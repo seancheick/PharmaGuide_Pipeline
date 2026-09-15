@@ -58,8 +58,8 @@ def test_config_fingerprint_is_stable_hex():
 def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
-    assert config_version("omega") == "1.0.0"
-    assert config_version("quality_score") == "1.1.6-probiotic-clinical-gates"
+    assert config_version("omega") == "1.1.0-rubric-proxy-removal"
+    assert config_version("quality_score") == "1.2.0-rubric-proxy-removal"
 
 
 def test_all_config_provenance_shape():

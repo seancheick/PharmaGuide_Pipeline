@@ -7,10 +7,10 @@ scripts/data/omega_rubric.json:
                               scoring_config.section_A_ingredient_quality.
                               omega3_dose_bonus.bands (EFSA/FDA/AHA-grounded
                               thresholds: 250/500/1000/2000/4000 mg/day)
-    ratio_sanity         /5   EPA:DHA ratio in healthy 1:3..3:1 range.
-                              Exempt for pure-EPA or pure-DHA products
-                              (e.g. icosapent ethyl, algal DHA) — ratio
-                              doesn't apply.
+
+The former +5 EPA:DHA ratio bonus was removed in quality_score 1.2.0: no
+clinical optimum ratio exists for a generic omega product. Per-serving EPA
+and DHA stay in metadata for indication-specific logic.
 
 Per Sean's 'do not invent fields' rule:
 - EPA/DHA quantities are summed ONLY when canonical_id ∈ {epa, dha, epa_dha}
@@ -281,41 +281,6 @@ def _band_score(per_day_mg: float, bands: List[Dict[str, Any]]) -> Tuple[float, 
     return 0.0, "below_efsa_ai", None
 
 
-def _ratio_sanity_score(
-    epa_per_serving: float,
-    dha_per_serving: float,
-    cfg: Dict[str, Any],
-) -> Tuple[float, Dict[str, Any]]:
-    """Award +5 when EPA:DHA ratio is in the configured healthy range.
-
-    Pure-EPA or pure-DHA products (one component at 0) are EXEMPT from
-    ratio sanity per the rubric — score 0 (not penalized). The user gets
-    full credit for the disclosed component via the band; the ratio
-    bonus is reserved for products that disclose both.
-    """
-    exempt = bool(cfg.get("exempt_when_one_zero", True))
-    score = float(cfg.get("score", 5) or 5)
-    min_ratio = float(cfg.get("min_ratio", 0.333) or 0.333)
-    max_ratio = float(cfg.get("max_ratio", 3.0) or 3.0)
-    metadata = {
-        "min_ratio": min_ratio,
-        "max_ratio": max_ratio,
-        "exempt_when_one_zero": exempt,
-    }
-
-    if epa_per_serving <= 0 or dha_per_serving <= 0:
-        metadata["status"] = "exempt_one_component_zero" if exempt else "skipped"
-        return 0.0, metadata
-
-    ratio = epa_per_serving / dha_per_serving
-    metadata["epa_dha_ratio"] = round(ratio, 4)
-    if min_ratio <= ratio <= max_ratio:
-        metadata["status"] = "in_range"
-        return score, metadata
-    metadata["status"] = "out_of_range"
-    return 0.0, metadata
-
-
 def score_dose(product: Any) -> Dict[str, Any]:
     """Score omega-class Dose dimension.
 
@@ -328,7 +293,6 @@ def score_dose(product: Any) -> Dict[str, Any]:
     dose_cfg = rubric["dose"]
     bands = list(dose_cfg["epa_dha_bands"])
     band_cap = float(dose_cfg.get("epa_dha_band_cap", 20) or 20)
-    ratio_cfg = _safe_dict(dose_cfg.get("ratio_sanity"))
 
     epa_ps, dha_ps, combined_ps = _sum_epa_dha_per_serving(product)
     # Avoid additive double-count when both separates AND combined are
@@ -382,15 +346,11 @@ def score_dose(product: Any) -> Dict[str, Any]:
         if ind_score > band_score:
             band_score, band_label = ind_score, indication_label
 
-    ratio_score, ratio_meta = _ratio_sanity_score(epa_ps, dha_ps, ratio_cfg)
-
     components: Dict[str, float] = {}
     if band_score > 0:
         components["epa_dha_band"] = band_score
-    if ratio_score > 0:
-        components["ratio_sanity"] = ratio_score
 
-    raw_score = band_score + ratio_score
+    raw_score = band_score
     score = max(0.0, min(CAP_DOSE, raw_score))
 
     metadata: Dict[str, Any] = {
@@ -408,7 +368,6 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "per_day_max_mg": round(per_day_max, 2),
         "epa_dha_band_label": band_label,
         "epa_dha_band_flag": band_flag,
-        "ratio_sanity": ratio_meta,
         "raw_score": round(raw_score, 4),
         "cap_applied": raw_score > CAP_DOSE,
     }

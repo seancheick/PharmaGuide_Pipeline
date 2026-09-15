@@ -1,0 +1,682 @@
+{
+  "_metadata": {
+    "purpose": "Stratified rubric calibration packet; controls must not move.",
+    "selected_from": "scripts/products/output_*_scored (2026-09-13 scored breakdowns)",
+    "missing_from_enriched": [
+      "180337",
+      "19067",
+      "239859",
+      "259249",
+      "313835",
+      "8920"
+    ]
+  },
+  "products": [
+    {
+      "id": "65926",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Alive! Men's 50+ Gummy Vitamins"
+    },
+    {
+      "id": "178691",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Daily Men's Adult Gummy"
+    },
+    {
+      "id": "204836",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Centrum MultiGummies Women Assorted Natural Fruit Flavors"
+    },
+    {
+      "id": "218955",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Mega Men Gummy Multivitamin Mixed Berry"
+    },
+    {
+      "id": "250045",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Women's Supercharged Multi Natural Berry Flavor"
+    },
+    {
+      "id": "257161",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Centrum MultiGummies Men Assorted Natural Fruit Flavors"
+    },
+    {
+      "id": "267605",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Baby & Me 2 Prenatal Multi Red Raspberry"
+    },
+    {
+      "id": "273855",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Children's Multivitamin Gummies"
+    },
+    {
+      "id": "300899",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Airborne Original Zesty Orange"
+    },
+    {
+      "id": "327864",
+      "group": "prenatal_gummy",
+      "module": "multi_or_prenatal",
+      "name": "Alive! Men's 50+ Premium Gummy Multivitamin"
+    },
+    {
+      "id": "PG_SUB_A89A9212EDDD4A89A54842EF791F2AE2",
+      "group": "prenatal_control",
+      "module": "multi_or_prenatal",
+      "name": "Essential for Men Multivitamin 18+"
+    },
+    {
+      "id": "29282",
+      "group": "prenatal_control",
+      "module": "multi_or_prenatal",
+      "name": "Women's 50+"
+    },
+    {
+      "id": "69938",
+      "group": "prenatal_control",
+      "module": "multi_or_prenatal",
+      "name": "50 Plus Mini"
+    },
+    {
+      "id": "202419",
+      "group": "prenatal_control",
+      "module": "multi_or_prenatal",
+      "name": "1,000 mg Vitamin C Tangerine"
+    },
+    {
+      "id": "232760",
+      "group": "prenatal_control",
+      "module": "multi_or_prenatal",
+      "name": "Anti-Alcohol HepatoProtection Complex"
+    },
+    {
+      "id": "251312",
+      "group": "prenatal_control",
+      "module": "multi_or_prenatal",
+      "name": "Centrum Men"
+    },
+    {
+      "id": "273866",
+      "group": "prenatal_control",
+      "module": "multi_or_prenatal",
+      "name": "Vision Formula with Lutein"
+    },
+    {
+      "id": "307745",
+      "group": "prenatal_control",
+      "module": "multi_or_prenatal",
+      "name": "Vision Optimizer"
+    },
+    {
+      "id": "2246",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Fiber Soft Chews Natural Citrus Flavor"
+    },
+    {
+      "id": "204676",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Turmeric Gummy"
+    },
+    {
+      "id": "210865",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Prebiotic Chewable Natural Strawberry Flavor"
+    },
+    {
+      "id": "232350",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Prebiotic Chewable Natural Strawberry Flavor"
+    },
+    {
+      "id": "250775",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Relax + Calm Magnesium Soft Chews Grape Flavor"
+    },
+    {
+      "id": "274561",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Turmeric Gummy"
+    },
+    {
+      "id": "290590",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Fiber Gummy Rings Berry Melon"
+    },
+    {
+      "id": "305905",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Fiber Gummy"
+    },
+    {
+      "id": "327579",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Relax + Calm Magnesium Soft Chews Grape Flavor"
+    },
+    {
+      "id": "328846",
+      "group": "fiber_gummy",
+      "module": "fiber_digestive",
+      "name": "Melatonin 3 mg Strawberry Flavored"
+    },
+    {
+      "id": "1834",
+      "group": "fiber_control",
+      "module": "fiber_digestive",
+      "name": "Colon Care"
+    },
+    {
+      "id": "75897",
+      "group": "fiber_control",
+      "module": "fiber_digestive",
+      "name": "Optifiber"
+    },
+    {
+      "id": "208593",
+      "group": "fiber_control",
+      "module": "fiber_digestive",
+      "name": "Break it Down. Organic Pineapple"
+    },
+    {
+      "id": "246102",
+      "group": "fiber_control",
+      "module": "fiber_digestive",
+      "name": "G.I. Fortify (Capsules)"
+    },
+    {
+      "id": "274135",
+      "group": "fiber_control",
+      "module": "fiber_digestive",
+      "name": "Organic Fiber Unflavored"
+    },
+    {
+      "id": "312068",
+      "group": "fiber_control",
+      "module": "fiber_digestive",
+      "name": "Konjac Root Extract"
+    },
+    {
+      "id": "18142",
+      "group": "melatonin_gummy",
+      "module": "generic",
+      "name": "Melatonin All Natural Strawberry Flavor"
+    },
+    {
+      "id": "242541",
+      "group": "melatonin_gummy",
+      "module": "generic",
+      "name": "Sleep Gummies Tropical Punch Flavored Gummies"
+    },
+    {
+      "id": "271645",
+      "group": "melatonin_gummy",
+      "module": "generic",
+      "name": "Melatonin 1.5 mg Natural Tropical Peach Flavor"
+    },
+    {
+      "id": "290588",
+      "group": "melatonin_gummy",
+      "module": "generic",
+      "name": "Extra Strength Sleep Blackberry Zen"
+    },
+    {
+      "id": "291292",
+      "group": "melatonin_gummy",
+      "module": "generic",
+      "name": "Sleep Strawberry Sunset"
+    },
+    {
+      "id": "83238",
+      "group": "immune_gummy",
+      "module": "generic",
+      "name": "Kids Immune Defense Gummy Natural Grape Flavor"
+    },
+    {
+      "id": "242953",
+      "group": "immune_gummy",
+      "module": "generic",
+      "name": "Airborne Kids Elderberry"
+    },
+    {
+      "id": "265189",
+      "group": "immune_gummy",
+      "module": "generic",
+      "name": "Elderberry Immune Support 400 mg Berry"
+    },
+    {
+      "id": "273671",
+      "group": "immune_gummy",
+      "module": "generic",
+      "name": "Immune Gummy Cherry Flavor"
+    },
+    {
+      "id": "293384",
+      "group": "immune_gummy",
+      "module": "generic",
+      "name": "Sambucus Elderberry Gummies"
+    },
+    {
+      "id": "304694",
+      "group": "immune_gummy",
+      "module": "generic",
+      "name": "Sambucus Kids Cough Relief + Immune Syrup"
+    },
+    {
+      "id": "317045",
+      "group": "immune_gummy",
+      "module": "generic",
+      "name": "Sambucus Kids Cough Relief + Immune Gummy"
+    },
+    {
+      "id": "332948",
+      "group": "immune_gummy",
+      "module": "generic",
+      "name": "Sambucus Cough Relief + Immune Gummy"
+    },
+    {
+      "id": "830",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Fish Oil + Vitamin D-3"
+    },
+    {
+      "id": "28636",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "MorO-3 Balanced EPA-DHA Formula Orange Flavor"
+    },
+    {
+      "id": "62005",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Fish Oil 1200 mg Plus Vitamin D3 2000 IU"
+    },
+    {
+      "id": "79146",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Triple Strength Fish Oil"
+    },
+    {
+      "id": "184588",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Omega-3 +Vitamin D 1250 mg Grapefruit Tangerine Flavored"
+    },
+    {
+      "id": "214702",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Omega-3 \"700\" Coenzyme Q-10 Policosanol"
+    },
+    {
+      "id": "224615",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Ultimate Omega 2X Mini Soft Gels Strawberry"
+    },
+    {
+      "id": "259806",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Fish Oil Mini 1000 mg of EPA/DHA Omega-3s"
+    },
+    {
+      "id": "288747",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Ultimate Omega 2X Mini Soft Gels Strawberry"
+    },
+    {
+      "id": "309900",
+      "group": "omega_ratio_in_range",
+      "module": "omega",
+      "name": "Triple Strength Fish Oil"
+    },
+    {
+      "id": "12043",
+      "group": "omega_ratio_none",
+      "module": "omega",
+      "name": "Fish Oil 1,000 mg"
+    },
+    {
+      "id": "42261",
+      "group": "omega_ratio_none",
+      "module": "omega",
+      "name": "Fish Oil"
+    },
+    {
+      "id": "77221",
+      "group": "omega_ratio_none",
+      "module": "omega",
+      "name": "Fish Oil + D3"
+    },
+    {
+      "id": "205211",
+      "group": "omega_ratio_none",
+      "module": "omega",
+      "name": "DHA Liquid"
+    },
+    {
+      "id": "237197",
+      "group": "omega_ratio_none",
+      "module": "omega",
+      "name": "Algae Omega-3 Orange Flavor"
+    },
+    {
+      "id": "294049",
+      "group": "omega_ratio_none",
+      "module": "omega",
+      "name": "PureNutrients EPA/DHA Gummy Natural Lemon-Lime Flavor"
+    },
+    {
+      "id": "199521",
+      "group": "probiotic_single_exact",
+      "module": "probiotic",
+      "name": "Fortify Gummy Probiotic 6 Billion Berry Flavored"
+    },
+    {
+      "id": "246181",
+      "group": "probiotic_single_exact",
+      "module": "probiotic",
+      "name": "Lactobacillus Acidophilus"
+    },
+    {
+      "id": "250912",
+      "group": "probiotic_single_exact",
+      "module": "probiotic",
+      "name": "Purely Probiotics Chewables Bursting Berry Flavor!"
+    },
+    {
+      "id": "273839",
+      "group": "probiotic_single_exact",
+      "module": "probiotic",
+      "name": "Immune Defense Probiotic Great Mixed Berry Flavor"
+    },
+    {
+      "id": "44161",
+      "group": "probiotic_multi_all_exact",
+      "module": "probiotic",
+      "name": "Advanced Acidophilus Plus"
+    },
+    {
+      "id": "182421",
+      "group": "probiotic_multi_all_exact",
+      "module": "probiotic",
+      "name": "FLORASSIST GI with Phage Technology"
+    },
+    {
+      "id": "232334",
+      "group": "probiotic_multi_all_exact",
+      "module": "probiotic",
+      "name": "GI with Phage Technology"
+    },
+    {
+      "id": "259770",
+      "group": "probiotic_multi_all_exact",
+      "module": "probiotic",
+      "name": "Kids Probiotic Fast Stix Banana Vanilla"
+    },
+    {
+      "id": "297698",
+      "group": "probiotic_multi_all_exact",
+      "module": "probiotic",
+      "name": "HSO Probiotic Formula"
+    },
+    {
+      "id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+      "group": "probiotic_partial_exact",
+      "module": "probiotic",
+      "name": "DS-01 Daily Synbiotic"
+    },
+    {
+      "id": "206322",
+      "group": "probiotic_partial_exact",
+      "module": "probiotic",
+      "name": "Baby Probiotic Powder with Colostrum Unflavored"
+    },
+    {
+      "id": "250224",
+      "group": "probiotic_partial_exact",
+      "module": "probiotic",
+      "name": "Probiotics + Orange"
+    },
+    {
+      "id": "274764",
+      "group": "probiotic_partial_exact",
+      "module": "probiotic",
+      "name": "Vaginal Care"
+    },
+    {
+      "id": "307750",
+      "group": "probiotic_partial_exact",
+      "module": "probiotic",
+      "name": "Yum-Yum Dophilus 1 Billion CFU Raspberry"
+    },
+    {
+      "id": "799",
+      "group": "probiotic_no_exact",
+      "module": "probiotic",
+      "name": "Probiotic Complex 4"
+    },
+    {
+      "id": "59603",
+      "group": "probiotic_no_exact",
+      "module": "probiotic",
+      "name": "Tranquil Tract"
+    },
+    {
+      "id": "178848",
+      "group": "probiotic_no_exact",
+      "module": "probiotic",
+      "name": "Extra Care Probiotic"
+    },
+    {
+      "id": "241322",
+      "group": "probiotic_no_exact",
+      "module": "probiotic",
+      "name": "Paleo Defense Daily"
+    },
+    {
+      "id": "298030",
+      "group": "probiotic_no_exact",
+      "module": "probiotic",
+      "name": "FloraPro-LP Probiotic"
+    },
+    {
+      "id": "2248",
+      "group": "generic_organic",
+      "module": "generic",
+      "name": "Flax Seed Oil 1300"
+    },
+    {
+      "id": "251461",
+      "group": "generic_organic",
+      "module": "generic",
+      "name": "Alfalfa 1,215 mg"
+    },
+    {
+      "id": "287370",
+      "group": "generic_organic",
+      "module": "generic",
+      "name": "C Defense Tangy Citrus"
+    },
+    {
+      "id": "327867",
+      "group": "generic_organic",
+      "module": "generic",
+      "name": "Alive! Vitamin C"
+    },
+    {
+      "id": "28897",
+      "group": "generic_non_gmo",
+      "module": "generic",
+      "name": "Perfect Food Raw"
+    },
+    {
+      "id": "251868",
+      "group": "generic_non_gmo",
+      "module": "generic",
+      "name": "Valerian"
+    },
+    {
+      "id": "307740",
+      "group": "generic_non_gmo",
+      "module": "generic",
+      "name": "trans-Pterostilbene 50 mg"
+    },
+    {
+      "id": "695",
+      "group": "generic_natural",
+      "module": "generic",
+      "name": "Turmeric Curcumin"
+    },
+    {
+      "id": "239650",
+      "group": "generic_natural",
+      "module": "generic",
+      "name": "Calcium Citrate+D3 Petites"
+    },
+    {
+      "id": "310731",
+      "group": "generic_natural",
+      "module": "generic",
+      "name": "Magnesium Carbonate"
+    },
+    {
+      "id": "315588",
+      "group": "generic_capped",
+      "module": "generic",
+      "name": "Astaxanthin 12 mg"
+    },
+    {
+      "id": "223163",
+      "group": "generic_capped",
+      "module": "generic",
+      "name": "Nordic CoQ10 Ubiquinol Sport"
+    },
+    {
+      "id": "PG_SUB_5E4D136A84A8485F98E1F3C0BCF49A73",
+      "group": "generic_control",
+      "module": "generic",
+      "name": "Adrenal Complex"
+    },
+    {
+      "id": "81731",
+      "group": "generic_control",
+      "module": "generic",
+      "name": "Acetyl-L-Carnitine With Biosint Carnitines 500 mg"
+    },
+    {
+      "id": "239581",
+      "group": "generic_control",
+      "module": "generic",
+      "name": "Glucosamine HCl with MSM"
+    },
+    {
+      "id": "269730",
+      "group": "generic_control",
+      "module": "generic",
+      "name": "CoQ10 Gummies 200 mg Mango Madness"
+    },
+    {
+      "id": "310647",
+      "group": "generic_control",
+      "module": "generic",
+      "name": "American Ginseng Extract"
+    },
+    {
+      "id": "315841",
+      "group": "generic_control",
+      "module": "generic",
+      "name": "Circulatory Health"
+    },
+    {
+      "id": "1179",
+      "group": "sports_control",
+      "module": "sports",
+      "name": "Ravage Fruit Punch"
+    },
+    {
+      "id": "63973",
+      "group": "sports_control",
+      "module": "sports",
+      "name": "Ravage Lemon Lime"
+    },
+    {
+      "id": "220054",
+      "group": "sports_control",
+      "module": "sports",
+      "name": "LIT Gummy Worm"
+    },
+    {
+      "id": "252414",
+      "group": "sports_control",
+      "module": "sports",
+      "name": "BCAA 2:1:1"
+    },
+    {
+      "id": "307784",
+      "group": "sports_control",
+      "module": "sports",
+      "name": "Creatine Monohydrate 5 g Unflavored"
+    },
+    {
+      "id": "316254",
+      "group": "sports_control",
+      "module": "sports",
+      "name": "100% Whey Cookies & Cream"
+    },
+    {
+      "id": "4123",
+      "group": "b_complex_control",
+      "module": "b_complex",
+      "name": "Super Stress B-Complex With C-500"
+    },
+    {
+      "id": "35679",
+      "group": "b_complex_control",
+      "module": "b_complex",
+      "name": "B-Complex Plus Electrolytes & Vitamin C"
+    },
+    {
+      "id": "200572",
+      "group": "b_complex_control",
+      "module": "b_complex",
+      "name": "B-Complex with Vitamin C Stress Formula"
+    },
+    {
+      "id": "239458",
+      "group": "b_complex_control",
+      "module": "b_complex",
+      "name": "Super B Complex with Vitamin C"
+    },
+    {
+      "id": "293894",
+      "group": "b_complex_control",
+      "module": "b_complex",
+      "name": "B-Complex Liquid"
+    }
+  ]
+}

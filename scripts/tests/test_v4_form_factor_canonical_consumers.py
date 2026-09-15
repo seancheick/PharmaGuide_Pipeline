@@ -1,4 +1,4 @@
-"""SP-3 C3 — v4 consumers (completeness gate, multi/prenatal formulation,
+"""SP-3 C3 — v4 consumers (completeness gate,
 build_final_db) read `form_factor_canonical` first, fall back to legacy.
 
 Locks the canonical-first reading contract at each consumer site without
@@ -15,7 +15,6 @@ import pytest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from scoring_v4.gate_completeness import _form_factor as _completeness_form
-from scoring_v4.modules.multi_prenatal_formulation import _form_factor_text
 
 
 # ============================================================================
@@ -49,39 +48,6 @@ class TestCompletenessGate:
     def test_canonical_only_returns_canonical(self):
         product = {"form_factor_canonical": "gummy"}
         assert _completeness_form(product) == "gummy"
-
-
-# ============================================================================
-# multi/prenatal formulation consumer
-# ============================================================================
-
-class TestMultiPrenatalFormulationFormText:
-
-    def test_canonical_id_in_text_blob(self):
-        """The canonical id participates in pattern matching — `gummy`
-        canonical alone is enough to trigger the gummy formulation penalty."""
-        product = {"form_factor_canonical": "gummy"}
-        text = _form_factor_text(product)
-        assert "gummy" in text
-
-    def test_canonical_plus_legacy_text_both_present(self):
-        product = {
-            "form_factor_canonical": "softgel",
-            "form_factor": "softgel capsule",
-            "product_name": "Vitamin D3 5000 IU",
-        }
-        text = _form_factor_text(product)
-        assert "softgel" in text
-        assert "capsule" in text
-        assert "vitamin d3" in text
-
-    def test_name_keyword_still_matches_when_canonical_absent(self):
-        """Old enriched batch (no canonical) — name-based gummy detection
-        still works. Locks against a regression where canonical migration
-        accidentally cuts the product_name signal."""
-        product = {"product_name": "Daily Gummy Multivitamin"}
-        text = _form_factor_text(product)
-        assert "gummy" in text
 
 
 # ============================================================================

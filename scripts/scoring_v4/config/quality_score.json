@@ -1,11 +1,11 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.1.6-probiotic-clinical-gates",
+    "version": "1.2.0-rubric-proxy-removal",
     "schema_version": "1.0.0",
-    "last_updated": "2026-09-13",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
-    "phase": "generic_public_caps"
+    "last_updated": "2026-09-14",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. 1.2.0 removes rubric proxies: blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, and the astaxanthin/CoQ10 public caps, so the six pillars alone explain the public number. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
+    "phase": "rubric_proxy_removal"
   },
   "pillars": {
     "formulation":    { "weight": 20, "assembler": "formulation" },
@@ -46,7 +46,7 @@
     "default_reference": 20.0
   },
   "dose_subscale": {
-    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. Sports pre-workout retains the sports engine's 25-point reference because products classified by context can still earn its focused-single completion path. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing.",
+    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. Sports pre-workout retains the sports engine's 25-point reference because products classified by context can still earn its focused-single completion path. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing. 1.2.0 (2026-09-14): omega raw dose tops out at 20 after the +5 EPA:DHA ratio bonus was removed; its reference moves 23 -> 18, keeping the same 2-point appropriate-dose slack below the raw ceiling.",
     "archetype_reference": {
       "sports_single": 25.0,
       "sports_pre_workout": 25.0,
@@ -57,14 +57,14 @@
       "immune_support": 22.0,
       "fiber_digestive": 25.0,
       "b_complex": 25.0,
-      "omega": 23.0,
+      "omega": 18.0,
       "probiotic": 22.0,
       "prenatal_multi": 23.0
     },
     "default_reference": 22.0
   },
   "formulation_subscale": {
-    "_doc": "PR4: category-aware purpose-fit formulation. A focused single can earn 24 without faking breadth, while multi-active sports products retain their reviewed category references. The dedicated protein adapter has a 29-point positive-component ceiling (15 + 5 + 3 + 4 + 2). Pre-workout and BCAA/EAA still reuse the broader generic formulation engine, so current-corpus maxima are not valid divisors; they retain the reviewed 30 and 25 references until a dedicated adapter or benchmark justifies a change. A cheap form remains low because normalization is proportional.",
+    "_doc": "PR4: category-aware purpose-fit formulation. A focused single can earn 24 without faking breadth, while multi-active sports products retain their reviewed category references. The dedicated protein adapter has a 29-point positive-component ceiling (15 + 5 + 3 + 4 + 2). Pre-workout and BCAA/EAA still reuse the broader generic formulation engine, so current-corpus maxima are not valid divisors; they retain the reviewed 30 and 25 references until a dedicated adapter or benchmark justifies a change. A cheap form remains low because normalization is proportional. 1.2.0 (2026-09-14): omega's achievable formulation drops 23 -> 21 because sustainability certification is now 0 points (consumer attribute); prenatal_multi drops 23 -> 21 because the 2-point dosage_form_suitability credit (an inverted gummy flag) was removed.",
     "archetype_reference": {
       "sports_single": 24.0,
       "sports_pre_workout": 30.0,
@@ -75,9 +75,9 @@
       "immune_support": 30.0,
       "fiber_digestive": 28.0,
       "b_complex": 30.0,
-      "omega": 23.0,
+      "omega": 21.0,
       "probiotic": 22.0,
-      "prenatal_multi": 23.0
+      "prenatal_multi": 21.0
     },
     "default_reference": 25.0
   },
@@ -87,7 +87,7 @@
     "b1_harmful_additive_cap": 15.0
   },
   "formulation_magnitudes": {
-    "_doc": "A1-A6 + B0 formulation-dimension point values, caps, and tier thresholds — hoisted from generic_formulation.py's hardcoded constants 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score diff on a real-product sample + targeted formulation tests). generic_formulation.py reads these at load time; test_v4_formulation_magnitudes_config pins each to its original value (drift guard). Structural constants (canonical-ID sets, enzyme name list, supp-type enums, the skip-first flag) stay in code — data/logic, not tunable magnitudes. B1 additive points are in the sibling formulation_penalties block.",
+    "_doc": "A1-A6 + B0 formulation-dimension point values, caps, and tier thresholds — hoisted from generic_formulation.py's hardcoded constants 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score diff on a real-product sample + targeted formulation tests). generic_formulation.py reads these at load time; test_v4_formulation_magnitudes_config pins each to its original value (drift guard). Structural constants (canonical-ID sets, enzyme name list, supp-type enums, the skip-first flag) stay in code — data/logic, not tunable magnitudes. B1 additive points are in the sibling formulation_penalties block. 1.2.0 (2026-09-14): a5a_organic, a5d_non_gmo_project and a5e_natural are 0.0 -- organic, Non-GMO and natural-source are consumer attributes, not evidence of clinical formulation quality; detection and metadata stay so they can be shown as attributes.",
     "dimension_cap": 30.0,
     "presence_floor": 2.0,
     "a1_bio_score_cap": 15.0,
@@ -98,12 +98,12 @@
     "a3_delivery_tier_points": { "1": 3.0, "2": 2.0, "3": 1.0 },
     "a4_absorption_cap": 3.0,
     "a5_excellence_cap": 4.0,
-    "a5a_organic": 1.0,
+    "a5a_organic": 0.0,
     "a5b_standardized_full": 1.0,
     "a5b_standardized_marker_only": 0.5,
     "a5c_synergy_tier_points": { "1": 1.0, "2": 0.75, "3": 0.5, "4": 0.25 },
-    "a5d_non_gmo_project": 0.5,
-    "a5e_natural": 1.0,
+    "a5d_non_gmo_project": 0.0,
+    "a5e_natural": 0.0,
     "a6_single_ingredient_cap": 4.0,
     "a6_tier_floor_bio": 10.0,
     "a6_tier_solid_bio": 12.0,
@@ -280,9 +280,8 @@
     "multi_prenatal": {
       "cap_formulation": 25.0, "formulation_presence_floor": 2.0, "cap_panel_form_quality": 12.0,
       "cap_premium_form_diversity": 4.0, "cap_key_form_support": 5.0, "cap_panel_disclosure_structure": 2.0,
-      "cap_dosage_form_suitability": 2.0, "panel_form_neutral_floor": 9.0,
-      "bio_score_max": 15.0, "premium_form_threshold": 12.0, "premium_points_per_additional": 0.5,
-      "gummy_formulation_penalty": 3.0
+      "panel_form_neutral_floor": 9.0,
+      "bio_score_max": 15.0, "premium_form_threshold": 12.0, "premium_points_per_additional": 0.5
     },
     "omega": { "cap_formulation": 25.0, "data_limited_form_floor": 19.0, "data_limited_form_min_epa_dha_mg": 750.0 },
     "probiotic": { "cap_formulation": 25.0 },
@@ -304,9 +303,7 @@
       "dimension_caps": [["formulation", 30], ["dose", 25], ["evidence", 20], ["transparency", 10]],
       "manufacturer_trust_cap": 5,
       "manufacturer_violations_floor": -25,
-      "botanical_raw_floor": 40.0,
-      "astaxanthin_public_quality_cap": 85.0,
-      "coq10_public_quality_cap": 93.0
+      "botanical_raw_floor": 40.0
     },
     "multi_prenatal": { "dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
     "omega": { "dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
@@ -319,7 +316,6 @@
       "evidence_cap": 14.0,
       "target_dose_mg": { "glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0, "uc_ii": 40.0, "hyaluronic_acid": 120.0 }
     },
-    "sleep_support": { "melatonin_gummy_format_penalty": 2.0 },
     "safety_hygiene": { "cap": 4.0 }
   },
   "verification_subscale": {

@@ -117,20 +117,17 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
     )
 
     high_zinc = (doses.get("zinc_mg") or 0.0) > 40.0
-    gummy_or_syrup = _is_gummy_or_syrup(product)
     herb_soup = _high_variability_botanical_count(product) >= 3
 
     components = {
         "immune_foundation_design": min(5.0, foundation_count * 1.7),
         "immune_mineral_balance": min(2.0, balance_count * 1.0),
         "immune_targeted_disclosure": min(3.0, targeted_count * 1.0),
-        "immune_daily_clean_design": 2.0 if not (gummy_or_syrup or herb_soup or high_zinc) else 0.0,
+        "immune_daily_clean_design": 2.0 if not (herb_soup or high_zinc) else 0.0,
     }
     bonus = min(IMMUNE_FORMULATION_BONUS_CAP, sum(components.values()))
 
     penalties: Dict[str, float] = {}
-    if gummy_or_syrup:
-        penalties["B1_immune_gummy_or_syrup"] = -2.0
     if high_zinc:
         penalties["B7_immune_high_zinc_daily_use"] = -2.0
     if herb_soup:
@@ -143,7 +140,7 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
         "metadata": {
             "profile_applied": True,
             "active_doses": {k: round(v, 4) for k, v in doses.items()},
-            "gummy_or_syrup": gummy_or_syrup,
+            "gummy_or_syrup": _is_gummy_or_syrup(product),
             "high_zinc": high_zinc,
             "high_variability_botanical_count": _high_variability_botanical_count(product),
         },

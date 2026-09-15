@@ -1129,4 +1129,5 @@ def test_omega_rubric_sustainability_eligibility_requires_rules_db_verification(
     assert sust["eligibility"] == "rules_db_verified"
     assert "Friend of the Sea" in sust["eligible_programs"]
     assert "MSC" in sust["eligible_programs"]
-    assert sust["score"] == 2
+    # 1.2.0: sustainable sourcing is a consumer attribute, not formulation quality.
+    assert sust["score"] == 0

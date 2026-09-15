@@ -148,10 +148,10 @@ def test_formulation_cheap_form_stays_low() -> None:
 
 def test_formulation_multi_uses_panel_reference() -> None:
     from scoring_v4.quality_score import assemble_quality_score
-    # multi/prenatal raw formulation is out of 25 (panel-aware already); ref 23
-    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=21, form_max=25)))
+    # multi/prenatal raw formulation is out of 25 (panel-aware already); ref 21
+    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=19, form_max=25)))
     f = out["quality_pillars_v4"]["formulation"]["score"]
-    assert 17.0 <= f <= 19.0  # 21/23*20 ~= 18.3
+    assert 17.0 <= f <= 19.0  # 19/21*20 ~= 18.1
 
 
 def test_formulation_never_exceeds_20() -> None:
@@ -206,7 +206,7 @@ def test_fish_oil_parent_identity_does_not_imply_molecular_form() -> None:
     ))
     formulation = out["quality_pillars_v4"]["formulation"]
 
-    assert formulation["score"] == 6.1
+    assert formulation["score"] == 6.7  # 7/21*20; omega formulation reference 21 since 1.2.0
     assert formulation["components"]["raw_formulation"] == 7.0
     assert "molecular form is not disclosed" in formulation["reason"].lower()
     assert "basic" not in formulation["reason"].lower()
@@ -327,21 +327,6 @@ def test_b1_additive_and_sugar_penalties_reduce_public_safety_pillar() -> None:
 
     assert pillar["score"] == 7.0
     assert pillar["components"]["additive_or_sweetener_penalty"] == 3.0
-    assert "additive or sweetener" in pillar["reason"]
-
-
-def test_sleep_melatonin_gummy_penalty_reduces_public_safety_pillar() -> None:
-    from scoring_v4.quality_score import assemble_quality_score
-    bd = _module_bd(form=2, form_max=30, hygiene=4)
-    bd["dimensions"]["formulation"]["penalties"] = {
-        "B1_sleep_melatonin_gummy": -2.0,
-    }
-
-    out = assemble_quality_score(_shadow(module="generic", bd=bd))
-    pillar = out["quality_pillars_v4"]["safety_hygiene"]
-
-    assert pillar["score"] == 8.0
-    assert pillar["components"]["additive_or_sweetener_penalty"] == 2.0
     assert "additive or sweetener" in pillar["reason"]
 
 
@@ -580,7 +565,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.1.6-probiotic-clinical-gates"
+    assert out["quality_score_version"] == "1.2.0-rubric-proxy-removal"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:
@@ -625,9 +610,9 @@ def test_public_quality_cap_limits_score_without_changing_raw() -> None:
     bd = _module_bd(form=24, dose=21, evidence=18, verification=8, manuf_trust=5, hygiene=4)
     bd["metadata"] = {
         "public_quality_cap": {
-            "id": "generic_astaxanthin_single",
+            "id": "example_module_cap",
             "cap": 85.0,
-            "reason": "Single-ingredient astaxanthin has promising but not elite clinical evidence.",
+            "reason": "A module-emitted public cap is applied as an explicit adjustment.",
         }
     }
 
@@ -635,7 +620,7 @@ def test_public_quality_cap_limits_score_without_changing_raw() -> None:
 
     assert out["raw_score_v4_100"] == 88.5
     assert out["quality_score_v4_100"] == 85.0
-    assert out["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"
+    assert out["quality_score_cap_v4"]["id"] == "example_module_cap"
     assert out["quality_score_cap_v4"]["score_before_cap"] > 85.0
     assert out["quality_score_cap_v4"]["adjustment"] < 0
     assert out["quality_score_cap_v4"]["presentation"] == "explicit_adjustment"

@@ -34,7 +34,7 @@ ORIGINAL = {
     "generic": {
         "dimension_caps": [["formulation", 30], ["dose", 25], ["evidence", 20], ["transparency", 10]],
         "manufacturer_trust_cap": 5, "manufacturer_violations_floor": -25,
-        "botanical_raw_floor": 40.0, "astaxanthin_public_quality_cap": 85.0, "coq10_public_quality_cap": 93.0,
+        "botanical_raw_floor": 40.0,
     },
     "multi_prenatal": {"dimension_caps": ROUTER_DC},
     "omega": {"dimension_caps": ROUTER_DC},
@@ -47,7 +47,6 @@ ORIGINAL = {
     "joint_support": {"evidence_cap": 14.0,
                       "target_dose_mg": {"glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0,
                                          "uc_ii": 40.0, "hyaluronic_acid": 120.0}},
-    "sleep_support": {"melatonin_gummy_format_penalty": 2.0},
     "safety_hygiene": {"cap": 4.0},
 }
 SUGAR = {
@@ -71,7 +70,6 @@ def test_runtime_constants_read_from_config_no_drift():
     assert generic.DIMENSION_CAPS == (("formulation", 30), ("dose", 25), ("evidence", 20), ("transparency", 10))
     assert generic.MANUFACTURER_TRUST_CAP == 5
     assert generic.MANUFACTURER_VIOLATIONS_FLOOR == -25
-    assert generic.COQ10_PUBLIC_QUALITY_CAP == 93.0
     assert multi_prenatal.DIMENSION_CAPS == (("formulation", 25), ("dose", 25), ("evidence", 20), ("transparency", 15))
     assert omega.DIMENSION_CAPS == multi_prenatal.DIMENSION_CAPS == probiotic.DIMENSION_CAPS
     assert b_complex.FORMULATION_CAP == 30.0 and b_complex.B7_CAP == 3.0
@@ -79,7 +77,6 @@ def test_runtime_constants_read_from_config_no_drift():
     assert immune_support.IMMUNE_EVIDENCE_FLOOR_CAP == 16.5
     assert joint_support.JOINT_SUPPORT_EVIDENCE_CAP == 14.0
     assert joint_support.JOINT_TARGET_DOSE_MG == ORIGINAL["joint_support"]["target_dose_mg"]
-    assert sleep_support.MELATONIN_GUMMY_FORMAT_PENALTY == 2.0
     assert safety_hygiene.SAFETY_HYGIENE_CAP == 4.0
     # sugar bands (formulation_magnitudes)
     assert generic_formulation.DIETARY_SUGAR_MODERATE_PENALTY == 3.0

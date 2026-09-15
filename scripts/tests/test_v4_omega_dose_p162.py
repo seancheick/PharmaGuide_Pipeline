@@ -9,7 +9,7 @@ Locks the Dose sub-component math:
                           500+  → 10   (FDA QHC)
                           250+  → 5    (EFSA AI)
                           <250  → 0
-    ratio_sanity     /5   EPA:DHA in 1:3..3:1 → +5
+    (the former +5 EPA:DHA ratio bonus was removed in quality_score 1.2.0)
                           Outside range → 0
                           Pure-EPA or pure-DHA → 0 (exempt, not penalized)
 
@@ -244,69 +244,18 @@ def test_mct_miscanonicalized_as_dha_does_not_count_as_epa_dha() -> None:
 # --- Ratio sanity -------------------------------------------------------
 
 
-def test_ratio_sanity_in_range_awards_full_credit() -> None:
-    """EPA:DHA = 2:1 (within 1:3..3:1) → +5."""
+@pytest.mark.parametrize("epa,dha", [(600, 300), (100, 300), (900, 300), (1900, 100), (1000, 0), (0, 1000)])
+def test_epa_dha_ratio_earns_no_dose_points(epa, dha) -> None:
+    """No clinical optimum EPA:DHA ratio exists for a generic omega product, so
+    the ratio neither earns nor costs dose points; amounts stay in metadata."""
     from scoring_v4.modules.omega_dose import score_dose
 
-    product = _omega_product(epa=600, dha=300)  # ratio 2.0
-    payload = score_dose(product)
-    assert payload["components"]["ratio_sanity"] == 5.0
-    assert payload["metadata"]["ratio_sanity"]["status"] == "in_range"
-    assert payload["metadata"]["ratio_sanity"]["epa_dha_ratio"] == 2.0
-
-
-def test_ratio_sanity_at_low_boundary_in_range() -> None:
-    """EPA:DHA = 1:3 (boundary) → in_range (inclusive)."""
-    from scoring_v4.modules.omega_dose import score_dose
-
-    product = _omega_product(epa=100, dha=300)  # ratio 0.333
-    payload = score_dose(product)
-    assert payload["components"]["ratio_sanity"] == 5.0
-
-
-def test_ratio_sanity_at_high_boundary_in_range() -> None:
-    """EPA:DHA = 3:1 (boundary) → in_range."""
-    from scoring_v4.modules.omega_dose import score_dose
-
-    product = _omega_product(epa=900, dha=300)  # ratio 3.0
-    payload = score_dose(product)
-    assert payload["components"]["ratio_sanity"] == 5.0
-
-
-def test_ratio_sanity_out_of_range_zero() -> None:
-    """EPA:DHA = 19:1 (extreme imbalance) → 0 ratio credit."""
-    from scoring_v4.modules.omega_dose import score_dose
-
-    product = _omega_product(epa=1900, dha=100)  # ratio 19
-    payload = score_dose(product)
-    assert "ratio_sanity" not in payload["components"]
-    assert payload["metadata"]["ratio_sanity"]["status"] == "out_of_range"
-
-
-def test_ratio_sanity_pure_epa_exempt() -> None:
-    """Pure-EPA (no DHA) is exempt from ratio sanity. Score 0 for ratio,
-    not penalized — band still scores normally."""
-    from scoring_v4.modules.omega_dose import score_dose
-
-    product = _omega_product(epa=1000, dha=None)
-    payload = score_dose(product)
-    assert "ratio_sanity" not in payload["components"]
-    assert payload["metadata"]["ratio_sanity"]["status"] == "exempt_one_component_zero"
-    # Band still works on EPA alone.
-    assert payload["components"]["epa_dha_band"] == 16.0  # 1000 mg → aha_cvd
-
-
-def test_ratio_sanity_pure_dha_exempt() -> None:
-    """Pure-DHA (algal) — exempt from ratio sanity."""
-    from scoring_v4.modules.omega_dose import score_dose
-
-    product = _omega_product(epa=None, dha=300)
-    payload = score_dose(product)
-    assert "ratio_sanity" not in payload["components"]
-    assert payload["metadata"]["ratio_sanity"]["status"] == "exempt_one_component_zero"
-
-
-# --- Unit conversion ----------------------------------------------------
+    payload = score_dose(_omega_product(epa=epa, dha=dha))
+    assert set(payload["components"]) <= {"epa_dha_band"}
+    assert payload["score"] == payload["components"].get("epa_dha_band", 0.0)
+    assert "ratio_sanity" not in payload["metadata"]
+    assert payload["metadata"]["epa_mg_per_serving"] == epa
+    assert payload["metadata"]["dha_mg_per_serving"] == dha
 
 
 def test_unit_grams_converts_to_mg() -> None:
@@ -441,13 +390,13 @@ def test_epa_dha_combined_does_not_double_count_with_separates() -> None:
 # --- Score ceiling -----------------------------------------------------
 
 
-def test_max_dose_score_is_25_at_prescription_band_with_in_range_ratio() -> None:
-    """Max Dose: prescription_dose (20) + ratio_sanity (5) = 25."""
+def test_max_dose_score_is_20_at_prescription_band() -> None:
+    """Max Dose: prescription_dose band (20). The ratio adds nothing."""
     from scoring_v4.modules.omega_dose import score_dose
 
-    product = _omega_product(epa=2500, dha=2000)  # 4500 mg/day, ratio 1.25
+    product = _omega_product(epa=2500, dha=2000)  # 4500 mg/day
     payload = score_dose(product)
-    assert payload["score"] == 25.0
+    assert payload["score"] == 20.0
 
 
 def test_dose_cap_25() -> None:
@@ -506,12 +455,12 @@ def _load_canaries(ids):
 
 
 @pytest.mark.parametrize("dsld_id,expected_score,expected_band", [
-    ("327776", 21.0, "aha_cvd"),    # Sports Research: EPA 690 + DHA 310 = 1000 mg
-    ("326270", 21.0, "aha_cvd"),    # Sports Research alt SKU: same EPA/DHA
-    ("288740", 21.0, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
-    ("273630", 21.0, "aha_cvd"),    # Garden of Life Advanced Omega: 1160 mg
-    ("239592", 5.0, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day, ratio-only
-    ("182968", 9.0, "near_efsa_ai"),  # Pure Encap Krill-Plex: 240 mg/day + ratio
+    ("327776", 16.0, "aha_cvd"),    # Sports Research: EPA 690 + DHA 310 = 1000 mg
+    ("326270", 16.0, "aha_cvd"),    # Sports Research alt SKU: same EPA/DHA
+    ("288740", 16.0, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
+    ("273630", 16.0, "aha_cvd"),    # Garden of Life Advanced Omega: 1160 mg
+    ("239592", 0.0, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day
+    ("182968", 4.0, "near_efsa_ai"),  # Pure Encap Krill-Plex: 240 mg/day
     ("261863", 4.0, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
     ("267461", 0.0, "below_efsa_ai"),  # Vitafusion gummy: only 50 mg aggregate
 ])
@@ -611,9 +560,5 @@ def test_dose_weights_match_rubric_config() -> None:
     assert bands[6]["score"] == 2.5  # low_disclosed_epa_dha
     assert bands[-1]["score"] == 0  # below_efsa_ai
 
-    # Ratio sanity
-    rs = rubric["dose"]["ratio_sanity"]
-    assert rs["score"] == 5
-    assert rs["min_ratio"] == pytest.approx(0.333, abs=0.001)
-    assert rs["max_ratio"] == 3.0
-    assert rs["exempt_when_one_zero"] is True
+    # The EPA:DHA ratio bonus is gone from the rubric (quality_score 1.2.0).
+    assert "ratio_sanity" not in rubric["dose"]

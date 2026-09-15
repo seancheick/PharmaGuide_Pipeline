@@ -25,7 +25,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from enrich_supplements_v3 import SupplementEnricherV3
 from scoring_v4.gate_completeness import _form_factor as gate_form_factor
-from scoring_v4.modules.multi_prenatal_formulation import _form_factor_text
 from build_final_db import _derive_serving_verb_and_noun
 
 
@@ -69,10 +68,6 @@ def test_softgel_survives_clean_enrich_consumer_chain(enricher):
     # Stage 3a: completeness gate consumes canonical
     assert gate_form_factor(enriched_blob) == "softgel"
 
-    # Stage 3b: multi/prenatal formulation text includes canonical
-    text = _form_factor_text(enriched_blob)
-    assert "softgel" in text
-
     # Stage 4: build_final_db serving-verb derivation uses canonical
     verb, sing, plural = _derive_serving_verb_and_noun("ct", "softgel")
     assert verb, "must produce a serving verb"
@@ -81,7 +76,7 @@ def test_softgel_survives_clean_enrich_consumer_chain(enricher):
     )
 
 
-# --- Canary 2: Gummy (drives the multi/prenatal formulation penalty) ---
+# --- Canary 2: Gummy ---
 
 def test_gummy_survives_clean_enrich_consumer_chain(enricher):
     cleaned = {
@@ -101,13 +96,6 @@ def test_gummy_survives_clean_enrich_consumer_chain(enricher):
         "form_factor_canonical": enriched_serving["form_factor_canonical"],
     }
     assert gate_form_factor(blob) == "gummy"
-    assert "gummy" in _form_factor_text(blob)
-
-    # Critical for multi/prenatal scoring: the gummy regex must fire on the
-    # text blob since canonical id is alone enough to trigger the penalty.
-    import re
-    GUMMY_RE = re.compile(r"\b(gummy|gummies|chewable)\b")
-    assert GUMMY_RE.search(_form_factor_text(blob))
 
 
 # --- Canary 3: Backward-compat — old enriched blob without canonical field ---
@@ -119,9 +107,6 @@ def test_legacy_blob_without_canonical_still_works():
 
     # Completeness gate: legacy fallback wins
     assert gate_form_factor(legacy_blob) == "capsule"
-
-    # Formulation text blob still picks it up
-    assert "capsule" in _form_factor_text(legacy_blob)
 
     # build_final_db: legacy text drives the serving verb
     verb, sing, plural = _derive_serving_verb_and_noun("ct", "capsule")
@@ -141,9 +126,6 @@ def test_canonical_wins_when_legacy_disagrees():
     }
     # Completeness gate picks softgel
     assert gate_form_factor(blob) == "softgel"
-    # Formulation text includes both — softgel is what matters for scoring
-    text = _form_factor_text(blob)
-    assert "softgel" in text
 
 
 # --- Canary 5: Tea bag (text-driven canonical, no langual_code) ---

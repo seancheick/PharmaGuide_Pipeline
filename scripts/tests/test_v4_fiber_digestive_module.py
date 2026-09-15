@@ -182,7 +182,7 @@ def test_under_dosed_fiber_gummy_stays_low_despite_category_membership() -> None
 
     assert result.score_100 < 55.0
     assert breakdown["dimensions"]["dose"]["score"] < 8.0
-    assert breakdown["dimensions"]["formulation"]["penalties"]["fiber_gummy_delivery_penalty"] < 0
+    assert "fiber_gummy_delivery_penalty" not in breakdown["dimensions"]["formulation"]["penalties"]
 
 
 def test_stimulant_laxative_cleanse_is_not_rewarded_as_fiber() -> None:

@@ -417,7 +417,7 @@ def test_presence_floor_does_not_apply_to_product_level_evidence_without_cleaner
 
     payload = score_formulation(product)
 
-    assert payload["components"]["A5e_natural_source"] == 1.0
+    assert payload["components"]["A5e_natural_source"] == 0.0
     assert payload["metadata"]["botanical_formulation"]["weak_or_unidentified_botanical"] == -4.0
     assert payload["score"] == 0.0
     assert payload["metadata"]["presence_floor"]["applied"] is False
@@ -496,22 +496,15 @@ def test_a4_absorption_paired_false_returns_zero() -> None:
 # --- A5a organic ----------------------------------------------------------
 
 
-def test_a5a_organic_usda_verified() -> None:
+@pytest.mark.parametrize("organic", [{"usda_verified": True}, {"claimed": True, "exclusion_matched": False}])
+def test_a5a_organic_is_attribute_only(organic) -> None:
+    """Organic is a consumer attribute (quality_score 1.2.0): detected, never scored."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
-    product = _product(formulation_data={"organic": {"usda_verified": True}})
-    payload = score_formulation(product)
-    assert payload["components"]["A5a_organic"] == 1.0
-
-
-def test_a5a_organic_claimed_without_exclusion() -> None:
-    from scoring_v4.modules.generic_formulation import score_formulation
-
-    product = _product(
-        formulation_data={"organic": {"claimed": True, "exclusion_matched": False}}
-    )
-    payload = score_formulation(product)
-    assert payload["components"]["A5a_organic"] == 1.0
+    plain = score_formulation(_product())
+    payload = score_formulation(_product(formulation_data={"organic": organic}))
+    assert payload["components"]["A5a_organic"] == 0.0
+    assert payload["score"] == plain["score"]
 
 
 def test_a5a_organic_claimed_with_exclusion_skipped() -> None:
@@ -529,18 +522,22 @@ def test_a5a_organic_claimed_with_exclusion_skipped() -> None:
 # --- A5e natural source ---------------------------------------------------
 
 
-def test_a5e_natural_source_majority_natural() -> None:
+def test_a5e_natural_source_is_attribute_only() -> None:
+    """Natural source is a consumer attribute (quality_score 1.2.0): it never moves the score."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
-    product = _product(
-        ingredients=[
-            _ingredient(canonical_id="a", natural=True),
-            _ingredient(canonical_id="b", natural=True),
-            _ingredient(canonical_id="c", natural=False),
-        ]
-    )
-    payload = score_formulation(product)
-    assert payload["components"]["A5e_natural_source"] == 1.0
+    natural = score_formulation(_product(ingredients=[
+        _ingredient(canonical_id="a", natural=True),
+        _ingredient(canonical_id="b", natural=True),
+        _ingredient(canonical_id="c", natural=False),
+    ]))
+    synthetic = score_formulation(_product(ingredients=[
+        _ingredient(canonical_id="a", natural=False),
+        _ingredient(canonical_id="b", natural=False),
+        _ingredient(canonical_id="c", natural=False),
+    ]))
+    assert natural["components"]["A5e_natural_source"] == 0.0
+    assert natural["score"] == synthetic["score"]
 
 
 def test_a5e_natural_source_minority_natural_returns_zero() -> None:
@@ -1036,11 +1033,13 @@ def test_b1_dietary_sugar_clean_returns_zero() -> None:
     assert payload["penalties"]["B1_dietary_sugar"] == 0.0
 
 
-def test_sleep_melatonin_gummy_gets_format_safety_penalty() -> None:
+def test_sleep_melatonin_gummy_has_no_format_penalty() -> None:
+    """Dosage form alone is not scored; sugar in a gummy is charged by B1_dietary_sugar."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     payload = score_formulation(
         _product(
+            product_name="Kids Sleep Gummies Berry Flavor",
             form_factor="gummy",
             supplement_taxonomy={"primary_type": "sleep_support"},
             ingredients=[
@@ -1055,32 +1054,8 @@ def test_sleep_melatonin_gummy_gets_format_safety_penalty() -> None:
         )
     )
 
-    assert payload["penalties"]["B1_sleep_melatonin_gummy"] == -2.0
-    assert payload["metadata"]["sleep_support"]["melatonin_gummy_penalty"] == 2.0
-
-
-def test_sleep_melatonin_gummy_name_gets_penalty_when_form_factor_missing() -> None:
-    from scoring_v4.modules.generic_formulation import score_formulation
-
-    payload = score_formulation(
-        _product(
-            product_name="Kids Sleep Gummies Berry Flavor",
-            form_factor="",
-            supplement_taxonomy={"primary_type": "sleep_support"},
-            ingredients=[
-                _ingredient(
-                    name="Melatonin",
-                    canonical_id="melatonin",
-                    bio_score=9,
-                    quantity=3,
-                    unit="mg",
-                )
-            ],
-        )
-    )
-
-    assert payload["penalties"]["B1_sleep_melatonin_gummy"] == -2.0
-    assert payload["metadata"]["sleep_support"]["melatonin_gummy_penalty"] == 2.0
+    assert not any("gummy" in key for key in payload["penalties"])
+    assert "melatonin_gummy_penalty" not in payload["metadata"]["sleep_support"]
 
 
 # --- P1.3.1b formulation-excellence components ---------------------------
@@ -1262,7 +1237,7 @@ def test_a5c_synergy_cluster_explicit_legacy_flag() -> None:
     assert false_payload["components"]["A5c_synergy_cluster"] == 0.0
 
 
-def test_a5d_non_gmo_project_verified_gets_half_point() -> None:
+def test_a5d_non_gmo_project_verified_is_attribute_only() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 
     payload = score_formulation(
@@ -1276,10 +1251,10 @@ def test_a5d_non_gmo_project_verified_gets_half_point() -> None:
         )
     )
 
-    assert payload["components"]["A5d_non_gmo"] == 0.5
+    assert payload["components"]["A5d_non_gmo"] == 0.0
 
 
-def test_a5d_non_gmo_project_rules_db_evidence_gets_half_point() -> None:
+def test_a5d_non_gmo_project_rules_db_evidence_is_attribute_only() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 
     payload = score_formulation(
@@ -1300,7 +1275,7 @@ def test_a5d_non_gmo_project_rules_db_evidence_gets_half_point() -> None:
         )
     )
 
-    assert payload["components"]["A5d_non_gmo"] == 0.5
+    assert payload["components"]["A5d_non_gmo"] == 0.0
 
 
 def test_a5d_generic_non_gmo_claim_no_credit() -> None:
@@ -1313,7 +1288,8 @@ def test_a5d_generic_non_gmo_claim_no_credit() -> None:
     assert payload["components"]["A5d_non_gmo"] == 0.0
 
 
-def test_a5_rollup_clamps_at_4_when_subcredits_exceed_cap() -> None:
+def test_a5_rollup_scores_only_standardization_and_synergy() -> None:
+    """Organic, Non-GMO and natural signals are present but contribute nothing (1.2.0)."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(
@@ -1337,8 +1313,10 @@ def test_a5_rollup_clamps_at_4_when_subcredits_exceed_cap() -> None:
         ingredients=[_ingredient(natural=True)],
     )
     payload = score_formulation(product)
+    components = payload["components"]
 
-    assert payload["components"]["_A5_rollup_clamped_from"] == 4.5
+    assert components["A5a_organic"] == components["A5d_non_gmo"] == components["A5e_natural_source"] == 0.0
+    assert components["A5b_standardized_botanical"] + components["A5c_synergy_cluster"] <= 4.0
 
 
 # --- P1.3.1b enzyme recognition ------------------------------------------
@@ -1674,9 +1652,10 @@ def test_dimension_score_assembles_8_components_minus_penalty() -> None:
     assert payload["components"]["premium_single_ingredient_floor_adjustment"] == 4.0
 
 
-def test_dimension_score_clamps_to_max_30() -> None:
-    """P1.3.1b brings enough positive components online that the 30-point
-    dimension cap can be exercised directly."""
+def test_dimension_score_stays_within_max_30() -> None:
+    """Since quality_score 1.2.0 organic, Non-GMO and natural source add 0, so
+    the richest multi-active formula reaches 29 (A1 15 + A2 4 + A3 3 + A4 3 +
+    A5 standardized 1 + synergy 1 + enzymes 2) and the 30-point cap holds."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(
@@ -1717,7 +1696,7 @@ def test_dimension_score_clamps_to_max_30() -> None:
     payload = score_formulation(product)
 
     assert payload["score"] <= 30.0, "dimension cap must hold"
-    assert payload["score"] == 30.0
+    assert payload["score"] == 29.0
 
 
 def test_dimension_score_floors_at_zero() -> None:

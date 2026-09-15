@@ -176,7 +176,7 @@ def test_export_contract_reconciles_explicit_category_cap_adjustment() -> None:
             "safety_hygiene": {"score": 10.0},
         },
         "_v4_quality_score_cap": {
-            "id": "generic_astaxanthin_single",
+            "id": "sports_opaque_stimulant",
             "cap": 85.0,
             "applied": True,
             "score_before_cap": 95.0,
@@ -3972,7 +3972,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     e1["upcSku"] = "111111111111"; e2["upcSku"] = "222222222222"; e3["upcSku"] = "333333333333"
     scored_live = _canned_v4(status="scored", quality_100=88.5, verdict="SAFE", tier="Very good")
     scored_live["quality_score_cap_v4"] = {
-        "id": "generic_astaxanthin_single",
+        "id": "sports_opaque_stimulant",
         "cap": 88.5,
         "applied": True,
         "score_before_cap": 88.5,
@@ -4051,7 +4051,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         )
         assert blob["v4_confidence_detail"]["band"] == "high"
         assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
-        assert blob["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"
+        assert blob["quality_score_cap_v4"]["id"] == "sports_opaque_stimulant"
         assert "v4_score_explanation" in blob
         assert "raw_score_v4_100" not in blob
 

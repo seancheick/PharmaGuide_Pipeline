@@ -8,8 +8,9 @@ Formulation for multis and prenatals is panel-aware:
   - Cap premium-form diversity so stacked panels cannot inflate endlessly.
   - Credit a small set of key form signals (methylfolate, methyl-B12, D3,
     K2, chelated minerals) without treating dose adequacy as formulation.
-  - Penalize gummy formulation limitations modestly; missing/low doses and
-    prenatal-critical coverage land in P3.2 Dose.
+  - Dosage form earns or loses nothing by itself. A gummy's real consequences
+    (sugar through the shared penalty; missing/low doses and prenatal-critical
+    coverage in P3.2 Dose) are scored where they belong.
 """
 
 from __future__ import annotations
@@ -42,14 +43,11 @@ CAP_PANEL_FORM_QUALITY = _FVM["cap_panel_form_quality"]
 CAP_PREMIUM_FORM_DIVERSITY = _FVM["cap_premium_form_diversity"]
 CAP_KEY_FORM_SUPPORT = _FVM["cap_key_form_support"]
 CAP_PANEL_DISCLOSURE_STRUCTURE = _FVM["cap_panel_disclosure_structure"]
-CAP_DOSAGE_FORM_SUITABILITY = _FVM["cap_dosage_form_suitability"]
 
 PANEL_FORM_NEUTRAL_FLOOR = _FVM["panel_form_neutral_floor"]
 BIO_SCORE_MAX = _FVM["bio_score_max"]
 PREMIUM_FORM_THRESHOLD = _FVM["premium_form_threshold"]
 PREMIUM_POINTS_PER_ADDITIONAL = _FVM["premium_points_per_additional"]
-
-GUMMY_FORMULATION_PENALTY = _FVM["gummy_formulation_penalty"]
 
 PHASE_MARKER = "P3.1_multi_prenatal_formulation"
 
@@ -72,9 +70,6 @@ CHELATED_MINERAL_RE = re.compile(
     r"glycinate\s+chelate|amino\s+acid\s+chelate)\b"
 )
 STANDARD_MINERAL_RE = re.compile(r"\b(sulfate|oxide|carbonate|fumarate|gluconate|chloride)\b")
-GUMMY_RE = re.compile(r"\b(gummy|gummies|chewable)\b")
-
-
 def _clamp(low: float, high: float, value: float) -> float:
     return max(low, min(high, value))
 
@@ -124,31 +119,6 @@ def _ingredient_text(ingredient: Dict[str, Any]) -> str:
 
     return _norm_text(" ".join(parts))
 
-
-def _form_factor_text(product: Dict[str, Any]) -> str:
-    """Build a text blob for form-factor pattern matching (gummy detection,
-    dosage-form suitability scoring).
-
-    SP-3 (2026-05-21): also include `form_factor_canonical` so the canonical
-    id (`gummy`, `softgel`, etc.) participates in the regex match. The
-    legacy free-text fields and product name keep contributing because the
-    GUMMY_RE pattern also catches "chewable gummy multivitamin" name text
-    that the canonical field alone would miss.
-    """
-    parts = []
-    for key in (
-        "form_factor_canonical",
-        "form_factor",
-        "product_form",
-        "dosage_form",
-        "form",
-        "product_name",
-        "fullName",
-    ):
-        value = product.get(key)
-        if value:
-            parts.append(str(value))
-    return _norm_text(" ".join(parts))
 
 
 def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -275,19 +245,6 @@ def _score_panel_disclosure_structure(product: Dict[str, Any]) -> tuple[float, f
     return 0.0, coverage
 
 
-def _is_gummy(product: Dict[str, Any]) -> bool:
-    return bool(GUMMY_RE.search(_form_factor_text(product)))
-
-
-def _score_dosage_form_suitability(product: Dict[str, Any]) -> float:
-    text = _form_factor_text(product)
-    if not text:
-        return 1.0
-    if GUMMY_RE.search(text):
-        return 0.0
-    return 2.0
-
-
 def score_formulation(product: Any) -> Dict[str, Any]:
     """Score the multi/prenatal Formulation 25 dimension.
 
@@ -318,14 +275,6 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     components["panel_disclosure_structure"] = disclosure_score
     metadata["dose_coverage"] = coverage
 
-    components["dosage_form_suitability"] = (
-        _score_dosage_form_suitability(product)
-        if _active_ingredients(product)
-        else 0.0
-    )
-
-    if _is_gummy(product):
-        penalties["gummy_formulation_limit"] = -GUMMY_FORMULATION_PENALTY
     shared_penalties = shared_formulation_penalty_detail(product)
     penalties.update(shared_penalties["penalties"])
 

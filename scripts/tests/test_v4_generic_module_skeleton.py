@@ -28,6 +28,8 @@ Plus separate adjustments:
 
 from __future__ import annotations
 
+import pytest
+
 import sys
 from pathlib import Path
 
@@ -211,39 +213,27 @@ def test_score_generic_does_not_mutate_input() -> None:
     assert product == before
 
 
-def test_single_astaxanthin_emits_public_quality_cap() -> None:
-    from scoring_v4.modules.generic import generic_public_quality_cap
+@pytest.mark.parametrize(
+    ("name", "canonical_id", "quantity"),
+    [
+        ("Astaxanthin", "astaxanthin", 4),
+        ("Haematococcus pluvialis extract", "haematococcus_pluvialis", 4),
+        ("Kaneka Ubiquinol", "kaneka_ubiquinol", 100),
+    ],
+)
+def test_single_astaxanthin_and_coq10_have_no_hidden_public_cap(name, canonical_id, quantity) -> None:
+    """The six pillars must explain the public number: no ingredient-specific cap."""
+    from score_supplements_v4 import score_product_v4
+    from scoring_v4.modules.generic import score_generic
 
-    product = _single_active_product("Astaxanthin", "astaxanthin", 4)
+    product = _single_active_product(name, canonical_id, quantity)
 
-    cap = generic_public_quality_cap(product)
-
-    assert cap is not None
-    assert cap["id"] == "generic_astaxanthin_single"
-    assert cap["cap"] == 85.0
-
-
-def test_haematococcus_astaxanthin_source_emits_public_quality_cap() -> None:
-    from scoring_v4.modules.generic import generic_public_quality_cap
-
-    product = _single_active_product("Haematococcus pluvialis extract", "haematococcus_pluvialis", 4)
-
-    cap = generic_public_quality_cap(product)
-
-    assert cap is not None
-    assert cap["id"] == "generic_astaxanthin_single"
-
-
-def test_single_coq10_emits_public_quality_cap() -> None:
-    from scoring_v4.modules.generic import generic_public_quality_cap
-
-    product = _single_active_product("Kaneka Ubiquinol", "kaneka_ubiquinol", 100)
-
-    cap = generic_public_quality_cap(product)
-
-    assert cap is not None
-    assert cap["id"] == "generic_coq10_single"
-    assert cap["cap"] == 93.0
+    assert "public_quality_cap" not in score_generic(product).metadata
+    out = score_product_v4(product)
+    assert out["quality_score_cap_v4"] is None
+    if out["quality_score_v4_100"] is not None:
+        pillar_sum = round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1)
+        assert out["quality_score_v4_100"] == max(0.0, min(100.0, pillar_sum))
 
 
 def _single_active_product(name: str, canonical_id: str, quantity: float) -> dict:
@@ -265,8 +255,8 @@ def _single_active_product(name: str, canonical_id: str, quantity: float) -> dic
     }
 
 
-def test_areds_like_eye_formula_is_not_capped_as_single_astaxanthin() -> None:
-    from scoring_v4.modules.generic import generic_public_quality_cap
+def test_areds_like_eye_formula_has_no_public_cap() -> None:
+    from scoring_v4.modules.generic import score_generic
 
     product = {
         **COMPLETE_GENERIC_PRODUCT,
@@ -281,7 +271,7 @@ def test_areds_like_eye_formula_is_not_capped_as_single_astaxanthin() -> None:
         },
     }
 
-    assert generic_public_quality_cap(product) is None
+    assert "public_quality_cap" not in score_generic(product).metadata
 
 
 # --- Shadow integration ---------------------------------------------------

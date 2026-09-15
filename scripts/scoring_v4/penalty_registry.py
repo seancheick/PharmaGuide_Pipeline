@@ -32,20 +32,8 @@ PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
     "B1_harmful_additives": PenaltySpec(
         "formulation", "consumer_material", FORMULA_QUALITY_MIRROR
     ),
-    "B1_sleep_melatonin_gummy": PenaltySpec(
-        "formulation", "consumer_material", FORMULA_QUALITY_MIRROR
-    ),
-    "B1_immune_gummy_or_syrup": PenaltySpec(
-        "formulation", "consumer_material"
-    ),
-    "gummy_formulation_limit": PenaltySpec(
-        "formulation", "consumer_material"
-    ),
     "immune_high_variability_botanical_stack": PenaltySpec(
         "formulation", "quality_context"
-    ),
-    "fiber_gummy_delivery_penalty": PenaltySpec(
-        "formulation", "consumer_material"
     ),
     "fiber_cleanse_detox_penalty": PenaltySpec(
         "formulation", "quality_context"

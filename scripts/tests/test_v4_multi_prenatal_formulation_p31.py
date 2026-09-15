@@ -158,7 +158,11 @@ def test_presence_floor_preserves_positive_multi_form_signal_after_penalty_clamp
     presence floor instead of displaying 0 for a mapped active."""
     import scoring_v4.modules.multi_prenatal_formulation as formulation
 
-    monkeypatch.setattr(formulation, "GUMMY_FORMULATION_PENALTY", 10.0)
+    monkeypatch.setattr(
+        formulation,
+        "shared_formulation_penalty_detail",
+        lambda product: {"penalties": {"B1_harmful_additives": -10.0}, "metadata": {}},
+    )
 
     product = _product(
         form_factor="gummy",
@@ -177,7 +181,11 @@ def test_presence_floor_preserves_positive_multi_form_signal_after_penalty_clamp
 def test_presence_floor_does_not_apply_to_multi_with_no_positive_form_signal(monkeypatch) -> None:
     import scoring_v4.modules.multi_prenatal_formulation as formulation
 
-    monkeypatch.setattr(formulation, "GUMMY_FORMULATION_PENALTY", 10.0)
+    monkeypatch.setattr(
+        formulation,
+        "shared_formulation_penalty_detail",
+        lambda product: {"penalties": {"B1_harmful_additives": -10.0}, "metadata": {}},
+    )
 
     product = _product(form_factor="gummy", ingredients=[])
 
@@ -201,16 +209,15 @@ def test_dose_panel_structure_rewards_individual_dose_disclosure() -> None:
     assert partial["metadata"]["dose_coverage"] == 0.625
 
 
-def test_gummy_formulation_loses_dosage_form_credit_and_gets_modest_penalty() -> None:
+def test_dosage_form_alone_neither_earns_nor_loses_formulation_points() -> None:
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
     tablet = score_formulation(_product(form_factor="tablet", ingredients=_premium_prenatal_ingredients()))
     gummy = score_formulation(_product(form_factor="gummy", name="Adult Multi Gummies", ingredients=_premium_prenatal_ingredients()))
 
-    assert tablet["components"]["dosage_form_suitability"] == 2.0
-    assert gummy["components"]["dosage_form_suitability"] == 0.0
-    assert gummy["penalties"]["gummy_formulation_limit"] == -3.0
-    assert gummy["score"] == tablet["score"] - 5.0
+    assert "dosage_form_suitability" not in gummy["components"]
+    assert not any("gummy" in key for key in gummy["penalties"])
+    assert gummy["score"] == tablet["score"]
 
 
 def test_empty_or_malformed_product_scores_zero_not_none() -> None:

@@ -619,7 +619,7 @@
         "archetype": "immune_support",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 41.7,
+        "quality_score_v4_100": 43.0,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -628,7 +628,7 @@
           "evidence": 17.0
         },
         "pillars": {
-          "formulation": 4.7,
+          "formulation": 6.0,
           "dose": 2.7,
           "evidence": 11.8,
           "transparency": 13.5,
@@ -636,7 +636,7 @@
           "safety_hygiene": 3.0
         },
         "raw_dimensions": {
-          "formulation": 7.0,
+          "formulation": 9.0,
           "dose": 3.0,
           "evidence": 10.0,
           "transparency": 9.0
@@ -754,7 +754,7 @@
         "archetype": "fiber_digestive",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 36.5,
+        "quality_score_v4_100": 39.7,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -763,7 +763,7 @@
           "evidence": 18.0
         },
         "pillars": {
-          "formulation": 6.8,
+          "formulation": 10.0,
           "dose": 4.2,
           "evidence": 0.0,
           "transparency": 13.5,
@@ -771,7 +771,7 @@
           "safety_hygiene": 6.0
         },
         "raw_dimensions": {
-          "formulation": 9.5,
+          "formulation": 14.0,
           "dose": 5.2,
           "evidence": 0.0,
           "transparency": 9.0
@@ -1001,8 +1001,8 @@
         "quality_tier": "Exceptional",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 23.0,
-          "dose": 23.0,
+          "formulation": 21.0,
+          "dose": 18.0,
           "evidence": 20.0
         },
         "pillars": {
@@ -1014,8 +1014,8 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 23.0,
-          "dose": 25.0,
+          "formulation": 21.0,
+          "dose": 20.0,
           "evidence": 19.26,
           "transparency": 12.0
         }
@@ -1053,17 +1053,17 @@
         "archetype": "omega",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 26.0,
+        "quality_score_v4_100": 21.9,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 23.0,
-          "dose": 23.0,
+          "formulation": 21.0,
+          "dose": 18.0,
           "evidence": 20.0
         },
         "pillars": {
-          "formulation": 1.7,
-          "dose": 4.3,
+          "formulation": 1.9,
+          "dose": 0.0,
           "evidence": 0.0,
           "transparency": 8.0,
           "verification": 6.0,
@@ -1071,7 +1071,7 @@
         },
         "raw_dimensions": {
           "formulation": 2.0,
-          "dose": 5.0,
+          "dose": 0.0,
           "evidence": 0.0,
           "transparency": 8.0
         }
@@ -1160,7 +1160,7 @@
         "quality_tier": "Excellent",
         "v4_confidence": "high",
         "normalization_references": {
-          "formulation": 23.0,
+          "formulation": 21.0,
           "dose": 23.0,
           "evidence": 18.0
         },
@@ -1173,7 +1173,7 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 23.4,
+          "formulation": 21.4,
           "dose": 23.3571,
           "evidence": 18.0,
           "transparency": 11.0
@@ -1236,16 +1236,16 @@
         "archetype": "prenatal_multi",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 34.1,
+        "quality_score_v4_100": 37.4,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 23.0,
+          "formulation": 21.0,
           "dose": 23.0,
           "evidence": 18.0
         },
         "pillars": {
-          "formulation": 4.1,
+          "formulation": 7.4,
           "dose": 9.0,
           "evidence": 0.0,
           "transparency": 11.0,
@@ -1253,7 +1253,7 @@
           "safety_hygiene": 4.0
         },
         "raw_dimensions": {
-          "formulation": 4.75,
+          "formulation": 7.75,
           "dose": 10.2991,
           "evidence": 0.0,
           "transparency": 11.0

@@ -15,9 +15,12 @@ Components:
                            disclosed. +0..4.
     sustainability_cert  — Friend of the Sea or MSC verified by rules_db
                            (score_eligible=True in
-                           certification_data.evidence_based). +2.
+                           certification_data.evidence_based). 0 points since
+                           quality_score 1.2.0: a consumer attribute recorded in
+                           metadata (sustainability_cert_program), not a
+                           formulation-quality signal.
 
-Maximum reachable score with current sub-components: 8 + 4 + 5 + 4 + 2 = 23/25.
+Maximum reachable score with current sub-components: 8 + 4 + 5 + 4 = 21/25.
 The 2-point headroom is intentional and reserved for future lot-level purity
 signals. Per Sean's 'do not invent fields' rule, concentration credit requires
 label-disclosed parent omega oil mass and EPA/DHA mass.
@@ -517,7 +520,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         components["epa_dha_concentration"] = concentration["score"]
 
     sustainability_match = _sustainability_cert_verified(product)
-    if sustainability_match:
+    if sustainability_match and sustainability_pts > 0:
         components["sustainability_cert"] = sustainability_pts
 
     shared_penalties = shared_formulation_penalty_detail(product)
@@ -561,11 +564,11 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "sustainability_cert_program": sustainability_match,
         "data_limited_form_floor_applied": bool(data_limited_form_floor["applied"]),
         "data_limited_form_floor": data_limited_form_floor,
-        "max_reachable_in_p161": 23.0,
+        "max_reachable_in_p161": 21.0,
         "_max_reachable_note": (
-            "Current sub-components sum to 23/25 maximum. 2-point headroom "
-            "is reserved for future lot-level purity evidence. Do not interpret "
-            "a 23/25 score as a cap-applied event."
+            "Current sub-components sum to 21/25 maximum (sustainability "
+            "certification is an attribute worth 0 points). Do not interpret "
+            "a 21/25 score as a cap-applied event."
         ),
     }
     metadata.update(shared_penalties["metadata"])

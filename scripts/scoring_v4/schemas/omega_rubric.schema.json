@@ -38,15 +38,6 @@
               "flag": {"type": ["string", "null"]}
             }
           }
-        },
-        "ratio_sanity": {
-          "type": "object",
-          "additionalProperties": true,
-          "properties": {
-            "score": {"type": "number", "minimum": 0, "maximum": 30},
-            "min_ratio": {"type": "number", "minimum": 0},
-            "max_ratio": {"type": "number", "minimum": 0}
-          }
         }
       }
     },

@@ -5,11 +5,10 @@ Locks the Formulation sub-component math:
     form_tier            8 / 8 / 7 / 4 / 2 (TG / rTG / PL / EE / undefined)
     source_disclosed     +4
     premium_form_a2      +5 (only when form != undefined)
-    sustainability_cert  +2 (Friend of the Sea or MSC, rules_db verified)
+    sustainability_cert  0 (attribute only since quality_score 1.2.0; program kept in metadata)
     epa_dha_concentration +0..4 (EPA+DHA mg / omega oil mg, when disclosed)
 
-Maximum reachable: 23/25 today. The remaining 2-point headroom is reserved
-for future lot-level purity/oxidation evidence.
+Maximum reachable: 21/25 today.
 
 Per Sean's 2026-05-20 directive: 'Do not invent fields.' Form is credited
 only when the label or ingredient panel EXPLICITLY discloses molecular
@@ -488,7 +487,7 @@ def test_source_not_disclosed_bare_epa_dha_name() -> None:
 # --- Sustainability cert (rules_db verified) -----------------------------
 
 
-def test_sustainability_credit_friend_of_the_sea_rules_db_verified() -> None:
+def test_sustainability_friend_of_the_sea_is_attribute_only() -> None:
     """Friend of the Sea must be in evidence_based.third_party_programs
     with score_eligible=True. Bare label-text claims do NOT qualify."""
     from scoring_v4.modules.omega_formulation import score_formulation
@@ -498,11 +497,11 @@ def test_sustainability_credit_friend_of_the_sea_rules_db_verified() -> None:
         certification_data=_verified_sustainability("Friend of the Sea"),
     )
     payload = score_formulation(product)
-    assert payload["components"]["sustainability_cert"] == 2.0
+    assert "sustainability_cert" not in payload["components"]
     assert payload["metadata"]["sustainability_cert_program"] == "Friend of the Sea"
 
 
-def test_sustainability_credit_msc_rules_db_verified() -> None:
+def test_sustainability_msc_is_attribute_only() -> None:
     from scoring_v4.modules.omega_formulation import score_formulation
 
     product = _epa_dha_product(
@@ -510,7 +509,21 @@ def test_sustainability_credit_msc_rules_db_verified() -> None:
         certification_data=_verified_sustainability("MSC"),
     )
     payload = score_formulation(product)
-    assert payload["components"]["sustainability_cert"] == 2.0
+    assert "sustainability_cert" not in payload["components"]
+    assert payload["metadata"]["sustainability_cert_program"] == "MSC"
+
+
+def test_verified_sustainability_does_not_change_formulation_score() -> None:
+    """Invariance: sustainable sourcing is an attribute, so the score is identical."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    certified = score_formulation(_epa_dha_product(
+        name="Sustainable Fish Oil",
+        certification_data=_verified_sustainability("Friend of the Sea"),
+    ))
+    plain = score_formulation(_epa_dha_product(name="Sustainable Fish Oil"))
+    assert certified["score"] == plain["score"]
+    assert certified["metadata"]["sustainability_cert_program"] == "Friend of the Sea"
 
 
 # --- EPA+DHA concentration credit ----------------------------------------
@@ -611,10 +624,9 @@ def test_sustainability_does_not_credit_unrelated_cert() -> None:
 # --- Score ceiling + headroom -------------------------------------------
 
 
-def test_maximum_reachable_score_is_23() -> None:
+def test_maximum_reachable_score_is_21() -> None:
     """Per the rubric: max reachable today is form 8 + source 4 +
-    premium 5 + sustainability 2 + concentration 4 = 23/25. The remaining
-    2-point headroom is reserved for future lot-level purity evidence."""
+    premium 5 + concentration 4 = 21/25; sustainability adds 0."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     product = _epa_dha_product(
@@ -625,8 +637,8 @@ def test_maximum_reachable_score_is_23() -> None:
         certification_data=_verified_sustainability("Friend of the Sea"),
     )
     payload = score_formulation(product)
-    assert payload["score"] == 23.0
-    assert payload["metadata"]["max_reachable_in_p161"] == 23.0
+    assert payload["score"] == 21.0
+    assert payload["metadata"]["max_reachable_in_p161"] == 21.0
 
 
 def test_dimension_cap_clamps_above_25() -> None:
@@ -645,7 +657,7 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
     """Sports Research Omega-3 1055mg Fish Oil (DSLD 327776) has TG form
     (via ingredient panel 'Triglycerides' row), source disclosed
     (Fish Oil Concentrate), and Friend of the Sea rules_db verified.
-    Expected: 23/25 (max reachable today)."""
+    Expected: 21/25 (max reachable today)."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     # Synthesize the canary blob shape from the field audit.
@@ -681,7 +693,7 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
         }
     }
     payload = score_formulation(product)
-    assert payload["score"] == 23.0
+    assert payload["score"] == 21.0
     assert payload["metadata"]["form_detected"] == "tg"
     assert payload["metadata"]["sustainability_cert_program"] == "Friend of the Sea"
 
@@ -691,7 +703,7 @@ def test_canary_nordic_naturals_ultimate_omega_undefined_form() -> None:
     keyword on the DSLD label (Nordic is widely known to be rTG but
     doesn't disclose this on the label DSLD scrapes). Per
     'do not invent fields', score the undefined-form baseline only.
-    Expected: form_tier 2 + source 4 + sustainability 2 + concentration 4 = 12/25.
+    Expected: form_tier 2 + source 4 + concentration 4 = 10/25 (sustainability 0).
     No premium_form_a2_carry (form undefined)."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
@@ -722,7 +734,7 @@ def test_canary_nordic_naturals_ultimate_omega_undefined_form() -> None:
         }
     }
     payload = score_formulation(product)
-    assert payload["score"] == 12.0
+    assert payload["score"] == 10.0
     assert payload["metadata"]["form_detected"] == "undefined"
     assert "premium_form_a2_carry" not in payload["components"]
 
@@ -801,6 +813,6 @@ def test_formulation_weights_match_rubric_config() -> None:
     assert f["form_tier"]["undefined"] == 2
     assert f["source_disclosed"]["score"] == 4
     assert f["premium_form_a2_carry"]["score"] == 5
-    assert f["sustainability_cert"]["score"] == 2
+    assert f["sustainability_cert"]["score"] == 0
     assert f["epa_dha_concentration"]["score_bands"][0]["score"] == 4
     assert f["sustainability_cert"]["eligibility"] == "rules_db_verified"

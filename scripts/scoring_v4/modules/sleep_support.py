@@ -22,12 +22,7 @@ MELATONIN_CANONICALS = frozenset({"melatonin"})
 FIVE_HTP_CANONICALS = frozenset({"5_htp", "5-htp", "5 hydroxytryptophan"})
 SLEEP_CANONICALS = MELATONIN_CANONICALS | FIVE_HTP_CANONICALS
 
-from scoring_v4.quality_score_config import block as _cfg_block
 
-_CM = _cfg_block("category_magnitudes", "sleep_support")["sleep_support"]
-
-
-MELATONIN_GUMMY_FORMAT_PENALTY = _CM["melatonin_gummy_format_penalty"]
 
 
 def is_sleep_support_product(product: Dict[str, Any]) -> bool:
@@ -41,18 +36,6 @@ def has_sleep_active(product: Dict[str, Any], canonicals: Iterable[str]) -> bool
             return True
     return False
 
-
-def has_melatonin_gummy_format(product: Dict[str, Any]) -> bool:
-    if not is_sleep_support_product(product):
-        return False
-    form_text = _norm_text(
-        f"{product.get('form_factor_canonical') or ''} "
-        f"{product.get('form_factor') or ''} "
-        f"{product.get('product_name') or ''}"
-    )
-    if "gummy" not in form_text and "gummies" not in form_text:
-        return False
-    return has_sleep_active(product, MELATONIN_CANONICALS)
 
 
 def score_sleep_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:

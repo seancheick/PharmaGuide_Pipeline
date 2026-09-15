@@ -76,10 +76,6 @@ from scoring_v4.modules.generic_evidence import (
     has_verified_ingredient_human_evidence_for_row,
 )
 from scoring_v4.modules.immune_support import immune_support_formulation_adjustment
-from scoring_v4.modules.sleep_support import (
-    MELATONIN_GUMMY_FORMAT_PENALTY,
-    has_melatonin_gummy_format,
-)
 
 
 # --- v4 generic Formulation weights ---------------------------------------
@@ -851,11 +847,6 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         )
         penalties.update(immune_adjustment.get("penalties", {}))
         immune_support_metadata = immune_adjustment.get("metadata", {})
-    if has_melatonin_gummy_format(product):
-        penalties["B1_sleep_melatonin_gummy"] = round(
-            -MELATONIN_GUMMY_FORMAT_PENALTY, 4
-        )
-        sleep_support_metadata["melatonin_gummy_penalty"] = MELATONIN_GUMMY_FORMAT_PENALTY
 
     # A5 rollup hard-clamp at CAP_EXCELLENCE (4).
     a5_sum = (

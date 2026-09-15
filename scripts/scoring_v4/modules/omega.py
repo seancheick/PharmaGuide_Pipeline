@@ -8,12 +8,12 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §9
     Formulation         25     P1.6.1 — form_tier (TG 8 / rTG 8 / PL 7 /
                                EE 4 / undefined 2) + source_disclosed 4
                                + premium_form_a2_carry 5
-                               + epa_dha_concentration 0..4
-                               + sustainability_cert 2 (Friend of the Sea /
-                               MSC, rules_db verified); 23/25 reachable
+                               + epa_dha_concentration 0..4; 21/25 reachable
+                               (Friend of the Sea / MSC is recorded as an
+                               attribute worth 0 points since quality_score 1.2.0)
     Dose                25     P1.6.2 — EPA+DHA per-day bands (rescaled to /20
-                               from scoring_config omega3_dose_bonus.bands)
-                               + EPA:DHA ratio sanity (/5, in 1:3..3:1 range)
+                               from scoring_config omega3_dose_bonus.bands);
+                               no EPA:DHA ratio bonus since quality_score 1.2.0
     Evidence            20     P1.6.3 — generic evidence pipeline with
                                omega-specific canonicals (EPA/DHA/EPA+DHA)
                                + indication_relevance (+5 at AHA CVD dose)

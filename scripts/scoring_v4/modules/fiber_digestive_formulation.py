@@ -174,8 +174,6 @@ def _clean_daily_use(product: Dict[str, Any]) -> float:
 
 def _practicality(product: Dict[str, Any]) -> float:
     text = product_name_text(product)
-    if any(term in text for term in ("gummy", "chew", "candy")):
-        return 0.5
     if any(term in text for term in ("cleanse", "detox")):
         return 0.5
     return 2.0
@@ -184,8 +182,6 @@ def _practicality(product: Dict[str, Any]) -> float:
 def _fiber_penalties(product: Dict[str, Any], rows: List[Dict[str, Any]]) -> Dict[str, float]:
     text = product_name_text(product)
     penalties: Dict[str, float] = {}
-    if any(term in text for term in ("gummy", "chew", "candy")):
-        penalties["fiber_gummy_delivery_penalty"] = -3.0
     if any(term in text for term in ("cleanse", "detox")):
         penalties["fiber_cleanse_detox_penalty"] = -3.0
     if _has_stimulant_laxative(rows):
