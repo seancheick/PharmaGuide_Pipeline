@@ -96,6 +96,107 @@ def test_shared_eligibility_preserves_printed_identity_and_unspecified_legacy_na
     assert is_probiotic_source_identity(source)
 
 
+@pytest.mark.parametrize("source", [
+    {
+        "name": "Parry Organic Spirulina",
+        "standardName": "Spirulina",
+        "canonical_id": "spirulina",
+        "raw_category": "bacteria",
+        "raw_taxonomy": {"category": "bacteria", "ingredientGroup": "Blue-Green Algae"},
+    },
+    {
+        "name": "Spirulina Algae",
+        "canonical_id": "spirulina",
+        "category": "bacteria",
+        "ingredientGroup": "Blue-Green Algae",
+    },
+    {
+        "name": "Chlorella vulgaris",
+        "canonical_id": "chlorella",
+        "category": "bacteria",
+    },
+    {
+        # Real Solgar Omnium source shape: DSLD says bacteria, while the
+        # cleaner has already resolved the row to the non-probiotic IQM herb.
+        "name": "standardized Turmeric extract",
+        "standardName": "Turmeric",
+        "canonical_id": "turmeric",
+        "raw_category": "bacteria",
+        "raw_taxonomy": {"category": "bacteria", "ingredientGroup": "Turmeric"},
+    },
+])
+def test_resolved_nonprobiotic_iqm_identity_beats_broad_source_category(source):
+    """A broad or wrong DSLD category cannot override resolved ingredient identity."""
+    from probiotic_measurements import is_probiotic_source_identity
+
+    assert is_probiotic_source_identity(source) is False
+
+
+def test_unlisted_bacterial_genus_keeps_category_based_probiotic_eligibility():
+    """The algae guard must not replace the useful long-tail bacteria fallback."""
+    from probiotic_measurements import is_probiotic_source_identity
+
+    assert is_probiotic_source_identity({
+        "name": "Pediococcus acidilactici",
+        "raw_category": "bacteria",
+        "raw_taxonomy": {"ingredientGroup": "Pediococcus acidilactici"},
+    }) is True
+
+
+def test_resolved_iqm_probiotic_keeps_category_based_long_tail_eligibility():
+    from probiotic_measurements import is_probiotic_source_identity
+
+    assert is_probiotic_source_identity({
+        "name": "Leuconostoc cremoris",
+        "canonical_id": "leuconostoc_cremoris",
+        "raw_category": "bacteria",
+    }) is True
+
+
+def test_resolved_nonprobiotic_blend_member_cannot_inherit_container_identity():
+    """A probiotic blend does not turn its Chlorella sibling into a strain."""
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from probiotic_measurements import probiotic_label_identity_summary
+
+    ref = "ingredientRows[9]"
+    children = [
+        {
+            "name": "High Protein Chlorella",
+            "standardName": "Chlorella",
+            "canonical_id": "chlorella",
+            "raw_category": "other",
+            "cleaner_row_role": "nested_display_only",
+            "raw_source_path": f"{ref}.nestedRows[0]",
+        },
+        {
+            "name": "Bacillus subtilis",
+            "standardName": "Bacillus Subtilis",
+            "canonical_id": "bacillus_subtilis",
+            "raw_category": "bacteria",
+            "cleaner_row_role": "nested_display_only",
+            "raw_source_path": f"{ref}.nestedRows[1]",
+        },
+    ]
+    product = {
+        "product_name": "Source-shaped blend",
+        "inactiveIngredients": [],
+        "activeIngredients": [{
+            "name": "RAW Probiotic and Enzyme Blend",
+            "raw_category": "blend",
+            "cleaner_row_role": "blend_header_total",
+            "raw_source_path": ref,
+            "quantity": 270,
+            "unit": "mg",
+            "nestedIngredients": children,
+        }],
+    }
+
+    product["probiotic_data"] = SupplementEnricherV3()._collect_probiotic_data(deepcopy(product))
+
+    assert product["probiotic_data"]["total_strain_count"] == 1
+    assert probiotic_label_identity_summary(product)["total_strain_count"] == 1
+
+
 @pytest.mark.parametrize("ref", [None, "legacyRows[0]"])
 def test_detached_names_are_only_a_legacy_denominator_when_source_scope_is_absent(ref):
     from scoring_v4.modules.probiotic_dose import score_dose

@@ -20,7 +20,11 @@ from typing import Any, Callable, Dict, List, Optional
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
 # the scorer and only reads data files lazily.
-from scoring_reference_resolver import has_therapeutic_reference, is_known_botanical
+from scoring_reference_resolver import (
+    has_therapeutic_reference,
+    iqm_reference_index,
+    is_known_botanical,
+)
 
 # Single source of truth for identity disposition vocabulary and scoreability.
 # Never copy the disposition list here; the contract must consume the same policy
@@ -43,7 +47,6 @@ from scoring_v4.route_features import (
 
 
 _DATA_DIR = Path(__file__).resolve().parent / "data"
-_IQM_PATH = _DATA_DIR / "ingredient_quality_map.json"
 SCORING_SOURCE = "ingredient_quality_data.ingredients_scorable"
 LEGACY_IQD_SOURCE = "ingredient_quality_data.ingredients"
 PRODUCT_EVIDENCE_SOURCE = "product_scoring_evidence"
@@ -594,11 +597,8 @@ def _botanical_child_identity(name: Any) -> Optional[Dict[str, str]]:
 
 @lru_cache(maxsize=1)
 def _iqm_index() -> Dict[str, Dict[str, Any]]:
-    try:
-        raw = json.loads(_IQM_PATH.read_text())
-    except Exception:  # pragma: no cover - missing data degrades to empty
-        return {}
-    return {str(key): value for key, value in raw.items() if isinstance(value, dict)}
+    """Compatibility accessor backed by the shared reference-data owner."""
+    return iqm_reference_index()
 
 
 def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[str, Any]:

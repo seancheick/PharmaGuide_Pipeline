@@ -43,6 +43,34 @@ def _collect(enricher, rows):
     return product
 
 
+def test_plural_probiotics_header_keeps_its_typed_bacterial_form(enricher):
+    """Real DSLD blend headers may print ``Probiotics`` and type the strain in forms."""
+    owner = {
+        "name": "Ultra Probiotics",
+        "raw_source_text": "Ultra Probiotics",
+        "canonical_id": "probiotics",
+        "raw_category": "blend",
+        "cleaner_row_role": "blend_header_total",
+        "raw_source_path": "ingredientRows[27]",
+        "quantity": 12.5,
+        "unit": "Billion CFU",
+        "forms": [{
+            "name": "Bacillus coagulans",
+            "category": "bacteria",
+            "ingredientGroup": "Bacillus Coagulans",
+        }],
+    }
+
+    product = _collect(enricher, [owner])
+
+    assert product["probiotic_data"]["is_probiotic_product"] is True
+    assert product["probiotic_data"]["total_strain_count"] == 1
+    assert product["probiotic_data"]["total_billion_count"] == 12.5
+    assert product["probiotic_data"]["probiotic_blends"][0]["strains"] == [
+        "Bacillus coagulans"
+    ]
+
+
 @pytest.mark.parametrize("name", ["Lactobacillus rhamnosus GG", "L. rhamnosus GG"])
 @pytest.mark.parametrize("stale_projection", [False, True])
 def test_nonlive_exact_source_cannot_restore_identity_excluded_by_collector(enricher, name, stale_projection):

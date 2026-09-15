@@ -16498,6 +16498,29 @@ class SupplementEnricherV3:
         r'organism(?:s)?(?:\([^)]*\))?',
     ]
 
+    def _cfu_unit_multiplier(self, unit: str) -> Optional[float]:
+        """Return the label-unit scale to individual CFU, or ``None``.
+
+        DSLD stores both fully expanded CFU counts and human-readable units
+        such as ``Billion CFU``.  The unit predicate and the quantity parser
+        must share this one interpretation so a scaled label unit is neither
+        discarded nor mistaken for 12.5 individual cells.
+        """
+        if not unit:
+            return None
+        unit_lower = unit.lower().strip()
+        scale = 1.0
+        scaled = re.fullmatch(r"(million|billion)\s+(.+)", unit_lower)
+        if scaled:
+            scale = 1e6 if scaled.group(1) == "million" else 1e9
+            unit_lower = scaled.group(2).strip()
+        if any(
+            re.fullmatch(pattern, unit_lower, re.IGNORECASE)
+            for pattern in self.CFU_EQUIVALENT_PATTERNS
+        ):
+            return scale
+        return None
+
     def _is_cfu_equivalent_unit(self, unit: str) -> bool:
         """
         Check if a unit string represents CFU-equivalent measurement using
@@ -16505,17 +16528,7 @@ class SupplementEnricherV3:
         labels that merely contain CFU-related words (e.g. "probiotic blend")
         must NOT match.
         """
-        if not unit:
-            return False
-
-        unit_lower = unit.lower().strip()
-
-        import re
-        for pattern in self.CFU_EQUIVALENT_PATTERNS:
-            if re.fullmatch(pattern, unit_lower, re.IGNORECASE):
-                return True
-
-        return False
+        return self._cfu_unit_multiplier(unit) is not None
 
     def _parse_cfu_text_count(self, text: str) -> Optional[float]:
         """Return the first label-declared CFU count from supported notation."""
@@ -16585,11 +16598,13 @@ class SupplementEnricherV3:
             quantity = ingredient.get('quantity', 0)
             unit = (ingredient.get('unit', '') or '')
 
-            if unit and self._is_cfu_equivalent_unit(unit):
+            unit_multiplier = self._cfu_unit_multiplier(unit)
+            if unit_multiplier is not None:
                 if quantity and quantity > 0:
+                    normalized_quantity = float(quantity) * unit_multiplier
                     result["has_cfu"] = True
-                    result["cfu_count"] = quantity
-                    result["billion_count"] = quantity / 1e9
+                    result["cfu_count"] = normalized_quantity
+                    result["billion_count"] = normalized_quantity / 1e9
                     _mark_source("activeIngredients.quantity_unit", source_path or ingredient.get("raw_source_path"), evidence_scope or "row_level")
 
         self.logger.debug("CFU extraction result: %s", result)

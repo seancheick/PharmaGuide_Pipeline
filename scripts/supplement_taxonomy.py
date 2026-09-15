@@ -26,7 +26,6 @@ from collections import Counter
 from math import ceil
 from typing import Any
 
-from identity_integrity import has_nonlive_microbial_derivative_evidence
 from supplement_type_utils import (
     NON_SCORABLE_CATEGORIES,
     canonical_category,
@@ -431,22 +430,22 @@ def _row_has_probiotic_identity(
     row: dict[str, Any],
     category: str | None = None,
 ) -> bool:
-    if has_nonlive_microbial_derivative_evidence(row):
-        return False
-    category = category or canonical_category(row.get("category"))
-    if category in {"probiotic", "bacteria"}:
-        return True
-    text = _normalize_text(
-        " ".join(
-            str(row.get(key) or "")
-            for key in (
-                "name", "raw_source_text", "source_label_name",
-                "label_display_name", "standardName", "standard_name",
-                "canonical_id",
-            )
-        )
-    )
-    return bool(_PROBIOTIC_IDENTITY_RE.search(text))
+    """Delegate physical probiotic identity to the shared source predicate."""
+    from probiotic_measurements import is_probiotic_source_identity
+
+    if category is None:
+        return is_probiotic_source_identity(row)
+
+    # Callers may supply a cleaner-owned classification category that is more
+    # specific than DSLD's raw category. Preserve that precedence while using
+    # the one shared identity rule.
+    probe = dict(row)
+    probe["raw_category"] = category
+    probe["category"] = category
+    taxonomy = probe.get("raw_taxonomy")
+    if isinstance(taxonomy, dict):
+        probe["raw_taxonomy"] = {**taxonomy, "category": category}
+    return is_probiotic_source_identity(probe)
 
 
 def _is_probiotic_cfu_support_row(row: dict[str, Any]) -> bool:

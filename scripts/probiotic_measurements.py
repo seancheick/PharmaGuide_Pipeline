@@ -25,14 +25,13 @@ AFU_REVIEW_REASON = "probiotic_afu_reference_unavailable"
 
 _PROBIOTIC_IDENTITY_RE = re.compile(
     r"\b("
-    r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
+    r"probiotics?|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
     r"bacillus|limosilactobacillus|lacticaseibacillus|lactiplantibacillus|"
     r"lactococcus|acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius|"
     r"coagulans|subtilis|bifidus|cfu|live\s+cultures?|viable\s+cells?"
     r")\b",
     re.IGNORECASE,
 )
-
 
 def _probiotic_source_category(ingredient: Mapping) -> str:
     """Read cleaner/enriched category storage using the canonical vocabulary."""
@@ -45,22 +44,47 @@ def _probiotic_source_category(ingredient: Mapping) -> str:
     )
 
 
+def _resolved_nonprobiotic_iqm_identity(ingredient: Mapping) -> bool:
+    """Whether a resolved IQM identity is owned by a non-probiotic category.
+
+    DSLD can use a taxonomically broad category (for example ``bacteria`` for
+    Spirulina) or an incorrect one (Turmeric in several Solgar records). Once
+    the cleaner has resolved a canonical IQM identity, that reference category
+    outranks category-only evidence. Printed microbial identity remains source
+    evidence and is evaluated independently by the caller.
+    """
+    from scoring_reference_resolver import iqm_reference_entry
+
+    canonical_id = ingredient.get("canonical_id") or ingredient.get("iqm_parent_key")
+    entry = iqm_reference_entry(canonical_id)
+    return bool(entry) and str(entry.get("category") or "").strip().lower() != "probiotics"
+
+
 def is_probiotic_source_identity(ingredient: Mapping) -> bool:
     """Shared collector eligibility, not exact strain proof or clinical credit."""
     from identity_integrity import has_nonlive_microbial_derivative_evidence
 
     if has_nonlive_microbial_derivative_evidence(ingredient):
         return False
-    ing_name = str(ingredient.get("name", "") or "").lower()
-    std_name = str(ingredient.get("standardName", "") or "").lower()
+    ing_name = " ".join(
+        str(ingredient.get(field) or "")
+        for field in ("name", "raw_source_text", "source_label_name", "label_display_name")
+    ).lower()
+    std_name = " ".join(
+        str(ingredient.get(field) or "")
+        for field in ("standardName", "standard_name", "canonical_id")
+    ).lower()
     category = _probiotic_source_category(ingredient)
-    return (
-        bool(_PROBIOTIC_IDENTITY_RE.search(ing_name))
-        or "probiotic" in category
+    printed_identity = bool(_PROBIOTIC_IDENTITY_RE.search(ing_name))
+    category_evidence = (
+        "probiotic" in category
         or "bacteria" in category
         # A derived normalized name cannot turn an explicitly nonmicrobial
         # source (for example yogurt) into a printed organism.
         or (category in ("", "other") and bool(_PROBIOTIC_IDENTITY_RE.search(std_name)))
+    )
+    return printed_identity or (
+        category_evidence and not _resolved_nonprobiotic_iqm_identity(ingredient)
     )
 
 
@@ -164,7 +188,8 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
         id(owner): bool(members) and source_live_eligible[id(owner)]
         and id(owner) not in source_containers
         and (any(cid for _, _, cid in members) or is_probiotic_source_identity(owner)
-             or (id(owner) in child_members and _probiotic_source_category(owner) in ("", "other")))
+             or (id(owner) in child_members and _probiotic_source_category(owner) in ("", "other")
+                 and not _resolved_nonprobiotic_iqm_identity(owner)))
         for owner, members in owned
     }
     owner_registry_ids = {

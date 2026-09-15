@@ -49,6 +49,7 @@ _DATA_DIR = Path(__file__).resolve().parent / "data"
 _THERAPEUTIC_PATH = _DATA_DIR / "rda_therapeutic_dosing.json"
 _RDA_UL_PATH = _DATA_DIR / "rda_optimal_uls.json"
 _BOTANICAL_IDENTITY_PATH = _DATA_DIR / "botanical_ingredients.json"
+_IQM_PATH = _DATA_DIR / "ingredient_quality_map.json"
 
 # Domain (as stamped by the contract's _ingredient_domain) -> reference family.
 _DOMAIN_FAMILY: Dict[str, str] = {
@@ -121,6 +122,31 @@ def _rda_ul_index() -> Dict[str, Dict[str, Any]]:
             if k:
                 index.setdefault(k, entry)
     return index
+
+
+@lru_cache(maxsize=1)
+def iqm_reference_index() -> Dict[str, Dict[str, Any]]:
+    """Canonical IQM id -> entry for cross-layer identity decisions.
+
+    This dependency-free resolver owns this cross-layer reference lookup;
+    neither enrichment measurements nor the scoring contract should import the
+    other merely to ask what category an already-resolved canonical id owns.
+    """
+    try:
+        raw = json.loads(_IQM_PATH.read_text())
+    except Exception:  # pragma: no cover - missing data degrades to empty
+        return {}
+    return {
+        _norm(key): value
+        for key, value in raw.items()
+        if key != "_metadata" and isinstance(value, dict)
+    }
+
+
+def iqm_reference_entry(canonical_id: Any) -> Optional[Dict[str, Any]]:
+    """Return the exact IQM entry for a canonical id, without alias guessing."""
+    key = _norm(canonical_id)
+    return iqm_reference_index().get(key) if key else None
 
 
 @dataclass(frozen=True)

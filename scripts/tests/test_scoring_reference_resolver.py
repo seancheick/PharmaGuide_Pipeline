@@ -98,6 +98,14 @@ def test_resolver_does_not_import_scorer_or_contract():
     assert "from scoring_input_contract" not in source
 
 
+def test_iqm_reference_entry_owns_canonical_category_lookup():
+    from scoring_reference_resolver import iqm_reference_entry
+
+    assert iqm_reference_entry("turmeric")["category"] == "herbs"
+    assert iqm_reference_entry("leuconostoc_cremoris")["category"] == "probiotics"
+    assert iqm_reference_entry("not_a_real_canonical_id") is None
+
+
 def test_therapeutic_index_parity_with_botanical_profile_dosing_index():
     """Resolver and the live scorer must agree on therapeutic-reference membership."""
     from scoring_reference_resolver import _therapeutic_index
