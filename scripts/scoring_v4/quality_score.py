@@ -737,15 +737,17 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     audited_gmp = bool(
         trust_meta.get("B4b_gmp_inferred_from_cert")
         or trust_meta.get("B4b_gmp_inferred_from_manufacturer_facility")
+        or (trust_meta.get("b4b") or {}).get("source") in {
+            "verified_cert_implies_gmp", "manufacturer_facility_gmp"}
     )
     gmp = sub["gmp_certified_points"] if (audited_gmp and b4b >= 4.0) else 0.0
     testing = sub["brand_testing_points"] if b4d > 0 else 0.0
     # PR2.1: a verified brand/facility scoped cert is a real third-party
     # verification signal, but weaker than sku/product_line certification and
-    # not evidence for this SKU. It never stacks on product-level cert/COA.
+    # not evidence for this SKU. It never stacks on a product-level registry cert.
     brand_only_cert = (
         _num(sub.get("brand_only_cert_points"))
-        if brand_only_count > 0 and b4a <= 0 and b4c <= 0
+        if brand_only_count > 0 and not has_registry_cert
         else 0.0
     )
     # Manufacturer reputation is brand-level context; manufacturing region is not
@@ -755,10 +757,12 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     # 1.3.0 evidence tiers: more independent evidence can never score lower than
     # less. Unknown sits at the neutral baseline; claims and brand context can
     # add a little; manufacturing verification more; product-level verification
-    # (registry cert or batch COA) always outranks every lower tier.
-    product_verified = has_registry_cert or coa_batch > 0
+    # (a registry-backed product cert) always outranks every lower tier.
+    # B4c is label/rules-derived traceability (even a QR code can set it).
+    # It is not an independent laboratory verification of this product.
+    product_verified = has_registry_cert
     manufacturing_verified = gmp > 0 or brand_only_cert > 0
-    claim_or_brand = cert > 0 or testing > 0 or reputation > 0
+    claim_or_brand = cert > 0 or testing > 0 or reputation > 0 or coa_batch > 0
     base = sub["neutral_baseline"] + cert + coa_batch + gmp + testing + brand_only_cert + reputation
     ceilings = sub["tier_ceilings"]
     if product_verified:
@@ -781,7 +785,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     elif has_label_asserted_cert:
         signals.append("label claims third-party certification")
     if coa_batch > 0:
-        signals.append("publishes batch test results")
+        signals.append("label provides COA or batch-lookup information")
     if brand_only_cert > 0:
         signals.append("holds a brand/facility certification verified by a third party")
     if gmp > 0:
@@ -791,7 +795,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     if tier == "product":
         reason = "Independently verified — " + ", ".join(signals) + "."
     elif tier == "manufacturing":
-        reason = "Manufacturing verified, product not independently tested — " + ", ".join(signals) + "."
+        reason = "Manufacturing verified; no independent product testing verified on file — " + ", ".join(signals) + "."
     elif tier == "claim_or_brand":
         detail = ", ".join(signals) if signals else "established manufacturer"
         reason = "Quality signals on file, not independently verified — " + detail + "."

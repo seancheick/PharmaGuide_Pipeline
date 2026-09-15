@@ -275,26 +275,21 @@ def _label_asserted_program_key(display: str, rule_id: str) -> str:
 def _score_b4b(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
     """Score GMP / facility quality.
 
-    Order of evidence (strongest first):
-      1. Direct GMP signal (gmp_level=certified / nsf_gmp / compliant / claimed)
-      2. cert→GMP implication: a VERIFIED sku/product_line cert whose program
+    Verified evidence is checked before label-only GMP wording, so adding a
+    claim never masks the independent provenance consumed by the public pillar.
+      1. cert→GMP implication: a VERIFIED sku/product_line cert whose program
          requires a GMP facility audit (NSF Sport/Contents, USP Verified,
          Informed Sport/Choice, BSCG — policy in cert_claim_rules.json). The
          cert is a stronger third-party signal than an empty gmp_level field,
          so we credit GMP from it rather than zeroing a product we KNOW is made
          under audited GMP. Conservative: brand_only/claimed_only/needs_review
          and stale/blocked rows never imply GMP.
-      3. FDA-registered only (weakest).
+      2. Exact manufacturer facility evidence.
+      3. Label-only GMP / FDA-registration signals (module audit only).
     """
     cert = _safe_dict(product.get("certification_data"))
     gmp = _safe_dict(cert.get("gmp"))
     gmp_level = _norm_text(product.get("gmp_level"))
-    if gmp_level == "certified" or bool(
-        gmp.get("nsf_gmp")
-        or gmp.get("gmp_certified_or_compliant")
-        or (gmp.get("claimed") and not gmp.get("fda_registered"))
-    ):
-        return B4B_GMP_CERTIFIED, {}
     inferred = _gmp_implied_by_verified_cert(product)
     if inferred:
         return B4B_GMP_CERTIFIED, {"B4b_gmp_inferred_from_cert": inferred}
@@ -304,6 +299,12 @@ def _score_b4b(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
     facility = gmp_facility_evidence(product)
     if facility:
         return B4B_GMP_CERTIFIED, {"B4b_gmp_inferred_from_manufacturer_facility": facility}
+    if gmp_level == "certified" or bool(
+        gmp.get("nsf_gmp")
+        or gmp.get("gmp_certified_or_compliant")
+        or (gmp.get("claimed") and not gmp.get("fda_registered"))
+    ):
+        return B4B_GMP_CERTIFIED, {}
     if gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
         return B4B_FDA_REGISTERED, {}
     return 0.0, {}

@@ -256,8 +256,6 @@ def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dic
     cert_data = _safe_dict(product.get("certification_data"))
     gmp = _safe_dict(cert_data.get("gmp"))
 
-    if bool(gmp.get("nsf_gmp")):
-        return min(nsf_gmp_pts, cap), {"source": "nsf_gmp", "raw": nsf_gmp_pts}
     inferred = _gmp_implied_by_verified_cert(product)
     if inferred:
         return min(nsf_gmp_pts, cap), {
@@ -275,6 +273,8 @@ def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dic
             "program": facility,
             "raw": nsf_gmp_pts,
         }
+    if bool(gmp.get("nsf_gmp")):
+        return min(nsf_gmp_pts, cap), {"source": "nsf_gmp", "raw": nsf_gmp_pts}
     if bool(gmp.get("fda_registered")):
         return min(fda_pts, cap), {"source": "fda_registered", "raw": fda_pts}
     return 0.0, {

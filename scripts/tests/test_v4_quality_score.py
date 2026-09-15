@@ -566,7 +566,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.5.1-clinical-anchor-corrections"
+    assert out["quality_score_version"] == "1.5.2-evidence-boundary-fixes"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:
@@ -835,19 +835,45 @@ def test_more_independent_evidence_never_scores_lower() -> None:
     manufacturing["verification_bonus"]["metadata"]["trust_metadata"]["B4b_gmp_inferred_from_manufacturer_facility"] = "audited"
     manufacturing["manufacturer_trust"]["components"]["D1_manufacturer_reputation"] = 2.0
     manufacturing_best = _verif(manufacturing)
-    coa_only = _verif(_bd_verif(b4a=0.0, b4b=0.0, b4c=0.5, b4d=0.0, d1=0.0, d4=0.0))
+    product_cert = _verif(_bd_verif(b4a=8.0, b4b=0.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0))
 
     assert unknown["score"] < claim_best["score"] <= 8.0
     assert claim_best["score"] < manufacturing_best["score"] <= 10.0
-    assert manufacturing_best["score"] < coa_only["score"]
-    assert coa_only["score"] >= 11.0
-    assert [v["components"]["tier"] for v in (unknown, claim_best, manufacturing_best, coa_only)] == [
+    assert manufacturing_best["score"] < product_cert["score"]
+    assert product_cert["score"] >= 11.0
+    assert [v["components"]["tier"] for v in (unknown, claim_best, manufacturing_best, product_cert)] == [
         "unknown", "claim_or_brand", "manufacturing", "product"]
 
 
 def test_verification_never_exceeds_15() -> None:
     v = _verif(_bd_verif(b4a=12.0, b4c=2.0, d1=2.0, d4=1.0))
     assert v["score"] <= 15.0
+
+
+def test_label_claim_does_not_erase_verified_facility_evidence() -> None:
+    from copy import deepcopy
+    bd = _bd_verif_with_brand_only_cert()
+    before = _verif(bd)
+    after = deepcopy(bd)
+    after["verification_bonus"]["components"]["B4a_verified_certifications"] = 2.0
+    after["verification_bonus"]["metadata"]["trust_metadata"]["verified_scope_counts"] = {"label_asserted_product": 1}
+    actual = _verif(after)
+    assert actual["score"] >= before["score"]
+    assert actual["components"]["tier"] == "manufacturing"
+
+
+def test_omega_facility_metadata_reaches_the_shared_pillar() -> None:
+    bd = _bd_verif(b4b=4, b4d=0, d1=0)
+    bd["verification_bonus"]["metadata"]["trust_metadata"]["b4b"] = {"source": "manufacturer_facility_gmp", "program": "audited facility"}
+    assert _verif(bd)["components"]["gmp"] == 2.0
+
+
+def test_lookup_or_qr_code_is_not_independent_product_testing() -> None:
+    bd = _bd_verif(b4a=0, b4b=0, b4c=1, b4d=0, d1=0)
+    actual = _verif(bd)
+    assert actual["components"]["tier"] == "claim_or_brand"
+    assert actual["score"] <= 8
+    assert "independently verified" not in actual["reason"].lower().replace("not independently verified", "")
 
 
 # ---- dose copy when the primary active has no benchmark ---------------------

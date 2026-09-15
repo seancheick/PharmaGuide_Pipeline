@@ -2764,7 +2764,9 @@ def derive_v4_tradeoffs(
     transp_pen = safe_dict(transp.get("penalties"))
     transp_comp = safe_dict(transp.get("components"))
     transp_meta = safe_dict(transp.get("metadata"))
-    verif = safe_dict(safe_dict(mb.get("verification_bonus")).get("components"))
+    # Consumer copy uses the final pillar, not raw module trust signals which
+    # include provisional label claims and never proved a laboratory test.
+    verif = safe_dict(safe_dict(safe_dict(scored.get("quality_pillars_v4")).get("verification")).get("components"))
     dose = safe_dict(dims.get("dose"))
     dose_c = safe_dict(dose.get("components"))
     dose_m = safe_dict(dose.get("metadata"))
@@ -2796,12 +2798,13 @@ def derive_v4_tradeoffs(
     if _pos(form, "A6_single_ingredient"):
         bonuses.append({"id": "A6", "label": "Single-nutrient premium form", "score": form["A6_single_ingredient"]})
     # A5e natural-source: scored by v4 but intentionally NOT surfaced (cosmetic).
-    if _pos(verif, "B4a_verified_certifications"):
-        bonuses.append({"id": "B4a", "label": "Third-party purity testing", "score": verif["B4a_verified_certifications"]})
-    if _pos(verif, "B4b_gmp"):
-        bonuses.append({"id": "B4b", "label": "GMP certified facility", "score": verif["B4b_gmp"]})
-    if _pos(verif, "B4c_batch_traceability"):
-        bonuses.append({"id": "B4c", "label": "Heavy metal tested", "score": verif["B4c_batch_traceability"]})
+    if _pos(verif, "cert"):
+        label = "Verified product certification" if verif.get("tier") == "product" else "Label claims certification"
+        bonuses.append({"id": "B4a", "label": label, "score": verif["cert"]})
+    if _pos(verif, "gmp"):
+        bonuses.append({"id": "B4b", "label": "Audited GMP facility", "score": verif["gmp"]})
+    if _pos(verif, "coa_batch"):
+        bonuses.append({"id": "B4c", "label": "COA or batch-lookup information", "score": verif["coa_batch"]})
 
     # Module-specific quality bonuses — the omega and probiotic modules credit
     # their own positive components (not the generic A-codes), so surface them as

@@ -3,8 +3,8 @@ the V3-section-derived `score_bonuses` / `score_penalties`.
 
 Contract (V4 cutover):
   * Bonuses come from `_v4_module_breakdown.dimensions.formulation.components`
-    (A2..A6, A5a..A5d) and `_v4_module_breakdown.verification_bonus.components`
-    (B4a..B4c). A5e natural-source and the hypoallergenic bonus are DROPPED.
+    (A2..A6, A5a..A5d) and `quality_pillars_v4.verification.components`
+    (public, evidence-scoped signals). A5e natural-source and the hypoallergenic bonus are DROPPED.
   * Nuanced transparency penalties (B2 false-allergen-free, B3 compliance,
     B5 opacity, B6 marketing) come from the V4 transparency dimension.
   * Safety penalties (B0 banned/recalled, B1 harmful additive, B1 dietary sugar,
@@ -72,15 +72,25 @@ def test_bonuses_from_v4_formulation_components():
         form={"A2_premium_forms": 1.5, "A5a_organic": 0.5, "A6_single_ingredient": 1.0},
         verif={"B4a_verified_certifications": 1.0, "B4b_gmp": 0.5},
     )
+    scored["quality_pillars_v4"] = {"verification": {"components": {"cert": 9.0, "gmp": 2.0, "tier": "product"}}}
     bonuses, _ = derive_v4_tradeoffs(scored, {})
     labels = {b["label"] for b in bonuses}
     assert "Premium ingredient forms" in labels
     assert "Certified organic" in labels
     assert "Single-nutrient premium form" in labels
-    assert "Third-party purity testing" in labels
-    assert "GMP certified facility" in labels
+    assert "Verified product certification" in labels
+    assert "Audited GMP facility" in labels
     # the bonus score mirrors the v4 component value
     assert _by_id(bonuses, "A2")["score"] == 1.5
+
+
+def test_raw_claims_cannot_create_verified_test_badges():
+    scored = _scored_v4(verif={"B4a_verified_certifications": 2, "B4b_gmp": 4, "B4c_batch_traceability": 1})
+    scored["quality_pillars_v4"] = {"verification": {"components": {"cert": 2, "gmp": 0, "coa_batch": 2.5, "tier": "claim_or_brand"}}}
+    bonuses, _ = derive_v4_tradeoffs(scored, {})
+    assert "B4b" not in _ids(bonuses)
+    assert _by_id(bonuses, "B4a")["label"] == "Label claims certification"
+    assert _by_id(bonuses, "B4c")["label"] == "COA or batch-lookup information"
 
 
 def test_omega3_dose_bonus_from_v4_module():

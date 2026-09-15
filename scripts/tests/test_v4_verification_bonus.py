@@ -83,6 +83,15 @@ def test_bonus_never_exceeds_cap():
     assert 0.0 <= out["score"] <= VERIFICATION_BONUS_CAP
 
 
+def test_label_gmp_does_not_hide_verified_cert_provenance():
+    from copy import deepcopy
+    product = _product(verified_cert_programs=[_cert("usp verified", "sku")])
+    before = _generic_trust(product)
+    claimed = deepcopy(product)
+    claimed["certification_data"]["gmp"] = {"gmp_certified_or_compliant": True}
+    assert _generic_trust(claimed)["metadata"]["B4b_gmp_inferred_from_cert"] == before["metadata"]["B4b_gmp_inferred_from_cert"]
+
+
 def test_bonus_rescale_and_clamp_hold_at_high_verification():
     out = score_verification_bonus(_max_verified_product(), "generic")
     src = out["metadata"]["source_trust_score_0_15"]
