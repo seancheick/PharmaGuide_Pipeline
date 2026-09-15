@@ -107,7 +107,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     from studied_formulas import (
         _clinical_strain_registry,
         clinical_strain_identity_key, clinical_strain_identity_matches,
-        label_owned_strain_identities,
+        label_owned_strain_identities, probiotic_source_live_eligible,
     )
 
     product = product if isinstance(product, Mapping) else {}
@@ -116,6 +116,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     registry = _clinical_strain_registry()
     owned = label_owned_strain_identities(product)
     owners = [owner for owner, _ in owned]
+    source_live_eligible = {id(owner): probiotic_source_live_eligible(product, owner) for owner in owners}
     owner_identities = {id(owner): identities for owner, identities in owned}
     owner_registry_ids = {
         id(owner): {key.removeprefix("strain:") for key, _, _ in identities if key.startswith("strain:")}
@@ -129,6 +130,8 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
 
     def identities(name, owner=None):
         if owner is not None:
+            if not source_live_eligible[id(owner)]:
+                return []
             result = []
             for key, label, cid in owner_identities[id(owner)]:
                 # Ownership already proved the printed alias. Use the registry
@@ -169,6 +172,8 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
                          and owner["raw_source_path"].startswith(f"{ref}.nestedRows[")))
             )]
             if ref and not source_rows:
+                source_names_proved = False
+            if any(not source_live_eligible[id(owner)] for owner in source_rows):
                 source_names_proved = False
             for owner in source_rows or [None]:
                 for key, state, exact in identities(name, owner):

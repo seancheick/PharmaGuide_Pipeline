@@ -302,11 +302,26 @@ def _clinical_label_rows(rows):
             yield from _clinical_label_rows(row.get("nestedIngredients"))
 
 
+def _source_row_representations(owners, ref):
+    if not isinstance(ref, str) or not ref:
+        return []
+    return [owner for owner in owners if owner.get("raw_source_path") == ref]
+
+
+def probiotic_source_live_eligible(product: Mapping, row: Mapping) -> bool:
+    """No representation of this source may contradict live-organism use.
+
+    Keep nonlive representations in the source set: a live-looking duplicate
+    must not rescue their identity, denominator membership, or CFU disclosure.
+    """
+    owners = list(_clinical_label_rows(product.get("activeIngredients")))
+    representations = _source_row_representations(owners, row.get("raw_source_path")) or [row]
+    return not any(has_nonlive_microbial_derivative_evidence(owner) for owner in representations)
+
+
 def _source_rows_all_match(owners, ref, predicate):
     """Every actual representation must remain live-eligible and agree."""
-    if not isinstance(ref, str) or not ref:
-        return False
-    matched = [owner for owner in owners if owner.get("raw_source_path") == ref]
+    matched = _source_row_representations(owners, ref)
     return bool(matched) and all(
         not has_nonlive_microbial_derivative_evidence(owner) and predicate(owner)
         for owner in matched

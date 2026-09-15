@@ -58,6 +58,7 @@ def test_nonlive_exact_source_cannot_restore_identity_excluded_by_collector(enri
             "name": name, "strains": [name], "raw_source_path": nonlive["raw_source_path"],
         })
     result = score_formulation(product)
+    assert result["metadata"]["total_strain_count"] == 1
     assert result["metadata"]["identified_strain_count"] == 0
     assert result["components"]["exact_identity_completeness"] == 0
     assert independent_clinical_strains(product) == []

@@ -73,6 +73,46 @@ def test_source_completion_retains_explicit_probiotic_role_without_inventing_ide
     assert result["components"]["exact_identity_completeness"] == 4
 
 
+@pytest.mark.parametrize("stale_projection", [False, True])
+@pytest.mark.parametrize("alias", [False, True])
+def test_nonlive_projection_cannot_change_live_identity_denominator_or_disclosure(stale_projection, alias):
+    from build_final_db import build_detail_blob
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    product = product_with_identities(2)
+    product["probiotic_data"].update(is_probiotic_product=True, clinical_strains=[])
+    product["activeIngredients"][1]["forms"] = [{"name": "heat killed"}]
+    live, nonlive = product["probiotic_data"]["probiotic_blends"]
+    live["cfu_data"] = {"has_cfu": True, "cfu_count": 1e9}
+    nonlive["cfu_data"] = {"has_cfu": True, "cfu_count": 50e9}
+    if alias:
+        nonlive["strains"] = ["L. plantarum 299v"]
+    if not stale_projection:
+        product["probiotic_data"]["probiotic_blends"] = [live]
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["total_strain_count"] == 1
+    assert formulation["metadata"]["identified_strain_count"] == 1
+    assert formulation["components"]["exact_identity_completeness"] == 8
+    dose = score_dose(product)
+    assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
+    assert dose["components"]["per_strain_cfu_disclosure"] == 10
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 7
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
+
+
+def test_mixed_live_nonlive_aggregate_does_not_become_an_individual_cfu_amount():
+    from scoring_v4.modules.probiotic_dose import score_dose
+    product = product_with_identities(2)
+    product["activeIngredients"][1]["forms"] = [{"name": "heat killed"}]
+    product["probiotic_data"]["probiotic_blends"] = [{
+        "strains": [row["name"] for row in product["activeIngredients"]],
+        "cfu_data": {"has_cfu": True, "cfu_count": 50e9},
+    }]
+    assert score_formulation(product)["metadata"]["total_strain_count"] == 1
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
+
+
 @pytest.mark.parametrize("name", ["L. rhamnosus GG", "lactobacillus rhamnosus gg"])
 def test_source_alias_case_does_not_change_exact_identity_specificity(name):
     product = product_with_identities(1)
@@ -137,7 +177,9 @@ def test_conflicting_representations_of_same_source_path_fail_closed(conflict):
 @pytest.mark.parametrize("reverse", [False, True])
 @pytest.mark.parametrize("nonlive_name", ["Lactobacillus rhamnosus GG", "L. rhamnosus GG"])
 def test_nonlive_same_path_representation_cannot_be_hidden_by_live_duplicate(stale_projection, reverse, nonlive_name):
+    from scoring_v4.modules.probiotic_dose import score_dose
     product = product_with_identities(1)
+    product["probiotic_data"]["probiotic_blends"][0]["cfu_data"] = {"has_cfu": True, "cfu_count": 1e9}
     nonlive = {**product["activeIngredients"][0], "name": nonlive_name,
                "forms": [{"name": "heat killed"}]}
     product["activeIngredients"].append(nonlive)
@@ -146,9 +188,11 @@ def test_nonlive_same_path_representation_cannot_be_hidden_by_live_duplicate(sta
     if not stale_projection:
         product["probiotic_data"]["probiotic_blends"] = []
     result = score_formulation(product)
+    assert result["metadata"]["total_strain_count"] == 0
     assert result["metadata"]["identified_strain_count"] == 0
     assert result["components"]["exact_identity_completeness"] == 0
     assert label_owned_native_strains(product) == []
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert len(product["probiotic_data"]["clinical_strains"]) == 1  # Original diagnostic survives.
 
 
