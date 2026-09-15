@@ -202,7 +202,8 @@ def test_distinct_unregistered_forms_are_separate_without_exact_credit(enricher)
 
 @pytest.mark.parametrize("remove_clinical", [False, True])
 @pytest.mark.parametrize("repeat_alias", [False, True])
-def test_multiple_biological_forms_count_separately_without_allocating_shared_cfu(enricher, remove_clinical, repeat_alias):
+@pytest.mark.parametrize("add_unknown", [False, True])
+def test_multiple_biological_forms_count_separately_without_allocating_shared_cfu(enricher, remove_clinical, repeat_alias, add_unknown):
     from scoring_v4.modules.probiotic_formulation import score_formulation
     from scoring_v4.modules.probiotic_dose import score_dose
     from scoring_v4.modules.probiotic_transparency import score_transparency
@@ -212,22 +213,28 @@ def test_multiple_biological_forms_count_separately_without_allocating_shared_cf
                        {"name": "Lactobacillus rhamnosus HN001"}]
     if repeat_alias:
         howaru["forms"].append({"name": "L. acidophilus NCFM"})
-    product = _collect(enricher, [lgg, howaru])
-    assert product["probiotic_data"]["total_strain_count"] == 3
+    rows = [lgg, howaru]
+    if add_unknown:
+        rows.append(_row("Unknown organism", index=2, cfu=0))
+    product = _collect(enricher, rows)
+    count = 4 if add_unknown else 3
+    assert product["probiotic_data"]["total_strain_count"] == count
     assert len(product["probiotic_data"]["clinical_strains"]) == 1
     if remove_clinical:
         product["probiotic_data"]["clinical_strains"] = []
     formulation = score_formulation(product)
-    assert formulation["metadata"]["total_strain_count"] == 3
-    assert formulation["components"]["exact_identity_completeness"] == pytest.approx(0 if remove_clinical else 8 / 3)
+    assert formulation["metadata"]["total_strain_count"] == count
+    assert formulation["components"]["exact_identity_completeness"] == (6 if add_unknown else 8)
     dose = score_dose(product)
-    assert dose["metadata"]["total_strain_count"] == 3
+    assert dose["metadata"]["total_strain_count"] == count
     assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
-    assert dose["components"]["per_strain_cfu_disclosure"] == 3.33
+    assert dose["components"]["per_strain_cfu_disclosure"] == round(10 / count, 2)
     transparency = score_transparency(product)
-    assert transparency["metadata"]["total_strain_count"] == 3
-    assert transparency["components"]["per_strain_cfu_on_label"] == 2.3333
-    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 3
+    assert transparency["metadata"]["total_strain_count"] == count
+    assert transparency["components"]["per_strain_cfu_on_label"] == round(7 / count, 4)
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == count
+    assert all(row["strain"] == lgg["name"] for row in independent_clinical_strains(product))
+    assert len(product["probiotic_data"]["clinical_strains"]) == (0 if remove_clinical else 1)
 
 
 @pytest.mark.parametrize("extra_form,expected_count", [
@@ -245,7 +252,7 @@ def test_single_form_identity_with_alias_or_delivery_descriptor_deduplicates_sou
     assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 1
     product["probiotic_data"]["clinical_strains"] = []
     assert score_formulation(product)["metadata"]["total_strain_count"] == expected_count
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert score_formulation(product)["components"]["exact_identity_completeness"] == 8 / expected_count
 
 
 @pytest.mark.parametrize("forgery", ["wrong_owner", "missing_owner", "changed_form"])

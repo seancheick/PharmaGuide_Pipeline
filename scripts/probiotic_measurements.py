@@ -60,31 +60,25 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     """Count distinct label identities after proving each source row's forms.
 
     ``total_strain_count`` is a derived projection, never a declared denominator.
-    Native registry rows may complete a missing blend projection only when the
-    existing source-owner check proves their label identity. Clinical review and
-    dose applicability are independent of this physical identity calculation.
+    Actual label rows may complete a missing blend projection. Neither clinical
+    projection availability nor clinical review controls physical identity.
     """
-    from form_vocab import matches_postbiotic, matches_probiotic_delivery
     from studied_formulas import (
-        _clinical_label_rows, _clinical_strain_registry,
+        _clinical_strain_registry,
         clinical_strain_identity_key, clinical_strain_identity_matches,
-        clinical_strain_identity_from_label, clinical_strain_group_designation,
-        label_owned_native_strains,
+        label_owned_strain_identities,
     )
 
     product = product if isinstance(product, Mapping) else {}
     pdata = product.get("probiotic_data") or product.get("probiotic_detail") or {}
     pdata = pdata if isinstance(pdata, Mapping) else {}
     registry = _clinical_strain_registry()
-    native = label_owned_native_strains(product)
-    owners = list(_clinical_label_rows(product.get("activeIngredients")))
-    # Alias normalization is a denominator property even when the clinical
-    # projection is absent. Only label_owned_native_strains supplies numerator
-    # proof; consulting the registry here cannot create exact-identity credit.
+    owned = label_owned_strain_identities(product)
+    owners = [owner for owner, _ in owned]
+    owner_identities = {id(owner): identities for owner, identities in owned}
     owner_registry_ids = {
-        id(owner): {cid for cid, reference in registry.items()
-                    if clinical_strain_identity_from_label(owner, reference)}
-        for owner in owners
+        id(owner): {key.removeprefix("strain:") for key, _, _ in identities if key.startswith("strain:")}
+        for owner, identities in owned
     }
     keys, exact_keys, disclosed_keys = set(), set(), set()
     blend_resolutions = []
@@ -92,70 +86,26 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     def valid_name(value):
         return isinstance(value, str) and bool(value.strip()) and bool(clinical_strain_identity_key(value))
 
-    def native_for(owner):
-        if not owner:
-            return []
-        return [row for row in native if (
-            row.get("source_row_ref") == owner.get("raw_source_path")
-            if row.get("source_row_ref")
-            else clinical_strain_identity_key(row.get("label_name") or row["strain"])
-                 == clinical_strain_identity_key(owner.get("name") or "")
-        )]
-
     def identities(name, owner=None):
-        exact = {}
-        for row in native_for(owner):
-            state = label_strain_identity_resolution(row["strain"], row["clinical_id"], registry)
-            if state["resolution"] in {"exact_strain_reviewed", "exact_strain_unreviewed"}:
-                exact[row["clinical_id"]] = state
-        if len(exact) == 1:
-            cid, state = next(iter(exact.items()))
-            return [(f"strain:{cid}", state, True)]
-        registered = owner_registry_ids[id(owner)] if owner is not None else {
+        if owner is not None:
+            result = []
+            for key, label, cid in owner_identities[id(owner)]:
+                # Ownership already proved the printed alias. Use the registry
+                # spelling to assess specificity, not the label's typography.
+                identity = registry[cid]["standard_name"] if cid else label
+                state = label_strain_identity_resolution(identity, cid, registry)
+                result.append((key, state, state["resolution"] in {
+                    "exact_strain_reviewed", "exact_strain_unreviewed"}))
+            return result
+        registered = {
             cid for cid, reference in registry.items()
             if clinical_strain_identity_matches(name, reference)
         }
         if len(registered) == 1:
             cid = next(iter(registered))
             return [(f"strain:{cid}", label_strain_identity_resolution(name, None, registry), False)]
-        # An unregistered designation still distinguishes its own source row.
-        # Preserve its printed form in the key without inventing a registry ID.
-        forms = (owner or {}).get("forms")
-        forms = list(forms) if isinstance(forms, list) else []
-        group_code = clinical_strain_group_designation(owner or {})
-        if group_code:
-            forms.append(group_code)
-        form_names = {
-            clinical_strain_identity_key(value): value
-            for form in forms
-            for value in [form.get("name") if isinstance(form, Mapping) else form]
-            if valid_name(value)
-        }
-        label_key = clinical_strain_identity_key(name)
-        if len(form_names) > 1 and owner is not None:
-            alternatives = {}
-            for form_key, form_name in form_names.items():
-                # A view of one printed form identifies denominator members.
-                # It never proves that the original multi-form owner disclosed
-                # an individual amount or supplies a native clinical row.
-                form_owner = {**owner, "forms": [{"name": form_name}]}
-                form_ids = {cid for cid, reference in registry.items()
-                            if clinical_strain_identity_from_label(form_owner, reference)}
-                state = label_strain_identity_resolution(form_name, None, registry)
-                if len(form_ids) == 1:
-                    key = f"strain:{next(iter(form_ids))}"
-                elif (state["resolution"] == "unresolved_label_text"
-                      and not any(clinical_strain_group_designation({"ingredientGroup": code})
-                                  for code in _label_designation_tokens(form_name)[1])
-                      and (matches_probiotic_delivery(form_name) or matches_postbiotic(form_name))):
-                    continue  # A delivery/form descriptor is not another organism.
-                else:
-                    key = f"label:{label_key}|{form_key}"  # Unknown labels stay in the denominator.
-                alternatives[key] = (key, state, False)
-            if alternatives:
-                return list(alternatives.values())
-        key = "|".join([label_key, *sorted(form_names)])
-        return [(f"label:{key}", label_strain_identity_resolution(name, None, registry), False)]
+        return [(f"label:{clinical_strain_identity_key(name)}",
+                 label_strain_identity_resolution(name, None, registry), False)]
 
     blends = pdata.get("probiotic_blends")
     for blend in blends if isinstance(blends, list) else []:
@@ -196,12 +146,12 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
                 and normalized_cfu_count(measure) is not None):
             disclosed_keys.update(blend_keys)
 
-    # Source-owned native rows survive missing blend projections; detached IDs
-    # cannot supply either a denominator member or an exact identity.
-    for row in native:
-        name = row.get("label_name") or row["strain"]
-        owner = next((owner for owner in owners if row in native_for(owner)), None)
-        for key, _, exact in identities(name, owner):
+    # Actual registry-resolved label sources survive missing blend projections;
+    # detached clinical IDs never manufacture a source row or an identity.
+    for owner, members in owned:
+        if not any(cid for _, _, cid in members):
+            continue
+        for key, _, exact in identities(owner["name"], owner):
             keys.add(key)
             if exact:
                 exact_keys.add(key)

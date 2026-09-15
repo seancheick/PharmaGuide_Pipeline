@@ -206,6 +206,23 @@ def clinical_strain_group_designation(row: Mapping) -> str | None:
     return None
 
 
+def _clinical_strain_label_forms(row: Mapping) -> set[str] | None:
+    """Read only well-shaped source form names; malformed members fail closed."""
+    raw_forms = row.get("forms")
+    if raw_forms is not None and not isinstance(raw_forms, list):
+        return None
+    forms = set()
+    for form in raw_forms or []:
+        value = form.get("name") if isinstance(form, Mapping) else form
+        if not isinstance(value, str) or not value.strip():
+            return None
+        forms.add(value.strip())
+    group_code = clinical_strain_group_designation(row)
+    if group_code:
+        forms.add(group_code)
+    return forms
+
+
 def clinical_strain_identity_from_label(row: Mapping, reference: Mapping) -> str | None:
     """Resolve an exact identity from this label row, never surrounding prose.
 
@@ -215,19 +232,12 @@ def clinical_strain_identity_from_label(row: Mapping, reference: Mapping) -> str
     Multiple distinct forms remain unresolved rather than inheriting one dose.
     """
     label = row.get("raw_source_text") or row.get("name")
-    raw_forms = row.get("forms")
-    if raw_forms is not None and not isinstance(raw_forms, list):
+    forms = _clinical_strain_label_forms(row)
+    if forms is None:
         return None
-    forms = {
-        str(form.get("name") if isinstance(form, Mapping) else form).strip()
-        for form in raw_forms or []
-        if (form.get("name") if isinstance(form, Mapping) else form)
-    }
     # DSLD may put the explicit strain code in this same row's structured
     # group field. Taxonomy, categories and notes cannot select a strain.
     group_code = clinical_strain_group_designation(row)
-    if group_code:
-        forms.add(group_code)
     def tokens(value):
         return tuple(re.findall(r"[a-z0-9]+", normalize_text(str(value or "")).lower()))
 
@@ -291,6 +301,120 @@ def _clinical_label_rows(rows):
             yield from _clinical_label_rows(row.get("nestedIngredients"))
 
 
+def _source_rows_all_match(owners, ref, predicate):
+    """Every actual representation of one valid source path must agree."""
+    if not isinstance(ref, str) or not ref:
+        return False
+    matched = [owner for owner in owners if owner.get("raw_source_path") == ref]
+    return bool(matched) and all(predicate(owner) for owner in matched)
+
+
+def _legacy_label_owner_unique(owners, identity):
+    owner_refs = set()
+    for owner in owners:
+        if clinical_strain_identity_key(str(owner.get("name") or "")) != identity:
+            continue
+        ref = owner.get("raw_source_path")
+        if ref is not None and (not isinstance(ref, str) or not ref):
+            return False
+        owner_refs.add(ref if ref is not None else id(owner))
+    return len(owner_refs) == 1
+
+
+def _label_strain_identity_candidates(row: Mapping) -> list[tuple[str, str, str | None]]:
+    """Enumerate printed biological members using the single-strain resolver.
+
+    A one-form view proves physical identity only: it must never be passed to
+    the individual-dose gate in place of the original multi-form source row.
+    """
+    from form_vocab import matches_postbiotic, matches_probiotic_delivery
+    from probiotic_measurements import _label_designation_tokens, label_strain_identity_resolution
+
+    registry = _clinical_strain_registry()
+    label = row.get("name")
+    if not isinstance(label, str) or not clinical_strain_identity_key(label):
+        return []
+
+    def resolved(view):
+        matches = {cid: identity for cid, reference in registry.items()
+                   if (identity := clinical_strain_identity_from_label(view, reference))}
+        if len(matches) == 1:
+            cid, identity = next(iter(matches.items()))
+            return (f"strain:{cid}", identity, cid)
+        return None
+
+    whole = resolved(row)
+    if whole:
+        return [whole]
+    forms = _clinical_strain_label_forms(row)
+    if forms is None:
+        return [(f"label:{clinical_strain_identity_key(label)}", label, None)]
+    form_names = {
+        clinical_strain_identity_key(value): value
+        for value in sorted(forms) if clinical_strain_identity_key(value)
+    }
+    label_key = clinical_strain_identity_key(label)
+    if len(form_names) > 1:
+        alternatives = {}
+        for form_key, form_name in form_names.items():
+            candidate = resolved({**row, "forms": [{"name": form_name}]})
+            state = label_strain_identity_resolution(form_name, None, registry)
+            if candidate:
+                key = candidate[0]
+            elif (state["resolution"] == "unresolved_label_text"
+                  and not any(clinical_strain_group_designation({"ingredientGroup": code})
+                              for code in _label_designation_tokens(form_name)[1])
+                  and (matches_probiotic_delivery(form_name) or matches_postbiotic(form_name))):
+                continue
+            else:
+                key = f"label:{label_key}|{form_key}"
+                candidate = (key, form_name, None)
+            alternatives[key] = candidate
+        if alternatives:
+            return list(alternatives.values())
+    key = "|".join([label_key, *sorted(form_names)])
+    return [(f"label:{key}", label, None)]
+
+
+def label_owned_strain_identities(product: Mapping) -> list[tuple[Mapping, list[tuple[str, str, str | None]]]]:
+    """Source rows and identity-only keys, independent of clinical projections.
+
+    This proves identity only, never an individual amount or clinical support.
+    A registry ID is returned only when every representation of that source
+    proves the same biological member set. Unknown names retain their keys.
+    """
+    from constants import BLOCKED_PROBIOTIC_STRAINS, HOLD_PROBIOTIC_STRAINS
+
+    owners = list(_clinical_label_rows(product.get("activeIngredients")))
+    blocked = BLOCKED_PROBIOTIC_STRAINS | HOLD_PROBIOTIC_STRAINS
+    registry = _clinical_strain_registry()
+
+    def permitted(label, cid):
+        # A printed alias cannot bypass the policy on its canonical identity.
+        names = [label, registry.get(cid, {}).get("standard_name", "")]
+        return not any(token in name.lower() for name in names for token in blocked)
+
+    candidates = {id(owner): _label_strain_identity_candidates(owner) for owner in owners}
+    result = []
+    for owner in owners:
+        identities = candidates[id(owner)]
+        expected = {key for key, _, _ in identities}
+        source_proved = _source_rows_all_match(
+            owners, owner.get("raw_source_path"),
+            lambda other: {key for key, _, _ in candidates[id(other)]} == expected,
+        )
+        if owner.get("raw_source_path") is None:
+            # Preserve the existing unambiguous exact-name legacy owner path.
+            # Forms cannot complete a species without their required source ref.
+            source_proved = _legacy_label_owner_unique(
+                owners, clinical_strain_identity_key(str(owner.get("name") or "")))
+        result.append((owner, [
+            (key, label, cid if source_proved and permitted(label, cid) else None)
+            for key, label, cid in identities
+        ]))
+    return result
+
+
 def clinical_strain_matches_source_row(product: Mapping, clinical: Mapping, row: Mapping) -> bool:
     """Use an actual source owner, or one unambiguous exact legacy label name."""
     owners = list(_clinical_label_rows(product.get("activeIngredients")))
@@ -299,24 +423,17 @@ def clinical_strain_matches_source_row(product: Mapping, clinical: Mapping, row:
         if not isinstance(ref, str) or not ref or ref != row.get("raw_source_path"):
             return False
         reference = _clinical_strain_registry().get(clinical.get("clinical_id"))
-        matched = [owner for owner in owners if owner.get("raw_source_path") == ref]
-        return bool(reference and matched) and clinical_strain_identity_matches(
+        return bool(reference) and clinical_strain_identity_matches(
             clinical.get("strain"), reference
-        ) and all(
+        ) and _source_rows_all_match(owners, ref, lambda owner:
             clinical_strain_identity_from_label(owner, reference)
             and (not clinical.get("label_name")
                  or _key(clinical["label_name"]) == _key(owner.get("name")))
-            for owner in matched
         )
     identity = _key(normalize_text(str(clinical.get("strain") or "")))
     if not identity or identity != _key(normalize_text(str(row.get("name") or ""))):
         return False
-    owner_refs = {
-        owner.get("raw_source_path") or id(owner)
-        for owner in owners
-        if _key(normalize_text(str(owner.get("name") or ""))) == identity
-    }
-    return len(owner_refs) == 1
+    return _legacy_label_owner_unique(owners, identity)
 
 
 def consolidated_native_strains(product: Mapping) -> list[dict]:

@@ -124,7 +124,10 @@ def test_export_consolidates_native_projections_without_losing_holds(conflict):
     elif conflict == "blocked":
         assert exported["is_blocked"] is True
         assert exported["block_reason"] == "Rejected source identity"
-        assert score_formulation(p)["components"]["exact_identity_completeness"] == 0
+        # A caller's rejected clinical projection does not erase the actual LGG
+        # label. The rejected row remains excluded from the clinical gate.
+        assert score_formulation(p)["components"]["exact_identity_completeness"] == 8
+        assert studied_formulas.label_owned_native_strains(p) == []
     elif conflict == "inactivated":
         assert exported["is_inactivated"] is True
         assert score_dose(p)["metadata"]["cfu_adequacy_v3_points"] == 0
@@ -282,7 +285,12 @@ def test_direct_mass_floor_requires_exact_source_owner_not_substring():
 def test_source_owner_not_current_review_flag_controls_formulation_identity():
     p = owned_label()
     p["activeIngredients"][0]["name"] = "Lactobacillus rhamnosus HN001"
-    assert score_formulation(p)["components"]["exact_identity_completeness"] == 0
+    result = score_formulation(p)
+    assert result["components"]["exact_identity_completeness"] == 4
+    assert result["metadata"]["total_strain_count"] == 2
+    assert result["metadata"]["identified_strain_count"] == 1  # Actual HN001, not projected LGG.
+    assert studied_formulas.label_owned_native_strains(p) == []
+    assert score_evidence(p)["score"] == 0
 
 
 def test_normalized_billion_count_can_prove_disclosure_without_clinical_review():
