@@ -104,10 +104,11 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     Actual label rows may complete a missing blend projection. Neither clinical
     projection availability nor clinical review controls physical identity.
     """
+    from identity_integrity import has_nonlive_microbial_derivative_evidence
     from studied_formulas import (
-        _clinical_strain_registry,
+        _clinical_label_rows, _clinical_strain_registry,
         clinical_strain_identity_key, clinical_strain_identity_matches,
-        label_owned_strain_identities, probiotic_source_live_eligible,
+        label_owned_strain_identities, probiotic_source_live_eligible, probiotic_source_scope,
     )
 
     product = product if isinstance(product, Mapping) else {}
@@ -118,6 +119,35 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     owners = [owner for owner, _ in owned]
     source_live_eligible = {id(owner): probiotic_source_live_eligible(product, owner) for owner in owners}
     owner_identities = {id(owner): identities for owner, identities in owned}
+    blends = pdata.get("probiotic_blends")
+    blends = blends if isinstance(blends, list) else []
+    # As in the collector, named children of an actual probiotic container are
+    # members even when their own taxonomy/category remains unresolved.
+    child_members = set()
+    for owner in owners:
+        if is_probiotic_source_identity(owner) and (is_probiotic_source_header(owner) or owner.get("nestedIngredients")):
+            ref = owner.get("raw_source_path")
+            children = (probiotic_source_scope(product, ref) if isinstance(ref, str) and ref
+                        else list(_clinical_label_rows(owner.get("nestedIngredients"))))
+            child_members.update(id(child) for child in children if child is not owner)
+    # Existing source-linked probiotic context can identify an unresolved
+    # actual member. It never creates a registry identity or a measurement.
+    for blend in blends:
+        if not isinstance(blend, Mapping):
+            continue
+        ref = blend.get("raw_source_path")
+        names = blend.get("strains")
+        named = {clinical_strain_identity_key(name) for name in names if isinstance(name, str)} if isinstance(names, list) else set()
+        for owner in probiotic_source_scope(product, ref):
+            if ref or clinical_strain_identity_key(str(owner.get("name") or "")) in named:
+                child_members.add(id(owner))
+    source_member = {
+        id(owner): bool(members) and source_live_eligible[id(owner)]
+        and not owner.get("nestedIngredients")
+        and (any(cid for _, _, cid in members) or is_probiotic_source_identity(owner)
+             or (id(owner) in child_members and not owner.get("category")))
+        for owner, members in owned
+    }
     owner_registry_ids = {
         id(owner): {key.removeprefix("strain:") for key, _, _ in identities if key.startswith("strain:")}
         for owner, identities in owned
@@ -130,7 +160,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
 
     def identities(name, owner=None):
         if owner is not None:
-            if not source_live_eligible[id(owner)]:
+            if not source_member[id(owner)]:
                 return []
             result = []
             for key, label, cid in owner_identities[id(owner)]:
@@ -151,8 +181,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
         return [(f"label:{clinical_strain_identity_key(name)}",
                  label_strain_identity_resolution(name, None, registry), False)]
 
-    blends = pdata.get("probiotic_blends")
-    for blend in blends if isinstance(blends, list) else []:
+    for blend in blends:
         if not isinstance(blend, Mapping):
             blend_resolutions.append([])
             continue
@@ -164,23 +193,30 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
         if ref and not probiotic_source_live_eligible(product, {"raw_source_path": ref}):
             blend_resolutions.append([])
             continue
-        resolutions, blend_keys = [], set()
-        source_names_proved = True
+        scope = probiotic_source_scope(product, ref)
+        resolutions = []
+        blend_keys = {key for owner in scope if source_member[id(owner)]
+                      for key, _, _ in identities(owner["name"], owner)}
+        source_names_proved = all(source_live_eligible[id(owner)] for owner in scope)
+        # A header's nonlive components cannot disappear from the ownership
+        # check and leave its aggregate quantity assigned to a live sibling.
+        if any(has_nonlive_microbial_derivative_evidence(form)
+               for owner in scope if is_probiotic_source_header(owner)
+               for form in (owner["forms"] if isinstance(owner.get("forms"), list) else [])
+               if isinstance(form, Mapping)):
+            source_names_proved = False
         for name in names:
-            source_rows = [owner for owner in owners if (
-                valid_name(owner.get("name"))
+            source_rows = [owner for owner in scope if (
+                source_member[id(owner)] and valid_name(owner.get("name"))
                 and (clinical_strain_identity_key(owner["name"]) == clinical_strain_identity_key(name)
                      or any(clinical_strain_identity_matches(name, registry[cid])
                             for cid in owner_registry_ids[id(owner)]))
-                and (not ref or owner.get("raw_source_path") == ref
-                     or (isinstance(owner.get("raw_source_path"), str)
-                         and owner["raw_source_path"].startswith(f"{ref}.nestedRows[")))
             )]
-            if ref and not source_rows:
+            if (ref or scope) and not source_rows:
                 source_names_proved = False
-            if any(not source_live_eligible[id(owner)] for owner in source_rows):
-                source_names_proved = False
-            for owner in source_rows or [None]:
+            # Detached names remain a legacy denominator only when there is no
+            # actual source scope. They cannot add members to an owned scope.
+            for owner in source_rows or ([] if scope else [None]):
                 for key, state, exact in identities(name, owner):
                     keys.add(key)
                     blend_keys.add(key)
@@ -201,13 +237,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     # including unresolved species/designations. Containers are not organisms;
     # detached clinical IDs never manufacture a source row or an identity.
     for owner, members in owned:
-        if not members:
-            continue  # A source role without any actual label name is not an identity.
-        if not any(cid for _, _, cid in members) and (
-            not is_probiotic_source_identity(owner)
-            or is_probiotic_source_header(owner)
-            or owner.get("nestedIngredients")
-        ):
+        if not source_member[id(owner)]:
             continue
         for key, _, exact in identities(owner["name"], owner):
             keys.add(key)

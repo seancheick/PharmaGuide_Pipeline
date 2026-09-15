@@ -300,15 +300,16 @@ def test_direct_mass_floor_requires_exact_source_owner_not_substring():
     assert score_dose(p)["score"] == 0
 
 
-def test_source_owner_not_current_review_flag_controls_formulation_identity():
+def test_actual_source_identity_overrides_stale_clinical_and_blend_names():
     p = owned_label()
     p["activeIngredients"][0]["name"] = "Lactobacillus rhamnosus HN001"
     result = score_formulation(p)
-    assert result["components"]["exact_identity_completeness"] == 4
-    assert result["metadata"]["total_strain_count"] == 2
+    assert result["components"]["exact_identity_completeness"] == 8
+    assert result["metadata"]["total_strain_count"] == 1
     assert result["metadata"]["identified_strain_count"] == 1  # Actual HN001, not projected LGG.
     assert studied_formulas.label_owned_native_strains(p) == []
     assert score_evidence(p)["score"] == 0
+    assert score_dose(p)["metadata"]["per_strain_cfu_disclosed_count"] == 0
 
 
 def test_normalized_billion_count_can_prove_disclosure_without_clinical_review():

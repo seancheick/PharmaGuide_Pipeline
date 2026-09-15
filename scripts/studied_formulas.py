@@ -308,6 +308,24 @@ def _source_row_representations(owners, ref):
     return [owner for owner in owners if owner.get("raw_source_path") == ref]
 
 
+def probiotic_source_scope(product: Mapping, ref=None) -> list[Mapping]:
+    """Actual label scope of a row/parent reference, or the ref-less label.
+
+    Reuse both nested source traversal and cleaner flattened-child paths. No
+    projected strain name can expand a resolved source scope.
+    """
+    owners = list(_clinical_label_rows(product.get("activeIngredients")))
+    if ref is None or ref == "":
+        return owners
+    if not isinstance(ref, str):
+        return []
+    nested = {id(row) for parent in _source_row_representations(owners, ref)
+              for row in _clinical_label_rows([parent])}
+    return [row for row in owners if id(row) in nested or (
+        isinstance(row.get("raw_source_path"), str)
+        and row["raw_source_path"].startswith(f"{ref}.nestedRows["))]
+
+
 def probiotic_source_live_eligible(product: Mapping, row: Mapping) -> bool:
     """No representation of this source may contradict live-organism use.
 
@@ -349,12 +367,25 @@ def _label_strain_identity_candidates(row: Mapping) -> list[tuple[str, str, str 
     the individual-dose gate in place of the original multi-form source row.
     """
     from form_vocab import matches_postbiotic, matches_probiotic_delivery
-    from probiotic_measurements import _label_designation_tokens, label_strain_identity_resolution
+    from probiotic_measurements import (
+        _label_designation_tokens, label_strain_identity_resolution,
+        is_probiotic_source_header, is_probiotic_source_identity,
+    )
 
     registry = _clinical_strain_registry()
     label = row.get("name")
     if not isinstance(label, str) or not clinical_strain_identity_key(label):
         return []
+    if is_probiotic_source_header(row) and not row.get("nestedIngredients"):
+        # Typed biological form records are actual members, not the container
+        # name and not independently dosed/native clinical projections.
+        members = {}
+        forms = row.get("forms")
+        for form in forms if isinstance(forms, list) else []:
+            if isinstance(form, Mapping) and is_probiotic_source_identity(form):
+                for candidate in _label_strain_identity_candidates(form):
+                    members[candidate[0]] = candidate
+        return list(members.values())
 
     def resolved(view):
         matches = {cid: identity for cid, reference in registry.items()

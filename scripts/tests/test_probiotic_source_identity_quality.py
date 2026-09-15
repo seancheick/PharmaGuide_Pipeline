@@ -10,6 +10,106 @@ from test_native_clinical_strain_provenance import _owned_product
 from test_probiotic_identity_completeness import product_with_identities
 
 
+@pytest.mark.parametrize("forms", [42, True, None, {"name": "invalid"}])
+def test_malformed_header_forms_do_not_authorize_or_crash_source_scope(forms):
+    product = product_with_identities(1)
+    product["activeIngredients"].append({"name": "Probiotic Blend", "cleaner_row_role": "blend_header_total",
+        "raw_source_path": "ingredientRows[1]", "forms": forms})
+    product["probiotic_data"]["probiotic_blends"].append({"strains": ["Unowned member"],
+        "raw_source_path": "ingredientRows[1]", "cfu_data": {"has_cfu": True, "cfu_count": 50e9}})
+    assert score_formulation(product)["metadata"]["total_strain_count"] == 1
+
+
+@pytest.mark.parametrize("ref", [None, "legacyRows[0]"])
+def test_detached_names_are_only_a_legacy_denominator_when_source_scope_is_absent(ref):
+    from scoring_v4.modules.probiotic_dose import score_dose
+    product = {"probiotic_data": {"probiotic_blends": [{
+        "strains": ["Lactobacillus rhamnosus GG", "Unknown organism A123"],
+        "raw_source_path": ref, "cfu_data": {"has_cfu": True, "cfu_count": 50e9},
+    }], "clinical_strains": [{"strain": "Lactobacillus rhamnosus GG", "clinical_id": "STRAIN_LGG"}]}}
+    result = score_formulation(product)
+    assert result["metadata"]["total_strain_count"] == 2
+    assert result["metadata"]["identified_strain_count"] == 0
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
+
+
+@pytest.mark.parametrize("projection", ["complete", "omitted_member", "extra_unknown"])
+@pytest.mark.parametrize("ref_less", [False, True])
+def test_actual_multimember_scope_never_lends_aggregate_cfu_to_shortened_projection(projection, ref_less):
+    from scoring_v4.modules.probiotic_dose import score_dose
+    product = product_with_identities(2)
+    children = product["activeIngredients"]
+    for index, child in enumerate(children):
+        child["raw_source_path"] = f"ingredientRows[0].nestedRows[{index}]"
+    product["activeIngredients"] = [{"name": "Probiotic Blend", "category": "probiotic",
+        "raw_source_path": "ingredientRows[0]", "cleaner_row_role": "blend_header_total", "nestedIngredients": children}]
+    names = [child["name"] for child in children]
+    if projection == "omitted_member":
+        names = names[:1]
+    elif projection == "extra_unknown":
+        names.append("Unowned invented member")
+    blend = {"strains": names, "cfu_data": {"has_cfu": True, "cfu_count": 50e9}}
+    if not ref_less:
+        blend["raw_source_path"] = "ingredientRows[0]"
+    product["probiotic_data"].update(probiotic_blends=[blend], clinical_strains=[])
+    dose = score_dose(product)
+    assert dose["metadata"]["total_strain_count"] == 2
+    assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 0
+    assert dose["components"]["per_strain_cfu_disclosure"] == 0
+
+
+@pytest.mark.parametrize("nonlive_evidence", ["name", "forms"])
+@pytest.mark.parametrize("alias", [False, True])
+@pytest.mark.parametrize("parent_projection", [False, True])
+@pytest.mark.parametrize("ref_less", [False, True])
+@pytest.mark.parametrize("unknown_child", [False, True])
+@pytest.mark.parametrize("flattened", [False, True])
+def test_actual_parent_scope_owns_membership_not_stale_aggregate_names(nonlive_evidence, alias, parent_projection, ref_less, unknown_child, flattened):
+    from build_final_db import build_detail_blob
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    live_name = "Lactobacillus rhamnosus GG"
+    nonlive_name = "Lactobacillus plantarum 299v"
+    parent_ref = "ingredientRows[0]"
+    live = {"name": live_name, "raw_source_path": f"{parent_ref}.nestedRows[0]"}
+    nonlive = {"name": nonlive_name, "raw_source_path": f"{parent_ref}.nestedRows[1]"}
+    if nonlive_evidence == "name":
+        nonlive["name"] += " (heat killed)"
+    else:
+        nonlive["forms"] = [{"name": "heat killed"}]
+    children = [live, nonlive]
+    projected_names = [live_name, "L. plantarum 299v" if alias else nonlive_name]
+    if unknown_child:
+        children.append({"name": "Unknown organism A123", "raw_source_path": f"{parent_ref}.nestedRows[2]"})
+        projected_names.append("Unknown organism A123")
+    parent = {"name": "Probiotic Blend", "category": "probiotic", "cleaner_row_role": "blend_header_total",
+              "raw_source_path": parent_ref, "nestedIngredients": children}
+    blends = [{"strains": [live_name], "raw_source_path": live["raw_source_path"],
+               "cfu_data": {"has_cfu": True, "cfu_count": 1e9}}]
+    if parent_projection:
+        aggregate = {"strains": projected_names, "cfu_data": {"has_cfu": True, "cfu_count": 50e9}}
+        if not ref_less:
+            aggregate["raw_source_path"] = parent_ref
+        blends.append(aggregate)
+    sources = [parent]
+    if flattened:
+        sources.extend(parent.pop("nestedIngredients"))
+    product = {"activeIngredients": sources, "probiotic_data": {
+        "is_probiotic_product": True, "clinical_strains": [], "probiotic_blends": blends,
+    }}
+    count = 2 if unknown_child else 1
+    result = score_formulation(product)
+    assert result["metadata"]["total_strain_count"] == count
+    assert result["metadata"]["identified_strain_count"] == 1
+    assert result["components"]["exact_identity_completeness"] == 8 / count
+    dose = score_dose(product)
+    assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
+    assert dose["components"]["per_strain_cfu_disclosure"] == 10 / count
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 7 / count
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == count
+
+
 @pytest.mark.parametrize("name", ["Lactobacillus acidophilus", "Bifidobacterium longum Unknown-A123"])
 @pytest.mark.parametrize("projections", ["all", "known_only", "none"])
 @pytest.mark.parametrize("remove_clinical", [False, True])

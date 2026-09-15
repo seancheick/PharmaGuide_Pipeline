@@ -91,6 +91,13 @@ def _product(
         product["activeIngredients"].append({"name": row["strain"], "raw_source_path": ref})
         if default_blends and index < len(blends):
             blends[index].update(name=row["strain"], strains=[row["strain"]], raw_source_path=ref)
+    if default_blends:
+        # The unresolved labels are actual source members too; absence of a
+        # clinical projection must not stand in for absence from the label.
+        for index in range(len(product["activeIngredients"]), len(blends)):
+            ref = f"ingredientRows[{index}]"
+            product["activeIngredients"].append({"name": blends[index]["strains"][0], "raw_source_path": ref})
+            blends[index]["raw_source_path"] = ref
     return product
 
 
