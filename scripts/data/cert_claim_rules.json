@@ -131,6 +131,13 @@
       },
       "usp_verified": {
         "id": "CERT_USP_VERIFIED",
+        "verified_capabilities": {
+          "verified_program": "USP Verified",
+          "scopes": ["sku", "product_line"],
+          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "basis": "USP verification checks that listed ingredients are present in the declared amounts and screens for harmful levels of specified contaminants. Applies only to a registry-verified product, never to a label claim.",
+          "source": "https://www.usp.org/verification-services"
+        },
         "implies_gmp": {
           "verified_program": "USP Verified",
           "scopes": ["sku", "product_line"],
@@ -168,6 +175,13 @@
       },
       "nsf_sport": {
         "id": "CERT_NSF_SPORT",
+        "verified_capabilities": {
+          "verified_program": "NSF Sport",
+          "scopes": ["sku", "product_line"],
+          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "basis": "NSF Certified for Sport builds on NSF/ANSI 173 contents and contaminant testing and adds banned-substance screening. Applies only to a registry-verified product, never to a label claim.",
+          "source": "https://www.nsfsport.com/"
+        },
         "implies_gmp": {
           "verified_program": "NSF Sport",
           "scopes": ["sku", "product_line"],
@@ -195,6 +209,13 @@
       },
       "nsf_contents_certified": {
         "id": "CERT_NSF_CONTENTS",
+        "verified_capabilities": {
+          "verified_program": "NSF Certified",
+          "scopes": ["sku", "product_line"],
+          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "basis": "The NSF Certified dietary supplement listing is NSF/ANSI 173 contents certification: label contents verification plus contaminant testing. Applies only to a registry-verified product, never to a label claim.",
+          "source": "https://www.nsf.org/consumer-resources/articles/supplements-and-gmp"
+        },
         "implies_gmp": {
           "verified_program": "NSF Certified",
           "scopes": ["sku", "product_line"],
@@ -219,6 +240,13 @@
       },
       "consumerlab": {
         "id": "CERT_CONSUMERLAB",
+        "verified_capabilities": {
+          "verified_program": "ConsumerLab",
+          "scopes": ["sku", "product_line"],
+          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "basis": "ConsumerLab's Quality Certification Program tests certified products for identity, strength and contamination. Applies only to a registry-verified product, never to a label claim.",
+          "source": "https://www.consumerlab.com/quality-certification-program/certified-products/"
+        },
         "display_name": "ConsumerLab Approved",
         "dedupe_key": "third_party_program:consumerlab",
         "claim_type": "third_party_certification",
@@ -240,6 +268,13 @@
       },
       "informed_sport": {
         "id": "CERT_INFORMED_SPORT",
+        "verified_capabilities": {
+          "verified_program": "Informed Sport",
+          "scopes": ["sku", "product_line"],
+          "capabilities": ["purity_verified"],
+          "basis": "Informed Sport is a banned-substance testing program; it does not establish label potency or heavy-metal testing. Applies only to a registry-verified product, never to a label claim.",
+          "source": "https://sport.wetestyoutrust.com/"
+        },
         "implies_gmp": {
           "verified_program": "Informed Sport",
           "scopes": ["sku", "product_line"],
@@ -262,6 +297,13 @@
       },
       "informed_choice": {
         "id": "CERT_INFORMED_CHOICE",
+        "verified_capabilities": {
+          "verified_program": "Informed Choice",
+          "scopes": ["sku", "product_line"],
+          "capabilities": ["purity_verified"],
+          "basis": "Informed Choice is a banned-substance testing program; it does not establish label potency or heavy-metal testing. Applies only to a registry-verified product, never to a label claim.",
+          "source": "https://choice.wetestyoutrust.com/"
+        },
         "implies_gmp": {
           "verified_program": "Informed Choice",
           "scopes": ["sku", "product_line"],
@@ -284,6 +326,13 @@
       },
       "bscg": {
         "id": "CERT_BSCG",
+        "verified_capabilities": {
+          "verified_program": "BSCG",
+          "scopes": ["sku", "product_line"],
+          "capabilities": ["purity_verified"],
+          "basis": "BSCG Certified Drug Free is a banned-substance testing program; it does not establish label potency or heavy-metal testing. Applies only to a registry-verified product, never to a label claim.",
+          "source": "https://www.bscg.org/"
+        },
         "implies_gmp": {
           "verified_program": "BSCG",
           "scopes": ["sku", "product_line"],
@@ -307,6 +356,13 @@
       },
       "ifos": {
         "id": "CERT_IFOS",
+        "verified_capabilities": {
+          "verified_program": "IFOS",
+          "scopes": ["sku", "product_line"],
+          "capabilities": ["purity_verified", "heavy_metal_tested"],
+          "basis": "IFOS tests certified fish oils for contaminants including heavy metals; it is not treated as supplement-facts label accuracy verification. Applies only to a registry-verified product, never to a label claim.",
+          "source": "https://certifications.nutrasource.ca/certified-products"
+        },
         "display_name": "IFOS Certified",
         "dedupe_key": "third_party_program:ifos",
         "claim_type": "third_party_certification",
@@ -576,7 +632,9 @@
         "positive_patterns": [
           "\\b(third[\\s-]*party|3rd[\\s-]*party)\\s*(tested|verified|inspected)\\b"
         ],
-        "negative_patterns": [],
+        "negative_patterns": [
+          "\\bnot\\s+(?:third[\\s-]*party|3rd[\\s-]*party)\\s*(?:tested|verified|inspected)\\b"
+        ],
         "evidence_strength": "weak",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",

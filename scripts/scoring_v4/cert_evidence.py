@@ -111,6 +111,76 @@ def verified_product_cert_entries(product: Dict[str, Any]) -> List[Dict[str, Any
     ]
 
 
+QUALITY_FLAGS = ("purity_verified", "heavy_metal_tested", "label_accuracy_verified")
+
+
+@lru_cache(maxsize=1)
+def verified_program_capabilities() -> Dict[str, frozenset[str]]:
+    """Registry program -> quality flags its product-level verification
+    establishes (``verified_capabilities`` in data/cert_claim_rules.json)."""
+    try:
+        data = json.loads(_CERT_CLAIM_RULES_PATH.read_text())
+    except (OSError, ValueError):
+        return {}
+    programs = (data.get("rules") or {}).get("third_party_programs") or {}
+    capabilities: Dict[str, frozenset[str]] = {}
+    for key, entry in programs.items():
+        if key.startswith("_") or not isinstance(entry, dict):
+            continue
+        policy = entry.get("verified_capabilities")
+        if isinstance(policy, dict) and _norm(policy.get("verified_program")):
+            capabilities[_norm(policy["verified_program"])] = frozenset(
+                flag for flag in policy.get("capabilities") or [] if flag in QUALITY_FLAGS
+            )
+    return capabilities
+
+
+def claimed_programs(product: Dict[str, Any]) -> List[str]:
+    """Every certification/testing program the label claims, in label order.
+    A claim is never verification, even when a registry also verifies it."""
+    cert_data = product.get("certification_data")
+    third_party = cert_data.get("third_party_programs") if isinstance(cert_data, dict) else None
+    entries = third_party.get("programs") if isinstance(third_party, dict) else None
+    names: List[str] = []
+    for entry in entries if isinstance(entries, list) else []:
+        name = str((entry.get("name") if isinstance(entry, dict) else entry) or "").strip()
+        if name and name not in names:
+            names.append(name)
+    return names
+
+
+def verified_programs(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Registry-verified product certifications with their provenance, one per
+    program (first product-verifying row wins)."""
+    out: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    for entry in verified_product_cert_entries(product):
+        program = str(entry.get("program") or "").strip()
+        if not program or _norm(program) in seen:
+            continue
+        seen.add(_norm(program))
+        out.append({
+            "name": program,
+            "program": program,
+            "record_id": entry.get("record_id"),
+            "scope": entry.get("scope"),
+            "source_url": entry.get("source_url"),
+            "snapshot_date": entry.get("snapshot_date"),
+            "recency_status": entry.get("recency_status"),
+        })
+    return out
+
+
+def verified_quality_flags(product: Dict[str, Any]) -> Dict[str, bool]:
+    """Purity / heavy-metal / label-accuracy flags established by verified
+    product certifications only. Label claims light none of them."""
+    capabilities = verified_program_capabilities()
+    earned: set[str] = set()
+    for verified in verified_programs(product):
+        earned |= capabilities.get(_norm(verified["program"]), frozenset())
+    return {flag: flag in earned for flag in QUALITY_FLAGS}
+
+
 def gmp_implied_by_verified_cert(product: Dict[str, Any]) -> Optional[str]:
     """The product-verifying certification whose program audits GMP, or None."""
     programs = gmp_implying_programs()

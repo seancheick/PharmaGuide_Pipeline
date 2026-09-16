@@ -3688,7 +3688,13 @@ class TestDetailBlobNutritionAndUnmapped:
         assert CORE_COLUMN_COUNT == len(PRODUCTS_CORE_COLUMNS)
 
     def test_schema_version_bumped_for_independent_consumer_semantics(self):
-        assert EXPORT_SCHEMA_VERSION == "2.4.0"
+        # 2.5.0: additive certification_detail.claimed_programs /
+        # verified_programs; legacy third_party_programs, quality flags,
+        # has_third_party_testing and cert_programs became verified-only.
+        assert EXPORT_SCHEMA_VERSION == "2.5.0"
+        from export_schema import SUPPORTED_EXPORT_SCHEMA_VERSIONS
+        assert "2.4.0" in SUPPORTED_EXPORT_SCHEMA_VERSIONS  # installed catalogs keep importing
+        assert "2.5.0" in SUPPORTED_EXPORT_SCHEMA_VERSIONS
 
     def test_detail_blob_emits_demoted_absorption_enhancers(self):
         """Sprint E1.23 follow-up (2026-05-09): the enricher produces
@@ -3840,7 +3846,7 @@ def _artifact_from_canned(dsld_id: str, v4_result: dict) -> dict:
 
 
 def _run_build(
-    tmp, enriched_list, scored_list, *, export_schema_version="2.4.0", strict=False
+    tmp, enriched_list, scored_list, *, export_schema_version=EXPORT_SCHEMA_VERSION, strict=False
 ):
     root = Path(tmp)
     enriched_dir = root / "enriched"; enriched_dir.mkdir()

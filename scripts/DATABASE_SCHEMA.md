@@ -298,7 +298,7 @@ Primary keys: `config` (object), `rules` (object)
 
 `rules` sub-keys: `third_party_programs`, `gmp_certifications`, `organic_certifications`, `allergen_free_claims`, `batch_traceability`, `quality_markers`
 
-Each rule entry contains pattern-matching criteria and scoring weights for claim detection.
+Each rule entry contains pattern-matching criteria and scoring weights for claim detection. `third_party_programs` rules with a public registry carry `verified_capabilities` (`verified_program`, `scopes`, `capabilities`, `basis`, `source`): the quality flags a registry-verified product certification establishes, interpreted only by `scoring_v4/cert_evidence.py`. A label claim establishes none of them.
 
 ---
 

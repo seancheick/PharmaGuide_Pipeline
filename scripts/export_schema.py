@@ -13,7 +13,7 @@ import json
 from typing import Any, Mapping
 
 
-SUPPORTED_EXPORT_SCHEMA_VERSIONS = ("2.4.0", "3.0.0")
+SUPPORTED_EXPORT_SCHEMA_VERSIONS = ("2.4.0", "2.5.0", "3.0.0")
 
 
 def export_schema_major(version: str) -> int:

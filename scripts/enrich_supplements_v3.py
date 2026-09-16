@@ -12886,7 +12886,9 @@ class SupplementEnricherV3:
                 "programs": [],
                 "count": 0,
                 "has_generic_claim_only": any(
-                    ev.get("rule_id") == "CERT_THIRD_PARTY_GENERIC" for ev in third_party_evidence
+                    ev.get("rule_id") == "CERT_THIRD_PARTY_GENERIC"
+                    and not (ev.get("negation") or {}).get("negated")
+                    for ev in third_party_evidence
                 ),
             },
             third_party_evidence,
@@ -12910,10 +12912,9 @@ class SupplementEnricherV3:
             verified_cert_programs
         )
 
-        # Derive safety flags from certifications (uses claimed set — display
-        # signals like "tested for heavy metals" still come from the regex/
-        # rules-db detection, not from registry verification).
-        safety_flags = self._derive_safety_flags(third_party, product)
+        # Purity / heavy-metal / label-accuracy flags are NOT derived here:
+        # these are claims. Only registry-verified product certifications
+        # establish them (scoring_v4.cert_evidence.verified_quality_flags).
 
         return {
             # Legacy format for backward compatibility (DISPLAY ONLY post-v4)
@@ -12924,11 +12925,7 @@ class SupplementEnricherV3:
             "manufacturer_cert_signals": manufacturer_cert_signals,
             "verified_cert_programs": verified_cert_programs,
             "verification_assessment": verification_assessment,
-            # Safety verification flags for app display
-            "purity_verified": safety_flags["purity_verified"],
-            "heavy_metal_tested": safety_flags["heavy_metal_tested"],
-            "label_accuracy_verified": safety_flags["label_accuracy_verified"],
-            "category_contamination_risk": safety_flags["category_contamination_risk"],
+            "category_contamination_risk": self._assess_category_contamination_risk(product),
             # ENHANCED: Evidence-based detection (for hardened scoring)
             "evidence_based": {
                 "third_party_programs": third_party_evidence,
@@ -13053,7 +13050,7 @@ class SupplementEnricherV3:
             key = self._normalize_text(mapped_name)
             if not key or key in existing:
                 continue
-            programs.append({"name": mapped_name, "verified": True, "source": "rules_db"})
+            programs.append({"name": mapped_name, "source": "rules_db"})
             existing.add(key)
 
         merged = dict(third_party or {})
@@ -13355,34 +13352,6 @@ class SupplementEnricherV3:
         )
         return merged
 
-    QUALITY_CERT_CAPABILITIES = {
-        # Contents / potency / contaminant programs.
-        "nsf sport": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "nsf certified for sport": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "nsf contents certified": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "nsf ansi 173": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "nsf 173": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "nsf ansi 455": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "nsf ansi 455 dietary supplement": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "usp verified": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "consumerlab": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "consumerlab approved": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "labdoor tested": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        # Contaminant / banned-substance programs. These are valuable but do
-        # not universally prove supplement-facts potency.
-        "ifos": {"purity_verified", "heavy_metal_tested"},
-        "goed certified": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
-        "clean label project certified": {"purity_verified", "heavy_metal_tested"},
-        "informed sport": {"purity_verified"},
-        "informed choice": {"purity_verified"},
-        "bscg": {"purity_verified"},
-    }
-
-    @classmethod
-    def _quality_cert_capabilities(cls, program_name: str) -> set:
-        key = re.sub(r"[^a-z0-9]+", " ", str(program_name or "").lower()).strip()
-        return cls.QUALITY_CERT_CAPABILITIES.get(key, set())
-
     # Categories with elevated contamination risk (based on ConsumerLab/FDA data)
     HIGH_CONTAMINATION_RISK_CATEGORIES = {
         "protein_powder": {
@@ -13416,40 +13385,6 @@ class SupplementEnricherV3:
             "note": "May contain substances banned by WADA"
         }
     }
-
-    def _derive_safety_flags(self, third_party: Dict, product: Dict) -> Dict:
-        """
-        Derive safety verification flags from certification programs.
-
-        These flags indicate whether the product has been tested by programs
-        that verify specific safety criteria:
-        - purity_verified: Tested for contaminants (pesticides, microbes, etc.)
-        - heavy_metal_tested: Tested for heavy metals (Pb, As, Hg, Cd)
-        - label_accuracy_verified: Ingredient identity and potency verified
-
-        Also assesses category-based contamination risk.
-        """
-        programs = third_party.get("programs", [])
-        program_names = [p.get("name", "") for p in programs]
-
-        capabilities = set()
-        for name in program_names:
-            capabilities.update(self._quality_cert_capabilities(name))
-
-        purity_verified = "purity_verified" in capabilities
-        heavy_metal_tested = "heavy_metal_tested" in capabilities
-        label_accuracy_verified = "label_accuracy_verified" in capabilities
-
-        # Assess category-based contamination risk
-        category_risk = self._assess_category_contamination_risk(product)
-
-        return {
-            "purity_verified": purity_verified,
-            "heavy_metal_tested": heavy_metal_tested,
-            "label_accuracy_verified": label_accuracy_verified,
-            "verifying_programs": program_names if program_names else [],
-            "category_contamination_risk": category_risk
-        }
 
     def _assess_category_contamination_risk(self, product: Dict) -> Dict:
         """

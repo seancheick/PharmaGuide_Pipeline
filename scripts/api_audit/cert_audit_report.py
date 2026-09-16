@@ -79,6 +79,12 @@ def _load_claimed_certs(blob: dict) -> list[str]:
     different blob versions. Tries multiple shapes."""
     out: list[str] = []
     cd = blob.get("certification_detail") or {}
+    # Current contract: every label claim lives in claimed_programs;
+    # third_party_programs is the verified-only legacy list.
+    for p in cd.get("claimed_programs") or []:
+        name = p.get("name") if isinstance(p, dict) else p
+        if name:
+            out.append(str(name))
     tp = cd.get("third_party_programs") or {}
     programs = tp.get("programs") if isinstance(tp, dict) else None
     if isinstance(programs, list):
@@ -111,7 +117,8 @@ def _current_b4a(row: dict) -> float:
     aggregate B and let the report record context."""
     # We don't get per-B4a from products_core in v3. The audit shows:
     #   - claimed program count (proxy for current B4a contribution)
-    #   - cert_programs list (raw claimed)
+    #   - cert_programs list (registry-verified programs in current exports;
+    #     label claims are certification_detail.claimed_programs)
     # Real per-B4a comparison would require running the v3 scorer on the blob,
     # which we can do as a follow-up. For now, report the v3 raw claimed_count.
     cert_programs = row.get("cert_programs") or "[]"

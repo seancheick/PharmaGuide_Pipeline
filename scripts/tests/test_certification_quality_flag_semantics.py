@@ -1,4 +1,10 @@
-"""Certification capability semantics for app-facing quality flags."""
+"""Label certification claims detected by the enricher.
+
+Claims are claims: the enricher records which programs a label names but never
+derives purity / heavy-metal / label-accuracy flags from them. Those flags come
+only from registry-verified product certifications
+(scoring_v4.cert_evidence.verified_quality_flags; see
+test_cert_claimed_vs_verified.py)."""
 
 from __future__ import annotations
 
@@ -46,58 +52,53 @@ def _certification_from_label(label_text: str) -> dict:
     return _enricher()._collect_certification_data(product)
 
 
+def _assert_no_claim_derived_flags(certification_data: dict) -> None:
+    for flag in ("purity_verified", "heavy_metal_tested", "label_accuracy_verified"):
+        assert flag not in certification_data
+
+
 def _program_names(certification_data: dict) -> list[str]:
     programs = certification_data["third_party_programs"]["programs"]
     return [program["name"] for program in programs]
 
 
-def test_nsf_certified_gluten_free_does_not_imply_quality_testing_flags() -> None:
+def test_nsf_certified_gluten_free_is_not_a_quality_program_claim() -> None:
     certification = _certification_from_label(
         "NSF Certified Gluten-Free Certified Vegan Vegan.org Non-GMO Project Verified"
     )
 
     assert _program_names(certification) == []
-    assert certification["purity_verified"] is False
-    assert certification["heavy_metal_tested"] is False
-    assert certification["label_accuracy_verified"] is False
+    _assert_no_claim_derived_flags(certification)
 
 
-def test_generic_nsf_certified_does_not_imply_quality_testing_flags() -> None:
+def test_generic_nsf_certified_is_not_a_quality_program_claim() -> None:
     certification = _certification_from_label("NSF Certified")
 
     assert _program_names(certification) == []
-    assert certification["purity_verified"] is False
-    assert certification["heavy_metal_tested"] is False
-    assert certification["label_accuracy_verified"] is False
+    _assert_no_claim_derived_flags(certification)
 
 
-def test_nsf_contents_certified_sets_quality_testing_flags() -> None:
+def test_nsf_contents_certified_is_detected_as_a_claim() -> None:
     certification = _certification_from_label("NSF Contents Certified")
 
     assert _program_names(certification) == ["NSF Contents Certified"]
-    assert certification["purity_verified"] is True
-    assert certification["heavy_metal_tested"] is True
-    assert certification["label_accuracy_verified"] is True
+    _assert_no_claim_derived_flags(certification)
 
 
-def test_reversed_contents_certified_nsf_sets_specific_quality_program() -> None:
+def test_reversed_contents_certified_nsf_is_detected_as_a_claim() -> None:
     certification = _certification_from_label(
         "Contents Certified NSF\nNSF Certified Gluten-Free\nCertified Vegan"
     )
 
     assert _program_names(certification) == ["NSF Contents Certified"]
-    assert certification["purity_verified"] is True
-    assert certification["heavy_metal_tested"] is True
-    assert certification["label_accuracy_verified"] is True
+    _assert_no_claim_derived_flags(certification)
 
 
-def test_nsf_ansi_455_sets_quality_testing_flags() -> None:
+def test_nsf_ansi_455_is_detected_as_a_claim() -> None:
     certification = _certification_from_label("NSF/ANSI 455 Dietary Supplement Certified")
 
     assert _program_names(certification) == ["NSF/ANSI 455 Dietary Supplement"]
-    assert certification["purity_verified"] is True
-    assert certification["heavy_metal_tested"] is True
-    assert certification["label_accuracy_verified"] is True
+    _assert_no_claim_derived_flags(certification)
 
 
 def test_nsf_contents_rules_db_bridge_preserves_specific_program_name() -> None:
@@ -115,7 +116,7 @@ def test_nsf_contents_rules_db_bridge_preserves_specific_program_name() -> None:
     )
 
     assert merged["programs"] == [
-        {"name": "NSF Contents Certified", "verified": True, "source": "rules_db"}
+        {"name": "NSF Contents Certified", "source": "rules_db"}
     ]
 
 
@@ -148,9 +149,7 @@ def test_usp_chapter_and_later_verified_wording_is_not_usp_verified() -> None:
     )
 
     assert _program_names(certification) == []
-    assert certification["purity_verified"] is False
-    assert certification["heavy_metal_tested"] is False
-    assert certification["label_accuracy_verified"] is False
+    _assert_no_claim_derived_flags(certification)
 
 
 def test_program_claim_split_across_statements_is_not_a_claim() -> None:
@@ -224,42 +223,20 @@ def test_verification_assessment_distinguishes_completed_absence_and_presence() 
 
 
 @pytest.mark.parametrize(
-    ("label_text", "expected_programs", "expected_flags"),
+    ("label_text", "expected_programs"),
     [
-        (
-            "Clean Label Project Certified",
-            ["Clean Label Project Certified"],
-            {"purity_verified": True, "heavy_metal_tested": True, "label_accuracy_verified": False},
-        ),
-        (
-            "Labdoor Tested",
-            ["Labdoor Tested"],
-            {"purity_verified": True, "heavy_metal_tested": True, "label_accuracy_verified": True},
-        ),
-        (
-            "GOED Certified",
-            ["GOED Certified"],
-            {"purity_verified": True, "heavy_metal_tested": True, "label_accuracy_verified": True},
-        ),
-        (
-            "IFOS 5-Star",
-            ["IFOS"],
-            {"purity_verified": True, "heavy_metal_tested": True, "label_accuracy_verified": False},
-        ),
-        (
-            "Informed Choice",
-            ["Informed Choice"],
-            {"purity_verified": True, "heavy_metal_tested": False, "label_accuracy_verified": False},
-        ),
+        ("Clean Label Project Certified", ["Clean Label Project Certified"]),
+        ("Labdoor Tested", ["Labdoor Tested"]),
+        ("GOED Certified", ["GOED Certified"]),
+        ("IFOS 5-Star", ["IFOS"]),
+        ("Informed Choice", ["Informed Choice"]),
     ],
 )
-def test_quality_certification_capabilities_are_program_specific(
+def test_program_claims_are_detected_without_quality_flags(
     label_text: str,
     expected_programs: list[str],
-    expected_flags: dict[str, bool],
 ) -> None:
     certification = _certification_from_label(label_text)
 
     assert _program_names(certification) == expected_programs
-    for flag, expected in expected_flags.items():
-        assert certification[flag] is expected
+    _assert_no_claim_derived_flags(certification)

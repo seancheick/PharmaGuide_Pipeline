@@ -30,7 +30,7 @@ const Set<String> appCoreProjectionColumns = <String>{{
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--export-schema-version", default="2.4.0")
+    parser.add_argument("--export-schema-version", default="2.5.0")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
 

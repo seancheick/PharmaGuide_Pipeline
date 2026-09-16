@@ -110,7 +110,7 @@ from scoring_v4.scored_artifact import SCORING_ENGINE_VERSION
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "2.4.0"  # additive score/route/status compatibility bridge
+EXPORT_SCHEMA_VERSION = "2.5.0"  # additive claimed/verified certification contract (2.4.0 still importable)
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -2984,7 +2984,10 @@ def build_decision_highlights(
     ``danger`` exclusively; ``caution`` then flows unchanged for the
     non-blocking signals (additives, allergens, verdict).
     """
-    named_programs = safe_list(enriched.get("named_cert_programs"))
+    from scoring_v4.cert_evidence import claimed_programs, verified_programs
+
+    verified_names = [row["name"] for row in verified_programs(enriched)]
+    unverified_claims = [name for name in claimed_programs(enriched) if name not in verified_names]
     verdict = safe_str(scored.get("verdict")).upper()
     # V4 cutover: the shipped /100 score (overlay sets score_100_equivalent
     # from quality_score_v4_100); 75/100 mirrors the retired V3 score_80>=60.
@@ -3017,8 +3020,10 @@ def build_decision_highlights(
     else:
         caution = "No major caution signal surfaced in the quick review."
 
-    if named_programs:
-        trust = f"Third-party programs listed: {', '.join(str(program) for program in named_programs[:2])}."
+    if verified_names:
+        trust = f"Verified in official registries: {', '.join(verified_names[:2])}."
+    elif unverified_claims:
+        trust = f"Claimed on label, not independently verified: {', '.join(unverified_claims[:2])}."
     elif safe_bool(enriched.get("has_full_disclosure")):
         trust = "Formula is fully disclosed for easier review."
     elif safe_bool(enriched.get("is_trusted_manufacturer")):
@@ -5935,6 +5940,44 @@ def has_recalled_ingredient(enriched: Dict) -> bool:
 
 # ─── Detail Blob Builder ───
 
+def _certification_detail(enriched: Dict, cd: Dict) -> Dict[str, Any]:
+    """Claims and verification are separate dimensions, decided by one owner
+    (scoring_v4.cert_evidence).
+
+    - ``claimed_programs``: every program the label claims, with its canonical
+      registry program.
+    - ``verified_programs``: the registry-verified product certifications,
+      with record id, scope, source URL and snapshot recency.
+    - ``third_party_programs.programs``: transitional legacy list that
+      installed apps render as "Third-party verified"; verified-only.
+    - Quality flags come from verified programs only.
+    """
+    from cert_resolver import normalize_program
+    from scoring_v4.cert_evidence import claimed_programs, verified_programs, verified_quality_flags
+
+    verified = verified_programs(enriched)
+    flags = verified_quality_flags(enriched)
+    return {
+        # ``program`` is the registry's canonical name for the claim (label
+        # "NSF Contents Certified" is the "NSF Certified" listing), so a
+        # consumer can let a verified row replace its matching claim.
+        "claimed_programs": [
+            {"name": name, "program": normalize_program(name)} for name in claimed_programs(enriched)
+        ],
+        "verified_programs": verified,
+        "third_party_programs": {
+            "programs": [
+                {"name": row["name"], "verified": True, "source": "registry", "record_id": row["record_id"]}
+                for row in verified
+            ],
+        },
+        "gmp": cd.get("gmp"),
+        "purity_verified": json_bool(flags["purity_verified"]),
+        "heavy_metal_tested": json_bool(flags["heavy_metal_tested"]),
+        "label_accuracy_verified": json_bool(flags["label_accuracy_verified"]),
+    }
+
+
 def _certification_gmp_detail(label_gmp: Any, pillars: Any) -> Dict[str, Any]:
     """certification_detail.gmp: the label's GMP wording plus the Verification
     pillar's audited-facility decision. The app badge reads only
@@ -7818,13 +7861,7 @@ def build_detail_blob(
         # products with EPA/DHA hidden in opaque proprietary blends.
         "omega3_detail": omega3_detail,
         "compliance_detail": safe_dict(enriched.get("compliance_data")),
-        "certification_detail": {
-            "third_party_programs": cd.get("third_party_programs"),
-            "gmp": cd.get("gmp"),
-            "purity_verified": json_bool(cd.get("purity_verified")),
-            "heavy_metal_tested": json_bool(cd.get("heavy_metal_tested")),
-            "label_accuracy_verified": json_bool(cd.get("label_accuracy_verified")),
-        },
+        "certification_detail": _certification_detail(enriched, cd),
         "proprietary_blend_detail": {
             "has_proprietary_blends": json_bool(safe_dict(enriched.get("proprietary_data")).get("has_proprietary_blends")),
             "blends": annotate_probiotic_blend_totals(
@@ -8537,7 +8574,10 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     positive_signals = []
     if v4_evidence >= 15:
         positive_signals.append("clinical evidence")
-    if safe_list(enriched.get("named_cert_programs")):
+    from scoring_v4.cert_evidence import verified_programs
+
+    verified_names = [row["name"] for row in verified_programs(enriched)]
+    if verified_names:
         positive_signals.append("third-party testing")
     # Dietary signals come from compliance_data (the canonical source for
     # vegan / gluten_free / etc. flags). dietary_sensitivity_data carries
@@ -8569,10 +8609,9 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     if v4_evidence >= 12:
         highlights.append("Clinically-backed ingredients")
 
-    # Certifications
-    certs = safe_list(enriched.get("named_cert_programs"))
-    if certs:
-        highlights.append(" • ".join(str(c) for c in certs[:3]))
+    # Certifications: registry-verified only; a label claim is not a highlight.
+    if verified_names:
+        highlights.append(" • ".join(verified_names[:3]))
 
     # Dietary highlights — same canonical source as the description above.
     # The earlier `ds.get("gluten_free") or compliance.gluten_free` guard
@@ -10203,23 +10242,13 @@ def generate_allergen_summary(enriched: Dict) -> Optional[str]:
 
 
 def registry_verified_cert_display_programs(enriched: Dict) -> List[str]:
-    """Registry-verified (sku/product_line) cert program names whose
-    matched_brand agrees with the product brand.
+    """Registry-verified (sku/product_line, brand-matched, unblocked) program
+    names, from the one owner (scoring_v4.cert_evidence). claimed_only /
+    needs_review / brand_only rows never reach display: a claim is not
+    verification."""
+    from scoring_v4.cert_evidence import verified_programs
 
-    Re-applies the scoring layer's brand guard (scoring_v4.cert_evidence) at
-    export, per the stale-artifact defense doctrine, so a stale enriched
-    artifact carrying a cross-brand registry row can light neither score nor
-    display badge — the same function, not a second copy. claimed_only / needs_review /
-    brand_only rows never reach display: a claim is not verification.
-    """
-    from scoring_v4.cert_evidence import verified_product_cert_entries
-
-    out: List[str] = []
-    for entry in verified_product_cert_entries(enriched):
-        name = str(entry.get("program") or "").strip()
-        if name and name not in out:
-            out.append(name)
-    return out
+    return [row["name"] for row in verified_programs(enriched)]
 
 
 def compute_v4_category_percentiles(
@@ -10282,17 +10311,10 @@ def build_core_row(
     sm = safe_dict(scored.get("scoring_metadata"))
     brand_identity = resolve_catalog_brand(enriched)
 
-    # cert_programs / has_third_party_testing: union of label-named programs
-    # and registry-verified (sku/product_line) certs. Label-only sourcing
-    # inverted the badge — Thorne Super EPA (two NSF SKU registry matches)
-    # shipped has_third_party_testing=0 while label-claim-only products
-    # showed the badge (2026-06-09 audit).
-    cert_display_programs = [
-        str(p) for p in safe_list(enriched.get("named_cert_programs")) if str(p).strip()
-    ]
-    for _prog in registry_verified_cert_display_programs(enriched):
-        if _prog not in cert_display_programs:
-            cert_display_programs.append(_prog)
+    # cert_programs / has_third_party_testing ("Third-Party Tested" in the
+    # app hero and the share index): registry-verified product certifications
+    # only. Label claims live in certification_detail.claimed_programs.
+    cert_display_programs = registry_verified_cert_display_programs(enriched)
 
     disc_date = safe_str(enriched.get("discontinuedDate"))[:10] or None
     effective_scored = project_export_scored_artifact(
