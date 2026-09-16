@@ -89,7 +89,7 @@ def test_label_gmp_does_not_hide_verified_cert_provenance():
     before = _generic_trust(product)
     claimed = deepcopy(product)
     claimed["certification_data"]["gmp"] = {"gmp_certified_or_compliant": True}
-    assert _generic_trust(claimed)["metadata"]["B4b_gmp_inferred_from_cert"] == before["metadata"]["B4b_gmp_inferred_from_cert"]
+    assert _generic_trust(claimed)["metadata"]["gmp_evidence"] == before["metadata"]["gmp_evidence"]
 
 
 def test_bonus_rescale_and_clamp_hold_at_high_verification():

@@ -279,45 +279,22 @@ def test_b4a_reads_certification_data_nested_path() -> None:
 # --- B4b GMP -------------------------------------------------------------
 
 
-def test_b4b_nsf_gmp_awards_4() -> None:
-    """NSF/ANSI 173 audit → 4 pts (strongest GMP signal)."""
+@pytest.mark.parametrize("gmp", [
+    {"nsf_gmp": True, "text_matched": "NSF GMP"},
+    {"fda_registered": True, "text_matched": "FDA Registered"},
+    {"nsf_gmp": True, "fda_registered": True, "text_matched": "NSF GMP"},
+    {"claimed": True, "nsf_gmp": False, "fda_registered": False},
+])
+def test_b4b_label_gmp_wording_scores_zero(gmp) -> None:
+    """2026-09-16 one GMP owner (scoring_v4.cert_evidence): a label NSF GMP
+    mark, FDA facility registration and self-attested GMP are unverified label
+    wording. They used to score 4 / 2 here while generic trust and the
+    Verification pillar disagreed; see test_gmp_one_owner.py."""
     from scoring_v4.modules.omega_trust import score_trust
 
-    product = {"certification_data": {"gmp": {"nsf_gmp": True}}}
-    payload = score_trust(product)
-    assert payload["components"]["b4b_gmp"] == 4.0
-
-
-def test_b4b_fda_registered_awards_2() -> None:
-    """FDA registered facility → 2 pts (weaker than NSF/ANSI 173)."""
-    from scoring_v4.modules.omega_trust import score_trust
-
-    product = {"certification_data": {"gmp": {"fda_registered": True}}}
-    payload = score_trust(product)
-    assert payload["components"]["b4b_gmp"] == 2.0
-
-
-def test_b4b_nsf_gmp_wins_over_fda_when_both_present() -> None:
-    """When both flags are set, NSF/ANSI 173 takes precedence (higher tier)."""
-    from scoring_v4.modules.omega_trust import score_trust
-
-    product = {"certification_data": {"gmp": {"nsf_gmp": True, "fda_registered": True}}}
-    payload = score_trust(product)
-    assert payload["components"]["b4b_gmp"] == 4.0
-
-
-def test_b4b_self_attested_only_scores_zero() -> None:
-    """gmp.claimed=True without nsf_gmp/fda_registered → 0.
-    This is STRICTER than generic_trust which credits gmp_level=certified.
-    Omega rubric explicitly requires third-party-verified GMP."""
-    from scoring_v4.modules.omega_trust import score_trust
-
-    product = {"certification_data": {"gmp": {
-        "claimed": True, "nsf_gmp": False, "fda_registered": False,
-    }}}
-    payload = score_trust(product)
+    payload = score_trust({"certification_data": {"gmp": gmp}})
     assert "b4b_gmp" not in payload["components"]
-    assert payload["metadata"]["b4b"]["self_attested_only_no_credit"] is True
+    assert payload["metadata"]["b4b"]["gmp_basis"] is None
 
 
 def test_b4b_no_gmp_data_scores_zero() -> None:
@@ -345,8 +322,8 @@ def test_b4b_verified_nsf_contents_sku_cert_infers_gmp() -> None:
     payload = score_trust(product)
 
     assert payload["components"]["b4b_gmp"] == 4.0
-    assert payload["metadata"]["b4b"]["source"] == "verified_cert_implies_gmp"
-    assert payload["metadata"]["b4b"]["program"] == "NSF Certified"
+    assert payload["metadata"]["b4b"]["gmp_basis"] == "verified_certification"
+    assert payload["metadata"]["b4b"]["gmp_evidence"] == "NSF Certified"
 
 
 def test_b4b_cross_brand_cert_does_not_infer_gmp() -> None:
@@ -367,7 +344,7 @@ def test_b4b_cross_brand_cert_does_not_infer_gmp() -> None:
     payload = score_trust(product)
 
     assert "b4b_gmp" not in payload["components"]
-    assert payload["metadata"]["b4b"]["source"] is None
+    assert payload["metadata"]["b4b"]["gmp_basis"] is None
 
 
 def test_b4b_brand_only_cert_does_not_infer_gmp() -> None:
@@ -386,7 +363,7 @@ def test_b4b_brand_only_cert_does_not_infer_gmp() -> None:
     payload = score_trust(product)
 
     assert "b4b_gmp" not in payload["components"]
-    assert payload["metadata"]["b4b"]["source"] is None
+    assert payload["metadata"]["b4b"]["gmp_basis"] is None
 
 
 def test_b4b_blocked_verified_cert_does_not_infer_gmp() -> None:
@@ -405,7 +382,7 @@ def test_b4b_blocked_verified_cert_does_not_infer_gmp() -> None:
     payload = score_trust(product)
 
     assert "b4b_gmp" not in payload["components"]
-    assert payload["metadata"]["b4b"]["source"] is None
+    assert payload["metadata"]["b4b"]["gmp_basis"] is None
 
 
 # --- B4c Batch traceability ----------------------------------------------
@@ -471,13 +448,17 @@ def test_b4c_neither_signal_scores_zero() -> None:
 
 
 def test_max_trust_score_is_15() -> None:
-    """Maximum reachable: sku cert 10 + nsf_gmp 4 + coa 1 = 15."""
+    """Maximum reachable: sku certs 10 + audited GMP 4 (NSF Certified implies a
+    GMP facility audit) + coa 1 = 15."""
     from scoring_v4.modules.omega_trust import score_trust
 
     product = {
-        "verified_cert_programs": [{"program": "IFOS", "scope": "sku"}],
+        "verified_cert_programs": [
+            {"program": "IFOS", "scope": "sku"},
+            {"program": "NSF Certified", "scope": "sku"},
+        ],
         "certification_data": {
-            "gmp": {"nsf_gmp": True},
+            "gmp": {},
             "batch_traceability": {"has_coa": True, "has_batch_lookup": True},
         },
     }
@@ -569,8 +550,8 @@ def test_canary_trust_matches_curated_override_state(dsld_id):
         assert sku["match_confidence"] == 1.0
         assert payload["components"]["b4a_verified_certifications"] == 10.0
         assert payload["components"]["b4b_gmp"] == 4.0
-        assert payload["metadata"]["b4b"]["source"] == "verified_cert_implies_gmp"
-        assert payload["metadata"]["b4b"]["program"] == "NSF Certified"
+        assert payload["metadata"]["b4b"]["gmp_basis"] == "verified_certification"
+        assert payload["metadata"]["b4b"]["gmp_evidence"] == "NSF Certified"
         assert payload["metadata"]["b4a"]["B4a_scored_entries"] == [
             {"program": "NSF Certified", "scope": "sku", "pts": 10.0}
         ]

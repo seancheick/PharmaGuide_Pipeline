@@ -772,18 +772,13 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     # Every GMP flag the enricher sets is matched from label text (self-asserted
     # table stakes). GMP only counts when a verified product cert implies an
     # audited facility or exact-matched manufacturer evidence names one.
-    b4b_source = (trust_meta.get("b4b") or {}).get("source")
-    if trust_meta.get("B4b_gmp_inferred_from_cert") or b4b_source == "verified_cert_implies_gmp":
-        audited_gmp_basis = "verified_certification"
-    elif (trust_meta.get("B4b_gmp_inferred_from_manufacturer_facility")
-          or b4b_source == "manufacturer_facility_gmp"):
-        audited_gmp_basis = "manufacturer_facility"
-    else:
-        audited_gmp_basis = None
-    gmp = sub["gmp_certified_points"] if (audited_gmp_basis and b4b >= 4.0) else 0.0
-    # The app's GMP badge renders this decision; it never re-derives GMP from
-    # label wording.
-    gmp_basis = audited_gmp_basis if gmp > 0 else None
+    # GMP counts only on a basis decided by scoring_v4.cert_evidence (generic
+    # trust emits it at top level, omega trust under "b4b"). The app's GMP badge
+    # renders this decision; nothing re-derives GMP from label wording.
+    from scoring_v4.cert_evidence import AUDITED_GMP_BASES
+    reported_basis = trust_meta.get("gmp_basis") or (trust_meta.get("b4b") or {}).get("gmp_basis")
+    gmp = sub["gmp_certified_points"] if (reported_basis in AUDITED_GMP_BASES and b4b >= 4.0) else 0.0
+    gmp_basis = reported_basis if gmp > 0 else None
     testing = sub["brand_testing_points"] if b4d > 0 else 0.0
     # PR2.1: a verified brand/facility scoped cert is a real third-party
     # verification signal, but weaker than sku/product_line certification and

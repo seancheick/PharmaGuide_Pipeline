@@ -351,3 +351,10 @@ def test_certification_detail_gmp_carries_the_pillar_audited_decision() -> None:
     assert audited["audited_facility_basis"] == "manufacturer_facility"
     assert _certification_gmp_detail(None, None) == {
         "audited_facility": False, "audited_facility_basis": None}
+    # Fail closed: points without a recognised basis (an old or malformed
+    # pillar) never light the audited badge.
+    for basis in (None, "", "label_claim", "fda_registered"):
+        detail = _certification_gmp_detail(
+            {}, {"verification": {"components": {"gmp": 2.0, "gmp_basis": basis}}})
+        assert detail["audited_facility"] is False
+        assert detail["audited_facility_basis"] is None

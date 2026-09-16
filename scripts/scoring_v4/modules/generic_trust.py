@@ -26,10 +26,8 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
     get_active_ingredients,
 )
-from scoring_v4.modules.brand_testing_posture import (
-    gmp_facility_evidence,
-    score_brand_testing_posture,
-)
+from scoring_v4.cert_evidence import audited_gmp_evidence, cert_entry_brand_matches_product
+from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
 
 
 _DHA_EPA_WORD_BOUNDARY_RE = re.compile(r"\b(epa|dha)\b", re.IGNORECASE)
@@ -69,7 +67,6 @@ SUSTAINABILITY_ONLY_CERTS = frozenset(
 MARINE_CERTS_FALLBACK = frozenset({"ifos", "friend of the sea", "msc", "goed"})
 
 B4B_GMP_CERTIFIED = _VM["b4b_gmp_certified"]
-B4B_FDA_REGISTERED = _VM["b4b_fda_registered"]
 B4C_COA = _VM["b4c_coa"]
 B4C_BATCH_LOOKUP = _VM["b4c_batch_lookup"]
 
@@ -153,7 +150,7 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
         if not program:
             continue
 
-        if scope in ("sku", "product_line") and not _cert_entry_brand_matches_product(product, entry):
+        if scope in ("sku", "product_line") and not cert_entry_brand_matches_product(product, entry):
             skipped_reasons["brand_mismatch"] += 1
             continue
 
@@ -273,133 +270,26 @@ def _label_asserted_program_key(display: str, rule_id: str) -> str:
 
 
 def _score_b4b(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
-    """Score GMP / facility quality.
+    """Score GMP / facility quality from the one audited-GMP decision
+    (scoring_v4.cert_evidence.audited_gmp_evidence): a verified certification
+    whose program audits GMP, or an exact manufacturer facility record.
 
-    Verified evidence is checked before label-only GMP wording, so adding a
-    claim never masks the independent provenance consumed by the public pillar.
-      1. cert→GMP implication: a VERIFIED sku/product_line cert whose program
-         requires a GMP facility audit (NSF Sport/Contents, USP Verified,
-         Informed Sport/Choice, BSCG — policy in cert_claim_rules.json). The
-         cert is a stronger third-party signal than an empty gmp_level field,
-         so we credit GMP from it rather than zeroing a product we KNOW is made
-         under audited GMP. Conservative: brand_only/claimed_only/needs_review
-         and stale/blocked rows never imply GMP.
-      2. Exact manufacturer facility evidence.
-      3. Label-only GMP / FDA-registration signals (module audit only).
+    Label GMP wording, an NSF GMP mark and FDA facility registration are
+    self-asserted; they are recorded for audit and never scored, exactly as
+    the Verification pillar and the app's GMP badge treat them.
     """
-    cert = _safe_dict(product.get("certification_data"))
-    gmp = _safe_dict(cert.get("gmp"))
-    gmp_level = _norm_text(product.get("gmp_level"))
-    inferred = _gmp_implied_by_verified_cert(product)
-    if inferred:
-        return B4B_GMP_CERTIFIED, {"B4b_gmp_inferred_from_cert": inferred}
-    # Facility-level GMP: exact-matched manufacturer evidence can fill B4b only
-    # when the manufacturer corpus explicitly says GMP/cGMP/facility/manufacturing
-    # quality. Product-only NSF/USP wording stays in B4a or product-cert→GMP.
-    facility = gmp_facility_evidence(product)
-    if facility:
-        return B4B_GMP_CERTIFIED, {"B4b_gmp_inferred_from_manufacturer_facility": facility}
-    if gmp_level == "certified" or bool(
-        gmp.get("nsf_gmp")
-        or gmp.get("gmp_certified_or_compliant")
-        or (gmp.get("claimed") and not gmp.get("fda_registered"))
-    ):
-        return B4B_GMP_CERTIFIED, {}
-    if gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
-        return B4B_FDA_REGISTERED, {}
-    return 0.0, {}
+    audited = audited_gmp_evidence(product)
+    if audited:
+        return B4B_GMP_CERTIFIED, {"gmp_basis": audited["basis"], "gmp_evidence": audited["detail"]}
+    label_wording = _label_gmp_wording(_safe_dict(_safe_dict(product.get("certification_data")).get("gmp")))
+    return 0.0, ({"B4b_label_gmp_wording_not_scored": label_wording} if label_wording else {})
 
 
-def _gmp_implied_by_verified_cert(product: Dict[str, Any]) -> str | None:
-    """Return the program name of a verified sku/product_line cert that implies
-    GMP (per cert_claim_rules.json), or None. Mirrors B4a's verified-cert
-    gating: scope must be sku/product_line and the row must not be blocked."""
-    verified = product.get("verified_cert_programs")
-    if verified is None:
-        verified = _safe_dict(product.get("certification_data")).get("verified_cert_programs")
-    if not isinstance(verified, list):
-        return None
-    gmp_programs = _get_gmp_implying_programs()
-    for entry in verified:
-        if not isinstance(entry, dict):
-            continue
-        if entry.get("scope") not in ("sku", "product_line"):
-            continue
-        if entry.get("scoring_blocked_reason"):
-            continue
-        if not _cert_entry_brand_matches_product(product, entry):
-            continue
-        if _norm_text(entry.get("program") or "") in gmp_programs:
-            return entry.get("program")
-    return None
-
-
-def _cert_entry_brand_matches_product(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
-    matched_brand = _brand_key(entry.get("matched_brand"))
-    if not matched_brand:
-        return True
-    product_brand = _brand_key(
-        product.get("brandName")
-        or product.get("brand_name")
-        or product.get("brand")
-        or ""
-    )
-    if not product_brand:
-        return True
-    product_tokens = _brand_tokens(product_brand)
-    matched_tokens = _brand_tokens(matched_brand)
-    if not product_tokens or not matched_tokens:
-        return False
-    return product_tokens.issubset(matched_tokens) or matched_tokens.issubset(product_tokens)
-
-
-def _brand_key(value: Any) -> str:
-    text = str(value or "").lower().strip()
-    text = re.sub(r"[®™©]", " ", text)
-    text = re.sub(
-        r"\b(inc|incorporated|llc|ltd|limited|corp|corporation|company|co|gmbh|holdings|group|brands|brand)\b",
-        " ",
-        text,
-    )
-    text = re.sub(r"[^a-z0-9\s]", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
-
-
-def _brand_tokens(value: str) -> set[str]:
-    return {token for token in value.split() if len(token) >= 2}
-
-
-_GMP_IMPLYING_PROGRAMS_CACHE: frozenset[str] | None = None
-
-
-def _get_gmp_implying_programs() -> frozenset[str]:
-    """Normalized canonical program names whose certification requires a GMP
-    facility audit. Loaded from cert_claim_rules.json (implies_gmp policy) so
-    the rule is data-driven, not hardcoded in the scorer."""
-    global _GMP_IMPLYING_PROGRAMS_CACHE
-    if _GMP_IMPLYING_PROGRAMS_CACHE is not None:
-        return _GMP_IMPLYING_PROGRAMS_CACHE
-
-    tokens: set[str] = set()
-    try:
-        rules_path = Path(__file__).resolve().parents[2] / "data" / "cert_claim_rules.json"
-        data = json.loads(rules_path.read_text()) if rules_path.exists() else {}
-        programs = data.get("rules", {}).get("third_party_programs", {})
-        if isinstance(programs, dict):
-            for key, entry in programs.items():
-                if key.startswith("_") or not isinstance(entry, dict):
-                    continue
-                policy = entry.get("implies_gmp")
-                if not isinstance(policy, dict):
-                    continue
-                program = _norm_text(policy.get("verified_program"))
-                if program:
-                    tokens.add(program)
-    except Exception:
-        tokens = set()
-
-    _GMP_IMPLYING_PROGRAMS_CACHE = frozenset(tokens)
-    return _GMP_IMPLYING_PROGRAMS_CACHE
+def _label_gmp_wording(gmp: Dict[str, Any]) -> str:
+    if not (gmp.get("claimed") or gmp.get("nsf_gmp") or gmp.get("gmp_certified_or_compliant")
+            or gmp.get("fda_registered")):
+        return ""
+    return str(gmp.get("text_matched") or "GMP claim").strip()
 
 
 def _score_b4c(product: Dict[str, Any]) -> float:

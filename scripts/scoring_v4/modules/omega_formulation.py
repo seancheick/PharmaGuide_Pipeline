@@ -41,6 +41,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional
 
+from scoring_v4.cert_evidence import verified_product_cert_entries
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import get_active_ingredients
 
@@ -410,14 +411,7 @@ def _verified_quality_programs(product: Dict[str, Any]) -> List[str]:
         haystack = f"{display} {rule_id}".lower()
         if any(token in haystack for token in _QUALITY_PROGRAM_KEYWORDS):
             programs.append(display or rule_id)
-    for entry in _safe_list(cert_data.get("verified_cert_programs")):
-        if not isinstance(entry, dict):
-            continue
-        scope = str(entry.get("scope") or "").strip().lower()
-        if scope not in {"sku", "product_line"}:
-            continue
-        if not _verified_cert_brand_matches_product(product, entry):
-            continue
+    for entry in verified_product_cert_entries(product):
         display = str(entry.get("program") or entry.get("display_name") or "").strip()
         rule_id = str(entry.get("rule_id") or "").strip()
         haystack = f"{display} {rule_id}".lower()
@@ -432,32 +426,6 @@ def _verified_quality_programs(product: Dict[str, Any]) -> List[str]:
         seen.add(key)
         deduped.append(program)
     return deduped
-
-
-def _brand_key(value: Any) -> str:
-    text = str(value or "").lower()
-    text = re.sub(r"[^a-z0-9]+", " ", text)
-    text = re.sub(r"\b(inc|llc|ltd|co|company|the|registered|trademark|tm|r)\b", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
-
-
-def _verified_cert_brand_matches_product(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
-    matched_brand = _brand_key(entry.get("matched_brand"))
-    if not matched_brand:
-        return True
-    product_brands = [
-        _brand_key(product.get(key))
-        for key in ("brandName", "brand_name", "brand", "manufacturer_name")
-        if _brand_key(product.get(key))
-    ]
-    if not product_brands:
-        return False
-    return any(
-        matched_brand == brand
-        or (len(matched_brand) >= 5 and matched_brand in brand)
-        or (len(brand) >= 5 and brand in matched_brand)
-        for brand in product_brands
-    )
 
 
 def score_formulation(product: Any) -> Dict[str, Any]:

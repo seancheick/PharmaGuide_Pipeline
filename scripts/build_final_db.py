@@ -5942,11 +5942,16 @@ def _certification_gmp_detail(label_gmp: Any, pillars: Any) -> Dict[str, Any]:
     badge, exactly as it earns no pillar points."""
     verification = safe_dict(safe_dict(pillars).get("verification"))
     components = safe_dict(verification.get("components"))
-    audited = safe_float(components.get("gmp"), 0.0) > 0
+    basis = safe_str(components.get("gmp_basis"))
+    # Fail closed: an old or malformed pillar with points but no recognised
+    # audited basis never lights the badge.
+    from scoring_v4.cert_evidence import AUDITED_GMP_BASES
+
+    audited = safe_float(components.get("gmp"), 0.0) > 0 and basis in AUDITED_GMP_BASES
     return {
         **safe_dict(label_gmp),
         "audited_facility": audited,
-        "audited_facility_basis": safe_str(components.get("gmp_basis")) or None if audited else None,
+        "audited_facility_basis": basis if audited else None,
     }
 
 
@@ -10201,28 +10206,16 @@ def registry_verified_cert_display_programs(enriched: Dict) -> List[str]:
     """Registry-verified (sku/product_line) cert program names whose
     matched_brand agrees with the product brand.
 
-    Mirrors the scoring-layer brand guard in scoring_v4 trust modules —
-    deliberately duplicated per the stale-artifact defense doctrine, so a
-    stale enriched artifact carrying a cross-brand registry row can light
-    neither score nor display badge. claimed_only / needs_review /
+    Re-applies the scoring layer's brand guard (scoring_v4.cert_evidence) at
+    export, per the stale-artifact defense doctrine, so a stale enriched
+    artifact carrying a cross-brand registry row can light neither score nor
+    display badge — the same function, not a second copy. claimed_only / needs_review /
     brand_only rows never reach display: a claim is not verification.
     """
-    from scoring_v4.modules.generic_trust import _brand_key, _brand_tokens
+    from scoring_v4.cert_evidence import verified_product_cert_entries
 
     out: List[str] = []
-    product_brand = _brand_key(
-        enriched.get("brandName") or enriched.get("brand_name") or enriched.get("brand") or ""
-    )
-    for entry in safe_list(enriched.get("verified_cert_programs")):
-        if not isinstance(entry, dict) or entry.get("scoring_blocked_reason"):
-            continue
-        if str(entry.get("scope") or "").strip().lower() not in ("sku", "product_line"):
-            continue
-        matched_brand = _brand_key(entry.get("matched_brand"))
-        if matched_brand and product_brand:
-            mt, pt = _brand_tokens(matched_brand), _brand_tokens(product_brand)
-            if not (mt and pt and (mt <= pt or pt <= mt)):
-                continue
+    for entry in verified_product_cert_entries(enriched):
         name = str(entry.get("program") or "").strip()
         if name and name not in out:
             out.append(name)

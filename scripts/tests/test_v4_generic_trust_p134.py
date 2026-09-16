@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 import sys
 from pathlib import Path
 
@@ -25,7 +27,6 @@ def _product(
     *,
     verified_cert_programs: list | None = None,
     gmp: dict | None = None,
-    gmp_level: str | None = None,
     batch_traceability: dict | None = None,
     ingredients: list | None = None,
     supp_type: str = "single_nutrient",
@@ -47,8 +48,6 @@ def _product(
             or {"has_coa": False, "has_batch_lookup": False, "has_qr_code": False},
         },
     }
-    if gmp_level is not None:
-        product["gmp_level"] = gmp_level
     if top_level:
         product.update(top_level)
     return product
@@ -98,7 +97,7 @@ def test_two_sku_verified_certs_score_12_b4a() -> None:
     # NSF Sport/Certified at sku scope now also imply B4b GMP (cert->GMP), so the
     # dimension is B4a(12) + B4b(4) = 16, hard-clamped to 15.
     assert payload["components"]["B4b_gmp"] == 4.0
-    assert payload["metadata"]["B4b_gmp_inferred_from_cert"] in ("NSF Sport", "NSF Certified")
+    assert payload["metadata"]["gmp_evidence"] in ("NSF Sport", "NSF Certified")
     assert payload["score"] == 15.0
     assert payload["metadata"]["verified_scope_counts"] == {"sku": 2}
 
@@ -426,41 +425,23 @@ def test_marine_sku_cert_scores_only_for_omega_product() -> None:
     assert omega["components"]["B4a_verified_certifications"] == 8.0
 
 
-def test_gmp_certified_scores_four_and_fda_registered_scores_two() -> None:
+@pytest.mark.parametrize("gmp", [
+    {"claimed": True},
+    {"claimed": True, "gmp_certified_or_compliant": True, "text_matched": "GMP"},
+    {"fda_registered": True, "text_matched": "FDA Registered"},
+    {"claimed": True, "nsf_gmp": False, "fda_registered": True, "gmp_certified_or_compliant": False},
+])
+def test_label_gmp_wording_and_fda_registration_score_zero(gmp) -> None:
+    """2026-09-16 one GMP owner (scoring_v4.cert_evidence): label GMP wording
+    used to score 4 and FDA facility registration 2 here, while the
+    Verification pillar discarded both. Only audited GMP scores now; the label
+    wording stays visible as audit metadata. The enricher's gmp_level
+    projection was removed with it."""
     from scoring_v4.modules.generic_trust import score_trust
 
-    certified = score_trust(_product(gmp={"claimed": True}))
-    fda_registered = score_trust(_product(gmp={"fda_registered": True}))
-
-    assert certified["components"]["B4b_gmp"] == 4.0
-    assert fda_registered["components"]["B4b_gmp"] == 2.0
-
-
-def test_top_level_gmp_level_scores() -> None:
-    from scoring_v4.modules.generic_trust import score_trust
-
-    certified = score_trust(_product(gmp_level="certified"))
-    fda_registered = score_trust(_product(gmp_level="fda_registered"))
-
-    assert certified["components"]["B4b_gmp"] == 4.0
-    assert fda_registered["components"]["B4b_gmp"] == 2.0
-
-
-def test_nested_fda_registered_gmp_scores_two_not_certified_four() -> None:
-    from scoring_v4.modules.generic_trust import score_trust
-
-    payload = score_trust(
-        _product(
-            gmp={
-                "claimed": True,
-                "nsf_gmp": False,
-                "fda_registered": True,
-                "gmp_certified_or_compliant": False,
-            }
-        )
-    )
-
-    assert payload["components"]["B4b_gmp"] == 2.0
+    payload = score_trust(_product(gmp=gmp))
+    assert payload["components"]["B4b_gmp"] == 0.0
+    assert payload["metadata"]["B4b_label_gmp_wording_not_scored"]
 
 
 def test_batch_traceability_scores_coa_and_batch_lookup() -> None:
@@ -568,7 +549,7 @@ def test_generic_trust_does_not_import_v3_scorer() -> None:
 # A verified sku/product_line cert whose program REQUIRES a GMP/facility audit
 # (NSF Sport, NSF Contents Certified, USP Verified, Informed Sport/Choice, BSCG)
 # implies GMP-compliant manufacturing. We credit B4b from that stronger verified
-# signal even when the gmp_level/gmp object is empty (a data gap), instead of
+# signal even when the gmp object is empty (a data gap), instead of
 # zeroing GMP for a product we KNOW is made under audited GMP. Policy lives in
 # cert_claim_rules.json (implies_gmp); scorer only reads it. Conservative:
 # brand_only / claimed_only / needs_review / stale never imply GMP, and a
@@ -581,7 +562,7 @@ def test_sku_nsf_sport_cert_infers_b4b_gmp_when_gmp_data_absent() -> None:
     payload = score_trust(_product(verified_cert_programs=[_cert("NSF Sport", "sku")]))
 
     assert payload["components"]["B4b_gmp"] == 4.0
-    assert payload["metadata"]["B4b_gmp_inferred_from_cert"] == "NSF Sport"
+    assert payload["metadata"]["gmp_evidence"] == "NSF Sport"
 
 
 def test_product_line_usp_verified_cert_infers_b4b_gmp() -> None:
@@ -590,7 +571,7 @@ def test_product_line_usp_verified_cert_infers_b4b_gmp() -> None:
     payload = score_trust(_product(verified_cert_programs=[_cert("USP Verified", "product_line")]))
 
     assert payload["components"]["B4b_gmp"] == 4.0
-    assert payload["metadata"]["B4b_gmp_inferred_from_cert"] == "USP Verified"
+    assert payload["metadata"]["gmp_evidence"] == "USP Verified"
 
 
 def test_brand_only_cert_does_not_infer_b4b_gmp() -> None:
@@ -599,7 +580,7 @@ def test_brand_only_cert_does_not_infer_b4b_gmp() -> None:
     payload = score_trust(_product(verified_cert_programs=[_cert("NSF Sport", "brand_only")]))
 
     assert payload["components"]["B4b_gmp"] == 0.0
-    assert "B4b_gmp_inferred_from_cert" not in payload["metadata"]
+    assert "gmp_evidence" not in payload["metadata"]
 
 
 def test_claimed_only_cert_does_not_infer_b4b_gmp() -> None:
@@ -658,7 +639,7 @@ def test_inferred_gmp_beats_fda_registered_only() -> None:
     )
 
     assert payload["components"]["B4b_gmp"] == 4.0
-    assert payload["metadata"]["B4b_gmp_inferred_from_cert"] == "NSF Sport"
+    assert payload["metadata"]["gmp_evidence"] == "NSF Sport"
 
 
 def test_facility_gmp_inferred_from_explicit_manufacturer_gmp_evidence(monkeypatch) -> None:
@@ -677,7 +658,7 @@ def test_facility_gmp_inferred_from_explicit_manufacturer_gmp_evidence(monkeypat
         })
     )
     assert payload["components"]["B4b_gmp"] == 4.0
-    assert payload["metadata"].get("B4b_gmp_inferred_from_manufacturer_facility")
+    assert payload["metadata"].get("gmp_basis") == "manufacturer_facility"
 
 
 def test_facility_gmp_not_inferred_from_soft_or_product_only_evidence(monkeypatch) -> None:
@@ -703,4 +684,4 @@ def test_facility_gmp_not_inferred_from_soft_or_product_only_evidence(monkeypatc
         })
     )
     assert payload["components"]["B4b_gmp"] == 0.0
-    assert not payload["metadata"].get("B4b_gmp_inferred_from_manufacturer_facility")
+    assert payload["metadata"].get("gmp_basis") != "manufacturer_facility"

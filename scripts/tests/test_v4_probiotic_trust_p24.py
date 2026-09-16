@@ -130,7 +130,8 @@ def test_probiotic_trust_nsf_sport_sku_scores_8() -> None:
 
 
 def test_probiotic_trust_combined_sku_plus_gmp_plus_coa() -> None:
-    """SKU 8 + GMP 4 + COA 1 = 13, well under the 15 clamp."""
+    """SKU 8 + COA 1 = 9. A label NSF GMP mark is unverified wording and no
+    longer scores B4b (2026-09-16 one GMP owner, scoring_v4.cert_evidence)."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     product = _probiotic_product(
@@ -142,8 +143,8 @@ def test_probiotic_trust_combined_sku_plus_gmp_plus_coa() -> None:
     )
     trust_dim =_trust_view( score_probiotic(product).to_breakdown())
 
-    assert trust_dim["score"] == 13.0
-    assert trust_dim["components"]["B4b_gmp"] == 4.0
+    assert trust_dim["score"] == 9.0
+    assert trust_dim["components"]["B4b_gmp"] == 0.0
     assert trust_dim["components"]["B4c_batch_traceability"] == 1.0
 
 
@@ -183,14 +184,15 @@ def test_probiotic_trust_needs_review_cert_scores_zero() -> None:
     assert trust_dim["score"] == 0.0
 
 
-def test_probiotic_trust_fda_registered_only_scores_2() -> None:
-    """B4b FDA-registered (without NSF/claimed GMP) = 2 pts."""
+def test_probiotic_trust_fda_registered_only_scores_nothing() -> None:
+    """FDA facility registration is not approval or an audit; it used to score
+    2 here while the Verification pillar discarded it (2026-09-16)."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     product = _probiotic_product(gmp={"fda_registered": True})
     trust_dim =_trust_view( score_probiotic(product).to_breakdown())
-    assert trust_dim["components"]["B4b_gmp"] == 2.0
-    assert trust_dim["score"] == 2.0
+    assert trust_dim["components"]["B4b_gmp"] == 0.0
+    assert trust_dim["score"] == 0.0
 
 
 def test_probiotic_trust_marine_cert_filter_holds() -> None:

@@ -435,7 +435,7 @@ def test_verification_pillar_reads_lowercase_v4_component_keys() -> None:
         },
         "metadata": {
             # GMP counts only when audited (1.3.0); label GMP wording alone scores 0.
-            "trust_metadata": {"verified_scope_counts": {"sku": 1}, "B4b_gmp_inferred_from_cert": "NSF Certified for Sport"},
+            "trust_metadata": {"verified_scope_counts": {"sku": 1}, "gmp_basis": "verified_certification"},
         },
     }
 
@@ -591,7 +591,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.8.1-immune-neutrality"
+    assert out["quality_score_version"] == "1.8.2-audited-gmp-owner"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:
@@ -840,7 +840,7 @@ def test_region_does_not_count_and_reputation_is_capped() -> None:
 def test_audited_gmp_counts_but_label_gmp_wording_does_not() -> None:
     label = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0))
     bd = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
-    bd["verification_bonus"]["metadata"]["trust_metadata"]["B4b_gmp_inferred_from_manufacturer_facility"] = "audited cGMP facility"
+    bd["verification_bonus"]["metadata"]["trust_metadata"]["gmp_basis"] = "manufacturer_facility"
     audited = _verif(bd)
     assert label["components"]["gmp"] == 0.0 and label["score"] == 6.0
     assert audited["components"]["gmp"] == 2.0 and audited["score"] == 8.0
@@ -857,7 +857,7 @@ def test_more_independent_evidence_never_scores_lower() -> None:
                                   scope_counts={"label_asserted_product": 1}))
     manufacturing = _bd_verif_with_brand_only_cert()
     manufacturing["verification_bonus"]["components"].update({"B4b_gmp": 4.0, "B4d_brand_testing_posture": 2.0})
-    manufacturing["verification_bonus"]["metadata"]["trust_metadata"]["B4b_gmp_inferred_from_manufacturer_facility"] = "audited"
+    manufacturing["verification_bonus"]["metadata"]["trust_metadata"]["gmp_basis"] = "manufacturer_facility"
     manufacturing["manufacturer_trust"]["components"]["D1_manufacturer_reputation"] = 2.0
     manufacturing_best = _verif(manufacturing)
     product_cert = _verif(_bd_verif(b4a=8.0, b4b=0.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0))
@@ -889,7 +889,7 @@ def test_label_claim_does_not_erase_verified_facility_evidence() -> None:
 
 def test_omega_facility_metadata_reaches_the_shared_pillar() -> None:
     bd = _bd_verif(b4b=4, b4d=0, d1=0)
-    bd["verification_bonus"]["metadata"]["trust_metadata"]["b4b"] = {"source": "manufacturer_facility_gmp", "program": "audited facility"}
+    bd["verification_bonus"]["metadata"]["trust_metadata"]["b4b"] = {"gmp_basis": "manufacturer_facility", "gmp_evidence": "audited facility"}
     assert _verif(bd)["components"]["gmp"] == 2.0
 
 
@@ -953,16 +953,17 @@ def test_verification_pillar_names_the_audited_gmp_basis() -> None:
     badge the pillar gave no credit)."""
     label = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0))
     facility = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
-    facility["verification_bonus"]["metadata"]["trust_metadata"][
-        "B4b_gmp_inferred_from_manufacturer_facility"] = "NSF GMP-registered facility"
+    facility["verification_bonus"]["metadata"]["trust_metadata"]["gmp_basis"] = "manufacturer_facility"
     certified = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
-    certified["verification_bonus"]["metadata"]["trust_metadata"][
-        "B4b_gmp_inferred_from_cert"] = "NSF Certified for Sport"
+    certified["verification_bonus"]["metadata"]["trust_metadata"]["gmp_basis"] = "verified_certification"
     omega = _bd_verif(b4b=4, b4d=0, d1=0)
     omega["verification_bonus"]["metadata"]["trust_metadata"]["b4b"] = {
-        "source": "verified_cert_implies_gmp", "program": "IFOS"}
+        "gmp_basis": "verified_certification", "gmp_evidence": "IFOS"}
+    unknown = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
+    unknown["verification_bonus"]["metadata"]["trust_metadata"]["gmp_basis"] = "label_claim"
 
     assert label["components"]["gmp_basis"] is None
     assert _verif(facility)["components"]["gmp_basis"] == "manufacturer_facility"
     assert _verif(certified)["components"]["gmp_basis"] == "verified_certification"
     assert _verif(omega)["components"]["gmp_basis"] == "verified_certification"
+    assert _verif(unknown)["components"]["gmp"] == 0.0

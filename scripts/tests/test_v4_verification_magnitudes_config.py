@@ -34,7 +34,7 @@ ORIGINAL = {
                              "label_asserted_product": [2.0, 1.0, 0.0], "brand_only": [0.0, 0.0, 0.0],
                              "needs_review": [0.0, 0.0, 0.0], "claimed_only": [0.0, 0.0, 0.0]},
         "b4a_scope_strength": {"sku": 3, "product_line": 2, "label_asserted_product": 1},
-        "b4b_gmp_certified": 4.0, "b4b_fda_registered": 2.0, "b4c_coa": 1.0, "b4c_batch_lookup": 1.0,
+        "b4b_gmp_certified": 4.0, "b4c_coa": 1.0, "b4c_batch_lookup": 1.0,
     },
     "manufacturer": {
         "manufacturer_trust_cap": 5.0, "d1_trusted": 2.0, "d1_mid_tier": 1.0, "d2_disclosure": 1.0,

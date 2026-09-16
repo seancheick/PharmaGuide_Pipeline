@@ -45,42 +45,39 @@ SOFT_QUALITY_POSTURE_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Manufacturer evidence that explicitly describes audited GMP / manufacturing
-# facility quality. Keep this stricter than product-cert rules: an NSF/USP
-# product certification can imply GMP for that SKU through certification_data,
-# but a broad top-manufacturer evidence string like "USP-verified products" does
-# not prove every product from the manufacturer is made in the same audited GMP
-# facility.
-GMP_FACILITY_EVIDENCE_RE = re.compile(
+# Audited GMP facility evidence: the audit / certification / registration /
+# licensing wording must attach to the GMP program or the facility itself
+# ("NSF GMP-registered", "GMP certified", "certified manufacturing",
+# "TGA-registered GMP facility"). "cGMP-compliant" is a manufacturer statement,
+# "IFOS-certified fish oil" or "NSF certification" certifies products, and FDA
+# facility registration is not an audit (Codex audit 2026-09-16).
+AUDITED_GMP_FACILITY_RE = re.compile(
     r"("
-    r"\bcGMP\b|"
-    r"\bGMP\b|"
-    r"\bGMP[\s-]*(certified|registered|compliant|compliance)\b|"
-    r"\b(certified|registered|audited)[\s-]+GMP\b|"
-    r"\bNSF[\s-]*GMP\b|"
-    r"\bNPA[\s-]*GMP\b|"
-    r"\bUL[\s-]*(Solutions[\s-]*)?GMP\b|"
-    r"\bGMP[\s-]*(facility|facilities|manufacturing|production)\b|"
-    r"\b(manufacturing|production|facility|facilities)[^.;,]{0,80}\bGMP\b|"
-    r"\bFDA[\s-]*registered[\s-]*(facility|facilities)\b"
-    r")",
-    re.IGNORECASE,
-)
-SELF_ASSERTED_FACILITY_RE = re.compile(
-    r"\b(brand|company)\s+(states?|claims?|describes?)\b|\bclaims?\b",
-    re.IGNORECASE,
-)
-AUDITED_FACILITY_EVIDENCE_RE = re.compile(
-    r"("
-    r"\b(certified|registered|audited|licensed|licensing)\b|"
-    r"\b(certification|certifications|certs)\b|"
-    r"\bNSF[\s-]*GMP\b|"
-    r"\bNPA[\s-]*GMP\b|"
-    r"\bUL[\s-]*(Solutions[\s-]*)?certified[\s-]+facility\b|"
+    r"\b(?:NSF|NPA|UL(?:\s+Solutions)?)[\s-]*GMP[\s-]*(?:registered|certified|audited)\b|"
+    r"\bc?GMP[\s-]*(?:certified|certification|certifications|certs|registered|audited)\b|"
+    r"\b(?:certified|registered|audited|licensed)[\s-]+(?:c?GMP[\s-]+)?"
+    r"(?:facility|facilities|manufacturing|production)\b|"
+    r"\bc?GMP\s+(?:and|&)\s+(?:ISO|HACCP|SQF|NSF)\s+(?:certified|registered)\b|"
+    r"\bc?GMP\s+licens\w*|"
+    r"\bNatural\s+Products\s+Association\s+certified\b|"
     r"\bTGA[\s-]*registered\b"
     r")",
     re.IGNORECASE,
 )
+_FDA_REGISTRATION_RE = re.compile(r"\bFDA[\s-]*registered\b", re.IGNORECASE)
+_PRODUCT_SCOPE_RE = re.compile(r"\b(?:select|many|some|certain)\s+products\b", re.IGNORECASE)
+
+
+def is_audited_gmp_facility_evidence(text: str) -> bool:
+    """True when manufacturer evidence names an audited GMP facility."""
+    text = str(text or "")
+    if _PRODUCT_SCOPE_RE.search(text):
+        return False
+    for match in AUDITED_GMP_FACILITY_RE.finditer(text):
+        window = text[max(0, match.start() - 20):match.end()]
+        if not _FDA_REGISTRATION_RE.search(window):
+            return True
+    return False
 
 
 def gmp_facility_evidence(product: Dict[str, Any]) -> str | None:
@@ -104,11 +101,8 @@ def gmp_facility_evidence(product: Dict[str, Any]) -> str | None:
     if not isinstance(entry, dict):
         return None
     for item in entry.get("evidence", []):
-        if not isinstance(item, str) or not GMP_FACILITY_EVIDENCE_RE.search(item):
-            continue
-        if SELF_ASSERTED_FACILITY_RE.search(item) and not AUDITED_FACILITY_EVIDENCE_RE.search(item):
-            continue
-        return item[:60]
+        if isinstance(item, str) and is_audited_gmp_facility_evidence(item):
+            return item[:60]
     return None
 
 

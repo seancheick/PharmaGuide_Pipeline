@@ -126,7 +126,7 @@ def test_multi_prenatal_trust_scores_product_line_certification_at_first_rung() 
     # B4a(6) + B4b(4) = 10.
     assert trust["components"]["B4a_verified_certifications"] == 6.0
     assert trust["components"]["B4b_gmp"] == 4.0
-    assert trust["metadata"]["B4b_gmp_inferred_from_cert"] == "USP Verified"
+    assert trust["metadata"]["gmp_evidence"] == "USP Verified"
     assert trust["score"] == 10.0
     assert trust["metadata"]["verified_scope_counts"] == {"product_line": 1}
 
@@ -180,10 +180,12 @@ def test_multi_prenatal_trust_combines_sku_gmp_and_traceability() -> None:
         )
     )
 
-    assert trust["score"] == 14.0
+    # A label NSF GMP mark is unverified wording and no longer scores B4b
+    # (2026-09-16 one GMP owner, scoring_v4.cert_evidence).
+    assert trust["score"] == 10.0
     assert trust["components"] == {
         "B4a_verified_certifications": 8.0,
-        "B4b_gmp": 4.0,
+        "B4b_gmp": 0.0,
         "B4c_batch_traceability": 2.0,
         "B4d_brand_testing_posture": 0.0,
     }
@@ -198,13 +200,15 @@ def test_multi_prenatal_trust_nested_qr_code_counts_as_batch_lookup() -> None:
     assert trust["components"]["B4c_batch_traceability"] == 1.0
 
 
-def test_multi_prenatal_trust_fda_registered_only_scores_two_points() -> None:
+def test_multi_prenatal_trust_fda_registered_only_scores_nothing() -> None:
+    """FDA facility registration is not approval or an audit (2026-09-16 one
+    GMP owner); it used to score 2 here while the pillar discarded it."""
     trust = _trust_breakdown(
         _multi_product(gmp={"fda_registered": True})
     )
 
-    assert trust["score"] == 2.0
-    assert trust["components"]["B4b_gmp"] == 2.0
+    assert trust["score"] == 0.0
+    assert trust["components"]["B4b_gmp"] == 0.0
 
 
 def test_multi_prenatal_trust_clamps_dimension_at_15() -> None:

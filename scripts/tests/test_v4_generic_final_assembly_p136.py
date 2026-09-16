@@ -94,7 +94,6 @@ def _high_quality_product() -> dict:
             "claim_physician_formulated": True,
             "manufacturing_region": "USA",
             "has_sustainable_packaging": True,
-            "gmp_level": "fda_registered",
             "has_coa": True,
         }
     )

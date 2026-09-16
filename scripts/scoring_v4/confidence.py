@@ -12,10 +12,10 @@ breakdown plus the enriched product contract.
 
 from __future__ import annotations
 
-import re
 from typing import Any, Dict, Iterable, List, Tuple
 
 from scoring_input_contract import get_scoring_ingredients
+from scoring_v4.cert_evidence import cert_entry_brand_matches_product
 
 
 LEVEL_ORDER = {"high": 3, "moderate": 2, "low": 1}
@@ -376,7 +376,7 @@ def _verification_confidence(product: Dict[str, Any], module: Dict[str, Any]) ->
         if not isinstance(entry, dict):
             continue
         scope = _norm(entry.get("scope")).replace("-", "_")
-        if scope in {"sku", "product_line"} and not _cert_entry_brand_matches_product(product, entry):
+        if scope in {"sku", "product_line"} and not cert_entry_brand_matches_product(product, entry):
             drivers.append("cert_brand_mismatch_ignored")
             continue
         blocked = bool(entry.get("scoring_blocked_reason"))
@@ -415,41 +415,6 @@ def _verification_confidence(product: Dict[str, Any], module: Dict[str, Any]) ->
     if has_claimed_only:
         return "moderate", drivers
     return "moderate", drivers or ["third_party_verification_unresolved"]
-
-
-def _cert_entry_brand_matches_product(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
-    matched_brand = _brand_key(entry.get("matched_brand"))
-    if not matched_brand:
-        return True
-    product_brand = _brand_key(
-        product.get("brandName")
-        or product.get("brand_name")
-        or product.get("brand")
-        or ""
-    )
-    if not product_brand:
-        return True
-    product_tokens = _brand_tokens(product_brand)
-    matched_tokens = _brand_tokens(matched_brand)
-    if not product_tokens or not matched_tokens:
-        return False
-    return product_tokens.issubset(matched_tokens) or matched_tokens.issubset(product_tokens)
-
-
-def _brand_key(value: Any) -> str:
-    text = str(value or "").lower().strip()
-    text = re.sub(r"[®™©]", " ", text)
-    text = re.sub(
-        r"\b(inc|incorporated|llc|ltd|limited|corp|corporation|company|co|gmbh|holdings|group|brands|brand)\b",
-        " ",
-        text,
-    )
-    text = re.sub(r"[^a-z0-9\s]", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
-
-
-def _brand_tokens(value: str) -> set[str]:
-    return {token for token in value.split() if len(token) >= 2}
 
 
 def _identity_confidence(

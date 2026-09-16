@@ -12863,7 +12863,7 @@ class SupplementEnricherV3:
         # third_party_programs (the v3 overcredit bug). v4 reroutes this to
         # its own field, display-only, never scored. The function below now
         # returns a separate dict instead of mutating third_party.
-        manufacturer_cert_signals = self._collect_manufacturer_cert_signals(product, gmp)
+        manufacturer_cert_signals = self._collect_manufacturer_cert_signals(product)
 
         # Cert resolver: ask the public registry whether THIS SKU is verified
         # for any of the claimed-or-manufacturer-signaled programs. Output is
@@ -13039,7 +13039,6 @@ class SupplementEnricherV3:
         (re.compile(r'Informed[\s-]?Choice', re.I), "Informed Choice"),
         (re.compile(r'BSCG', re.I), "BSCG"),
         (re.compile(r'\bIFOS\b', re.I), "IFOS"),
-        (re.compile(r'\bGMP\b', re.I), None),  # GMP handled separately
     ]
 
     _LABEL_ASSERTED_B4A_PROGRAMS = {
@@ -13052,9 +13051,7 @@ class SupplementEnricherV3:
         "ifos",
     }
 
-    def _collect_manufacturer_cert_signals(
-        self, product: Dict, gmp: Dict
-    ) -> List[Dict]:
+    def _collect_manufacturer_cert_signals(self, product: Dict) -> List[Dict]:
         """v4 (P0.1b 2026-05-18): Returns brand/manufacturer-level cert evidence
         as a SEPARATE list, no longer mutates ``third_party.programs``.
 
@@ -13066,8 +13063,9 @@ class SupplementEnricherV3:
         useful trust metadata) but route it to its own field so the scorer
         cannot grant B4a points from it.
 
-        GMP evidence is still side-effected into the ``gmp`` dict — that's a
-        separate B4b concern, not the B4a bug we're fixing.
+        Manufacturer GMP evidence is not read here: audited GMP has one owner,
+        scoring_v4.cert_evidence.audited_gmp_evidence, and ``certification_data.gmp``
+        records label wording only.
         """
         brand = product.get("brandName", "")
         contacts = product.get("contacts", [])
@@ -13104,12 +13102,6 @@ class SupplementEnricherV3:
             for pattern, cert_name in self._MANUFACTURER_CERT_PATTERNS:
                 if not pattern.search(ev_str):
                     continue
-                if cert_name is None:
-                    # GMP — still side-effected into the gmp dict (B4b, not B4a)
-                    if not gmp.get("nsf_gmp") and not gmp.get("claimed"):
-                        gmp["claimed"] = True
-                        gmp["source"] = "manufacturer_evidence"
-                    continue
                 key = self._normalize_text(cert_name)
                 if key in seen:
                     continue
@@ -13123,18 +13115,6 @@ class SupplementEnricherV3:
                 })
                 break  # one cert per evidence string
         return signals
-
-    def _inject_manufacturer_certs(
-        self, third_party: Dict, product: Dict, gmp: Dict
-    ) -> Dict:
-        """DEPRECATED (P0.1b): kept for any external callers; do not call from
-        within enrichment. v4 uses _collect_manufacturer_cert_signals which
-        returns a separate list instead of mutating third_party. This shim
-        delegates to the new function and adds nothing to third_party so
-        existing tests against `programs` content don't accidentally pass."""
-        # Side-effect GMP only; do not touch third_party.programs.
-        _ = self._collect_manufacturer_cert_signals(product, gmp)
-        return third_party
 
     def _resolve_verified_cert_programs(
         self,
@@ -14428,22 +14408,6 @@ class SupplementEnricherV3:
         # not stale). Other fields are display-only.
         enriched["verified_cert_programs"] = certification_data.get("verified_cert_programs", []) or []
         enriched["manufacturer_cert_signals"] = certification_data.get("manufacturer_cert_signals", []) or []
-
-        gmp_data = certification_data.get("gmp", {}) or {}
-        if bool(
-            gmp_data.get("nsf_gmp")
-            or gmp_data.get("gmp_certified_or_compliant")
-            or (
-                gmp_data.get("claimed")
-                and not gmp_data.get("fda_registered")
-            )
-        ):
-            gmp_level = "certified"
-        elif bool(gmp_data.get("fda_registered")):
-            gmp_level = "fda_registered"
-        else:
-            gmp_level = None
-        enriched["gmp_level"] = gmp_level
 
         batch_data = certification_data.get("batch_traceability", {}) or {}
         enriched["has_coa"] = bool(batch_data.get("has_coa", False))
