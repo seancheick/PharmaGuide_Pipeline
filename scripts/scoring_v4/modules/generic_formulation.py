@@ -462,19 +462,14 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     immune_support_metadata: Dict[str, Any] = {}
     immune_adjustment = immune_support_formulation_adjustment(product)
     if immune_adjustment is not None:
-        components["immune_support_profile"] = round(
-            float(immune_adjustment["bonus"]), 4
-        )
         penalties.update(immune_adjustment.get("penalties", {}))
         immune_support_metadata = immune_adjustment.get("metadata", {})
-        formulation_profile = "immune_support"
 
     positive = (
         components["A1_bio_score"]
         + components["A3_delivery_system"]
         + components["A4_absorption_enhancer"]
         + components["A5b_standardized_botanical"]
-        + components.get("immune_support_profile", 0.0)
     )
     penalty_total = _sum_penalty_magnitudes(penalties)
 

@@ -177,6 +177,14 @@ chips from legacy component keys.
 The same boundary pass removed the immune ingredient-presence Evidence floor.
 Only reviewed evidence can create Evidence points. Immune dose excess remains
 in Dose/B7 and Safety; it no longer also erases Formulation design credit.
+The 1.8.1 follow-up also removes the immune ingredient-count Formulation
+profile: one, three, five, or eight equally rated immune actives now receive the
+same form-quality score, and names without disclosed doses cannot manufacture
+Formulation credit. Immune products retain the immune Dose/Evidence references,
+while Formulation uses the same 15-point IQM engine reference as other generic
+formulas. High zinc is assessed once through the immune dose band plus canonical
+B7/Safety handling; the retired Formulation emitter is not restored as a second
+dose penalty.
 
 ### Locked canaries
 
@@ -186,6 +194,8 @@ in Dose/B7 and Safety; it no longer also erases Formulation design credit.
 - A raw 14 single with a 5-point watchlist penalty scores 9; no floor masks it.
 - Generic and botanical raw 15 normalize to 20 through their engine reference;
   a dedicated sports raw 24 continues to use its own 24 reference.
+- Immune products keep immune Dose/Evidence normalization while equal-quality
+  Formulation stays count-neutral on the generic IQM reference.
 - A declared total CFU can satisfy only its matching synthesized CFU exposure;
   mismatched CFU and AFU remain incomplete.
 
@@ -204,3 +214,11 @@ exposure. The readiness owner now accepts a positive CFU row only when its value
 matches the enrichment-owned declared total. All 12 affected stored probiotic
 products return to `scored`; the prebiotic matcher remains canonical and no AFU
 or caller-supplied count can satisfy the rule.
+
+The 1.8.1 immune-neutrality follow-up was replayed against the same fixed packet.
+All eight immune products moved and all 103 non-immune products remained byte-for-
+byte score-equivalent. Movement was confined to Formulation (mean total-score
+delta -1.07; range -2.4 to +0.6); no status, cap, Dose, Evidence, Transparency,
+Verification, or Safety Hygiene value moved. The small positive case reflects
+the removal of a mismatched 27-point immune-only Formulation reference, not a
+new bonus.

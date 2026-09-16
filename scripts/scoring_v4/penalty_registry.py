@@ -56,14 +56,6 @@ PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
     "B7_dose_safety": PenaltySpec(
         "dose", "safety_material", DOSE_LIMIT_MIRROR
     ),
-    # The immune profile historically emitted this from Formulation despite
-    # detecting a dose fact. The central adapter migrates it once, then validates.
-    "B7_immune_high_zinc_daily_use": PenaltySpec(
-        "dose",
-        "safety_material",
-        DOSE_LIMIT_MIRROR,
-        relocate_legacy_dimension=True,
-    ),
     "opaque_primary_sports_blend": PenaltySpec("dose", "quality_context"),
     "B2_false_allergen_free_claim": PenaltySpec(
         "transparency", "label_integrity"

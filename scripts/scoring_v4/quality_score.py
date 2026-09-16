@@ -579,7 +579,11 @@ def _archetype(module: Optional[str], module_bd: Dict[str, Any]) -> str:
         return "prenatal_multi"
     form = (module_bd.get("dimensions", {}) or {}).get("formulation") or {}
     meta = form.get("metadata") or {}
-    if (meta.get("immune_support") or {}).get("profile_applied"):
+    immune_meta = meta.get("immune_support") or {}
+    if (
+        immune_meta.get("profile_applied")
+        or immune_meta.get("design_audit_applied")
+    ):
         return "immune_support"
     if meta.get("botanical_profile_applied") or meta.get("collagen_profile_applied"):
         return "generic_botanical_branded"

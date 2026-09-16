@@ -55,6 +55,48 @@ def _product(count: int, *, bio: float = 14.0, dose: bool = True) -> dict:
     }
 
 
+_IMMUNE_ROWS = (
+    ("Vitamin C", "vitamin_c", 500.0, "mg"),
+    ("Vitamin D3", "vitamin_d3", 25.0, "mcg"),
+    ("Zinc", "zinc", 15.0, "mg"),
+    ("Copper", "copper", 1.0, "mg"),
+    ("Selenium", "selenium", 55.0, "mcg"),
+    ("Beta glucan", "beta_glucan", 250.0, "mg"),
+    ("Quercetin", "quercetin", 500.0, "mg"),
+    ("Elderberry", "elderberry", 300.0, "mg"),
+)
+
+
+def _immune_product(count: int, *, disclosed_count: int | None = None) -> dict:
+    disclosed = count if disclosed_count is None else disclosed_count
+    rows = []
+    for index, (name, canonical_id, quantity, unit) in enumerate(
+        _IMMUNE_ROWS[:count]
+    ):
+        row = _row(index, bio=14.0, dose=index < disclosed)
+        row.update(
+            name=name,
+            standard_name=name,
+            canonical_id=canonical_id,
+        )
+        if index < disclosed:
+            row.update(quantity=quantity, unit=unit, has_dose=True)
+        rows.append(row)
+    return {
+        "product_name": "Immune formulation neutrality fixture",
+        "supplement_taxonomy": {
+            "primary_type": "immune_support",
+            "is_single_scorable_active": count == 1,
+            "scorable_active_count": disclosed,
+        },
+        "ingredient_quality_data": {
+            "ingredients": rows,
+            "ingredients_scorable": rows[:disclosed],
+            "total_active": count,
+        },
+    }
+
+
 def test_equal_form_quality_is_neutral_to_ingredient_count() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 
@@ -72,6 +114,27 @@ def test_disclosing_or_omitting_dose_does_not_change_form_quality() -> None:
     assert disclosed["components"]["A1_bio_score"] == 12.0
     assert undisclosed["components"]["A1_bio_score"] == 12.0
     assert disclosed["score"] == undisclosed["score"] == 12.0
+
+
+def test_immune_formulation_is_neutral_to_recognized_ingredient_count() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    results = [score_formulation(_immune_product(count)) for count in (1, 3, 5, 8)]
+
+    assert [result["score"] for result in results] == [14.0] * 4
+    assert all("immune_support_profile" not in result["components"] for result in results)
+
+
+def test_undisclosed_immune_rows_cannot_manufacture_formulation_credit() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    one_disclosed = score_formulation(_immune_product(1))
+    seven_undisclosed = score_formulation(
+        _immune_product(8, disclosed_count=1)
+    )
+
+    assert seven_undisclosed["score"] == one_disclosed["score"] == 14.0
+    assert "immune_support_profile" not in seven_undisclosed["components"]
 
 
 def test_dose_gated_synergy_does_not_change_formulation() -> None:

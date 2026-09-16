@@ -550,16 +550,16 @@
         "archetype": "immune_support",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 90.5,
-        "quality_tier": "Excellent",
+        "quality_score_v4_100": 88.8,
+        "quality_tier": "Very good",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 27.0,
+          "formulation": 15.0,
           "dose": 22.0,
           "evidence": 17.0
         },
         "pillars": {
-          "formulation": 18.0,
+          "formulation": 16.3,
           "dose": 20.0,
           "evidence": 14.0,
           "transparency": 13.5,
@@ -567,7 +567,7 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 24.25,
+          "formulation": 12.25,
           "dose": 22.0,
           "evidence": 11.9,
           "transparency": 9.0
@@ -619,25 +619,25 @@
         "archetype": "immune_support",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 45.1,
+        "quality_score_v4_100": 43.8,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 27.0,
+          "formulation": 15.0,
           "dose": 22.0,
           "evidence": 17.0
         },
         "pillars": {
-          "formulation": 8.1,
-          "dose": 2.7,
+          "formulation": 4.0,
+          "dose": 4.5,
           "evidence": 11.8,
           "transparency": 13.5,
           "verification": 6.0,
-          "safety_hygiene": 3.0
+          "safety_hygiene": 4.0
         },
         "raw_dimensions": {
-          "formulation": 11.0,
-          "dose": 3.0,
+          "formulation": 3.0,
+          "dose": 5.0,
           "evidence": 10.0,
           "transparency": 9.0
         }

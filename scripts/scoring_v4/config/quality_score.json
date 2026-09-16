@@ -1,10 +1,10 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.8.0-formulation-neutrality",
+    "version": "1.8.1-immune-neutrality",
     "schema_version": "1.0.0",
-    "last_updated": "2026-09-15",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth, focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, and ingredient-presence Evidence floors. Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
+    "last_updated": "2026-09-16",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, and ingredient-presence Evidence floors. Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
     "phase": "rubric_proxy_removal"
   },
   "pillars": {
@@ -68,8 +68,7 @@
     "profile_reference": {
       "generic_iqm": 15.0,
       "botanical": 15.0,
-      "collagen": 15.0,
-      "immune_support": 27.0
+      "collagen": 15.0
     },
     "archetype_reference": {
       "sports_single": 24.0,
@@ -321,7 +320,7 @@
     "b_complex": {
       "formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0
     },
-    "immune_support": { "formulation_bonus_cap": 12.0, "evidence_cap": 17.0 },
+    "immune_support": { "evidence_cap": 17.0 },
     "joint_support": {
       "evidence_cap": 14.0,
       "target_dose_mg": { "glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0, "uc_ii": 40.0, "hyaluronic_acid": 120.0 }

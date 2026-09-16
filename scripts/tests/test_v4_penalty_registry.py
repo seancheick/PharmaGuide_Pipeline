@@ -54,34 +54,6 @@ def test_omega_lowercase_penalty_alias_normalizes_to_one_schema() -> None:
     }
 
 
-def test_immune_high_zinc_penalty_moves_from_formulation_to_dose() -> None:
-    result = _result()
-    result.dimensions["formulation"].penalties[
-        "B7_immune_high_zinc_daily_use"
-    ] = -2.0
-
-    changed = apply_penalty_registry(result)
-    if changed:
-        _assemble_score(result)
-
-    assert "B7_immune_high_zinc_daily_use" not in (
-        result.dimensions["formulation"].penalties
-    )
-    assert result.dimensions["formulation"].score == 12.0
-    assert result.dimensions["dose"].score == 8.0
-    assert result.dimensions["dose"].penalties[
-        "B7_immune_high_zinc_daily_use"
-    ] == -2.0
-    assert result.metadata["penalty_relocations"] == [
-        {
-            "penalty": "B7_immune_high_zinc_daily_use",
-            "from": "formulation",
-            "to": "dose",
-            "magnitude": 2.0,
-        }
-    ]
-
-
 def test_consumer_mirror_is_registry_driven_across_dimensions() -> None:
     result = _result()
     result.dimensions["formulation"].penalties["B1_dietary_sugar"] = -2.5

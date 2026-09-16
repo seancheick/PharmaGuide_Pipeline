@@ -193,9 +193,11 @@ def test_clean_daily_immune_formula_reaches_realistic_high_80s() -> None:
     assert 86.0 <= out["quality_score_v4_100"] <= 96.0
     assert out["quality_pillars_v4"]["dose"]["score"] >= 17.0
     assert out["quality_pillars_v4"]["formulation"]["score"] >= 16.0
-    assert out["v4_breakdown"]["module"]["dimensions"]["formulation"]["metadata"][
-        "immune_support"
-    ]["profile_applied"] is True
+    immune_meta = out["v4_breakdown"]["module"]["dimensions"]["formulation"][
+        "metadata"
+    ]["immune_support"]
+    assert immune_meta["profile_applied"] is False
+    assert immune_meta["design_audit_applied"] is True
 
 
 def test_gummy_high_zinc_immune_formula_not_benchmark_clean() -> None:
@@ -207,6 +209,19 @@ def test_gummy_high_zinc_immune_formula_not_benchmark_clean() -> None:
     # belong.
     assert pillars["safety_hygiene"]["score"] < 10.0
     assert pillars["dose"]["score"] < 17.0
+
+
+def test_high_zinc_changes_dose_not_formulation_quality() -> None:
+    normal = score_product_v4(_immune_product())
+    high_zinc = score_product_v4(_immune_product(high_zinc=True))
+    normal_pillars = normal["quality_pillars_v4"]
+    high_pillars = high_zinc["quality_pillars_v4"]
+
+    assert (
+        high_pillars["formulation"]["score"]
+        == normal_pillars["formulation"]["score"]
+    )
+    assert high_pillars["dose"]["score"] < normal_pillars["dose"]["score"]
 
 
 def test_high_zinc_gummy_does_not_receive_clean_daily_immune_evidence_floor() -> None:
@@ -225,7 +240,7 @@ def test_high_variability_botanical_count_dedupes_duplicate_rows() -> None:
 
     assert immune_meta["high_variability_botanical_count"] == 5
     assert "immune_high_variability_botanical_stack" in formulation["penalties"]
-    assert out["quality_score_v4_100"] < 50.0
+    assert formulation["score"] < 4.0
 
 
 def test_immune_goal_mapping_excludes_broad_lifestyle_clusters() -> None:

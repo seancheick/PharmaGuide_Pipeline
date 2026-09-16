@@ -26,7 +26,6 @@ from scoring_v4.quality_score_config import block as _cfg_block
 _CM = _cfg_block("category_magnitudes", "immune_support")["immune_support"]
 
 
-IMMUNE_FORMULATION_BONUS_CAP = _CM["formulation_bonus_cap"]
 IMMUNE_EVIDENCE_CAP = _CM["evidence_cap"]
 
 _ALIASES = {
@@ -92,6 +91,12 @@ def score_immune_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any
 
 
 def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Return immune-specific design diagnostics and true complexity penalties.
+
+    Formulation quality is already owned by the generic IQM/form engine.  The
+    presence, count, or disclosed dose of immune ingredients belongs to
+    Dose/Evidence and must not manufacture additional Formulation credit.
+    """
     if not is_immune_support_product(product):
         return None
 
@@ -100,52 +105,25 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
         for row in get_source_score_eligible_active_rows(product)
         if (identity := _active_id(row))
     }
-    if not identities:
-        return None
-
-    foundation_count = sum(
-        1
-        for key in ("vitamin_c", "vitamin_d", "zinc")
-        if key in identities
-    )
-    balance_count = sum(
-        1 for key in ("copper", "selenium") if key in identities
-    )
-    targeted_count = sum(
-        1
-        for key in ("beta_glucan", "quercetin", "elderberry")
-        if key in identities
-    )
-
     doses = immune_active_doses(product)
     high_zinc = (doses.get("zinc_mg") or 0.0) > 40.0
-    herb_soup = _high_variability_botanical_count(product) >= 3
-
-    components = {
-        "immune_foundation_design": min(5.0, foundation_count * 1.7),
-        "immune_mineral_balance": min(2.0, balance_count * 1.0),
-        "immune_targeted_disclosure": min(3.0, targeted_count * 1.0),
-        "immune_daily_clean_design": 2.0 if not herb_soup else 0.0,
-    }
-    bonus = min(IMMUNE_FORMULATION_BONUS_CAP, sum(components.values()))
+    botanical_count = _high_variability_botanical_count(product)
+    herb_soup = botanical_count >= 3
 
     penalties: Dict[str, float] = {}
-    if high_zinc:
-        penalties["B7_immune_high_zinc_daily_use"] = -2.0
     if herb_soup:
         penalties["immune_high_variability_botanical_stack"] = -3.0
 
     return {
-        "bonus": round(bonus, 4),
-        "components": {k: round(v, 4) for k, v in components.items()},
         "penalties": penalties,
         "metadata": {
-            "profile_applied": True,
+            "profile_applied": False,
+            "design_audit_applied": True,
             "identified_actives": sorted(identities),
             "active_doses": {k: round(v, 4) for k, v in doses.items()},
             "gummy_or_syrup": _is_gummy_or_syrup(product),
             "high_zinc": high_zinc,
-            "high_variability_botanical_count": _high_variability_botanical_count(product),
+            "high_variability_botanical_count": botanical_count,
         },
     }
 
