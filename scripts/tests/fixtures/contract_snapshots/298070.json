@@ -4,17 +4,17 @@
   "dsld_id": "298070",
   "evaluation_stage": "scored_v4",
   "flags": [],
-  "grade": "Poor",
+  "grade": "Needs improvement",
   "mapped_coverage": 1.0,
   "output_schema_version": "4.3.0",
   "product_name": "FloraMend Prime Probiotic",
   "quality_score_status": "scored",
-  "quality_score_v4_100": 48.8,
+  "quality_score_v4_100": 55.5,
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 48.8,
+  "score_100_equivalent": 55.5,
   "score_basis": "v4_six_pillar",
   "scoring_status": "scored",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
-  "verdict": "POOR"
+  "verdict": "SAFE"
 }

@@ -348,6 +348,31 @@ def test_b7_over_ul_penalty_reduces_public_safety_pillar() -> None:
     assert "exceed an established upper limit" in pillar["reason"]
 
 
+def test_confirmed_over_ul_below_b7_penalty_threshold_is_still_explained() -> None:
+    """A 100–150% UL exposure is a caution even before the B7 score penalty.
+
+    The shared dose-safety evaluator records the confirmed exceedance and the
+    verdict gate prevents SAFE.  The public Safety explanation must not hide
+    that finding merely because the graduated B7 deduction starts at 150%.
+    """
+    from scoring_v4.quality_score import assemble_quality_score
+
+    bd = _module_bd(hygiene=4)
+    bd["dimensions"]["dose"]["penalties"] = {"B7_dose_safety": 0.0}
+    bd["dimensions"]["dose"]["metadata"] = {
+        "B7_safety_evaluation": {
+            "state_counts": {"confirmed_over_threshold": 1},
+        }
+    }
+
+    out = assemble_quality_score(_shadow(module="generic", bd=bd))
+    pillar = out["quality_pillars_v4"]["safety_hygiene"]
+
+    assert pillar["score"] == 10.0
+    assert "over_ul_penalty" not in pillar["components"]
+    assert "exceed an established upper limit" in pillar["reason"]
+
+
 def test_b7_unresolved_only_explains_incomplete_check_without_claiming_excess() -> None:
     from scoring_v4.quality_score import assemble_quality_score
 

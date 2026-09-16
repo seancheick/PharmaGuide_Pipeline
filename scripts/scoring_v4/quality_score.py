@@ -509,7 +509,9 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     no forced CAUTION). B1 additive/sweetener concerns also deduct a capped public
     truthfulness penalty so the Safety Hygiene pillar cannot remain perfect when
     additive concerns are present. Material B7 findings also receive the
-    configured capped cross-pillar deduction."""
+    configured capped cross-pillar deduction. Confirmed or unresolved findings
+    remain visible in the explanation even when their magnitude is below the
+    separate numeric B7 threshold."""
     base = module_bd.get("safety_hygiene_base") or {}
     bscore = _num(base.get("score"))
     bmax = _num(base.get("max"))
@@ -520,6 +522,9 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     additive_pen = _formulation_additive_safety_penalty(module_bd, cfg)
     over_ul_pen = _dose_safety_penalty(module_bd, cfg)
     dose_safety_state_counts = _dose_safety_state_counts(module_bd)
+    dose_safety_explanation = dose_safety_consumer_explanation(
+        dose_safety_state_counts
+    )
     val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen - additive_pen - over_ul_pen)), 1)
     deductions = []
     if safety_pen > 0:
@@ -528,11 +533,10 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         deductions.append("it contains a restricted additive")
     if additive_pen > 0:
         deductions.append("it contains additive or sweetener/form-factor concerns")
-    if over_ul_pen > 0:
-        deductions.append(
-            dose_safety_consumer_explanation(dose_safety_state_counts)
-            or "one or more dose-safety checks require attention"
-        )
+    if dose_safety_explanation:
+        deductions.append(dose_safety_explanation)
+    elif over_ul_pen > 0:
+        deductions.append("one or more dose-safety checks require attention")
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."

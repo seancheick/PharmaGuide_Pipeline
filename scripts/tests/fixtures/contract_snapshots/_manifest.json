@@ -661,6 +661,46 @@
         "Probiotic strain count unified across dose, transparency and formulation"
       ],
       "notes": "The original 1.1.3 pass lowered 19 references, but its audit conflated engine ceilings with one fixture and current-corpus maxima. Version 1.1.4 retains only supported changes and keeps 100 reachable without a hidden global cap. Grades in every fixture carry the renamed ladder; final release deltas must be measured from a fresh build."
+    },
+    {
+      "date": "2026-09-16",
+      "action": "refrozen_reviewed_v4_calibration_and_probiotic_identity_contract",
+      "products": [
+        182730,
+        288344,
+        245156,
+        183275,
+        278454,
+        270831,
+        180417,
+        18141,
+        239600,
+        204571,
+        223084,
+        270256,
+        306381,
+        239741,
+        241353,
+        269278,
+        274498,
+        293924,
+        293943,
+        298070,
+        298102,
+        306237,
+        321405,
+        321969,
+        323080,
+        327416,
+        336337,
+        337853
+      ],
+      "sprints_covered": [
+        "quality_score 1.2.0-1.8.1: proxy removal, evidence-tier verification, reviewed dose anchors, and formulation neutrality",
+        "Exact probiotic source identity and proportional disclosure completeness",
+        "No strain-count, aggregate-CFU, gummy-format, organic, natural, or non-GMO quality proxy"
+      ],
+      "notes": "Re-froze the complete 28-product drift set after a fresh 37-brand score-only run plus Product Submissions. These are the reviewed effects of the accepted calibration sequence from 7e810cae through 41c393d2, not target-score tuning: generic dose now follows verified DRI or clinical-reference ownership, verification follows evidence tier, probiotic Formulation measures exact source identity completeness rather than strain count or aggregate CFU, and immune Formulation no longer rewards ingredient count. The snapshot gate showed only score mirrors plus their mechanically derived grade/verdict changes; product identity, score status, safety verdict, coverage, badges, flags, and schema fields did not drift. Two monitored controls, 12012 and 294077, remained unchanged. The 2026-09-16 UL explanation fix changes consumer copy only and does not alter these numeric baselines."
     }
   ]
 }
