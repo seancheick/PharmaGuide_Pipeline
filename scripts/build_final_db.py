@@ -5938,9 +5938,10 @@ def has_recalled_ingredient(enriched: Dict) -> bool:
 def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
     """Top strength / drag pillar reasons — the consumer "how it scored X".
 
-    Ranks the six v4 pillars by their (score - max) delta: the fullest pillars
-    are strengths, the largest gaps are drags. Returns None for a non-scored
-    product (no pillars)."""
+    Ranks the six v4 pillars by their (score - max) delta: the largest gaps
+    are drags; strengths are only pillars at full credit, so a pillar that
+    lost points (e.g. an additive safety concern) is never presented as a
+    strength. Returns None for a non-scored product (no pillars)."""
     if not isinstance(pillars, dict) or not pillars:
         return None
     ranked = []
@@ -5956,7 +5957,9 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
         return None
     ranked.sort(key=lambda r: r[0])  # ascending: biggest drags first
     drags = [{"pillar": n, "reason": rs} for d, n, rs in ranked if d < -1e-9][:3]
-    strengths = [{"pillar": n, "reason": rs} for d, n, rs in reversed(ranked)][:3]
+    strengths = [
+        {"pillar": n, "reason": rs} for d, n, rs in reversed(ranked) if d >= -1e-9
+    ][:3]
     return {"strengths": strengths, "drags": drags}
 
 

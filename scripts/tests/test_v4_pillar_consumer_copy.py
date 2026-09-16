@@ -300,3 +300,33 @@ def test_probiotic_aggregate_cfu_dose_copy_does_not_claim_the_total_is_too_low()
         "Per-strain doses cannot be checked against studied doses."
     )
     assert "fall short" not in reason.lower()
+
+
+# ── strengths are full-credit pillars, never a pillar that lost points ───────
+
+def test_score_explanation_never_lists_a_penalized_pillar_as_a_strength() -> None:
+    """Fortify Women's 50 Billion (327967, 2026-09-16 release) exported
+    "Safety concern: it contains additive..." (safety 9/10) under strengths
+    because strengths were simply the three smallest gaps. A pillar that lost
+    points is a drag or nothing; strengths are pillars at full credit."""
+    from build_final_db import _build_v4_score_explanation
+
+    pillars = {
+        "formulation": {"score": 16.8, "max": 20, "reason": "Well-formulated."},
+        "dose": {"score": 3.1, "max": 20, "reason": "Per-strain doses unknown."},
+        "evidence": {"score": 8.0, "max": 20, "reason": "Limited strain research."},
+        "transparency": {"score": 15.0, "max": 15, "reason": "All strains named."},
+        "verification": {"score": 10.0, "max": 15, "reason": "No product testing."},
+        "safety_hygiene": {
+            "score": 9.0,
+            "max": 10,
+            "reason": "Safety concern: it contains additive concerns.",
+        },
+    }
+
+    explanation = _build_v4_score_explanation(pillars)
+
+    assert [item["pillar"] for item in explanation["strengths"]] == ["transparency"]
+    assert [item["pillar"] for item in explanation["drags"]] == [
+        "dose", "evidence", "verification",
+    ]
