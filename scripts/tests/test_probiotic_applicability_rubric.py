@@ -323,13 +323,66 @@ def test_stale_positional_reference_cannot_consolidate_a_different_blend():
     assert penalty == 1
 
 
-def test_companion_ingredient_credit_is_not_described_as_strain_research():
-    """2026-09-16 evidence audit: 106 of 553 probiotic-routed products took their
-    Evidence credit from non-strain ingredients (vitamins in multi + probiotic
-    combinations, inulin, saffron) because strain credit is max(generic, native).
-    "Triple Probiotic" (19071) had no strain evidence yet read "Named strains
-    have reviewed research". The score is unchanged here; the explanation must
-    say where the credit came from."""
+# ── Evidence credit ownership (Codex audit 2026-09-16) ───────────────────────
+# Probiotic strain credit is max(generic, native), and the generic side can
+# include vitamins, botanicals or fiber. The Evidence module owns the question
+# "who earned this credit" and emits it; the pillar copy reads that result and
+# never re-infers ownership from ingredient names.
+
+def _companion_generic(monkeypatch, *, with_companion: float, without_companion: float):
+    from scoring_v4.modules import probiotic_evidence
+
+    def fake_generic(product, accepted_matches=None):
+        has_companion = any(m.get("id") == "INGR_VITAMIN_C" for m in accepted_matches or [])
+        score = with_companion if has_companion else without_companion
+        return {"score": score, "metadata": {}}
+
+    monkeypatch.setattr(probiotic_evidence, "score_generic_evidence", fake_generic)
+
+
+def _vitamin_c_match():
+    from test_v4_probiotic_evidence_p23 import _match
+    return _match(id="INGR_VITAMIN_C", ingredient="Vitamin C", standard_name="Vitamin C",
+                  study_type="systematic_review_meta", evidence_level="ingredient-human")
+
+
+def test_companion_only_credit_is_owned_by_companions(monkeypatch):
+    _companion_generic(monkeypatch, with_companion=5.4, without_companion=0.0)
+    p = strain_product(clinical_id="STRAIN_NOT_IN_REGISTRY", name="Lactobacillus sp. XYZ-1")
+    p["evidence_data"] = {"clinical_matches": [_vitamin_c_match()]}
+    md = score_evidence(p)["metadata"]
+    assert md["credit_owner"] == "companion"
+    assert md["strain_points"] == 0.0
+    assert md["companion_points"] == md["final_points"] > 0
+
+
+def test_capped_strain_credit_is_owned_by_strains_despite_a_tiny_companion(monkeypatch):
+    """15 points of Lactobacillus research plus 0.1 of vitamin C is strain
+    credit, not "credit from other ingredients"."""
+    _companion_generic(monkeypatch, with_companion=15.1, without_companion=15.0)
+    p = strain_product()
+    p["evidence_data"] = {"clinical_matches": [_vitamin_c_match()]}
+    md = score_evidence(p)["metadata"]
+    assert md["credit_owner"] == "strain"
+    assert md["companion_points"] == 0.0
+
+
+def test_partial_companion_lift_is_mixed(monkeypatch):
+    _companion_generic(monkeypatch, with_companion=5.4, without_companion=3.0)
+    p = strain_product(clinical_id="STRAIN_NOT_IN_REGISTRY", name="Lactobacillus sp. XYZ-1")
+    p["evidence_data"] = {"clinical_matches": [_vitamin_c_match()]}
+    md = score_evidence(p)["metadata"]
+    assert md["credit_owner"] == "mixed"
+    assert md["strain_points"] == 3.0
+    assert md["companion_points"] == pytest.approx(md["final_points"] - 3.0)
+
+
+@pytest.mark.parametrize("owner, expected, absent", [
+    ("companion", "other ingredients", "Named strains"),
+    ("mixed", "combines", "Named strains have reviewed research;"),
+    ("strain", "Named strains", "other ingredients"),
+])
+def test_evidence_copy_reads_the_module_credit_owner(owner, expected, absent):
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
 
@@ -338,30 +391,31 @@ def test_companion_ingredient_credit_is_not_described_as_strain_research():
         "metadata": {
             "evidence_result_state": "research_present_applicability_unestablished",
             "evidence_assessment": {"strain_assessments": [
-                {"research_accepted": True, "dose_applicable": False},
+                {"research_accepted": True, "dose_applicable": owner != "strain"},
             ]},
-            "generic_evidence_score": 16.7,
-            "generic_evidence_metadata": {"ingredient_points": {
-                "vitamin c": 6.48, "calcium": 6.48, "lactobacillus acidophilus": 4.5}},
-            "native_clinical_strain_evidence_score": 0.0,
-            "native_clinical_strain_evidence_rows": [],
+            "credit_owner": owner,
+            "native_clinical_strain_evidence_rows": [{"evidence_scope": "strain_specific"}],
         },
     }
+    if owner == "strain":
+        dim["metadata"]["evidence_assessment"]["strain_assessments"][0]["dose_applicable"] = False
     reason = _pillar_evidence(dim, 20, "probiotic", config())["reason"]
-    assert "Named strains" not in reason
-    assert "other ingredients" in reason
+    assert expected in reason
+    assert absent not in reason
 
-    strain_led = deepcopy(dim)
-    strain_led["metadata"]["generic_evidence_score"] = 5.4
-    strain_led["metadata"]["native_clinical_strain_evidence_score"] = 8.0
-    strain_led["metadata"]["native_clinical_strain_evidence_rows"] = [
-        {"evidence_scope": "strain_specific"}]
-    assert "Named strains" in _pillar_evidence(strain_led, 20, "probiotic", config())["reason"]
 
-    # Species-level probiotic evidence is still probiotic research, not a
-    # companion ingredient.
-    species_only = deepcopy(dim)
-    species_only["metadata"]["generic_evidence_metadata"] = {
-        "ingredient_points": {"lactobacillus acidophilus": 4.5}}
-    assert "other ingredients" not in _pillar_evidence(
-        species_only, 20, "probiotic", config())["reason"]
+@pytest.mark.parametrize("dose_applicable, expected", [
+    (True, "matches the disclosed dose"),
+    (False, "is not established"),
+])
+def test_mixed_credit_copy_follows_strain_dose_applicability(dose_applicable, expected):
+    from scoring_v4.quality_score import _pillar_evidence
+    from scoring_v4.quality_score_config import config
+
+    dim = {"score": 8.0, "metadata": {
+        "evidence_result_state": "research_present_applicability_unestablished",
+        "evidence_assessment": {"strain_assessments": [
+            {"research_accepted": True, "dose_applicable": dose_applicable}]},
+        "credit_owner": "mixed",
+    }}
+    assert expected in _pillar_evidence(dim, 20, "probiotic", config())["reason"]

@@ -92,11 +92,23 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         CAP_STRAIN_CLINICAL,
         max(generic_score, native_evidence["score"]),
     )
+    # Credit ownership: the same strain credit computed without companion
+    # (non-probiotic) matches. Evidence owns this answer; the pillar copy reads
+    # it instead of guessing from ingredient names.
+    formula = assessment["formula_assessment"]
+    probiotic_owned = [m for m in accepted if _is_probiotic_owned_match(m, formula)]
+    strain_only_generic = (
+        generic_score if len(probiotic_owned) == len(accepted)
+        else _as_float(score_generic_evidence(product, accepted_matches=probiotic_owned).get("score"), 0.0)
+    )
+    strain_only_clinical = min(
+        CAP_STRAIN_CLINICAL,
+        max(strain_only_generic, native_evidence["score"]),
+    )
 
     relevance = _claim_alignment(product, assessment)
     # Claim alignment is descriptive only. Native dose applicability must be
     # reviewed; generic 1B/10B/50B bands and marketing phrases cannot prove it.
-    formula = assessment["formula_assessment"]
     applicable_effects = [_effect_multiplier(m) for m in accepted
                          if m.get("id") == formula.get("evidence_id")
                          and formula["status"] == "assessed_studied_formula"]
@@ -105,6 +117,18 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     applicability_credit = CAP_DOSE_APPLICABILITY * max(applicable_effects, default=0.0)
     if not applicable_effects:
         strain_clinical = min(strain_clinical, max(NATIVE_STRAIN_EVIDENCE_POINTS.values()))
+        strain_only_clinical = min(strain_only_clinical, max(NATIVE_STRAIN_EVIDENCE_POINTS.values()))
+    companion_points = max(0.0, strain_clinical - strain_only_clinical)
+    if formula["status"] == "assessed_studied_formula":
+        credit_owner = "studied_formula"
+    elif strain_clinical <= 0:
+        credit_owner = "none"
+    elif companion_points <= 1e-9:
+        credit_owner = "strain"
+    elif strain_only_clinical <= 1e-9:
+        credit_owner = "companion"
+    else:
+        credit_owner = "mixed"
 
     components = {
         "strain_clinical_evidence": round(strain_clinical, 4),
@@ -146,6 +170,10 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             "evidence_result_state": evidence_state,
             "claim_alignment": relevance,
             "studied_formula_assessment": formula,
+            "credit_owner": credit_owner,
+            "strain_points": round(strain_only_clinical, 4),
+            "companion_points": round(companion_points, 4),
+            "final_points": round(strain_clinical, 4),
             "uncredited_strain_match_ids": [m.get("id") for m in matches if m not in accepted],
             "generic_evidence_score": generic_score,
             "generic_evidence_metadata": generic_payload.get("metadata", {}),
@@ -288,6 +316,22 @@ def _claim_alignment(product: Dict[str, Any], assessment: Dict[str, Any]) -> Dic
         "matched_categories": sorted(matched),
         "reason": reason,
     }
+
+
+def _is_probiotic_owned_match(match: dict, formula: dict) -> bool:
+    """A match that speaks for the probiotic itself: strain evidence, the
+    studied-formula record, or research on a probiotic organism named by the
+    one identity owner (probiotic_measurements). Anything else — vitamins,
+    botanicals, fiber — is a companion."""
+    from probiotic_measurements import has_probiotic_identity_text
+
+    if _is_strain_match(match):
+        return True
+    if formula.get("evidence_id") and match.get("id") == formula.get("evidence_id"):
+        return True
+    return has_probiotic_identity_text(
+        " ".join(str(match.get(field) or "") for field in ("ingredient", "standard_name"))
+    )
 
 
 def _is_strain_match(match: dict) -> bool:
