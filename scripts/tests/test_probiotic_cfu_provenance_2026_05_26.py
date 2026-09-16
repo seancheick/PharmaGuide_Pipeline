@@ -647,9 +647,8 @@ def test_unrelated_strict_active_still_rejects_accessory_probiotic_cfu(enricher)
     # Nature's Way Fortify Women's 50 Billion (DSLD 327967) label statement;
     # shipped as "not stated" and cost the dose pillar its 0.85 multiplier.
     "Guarantees 50 billion live probiotic cultures through the date of expiration",
-    "Potency guaranteed through the expiration date",
     "50 billion CFU guaranteed until the expiration date",
-    "Guaranteed potency through the best by date",
+    "Viable probiotic cultures guaranteed through the best by date",
 ])
 def test_guarantee_through_the_date_of_expiration(enricher, statement):
     assert enricher._extract_guarantee_type(statement) == "at_expiration"
@@ -659,6 +658,10 @@ def test_guarantee_through_the_date_of_expiration(enricher, statement):
     "Store below 25C. Discard after the expiration date.",
     "Do not use after the expiration date printed on the bottle.",
     "Keep refrigerated until the expiration date.",
+    "Keep refrigerated until expiration.",
+    "Vitamin potency guaranteed through the expiration date.",
+    "Guaranteed potency through the best by date.",
+    "Quality guaranteed through the best by date.",
 ])
 def test_expiration_storage_advice_is_not_a_potency_guarantee(enricher, statement):
     assert enricher._extract_guarantee_type(statement) is None

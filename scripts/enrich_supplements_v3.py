@@ -16701,6 +16701,22 @@ class SupplementEnricherV3:
 
         text_lower = text.lower()
 
+        # This value controls probiotic Dose credit, so an expiration phrase
+        # is not enough by itself. Labels also use the same wording for storage
+        # advice, general product quality, and vitamin potency. Require the
+        # sentence to identify probiotic potency explicitly before treating it
+        # as a CFU guarantee. This deliberately abstains on generic "potency
+        # guaranteed" copy rather than assigning that claim to probiotic rows.
+        probiotic_potency_context = re.search(
+            r"\b(?:cfu(?:s)?|colony[\s-]*forming\s+units?|probiotics?|"
+            r"live\s+(?:probiotic\s+)?(?:cultures?|cells?|organisms?)|"
+            r"viable\s+(?:probiotic\s+)?(?:cultures?|cells?|organisms?))\b",
+            text_lower,
+            re.I,
+        )
+        if probiotic_potency_context is None:
+            return None
+
         # Check for expiration guarantee first (more valuable)
         if self.compiled_patterns['cfu_expiration'].search(text):
             return "at_expiration"
