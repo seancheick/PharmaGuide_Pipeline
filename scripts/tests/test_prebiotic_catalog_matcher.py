@@ -83,6 +83,10 @@ def test_generic_pomegranate_extract_is_not_promoted_to_a_prebiotic(label):
     "Pomegranate Polyphenol Extract",
     "Indian pomegranate extract",
     "Indian pomegranate fruit MAPP",
+    # DS-01's own label row (2026-09-16 app walkthrough: shipped
+    # prebiotic_present=False, so "Prebiotic included" was hidden while the
+    # score credited the prebiotic through the studied-formula brand token).
+    "MAPP Microbiota-Accessible Polyphenolic Precursors",
 ])
 def test_seed_pomegranate_preparation_retains_prebiotic_identity(label):
     assert match_prebiotic(label).standard_name == "Pomegranate Polyphenol Extract"
