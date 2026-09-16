@@ -2290,7 +2290,16 @@ class SupplementEnricherV3:
                 r'(?:cfu(?:s)?|colony[\s-]*forming\s+unit(?:s)?)\b',
                 re.I,
             ),
-            'cfu_expiration': re.compile(r'(until\s+expiration|through\s+shelf\s+life|at\s+expiration|guaranteed\s+through)', re.I),
+            'cfu_expiration': re.compile(
+                r'(until\s+expiration|through\s+shelf\s+life|at\s+expiration|guaranteed\s+through'
+                # "Guarantees 50 billion live cultures through the date of
+                # expiration": a dated phrase counts only in a potency sentence,
+                # so "Keep refrigerated until the expiration date" stays None.
+                r'|\b(?:guarantee[sd]?|potency|cfu|live|cultures|viable)\b[^.]{0,80}?'
+                r'\b(?:through|thru|until)\s+(?:the\s+)?'
+                r'(?:date\s+of\s+expiration|expiration\s+date|expiry\s+date|date\s+of\s+expiry))',
+                re.I,
+            ),
             'cfu_manufacture': re.compile(r'(at\s+manufacture|when\s+manufactured|at\s+time\s+of\s+manufacture)', re.I),
 
             # Standardization percentage
@@ -15935,6 +15944,12 @@ class SupplementEnricherV3:
                 cfu_raw_source_path = product_level_cfu.get("raw_source_path")
                 cfu_evidence_scope = product_level_cfu.get("evidence_scope")
                 cfu_linked_rows = list(product_level_cfu.get("linked_rows") or [])
+        # Rows can own the count while a label statement owns the guarantee
+        # ("Guarantees 50 billion live cultures through the date of
+        # expiration"); reading the guarantee only when the statement also won
+        # the count dropped it whenever the rows carried the same total.
+        if not guarantee_type and product_level_cfu.get('guarantee_type'):
+            guarantee_type = product_level_cfu.get('guarantee_type')
 
         self.logger.debug(
             "Returning probiotic_data with has_cfu=%s, first_blend_cfu_data=%s",

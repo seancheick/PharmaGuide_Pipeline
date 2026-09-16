@@ -641,3 +641,58 @@ def test_unrelated_strict_active_still_rejects_accessory_probiotic_cfu(enricher)
 
     assert cfu["scoreable"] is False
     assert cfu["rejection_reason"] == "non_probiotic_strict_active_present"
+
+
+@pytest.mark.parametrize("statement", [
+    # Nature's Way Fortify Women's 50 Billion (DSLD 327967) label statement;
+    # shipped as "not stated" and cost the dose pillar its 0.85 multiplier.
+    "Guarantees 50 billion live probiotic cultures through the date of expiration",
+    "Potency guaranteed through the expiration date",
+    "50 billion CFU guaranteed until the expiration date",
+    "Guaranteed potency through the best by date",
+])
+def test_guarantee_through_the_date_of_expiration(enricher, statement):
+    assert enricher._extract_guarantee_type(statement) == "at_expiration"
+
+
+@pytest.mark.parametrize("statement", [
+    "Store below 25C. Discard after the expiration date.",
+    "Do not use after the expiration date printed on the bottle.",
+    "Keep refrigerated until the expiration date.",
+])
+def test_expiration_storage_advice_is_not_a_potency_guarantee(enricher, statement):
+    assert enricher._extract_guarantee_type(statement) is None
+
+
+def test_statement_guarantee_survives_when_rows_already_carry_the_total(enricher):
+    """The label's rows own the CFU count and a statement owns the guarantee.
+    The guarantee used to be read only when the statement also supplied the
+    count, so an equal row total silently discarded it."""
+    product = {
+        "id": "row_total_statement_guarantee",
+        "product_name": "Daily Probiotic",
+        "fullName": "Daily Probiotic",
+        "bundleName": "",
+        "statements": [
+            {"type": "Formula re: Contains",
+             "notes": "Guarantees 10 billion live cultures through the date of expiration"},
+        ],
+        "activeIngredients": [
+            {
+                "name": "Lactobacillus rhamnosus GG",
+                "standardName": "Lactobacillus rhamnosus GG",
+                "category": "probiotic",
+                "quantity": 10,
+                "unit": "billion CFU",
+                "raw_source_path": "ingredientRows[0]",
+                "harvestMethod": "",
+                "notes": "",
+            }
+        ],
+        "inactiveIngredients": [],
+    }
+
+    probiotic_data = enricher._collect_probiotic_data(product)
+
+    assert probiotic_data["total_billion_count"] == pytest.approx(10.0)
+    assert probiotic_data["guarantee_type"] == "at_expiration"
