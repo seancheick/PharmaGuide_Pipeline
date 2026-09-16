@@ -713,3 +713,100 @@ def test_statement_guarantee_survives_when_rows_already_carry_the_total(enricher
 
     assert probiotic_data["total_billion_count"] == pytest.approx(10.0)
     assert probiotic_data["guarantee_type"] == "at_expiration"
+
+
+# ── guarantee locality (Codex audit 2026-09-16) ──────────────────────────────
+# The probiotic context and the guarantee timing must come from the same
+# statement and sentence. Joining statements let an organism named in one
+# statement vouch for an unrelated "potency guaranteed" claim in another.
+
+@pytest.mark.parametrize("text", [
+    "Contains Lactobacillus acidophilus. Vitamin potency guaranteed through expiration.",
+    "Lactobacillus acidophilus 1 billion CFU\r\nVitamin C potency guaranteed through expiration",
+])
+def test_guarantee_needs_probiotic_context_in_the_same_sentence(enricher, text):
+    assert enricher._extract_guarantee_type(text) is None
+
+
+@pytest.mark.parametrize("text, expected", [
+    ("L. rhamnosus GG 10 billion CFU guaranteed through expiration.", "at_expiration"),
+    ("Guarantees 50 billion live probiotic cultures through the date of expiration\r\n"
+     "Formulated with 10 diverse probiotic strains", "at_expiration"),
+    ("Contains Lactobacillus acidophilus. 5 billion CFU at time of manufacture.", "at_manufacture"),
+])
+def test_local_guarantee_is_still_read(enricher, text, expected):
+    assert enricher._extract_guarantee_type(text) == expected
+
+
+def test_statements_do_not_vouch_for_each_other(enricher):
+    product = {
+        "id": "cross_statement",
+        "product_name": "Daily Probiotic",
+        "fullName": "Daily Probiotic",
+        "bundleName": "",
+        "statements": [
+            {"type": "Formula re: Contains", "notes": "Contains Lactobacillus acidophilus"},
+            {"type": "General Statements", "notes": "Vitamin potency guaranteed through expiration"},
+        ],
+        "activeIngredients": [{
+            "name": "Lactobacillus acidophilus", "standardName": "Lactobacillus acidophilus",
+            "category": "probiotic", "quantity": 1, "unit": "billion CFU",
+            "raw_source_path": "ingredientRows[0]", "harvestMethod": "", "notes": "",
+        }],
+        "inactiveIngredients": [],
+    }
+    assert enricher._collect_probiotic_data(product)["guarantee_type"] is None
+
+
+def test_probiotic_row_text_is_its_own_context(enricher):
+    """Garden of Life 173757: the row's harvestMethod reads "Guaranteed per
+    serving, at time of manufacture." — the row itself is the probiotic."""
+    product = {
+        "id": "row_guarantee",
+        "product_name": "Prostate+",
+        "fullName": "Prostate+",
+        "bundleName": "",
+        "statements": [],
+        "activeIngredients": [{
+            "name": "Lactobacillus bulgaricus", "standardName": "Lactobacillus bulgaricus",
+            "category": "probiotic", "quantity": 0, "unit": "NP",
+            "raw_source_path": "ingredientRows[0]",
+            "harvestMethod": "Guaranteed per serving, at time of manufacture.", "notes": "",
+        }],
+        "inactiveIngredients": [],
+    }
+    assert enricher._collect_probiotic_data(product)["guarantee_type"] == "at_manufacture"
+
+
+def _probiotic_statement_product(note, extra_actives=()):
+    strain = {"name": "Lactobacillus rhamnosus GG", "standardName": "Lactobacillus rhamnosus GG",
+              "category": "probiotic", "quantity": 10, "unit": "billion CFU",
+              "raw_source_path": "ingredientRows[0]", "harvestMethod": "", "notes": "",
+              "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable"}
+    return {
+        "id": "unqualified_potency", "product_name": "Daily Probiotic", "fullName": "Daily Probiotic",
+        "bundleName": "", "statements": [{"type": "General Statements", "notes": note}],
+        "activeIngredients": [strain, *extra_actives], "inactiveIngredients": [],
+    }
+
+
+def test_unqualified_potency_guarantee_counts_on_a_probiotic_only_product(enricher):
+    """GNC "Probiotic Complex 50 Billion CFUs", MegaFlora, Primadophilus print
+    "Guaranteed potency through expiration date" with no nutrient named: on a
+    product whose only actives are probiotics that potency is probiotic."""
+    product = _probiotic_statement_product("Guaranteed potency through expiration date")
+    assert enricher._collect_probiotic_data(product)["guarantee_type"] == "at_expiration"
+
+
+def test_unqualified_potency_guarantee_abstains_on_a_combination_product(enricher):
+    vitamin_c = {"name": "Vitamin C", "standardName": "Vitamin C", "canonical_id": "vitamin_c",
+                 "category": "vitamin", "quantity": 60, "unit": "mg",
+                 "raw_source_path": "ingredientRows[1]", "score_eligible_by_cleaner": True,
+                 "cleaner_row_role": "active_scorable"}
+    product = _probiotic_statement_product("Guaranteed potency through expiration date", [vitamin_c])
+    assert enricher._collect_probiotic_data(product)["guarantee_type"] is None
+
+
+def test_a_named_non_probiotic_potency_never_counts(enricher):
+    product = _probiotic_statement_product("Vitamin potency guaranteed through expiration")
+    assert enricher._collect_probiotic_data(product)["guarantee_type"] is None

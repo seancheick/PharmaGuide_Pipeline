@@ -728,6 +728,19 @@ _FREE_FROM_CLAUSE_END = re.compile(
 )
 
 
+# Sentence / line boundaries for statement-local guarantee reading. A period
+# after a lower-case letter, digit or closing bracket ends a sentence; "L."
+# in "L. rhamnosus" does not.
+# A guarantee sentence naming another nutrient ("Vitamin potency guaranteed
+# through expiration") is about that nutrient, never probiotic potency.
+_NON_PROBIOTIC_POTENCY_SUBJECT_RE = re.compile(
+    r"\b(?:vitamins?|minerals?|multivitamins?|nutrients?|omega|fish\s+oil|enzymes?|herbs?|"
+    r"botanicals?|proteins?)\b",
+    re.I,
+)
+_GUARANTEE_UNIT_SPLIT_RE = re.compile(r"\r?\n|(?<=[a-z0-9)\]%])[.!?;](?=\s|$)")
+
+
 def _net_contents_texts(product: Dict) -> List[str]:
     """Unit-of-sale text per netContents row ("30 Delayed-Release Veg.
     Capsule(s)"), the label's own statement of the dosage form."""
@@ -15430,6 +15443,22 @@ class SupplementEnricherV3:
             source_path=product_cfu_source_path,
             evidence_scope="product_level",
         )
+        # Each label statement is judged on its own: joining them let an
+        # organism named in one statement vouch for another statement's
+        # unrelated "potency guaranteed" wording.
+        # An unqualified "Guaranteed potency through expiration" can only mean
+        # probiotic potency when the product has no non-probiotic actives
+        # (same owner that decides whether CFU evidence is accessory).
+        probiotic_only_product = not self._has_non_probiotic_active_for_cfu_evidence(product)
+        statement_guarantees = {
+            self._extract_guarantee_type(part, subject_is_probiotic=probiotic_only_product)
+            for part in statement_parts
+        }
+        product_level_cfu["guarantee_type"] = (
+            "at_expiration" if "at_expiration" in statement_guarantees
+            else "at_manufacture" if "at_manufacture" in statement_guarantees
+            else None
+        )
         if not product_level_cfu.get("has_cfu"):
             for field_name in ("product_name", "fullName", "bundleName"):
                 field_text = str(product.get(field_name) or "").strip()
@@ -16646,75 +16675,70 @@ class SupplementEnricherV3:
                     evidence_scope or ("row_level" if ingredient else "product_level"),
                 )
 
-            # P1.1: Enhanced guarantee type parsing
-            result["guarantee_type"] = self._extract_guarantee_type(text)
+            # P1.1: Enhanced guarantee type parsing. A probiotic ingredient
+            # row's own text is its probiotic context.
+            result["guarantee_type"] = self._extract_guarantee_type(
+                text, subject_is_probiotic=ingredient is not None
+            )
 
         return result
 
-    def _extract_guarantee_type(self, text: str) -> Optional[str]:
+    def _extract_guarantee_type(self, text: str, subject_is_probiotic: bool = False) -> Optional[str]:
         """
         P1.1: Extract CFU guarantee type from text.
 
         Returns:
-        - 'at_manufacture' for "At the time of manufacture"
         - 'at_expiration' for "Until expiration" / "Through expiration"
-        - None if no guarantee statement found
+        - 'at_manufacture' for "At the time of manufacture"
+        - None if no probiotic guarantee statement found
+
+        The value controls probiotic Dose credit, so timing wording alone is not
+        enough: labels use the same words for storage advice and vitamin
+        potency. The probiotic identity and the timing must sit in the same
+        sentence or line (Codex audit 2026-09-16: "Contains Lactobacillus
+        acidophilus. Vitamin potency guaranteed through expiration." read as a
+        CFU guarantee). A probiotic ingredient row is its own context
+        (``subject_is_probiotic``), e.g. Garden of Life's harvestMethod
+        "Guaranteed per serving, at time of manufacture." Probiotic wording is
+        judged by the one identity owner, probiotic_measurements.
         """
         if not text:
             return None
+        from probiotic_measurements import _PROBIOTIC_VIABILITY_RE, has_probiotic_identity_text
 
-        text_lower = text.lower()
+        found = None
+        for unit in _GUARANTEE_UNIT_SPLIT_RE.split(str(text)):
+            unit = unit.strip()
+            if not unit:
+                continue
+            names_probiotic = bool(has_probiotic_identity_text(unit) or _PROBIOTIC_VIABILITY_RE.search(unit))
+            if not names_probiotic and (
+                not subject_is_probiotic or _NON_PROBIOTIC_POTENCY_SUBJECT_RE.search(unit)
+            ):
+                continue
+            timing = self._guarantee_timing(unit)
+            if timing == "at_expiration":
+                return timing
+            found = found or timing
+        return found
 
-        # This value controls probiotic Dose credit, so an expiration phrase
-        # is not enough by itself. Labels also use the same wording for storage
-        # advice, general product quality, and vitamin potency. Require the
-        # sentence to identify probiotic potency explicitly before treating it
-        # as a CFU guarantee. This deliberately abstains on generic "potency
-        # guaranteed" copy rather than assigning that claim to probiotic rows.
-        # Organism-named guarantees count too: "100 million active
-        # Lactobacillus Acidophilus ... at the time of manufacture", "1 Billion
-        # live bacteria when manufactured" (CVS 19171 / 19172). Genus names come
-        # from the one probiotic taxonomy list.
-        from probiotic_measurements import _PROBIOTIC_GENERA
-        probiotic_potency_context = re.search(
-            r"\b(?:cfu(?:s)?|colony[\s-]*forming\s+units?|probiotics?|"
-            r"(?:live|viable|active)\s+(?:probiotic\s+)?"
-            r"(?:cultures?|cells?|organisms?|microorganisms?|bacteria)|"
-            + "|".join(sorted(map(re.escape, _PROBIOTIC_GENERA)))
-            + r")\b",
-            text_lower,
-            re.I,
-        )
-        if probiotic_potency_context is None:
-            return None
-
-        # Check for expiration guarantee first (more valuable)
-        if self.compiled_patterns['cfu_expiration'].search(text):
+    def _guarantee_timing(self, unit: str) -> Optional[str]:
+        """Guarantee timing named in one sentence/line, expiration first."""
+        unit_lower = unit.lower()
+        if self.compiled_patterns['cfu_expiration'].search(unit) or any(
+            phrase in unit_lower for phrase in (
+                'until expiration', 'through expiration', 'at expiration',
+                'best by date', 'until best by', 'at time of expiration')
+        ):
             return "at_expiration"
-
-        # Check for manufacture guarantee
-        if self.compiled_patterns['cfu_manufacture'].search(text):
+        if self.compiled_patterns['cfu_manufacture'].search(unit) or any(
+            phrase in unit_lower for phrase in (
+                'at the time of manufacture', 'at time of manufacture',
+                'at manufacture', 'when manufactured', 'at production')
+        ):
             return "at_manufacture"
-
-        # P1.1: Additional patterns for guarantee type
-        expiration_patterns = [
-            'until expiration', 'through expiration', 'at expiration',
-            'best by date', 'until best by', 'at time of expiration'
-        ]
-        manufacture_patterns = [
-            'at the time of manufacture', 'at time of manufacture',
-            'at manufacture', 'when manufactured', 'at production'
-        ]
-
-        for pattern in expiration_patterns:
-            if pattern in text_lower:
-                return "at_expiration"
-
-        for pattern in manufacture_patterns:
-            if pattern in text_lower:
-                return "at_manufacture"
-
         return None
+
     def _decorate_percentile_category(self, enriched: Dict[str, Any]) -> Dict[str, Any]:
         """Project the canonical taxonomy's percentile cohort onto the artifact.
 

@@ -34,8 +34,9 @@ _PROBIOTIC_IDENTITY_RE = re.compile(
 )
 
 _PROBIOTIC_VIABILITY_RE = re.compile(
-    r"\b(?:probiotics?|cfu|colony[-\s]+forming units?|afu|active fluorescent units?|"
-    r"live\s+cultures?|active\s+cultures?|viable\s+cells?)\b",
+    r"\b(?:probiotics?|cfus?|colony[-\s]+forming units?|afus?|active fluorescent units?|"
+    r"live\s+cultures?|active\s+cultures?|viable\s+cells?|"
+    r"(?:live|viable|active)\s+(?:bacteria|(?:micro)?organisms?))\b",
     re.IGNORECASE,
 )
 

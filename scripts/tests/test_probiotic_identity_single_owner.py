@@ -286,3 +286,26 @@ def test_enricher_cfu_accessory_check_uses_the_shared_identity(enricher):
 
     assert enricher._has_non_probiotic_active_for_cfu_evidence(microbe_only) is False
     assert enricher._has_non_probiotic_active_for_cfu_evidence(with_greens) is True
+
+
+@pytest.mark.parametrize("text", [
+    "Contains a minimum of 5 billion CFUs per capsule at time of expiration",
+    "Contains a minimum of 1 Billion live bacteria when manufactured",
+    "10 billion viable organisms per serving",
+])
+def test_viability_wording_covers_plural_cfus_and_live_bacteria(text):
+    """Thorne Sacro-B (306291) prints "CFUs"; CVS 19172 prints "live bacteria".
+    The owner regex missed both, so guarantee reading and viability overrides
+    that consult it silently abstained (2026-09-16)."""
+    from probiotic_measurements import _PROBIOTIC_VIABILITY_RE
+    assert _PROBIOTIC_VIABILITY_RE.search(text)
+
+
+@pytest.mark.parametrize("text", [
+    "Vitamin potency guaranteed through expiration",
+    "Store in a cool dry place",
+    "nutritional yeast flakes",
+])
+def test_viability_wording_does_not_match_non_live_text(text):
+    from probiotic_measurements import _PROBIOTIC_VIABILITY_RE
+    assert not _PROBIOTIC_VIABILITY_RE.search(text)
