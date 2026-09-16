@@ -83,6 +83,15 @@ def test_cross_brand_certification_never_implies_gmp():
     assert cert_evidence.audited_gmp_evidence(product) is None
 
 
+def test_named_certification_brand_fails_closed_when_product_brand_is_missing():
+    """A registry row tied to a named brand cannot verify an unidentified
+    product. Missing identity is not evidence of a match."""
+    entry = {"program": "NSF Certified", "scope": "sku", "matched_brand": "Nature Made"}
+    product = _product(brandName="")
+    assert cert_evidence.cert_entry_brand_matches_product(product, entry) is False
+    assert cert_evidence.verified_product_cert_entries({**product, "verified_cert_programs": [entry]}) == []
+
+
 @pytest.mark.parametrize("module", [generic_trust, omega_trust])
 @pytest.mark.parametrize("name", [
     "_gmp_implied_by_verified_cert", "_get_gmp_implying_programs",

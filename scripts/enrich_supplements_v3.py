@@ -738,7 +738,11 @@ _NON_PROBIOTIC_POTENCY_SUBJECT_RE = re.compile(
     r"botanicals?|proteins?)\b",
     re.I,
 )
-_GUARANTEE_UNIT_SPLIT_RE = re.compile(r"\r?\n|(?<=[a-z0-9)\]%])[.!?;](?=\s|$)")
+_GUARANTEE_UNIT_SPLIT_RE = re.compile(
+    r"\r?\n|[!?;](?=\s|$)|"
+    r"(?<!\b[A-Za-z])(?<!\bsubsp)(?<!\bssp)(?<!\bsp)(?<!\bspp)\.(?=\s|$)",
+    re.I,
+)
 
 
 def _net_contents_texts(product: Dict) -> List[str]:
@@ -16712,9 +16716,12 @@ class SupplementEnricherV3:
             if not unit:
                 continue
             names_probiotic = bool(has_probiotic_identity_text(unit) or _PROBIOTIC_VIABILITY_RE.search(unit))
-            if not names_probiotic and (
-                not subject_is_probiotic or _NON_PROBIOTIC_POTENCY_SUBJECT_RE.search(unit)
-            ):
+            # An explicitly named non-probiotic potency subject is not rescued
+            # by CFU/probiotic wording elsewhere in the same unit. Ambiguous
+            # combined claims abstain instead of manufacturing a CFU guarantee.
+            if _NON_PROBIOTIC_POTENCY_SUBJECT_RE.search(unit):
+                continue
+            if not names_probiotic and not subject_is_probiotic:
                 continue
             timing = self._guarantee_timing(unit)
             if timing == "at_expiration":

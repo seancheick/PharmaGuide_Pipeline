@@ -6,8 +6,8 @@ Locks the Testing & Trust sub-component math:
                               label_asserted_product quality claim → 2.
                               needs_review, brand_only, claimed_only,
                               rejected → 0. Cap 10. No diminishing returns.
-    b4b_gmp             /4    nsf_gmp → 4. fda_registered → 2.
-                              self-attested only → 0.
+    b4b_gmp             /4    canonical audited-GMP decision → 4.
+                              Label wording / FDA registration → 0.
     b4c_traceability    /1    has_coa OR has_batch_lookup → 1.
 
     Hard-clamped at 15.
@@ -645,9 +645,8 @@ def test_trust_policy_matches_rubric_config() -> None:
     assert trust["dimension_cap"] == 15
 
     b4b = trust["b4b_gmp"]
-    assert b4b["nsf_gmp"] == 4
-    assert b4b["fda_registered"] == 2
-    assert b4b["self_attested_only"] == 0
+    assert set(b4b) == {"_doc", "audited_gmp", "cap"}
+    assert b4b["audited_gmp"] == 4
     assert b4b["cap"] == 4
 
     b4c = trust["b4c_traceability"]

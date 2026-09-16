@@ -377,6 +377,28 @@ def test_partial_companion_lift_is_mixed(monkeypatch):
     assert md["companion_points"] == pytest.approx(md["final_points"] - 3.0)
 
 
+def test_studied_formula_does_not_hide_companion_credit(monkeypatch):
+    """A studied-formula match describes the probiotic-owned portion; it must
+    not claim ownership of additional Evidence points supplied by a companion
+    ingredient."""
+    _companion_generic(monkeypatch, with_companion=8.0, without_companion=6.0)
+    p = seed_label()
+    p["evidence_data"] = {"clinical_matches": [_vitamin_c_match()]}
+
+    evidence = score_evidence(p)
+    md = evidence["metadata"]
+    assert md["studied_formula_assessment"]["status"] == "assessed_studied_formula"
+    assert md["credit_owner"] == "mixed"
+    assert md["strain_points"] == 6.0
+    assert md["companion_points"] == 2.0
+
+    from scoring_v4.quality_score import _pillar_evidence
+    from scoring_v4.quality_score_config import config
+    reason = _pillar_evidence(evidence, 20, "probiotic", config())["reason"]
+    assert "combines" in reason
+    assert "complete formula" not in reason
+
+
 @pytest.mark.parametrize("owner, expected, absent", [
     ("companion", "other ingredients", "Named strains"),
     ("mixed", "combines", "Named strains have reviewed research;"),

@@ -652,7 +652,10 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     metadata = dim.get("metadata") or {}
     if _num(metadata.get("primary_evidence_floor")) > 0:
         reason = "Evidence credit is driven by the primary ingredient, not a trial of the whole formula."
-    if (metadata.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
+    if (
+        (metadata.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula"
+        and metadata.get("credit_owner") == "studied_formula"
+    ):
         reason = "The complete formula has adult digestive-symptom trial evidence; independent confirmation is limited."
     elif archetype == "probiotic":
         assessed = (metadata.get("evidence_assessment") or {}).get("strain_assessments", [])

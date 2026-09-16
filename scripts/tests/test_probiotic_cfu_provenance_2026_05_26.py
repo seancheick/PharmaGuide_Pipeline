@@ -722,6 +722,8 @@ def test_statement_guarantee_survives_when_rows_already_carry_the_total(enricher
 
 @pytest.mark.parametrize("text", [
     "Contains Lactobacillus acidophilus. Vitamin potency guaranteed through expiration.",
+    "Contains 10 billion CFU. Vitamin potency guaranteed through expiration.",
+    "Contains 10 billion CFU; Vitamin potency guaranteed through expiration.",
     "Lactobacillus acidophilus 1 billion CFU\r\nVitamin C potency guaranteed through expiration",
 ])
 def test_guarantee_needs_probiotic_context_in_the_same_sentence(enricher, text):

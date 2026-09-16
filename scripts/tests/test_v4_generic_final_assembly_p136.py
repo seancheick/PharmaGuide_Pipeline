@@ -129,7 +129,7 @@ def test_manufacturer_trust_scores_d1_d2_and_tail_cap() -> None:
     assert trust["metadata"]["tail_cap_applied"] is False
 
 
-def test_mid_tier_manufacturer_evidence_scores_one_without_trusted_brand() -> None:
+def test_label_fda_registration_does_not_create_manufacturer_reputation() -> None:
     from scoring_v4.modules.generic import score_generic
 
     product = _base_product(
@@ -137,6 +137,23 @@ def test_mid_tier_manufacturer_evidence_scores_one_without_trusted_brand() -> No
             "certification_data": {"gmp": {"fda_registered": True}, "batch_traceability": {}}
         }
     )
+    trust = score_generic(product).to_breakdown()["manufacturer_trust"]
+
+    assert trust["components"]["D1_manufacturer_reputation"] == 0.0
+    assert trust["metadata"]["D1_source"] == "none"
+
+
+def test_verified_product_certification_can_support_mid_tier_reputation() -> None:
+    from scoring_v4.modules.generic import score_generic
+
+    product = _base_product(top_level={
+        "brandName": "Example Brand",
+        "verified_cert_programs": [{
+            "program": "NSF Certified",
+            "scope": "sku",
+            "matched_brand": "Example Brand",
+        }],
+    })
     trust = score_generic(product).to_breakdown()["manufacturer_trust"]
 
     assert trust["components"]["D1_manufacturer_reputation"] == 1.0

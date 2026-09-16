@@ -161,22 +161,15 @@ def _score_d1_reputation(product: Dict[str, Any], md: Dict[str, Any]) -> Tuple[f
 
 
 def _has_verifiable_mid_tier_manufacturer_evidence(product: Dict[str, Any]) -> bool:
-    cert_data = _safe_dict(product.get("certification_data"))
-    gmp = _safe_dict(cert_data.get("gmp"))
-    if bool(gmp.get("nsf_gmp", False)) or bool(gmp.get("fda_registered", False)):
+    # The certification/GMP owner is the only authority for these signals.
+    # Label marks, named-program text and FDA facility registration are claims,
+    # not verified manufacturer evidence, and cannot create reputation credit.
+    from scoring_v4.cert_evidence import audited_gmp_evidence, verified_product_cert_entries
+
+    if audited_gmp_evidence(product):
         return True
-
-    named_programs = _safe_list(product.get("named_cert_programs"))
-    if not named_programs:
-        programs = _safe_dict(cert_data.get("third_party_programs")).get("programs", [])
-        if isinstance(programs, list):
-            named_programs = [
-                p.get("name") if isinstance(p, dict) else p
-                for p in programs
-            ]
-
-    for program in named_programs:
-        text = _norm_text(program)
+    for entry in verified_product_cert_entries(product):
+        text = _norm_text(entry.get("program"))
         if not text:
             continue
         if "usp" in text or "nsf" in text or ("gmp" in text and "cert" in text):

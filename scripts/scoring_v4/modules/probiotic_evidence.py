@@ -119,16 +119,16 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         strain_clinical = min(strain_clinical, max(NATIVE_STRAIN_EVIDENCE_POINTS.values()))
         strain_only_clinical = min(strain_only_clinical, max(NATIVE_STRAIN_EVIDENCE_POINTS.values()))
     companion_points = max(0.0, strain_clinical - strain_only_clinical)
-    if formula["status"] == "assessed_studied_formula":
-        credit_owner = "studied_formula"
-    elif strain_clinical <= 0:
+    if strain_clinical <= 0:
         credit_owner = "none"
-    elif companion_points <= 1e-9:
-        credit_owner = "strain"
-    elif strain_only_clinical <= 1e-9:
+    elif companion_points > 1e-9 and strain_only_clinical <= 1e-9:
         credit_owner = "companion"
-    else:
+    elif companion_points > 1e-9:
         credit_owner = "mixed"
+    elif formula["status"] == "assessed_studied_formula":
+        credit_owner = "studied_formula"
+    else:
+        credit_owner = "strain"
 
     components = {
         "strain_clinical_evidence": round(strain_clinical, 4),

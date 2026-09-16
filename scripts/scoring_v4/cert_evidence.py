@@ -61,7 +61,7 @@ def cert_entry_brand_matches_product(product: Dict[str, Any], entry: Dict[str, A
         or ""
     )
     if not product_brand:
-        return True
+        return False
     product_tokens = brand_tokens(product_brand)
     matched_tokens = brand_tokens(matched_brand)
     if not product_tokens or not matched_tokens:
