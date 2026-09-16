@@ -635,6 +635,22 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     }
 
 
+def _companion_evidence_leads(metadata: Dict[str, Any]) -> bool:
+    """True when probiotic Evidence credit came from non-probiotic ingredients:
+    the generic side beat native strain evidence and a non-probiotic canonical
+    (vitamin, botanical, fiber) scored in it. Species-level probiotic matches
+    are probiotic research, not companions."""
+    if _num(metadata.get("generic_evidence_score")) <= _num(
+            metadata.get("native_clinical_strain_evidence_score")):
+        return False
+    from probiotic_measurements import _PROBIOTIC_GENERA
+    points = (metadata.get("generic_evidence_metadata") or {}).get("ingredient_points") or {}
+    return any(
+        _num(value) > 0 and not any(genus in str(name).lower() for genus in _PROBIOTIC_GENERA)
+        for name, value in points.items()
+    )
+
+
 def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
                      cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Category-aware evidence fit against reviewed engine/purpose ceilings.
@@ -666,6 +682,11 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
             reason = "Our strain-specific human clinical review is incomplete; no conclusion about benefit or product quality follows from this review gap."
         elif any(row.get("dose_applicable") for row in assessed):
             reason = "Reviewed strain evidence matches the disclosed dose and label context; benefits remain outcome-specific."
+        elif val > 0 and _companion_evidence_leads(metadata):
+            # Strain credit is max(generic, native); when the generic side wins,
+            # the credit came from vitamins, botanicals or fiber in the formula.
+            reason = ("Evidence credit comes from the formula's other ingredients; research on its "
+                      "probiotic strains is limited or not yet reviewed for this label.")
         elif val > 0 and any(row.get("research_accepted") for row in assessed):
             credited = metadata.get("native_clinical_strain_evidence_rows") or []
             if credited and any(row.get("evidence_scope") == "scope_unresolved" for row in credited):

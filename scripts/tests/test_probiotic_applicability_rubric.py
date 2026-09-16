@@ -321,3 +321,47 @@ def test_stale_positional_reference_cannot_consolidate_a_different_blend():
     pdata = {"strain_allocation_owner_refs": ["ingredientRows[0]"]}
     penalty, _ = _consolidate_strain_allocation_opacity(pdata, {"status": "unresolved"}, evidence)
     assert penalty == 1
+
+
+def test_companion_ingredient_credit_is_not_described_as_strain_research():
+    """2026-09-16 evidence audit: 106 of 553 probiotic-routed products took their
+    Evidence credit from non-strain ingredients (vitamins in multi + probiotic
+    combinations, inulin, saffron) because strain credit is max(generic, native).
+    "Triple Probiotic" (19071) had no strain evidence yet read "Named strains
+    have reviewed research". The score is unchanged here; the explanation must
+    say where the credit came from."""
+    from scoring_v4.quality_score import _pillar_evidence
+    from scoring_v4.quality_score_config import config
+
+    dim = {
+        "score": 8.0,
+        "metadata": {
+            "evidence_result_state": "research_present_applicability_unestablished",
+            "evidence_assessment": {"strain_assessments": [
+                {"research_accepted": True, "dose_applicable": False},
+            ]},
+            "generic_evidence_score": 16.7,
+            "generic_evidence_metadata": {"ingredient_points": {
+                "vitamin c": 6.48, "calcium": 6.48, "lactobacillus acidophilus": 4.5}},
+            "native_clinical_strain_evidence_score": 0.0,
+            "native_clinical_strain_evidence_rows": [],
+        },
+    }
+    reason = _pillar_evidence(dim, 20, "probiotic", config())["reason"]
+    assert "Named strains" not in reason
+    assert "other ingredients" in reason
+
+    strain_led = deepcopy(dim)
+    strain_led["metadata"]["generic_evidence_score"] = 5.4
+    strain_led["metadata"]["native_clinical_strain_evidence_score"] = 8.0
+    strain_led["metadata"]["native_clinical_strain_evidence_rows"] = [
+        {"evidence_scope": "strain_specific"}]
+    assert "Named strains" in _pillar_evidence(strain_led, 20, "probiotic", config())["reason"]
+
+    # Species-level probiotic evidence is still probiotic research, not a
+    # companion ingredient.
+    species_only = deepcopy(dim)
+    species_only["metadata"]["generic_evidence_metadata"] = {
+        "ingredient_points": {"lactobacillus acidophilus": 4.5}}
+    assert "other ingredients" not in _pillar_evidence(
+        species_only, 20, "probiotic", config())["reason"]
