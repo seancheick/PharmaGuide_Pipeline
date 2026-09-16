@@ -740,6 +740,25 @@ def test_local_guarantee_is_still_read(enricher, text, expected):
     assert enricher._extract_guarantee_type(text) == expected
 
 
+@pytest.mark.parametrize("text, expected", [
+    # Emergen-C 206889: one guarantee covers the culture count and vitamin C.
+    ("Each packet is guaranteed to deliver 2 billion live active cultures and a boost of "
+     "250 mg of Vitamin C through the expiration date.", "at_expiration"),
+    ("Guaranteed 10 billion CFU through expiration, with digestive enzymes.", "at_expiration"),
+])
+def test_count_guarantee_that_also_names_another_nutrient_is_read(enricher, text, expected):
+    assert enricher._extract_guarantee_type(text) == expected
+
+
+@pytest.mark.parametrize("text", [
+    "10 billion CFU, vitamin potency guaranteed through expiration",
+    "Contains 5 billion CFU and Vitamin C potency guaranteed through the expiration date",
+    "Probiotics plus minerals: mineral content guaranteed through expiration",
+])
+def test_guarantee_whose_subject_is_another_nutrient_abstains(enricher, text):
+    assert enricher._extract_guarantee_type(text) is None
+
+
 def test_statements_do_not_vouch_for_each_other(enricher):
     product = {
         "id": "cross_statement",

@@ -729,13 +729,20 @@ _FREE_FROM_CLAUSE_END = re.compile(
 
 
 # Sentence / line boundaries for statement-local guarantee reading. A period
-# after a lower-case letter, digit or closing bracket ends a sentence; "L."
-# in "L. rhamnosus" does not.
-# A guarantee sentence naming another nutrient ("Vitamin potency guaranteed
-# through expiration") is about that nutrient, never probiotic potency.
+# ends a sentence unless it abbreviates a genus ("L." in "L. rhamnosus") or
+# sp./ssp./subsp.
+# A guarantee whose subject is another nutrient ("Vitamin C potency guaranteed
+# through expiration") is about that nutrient, never probiotic potency. Merely
+# naming a nutrient beside a culture count does not change the subject:
+# Emergen-C "guaranteed to deliver 2 billion live active cultures and ...
+# 250 mg of Vitamin C through the expiration date" guarantees the cultures.
+_NUTRIENT_WORDS = (
+    r"(?:vitamins?|minerals?|multivitamins?|nutrients?|omega(?:-?\d+s?)?|fish\s+oil|enzymes?|"
+    r"herbs?|botanicals?|proteins?)"
+)
 _NON_PROBIOTIC_POTENCY_SUBJECT_RE = re.compile(
-    r"\b(?:vitamins?|minerals?|multivitamins?|nutrients?|omega|fish\s+oil|enzymes?|herbs?|"
-    r"botanicals?|proteins?)\b",
+    rf"\b{_NUTRIENT_WORDS}(?:\s+[a-z]\d{{0,2}})?\s+(?:potency|content|levels?)\b|"
+    rf"\b(?:potency|content|levels?)\s+of\s+(?:(?:all|the|its|our)\s+)?{_NUTRIENT_WORDS}\b",
     re.I,
 )
 _GUARANTEE_UNIT_SPLIT_RE = re.compile(
@@ -12860,8 +12867,6 @@ class SupplementEnricherV3:
         """
         all_text = self._get_all_product_text(product)
 
-        # LEGACY: Collect using old patterns for backward compatibility
-        third_party = self._collect_third_party_certs(all_text)
         gmp = self._collect_gmp_data(all_text)
         traceability = self._collect_traceability_data(all_text)
 
@@ -12871,10 +12876,21 @@ class SupplementEnricherV3:
         batch_evidence = self._collect_claims_from_rules_db(product, 'batch_traceability')
         traceability = self._merge_evidence_batch_traceability(traceability, batch_evidence)
 
-        # Merge evidence-based third-party detections into the regex-derived
-        # third_party_programs. This is the CLAIMED set — labels + rules-db
-        # only. Manufacturer-level evidence does NOT go here in v4.
-        third_party = self._merge_evidence_third_party_programs(third_party, third_party_evidence)
+        # third_party_programs is the CLAIMED set, and the rules DB is its one
+        # detector: it reads each statement separately. A second whole-label
+        # regex ("USP.*Verified") joined "USP <2091>" to unrelated "verified"
+        # wording statements later and invented USP Verified on 156 products.
+        # Manufacturer-level evidence does NOT go here in v4.
+        third_party = self._merge_evidence_third_party_programs(
+            {
+                "programs": [],
+                "count": 0,
+                "has_generic_claim_only": any(
+                    ev.get("rule_id") == "CERT_THIRD_PARTY_GENERIC" for ev in third_party_evidence
+                ),
+            },
+            third_party_evidence,
+        )
 
         # Manufacturer-level cert evidence — was previously merged into
         # third_party_programs (the v3 overcredit bug). v4 reroutes this to
@@ -13270,43 +13286,6 @@ class SupplementEnricherV3:
             out.append(row)
 
         return out
-
-    def _collect_third_party_certs(self, text: str) -> List[Dict]:
-        """Collect third-party testing certifications"""
-        certs = []
-
-        # Priority certification patterns (named quality/testing programs only).
-        # Generic "NSF Certified" is intentionally excluded: labels such as
-        # "NSF Certified Gluten-Free" certify a dietary claim, not supplement
-        # contents, contaminants, or potency. Quality flags require a specific
-        # quality program such as NSF Contents/ANSI 173, NSF Sport, or NSF/ANSI 455.
-        cert_checks = [
-            ("NSF Sport", r'\bNSF\b.*certified(?:\s*for)?\s*sport\b|\bNSF[-\s]?sport\b'),
-            ("NSF Contents Certified", r'\bNSF\s+Contents\s+Certified\b|\bContents\s+Certified\s+NSF\b|\bNSF/ANSI\s*173\b|\bNSF\s+173\b'),
-            ("NSF/ANSI 455 Dietary Supplement", r'\bNSF[\s/]*ANSI\s*455\b|\bNSF\s+455\b|\bNSF\s+Dietary\s+Supplement\s+Certified\b'),
-            ("USP Verified", r'\bUSP\b.*(Verified|Verification\s*Program)\b'),
-            ("ConsumerLab", r'\bConsumerLab\b.*(Approved|Seal)\b'),
-            ("Informed Sport", r'\bInformed[-\s]?Sport\b'),
-            ("Informed Choice", r'\bInformed[-\s]?Choice\b'),
-            ("BSCG", r'\bBSCG\b.*(Certified|Drug\s*Free)\b'),
-            ("IFOS", r'\bIFOS\b|\bInternational\s*Fish\s*Oil\s*Standards\b')
-        ]
-
-        for cert_name, pattern in cert_checks:
-            if re.search(pattern, text, re.I):
-                certs.append({
-                    "name": cert_name,
-                    "verified": True
-                })
-
-        # Check for generic "third-party tested" (doesn't count for points)
-        generic_third_party = bool(re.search(r'\b(third[-\s]?party|3rd[-\s]?party)\s*(tested|verified)\b', text, re.I))
-
-        return {
-            "programs": certs,
-            "count": len(certs),
-            "has_generic_claim_only": generic_third_party and len(certs) == 0
-        }
 
     def _collect_gmp_data(self, text: str) -> Dict:
         """Collect GMP certification data"""

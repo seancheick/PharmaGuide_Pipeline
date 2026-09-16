@@ -586,6 +586,44 @@ class TestSkuStrengthIdentity:
     def test_billion_shorthand_does_not_consume_vitamin_identity(self, product, expected):
         assert _sku_dose_tokens(product) == expected
 
+    @pytest.mark.parametrize(
+        ("product", "expected"),
+        [("Maximum Strength Biotin 5,000 mcg", {"5000mcg"}),
+         ("Vitamin D3 10,000 IU", {"10000iu"}),
+         ("Fish Oil 1,200 mg", {"1200mg"})],
+    )
+    def test_thousands_separator_is_one_strength(self, product, expected):
+        """DSLD prints "5,000 mcg"; registries print "5000 Mcg". Reading the
+        comma as a boundary made the strength "000mcg", so Nature Made
+        Maximum Strength Biotin 5,000 mcg conflicted with its own USP listing."""
+        assert _sku_dose_tokens(product) == expected
+        assert normalize_product(product) == normalize_product(product.replace(",", ""))
+
+    def test_thousands_separator_label_matches_listed_strength(self):
+        registry = _make_registry(records=[{
+            "program": "USP Verified", "brand": "Nature Made",
+            "product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+        }])
+
+        result = resolve(
+            "Nature Made", "Maximum Strength Biotin 5,000 mcg", ["USP Verified"], registry,
+            label_context={"netContents": [{"quantity": 120, "unit": "Softgel(s)"}]},
+        )[0]
+
+        assert result.scope == "sku"
+
+    def test_single_shared_word_without_strength_stays_insufficient(self):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Garden of Life, LLC",
+            "product": "Garden of Life® Dr. Formulated DHA",
+        }])
+
+        result = resolve(
+            "Garden of Life Dr. Formulated", "DHA Citrus Flavor", ["NSF Certified"], registry,
+        )[0]
+
+        assert not result.scores_points()
+
     @pytest.mark.parametrize("product", ["Vitamin B12 1000 mcg", "Vitamin D3 5000 IU", "Probiotics 50B"])
     def test_exact_product_with_strength_keeps_credit(self, product):
         registry = _make_registry(records=[{

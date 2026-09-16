@@ -123,6 +123,62 @@ def test_nsf_contents_certified_resolves_against_existing_nsf_173_registry_name(
     assert normalize_program("NSF Contents Certified") == "NSF Certified"
 
 
+def _certification_from_statements(*notes: str) -> dict:
+    product = {
+        "brandName": "GNC",
+        "fullName": "Melatonin 3 mg Timed-Release",
+        "statements": [{"type": "General Statements", "notes": note} for note in notes],
+        "claims": [],
+        "activeIngredients": [],
+        "inactiveIngredients": [],
+    }
+    return _enricher()._collect_certification_data(product)
+
+
+def test_usp_chapter_and_later_verified_wording_is_not_usp_verified() -> None:
+    """GNC 224757 prints "Conforms to USP <2091> for weight." (a pharmacopeial
+    test) and, statements later, unrelated "verified" wording. A whole-label
+    regex joined the two into "USP Verified" and lit Purity / Heavy Metal /
+    Label Accuracy badges on 156 products. Claims are read statement by
+    statement by the one rules-DB detector."""
+    certification = _certification_from_statements(
+        "Conforms to USP <2091> for weight. Meets USP <2040> disintegration.",
+        "This statement has not been evaluated by the Food and Drug Administration.",
+        "Potency verified by GNC procedure #5008.",
+    )
+
+    assert _program_names(certification) == []
+    assert certification["purity_verified"] is False
+    assert certification["heavy_metal_tested"] is False
+    assert certification["label_accuracy_verified"] is False
+
+
+def test_program_claim_split_across_statements_is_not_a_claim() -> None:
+    certification = _certification_from_statements(
+        "Ingredients reviewed in a ConsumerLab.com industry report.",
+        "Freshness seal: do not use if seal under cap is broken.",
+    )
+
+    assert _program_names(certification) == []
+
+
+def test_seal_statement_program_claims_still_detected() -> None:
+    certification = _certification_from_statements("NSF Certified Sport", "USP Verified")
+
+    assert sorted(_program_names(certification)) == ["NSF Sport", "USP Verified"]
+
+
+def test_generic_third_party_wording_is_display_only() -> None:
+    certification = _certification_from_statements("Third-party tested for purity.")
+
+    assert _program_names(certification) == []
+    assert certification["third_party_programs"]["has_generic_claim_only"] is True
+
+
+def test_third_party_programs_have_one_detector() -> None:
+    assert not hasattr(SupplementEnricherV3, "_collect_third_party_certs")
+
+
 def test_verification_assessment_is_not_evaluated_without_registry_sources() -> None:
     certification = _certification_from_label("")
 

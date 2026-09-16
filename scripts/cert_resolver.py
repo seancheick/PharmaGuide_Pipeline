@@ -260,8 +260,9 @@ def _brands_likely_same(product_brand_norm: str, registry_brand_norm: str) -> bo
     return product_tokens.issubset(registry_tokens) or registry_tokens.issubset(product_tokens)
 
 
+# "5,000 mcg" is one strength: a thousands separator must not start the number.
 _SKU_DOSE_TOKEN_PATTERN = re.compile(
-    r"\b(\d+(?:\.\d+)?)\s*(mg|mcg|µg|g|kg|iu|ml|fl\s*oz|oz|"
+    r"\b(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*(mg|mcg|µg|g|kg|iu|ml|fl\s*oz|oz|"
     r"(?:billion|b)(?:\s*(?:cfus?|afu))?|cfus?|afu)\b\.?",
     re.IGNORECASE,
 )
@@ -357,6 +358,7 @@ def _sku_dose_tokens(text: str) -> set[str]:
     tokens: set[str] = set()
     normalized = _strip_accents(text).lower()
     for value, unit in _SKU_DOSE_TOKEN_PATTERN.findall(normalized):
+        value = value.replace(",", "")
         unit_norm = unit.replace("µ", "u").replace(" ", "")
         # Registry shorthand 50B and label 50 billion CFU identify the same
         # strength. AFU remains a distinct measurement; never infer CFU from it.
