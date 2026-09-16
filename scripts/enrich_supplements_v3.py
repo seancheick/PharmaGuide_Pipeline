@@ -718,6 +718,39 @@ def _probiotic_research_presentation(
     }
 
 
+_FREE_FROM_CUE = re.compile(
+    r'\b(?:no|without|free\s+(?:of|from)|does\s+not\s+contain|do\s+not\s+contain|contains\s+no)\b',
+    re.I,
+)
+_FREE_FROM_CLAUSE_END = re.compile(
+    r'[.;:!?]|\b(?:but|however|contains|may\s+contain|made\s+with|processed|manufactured|packaged|produced)\b',
+    re.I,
+)
+
+
+def _net_contents_texts(product: Dict) -> List[str]:
+    """Unit-of-sale text per netContents row ("30 Delayed-Release Veg.
+    Capsule(s)"), the label's own statement of the dosage form."""
+    texts: List[str] = []
+    for row in product.get("netContents") or []:
+        if isinstance(row, dict):
+            text = str(row.get("display") or row.get("unit") or "").strip()
+            if text:
+                texts.append(text)
+    return texts
+
+
+def _free_from_clause_spans(text: str) -> List[Tuple[int, int]]:
+    """Spans of text that list absences: from a cue ("no", "without", "free of",
+    "does not contain") to the end of its clause, where a sentence break or a
+    presence cue ("but", "contains", "may contain", "processed") ends it."""
+    spans: List[Tuple[int, int]] = []
+    for cue in _FREE_FROM_CUE.finditer(text):
+        end_match = _FREE_FROM_CLAUSE_END.search(text, cue.end())
+        spans.append((cue.end(), end_match.start() if end_match else len(text)))
+    return spans
+
+
 class SupplementEnricherV3:
     """
     Lean enrichment system focused on data collection for scoring.
@@ -10020,6 +10053,10 @@ class SupplementEnricherV3:
             value = product.get(field)
             if isinstance(value, str) and value.strip():
                 evidence_sources.append((field, value))
+        # The label's unit of sale names the dosage form ("30 Vegan
+        # Enteric-Coated Tablet(s)", "30 Delayed-Release Veg. Capsule(s)").
+        for index, text in enumerate(_net_contents_texts(product)):
+            evidence_sources.append((f"netContents[{index}]", text))
         for index, ingredient in enumerate(
             self._primary_active_ingredients_for_enrichment(product)
         ):
@@ -10056,9 +10093,17 @@ class SupplementEnricherV3:
             if delivery_name.startswith("_") or not isinstance(delivery_data, dict):
                 continue
 
-            delivery_lower = delivery_name.lower().strip()
+            # Labels write "Enteric coated" and "Timed-Release" for the
+            # "enteric-coated" / "time-release" keys: separators are
+            # interchangeable and a key may declare label aliases.
+            terms = [delivery_name, *(delivery_data.get("aliases") or [])]
+            alternatives = [
+                r"[\s-]?".join(re.escape(part) for part in re.split(r"[\s-]+", str(term).lower().strip()))
+                for term in terms
+                if str(term).strip()
+            ]
             pattern = re.compile(
-                r"(?<![a-z0-9])" + re.escape(delivery_lower) + r"(?![a-z0-9])",
+                r"(?<![a-z0-9])(?:" + "|".join(alternatives) + r")(?![a-z0-9])",
                 flags=re.IGNORECASE,
             )
 
@@ -10253,11 +10298,22 @@ class SupplementEnricherV3:
             std_name = ingredient.get('standardName', '') or ing_name
             notes = ingredient.get('notes', '') or ''
 
+            # The cleaner already resolved this row's identity; standardized
+            # botanical ids reuse ingredient_quality_map ids for the same
+            # substance ("amla"), so trust that identity before re-matching the
+            # raw label name ("Amla extract") against a second alias list.
+            resolved_iqm_id = (
+                ingredient.get('canonical_id')
+                if ingredient.get('canonical_source_db') == 'ingredient_quality_map'
+                else None
+            )
+
             for botanical in botanicals_list:
                 bot_name = botanical.get('standard_name', '')
                 bot_aliases = botanical.get('aliases', [])
 
-                if self._exact_match(ing_name, bot_name, bot_aliases) or \
+                if (resolved_iqm_id and resolved_iqm_id == botanical.get('id')) or \
+                   self._exact_match(ing_name, bot_name, bot_aliases) or \
                    self._exact_match(std_name, bot_name, bot_aliases):
 
                     # Extract standardization percentage
@@ -12480,11 +12536,20 @@ class SupplementEnricherV3:
             window_end = min(len(text), positive_match['end'] + proximity_window)
             nearby_text = text[window_start:window_end].lower()
 
+            free_from_spans = _free_from_clause_spans(nearby_text)
             for allergen in conflict_allergens:
-                if allergen.lower() in nearby_text:
-                    # Check if it's not the "-free" claim itself
-                    if f"{allergen.lower()}-free" not in nearby_text and f"{allergen.lower()} free" not in nearby_text:
-                        proximity_conflicts.append(allergen)
+                token = allergen.lower()
+                for occurrence in re.finditer(re.escape(token), nearby_text):
+                    # A mention that is itself an absence ("soy-free", "no
+                    # soy", "No gluten, dairy, soy") is the claim, not a
+                    # conflict. Judged per mention: "Soy-free ... soy lecithin"
+                    # still conflicts.
+                    if re.match(r'[\s-]*free\b', nearby_text[occurrence.end():]):
+                        continue
+                    if any(start <= occurrence.start() < end for start, end in free_from_spans):
+                        continue
+                    proximity_conflicts.append(allergen)
+                    break
 
         # 7. Determine score eligibility with REASON
         evidence_strength = rule.get('evidence_strength', 'weak')
@@ -15833,6 +15898,7 @@ class SupplementEnricherV3:
 
         # Combine all text sources for checking
         texts_to_check = [product_name, delivery_form, label_text]
+        texts_to_check.extend(text.lower() for text in _net_contents_texts(product))
 
         # Also check harvestMethod and notes from probiotic ingredients
         for blend in probiotic_blends:

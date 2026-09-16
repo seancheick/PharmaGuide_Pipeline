@@ -153,7 +153,8 @@
   "time-release": {
     "tier": 2,
     "description": "Sustained delivery – stable blood levels",
-    "category": "delivery"
+    "category": "delivery",
+    "aliases": ["timed-release"]
   },
   "sustained-release": {
     "tier": 2,

@@ -781,7 +781,8 @@
           "\\bgluten[\\s-]*free\\b",
           "\\bno\\s+gluten\\b",
           "\\bfree\\s+of\\s+gluten\\b",
-          "\\bdoes\\s+not\\s+contain\\s+gluten\\b"
+          "\\bdoes\\s+not\\s+contain\\s+gluten\\b",
+          "\\b(?:no|without|free\\s+(?:of|from))\\s+(?:(?:(?!(?:contains?|may|with|but|made|processed)\\b)[a-z][a-z-]*(?:\\s+(?!(?:contains?|may|with|but)\\b)[a-z][a-z-]*){0,2})(?:\\s*,\\s*(?:or\\s+|and\\s+)?|\\s+(?:or|and)\\s+)){0,10}gluten\\b"
         ],
         "negative_patterns": [
           "\\bnot\\s+gluten[\\s-]*free\\b",
@@ -834,9 +835,9 @@
         "positive_patterns": [
           "\\bdairy[\\s-]*free\\b",
           "\\bmilk[\\s-]*free\\b",
-          "\\blactose[\\s-]*free\\b",
-          "\\bno\\s+(dairy|milk|lactose)\\b",
-          "\\bdoes\\s+not\\s+contain\\s+(dairy|milk)\\b"
+          "\\bno\\s+(dairy|milk)\\b",
+          "\\bdoes\\s+not\\s+contain\\s+(dairy|milk)\\b",
+          "\\b(?:no|without|free\\s+(?:of|from))\\s+(?:(?:(?!(?:contains?|may|with|but|made|processed)\\b)[a-z][a-z-]*(?:\\s+(?!(?:contains?|may|with|but)\\b)[a-z][a-z-]*){0,2})(?:\\s*,\\s*(?:or\\s+|and\\s+)?|\\s+(?:or|and)\\s+)){0,10}(?:dairy|milk)\\b"
         ],
         "negative_patterns": [
           "\\bcontains\\s+(dairy|milk)\\b",
@@ -853,7 +854,7 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 1,
-        "notes": "This product does not contain dairy, milk, lactose, casein, or whey. Important for people with dairy allergies or lactose intolerance. We verify this claim by checking the actual ingredient list for dairy-derived compounds."
+        "notes": "This product does not contain dairy, milk, lactose, casein, or whey. Important for people with dairy allergies or lactose intolerance. We verify this claim by checking the actual ingredient list for dairy-derived compounds. 2026-09-16: lactose-free wording no longer counts as dairy-free - lactose-free products can still contain milk protein (whey, casein), the part a milk allergy reacts to."
       },
       "soy_free": {
         "id": "CLAIM_SOY_FREE",
@@ -863,7 +864,8 @@
         "positive_patterns": [
           "\\bsoy[\\s-]*free\\b",
           "\\bno\\s+soy\\b",
-          "\\bdoes\\s+not\\s+contain\\s+soy\\b"
+          "\\bdoes\\s+not\\s+contain\\s+soy\\b",
+          "\\b(?:no|without|free\\s+(?:of|from))\\s+(?:(?:(?!(?:contains?|may|with|but|made|processed)\\b)[a-z][a-z-]*(?:\\s+(?!(?:contains?|may|with|but)\\b)[a-z][a-z-]*){0,2})(?:\\s*,\\s*(?:or\\s+|and\\s+)?|\\s+(?:or|and)\\s+)){0,10}soy(?:a|bean)?s?\\b"
         ],
         "negative_patterns": [
           "\\bcontains\\s+soy\\b",
