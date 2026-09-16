@@ -655,6 +655,20 @@ def test_guarantee_through_the_date_of_expiration(enricher, statement):
 
 
 @pytest.mark.parametrize("statement", [
+    # CVS 19171 / 19172: real probiotic potency guarantees that name the
+    # organism rather than saying "CFU" or "cultures" (lost when the 2026-09-16
+    # context guard required those words).
+    "which contains over 100 million active Lactobacillus Acidophilus "
+    "(including the naturally occurring metabolic product produced by "
+    "Lactobacilli) at the time of manufacture.",
+    "Contains a minimum of 1 Billion live bacteria when manufactured, and "
+    "provides an effective amount through expiration date.",
+])
+def test_organism_named_potency_guarantee_keeps_its_type(enricher, statement):
+    assert enricher._extract_guarantee_type(statement) in {"at_manufacture", "at_expiration"}
+
+
+@pytest.mark.parametrize("statement", [
     "Store below 25C. Discard after the expiration date.",
     "Do not use after the expiration date printed on the bottle.",
     "Keep refrigerated until the expiration date.",

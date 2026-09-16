@@ -16707,10 +16707,17 @@ class SupplementEnricherV3:
         # sentence to identify probiotic potency explicitly before treating it
         # as a CFU guarantee. This deliberately abstains on generic "potency
         # guaranteed" copy rather than assigning that claim to probiotic rows.
+        # Organism-named guarantees count too: "100 million active
+        # Lactobacillus Acidophilus ... at the time of manufacture", "1 Billion
+        # live bacteria when manufactured" (CVS 19171 / 19172). Genus names come
+        # from the one probiotic taxonomy list.
+        from probiotic_measurements import _PROBIOTIC_GENERA
         probiotic_potency_context = re.search(
             r"\b(?:cfu(?:s)?|colony[\s-]*forming\s+units?|probiotics?|"
-            r"live\s+(?:probiotic\s+)?(?:cultures?|cells?|organisms?)|"
-            r"viable\s+(?:probiotic\s+)?(?:cultures?|cells?|organisms?))\b",
+            r"(?:live|viable|active)\s+(?:probiotic\s+)?"
+            r"(?:cultures?|cells?|organisms?|microorganisms?|bacteria)|"
+            + "|".join(sorted(map(re.escape, _PROBIOTIC_GENERA)))
+            + r")\b",
             text_lower,
             re.I,
         )
