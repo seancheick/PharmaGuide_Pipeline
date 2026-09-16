@@ -944,3 +944,25 @@ def test_opaque_blend_reason_precedes_missing_reference_reason():
     }}
     out = _pillar_dose(dim, 20.0, "generic", _config())
     assert "individual ingredient amounts" in out["reason"]
+
+
+def test_verification_pillar_names_the_audited_gmp_basis() -> None:
+    """The app's GMP badge renders the pillar's decision, so the pillar records
+    which audited source earned the GMP points (2026-09-16: 6,866 products had
+    pillar GMP credit and no badge; 399 had a label-wording "GMP Certified"
+    badge the pillar gave no credit)."""
+    label = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0))
+    facility = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
+    facility["verification_bonus"]["metadata"]["trust_metadata"][
+        "B4b_gmp_inferred_from_manufacturer_facility"] = "NSF GMP-registered facility"
+    certified = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
+    certified["verification_bonus"]["metadata"]["trust_metadata"][
+        "B4b_gmp_inferred_from_cert"] = "NSF Certified for Sport"
+    omega = _bd_verif(b4b=4, b4d=0, d1=0)
+    omega["verification_bonus"]["metadata"]["trust_metadata"]["b4b"] = {
+        "source": "verified_cert_implies_gmp", "program": "IFOS"}
+
+    assert label["components"]["gmp_basis"] is None
+    assert _verif(facility)["components"]["gmp_basis"] == "manufacturer_facility"
+    assert _verif(certified)["components"]["gmp_basis"] == "verified_certification"
+    assert _verif(omega)["components"]["gmp_basis"] == "verified_certification"

@@ -5935,6 +5935,21 @@ def has_recalled_ingredient(enriched: Dict) -> bool:
 
 # ─── Detail Blob Builder ───
 
+def _certification_gmp_detail(label_gmp: Any, pillars: Any) -> Dict[str, Any]:
+    """certification_detail.gmp: the label's GMP wording plus the Verification
+    pillar's audited-facility decision. The app badge reads only
+    ``audited_facility``; label wording alone is self-asserted and earns no
+    badge, exactly as it earns no pillar points."""
+    verification = safe_dict(safe_dict(pillars).get("verification"))
+    components = safe_dict(verification.get("components"))
+    audited = safe_float(components.get("gmp"), 0.0) > 0
+    return {
+        **safe_dict(label_gmp),
+        "audited_facility": audited,
+        "audited_facility_basis": safe_str(components.get("gmp_basis")) or None if audited else None,
+    }
+
+
 def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
     """Top strength / drag pillar reasons — the consumer "how it scored X".
 
@@ -8290,6 +8305,9 @@ def build_detail_blob(
         blob["quality_assessment_status"] = scored.get("quality_assessment_status")
         pillars = scored.get("_v4_pillars")
         blob["quality_pillars_v4"] = pillars
+        blob["certification_detail"]["gmp"] = _certification_gmp_detail(
+            blob["certification_detail"].get("gmp"), pillars
+        )
         blob["quality_score_cap_v4"] = scored.get("_v4_quality_score_cap")
         blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")
         blob["v4_safety_gate"] = scored.get("_v4_safety_gate")

@@ -751,13 +751,18 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     # Every GMP flag the enricher sets is matched from label text (self-asserted
     # table stakes). GMP only counts when a verified product cert implies an
     # audited facility or exact-matched manufacturer evidence names one.
-    audited_gmp = bool(
-        trust_meta.get("B4b_gmp_inferred_from_cert")
-        or trust_meta.get("B4b_gmp_inferred_from_manufacturer_facility")
-        or (trust_meta.get("b4b") or {}).get("source") in {
-            "verified_cert_implies_gmp", "manufacturer_facility_gmp"}
-    )
-    gmp = sub["gmp_certified_points"] if (audited_gmp and b4b >= 4.0) else 0.0
+    b4b_source = (trust_meta.get("b4b") or {}).get("source")
+    if trust_meta.get("B4b_gmp_inferred_from_cert") or b4b_source == "verified_cert_implies_gmp":
+        audited_gmp_basis = "verified_certification"
+    elif (trust_meta.get("B4b_gmp_inferred_from_manufacturer_facility")
+          or b4b_source == "manufacturer_facility_gmp"):
+        audited_gmp_basis = "manufacturer_facility"
+    else:
+        audited_gmp_basis = None
+    gmp = sub["gmp_certified_points"] if (audited_gmp_basis and b4b >= 4.0) else 0.0
+    # The app's GMP badge renders this decision; it never re-derives GMP from
+    # label wording.
+    gmp_basis = audited_gmp_basis if gmp > 0 else None
     testing = sub["brand_testing_points"] if b4d > 0 else 0.0
     # PR2.1: a verified brand/facility scoped cert is a real third-party
     # verification signal, but weaker than sku/product_line certification and
@@ -834,7 +839,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
         "max": weight,
         "reason": reason,
         "components": {"cert": cert, "coa_batch": coa_batch, "gmp": gmp,
-                       "brand_testing": testing, "brand_only_cert": brand_only_cert,
+                       "gmp_basis": gmp_basis, "brand_testing": testing, "brand_only_cert": brand_only_cert,
                        "reputation": reputation, "tier": tier, "fail_open_neutral": fail_open,
                        "quality_system_violation_penalty": qs_pen},
     }

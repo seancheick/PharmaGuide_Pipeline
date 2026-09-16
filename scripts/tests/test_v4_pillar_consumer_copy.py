@@ -330,3 +330,24 @@ def test_score_explanation_never_lists_a_penalized_pillar_as_a_strength() -> Non
     assert [item["pillar"] for item in explanation["drags"]] == [
         "dose", "evidence", "verification",
     ]
+
+
+def test_certification_detail_gmp_carries_the_pillar_audited_decision() -> None:
+    from build_final_db import _certification_gmp_detail
+
+    label_only = _certification_gmp_detail(
+        {"claimed": True, "gmp_certified_or_compliant": True, "text_matched": "GMP"},
+        {"verification": {"components": {"gmp": 0.0, "gmp_basis": None}}},
+    )
+    audited = _certification_gmp_detail(
+        {"claimed": False, "gmp_certified_or_compliant": False},
+        {"verification": {"components": {"gmp": 2.0, "gmp_basis": "manufacturer_facility"}}},
+    )
+
+    assert label_only["audited_facility"] is False
+    assert label_only["audited_facility_basis"] is None
+    assert label_only["text_matched"] == "GMP"
+    assert audited["audited_facility"] is True
+    assert audited["audited_facility_basis"] == "manufacturer_facility"
+    assert _certification_gmp_detail(None, None) == {
+        "audited_facility": False, "audited_facility_basis": None}
