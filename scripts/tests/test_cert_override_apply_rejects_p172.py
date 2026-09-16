@@ -226,7 +226,7 @@ def test_resolver_applies_reject_override(tmp_path: Path):
     key = (normalize_brand("Nature Made"), normalize_product("Vitamin E 200 IU"))
     registry.overrides_by_brand_product.setdefault(key, []).append(override)
 
-    resolution = _check_override(
+    resolution, rejected_record_ids = _check_override(
         normalize_brand("Nature Made"),
         normalize_product("Vitamin E 200 IU"),
         "USP Verified",
@@ -234,9 +234,10 @@ def test_resolver_applies_reject_override(tmp_path: Path):
         dsld_id="99001",
         product="Vitamin E 200 IU",
     )
-    assert resolution is not None
-    assert resolution.scope == "claimed_only"
-    assert "rejected" in (resolution.notes or "").lower()
+    # A rejection naming a registry record rejects that pairing only; the
+    # resolver then refuses that record (claimed_only when nothing else fits).
+    assert resolution is None
+    assert rejected_record_ids == {"USP_VITE_1000"}
 
 
 # --- CLI ----------------------------------------------------------------

@@ -272,6 +272,32 @@ def test_triage_hint_flags_dose_mismatch_false_positive():
     assert "dose_mismatch" in hint["reasons"]
 
 
+def test_triage_hint_reads_thousands_separators_like_the_resolver():
+    """"5,000 mcg" and "5000 Mcg" are one strength. The duplicate dose parser
+    read the comma label as 0 mcg and auto-rejected Nature Made Biotin against
+    its own USP listing (P1.7.2, 2026-05-20)."""
+    from api_audit.cert_needs_review_cluster import classify_member
+
+    hint = classify_member({
+        "dsld_id": "179953",
+        "brand_name": "Nature Made",
+        "product_name": "Maximum Strength Biotin 5,000 mcg",
+        "matched_brand": "Nature Made",
+        "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+    })
+    assert "dose_mismatch" not in hint["reasons"]
+
+
+def test_triage_uses_resolver_identity_helpers_not_copies():
+    import api_audit.cert_needs_review_cluster as cluster
+    import cert_resolver
+
+    for duplicate in ("_DOSE_TOKEN_RE", "_extract_dose_tokens", "_brand_tokens"):
+        assert not hasattr(cluster, duplicate), duplicate
+    assert cluster._brands_likely_same is cert_resolver._brands_likely_same
+    assert cluster._sku_dose_tokens is cert_resolver._sku_dose_tokens
+
+
 def test_triage_hint_verifies_flavor_variant_match():
     """A product whose name is the registry product + a flavor suffix is
     a likely product_line variant — flag for VERIFY."""
@@ -392,3 +418,65 @@ def test_cluster_handles_real_catalog_shape_smoke():
     # Each cluster should have a non-empty members list
     for c in clusters:
         assert len(c["members"]) > 0
+
+
+# --- Re-evaluation of P1.7.2 auto-rejects (2026-09-16) ------------------
+# Read-only: classifies each automatic rejection with the current resolver.
+# Nothing is applied; stale rows are reviewed one at a time.
+
+
+def _auto_reject_registry():
+    from cert_resolver import CertRegistry, normalize_brand, normalize_product
+
+    registry = CertRegistry()
+    records = [
+        ("USP_BIOTIN_5000", "Nature Made Maximum Strength Biotin 5000 Mcg Softgels"),
+        ("USP_COQ10_100", "Nature Made CoQ10 100 Mg Softgels"),
+        ("USP_COQ10_400", "Nature Made CoQ10 400 Mg Softgels"),
+        ("USP_VITE_1000", "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels"),
+    ]
+    for record_id, product in records:
+        registry.records_by_program.setdefault("USP Verified", []).append({
+            "program": "USP Verified", "brand": "Nature Made", "product": product,
+            "brand_normalized": normalize_brand("Nature Made"),
+            "product_normalized": normalize_product(product), "record_id": record_id,
+            "_snapshot_date": "2026-09-16", "_snapshot_age_days": 0, "_recency_status": "fresh",
+        })
+    overrides = [
+        ("179953", "Maximum Strength Biotin 5,000 mcg", "USP_BIOTIN_5000"),
+        ("179710", "CoQ10 400 mg", "USP_COQ10_100"),
+        ("8750", "Vitamin E 200 IU Supplement", "USP_VITE_1000"),
+    ]
+    rows = []
+    for dsld_id, product, record_id in overrides:
+        row = {"brand": "Nature Made", "product": product, "program": "USP Verified",
+               "status": "rejected", "scope": "claimed_only", "dsld_id": dsld_id,
+               "record_id": record_id, "review_source": "P1.7.2_auto_reject_2026-05-20",
+               "triage_reasons": ["dose_mismatch"]}
+        rows.append(row)
+        key = (normalize_brand("Nature Made"), normalize_product(product))
+        registry.overrides_by_brand_product.setdefault(key, []).append(row)
+    rows.append({"brand": "Nature Made", "product": "Iron", "program": "USP Verified",
+                 "status": "rejected", "record_id": "X", "review_source": "human_review_2026-06-01"})
+    products = {
+        dsld_id: {"dsld_id": dsld_id, "brandName": "Nature Made", "product_name": product,
+                  "netContents": [{"quantity": 60, "unit": "Softgel(s)"}]}
+        for dsld_id, product, _ in overrides
+    }
+    return registry, rows, products
+
+
+def test_auto_reject_reevaluation_classifies_each_row_without_applying():
+    from api_audit.cert_needs_review_cluster import reevaluate_auto_rejects
+
+    registry, overrides, products = _auto_reject_registry()
+    before = json.dumps(overrides, sort_keys=True)
+
+    packet = {row["dsld_id"]: row for row in reevaluate_auto_rejects(overrides, products, registry)}
+
+    assert set(packet) == {"179953", "179710", "8750"}  # human review rows are not auto-rejects
+    assert packet["179953"]["classification"] == "premise_stale"
+    assert packet["179710"]["classification"] == "other_record_now_matches"
+    assert packet["179710"]["current_record_id"] == "USP_COQ10_400"
+    assert packet["8750"]["classification"] == "still_valid"
+    assert json.dumps(overrides, sort_keys=True) == before

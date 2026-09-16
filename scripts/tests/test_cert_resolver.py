@@ -1154,3 +1154,111 @@ class TestMultiSourceRegistry:
         assert out[0].program == "USP Verified"
         assert out[0].scope == "claimed_only"  # not found in any USP registry
         assert out[0].scores_points() is False
+
+
+# --- Record-scoped rejection (2026-09-16) -----------------------------------
+# A rejection that names a registry record rejects that pairing only. The
+# P1.7.2 auto-reject run rejected Nature Made "CoQ10 400 mg" against the
+# "CoQ10 100 Mg" row; that must not hide the correct "CoQ10 400 Mg" row.
+
+
+def _coq10_registry(*rejected_record_ids: str, reject_program_level: bool = False):
+    records = [
+        {"program": "USP Verified", "brand": "Nature Made", "product": f"Nature Made CoQ10 {mg} Mg Softgels",
+         "record_id": f"USP_COQ10_{mg}", "source_url": "https://www.quality-supplements.org/usp_verified_products"}
+        for mg in (100, 200, 400)
+    ]
+    overrides = [
+        {"brand": "Nature Made", "product": "CoQ10 400 mg", "program": "USP Verified",
+         "status": "rejected", "record_id": record_id, "reason": "P1.7.2 auto-reject — dose_mismatch",
+         "review_source": "P1.7.2_auto_reject_2026-05-20"}
+        for record_id in rejected_record_ids
+    ]
+    if reject_program_level:
+        overrides.append({"brand": "Nature Made", "product": "CoQ10 400 mg", "program": "USP Verified",
+                          "status": "rejected", "reason": "Reviewer: not USP Verified"})
+    return _make_registry(records=records, overrides=overrides)
+
+
+_SOFTGEL_CONTEXT = {"netContents": [{"quantity": 40, "unit": "Softgel(s)"}]}
+
+
+class TestRecordScopedRejection:
+    def test_rejected_wrong_record_does_not_hide_the_correct_record(self):
+        registry = _coq10_registry("USP_COQ10_100")
+
+        result = resolve("Nature Made", "CoQ10 400 mg", ["USP Verified"], registry,
+                         label_context=_SOFTGEL_CONTEXT)[0]
+
+        assert result.scope == "sku"
+        assert result.record_id == "USP_COQ10_400"
+
+    def test_every_rejected_record_is_excluded(self):
+        registry = _coq10_registry("USP_COQ10_100", "USP_COQ10_200")
+
+        result = resolve("Nature Made", "CoQ10 400 mg", ["USP Verified"], registry,
+                         label_context=_SOFTGEL_CONTEXT)[0]
+
+        assert result.record_id == "USP_COQ10_400"
+
+    def test_all_candidates_rejected_is_claimed_only_with_reason(self):
+        registry = _coq10_registry("USP_COQ10_100", "USP_COQ10_200", "USP_COQ10_400")
+
+        result = resolve("Nature Made", "CoQ10 400 mg", ["USP Verified"], registry,
+                         label_context=_SOFTGEL_CONTEXT)[0]
+
+        assert result.scope == "claimed_only"
+        assert not result.scores_points()
+        assert "all registry candidates rejected by override" in (result.notes or "")
+        for record_id in ("USP_COQ10_100", "USP_COQ10_200", "USP_COQ10_400"):
+            assert record_id in result.notes
+
+    def test_program_level_rejection_still_blocks(self):
+        registry = _coq10_registry(reject_program_level=True)
+
+        result = resolve("Nature Made", "CoQ10 400 mg", ["USP Verified"], registry,
+                         label_context=_SOFTGEL_CONTEXT)[0]
+
+        assert result.scope == "claimed_only"
+        assert "override rejected" in (result.notes or "")
+
+    def test_discovery_never_returns_a_rejected_record(self):
+        registry = _coq10_registry("USP_COQ10_400")
+
+        discovered = discover_verified_programs("Nature Made", "CoQ10 400 mg", registry,
+                                                label_context=_SOFTGEL_CONTEXT)
+
+        assert all(r.record_id != "USP_COQ10_400" for r in discovered)
+
+
+class TestVerifiedOverrideProvenance:
+    def test_override_inherits_its_registry_record_provenance_and_recency(self):
+        registry = _make_registry(
+            records=[{"program": "USP Verified", "brand": "Nature Made",
+                      "product": "Nature Made Vitamin D3 5000 IU Softgels", "record_id": "USP_D3_5000",
+                      "source_url": "https://www.quality-supplements.org/usp_verified_products"}],
+            overrides=[{"brand": "Nature Made", "product": "D3 5000 IU", "program": "USP Verified",
+                        "status": "verified", "scope": "product_line", "record_id": "USP_D3_5000",
+                        "matched_product": "Nature Made Vitamin D3 5000 IU Softgels"}],
+        )
+
+        result = resolve("Nature Made", "D3 5000 IU", ["USP Verified"], registry)[0]
+
+        assert result.scope == "product_line"
+        assert result.source_url == "https://www.quality-supplements.org/usp_verified_products"
+        assert result.snapshot_date == "2026-05-18"
+        assert result.recency_status == "fresh"
+
+    def test_override_on_a_stale_registry_record_is_blocked(self):
+        registry = _make_registry(
+            records=[{"program": "USP Verified", "brand": "Nature Made",
+                      "product": "Nature Made Vitamin D3 5000 IU Softgels", "record_id": "USP_D3_5000"}],
+            overrides=[{"brand": "Nature Made", "product": "D3 5000 IU", "program": "USP Verified",
+                        "status": "verified", "scope": "product_line", "record_id": "USP_D3_5000"}],
+            recency_status="scoring_blocked", snapshot_age_days=1977,
+        )
+
+        result = resolve("Nature Made", "D3 5000 IU", ["USP Verified"], registry)[0]
+
+        assert result.scoring_blocked_reason
+        assert not result.scores_points() or result.scoring_blocked_reason

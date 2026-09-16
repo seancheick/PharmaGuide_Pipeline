@@ -55,7 +55,16 @@ if str(SCRIPTS_ROOT) not in sys.path:
 DEFAULT_PRODUCTS_ROOT = SCRIPTS_ROOT / "products"
 DEFAULT_OUT_DIR = SCRIPTS_ROOT / "api_audit" / "reports"
 
-from cert_resolver import CertRegistry, resolve  # noqa: E402
+from cert_resolver import (  # noqa: E402
+    _SKU_DOSE_TOKEN_PATTERN,
+    CertRegistry,
+    _brands_likely_same,
+    _sku_dose_tokens,
+    _sku_variant_conflict,
+    _with_label_form_context,
+    normalize_brand,
+    resolve,
+)
 
 
 # --- IO -----------------------------------------------------------------
@@ -240,11 +249,6 @@ def _aggregate_cluster_action(members: List[Dict[str, Any]]) -> str:
 # --- Triage heuristics --------------------------------------------------
 
 
-# Dose-bearing tokens we look for in product names (e.g. "1000 mg", "200 IU").
-_DOSE_TOKEN_RE = re.compile(
-    r"\b(\d+(?:\.\d+)?)\s*(mg|mcg|ug|µg|iu|g|billion|b|cfu|ml)\b",
-    re.IGNORECASE,
-)
 # Common flavor / variant tokens. Presence in product_name but not
 # matched_product strongly suggests a product-line variant.
 _FLAVOR_TOKENS = (
@@ -279,8 +283,9 @@ def classify_member(member: Dict[str, Any]) -> Dict[str, Any]:
 
     # 1. Dose / form mismatch — e.g. "Vitamin E 200 IU" vs "Vitamin E 1000 IU"
     if product_name and matched_product:
-        product_doses = _extract_dose_tokens(product_name)
-        matched_doses = _extract_dose_tokens(matched_product)
+        # The resolver owns strength parsing ("5,000 mcg" == "5000 Mcg").
+        product_doses = _sku_dose_tokens(product_name)
+        matched_doses = _sku_dose_tokens(matched_product)
         if product_doses and matched_doses and product_doses != matched_doses:
             # Different dose values on the same form → mismatch.
             reasons.append("dose_mismatch")
@@ -288,7 +293,7 @@ def classify_member(member: Dict[str, Any]) -> Dict[str, Any]:
 
     # 2. Brand-name collision — brand and matched_brand are not the same brand.
     if brand_name and matched_brand:
-        if not _brands_likely_same(brand_name, matched_brand):
+        if not _brands_likely_same(normalize_brand(brand_name), normalize_brand(matched_brand)):
             reasons.append("brand_mismatch")
             # Brand mismatch is a strong false-positive signal — reject
             # even if a dose match would otherwise suggest verify.
@@ -322,59 +327,90 @@ def classify_member(member: Dict[str, Any]) -> Dict[str, Any]:
 # --- Helpers ------------------------------------------------------------
 
 
-def _extract_dose_tokens(text: str) -> set:
-    """Extract (value, unit) dose tokens, normalized for comparison."""
-    tokens = set()
-    for match in _DOSE_TOKEN_RE.finditer(text):
-        value_str, unit = match.groups()
-        try:
-            value = float(value_str)
-        except ValueError:
-            continue
-        tokens.add((value, unit.lower().replace("ug", "mcg").replace("µg", "mcg")))
-    return tokens
-
-
 def _normalize_text(text: str) -> str:
     """Lowercase + collapse whitespace + strip dose tokens for comparison."""
     text = text.lower()
     # Strip dose tokens so we compare the substantive product name.
-    text = _DOSE_TOKEN_RE.sub(" ", text)
+    text = _SKU_DOSE_TOKEN_PATTERN.sub(" ", text)
     text = re.sub(r"[^a-z0-9\s]+", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
 
-def _brands_likely_same(brand_a: str, brand_b: str) -> bool:
-    """Conservative brand-equality check: lowercased substring overlap.
+# --- Auto-reject re-evaluation (read-only) ------------------------------
 
-    Examples:
-      "Nordic Naturals" vs "Nordic Naturals, Inc" → same
-      "GNC" vs "GNC Holdings" → same
-      "Nordic Naturals" vs "Naturalis Inc" → different ('naturals' != 'naturalis')
+AUTO_REJECT_SOURCE_PREFIX = "P1.7.2_auto_reject"
 
-    Uses normalized brand-token overlap rather than full string equality
-    because brand strings vary (LLC / Inc suffixes, trailing comma).
+
+def reevaluate_auto_rejects(
+    overrides: Iterable[Dict[str, Any]],
+    products_by_dsld: Dict[str, Dict[str, Any]],
+    registry: CertRegistry,
+) -> List[Dict[str, Any]]:
+    """Classify each automatic rejection with the current resolver.
+
+    Read-only; nothing is applied. Classes:
+    - ``premise_stale``: the current identity guards find no brand, strength,
+      form or population conflict with the rejected registry record;
+    - ``other_record_now_matches``: record-scoped rejection lets the resolver
+      verify the product against a different record;
+    - ``still_valid``: the rejection's premise holds and nothing else matches;
+    - ``product_not_in_catalog`` / ``record_not_in_registry``.
     """
-    a = _brand_tokens(brand_a)
-    b = _brand_tokens(brand_b)
-    if not a or not b:
-        return False
-    # Require at least one shared brand-core token AND that the shorter
-    # set is a subset modulo legal suffixes.
-    legal_suffixes = {"inc", "llc", "co", "corp", "ltd", "company", "holdings"}
-    a_core = a - legal_suffixes
-    b_core = b - legal_suffixes
-    if not a_core or not b_core:
-        return False
-    return bool(a_core & b_core) and (a_core <= b_core or b_core <= a_core)
-
-
-def _brand_tokens(brand: str) -> set:
-    """Lowercase set of brand-name tokens (alphanumeric splits)."""
-    text = brand.lower()
-    text = re.sub(r"[^a-z0-9\s]+", " ", text)
-    return {tok for tok in text.split() if tok}
+    packet: List[Dict[str, Any]] = []
+    for override in overrides:
+        if override.get("status") != "rejected":
+            continue
+        if not str(override.get("review_source") or "").startswith(AUTO_REJECT_SOURCE_PREFIX):
+            continue
+        dsld_id = str(override.get("dsld_id") or "")
+        row = {
+            "dsld_id": dsld_id,
+            "brand": override.get("brand"),
+            "product": override.get("product"),
+            "program": override.get("program"),
+            "rejected_record_id": override.get("record_id"),
+            "rejection_reasons": override.get("triage_reasons") or [],
+        }
+        product = products_by_dsld.get(dsld_id)
+        record = registry.record_by_id(override.get("record_id"))
+        if product is None:
+            packet.append({**row, "classification": "product_not_in_catalog"})
+            continue
+        if record is None:
+            packet.append({**row, "classification": "record_not_in_registry"})
+            continue
+        brand = str(product.get("brandName") or product.get("brand_name") or override.get("brand") or "")
+        name = str(product.get("product_name") or product.get("fullName") or override.get("product") or "")
+        label_context = {key: product.get(key) for key in ("form_factor_canonical", "form_factor", "netContents")}
+        row["rejected_product"] = record.get("product")
+        premise_holds = (
+            not _brands_likely_same(normalize_brand(brand), normalize_brand(record.get("brand", "")))
+            or _sku_variant_conflict(
+                _with_label_form_context(name, label_context),
+                _with_label_form_context(record.get("product", ""), {"form_factor": record.get("product_form")}),
+                brand_a=brand,
+                brand_b=record.get("brand", ""),
+            )
+        )
+        if not premise_holds:
+            packet.append({**row, "classification": "premise_stale"})
+            continue
+        [current] = resolve(
+            brand, name, [str(override.get("program") or "")], registry,
+            dsld_id=dsld_id, label_context=label_context,
+        ) or [None]
+        if current is not None and current.scores_points() and current.record_id != override.get("record_id"):
+            packet.append({
+                **row,
+                "classification": "other_record_now_matches",
+                "current_record_id": current.record_id,
+                "current_matched_product": current.matched_product,
+                "current_scope": current.scope,
+            })
+            continue
+        packet.append({**row, "classification": "still_valid"})
+    return packet
 
 
 # --- Summary + reports --------------------------------------------------
@@ -490,6 +526,11 @@ def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
         help="Cap number of products read (useful for testing).",
     )
     parser.add_argument(
+        "--reevaluate-auto-rejects",
+        action="store_true",
+        help="Write a read-only packet classifying P1.7.2 auto-reject overrides with the current resolver.",
+    )
+    parser.add_argument(
         "--no-current-resolver-refresh",
         action="store_true",
         help="Report embedded needs_review entries without re-checking current registry/overrides.",
@@ -500,6 +541,23 @@ def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
 def main(argv: List[str] | None = None) -> int:
     args = _parse_args(argv)
     products = list(load_enriched_products(args.products_root, limit=args.limit))
+    if args.reevaluate_auto_rejects:
+        from cert_resolver import OVERRIDES_PATH
+
+        registry = CertRegistry.load()
+        overrides = json.loads(OVERRIDES_PATH.read_text()).get("overrides", [])
+        products_by_dsld = {str(p.get("dsld_id") or p.get("id")): p for p in products}
+        packet = reevaluate_auto_rejects(overrides, products_by_dsld, registry)
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        out_path = args.out_dir / f"auto_reject_reevaluation_{stamp}.json"
+        out_path.write_text(json.dumps(packet, indent=2, ensure_ascii=False) + "\n")
+        counts: Dict[str, int] = defaultdict(int)
+        for row in packet:
+            counts[row["classification"]] += 1
+        print(f"Re-evaluated {len(packet)} auto-reject overrides → {dict(sorted(counts.items()))}")
+        print(f"  json: {out_path}")
+        return 0
     registry = None if args.no_current_resolver_refresh else CertRegistry.load()
     clusters = build_clusters(products, registry=registry)
     source = (

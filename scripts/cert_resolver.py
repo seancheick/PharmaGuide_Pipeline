@@ -190,6 +190,15 @@ class CertRegistry:
     def candidates_for(self, program: str) -> list[dict[str, Any]]:
         return self.records_by_program.get(program, [])
 
+    def record_by_id(self, record_id: str | None) -> dict[str, Any] | None:
+        if not record_id:
+            return None
+        for records in self.records_by_program.values():
+            for record in records:
+                if record.get("record_id") == record_id:
+                    return record
+        return None
+
     def recency_for(self, program: str) -> dict[str, Any]:
         return self.recency_by_program.get(program, {"status": "unknown", "age_days": None})
 
@@ -692,10 +701,17 @@ def _check_override(
     dsld_id: str | None = None,
     *,
     product: str,
-) -> CertResolution | None:
-    """Apply a curated override only to its reviewed raw product identity."""
+) -> tuple[CertResolution | None, frozenset[str]]:
+    """Apply a curated override only to its reviewed raw product identity.
+
+    Returns ``(resolution, rejected_record_ids)``. A rejection that names a
+    registry ``record_id`` rejects that pairing only: its id is collected and
+    the resolver keeps looking at the other records. A rejection without a
+    ``record_id`` is a program-level decision and still returns claimed_only.
+    """
     program_canon = normalize_program(program)
     request_dsld_id = str(dsld_id or "").strip()
+    rejected_record_ids: set[str] = set()
     # Direct (brand, product) hit
     for key, overrides in registry.overrides_by_brand_product.items():
         ovr_brand, ovr_product = key
@@ -722,18 +738,21 @@ def _check_override(
             status = override.get("status", "verified")
             scope = override.get("scope", "sku")
             if status == "rejected":
+                if override.get("record_id"):
+                    rejected_record_ids.add(str(override["record_id"]))
+                    continue
                 return CertResolution(
                     program=program_canon,
                     scope="claimed_only",
                     notes=f"override rejected: {override.get('reason', '')}",
-                )
+                ), frozenset(rejected_record_ids)
             if status == "pending_review":
                 return CertResolution(
                     program=program_canon,
                     scope="needs_review",
                     record_id=override.get("record_id"),
                     notes="override pending_review",
-                )
+                ), frozenset(rejected_record_ids)
             if scope in {"sku", "product_line"} and override.get("matched_product"):
                 if _sku_population_conflict(
                     f"{brand_norm} {product}",
@@ -746,8 +765,20 @@ def _check_override(
                         notes="curated override population conflict",
                         matched_brand=override.get("matched_brand"),
                         matched_product=override["matched_product"],
-                    )
-            # verified
+                    ), frozenset(rejected_record_ids)
+            # verified. A reviewed override that points at a current registry
+            # record carries that record's provenance and snapshot recency, so
+            # a stale snapshot blocks it like any registry match. An override
+            # for a certification not in the snapshots keeps its own evidence.
+            record = registry.record_by_id(override.get("record_id"))
+            if record is not None:
+                resolution = replace(
+                    _record_to_resolution(record, program_canon, scope, 1.0),
+                    notes="curated override",
+                    matched_brand=override.get("matched_brand") or record.get("brand") or override.get("brand"),
+                    matched_product=override.get("matched_product") or record.get("product") or override.get("product"),
+                )
+                return resolution, frozenset(rejected_record_ids)
             return CertResolution(
                 program=program_canon,
                 scope=scope,
@@ -758,8 +789,8 @@ def _check_override(
                 notes="curated override",
                 matched_brand=override.get("matched_brand") or override.get("brand"),
                 matched_product=override.get("matched_product") or override.get("product"),
-            )
-    return None
+            ), frozenset(rejected_record_ids)
+    return None, frozenset(rejected_record_ids)
 
 
 def resolve(
@@ -789,7 +820,7 @@ def resolve(
             continue
 
         # Stage 1: curated override wins
-        override_resolution = _check_override(
+        override_resolution, rejected_record_ids = _check_override(
             brand_norm,
             reviewed_product_norm,
             program_canon,
@@ -808,12 +839,21 @@ def resolve(
         # matching here: false-positive registry certs are worse than missed
         # bonuses, and short brands like LTH/VITAL collide with unrelated names.
         brand_matches: list[dict[str, Any]] = []
+        rejected_brand_matches: list[str] = []
         for c in candidates:
             c_brand = normalize_brand(c.get("brand_normalized", c.get("brand", "")))
             if _brands_likely_same(brand_norm, c_brand):
-                brand_matches.append(c)
+                if c.get("record_id") in rejected_record_ids:
+                    rejected_brand_matches.append(str(c["record_id"]))
+                else:
+                    brand_matches.append(c)
         if not brand_matches:
-            out.append(CertResolution(program=program_canon, scope="claimed_only"))
+            notes = (
+                "all registry candidates rejected by override: " + ", ".join(sorted(rejected_brand_matches))
+                if rejected_brand_matches
+                else None
+            )
+            out.append(CertResolution(program=program_canon, scope="claimed_only", notes=notes))
             continue
 
         if _program_requires_marine_context(program_canon) and not _has_marine_product_context(product):
