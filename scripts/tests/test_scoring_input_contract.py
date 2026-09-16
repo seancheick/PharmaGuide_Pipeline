@@ -1846,3 +1846,42 @@ def test_affirmative_exclusion_outranks_a_legacy_identity_rationale() -> None:
     # is not a coverage gap even though its identity is unresolved.
     assert has_unresolved_identity_reason(row) is False
     assert score_exclusion_reason(row) == "no_dose_evidence"
+
+
+def test_source_active_rows_require_cleaner_ownership_when_source_mirror_exists() -> None:
+    product = {
+        "ingredient_quality_data": {
+            "ingredients": [
+                {
+                    "name": "Unclassified source row",
+                    "canonical_id": "unclassified",
+                    "source_section": "active",
+                    "raw_source_path": "ingredientRows[0]",
+                }
+            ],
+            "ingredients_scorable": [],
+        }
+    }
+
+    rows = scoring_contract.get_source_score_eligible_active_rows(product)
+
+    assert rows == []
+
+
+def test_source_active_rows_preserve_pre_source_mirror_fixture_compatibility() -> None:
+    legacy_row = {
+        "name": "Legacy scored active",
+        "canonical_id": "legacy_active",
+        "bio_score": 12,
+        "source_section": "active",
+        "raw_source_path": "activeIngredients[0]",
+    }
+    product = {
+        "ingredient_quality_data": {
+            "ingredients_scorable": [legacy_row],
+        }
+    }
+
+    rows = scoring_contract.get_source_score_eligible_active_rows(product)
+
+    assert rows == [legacy_row]

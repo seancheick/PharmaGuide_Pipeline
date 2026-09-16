@@ -1,16 +1,4 @@
-"""The immune evidence ceiling is a tunable magnitude, not a literal.
-
-``immune_support_evidence_cap`` returned a hardcoded ``17.0`` while its sibling
-``evidence_floor_cap`` sat in config at ``16.5``. The two are different controls
-— one is the ceiling applied to every immune product's evidence dimension, the
-other bounds the floor that lifts a well-formed immune panel — so they are not
-expected to be equal, and the fix is to configure the ceiling at its current
-value rather than to reconcile the numbers.
-
-Value unchanged: this is a zero-movement refactor. The test pins both the
-config value and the fact that the scorer reads it, so a future recalibration is
-a config edit reviewed like any other magnitude.
-"""
+"""The immune Evidence ceiling is configured; presence-based floors are retired."""
 
 from __future__ import annotations
 
@@ -42,10 +30,10 @@ def test_evidence_cap_is_configured_at_its_current_value():
     assert _immune_block()["evidence_cap"] == 17.0
 
 
-def test_evidence_cap_and_floor_cap_are_distinct_controls():
+def test_ingredient_presence_cannot_configure_an_evidence_floor():
     block = _immune_block()
     assert block["evidence_cap"] == 17.0
-    assert block["evidence_floor_cap"] == 16.5
+    assert "evidence_floor_cap" not in block
 
 
 def test_scorer_reads_the_configured_ceiling():

@@ -202,7 +202,9 @@ def test_gummy_high_zinc_immune_formula_not_benchmark_clean() -> None:
     out = score_product_v4(_immune_product(high_zinc=True, gummy=True))
     pillars = out["quality_pillars_v4"]
 
-    assert out["quality_score_v4_100"] < 75.0
+    # Guard the owning pillars, not a tuned total-score cutoff. The gummy form
+    # itself is neutral; excess zinc and added sugar remain visible where they
+    # belong.
     assert pillars["safety_hygiene"]["score"] < 10.0
     assert pillars["dose"]["score"] < 17.0
 

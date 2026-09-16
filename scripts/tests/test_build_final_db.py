@@ -720,8 +720,6 @@ def test_non_gmo_project_verified_flows_to_core_row_and_blob_audit():
         }
     }
     scored = make_scored()
-    # v4 cutover: the A5d Non-GMO bonus is sourced from the v4 formulation
-    # component, not the v3 A5d section sub-score.
     scored["_v4_module_breakdown"] = {
         "dimensions": {"formulation": {"components": {"A5d_non_gmo": 0.5}}}
     }
@@ -733,7 +731,9 @@ def test_non_gmo_project_verified_flows_to_core_row_and_blob_audit():
     assert blob["non_gmo_audit"]["project_verified"] is True
     assert blob["non_gmo_audit"]["score_eligible"] is True
     assert blob["formulation_detail"]["claim_non_gmo_verified"] is True
-    assert any(bonus["id"] == "A5d" for bonus in blob["score_bonuses"])
+    # Non-GMO remains a consumer badge/audit fact, never a clinical-quality
+    # score bonus—even when an old scored artifact still carries the retired key.
+    assert not any(bonus["id"] == "A5d" for bonus in blob["score_bonuses"])
 
 
 def test_non_gmo_project_rules_db_evidence_flows_to_core_row_and_blob_audit():

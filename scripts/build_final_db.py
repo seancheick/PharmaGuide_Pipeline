@@ -2780,24 +2780,13 @@ def derive_v4_tradeoffs(
 
     # ── Bonuses — gate on the v4 component that actually scored them ──────────
     bonuses: List[Dict[str, Any]] = []
-    if _pos(form, "A2_premium_forms"):
-        bonuses.append({"id": "A2", "label": "Premium ingredient forms", "score": form["A2_premium_forms"]})
     if _pos(form, "A3_delivery_system"):
         bonuses.append({"id": "A3", "label": "Advanced delivery system", "score": form["A3_delivery_system"],
                         "detail": safe_str(enriched.get("delivery_tier") or delivery_data.get("highest_tier"))})
     if _pos(form, "A4_absorption_enhancer"):
         bonuses.append({"id": "A4", "label": "Absorption enhancer present", "score": form["A4_absorption_enhancer"]})
-    if _pos(form, "A5a_organic"):
-        bonuses.append({"id": "A5a", "label": "Certified organic", "score": form["A5a_organic"]})
     if _pos(form, "A5b_standardized_botanical"):
         bonuses.append({"id": "A5b", "label": "Standardized botanicals", "score": form["A5b_standardized_botanical"]})
-    if _pos(form, "A5c_synergy_cluster"):
-        bonuses.append({"id": "A5c", "label": "Synergy cluster qualified", "score": form["A5c_synergy_cluster"]})
-    if _pos(form, "A5d_non_gmo"):
-        bonuses.append({"id": "A5d", "label": "Non-GMO Project Verified", "score": form["A5d_non_gmo"]})
-    if _pos(form, "A6_single_ingredient"):
-        bonuses.append({"id": "A6", "label": "Single-nutrient premium form", "score": form["A6_single_ingredient"]})
-    # A5e natural-source: scored by v4 but intentionally NOT surfaced (cosmetic).
     if _pos(verif, "cert"):
         label = "Verified product certification" if verif.get("tier") == "product" else "Label claims certification"
         bonuses.append({"id": "B4a", "label": label, "score": verif["cert"]})

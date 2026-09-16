@@ -1,4 +1,4 @@
-"""Phase 1 — the formulation scoring split consumes the canonical single fact.
+"""Canonical single-active fact and generic-Formulation separation.
 
 THE BUG (plan §3, "the actual bug")
     generic_formulation.py gated the A6 focus bonus, the premium-single floor,
@@ -22,8 +22,6 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-
-import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SCRIPTS_DIR))
@@ -82,10 +80,17 @@ def test_formulation_no_longer_reads_the_legacy_type():
     )
 
 
-def test_all_four_gates_use_the_fact():
-    """A6 focus bonus, premium-single floor, standard-single floor, enzyme bonus."""
+def test_generic_formulation_no_longer_uses_single_status_for_points():
+    """Focus/breadth bonuses are retired; single status cannot change A1."""
     source = (SCRIPTS_DIR / "scoring_v4" / "modules" / "generic_formulation.py").read_text()
-    assert source.count("is_single_scorable_active_of(product)") == 4
+    assert "is_single_scorable_active_of" not in source
+    for retired in (
+        "A6_single_ingredient",
+        "premium_single_ingredient_floor",
+        "standard_single_ingredient_floor",
+        "enzyme_recognition",
+    ):
+        assert retired not in source
 
 
 def test_the_fact_is_not_rebuilt_inside_the_module():

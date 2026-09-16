@@ -1,4 +1,4 @@
-# Rubric calibration passes — quality_score 1.5.1 (2026-09-15)
+# Rubric calibration passes — quality_score 1.8.0 (2026-09-15)
 
 **Audit correction, 1.5.2:** historical results below describe their original
 snapshots, not current behavior. A label COA/QR mention does not verify testing;
@@ -146,3 +146,61 @@ choline AI) -5.4 to -6.9, vitamin K2 45 mcg (37.5% of the AI) -7.8.
 Test note: the immune audit and ideal B-complex ceilings (92 -> 96) reflect 1.3.0 verification:
 a single verified registry cert now fills the pillar (6 + 9 points = 15; before, 9 + label GMP 2 = 11).
 Commit 2's targeted test run missed both; the full fast suite caught the B-complex one.
+
+## Pass 3 — count- and dose-neutral generic Formulation (quality_score 1.8.0)
+
+The canonical generic Formulation engine now measures form quality and actual
+formulation design, not ingredient count, focus, dose, evidence, or badges.
+
+```text
+A1 = clamp(0, 15, equal-weight mean of cleaner-owned form-quality ratings)
+raw generic Formulation = clamp(0, 30,
+    A1 + delivery[0..3] + absorption_pairing[0|3]
+       + standardized_botanical[0|0.5|1]
+       + category_profile_bonus - shared_formulation_penalties)
+public Formulation = clamp(0, 20, raw / engine_reference * 20)
+```
+
+Engine references are structural, not corpus-derived: generic IQM, botanical,
+and collagen use 15; immune support uses 27 (generic 15 + its 12-point identity-
+design profile). Dedicated probiotic, omega, multi/prenatal, B-complex, sports,
+and fiber engines retain their reviewed category references. The metadata field
+`formulation_profile` identifies which engine supplied the raw score, preventing
+mixed archetypes from silently using the wrong divisor.
+
+Retired without reallocating points: A2 premium-form breadth, A5c dose-gated
+synergy, A6 focus bonus, premium/standard single floors, generic enzyme count,
+and the zero-point organic/Non-GMO/natural tombstones. Organic, Non-GMO and
+natural claims remain available as badges. Export no longer reconstructs bonus
+chips from legacy component keys.
+
+The same boundary pass removed the immune ingredient-presence Evidence floor.
+Only reviewed evidence can create Evidence points. Immune dose excess remains
+in Dose/B7 and Safety; it no longer also erases Formulation design credit.
+
+### Locked canaries
+
+- 1, 2, 3, and 8 equally rated actives all produce raw Formulation 14.
+- The same rated form with and without a disclosed dose produces A1/raw 12.
+- Dose-qualified synergy metadata cannot move Formulation.
+- A raw 14 single with a 5-point watchlist penalty scores 9; no floor masks it.
+- Generic and botanical raw 15 normalize to 20 through their engine reference;
+  a dedicated sports raw 24 continues to use its own 24 reference.
+- A declared total CFU can satisfy only its matching synthesized CFU exposure;
+  mismatched CFU and AFU remain incomplete.
+
+### Frozen packet and production regression check
+
+The fixed 111-product pass-1 packet was scored at `bc38379b` and again with the
+tracked 1.8.0 diff. 35 products moved, and every movement was confined to the
+Formulation pillar. Dose, Evidence, Transparency, Verification, Safety Hygiene,
+score status, and score caps had zero changes. Total-score deltas ranged from
+-2.8 to +6.8; seven display tiers changed as a direct consequence of the new
+pillar total, not a gate or status change.
+
+The audit also found a separate readiness regression: canonical prebiotic
+support caused a synthesized total-CFU row to be treated as an unassessed RDA/UL
+exposure. The readiness owner now accepts a positive CFU row only when its value
+matches the enrichment-owned declared total. All 12 affected stored probiotic
+products return to `scored`; the prebiotic matcher remains canonical and no AFU
+or caller-supplied count can satisfy the rule.

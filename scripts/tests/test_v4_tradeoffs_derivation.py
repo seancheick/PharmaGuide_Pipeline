@@ -69,19 +69,23 @@ def _by_id(items, _id):
 
 def test_bonuses_from_v4_formulation_components():
     scored = _scored_v4(
-        form={"A2_premium_forms": 1.5, "A5a_organic": 0.5, "A6_single_ingredient": 1.0},
+        form={
+            "A3_delivery_system": 3.0,
+            "A4_absorption_enhancer": 3.0,
+            "A5b_standardized_botanical": 1.0,
+        },
         verif={"B4a_verified_certifications": 1.0, "B4b_gmp": 0.5},
     )
     scored["quality_pillars_v4"] = {"verification": {"components": {"cert": 9.0, "gmp": 2.0, "tier": "product"}}}
     bonuses, _ = derive_v4_tradeoffs(scored, {})
     labels = {b["label"] for b in bonuses}
-    assert "Premium ingredient forms" in labels
-    assert "Certified organic" in labels
-    assert "Single-nutrient premium form" in labels
+    assert "Advanced delivery system" in labels
+    assert "Absorption enhancer present" in labels
+    assert "Standardized botanicals" in labels
     assert "Verified product certification" in labels
     assert "Audited GMP facility" in labels
     # the bonus score mirrors the v4 component value
-    assert _by_id(bonuses, "A2")["score"] == 1.5
+    assert _by_id(bonuses, "A3")["score"] == 3.0
 
 
 def test_raw_claims_cannot_create_verified_test_badges():
@@ -115,14 +119,20 @@ def test_probiotic_quality_bonus_from_v4_module(identity_key):
 
 
 def test_dropped_bonuses_never_emit():
-    """A5e natural-source and hypoallergenic have no user-facing home in v4."""
+    """Retired formulation proxies and hypoallergenic do not emit points."""
     scored = _scored_v4(
-        form={"A5e_natural_source": 2.0},
+        form={
+            "A2_premium_forms": 2.0,
+            "A5a_organic": 1.0,
+            "A5d_non_gmo": 1.0,
+            "A5e_natural_source": 2.0,
+            "A6_single_ingredient": 4.0,
+        },
         transp_comp={"hypoallergenic_bonus": 1.0},
     )
     bonuses, _ = derive_v4_tradeoffs(scored, {})
     assert "B_hypo" not in _ids(bonuses)
-    assert not any("natural-source" in b["label"].lower() for b in bonuses)
+    assert not {"A2", "A5a", "A5d", "A6"} & _ids(bonuses)
 
 
 # --------------------------------------------------------------------------
@@ -332,8 +342,8 @@ def test_b8_caers_not_surfaced():
 
 def test_no_v3_section_dependency():
     """Smoke: a scored dict with NO breakdown/section_scores still derives."""
-    scored = _scored_v4(form={"A2_premium_forms": 1.0})
+    scored = _scored_v4(form={"A3_delivery_system": 1.0})
     assert "breakdown" not in scored and "section_scores" not in scored
     bonuses, penalties = derive_v4_tradeoffs(scored, {})
     assert isinstance(bonuses, list) and isinstance(penalties, list)
-    assert "Premium ingredient forms" in {b["label"] for b in bonuses}
+    assert "Advanced delivery system" in {b["label"] for b in bonuses}

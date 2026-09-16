@@ -15,7 +15,7 @@ from functools import lru_cache
 import json
 import re
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Mapping, Optional
 
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
@@ -2790,6 +2790,72 @@ def get_scoring_ingredients(
         strict=strict,
         allow_legacy_fallback=allow_legacy_fallback,
     )
+
+
+def get_source_score_eligible_active_rows(
+    product: Mapping[str, Any],
+) -> List[Dict[str, Any]]:
+    """Return cleaner-owned active rows before dose-based scoring exclusion.
+
+    This is the shared source projection for readiness and form-quality work.
+    A mapped form remains assessable when its amount is not disclosed, while
+    inactive rows and cleaner-excluded structural rows remain out. Required
+    identity conflicts are retained so callers cannot make them disappear by
+    reading only the strict, dose-bearing scoring rows.
+    """
+    data = dict(product) if isinstance(product, Mapping) else {}
+    quality = _safe_dict(data.get("ingredient_quality_data"))
+    rows = quality.get("ingredients")
+    using_legacy_scorable_fallback = not isinstance(rows, list)
+    if using_legacy_scorable_fallback:
+        # Narrow compatibility for score-ready fixtures/artifacts that predate
+        # the source-row mirror. New enrichment always owns ``ingredients``;
+        # this fallback cannot recover omitted no-dose rows, but it preserves
+        # the same cleaner-approved identities rather than re-parsing labels.
+        rows = quality.get("ingredients_scorable")
+
+    def source_active_eligible(row: Mapping[str, Any]) -> bool:
+        score_flag = row.get("score_eligible_by_cleaner")
+        role = _norm(row.get("cleaner_row_role"))
+        no_dose_form_row = (
+            score_exclusion_reason(dict(row)) == "recognized_non_scorable"
+            and _norm(row.get("identity_decision_reason")) == "no_dose_evidence"
+        )
+        if score_flag is True:
+            return True
+        if role == "active_scorable" and (score_flag is None or no_dose_form_row):
+            return True
+        # Old score-ready fixtures can predate the explicit cleaner contract,
+        # but a current source mirror must never promote an unclassified row.
+        return (
+            using_legacy_scorable_fallback
+            and score_flag is None
+            and role == ""
+        )
+
+    source_rows = {
+        scoring_row_key(row, index): dict(row)
+        for index, row in enumerate(_safe_list(rows))
+        if isinstance(row, Mapping)
+        and _norm(row.get("source_section")) != "inactive"
+        and (
+            not score_exclusion_reason(dict(row))
+            or has_unresolved_identity_reason(dict(row))
+            or (
+                score_exclusion_reason(dict(row)) == "recognized_non_scorable"
+                and _norm(row.get("identity_decision_reason"))
+                == "no_dose_evidence"
+            )
+        )
+        and source_active_eligible(row)
+    }
+    source_rows.update(
+        {
+            key: dict(row)
+            for key, row in required_identity_conflicts(data).items()
+        }
+    )
+    return list(source_rows.values())
 
 
 def scoring_row_key(row: Dict[str, Any], index: int) -> str:

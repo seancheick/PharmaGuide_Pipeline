@@ -18,6 +18,7 @@ from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     primary_type_of,
 )
+from scoring_input_contract import get_source_score_eligible_active_rows
 
 
 from scoring_v4.quality_score_config import block as _cfg_block
@@ -26,11 +27,7 @@ _CM = _cfg_block("category_magnitudes", "immune_support")["immune_support"]
 
 
 IMMUNE_FORMULATION_BONUS_CAP = _CM["formulation_bonus_cap"]
-# Ceiling applied to every immune product's evidence dimension. Distinct from
-# the floor cap below, which bounds the lift a well-formed immune panel earns —
-# the two are different controls and are not expected to share a value.
 IMMUNE_EVIDENCE_CAP = _CM["evidence_cap"]
-IMMUNE_EVIDENCE_FLOOR_CAP = _CM["evidence_floor_cap"]
 
 _ALIASES = {
     "vitamin_c": ("vitamin_c", "ascorbic acid", "ascorbate", "ester-c", "vitamin c"),
@@ -98,24 +95,29 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
     if not is_immune_support_product(product):
         return None
 
-    doses = immune_active_doses(product)
-    if not doses:
+    identities = {
+        identity
+        for row in get_source_score_eligible_active_rows(product)
+        if (identity := _active_id(row))
+    }
+    if not identities:
         return None
 
     foundation_count = sum(
         1
-        for key in ("vitamin_c_mg", "vitamin_d_mcg", "zinc_mg")
-        if (doses.get(key) or 0.0) > 0
+        for key in ("vitamin_c", "vitamin_d", "zinc")
+        if key in identities
     )
     balance_count = sum(
-        1 for key in ("copper_mg", "selenium_mcg") if (doses.get(key) or 0.0) > 0
+        1 for key in ("copper", "selenium") if key in identities
     )
     targeted_count = sum(
         1
-        for key in ("beta_glucan_mg", "quercetin_mg", "elderberry_mg")
-        if (doses.get(key) or 0.0) > 0
+        for key in ("beta_glucan", "quercetin", "elderberry")
+        if key in identities
     )
 
+    doses = immune_active_doses(product)
     high_zinc = (doses.get("zinc_mg") or 0.0) > 40.0
     herb_soup = _high_variability_botanical_count(product) >= 3
 
@@ -123,7 +125,7 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
         "immune_foundation_design": min(5.0, foundation_count * 1.7),
         "immune_mineral_balance": min(2.0, balance_count * 1.0),
         "immune_targeted_disclosure": min(3.0, targeted_count * 1.0),
-        "immune_daily_clean_design": 2.0 if not (herb_soup or high_zinc) else 0.0,
+        "immune_daily_clean_design": 2.0 if not herb_soup else 0.0,
     }
     bonus = min(IMMUNE_FORMULATION_BONUS_CAP, sum(components.values()))
 
@@ -139,60 +141,11 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
         "penalties": penalties,
         "metadata": {
             "profile_applied": True,
+            "identified_actives": sorted(identities),
             "active_doses": {k: round(v, 4) for k, v in doses.items()},
             "gummy_or_syrup": _is_gummy_or_syrup(product),
             "high_zinc": high_zinc,
             "high_variability_botanical_count": _high_variability_botanical_count(product),
-        },
-    }
-
-
-def immune_support_evidence_floor(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    if not is_immune_support_product(product):
-        return None
-
-    doses = immune_active_doses(product)
-    if not doses:
-        return None
-
-    foundation = sum(
-        1
-        for key in ("vitamin_c_mg", "vitamin_d_mcg", "zinc_mg")
-        if (doses.get(key) or 0.0) > 0
-    )
-    targeted = sum(
-        1
-        for key in ("beta_glucan_mg", "quercetin_mg", "elderberry_mg")
-        if (doses.get(key) or 0.0) > 0
-    )
-    floor = 0.0
-    if foundation >= 3:
-        floor = 14.0
-    elif foundation >= 2:
-        floor = 12.0
-    if foundation >= 3 and targeted >= 2:
-        floor = 16.0
-    if foundation >= 3 and targeted >= 3:
-        floor = IMMUNE_EVIDENCE_FLOOR_CAP
-
-    if floor <= 0.0:
-        return None
-    design_flags = _immune_design_flags(product, doses)
-    if (
-        design_flags["high_zinc"]
-        or design_flags["high_vitamin_d"]
-        or design_flags["gummy_or_syrup"]
-        or design_flags["high_glycemic_sugar"]
-    ):
-        return None
-    return {
-        "floor": round(floor, 4),
-        "components": {
-            "immune_support_evidence_floor": round(floor, 4),
-        },
-        "metadata": {
-            "foundation_count": foundation,
-            "targeted_count": targeted,
         },
     }
 

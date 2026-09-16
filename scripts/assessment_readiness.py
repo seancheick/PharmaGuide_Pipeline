@@ -23,11 +23,8 @@ from scoring_input_contract import (
     build_scoring_classification,
     classify_ingredient_roles,
     get_scoring_ingredients,
+    get_source_score_eligible_active_rows,
     has_scoring_identity,
-    has_unresolved_identity_reason,
-    required_identity_conflicts,
-    scoring_row_key,
-    score_exclusion_reason,
 )
 from scoring_v4.modules.generic_evidence import (
     DRI_ESSENTIAL_NUTRIENTS,
@@ -486,41 +483,6 @@ def _scores_as_verified(entry: Mapping[str, Any]) -> bool:
     )
 
 
-def _source_score_eligible_active_rows(
-    product: Mapping[str, Any],
-) -> list[Mapping[str, Any]]:
-    """Return cleaner-owned active rows even when dose filtering removes them."""
-    quality = _safe_dict(product.get("ingredient_quality_data"))
-    rows = quality.get("ingredients")
-    source_rows = {
-        scoring_row_key(row, index): row
-        for index, row in enumerate(_safe_list(rows))
-        if isinstance(row, Mapping)
-        and _norm(row.get("source_section")) != "inactive"
-        and (
-            not score_exclusion_reason(dict(row))
-            or has_unresolved_identity_reason(dict(row))
-            or (
-                score_exclusion_reason(dict(row)) == "recognized_non_scorable"
-                and _norm(row.get("identity_decision_reason"))
-                == "no_dose_evidence"
-            )
-        )
-        and (
-            row.get("score_eligible_by_cleaner") is True
-            or (
-                row.get("score_eligible_by_cleaner") is None
-                and _norm(row.get("cleaner_row_role")) == "active_scorable"
-            )
-        )
-    }
-    # Reuse the scoring contract's exact ownership/eligibility decision. A
-    # conflict can live only in skipped IQD rows, or carry a stale positive
-    # match reason; neither may erase it from source-coverage diagnostics.
-    source_rows.update(required_identity_conflicts(dict(product)))
-    return list(source_rows.values())
-
-
 def evaluate_catalog_disposition(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Separate explicit QA-only labels from genuine scoring remediation.
 
@@ -576,7 +538,7 @@ def evaluate_catalog_disposition(product: Mapping[str, Any]) -> Dict[str, Any]:
             "reason_code": "strict_scoring_rows_present",
             "evidence_paths": [],
         }
-    if _source_score_eligible_active_rows(product):
+    if get_source_score_eligible_active_rows(product):
         return {
             "disposition": CATALOG_DISPOSITION_REQUIRES_REMEDIATION,
             "reason_code": "source_active_assessment_required",
@@ -777,7 +739,7 @@ def _identity_readiness(
         for row in product_evidence_rows
         if row.get("scoreable_identity") is True and has_scoring_identity(row)
     ]
-    source_rows = _source_score_eligible_active_rows(product)
+    source_rows = get_source_score_eligible_active_rows(product)
     mapped_source_rows = [
         row
         for row in source_rows
@@ -928,7 +890,7 @@ def _dose_readiness(
             "incomplete_source_row_refs": failed_conversion_refs,
         }
     if material_count == 0:
-        source_rows = _source_score_eligible_active_rows(product)
+        source_rows = get_source_score_eligible_active_rows(product)
         assessments = [
             assessment
             for assessment in _safe_list(rda_ul.get("dose_assessments"))
@@ -1042,6 +1004,35 @@ def _dose_readiness(
     for row in material_rows:
         requirements.setdefault(_requirement_key(row), row)
 
+    probiotic_total_cfu = 0.0
+    if module == "probiotic":
+        probiotic = _safe_dict(
+            product.get("probiotic_data") or product.get("probiotic_detail")
+        )
+        probiotic_total_cfu = declared_total_cfu(probiotic)
+
+    def _is_declared_probiotic_total(requirement: tuple[Any, ...]) -> bool:
+        """Return whether the module-owned total proves this CFU exposure.
+
+        CFU has no RDA/UL assessment. The scoring contract's product-level CFU
+        row is itself the typed dose evidence, but only when its value agrees
+        with the source-owned total. This deliberately does not accept a
+        caller-supplied strain count, clinical dose, AFU value, or mismatched
+        projection.
+        """
+        _source_ref, dose_class, value, unit = requirement
+        if (
+            module != "probiotic"
+            or dose_class != "probiotic_cfu"
+            or value is None
+            or value <= 0
+            or unit != "cfu"
+            or probiotic_total_cfu <= 0
+        ):
+            return False
+        tolerance = max(1e-9, abs(probiotic_total_cfu) * 1e-9)
+        return abs(value - probiotic_total_cfu) <= tolerance
+
     def _matches(
         requirement: tuple[Any, ...],
         assessment: Mapping[str, Any],
@@ -1071,8 +1062,23 @@ def _dose_readiness(
             return False
         return True
 
-    matched_assessments: Dict[tuple[Any, ...], Mapping[str, Any]] = {}
+    module_owned_assessments: Dict[tuple[Any, ...], Mapping[str, Any]] = {
+        requirement: {
+            "readiness": READINESS_COMPLETE,
+            "dose_class": "probiotic_cfu",
+            "source_value": requirement[2],
+            "source_unit": "CFU",
+            "assessment_source": "probiotic_total_cfu",
+        }
+        for requirement in requirements
+        if _is_declared_probiotic_total(requirement)
+    }
+    matched_assessments: Dict[tuple[Any, ...], Mapping[str, Any]] = dict(
+        module_owned_assessments
+    )
     for requirement in requirements:
+        if requirement in matched_assessments:
+            continue
         match = next(
             (
                 assessment
@@ -1093,24 +1099,39 @@ def _dose_readiness(
         not in {READINESS_COMPLETE, READINESS_NOT_APPLICABLE}
     ]
     material_assessment_count = len(matched_assessments)
-    complete = (
-        "dose_assessments" in rda_ul
-        and collection_status in {
+    typed_requirements = set(requirements) - set(module_owned_assessments)
+    typed_collection_complete = (
+        not typed_requirements
+        or (
+            "dose_assessments" in rda_ul
+            and collection_status in {
             READINESS_COMPLETE,
             "complete_with_row_errors",
-        }
+            }
+        )
+    )
+    complete = (
+        typed_collection_complete
         and material_assessment_count == len(requirements)
         and not incomplete_refs
     )
     if complete:
+        if module_owned_assessments and typed_requirements:
+            assessment_source = (
+                "typed_dose_assessments_and_probiotic_total_cfu"
+            )
+        elif module_owned_assessments:
+            assessment_source = "probiotic_total_cfu"
+        else:
+            assessment_source = "typed_dose_assessments"
         return {
             "readiness": READINESS_COMPLETE,
-            "collection_status": collection_status,
-            "assessment_count": len(assessments),
+            "collection_status": collection_status or "module_complete",
+            "assessment_count": len(assessments) + len(module_owned_assessments),
             "material_active_count": material_count,
             "material_exposure_count": len(requirements),
             "material_assessment_count": material_assessment_count,
-            "assessment_source": "typed_dose_assessments",
+            "assessment_source": assessment_source,
         }
 
     # Schema-2.x migration boundary.  Old enriched fixtures and frozen inputs

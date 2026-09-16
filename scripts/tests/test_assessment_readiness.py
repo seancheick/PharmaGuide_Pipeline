@@ -679,6 +679,86 @@ def test_product_projection_reuses_typed_source_row_dose_assessment() -> None:
     assert result["dose"]["readiness"] == "complete"
 
 
+def test_declared_total_cfu_satisfies_its_own_probiotic_dose_requirement() -> None:
+    """CFU is module-owned dose evidence, not an RDA/UL assessment."""
+    from assessment_readiness import _dose_readiness
+
+    product = {
+        "assessment_readiness_contract_version": "1.0.0",
+        "probiotic_data": {
+            "total_cfu": 50_000_000_000,
+            "cfu_unit": "CFU",
+        },
+        "rda_ul_data": {
+            "collection_status": "complete",
+            "dose_assessments": [
+                {
+                    "source_row_ref": "ingredientRows[0]",
+                    "dose_class": "therapeutic_mass",
+                    "source_value": 550.0,
+                    "source_unit": "mg",
+                    "readiness": "not_applicable",
+                }
+            ],
+        },
+    }
+    evidence = [
+        {
+            "source_row_ref": "ingredientRows[0]",
+            "material": True,
+            "source_value": 550.0,
+            "source_unit": "mg",
+            "dose_class": "therapeutic_mass",
+        },
+        {
+            "source_row_ref": "statements",
+            "material": True,
+            "source_value": 50_000_000_000,
+            "source_unit": "CFU",
+            "dose_class": "probiotic_cfu",
+            "evidence_type": "probiotic_cfu",
+        },
+    ]
+
+    result = _dose_readiness(product, evidence, module="probiotic")
+
+    assert result["readiness"] == "complete"
+    assert result["material_exposure_count"] == 2
+    assert result["material_assessment_count"] == 2
+    assert result["assessment_source"] == (
+        "typed_dose_assessments_and_probiotic_total_cfu"
+    )
+
+
+def test_claimed_cfu_that_disagrees_with_declared_total_stays_incomplete() -> None:
+    """A caller-supplied CFU row cannot manufacture dose readiness."""
+    from assessment_readiness import _dose_readiness
+
+    product = {
+        "assessment_readiness_contract_version": "1.0.0",
+        "probiotic_data": {"total_cfu": 10_000_000_000},
+        "rda_ul_data": {
+            "collection_status": "complete",
+            "dose_assessments": [],
+        },
+    }
+    evidence = [
+        {
+            "source_row_ref": "statements",
+            "material": True,
+            "source_value": 50_000_000_000,
+            "source_unit": "CFU",
+            "dose_class": "probiotic_cfu",
+            "evidence_type": "probiotic_cfu",
+        }
+    ]
+
+    result = _dose_readiness(product, evidence, module="probiotic")
+
+    assert result["readiness"] == "incomplete"
+    assert result["incomplete_source_row_refs"] == ["statements"]
+
+
 def test_enzyme_activity_requirement_uses_activity_value_not_carrier_mass() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 

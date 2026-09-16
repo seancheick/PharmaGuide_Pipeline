@@ -36,7 +36,6 @@ from scoring_v4.modules.botanical_profile import _mass_mg
 from scoring_v4.modules.collagen_profile import is_collagen_product
 from scoring_v4.modules.immune_support import (
     immune_support_evidence_cap,
-    immune_support_evidence_floor,
 )
 from scoring_v4.modules.joint_support import joint_support_evidence_cap
 
@@ -338,12 +337,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 floor_canonical = auth_canon
 
     total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
-    immune_floor = immune_support_evidence_floor(product)
-    immune_floor_applied = (
-        immune_floor is not None and total < float(immune_floor["floor"])
-    )
-    if immune_floor_applied and immune_floor is not None:
-        total = float(immune_floor["floor"])
     immune_cap = immune_support_evidence_cap(product)
     immune_cap_applied = immune_cap is not None and total > immune_cap
     if immune_cap_applied and immune_cap is not None:
@@ -359,8 +352,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     }
     if primary_floor > 0.0:
         components["primary_evidence_floor"] = round(primary_floor, 4)
-    if immune_floor_applied and immune_floor is not None:
-        components.update(immune_floor.get("components", {}))
     if immune_cap_applied and immune_cap is not None:
         components["immune_support_evidence_cap"] = round(immune_cap, 4)
     if joint_cap_applied:
@@ -380,8 +371,11 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
             "primary_evidence_floor": round(primary_floor, 4),
             "primary_evidence_floor_canonical": floor_canonical,
-            "immune_support_evidence_floor_applied": immune_floor_applied,
-            "immune_support_evidence_floor": immune_floor,
+            # Compatibility fields remain explicit so old clients distinguish
+            # a deliberately retired proxy from missing metadata. Ingredient
+            # presence or dose can never manufacture Evidence credit.
+            "immune_support_evidence_floor_applied": False,
+            "immune_support_evidence_floor": None,
             "immune_support_evidence_cap_applied": immune_cap_applied,
             "immune_support_evidence_cap": immune_cap,
             "joint_support_evidence_cap_applied": joint_cap_applied,

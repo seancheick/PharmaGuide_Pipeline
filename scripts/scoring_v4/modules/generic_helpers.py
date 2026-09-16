@@ -15,7 +15,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Tuple
 
-from scoring_input_contract import get_scoring_ingredients
+from scoring_input_contract import (
+    get_scoring_ingredients,
+    get_source_score_eligible_active_rows,
+)
 from serving_frequency import resolve_daily_serving_range
 
 
@@ -145,6 +148,7 @@ def scorable_ingredients(
     product: Dict[str, Any],
     *,
     allow_sole_mapped_blend: bool = False,
+    require_dose: bool = True,
 ) -> List[Dict[str, Any]]:
     """Return ingredients eligible for a formulation sub-rubric.
 
@@ -158,14 +162,18 @@ def scorable_ingredients(
     identity (for example I3C/DIM Complex or BioCell Collagen Complex).
     Opaque/unmapped blend parents still earn no A1 credit.
     """
-    rows = get_active_ingredients(product)
+    rows = (
+        get_active_ingredients(product)
+        if require_dose
+        else get_source_score_eligible_active_rows(product)
+    )
     non_blend_candidates = sum(
         1
         for ing in rows
         if isinstance(ing, dict)
         and not ing.get("is_proprietary_blend")
         and not ing.get("is_parent_total")
-        and has_usable_individual_dose(ing)
+        and (not require_dose or has_usable_individual_dose(ing))
     )
 
     eligible: List[Dict[str, Any]] = []
@@ -174,7 +182,9 @@ def scorable_ingredients(
             continue
         if ing.get("is_parent_total"):
             continue
-        if not has_usable_individual_dose(ing):
+        if ing.get("is_compound_duplicate"):
+            continue
+        if require_dose and not has_usable_individual_dose(ing):
             continue
         if ing.get("is_proprietary_blend"):
             if (

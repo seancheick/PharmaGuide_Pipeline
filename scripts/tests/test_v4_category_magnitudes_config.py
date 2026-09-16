@@ -41,10 +41,7 @@ ORIGINAL = {
     "omega": {"dimension_caps": ROUTER_DC},
     "probiotic": {"dimension_caps": [["formulation", 16], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
     "b_complex": {"formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0},
-    # evidence_cap hoisted from immune_support.immune_support_evidence_cap's
-    # hardcoded 17.0 — same value, now a reviewable magnitude. It is a ceiling
-    # on the evidence dimension and is deliberately distinct from the floor cap.
-    "immune_support": {"formulation_bonus_cap": 12.0, "evidence_cap": 17.0, "evidence_floor_cap": 16.5},
+    "immune_support": {"formulation_bonus_cap": 12.0, "evidence_cap": 17.0},
     "joint_support": {"evidence_cap": 14.0,
                       "target_dose_mg": {"glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0,
                                          "uc_ii": 40.0, "hyaluronic_acid": 120.0}},
@@ -76,7 +73,6 @@ def test_runtime_constants_read_from_config_no_drift():
     assert probiotic.DIMENSION_CAPS == (("formulation", 16), ("dose", 25), ("evidence", 20), ("transparency", 15))
     assert b_complex.FORMULATION_CAP == 23.0 and b_complex.B7_CAP == 3.0
     assert immune_support.IMMUNE_FORMULATION_BONUS_CAP == 12.0
-    assert immune_support.IMMUNE_EVIDENCE_FLOOR_CAP == 16.5
     assert joint_support.JOINT_SUPPORT_EVIDENCE_CAP == 14.0
     assert joint_support.JOINT_TARGET_DOSE_MG == ORIGINAL["joint_support"]["target_dose_mg"]
     assert safety_hygiene.SAFETY_HYGIENE_CAP == 4.0

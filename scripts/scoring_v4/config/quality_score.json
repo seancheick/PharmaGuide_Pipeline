@@ -1,10 +1,10 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.7.0-vitamin-form-ownership",
+    "version": "1.8.0-formulation-neutrality",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-15",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. 1.2.0 removes rubric proxies: blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, and the astaxanthin/CoQ10 public caps, so the six pillars alone explain the public number. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth, focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, and ingredient-presence Evidence floors. Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
     "phase": "rubric_proxy_removal"
   },
   "pillars": {
@@ -64,7 +64,13 @@
     "default_reference": 22.0
   },
   "formulation_subscale": {
-    "_doc": "PR4: category-aware purpose-fit formulation. A focused single can earn 24 without faking breadth, while multi-active sports products retain their reviewed category references. The dedicated protein adapter has a 29-point positive-component ceiling (15 + 5 + 3 + 4 + 2). Pre-workout and BCAA/EAA still reuse the broader generic formulation engine, so current-corpus maxima are not valid divisors; they retain the reviewed 30 and 25 references until a dedicated adapter or benchmark justifies a change. A cheap form remains low because normalization is proportional. 1.2.0 (2026-09-14): omega's achievable formulation drops 23 -> 21 because sustainability certification is now 0 points (consumer attribute); prenatal_multi drops 23 -> 21 because the 2-point dosage_form_suitability credit (an inverted gummy flag) was removed. 1.6.0 (2026-09-15): probiotic Formulation removes CFU-size and species-diversity points without reallocating them. Its reference and raw cap are 16: total potency disclosure 4 + exact source-owned identity completeness 8 + delivery 3 + existing prebiotic complement 1. Identity completeness is a label property, not clinical efficacy. 1.7.0 (2026-09-15): IQM bio_score is the one form-quality owner for multi/prenatal and B-complex Formulation. prenatal_multi removes premium-form diversity (4) and key-form name credit (5); its reference, category cap and raw cap are 14 = panel form quality 12 + disclosure structure 2. b_complex removes its preferred-form name table (7); its reference and raw cap are 23 = core panel 10 + IQM form quality 8 + focus purity 3 + disclosure 2. Neither is reallocated.",
+    "_doc": "PR4: category-aware purpose-fit formulation. A reference follows the formulation engine that produced the raw score, not the product archetype alone. Generic IQM, botanical and collagen engines use a 15-point structural reference; their optional delivery, absorption and standardization signals can still reach the 20-point public pillar cap. Ingredient count, dose adequacy, evidence strength, organic/Non-GMO/natural badges, single-focus bonuses and generic enzyme recognition do not create Formulation points. Dedicated category engines retain their reviewed archetype references. Probiotic identity completeness remains a label property, not efficacy.",
+    "profile_reference": {
+      "generic_iqm": 15.0,
+      "botanical": 15.0,
+      "collagen": 15.0,
+      "immune_support": 27.0
+    },
     "archetype_reference": {
       "sports_single": 24.0,
       "sports_pre_workout": 30.0,
@@ -87,35 +93,15 @@
     "b1_harmful_additive_cap": 15.0
   },
   "formulation_magnitudes": {
-    "_doc": "A1-A6 + B0 formulation-dimension point values, caps, and tier thresholds — hoisted from generic_formulation.py's hardcoded constants 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score diff on a real-product sample + targeted formulation tests). generic_formulation.py reads these at load time; test_v4_formulation_magnitudes_config pins each to its original value (drift guard). Structural constants (canonical-ID sets, enzyme name list, supp-type enums, the skip-first flag) stay in code — data/logic, not tunable magnitudes. B1 additive points are in the sibling formulation_penalties block. 1.2.0 (2026-09-14): a5a_organic, a5d_non_gmo_project and a5e_natural are 0.0 -- organic, Non-GMO and natural-source are consumer attributes, not evidence of clinical formulation quality; detection and metadata stay so they can be shown as attributes. 1.2.1: a5_excellence_cap 4.0 -> 2.0, the most standardization (1) + synergy (1) can reach, so the cap no longer implies unreachable points.",
+    "_doc": "Canonical generic Formulation magnitudes. A1 is the equal-weight mean of cleaner-owned form-quality ratings; dose disclosure is not required and ingredient count cannot increase it. A3/A4/A5b are explicit formulation-design signals. Retired breadth, single-focus, badge, synergy-dose and enzyme-recognition premiums are intentionally absent. B1 additive points are in formulation_penalties.",
     "dimension_cap": 30.0,
     "presence_floor": 2.0,
     "a1_bio_score_cap": 15.0,
-    "a2_premium_forms_cap": 4.0,
-    "a2_premium_form_threshold": 12.0,
-    "a2_premium_form_points_per_additional": 0.5,
     "a3_delivery_cap": 3.0,
     "a3_delivery_tier_points": { "1": 3.0, "2": 2.0, "3": 1.0 },
     "a4_absorption_cap": 3.0,
-    "a5_excellence_cap": 2.0,
-    "a5a_organic": 0.0,
     "a5b_standardized_full": 1.0,
     "a5b_standardized_marker_only": 0.5,
-    "a5c_synergy_tier_points": { "1": 1.0, "2": 0.75, "3": 0.5, "4": 0.25 },
-    "a5d_non_gmo_project": 0.0,
-    "a5e_natural": 0.0,
-    "a6_single_ingredient_cap": 4.0,
-    "a6_tier_floor_bio": 10.0,
-    "a6_tier_solid_bio": 12.0,
-    "a6_tier_elite_bio": 14.0,
-    "a6_points_good": 1.0,
-    "a6_points_solid": 3.0,
-    "a6_points_elite": 4.0,
-    "enzyme_cap": 2.0,
-    "enzyme_points_per_named": 0.5,
-    "premium_single_floor_solid": 22.0,
-    "premium_single_floor_elite": 24.0,
-    "standard_single_floor_validated_low_bio": 13.0,
     "b0_high_risk_penalty": 10.0,
     "b0_watchlist_penalty": 5.0,
     "b0_moderate_penalty": 10.0,
@@ -335,7 +321,7 @@
     "b_complex": {
       "formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0
     },
-    "immune_support": { "formulation_bonus_cap": 12.0, "evidence_cap": 17.0, "evidence_floor_cap": 16.5 },
+    "immune_support": { "formulation_bonus_cap": 12.0, "evidence_cap": 17.0 },
     "joint_support": {
       "evidence_cap": 14.0,
       "target_dose_mg": { "glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0, "uc_ii": 40.0, "hyaluronic_acid": 120.0 }

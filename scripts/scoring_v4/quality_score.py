@@ -594,11 +594,15 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     form (low raw formulation) still scores low — this discriminates within the
     archetype, it does not anchor on corpus best-in-class."""
     sub = cfg["formulation_subscale"]
-    ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
+    meta = dim.get("metadata") or {}
+    profile = str(meta.get("formulation_profile") or "").strip()
+    ref = (
+        sub.get("profile_reference", {}).get(profile)
+        or sub["archetype_reference"].get(archetype, sub["default_reference"])
+    )
     score = _num(dim.get("score"))
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
     reason = _reason_formulation(_band(val, weight))
-    meta = dim.get("metadata") or {}
     assessed_count = meta.get("iqm_form_quality_assessed_count")
     if (
         type(assessed_count) is int and assessed_count == 0
@@ -614,7 +618,12 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
         "score": val,
         "max": weight,
         "reason": reason,
-        "components": {"raw_formulation": score, "archetype": archetype, "reference": ref},
+        "components": {
+            "raw_formulation": score,
+            "archetype": archetype,
+            "formulation_profile": profile or None,
+            "reference": ref,
+        },
     }
 
 
