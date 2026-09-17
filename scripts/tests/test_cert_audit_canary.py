@@ -336,19 +336,28 @@ def test_audit_report_recency_gated_b4a_does_not_credit_stale(tmp_path: Path) ->
     ]
     assert _propose_b4a(blocked) == 0.0
 
-    # Same shape but fresh → should grant points
+    # Same shape but fresh, with the current sourced provenance production
+    # scoring requires → should grant points
+    provenance = {
+        "source_url": "https://registry.example/certified-products",
+        "snapshot_date": "2026-09-16",
+    }
     fresh = [
         CertResolution(
             program="NSF Sport",
             scope="sku",
             match_confidence=1.0,
+            record_id="NSF_SPORT_FIXTURE",
             recency_status="fresh",
+            **provenance,
         ),
         CertResolution(
             program="NSF Certified",
             scope="sku",
             match_confidence=1.0,
+            record_id="NSF_CERTIFIED_FIXTURE",
             recency_status="fresh",
+            **provenance,
         ),
     ]
     assert _propose_b4a(fresh) > 0.0
