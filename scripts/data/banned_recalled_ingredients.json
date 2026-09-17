@@ -7318,7 +7318,15 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "mercury free",
+          "mercury-free",
+          "free of mercury",
+          "no mercury",
+          "tested for mercury",
+          "mercury tested",
+          "mercury screened"
+        ]
       },
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "critical",
@@ -7393,7 +7401,7 @@
       "entity_type": "contaminant",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
+        "last_reviewed_at": "2026-09-17",
         "next_review_due": "2026-07-07",
         "reviewed_by": "codex_alias_precision_pass",
         "change_log": [
@@ -7406,6 +7414,11 @@
             "date": "2026-02-16",
             "change": "Alias precision hardening for supplement label matching (reduced ambiguous aliases; added hydrogenated coconut reverse-label variants)",
             "by": "codex_alias_precision_pass"
+          },
+          {
+            "date": "2026-09-17",
+            "change": "Added negative match terms for mercury-absence wording. The ingredient name 'PureSeaOmega3 Mercury Free Tuna Oil' matched the 'mercury' alias, which put a CAUTION verdict and Safety 0 on Garden of Life Prenatal Multi + DHA (242666) and Advanced Omega (297656). An absence claim is not a contaminant.",
+            "by": "scoring_audit_2026_09_17"
           }
         ]
       },

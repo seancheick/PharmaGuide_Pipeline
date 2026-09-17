@@ -205,3 +205,18 @@ class TestProductRecallFalsePositives:
         banned_ids = _banned_ids(enricher, "super greens original powder")
         assert "RECALLED_LIVE_IT_UP_SUPER_GREENS" not in banned_ids, \
             "Generic 'super greens' without brand should not match brand-specific recall"
+
+
+@pytest.mark.parametrize("variant", [
+    "PureSeaOmega3 Mercury Free Tuna Oil",
+    "MSC CoC Mercury-free Tuna Fish Oil",
+    "Tuna oil, tested for mercury",
+])
+def test_mercury_free_claim_is_not_a_mercury_contaminant(enricher, variant):
+    """Garden of Life Prenatal Multi + DHA (DSLD 242666) carried a CAUTION verdict
+    because its oil is named "Mercury Free"."""
+    assert "HM_MERCURY" not in _banned_ids(enricher, variant)
+
+
+def test_declared_mercury_still_matches(enricher):
+    assert "HM_MERCURY" in _banned_ids(enricher, "Methylmercury")
