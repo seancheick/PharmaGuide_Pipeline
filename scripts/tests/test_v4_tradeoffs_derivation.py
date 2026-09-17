@@ -347,3 +347,17 @@ def test_no_v3_section_dependency():
     bonuses, penalties = derive_v4_tradeoffs(scored, {})
     assert isinstance(bonuses, list) and isinstance(penalties, list)
     assert "Advanced delivery system" in {b["label"] for b in bonuses}
+
+
+def test_gmp_tradeoff_label_matches_the_audited_basis():
+    """A manufacturer listed in an audited GMP facility registry is not proof
+    that this product was made in that facility."""
+    scored = _scored_v4(verif={"B4b_gmp": 4})
+    scored["quality_pillars_v4"] = {"verification": {"components": {
+        "gmp": 2.0, "gmp_basis": "manufacturer_facility", "tier": "manufacturing"}}}
+    facility, _ = derive_v4_tradeoffs(scored, {})
+    scored["quality_pillars_v4"]["verification"]["components"]["gmp_basis"] = "verified_certification"
+    certified, _ = derive_v4_tradeoffs(scored, {})
+
+    assert _by_id(facility, "B4b")["label"] == "GMP-registered manufacturer"
+    assert _by_id(certified, "B4b")["label"] == "Audited GMP facility"

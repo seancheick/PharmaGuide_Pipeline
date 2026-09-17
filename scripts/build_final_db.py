@@ -2791,7 +2791,12 @@ def derive_v4_tradeoffs(
         label = "Verified product certification" if verif.get("tier") == "product" else "Label claims certification"
         bonuses.append({"id": "B4a", "label": label, "score": verif["cert"]})
     if _pos(verif, "gmp"):
-        bonuses.append({"id": "B4b", "label": "Audited GMP facility", "score": verif["gmp"]})
+        label = (
+            "GMP-registered manufacturer"
+            if verif.get("gmp_basis") == "manufacturer_facility"
+            else "Audited GMP facility"
+        )
+        bonuses.append({"id": "B4b", "label": label, "score": verif["gmp"]})
     if _pos(verif, "coa_batch"):
         bonuses.append({"id": "B4c", "label": "COA or batch-lookup information", "score": verif["coa_batch"]})
 
