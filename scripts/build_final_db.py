@@ -11377,8 +11377,8 @@ def main():
         choices=SUPPORTED_EXPORT_SCHEMA_VERSIONS,
         default=EXPORT_SCHEMA_VERSION,
         help=(
-            "Public catalog schema to build. 2.4.0 remains the release default; "
-            "3.0.0 is a prepared local candidate until a compatible app ships."
+            f"Public catalog schema to build. {EXPORT_SCHEMA_VERSION} is the release default "
+            "(2.4.0 stays importable); 3.0.0 is a prepared local candidate until a compatible app ships."
         ),
     )
     args = parser.parse_args()
