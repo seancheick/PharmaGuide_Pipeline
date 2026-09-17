@@ -267,6 +267,54 @@ class TestRegistryDiscovery:
         assert out[0].record_id == "USP_RITUAL_EFW"
         assert "registry_discovered_product_match" in (out[0].notes or "")
 
+    @staticmethod
+    def _strengthless_registry(**override) -> CertRegistry:
+        return _make_registry(
+            records=[{
+                "program": "Informed Choice",
+                "brand": "Nature Made",
+                "product": "Nature Made E",
+                "record_id": "IC_NATURE_MADE_E",
+            }],
+            **override,
+        )
+
+    def test_strengthless_listing_alone_cannot_verify_a_specific_strength(self) -> None:
+        """A registry name without a strength cannot say which strength is
+        certified (Vitamin E 200, 400 and 1000 IU all match "Nature Made E")."""
+        registry = self._strengthless_registry()
+        for product in ("Vitamin E 200 IU", "Vitamin E 400 IU", "Vitamin E 1000 IU"):
+            assert discover_verified_programs("Nature Made", product, registry) == []
+
+    def test_label_claim_still_resolves_against_a_strengthless_listing(self) -> None:
+        registry = self._strengthless_registry()
+        out = resolve("Nature Made", "Vitamin E 400 IU", ["Informed Choice"], registry)
+        assert out[0].scope == "sku"
+        assert out[0].record_id == "IC_NATURE_MADE_E"
+
+    def test_reviewed_override_on_a_strengthless_listing_stays_discoverable(self) -> None:
+        registry = self._strengthless_registry(overrides=[{
+            "brand": "Nature Made",
+            "product": "Vitamin E 400 IU",
+            "program": "Informed Choice",
+            "status": "verified",
+            "scope": "sku",
+            "record_id": "IC_NATURE_MADE_E",
+        }])
+        out = discover_verified_programs("Nature Made", "Vitamin E 400 IU", registry)
+        assert [row.record_id for row in out] == ["IC_NATURE_MADE_E"]
+        assert out[0].scores_points() is True
+
+    def test_strengthless_listing_still_discovers_a_strengthless_product(self) -> None:
+        registry = _make_registry(records=[{
+            "program": "ConsumerLab",
+            "brand": "GNC",
+            "product": "GNC Triflex",
+            "record_id": "CL_GNC_TRIFLEX",
+        }])
+        out = discover_verified_programs("GNC", "TriFlex", registry)
+        assert [row.record_id for row in out] == ["CL_GNC_TRIFLEX"]
+
     def test_discovery_does_not_emit_brand_only_cert(self) -> None:
         registry = _make_registry(
             records=[

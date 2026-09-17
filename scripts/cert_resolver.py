@@ -1083,12 +1083,26 @@ def discover_verified_programs(
     public registry lists the product but the label text does not repeat the
     program name. Only SKU/product-line matches are returned; brand-only,
     claimed-only, and needs-review results remain non-scoring.
+
+    Without a label claim the registry name is the only evidence, so a
+    strength-less listing ("Nature Made E") cannot verify a product that
+    declares a strength: it matches every strength the brand sells. A reviewed
+    override or a registry product-line listing still counts.
     """
     discovered: list[CertResolution] = []
+    product_has_strength = bool(_sku_dose_tokens(product))
     for program in sorted(registry.records_by_program):
         for resolution in resolve(brand, product, [program], registry, dsld_id=dsld_id,
                                   label_context=label_context):
             if resolution.scope not in {"sku", "product_line"}:
+                continue
+            record = registry.record_by_id(resolution.record_id) or {}
+            if (
+                product_has_strength
+                and not _sku_dose_tokens(str(record.get("product") or ""))
+                and record.get("scope") != "product_line"
+                and resolution.notes != "curated override"
+            ):
                 continue
             note = "registry_discovered_product_match"
             if resolution.notes:
