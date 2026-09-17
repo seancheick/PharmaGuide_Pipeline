@@ -3712,11 +3712,13 @@
     "withdrawn_guideline_recommendation"
    ],
    "scorer_compatibility": {
-    "class": "B",
-    "reason": "Corrected after a live probe on four real butterbur products (328579, 61929, 293376, 252504). The applicability contract links the PRINTED label row, whose text is e.g. 'Purple Butterbur CO2 extract' with form_id None; the 'PA-free butterbur extract (Petadolex)' identity lives on the enricher's separate row object and is invisible to required_form_terms, so the studied material cannot be selected (clinical_form_mismatch). Products carrying two butterbur rows (328579 Migra-Eeze, 293376 Petadolex Pro-Active) fail to link at all, because _linked_rows returns nothing when more than one canonical candidate row exists. A dose-floor-only record would therefore credit the 150 mg 'butterbur (unspecified)' products \u2014 exactly the pyrrolizidine-alkaloid material the safety literature warns about \u2014 while the branded-extract products it is meant for may not link."
+    "class": "A",
+    "reason": "Upgraded from B after the applicability-owner repair (2026-09-17). The owner now reads the form identity enrichment already resolved, and resolves a multi-row identity when the reviewed scope names the material and exactly one row carries it. Re-run against the 29 real butterbur products: 3 become applicable (61929 Petadolex CO2 extract 75 mg x 2 servings; 204072 Petadolex 150 mg; 293376 Petadolex Pro-Active 50 mg x 3 servings), 26 are still refused \u2014 24 on form mismatch (unspecified butterbur), 1 below the 150 mg floor, 1 unresolved. Migra-Eeze (328579) is the canary: its 22.5 mg Petadolex-form petasin row links but falls below the floor, and the 150 mg unspecified row is NOT allowed to lend its amount.",
+    "class_before_repair": "B",
+    "note": "Class A describes what the architecture can now express. It is NOT an approval: the owner's HOLD stands on safety grounds (pyrrolizidine-alkaloid hepatotoxicity, the 2015 AAN withdrawal, and rare liver injury reported even for products labelled PA-free)."
    },
    "proposed_record_level_synthesis": {
-    "proposal": "HOLD \u2014 the evidence is the strongest in Wave 1, but the material scoping it requires is not expressible today",
+    "proposal": "HOLD on safety grounds \u2014 the applicability blocker is now resolved, the safety question is not",
     "rationale": "Two placebo-controlled trials and a systematic review support the proprietary PA-free Petasites root extract at 150 mg/day for migraine prophylaxis, and the 100 mg/day arm failed (p = 0.127). The 2012 AAN/AHS Level A recommendation is HISTORICAL: the Academy stopped recommending butterbur in 2015 over safety concerns, and rare liver injury has been reported even for products labelled PA-free. 'PA-free' is a processing claim, not the studied Petadolex material, so the two must not be equated. A live probe also shows the applicability contract cannot select the studied material at all: it matches printed label text, where 'Petadolex' does not appear. A dose-floor-only record would credit unspecified butterbur at 150 mg \u2014 the PA-risk material.",
     "owner_decisions_needed": [
      "Safety owner leads here: unspecified butterbur carries pyrrolizidine-alkaloid hepatotoxicity risk, and NCCIH reports rare liver injury even in products labelled PA-free. No evidence record should make any butterbur product look endorsed before that is settled.",
@@ -3725,7 +3727,7 @@
     ],
     "review_completeness": "bounded search documented in wave1_search_log.json (58 records screened, 51 kept)",
     "evidence_strength": "guideline-endorsed but thin: two trials, 293 patients, dose-dependent",
-    "applicability_to_labels": "applicable to the PA-free/Petadolex rows at >= 150 mg/day; not applicable to unspecified butterbur",
+    "applicability_to_labels": "Now expressible: a record scoped to required_form_terms ['petadolex','pa-free'] with minimum_daily_dose 150 mg credits exactly the 3 products declaring the studied material at the studied dose and refuses the other 26. Verified against real products in wave1_applicability_rerun.json.",
     "what_would_unblock_it": [
      "Let the applicability contract consult the enricher's resolved form identity (form_id / matched_form) for material scoping, with the two-matchers risk handled deliberately \u2014 today required_form_terms only sees label text.",
      "Make _linked_rows resolve multi-row identities instead of returning nothing when more than one canonical row exists (it silently drops Migra-Eeze and Petadolex Pro-Active).",

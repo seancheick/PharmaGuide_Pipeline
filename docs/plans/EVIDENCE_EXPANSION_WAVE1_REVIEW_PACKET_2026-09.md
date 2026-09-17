@@ -17,7 +17,7 @@ Each PMID below was re-fetched live from PubMed after screening; every quote is 
 | [Horny Goat Weed (Epimedium)](#horny-goat-weed) | 51 | 28 | 28 | 1 | RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD | B |
 | [Gotu Kola](#gotu-kola) | 43 | 25 | 30 | 3 | DO NOT create a scoring record yet | B |
 | [D-Ribose](#d-ribose) | 33 | 25 | 27 | 1 | HOLD | B |
-| [Butterbur](#butterbur) | 29 | 25 | 26 | 4 | HOLD | B |
+| [Butterbur](#butterbur) | 29 | 25 | 26 | 4 | HOLD on safety grounds | A |
 | [DHEA (Dehydroepiandrosterone)](#dhea) | 33 | 25 | 25 | 4 | HOLD | B |
 | [Dandelion](#dandelion) | 57 | 21 | 27 | 1 | RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD | B |
 
@@ -660,7 +660,7 @@ The measured label median of 150 mg/day comes from the UNSPECIFIED-material rows
 
 ### Proposed synthesis (for your decision)
 
-**HOLD — the evidence is the strongest in Wave 1, but the material scoping it requires is not expressible today**
+**HOLD on safety grounds — the applicability blocker is now resolved, the safety question is not**
 
 Two placebo-controlled trials and a systematic review support the proprietary PA-free Petasites root extract at 150 mg/day for migraine prophylaxis, and the 100 mg/day arm failed (p = 0.127). The 2012 AAN/AHS Level A recommendation is HISTORICAL: the Academy stopped recommending butterbur in 2015 over safety concerns, and rare liver injury has been reported even for products labelled PA-free. 'PA-free' is a processing claim, not the studied Petadolex material, so the two must not be equated. A live probe also shows the applicability contract cannot select the studied material at all: it matches printed label text, where 'Petadolex' does not appear. A dose-floor-only record would credit unspecified butterbur at 150 mg — the PA-risk material.
 
@@ -703,9 +703,9 @@ Two placebo-controlled trials and a systematic review support the proprietary PA
 - Treat the AAN/AHS Level A statement as historical in any consumer-facing copy.
 
 - Evidence strength: guideline-endorsed but thin: two trials, 293 patients, dose-dependent
-- Applicability to labels: applicable to the PA-free/Petadolex rows at >= 150 mg/day; not applicable to unspecified butterbur
+- Applicability to labels: Now expressible: a record scoped to required_form_terms ['petadolex','pa-free'] with minimum_daily_dose 150 mg credits exactly the 3 products declaring the studied material at the studied dose and refuses the other 26. Verified against real products in wave1_applicability_rerun.json.
 - Review completeness: bounded search documented in wave1_search_log.json (58 records screened, 51 kept)
-- Scorer compatibility: **class B** — Corrected after a live probe on four real butterbur products (328579, 61929, 293376, 252504). The applicability contract links the PRINTED label row, whose text is e.g. 'Purple Butterbur CO2 extract' with form_id None; the 'PA-free butterbur extract (Petadolex)' identity lives on the enricher's separate row object and is invisible to required_form_terms, so the studied material cannot be selected (clinical_form_mismatch). Products carrying two butterbur rows (328579 Migra-Eeze, 293376 Petadolex Pro-Active) fail to link at all, because _linked_rows returns nothing when more than one canonical candidate row exists. A dose-floor-only record would therefore credit the 150 mg 'butterbur (unspecified)' products — exactly the pyrrolizidine-alkaloid material the safety literature warns about — while the branded-extract products it is meant for may not link.
+- Scorer compatibility: **class A** — Upgraded from B after the applicability-owner repair (2026-09-17). The owner now reads the form identity enrichment already resolved, and resolves a multi-row identity when the reviewed scope names the material and exactly one row carries it. Re-run against the 29 real butterbur products: 3 become applicable (61929 Petadolex CO2 extract 75 mg x 2 servings; 204072 Petadolex 150 mg; 293376 Petadolex Pro-Active 50 mg x 3 servings), 26 are still refused — 24 on form mismatch (unspecified butterbur), 1 below the 150 mg floor, 1 unresolved. Migra-Eeze (328579) is the canary: its 22.5 mg Petadolex-form petasin row links but falls below the floor, and the 150 mg unspecified row is NOT allowed to lend its amount.
 
 ### Authoritative guidance (recorded as references, not study contexts)
 

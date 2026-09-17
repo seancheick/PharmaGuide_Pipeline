@@ -1,0 +1,182 @@
+{
+ "_metadata": {
+  "baseline_ref": "HEAD",
+  "identities": 10,
+  "simulated": 1,
+  "note": "Applicability only. No record was created, no score computed or moved, no production data written."
+ },
+ "identities_detail": [
+  {
+   "canonical_id": "gotu_kola",
+   "label_name": "Gotu Kola",
+   "products_with_identity": 41,
+   "scorer_class_before": "B",
+   "proposal": "DO NOT create a scoring record yet",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "The only positive primary outcome used a single 12 g challenge and the one label-range trial (1,000 mg/day) was null; catalog median is 60 mg/day. The scorer's dose handling (min_clinical_dose guard) cannot express 'positive only far above any label serving'.",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "dhea",
+   "label_name": "DHEA (Dehydroepiandrosterone)",
+   "products_with_identity": 33,
+   "scorer_class_before": "B",
+   "proposal": "HOLD \u2014 do not create a scoring record in Wave 1",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "Positive and mixed results are population- and indication-specific (IVF/diminished ovarian reserve, adrenal insufficiency, clinical depression, and a women-only bone-density signal in healthy older adults), and no review states a dose. With no population or sex gate the record would credit 25 mg consumer products. Hormone-related, so it also routes to the high-risk path.",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "label_name": "Linoleic Acid",
+   "products_with_identity": 75,
+   "scorer_class_before": "B",
+   "proposal": "RECORD THE REVIEW STATE, CREATE NO SCORING RECORD",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "Evidence is gram-level supplementation or whole-diet substitution against surrogate endpoints; the scorer has no exposure-basis concept, so dietary-substitution trials would become capsule efficacy at a 20-40x dose gap.",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "label_name": "Isoflavones",
+   "products_with_identity": 58,
+   "scorer_class_before": "B",
+   "proposal": "HOLD \u2014 do not apply a generic production record (owner decision 2026-09-17)",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "Evidence is materially population-specific (peri/postmenopausal women) and the generic scorer has no population gate; applying it would transfer menopause evidence to every consumer.",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "ginkgo",
+   "label_name": "Ginkgo",
+   "products_with_identity": 154,
+   "scorer_class_before": "B",
+   "proposal": "HOLD \u2014 do not create a scoring record",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "Positive evidence is confined to one branded standardised extract (EGb 761) at 240 mg/day in diagnosed dementia patients, while the consumer-relevant meta-analysis in healthy adults is null and the measured label median is 60 mg/day of mostly unspecified ginkgo. The generic scorer has no population gate and no branded-material equivalence test, so a positive record would transfer dementia-treatmen",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "label_name": "Horny Goat Weed (Epimedium)",
+   "products_with_identity": 49,
+   "scorer_class_before": "B",
+   "proposal": "RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "There is nothing for the scorer to consume: no controlled human efficacy evidence exists in the documented scope, so the correct outcome is a review-state change (A -> B), which the current registry has no field for on an identity with no record.",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "tribulus",
+   "label_name": "Tribulus",
+   "products_with_identity": 49,
+   "scorer_class_before": "B",
+   "proposal": "RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "The only positive signal (erectile function, low level of evidence) is confined to men with diagnosed erectile dysfunction, and the scorer has no population gate; the marketed testosterone and performance claims are null. Sole-agent versus combination also cannot be distinguished, so any record risks importing combination results.",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "dandelion",
+   "label_name": "Dandelion",
+   "products_with_identity": 115,
+   "scorer_class_before": "B",
+   "proposal": "RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "No qualifying positive evidence exists to represent; the useful output is a review-state change, which the registry cannot express for an identity with no record.",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "label_name": "D-Ribose",
+   "products_with_identity": 33,
+   "scorer_class_before": "B",
+   "proposal": "HOLD \u2014 record the review state, create no scoring record",
+   "simulated": false,
+   "outcome": "still held \u2014 no matcher change addresses this blocker",
+   "blocker": "The strongest evidence is a null Cochrane review in a rare disease population plus small exercise trials; approving a null record would add Evidence points under the current 0.25 null multiplier.",
+   "scorer_class_after": "B"
+  },
+  {
+   "canonical_id": "butterbur",
+   "label_name": "Butterbur",
+   "products_with_identity": 29,
+   "scorer_class_before": "B",
+   "proposal": "HOLD \u2014 the evidence is the strongest in Wave 1, but the material scoping it requires is not expressible today",
+   "simulated": true,
+   "intent": "credit only products declaring the studied PA-free/Petadolex material at the studied 150 mg/day",
+   "products_evaluated": 29,
+   "applicable_before": 0,
+   "applicable_after": 3,
+   "newly_applicable": [
+    {
+     "dsld_id": "61929",
+     "brand": "Life Extension",
+     "product_name": "Butterbur Extract With Standardized Rosmarinic Acid",
+     "before": "not_applicable:clinical_form_mismatch",
+     "after": "applicable:reviewed_scope_match",
+     "rows": [
+      {
+       "name": "Purple Butterbur CO2 extract",
+       "form_id": "PA-free butterbur extract (Petadolex)",
+       "mg": 75.0
+      }
+     ]
+    },
+    {
+     "dsld_id": "204072",
+     "brand": "Nature's Way",
+     "product_name": "Petadolex",
+     "before": "not_applicable:clinical_source_row_unresolved",
+     "after": "applicable:reviewed_scope_match",
+     "rows": [
+      {
+       "name": "Purple Butterbur (Petadolex brand) root extract",
+       "form_id": "butterbur (unspecified)",
+       "mg": 150.0
+      },
+      {
+       "name": "Petasins",
+       "form_id": "butterbur (unspecified)",
+       "mg": 22.5
+      }
+     ]
+    },
+    {
+     "dsld_id": "293376",
+     "brand": "Nature's Way",
+     "product_name": "Petadolex Pro-Active",
+     "before": "not_applicable:clinical_source_row_unresolved",
+     "after": "applicable:reviewed_scope_match",
+     "rows": [
+      {
+       "name": "Purple Butterbur Root Extract",
+       "form_id": "PA-free butterbur extract (Petadolex)",
+       "mg": 50.0
+      },
+      {
+       "name": "Petasins",
+       "form_id": "butterbur (unspecified)",
+       "mg": 7.5
+      }
+     ]
+    }
+   ],
+   "still_refused": {
+    "not_applicable:clinical_form_mismatch": 24,
+    "not_applicable:below_applicable_clinical_dose": 1,
+    "not_applicable:clinical_source_row_unresolved": 1
+   },
+   "outcome": "the owner can now apply the proposed scope",
+   "scorer_class_after": "A"
+  }
+ ]
+}

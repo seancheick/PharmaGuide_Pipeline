@@ -330,3 +330,92 @@ def test_policy_dose_unit_accepts_canonical_spellings(monkeypatch):
     product = zinc_product("zinc acetate", 80, "lozenge")
     verdict = assess_clinical_applicability(product, product["evidence_data"]["clinical_matches"][0])
     assert verdict["status"] == "applicable", verdict
+
+
+# --- resolved material identity and multi-row ownership (Wave 1 applicability repair) -------------
+#
+# Both defects were found by probing real butterbur products (61929, 328579, 293376):
+# the enricher resolves "PA-free butterbur extract (Petadolex)" on its own projection of a
+# label row, and the applicability contract never saw it.
+
+def butterbur_product(*extra_rows, resolved_form="PA-free butterbur extract (Petadolex)"):
+    """A product as the pipeline really emits it: the SAME label row in two projections."""
+    label_row = {"name": "Purple Butterbur CO2 extract", "canonical_id": "butterbur",
+                 "quantity": 75.0, "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+    enriched_row = dict(label_row, form_id=resolved_form, matched_form=resolved_form, mapped=True,
+                        standard_name="Butterbur")
+    return {"form_factor_canonical": "capsule",
+            "activeIngredients": [deepcopy(label_row), *[deepcopy(r) for r in extra_rows]],
+            "ingredient_quality_data": {"ingredients": [enriched_row, *[deepcopy(r) for r in extra_rows]]},
+            "servingSizes": [{"minDailyServings": 2, "maxDailyServings": 2}]}
+
+
+def butterbur_entry(**policy_overrides):
+    policy = {"scope": "ingredient", "required_form_terms": ["petadolex"],
+              "dose_unit": "mg", "minimum_daily_dose": 150}
+    policy.update(policy_overrides)
+    return {"id": "CANDIDATE_BUTTERBUR", "ingredient": "Butterbur",
+            "matched_canonical_ids": ["butterbur"], "applicability": policy}
+
+
+def test_resolved_material_identity_is_visible_to_a_form_scoped_scope():
+    # The label prints "Purple Butterbur CO2 extract"; only enrichment resolves Petadolex.
+    decision = assess_clinical_applicability(butterbur_product(), butterbur_entry())
+
+    assert decision["status"] == "applicable"
+    assert decision["source_row_ref"] == "ingredientRows[0]"
+
+
+def test_source_required_scope_still_refuses_enrichment_resolved_forms():
+    # A source-required scope distrusts enrichment by design; merging must not leak into it.
+    decision = assess_clinical_applicability(
+        butterbur_product(), butterbur_entry(require_source_label_form=True))
+
+    assert decision["status"] == "not_applicable"
+
+
+def test_unspecified_material_stays_out_even_when_the_dose_matches():
+    product = butterbur_product(resolved_form="butterbur (unspecified)")
+    product["servingSizes"] = [{"minDailyServings": 2, "maxDailyServings": 2}]
+
+    decision = assess_clinical_applicability(product, butterbur_entry())
+
+    assert decision["status"] == "not_applicable"
+    assert decision["reason_code"] == "clinical_form_mismatch"
+
+
+def test_second_owned_row_no_longer_blocks_a_discriminated_match():
+    # 293376 Petadolex Pro-Active carries a second butterbur row ("Petasins"), which
+    # previously made the whole identity unresolved.
+    second = {"name": "Petasins", "canonical_id": "butterbur", "quantity": 7.5, "unit": "mg",
+              "raw_source_path": "ingredientRows[1]", "form_id": "butterbur (unspecified)"}
+
+    decision = assess_clinical_applicability(butterbur_product(second), butterbur_entry())
+
+    assert decision["status"] == "applicable"
+    assert decision["source_row_ref"] == "ingredientRows[0]"
+
+
+def test_two_rows_matching_the_same_scope_remain_unresolved():
+    twin = {"name": "Butterbur root extract", "canonical_id": "butterbur", "quantity": 75.0,
+            "unit": "mg", "raw_source_path": "ingredientRows[1]",
+            "form_id": "PA-free butterbur extract (Petadolex)"}
+
+    decision = assess_clinical_applicability(butterbur_product(twin), butterbur_entry())
+
+    assert decision["status"] == "not_applicable"
+    assert decision["reason_code"] == "clinical_source_row_unresolved"
+
+
+def test_multiple_owned_rows_without_a_discriminating_scope_stay_unresolved():
+    # No required_form_terms means nothing distinguishes the rows: an unmatched row
+    # must never lend its amount to the scope.
+    second = {"name": "Petasins", "canonical_id": "butterbur", "quantity": 7.5, "unit": "mg",
+              "raw_source_path": "ingredientRows[1]", "form_id": "butterbur (unspecified)"}
+    entry = butterbur_entry()
+    entry["applicability"].pop("required_form_terms")
+
+    decision = assess_clinical_applicability(butterbur_product(second), entry)
+
+    assert decision["status"] == "not_applicable"
+    assert decision["reason_code"] == "clinical_source_row_unresolved"
