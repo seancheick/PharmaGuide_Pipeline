@@ -114,12 +114,17 @@ class CertResolution:
     scoring_blocked_reason: str | None = None  # set when the resolution cannot grant points
 
     def scores_points(self) -> bool:
-        """v4 rule: only sku/product_line score B4a points AND recency must be fresh/warn."""
+        """Only sourced, current sku/product-line evidence can score."""
         if self.scope not in {"sku", "product_line"}:
             return False
         if self.scoring_blocked_reason:
             return False
-        return True
+        return bool(
+            self.record_id
+            and self.source_url
+            and self.snapshot_date
+            and self.recency_status in {"fresh", "warn"}
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {k: v for k, v in asdict(self).items() if v is not None}
@@ -768,8 +773,10 @@ def _check_override(
                     ), frozenset(rejected_record_ids)
             # verified. A reviewed override that points at a current registry
             # record carries that record's provenance and snapshot recency, so
-            # a stale snapshot blocks it like any registry match. An override
-            # for a certification not in the snapshots keeps its own evidence.
+            # a stale snapshot blocks it like any registry match. If a curated
+            # record disappeared from the current registry snapshot, retain it
+            # for review but never treat historical override text as current
+            # certification.
             record = registry.record_by_id(override.get("record_id"))
             if record is not None:
                 resolution = replace(
@@ -779,14 +786,47 @@ def _check_override(
                     matched_product=override.get("matched_product") or record.get("product") or override.get("product"),
                 )
                 return resolution, frozenset(rejected_record_ids)
+            # A current snapshot for this program exists, but the reviewed
+            # record no longer does.  That is a meaningful delisting signal;
+            # historical override evidence must return to review.
+            if program_canon in registry.recency_by_program:
+                return CertResolution(
+                    program=program_canon,
+                    scope="needs_review",
+                    record_id=override.get("record_id"),
+                    verified_at=override.get("verified_at"),
+                    source_url=override.get("source_url"),
+                    notes="curated override record absent from current registry",
+                    matched_brand=override.get("matched_brand") or override.get("brand"),
+                    matched_product=override.get("matched_product") or override.get("product"),
+                ), frozenset(rejected_record_ids)
+
+            # Some programs do not yet have an ingested registry.  A reviewed
+            # override can remain authoritative only while its own dated,
+            # sourced verification is current under the same recency policy.
+            override_recency, override_age = _recency_status(override.get("verified_at"))
+            if override.get("source_url") and override_recency in {"fresh", "warn"}:
+                return CertResolution(
+                    program=program_canon,
+                    scope=scope,
+                    match_confidence=1.0,
+                    record_id=override.get("record_id"),
+                    verified_at=override.get("verified_at"),
+                    source_url=override.get("source_url"),
+                    notes="curated override (program registry not ingested)",
+                    matched_brand=override.get("matched_brand") or override.get("brand"),
+                    matched_product=override.get("matched_product") or override.get("product"),
+                    snapshot_date=override.get("verified_at"),
+                    snapshot_age_days=override_age,
+                    recency_status=override_recency,
+                ), frozenset(rejected_record_ids)
             return CertResolution(
                 program=program_canon,
-                scope=scope,
-                match_confidence=1.0,
+                scope="needs_review",
                 record_id=override.get("record_id"),
                 verified_at=override.get("verified_at"),
                 source_url=override.get("source_url"),
-                notes="curated override",
+                notes="curated override record absent from current registry",
                 matched_brand=override.get("matched_brand") or override.get("brand"),
                 matched_product=override.get("matched_product") or override.get("product"),
             ), frozenset(rejected_record_ids)
@@ -1048,7 +1088,13 @@ def _record_to_resolution(
     recency_status = record.get("_recency_status", "unknown")
 
     scoring_blocked_reason: str | None = None
-    if recency_status == "scoring_blocked":
+    if not str(record.get("record_id") or "").strip():
+        scoring_blocked_reason = "registry record id missing; refresh registry before granting points"
+    elif not str(record.get("source_url") or "").strip():
+        scoring_blocked_reason = "registry source url missing; refresh registry before granting points"
+    elif not str(snapshot_date or "").strip():
+        scoring_blocked_reason = "registry snapshot date missing; refresh registry before granting points"
+    elif recency_status == "scoring_blocked":
         scoring_blocked_reason = (
             f"snapshot is {snapshot_age_days}d old (> {RECENCY_AUDIT_ONLY_DAYS}d audit-only threshold); "
             f"refresh registry before granting B4a points"

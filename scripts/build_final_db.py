@@ -2989,10 +2989,15 @@ def build_decision_highlights(
     ``danger`` exclusively; ``caution`` then flows unchanged for the
     non-blocking signals (additives, allergens, verdict).
     """
+    from cert_resolver import normalize_program
     from scoring_v4.cert_evidence import claimed_programs, verified_programs
 
     verified_names = [row["name"] for row in verified_programs(enriched)]
-    unverified_claims = [name for name in claimed_programs(enriched) if name not in verified_names]
+    verified_keys = {normalize_program(name) for name in verified_names}
+    unverified_claims = [
+        name for name in claimed_programs(enriched)
+        if normalize_program(name) not in verified_keys
+    ]
     verdict = safe_str(scored.get("verdict")).upper()
     # V4 cutover: the shipped /100 score (overlay sets score_100_equivalent
     # from quality_score_v4_100); 75/100 mirrors the retired V3 score_80>=60.

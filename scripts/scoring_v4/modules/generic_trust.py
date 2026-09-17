@@ -30,6 +30,7 @@ from scoring_v4.cert_evidence import (
     audited_gmp_evidence,
     cert_entry_brand_matches_product,
     facility_audit_programs,
+    is_verified_product_cert_entry,
 )
 from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
 
@@ -161,6 +162,9 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
 
         if scope in ("sku", "product_line") and not cert_entry_brand_matches_product(product, entry):
             skipped_reasons["brand_mismatch"] += 1
+            continue
+        if scope in ("sku", "product_line") and not is_verified_product_cert_entry(product, entry):
+            skipped_reasons["missing_or_stale_provenance"] += 1
             continue
 
         if scope == "label_asserted_product":

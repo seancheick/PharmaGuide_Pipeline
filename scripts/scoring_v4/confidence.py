@@ -15,7 +15,12 @@ from __future__ import annotations
 from typing import Any, Dict, Iterable, List, Tuple
 
 from scoring_input_contract import get_scoring_ingredients
-from scoring_v4.cert_evidence import cert_entry_brand_matches_product
+from scoring_v4.cert_evidence import (
+    cert_entry_brand_matches_product,
+    is_verified_product_cert_entry,
+    verified_cert_entries,
+    verified_product_cert_entries,
+)
 
 
 LEVEL_ORDER = {"high": 3, "moderate": 2, "low": 1}
@@ -355,14 +360,16 @@ def _verification_metadata(module: Dict[str, Any]) -> Dict[str, Any]:
 def _verification_confidence(product: Dict[str, Any], module: Dict[str, Any]) -> Tuple[str, List[str]]:
     metadata = _verification_metadata(module)
     scope_counts = _safe_dict(metadata.get("verified_scope_counts"))
-    if _as_float(scope_counts.get("sku"), 0.0):
+    current_product_entries = verified_product_cert_entries(product)
+    current_scopes = {_norm(entry.get("scope")) for entry in current_product_entries}
+    if _as_float(scope_counts.get("sku"), 0.0) and "sku" in current_scopes:
         return "high", ["cert_sku_verified"]
-    if _as_float(scope_counts.get("product_line"), 0.0):
+    if _as_float(scope_counts.get("product_line"), 0.0) and "product_line" in current_scopes:
         return "high", ["cert_product_line_verified"]
     if _as_float(scope_counts.get("label_asserted_product"), 0.0):
         return "moderate", ["cert_label_asserted_product"]
 
-    cert_entries = _verified_cert_entries(product)
+    cert_entries = verified_cert_entries(product)
     drivers: List[str] = []
     if not cert_entries:
         return "moderate", ["no_verified_third_party_certification"]
@@ -380,7 +387,10 @@ def _verification_confidence(product: Dict[str, Any], module: Dict[str, Any]) ->
             drivers.append("cert_brand_mismatch_ignored")
             continue
         blocked = bool(entry.get("scoring_blocked_reason"))
-        if blocked:
+        if scope in {"sku", "product_line"} and not is_verified_product_cert_entry(product, entry):
+            drivers.append("cert_registry_stale_or_missing_provenance")
+            has_low_unresolved = True
+        elif blocked:
             drivers.append("cert_registry_stale_or_blocked")
             has_low_unresolved = True
         elif scope == "sku":
@@ -479,13 +489,6 @@ def _clinical_matches(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     if not product.get("evidence_data") and product.get("clinical_evidence"):
         product = {**product, "evidence_data": product["clinical_evidence"]}
     return resolved_clinical_matches(product)[0]
-
-
-def _verified_cert_entries(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    entries = product.get("verified_cert_programs")
-    if entries is None:
-        entries = _safe_dict(product.get("certification_data")).get("verified_cert_programs")
-    return [e for e in _safe_list(entries) if isinstance(e, dict)]
 
 
 def _ingredient_identity_confidences(product: Dict[str, Any]) -> Iterable[float]:

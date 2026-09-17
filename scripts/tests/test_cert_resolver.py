@@ -49,6 +49,8 @@ def _make_registry(
     registry = CertRegistry()
     for r in records or []:
         program = r.get("program") or ""
+        r.setdefault("record_id", f"TEST_{len(registry.records_by_program.get(program, [])) + 1}")
+        r.setdefault("source_url", "https://registry.example/certified-products")
         # auto-populate normalized fields if not present
         r.setdefault("brand_normalized", normalize_brand(r.get("brand", "")))
         r.setdefault("product_normalized", normalize_product(r.get("product", "")))
@@ -130,11 +132,21 @@ class TestNormalization:
 
 class TestCertResolution:
     def test_scores_points_only_for_sku_and_product_line(self) -> None:
-        assert CertResolution("NSF Sport", "sku").scores_points() is True
-        assert CertResolution("NSF Sport", "product_line").scores_points() is True
+        current = {
+            "record_id": "TEST_RECORD",
+            "source_url": "https://registry.example/certified-products",
+            "snapshot_date": "2026-09-16",
+            "recency_status": "fresh",
+        }
+        assert CertResolution("NSF Sport", "sku", **current).scores_points() is True
+        assert CertResolution("NSF Sport", "product_line", **current).scores_points() is True
         assert CertResolution("NSF Sport", "brand_only").scores_points() is False
         assert CertResolution("NSF Sport", "needs_review").scores_points() is False
         assert CertResolution("NSF Sport", "claimed_only").scores_points() is False
+
+    def test_product_scope_without_current_recency_never_scores(self) -> None:
+        assert CertResolution("NSF Sport", "sku").scores_points() is False
+        assert CertResolution("NSF Sport", "product_line", recency_status="unknown").scores_points() is False
 
     def test_to_dict_strips_none(self) -> None:
         r = CertResolution("NSF Sport", "sku", match_confidence=0.95)
@@ -637,6 +649,7 @@ class TestSkuStrengthIdentity:
             "brand": "Example", "product": "Probiotics 50 Billion",
             "program": "NSF Certified", "status": "verified", "scope": "product_line",
             "matched_product": "Daily Probiotics", "record_id": "REVIEWED_LINE",
+            "verified_at": "2026-09-16", "source_url": "https://registry.example/reviewed-line",
         }])
 
         result = resolve("Example", "Probiotics 50 Billion", ["NSF Certified"], registry)[0]
@@ -838,6 +851,7 @@ class TestSkuFormContext:
             "brand": "Example", "product": "Daily Probiotic", "program": "USP Verified",
             "scope": "product_line", "status": "verified", "dsld_id": "reviewed-id",
             "record_id": "REVIEWED_LINE",
+            "verified_at": "2026-09-16", "source_url": "https://registry.example/reviewed-line",
         }])
         context = {"form_factor_canonical": "capsule", "netContents": [{"unit": "Vegetarian Capsule(s)"}]}
 
@@ -876,7 +890,7 @@ class TestResolverScoring:
 
 
 class TestOverrides:
-    def test_verified_override_wins_over_registry_miss(self) -> None:
+    def test_verified_override_missing_from_current_registry_requires_review(self) -> None:
         registry = _make_registry(
             records=[],
             overrides=[
@@ -892,9 +906,10 @@ class TestOverrides:
         )
         out = resolve("Transparent Labs", "KSM-66", ["Informed Sport"], registry)
         assert len(out) == 1
-        assert out[0].scope == "sku"
+        assert out[0].scope == "needs_review"
         assert out[0].record_id == "OVR_001"
-        assert out[0].notes == "curated override"
+        assert out[0].notes == "curated override record absent from current registry"
+        assert out[0].scores_points() is False
 
     def test_pending_review_override_returns_needs_review(self) -> None:
         registry = _make_registry(
@@ -948,6 +963,8 @@ class TestOverrides:
                     "scope": "product_line",
                     "record_id": "USP_D3_SOFTGEL",
                     "dsld_id": "12154",
+                    "verified_at": "2026-09-16",
+                    "source_url": "https://registry.example/usp-d3-softgel",
                 }
             ],
         )

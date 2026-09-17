@@ -51,6 +51,19 @@ def _trust_view(breakdown: dict) -> dict:
     }
 
 
+def _verified(program: str, scope: str = "sku", **extra: object) -> dict:
+    row = {
+        "program": program,
+        "scope": scope,
+        "record_id": f"TEST_{program.upper().replace(' ', '_')}",
+        "source_url": "https://registry.example/certified-products",
+        "snapshot_date": "2026-09-16",
+        "recency_status": "fresh",
+    }
+    row.update(extra)
+    return row
+
+
 # --- Component contract --------------------------------------------------
 
 
@@ -82,7 +95,7 @@ def test_none_input_scores_zero_safely() -> None:
 def test_b4a_sku_scope_awards_10_pts() -> None:
     from scoring_v4.modules.omega_trust import score_trust
 
-    product = {"verified_cert_programs": [{"program": "IFOS", "scope": "sku"}]}
+    product = {"verified_cert_programs": [_verified("IFOS")]}
     payload = score_trust(product)
     assert payload["components"]["b4a_verified_certifications"] == 10.0
 
@@ -91,7 +104,7 @@ def test_b4a_product_line_scope_awards_10_pts() -> None:
     """Curated product_line overrides (from P1.7.3) score full 10."""
     from scoring_v4.modules.omega_trust import score_trust
 
-    product = {"verified_cert_programs": [{"program": "IFOS", "scope": "product_line"}]}
+    product = {"verified_cert_programs": [_verified("IFOS", "product_line")]}
     payload = score_trust(product)
     assert payload["components"]["b4a_verified_certifications"] == 10.0
 
@@ -103,8 +116,7 @@ def test_b4a_cross_brand_sku_cert_scores_zero() -> None:
         "brandName": "CVS Health",
         "verified_cert_programs": [
             {
-                "program": "NSF Sport",
-                "scope": "sku",
+                **_verified("NSF Sport"),
                 "matched_brand": "LTH",
                 "matched_product": "GLOW Omega-3 Fish Oil",
             }
@@ -114,7 +126,7 @@ def test_b4a_cross_brand_sku_cert_scores_zero() -> None:
 
     assert "b4a_verified_certifications" not in payload["components"]
     assert payload["metadata"]["b4a"]["B4a_skipped_entries"] == [
-        {"program": "NSF Sport", "scope": "sku", "reason": "brand_mismatch"}
+        {"program": "NSF Sport", "scope": "sku", "reason": "missing_stale_or_mismatched_provenance"}
     ]
 
 
@@ -143,7 +155,7 @@ def test_b4a_brand_only_scope_scores_zero() -> None:
     assert "b4a_verified_certifications" not in payload["components"]
 
 
-def test_brand_level_omega_testing_posture_scores_without_b4a_credit() -> None:
+def test_brand_level_omega_testing_posture_and_sourced_facility_gmp_stay_separate() -> None:
     """Brand-level IFOS posture is not SKU proof, but it is a low trust signal.
 
     Locks the Nordic Naturals canary shape: brand_only IFOS remains excluded
@@ -166,7 +178,9 @@ def test_brand_level_omega_testing_posture_scores_without_b4a_credit() -> None:
 
     assert "b4a_verified_certifications" not in payload["components"]
     assert payload["components"]["b4d_brand_testing_posture"] == 2.0
-    assert payload["score"] == 2.0
+    assert payload["components"]["b4b_gmp"] == 4.0
+    assert payload["metadata"]["b4b"]["gmp_basis"] == "manufacturer_facility"
+    assert payload["score"] == 6.0
     assert payload["metadata"]["b4d"]["source"] == "top_manufacturers_data.json"
     assert payload["metadata"]["b4d"]["manufacturer_id"] == "MANUF_NORDIC_NATURALS"
 
@@ -242,8 +256,8 @@ def test_b4a_multiple_sku_certs_cap_at_10() -> None:
     from scoring_v4.modules.omega_trust import score_trust
 
     product = {"verified_cert_programs": [
-        {"program": "IFOS", "scope": "sku"},
-        {"program": "NSF Sport", "scope": "sku"},
+        _verified("IFOS"),
+        _verified("NSF Sport"),
     ]}
     payload = score_trust(product)
     assert payload["components"]["b4a_verified_certifications"] == 10.0
@@ -270,7 +284,7 @@ def test_b4a_reads_certification_data_nested_path() -> None:
 
     # Nested-only shape
     product = {"certification_data": {"verified_cert_programs": [
-        {"program": "IFOS", "scope": "sku"}
+        _verified("IFOS")
     ]}}
     payload = score_trust(product)
     assert payload["components"]["b4a_verified_certifications"] == 10.0
@@ -315,7 +329,7 @@ def test_b4b_verified_nsf_contents_sku_cert_infers_gmp() -> None:
 
     product = {
         "verified_cert_programs": [
-            {"program": "NSF Certified", "scope": "sku"},
+            _verified("NSF Certified"),
         ],
         "certification_data": {"gmp": {"claimed": False}},
     }
@@ -333,8 +347,7 @@ def test_b4b_cross_brand_cert_does_not_infer_gmp() -> None:
         "brandName": "CVS Health",
         "verified_cert_programs": [
             {
-                "program": "NSF Certified",
-                "scope": "sku",
+                **_verified("NSF Certified"),
                 "matched_brand": "LTH",
                 "matched_product": "GLOW Omega-3 Fish Oil",
             },
@@ -454,8 +467,8 @@ def test_max_trust_score_is_15() -> None:
 
     product = {
         "verified_cert_programs": [
-            {"program": "IFOS", "scope": "sku"},
-            {"program": "NSF Certified", "scope": "sku"},
+            _verified("IFOS"),
+            _verified("NSF Certified"),
         ],
         "certification_data": {
             "gmp": {},
@@ -589,7 +602,7 @@ def test_omega_trust_dimension_score_populated_in_breakdown() -> None:
             {"name": "EPA", "canonical_id": "epa", "quantity": 500, "unit": "mg"},
             {"name": "DHA", "canonical_id": "dha", "quantity": 300, "unit": "mg"},
         ]},
-        "verified_cert_programs": [{"program": "IFOS", "scope": "sku"}],
+        "verified_cert_programs": [_verified("IFOS")],
     }
     breakdown = score_omega(product).to_breakdown()
     trust = _trust_view(breakdown)

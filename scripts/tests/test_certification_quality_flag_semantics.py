@@ -205,21 +205,31 @@ def test_verification_assessment_distinguishes_completed_absence_and_presence() 
     )
     enricher._cert_registry_cache = registry
 
-    absent = enricher._build_verification_assessment([])
+    product = {"brandName": "Test Brand"}
+    absent = enricher._build_verification_assessment([], product)
     present = enricher._build_verification_assessment([
         {
             "program": "NSF Sport",
             "scope": "sku",
             "record_id": "fixture-record",
+            "source_url": "https://registry.example/nsf-sport",
+            "snapshot_date": "2026-08-01",
             "recency_status": "fresh",
         }
-    ])
+    ], product)
 
     assert absent["state"] == "verified_absent"
     assert absent["readiness"] == "complete"
     assert absent["reason_code"] == "registry_evaluated_no_match"
     assert present["state"] == "verified_present"
     assert present["matched_programs"] == ["NSF Sport"]
+
+    incomplete = enricher._build_verification_assessment([
+        {"program": "NSF Sport", "scope": "sku", "record_id": "fixture-record"}
+    ], product)
+    assert incomplete["state"] == "not_evaluated"
+    assert incomplete["readiness"] == "incomplete"
+    assert incomplete["reason_code"] == "cert_registry_match_missing_current_provenance"
 
 
 @pytest.mark.parametrize(

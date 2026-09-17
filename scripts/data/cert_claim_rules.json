@@ -271,9 +271,9 @@
         "verified_capabilities": {
           "verified_program": "Informed Sport",
           "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified"],
-          "basis": "Informed Sport is a banned-substance testing program; it does not establish label potency or heavy-metal testing. Applies only to a registry-verified product, never to a label claim.",
-          "source": "https://sport.wetestyoutrust.com/"
+          "capabilities": [],
+          "basis": "Informed Sport verifies batch testing for prohibited substances. That is valuable named-program evidence, but it does not establish PharmaGuide's broader purity, heavy-metal, or label-accuracy flags.",
+          "source": "https://sport.wetestyoutrust.com/about/certification-process"
         },
         "implies_gmp": {
           "verified_program": "Informed Sport",
@@ -300,9 +300,9 @@
         "verified_capabilities": {
           "verified_program": "Informed Choice",
           "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified"],
-          "basis": "Informed Choice is a banned-substance testing program; it does not establish label potency or heavy-metal testing. Applies only to a registry-verified product, never to a label claim.",
-          "source": "https://choice.wetestyoutrust.com/"
+          "capabilities": [],
+          "basis": "Informed Choice verifies recurring testing for banned-substance contamination. That is valuable named-program evidence, but it does not establish PharmaGuide's broader purity, heavy-metal, or label-accuracy flags.",
+          "source": "https://choice.wetestyoutrust.com/sites/default/files/2022-07/Informed%20Choice%20Dietary%20Supplement%20Certification%20Process.pdf"
         },
         "implies_gmp": {
           "verified_program": "Informed Choice",
@@ -329,9 +329,9 @@
         "verified_capabilities": {
           "verified_program": "BSCG",
           "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified"],
-          "basis": "BSCG Certified Drug Free is a banned-substance testing program; it does not establish label potency or heavy-metal testing. Applies only to a registry-verified product, never to a label claim.",
-          "source": "https://www.bscg.org/"
+          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "basis": "BSCG Certified Drug Free combines banned-substance screening with label-claim and contaminant testing, including heavy metals. Applies only to a current registry-verified product, never to a label claim.",
+          "source": "https://www.bscg.org/certified-drug-free-certification-and-testing-for-banned-substances"
         },
         "implies_gmp": {
           "verified_program": "BSCG",

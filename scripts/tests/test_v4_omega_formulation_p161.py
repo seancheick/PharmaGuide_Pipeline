@@ -326,7 +326,10 @@ def test_undefined_form_floor_accepts_sku_verified_cert_programs() -> None:
         dha=650,
         certification_data={
             "verified_cert_programs": [
-                {"program": "NSF Certified", "scope": "sku", "match_confidence": 1.0},
+                {"program": "NSF Certified", "scope": "sku", "match_confidence": 1.0,
+                 "record_id": "NSF_TEST", "source_url": "https://registry.example/nsf-test",
+                 "snapshot_date": "2026-09-16",
+                 "recency_status": "fresh"},
                 {"program": "IFOS", "scope": "brand_only"},
             ],
             "evidence_based": {"third_party_programs": []},

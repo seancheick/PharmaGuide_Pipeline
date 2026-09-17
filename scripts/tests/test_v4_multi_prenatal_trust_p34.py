@@ -44,7 +44,15 @@ def _trust_view(breakdown: dict) -> dict:
 
 
 def _cert(program: str, scope: str, *, source: str = "registry", **extra: object) -> dict:
-    row = {"program": program, "scope": scope, "evidence_source": source}
+    row = {
+        "program": program,
+        "scope": scope,
+        "evidence_source": source,
+        "record_id": f"TEST_{program.upper().replace(' ', '_')}",
+        "source_url": "https://registry.example/certified-products",
+        "snapshot_date": "2026-09-16",
+        "recency_status": "fresh",
+    }
     row.update(extra)
     return row
 

@@ -104,6 +104,9 @@
           {
             "program": "NSF Certified for Sport",
             "scope": "sku",
+            "record_id": "FIXTURE_NSF_CERTIFIED_FOR_SPORT",
+            "source_url": "https://registry.example/nsf-sport",
+            "snapshot_date": "2026-09-16",
             "recency_status": "fresh",
             "brand_matched": true
           }
@@ -360,6 +363,9 @@
           {
             "program": "NSF Certified for Sport",
             "scope": "sku",
+            "record_id": "FIXTURE_NSF_CERTIFIED_FOR_SPORT",
+            "source_url": "https://registry.example/nsf-sport",
+            "snapshot_date": "2026-09-16",
             "recency_status": "fresh",
             "brand_matched": true
           }
@@ -538,7 +544,7 @@
           ]
         },
         "verified_cert_programs": [
-          {"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}
+          {"program": "NSF Sport", "scope": "sku", "record_id": "FIXTURE_NSF_SPORT", "source_url": "https://registry.example/nsf-sport", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}
         ],
         "dietary_sensitivity_data": {
           "sugar": {"level": "sugar_free", "contains_sugar": false, "has_added_sugar": false, "amount_g": 0, "sugar_sources": []},
@@ -848,7 +854,7 @@
             {"id": "FIXTURE_PROBIOTIC_BB12_EVIDENCE", "ingredient": "Bifidobacterium lactis BB-12", "standard_name": "Bifidobacterium lactis BB-12", "study_type": "clinical_strain", "evidence_level": "strain-clinical", "effect_direction": "positive_strong", "total_enrollment": 800}
           ]
         },
-        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "record_id": "FIXTURE_NSF_SPORT", "source_url": "https://registry.example/nsf-sport", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}],
         "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
         "has_batch_coa": true
       },
@@ -980,7 +986,7 @@
             {"id": "FIXTURE_OMEGA_FISH_OIL_EVIDENCE", "ingredient": "Fish Oil", "standard_name": "Fish Oil", "canonical_id": "fish_oil", "study_type": "systematic_review_meta", "evidence_level": "ingredient-human", "effect_direction": "positive_strong", "total_enrollment": 1000}
           ]
         },
-        "verified_cert_programs": [{"program": "IFOS", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "verified_cert_programs": [{"program": "IFOS", "scope": "sku", "record_id": "FIXTURE_IFOS", "source_url": "https://registry.example/ifos", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}],
         "certification_data": {
           "gmp": {"nsf_gmp": true},
           "batch_traceability": {"has_coa": true, "has_batch_lookup": true},
@@ -1145,7 +1151,7 @@
             {"id": "FIXTURE_PRENATAL_CHOLINE_EVIDENCE", "ingredient": "Choline", "standard_name": "Choline", "canonical_id": "choline", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000}
           ]
         },
-        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "record_id": "FIXTURE_NSF_SPORT", "source_url": "https://registry.example/nsf-sport", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}],
         "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
         "has_batch_coa": true,
         "proprietary_blends": [],
@@ -1286,7 +1292,7 @@
         },
         "rda_ul_data": {"adequacy_results": [{"nutrient": "Ashwagandha", "pct_rda": null, "pct_ul": null, "scoring_eligible": true}], "safety_flags": []},
         "evidence_data": {"clinical_matches": [{"id": "FIXTURE_BOTANICAL_PRODUCT_EVIDENCE", "ingredient": "KSM-66 Ashwagandha", "standard_name": "KSM-66 Ashwagandha", "canonical_id": "ashwagandha", "study_type": "rct_multiple", "evidence_level": "branded-rct", "effect_direction": "positive_strong", "total_enrollment": 500, "min_clinical_dose": 300, "dose_unit": "mg"}]},
-        "verified_cert_programs": [{"program": "NSF", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "verified_cert_programs": [{"program": "NSF", "scope": "sku", "record_id": "FIXTURE_NSF", "source_url": "https://registry.example/nsf", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}],
         "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
         "has_batch_coa": true,
         "proprietary_blends": [],
@@ -1365,7 +1371,7 @@
         "supplement_taxonomy": {"primary_type": "amino_acid", "percentile_category": "sports_nutrition"},
         "ingredient_quality_data": {"total_active": 1, "ingredients_scorable": [{"name": "Creatine Monohydrate", "standard_name": "Creatine Monohydrate", "canonical_id": "creatine_monohydrate", "quantity": 5, "dose": 5, "unit": "g", "bio_score": 14, "matched_form": "creatine monohydrate", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}]},
         "evidence_data": {"clinical_matches": [{"id": "FIXTURE_CREATINE_PRODUCT_EVIDENCE", "ingredient": "Creatine Monohydrate", "standard_name": "Creatine Monohydrate", "canonical_id": "creatine_monohydrate", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000, "published_studies_count": 40}]},
-        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "record_id": "FIXTURE_NSF_SPORT", "source_url": "https://registry.example/nsf-sport", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}],
         "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
         "has_batch_coa": true,
         "proprietary_blends": [],
@@ -1446,7 +1452,7 @@
           {"id": "FIXTURE_PREWORKOUT_BETA_ALANINE_EVIDENCE", "ingredient": "Beta-Alanine", "standard_name": "Beta-Alanine", "canonical_id": "beta-alanine", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000},
           {"id": "FIXTURE_PREWORKOUT_CREATINE_EVIDENCE", "ingredient": "Creatine Monohydrate", "standard_name": "Creatine Monohydrate", "canonical_id": "creatine_monohydrate", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000}
         ]},
-        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "record_id": "FIXTURE_NSF_SPORT", "source_url": "https://registry.example/nsf-sport", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}],
         "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
         "has_batch_coa": true,
         "proprietary_blends": [],
@@ -1525,7 +1531,7 @@
           {"name": "L-Valine", "standard_name": "L-Valine", "canonical_id": "l_valine", "quantity": 1.6, "dose": 1.6, "unit": "g", "bio_score": 12, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[3]", "dose_class": "therapeutic_mass"}
         ]},
         "evidence_data": {"clinical_matches": [{"id": "FIXTURE_PROTEIN_PRODUCT_EVIDENCE", "ingredient": "Whey Protein Isolate", "standard_name": "Whey Protein Isolate", "canonical_id": "whey_protein", "study_type": "rct_multiple", "evidence_level": "branded-rct", "effect_direction": "positive_strong", "total_enrollment": 500, "min_clinical_dose": 20, "dose_unit": "g"}]},
-        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "record_id": "FIXTURE_NSF_SPORT", "source_url": "https://registry.example/nsf-sport", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}],
         "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
         "has_batch_coa": true,
         "dietary_sensitivity_data": {"sugar": {"level": "sugar_free", "contains_sugar": false, "has_added_sugar": false, "amount_g": 0, "sugar_sources": []}, "sweeteners": {"artificial": [], "high_glycemic": [], "sugar_alcohols": [], "safer_alternatives": []}},
@@ -1610,7 +1616,7 @@
           {"id": "FIXTURE_BCAA_ISOLEUCINE_EVIDENCE", "ingredient": "L-Isoleucine", "standard_name": "L-Isoleucine", "canonical_id": "l_isoleucine", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000},
           {"id": "FIXTURE_BCAA_VALINE_EVIDENCE", "ingredient": "L-Valine", "standard_name": "L-Valine", "canonical_id": "l_valine", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000}
         ]},
-        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "record_id": "FIXTURE_NSF_SPORT", "source_url": "https://registry.example/nsf-sport", "snapshot_date": "2026-09-16", "recency_status": "fresh", "brand_matched": true}],
         "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
         "has_batch_coa": true,
         "proprietary_blends": [],

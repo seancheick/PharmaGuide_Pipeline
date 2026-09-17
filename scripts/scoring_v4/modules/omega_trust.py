@@ -32,7 +32,7 @@ from typing import Any, Dict, List, Tuple
 
 from scoring_v4.cert_evidence import (
     audited_gmp_evidence,
-    cert_entry_brand_matches_product,
+    is_verified_product_cert_entry,
     verified_cert_entries,
 )
 from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
@@ -124,11 +124,11 @@ def _score_b4a(
                 "reason": "scope_not_in_verified_set",
             })
             continue
-        if scope in {"sku", "product_line"} and not cert_entry_brand_matches_product(product, entry):
+        if scope in {"sku", "product_line"} and not is_verified_product_cert_entry(product, entry):
             skipped_entries.append({
                 "program": entry.get("program"),
                 "scope": scope,
-                "reason": "brand_mismatch",
+                "reason": "missing_stale_or_mismatched_provenance",
             })
             continue
         raw += pts

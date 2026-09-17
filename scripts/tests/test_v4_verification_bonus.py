@@ -30,7 +30,14 @@ def _ingredient() -> dict:
 
 
 def _cert(program: str, scope: str) -> dict:
-    return {"program": program, "scope": scope, "recency_status": "fresh"}
+    return {
+        "program": program,
+        "scope": scope,
+        "record_id": f"TEST_{program.upper().replace(' ', '_')}",
+        "source_url": "https://registry.example/certified-products",
+        "snapshot_date": "2026-09-16",
+        "recency_status": "fresh",
+    }
 
 
 def _product(verified_cert_programs=None, gmp=None, batch_traceability=None) -> dict:

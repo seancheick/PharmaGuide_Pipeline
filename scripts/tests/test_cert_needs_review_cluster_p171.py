@@ -440,6 +440,7 @@ def _auto_reject_registry():
             "program": "USP Verified", "brand": "Nature Made", "product": product,
             "brand_normalized": normalize_brand("Nature Made"),
             "product_normalized": normalize_product(product), "record_id": record_id,
+            "source_url": "https://registry.example/usp-verified",
             "_snapshot_date": "2026-09-16", "_snapshot_age_days": 0, "_recency_status": "fresh",
         })
     overrides = [

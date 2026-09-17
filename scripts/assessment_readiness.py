@@ -476,13 +476,6 @@ def _verified_programs(product: Mapping[str, Any]) -> list[Mapping[str, Any]]:
     return [entry for entry in _safe_list(entries) if isinstance(entry, Mapping)]
 
 
-def _scores_as_verified(entry: Mapping[str, Any]) -> bool:
-    return (
-        str(entry.get("scope") or "") in {"sku", "product_line"}
-        and not entry.get("scoring_blocked_reason")
-    )
-
-
 def evaluate_catalog_disposition(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Separate explicit QA-only labels from genuine scoring remediation.
 
@@ -602,7 +595,26 @@ def evaluate_verification_assessment(product: Mapping[str, Any]) -> Dict[str, An
         # Schema-2.x migration boundary. The presence of certification_data
         # proves the enrichment collector ran; old artifacts simply omitted its
         # explicit completion marker. Remove this branch with schema 3.
-        verified = [entry for entry in _verified_programs(product) if _scores_as_verified(entry)]
+        from scoring_v4.cert_evidence import is_verified_product_cert_entry
+
+        entries = _verified_programs(product)
+        verified = [
+            entry
+            for entry in entries
+            if is_verified_product_cert_entry(dict(product), dict(entry))
+        ]
+        product_scope_candidates = [
+            entry for entry in entries
+            if str(entry.get("scope") or "") in {"sku", "product_line"}
+        ]
+        if product_scope_candidates and not verified:
+            return {
+                "state": VERIFICATION_NOT_EVALUATED,
+                "readiness": READINESS_INCOMPLETE,
+                "reason_code": "legacy_registry_match_missing_current_provenance",
+                "matched_programs": [],
+                "migration_inference": True,
+            }
         programs = list(dict.fromkeys(
             str(entry.get("program") or "").strip()
             for entry in verified

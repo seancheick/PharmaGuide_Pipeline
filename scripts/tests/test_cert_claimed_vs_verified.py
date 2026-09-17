@@ -91,7 +91,9 @@ def test_enricher_no_longer_owns_a_capability_table():
     ("NSF Certified", {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"}),
     ("NSF Sport", {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"}),
     ("IFOS", {"purity_verified", "heavy_metal_tested"}),
-    ("Informed Choice", {"purity_verified"}),
+    ("Informed Choice", set()),
+    ("Informed Sport", set()),
+    ("BSCG", {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"}),
 ])
 def test_verified_program_capabilities(program, expected):
     flags = cert_evidence.verified_quality_flags(_product(verified=[_verified_row(program)]))
@@ -111,6 +113,15 @@ def test_claims_and_unverified_rows_light_no_quality_flag(claims, verified):
     flags = cert_evidence.verified_quality_flags(_product(claims, verified))
     assert flags == {flag: False for flag in FLAGS}
     assert cert_evidence.verified_programs(_product(claims, verified)) == []
+
+
+@pytest.mark.parametrize("missing", ["record_id", "source_url", "snapshot_date", "recency_status"])
+def test_product_scope_without_complete_current_provenance_is_not_verified(missing):
+    row = _verified_row("USP Verified")
+    row.pop(missing)
+    product = _product(verified=[row])
+    assert cert_evidence.verified_programs(product) == []
+    assert cert_evidence.verified_quality_flags(product) == {flag: False for flag in FLAGS}
 
 
 def test_claimed_programs_preserve_every_claim_even_when_verified():
@@ -218,6 +229,16 @@ def test_exported_claims_carry_their_canonical_registry_program():
 
     assert cert["claimed_programs"] == [{"name": "NSF Contents Certified", "program": "NSF Certified"}]
     assert [p["program"] for p in cert["verified_programs"]] == ["NSF Certified"]
+
+
+def test_verified_canonical_program_is_not_described_as_an_unverified_alias():
+    from build_final_db import build_decision_highlights
+    from test_build_final_db import make_scored
+
+    enriched = _export_enriched(["NSF Contents Certified"], [_verified_row("NSF Certified")])
+    trust = build_decision_highlights(enriched, make_scored(), None)["trust"]
+
+    assert trust == "Verified in official registries: NSF Certified."
 
 
 def test_claim_only_export_has_no_verified_signal_anywhere():

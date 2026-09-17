@@ -4227,7 +4227,9 @@ def test_registry_verified_certs_drive_third_party_display_columns(monkeypatch):
     e1 = make_enriched()  # dsld_id 999 — registry-verified only, no label claims
     e1["named_cert_programs"] = []
     e1["verified_cert_programs"] = [
-        {"program": "NSF Certified", "scope": "sku", "matched_brand": "Test Brand"},
+        {"program": "NSF Certified", "scope": "sku", "matched_brand": "Test Brand",
+         "record_id": "NSF_TEST", "source_url": "https://registry.example/nsf-test",
+         "snapshot_date": "2026-09-16", "recency_status": "fresh"},
         {"program": "NSF Sport", "scope": "sku", "matched_brand": "Unrelated Megacorp"},  # cross-brand: excluded
         {"program": "USP Verified", "scope": "claimed_only"},  # unverified: excluded
     ]
@@ -4239,7 +4241,9 @@ def test_registry_verified_certs_drive_third_party_display_columns(monkeypatch):
     e3["upcSku"] = "0123456789777"
     e3["named_cert_programs"] = ["NSF Certified"]  # label names it too — no dupe
     e3["verified_cert_programs"] = [
-        {"program": "NSF Certified", "scope": "product_line", "matched_brand": "Test Brand, Inc."},
+        {"program": "NSF Certified", "scope": "product_line", "matched_brand": "Test Brand, Inc.",
+         "record_id": "NSF_TEST_LINE", "source_url": "https://registry.example/nsf-test-line",
+         "snapshot_date": "2026-09-16", "recency_status": "fresh"},
     ]
     scored = [
         _artifact_from_canned(d, _canned_v4()) for d in ("999", "888", "777")

@@ -57,7 +57,9 @@ def test_label_gmp_wording_scores_nothing_in_any_module(gmp):
 
 def test_verified_gmp_auditing_certification_scores_in_both_modules():
     product = _product(verified_cert_programs=[
-        {"program": "NSF Certified", "scope": "sku", "recency_status": "fresh"}])
+        {"program": "NSF Certified", "scope": "sku", "recency_status": "fresh",
+         "record_id": "NSF_TEST", "source_url": "https://registry.example/nsf-test",
+         "snapshot_date": "2026-09-16"}])
     assert cert_evidence.audited_gmp_evidence(product) == {
         "basis": "verified_certification", "detail": "NSF Certified"}
     assert _generic_b4b(product) == 4.0
@@ -248,7 +250,9 @@ def test_verified_product_cert_entries_is_the_one_filter():
     exported certification badges (omega formulation used to skip the blocked
     check and use its own substring brand matcher)."""
     product = _product(verified_cert_programs=[
-        {"program": "IFOS", "scope": "sku"},
+        {"program": "IFOS", "scope": "sku", "record_id": "IFOS_TEST",
+         "source_url": "https://registry.example/ifos-test", "snapshot_date": "2026-09-16",
+         "recency_status": "fresh"},
         {"program": "IFOS", "scope": "sku", "scoring_blocked_reason": "stale_snapshot"},
         {"program": "USP Verified", "scope": "brand_only"},
         {"program": "NSF Certified", "scope": "product_line", "matched_brand": "Nature Made"},

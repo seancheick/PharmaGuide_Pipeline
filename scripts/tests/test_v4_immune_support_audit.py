@@ -48,6 +48,9 @@ def _cert(program: str = "NSF Sport", scope: str = "sku") -> Dict[str, Any]:
     return {
         "program": program,
         "scope": scope,
+        "record_id": f"FIXTURE_{program.upper().replace(' ', '_')}",
+        "source_url": "https://registry.example/certified-products",
+        "snapshot_date": "2026-09-16",
         "recency_status": "fresh",
         "brand_matched": True,
     }

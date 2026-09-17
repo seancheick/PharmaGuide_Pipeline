@@ -29,6 +29,7 @@ _CERT_CLAIM_RULES_PATH = Path(__file__).resolve().parents[1] / "data" / "cert_cl
 # The only bases on which GMP counts as audited. Trust modules emit one of these
 # as ``gmp_basis``; the Verification pillar and the export accept nothing else.
 AUDITED_GMP_BASES = frozenset({"verified_certification", "manufacturer_facility"})
+_USABLE_PRODUCT_CERT_RECENCY = frozenset({"fresh", "warn"})
 
 
 def _norm(value: Any) -> str:
@@ -101,15 +102,33 @@ def gmp_implying_programs() -> frozenset[str]:
     return frozenset(tokens)
 
 
+def is_verified_product_cert_entry(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
+    """Whether one resolver row is current, attributable product evidence.
+
+    Product scope alone is not verification.  A scoring row must retain the
+    current registry record, its source, usable snapshot recency, and the
+    product-brand binding.  Keeping this predicate here prevents trust,
+    confidence, export, and badges from inventing separate meanings of
+    "verified".
+    """
+    return bool(
+        not entry.get("scoring_blocked_reason")
+        and _norm(entry.get("scope")) in {"sku", "product_line"}
+        and str(entry.get("record_id") or "").strip()
+        and str(entry.get("source_url") or "").strip()
+        and str(entry.get("snapshot_date") or "").strip()
+        and _norm(entry.get("recency_status")) in _USABLE_PRODUCT_CERT_RECENCY
+        and cert_entry_brand_matches_product(product, entry)
+    )
+
+
 def verified_product_cert_entries(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Registry rows that verify THIS product: sku/product_line scope, not
     blocked by the resolver, and matched to this product's brand. Brand-only,
     claimed-only and needs-review rows never verify a product."""
     return [
         entry for entry in verified_cert_entries(product)
-        if not entry.get("scoring_blocked_reason")
-        and _norm(entry.get("scope")) in {"sku", "product_line"}
-        and cert_entry_brand_matches_product(product, entry)
+        if is_verified_product_cert_entry(product, entry)
     ]
 
 

@@ -926,11 +926,20 @@ def test_verification_preserves_present_absent_and_not_evaluated_states() -> Non
         }
     })
     missing = evaluate_verification_assessment({})
+    stale_legacy = evaluate_verification_assessment({
+        "brandName": "Test Brand",
+        "certification_data": {},
+        "verified_cert_programs": [
+            {"program": "NSF Sport", "scope": "sku", "record_id": "old-record"}
+        ],
+    })
 
     assert present["state"] == "verified_present"
     assert absent["state"] == "verified_absent"
     assert missing["state"] == "not_evaluated"
     assert missing["readiness"] == "incomplete"
+    assert stale_legacy["state"] == "not_evaluated"
+    assert stale_legacy["reason_code"] == "legacy_registry_match_missing_current_provenance"
 
 
 @pytest.mark.parametrize("has_label_owner", [True, False])

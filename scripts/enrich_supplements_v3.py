@@ -12909,7 +12909,8 @@ class SupplementEnricherV3:
             manufacturer_signals=manufacturer_cert_signals,
         )
         verification_assessment = self._build_verification_assessment(
-            verified_cert_programs
+            verified_cert_programs,
+            product,
         )
 
         # Purity / heavy-metal / label-accuracy flags are NOT derived here:
@@ -12938,6 +12939,7 @@ class SupplementEnricherV3:
     def _build_verification_assessment(
         self,
         verified_cert_programs: List[Dict],
+        product: Dict,
     ) -> Dict:
         """Return the typed result of the product-cert registry evaluation.
 
@@ -12958,13 +12960,16 @@ class SupplementEnricherV3:
         source_count = len(recency)
         schema_version = metadata.get("schema_version")
 
+        from scoring_v4.cert_evidence import is_verified_product_cert_entry
+
         verified = []
+        product_scope_candidates = []
         for entry in verified_cert_programs or []:
             if not isinstance(entry, dict):
                 continue
-            if entry.get("scope") not in {"sku", "product_line"}:
-                continue
-            if entry.get("scoring_blocked_reason"):
+            if entry.get("scope") in {"sku", "product_line"}:
+                product_scope_candidates.append(entry)
+            if not is_verified_product_cert_entry(product, entry):
                 continue
             program = str(entry.get("program") or "").strip()
             if program:
@@ -12977,6 +12982,16 @@ class SupplementEnricherV3:
                 "readiness": "complete",
                 "reason_code": "registry_verified_product_match",
                 "matched_programs": matched_programs,
+                "registry_schema_version": schema_version,
+                "registry_source_count": source_count,
+            }
+
+        if product_scope_candidates:
+            return {
+                "state": "not_evaluated",
+                "readiness": "incomplete",
+                "reason_code": "cert_registry_match_missing_current_provenance",
+                "matched_programs": [],
                 "registry_schema_version": schema_version,
                 "registry_source_count": source_count,
             }

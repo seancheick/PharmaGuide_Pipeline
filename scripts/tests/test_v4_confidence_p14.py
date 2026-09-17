@@ -77,7 +77,14 @@ def _product(**extra) -> dict:
             "has_may_contain_warning": False,
         },
         "verified_cert_programs": [
-            {"program": "NSF Sport", "scope": "sku", "recency_status": "fresh"}
+            {
+                "program": "NSF Sport",
+                "scope": "sku",
+                "recency_status": "fresh",
+                "record_id": "NSF_SPORT_TEST",
+                "source_url": "https://registry.example/nsf-sport",
+                "snapshot_date": "2026-09-16",
+            }
         ],
         "certification_data": {"gmp": {}, "batch_traceability": {}},
         "proprietary_blends": [],
@@ -383,6 +390,32 @@ def test_cross_brand_sku_cert_is_ignored_for_verification_confidence() -> None:
     assert out["v4_confidence"] == "moderate"
 
 
+def test_caller_scope_count_cannot_manufacture_high_verification_confidence() -> None:
+    from scoring_v4.confidence import _verification_confidence
+
+    product = _product(
+        verified_cert_programs=[
+            {
+                "program": "NSF Sport",
+                "scope": "sku",
+                "recency_status": "fresh",
+                # No record id or source: this is not current attributable evidence.
+            }
+        ]
+    )
+    module = {
+        "verification_bonus": {
+            "metadata": {"trust_metadata": {"verified_scope_counts": {"sku": 1}}}
+        }
+    }
+
+    level, drivers = _verification_confidence(product, module)
+
+    assert level == "low"
+    assert "cert_sku_verified" not in drivers
+    assert "cert_registry_stale_or_missing_provenance" in drivers
+
+
 def test_verified_cert_dominates_secondary_claimed_only_cert_confidence() -> None:
     """Regression: products can carry one real SKU cert plus another label claim
     whose registry match was absent. The unresolved secondary claim must not drag
@@ -391,7 +424,9 @@ def test_verified_cert_dominates_secondary_claimed_only_cert_confidence() -> Non
 
     product = _product(
         verified_cert_programs=[
-            {"program": "NSF Sport", "scope": "sku", "recency_status": "fresh"},
+            {"program": "NSF Sport", "scope": "sku", "recency_status": "fresh",
+             "record_id": "NSF_SPORT_TEST", "source_url": "https://registry.example/nsf-sport",
+             "snapshot_date": "2026-09-16"},
             {"program": "USP Verified", "scope": "claimed_only"},
         ]
     )

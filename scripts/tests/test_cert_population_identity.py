@@ -114,6 +114,7 @@ def test_matching_override_is_not_hidden_by_first_lossy_key_collision():
         "brand": "Nature Made", "product": f"CoQ10 {strength} mg Softgels",
         "program": "USP Verified", "status": "verified", "scope": "sku",
         "record_id": f"test-{strength}",
+        "verified_at": "2026-09-16", "source_url": "https://registry.example/usp-verified",
     } for strength in (100, 200)])
 
     result = resolve("Nature Made", "CoQ10 200 mg Softgels", ["USP Verified"], registry)[0]

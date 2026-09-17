@@ -119,7 +119,9 @@ def test_probiotic_trust_nsf_sport_sku_scores_8() -> None:
 
     product = _probiotic_product(
         verified_cert_programs=[
-            {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}
+            {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry",
+             "record_id": "NSF_SPORT_TEST", "source_url": "https://registry.example/nsf-sport",
+             "snapshot_date": "2026-09-16", "recency_status": "fresh"}
         ]
     )
     result = score_probiotic(product)
@@ -136,7 +138,10 @@ def test_probiotic_trust_combined_sku_plus_gmp_plus_coa() -> None:
 
     product = _probiotic_product(
         verified_cert_programs=[
-            {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}
+            {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry",
+             "record_id": "NSF_SPORT_TEST", "source_url": "https://registry.example/nsf-sport",
+             "snapshot_date": "2026-09-16",
+             "recency_status": "fresh"}
         ],
         gmp={"nsf_gmp": True},
         has_coa=True,
@@ -154,9 +159,15 @@ def test_probiotic_trust_clamps_at_15() -> None:
 
     product = _probiotic_product(
         verified_cert_programs=[
-            {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"},
-            {"program": "usp verified", "scope": "sku", "evidence_source": "registry"},
-            {"program": "informed choice", "scope": "sku", "evidence_source": "registry"},
+            {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry",
+             "record_id": "NSF_SPORT_TEST", "source_url": "https://registry.example/nsf-sport",
+             "snapshot_date": "2026-09-16", "recency_status": "fresh"},
+            {"program": "usp verified", "scope": "sku", "evidence_source": "registry",
+             "record_id": "USP_TEST", "source_url": "https://registry.example/usp",
+             "snapshot_date": "2026-09-16", "recency_status": "fresh"},
+            {"program": "informed choice", "scope": "sku", "evidence_source": "registry",
+             "record_id": "INFORMED_CHOICE_TEST", "source_url": "https://registry.example/informed-choice",
+             "snapshot_date": "2026-09-16", "recency_status": "fresh"},
         ],
         gmp={"nsf_gmp": True},
         has_coa=True,
@@ -233,7 +244,9 @@ def test_probiotic_trust_metadata_carries_audit_fields() -> None:
 
     product = _probiotic_product(
         verified_cert_programs=[
-            {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}
+            {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry",
+             "record_id": "NSF_SPORT_TEST", "source_url": "https://registry.example/nsf-sport",
+             "snapshot_date": "2026-09-16", "recency_status": "fresh"}
         ]
     )
     trust_dim =_trust_view( score_probiotic(product).to_breakdown())

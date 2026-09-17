@@ -152,6 +152,10 @@ def test_verified_product_certification_can_support_mid_tier_reputation() -> Non
             "program": "NSF Certified",
             "scope": "sku",
             "matched_brand": "Example Brand",
+            "record_id": "NSF_TEST",
+            "source_url": "https://registry.example/nsf-test",
+            "snapshot_date": "2026-09-16",
+            "recency_status": "fresh",
         }],
     })
     trust = score_generic(product).to_breakdown()["manufacturer_trust"]

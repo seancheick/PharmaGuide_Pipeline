@@ -301,6 +301,8 @@ def test_enricher_passes_dsld_id_to_cert_resolver_for_member_specific_overrides(
         "scope": "product_line",
         "record_id": "USP_D3_SOFTGEL",
         "dsld_id": "12154",
+        "verified_at": "2026-09-16",
+        "source_url": "https://registry.example/usp-d3-softgel",
     })
     registry.records_by_program["USP Verified"] = [{
         "program": "USP Verified",
