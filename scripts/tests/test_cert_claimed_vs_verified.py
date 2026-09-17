@@ -93,7 +93,9 @@ def test_enricher_no_longer_owns_a_capability_table():
     ("IFOS", {"purity_verified", "heavy_metal_tested"}),
     ("Informed Choice", set()),
     ("Informed Sport", set()),
-    ("BSCG", {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"}),
+    # BSCG Certified Drug Free verifies label claims and contaminant limits;
+    # its program pages never name heavy-metal testing.
+    ("BSCG", {"purity_verified", "label_accuracy_verified"}),
 ])
 def test_verified_program_capabilities(program, expected):
     flags = cert_evidence.verified_quality_flags(_product(verified=[_verified_row(program)]))

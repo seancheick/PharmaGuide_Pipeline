@@ -329,9 +329,9 @@
         "verified_capabilities": {
           "verified_program": "BSCG",
           "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
-          "basis": "BSCG Certified Drug Free combines banned-substance screening with label-claim and contaminant testing, including heavy metals. Applies only to a current registry-verified product, never to a label claim.",
-          "source": "https://www.bscg.org/certified-drug-free-certification-and-testing-for-banned-substances"
+          "capabilities": ["purity_verified", "label_accuracy_verified"],
+          "basis": "BSCG Certified Drug Free tests every lot for banned substances and verifies label claims and the product's contaminant limits (annually, by BSCG or another qualified lab). BSCG's program pages do not name heavy-metal testing, so heavy_metal_tested is not established. Applies only to a current registry-verified product, never to a label claim.",
+          "source": "https://www.bscg.org/certified-drug-free-supplement-certification-process"
         },
         "implies_gmp": {
           "verified_program": "BSCG",
@@ -352,7 +352,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://www.bscg.org/",
-        "notes": "BSCG tests for over 700 drugs including stimulants, steroids, narcotics, and other banned substances — the most comprehensive screening panel available for supplements. Trusted by athletes and consumers who want absolute confidence their product is drug-free."
+        "notes": "BSCG Certified Drug Free tests every production lot for more than 450 drugs, including 400+ on the WADA Prohibited List and 50+ prescription, OTC, and illicit drugs (https://www.bscg.org/certified-drug-free-certification-and-testing-for-banned-substances)."
       },
       "ifos": {
         "id": "CERT_IFOS",
