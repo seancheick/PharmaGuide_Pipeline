@@ -109,7 +109,6 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/confidence.py|_is_non_contributory_epa_dha_placeholder|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/gate_safety.py|_ingredient_safety_terms|get|raw_source_text|defe2b573198": "pass_a_known_pending_native_safety_signal_contract",
     "scripts/scoring_v4/gate_safety.py|_blend_children_text|get|raw_source_text|785fb9c4489c": "pass_a_known_pending_native_safety_signal_contract",
-    "scripts/scoring_v4/modules/brand_testing_posture.py|gmp_facility_evidence|get|match_type|2d68ef6686e9": "pass_a_known_pending_native_safety_signal_contract",
     "scripts/scoring_v4/modules/generic_dose.py|_score_no_reference_quantified_dose|get|quantity|3fd4e11ae842": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_evidence.py|_row_identity_text|get|raw_source_text|2574dd84d909": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/multi_prenatal_dose.py|_unit_text|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",

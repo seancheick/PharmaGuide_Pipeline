@@ -967,3 +967,27 @@ def test_verification_pillar_names_the_audited_gmp_basis() -> None:
     assert _verif(certified)["components"]["gmp_basis"] == "verified_certification"
     assert _verif(omega)["components"]["gmp_basis"] == "verified_certification"
     assert _verif(unknown)["components"]["gmp"] == 0.0
+
+
+def test_reputation_that_restates_certification_or_gmp_is_not_counted_twice() -> None:
+    """D1 mid-tier reputation is derived only from verified certifications or
+    audited GMP, which the pillar already scores as cert / gmp points."""
+    restated = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=1.0, d4=0.0)
+    restated["verification_bonus"]["metadata"]["trust_metadata"]["gmp_basis"] = "verified_certification"
+    restated["manufacturer_trust"]["metadata"] = {"D1_source": "mid_tier_verified_evidence"}
+    curated = _bd_verif(b4a=0.0, b4b=0.0, b4c=0.0, b4d=0.0, d1=2.0, d4=0.0)
+    curated["manufacturer_trust"]["metadata"] = {"D1_source": "top_manufacturer_exact"}
+
+    assert _verif(restated)["components"]["reputation"] == 0.0
+    assert _verif(curated)["components"]["reputation"] == 2.0
+
+
+def test_gmp_signal_wording_matches_its_basis() -> None:
+    facility = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
+    facility["verification_bonus"]["metadata"]["trust_metadata"]["gmp_basis"] = "manufacturer_facility"
+    certified = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
+    certified["verification_bonus"]["metadata"]["trust_metadata"]["gmp_basis"] = "verified_certification"
+
+    assert "manufacturer is listed in an audited GMP facility registry" in _verif(facility)["reason"]
+    assert "made in an audited GMP facility" not in _verif(facility)["reason"]
+    assert "made in an audited GMP facility" in _verif(certified)["reason"]

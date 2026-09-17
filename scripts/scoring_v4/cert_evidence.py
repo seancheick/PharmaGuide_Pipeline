@@ -6,7 +6,9 @@ omega_trust and confidence (and re-implemented in build_final_db):
 - which verified certification rows belong to this product's brand;
 - which certification programs require an audited GMP facility
   (``implies_gmp`` policy in data/cert_claim_rules.json);
-- whether this product has audited GMP evidence at all.
+- whether this product has audited GMP evidence at all (a verified product
+  certification that audits GMP, or the canonical manufacturer's sourced
+  registration in an audited GMP facility registry).
 
 Label GMP wording (a "GMP"/"cGMP" claim, an NSF GMP mark, FDA facility
 registration) is self-asserted and never counts as audited GMP.
@@ -20,7 +22,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from scoring_v4.modules.brand_testing_posture import gmp_facility_evidence
+from scoring_v4.modules import brand_testing_posture
 
 _CERT_CLAIM_RULES_PATH = Path(__file__).resolve().parents[1] / "data" / "cert_claim_rules.json"
 
@@ -190,14 +192,86 @@ def gmp_implied_by_verified_cert(product: Dict[str, Any]) -> Optional[str]:
     return None
 
 
+FACILITY_AUDIT_SCOPE = "gmp_facility"
+_USABLE_RECENCY = frozenset({"fresh", "warn"})
+
+
+@lru_cache(maxsize=1)
+def _cert_registry():
+    from cert_resolver import CertRegistry
+
+    return CertRegistry.load()
+
+
+def facility_audit_programs() -> frozenset[str]:
+    """Registry programs whose listings are audited GMP facility registrations
+    (``registry_sources[].audit_scope == "gmp_facility"``)."""
+    sources = (_cert_registry().metadata or {}).get("registry_sources") or []
+    return frozenset(
+        str(source["program"])
+        for source in sources
+        if isinstance(source, dict) and source.get("program") and source.get("audit_scope") == FACILITY_AUDIT_SCOPE
+    )
+
+
+def facility_audit_resolution(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Resolve an audited GMP facility registration for the product's
+    canonical manufacturer.
+
+    Only an exact ``top_manufacturer`` identity counts, and only through that
+    manufacturer's sourced ``facility_registrations`` links to a fresh
+    facility-scope row of a gmp_facility audit source. Brand-name similarity
+    and free-text manufacturer summaries never attribute a facility."""
+    manufacturer_data = product.get("manufacturer_data")
+    top = manufacturer_data.get("top_manufacturer") if isinstance(manufacturer_data, dict) else None
+    top = top if isinstance(top, dict) else {}
+    manufacturer_id = str(top.get("manufacturer_id") or "").strip()
+    if not (top.get("found") and _norm(top.get("match_type")) == "exact" and manufacturer_id):
+        return {"state": "no_canonical_manufacturer"}
+    entry = brand_testing_posture._top_manufacturers_by_id().get(manufacturer_id) or {}
+    links = [link for link in entry.get("facility_registrations") or [] if isinstance(link, dict)]
+    if not links:
+        return {"state": "no_sourced_registration"}
+
+    from cert_resolver import normalize_brand
+
+    registry = _cert_registry()
+    programs = facility_audit_programs()
+    for link in links:
+        record = registry.record_by_id(link.get("registry_record_id"))
+        if (
+            record is None
+            or _norm(record.get("scope")) != "facility"
+            or record.get("program") not in programs
+            or record.get("_recency_status") not in _USABLE_RECENCY
+            or normalize_brand(record.get("brand") or "") != normalize_brand(link.get("registered_company") or "")
+        ):
+            continue
+        return {
+            "state": "resolved",
+            "program": record["program"],
+            "registered_company": record.get("brand"),
+            "record_id": record.get("record_id"),
+            "relationship": link.get("relationship"),
+            "evidence_url": link.get("evidence_url"),
+            "source_url": record.get("source_url"),
+            "snapshot_date": record.get("_snapshot_date"),
+            "recency_status": record.get("_recency_status"),
+        }
+    return {"state": "registry_row_stale_or_missing"}
+
+
 def audited_gmp_evidence(product: Dict[str, Any]) -> Optional[Dict[str, str]]:
-    """The one GMP decision: ``{"basis", "detail"}`` when a verified
-    certification requires a GMP audit or an exact manufacturer facility record
-    names a certified/audited facility; otherwise None."""
+    """The one GMP decision: ``{"basis", "detail"}`` when a verified product
+    certification requires a GMP audit, or the canonical manufacturer is
+    listed in an audited GMP facility registry; otherwise None."""
     program = gmp_implied_by_verified_cert(product)
     if program:
         return {"basis": "verified_certification", "detail": program}
-    facility = gmp_facility_evidence(product)
-    if facility:
-        return {"basis": "manufacturer_facility", "detail": facility}
+    facility = facility_audit_resolution(product)
+    if facility["state"] == "resolved":
+        return {
+            "basis": "manufacturer_facility",
+            "detail": f"{facility['program']}: {facility['registered_company']}",
+        }
     return None

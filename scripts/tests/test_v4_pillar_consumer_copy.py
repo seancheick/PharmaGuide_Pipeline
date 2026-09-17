@@ -341,14 +341,14 @@ def test_certification_detail_gmp_carries_the_pillar_audited_decision() -> None:
     )
     audited = _certification_gmp_detail(
         {"claimed": False, "gmp_certified_or_compliant": False},
-        {"verification": {"components": {"gmp": 2.0, "gmp_basis": "manufacturer_facility"}}},
+        {"verification": {"components": {"gmp": 2.0, "gmp_basis": "verified_certification"}}},
     )
 
     assert label_only["audited_facility"] is False
     assert label_only["audited_facility_basis"] is None
     assert label_only["text_matched"] == "GMP"
     assert audited["audited_facility"] is True
-    assert audited["audited_facility_basis"] == "manufacturer_facility"
+    assert audited["audited_facility_basis"] == "verified_certification"
     assert _certification_gmp_detail(None, None) == {
         "audited_facility": False, "audited_facility_basis": None}
     # Fail closed: points without a recognised basis (an old or malformed
@@ -358,3 +358,31 @@ def test_certification_detail_gmp_carries_the_pillar_audited_decision() -> None:
             {}, {"verification": {"components": {"gmp": 2.0, "gmp_basis": basis}}})
         assert detail["audited_facility"] is False
         assert detail["audited_facility_basis"] is None
+
+
+def test_manufacturer_facility_gmp_export_carries_registry_provenance_and_fails_closed(monkeypatch):
+    """Facility GMP credit ships with the registry row that earned it. A pillar
+    that says manufacturer_facility without a resolvable registration (a stale
+    artifact) lights no badge."""
+    from build_final_db import _certification_gmp_detail
+    from scoring_v4 import cert_evidence
+
+    resolved = {
+        "state": "resolved", "program": "NSF/ANSI 455", "registered_company": "Pure Encapsulations",
+        "record_id": "NSF_ANSI_PE", "relationship": "same_entity",
+        "evidence_url": "https://info.nsf.org/Certified/455GMP/", "source_url": "https://info.nsf.org/Certified/455GMP/",
+        "snapshot_date": "2026-09-16", "recency_status": "fresh",
+    }
+    pillars = {"verification": {"components": {"gmp": 2.0, "gmp_basis": "manufacturer_facility"}}}
+
+    monkeypatch.setattr(cert_evidence, "facility_audit_resolution", lambda product: resolved)
+    detail = _certification_gmp_detail({}, pillars, {"brandName": "Pure Encapsulations"})
+    assert detail["audited_facility"] is True
+    assert detail["audited_facility_registration"] == {k: v for k, v in resolved.items() if k != "state"}
+
+    monkeypatch.setattr(cert_evidence, "facility_audit_resolution",
+                        lambda product: {"state": "no_sourced_registration"})
+    stale = _certification_gmp_detail({}, pillars, {"brandName": "Pure Encapsulations"})
+    assert stale["audited_facility"] is False
+    assert stale["audited_facility_basis"] is None
+    assert "audited_facility_registration" not in stale

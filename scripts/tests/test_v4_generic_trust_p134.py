@@ -642,9 +642,10 @@ def test_inferred_gmp_beats_fda_registered_only() -> None:
     assert payload["metadata"]["gmp_evidence"] == "NSF Sport"
 
 
-def test_facility_gmp_inferred_from_explicit_manufacturer_gmp_evidence(monkeypatch) -> None:
-    """A known manufacturer with explicit GMP/facility evidence earns B4b
-    facility GMP even when this product has no verified product-specific cert."""
+def test_free_text_manufacturer_gmp_evidence_earns_no_facility_gmp(monkeypatch) -> None:
+    """Unsourced manufacturer summaries ("NSF GMP-registered facility") are not
+    audited GMP evidence. Facility GMP needs the manufacturer's sourced link to
+    an audited GMP facility registry row (see test_gmp_one_owner.py)."""
     from scoring_v4.modules import generic_trust, brand_testing_posture
     monkeypatch.setattr(
         brand_testing_posture, "_top_manufacturers_by_id",
@@ -657,8 +658,8 @@ def test_facility_gmp_inferred_from_explicit_manufacturer_gmp_evidence(monkeypat
                 "found": True, "match_type": "exact", "manufacturer_id": "MANUF_THORNE"}},
         })
     )
-    assert payload["components"]["B4b_gmp"] == 4.0
-    assert payload["metadata"].get("gmp_basis") == "manufacturer_facility"
+    assert payload["components"]["B4b_gmp"] == 0.0
+    assert payload["metadata"].get("gmp_basis") is None
 
 
 def test_facility_gmp_not_inferred_from_soft_or_product_only_evidence(monkeypatch) -> None:

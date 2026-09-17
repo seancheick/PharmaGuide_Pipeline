@@ -788,6 +788,7 @@ Primary key: `top_manufacturers` (array)
 | `evidence` | object | YES | Quality certifications |
 | `notes` | string | NO | Additional info |
 | `last_updated` | string | NO | ISO date |
+| `facility_registrations` | object[] | NO | Sourced links to audited GMP facility registry rows: `registry_record_id`, `program`, `registered_company`, `relationship` (`same_entity` / `dba` / `parent_company`), `evidence_url`, `reviewed_at`. The only way a manufacturer earns audited-GMP facility credit (`scoring_v4/cert_evidence.facility_audit_resolution`); free-text `evidence` never does. |
 
 ---
 

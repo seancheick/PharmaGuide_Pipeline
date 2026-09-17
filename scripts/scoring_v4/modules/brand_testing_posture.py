@@ -45,67 +45,6 @@ SOFT_QUALITY_POSTURE_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Audited GMP facility evidence: the audit / certification / registration /
-# licensing wording must attach to the GMP program or the facility itself
-# ("NSF GMP-registered", "GMP certified", "certified manufacturing",
-# "TGA-registered GMP facility"). "cGMP-compliant" is a manufacturer statement,
-# "IFOS-certified fish oil" or "NSF certification" certifies products, and FDA
-# facility registration is not an audit (Codex audit 2026-09-16).
-AUDITED_GMP_FACILITY_RE = re.compile(
-    r"("
-    r"\b(?:NSF|NPA|UL(?:\s+Solutions)?)[\s-]*GMP[\s-]*(?:registered|certified|audited)\b|"
-    r"\bc?GMP[\s-]*(?:certified|certification|certifications|certs|registered|audited)\b|"
-    r"\b(?:certified|registered|audited|licensed)[\s-]+(?:c?GMP[\s-]+)?"
-    r"(?:facility|facilities|manufacturing|production)\b|"
-    r"\bc?GMP\s+(?:and|&)\s+(?:ISO|HACCP|SQF|NSF)\s+(?:certified|registered)\b|"
-    r"\bc?GMP\s+licens\w*|"
-    r"\bNatural\s+Products\s+Association\s+certified\b|"
-    r"\bTGA[\s-]*registered\b"
-    r")",
-    re.IGNORECASE,
-)
-_FDA_REGISTRATION_RE = re.compile(r"\bFDA[\s-]*registered\b", re.IGNORECASE)
-_PRODUCT_SCOPE_RE = re.compile(r"\b(?:select|many|some|certain)\s+products\b", re.IGNORECASE)
-
-
-def is_audited_gmp_facility_evidence(text: str) -> bool:
-    """True when manufacturer evidence names an audited GMP facility."""
-    text = str(text or "")
-    if _PRODUCT_SCOPE_RE.search(text):
-        return False
-    for match in AUDITED_GMP_FACILITY_RE.finditer(text):
-        window = text[max(0, match.start() - 20):match.end()]
-        if not _FDA_REGISTRATION_RE.search(window):
-            return True
-    return False
-
-
-def gmp_facility_evidence(product: Dict[str, Any]) -> str | None:
-    """Return explicit facility/manufacturing GMP evidence for an exact top-
-    manufacturer match, or None.
-
-    This is intentionally stricter than product-specific cert→GMP inference.
-    Product certs such as NSF Sport / USP Verified can imply GMP only for the
-    matched SKU/product line through certification_data. Manufacturer-level B4b
-    needs explicit GMP/facility/manufacturing wording.
-    """
-    if not isinstance(product, dict):
-        return None
-    top = _safe_dict(_safe_dict(product.get("manufacturer_data")).get("top_manufacturer"))
-    if not (top.get("found") and _norm(top.get("match_type")) == "exact"):
-        return None
-    manufacturer_id = str(top.get("manufacturer_id") or "").strip()
-    if not manufacturer_id:
-        return None
-    entry = _top_manufacturers_by_id().get(manufacturer_id)
-    if not isinstance(entry, dict):
-        return None
-    for item in entry.get("evidence", []):
-        if isinstance(item, str) and is_audited_gmp_facility_evidence(item):
-            return item[:60]
-    return None
-
-
 def score_brand_testing_posture(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
     """Return low brand-level testing posture score and audit metadata."""
     if not isinstance(product, dict):

@@ -26,7 +26,11 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
     get_active_ingredients,
 )
-from scoring_v4.cert_evidence import audited_gmp_evidence, cert_entry_brand_matches_product
+from scoring_v4.cert_evidence import (
+    audited_gmp_evidence,
+    cert_entry_brand_matches_product,
+    facility_audit_programs,
+)
 from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
 
 
@@ -125,6 +129,9 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
     unscored_scope_counts: Dict[str, int] = defaultdict(int)
     skipped_reasons: Dict[str, int] = defaultdict(int)
     brand_only_programs: set[str] = set()
+    # A facility-audit registration (NSF/ANSI 455-2) is the audited-GMP fact,
+    # scored once through B4b; it is never also brand-level certification.
+    facility_programs = {_norm_text(program) for program in facility_audit_programs()}
 
     for entry in verified:
         if not isinstance(entry, dict):
@@ -138,6 +145,8 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
                 if not program:
                     continue
                 if any(token in program for token in marine_tokens) and not omega_like:
+                    continue
+                if program in facility_programs:
                     continue
                 unscored_scope_counts[scope] += 1
                 if scope == "brand_only":

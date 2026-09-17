@@ -176,3 +176,28 @@ def test_write_registry_merge_existing_replaces_refreshed_program(tmp_path: Path
 
     payload = json.loads(registry_path.read_text(encoding="utf-8"))
     assert [record["record_id"] for record in payload["verified_records"]] == ["USP_NEW"]
+
+
+def test_write_registry_marks_gmp_facility_audit_sources(tmp_path: Path, monkeypatch) -> None:
+    """The audited-GMP owner trusts only sources flagged audit_scope=gmp_facility.
+    The flag is owned here, so a registry refresh can never silently drop it."""
+    registry_path = tmp_path / "cert_registry.json"
+    registry_path.write_text(json.dumps({
+        "_metadata": {"registry_sources": [
+            {"program": "NSF/ANSI 455", "url": "old", "snapshot_date": "2026-09-01", "entry_count": 1},
+        ]},
+        "verified_records": [
+            {"record_id": "NSF_455_OLD", "program": "NSF/ANSI 455", "brand": "Thorne®", "product": "", "scope": "facility"},
+        ],
+    }) + "\n", encoding="utf-8")
+    monkeypatch.setattr(vc, "REGISTRY_PATH", registry_path)
+
+    vc.write_registry(
+        [{"program": "USP Verified", "url": vc.USP_VERIFIED_URL, "snapshot_date": "2026-09-16",
+          "records": [{"record_id": "USP_NEW", "program": "USP Verified", "brand": "New", "product": "New"}]}],
+        merge_existing=True,
+    )
+
+    sources = {s["program"]: s for s in json.loads(registry_path.read_text())["_metadata"]["registry_sources"]}
+    assert sources["NSF/ANSI 455"]["audit_scope"] == "gmp_facility"
+    assert "audit_scope" not in sources["USP Verified"]

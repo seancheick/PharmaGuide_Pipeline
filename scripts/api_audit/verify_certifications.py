@@ -1315,6 +1315,14 @@ def _load_existing_sources(exclude_programs: set[str]) -> list[dict]:
     return sources
 
 
+# Registry sources whose listings are facility audits rather than product
+# certifications. scoring_v4.cert_evidence trusts audited-GMP facility evidence
+# only from sources flagged here, so the flag is written on every refresh.
+PROGRAM_AUDIT_SCOPE = {
+    "NSF/ANSI 455": "gmp_facility",  # NSF/ANSI 455-2 GMP facility registration
+}
+
+
 def write_registry(sources_with_records: list[dict], merge_existing: bool = False) -> None:
     """Merge records from one or more sources into the registry file.
 
@@ -1328,14 +1336,15 @@ def write_registry(sources_with_records: list[dict], merge_existing: bool = Fals
     all_records: list[dict] = []
     registry_sources: list[dict] = []
     for source in sources_with_records:
-        registry_sources.append(
-            {
-                "program": source["program"],
-                "url": source["url"],
-                "snapshot_date": source["snapshot_date"],
-                "entry_count": len(source["records"]),
-            }
-        )
+        entry = {
+            "program": source["program"],
+            "url": source["url"],
+            "snapshot_date": source["snapshot_date"],
+            "entry_count": len(source["records"]),
+        }
+        if source["program"] in PROGRAM_AUDIT_SCOPE:
+            entry["audit_scope"] = PROGRAM_AUDIT_SCOPE[source["program"]]
+        registry_sources.append(entry)
         all_records.extend(source["records"])
 
     payload = {

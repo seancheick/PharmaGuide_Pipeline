@@ -5978,11 +5978,12 @@ def _certification_detail(enriched: Dict, cd: Dict) -> Dict[str, Any]:
     }
 
 
-def _certification_gmp_detail(label_gmp: Any, pillars: Any) -> Dict[str, Any]:
+def _certification_gmp_detail(label_gmp: Any, pillars: Any, enriched: Optional[Dict] = None) -> Dict[str, Any]:
     """certification_detail.gmp: the label's GMP wording plus the Verification
     pillar's audited-facility decision. The app badge reads only
     ``audited_facility``; label wording alone is self-asserted and earns no
-    badge, exactly as it earns no pillar points."""
+    badge, exactly as it earns no pillar points. Facility GMP ships with the
+    registry registration that earned it, or not at all."""
     verification = safe_dict(safe_dict(pillars).get("verification"))
     components = safe_dict(verification.get("components"))
     basis = safe_str(components.get("gmp_basis"))
@@ -5991,11 +5992,23 @@ def _certification_gmp_detail(label_gmp: Any, pillars: Any) -> Dict[str, Any]:
     from scoring_v4.cert_evidence import AUDITED_GMP_BASES
 
     audited = safe_float(components.get("gmp"), 0.0) > 0 and basis in AUDITED_GMP_BASES
-    return {
+    registration = None
+    if audited and basis == "manufacturer_facility":
+        from scoring_v4 import cert_evidence
+
+        resolution = cert_evidence.facility_audit_resolution(safe_dict(enriched))
+        if resolution.get("state") == "resolved":
+            registration = {key: value for key, value in resolution.items() if key != "state"}
+        else:
+            audited = False
+    detail = {
         **safe_dict(label_gmp),
         "audited_facility": audited,
         "audited_facility_basis": basis if audited else None,
     }
+    if registration is not None:
+        detail["audited_facility_registration"] = registration
+    return detail
 
 
 def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
@@ -8348,7 +8361,7 @@ def build_detail_blob(
         pillars = scored.get("_v4_pillars")
         blob["quality_pillars_v4"] = pillars
         blob["certification_detail"]["gmp"] = _certification_gmp_detail(
-            blob["certification_detail"].get("gmp"), pillars
+            blob["certification_detail"].get("gmp"), pillars, enriched
         )
         blob["quality_score_cap_v4"] = scored.get("_v4_quality_score_cap")
         blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")

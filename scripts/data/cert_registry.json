@@ -22,7 +22,8 @@
         "program": "NSF/ANSI 455",
         "url": "https://info.nsf.org/Certified/455GMP/Listings.asp?Standard=455-2GMP",
         "snapshot_date": "2026-09-16",
-        "entry_count": 718
+        "entry_count": 718,
+        "audit_scope": "gmp_facility"
       },
       {
         "program": "USP Verified",

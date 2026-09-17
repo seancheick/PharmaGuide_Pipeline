@@ -64,15 +64,15 @@ def test_verified_gmp_auditing_certification_scores_in_both_modules():
     assert _omega_b4b(product) == 4.0
 
 
-def test_manufacturer_facility_record_scores_in_both_modules(monkeypatch):
-    monkeypatch.setattr(
-        brand_testing_posture, "_top_manufacturers_by_id",
-        lambda: {"MANUF_THORNE": {"id": "MANUF_THORNE",
-                                  "evidence": ["NSF GMP-registered facility"]}},
-    )
-    product = _product(manufacturer_data={"top_manufacturer": {
-        "found": True, "match_type": "exact", "manufacturer_id": "MANUF_THORNE"}})
-    assert cert_evidence.audited_gmp_evidence(product)["basis"] == "manufacturer_facility"
+def test_manufacturer_listed_in_gmp_facility_registry_scores_in_both_modules(monkeypatch):
+    _facility_registry(monkeypatch)
+    _manufacturers(monkeypatch, facility_registrations=[_link()])
+    product = _product(manufacturer_data=_exact_manufacturer())
+
+    evidence = cert_evidence.audited_gmp_evidence(product)
+
+    assert evidence["basis"] == "manufacturer_facility"
+    assert "NSF/ANSI 455" in evidence["detail"] and "Thorne" in evidence["detail"]
     assert _generic_b4b(product) == 4.0
     assert _omega_b4b(product) == 4.0
 
@@ -101,53 +101,131 @@ def test_trust_modules_do_not_carry_their_own_copies(module, name):
     assert not hasattr(module, name)
 
 
-# Manufacturer evidence strings from data/top_manufacturers_data.json
-# (2026-09-16 Codex audit): the audit/certification wording must attach to the
-# GMP program or the facility itself. Compliance statements, product-level
-# certifications and FDA facility registration are not audited GMP.
-@pytest.mark.parametrize("evidence", [
-    "NSF GMP-registered, third-party tested",
-    "ISO, GMP certifications",
-    "GMP certs, clinical distribution",
-    "NSF, cGMP certifications",
-    "GMP and NSF registered facilities",
-    "GMP certified",
-    "cGMP and HACCP certified",
-    "Non-GMO and GMP certified",
-    "GMP certified production",
-    "GMP and ISO certified",
-    "NSF GMP certified",
-    "UL Solutions-certified facility, cGMP-compliant",
-    "cGMP, ISO certified manufacturing",
-    "cGMP-compliant and Natural Products Association certified",
-    "Brand states manufacturing in NSF-GMP registered facility",
-    "Brand states manufacturing in TGA-registered GMP facility",
-    "Brand references Health Canada GMP licensing and quality-control framework",
-])
-def test_audited_facility_wording_counts(evidence):
-    assert brand_testing_posture.is_audited_gmp_facility_evidence(evidence)
+# Audited GMP facility evidence comes only from a sourced facility-audit
+# registry (cert_registry.json sources flagged audit_scope=gmp_facility),
+# linked to the product's canonical manufacturer by an explicit, sourced
+# facility_registrations entry. Free-text manufacturer summaries and brand-name
+# similarity never attribute a facility (Codex plan audit 2026-09-16).
 
 
-@pytest.mark.parametrize("evidence", [
-    "cGMP-compliant with third-party testing",
-    "cGMP compliant facilities",
-    "cGMP compliant manufacturing",
-    "cGMP compliant",
-    "cGMP-compliant with USDA Organic certifications",
-    "IFOS-certified fish oil, cGMP-compliant",
-    "cGMP-compliant with NSF certification",
-    "NSF Certified, cGMP compliant",
-    "GMP, NSF certification",
-    "GMP, multiple third-party certifications",
-    "GMP, third-party certified",
-    "GMP and USP certifications",
-    "cGMP and FDA registered facilities",
-    "cGMP and NSF certifications on many products",
-    "cGMP and Informed-Sport certified for select products",
-    "NSF GMP compliant; transparent ingredient sourcing",
+def _facility_registry(monkeypatch, *, recency="fresh", scope="facility", audit_scope="gmp_facility"):
+    from cert_resolver import CertRegistry
+
+    registry = CertRegistry(
+        metadata={"registry_sources": [
+            {"program": "NSF/ANSI 455", "url": "https://info.nsf.org/Certified/455GMP/", "audit_scope": audit_scope},
+            {"program": "NSF Certified", "url": "https://info.nsf.org/Certified/Dietary/"},
+        ]},
+        records_by_program={"NSF/ANSI 455": [{
+            "record_id": "NSF_ANSI_THORNE", "program": "NSF/ANSI 455", "brand": "Thorne®", "product": "",
+            "scope": scope, "source_url": "https://info.nsf.org/Certified/455GMP/",
+            "_snapshot_date": "2026-09-16", "_snapshot_age_days": 0, "_recency_status": recency,
+        }]},
+    )
+    monkeypatch.setattr(cert_evidence, "_cert_registry", lambda: registry)
+    return registry
+
+
+def _link(**overrides):
+    link = {"registry_record_id": "NSF_ANSI_THORNE", "program": "NSF/ANSI 455",
+            "registered_company": "Thorne®", "relationship": "same_entity",
+            "evidence_url": "https://info.nsf.org/Certified/455GMP/", "reviewed_at": "2026-09-16"}
+    link.update(overrides)
+    return link
+
+
+def _manufacturers(monkeypatch, **entry):
+    monkeypatch.setattr(
+        brand_testing_posture, "_top_manufacturers_by_id",
+        lambda: {"MANUF_THORNE": {"id": "MANUF_THORNE", "standard_name": "Thorne",
+                                  "evidence": ["NSF GMP-registered facility"], **entry}},
+    )
+
+
+def _exact_manufacturer(match_type="exact"):
+    return {"top_manufacturer": {"found": True, "match_type": match_type, "manufacturer_id": "MANUF_THORNE"}}
+
+
+def test_free_text_manufacturer_evidence_never_counts(monkeypatch):
+    _facility_registry(monkeypatch)
+    _manufacturers(monkeypatch)  # evidence text says "NSF GMP-registered", no sourced link
+    product = _product(manufacturer_data=_exact_manufacturer())
+
+    assert cert_evidence.audited_gmp_evidence(product) is None
+    assert cert_evidence.facility_audit_resolution(product)["state"] == "no_sourced_registration"
+
+
+def test_brand_similarity_alone_never_attributes_a_facility(monkeypatch):
+    _facility_registry(monkeypatch)  # registry lists "Thorne®"; product brand is Thorne
+    _manufacturers(monkeypatch)
+    assert cert_evidence.audited_gmp_evidence(_product()) is None
+    assert cert_evidence.facility_audit_resolution(_product())["state"] == "no_canonical_manufacturer"
+
+
+@pytest.mark.parametrize("registry_kwargs, link, state", [
+    ({}, {"registry_record_id": "NSF_ANSI_MISSING"}, "registry_row_stale_or_missing"),
+    ({"recency": "scoring_blocked"}, {}, "registry_row_stale_or_missing"),
+    ({"scope": "sku"}, {}, "registry_row_stale_or_missing"),
+    ({"audit_scope": None}, {}, "registry_row_stale_or_missing"),
 ])
-def test_compliance_or_other_certification_wording_does_not_count(evidence):
-    assert not brand_testing_posture.is_audited_gmp_facility_evidence(evidence)
+def test_unusable_registry_rows_fail_closed(monkeypatch, registry_kwargs, link, state):
+    _facility_registry(monkeypatch, **registry_kwargs)
+    _manufacturers(monkeypatch, facility_registrations=[_link(**link)])
+    product = _product(manufacturer_data=_exact_manufacturer())
+
+    assert cert_evidence.audited_gmp_evidence(product) is None
+    assert cert_evidence.facility_audit_resolution(product)["state"] == state
+
+
+def test_fuzzy_manufacturer_match_is_not_canonical_identity(monkeypatch):
+    _facility_registry(monkeypatch)
+    _manufacturers(monkeypatch, facility_registrations=[_link()])
+    product = _product(manufacturer_data=_exact_manufacturer(match_type="fuzzy"))
+
+    assert cert_evidence.facility_audit_resolution(product)["state"] == "no_canonical_manufacturer"
+
+
+def test_resolved_facility_audit_keeps_registry_provenance(monkeypatch):
+    _facility_registry(monkeypatch)
+    _manufacturers(monkeypatch, facility_registrations=[_link(relationship="dba")])
+    product = _product(manufacturer_data=_exact_manufacturer())
+
+    assert cert_evidence.facility_audit_resolution(product) == {
+        "state": "resolved",
+        "program": "NSF/ANSI 455",
+        "registered_company": "Thorne®",
+        "record_id": "NSF_ANSI_THORNE",
+        "relationship": "dba",
+        "evidence_url": "https://info.nsf.org/Certified/455GMP/",
+        "source_url": "https://info.nsf.org/Certified/455GMP/",
+        "snapshot_date": "2026-09-16",
+        "recency_status": "fresh",
+    }
+
+
+def test_free_text_gmp_inference_is_deleted():
+    for name in ("gmp_facility_evidence", "is_audited_gmp_facility_evidence", "AUDITED_GMP_FACILITY_RE"):
+        assert not hasattr(brand_testing_posture, name), name
+
+
+def test_registry_marks_nsf_455_as_a_gmp_facility_audit_source():
+    import json
+    from pathlib import Path
+
+    registry = json.loads((Path(__file__).resolve().parents[1] / "data" / "cert_registry.json").read_text())
+    sources = {s["program"]: s for s in registry["_metadata"]["registry_sources"]}
+    assert sources["NSF/ANSI 455"].get("audit_scope") == "gmp_facility"
+    assert all(s.get("audit_scope") in (None, "gmp_facility") for s in sources.values())
+
+
+def test_facility_audit_rows_never_count_as_brand_only_certification(monkeypatch):
+    _facility_registry(monkeypatch)
+    product = _product(verified_cert_programs=[{"program": "NSF/ANSI 455", "scope": "brand_only"}])
+
+    metadata = generic_trust.score_trust(product)["metadata"]
+
+    assert "brand_only" not in metadata.get("verified_unscored_scope_counts", {})
+    assert metadata.get("verified_brand_only_programs") == []
 
 
 def test_manufacturer_gmp_evidence_does_not_leak_into_label_wording():

@@ -3,10 +3,11 @@
     "description": "Top supplement manufacturers with quality ratings and certifications",
     "purpose": "manufacturer_quality",
     "schema_version": "5.0.0",
-    "last_updated": "2026-02-20",
+    "last_updated": "2026-09-16",
     "total_entries": 77,
     "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle. 2026-02-20: Added 16 manufacturer entries (sports, DTC, international, and legacy Care/of coverage) with updated alias coverage for exact matching.",
-    "country_field_added": "2026-06-04 (research-verified HQ/regulatory jurisdiction; 5 unverified left blank)"
+    "country_field_added": "2026-06-04 (research-verified HQ/regulatory jurisdiction; 5 unverified left blank)",
+    "facility_registrations_added": "2026-09-16: optional sourced links from a manufacturer to an audited GMP facility registry row (cert_registry.json source with audit_scope=gmp_facility). Added one at a time only where the NSF/ANSI 455-2 listing names the manufacturer itself or a DBA: Pure Encapsulations, Nordic Naturals, Thorne, Life Extension (DBA), MegaFood (DBA). Parent-company links need separate evidence."
   },
   "top_manufacturers": [
     {
@@ -51,6 +52,16 @@
       "last_updated": "2025-07-16",
       "aliases": [
         "Nordic Naturals Inc."
+      ],
+      "facility_registrations": [
+        {
+          "registry_record_id": "NSF_ANSI_380575937AEA",
+          "program": "NSF/ANSI 455",
+          "registered_company": "Nordic Naturals, Inc.",
+          "relationship": "same_entity",
+          "evidence_url": "https://info.nsf.org/Certified/455GMP/Listings.asp?Company=C0036070&Standard=455-2GMP",
+          "reviewed_at": "2026-09-16"
+        }
       ]
     },
     {
@@ -84,6 +95,16 @@
         "Thorne Research",
         "Thorne FX",
         "Thorne Performance"
+      ],
+      "facility_registrations": [
+        {
+          "registry_record_id": "NSF_ANSI_5BEBAB1283C8",
+          "program": "NSF/ANSI 455",
+          "registered_company": "Thorne®",
+          "relationship": "same_entity",
+          "evidence_url": "https://info.nsf.org/Certified/455GMP/Listings.asp?Standard=455-2GMP",
+          "reviewed_at": "2026-09-16"
+        }
       ]
     },
     {
@@ -126,6 +147,16 @@
       "last_updated": "2025-07-16",
       "aliases": [
         "Pure Encapsulations Inc."
+      ],
+      "facility_registrations": [
+        {
+          "registry_record_id": "NSF_ANSI_23C6C768A363",
+          "program": "NSF/ANSI 455",
+          "registered_company": "Pure Encapsulations",
+          "relationship": "same_entity",
+          "evidence_url": "https://info.nsf.org/Certified/455GMP/Listings.asp?Company=C0006061&Standard=455-2GMP",
+          "reviewed_at": "2026-09-16"
+        }
       ]
     },
     {
@@ -172,6 +203,16 @@
       "last_updated": "2025-07-16",
       "aliases": [
         "Life Extension Foundation"
+      ],
+      "facility_registrations": [
+        {
+          "registry_record_id": "NSF_ANSI_54244399C113",
+          "program": "NSF/ANSI 455",
+          "registered_company": "Quality Supplements and Vitamins Inc. DBA Life Extension®",
+          "relationship": "dba",
+          "evidence_url": "https://info.nsf.org/Certified/455GMP/Listings.asp?Company=C0128578&Standard=455-2GMP",
+          "reviewed_at": "2026-09-16"
+        }
       ]
     },
     {
@@ -667,6 +708,16 @@
       "aliases": [
         "MegaFood Inc.",
         "FoodState Inc."
+      ],
+      "facility_registrations": [
+        {
+          "registry_record_id": "NSF_ANSI_773AD83E40DC",
+          "program": "NSF/ANSI 455",
+          "registered_company": "Food State Inc. DBA MegaFood",
+          "relationship": "dba",
+          "evidence_url": "https://info.nsf.org/Certified/455GMP/Listings.asp?Company=C0065766&Standard=455-2GMP",
+          "reviewed_at": "2026-09-16"
+        }
       ]
     },
     {

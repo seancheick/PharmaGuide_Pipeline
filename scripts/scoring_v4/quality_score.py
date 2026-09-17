@@ -784,8 +784,15 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
         else 0.0
     )
     # Manufacturer reputation is brand-level context; manufacturing region is not
-    # verification and no longer counts.
-    reputation = min(sub["reputation_cap"], _num(mt.get("D1_manufacturer_reputation")))
+    # verification and no longer counts. Mid-tier reputation is derived only
+    # from verified certifications or audited GMP, which cert / gmp already
+    # score, so it is not counted a second time here.
+    mt_source = ((module_bd.get("manufacturer_trust") or {}).get("metadata") or {}).get("D1_source")
+    reputation = (
+        0.0
+        if mt_source == "mid_tier_verified_evidence"
+        else min(sub["reputation_cap"], _num(mt.get("D1_manufacturer_reputation")))
+    )
 
     # 1.3.0 evidence tiers: more independent evidence can never score lower than
     # less. Unknown sits at the neutral baseline; claims and brand context can
@@ -822,7 +829,11 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     if brand_only_cert > 0:
         signals.append("holds a brand/facility certification verified by a third party")
     if gmp > 0:
-        signals.append("made in an audited GMP facility")
+        signals.append(
+            "manufacturer is listed in an audited GMP facility registry"
+            if gmp_basis == "manufacturer_facility"
+            else "made in an audited GMP facility"
+        )
     if testing > 0:
         signals.append("does its own purity testing")
     if tier == "product":
