@@ -2077,3 +2077,67 @@ def test_source_active_rows_preserve_pre_source_mirror_fixture_compatibility() -
     rows = scoring_contract.get_source_score_eligible_active_rows(product)
 
     assert rows == [legacy_row]
+
+
+def test_omega3_row_itemized_as_amountless_epa_dha_children_owns_its_dose() -> None:
+    """Nature Made Fish Oil 1000 mg (DSLD 26691): "Omega-3 Fatty Acids 500 mg" with
+    Eicosapentaenoic Acid and Docosahexaenoic Acid printed beneath it without their
+    own amounts. The 500 mg is EPA+DHA; the 2 g fish oil concentrate is not."""
+    product = _omega_printed_forms_product([
+        _row(name="Fish Oil concentrate", raw_source_text="Fish Oil concentrate",
+             canonical_id="fish_oil", quantity=2000, unit="mg",
+             raw_source_path="ingredientRows[5]"),
+        _row(name="Omega-3 Fatty Acids", raw_source_text="Omega-3 Fatty Acids",
+             canonical_id="omega_3", quantity=500, unit="mg",
+             raw_source_path="ingredientRows[5].nestedRows[1]", parentBlend="Fish Oil concentrate"),
+        _row(name="Eicosapentaenoic Acid", raw_source_text="Eicosapentaenoic Acid",
+             canonical_id="epa", quantity=0, unit="NP",
+             raw_source_path="ingredientRows[5].nestedRows[1].nestedRows[0]",
+             parentBlend="Omega-3 Fatty Acids"),
+        _row(name="Docosahexaenoic Acid", raw_source_text="Docosahexaenoic Acid",
+             canonical_id="dha", quantity=0, unit="NP",
+             raw_source_path="ingredientRows[5].nestedRows[1].nestedRows[1]",
+             parentBlend="Omega-3 Fatty Acids"),
+    ])
+
+    assert _omega_aggregate_evidence(product) == [
+        ("epa_dha", 500, "ingredientRows[5].nestedRows[1]"),
+    ]
+
+
+def test_omega3_children_with_their_own_amounts_keep_owning_them() -> None:
+    """When EPA and DHA print their own amounts, the parent total is not a second dose."""
+    product = _omega_printed_forms_product([
+        _row(name="Omega-3 Fatty Acids", raw_source_text="Omega-3 Fatty Acids",
+             canonical_id="omega_3", quantity=500, unit="mg",
+             raw_source_path="ingredientRows[5].nestedRows[1]"),
+        _row(name="Eicosapentaenoic Acid", raw_source_text="Eicosapentaenoic Acid",
+             canonical_id="epa", quantity=180, unit="mg",
+             raw_source_path="ingredientRows[5].nestedRows[1].nestedRows[0]",
+             parentBlend="Omega-3 Fatty Acids"),
+        _row(name="Docosahexaenoic Acid", raw_source_text="Docosahexaenoic Acid",
+             canonical_id="dha", quantity=120, unit="mg",
+             raw_source_path="ingredientRows[5].nestedRows[1].nestedRows[1]",
+             parentBlend="Omega-3 Fatty Acids"),
+    ])
+
+    assert _omega_aggregate_evidence(product) == []
+
+
+def test_omega3_total_with_a_non_epa_dha_child_is_not_owned() -> None:
+    """An ALA child means the printed total is not only EPA+DHA."""
+    product = _omega_printed_forms_product([
+        _row(name="Omega-3 Fatty Acids", raw_source_text="Omega-3 Fatty Acids",
+             canonical_id="omega_3", quantity=500, unit="mg",
+             raw_source_path="ingredientRows[2]"),
+        _row(name="Alpha-Linolenic Acid", raw_source_text="Alpha-Linolenic Acid",
+             canonical_id="ala", quantity=0, unit="NP",
+             raw_source_path="ingredientRows[2].nestedRows[0]",
+             parentBlend="Omega-3 Fatty Acids"),
+        _row(name="Eicosapentaenoic Acid", raw_source_text="Eicosapentaenoic Acid",
+             canonical_id="epa", quantity=0, unit="NP",
+             raw_source_path="ingredientRows[2].nestedRows[1]",
+             parentBlend="Omega-3 Fatty Acids"),
+    ])
+
+    assert _omega_aggregate_evidence(product) == []

@@ -820,6 +820,47 @@ def _printed_epa_dha_owner(row: Dict[str, Any]) -> Optional[str]:
     return "epa_dha" if nutrients == {"epa", "dha"} else nutrients.pop()
 
 
+def _child_disclosed_epa_dha_owner(
+    row: Dict[str, Any], rows: List[Dict[str, Any]]
+) -> Optional[str]:
+    """EPA/DHA owner of an omega-3 row itemized as amount-less EPA/DHA children.
+
+    Nature Made Fish Oil 1000 mg prints "Omega-3 Fatty Acids 500 mg" with
+    Eicosapentaenoic Acid and Docosahexaenoic Acid beneath it and no child
+    amounts: the 500 mg is the EPA+DHA amount. A child that prints its own
+    amount owns that amount instead, and any other omega-3 child (ALA, DPA)
+    means the printed total is not only EPA/DHA.
+    """
+    name = str(row.get("name") or row.get("raw_source_text") or "")
+    if not _OMEGA_THREE_NAME_RE.search(name) or _OIL_NAME_RE.search(name):
+        return None
+    path = str(row.get("raw_source_path") or "")
+    nutrients: set[str] = set()
+    for other in rows:
+        if other is row or not isinstance(other, dict):
+            continue
+        parent = str(other.get("parentBlend") or "").strip().lower()
+        other_path = str(other.get("raw_source_path") or "")
+        is_child = (parent and parent == name.strip().lower()) or (
+            bool(path) and other_path.startswith(path + ".nestedRows[")
+        )
+        if not is_child:
+            continue
+        if _positive_quantity(other) is not None:
+            return None
+        canonical = _norm(other.get("canonical_id"))
+        child_name = str(other.get("name") or other.get("raw_source_text") or "")
+        if canonical == "epa" or (not canonical and _PRINTED_EPA_FORM_RE.search(child_name)):
+            nutrients.add("epa")
+        elif canonical == "dha" or (not canonical and _PRINTED_DHA_FORM_RE.search(child_name)):
+            nutrients.add("dha")
+        else:
+            return None
+    if not nutrients:
+        return None
+    return "epa_dha" if nutrients == {"epa", "dha"} else nutrients.pop()
+
+
 def _is_omega_aggregate_row(row: Dict[str, Any]) -> bool:
     text = _row_identity_text(row).lower()
     if any(
@@ -1815,7 +1856,9 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             evidence.append(_sports_primary_identity_without_dose(row, canonical))
 
         explicit_aggregate = _is_explicit_epa_dha_aggregate_label(_row_identity_text(row))
-        printed_owner = None if explicit_aggregate else _printed_epa_dha_owner(row)
+        printed_owner = None if explicit_aggregate else (
+            _printed_epa_dha_owner(row) or _child_disclosed_epa_dha_owner(row, active_rows)
+        )
         if (
             not has_explicit_epa_dha_row
             and
