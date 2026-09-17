@@ -12619,6 +12619,8 @@
         "beta carotene color",
         "betalains",
         "caramel color",
+        "carob color",
+        "carob colour",
         "carotenoids",
         "carotino color",
         "chlorophyll",
@@ -12665,7 +12667,7 @@
         "product differentiation",
         "clean label alternative to artificial colors"
       ],
-      "last_updated": "2026-03-16",
+      "last_updated": "2026-09-17",
       "external_ids": {
         "unii": "00WNZ48OR9"
       },

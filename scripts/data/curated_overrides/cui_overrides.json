@@ -295,7 +295,7 @@
     "name": null,
     "note": "Curated override: no confirmed exact UMLS concept was found for the designer steroid name Hexadrone."
   },
-  "carob color (e153 / vegetable carbon)": {
+  "vegetable carbon (e153)": {
     "cui": null,
     "name": null,
     "note": "Curated override: food-color entry maps to a formulation/coloring class and should not be auto-collapsed into generic carbon black."
