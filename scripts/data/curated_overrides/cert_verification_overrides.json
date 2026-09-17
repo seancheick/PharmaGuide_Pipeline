@@ -3,7 +3,7 @@
     "schema_version": "6.0.0",
     "description": "Manual overrides for cert verification scope. Used when (a) the fuzzy resolver returns needs_review and a human confirms/downgrades, or (b) a known-good cert isn't in the public registry snapshots yet. Pattern matches scripts/data/curated_overrides/upc_overrides.json.",
     "purpose": "cert_verification_manual_override",
-    "last_updated": "2026-06-15",
+    "last_updated": "2026-09-17",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
     "total_overrides": 715,
     "status_meanings": {
@@ -2624,18 +2624,21 @@
       "brand": "Nature Made",
       "product": "Maximum Strength Biotin 5,000 mcg",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Premise-stale auto-reject reversed: the 2026-05-20 dose_mismatch came from the resolver reading \"5,000 mcg\" as \"000 mcg\". The label strength and softgel form match the current USP listing `Nature Made Maximum Strength Biotin 5000 Mcg Softgels`, confirmed live on the USP Verified products page on 2026-09-17.",
+      "reviewed_at": "2026-09-17",
+      "review_source": "auto_reject_reevaluation_2026-09-17 premise_stale",
       "dsld_id": "179750",
       "record_id": "USP_VERIFIED_82D48685B0FA",
       "matched_brand": "Nature Made",
       "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
       "triage_reasons": [
         "dose_mismatch"
-      ]
+      ],
+      "verified_at": "2026-09-17",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=9",
+      "reviewer": "Claude"
     },
     {
       "brand": "Nature Made",
@@ -2658,18 +2661,21 @@
       "brand": "Nature Made",
       "product": "Maximum Strength Biotin 5,000 mcg",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Premise-stale auto-reject reversed: the 2026-05-20 dose_mismatch came from the resolver reading \"5,000 mcg\" as \"000 mcg\". The label strength and softgel form match the current USP listing `Nature Made Maximum Strength Biotin 5000 Mcg Softgels`, confirmed live on the USP Verified products page on 2026-09-17.",
+      "reviewed_at": "2026-09-17",
+      "review_source": "auto_reject_reevaluation_2026-09-17 premise_stale",
       "dsld_id": "179953",
       "record_id": "USP_VERIFIED_82D48685B0FA",
       "matched_brand": "Nature Made",
       "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
       "triage_reasons": [
         "dose_mismatch"
-      ]
+      ],
+      "verified_at": "2026-09-17",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=9",
+      "reviewer": "Claude"
     },
     {
       "brand": "Nature Made",
@@ -2692,69 +2698,81 @@
       "brand": "Nature Made",
       "product": "Maximum Strength Biotin 5,000 mcg",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Premise-stale auto-reject reversed: the 2026-05-20 dose_mismatch came from the resolver reading \"5,000 mcg\" as \"000 mcg\". The label strength and softgel form match the current USP listing `Nature Made Maximum Strength Biotin 5000 Mcg Softgels`, confirmed live on the USP Verified products page on 2026-09-17.",
+      "reviewed_at": "2026-09-17",
+      "review_source": "auto_reject_reevaluation_2026-09-17 premise_stale",
       "dsld_id": "180191",
       "record_id": "USP_VERIFIED_82D48685B0FA",
       "matched_brand": "Nature Made",
       "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
       "triage_reasons": [
         "dose_mismatch"
-      ]
+      ],
+      "verified_at": "2026-09-17",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=9",
+      "reviewer": "Claude"
     },
     {
       "brand": "Nature Made",
       "product": "Maximum Strength Biotin 5,000 mcg",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Premise-stale auto-reject reversed: the 2026-05-20 dose_mismatch came from the resolver reading \"5,000 mcg\" as \"000 mcg\". The label strength and softgel form match the current USP listing `Nature Made Maximum Strength Biotin 5000 Mcg Softgels`, confirmed live on the USP Verified products page on 2026-09-17.",
+      "reviewed_at": "2026-09-17",
+      "review_source": "auto_reject_reevaluation_2026-09-17 premise_stale",
       "dsld_id": "287807",
       "record_id": "USP_VERIFIED_82D48685B0FA",
       "matched_brand": "Nature Made",
       "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
       "triage_reasons": [
         "dose_mismatch"
-      ]
+      ],
+      "verified_at": "2026-09-17",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=9",
+      "reviewer": "Claude"
     },
     {
       "brand": "Nature Made",
       "product": "Maximum Strength Biotin 5,000 mcg",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Premise-stale auto-reject reversed: the 2026-05-20 dose_mismatch came from the resolver reading \"5,000 mcg\" as \"000 mcg\". The label strength and softgel form match the current USP listing `Nature Made Maximum Strength Biotin 5000 Mcg Softgels`, confirmed live on the USP Verified products page on 2026-09-17.",
+      "reviewed_at": "2026-09-17",
+      "review_source": "auto_reject_reevaluation_2026-09-17 premise_stale",
       "dsld_id": "287808",
       "record_id": "USP_VERIFIED_82D48685B0FA",
       "matched_brand": "Nature Made",
       "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
       "triage_reasons": [
         "dose_mismatch"
-      ]
+      ],
+      "verified_at": "2026-09-17",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=9",
+      "reviewer": "Claude"
     },
     {
       "brand": "Nature Made",
       "product": "Maximum Strength Biotin 5,000 mcg",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Premise-stale auto-reject reversed: the 2026-05-20 dose_mismatch came from the resolver reading \"5,000 mcg\" as \"000 mcg\". The label strength and softgel form match the current USP listing `Nature Made Maximum Strength Biotin 5000 Mcg Softgels`, confirmed live on the USP Verified products page on 2026-09-17.",
+      "reviewed_at": "2026-09-17",
+      "review_source": "auto_reject_reevaluation_2026-09-17 premise_stale",
       "dsld_id": "302758",
       "record_id": "USP_VERIFIED_82D48685B0FA",
       "matched_brand": "Nature Made",
       "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
       "triage_reasons": [
         "dose_mismatch"
-      ]
+      ],
+      "verified_at": "2026-09-17",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=9",
+      "reviewer": "Claude"
     },
     {
       "brand": "Nature Made",
@@ -2947,18 +2965,21 @@
       "brand": "Nature Made",
       "product": "Maximum Strength B12 5,000 mcg",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 Maximum Strength 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Premise-stale auto-reject reversed: the 2026-05-20 dose_mismatch came from the resolver reading \"5,000 mcg\" as \"000 mcg\". The label strength and softgel form match the current USP listing `Nature Made Vitamin B12 Maximum Strength 5000 Mcg Softgels`, confirmed live on the USP Verified products page on 2026-09-17.",
+      "reviewed_at": "2026-09-17",
+      "review_source": "auto_reject_reevaluation_2026-09-17 premise_stale",
       "dsld_id": "179932",
       "record_id": "USP_VERIFIED_610F69F499FE",
       "matched_brand": "Nature Made",
       "matched_product": "Nature Made Vitamin B12 Maximum Strength 5000 Mcg Softgels",
       "triage_reasons": [
         "dose_mismatch"
-      ]
+      ],
+      "verified_at": "2026-09-17",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=5",
+      "reviewer": "Claude"
     },
     {
       "brand": "Nature Made",
