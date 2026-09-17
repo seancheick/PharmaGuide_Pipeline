@@ -941,6 +941,22 @@ def test_verification_preserves_present_absent_and_not_evaluated_states() -> Non
     assert stale_legacy["state"] == "not_evaluated"
     assert stale_legacy["reason_code"] == "legacy_registry_match_missing_current_provenance"
 
+    other_brand_legacy = evaluate_verification_assessment({
+        "brandName": "Test Brand",
+        "certification_data": {},
+        "verified_cert_programs": [{
+            "program": "NSF Sport",
+            "scope": "sku",
+            "record_id": "other-brand-record",
+            "source_url": "https://registry.example/nsf-sport",
+            "snapshot_date": "2026-09-16",
+            "recency_status": "fresh",
+            "matched_brand": "Unrelated Megacorp",
+        }],
+    })
+    assert other_brand_legacy["state"] == "verified_absent"
+    assert other_brand_legacy["readiness"] == "complete"
+
 
 @pytest.mark.parametrize("has_label_owner", [True, False])
 def test_probiotic_native_clinical_strain_requires_label_owner_for_material_assessment(has_label_owner) -> None:

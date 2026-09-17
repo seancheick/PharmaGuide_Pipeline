@@ -12960,14 +12960,19 @@ class SupplementEnricherV3:
         source_count = len(recency)
         schema_version = metadata.get("schema_version")
 
-        from scoring_v4.cert_evidence import is_verified_product_cert_entry
+        from scoring_v4.cert_evidence import (
+            cert_entry_brand_matches_product,
+            is_verified_product_cert_entry,
+        )
 
         verified = []
         product_scope_candidates = []
         for entry in verified_cert_programs or []:
             if not isinstance(entry, dict):
                 continue
-            if entry.get("scope") in {"sku", "product_line"}:
+            # Another brand's listing is an evaluated no-match, not this
+            # product's incomplete evidence.
+            if entry.get("scope") in {"sku", "product_line"} and cert_entry_brand_matches_product(product, entry):
                 product_scope_candidates.append(entry)
             if not is_verified_product_cert_entry(product, entry):
                 continue

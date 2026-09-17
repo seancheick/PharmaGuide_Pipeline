@@ -595,7 +595,10 @@ def evaluate_verification_assessment(product: Mapping[str, Any]) -> Dict[str, An
         # Schema-2.x migration boundary. The presence of certification_data
         # proves the enrichment collector ran; old artifacts simply omitted its
         # explicit completion marker. Remove this branch with schema 3.
-        from scoring_v4.cert_evidence import is_verified_product_cert_entry
+        from scoring_v4.cert_evidence import (
+            cert_entry_brand_matches_product,
+            is_verified_product_cert_entry,
+        )
 
         entries = _verified_programs(product)
         verified = [
@@ -603,9 +606,12 @@ def evaluate_verification_assessment(product: Mapping[str, Any]) -> Dict[str, An
             for entry in entries
             if is_verified_product_cert_entry(dict(product), dict(entry))
         ]
+        # Another brand's listing is an evaluated no-match, not incomplete
+        # evidence for this product.
         product_scope_candidates = [
             entry for entry in entries
             if str(entry.get("scope") or "") in {"sku", "product_line"}
+            and cert_entry_brand_matches_product(dict(product), dict(entry))
         ]
         if product_scope_candidates and not verified:
             return {

@@ -231,6 +231,22 @@ def test_verification_assessment_distinguishes_completed_absence_and_presence() 
     assert incomplete["readiness"] == "incomplete"
     assert incomplete["reason_code"] == "cert_registry_match_missing_current_provenance"
 
+    # A listing that belongs to another brand is an evaluated no-match; it must
+    # not withhold this product as if its own evidence were incomplete.
+    other_brand = enricher._build_verification_assessment([
+        {
+            "program": "NSF Sport",
+            "scope": "sku",
+            "record_id": "other-brand-record",
+            "source_url": "https://registry.example/nsf-sport",
+            "snapshot_date": "2026-08-01",
+            "recency_status": "fresh",
+            "matched_brand": "Unrelated Megacorp",
+        }
+    ], product)
+    assert other_brand["state"] == "verified_absent"
+    assert other_brand["readiness"] == "complete"
+
 
 @pytest.mark.parametrize(
     ("label_text", "expected_programs"),
