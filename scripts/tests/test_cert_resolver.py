@@ -913,6 +913,79 @@ class TestOverrides:
         assert out[0].notes == "curated override record absent from current registry"
         assert out[0].scores_points() is False
 
+    @staticmethod
+    def _delisted_override(**extra) -> dict:
+        return {
+            "brand": "Transparent Labs",
+            "product": "KSM-66",
+            "program": "Informed Sport",
+            "status": "verified",
+            "scope": "sku",
+            "record_id": "DELISTED_RECORD",
+            **extra,
+        }
+
+    def test_delisted_override_yields_to_a_current_registry_listing(self) -> None:
+        """A reviewed record that left the registry must not hide the same
+        product's current listing under a new record id."""
+        registry = _make_registry(
+            records=[{
+                "program": "Informed Sport",
+                "brand": "Transparent Labs",
+                "product": "KSM-66",
+                "record_id": "RELISTED_RECORD",
+            }],
+            overrides=[self._delisted_override()],
+        )
+        out = resolve("Transparent Labs", "KSM-66", ["Informed Sport"], registry)
+        assert len(out) == 1
+        assert out[0].scope == "sku"
+        assert out[0].record_id == "RELISTED_RECORD"
+        assert out[0].scores_points() is True
+
+    def test_delisted_override_without_current_listing_requires_review(self) -> None:
+        registry = _make_registry(
+            records=[{
+                "program": "Informed Sport",
+                "brand": "Transparent Labs",
+                "product": "Creatine HMB",
+                "record_id": "OTHER_PRODUCT",
+            }],
+            overrides=[self._delisted_override()],
+        )
+        out = resolve("Transparent Labs", "KSM-66", ["Informed Sport"], registry)
+        assert len(out) == 1
+        assert out[0].scope == "needs_review"
+        assert out[0].record_id == "DELISTED_RECORD"
+        assert out[0].notes == "curated override record absent from current registry"
+        assert out[0].scores_points() is False
+
+    def test_delisted_override_fallback_keeps_record_rejections(self) -> None:
+        registry = _make_registry(
+            records=[{
+                "program": "Informed Sport",
+                "brand": "Transparent Labs",
+                "product": "KSM-66",
+                "record_id": "REJECTED_RECORD",
+            }],
+            overrides=[
+                self._delisted_override(),
+                {
+                    "brand": "Transparent Labs",
+                    "product": "KSM-66",
+                    "program": "Informed Sport",
+                    "status": "rejected",
+                    "record_id": "REJECTED_RECORD",
+                    "reason": "listing is a different formula",
+                },
+            ],
+        )
+        out = resolve("Transparent Labs", "KSM-66", ["Informed Sport"], registry)
+        assert len(out) == 1
+        assert out[0].scope == "needs_review"
+        assert out[0].record_id == "DELISTED_RECORD"
+        assert out[0].scores_points() is False
+
     def test_pending_review_override_returns_needs_review(self) -> None:
         registry = _make_registry(
             overrides=[

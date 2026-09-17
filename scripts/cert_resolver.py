@@ -703,6 +703,9 @@ def _keyword_overlap(a: str, b: str) -> float:
     return 100.0 * len(overlap) / len(a_tokens)
 
 
+_DELISTED_OVERRIDE_NOTE = "curated override record absent from current registry"
+
+
 def _check_override(
     brand_norm: str,
     product_norm: str,
@@ -711,6 +714,7 @@ def _check_override(
     dsld_id: str | None = None,
     *,
     product: str,
+    skip_delisted: bool = False,
 ) -> tuple[CertResolution | None, frozenset[str]]:
     """Apply a curated override only to its reviewed raw product identity.
 
@@ -718,6 +722,8 @@ def _check_override(
     registry ``record_id`` rejects that pairing only: its id is collected and
     the resolver keeps looking at the other records. A rejection without a
     ``record_id`` is a program-level decision and still returns claimed_only.
+    ``skip_delisted`` ignores verified overrides whose record left a current
+    registry, so the registry lookup can look for the product's new listing.
     """
     program_canon = normalize_program(program)
     request_dsld_id = str(dsld_id or "").strip()
@@ -795,13 +801,15 @@ def _check_override(
             # record no longer does.  That is a meaningful delisting signal;
             # historical override evidence must return to review.
             if program_canon in registry.recency_by_program:
+                if skip_delisted:
+                    continue
                 return CertResolution(
                     program=program_canon,
                     scope="needs_review",
                     record_id=override.get("record_id"),
                     verified_at=override.get("verified_at"),
                     source_url=override.get("source_url"),
-                    notes="curated override record absent from current registry",
+                    notes=_DELISTED_OVERRIDE_NOTE,
                     matched_brand=override.get("matched_brand") or override.get("brand"),
                     matched_product=override.get("matched_product") or override.get("product"),
                 ), frozenset(rejected_record_ids)
@@ -831,7 +839,7 @@ def _check_override(
                 record_id=override.get("record_id"),
                 verified_at=override.get("verified_at"),
                 source_url=override.get("source_url"),
-                notes="curated override record absent from current registry",
+                notes=_DELISTED_OVERRIDE_NOTE,
                 matched_brand=override.get("matched_brand") or override.get("brand"),
                 matched_product=override.get("matched_product") or override.get("product"),
             ), frozenset(rejected_record_ids)
@@ -846,6 +854,7 @@ def resolve(
     dsld_id: str | None = None,
     *,
     label_context: dict[str, Any] | None = None,
+    _skip_delisted_overrides: bool = False,
 ) -> list[CertResolution]:
     """Resolve every claimed program to its registry scope.
 
@@ -872,8 +881,20 @@ def resolve(
             registry,
             dsld_id=dsld_id,
             product=identity_product,
+            skip_delisted=_skip_delisted_overrides,
         )
         if override_resolution is not None:
+            if override_resolution.notes == _DELISTED_OVERRIDE_NOTE and not _skip_delisted_overrides:
+                # The reviewed record left the registry, but the product may
+                # be listed under a new record. Only current, sourced
+                # product-level registry evidence replaces the review signal,
+                # with every other override (including rejections) applied.
+                current = resolve(
+                    brand, product, [claimed], registry, dsld_id,
+                    label_context=label_context, _skip_delisted_overrides=True,
+                )
+                if current and current[0].scores_points():
+                    override_resolution = current[0]
             out.append(override_resolution)
             continue
 
