@@ -3,11 +3,11 @@
     "description": "Top supplement manufacturers with quality ratings and certifications",
     "purpose": "manufacturer_quality",
     "schema_version": "5.0.0",
-    "last_updated": "2026-09-16",
+    "last_updated": "2026-09-17",
     "total_entries": 77,
     "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle. 2026-02-20: Added 16 manufacturer entries (sports, DTC, international, and legacy Care/of coverage) with updated alias coverage for exact matching.",
     "country_field_added": "2026-06-04 (research-verified HQ/regulatory jurisdiction; 5 unverified left blank)",
-    "facility_registrations_added": "2026-09-16: optional sourced links from a manufacturer to an audited GMP facility registry row (cert_registry.json source with audit_scope=gmp_facility). Added one at a time only where the NSF/ANSI 455-2 listing names the manufacturer itself or a DBA: Pure Encapsulations, Nordic Naturals, Thorne, Life Extension (DBA), MegaFood (DBA). Parent-company links need separate evidence."
+    "facility_registrations_added": "2026-09-16: optional sourced links from a manufacturer to an audited GMP facility registry row (cert_registry.json source with audit_scope=gmp_facility). Added one at a time only where the NSF/ANSI 455-2 listing names the manufacturer itself or a DBA: Pure Encapsulations, Nordic Naturals, Thorne, Life Extension (DBA), MegaFood (DBA). Parent-company links need separate evidence. 2026-09-17: Nature Made -> Pharmavite LLC (same_entity; pharmavite.com says its Opelika site manufactures Nature Made) and Nature's Way -> Schwabe North America (parent_company; the NSF listing names Nature's Way manufacturing facilities under that registration). Held without a primary source: Nutricost Manufacturing, Haleon US Holdings (Centrum), Bayer U.S. (evidence covers One A Day only), Bayer de Mexico; i-Health is not linked because its registration covers a distribution facility only."
   },
   "top_manufacturers": [
     {
@@ -23,6 +23,16 @@
       "last_updated": "2025-07-16",
       "aliases": [
         "Pharmavite LLC"
+      ],
+      "facility_registrations": [
+        {
+          "registry_record_id": "NSF_ANSI_5E5FDA579D01",
+          "program": "NSF/ANSI 455",
+          "registered_company": "Pharmavite LLC",
+          "relationship": "same_entity",
+          "evidence_url": "https://www.pharmavite.com/careers/manufacturing/",
+          "reviewed_at": "2026-09-17"
+        }
       ]
     },
     {
@@ -515,6 +525,16 @@
       "last_updated": "2025-07-22",
       "aliases": [
         "Nature's Way Brands, LLC"
+      ],
+      "facility_registrations": [
+        {
+          "registry_record_id": "NSF_ANSI_F1BE0FB35D2B",
+          "program": "NSF/ANSI 455",
+          "registered_company": "Schwabe North America, Inc.",
+          "relationship": "parent_company",
+          "evidence_url": "https://info.nsf.org/Certified/455GMP/Listings.asp?CertName=Schwabe&Standard=455-2GMP",
+          "reviewed_at": "2026-09-17"
+        }
       ]
     },
     {
