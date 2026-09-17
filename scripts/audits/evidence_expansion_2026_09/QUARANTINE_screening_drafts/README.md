@@ -28,3 +28,51 @@ source cannot support a clinical field.
 3. What IS reusable here: the title triage, reject reason codes, handoff proposals and
    per-identity applicability caveats — a starting point for the next wave instead of
    re-screening ~4,800 records.
+
+## Contents
+
+39 identities screened (partition 2 was still running when this was captured; its remaining identities are not here).
+
+| identity | screened | kept | shortlisted | handoffs |
+|---|---:|---:|---:|---:|
+| `OI_BEETROOT_POWDER` | 114 | 35 | 12 | 5 |
+| `acai_berry` | 49 | 16 | 12 | 2 |
+| `apple_cider_vinegar` | 37 | 18 | 12 | 6 |
+| `blueberry` | 135 | 81 | 12 | 0 |
+| `broccoli` | 117 | 53 | 12 | 3 |
+| `butterbur` | 58 | 51 | 12 | 8 |
+| `citrus_bioflavonoids` | 157 | 71 | 12 | 1 |
+| `cla` | 159 | 48 | 12 | 5 |
+| `d_ribose` | 44 | 24 | 10 | 3 |
+| `dandelion` | 33 | 13 | 10 | 4 |
+| `dhea` | 154 | 52 | 12 | 1 |
+| `evening_primrose_oil` | 135 | 84 | 12 | 3 |
+| `flaxseed` | 159 | 87 | 12 | 3 |
+| `gamma_linolenic_acid` | 134 | 59 | 12 | 2 |
+| `garcinia_cambogia` | 122 | 40 | 12 | 7 |
+| `ginkgo` | 152 | 79 | 12 | 8 |
+| `gotu_kola` | 18 | 8 | 3 | 2 |
+| `horny_goat_weed` | 11 | 9 | 6 | 6 |
+| `isoflavones` | 155 | 92 | 12 | 8 |
+| `l_carnosine` | 146 | 47 | 12 | 7 |
+| `l_glutamine` | 158 | 48 | 12 | 3 |
+| `l_histidine` | 160 | 6 | 6 | 4 |
+| `l_leucine` | 156 | 61 | 12 | 3 |
+| `l_lysine` | 159 | 16 | 12 | 0 |
+| `l_phenylalanine` | 159 | 6 | 6 | 0 |
+| `l_tryptophan` | 160 | 38 | 12 | 6 |
+| `l_tyrosine` | 160 | 24 | 12 | 0 |
+| `l_valine` | 159 | 13 | 10 | 2 |
+| `lecithin` | 127 | 29 | 12 | 1 |
+| `linoleic_acid` | 160 | 23 | 12 | 3 |
+| `lycopene` | 155 | 60 | 12 | 1 |
+| `maca` | 59 | 33 | 12 | 5 |
+| `mct_oil` | 158 | 61 | 12 | 1 |
+| `methionine` | 158 | 11 | 11 | 2 |
+| `nattokinase` | 37 | 23 | 12 | 6 |
+| `olive_leaf` | 121 | 60 | 12 | 1 |
+| `pomegranate` | 156 | 81 | 12 | 5 |
+| `pumpkin` | 93 | 45 | 12 | 3 |
+| `tribulus` | 78 | 64 | 12 | 9 |
+
+Totals: 4662 records screened, 1669 kept, 434 shortlisted, 139 handoffs proposed.

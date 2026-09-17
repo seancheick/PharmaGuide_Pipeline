@@ -1,0 +1,1362 @@
+{
+  "canonical_id": "maca",
+  "screened": 59,
+  "kept": 33,
+  "rejected": [
+    {
+      "pmid": "21087067",
+      "reason": "off_topic",
+      "note": "Broad systematic review of botanical extracts as anti-aging skin preparations; not maca-isolated extractable data, and topical cosmetic focus."
+    },
+    {
+      "pmid": "24314619",
+      "reason": "off_topic",
+      "note": "Broad review of herbal preparations for menopause 'beyond isoflavones and black cohosh'; not confirmed as maca-specific extractable data."
+    },
+    {
+      "pmid": "27784600",
+      "reason": "off_topic",
+      "note": "Broad review of natural aphrodisiacs generally; not maca-isolated extractable data."
+    },
+    {
+      "pmid": "28174084",
+      "reason": "animal_or_invitro",
+      "note": "Protective effect of maca polysaccharide on Hep-G2 cells and alcoholic liver oxidative injury in mice; in vitro cell line plus animal model study."
+    },
+    {
+      "pmid": "28560642",
+      "reason": "off_topic",
+      "note": "Identification/characterization of microRNAs in maca as a high-altitude stress-adaptive plant; plant molecular biology study, not a clinical study."
+    },
+    {
+      "pmid": "29557436",
+      "reason": "off_topic",
+      "note": "Broad systematic review of 'superfoods' (of which maca is only one) on metabolic syndrome risk factors; not maca-isolated extractable data."
+    },
+    {
+      "pmid": "31989657",
+      "reason": "animal_or_invitro",
+      "note": "Inflammatory pathway of Red Maca in an induced benign prostatic hyperplasia rat model; animal study."
+    },
+    {
+      "pmid": "32719085",
+      "reason": "animal_or_invitro",
+      "note": "In vitro CYP3A inhibitory-potential screening of grapefruit juice and 29 herbal supplements (including maca) using cryopreserved human intestinal mucosa/enterocytes; in vitro pharmacokinetic screening, not a human clinical study."
+    },
+    {
+      "pmid": "32824772",
+      "reason": "off_topic",
+      "note": "Cross-institutional pilot study tracking antimicrobial resistance determinants in diarrheal pathogens; unrelated to maca (apparent keyword false match)."
+    },
+    {
+      "pmid": "33843553",
+      "reason": "off_topic",
+      "note": "Broad Bayesian network meta-analysis comparing many pharmacological interventions for antidepressant-induced sexual dysfunction; maca-specific extractable data not confirmed in this broad drug-focused comparison."
+    },
+    {
+      "pmid": "34639498",
+      "reason": "off_topic",
+      "note": "Systematic review of root canal morphology of the mandibular canine; unrelated to maca (apparent keyword false match)."
+    },
+    {
+      "pmid": "35892716",
+      "reason": "off_topic",
+      "note": "Broad systematic review of multiple nutraceuticals for antidepressant-induced sexual dysfunction; maca-isolated extractable data not confirmed in this multi-agent review scope."
+    },
+    {
+      "pmid": "36863914",
+      "reason": "off_topic",
+      "note": "Pathogenesis of histologic variations of appendiceal mucinous neoplasms; unrelated to maca (apparent keyword false match)."
+    },
+    {
+      "pmid": "37066467",
+      "reason": "off_topic",
+      "note": "Case of laparoscopic resection for mucinous cystadenocarcinoma of the appendix; unrelated to maca (apparent keyword false match)."
+    },
+    {
+      "pmid": "37829299",
+      "reason": "off_topic",
+      "note": "Retrospective chart review of adverse-event interactions between 'adaptogens' broadly and antidepressant drugs; maca-specific extractable data not confirmed within this broad adaptogen-class review."
+    },
+    {
+      "pmid": "38487706",
+      "reason": "animal_or_invitro",
+      "note": "Influence of dietary maca supplementation on sperm quality in dogs; animal (veterinary) study."
+    },
+    {
+      "pmid": "38935844",
+      "reason": "off_topic",
+      "note": "Critical appraisal of surgical treatment (gastrectomy plus colectomy with HIPEC) for pseudomyxoma peritonei; unrelated to maca (apparent keyword false match)."
+    },
+    {
+      "pmid": "39368558",
+      "reason": "animal_or_invitro",
+      "note": "Maca polysaccharides mitigating aflatoxin B1 liver toxicity via signaling pathway activation; mechanistic/animal-model study."
+    },
+    {
+      "pmid": "39739595",
+      "reason": "off_topic",
+      "note": "Case report of an infant with Beckwith-Wiedemann syndrome requiring transplant for hepatic mesenchymal hamartoma; unrelated to maca (apparent keyword false match)."
+    },
+    {
+      "pmid": "39985829",
+      "reason": "off_topic",
+      "note": "Systematic review and meta-analysis of PHARMACOLOGICAL (drug) treatments for antidepressant-induced sexual dysfunction in women; maca is a supplement, not a pharmacological drug treatment, and not confirmed as included in this drug-focused review."
+    },
+    {
+      "pmid": "40483779",
+      "reason": "off_topic",
+      "note": "Integrated transcriptome/proteome analysis of maca's response to UV-B radiation as a crop plant; plant molecular biology study, not a clinical study."
+    },
+    {
+      "pmid": "40718333",
+      "reason": "off_topic",
+      "note": "Anatomical case report on the middle accessory cerebral artery; unrelated to maca (apparent keyword false match)."
+    },
+    {
+      "pmid": "41696741",
+      "reason": "off_topic",
+      "note": "Broad systematic review and meta-analysis of herbal supplements generally (14 RCTs, multiple herbs) for erectile dysfunction; maca-isolated extractable data not confirmed within this multi-herb pooled review."
+    },
+    {
+      "pmid": "41719604",
+      "reason": "off_topic",
+      "note": "Quasi-experimental study of a diagnostic/therapeutic assignment model's impact on quality of care in institutionalized older adults; unrelated to maca (apparent keyword false match)."
+    },
+    {
+      "pmid": "42456382",
+      "reason": "animal_or_invitro",
+      "note": "Maca attenuates titanium dioxide nanoparticle-induced hepatotoxicity in rats; animal model study."
+    },
+    {
+      "pmid": "42601961",
+      "reason": "off_topic",
+      "note": "Broad narrative review of plant-derived bioactives generally for depression-related and antidepressant-associated sexual dysfunction; maca-isolated extractable data not confirmed within this broad multi-plant review."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "12472620",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Men aged 21-56 years",
+          "12-week double blind placebo-controlled, randomized, parallel trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Men aged 21-56 years received Maca in one of two doses: 1,500 mg or 3,000 mg or placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Men aged 21-56 years (healthy)",
+      "indication_as_stated": "sexual desire, relationship to mood and serum testosterone",
+      "dose_quote": "Men aged 21-56 years received Maca in one of two doses: 1,500 mg or 3,000 mg or placebo",
+      "primary_outcome_quote": "Self-perception on sexual desire, score for Hamilton test for depression, and Hamilton test for anxiety were measured at 4, 8 and 12 weeks of treatment.",
+      "primary_result_quote": "An improvement in sexual desire was observed with Maca since 8 weeks of treatment.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Effect on sexual desire was independent of mood/depression/anxiety scores and of serum testosterone/oestradiol levels, which did not differ between Maca and placebo.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Maca Gelatinizada' matches label spelling (gelatinized maca form)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "12525260",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Men aged between 21 and 56 Years",
+          "12-week double-blind, placebo-controlled, randomized, parallel trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Men aged between 21 and 56 Years received 1500 mg or 3000 mg Maca",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "apparently healthy men aged 21-56 years",
+      "indication_as_stated": "serum reproductive hormone levels",
+      "dose_quote": "Men aged between 21 and 56 Years received 1500 mg or 3000 mg Maca",
+      "primary_outcome_quote": "Serum levels of luteinizing hormone, follicle-stimulating hormone, prolactin, 17-alpha hydroxyprogesterone, testosterone and 17-beta estradiol were measured before and at 2, 4, 8 and 12 weeks of treatment",
+      "primary_result_quote": "Data showed that compared with placebo Maca had no effect on any of the hormones studied nor did the hormones show any changes over time.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result: 'treatment with Maca does not affect serum reproductive hormone levels' — companion study to 12472620 in the same cohort.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Maca Gelatinizada' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18054420",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "patients suffering from the metabolic syndrome",
+          "randomized placebo-controlled 90-day study"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "silymarin+maca (0.6+0.2 g/day)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "patients suffering from the metabolic syndrome",
+      "indication_as_stated": "plasma/lipoprotein lipids, serum glucose, and safety parameters",
+      "dose_quote": "silymarin+maca (0.6+0.2 g/day)",
+      "primary_outcome_quote": "to evaluate the effects of yacon and maca in combination with silymarin on plasma and lipoprotein lipids, serum glucose and safety parameters",
+      "primary_result_quote": "A moderate AST level and diastolic blood pressure increase was found in volunteers using maca (0.6 g/day).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Safety-focused trial; the maca-alone arm dose (0.6 g/day, without silymarin, in a separate comparison referenced in the abstract) showed AST and diastolic BP increases; the low-dose (0.2 g/day) maca+silymarin combination itself showed no adverse effects. Authors: 'effect of maca on AST level and blood pressure must be considered when using high doses of maca powder.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'maca' matches label spelling; studied alone (0.6 g/day) and combined with silymarin (0.2 g/day arm)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18784609",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fourteen postmenopausal women",
+          "randomized, double-blind, placebo-controlled, crossover trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "received 3.5 g/day of powered Maca for 6 weeks and matching placebo for 6 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Fourteen postmenopausal women",
+      "indication_as_stated": "psychological symptoms and sexual dysfunction in postmenopausal women; estrogenic/androgenic activity",
+      "dose_quote": "received 3.5 g/day of powered Maca for 6 weeks and matching placebo for 6 weeks",
+      "primary_outcome_quote": "the women completed the Greene Climacteric Scale to assess the severity of menopausal symptoms",
+      "primary_result_quote": "The Greene Climacteric Scale revealed a significant reduction in scores in the areas of psychological symptoms, including the subscales for anxiety and depression and sexual dysfunction after Maca consumption compared with both baseline and placebo (P < 0.05).",
+      "sample_size_quote": "Fourteen postmenopausal women completed a randomized, double-blind, placebo-controlled, crossover trial.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Positive on psychological symptoms/sexual dysfunction; null on estradiol, FSH, LH, SHBG; in vitro yeast-assay testing found no physiologically significant estrogenic/androgenic activity in Maca extract, so authors state the symptom benefit is independent of hormonal mechanisms.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Lepidium meyenii (Maca)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18801111",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "20 remitted depressed outpatients",
+          "double-blind, randomized, parallel group dose-finding pilot study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a low-dose (1.5 g/day) to a high-dose (3.0 g/day) maca regimen",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "20 remitted depressed outpatients (mean age 36+/-13 years; 17 women) with SSRI-induced sexual dysfunction",
+      "indication_as_stated": "SSRI-induced sexual dysfunction",
+      "dose_quote": "a low-dose (1.5 g/day) to a high-dose (3.0 g/day) maca regimen",
+      "primary_outcome_quote": "The Arizona Sexual Experience Scale (ASEX) and the Massachusetts General Hospital Sexual Function Questionnaire (MGH-SFQ) were used to measure sexual dysfunction.",
+      "primary_result_quote": "ITT subjects on 3.0 g/day maca had a significant improvement in ASEX (from 22.8+/-3.8 to 16.9+/-6.2; z=-2.20, P=0.028) and in MGH-SFQ scores (from 24.1+/-1.9 to 17.0+/-5.7; z=-2.39, P=0.017), but subjects on 1.5 g/day maca did not.",
+      "sample_size_quote": "20 remitted depressed outpatients (mean age 36+/-13 years; 17 women)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Dose-related effect: 3.0 g/day significant, 1.5 g/day not significant. Small pilot: only 10 of 20 randomized subjects completed the study; 16 eligible for intent-to-treat analysis.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'maca' / 'maca root' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "19260845",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "50 Caucasian men affected by mild erectile dysfunction",
+          "double-blind clinical trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "randomised to treatment with Maca dry extract, 2400 mg, or placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "50 Caucasian men with mild erectile dysfunction (ED)",
+      "indication_as_stated": "mild erectile dysfunction, well-being",
+      "dose_quote": "randomised to treatment with Maca dry extract, 2400 mg, or placebo",
+      "primary_outcome_quote": "administrating before and after 12 weeks the International Index of Erectile Function (IIEF-5) and the Satisfaction Profile (SAT-P)",
+      "primary_result_quote": "patients taking Maca experienced a more significant increase than those taking placebo (1.6 +/- 1.1 versus 0.5 +/- 0.6, P < 0.001)",
+      "sample_size_quote": "50 Caucasian men affected by mild erectile dysfunction (ED)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Both Maca and placebo groups improved on IIEF-5 (placebo response present), but Maca group improved significantly more; authors describe this as 'a small but significant effect.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Maca dry extract' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "19781622",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eight participants",
+          "randomised cross-over design"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "14 days supplementation with both maca extract (ME) and placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "trained male cyclists (eight participants)",
+      "indication_as_stated": "endurance performance and sexual desire",
+      "dose_quote": null,
+      "primary_outcome_quote": "Eight participants each completed a 40 km cycling time trial before and after 14 days supplementation with both maca extract (ME) and placebo, in a randomised cross-over design.",
+      "primary_result_quote": "ME administration significantly improved 40 km cycling time performance compared to the baseline test (P=0.01), but not compared to the placebo trial after supplementation (P>0.05).",
+      "sample_size_quote": "Eight participants each completed a 40 km cycling time trial",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Cycling performance improved vs. baseline but NOT significantly vs. placebo (i.e., a placebo-comparable, not maca-specific, effect on performance); sexual desire score did improve significantly vs. both baseline and placebo. Very small pilot (n=8). Specific maca extract dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'maca extract (ME)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "20090350",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "review summarizing experimental and clinical-trial literature",
+          "no new primary participant data described"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Lepidium meyenii (maca)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "nutrition, fertility, memory, mood; sperm production; menopausal/sexual symptoms",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Randomized clinical trials have shown that maca has favorable effects on energy and mood, may decrease anxiety and improve sexual desire.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "mixed",
+      "direction_note": "Narrative review distinguishing maca color/type-specific effects: 'Black maca has better effects on sperm production than yellow maca... Red maca, however, has no effect on sperm production'; also notes serum testosterone, estradiol, LH, FSH, and prolactin were not affected across trials reviewed.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Reviews yellow, black, and red maca types together without a single label-material designation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "20691074",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Four RCTs met all the inclusion criteria"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "any type of maca compared to a placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "healthy people or human patients with sexual dysfunction across 4 pooled RCTs",
+      "indication_as_stated": "sexual dysfunction",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Two RCTs suggested a significant positive effect of maca on sexual dysfunction or sexual desire in healthy menopausal women or healthy adult men, respectively, while the other RCT failed to show any effects in healthy cyclists.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "2 of 4 RCTs positive, 1 negative (cyclists), 1 positive for erectile dysfunction; authors conclude 'limited evidence' given the small total number/size/quality of trials.",
+      "registrations": [],
+      "included_studies": "Four RCTs (out of studies searched across 17 databases)",
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Reviews 'any type of maca' without a single label-material designation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "21840656",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Four RCTs met all inclusion criteria"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "any type of maca-based intervention",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "healthy perimenopausal, early postmenopausal, and late postmenopausal women across 4 pooled RCTs",
+      "indication_as_stated": "menopausal symptoms",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Using the Kupperman Menopausal Index and the Greene Climacteric Score, all RCTs demonstrated favorable effects of maca.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Authors caveat: 'the total number of trials, the total sample size, and the average methodological quality of the primary studies, were too limited to draw firm conclusions... the safety has not been proved yet.'",
+      "registrations": [],
+      "included_studies": "Four RCTs (out of studies searched across 17 databases)",
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Reviews 'any type of maca-based intervention' without a single label-material designation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "22700073",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A young female"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "using maca extract to improve her lethargy and low libido",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a young female with prolonged intermenstrual bleeding",
+      "indication_as_stated": "laboratory/assay-interference artifact, not a true hormonal effect",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Reanalysis of the original serum sample using Elecsys Testosterone II assay, a higher affinity assay, revealed a total testosterone level of 2.9 nmol/l.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Not a true testosterone-raising effect: an initially markedly elevated testosterone reading was an immunoassay-interference artifact from maca use, corrected on retesting with a different assay method. Important for interpreting any maca study relying on testosterone immunoassays.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'maca extract' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23674952",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "20 Caucasian healthy early-postmenopausal women volunteers (Trial I); eight women (Trial II)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "2g gelatinized Maca root powder (Maca-GO) in the form of two 500mg hard gel capsules, twice daily",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "20 Caucasian healthy early-postmenopausal women (Trial I, 3 months); 8 women (Trial II, 9 months)",
+      "indication_as_stated": "menopausal discomfort, serum hormone profile (LH, FSH, E2, progesterone)",
+      "dose_quote": "administration of 2g gelatinized Maca root powder (Maca-GO) in the form of two 500mg hard gel capsules, twice daily",
+      "primary_outcome_quote": "Hormone levels were determined in blood with a simultaneous assessment of menopausal index at the start of study, after one month use of placebo, and after two and eight months administration of 2g gelatinized Maca root powder",
+      "primary_result_quote": "level of FSH significantly (P<0.05) decreased with a simultaneous significant (P<0.05) increase in the LH level, resulting in significant (P<0.05) increase in both E2 and PG, after eight months of Maca-GO treatment only",
+      "sample_size_quote": "conducted on 20 Caucasian healthy early-postmenopausal women volunteers during the three months period (Trial I) and on eight women during nine months period (Trial II)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "A distinctive positive placebo effect was also noted ('elevated PG level after one month administration of placebo capsules'), and hormonal changes were significant only after the longer 8-month duration, not earlier timepoints.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'gelatinized Maca root powder (Maca-GO)' matches label spelling (gelatinized form)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23674976",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "20 women (aged 41-50 years)",
+          "four months, double blind, crossover, randomized pilot trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Two 500mg hard capsules with Maca-GO or Placebo were self-administered by participants twice daily with meals (total 2g/day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "20 perimenopausal women (aged 41-50 years)",
+      "indication_as_stated": "menopausal discomfort symptoms, hormone/lipid/mineral profiles",
+      "dose_quote": "Two 500mg hard capsules with Maca-GO or Placebo were self-administered by participants twice daily with meals (total 2g/day)",
+      "primary_outcome_quote": "monthly interviews conducted by gynecologist, body weight and blood pressure were registered and Menopausal Index according to Kupperman's was determined",
+      "primary_result_quote": "Two months administration of Maca-GO significantly alleviated symptoms of discomfort observed in majority of women involved in the study (74%-87%) as assessed by Kupperman's Menopausal index.",
+      "sample_size_quote": "A group of 20 women (aged 41-50 years)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "A distinctive placebo effect was also observed at the start of the study; rat toxicology data cited separately from the human trial ('Toxicity of Maca-GO determined on rats showed its safe use at the level of 7.5mg/kg body weight').",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Pre-Gelatinized Organic Maca (Maca-GO)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23675005",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "168 Caucasian early-postmenopausal women volunteers",
+          "double-blind, randomized, placebo-corrected, multi-centre (five sites) clinical study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Two 500 mg vegetable hard gel capsules with Maca-GO or Placebo powder were self-administered twice daily with meals (total 2 g/day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "168 Caucasian early-postmenopausal women (age>49 years); 124 completed",
+      "indication_as_stated": "menopausal symptoms, reproductive hormone and lipid profile",
+      "dose_quote": "Two 500 mg vegetable hard gel capsules with Maca-GO or Placebo powder were self-administered twice daily with meals (total 2 g/day)",
+      "primary_outcome_quote": "Menopausal symptoms were assessed according to Greene's Score (GMS) and Kupperman's Index (KMI).",
+      "primary_result_quote": "Maca-GO significantly reduced both frequency and severity of individual menopausal symptoms (hot flushes and night sweating in particular) resulting in significant (P<0.001) alleviation of KMI (from 22 to 10)",
+      "sample_size_quote": "a total of 168 Caucasian early-postmenopausal women volunteers (age>49 years) participated",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Largest of the three related Maca-GO postmenopausal-women trials in this identity's evidence base (168 enrolled, 124 completed, five-site multicentre design).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Pre-Gelatinized Organic Maca (Maca-GO)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23675006",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Total of 34 Caucasian women volunteers",
+          "double-blind, randomized, four months outpatient crossover configuration Trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Two 500 mg vegetable hard gel capsules with Maca-GO or Placebo powder were self-administered twice daily with meals (total 2 g/day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "34 Caucasian early-postmenopausal women (2 groups of 11-17 participants)",
+      "indication_as_stated": "menopausal symptoms, hormone/lipid/bone-marker profile",
+      "dose_quote": "Two 500 mg vegetable hard gel capsules with Maca-GO or Placebo powder were self-administered twice daily with meals (total 2 g/day)",
+      "primary_outcome_quote": "Menopausal symptoms were assessed according to Greene's Score (GMS) and Kupperman's Index (KMI).",
+      "primary_result_quote": "Two months application of Maca-GO stimulated (P<0.05) production of E2, suppressed (P<0.05) blood FSH, Thyroid (T3) and Adrenocorticotropic hormones, Cortisol, and BMI, increased (P<0.05) low density lipoproteins, blood Iron and alleviated (P<0.001) menopausal symptoms.",
+      "sample_size_quote": "Total of 34 Caucasian women volunteers participated in a double-blind, randomized, four months outpatient crossover configuration Trial.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for menopausal symptom relief, but also 'increased (P<0.05) low density lipoproteins' — a directionally unfavorable lipid change. Third of three related Maca-GO papers from the same research group/cohort series.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Pre-Gelatinized Organic Maca (Maca-GO)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "24931003",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "29 postmenopausal Hong Kong Chinese women",
+          "randomized, double-blind, placebo-controlled, cross-over study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "received 3.3 g/day of Maca or placebo for 6 weeks each",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "29 postmenopausal Hong Kong Chinese women",
+      "indication_as_stated": "hormones, lipids, glucose, cytokines, blood pressure, menopausal symptoms, well-being",
+      "dose_quote": "received 3.3 g/day of Maca or placebo for 6 weeks each, in either order, over 12 weeks",
+      "primary_outcome_quote": "estradiol, follicle stimulating hormone (FSH), sex hormone binding globulin (SHBG), thyroid stimulating hormone (TSH), full lipid profiles, glucose and serum cytokines were measured",
+      "primary_result_quote": "significant decreases in diastolic blood pressure and depression were apparent after Maca treatment",
+      "sample_size_quote": "A randomized, double-blind, placebo-controlled, cross-over study was conducted in 29 postmenopausal Hong Kong Chinese women.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Null on all measured hormones/lipids/glucose/cytokines ('Maca did not exert hormonal or immune biological action'); positive only for diastolic BP and depression scores. Authors note possible cultural differences in symptom reporting vs. prior Western cohorts.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Maca' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "25954318",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "45 female outpatients",
+          "12-week, double-blind, placebo-controlled trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "maca root (3.0 g/day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "45 female outpatients (mean age 41.5 ± 12.5 years) with SSRI/SNRI-induced sexual dysfunction whose depression remitted",
+      "indication_as_stated": "antidepressant-induced sexual dysfunction (AISD) in women",
+      "dose_quote": "a 12-week, double-blind, placebo-controlled trial of maca root (3.0 g/day)",
+      "primary_outcome_quote": "Endpoints were improvement in sexual functioning as per the Arizona Sexual Experience Scale (ASEX) and the Massachusetts General Hospital Sexual Function Questionnaire (MGH-SFQ).",
+      "primary_result_quote": "Remission rates by the end of treatment were higher for the maca than the placebo group, based on attainment of an ASEX total score ≤ 10 (9.5% for maca versus 4.8% for placebo)",
+      "sample_size_quote": "45 of 57 consented females were randomized, and 42 (30 premenopausal and 12 postmenopausal women) were eligible for a modified intent-to-treat analysis",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Higher (not necessarily statistically robust, remission rates reported descriptively) response in maca vs placebo overall, with effect concentrated in the postmenopausal subgroup ('Higher remission rates for the maca versus placebo group were associated with postmenopausal status').",
+      "registrations": [
+        "NCT00568126"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'maca root' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26421049",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A group of 20 volunteers aged 20-40 years",
+          "double-blind, randomized, placebo-controlled pilot trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "milled hypocotyl of maca or placebo (1.75 g/day) for 12 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "20 healthy adult men aged 20-40 years",
+      "indication_as_stated": "semen parameters and serum hormone levels",
+      "dose_quote": "supplied by milled hypocotyl of maca or placebo (1.75 g/day) for 12 weeks",
+      "primary_outcome_quote": "Negative controls of semen were compared to the samples after 6 and 12 weeks of maca administration; negative blood controls were compared to the samples after 12 weeks of treatment.",
+      "primary_result_quote": "Sperm concentration and motility showed rising trends compared to placebo even though levels of hormones did not change significantly after 12 weeks of trial.",
+      "sample_size_quote": "A group of 20 volunteers aged 20-40 years",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Described as 'rising trends' rather than a clearly statistically significant improvement in sperm parameters; hormone levels unchanged.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'maca' / milled hypocotyl matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27548190",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "175 participants",
+          "randomized study at low and high altitude"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "3 g of either placebo, black, or red maca extract daily for 12 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "175 adult human subjects living at low altitude (LA) and high altitude (HA)",
+      "indication_as_stated": "sexual desire, mood, energy, quality of life, chronic mountain sickness score",
+      "dose_quote": "A total of 175 participants were given 3 g of either placebo, black, or red maca extract daily for 12 weeks.",
+      "primary_outcome_quote": "Primary outcomes were changes in sexual desire, mood, energy, health-related quality of life score (HRQL), and chronic mountain sickness (CMS) score, or in glycaemia, blood pressure, and hemoglobin levels.",
+      "primary_result_quote": "Consumption of spray-dried extracts of red and black maca resulted in improvement in mood, energy, and health status, and reduced CMS score.",
+      "sample_size_quote": "A total of 175 participants were given 3 g of either placebo, black, or red maca extract daily for 12 weeks.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Two distinct maca varieties (black and red) compared; effects on mood/energy/CMS score were better with red maca; black maca (and to a lesser extent red) reduced hemoglobin only in highlanders with abnormally high hemoglobin, with no effect in lowlanders; black maca specifically reduced blood glucose.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Distinguishes black maca and red maca as separate spray-dried extract varieties with different effect profiles, not a single undifferentiated 'maca' material."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27621241",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Five studies - 3 randomized clinical trials (RCTs) and 2 uncontrolled observational studies (UOSs) - met all of the inclusion criteria"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "any type of maca",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "infertile and healthy men across 5 pooled studies",
+      "indication_as_stated": "semen quality",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "One RCT found favorable effects of maca on sperm mobility in infertile men. The two other RCTs showed positive effects of maca on several semen quality parameters in healthy men.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Authors caveat: 'the total number of trials, the total sample size, and the risk of bias of the included studies prevent the drawing firm conclusions.'",
+      "registrations": [],
+      "included_studies": "5 studies (3 RCTs, 2 uncontrolled observational studies)",
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Reviews 'any type of maca' regardless of preparation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29237937",
+      "design": "case_report",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "title describes drug-induced liver injury from a specific product",
+          "abstract not retrievable/empty in this record"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "Lepidium meyenii (Maca) Medicinal Liquor (title only; no abstract text)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": null,
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": null,
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Abstract field empty in retrieved record; title reports drug-induced liver injury due to a Lepidium meyenii (Maca) medicinal liquor product (an alcoholic preparation, not a standard powder/capsule form).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Title specifies a 'Medicinal Liquor' preparation of maca, an alcoholic-extract form distinct from powder/capsule/extract forms in other records."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29313251",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A 32-year-old female"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "ingest a maca root powder supplement",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a 32-year-old female (pregnant at the time of an earlier, separate lead-exposure episode)",
+      "indication_as_stated": "unintentional lead exposure from a nutritional supplement",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "her blood lead levels decreased, but increased a year later after she began to ingest a maca root powder supplement. Upon discontinuation of maca root powder ingestion, her blood lead levels decreased further.",
+      "sample_size_quote": "A 32-year-old female was found to have a whole blood lead concentration of 44 μg/dL.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Case report of lead contamination in a maca root powder supplement product (in addition to a separate ceramic-mug lead source); authors: 'Maca powder... may contain lead and other minerals' and warn 'imported products available from commercial retailers and internet vendors may contain significant amounts of lead.' A product-contamination/quality issue, not a pharmacologic effect of maca itself.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Product contamination issue rather than a material-form mismatch; specific product/brand not identified."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32654242",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "sixty-nine patients diagnosed with mild asthenozoospermia and/or mild oligozoospermia",
+          "double-blind, randomised, placebo-controlled pilot trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "supplied by maca (n = 35) or placebo (n = 34) (2 g/day) for a period of 12 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "69 infertile adult men with mild asthenozoospermia and/or mild oligozoospermia",
+      "indication_as_stated": "seminal parameters in infertile men",
+      "dose_quote": "supplied by maca (n = 35) or placebo (n = 34) (2 g/day) for a period of 12 weeks",
+      "primary_outcome_quote": "The objective of this study was to assess the effect of maca on seminal parameters in infertile adult men.",
+      "primary_result_quote": "there were no significant differences in semen volume (2.95 ± 0.52 vs. 2.90 ± 0.52; p = .392), sperm motility (22.34 ± 2.22 vs. 23.05 ± 2.22; p = .462) and normal sperm morphology (7.89 ± 1.89 vs. 7.04 ± 2.28; p = .801), but there was a significant difference in sperm concentration (15.04 ± 5.61 vs. 10.16 ± 3.59, respectively; p = .011)",
+      "sample_size_quote": "sixty-nine patients diagnosed with mild asthenozoospermia and/or mild oligozoospermia were supplied by maca (n = 35) or placebo (n = 34)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive only for sperm concentration; null for semen volume, motility, and morphology.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'maca' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34253105",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A 32-year-old White female"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a personalized nutrition plan, Lepidium peruvianum (maca), targeted nutrient supplementation, and lifestyle recommendations",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "a 32-year-old White female following hysterectomy and oophorectomy (surgically induced menopause)",
+      "indication_as_stated": "hot flashes, night sweats, anxiety, and mood changes after surgical menopause",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "These interventions resulted in the safe and effective resolution of hot flashes and anxiety in 2 months and significantly improved her moods and sleep.",
+      "sample_size_quote": "A 32-year-old White female presented with hot flashes, night sweats, anxiety, and mood changes",
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "positive",
+      "direction_note": "Single case report; maca given alongside a personalized nutrition plan, additional targeted supplements, and lifestyle recommendations — cannot isolate a maca-specific effect.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Maca administered only as one of several simultaneous naturopathic interventions, undosed individually."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34585449",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fifty patients suffering from various reproductive-related problems",
+          "randomized, double-blind, placebo-controlled trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "yellow maca",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Fifty patients suffering from various reproductive-related problems (infertile patients)",
+      "indication_as_stated": "semen quality and serum hormone levels in infertile patients",
+      "dose_quote": null,
+      "primary_outcome_quote": "Fifty patients suffering from various reproductive-related problems were enrolled for 16 weeks to evaluate the effect of yellow maca on semen quality and serum hormone levels.",
+      "primary_result_quote": "Treatment with maca improved the percentage of sperm concentration by 40%, whereas the placebo improved by 76% after 8 and 16 weeks of treatment, but the results were statistically non-significant.",
+      "sample_size_quote": "Fifty patients suffering from various reproductive-related problems were enrolled for 16 weeks",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Placebo group actually improved MORE than the maca group on sperm concentration (though neither reached statistical significance); authors conclude 'results are not sufficient to assess the efficacy of maca on male fertility.' Specific daily dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Specifies 'yellow maca', one of several distinct color/type variants."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36110519",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Five RCTs met all of the inclusion criteria"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Lepidium meyenii Walp. [Brassicaceae] (L. meyenii W.), known as maca",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "men experiencing infertility and healthy men across 5 pooled RCTs",
+      "indication_as_stated": "semen quality",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "The meta-analysis also failed to show the efficacy of maca in increasing the sperm concentration compared to the placebo (weighted mean difference, 2.22, 95% confidence interval -2.94 to 7.37, p = 0.4).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Pooled meta-analysis found NO significant effect of maca on sperm concentration; individual RCTs showed 'mixed efficacy.' Authors: 'evidence from the included studies suggests unclear effects of maca on semen quality parameters.' A more recent, more skeptical synthesis than the earlier 27621241 review on the same topic.",
+      "registrations": [],
+      "included_studies": "Five RCTs",
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Reviews maca 'regardless of the type', not a single label-material designation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36593713",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A total of 80 participants",
+          "randomly assigned"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "1,000 mg of Maca or placebo, two pills at a time, three times per day for 12 weeks before food intake",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "80 eugonadal patients with late onset hypogonadism (LOH) symptoms",
+      "indication_as_stated": "late-onset hypogonadism symptoms",
+      "dose_quote": "Participants were instructed to receive 1,000 mg of Maca or placebo, two pills at a time, three times per day for 12 weeks before food intake.",
+      "primary_outcome_quote": "Aging Males' Symptoms scale (AMS), Androgen Deficiency in the Aging Males (ADAM), International Prostate Symptom Score (IPSS), and International Index of Erectile Function (IIEF) questionnaires, serologic tests (total testosterone and free testosterone, total cholesterol, high density lipoprotein cholesterol, low density lipoprotein cholesterol, triglyceride), body weight, and waist circumference were assessed at 4 and 12 weeks after treatment",
+      "primary_result_quote": "AMS, IIEF, and IPSS were significantly (p<0.05) improved in Maca treated group than in the placebo group.",
+      "sample_size_quote": "A total of 80 participants were enrolled and randomly assigned to Maca treated group (n=41) or the placebo group (n=39)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Positive across multiple symptom scales in a eugonadal (normal-testosterone) LOH-symptom population; effect not attributable to a change in true gonadal status since patients were eugonadal by definition.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'gelatinized Maca' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38187794",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eight elite handball athletes",
+          "female adolescent elite handball athletes"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "2,500 mg of 100% concentrated BM extract and a placebo each, for 4 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Eight elite female adolescent handball athletes",
+      "indication_as_stated": "isokinetic muscular performance",
+      "dose_quote": "The intake capsules contained 2,500 mg of 100% concentrated BM extract and a placebo each, for 4 weeks.",
+      "primary_outcome_quote": "Isokinetic muscular performance and physical fitness were measured three times at 4-week intervals after the intake of BM and placebo, including baseline.",
+      "primary_result_quote": "a significant improvement in 20 m-shuttle run (P < 0.001), 30°/s flexor (P < 0.01), and 120°/s flexor (P < 0.01) in isokinetic muscle function of the trunk",
+      "sample_size_quote": "Eight elite handball athletes were recruited for the present study.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Very small sample (n=8), specific to elite adolescent female athletes and Black Maca extract specifically, not all maca types.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Specifies 'Black Maca (BM)', one of several distinct color/type variants."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39334705",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "Eleven studies were included in the systematic review and eight in the meta-analysis",
+          "pools in vitro, animal, and human studies"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Lepidium meyenii Walp (LmW) or Maca",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "mixed in vitro, animal, and human studies",
+      "indication_as_stated": "cellular oxidative stress",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "a higher dose of LmW generated a greater antioxidant effect",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Pools in vitro, animal, and human studies together without separating human-only results in the abstract; explicit caveat: 'information concerning humans is scarce.'",
+      "registrations": [],
+      "included_studies": "Eleven studies (systematic review), eight (meta-analysis) — mix of in vitro, animal, and human",
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Covers maca broadly including its 'bioactive components such as macamides', not one specific label material."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39611748",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "two cases of acute psychotic episodes"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "regular consumption of herbal products... herbal ingredients like maca and matcha",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "two patients (individual cases)",
+      "indication_as_stated": "acute psychotic episodes triggered by herbal-product consumption",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "This manuscript explores two cases of acute psychotic episodes triggered by the regular consumption of herbal products.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "negative",
+      "direction_note": "Two-case case series; maca is one of two implicated herbal ingredients (the other being matcha, a distinct product) — cannot confirm maca alone caused either case from the abstract text.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Maca named alongside matcha (a different herbal product) as an implicated ingredient across two distinct cases; individual case attribution unclear from the abstract."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39781531",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty healthy men",
+          "matched-pair design"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "consumed 2.25 g of maca or placebo twice per day for 12 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twenty healthy men",
+      "indication_as_stated": "immune responses and inflammatory cytokines after exhaustive endurance exercise",
+      "dose_quote": "All participants consumed 2.25 g of maca or placebo twice per day for 12 weeks",
+      "primary_outcome_quote": "Researchers collected blood samples before exercise, immediately after exercise, and at 2, 4, and 24 hours post-exercise to analyze immune functions and inflammatory markers.",
+      "primary_result_quote": "interferon-γ levels from peripheral blood mononuclear cells were significantly higher in the maca group than in the placebo group immediately and at 24 hours after exercise",
+      "sample_size_quote": "Twenty healthy men were recruited and assigned into maca and placebo groups",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Authors' own summary: '12-week maca supplementation had positive effects only on interferon-γ levels' — other measured immune parameters (lymphocyte counts, CD4+/CD8+ ratio) changed with exercise itself but were not specifically attributed to maca vs. placebo differences.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Lepidium Meyenii extract' / 'maca' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39796542",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "Twenty-one studies were included in the systematic review and sixteen in the meta-analysis",
+          "pools in vitro, animal, and human studies"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Lepidium meyenii Walp. (LmW), known as maca",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "mixed animal and human studies",
+      "indication_as_stated": "physical performance",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "They revealed a large effect for all outcomes (SMD: FST = 2.26, RRT = 6.26, GST = 5.23, LA = -1.01, and BLA = -1.70).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Pools animal studies (e.g., forced swimming test, rota-rod test — rodent behavioral assays) together with human studies without separating human-only effect sizes in the abstract; several outcome measures (FST, RRT, GST) are animal-only assays, so the pooled 'large effect' substantially reflects animal data.",
+      "registrations": [],
+      "included_studies": "Twenty-one studies (systematic review), sixteen (meta-analysis) — mix of animal and human",
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Covers maca broadly including macamides, not one specific label material; conducted 'both in vitro and in vivo in animals and humans.'"
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40960048",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "ten well-trained college male basketball players",
+          "randomized, placebo-controlled crossover trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "supplemented with either 2000 mg/day of MACA or a placebo for 2 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "ten well-trained college male basketball players",
+      "indication_as_stated": "basketball-specific performance and antifatigue",
+      "dose_quote": "ten well-trained college male basketball players supplemented with either 2000 mg/day of MACA or a placebo for 2 weeks",
+      "primary_outcome_quote": "Performance was assessed using the countermovement jump test, the Basketball Jump Shooting Accuracy Test, and the repeated sprint ability test.",
+      "primary_result_quote": "Results showed no significant differences between the MACA and placebo conditions in countermovement jump height ( P = 0.352), jump shooting accuracy, repeated sprint performance, fatigue index ( P = 0.266), or blood lactate clearance rate ( P = 0.258).",
+      "sample_size_quote": "ten well-trained college male basketball players supplemented with either 2000 mg/day of MACA or a placebo for 2 weeks",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result across all performance and fatigue measures: 'did not provide ergogenic benefits for performance or fatigue in well-trained basketball players.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'MACA' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "12472620",
+    "18801111",
+    "19260845",
+    "20691074",
+    "21840656",
+    "23675005",
+    "24931003",
+    "25954318",
+    "27548190",
+    "36110519",
+    "36593713",
+    "40960048"
+  ],
+  "handoff": [
+    {
+      "pmid": "22700073",
+      "role": "dosing",
+      "reason": "Case report demonstrating maca use caused a testosterone immunoassay-interference artifact (falsely elevated reading, corrected on retest with a different assay); relevant to a lab-monitoring/clinical-interpretation reviewer for any maca-and-hormone-testing context."
+    },
+    {
+      "pmid": "29313251",
+      "role": "safety",
+      "reason": "Case report of a patient's blood lead levels rising after starting a maca root powder supplement and falling after stopping it, suggesting possible lead contamination in a commercial maca product; relevant to a product-quality/contaminant reviewer."
+    },
+    {
+      "pmid": "29237937",
+      "role": "safety",
+      "reason": "Case report of drug-induced liver injury from a Lepidium meyenii (Maca) medicinal liquor product; abstract unavailable in this scope for full verification — relevant to a hepatic-safety reviewer, and the 'medicinal liquor' (alcoholic) preparation form differs from standard powder/capsule products."
+    },
+    {
+      "pmid": "39611748",
+      "role": "safety",
+      "reason": "Case series of two acute psychotic episodes linked to regular herbal-product consumption, naming maca and matcha as implicated ingredients; relevant to a neuropsychiatric-safety-signal reviewer even though rejected here as not maca-isolated."
+    },
+    {
+      "pmid": "37829299",
+      "role": "interaction",
+      "reason": "Retrospective chart review of 1,816 adverse-event reports for adaptogen-antidepressant drug interactions; relevant to a drug-interaction reviewer, though rejected here as too broad to confirm maca-specific extractable data."
+    }
+  ],
+  "identity_notes": "Maca (Lepidium meyenii) human RCT evidence clusters mainly around sexual function/libido (modest positive effects independent of sex hormone levels), menopausal symptom relief (a coherent positive series of 'Maca-GO' trials from one research group, though with a distinctive placebo effect noted repeatedly), and antidepressant-induced sexual dysfunction; systematic reviews consistently caveat that trial numbers, sample sizes, and methodological quality are too limited for firm conclusions. The single most important applicability caveat: maca is sold in multiple distinct color/type variants (yellow, black, red, gelatinized 'Maca-GO') with DIFFERENT reported effect profiles in the same reviewed literature (e.g., black maca improves sperm production while red maca does not; red maca showed better mood/energy effects than black maca in a head-to-head trial), so 'maca' is not interchangeable across products, and label_material_match is often unclear/related_form_differs rather than exact_match. Semen-quality evidence is itself contradictory across time: an earlier systematic review (27621241, 2016) reported suggestive positive effects, while a more recent meta-analysis (36110519, 2022) found no significant pooled effect on sperm concentration. Safety signals include a testosterone-immunoassay interference artifact, a case of probable lead contamination in a commercial maca powder product, and a case report of hepatotoxicity from a maca 'medicinal liquor' preparation."
+}

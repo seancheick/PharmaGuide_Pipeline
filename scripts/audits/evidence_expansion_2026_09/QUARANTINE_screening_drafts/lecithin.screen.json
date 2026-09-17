@@ -1,0 +1,1457 @@
+{
+ "canonical_id": "lecithin",
+ "screened": 127,
+ "kept": 29,
+ "rejected": [
+  {
+   "pmid": "1673209",
+   "reason": "not_intervention",
+   "note": "Tacrine plus lecithin combination vs. placebo in Alzheimer's disease; tacrine is the primary tested drug, lecithin an adjunct held constant with tacrine."
+  },
+  {
+   "pmid": "2680009",
+   "reason": "not_intervention",
+   "note": "Narrative discussion of tacrine plus lecithin in Alzheimer's disease; not itself primary trial data (though it notes 'lecithin used orally, failed to improve symptoms' in passing)."
+  },
+  {
+   "pmid": "3835497",
+   "reason": "not_intervention",
+   "note": "Piracetam plus lecithin combination EEG/neuropsychological study; piracetam is the primary tested drug."
+  },
+  {
+   "pmid": "7988619",
+   "reason": "not_intervention",
+   "note": "Population pharmacodynamic meta-analysis of tacrine (with lecithin background) trials; tacrine is the analyzed variable."
+  },
+  {
+   "pmid": "8173365",
+   "reason": "not_intervention",
+   "note": "Both study arms received lecithin (with tacrine or with placebo); design cannot isolate lecithin's own effect -- tacrine is the tested variable."
+  },
+  {
+   "pmid": "9813462",
+   "reason": "not_intervention",
+   "note": "Meta-analysis comparing tacrine versus lecithin and/or placebo; tacrine is the primary analyzed drug, not lecithin."
+  },
+  {
+   "pmid": "10480663",
+   "reason": "not_intervention",
+   "note": "Broad tardive dyskinesia treatment review (baclofen, deanol, diazepam, etc.); lecithin not the specific focus and no lecithin-specific extractable result identified."
+  },
+  {
+   "pmid": "11882512",
+   "reason": "not_intervention",
+   "note": "Absorption/kinetics of soy Delta(5)-phytosterols and phytostanols; phytosterol is the tested compound, not lecithin."
+  },
+  {
+   "pmid": "12083314",
+   "reason": "not_intervention",
+   "note": "Non-esterified stanols in a liquid emulsion; stanol is the tested compound, lecithin (if present) only a formulation vehicle."
+  },
+  {
+   "pmid": "35226642",
+   "reason": "not_intervention",
+   "note": "Broad narrative introduction to dietary emulsifiers and intestinal health; not a lecithin-specific trial or review."
+  },
+  {
+   "pmid": "35960461",
+   "reason": "not_intervention",
+   "note": "Broad natural-remedies-for-Alzheimer's review (Ginkgo, Melissa, Salvia, Ginseng, saffron, curcumin, soy lecithin); no lecithin-specific extractable result."
+  },
+  {
+   "pmid": "40037045",
+   "reason": "not_intervention",
+   "note": "Broad quercetin-bioavailability review; lecithin is only one of several enhancement strategies discussed, no lecithin-specific extractable result."
+  },
+  {
+   "pmid": "42411369",
+   "reason": "not_intervention",
+   "note": "Broad review of naturally derived excipients in injectable nanomedicines; injectable route, lecithin only one of many excipients, no lecithin-specific clinical outcome data."
+  },
+  {
+   "pmid": "10539742",
+   "reason": "not_intervention",
+   "note": "Sitostanol delivered in lecithin micelles; sitostanol is the tested cholesterol-lowering compound, lecithin is the micellization vehicle."
+  },
+  {
+   "pmid": "12866363",
+   "reason": "not_intervention",
+   "note": "Diclofenac epolamine gel formulated with lecithin for sprains/strains; diclofenac is the tested drug, lecithin an excipient."
+  },
+  {
+   "pmid": "20046768",
+   "reason": "not_intervention",
+   "note": "Curcuminoid (BCM-95) bioavailability study using non-curcuminoid turmeric components, not lecithin."
+  },
+  {
+   "pmid": "22656678",
+   "reason": "not_intervention",
+   "note": "Propofol nanoemulsion (lecithin vs. solutol) comparison; propofol is the tested anesthetic drug, intravenous route."
+  },
+  {
+   "pmid": "25183955",
+   "reason": "not_intervention",
+   "note": "Resettin/MyTosterone supplement (astaxanthin + saw palmetto); no lecithin component."
+  },
+  {
+   "pmid": "27919818",
+   "reason": "not_intervention",
+   "note": "PLGA-soya-lecithin micelles for methotrexate delivery; methotrexate is the tested drug, lecithin a formulation excipient; cellular uptake/cytotoxicity/PK study, largely preclinical."
+  },
+  {
+   "pmid": "28139161",
+   "reason": "not_intervention",
+   "note": "Liposome-encapsulated Aloe vera for melasma; Aloe vera is the tested active, lecithin liposome only the delivery vehicle."
+  },
+  {
+   "pmid": "34627852",
+   "reason": "not_intervention",
+   "note": "Piribedil-loaded lecithin-chitosan nasal nanoparticles; piribedil is the tested drug, lecithin a nanoparticle excipient; nasal route, preclinical formulation-design study."
+  },
+  {
+   "pmid": "38704709",
+   "reason": "not_intervention",
+   "note": "Case report of perioperative anaphylaxis to propofol; egg lecithin mentioned only as a propofol excipient (intravenous anesthesia), not an oral supplement."
+  },
+  {
+   "pmid": "2007937",
+   "reason": "not_this_route",
+   "note": "Human pulmonary surfactant (contains phosphatidylcholine) given intratracheally/at birth to preterm infants; not oral lecithin supplementation."
+  },
+  {
+   "pmid": "28574180",
+   "reason": "not_this_route",
+   "note": "Topical equol skin preparation; topical route, no oral lecithin."
+  },
+  {
+   "pmid": "31995229",
+   "reason": "not_this_route",
+   "note": "Water-in-oil emulsion with lecithin-modified bentonite for skin protection from pollutants; topical skin application."
+  },
+  {
+   "pmid": "37947116",
+   "reason": "not_this_route",
+   "note": "Lecithin-based multilamellar liposome sunscreen agent; topical skin application."
+  },
+  {
+   "pmid": "38815204",
+   "reason": "not_this_route",
+   "note": "Hempseed/flaxseed oil-based lyotropic liquid crystals for skin barrier function; topical skin application."
+  },
+  {
+   "pmid": "2297349",
+   "reason": "off_topic",
+   "note": "LCAT (lecithin:cholesterol acyltransferase) enzyme activity measured as an outcome of FISH OIL supplementation; LCAT is a measured biomarker enzyme, not the dietary lecithin supplement."
+  },
+  {
+   "pmid": "2360920",
+   "reason": "off_topic",
+   "note": "LCAT enzyme mass concentration associated with exercise/weight loss; LCAT is a measured biomarker enzyme, not dietary lecithin."
+  },
+  {
+   "pmid": "2918846",
+   "reason": "off_topic",
+   "note": "LCAT enzyme activity measured in a colestipol+fenofibrate drug trial; not dietary lecithin."
+  },
+  {
+   "pmid": "3234467",
+   "reason": "off_topic",
+   "note": "LCAT enzyme activity measured in a simvastatin+bezafibrate drug trial; not dietary lecithin."
+  },
+  {
+   "pmid": "19249891",
+   "reason": "off_topic",
+   "note": "Familial LCAT (enzyme) deficiency case report; genetic disease, not dietary lecithin supplementation."
+  },
+  {
+   "pmid": "24423117",
+   "reason": "off_topic",
+   "note": "LCAT enzyme activity measured in a general fruit/vegetable-intake trial; not dietary lecithin."
+  },
+  {
+   "pmid": "26647373",
+   "reason": "off_topic",
+   "note": "Serum amyloid A and HDL3-LCAT enzyme activity association study; not dietary lecithin."
+  },
+  {
+   "pmid": "30601362",
+   "reason": "off_topic",
+   "note": "Case report of corneal clouding from LCAT (enzyme) deficiency; genetic disease, not dietary lecithin."
+  },
+  {
+   "pmid": "33493256",
+   "reason": "off_topic",
+   "note": "Recombinant human LCAT ENZYME drug (a biologic) in atherosclerosis; not dietary lecithin."
+  },
+  {
+   "pmid": "34121413",
+   "reason": "off_topic",
+   "note": "MEDI6012 recombinant human LCAT enzyme drug; not dietary lecithin."
+  },
+  {
+   "pmid": "34256778",
+   "reason": "off_topic",
+   "note": "LCAT (enzyme) deficiency systematic review; genetic disease, not dietary lecithin."
+  },
+  {
+   "pmid": "34646351",
+   "reason": "off_topic",
+   "note": "LCAT (enzyme) deficiency and pregnancy case report; genetic disease, not dietary lecithin."
+  },
+  {
+   "pmid": "34789074",
+   "reason": "off_topic",
+   "note": "Novel pathogenic LCAT gene variant case report; genetic disease, not dietary lecithin."
+  },
+  {
+   "pmid": "34945193",
+   "reason": "off_topic",
+   "note": "Broad diet/lifestyle and HDL function systematic review; lecithin not named as a tested intervention."
+  },
+  {
+   "pmid": "35065092",
+   "reason": "off_topic",
+   "note": "Systematic review of natural history/biomarkers of primary LCAT (enzyme) deficiency; genetic disease."
+  },
+  {
+   "pmid": "35403472",
+   "reason": "off_topic",
+   "note": "Case report of gastric xanthomatosis secondary to lipoprotein X; unrelated to dietary lecithin."
+  },
+  {
+   "pmid": "35460085",
+   "reason": "off_topic",
+   "note": "LCAT enzyme measured as an outcome of probiotic-yogurt supplementation in heart failure; not dietary lecithin."
+  },
+  {
+   "pmid": "36039762",
+   "reason": "off_topic",
+   "note": "Recombinant human LCAT enzyme drug (REAL-TIMI 63B) in STEMI; not dietary lecithin."
+  },
+  {
+   "pmid": "38695168",
+   "reason": "off_topic",
+   "note": "Recombinant human LCAT enzyme effects on lipoprotein metabolism; not dietary lecithin."
+  },
+  {
+   "pmid": "39114211",
+   "reason": "off_topic",
+   "note": "Case report of renal lipid deposition resembling LCAT deficiency; genetic-disease-mimicking case report, not dietary lecithin."
+  },
+  {
+   "pmid": "40975265",
+   "reason": "off_topic",
+   "note": "Case report of monoclonal membranous nephropathy with acquired LCAT (enzyme) deficiency; not dietary lecithin."
+  },
+  {
+   "pmid": "42080096",
+   "reason": "off_topic",
+   "note": "Case report of co-inherited familial LCAT deficiency and alpha0-thalassemia; genetic disease, not dietary lecithin."
+  },
+  {
+   "pmid": "24969776",
+   "reason": "off_topic",
+   "note": "CSL112 (a reconstituted apoA-I biologic drug) and reverse cholesterol transport; not dietary lecithin."
+  },
+  {
+   "pmid": "8990255",
+   "reason": "off_topic",
+   "note": "Standards of laboratory practice for fetal lung maturity (L/S ratio); a diagnostic test, not a supplementation study."
+  },
+  {
+   "pmid": "9502662",
+   "reason": "off_topic",
+   "note": "Preterm premature rupture of membranes management trial; relates to fetal lung maturity assessment context, not lecithin supplementation."
+  },
+  {
+   "pmid": "10172601",
+   "reason": "off_topic",
+   "note": "Comparison of methods (including L/S ratio) for fetal lung maturity; diagnostic test meta-analysis."
+  },
+  {
+   "pmid": "11426891",
+   "reason": "off_topic",
+   "note": "Lamellar body count and L/S ratio accuracy for neonatal RDS prediction; diagnostic test meta-analysis."
+  },
+  {
+   "pmid": "23481577",
+   "reason": "off_topic",
+   "note": "L/S ratio and lamellar body count for fetal lung maturity meta-analysis; diagnostic test, not supplementation."
+  },
+  {
+   "pmid": "6142645",
+   "reason": "off_topic",
+   "note": "Alpha- and beta-blocker antihypertensive therapy and blood lipids; no lecithin relevance."
+  },
+  {
+   "pmid": "6449095",
+   "reason": "off_topic",
+   "note": "Aerosol salbutamol/SCH 1000 in cystic fibrosis; no lecithin relevance."
+  },
+  {
+   "pmid": "18427979",
+   "reason": "off_topic",
+   "note": "CoQ10/riboflavin/niacin in tamoxifen-treated breast cancer patients; no lecithin relevance."
+  },
+  {
+   "pmid": "19041224",
+   "reason": "off_topic",
+   "note": "CoQ10/vitamin E/selenium in psoriasis; no lecithin relevance."
+  },
+  {
+   "pmid": "22170930",
+   "reason": "off_topic",
+   "note": "Sampling solutions for microbiological testing of endoscopes; unrelated to lecithin."
+  },
+  {
+   "pmid": "23193678",
+   "reason": "off_topic",
+   "note": "Qianlieping capsule plus alpha-blocker for chronic prostatitis; Chinese herbal formula, no lecithin relevance."
+  },
+  {
+   "pmid": "26372095",
+   "reason": "off_topic",
+   "note": "Review of multi-liposomal drug delivery containers; pharmaceutical technology review, not a clinical lecithin supplementation study."
+  },
+  {
+   "pmid": "26606995",
+   "reason": "off_topic",
+   "note": "Case report of histiocytic/nonhistiocytic glomerular foam-cell lesions; unrelated to lecithin."
+  },
+  {
+   "pmid": "29609858",
+   "reason": "off_topic",
+   "note": "Case report of undetectable HDL cholesterol in acute malaria; unrelated to lecithin."
+  },
+  {
+   "pmid": "30073224",
+   "reason": "off_topic",
+   "note": "Egg consumption (whole food) and glycemic control; not a lecithin-specific intervention."
+  },
+  {
+   "pmid": "30080229",
+   "reason": "off_topic",
+   "note": "Essential fatty acids + Panax ginseng + green tea catechins on brain fMRI; no lecithin relevance."
+  },
+  {
+   "pmid": "30728574",
+   "reason": "off_topic",
+   "note": "Rheological/thermal study of avocado and sacha inchi oils; food-science study, not a lecithin supplementation trial."
+  },
+  {
+   "pmid": "32240476",
+   "reason": "off_topic",
+   "note": "Umbilicus treatment with Modified Dinggui Powder for chronic prostatitis; Chinese herbal formula, no lecithin relevance."
+  },
+  {
+   "pmid": "32929107",
+   "reason": "off_topic",
+   "note": "Prolonged bedrest and HDL/cholesterol efflux capacity; no lecithin relevance."
+  },
+  {
+   "pmid": "33169920",
+   "reason": "off_topic",
+   "note": "Thymus vulgaris phytocosmetic preparation for skin aging; unrelated topical plant-extract study."
+  },
+  {
+   "pmid": "33809928",
+   "reason": "off_topic",
+   "note": "Broad overview of soy isoflavones for menopausal syndrome; lecithin not named."
+  },
+  {
+   "pmid": "35836697",
+   "reason": "off_topic",
+   "note": "Retinoic acid and vitamin A status in neonatal rats; animal study, no lecithin relevance."
+  },
+  {
+   "pmid": "35978954",
+   "reason": "off_topic",
+   "note": "Lycopene-rich diets and HDL functionality; unrelated to lecithin (wrong-identity keyword match)."
+  },
+  {
+   "pmid": "36522805",
+   "reason": "off_topic",
+   "note": "Ethyl EPA and ethyl DHA effects on lipid metabolism; no lecithin relevance."
+  },
+  {
+   "pmid": "36618919",
+   "reason": "off_topic",
+   "note": "Systematic review of drugs for chemotherapy-induced peripheral neuropathy; lecithin not among the reviewed treatments."
+  },
+  {
+   "pmid": "36940225",
+   "reason": "off_topic",
+   "note": "Gut microbiome dysbiosis and atrial fibrillation systematic review; no lecithin relevance."
+  },
+  {
+   "pmid": "38053827",
+   "reason": "off_topic",
+   "note": "Dietary self-monitoring mobile-app intervention study; no lecithin relevance."
+  },
+  {
+   "pmid": "38214544",
+   "reason": "off_topic",
+   "note": "Maternal DHA supplementation and fetal ductus arteriosus; different supplement identity, no lecithin relevance."
+  },
+  {
+   "pmid": "38598220",
+   "reason": "off_topic",
+   "note": "Simiaotongzhuo Decoction for chronic prostatitis; Chinese herbal formula, no lecithin relevance."
+  },
+  {
+   "pmid": "39210421",
+   "reason": "off_topic",
+   "note": "Dongbai Tonglin Mixture for chronic prostatitis; Chinese herbal formula, no lecithin relevance."
+  },
+  {
+   "pmid": "39267053",
+   "reason": "off_topic",
+   "note": "Dietary interventions/intermittent fasting on HDL function in obese T2DM individuals; no lecithin-specific intervention."
+  },
+  {
+   "pmid": "39793682",
+   "reason": "off_topic",
+   "note": "Atherogenicity in mood disorders systematic review/meta-regression; no lecithin relevance."
+  },
+  {
+   "pmid": "41331788",
+   "reason": "off_topic",
+   "note": "CBD oral-bioavailability formulation study conducted in male Wistar RATS; animal pharmacokinetic study."
+  },
+  {
+   "pmid": "42165308",
+   "reason": "off_topic",
+   "note": "Systematic review of pharmacotherapy for post-traumatic attention impairments; no lecithin relevance."
+  },
+  {
+   "pmid": "1582035",
+   "reason": "off_topic",
+   "note": "Case report of acquired hypolipoproteinemia; no lecithin supplementation relevance evident."
+  },
+  {
+   "pmid": "7249374",
+   "reason": "off_topic",
+   "note": "Case report of familial hypo-alpha-lipoproteinemia; genetic lipid disorder, no lecithin supplementation relevance."
+  },
+  {
+   "pmid": "3006368",
+   "reason": "off_topic",
+   "note": "Fish-diet effects on blood pressure/serum lipids in hypertension; no lecithin relevance evident from title."
+  },
+  {
+   "pmid": "10606379",
+   "reason": "off_topic",
+   "note": "Topical diclofenac vs. placebo for knee osteoarthritis; no lecithin relevance."
+  },
+  {
+   "pmid": "10680386",
+   "reason": "off_topic",
+   "note": "Topical medications for orofacial neuropathic pain review; no lecithin relevance."
+  },
+  {
+   "pmid": "10319359",
+   "reason": "off_topic",
+   "note": "Vitamin E supplementation before marathon running; no lecithin relevance."
+  },
+  {
+   "pmid": "2628128",
+   "reason": "off_topic",
+   "note": "Clinofibrate therapy and HDL/atherogenic index in diabetes; no lecithin relevance."
+  },
+  {
+   "pmid": "35419726",
+   "reason": "off_topic",
+   "note": "Guihuang Formula for type III prostatitis; Chinese herbal formula, no lecithin relevance."
+  },
+  {
+   "pmid": "20496177",
+   "reason": "off_topic",
+   "note": "Topical treatment for chemotherapy-induced peripheral neuropathy; no lecithin relevance."
+  },
+  {
+   "pmid": "35263547",
+   "reason": "off_topic",
+   "note": "Longevity of hand sanitisers on fingers; unrelated to lecithin."
+  },
+  {
+   "pmid": "11589921",
+   "reason": "different_substance",
+   "note": "Choline alphoscerate (alpha-glyceryl-phosphorylcholine) in cognitive decline; a distinct choline compound, not lecithin."
+  },
+  {
+   "pmid": "8237620",
+   "reason": "not_intervention",
+   "note": "Explicitly evaluates THA (tacrine) WITHOUT lecithin; lecithin explicitly absent from the tested regimen."
+  },
+  {
+   "pmid": "8726246",
+   "reason": "not_intervention",
+   "note": "DHA/arachidonate from egg-yolk lecithin in infant formula; the tested variable is the fatty acid content, not lecithin itself."
+  },
+  {
+   "pmid": "10102659",
+   "reason": "not_intervention",
+   "note": "DHA/AA from egg-yolk lecithin in infant formula; the tested variable is fatty acid composition, not lecithin itself."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "3897460",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "purified soya lecithin, 20-25 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "51 subjects with senile dementia of the Alzheimer type",
+   "indication_as_stated": "Alzheimer's disease (dementia)",
+   "dose_quote": "20-25 g/day of purified soya lecithin (containing 90% phosphatidyl plus lysophosphatidyl choline) for six months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There were no differences between the placebo group and the lecithin group but there was an improvement in a subgroup of relatively poor compliers.",
+   "sample_size_quote": "Fifty one subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "A post-hoc subgroup of older, poor compliers with intermediate plasma choline showed improvement; overall trial was negative.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lecithin matches label material; high-dose purified soya lecithin monotherapy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10595648",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy lecithin, 25 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 volunteers",
+   "indication_as_stated": "platelet adhesion (cardiovascular risk marker)",
+   "dose_quote": "25 g (equivalent to 1.5 g omega-6, 0.5 g omega-3; omega-6/omega-3 ratio 3) per day of a soy lecithin supplement",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "In the soy lecithin group, platelet adhesion was increased in all test conditions (with ADP: from 18.7% to 23.2%, p<0.001; with thrombin: from 24.0% to 29.9% p<0.001; resting: from 3.5% to 6.6%, p<0.001).",
+   "sample_size_quote": "we randomised 60 volunteers into three groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Soy lecithin significantly INCREASED platelet adhesion (a pro-thrombotic direction), opposite to the fish-oil comparator arm which decreased it -- notable safety-relevant finding.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lecithin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10796586",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "lecithin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "286 patients across 11 included RCTs (Alzheimer's and Parkinsonian dementia)",
+   "indication_as_stated": "dementia/cognitive impairment",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Evidence from randomised trials does not support the use of lecithin in the treatment of patients with dementia or cognitive impairment.",
+   "sample_size_quote": "Eleven randomised trials have been identified involving patients with Alzheimer's disease (265 patients) and Parkinsonian dementia (21 patients).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Cochrane review restricted to unconfounded RCTs comparing lecithin with placebo.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11034695",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "lecithin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "376 patients across 12 included RCTs (Alzheimer's, Parkinsonian dementia, subjective memory problems)",
+   "indication_as_stated": "dementia/cognitive impairment",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Evidence from randomized trials does not support the use of lecithin in the treatment of patients with dementia.",
+   "sample_size_quote": "Twelve randomized trials have been identified involving patients with Alzheimer's disease (265 patients), Parkinsonian dementia (21 patients) and subjective memory problems (90 patients).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "An updated Cochrane review version of 10796586; notes a dramatic positive result in one small trial of subjects with subjective memory problems.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Cochrane review restricted to unconfounded RCTs comparing lecithin with placebo.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11194530",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lecithin (PhosChol 900), 4 capsules BID",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "12 marathon runners",
+   "indication_as_stated": "plasma choline maintenance/performance during marathon",
+   "dose_quote": "lecithin (4 capsules BID; PhosChol 900) or placebo beginning one day prior to the 2000 Houston-Methodist Health Care Marathon",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Short-term lecithin supplementation prior to a marathon maintains normal plasma free choline concentration during the race, but failed to improve performance.",
+   "sample_size_quote": "12 accomplished marathon runners, males (7) and females (5), 21 to 50 years of age",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lecithin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12728215",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy stanol-lecithin powder (fat-free foods)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "45 normal or mildly hypercholesterolemic subjects (21 absorption study, 24 lipid-reduction study)",
+   "indication_as_stated": "cholesterol absorption/LDL cholesterol",
+   "dose_quote": "formulated soy stanols (1.9 g)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Stanol-lecithin given in a beverage reduced total serum cholesterol by 10.1% (P=.0019, n=24) and LDL cholesterol by 14.3% (P=.0016, n=24).",
+   "sample_size_quote": "Forty-five normal or mildly hypercholesterolemic subjects were recruited for both studies.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Lecithin functions as a formulation vehicle for soy stanols in this design; the chronic-phase comparator arm received lecithin vehicle alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is the delivery vehicle/formulation base for soy stanols, the primary active being tested.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12917896",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "lecithin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "376 patients across 12 included RCTs (Alzheimer's, Parkinsonian dementia, subjective memory problems)",
+   "indication_as_stated": "dementia/cognitive impairment",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Evidence from randomized trials does not support the use of lecithin in the treatment of patients with dementia.",
+   "sample_size_quote": "Twelve randomized trials have been identified involving patients with Alzheimer's disease (265 patients), Parkinsonian dementia (21 patients) and subjective memory problems (90 patients).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Further-updated Cochrane review version of 10796586/11034695.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Cochrane review restricted to unconfounded RCTs comparing lecithin with placebo.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14760514",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lecithin, 1.6 g/day, alone or with carnitine",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "400 young adult females",
+   "indication_as_stated": "cognition (memory, reaction time, attention)",
+   "dose_quote": "lecithin (1.6 g/day), carnitine (500 mg/day) or carnitine plus lecithin",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The hypothesis that memory would be facilitated by offering supplements of lecithin, carnitine and glucose was not supported.",
+   "sample_size_quote": "Four hundred young adult females",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin tested alone and combined with carnitine and a glucose challenge; primary reported effects were driven by carnitine+glucose, not lecithin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15512856",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy lecithin phosphatidic acid and phosphatidylserine complex (PAS), 400/600/800 mg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "80 subjects (20/group)",
+   "indication_as_stated": "endocrine/psychological response to mental stress",
+   "dose_quote": "treated for three weeks with daily dosages of either 400 mg PAS, 600 mg PAS, 800 mg PAS, or placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Treatment with 400 mg PAS resulted in a pronounced blunting of both serum ACTH and cortisol, and salivary cortisol responses to the TSST, but did not affect heart rate.",
+   "sample_size_quote": "Four groups of 20 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Effect only seen at the 400 mg dose, not at higher 600/800 mg doses (non-monotonic dose-response).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "PAS is a soy-lecithin-derived phosphatidic acid/phosphatidylserine complex, not crude whole lecithin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17006376",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy lecithin, 20 g/day, alone or with soy isoflavone protein",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "25 healthy postmenopausal women (22 completed)",
+   "indication_as_stated": "endothelial function (postmenopausal women)",
+   "dose_quote": "soy isoflavone protein (25 g/day) and soy lecithin (20 g/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "No statistically significant (P > 0.05) difference was seen in FMD between treatment groups.",
+   "sample_size_quote": "25 participants (mean age, 61 years; body mass index, 25.46 kg/m2)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "FMD (primary vascular endpoint) not significant for any arm including lecithin alone; soy lecithin alone significantly improved HDL/LDL ratio.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Includes a soy-lecithin-alone arm (with placebo protein) as well as a combination arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24982601",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "curcumin as a lecithin delivery system (Meriva/Phytosome), 1 g twice daily",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "20 healthy, moderately active male volunteers",
+   "indication_as_stated": "delayed onset muscle soreness (exercise-induced)",
+   "dose_quote": "curcumin given as the Phytosome\u00ae delivery system 1 g twice daily (200 mg curcumin b.i.d.)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Subjects in the curcumin group reported less pain in the lower limb as compared with subjects in the placebo group, although significant differences were observed only for the right and left anterior thighs.",
+   "sample_size_quote": "Twenty male healthy, moderately active volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Curcumin is the primary tested active; lecithin (Phytosome) is the delivery technology whose bioavailability-enhancing role is central to the product's rationale.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin functions as a phytosome delivery vehicle for curcumin, the primary tested active.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29310653",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy lecithin, 600 or 1200 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "96 women aged 40-60 with fatigue (89 completed)",
+   "indication_as_stated": "fatigue and menopausal symptoms",
+   "dose_quote": "active tablets containing high-dose (1200 mg/day; n = 32) or low-dose (600 mg/day; n = 32) soy lecithin, or placebo (n = 32), for 8 weeks",
+   "primary_outcome_quote": "There were no significant differences in the changes in Chalder Fatigue Scale score (placebo vs low-dose vs high-dose groups: -2.9 \u00b1 1.1, -3.2 \u00b1 1.1, and -3.5 \u00b1 1.0; P = 0.79).",
+   "primary_result_quote": "the improvements were greater in the high-dose group compared with the placebo group concerning vigor scores in the POMS-brief (1.9 \u00b1 0.7 vs 0.2 \u00b1 0.6; P = 0.02)",
+   "sample_size_quote": "Eighty-nine women completed the study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Primary fatigue-scale endpoint not significant; secondary vigor/blood-pressure/vascular-index measures improved at high dose.",
+   "registrations": [
+    "UMIN000017127"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lecithin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29553158",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "cholinergic drugs (lecithin one of 16 named agents)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "people with antipsychotic-induced tardive dyskinesia across 14 included studies (1976-2014)",
+   "indication_as_stated": "antipsychotic-induced tardive dyskinesia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We are uncertain about the effect of new or old cholinergic drugs on no clinically important improvement in TD symptoms when compared with placebo; the quality of evidence was very low (RR 0.89, 95% CI 0.65 to 1.23; 27 people, 4 RCTs).",
+   "sample_size_quote": "We included 14 studies investigating the use of cholinergic drugs compared with placebo published between 1976 and 2014.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Cochrane review of cholinergic agents (including lecithin) as a class; evidence quality graded very low throughout.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is one of 16 distinct cholinergic agents analyzed in this review, not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30501605",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lecithin-based phytosomal formulation of bergamot polyphenolic fraction (BPF Phyto)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "60 patients with type 2 diabetes and mixed hyperlipemia",
+   "indication_as_stated": "hyperlipemia/glycemic control (type 2 diabetes)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "In the groups receiving BPF and BPF Phyto, a significant reduction of fasting plasma glucose, serum LDL cholesterol and triglycerides accompanied by increased HDL cholesterol was observed.",
+   "sample_size_quote": "A randomized, double blind, placebo-controlled study was carried out in 60 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Lecithin phytosome formulation improved absorption of naringin (bergamot's major component) ~2.5-fold vs standard formulation, though clinical hypolipemic effect was similar between standard and phytosomal forms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is the phytosome delivery vehicle for bergamot polyphenols, the primary tested active.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30676012",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lecithin-based delivery form of boswellic acids (Casperome)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "69 healthy subjects with mild irritable bowel syndrome",
+   "indication_as_stated": "irritable bowel syndrome (IBS)",
+   "dose_quote": "supplementation with the Boswellia serrata lecithin-based delivery form (one tablet/day; Casperome\u00ae)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "At follow-up, compared with the SM group, the Boswellia group showed lower mean score values for almost all self-assed IBS symptoms.",
+   "sample_size_quote": "The study included 69 otherwise healthy participants with a mild form of IBS who completed a 6-month follow-up period.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is the delivery vehicle for boswellic acids, the primary tested active; comparator arm was standard management (diet/antispasmodics), not a lecithin-free boswellic-acid arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33440385",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "delayed-release phosphatidylcholine (lecithin), 30% PC-containing",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "160 patients with ulcerative colitis across 3 included RCTs",
+   "indication_as_stated": "ulcerative colitis",
+   "dose_quote": null,
+   "primary_outcome_quote": "The meta-analysis of 3 RTCs with 160 included patients with ulcerative colitis verified that PC improved the rate of remission (OR = 9.68), as well as clinical (OR = 30.58) and endoscopic outcomes (OR = 36.73)",
+   "primary_result_quote": null,
+   "sample_size_quote": "Meta-analysis of 3 studies was performed using RevMan 5.3 software.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Notes that 3 monocenter RCTs using 30% PC-containing lecithin were successful, whereas 1 trial using >94% PC-containing lecithin failed -- PC concentration/formulation appears to matter.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delayed-release, specifically 30%-phosphatidylcholine-standardized lecithin, distinct from crude/high-PC lecithin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35775631",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "curcumin as a lecithin-formulated tablet, 200 mg twice daily",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "37 obese, non-diabetic individuals",
+   "indication_as_stated": "hepatic fat content (obesity)",
+   "dose_quote": "Curcumin was dosed as lecithin-formulated tablet; 200 mg twice daily.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Compared with placebo, curcumin treatment for 6 weeks had no significant effect on MRS-assessed hepatic fat content in obese individuals with primarily mild steatosis.",
+   "sample_size_quote": "37 obese, non-diabetic individuals were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Curcumin is the primary tested active; lecithin is the delivery formulation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin functions as the delivery formulation for curcumin, the primary tested active.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35831742",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "enteric lecithin (phosphatidylcholine), microencapsulated with Eudragit S-100",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "160 patients with ulcerative colitis across 3 included studies",
+   "indication_as_stated": "ulcerative colitis",
+   "dose_quote": null,
+   "primary_outcome_quote": "The meta-analysis showed that lecithin enriched with phosphatidylcholine and microencapsulated with Eudragit S-100 significantly improved the remission rate as well as the clinical and endoscopic picture.",
+   "primary_result_quote": null,
+   "sample_size_quote": "A summary analysis of three clinical studies published until now with 160 included patients with ulcerative colitis was performed.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Companion/related meta-analysis to 33440385 on the same enteric-release phosphatidylcholine lecithin evidence base.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Enteric-release, phosphatidylcholine-enriched, microencapsulated lecithin formulation, distinct from crude lecithin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37513677",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy-lecithin-enriched beverage (soy phospholipid + palm/coconut oil)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "adults with metabolic syndrome",
+   "indication_as_stated": "gut barrier function/cardiometabolic risk (metabolic syndrome)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Compared with COMP, fasting endotoxin, glucose, incretins, and triglyceride were unaffected by MEB.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Soy-lecithin beverage (COMP) is the active comparator arm against a milk-fat-globule-membrane beverage (MEB); neither beverage showed adverse or beneficial effects vs. the other.",
+   "registrations": [
+    "NCT03860584"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Soy lecithin combined with palm/coconut oil in a formulated comparator beverage.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37548195",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "iodized (lecithin-bound iodine) lecithin tablets, 390 \u00b5g/kg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "200 Chinese patients with diabetes and central serous retinopathy",
+   "indication_as_stated": "central serous retinopathy (uncontrolled diabetes)",
+   "dose_quote": "oral lecithin-bound iodine (390\u00b5g/kg/day) or oral spironolactone (50mg/day) for 6 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "no statistically significant difference was observed on none of comparisons",
+   "sample_size_quote": "A total of 200 patients were randomized and completed the study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Numerically favored lecithin-bound iodine over spironolactone on several measures, but no comparison reached statistical significance.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Iodine-bound/complexed lecithin formulation, distinct from plain lecithin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37716119",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lecithin-based delivery form of quercetin (Quercetin Phytosome), 500 mg/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "78 subjects with chronic fatigue symptoms",
+   "indication_as_stated": "chronic fatigue",
+   "dose_quote": "a 2-month period of daily Quercetin Phytosome\u2122 500 mg supplementation",
+   "primary_outcome_quote": "The primary end point has been the evaluation of fatigue, by Fatigue Impact Scale (FIS-40).",
+   "primary_result_quote": "The FIS-40 mean difference changes between groups (supplement minus placebo) was - 10.583 points (CI95% -11.985; -9.182) (p < 0.001).",
+   "sample_size_quote": "Seventy-eight subjects (42 F; 36 M) (mean age 56 \u00b1 9) reporting CF symptoms, completed the study (placebo/supplement 38/40).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is the phytosome delivery vehicle for quercetin, the primary tested active.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38490741",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "soy-derived lysophosphatidylcholine (LPC), 480 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "12 healthy men",
+   "indication_as_stated": "choline bioavailability/pharmacokinetics",
+   "dose_quote": "the single-dose pharmacokinetics of 480 mg soy-derived LPC in 12 healthy men",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Both LPC and GPC supplementation increased plasma choline, serum phospholipid, and serum triglyceride concentrations",
+   "sample_size_quote": "12 healthy men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lysophosphatidylcholine is a soy-lecithin-derived phospholipid, not whole/crude lecithin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39568724",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "sunflower lecithin, 18 g (15 g polar lipids)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "18 young healthy subjects",
+   "indication_as_stated": "postprandial cardiometabolic risk markers/appetite hormones",
+   "dose_quote": "18 g sunflower lecithin (of which 15 g were polar lipids): LPL",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Our study revealed that the consumption of both lecithin and oat PLs included in breakfast meal may similarly enhance postprandial glucose tolerance, reduce TG, and enhance the secretion of incretins and appetite regulating hormones",
+   "sample_size_quote": "Eighteen young healthy subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [
+    "NCT05139355"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lecithin matches label material; tested against oat polar lipids and rapeseed oil comparator meals.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40362785",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "quercetin lecithin-based (phospholipid) formulation",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "humans (narrative review, limited clinical trial data)",
+   "indication_as_stated": "allergic diseases",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "human studies are still scarce, as only two clinical trials investigated quercetin as a monotherapy",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "mixed",
+   "direction_note": "Narrative review focused primarily on quercetin; the lecithin-based phospholipid formulation is introduced as a new approach with very limited human data specific to that formulation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is the phospholipid delivery vehicle for quercetin, the primary reviewed active; lecithin-specific human data are minimal.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40816342",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy lecithin (dietary emulsifier), one of five emulsifiers tested",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "60 healthy participants",
+   "indication_as_stated": "intestinal inflammation/permeability/gut microbiome",
+   "dose_quote": "the addition of either carboxymethyl cellulose, polysorbate-80, carrageenan, soy lecithin, native rice starch, or no additives administered through brownies",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "No differences in fecal calprotectin, C-reactive protein, serum lipopolysaccharide-binding protein, cholesterol levels, or other metabolic markers were observed between placebo and emulsifiers at the end of the intervention.",
+   "sample_size_quote": "Sixty healthy participants followed an EFD for 2 weeks.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Soy lecithin is one of five dietary emulsifiers tested in separate arms; none of the emulsifiers (including lecithin) produced significant inflammatory or metabolic changes vs. placebo.",
+   "registrations": [
+    "NCT06552156"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lecithin matches label material; tested as one of five separate emulsifier arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10796324",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "cholinergic agents (lecithin one of 7 named agents)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "people with neuroleptic-induced tardive dyskinesia across 7 included studies",
+   "indication_as_stated": "neuroleptic-induced tardive dyskinesia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The studies failed to detect any significant advantage of deanol or lecithin when compared to placebo.",
+   "sample_size_quote": "Seven different studies (8 references) were included in this review",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is one of seven distinct cholinergic agents analyzed in this Cochrane review, not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12137608",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "cholinergic drugs (lecithin one of 16 named agents)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "170-240 people across 11 included studies",
+   "indication_as_stated": "neuroleptic-induced tardive dyskinesia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Cholinergic drugs did not result in any substantial improvement in tardive dyskinesia symptoms when compared with placebo (8 RCTs, 170 people, RR no important improvement 0.84 CI 0.68 to 1.04).",
+   "sample_size_quote": "We included eleven studies investigating the use of older cholinergic drugs compared with placebo.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Updated Cochrane review version of 10796324; lecithin is one of many cholinergic agents analyzed as a class.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is one of sixteen distinct cholinergic agents named in this review, not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15610922",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "cholinergic drugs (lecithin one of 17 named agents)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "261 randomized patients across 11 included trials",
+   "indication_as_stated": "neuroleptic-induced tardive dyskinesia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "we found no evidence to support administration of the old cholinergic agents lecithin, deanol, and meclofenoxate to patients with tardive dyskinesia",
+   "sample_size_quote": "Eleven trials with a total of 261 randomized patients were included in the meta-analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lecithin is one of seventeen distinct cholinergic agents analyzed in this meta-analysis, not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31603281",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "soya lecithin (emulsifier in food), 1.5 g/day challenge",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "22 children (8 months-5 years) with non-IgE-mediated soya allergy",
+   "indication_as_stated": "soya-lecithin tolerance in non-IgE-mediated soya allergy",
+   "dose_quote": "challenge dose of soya lecithin (1.5 g per day) in a custom-made biscuit",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Over the challenge period, the parents reported reactions in six cases: five cases (23%) to the placebo and one case (5%) to the challenge dose.",
+   "sample_size_quote": "Twenty-two children, 16 boys, with a median age of 44 months (range 21-58 months) were recruited",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Tolerance/allergy-challenge study rather than an efficacy trial; more reactions were reported to placebo than to the lecithin challenge, supporting tolerance.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lecithin matches label material (soya lecithin food emulsifier).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "10796586",
+  "11034695",
+  "3897460",
+  "29310653",
+  "33440385",
+  "35831742",
+  "12728215",
+  "30676012",
+  "24982601",
+  "37716119",
+  "10595648",
+  "39568724"
+ ],
+ "handoff": [
+  {
+   "pmid": "10595648",
+   "role": "safety",
+   "reason": "Soy lecithin 25 g/day significantly INCREASED platelet adhesion in all test conditions (resting and stimulated) versus a fish-oil comparator that decreased it -- a pro-thrombotic direction worth safety-review attention for high omega-6 lecithin intake."
+  }
+ ],
+ "identity_notes": "Lecithin's retrieval set is dominated by a large false-match cluster around LCAT (lecithin:cholesterol acyltransferase), an ENZYME etymologically named after lecithin but biologically and clinically unrelated to dietary lecithin supplementation -- this includes genetic LCAT deficiency case reports/reviews, and recombinant human LCAT enzyme DRUG trials (CSL112, MEDI6012, REAL-TIMI 63B), all rejected off_topic. A second large cluster is the fetal lung maturity lecithin/sphingomyelin (L/S) ratio, a diagnostic AMNIOTIC FLUID TEST for neonatal respiratory distress risk, not a supplementation intervention, also rejected off_topic. A third cluster is historical (1980s-90s) tacrine+lecithin and piracetam+lecithin combination trials for Alzheimer's disease, where lecithin is either a constant background co-treatment in both study arms or a minor adjunct to the primary drug being tested (tacrine/piracetam); these were rejected not_intervention since lecithin's own effect cannot be isolated -- the cleaner evidence for lecithin's own efficacy in dementia is the dedicated Cochrane reviews (10796586/11034695/12917896, three sequential updates of 'Lecithin for dementia and cognitive impairment'), all of which found NO clinical benefit, kept here as the authoritative synthesis. A recurring and important pattern for this identity is lecithin used as a PHOSPHOLIPID/PHYTOSOME DELIVERY VEHICLE for a different primary active (curcumin/Meriva, quercetin, boswellic acid/Casperome, bergamot polyphenols) -- in these records the clinical outcome is attributable to the co-administered active, not lecithin itself, so they are flagged related_form_differs and evidence_role reflects the primary active's indication; lecithin's bioavailability-enhancing role is noted in direction_note. A small but genuine single-ingredient oral lecithin evidence base exists for GI indications (phosphatidylcholine/enteric lecithin for ulcerative colitis: 33440385, 35831742 -- both positive) and for fatigue/menopausal symptoms (29310653, mixed results), plus one notable SAFETY signal: soy lecithin 25 g/day significantly increased platelet adhesion in a head-to-head comparison with fish oil (10595648, routed to handoff)."
+}

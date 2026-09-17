@@ -1,0 +1,772 @@
+{
+  "canonical_id": "acai_berry",
+  "screened": 49,
+  "kept": 16,
+  "rejected": [
+    {
+      "pmid": "10368868",
+      "reason": "off_topic",
+      "note": "SPECT brain perfusion imaging correlation with amobarbital distribution during the Wada test; unrelated to acai (apparent keyword false match)."
+    },
+    {
+      "pmid": "16730604",
+      "reason": "off_topic",
+      "note": "Pilot of audio computer-assisted self-interview for youth reproductive health research in Vietnam; unrelated to acai (apparent keyword false match)."
+    },
+    {
+      "pmid": "20930432",
+      "reason": "off_topic",
+      "note": "Improved assessment of aortic calcification in Japanese hemodialysis patients; unrelated to acai (apparent keyword false match)."
+    },
+    {
+      "pmid": "24161892",
+      "reason": "animal_or_invitro",
+      "note": "Açaí berry extract neuroprotective effects against β-amyloid exposure; in vitro study."
+    },
+    {
+      "pmid": "25329001",
+      "reason": "animal_or_invitro",
+      "note": "Pro-apoptotic activities of açai polyphenolics in human SW-480 colon cancer cells; in vitro cell-line study."
+    },
+    {
+      "pmid": "26243669",
+      "reason": "animal_or_invitro",
+      "note": "Anti-inflammatory activity of açai polyphenolics in intestinal myofibroblast (CCD-18Co) cells; in vitro cell-line study."
+    },
+    {
+      "pmid": "27781077",
+      "reason": "animal_or_invitro",
+      "note": "Neuroprotective effects of açaí against rotenone exposure in vitro."
+    },
+    {
+      "pmid": "28731787",
+      "reason": "animal_or_invitro",
+      "note": "Effect of açaí oil on dyslipidemia caused by coconut saturated fat in Wistar rats; animal model study."
+    },
+    {
+      "pmid": "28829893",
+      "reason": "animal_or_invitro",
+      "note": "Cytotoxic, genotoxic, and antigenotoxic assessment of açaí fruit oil in cultured human cells; in vitro study."
+    },
+    {
+      "pmid": "29360387",
+      "reason": "off_topic",
+      "note": "Broad review of 'superfruits' phytochemicals and health effects generally; not açaí-isolated extractable human data."
+    },
+    {
+      "pmid": "29399060",
+      "reason": "animal_or_invitro",
+      "note": "Açaí attenuates alcohol-induced liver injury in rats; animal model study."
+    },
+    {
+      "pmid": "29557436",
+      "reason": "off_topic",
+      "note": "Broad systematic review of 'superfoods' (açaí only one of many) on metabolic syndrome risk factors; not açaí-isolated extractable data."
+    },
+    {
+      "pmid": "29609579",
+      "reason": "animal_or_invitro",
+      "note": "Euterpe oleracea extract tested against DMBA-induced experimental breast cancer; animal model study."
+    },
+    {
+      "pmid": "29907219",
+      "reason": "animal_or_invitro",
+      "note": "Effects of açaí and cilostazol on skin microcirculation/flap viability in hamsters; animal study."
+    },
+    {
+      "pmid": "29966007",
+      "reason": "animal_or_invitro",
+      "note": "Systematic review of açaí's anticancer potential, mechanisms, and toxicity explicitly 'in preclinical models using rodents'; not human clinical data."
+    },
+    {
+      "pmid": "30234132",
+      "reason": "off_topic",
+      "note": "Unconventional vegetable oils for reducing methanogenesis in ruminant feed; livestock/agricultural study, not a human clinical study."
+    },
+    {
+      "pmid": "30339534",
+      "reason": "off_topic",
+      "note": "Advanced oxidative process for degrading food dyes including açaí purple dye; environmental/analytical chemistry study, not a clinical study."
+    },
+    {
+      "pmid": "31278418",
+      "reason": "animal_or_invitro",
+      "note": "Açaí supplementation during gestation/lactation attenuating liver steatosis 'in dams and protects offspring'; animal model study."
+    },
+    {
+      "pmid": "32560610",
+      "reason": "off_topic",
+      "note": "Molecular docking and in silico physicochemical/pharmacokinetic/toxicity prediction of açaí flavonoids; computational study, not a clinical study."
+    },
+    {
+      "pmid": "34895932",
+      "reason": "duplicate",
+      "note": "Letter to the editor raising methodological issues about the açaí/juçara HDL-c study already captured as PMID 32349893; commentary, not new primary data (abstract empty in this retrieval)."
+    },
+    {
+      "pmid": "34906360",
+      "reason": "duplicate",
+      "note": "Reply from the original authors to the letter re methodological issues on PMID 32349893; commentary, not new primary data (abstract empty in this retrieval)."
+    },
+    {
+      "pmid": "36000619",
+      "reason": "off_topic",
+      "note": "Report of an acute micro-outbreak of Chagas disease in the Amazon; unrelated to acai (apparent keyword false match)."
+    },
+    {
+      "pmid": "37130893",
+      "reason": "not_this_route",
+      "note": "Effect of polyphenol-rich plant extracts including açaí on protection against dentine erosion, applied directly to dentine specimens/salivary pellicle; ex vivo topical dental application, not oral human supplementation."
+    },
+    {
+      "pmid": "38485254",
+      "reason": "off_topic",
+      "note": "Safety assessment of palm-derived ingredients as used in cosmetics; topical cosmetic-ingredient review, not an oral dietary-supplement study."
+    },
+    {
+      "pmid": "38851601",
+      "reason": "animal_or_invitro",
+      "note": "In vitro genotoxic/cytotoxic assessment of clarified açai extract in a gastric cancer cell line (AGP01 cells); in vitro study."
+    },
+    {
+      "pmid": "38965051",
+      "reason": "off_topic",
+      "note": "Comparative metabolomics analysis of açaí fruit, food powder, and supplement extracts; analytical/compositional chemistry study, not a clinical outcome study."
+    },
+    {
+      "pmid": "39067341",
+      "reason": "off_topic",
+      "note": "Açaí seed biochar effects on soil quality and black pepper seedling development; agricultural/soil-science study, not a clinical study."
+    },
+    {
+      "pmid": "39343801",
+      "reason": "off_topic",
+      "note": "Biochar effects on Swietenia macrophylla growth in copper-contaminated soil; unrelated agricultural/soil-science study, no açaí involved."
+    },
+    {
+      "pmid": "40594116",
+      "reason": "off_topic",
+      "note": "Biometric/physiological responses of Virola surinamensis to cadmium and biochar in Amazonian soil; unrelated agricultural/soil-science study, no açaí involved."
+    },
+    {
+      "pmid": "40707537",
+      "reason": "off_topic",
+      "note": "Mechanisms of phosphorus accumulation and use efficiency in açaí palm plants; plant physiology/agronomy study, not a clinical study."
+    },
+    {
+      "pmid": "40742030",
+      "reason": "off_topic",
+      "note": "Broad systematic review of Brazilian berries generally (jabuticaba, açaí, camu-camu, acerola, etc.) on gut health 'in vivo'; not açaí-isolated extractable human data, and 'in vivo' scope not confirmed as human-only."
+    },
+    {
+      "pmid": "40805789",
+      "reason": "off_topic",
+      "note": "Systematic review of the ecology, systematics, population management, and fruit production of the Euterpe precatoria palm species; a botanical/agricultural production review, not a human clinical evidence study."
+    },
+    {
+      "pmid": "41948711",
+      "reason": "off_topic",
+      "note": "Systematic review of over-the-counter treatments generally for tinnitus (9 RCTs, 390 adults); açaí not confirmed as specifically named/extractable in the retrieved abstract excerpt, though it may include the açaí-tinnitus trial (PMID 35107519) among its pooled studies."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "18693743",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Healthy volunteers (12)",
+          "acute four-way crossover clinical trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "acai pulp and clarified acai juice compared to applesauce and a non-antioxidant beverage as controls",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Healthy volunteers (12)",
+      "indication_as_stated": "pharmacokinetics of anthocyanins and antioxidant effects",
+      "dose_quote": "Healthy volunteers (12) were dosed at 7 mL/kg of body weight after a washout phase and overnight fast",
+      "primary_outcome_quote": "Noncompartmental pharmacokinetic analysis of total anthocyanins quantified as cyanidin-3-O-glucoside showed Cmax values of 2321 and 1138 ng/L at t max times of 2.2 and 2.0 h",
+      "primary_result_quote": "Plasma antioxidant capacity was significantly increased by the acai pulp and applesauce.",
+      "sample_size_quote": "Healthy volunteers (12) were dosed",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for plasma antioxidant capacity (pulp and juice) and for anthocyanin bioavailability; explicit null for urine antioxidant capacity, reactive oxygen species generation, and plasma uric acid. Applesauce control also raised plasma antioxidant capacity, complicating attribution.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'acai pulp' and 'clarified acai juice' both tested; matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18717569",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "12 healthy subjects",
+          "randomized, double-blinded, placebo-controlled, crossover trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a juice blend (JB), MonaVie Active, containing a mixture of fruits and berries with known antioxidant activity, including acai, a palm fruit, as the predominant ingredient",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "12 healthy subjects",
+      "indication_as_stated": "antioxidant activity, lipid peroxidation",
+      "dose_quote": null,
+      "primary_outcome_quote": "Blood samples at baseline, 1 h, and 2 h following consumption of the JB or placebo were tested for antioxidant capacity using several antioxidant assays and the TBARS assay, a measure of lipid peroxidation.",
+      "primary_result_quote": "A within subject comparison showed an increase in serum antioxidants at 1 h ( p < 0.03) and 2 h ( p < 0.015), as well as inhibition of lipid peroxidation at 2 h ( p < 0.01) postconsumption.",
+      "sample_size_quote": "A randomized, double-blinded, placebo-controlled, crossover trial with 12 healthy subjects examined the JB's antioxidant activity in vivo.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Multi-fruit/berry juice blend (branded 'MonaVie Active') with acai as the predominant but not sole ingredient; in vivo human RCT arm is small (n=12); in vitro cell-based assay portions of the study are not human data.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Acai is 'the predominant ingredient' of a multi-fruit/berry branded juice blend, not isolated acai."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "22607647",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "consolidates safety and efficacy data from clinical trials plus expert opinion, folklore, pharmacology, kinetics/dynamics, interactions, adverse effects, toxicology, and dosing",
+          "no specific study counts or sample sizes given in the retrieved abstract"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "acai (Euterpe oleracea)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "general safety and efficacy evidence grading",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": null,
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Natural Standard evidence-grading monograph rather than a quantitative meta-analysis; no specific effect-size or outcome data given in the retrieved abstract text.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'acai (Euterpe oleracea)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23072538",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "12 healthy nonsmokers",
+          "randomized controlled crossover trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "ingested 400 mL of a blended juice of these fruits [açai, camu-camu, and blackberries] or a sugar solution (control)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "12 healthy nonsmokers",
+      "indication_as_stated": "antioxidative defense markers",
+      "dose_quote": "ingested 400 mL of a blended juice of these fruits or a sugar solution (control)",
+      "primary_outcome_quote": "Blood was drawn before and afterward to determine antioxidants in plasma, markers of antioxidant capacity [trolox equivalent antioxidant capacity, Folin-Ciocalteu reducing capacity, total oxidant scavenging capacity (TOSC)] and oxidative stress [isoprostane, DNA strand breaks in leukocytes in vivo], and their resistance versus H₂O₂-induced strand breaks.",
+      "primary_result_quote": "This anthocyanin-rich fruit juice may stabilize the pro-/antioxidant balance in healthy nonsmokers without affecting markers of oxidative stress.",
+      "sample_size_quote": "12 healthy nonsmokers ingested 400 mL of a blended juice",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Three-fruit blend (açai, camu-camu, blackberries), not isolated açai; a largely null/negative result for the title's stated antiglycemic/antioxidative-defense claim — 'did not influence markers of antioxidative defense.' 'Strand breaks in vivo increased after ingestion of both beverages,' an unfavorable direction, attributed by authors to postprandial/circadian effects rather than the juice.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Açai is one of three fruits (with camu-camu and blackberries) in a blended juice, not isolated açai."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "24767759",
+      "design": "rct",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "title specifies 'healthy volunteers' and 'a randomized controlled trial'",
+          "abstract not retrievable/empty in this record"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "açaí berry (title only; no abstract text)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "healthy volunteers (per title)",
+      "indication_as_stated": "hemodynamic and electrocardiographic effects",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": null,
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Abstract field empty in retrieved record; title indicates a randomized controlled trial of açaí berry's hemodynamic/ECG effects in healthy volunteers.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "Title uses 'açaí berry', matching label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26140415",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fourteen athletes"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "an açai (Euterpe oleracea Mart.) functional beverage (AB)... contained 27.6 mg of anthocyanins per dose",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Fourteen elite athletes",
+      "indication_as_stated": "muscle stress, effort tolerance during maximal treadmill running",
+      "dose_quote": "contained 27.6 mg of anthocyanins per dose",
+      "primary_outcome_quote": "Blood was collected at baseline and after maximal exercise in both conditions to determine biomarkers.",
+      "primary_result_quote": "AB increased time to exhaustion during short-term high-intensity exercise (mean difference: 69 s, 95% confidence interval = -296 s to 159 s, t = 2.2, p = 0.045), attenuating the metabolic stress induced by exercise (p < 0.05).",
+      "sample_size_quote": "Fourteen athletes performed 3 exercise tests",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Ergogenic-aid/acute-performance indication in elite athletes, not a disease outcome; reported confidence interval for the primary time-to-exhaustion effect (-296 s to 159 s) crosses zero despite the stated p=0.045.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "'açai functional beverage' is a formulated product developed as an ergogenic aid, not raw açai pulp/juice."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27680990",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty-three healthy male volunteers, aged 30-65 y"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "an açai-based smoothie (AS) or a macronutrient-matched control smoothie (PS) together with a high-fat breakfast meal challenge",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twenty-three healthy male volunteers, aged 30-65 y, BMI 25-30",
+      "indication_as_stated": "acute vascular function and disease risk markers (postprandial insulin, glucose, oxidative stress) in overweight men",
+      "dose_quote": "an AS containing 694 mg total phenolics",
+      "primary_outcome_quote": "The primary endpoint was the assessment of endothelial function in the brachial artery by flow-mediated dilatation (FMD).",
+      "primary_result_quote": "postprandial increases in FMD from baseline of 1.4% at 2 h compared with 0.4% after consumption of the PS (P = 0.001) and increases at 6 h of 0.8% for the AS compared with -0.3% for the PS (P < 0.001)",
+      "sample_size_quote": "Twenty-three healthy male volunteers, aged 30-65 y and with a body mass index (in kg/m2) of 25-30, completed a randomized, controlled, high-fat challenge, double-blind, crossover, acute dietary intervention trial.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive on primary FMD endpoint and oxidative-status marker; 'No significant changes were observed in blood pressure, heart rate, or postprandial glucose response'; postprandial insulin was actually ELEVATED (an unfavorable direction) for the açaí smoothie versus control. Single acute-exposure design, not chronic supplementation.",
+      "registrations": [
+        "NCT02292329"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "'açai-based smoothie' is a formulated multi-ingredient product, not isolated açai."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29850709",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "37 individuals with metabolic syndrome"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "an açaí-beverage (containing 1139 mg L-1 gallic acid equivalents of total polyphenolics)... randomized to consume 325 mL twice per d of a placebo control or açaí-beverage for 12 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "37 individuals with metabolic syndrome (BMI 33.5 ± 6.7 kg m-2)",
+      "indication_as_stated": "lipid- and glucose-metabolism, oxidative stress, and inflammation in metabolic syndrome",
+      "dose_quote": "randomized to consume 325 mL twice per d of a placebo control or açaí-beverage for 12 weeks",
+      "primary_outcome_quote": "Anthropometric measurements, dietary intake, and blood and urine samples were collected at baseline and after 12 weeks of consumption.",
+      "primary_result_quote": "Two functional biomarkers, plasma level of interferon gamma (IFN-γ) and urinary level of 8-isoprostane, were significantly decreased after 12 weeks of açaí consumption compared to the placebo control (p = 0.0141 and 0.0099, respectively).",
+      "sample_size_quote": "37 individuals with metabolic syndrome (BMI 33.5 ± 6.7 kg m-2)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Explicit null on the title's stated glucose/lipid-metabolism outcomes: 'No significant modification of biomarkers for lipid- and glucose-metabolism was observed in this study.' Only 2 inflammation/oxidative-stress biomarkers improved. Authors call this 'a weak indication' from 'this small pilot study.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'açaí-beverage' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31057125",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "not_applicable",
+        "signals": [
+          "case/literature review of preclinical and case-study literature on açaí flavonoids and neurodegenerative disease",
+          "authors state a need for future in vitro/in vivo studies to prove therapeutic potential, indicating no confirmed human trial data yet exists"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "açaí (flavonoids present in Euterpe oleracea Martius)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "neurodegenerative diseases (Alzheimer's disease, Parkinson's disease)",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "This systematic review points out that flavonoids presenting in açaí have the potential for the treatment of diseases such as PD and AD and are candidates for drugs in future clinical research.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "No completed human clinical trial of açaí for neurodegenerative disease is reported; authors explicitly state 'there is a need for in vitro and in vivo studies with polyphenol that prove and ratify the therapeutic potential of this fruit for several NDDs' — i.e., this is a rationale/background review, not evidence of a demonstrated human effect.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'açaí' / Euterpe oleracea Martius matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31307842",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Sixty-nine volunteers completed the clinical trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "200 g of either açaí pulp or placebo were added to the HD for 60 days",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "overweight, dyslipidemic individuals (69 completers: 30 HD+açaí, 39 HD+placebo)",
+      "indication_as_stated": "oxidative stress, antioxidant status, and inflammatory biomarkers, adjunctive to a hypoenergetic diet",
+      "dose_quote": "200 g of either açaí pulp or placebo were added to the HD for 60 days",
+      "primary_outcome_quote": "Anthropometric measurements, arterial pressure, oxidative stress and antioxidant status biomarkers, inflammatory and biochemical biomarkers were evaluated.",
+      "primary_result_quote": "Plasma 8-isoprostane concentrations significantly reduced 60 days after the intervention in the açaí group (p = 0.000), and there was a significant difference between the groups (açaí versus placebo; p = 0.037).",
+      "sample_size_quote": "Sixty-nine volunteers completed the clinical trial, 30 of which were in the HD + açaí group and 39 in HD + placebo group.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Açaí pulp added on top of a hypoenergetic (calorie-restricted) diet in both groups, not açaí alone; IL-6 improved only in the açaí group, but IFN-γ decreased significantly in BOTH groups with 'no differences between the groups'; 'Lipid profile parameters and blood glucose levels did not show change, regardless of nutritional intervention.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'açaí pulp' matches label spelling; added to a background hypoenergetic diet in both study arms."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31724083",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "ten male cyclists"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "consumed 400 g/day of pasteurized açai pulp (AP) or placebo (PL) for 15 days",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "ten male cyclists (33.5 ± 4.7 years old)",
+      "indication_as_stated": "oxidative, inflammatory, and aerobic capacity markers in cyclist athletes",
+      "dose_quote": "consumed 400 g/day of pasteurized açai pulp (AP) or placebo (PL) for 15 days",
+      "primary_outcome_quote": "Lipid peroxidation, serum antioxidant capacity, DNA damage in peripheral blood (Comet assay), IL-6 and TNF-alpha, blood lactate concentration during effort, anaerobic threshold intensity (ATi), maximum workload reached (Wmax), rating of perceived exertion threshold (RPET), and heart rate threshold (HRT) were evaluated before and after each intervention.",
+      "primary_result_quote": "Increased serum antioxidant capacity (p = 0.006) and decreased lipid peroxidation (p = 0.01) were observed in subjects after intervention with AP.",
+      "sample_size_quote": "ten male cyclists (33.5 ± 4.7 years old, body mass index of 23.9 ± 1.38 kg/m2, and training load around 1875 ± 238 AU/week)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive on antioxidant capacity, lipid peroxidation, blood lactate, and anaerobic threshold intensity; explicit null: 'No significant effect on DNA damage was attributed to AP consumption.' Very small sample (n=10).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'açai pulp (AP)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32349893",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "30 healthy adults"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "assigned to drink 200 mL/day of açaí or juçara juice for four weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "30 healthy adults",
+      "indication_as_stated": "fasting glucose, lipid profile, and oxidative stress biomarkers",
+      "dose_quote": "assigned to drink 200 mL/day of açaí or juçara juice for four weeks with a 4-week washout period",
+      "primary_outcome_quote": "blood samples were obtained to evaluate the outcomes: fasting glucose, total cholesterol, triglycerides, high-density lipoprotein-cholesterol (HDL-c), low-density lipoprotein-cholesterol (LDL-c), small, dense LDL-c (sd-LDL-c), total antioxidant capacity (TAC), total oxidant status (TOS), oxidative stress index (OSI), uric acid, and activity of the enzymes superoxide dismutase (SOD), catalase (CAT), and glutathione peroxidase (GPx)",
+      "primary_result_quote": "açaí and juçara juices increased the concentrations of HDL-c by 7.7% and 11.4%, respectively (P < 0.05)",
+      "sample_size_quote": "A randomized cross-over study was performed with 30 healthy adults.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive on HDL-c and several antioxidant enzyme markers within-group; explicit 'no significant intergroup differences were observed for any outcomes (P > 0.05)' between açaí and juçara (a related but distinct Euterpe species) arms — i.e., açaí was not shown superior to its comparator. NOTE: a subsequent published letter to the editor (PMID 34895932) raised methodological issues about this study, with a reply from the original authors (PMID 34906360); both commentary pieces had empty abstracts in this retrieval and were not independently evaluated here.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'açaí... juice' matches label spelling; compared head-to-head against juçara (Euterpe edulis) juice, a related but distinct species."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35107519",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "30 individuals participated, with an average of 50.5 years"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Açaí Group (100mg of açaí extract)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "30 individuals (average age 50.5 years) with chronic tinnitus, normal hearing or up to mild sensorineural hearing loss",
+      "indication_as_stated": "chronic tinnitus discomfort, anxiety, oxidative metabolism",
+      "dose_quote": "Açaí Group (100mg of açaí extract)",
+      "primary_outcome_quote": "Tinnitus Handicap Inventory (THI), Beck's Anxiety Inventory (BAI) and blood samples for evaluation of oxidative stress biomarkers (Lipid Peroxidation and Protein Carbonylation)",
+      "primary_result_quote": "There was a reduction in the discomfort of tinnitus for the açaí group verified through THI (p = 0.006).",
+      "sample_size_quote": "30 individuals participated, with an average of 50.5 years, 14 males and 16 females",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive on tinnitus-discomfort (THI) primary measure; anxiety scores improved significantly only in the PLACEBO group, not the açaí group ('Significant differences were found in the score of common symptoms for anxiety disorders in the placebo group... however, the same was not observed for oxidative metabolism biomarkers'); oxidative-stress biomarkers showed no significant treatment-specific effect.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'açaí extract' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36206152",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fifty-five individuals with BMI ≥25 kg/m2"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "daily intake of açaí-juçara 200 g (anthocyanins 293.6 mg) in the ATH diet plan",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Fifty-five individuals with BMI ≥25 kg/m2 (excess body weight)",
+      "indication_as_stated": "endothelial function and arterial stiffness in individuals with excess weight",
+      "dose_quote": "daily intake of açaí-juçara 200 g (anthocyanins 293.6 mg) in the ATH diet plan",
+      "primary_outcome_quote": "We evaluated anthropometric and biochemical parameters, FMD, PWV, and peripheral vascular resistance (PVR).",
+      "primary_result_quote": "No change in FMD was observed. However, PWV showed a reduction from baseline in the ATH (p = 0.002) and vs. N-ATH (p = 0.036).",
+      "sample_size_quote": "Fifty-five individuals with BMI ≥25 kg/m2 were randomized into non-anthocyanin (N-ATH, n = 25) or anthocyanin (ATH, n = 30) intake groups.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Title's endothelial-function (FMD) claim was explicitly null; only arterial stiffness (PWV) improved. Açaí-juçara fruit given within a broader 12-week individualized calorie-reduction diet plan common to both arms, not as an isolated supplement against a standard diet.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Açaí-juçara is a blend of Euterpe oleracea (açaí) and Euterpe edulis (juçara) fruit, not isolated açaí, given as whole fruit within a calorie-restricted diet."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36924018",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twelve men participated in the 21-day study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "AS was performed for 7 days with 40 g/day of dehydrated acai (GA) or placebo (GP)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twelve men",
+      "indication_as_stated": "markers of muscle damage/recovery after jump-based exercise protocol",
+      "dose_quote": "The AS was performed for 7 days with 40 g/day of dehydrated acai (GA) or placebo (GP).",
+      "primary_outcome_quote": "Blood parameters (CK, LDH and Trolox-equivalent antioxidant capacity - TEAC) were evaluated at 0 h and 24 h.",
+      "primary_result_quote": "time-treatment interaction was observed for knee flexors IPT (p = 0.02), where GA showed superior recovery after 24 h (GA = 108 ± 23 vs. GP = 92 ± 24 N∙m) and 72 h (GA = 113 ± 31 vs. GP = 98 ± 26 N∙m)",
+      "sample_size_quote": "Twelve men participated in the 21-day study.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for antioxidant capacity (TEAC) and knee-flexor isometric torque recovery; explicit null: 'No significance was observed in the fatigue index for knee extensors (p = 0.75) and flexors (p = 0.89).'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'dehydrated acai' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39960343",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Meta-analysis of 411 participants",
+          "8 of 188 identified studies met inclusion criteria"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "adult participants who received açaí in any form",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "411 participants across 8 pooled trials",
+      "indication_as_stated": "lipid profile markers (dyslipidemia)",
+      "dose_quote": null,
+      "primary_outcome_quote": "The outcome measures included triglycerides, total cholesterol, LDL-c and HDL-c.",
+      "primary_result_quote": "Meta-analysis of 411 participants displayed no significant effect of açaí on LDL-c (MD = 6.06 mg/dL 95% CI: -0.03, 12.48, p = 0.06), HDL-c (MD = 0.30 mg/dL 95% CI: -1.54, 2.13, p = 0.75), total cholesterol (MD = 2.94 mg/dL 95% CI: -6.44, 12.31, p = 0.54) and triglycerides (MD = 2.05 mg/dL 95% CI: 1.79, 2.28, p = 0.59).",
+      "sample_size_quote": "Out of 188 identified studies, 8 met the inclusion criteria.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result on ALL four standard lipid-panel measures (LDL-c, HDL-c, total cholesterol, triglycerides); a positive finding was reported only for a nonstandard composite 'total lipids' measure. GRADE certainty rated low/very low. This meta-analysis directly conflicts with the positive HDL-c findings in individual trials 32349893 and 36206152's (null FMD but PWV) evidence base — illustrating inconsistency across the literature.",
+      "registrations": [
+        "CRD42024549531"
+      ],
+      "included_studies": "8 trials, 411 participants (of 188 studies screened)",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'açaí in any form' — broad but açaí-isolated (not blended-product) scope per inclusion criteria."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "18693743",
+    "27680990",
+    "29850709",
+    "31307842",
+    "31724083",
+    "32349893",
+    "35107519",
+    "36206152",
+    "36924018",
+    "39960343",
+    "18717569",
+    "23072538"
+  ],
+  "handoff": [
+    {
+      "pmid": "32349893",
+      "role": "dosing",
+      "reason": "A published letter to the editor (PMID 34895932) and author reply (PMID 34906360) raised methodological concerns about this açaí/juçara HDL-c trial; relevant to a study-quality/evidence-grading reviewer since both commentary pieces had empty abstracts in this retrieval and were not independently evaluated."
+    },
+    {
+      "pmid": "41948711",
+      "role": "dosing",
+      "reason": "Systematic review of OTC tinnitus treatments (9 RCTs) may include the açaí-tinnitus trial (PMID 35107519) among its pooled studies; relevant to a tinnitus-indication evidence-synthesis reviewer."
+    }
+  ],
+  "identity_notes": "Açaí berry human evidence is almost entirely small (n=10-55), short-duration acute or pilot trials measuring antioxidant/inflammatory biomarkers, oxidative-stress markers, or acute vascular/exercise-performance outcomes rather than hard clinical endpoints; results are consistently mixed, with the same trial often showing a positive secondary biomarker alongside a null primary or comparator-matched outcome. The single most important applicability caveat: many of the 'açaí' products tested are NOT isolated açaí — they are multi-fruit branded juice blends (MonaVie Active, açaí+camu-camu+blackberry juice), açaí-juçara fruit blends (a related but distinct Euterpe species), or açaí added on top of another active background intervention (hypoenergetic diet, calorie-restricted diet plan) — so results frequently cannot be attributed to açaí alone. The largest and most rigorous synthesis in this set, a 2025 meta-analysis of 8 RCTs/411 participants (PMID 39960343), found NO significant effect of açaí on any standard lipid-panel measure (LDL-c, HDL-c, total cholesterol, triglycerides), directly tempering the positive HDL-c signal seen in two individual smaller trials (32349893, 36206152) also kept in this set."
+}

@@ -1,0 +1,954 @@
+{
+  "canonical_id": "nattokinase",
+  "screened": 37,
+  "kept": 23,
+  "rejected": [
+    {
+      "pmid": "25176138",
+      "reason": "off_topic",
+      "note": "Genetic engineering of Bacillus subtilis (deleting lytic genes) to enhance biomass yield and recombinant protein production; manufacturing/bioengineering study, not a clinical nattokinase-supplementation study."
+    },
+    {
+      "pmid": "28911464",
+      "reason": "animal_or_invitro",
+      "note": "GABA and nattokinase-enriched fermented bean effects on blood pressure in spontaneously hypertensive and normotensive Wistar-Kyoto rats; animal study."
+    },
+    {
+      "pmid": "30026514",
+      "reason": "off_topic",
+      "note": "Jerusalem artichoke and fermented soybean powder mixture on blood glucose/oxidative stress; fermented soybean powder is not confirmed to be characterized or dosed as nattokinase specifically, and is combined with Jerusalem artichoke."
+    },
+    {
+      "pmid": "31326559",
+      "reason": "different_substance",
+      "note": "Characterization of an anticoagulant/fibrinolytic serine protease from Clerodendrum colebrookianum plant leaves; a distinct plant-derived enzyme, not nattokinase from Bacillus subtilis/natto."
+    },
+    {
+      "pmid": "36418098",
+      "reason": "off_topic",
+      "note": "Bacterial meningitis caused by Bacillus subtilis var. natto in a patient who ate natto food daily; concerns infection from the source organism/whole fermented food, not administration of the purified nattokinase enzyme supplement."
+    },
+    {
+      "pmid": "38024037",
+      "reason": "off_topic",
+      "note": "Broad clinical-approach review of post-acute sequelae of COVID-19 infection and vaccination; not confirmed as nattokinase-specific extractable data."
+    },
+    {
+      "pmid": "40327064",
+      "reason": "off_topic",
+      "note": "Regulatory discussion of novel foods considerations; not a nattokinase clinical study."
+    },
+    {
+      "pmid": "40637357",
+      "reason": "animal_or_invitro",
+      "note": "Nattokinase effects on high-fat diet and carrageenan-induced tail-thrombosis in mice; animal model study."
+    },
+    {
+      "pmid": "40671933",
+      "reason": "off_topic",
+      "note": "Post-Spike Syndrome case series using a broad multi-agent intervention (Bifidobacterium, ivermectin, and nattokinase together); cannot isolate a nattokinase-specific effect in this small, non-standard case series."
+    },
+    {
+      "pmid": "41155474",
+      "reason": "off_topic",
+      "note": "Broad narrative review of multiple nutraceuticals (omega-3, berberine, garlic, nattokinase, antioxidants, ginkgo, ginger, ginseng, curcumin) and their bleeding risks; not nattokinase-isolated extractable data."
+    },
+    {
+      "pmid": "41256929",
+      "reason": "off_topic",
+      "note": "Systematic review of non-alcoholic fermented food consumption broadly and mortality risk; not nattokinase-specific in scope."
+    },
+    {
+      "pmid": "41836927",
+      "reason": "off_topic",
+      "note": "Broad narrative review of candidate treatments for long COVID; not confirmed as nattokinase-specific extractable data."
+    },
+    {
+      "pmid": "42319356",
+      "reason": "animal_or_invitro",
+      "note": "Antidiarrheal activity of fermented soybean powder by a specific Bacillus subtilis strain (DKU_09) in mice with castor-oil-induced diarrhea; animal study of a different bacterial strain/product, not a human nattokinase supplementation study."
+    },
+    {
+      "pmid": "42323614",
+      "reason": "not_this_route",
+      "note": "Nattokinase nanocomposite eye drops for UV-B-induced cataract; topical ocular application, not oral supplementation."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "16754735",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "review title only",
+          "abstract not retrievable/empty in this record"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Nattokinase (title only; no abstract text)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": null,
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": null,
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Abstract field empty in retrieved record; title indicates a review on nattokinase for thrombosis prevention.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "Title uses 'Nattokinase', matching label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18971533",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "86 participants ranging from 20 to 80 years of age",
+          "randomized, double-blind, placebo-controlled trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "nattokinase (2,000 FU/capsule) or a placebo capsule for 8 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "86 participants with an initial untreated systolic blood pressure (SBP) of 130 to 159 mmHg (pre-hypertension or stage 1 hypertension)",
+      "indication_as_stated": "blood pressure in pre-hypertension or stage 1 hypertension",
+      "dose_quote": "received nattokinase (2,000 FU/capsule) or a placebo capsule for 8 weeks",
+      "primary_outcome_quote": "examine the effects of nattokinase supplementation on blood pressure in subjects with pre-hypertension or stage 1 hypertension",
+      "primary_result_quote": "the net changes in SBP and diastolic blood pressure (DBP) were -5.55 mmHg (95% confidence interval [CI], -10.5 to -0.57 mmHg; p<0.05) and -2.84 mmHg (CI, -5.33 to -0.33 mmHg; p<0.05), respectively, after the 8-week intervention",
+      "sample_size_quote": "86 participants ranging from 20 to 80 years of age",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Seventy-three of 86 randomized subjects completed the protocol.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "19358933",
+      "design": "open_label_trial",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "45 enrolled subjects",
+          "open-label, self-controlled clinical trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "ingested 2 capsules of nattokinase (2000 fibrinolysis units per capsule) daily orally for 2 months",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "healthy volunteers, patients with cardiovascular risk factors, and patients undergoing dialysis",
+      "indication_as_stated": "blood clotting factors (fibrinogen, factor VII, factor VIII) and lipids associated with cardiovascular disease risk",
+      "dose_quote": "ingested 2 capsules of nattokinase (2000 fibrinolysis units per capsule) daily orally for 2 months",
+      "primary_outcome_quote": "a significant time effect, but not group effect, was observed in the change from baseline of fibrinogen (P = .003), factor VII (P < .001), and factor VIII (P < .001)",
+      "primary_result_quote": "fibrinogen, factor VII, and factor VIII decreased 9%, 14%, and 17%, respectively, for the Healthy Group; 7%, 13%, and 19%, respectively, for the Cardiovascular Group; and 10%, 7%, and 19%, respectively, for the Dialysis Group, whereas blood lipids were unaffected by nattokinase",
+      "sample_size_quote": "The intent-to-treat analysis was performed on all 45 enrolled subjects.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Open-label, self-controlled design (no blinded placebo arm) — positive on coagulation factors (fibrinogen, factor VII, factor VIII decreased); explicit null result on blood lipids ('whereas blood lipids were unaffected by nattokinase').",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "19786378",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A total of 47 patients with hyperlipidemia",
+          "randomized, double-blind, placebo-controlled, parallel comparison study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "nattokinase-mono formula (50 mg/capsule)... twice daily dose of two capsules for six months",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "47 patients with hyperlipidemia",
+      "indication_as_stated": "blood lipids in hyperlipidemia",
+      "dose_quote": "nattokinase-mono formula (50 mg/capsule)",
+      "primary_outcome_quote": "to evaluate the lipid-lowering effect of orally administrated nattokinase and nattokinase combined with red yeast rice (RYR) extract on blood lipids in patients with hyperlipidemia",
+      "primary_result_quote": "The mono formula showed no effects on blood lipids until month six, while the combined formula ameliorated all of measured lipids starting from month one.",
+      "sample_size_quote": "A total of 47 patients with hyperlipidemia were assigned to one of three groups",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Null/negative result for nattokinase MONOTHERAPY on blood lipids ('the mono formula showed no effects on blood lipids until month six'; 'only the combined group, but not mono group, showed a significant difference... when compared with the placebo group'). The positive lipid effect belongs to the nattokinase+red-yeast-rice combination arm, not isolated nattokinase.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "Mono-formula arm is isolated nattokinase (50 mg/capsule) matching label spelling; combination arm additionally contains red yeast rice."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "25552810",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "a patient's self-substitution",
+          "single patient case after aortic valve replacement"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "self-substitution of nattokinase for the vitamin K antagonist warfarin after aortic valve replacement with a mechanical prosthesis",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a patient with a mechanical aortic valve prosthesis",
+      "indication_as_stated": "anticoagulation after mechanical heart valve replacement (nattokinase substituted for warfarin)",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "After nearly a year of use of nattokinase without warfarin, the patient developed thrombus on the mechanical valve and underwent successful repeat valve replacement.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Critical safety case: patient self-substituted nattokinase for prescribed warfarin anticoagulation after mechanical valve replacement, developed a valve thrombus requiring repeat surgery. Authors: 'we strongly discourage its use for this purpose.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase' matches label spelling; used inappropriately as a warfarin substitute, not as prescribed anticoagulation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "25653551",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "cross-over, double-blind study",
+          "female patients with lifestyle diseases"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Fermented soya extract with subtilisin NAT (nattokinase) as the main component was used as an active placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "female patients with lifestyle diseases",
+      "indication_as_stated": "subjective symptoms caused by blood flow disturbance (shoulder stiffness, low back pain, coldness of extremities, headache)",
+      "dose_quote": null,
+      "primary_outcome_quote": "We examined whether daily intake of NKCP(®) effectively improves subjective symptoms in patients with lifestyle diseases in this cross-over, double-blind study.",
+      "primary_result_quote": "After a 4-week course of active placebo, no significant changes in the VAS score were found for any symptoms.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "In this trial, nattokinase (subtilisin NAT) itself was used as the ACTIVE-PLACEBO COMPARATOR arm and showed no significant symptom improvement over 4 weeks; the tested/positive product, NKCP®, is a different natto-derived supplement whose main active component is bacillopeptidase F, a distinct enzyme from nattokinase. This is a null result specifically for nattokinase.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "The positive product (NKCP®) is a distinct natto-derived supplement (main component bacillopeptidase F); nattokinase itself appears only as the null active-placebo comparator."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26109079",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "12 healthy young males",
+          "double-blind, placebo-controlled cross-over study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a single-dose of 2,000 FU NK (NSK-SD, Japan Bio Science Laboratory Co., Ltd) or placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "12 healthy young males",
+      "indication_as_stated": "coagulation/fibrinolysis parameters",
+      "dose_quote": "a single-dose of 2,000 FU NK (NSK-SD, Japan Bio Science Laboratory Co., Ltd) or placebo",
+      "primary_outcome_quote": "Subjects donated blood samples at 2, 4, 6 and 8 hours following administration for analysis of coagulation/fibrinolysis parameters.",
+      "primary_result_quote": "D-dimer concentrations at 6, and 8 hours, and blood fibrin/fibrinogen degradation products at 4 hours after NK administration elevated significantly (p < 0.05, respectively)",
+      "sample_size_quote": "12 healthy young males",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Acute single-dose pharmacodynamic study; 'All the changes, however, were within the normal range' — biomarker effects, not a clinical outcome trial.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Nattokinase (NK)' / NSK-SD branded product matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27785095",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "79 subjects were enrolled",
+          "randomized, double-blind, placebo-controlled, parallel-arm clinical study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "placebo or 100 mg nattokinase/d for the 8-week study duration",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "North American hypertensive population (systolic BP ≥130 or diastolic BP ≥90 mmHg)",
+      "indication_as_stated": "hypertension, von Willebrand factor (vWF), plasma renin activity",
+      "dose_quote": "consumed placebo or 100 mg nattokinase/d for the 8-week study duration",
+      "primary_outcome_quote": "Blood collections were performed at baseline and 8 weeks for testing plasma renin activity, von Willebrand factor (vWF), and platelet factor-4.",
+      "primary_result_quote": "Consumption of nattokinase was associated with a reduction in both systolic and diastolic BP.",
+      "sample_size_quote": "79 subjects were enrolled upon screening for elevated blood pressure",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Diastolic BP reduction significant overall and more pronounced in males; 'A decrease in vWF was seen in the female population consuming nattokinase (P<0.1)' — only trend-level (not conventionally significant) for vWF; sex-specific effects noted throughout.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase (NSK-SD)' matches label spelling; product noted to have vitamin K2 removed."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "28264497",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "narrative review of history, benefit, safety, and production of NK",
+          "no new primary participant data described"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Nattokinase (NK)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "cardiovascular disease prevention (antithrombotic agent)",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "NK is currently undergoing a clinical trial study (Phase II) in the USA for atherothrombotic prevention.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Narrative review covering history, mechanism, safety, and production methods; not a primary clinical trial.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Nattokinase (NK)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "28763875",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "82 patients were enrolled",
+          "76 patients completed the study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "NK Group-patients were given NK at a daily dose of 6 000 FU",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "82 patients enrolled (76 completed: NK 39, statin 37)",
+      "indication_as_stated": "carotid artery intimal medial thickness (CCA-IMT), carotid plaque size, blood lipids",
+      "dose_quote": "NK Group-patients were given NK at a daily dose of 6 000 FU",
+      "primary_outcome_quote": "CCA-IMT, carotid plaque size and blood lipid profile of the patients were measured before and after treatment.",
+      "primary_result_quote": "The reduction in the NK group was significantly profound (P<0.01, 36.6% reduction in plaque size in NK group versus 11.5% change in ST group).",
+      "sample_size_quote": "A total of 82 patients were enrolled in the study and 76 patients (NK 39, ST 37) completed the study.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Active-comparator design (nattokinase vs. simvastatin, not placebo); NK outperformed statin on carotid plaque/IMT reduction and HDL-C increase, but statin produced significantly greater reduction in TC, LDL-C, and TG than NK.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase (NK)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31070609",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "n = 50 per group",
+          "randomly divided into nattokinase and placebo groups"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "nattokinase and placebo groups (n = 50, respectively)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "subjects with hypercholesterolemia (serum cholesterol: 200-280 mg dL-1), nondiabetic",
+      "indication_as_stated": "hemostatic factors (collagen-epinephrine closure time, prothrombin time, activated partial thromboplastin time)",
+      "dose_quote": null,
+      "primary_outcome_quote": "No significant between-group differences were found at baseline in collagen-epinephrine closure time (C-EPI CT), prothrombin time (PT), or activated partial thromboplastin time (aPTT).",
+      "primary_result_quote": "After 8 weeks of treatment, the nattokinase group exhibited significant increases in C-EPI CT, PT, and aPTT.",
+      "sample_size_quote": "randomly divided into nattokinase and placebo groups (n = 50, respectively)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Biomarker/hemostatic-parameter outcome study (prolonged clotting/bleeding times), not a clinical thrombosis-prevention endpoint; specific daily dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31934821",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "61 patients diagnosed with subacute stage of ischemic stroke",
+          "single-blinded randomized controlled trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Ingestion of Nattospecs was tested as an adjuvant to support rehabilitation when combined with standard of care (SOC) treatment (electroacupuncture and Naatrapyl)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "61 patients diagnosed with subacute stage of ischemic stroke",
+      "indication_as_stated": "poststroke rehabilitation (physical activity, blood pressure, lipids, quality of life)",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Nattospes as a food supplement has good supportive effects on treatment and rehabilitation after ischemic stroke by showing statistically significant improvement of stroke-related symptom in scores from modified Rankin, Orgogozo, and Barthel scales.",
+      "sample_size_quote": "A single-blinded randomized controlled trial was conducted on 61 patients diagnosed with subacute stage of ischemic stroke.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "positive",
+      "direction_note": "Nattospes (a branded nattokinase-based nutraceutical) given as an add-on to standard-of-care poststroke treatment (electroacupuncture plus the drug Naatrapyl), not as monotherapy; single-blinded design; cannot fully isolate a nattokinase-specific effect from the co-administered SOC.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "'Nattospes' is a branded multi-ingredient nattokinase-based nutraceutical product, not necessarily isolated nattokinase; also given alongside acupuncture and a nootropic drug."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33843667",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "265 individuals of median age 65.3 years",
+          "double-blinded trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "randomized to oral nattokinase 2,000 fibrinolytic units or matching placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "265 individuals of median age 65.3 years, without clinical evidence of cardiovascular disease",
+      "indication_as_stated": "subclinical atherosclerosis progression (carotid intima-media thickness, carotid arterial stiffness) and atherothrombotic biomarkers",
+      "dose_quote": "randomized to oral nattokinase 2,000 fibrinolytic units or matching placebo",
+      "primary_outcome_quote": "Primary outcome was rate of change in subclinical atherosclerosis measured by serial carotid ultrasound every 6 months as carotid artery intima-media thickness (CIMT) and carotid arterial stiffness (CAS).",
+      "primary_result_quote": "Results of this trial show that nattokinase supplementation has a null effect on subclinical atherosclerosis progression in healthy individuals at low risk for CVD.",
+      "sample_size_quote": "265 individuals of median age 65.3 years, without clinical evidence of cardiovascular disease (CVD) were randomized",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Largest, longest (median 3 years) trial in this identity's evidence base; explicit null result on the pre-specified primary subclinical-atherosclerosis endpoint and on blood pressure/all laboratory measures, in a low-CVD-risk healthy population.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34199189",
+      "design": "prospective_cohort",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "153 patients (age 22-92 years)",
+          "real-life/real-world data"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "nattokinase (100 mg/day per os)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "153 patients admitted to vascular surgery with vascular diseases (deep vein thrombosis, superficial vein thrombosis, venous insufficiency)",
+      "indication_as_stated": "vascular diseases; efficacy and safety of nattokinase, including when combined with anticoagulants (fondaparinux, enoxaparin)",
+      "dose_quote": "evaluated both the efficacy and the safety of nattokinase (100 mg/day per os) in patients admitted to vascular surgery",
+      "primary_outcome_quote": null,
+      "primary_result_quote": "we enrolled 153 patients (age 22-92 years), 92 females (60.1%) and 61 males (39.9%;), and documented that nattokinase was able to improve the clinical symptoms (p < 0.01) without the development of adverse drug reactions or drug interactions",
+      "sample_size_quote": "we enrolled 153 patients (age 22-92 years)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Real-world, non-placebo-controlled cohort; nattokinase was frequently combined with anticoagulant drugs (fondaparinux, enoxaparin) in some patient groups. Authors stress that INR monitoring and dose adjustment are 'cornerstones of the safety of care' when combining nattokinase with pharmacological anticoagulation.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase' matches label spelling; used alone or combined with prescription anticoagulants depending on patient group."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34359426",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "AGM group (n = 40) and placebo group (n = 40)",
+          "12-week randomized, double-blinded clinical trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "an AGM granule containing 4 g of freeze-dried Aronia, red ginseng, shiitake mushroom, and nattokinase (3.4: 4.1: 2.4: 0.1 w/w) twice daily for 12 weeks",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "prediabetic adults with fasting serum glucose concentrations of 100-140 mg/dL",
+      "indication_as_stated": "glucose metabolism and insulin resistance in prediabetes",
+      "dose_quote": "an AGM granule containing 4 g of freeze-dried Aronia, red ginseng, shiitake mushroom, and nattokinase (3.4: 4.1: 2.4: 0.1 w/w) twice daily for 12 weeks",
+      "primary_outcome_quote": "Serum glucose and insulin concentrations were measured during oral-glucose tolerance tests (OGTT) after administering 75 g of glucose in a fasted state.",
+      "primary_result_quote": "serum glucose concentrations were not significantly different between the AGM and placebo groups after the intervention",
+      "sample_size_quote": "Participants of the AGM group (n = 40)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Nattokinase is the smallest component (0.1 part by weight) of a 4-ingredient granule dominated by Aronia and red ginseng; null on primary OGTT glucose outcome, positive on secondary insulin/HOMA-IR and liver-enzyme measures. Cannot attribute results to nattokinase specifically.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Nattokinase present only as the smallest (0.1 of 10 parts) undosed component of a 4-ingredient combination granule."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34452810",
+      "design": "case_report",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "title describes a specific patient",
+          "abstract not retrievable/empty in this record"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "nattokinase (title only; no abstract text)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a patient with fermented soybean (natto) allergy",
+      "indication_as_stated": null,
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": null,
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Abstract field empty in retrieved record; title reports anaphylaxis from nattokinase in a patient with pre-existing natto (fermented soybean) allergy.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "Title uses 'nattokinase', matching label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35003944",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "a patient who developed hemoperitoneum"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "nattokinase",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a patient (elderly woman, per title)",
+      "indication_as_stated": "herbal supplement consumption; developed hemoperitoneum",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "We present the case of a patient who developed hemoperitoneum and subsequently passed away.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Fatal bleeding case report; authors 'warn against consumption of herbal supplements, especially nattokinase.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "37483751",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "nine healthy men",
+          "double-blinded, placebo-controlled, crossover intervention study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a single dose of 2,000 fibrinolytic units (FU) of NK or a placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "nine healthy men",
+      "indication_as_stated": "skin temperature recovery after cold water immersion",
+      "dose_quote": "a single dose of 2,000 fibrinolytic units (FU) of NK or a placebo",
+      "primary_outcome_quote": "Skin temperature, perceived coldness, cardiac output, and sympathetic nervous activity were measured before, during, and after water immersion.",
+      "primary_result_quote": "the skin temperatures of the middle finger, palm, and back of the right hand immersed in the cold water were significantly dropped due to the cold water immersion, and then recovered more quickly by NK intake than by placebo intake",
+      "sample_size_quote": "A double-blinded, placebo-controlled, crossover intervention study was performed on nine healthy men.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive on skin-temperature recovery; explicit null on heart rate, cardiac output, and sympathetic nervous activity ('did not affect changes in heart rate, cardiac output, sympathetic nervous activity compared with a placebo').",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Nattokinase (NK)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "37836525",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "113 eligible subjects",
+          "randomly assigned (55 and 58)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "nattokinase monascus supplements (NMSs)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "113 eligible subjects with dyslipidemia",
+      "indication_as_stated": "dyslipidemia (cardiovascular biomarkers, carotid intima-media thickness)",
+      "dose_quote": null,
+      "primary_outcome_quote": "This study aims to examine the effect of nattokinase monascus supplements (NMSs) on cardiovascular biomarkers and carotid intima-media thickness (CIMT) in patients with dyslipidemia.",
+      "primary_result_quote": "there were significant mean absolute changes in total cholesterol (TC), low-density cholesterol (LDL-C), non-high-density cholesterol (non-HDL-C), and low-density cholesterol to high-density cholesterol ratio (LDL-C to HDL-C ratio)",
+      "sample_size_quote": "A total of 113 eligible subjects were randomly assigned to receive either NMSs or a placebo (55 and 58, respectively).",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Nattokinase co-formulated with Monascus (red yeast rice fungus, itself a source of statin-like monacolins), not isolated nattokinase; positive for TC/LDL-C/non-HDL-C ratio, but 'no significant differences were found in triglycerides (TGs), high-density cholesterol (HDL-C), and CIMT.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Nattokinase-Monascus combination product, not isolated nattokinase; Monascus is itself a source of statin-like compounds."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38812930",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "178 CAD patients",
+          "randomized, double-blind trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "randomized to four groups: NK + RYR, NK, RYR, and placebo",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "178 patients with stable coronary artery disease (CAD)",
+      "indication_as_stated": "cardiometabolic parameters in stable coronary artery disease",
+      "dose_quote": null,
+      "primary_outcome_quote": "This 90-day randomized, double-blind trial aims to investigate the effect of NK and RYR supplementations on cardiometabolic parameters in patients with stable CAD.",
+      "primary_result_quote": "NK + RYR showed the maximum effect in reducing triglyceride (-0.39 mmol), total cholesterol (-0.66 mmol/L), diastolic blood pressure (-7.39 mmHg), and increase in high-density lipoprotein cholesterol (0.195 mmol/L) than other groups (all p for multiple groups comparison<0.01)",
+      "sample_size_quote": "178 CAD patients were randomized to four groups",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Includes an isolated-NK arm alongside the NK+RYR combination arm, allowing some attribution; 'Both NK + RYR and NK groups had significantly better-improved lactate dehydrogenase than the others' — NK alone also showed benefit, though combination was most potent. Patients were concurrently on 'multiple heart medications.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "Includes an isolated nattokinase (NK) arm matching label spelling, plus a combination NK+red-yeast-rice arm."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39076715",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Six studies were eligible for quantitative analysis with 546 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "nattokinase supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "546 participants across 6 pooled RCTs",
+      "indication_as_stated": "cardiovascular risk factors",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Relatively low total dosage of nattokinase had a negative effect on blood total cholesterol (MD [mean difference] = 5.27, 95% CI [confidence intervals]: 3.74 to 6.81, p < 0.00001), high-density lipoprotein cholesterol (MD = -2.76, 95% CI: -3.88 to -1.64, p < 0.00001), and low-density lipoprotein cholesterol (MD = 6.49, 95% CI: 0.83 to 12.15, p = 0.02).",
+      "sample_size_quote": "Six studies were eligible for quantitative analysis with 546 participants.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for systolic/diastolic blood pressure; at LOW total dosage, nattokinase was associated with a WORSE (increased) lipid profile (higher TC, lower HDL-C, higher LDL-C) versus placebo, while high-dosage nattokinase showed higher TC vs. control with no significant LDL-C/HDL-C difference; also 'led a slight increase in blood glucose... as compared to placebo.' Authors' own conclusion: 'relatively low-dose supplementation of nattokinase may have no significant lipid-lowering effect,' contradicting a simple positive narrative.",
+      "registrations": [
+        "CRD42022315020"
+      ],
+      "included_studies": "Six RCTs, 546 participants",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nattokinase' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40507053",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "comprehensive review of source, structure, mechanisms, clinical research status, and safety",
+          "no new primary participant data described"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "nattokinase (NK)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "dyslipidemia / blood lipid lowering",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Large-scale clinical trials have confirmed that nattokinase significantly improves the lipid profile and reduces the atherosclerotic plaque area and intima-media thickness with a favorable safety profile.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Narrative/mechanistic review, not a primary study; recommends caution given 'various types of nattokinase preparations on the market' and advises consumers to verify activity/purity.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Nattokinase (NK)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "41325794",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "120 participants",
+          "single-center, double-blind, placebo-controlled study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "oral NK (8000 FU/day) or placebo for six months",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "120 participants with asymptomatic intracranial/carotid artery stenosis",
+      "indication_as_stated": "cerebral blood flow and cognitive function in asymptomatic intracranial/carotid stenosis",
+      "dose_quote": "A total of 120 participants were randomized 1:1 to receive oral NK (8000 FU/day) or placebo for six months.",
+      "primary_outcome_quote": "Cognitive assessments and multimodal brain magnetic resonance imaging (MRI) were performed at baseline and 6-month follow-up.",
+      "primary_result_quote": "Per-protocol analysis results found no significant between-group differences in the Montreal Cognitive Assessment (MoCA) score changes (mean difference: 0.038; 95 % CI: -1.109, 1.163; P = 0.948).",
+      "sample_size_quote": "A total of 120 subjects were ultimately included (60 in the NK group and 60 in the placebo group)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result on the primary global-cognition endpoint (MoCA): 'Six-month NK supplementation did not improve global cognition.' Only an exploratory secondary domain (visuospatial function) showed a significant between-group difference.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'NK'/nattokinase matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "18971533",
+    "19358933",
+    "19786378",
+    "25552810",
+    "27785095",
+    "28763875",
+    "33843667",
+    "34199189",
+    "35003944",
+    "38812930",
+    "39076715",
+    "41325794"
+  ],
+  "handoff": [
+    {
+      "pmid": "25552810",
+      "role": "interaction",
+      "reason": "Case of patient self-substituting nattokinase for prescribed warfarin after mechanical heart-valve replacement, resulting in valve thrombus requiring repeat surgery; critical for an anticoagulant-drug-interaction reviewer."
+    },
+    {
+      "pmid": "35003944",
+      "role": "safety",
+      "reason": "Fatal hemoperitoneum case report attributed to nattokinase; critical bleeding-risk safety signal."
+    },
+    {
+      "pmid": "34452810",
+      "role": "safety",
+      "reason": "Case report of anaphylaxis from nattokinase in a patient with pre-existing fermented-soybean (natto) allergy; abstract unavailable in this scope — relevant to an allergen/cross-reactivity reviewer."
+    },
+    {
+      "pmid": "34199189",
+      "role": "interaction",
+      "reason": "Real-world cohort combining nattokinase with prescription anticoagulants (fondaparinux, enoxaparin) in vascular-surgery patients; authors stress INR monitoring as essential — relevant to a drug-interaction/dosing reviewer."
+    },
+    {
+      "pmid": "41155474",
+      "role": "interaction",
+      "reason": "Broad review flags nattokinase among several nutraceuticals with bleeding risk when combined with antithrombotic therapy; relevant to an interaction-risk reviewer even though rejected here as too broad for isolated efficacy data."
+    },
+    {
+      "pmid": "36418098",
+      "role": "safety",
+      "reason": "Bacterial meningitis case caused by Bacillus subtilis var. natto (the source organism used to produce nattokinase) in a daily natto consumer; relevant to a food-safety/source-organism reviewer even though rejected here as off-topic for the purified-enzyme supplement scope."
+    }
+  ],
+  "identity_notes": "Nattokinase has a real fibrinolytic/antithrombotic mechanism supported by human biomarker studies (elevated D-dimer, prolonged clotting times, reduced fibrinogen/factor VII/VIII), and several RCTs show modest blood-pressure reduction. However, the single most important applicability caveat is a serious bleeding/anticoagulation-interaction safety signal: nattokinase is an active fibrinolytic agent, and this record set includes a case of a patient who substituted it for prescribed warfarin after mechanical heart-valve replacement and developed a valve thrombus requiring repeat surgery, plus a fatal hemoperitoneum case report — both underscoring that nattokinase should not be treated as inert or interchangeable with prescribed anticoagulant/antiplatelet therapy. On the efficacy side, the largest and longest RCT in this set (PMID 33843667, n=265, ~3 years) found a NULL effect on its pre-specified primary subclinical-atherosclerosis endpoint, and a monotherapy arm in another RCT (19786378) showed nattokinase alone had no lipid effect until combined with red yeast rice — evidence quality and dose (commonly 2,000 FU/day, i.e., ~100 mg) vary considerably across studies, and several 'positive' trials used nattokinase only as one component of multi-ingredient combination products (Nattospes, AGM granules, Nattokinase-Monascus) that cannot be attributed to nattokinase alone."
+}

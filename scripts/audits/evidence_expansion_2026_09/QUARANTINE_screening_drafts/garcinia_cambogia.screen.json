@@ -1,0 +1,1889 @@
+{
+  "canonical_id": "garcinia_cambogia",
+  "screened": 122,
+  "kept": 40,
+  "rejected": [
+    {
+      "pmid": "8261939",
+      "reason": "different_substance",
+      "note": "Bronchodilator effect of Garcinia Kola (bitter kola); a distinct Garcinia species with different active compounds (kolaviron), not Garcinia cambogia/hydroxycitric acid."
+    },
+    {
+      "pmid": "10516985",
+      "reason": "off_topic",
+      "note": "Broad general review titled 'Nutrition and dietary supplements'; not Garcinia cambogia-specific extractable data."
+    },
+    {
+      "pmid": "10997530",
+      "reason": "off_topic",
+      "note": "Broad 'Alternative therapies' review covering depression, diabetes, and obesity generally; not Garcinia cambogia-specific extractable data."
+    },
+    {
+      "pmid": "14965155",
+      "reason": "off_topic",
+      "note": "Broad review of 'Supplemental products used for weight loss' generally; not Garcinia cambogia-isolated extractable data."
+    },
+    {
+      "pmid": "15051593",
+      "reason": "off_topic",
+      "note": "Broad systematic review of dietary supplements for body-weight reduction generally; not Garcinia cambogia-isolated extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "17052970",
+      "reason": "off_topic",
+      "note": "RCT of a 'botanical extract-based weight loss formula'; specific ingredients (including whether Garcinia cambogia is present) not confirmed in the retrieved abstract excerpt."
+    },
+    {
+      "pmid": "17215177",
+      "reason": "different_substance",
+      "note": "Water-soluble calcium hydroxycitrate from Garcinia atroviridis, a distinct Garcinia species from G. cambogia, studied in obese Thai women."
+    },
+    {
+      "pmid": "17274236",
+      "reason": "different_substance",
+      "note": "Herbal mouthwash containing Garcinia mangostana (mangosteen) pericarp extract for halitosis; distinct Garcinia species (mangosteen, xanthone-based), topical oral-rinse application."
+    },
+    {
+      "pmid": "18667082",
+      "reason": "different_substance",
+      "note": "Clinical effects of Garcinia kola in knee osteoarthritis; distinct Garcinia species (bitter kola, kolaviron-based), not G. cambogia."
+    },
+    {
+      "pmid": "19186342",
+      "reason": "different_substance",
+      "note": "Topical Garcinia mangostana (mangosteen) pericarp gel as periodontal adjunct; distinct Garcinia species, topical/local dental application."
+    },
+    {
+      "pmid": "19360230",
+      "reason": "off_topic",
+      "note": "Broad systematic review survey of 'alternative weight-loss products' ingredients generally; not Garcinia cambogia-isolated extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "19575486",
+      "reason": "off_topic",
+      "note": "Broad review of herbal medicines for obesity in humans AND animals generally; not Garcinia cambogia-isolated extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "19807152",
+      "reason": "different_substance",
+      "note": "Bioavailability and antioxidant effects of a xanthone-rich Mangosteen (Garcinia mangostana) product; distinct Garcinia species (mangosteen), not G. cambogia."
+    },
+    {
+      "pmid": "20543944",
+      "reason": "different_substance",
+      "note": "Garcinia kola aqueous eye drops for glaucoma/ocular hypertension; distinct Garcinia species (bitter kola), topical ophthalmic application."
+    },
+    {
+      "pmid": "22088584",
+      "reason": "not_intervention",
+      "note": "Study protocol only, describing the design of a planned clinical trial of Garcinia cambogia/HCA on food intake and satiety; no outcome results reported."
+    },
+    {
+      "pmid": "23652044",
+      "reason": "different_substance",
+      "note": "Gambogic acid injection for advanced malignant tumors; a distinct Garcinia-derived compound (from Garcinia hanburyi), administered by injection, phase IIa oncology trial, not oral hydroxycitric-acid weight-management supplementation."
+    },
+    {
+      "pmid": "23685044",
+      "reason": "off_topic",
+      "note": "Broad ethnobotanical/therapeutic review of polyisoprenylated benzophenones across multiple Garcinia and related genera; not Garcinia cambogia-isolated extractable human data."
+    },
+    {
+      "pmid": "23767862",
+      "reason": "different_substance",
+      "note": "Herbal formulation of Sphaeranthus indicus and Garcinia mangostana (mangosteen) extracts for weight management; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "23784895",
+      "reason": "different_substance",
+      "note": "Novel herbal formulation of Sphaeranthus indicus and Garcinia mangostana (mangosteen) extracts for weight management; distinct Garcinia species, not G. cambogia (companion trial to PMID 23767862)."
+    },
+    {
+      "pmid": "23876572",
+      "reason": "off_topic",
+      "note": "Broad systematic review of plant extracts with appetite-suppressing properties generally; not Garcinia cambogia-isolated extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "24976853",
+      "reason": "off_topic",
+      "note": "Broad preclinical review of anti-inflammatory properties across the entire Clusiaceae plant family; not Garcinia cambogia-isolated human data."
+    },
+    {
+      "pmid": "25309592",
+      "reason": "different_substance",
+      "note": "Kolaviron and L-ascorbic acid attenuating chlorambucil-induced testicular oxidative stress in rats; kolaviron is a distinct Garcinia kola-derived compound, and this is an animal model study."
+    },
+    {
+      "pmid": "25328082",
+      "reason": "different_substance",
+      "note": "Effect of dehusked Garcinia kola seeds on quinine pharmacokinetics; distinct Garcinia species (bitter kola), not G. cambogia."
+    },
+    {
+      "pmid": "25649891",
+      "reason": "different_substance",
+      "note": "Functional beverage of Garcinia mangostana (mangosteen) enhancing plasma antioxidant capacity; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "26286710",
+      "reason": "different_substance",
+      "note": "Mangosteen (Garcinia mangostana)-based drink improving antioxidant/anti-inflammatory biomarkers; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "26701606",
+      "reason": "different_substance",
+      "note": "Alpha-mangostin nanoparticles for topical acne treatment; distinct Garcinia mangostana-derived compound, topical application."
+    },
+    {
+      "pmid": "27152103",
+      "reason": "different_substance",
+      "note": "Acute Garcinia mangostana (mangosteen) supplementation for physical fatigue during exercise; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "27558585",
+      "reason": "different_substance",
+      "note": "Meratrim, a combination of Sphaeranthus indicus and Garcinia mangostana (mangosteen) extracts; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "28098516",
+      "reason": "off_topic",
+      "note": "Germacrone (a sesquiterpene) effects on hyperlipidemia in high-fat diet-induced obese mice; not a Garcinia cambogia study and not clearly connected to any Garcinia species in the title, and an animal model."
+    },
+    {
+      "pmid": "28321995",
+      "reason": "different_substance",
+      "note": "4% Garcinia mangostana (mangosteen) pericarp gel as local periodontal drug delivery; distinct Garcinia species, topical/local dental application."
+    },
+    {
+      "pmid": "28441703",
+      "reason": "different_substance",
+      "note": "Alpha-Mangostin inhibitory effects on cholangiocarcinoma cells and allografts; distinct Garcinia mangostana-derived compound, in vitro/animal study."
+    },
+    {
+      "pmid": "28877777",
+      "reason": "animal_or_invitro",
+      "note": "Metabolomics of (-)-hydroxycitric acid promotion of protein synthesis in broiler chickens; animal (poultry) study."
+    },
+    {
+      "pmid": "29039482",
+      "reason": "different_substance",
+      "note": "Protective compounds from Garcinia mangostana (mangosteen) against UVB damage in HaCaT cells and hairless mice; distinct Garcinia species, in vitro/animal study."
+    },
+    {
+      "pmid": "29186708",
+      "reason": "different_substance",
+      "note": "Isogambogenic acid (a distinct Garcinia-derived compound, from Garcinia hanburyi) inhibiting glioma growth; not G. cambogia/HCA, and a mechanistic/preclinical study."
+    },
+    {
+      "pmid": "29207025",
+      "reason": "off_topic",
+      "note": "Anti-obesity effects of pectinase/cellulase-treated Ecklonia cava (a brown seaweed) extract in mice; unrelated species, not Garcinia, and an animal model."
+    },
+    {
+      "pmid": "29468886",
+      "reason": "different_substance",
+      "note": "Kolaviron protective effect against cyclophosphamide-induced cardiac toxicity in rats; distinct Garcinia kola-derived compound, animal study."
+    },
+    {
+      "pmid": "29747432",
+      "reason": "different_substance",
+      "note": "Mangosteen (Garcinia mangostana) extract insulin-sensitizing effect in obese female patients; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "30034348",
+      "reason": "off_topic",
+      "note": "Broad systematic review of mania associated with herbal medicines generally (excluding cannabis); Garcinia cambogia not confirmed as specifically implicated in the retrieved abstract excerpt."
+    },
+    {
+      "pmid": "30328970",
+      "reason": "different_substance",
+      "note": "Study protocol for adjunctive Garcinia mangostana (mangosteen) pericarp for bipolar depression; distinct Garcinia species, and a protocol without results."
+    },
+    {
+      "pmid": "30348185",
+      "reason": "different_substance",
+      "note": "Combined Garcinia mangostana fruit rind and Cinnamomum tamala leaf for muscle strength/endurance; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "30502394",
+      "reason": "different_substance",
+      "note": "Gamma-Mangostin alleviating liver fibrosis via a signaling axis; distinct Garcinia mangostana-derived compound, mechanistic/animal study."
+    },
+    {
+      "pmid": "30623680",
+      "reason": "different_substance",
+      "note": "New cytotoxic compound isolated from Garcinia nujiangensis; distinct Garcinia species, in vitro chemistry study."
+    },
+    {
+      "pmid": "30905130",
+      "reason": "different_substance",
+      "note": "Study protocol for a trial of adjunctive Garcinia mangostana (mangosteen) pericarp for schizophrenia; distinct Garcinia species, and a protocol without results."
+    },
+    {
+      "pmid": "31089310",
+      "reason": "different_substance",
+      "note": "Mangosteen peel and turmeric flour dietary supplementation in ducks; distinct Garcinia species, animal (poultry) study."
+    },
+    {
+      "pmid": "31126562",
+      "reason": "off_topic",
+      "note": "Broad systematic review of herbal medicines for appetite suppression generally; not Garcinia cambogia-isolated extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "31239743",
+      "reason": "different_substance",
+      "note": "Antiacne/antiblotch combination of Aloe barbadensis, Garcinia mangostana peel extract, and Camellia sinensis leaf extract; distinct Garcinia species, topical application."
+    },
+    {
+      "pmid": "31406532",
+      "reason": "different_substance",
+      "note": "Ethyl acetate fraction of Garcinia mangostana rind as antimalarial/antioxidant in mice; distinct Garcinia species, animal study."
+    },
+    {
+      "pmid": "31742118",
+      "reason": "different_substance",
+      "note": "Sub-chronic toxicity of Garcinia atroviridis fruit ethanol extract in Wistar rats; distinct Garcinia species, animal study."
+    },
+    {
+      "pmid": "31793087",
+      "reason": "off_topic",
+      "note": "Broad systematic review and meta-analysis of herbal medicines generally for obesity/metabolic syndrome; not Garcinia cambogia-isolated extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "31984610",
+      "reason": "off_topic",
+      "note": "Broad systematic review and meta-analysis of herbal medicines generally (54 RCTs across many herbs) for weight loss; not Garcinia cambogia-isolated extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "32275352",
+      "reason": "different_substance",
+      "note": "Oral consumption of Garcinia kola (Bitter kola) lowering intraocular pressure; distinct Garcinia species (bitter kola), not G. cambogia."
+    },
+    {
+      "pmid": "33207599",
+      "reason": "different_substance",
+      "note": "Antifungal activity of Alpha-Mangostin against a plant pathogen; distinct Garcinia mangostana-derived compound, in vitro/plant study."
+    },
+    {
+      "pmid": "33355478",
+      "reason": "different_substance",
+      "note": "Adjunctive Garcinia mangostana (mangosteen) pericarp for schizophrenia RCT; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "34211410",
+      "reason": "different_substance",
+      "note": "Effect of adjunctive mangosteen pericarp on cognition in schizophrenia (secondary analysis); distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "34307603",
+      "reason": "off_topic",
+      "note": "Broad systematic review and meta-analysis of herb-induced liver injury generally across many herbs; Garcinia cambogia not confirmed as specifically isolated with extractable data in the retrieved abstract, though relevant to the hepatotoxicity safety theme captured in other kept records."
+    },
+    {
+      "pmid": "34826556",
+      "reason": "different_substance",
+      "note": "New cytotoxic caged-polyprenylated xanthonoids from Garcinia oligantha; distinct Garcinia species, in vitro chemistry study."
+    },
+    {
+      "pmid": "35096104",
+      "reason": "off_topic",
+      "note": "Tamarindus indica (tamarind) seed extract botanical compositions for knee osteoarthritis; a different plant genus entirely, not Garcinia."
+    },
+    {
+      "pmid": "35415207",
+      "reason": "different_substance",
+      "note": "Water-soluble mangosteen (Garcinia mangostana) extract for cognitive function in Alzheimer's disease; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "35468650",
+      "reason": "off_topic",
+      "note": "Broad systematic review of herbal medicine generally for cholangiocarcinoma control; Garcinia cambogia not confirmed as specifically isolated with extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "35733624",
+      "reason": "different_substance",
+      "note": "Thai Medicinal Plant-4 (TMP-4) cream made of Garcinia mangostana peel, Sesamum indicum, Glycine max, and Centella asiatica for knee osteoarthritis; distinct Garcinia species (mangosteen) in an undosed topical combination cream, not G. cambogia."
+    },
+    {
+      "pmid": "35740124",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of alpha-Mangostin as an antimicrobial agent; distinct Garcinia mangostana-derived compound, not G. cambogia."
+    },
+    {
+      "pmid": "36230630",
+      "reason": "different_substance",
+      "note": "Fermented Mangosteen (Garcinia mangostana) supplementation for HPV-induced cervical cancer prevention; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "36881348",
+      "reason": "different_substance",
+      "note": "Kolaviron modulating angiogenesis/apoptosis/inflammation in a rat model of testosterone-propionate-induced benign prostate hyperplasia; distinct Garcinia kola-derived compound, animal study."
+    },
+    {
+      "pmid": "37215800",
+      "reason": "different_substance",
+      "note": "Systematic review of general toxicity studies of alpha-mangostin from Garcinia mangostana; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "37400324",
+      "reason": "off_topic",
+      "note": "Network meta-analysis of pharmaceutical (drug) therapies for obesity; not a dietary-supplement study, and Garcinia cambogia not a pharmaceutical drug."
+    },
+    {
+      "pmid": "38053351",
+      "reason": "different_substance",
+      "note": "Gamma-mangostin protecting Schwann cells against oxidative apoptotic cell death; distinct Garcinia mangostana-derived compound, in vitro cell study."
+    },
+    {
+      "pmid": "38170037",
+      "reason": "different_substance",
+      "note": "Combination of garcinol, curcuminoids, and piperine for nonalcoholic steatohepatitis; garcinol is a distinct compound typically sourced from Garcinia indica (kokum), not Garcinia cambogia/hydroxycitric acid, and is combined with unrelated curcuminoids/piperine."
+    },
+    {
+      "pmid": "38449600",
+      "reason": "different_substance",
+      "note": "Systematic review of Kolaviron (a Garcinia kola-derived bioflavonoid) in cardiovascular disease management; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "38680800",
+      "reason": "different_substance",
+      "note": "Optimization of extraction of mangosteen leaf (Garcinia mangostana) secondary metabolites as a poultry feed additive; distinct Garcinia species, agricultural/animal-feed study."
+    },
+    {
+      "pmid": "39093123",
+      "reason": "different_substance",
+      "note": "Kolaviron chemosuppressive effects on DMBA-induced mammary lesions; distinct Garcinia kola-derived compound, animal model study."
+    },
+    {
+      "pmid": "39136211",
+      "reason": "off_topic",
+      "note": "Broad review of challenges in herbal-induced liver injury identification and prevention generally; Garcinia cambogia not confirmed as specifically isolated with extractable data in the retrieved abstract, though relevant to the hepatotoxicity safety theme captured in other kept records."
+    },
+    {
+      "pmid": "39415841",
+      "reason": "different_substance",
+      "note": "Hypoglycemic activity of Garcinia mangostana extracts in diabetic rodent models; distinct Garcinia species, animal model systematic review."
+    },
+    {
+      "pmid": "40182812",
+      "reason": "different_substance",
+      "note": "Green-synthesized zinc oxide nanoparticles from Garcinia mangostana leaf extract as a poultry antibacterial agent; distinct Garcinia species, agricultural/veterinary application."
+    },
+    {
+      "pmid": "40314616",
+      "reason": "different_substance",
+      "note": "Systematic review of mangosteen (Garcinia mangostana) as local periodontal drug delivery; distinct Garcinia species, topical/local dental application."
+    },
+    {
+      "pmid": "40509408",
+      "reason": "different_substance",
+      "note": "Systematic review of lipid-lowering effects of alpha-Mangostin in hyperlipidemic animal models; distinct Garcinia mangostana-derived compound, animal studies."
+    },
+    {
+      "pmid": "40637133",
+      "reason": "different_substance",
+      "note": "Adjunctive Garcinia mangostana (mangosteen) pericarp extract for bipolar depression RCT; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "40947126",
+      "reason": "off_topic",
+      "note": "Broad scoping review of herbal medicines generally for weight loss and lipid profile; Garcinia cambogia not confirmed as specifically isolated with extractable data in the retrieved abstract."
+    },
+    {
+      "pmid": "41300530",
+      "reason": "different_substance",
+      "note": "Systematic review of alpha-Mangostin nephroprotective effects for acute kidney injury; distinct Garcinia mangostana-derived compound, not G. cambogia."
+    },
+    {
+      "pmid": "41459867",
+      "reason": "off_topic",
+      "note": "Broad in vitro screening of Indonesian medicinal plants and natural compounds for breast cancer; not Garcinia cambogia-isolated, and an in vitro study."
+    },
+    {
+      "pmid": "41461206",
+      "reason": "different_substance",
+      "note": "Systematic review of antioxidant mangosteen effects on periodontitis parameters; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "41978307",
+      "reason": "different_substance",
+      "note": "Systematic review of Garcinia mangostana peel extract effects on glycemic control in type 2 diabetes; distinct Garcinia species, not G. cambogia."
+    },
+    {
+      "pmid": "42355434",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of alpha-Mangostin anti-hyperglycemic effects in animal models; distinct Garcinia mangostana-derived compound, animal studies."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "9820262",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A total of 135 subjects were randomized",
+          "12-week randomized, double-blind, placebo-controlled trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "active herbal compound (1500 mg of hydroxycitric acid per day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Overweight men and women subjects (mean BMI approximately 32 kg/m2)",
+      "indication_as_stated": "body weight and fat mass loss in overweight subjects",
+      "dose_quote": "Subjects were randomized to receive either active herbal compound (1500 mg of hydroxycitric acid per day) or placebo, and both groups were prescribed a high-fiber, low-energy diet.",
+      "primary_outcome_quote": "Body weight change and fat mass change.",
+      "primary_result_quote": "Garcinia cambogia failed to produce significant weight loss and fat mass loss beyond that observed with placebo.",
+      "sample_size_quote": "A total of 135 subjects were randomized to either active hydroxycitric acid (n = 66) or placebo (n = 69)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Both groups lost significant weight on the shared background high-fiber, low-energy diet, but between-group difference was not statistically significant (P = .14). One of the larger and more frequently cited trials in this literature.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'hydroxycitric acid, the active ingredient in the herbal compound Garcinia cambogia' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "10490789",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Sedentary adult male subjects (n = 10)",
+          "double blind, placebo controlled, randomized, crossover study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "three days of (-)-HCA (3.0 g/d) or placebo supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Sedentary adult male subjects (n = 10, age 22-38 y, BMI 22.4-37.6 kg/m2)",
+      "indication_as_stated": "energy expenditure and substrate oxidation, at rest and during exercise",
+      "dose_quote": "three days of (-)-HCA (3.0 g/d) or placebo supplementation",
+      "primary_outcome_quote": "EE (by indirect calorimetry) and RQ were measured for 150 min following an overnight fast.",
+      "primary_result_quote": "Treatment with (-)-HCA did not affect EE, either during rest or during moderately intense exercise.",
+      "sample_size_quote": "Sedentary adult male subjects (n = 10, age: 22-38 y, body mass index (BMI) 22.4-37.6 kg/m2)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result: 'these results do not support the hypothesis that (-)-HCA alters the short-term rate of fat oxidation in the fasting state during rest or moderate exercise.' Very small sample (n=10), short duration (3 days).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'(-)-Hydroxycitric acid ((-)-HCA)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "11134690",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eighty-nine mildly overweight females"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "400-mg caplets of Garcinia cambogia 30-60 min prior to meals for a total dose of 2.4 g/day (1.2 g/day HCA)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Eighty-nine mildly overweight females",
+      "indication_as_stated": "satiety/appetite and body weight",
+      "dose_quote": "ingested 400-mg caplets of Garcinia cambogia 30-60 min prior to meals for a total dose of 2.4 g/day (1.2 g/day HCA)",
+      "primary_outcome_quote": "Food intake and appetitive variables were assessed at baseline and monthly for 12 weeks.",
+      "primary_result_quote": "Both groups lost body weight with the active group achieving a significantly greater reduction (3. 7+/-3.1 kg versus 2.4+/-2.9 kg).",
+      "sample_size_quote": "Eighty-nine mildly overweight females were prescribed 5020-kJ diets for 12 weeks",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive on total weight loss vs. placebo (on a shared calorie-restricted diet background), but explicit null on the study's own hypothesized mechanism: 'This study does not support a satiety effect of HCA' and 'No effects of the HCA were observed on appetitive variables.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "12953793",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "six subjects",
+          "double-blind crossover test"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "ingested 250 mg of HCA or placebo (same amount of dextrin) via capsule for 5 d",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "untrained women (six subjects)",
+      "indication_as_stated": "endurance exercise performance and fat metabolism",
+      "dose_quote": "ingested 250 mg of HCA or placebo (same amount of dextrin) via capsule for 5 d",
+      "primary_outcome_quote": "They cycled at 40% VO2max for 1 h and then the exercise intensity was increased to 60% VO2max until exhaustion on day 5 of each experiment.",
+      "primary_result_quote": "exercise time to exhaustion was significantly enhanced (p<0.05)",
+      "sample_size_quote": "six subjects ingested 250 mg of HCA or placebo",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Very small sample (n=6); acute exercise-performance outcome, not a weight-loss clinical endpoint.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'(-)-Hydroxycitric acid (HCA)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "15056124",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "60 moderately obese subjects",
+          "randomized, double-blind, placebo-controlled human study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Group A was administered HCA-SX 4667 mg, group B was administered a combination of HCA-SX 4667 mg, NBC 4 mg and GSE 400 mg, while group C was given placebo",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "60 moderately obese subjects (ages 21-50, BMI >26 kg/m2)",
+      "indication_as_stated": "body weight, BMI, appetite, lipid profiles, leptin in moderately obese subjects",
+      "dose_quote": "Group A was administered HCA-SX 4667 mg, group B was administered a combination of HCA-SX 4667 mg, NBC 4 mg and GSE 400 mg, while group C was given placebo daily in three equally divided doses 30-60 min before meals",
+      "primary_outcome_quote": "monitoring changes in body weight, body mass index (BMI), appetite, lipid profiles, serum leptin and excretion of urinary fat metabolites",
+      "primary_result_quote": "At the end of 8 weeks, body weight and BMI decreased by 5-6% in both groups A and B.",
+      "sample_size_quote": "A randomized, double-blind, placebo-controlled human study was conducted in Elluru, India for 8 weeks in 60 moderately obese subjects",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Includes an isolated HCA-SX arm (Group A) as well as a triple-combination arm (Group B, HCA-SX plus niacin-bound chromium plus Gymnema sylvestre); combination arm generally showed effects 'to a greater degree' than HCA-SX alone.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'HCA-SX' (Super CitriMax, a calcium/potassium HCA salt) matches label spelling as a related/branded form of hydroxycitric acid."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "15234082",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "reviews multiple placebo-controlled double-blind human trials employing up to 2800 mg/day HCA alongside animal toxicology studies",
+          "no single human sample size given for the review itself"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "HCA-SX (Super CitriMax)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "safety/toxicity of HCA",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "In several, placebo-controlled, double-blind trials employing up to 2800 mg/day HCA, no treatment-related adverse effects were reported.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "positive",
+      "direction_note": "Safety review combining animal toxicology (acute oral/dermal, 90-day subchronic, Ames genotoxicity) with summarized human trial safety data; concludes 'intake of HCA at levels up to 2800 mg/day is safe for human consumption.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'HCA-SX' / Super CitriMax matches label spelling as a branded calcium/potassium HCA salt form."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "15836459",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "assesses clinical evidence of adverse events for named herbal supplements including Garcinia cambogia, from RCTs with effectiveness data"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "Garcinia cambogia",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "adverse events of herbal weight-loss food supplements",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Exceptions are Garcinia cambogia and yerba mate, which merit further investigation.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Reviews several herbal weight-loss supplements together (Ephedra, Garcinia cambogia, guarana, guar gum, psyllium, yerba mate, yohimbe); Garcinia cambogia and yerba mate were specifically noted as having the most favorable risk-benefit profile among those reviewed, in contrast to ephedra-containing products which showed clear adverse-event signals.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "15899726",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty healthy volunteers"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "Metabolife Ephedra Free... contains caffeine and extracts of green tea, garcinia cambogia, and yerba mate",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Twenty healthy volunteers",
+      "indication_as_stated": "electrocardiographic (QTc interval) effects",
+      "dose_quote": "A single capsule containing half the normal recommended dose of Metabolife Ephedra Free or matching placebo was administered in crossover fashion",
+      "primary_outcome_quote": "Baseline and three postdose ECG measurements were obtained, and QTc intervals were measured over a 5-hour study period.",
+      "primary_result_quote": "No significant differences in the QTc interval or other ECG variables were observed between the Metabolife Ephedra Free and placebo groups.",
+      "sample_size_quote": "Twenty healthy volunteers.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Multi-ingredient branded product (caffeine, green tea, garcinia cambogia, yerba mate), not isolated garcinia; null safety result at half the recommended dose only, over just 5 hours — authors note 'dose-response studies and studies of longer duration should be conducted.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia is one of several active ingredients in the branded combination product 'Metabolife Ephedra Free.'"
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "16366421",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "90 obese subjects",
+          "combined data from two previously reported randomized, double-blind, placebo-controlled clinical studies"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "group A received a daily dose of HCA-SX 4,667 mg (providing 2,800 mg HCA per day)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "90 obese subjects (BMI 30-50.8 kg/m2)",
+      "indication_as_stated": "weight loss, BMI, lipid profile in obesity",
+      "dose_quote": "group A received a daily dose of HCA-SX 4, 667 mg (providing 2,800 mg HCA per day)",
+      "primary_outcome_quote": "Subjects were randomly divided into three groups: group A received a daily dose of HCA-SX 4, 667 mg (providing 2,800 mg HCA per day); group B was given a daily dose of a combination of HCA-SX 4,667 mg, niacin-bound chromium (NBC) 4 mg (providing 400 microg elemental chromium), and Gymnema sylvestre extract (GSE) 400 mg (providing 100 mg gymnemic acid); and group C received a placebo in three equally divided doses 30-60 min before each meal",
+      "primary_result_quote": "At the end of 8 weeks, in group A, both body weight and BMI decreased by 5.4%, low-density lipoprotein and triglycerides levels were reduced by 12.9% and 6.9%, respectively, while high-density lipoprotein levels increased by 8.9%",
+      "sample_size_quote": "90 obese subjects (BMI: 30-50.8 kg/m2)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Pooled re-analysis of two prior trials (from the same research group as 15056124/18084863); includes both an isolated HCA-SX arm and a combination arm (with NBC and GSE), the combination generally showing greater effects.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'HCA-SX' matches label spelling as a branded calcium/potassium HCA salt form."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "17639559",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "60-day treatment period, group receiving Slim339 (n = 30)",
+          "placebo group (n = 28)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Slim339, a proprietary fixed combination of Garcinia cambogia extract with calcium pantothenate (standardized for the content of hydroxycitric acid and pantothenic acid) and extracts of Matricaria chamomilla, Rosa damascena, Lavandula officinalis and Cananga odorata",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "overweight and obese volunteers",
+      "indication_as_stated": "body weight in overweight and obese subjects",
+      "dose_quote": null,
+      "primary_outcome_quote": "A double-blind, randomized, parallel-group, placebo-controlled study has been carried out in order to evaluate the effect of orally self-administered Slim339, a proprietary fixed combination of Garcinia cambogia extract with calcium pantothenate (standardized for the content of hydroxycitric acid and pantothenic acid) and extracts of Matricaria chamomilla, Rosa damascena, Lavandula officinalis and Cananga odorata, on body weight in overweight and obese volunteers.",
+      "primary_result_quote": "the average reduction in body weight for the group receiving Slim339 (n = 30) was 4.67% compared with 0.63% for the placebo group (n = 28) (p < 0.0001)",
+      "sample_size_quote": "the average reduction in body weight for the group receiving Slim339 (n = 30) was 4.67% compared with 0.63% for the placebo group (n = 28) (p < 0.0001)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Six-ingredient branded combination product (Garcinia cambogia is one of six components with calcium pantothenate and four other botanical extracts); cannot isolate a garcinia-specific effect. Exact daily dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia extract is one ingredient in the 6-component branded product 'Slim339.'"
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "17919327",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "five male and five female regular coffee drinkers"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a functional coffee beverage containing additional caffeine, green tea extracts, niacin and garcinia cambogia",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "five male and five female regular coffee drinkers",
+      "indication_as_stated": "resting energy expenditure and hemodynamic variables",
+      "dose_quote": null,
+      "primary_outcome_quote": "REE, resting heart rate (RHR), and systolic (SBP) and diastolic (DBP) blood pressure was assessed at PRE and 1, 2, and 3-hours post coffee ingestion.",
+      "primary_result_quote": "The JF trial resulted in a significant overall mean increase in REE of 14.4% (males = 12.1%, females = 17.9%) over the observation period (p < 0.05)",
+      "sample_size_quote": "Subjects included five male (26 +/- 2.1 y, 97.16 +/- 10.05 kg, 183.89 +/- 6.60 cm) and five female (28.8 +/- 5.3 y, 142.2 +/- 12.6 lbs) regular coffee drinkers.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Very small sample (n=10); multi-ingredient branded coffee product (caffeine, green tea, niacin, garcinia cambogia together vs. regular caffeinated coffee comparator, not placebo); systolic BP was significantly HIGHER in the garcinia-containing product, an unfavorable hemodynamic direction, though authors describe it as without adverse effect.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia is one of several active ingredients in the branded functional coffee product 'JavaFit Energy Extreme.'"
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18084863",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "clinical studies... conducted in 60 human volunteers"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "oral dose of placebo or 4666.7 mg HCA-SX (providing 2,800 mg HCA) in three equally divided doses 30-60 min before meals",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "60 human volunteers",
+      "indication_as_stated": "weight management: body weight, BMI, lipid profile, serum leptin/serotonin",
+      "dose_quote": "given an oral dose of placebo or 4666.7 mg HCA-SX (providing 2,800 mg HCA) in three equally divided doses 30-60 min before meals",
+      "primary_outcome_quote": "Body weight, BMI, lipid profiles, serum leptin, serotonin and excretion of urinary fat metabolites were determined at 0, 4 and 8 weeks of treatment.",
+      "primary_result_quote": "At the end of 8 weeks, body weight and BMI decreased by 5.4% and 5.2%, respectively.",
+      "sample_size_quote": "clinical studies to evaluate the safety and efficacy of HCA-SX over a period of eight weeks were conducted in 60 human volunteers",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Combines animal toxicology (90-day rat study, Ames/mouse lymphoma genotoxicity) with an 8-week human efficacy/safety trial; part of the same HCA-SX research-group series as 15056124/16366421.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'HCA-SX' matches label spelling as a branded calcium/potassium HCA salt form derived from Garcinia cambogia."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18316163",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "44 participants"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "G. cambogia extract (1667.3 mg/day equivalent to 1000 mg HCA/day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "44 participants, overweight subjects",
+      "indication_as_stated": "serum sex hormones (testosterone, estrone, estradiol), given prior animal-study testicular toxicity concerns",
+      "dose_quote": "44 participants received either G. cambogia extract (1667.3 mg/day equivalent to 1000 mg HCA/day) or placebo for 12 weeks",
+      "primary_outcome_quote": "we investigated changes in serum sex hormones levels as an extension of our previous double-blind placebo-controlled trial in human subjects",
+      "primary_result_quote": "Compared to the placebo group, administration of the extract did not significantly alter the serum testosterone, estrone, and estradiol levels.",
+      "sample_size_quote": "in which 44 participants received either G. cambogia extract (1667.3 mg/day equivalent to 1000 mg HCA/day) or placebo for 12 weeks",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Null/reassuring safety result specifically addressing animal-study testicular-toxicity concerns; authors describe as a 'preliminary investigation.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'G. cambogia extract' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18500961",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Ten subjects (8 male, 2 female)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "JavaFit coffee (450 mg of caffeine, 1200 mg of garcinia cambogia, 360 mg of citrus aurantium extract, and 225 mcg of chromium polynicotinate)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Ten subjects (8 male, 2 female), healthy and physically active",
+      "indication_as_stated": "resting oxygen uptake, respiratory exchange ratio, heart rate, blood pressure",
+      "dose_quote": "nutritionally enriched JavaFittrade mark (JF) coffee (450 mg of caffeine, 1200 mg of garcinia cambogia, 360 mg of citrus aurantium extract, and 225 mcg of chromium polynicotinate)",
+      "primary_outcome_quote": "VO2 and HR were determined every 5 min during the first 30 min and every 10 min during the next 150 min.",
+      "primary_result_quote": "seven of the ten subjects were considered responders to JF (had a higher AUC for VO2during JF than P). Statistical analysis showed the difference between JF and P (12%) to be significantly different in these responders.",
+      "sample_size_quote": "Ten subjects (8 male, 2 female; 20.9 +/- 1.7 y; 178.1 +/- 10.4 cm; 71.8 +/- 12.1 kg) underwent two testing sessions",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Very small sample (n=10); multi-ingredient branded coffee product including a stimulant, citrus aurantium (bitter orange, itself a cardiovascular-stimulant risk), and chromium, not isolated garcinia; 'Initial analysis revealed no significant differences' in the full sample, with effect only in a post hoc 'responder' subgroup; average systolic BP was significantly higher in the treatment condition, an unfavorable hemodynamic direction.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia (1200 mg) is one of four active ingredients in the branded product 'JavaFit coffee', including citrus aurantium, a distinct stimulant botanical."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18729243",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fifty-eight obese subjects"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Garcinia (2.4 g) plus Konjac (1.5 g)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Fifty-eight obese subjects (BMI 30.0-39.9 kg/m2)",
+      "indication_as_stated": "obesity treatment: anthropometrics, REE, lipid profile, glucose",
+      "dose_quote": "daily doses of either Garcinia (2.4 g) plus Konjac (1.5 g) or placebo prior to their main meals (3 times/day)",
+      "primary_outcome_quote": "height, weight, circumferences and body composition, resting energy expenditure (REE), lipid profile and glucose levels",
+      "primary_result_quote": "The treatment had no significant effect on anthropometric parameters, REE, triglycerides or glucose levels.",
+      "sample_size_quote": "Fifty-eight obese subjects (BMI 30.0-39.9 kg/m(2)) were assigned to the placebo group (n = 26) or the treatment group (n = 32)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Combination product (Garcinia cambogia + Amorphophallus konjac glucomannan), not garcinia alone; explicit null on the weight-loss-related anthropometric/calorimetric primary parameters that were the study's stated aim ('the treatment had no significant effect on anthropometric parameters, REE'); only total cholesterol and LDL-c were significantly reduced.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia standardized extract co-administered with Amorphophallus konjac glucomannan fiber, not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "20847896",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "reviews recently published randomized, placebo-controlled trials for several named supplements including Garcinia cambogia",
+          "no specific Garcinia-only sample size given in the retrieved abstract"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Garcinia cambogia",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "weight loss via fat-modifying mechanisms",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "CLA, chitosan, pyruvate, and Irvingia gabonensis appeared to be effective in weight loss via fat modifying mechanisms. However, the data on the use of these products is limited.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Garcinia cambogia is named among several reviewed fat-modifying supplements (CLA, chitosan, pyruvate, Irvingia gabonensis, chia seed) but is notably NOT included in the list the authors describe as 'appeared to be effective' — implying a less favorable assessment for garcinia specifically relative to the other supplements reviewed. Overall conclusion: 'there is little clinical evidence to support their use.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "21197150",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty-three eligible trials were identified and twelve were included. Nine trials provided data suitable for statistical pooling."
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Garcinia extract, hydroxycitric acid (HCA)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "weight reduction",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "The meta-analysis revealed a small, statistically significant difference in weight loss favouring HCA over placebo (MD: -0.88 kg; 95% CI: -1.75, -0.00).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Effect size is small (MD -0.88 kg) and authors state 'the clinical relevance is uncertain'; 'Gastrointestinal adverse events were twice as common in the HCA group compared with placebo in one included study.'",
+      "registrations": [],
+      "included_studies": "23 trials identified, 12 included, 9 pooled for meta-analysis",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia extract, hydroxycitric acid (HCA)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "21936892",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eighty-six overweight subjects"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Garcinia cambogia extract (GCE) (2 g/day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Eighty-six overweight subjects (BMI 23-29)",
+      "indication_as_stated": "weight loss and plasma cholesterol",
+      "dose_quote": "administered tablets containing EGML (2 g/day), GCE (2 g/day) or placebo (starch, 2 g/day) for 10 weeks",
+      "primary_outcome_quote": "At baseline and after 10 weeks, body composition, plasma cholesterol and diet were assessed.",
+      "primary_result_quote": "EGML and GCE supplementation failed to promote weight-loss or any clinically significant change in %body fat.",
+      "sample_size_quote": "Eighty-six overweight subjects (Male:Female = 46:40, age: 20~50 yr, BMI > 23 < 29)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result for the Garcinia cambogia extract arm specifically on both weight loss and cholesterol: 'GCE had no effect on triglycerides, non-HDL-C, adipocytokines or antioxidants when compared to placebo' — unlike the separate Glycine max leaves extract arm, which did raise HDL-C.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia extract (GCE)' tested as its own isolated arm alongside a separate Glycine max leaves extract arm."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "22530711",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "reviews multiple human and animal RCTs of G. cambogia extracts without giving a single combined sample size"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "G. cambogia extracts",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "body weight and fat loss; toxicity and safety",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "other randomized, placebo-controlled clinical trials have not reported the same outcomes",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "mixed",
+      "direction_note": "Explicitly notes conflicting trial results and cautions that 'we should be cautious when interpreting the results'; states 'none of them have shown whether these effects persist beyond 12 weeks of intervention' and calls the evidence base for long-term efficacy insufficient. Safety data across studies described as generally reassuring at usual doses.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'G. cambogia extracts' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "24133059",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "women... divided in treated (n = 30) and control (n = 13) groups"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "2.4 g (800 mg 3×/day) of garcinia extract (50% of HCA)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "obese women (BMI > 25 kg/m2; age 25-60 years)",
+      "indication_as_stated": "lipid profile, endocrine, calorimetric and anthropometric parameters in obese women",
+      "dose_quote": "received 2.4 g (800 mg 3×/day) of garcinia extract (50% of HCA) or placebo during 60 days",
+      "primary_outcome_quote": "Weight, BMI, waist-hip ratio and percentage of fat mass, resting metabolic rate, respiratory coefficient, triglycerides (TG), total cholesterol, HDL and LDL, leptin and insulin serum levels were evaluated.",
+      "primary_result_quote": "TG was significantly reduced in the treated group (p = 0.0002) and the post-treatment variation was different compared to the placebo group (p = 0.04).",
+      "sample_size_quote": "The women (BMI > 25 kg/m(2) ; age 25-60 years), divided in treated (n = 30) and control (n = 13) groups",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive only for triglycerides; 'No significant response was observed on other variables of the lipid profile, or on the anthropometric and calorimetric parameters. Leptin and insulin levels did not change significantly.' Study given alongside dietary control in both arms.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'garcinia extract (50% of HCA)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "24563084",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "28 subjects (21 females and 7 males)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a nutraceutical product composed of a combination of Garcinia cambogia, l-carnitine and a seaweed extract of Ascophyllum nodosum",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "28 healthy volunteers (21 females and 7 males, aged 31 ± 5, BMI 22.6 ± 1.7)",
+      "indication_as_stated": "subjective satiety sensations and food preferences",
+      "dose_quote": null,
+      "primary_outcome_quote": "Food preferences and appetite sensations were evaluated by means of the Leeds Food Preferences Questionnaire and visual analog scales, before and after meal, over three hours.",
+      "primary_result_quote": "LIS was associated with a reduction in subjective hunger sensations (p = 0.018) and to an increase in satiety (p = 0.02) and fullness (p = 0.01) ratings.",
+      "sample_size_quote": "28 subjects (21 females and 7 males, aged 31 ± 5, BMI 22.6 ± 1.7) were randomly assigned",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "3-ingredient combination product (Garcinia cambogia, L-carnitine, Ascophyllum nodosum), not isolated garcinia; 'There were no differences in energy intake between study groups' — i.e., subjective satiety ratings changed but not actual measured food/caloric intake. Healthy, normal-weight population, not obese.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia is one of three ingredients in a branded nutraceutical combination product."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "24797657",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Ninety-one overweight and mildly obese subjects (46 in the IQP-GC-101 group, 45 in the placebo group)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "IQP-GC-101 is a patented blend of the standardized extracts of Garcinia cambogia, Camellia sinensis, unroasted Coffea arabica, and Lagerstroemia speciosa",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Ninety-one overweight and mildly obese Caucasian adults",
+      "indication_as_stated": "body weight and body fat mass reduction",
+      "dose_quote": "Subjects took three IQP-GC-101 or placebo tablets, twice a day, 30 min before main meals. All subjects also adhered to a 500 kcal/day energy deficit diet",
+      "primary_outcome_quote": "investigate the efficacy and safety of IQP-GC-101 in reducing body weight and body fat mass in overweight Caucasian adults",
+      "primary_result_quote": "IQP-GC-101 resulted in a mean (±SD) weight loss of 2.26 ± 2.37 kg compared with 0.56 ± 2.34 kg for placebo (pU = 0.002).",
+      "sample_size_quote": "Ninety-one overweight and mildly obese subjects (46 in the IQP-GC-101 group, 45 in the placebo group) completed the study.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "4-ingredient patented blend (Garcinia cambogia, green tea, green coffee, Lagerstroemia speciosa/banaba leaf), not isolated garcinia; both groups also followed a shared calorie-deficit diet.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia is one of four standardized extracts in the patented blend 'IQP-GC-101.'"
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "24944404",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Forty-four subjects were randomized at baseline, and 39 completed the study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "G cambogia (containing 1000 mg of HCA per day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Subjects aged 20-65 years with visceral fat area >90 cm2",
+      "indication_as_stated": "visceral fat accumulation",
+      "dose_quote": "Subjects were randomly assigned to receive treatment for 12 weeks with G cambogia (containing 1000 mg of HCA per day) or placebo.",
+      "primary_outcome_quote": "The primary end point of this study was the effects of 12 weeks of G cambogia extract administration on visceral fat accumulation.",
+      "primary_result_quote": "At 16 weeks, the G cambogia group had significantly reduced visceral, subcutaneous, and total fat areas compared with the placebo group (all indices P<0.001).",
+      "sample_size_quote": "Forty-four subjects were randomized at baseline, and 39 completed the study (G cambogia group, n = 18; placebo group, n = 21)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Positive on the primary visceral-fat-area (CT-measured) endpoint; 'no significant differences in BMI or body weight at week 12' — i.e., fat-distribution effect without a significant overall body-weight effect. Includes a post-treatment 4-week rebound-assessment phase with no rebound observed.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'G cambogia' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26792024",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twelve healthy participants and 8 patients with type 2 diabetes"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "an intraduodenal infusion of HCA (2800 mg in water) or control (water) over 60 min",
+      "combination": false,
+      "route": "intraduodenal infusion",
+      "population_as_stated": "Twelve healthy participants and 8 patients with type 2 diabetes",
+      "indication_as_stated": "glucose absorption, incretin release, and glycemia in response to intraduodenal glucose",
+      "dose_quote": "received an intraduodenal infusion of HCA (2800 mg in water) or control (water) over 60 min",
+      "primary_outcome_quote": "the effects of small intestinal perfusion with HCA on glucose absorption, as well as the incretin and glycemic responses to a subsequent intraduodenal glucose infusion",
+      "primary_result_quote": "In healthy individuals, small intestinal exposure to HCA resulted in a modest reduction in glycemia and stimulation of plasma GIP and glucagon, but no effect on plasma GLP-1 or insulin, or on glucose absorption. HCA had no effect on glycemia in patients with type 2 diabetes.",
+      "sample_size_quote": "Twelve healthy participants and 8 patients with type 2 diabetes received an intraduodenal infusion of HCA",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Delivered via direct intraduodenal (small-intestinal) infusion, NOT oral capsule/tablet ingestion as in other trials in this set — a mechanistic experimental route, not how the supplement is consumed by users. Modest positive effect only in healthy individuals; explicit null in type 2 diabetes patients, the population of greatest clinical interest.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'HCA' matches label spelling, but administered via intraduodenal infusion rather than oral ingestion."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27757272",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A total of 99 obese male patients"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "second group treated with G. cambogia 166 mg/day, and third group treated with orlistat 120 mg/day plus G. cambogia 166 mg/day",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "99 obese male patients (aged 37-46 years)",
+      "indication_as_stated": "visceral adiposity index (VAI) in obesity, alone and combined with orlistat",
+      "dose_quote": "second group treated with G. cambogia 166 mg/day, and third group treated with orlistat 120 mg/day plus G. cambogia 166 mg/day",
+      "primary_outcome_quote": "Body mass index (BMI), VAI, blood pressure, blood glucose, total lipid profile, atherogenic index, and cardiac risk ratio were recorded at baseline and after 3 months.",
+      "primary_result_quote": "The treatment with G. cambogia leads to reduction in VAI P < 0.05, whereas orlistat has a beneficial effect on cardiometabolic profiles without a reduction in VAI P > 0.05.",
+      "sample_size_quote": "A total of 99 obese male patients were recruited with aged range between 37 and 46 years",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Includes an isolated G. cambogia-only arm as well as a combination arm with the prescription weight-loss drug orlistat; the combination arm showed the largest effect. Notably low garcinia dose (166 mg/day) relative to most other trials in this set (typically 1-3 g/day).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'G. cambogia' matches label spelling; tested both alone and combined with the prescription drug orlistat."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27885554",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "57 subjects randomly received three kinds of treatments"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "the combination of Garcinia c ambogia, green coffee extract and L-carnitine on satiety, when administered in a gum format",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "57 subjects",
+      "indication_as_stated": "chewing-gum-mediated snack intake, satiety, and appetite regulation",
+      "dose_quote": null,
+      "primary_outcome_quote": "Food preferences and appetite sensations were evaluated by means of the Leeds Food Preference Questionnaire and visual analog scales.",
+      "primary_result_quote": "There was a significant reduction in low-fat sweet snack intake with placebo gum and the active gum compared to no gum and a reduction in high-fat sweet snack intake with the active gum compared to placebo gum and no gum.",
+      "sample_size_quote": "57 subjects randomly received three kinds of treatments",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "3-ingredient combination (Garcinia cambogia, green coffee extract, L-carnitine) delivered as chewing gum, not a capsule/tablet form, and not isolated garcinia; both active AND placebo gum reduced hunger/increased fullness relative to no-gum condition, suggesting a chewing-mechanism effect independent of the active ingredients for several outcomes.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia is one of three ingredients delivered in a chewing-gum format, a distinct delivery form from capsules/tablets."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29310849",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "five episodes of liver injury in four patients"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "Garcinia gummi-gutta",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "four patients (admitted May 2010 to July 2015 in Slovenia)",
+      "indication_as_stated": "fat-burner-associated acute liver injury",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "We report on five episodes of liver injury in four patients. Liver injury was associated with consumption of different commercially available fat burners: Green tea extract (Camellia sinensis), Garcinia gummi-gutta, green coffee beans, and spirulina (blue-green algae).",
+      "sample_size_quote": "We report on five episodes of liver injury in four patients.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Case series of 4 patients/5 liver-injury episodes across several different 'fat burner' products; only one implicated product was specifically Garcinia gummi-gutta (a synonym for Garcinia cambogia), and that patient's specific outcome is not separately isolated in the abstract from the other three patients' non-garcinia products (green tea, green coffee, spirulina). One patient required liver transplantation for acute liver failure.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia gummi-gutta' is a taxonomic synonym for Garcinia cambogia."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29361938",
+      "design": "prospective_cohort",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "214 subjects",
+          "Prospective, not-randomized controlled intervention trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "GC and GNN (500 mg twice a day, each)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "214 subjects with overweight or obesity",
+      "indication_as_stated": "long-term (6-month) weight loss, considering PLIN4/FTO/ADRB3 genetic polymorphisms",
+      "dose_quote": "We treated 214 subjects with overweight or obesity with GC and GNN (500 mg twice a day, each) for 6 months",
+      "primary_outcome_quote": "evaluating weight, fat mass, visceral fat, basal metabolic rate, and lipid and glucose blood profiles comparing them with basal values",
+      "primary_result_quote": "Treatment produced weight loss, reducing fat mass, visceral fat, lipid and blood glucose profiles while increasing basal metabolic rate.",
+      "sample_size_quote": "We treated 214 subjects with overweight or obesity with GC and GNN",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Not-randomized (no control/placebo arm — 'prospective, not-randomized controlled intervention trial' compares only to baseline values), and combination product (Garcinia cambogia + Glucomannan), not garcinia alone; 'results were... attenuated in carriers of PLIN4, FTO, Trp64Arg polymorphisms.'",
+      "registrations": [
+        "ISRCTN78807585"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Garcinia cambogia (GC) co-administered in equal dose with Glucomannan (GNN)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29802521",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "four cases of acute liver failure in women"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "Garcinia cambogia (GC) extract",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "four women taking GC extract for weight loss",
+      "indication_as_stated": "acute liver failure associated with GC-extract weight-loss supplements",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Here, we present four cases of acute liver failure in women taking GC extract for weight loss, and a literature review of clinical evidences about hepatic toxicity in patients taking dietary supplements containing GC extract.",
+      "sample_size_quote": "four cases of acute liver failure in women taking GC extract for weight loss",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Critical safety case series: 'Garcinia cambogia extract and GC-containing products are some of the most popular dietary supplements currently marketed for weight loss... some herbs are listed as the leading cause of herb-induced liver injury, with a severe or potentially lethal clinical course.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia (GC) extract' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31879192",
+      "design": "case_report",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "title describes hepatotoxicity attributed to a named substance",
+          "abstract not retrievable/empty in this record"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "Garcinia cambogia (title only; no abstract text)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": null,
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": null,
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Abstract field empty in retrieved record; title directly states 'Hepatotoxicity caused by Garcinia cambogia', consistent with the hepatotoxicity signal documented in other kept records (29802521, 29310849, 35710615).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "Title uses 'Garcinia cambogia', matching label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32951714",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "eight trials (including 530 subjects) were included"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Garcinia cambogia supplement",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "obesity indices: weight, BMI, percentage fat mass, waist circumference",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Garcinia cambogia supplement significantly reduced the weight by -1.34 kg (95% CI: -2.62 to -0.07, P = 0.03), BMI by -0.99 kg/m2 (95% CI: -1.48 to -0.49, P < 0.001), PFM by -0.42% (95% CI: -0.77 to -0.06, P = 0.02), and WC by -4.16 cm (95% CI: -7.83 to -0.49, P = 0.02) compared with the placebo group.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Effect sizes are small (e.g., -1.34 kg weight difference); authors note 'several trials have examined the effect of Garcinia cambogia supplement on the weight and body composition, but their results are conflicting' and found a nonlinear dose-response relationship.",
+      "registrations": [],
+      "included_studies": "eight trials, 530 subjects",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia supplement' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33164784",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Healthy women ages 21-41 years"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "1500/750 mg of GCE/HCA under 8 h of fasting",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Healthy women ages 21-41 years (BMI 20.29-25.82)",
+      "indication_as_stated": "pharmacokinetics of HCA absorption, food effect",
+      "dose_quote": "subjects received 1500/750 mg of GCE/HCA under 8 h of fasting",
+      "primary_outcome_quote": "The aim of this study was to determine the main PK parameters of GCE/HCA in healthy women, and to evaluate food effects on HCA absorption.",
+      "primary_result_quote": "Peak plasma concentration (Cmax) and area under the curve of time-concentration (AUC0-10h) were 3-fold and 2-fold lower (p < 0.001, 0.01) in fed-condition, respectively.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Pharmacokinetic/bioavailability study, not an efficacy trial; key finding is that food substantially reduces HCA absorption ('Plasma HCA concentrations were substantially reduced in fed-state'), directly relevant to dosing-timing guidance ('before meals' seen in efficacy trials). Specific enrolled sample size not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'GCE/HCA' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35416190",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "40 overweight/obese women with NAFLD"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "calorie-restricted diet (-700 kcal d-1) accompanied by HCA tablets",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "40 overweight/obese women with non-alcoholic fatty liver disease (NAFLD)",
+      "indication_as_stated": "metabolic, atherogenic and inflammatory biomarkers in NAFLD",
+      "dose_quote": null,
+      "primary_outcome_quote": "Weight, height, body mass index (BMI), and waist circumference (WC) were measured. Fasting blood sugar (FBS), lipid profile, liver enzymes, as well as inflammatory biomarkers were determined at baseline and after the intervention.",
+      "primary_result_quote": "Weight, BMI, WC, and hip circumference as well as FBS, triglyceride (TG), low-density lipoprotein cholesterol (LDL-C) decreased and high-density lipoprotein cholesterol (HDL-C) increased significantly in the HCA group (p < 0.05).",
+      "sample_size_quote": "The present clinical trial was carried out on 40 overweight/obese women with NAFLD.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "HCA given add-on to a calorie-restricted diet common to both arms, not HCA alone against a standard diet; control group (diet-only) also showed significant reductions in several of the same measures; for some atherogenic indices (TC/HDL-C, non-HDL-C/HDL-C) the CONTROL group showed greater improvement than the HCA group; inflammatory markers showed no significant within- or between-group differences. Specific HCA dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'hydroxy citric acid (HCA) extracts from Garcinia cambogia' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35710615",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "reviews multiple published case reports of hepatotoxicity plus regulatory alerts",
+          "no single combined sample size given for the review itself"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "food supplements containing Garcinia cambogia and hydroxycitric acid",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "herb-induced liver injury / hepatotoxicity",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "It is noteworthy that in some cases it demonstrated the relationship between hydroxycitric acid and hepatotoxicity.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "negative",
+      "direction_note": "Narrative letter/review tracing regulatory alerts on HCA/Garcinia-cambogia-associated liver injury from a first 2009 European Food and Drug Administration alert through 2020-2021 European food alerts; concludes with a call for 'more attention to the relationship between a safe use and a more awareness in the intake of these supplements.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia and hydroxycitric acid' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "37249658",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "81 patients were included"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "hydroxycitric acid (HCA) like adjuvant therapy... a food supplement with hydroxycitric acid (HCA), vs. placebo",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "81 patients with calcium oxalate and calcium phosphate lithiasis indicated for extracorporeal shock wave lithotripsy (ESWL)",
+      "indication_as_stated": "adjuvant to shock wave lithotripsy for calcium kidney stones, stone fragmentation",
+      "dose_quote": null,
+      "primary_outcome_quote": "Stone fragmentation, the main efficacy variable.",
+      "primary_result_quote": "100% of the patients, who were given ESWL and took HCA, presented fragmentation while 17% of the patients with placebo did not reach fragmentation (p = 0.03)",
+      "sample_size_quote": "Eighty-one patients were included, 40 in the intervention group with HCA and 41 in the control group with placebo.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Adjuvant to extracorporeal shock wave lithotripsy (ESWL) procedure, not HCA monotherapy for an independent efficacy claim; specific daily HCA dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [
+        "NCT05525130"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'hydroxycitric acid (HCA)' matches label spelling; used as an adjuvant to a procedural intervention (ESWL)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "37476001",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "44 overweight/obese women with NAFLD",
+          "Forty patients completed the trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "individual CRD plus HCA tablets per day",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "44 overweight/obese women with NAFLD (40 completers)",
+      "indication_as_stated": "obesity indices, body composition, appetite, leptin, adiponectin in NAFLD",
+      "dose_quote": null,
+      "primary_outcome_quote": "Obesity indices, body composition, appetite status, and serum levels of leptin and adiponectin were assessed before and after the intervention.",
+      "primary_result_quote": "the reduction in visceral fat in the intervention group was significantly greater than that in the control group (-0.49 kg vs -0.37 kg, p=0.024)",
+      "sample_size_quote": "This study was carried out on 44 overweight/obese women with NAFLD.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "HCA given add-on to a calorie-restricted diet common to both arms, same NAFLD-trial research program as 35416190; 'Intra- and intergroup differences in serum leptin and adiponectin levels and their ratios before and after the trial were not significant' despite this being a stated focus outcome. Specific HCA dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'HCA' matches label spelling; add-on to a calorie-restricted diet."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38151892",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "14 trials involving 623 subjects"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Garcinia cambogia (GC)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "lipid profile: total cholesterol, triglycerides, LDL-C, HDL-C",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Plasma levels of TC (WMD: -6.76 mg/dL; CI: -12.39 to -0.59, p-value = 0.032), and TG (WMD: -24.21 mg/dL; CI: -37.84 to -10.58, p < 0.001) were significantly reduced after GC use, and plasma HDL-C (WMD: 2.95 mg/dL; CI: 2.01 to 3.89, p < 0.001) levels increased.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for TC, TG, HDL-C; explicit null for LDL-C ('not significantly affected'); authors note 'significant heterogeneity' and short intervention durations as limitations, and effects were 'more pronounced for periods longer than 8 weeks.'",
+      "registrations": [],
+      "included_studies": "14 trials, 623 subjects",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia (GC)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38876392",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "eight eligible trials with 330 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Garcinia cambogia (GC)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "serum leptin concentrations",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Our analysis, with no indication of publication bias, showed a significantly decreased effect of GC on leptin compared with the placebo (WMD: -5.01 ng/ml; 95 % CI: -9.22 to -0.80, p = 0.02).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Significant pooled leptin reduction, but 'significant heterogeneity was detected between studies (I2 =93.5 %, p < 0.001)'; quality assessment found 'half of the included trials were considered to have fair quality, while the other half were deemed to have poor quality.'",
+      "registrations": [
+        "CRD42023486370"
+      ],
+      "included_studies": "eight trials, 330 participants",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia (GC)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39943939",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "nine publications with 444 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Garcinia cambogia",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "glycaemic control (fasting blood sugar, insulin) and liver enzymes (ALT, AST)",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Garcinia cambogia has no significant effect on FBS (weighted mean difference (WMD): 1.02 mg/dl, 95% CI: -1.29, 3.33), insulin (WMD: -0.12 mU/L, 95% CI: -1.50, 1.25), AST (Hedges' g: -0.08, 95% CI: -0.43, 0.26), and ALT (Hedges' g: 0.27, 95% CI: -0.20, 0.73).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit overall null result on all four primary measures (FBS, insulin, AST, ALT); notably, subgroup analysis found Garcinia cambogia SIGNIFICANTLY INCREASED insulin and FBS levels in females and in patients with BMI ≥30 kg/m2 — an unfavorable direction in a clinically important subgroup, though duration >8 weeks was associated with decreased insulin.",
+      "registrations": [],
+      "included_studies": "nine publications, 444 participants",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia cambogia' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40209997",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "patients with LUTS/BPH... assigned randomly to one of three groups"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Group B (35 patients) received Garcinia extract 500 mg TID. Group C (36 patients) received the combination of Silodosin, plus Garcinia extract.",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "patients with lower urinary tract symptoms/benign prostatic hyperplasia (LUTS/BPH)",
+      "indication_as_stated": "LUTS/BPH: urinary flow rate, IPSS, post-void residual, prostate volume, PSA",
+      "dose_quote": "Group B (35 patients) received Garcinia extract 500 mg TID.",
+      "primary_outcome_quote": "All participants were assessed for the changes in; the maximum urinary flow rate (Qmax), International Prostate Symptom Score (IPSS), Post-Void Residual (PVR), prostate volume (PV), and serum Prostatic Specific Antigen (PSA) levels, at the baseline and after 12 weeks of treatment.",
+      "primary_result_quote": "After 12 weeks of treatment, all groups showed a significant improvement in both Qmax and IPSS (P >.001) and group C showed the best improvement.",
+      "sample_size_quote": "Group B (35 patients) received Garcinia extract 500 mg TID.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Includes an isolated Garcinia-extract-only arm (Group B) as well as a combination arm with the prescription alpha-blocker silodosin (Group C, best results); an unusual non-weight-loss indication (LUTS/BPH) for this identity.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Garcinia extract' matches label spelling; tested both alone and combined with the prescription drug silodosin."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "9820262",
+    "11134690",
+    "21197150",
+    "24944404",
+    "27757272",
+    "29802521",
+    "31879192",
+    "32951714",
+    "35710615",
+    "38151892",
+    "39943939",
+    "40209997"
+  ],
+  "handoff": [
+    {
+      "pmid": "29802521",
+      "role": "safety",
+      "reason": "Four cases of acute liver failure in women taking Garcinia cambogia extract for weight loss, with a supporting literature review; critical hepatotoxicity signal for a safety reviewer."
+    },
+    {
+      "pmid": "31879192",
+      "role": "safety",
+      "reason": "Case report/review titled 'Hepatotoxicity caused by Garcinia cambogia'; abstract unavailable in this scope — relevant to a hepatic-safety reviewer alongside 29802521 and 35710615."
+    },
+    {
+      "pmid": "29310849",
+      "role": "safety",
+      "reason": "Case series of fat-burner-induced acute liver injury including a patient on Garcinia gummi-gutta (a G. cambogia synonym), one requiring liver transplantation; relevant to a hepatic-safety reviewer."
+    },
+    {
+      "pmid": "18316163",
+      "role": "safety",
+      "reason": "Human RCT specifically designed to address prior animal-study testicular-toxicity signals for HCA/Garcinia cambogia by measuring serum sex hormones; relevant to a reproductive-safety reviewer."
+    },
+    {
+      "pmid": "26792024",
+      "role": "dosing",
+      "reason": "Intraduodenal-infusion mechanistic study showing HCA modestly affects glycemia in healthy individuals but not in type 2 diabetics; relevant to a diabetes-interaction/dosing reviewer, and route differs from standard oral capsule use."
+    },
+    {
+      "pmid": "33164784",
+      "role": "dosing",
+      "reason": "Phase I pharmacokinetic study showing food substantially reduces HCA absorption (3-fold lower Cmax when fed vs. fasted); directly relevant to a dosing-timing reviewer, since most efficacy trials specify dosing 30-60 minutes before meals."
+    },
+    {
+      "pmid": "34307603",
+      "role": "safety",
+      "reason": "Broad systematic review/meta-analysis of herb-induced liver injury; rejected here as too broad to confirm Garcinia-cambogia-isolated data, but may contain garcinia-specific case data relevant to a hepatotoxicity-signal reviewer."
+    }
+  ],
+  "identity_notes": "The retrieved literature for 'garcinia_cambogia' is heavily contaminated (82 of 122 records) by two taxonomically distinct Garcinia species with entirely different active compounds and indications: Garcinia mangostana (mangosteen; xanthones/alpha-mangostin, studied for schizophrenia/bipolar depression, periodontal disease, antimicrobial/anticancer effects) and Garcinia kola (bitter kola; kolaviron, studied for cardiovascular/hepatic/reproductive protection and glaucoma) — both rejected here as different_substance since 'Garcinia cambogia' on a supplement label refers specifically to hydroxycitric-acid-containing G. cambogia, not these other species. The single most important applicability caveat for the genuine G. cambogia/HCA evidence base: a recurring and serious hepatotoxicity signal exists across multiple independent case series (four cases of acute liver failure in PMID 29802521, one requiring transplant in the related fat-burner case series PMID 29310849, plus PMID 31879192 and a regulatory-alert review PMID 35710615 tracing European food-safety alerts from 2009 onward), despite most randomized efficacy trials themselves reporting no significant adverse events at typical doses (up to 2800 mg/day). Efficacy findings for weight/fat loss are consistently small in magnitude and inconsistent across trials (the largest single RCT, n=135, found NO significant weight-loss benefit over placebo), and many 'positive' trials tested Garcinia cambogia only as one component of multi-ingredient combination products (with glucomannan, orlistat, silodosin, chromium, Gymnema sylvestre, green tea, green coffee, L-carnitine, etc.) rather than as an isolated ingredient."
+}

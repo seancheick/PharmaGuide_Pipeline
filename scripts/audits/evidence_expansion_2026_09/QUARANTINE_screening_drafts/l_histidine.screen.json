@@ -1,0 +1,1022 @@
+{
+  "canonical_id": "l_histidine",
+  "screened": 160,
+  "kept": 6,
+  "rejected": [
+    {
+      "pmid": "463800",
+      "reason": "off_topic",
+      "note": "Short-term effects of dietary protein intake on urinary 3-methylhistidine excretion (a muscle-protein-breakdown marker); measures a histidine-derived catabolic marker, not histidine supplementation."
+    },
+    {
+      "pmid": "952756",
+      "reason": "off_topic",
+      "note": "Effect of topical salicylic acid on normal skin desquamation; unrelated to histidine (apparent keyword false match)."
+    },
+    {
+      "pmid": "2171853",
+      "reason": "not_intervention",
+      "note": "Effect of a test meal (with/without protein) on muscle and plasma free amino acid concentrations, including histidine as one of many measured amino acids; observational biomarker study, not a histidine supplementation intervention."
+    },
+    {
+      "pmid": "3591728",
+      "reason": "different_substance",
+      "note": "Bioavailability of zinc from zinc-histidine complexes versus zinc sulfate; the studied active agent is zinc (using histidine only as a chelating ligand), not free L-histidine itself."
+    },
+    {
+      "pmid": "3883917",
+      "reason": "off_topic",
+      "note": "Double-blind trial of etretinate versus ibuprofen in psoriatic arthritis; unrelated to histidine (apparent keyword false match, no histidine intervention described)."
+    },
+    {
+      "pmid": "6796774",
+      "reason": "off_topic",
+      "note": "Case report of renal histidinuria (a rare genetic amino-acid transport disorder) using a peroral histidine LOADING TEST as a diagnostic tool; diagnostic test, not a therapeutic histidine supplementation study."
+    },
+    {
+      "pmid": "8229500",
+      "reason": "different_substance",
+      "note": "Copper-histidine subcutaneous therapy for Menkes disease (a genetic copper-transport disorder); the therapeutic active agent is copper delivered via a histidine chelate complex, administered subcutaneously, not oral free L-histidine supplementation."
+    },
+    {
+      "pmid": "8757574",
+      "reason": "off_topic",
+      "note": "Routine fentanyl infusions for pain/stress reduction in infants with respiratory distress syndrome; unrelated to histidine (apparent keyword false match)."
+    },
+    {
+      "pmid": "11113466",
+      "reason": "off_topic",
+      "note": "Description of the Ames Salmonella/microsome mutagenicity assay methodology; a laboratory genotoxicity testing method, not a human histidine study (histidine-auxotroph bacterial strains are used as the assay's biological indicator, unrelated to human supplementation)."
+    },
+    {
+      "pmid": "15114104",
+      "reason": "not_this_route",
+      "note": "Comparison of histidine-tryptophan-ketoglutarate (HTK) organ-preservation solution versus University of Wisconsin solution in pancreas transplantation; histidine is a buffer component of an ex vivo organ-preservation perfusate, not an oral human dietary supplement."
+    },
+    {
+      "pmid": "15808630",
+      "reason": "not_this_route",
+      "note": "Comparison of Celsior and HTK organ-preservation solutions in liver transplantation; histidine is a buffer component of an ex vivo organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "16908310",
+      "reason": "not_this_route",
+      "note": "Randomized trial comparing University of Wisconsin versus histidine-tryptophan-ketoglutarate (HTK) solutions for hepatic graft preservation; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "17665493",
+      "reason": "not_this_route",
+      "note": "Systematic review of HTK versus University of Wisconsin solution for liver transplantation; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "18450547",
+      "reason": "off_topic",
+      "note": "Case report of plasmacytic skin infiltration in multiple myeloma; unrelated to histidine (apparent keyword false match)."
+    },
+    {
+      "pmid": "18811882",
+      "reason": "off_topic",
+      "note": "Meta-analysis of microsomal epoxide hydrolase gene polymorphisms and COPD risk; genetic association study unrelated to histidine supplementation."
+    },
+    {
+      "pmid": "18954363",
+      "reason": "not_this_route",
+      "note": "Multicenter trial comparing HTK versus University of Wisconsin perfusion solution in pancreas transplantation; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "19413574",
+      "reason": "not_intervention",
+      "note": "Acute L-histidine depletion (and separately L-tyrosine/L-phenylalanine depletion) paradigm testing effects on sensory/motor processes; the intervention removes rather than supplements histidine, used as a histaminergic-function-lowering research model, not a supplementation study."
+    },
+    {
+      "pmid": "19487926",
+      "reason": "different_substance",
+      "note": "N-acetylcarnosine eyedrop therapy for cataracts; a distinct carnosine-derived compound in a topical ophthalmic formulation, not free L-histidine, and belongs to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "21157980",
+      "reason": "off_topic",
+      "note": "Meta-analysis of ADH1B/ALDH2 gene polymorphisms and esophageal cancer risk; genetic association study unrelated to histidine supplementation."
+    },
+    {
+      "pmid": "22221739",
+      "reason": "not_this_route",
+      "note": "Systematic review of preservation solutions (including histidine-tryptophan-ketoglutarate) for static cold storage of kidney allografts; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "23020859",
+      "reason": "not_this_route",
+      "note": "Effect of minimized cardiopulmonary bypass perfusion circuit on brain-injury markers including carnosinase; surgical perfusion/biomarker study unrelated to oral histidine supplementation, and concerns carnosinase (a carnosine-metabolizing enzyme), not histidine itself."
+    },
+    {
+      "pmid": "23363494",
+      "reason": "not_this_route",
+      "note": "Trial protocol comparing pulmonary perfusion with oxygenated blood or Custodiol HTK solution during cardiac surgery; organ/tissue perfusion solution, not oral supplementation."
+    },
+    {
+      "pmid": "23618477",
+      "reason": "different_substance",
+      "note": "Carnosine treatment RCT for Gulf War illness; concerns the dipeptide L-carnosine, not free L-histidine, and belongs to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "24064511",
+      "reason": "off_topic",
+      "note": "Phase I safety/immunogenicity study of a Pseudomonas aeruginosa vaccine; unrelated to histidine (apparent keyword false match, likely from histidine-tag vaccine protein purification terminology)."
+    },
+    {
+      "pmid": "24109584",
+      "reason": "not_this_route",
+      "note": "Systematic review protocol comparing single-dose histidine-tryptophan-ketoglutarate versus intermittent cardioplegia solutions; organ/cardiac preservation solution, not oral supplementation, and a protocol without results."
+    },
+    {
+      "pmid": "24349972",
+      "reason": "not_this_route",
+      "note": "Systematic review of Custodiol (HTK) solution for myocardial protection/preservation; cardiac perfusion solution, not oral supplementation."
+    },
+    {
+      "pmid": "24374537",
+      "reason": "not_this_route",
+      "note": "Systematic review/meta-analysis of preservation solutions (including HTK) for liver allograft storage on transplant outcomes; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "24705678",
+      "reason": "off_topic",
+      "note": "Randomized trial of pulmonary rehabilitation exercise for exercise limitation in IPF patients; unrelated to histidine (apparent keyword false match)."
+    },
+    {
+      "pmid": "24835231",
+      "reason": "off_topic",
+      "note": "Association of histidine decarboxylase/histamine-pathway gene polymorphisms with breast cancer risk; genetic association study of histamine-pathway genes, not histidine supplementation."
+    },
+    {
+      "pmid": "25429531",
+      "reason": "not_this_route",
+      "note": "Multicenter RCT of a new HC-A II kidney-preservation solution; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "25553350",
+      "reason": "off_topic",
+      "note": "Meta-analysis of CASP8 gene polymorphism and cancer susceptibility; genetic association study unrelated to histidine supplementation."
+    },
+    {
+      "pmid": "25747472",
+      "reason": "off_topic",
+      "note": "Investigation of hydrogen sulfide's role in scavenging 4-HNE (a lipid peroxidation product); mechanistic chemistry/biology study, not a histidine supplementation study (apparent keyword false match)."
+    },
+    {
+      "pmid": "26036479",
+      "reason": "not_this_route",
+      "note": "Comparison of IGL-1 and HTK preservation solutions in deceased-donor liver transplantation; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "26345853",
+      "reason": "off_topic",
+      "note": "Genome-scale meta-analysis of DNA methylation in lung adenocarcinoma progression; epigenetics study unrelated to histidine supplementation."
+    },
+    {
+      "pmid": "26379905",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics in bladder cancer; broad biomarker-discovery review where histidine may appear only as one of many measured metabolites, not a histidine intervention study."
+    },
+    {
+      "pmid": "26526678",
+      "reason": "not_this_route",
+      "note": "Systematic review/meta-analysis of three preservation solutions (including HTK) for cold storage of heart allografts; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "27386336",
+      "reason": "animal_or_invitro",
+      "note": "Effects of dietary lysine levels on plasma free amino acid profile (including histidine) in finishing pigs; animal (swine) nutrition study."
+    },
+    {
+      "pmid": "27406953",
+      "reason": "off_topic",
+      "note": "Analysis of IDH-1 mutations and preoperative glioma-related epilepsy; genetic/oncology study unrelated to histidine supplementation."
+    },
+    {
+      "pmid": "27562843",
+      "reason": "off_topic",
+      "note": "Mast cell degranulation and de novo HISTAMINE formation in postexercise vasodilation; concerns histamine (a downstream metabolite), not histidine supplementation itself."
+    },
+    {
+      "pmid": "27601137",
+      "reason": "not_intervention",
+      "note": "Meta-analysis of clinical metabolic profiling (metabolomics) studies in cancer; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "28342911",
+      "reason": "off_topic",
+      "note": "Basophils, high-affinity IgE receptors, and CCL2 in human anaphylaxis; immunology study unrelated to histidine supplementation."
+    },
+    {
+      "pmid": "28492082",
+      "reason": "not_intervention",
+      "note": "Metabolomics investigation of metabolic changes in obese men after combined exercise training; histidine (if measured) would be one of many biomarkers in an exercise-training study, not a histidine intervention."
+    },
+    {
+      "pmid": "28734125",
+      "reason": "not_this_route",
+      "note": "Systematic review/meta-analysis of cold in situ perfusion and preservation of the hepatic allograft; organ-preservation perfusate methods, not oral supplementation."
+    },
+    {
+      "pmid": "28790842",
+      "reason": "off_topic",
+      "note": "Meta-analysis of FHIT gene expression/hypermethylation and liver cancer risk; genetic/epigenetic study unrelated to histidine supplementation."
+    },
+    {
+      "pmid": "28819352",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics biomarker discovery in ovarian cancer; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "28844527",
+      "reason": "not_this_route",
+      "note": "Systematic review/meta-analysis of cold in situ perfusion and preservation for pancreas transplantation; organ-preservation perfusate methods, not oral supplementation."
+    },
+    {
+      "pmid": "28910200",
+      "reason": "different_substance",
+      "note": "Comparison of two beta-alanine dosing protocols on muscle carnosine elevation; administered substance is beta-alanine, and outcome concerns carnosine, not free L-histidine (belongs to separate identities)."
+    },
+    {
+      "pmid": "29199300",
+      "reason": "off_topic",
+      "note": "Characterizing protein-protein interactions in high-concentration monoclonal antibody formulations; pharmaceutical formulation/biophysics study, not a human histidine study (histidine buffer used as an excipient)."
+    },
+    {
+      "pmid": "29343621",
+      "reason": "off_topic",
+      "note": "Impact of stainless-steel exposure on polysorbate 80 oxidation in histidine-buffered placebo/active antibody formulations; pharmaceutical manufacturing/stability study, not a human histidine study."
+    },
+    {
+      "pmid": "29368111",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of taurine supplementation on growth in low-birth-weight infants; taurine is a distinct amino acid/sulfonic acid, not histidine."
+    },
+    {
+      "pmid": "29510817",
+      "reason": "not_this_route",
+      "note": "Comparison of pulmonary artery perfusion versus no perfusion during cardiopulmonary bypass; surgical perfusion technique study, not oral histidine supplementation."
+    },
+    {
+      "pmid": "29567852",
+      "reason": "different_substance",
+      "note": "Protocol for a systematic review of carnosine and other histidine-containing dipeptides on chronic disease risk factors; concerns the carnosine/HCD category (separate l_carnosine identity) and is a protocol without results."
+    },
+    {
+      "pmid": "29713134",
+      "reason": "not_this_route",
+      "note": "Meta-analysis comparing preservation solutions on liver transplantation outcomes; organ-preservation perfusate methods, not oral supplementation."
+    },
+    {
+      "pmid": "30003336",
+      "reason": "different_substance",
+      "note": "Comparison of beta-alanine formulations on skeletal muscle carnosine and histidine content following a muscle-damaging protocol; administered substance is beta-alanine, and histidine content is only a measured muscle biomarker, not the supplemented agent."
+    },
+    {
+      "pmid": "30241409",
+      "reason": "not_this_route",
+      "note": "Lung protection strategies during cardiopulmonary bypass affecting bronchoalveolar fluid/lung tissue composition; surgical perfusion study, not oral histidine supplementation."
+    },
+    {
+      "pmid": "30469433",
+      "reason": "not_this_route",
+      "note": "Lung protection strategies during cardiopulmonary bypass affecting blood electrolytes/metabolites; surgical perfusion study, not oral histidine supplementation."
+    },
+    {
+      "pmid": "30591380",
+      "reason": "not_intervention",
+      "note": "RCT of protein bioavailability from Wolffia globosa (duckweed), a novel aquatic plant protein source; histidine (if measured) would be one of many amino acids assessed for protein-quality purposes, not a histidine supplementation intervention."
+    },
+    {
+      "pmid": "30594472",
+      "reason": "different_substance",
+      "note": "Systematic review/evidence-based guideline for Menkes disease diagnosis/treatment (copper-histidine therapy); the therapeutic active agent is copper delivered via a histidine chelate, not oral free L-histidine."
+    },
+    {
+      "pmid": "30619089",
+      "reason": "not_intervention",
+      "note": "Observational study of depot-specific adipose tissue metabolite profiles following aerobic exercise; histidine (if measured) is one of many metabolites in a biomarker-profiling study, not a supplementation intervention."
+    },
+    {
+      "pmid": "30830397",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics-based biomarker discovery in pancreatic cancer; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "30908879",
+      "reason": "not_this_route",
+      "note": "Randomized trial of antegrade hepatic artery/portal vein perfusion techniques in living donor liver transplantation; surgical perfusion technique study, not oral histidine supplementation."
+    },
+    {
+      "pmid": "30980076",
+      "reason": "different_substance",
+      "note": "Systematic risk assessment/meta-analysis of oral beta-alanine supplementation; administered substance is beta-alanine, not free L-histidine (belongs to a separate identity)."
+    },
+    {
+      "pmid": "31020811",
+      "reason": "off_topic",
+      "note": "Study of histaminergic transmission and amyotrophic lateral sclerosis progression; concerns histamine signaling/ALS drug mechanisms, not histidine supplementation."
+    },
+    {
+      "pmid": "31083704",
+      "reason": "not_intervention",
+      "note": "RCT of preoperative oral carbohydrate intake on catabolism/nutrition/adipocytokines during minor surgery; histidine (if measured) would be one of many biomarkers, not the supplemented agent (carbohydrate is the intervention)."
+    },
+    {
+      "pmid": "31204129",
+      "reason": "not_this_route",
+      "note": "Noninferiority RCT comparing single-dose versus repetitive cardioplegia dosing for myocardial protection; cardioplegia (surgical cardiac-arrest) solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "31211853",
+      "reason": "animal_or_invitro",
+      "note": "Inhibition of amyloid-induced toxicity by ergothioneine in a transgenic C. elegans model; ergothioneine is a distinct histidine-derived compound, and this is an invertebrate animal model study."
+    },
+    {
+      "pmid": "31331754",
+      "reason": "not_this_route",
+      "note": "Comparison of University of Wisconsin and HTK solutions in ex-situ liver resection/autotransplantation; organ-preservation perfusate, not oral supplementation."
+    },
+    {
+      "pmid": "31527081",
+      "reason": "off_topic",
+      "note": "Manganese co-localization with calcium/phosphorus in algal acidocalcisomes; plant/algal cell biology study unrelated to human histidine supplementation."
+    },
+    {
+      "pmid": "31557000",
+      "reason": "off_topic",
+      "note": "Library selection of randomized (βα)8-barrel enzyme repertoires and gene expression; protein-engineering/synthetic-biology study unrelated to human histidine supplementation."
+    },
+    {
+      "pmid": "31561379",
+      "reason": "not_intervention",
+      "note": "Meta-analysis of gut bacteria specific to Alzheimer's-associated diseases using population metagenomics/metabolomics; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "31803558",
+      "reason": "off_topic",
+      "note": "Case report of scombroid (histamine) poisoning from tilapia consumption; concerns dietary histamine toxicity from spoiled fish, not histidine supplementation."
+    },
+    {
+      "pmid": "31916678",
+      "reason": "not_intervention",
+      "note": "Human intervention trial characterizing markers of chicken and beef intake using targeted LC-MS/MS; histidine (if measured) would be a dietary-intake biomarker, not the supplemented agent (meat intake is the intervention)."
+    },
+    {
+      "pmid": "32183423",
+      "reason": "not_intervention",
+      "note": "Study of whey-protein appetite-suppressant/GLP-1 effects associated with circulating amino acid levels in obese subjects; whey protein is the intervention, with amino acids including histidine measured only as biomarkers."
+    },
+    {
+      "pmid": "32221803",
+      "reason": "not_intervention",
+      "note": "Systematic review of salivary metabolites to detect cancer patients; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "32325914",
+      "reason": "different_substance",
+      "note": "Anserine (a methylated analog of carnosine) reversing exercise-induced oxidative stress; a distinct histidine-containing dipeptide, not free L-histidine, and belongs to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "32402870",
+      "reason": "animal_or_invitro",
+      "note": "Metabolomics/transcriptomics analysis of DEHP exposure effects in MCF-7 breast cancer cells; in vitro cell-line toxicology study."
+    },
+    {
+      "pmid": "32473419",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics in rheumatoid arthritis development/progression; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "32594145",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of carnosine and other histidine-containing dipeptides on dyslipidemia; concerns the carnosine/HCD category, belongs to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "32613785",
+      "reason": "off_topic",
+      "note": "Report of scombroid (histamine) food poisoning among hospital personnel; concerns dietary histamine toxicity from spoiled fish, not histidine supplementation."
+    },
+    {
+      "pmid": "32693155",
+      "reason": "off_topic",
+      "note": "Chemistry study of polysorbate 20/80 degradation catalysed by histidine chloride buffer; pharmaceutical excipient/formulation chemistry study, not a human histidine study."
+    },
+    {
+      "pmid": "32922303",
+      "reason": "different_substance",
+      "note": "Systematic review of the muscle carnosine response to beta-alanine supplementation; administered substance is beta-alanine, and outcome is carnosine, not free L-histidine."
+    },
+    {
+      "pmid": "32984902",
+      "reason": "duplicate",
+      "note": "Corrigendum to the carnosine/histidine-containing-dipeptide dyslipidemia review; a correction notice tied to a carnosine/HCD study belonging to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "33036786",
+      "reason": "not_intervention",
+      "note": "Review of metabolomics 'fingerprints' in diabetic nephropathy development/progression; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "33106272",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics applications in ovarian cancer management; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "33197997",
+      "reason": "not_this_route",
+      "note": "RCT comparing del Nido and HTK cardioplegia solutions in pediatric open-heart surgery; cardioplegia (surgical cardiac-arrest) solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "33268560",
+      "reason": "not_intervention",
+      "note": "Meta-analysis of circulating metabolites and stroke risk across prospective cohorts; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "33487303",
+      "reason": "off_topic",
+      "note": "Discussion of magnesium and imidazole propionate (a gut-bacterial histidine-derived metabolite); mechanistic/commentary piece, not a histidine supplementation study."
+    },
+    {
+      "pmid": "33487412",
+      "reason": "not_this_route",
+      "note": "Comparison of del Nido and HTK cardioplegic solutions in minimally invasive cardiac surgery; cardioplegia (surgical cardiac-arrest) solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "33547671",
+      "reason": "not_this_route",
+      "note": "Meta-analysis of HTK versus multidose cardioplegias for myocardial protection in adult cardiac surgery; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "33635238",
+      "reason": "not_this_route",
+      "note": "RCT of HTK solution versus blood cardioplegia in cardiac surgical procedures; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "33687176",
+      "reason": "not_intervention",
+      "note": "Crossover trial examining how exercise intensity influences plasma and sweat amino acid concentrations, including histidine; observational biomarker study of exercise physiology, not a histidine supplementation intervention."
+    },
+    {
+      "pmid": "33704575",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of L-carnosine in children with autism spectrum disorders; concerns the dipeptide L-carnosine, belongs to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "33948897",
+      "reason": "animal_or_invitro",
+      "note": "Chemistry study of potential ternary chromium-histidine-DNA complex formation and carcinogenicity implications; in vitro molecular chemistry/toxicology study, not a human histidine supplementation study."
+    },
+    {
+      "pmid": "34024507",
+      "reason": "different_substance",
+      "note": "Meta-analysis of beta-alanine supplementation on Yo-Yo test performance; administered substance is beta-alanine, not free L-histidine."
+    },
+    {
+      "pmid": "34419509",
+      "reason": "off_topic",
+      "note": "Review of histamine and scombrotoxin (fish poisoning); concerns dietary histamine toxicity, not histidine supplementation."
+    },
+    {
+      "pmid": "34575593",
+      "reason": "different_substance",
+      "note": "Bioavailability comparison of beta-alanine delivery formulations; administered substance is beta-alanine, not free L-histidine."
+    },
+    {
+      "pmid": "34600812",
+      "reason": "not_this_route",
+      "note": "Network meta-analysis of myocardial protection with different cardioplegia solutions in adult cardiac surgery; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "34648231",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolic alterations underlying IgE-mediated food allergy in children; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "34715934",
+      "reason": "different_substance",
+      "note": "Protocol for a pilot RCT of ergothioneine supplementation in metabolic syndrome; ergothioneine is a distinct histidine-derived betaine compound, not free L-histidine, and this is a protocol without results."
+    },
+    {
+      "pmid": "34742239",
+      "reason": "not_intervention",
+      "note": "Systematic review/pathway mapping of metabolic alterations underlying pediatric obesity; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "34927019",
+      "reason": "animal_or_invitro",
+      "note": "Plant protein effects on serum cholesterol via gut microbiota/metabolites in hypercholesterolemic hamsters; animal model study."
+    },
+    {
+      "pmid": "35111801",
+      "reason": "animal_or_invitro",
+      "note": "Amino acid sensing/utilization in response to dietary aromatic amino acid supplementation in an LPS-induced inflammation piglet model; animal (swine) study, and concerns aromatic amino acids generally, not histidine specifically."
+    },
+    {
+      "pmid": "35244373",
+      "reason": "not_this_route",
+      "note": "Comparison of Custodiol (HTK) versus blood cardioplegia via myocardial immunohistochemistry and clinical outcomes; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "35642063",
+      "reason": "not_this_route",
+      "note": "Systematic review/meta-analysis of HTK solution versus multidose cardioplegia for myocardial protection; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "35774548",
+      "reason": "not_intervention",
+      "note": "Development of a serum fatty-acid/amino-acid-based indicator of saturated fat overeating and type 2 diabetes risk; histidine (if included) is one of many biomarker components of a composite indicator, not a supplementation intervention."
+    },
+    {
+      "pmid": "35883378",
+      "reason": "animal_or_invitro",
+      "note": "Meta-analysis of anti-nutritional factors and protein quality indicators in soybean meal for Nile tilapia diets; animal (aquaculture) nutrition study."
+    },
+    {
+      "pmid": "35889949",
+      "reason": "not_intervention",
+      "note": "Meta-analysis of gut microbiota characteristics in people with obesity using existing datasets; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "35969711",
+      "reason": "animal_or_invitro",
+      "note": "Influence of age/feed ingredients on ileal amino acid digestibility in broiler chickens; animal (poultry) nutrition study."
+    },
+    {
+      "pmid": "36008760",
+      "reason": "off_topic",
+      "note": "Evolutionary study of transcriptional regulation of histidine metabolism in Gram-positive bacteria; bacterial molecular biology study, not a human histidine supplementation study."
+    },
+    {
+      "pmid": "36145235",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolome/gut microbiota for predicting necrotizing enterocolitis and spontaneous intestinal perforation; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "36171552",
+      "reason": "off_topic",
+      "note": "Development of a computational tool (pHisPred) for predicting histidine phosphorylation sites in proteins; bioinformatics/proteomics tool development, not a human histidine supplementation study."
+    },
+    {
+      "pmid": "36176979",
+      "reason": "not_this_route",
+      "note": "Network meta-analysis of different cardioplegia types in cardiac surgery; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "36290685",
+      "reason": "not_intervention",
+      "note": "RCT of phenol-enriched olive oils on serum metabonome and cardiometabolic parameters; olive oil phenolics are the intervention, with histidine (if measured) only a biomarker."
+    },
+    {
+      "pmid": "36552244",
+      "reason": "not_intervention",
+      "note": "Observational study of plasma amino acids/acylcarnitines associated with adolescent swimmer performance; biomarker-association study, not a histidine supplementation intervention."
+    },
+    {
+      "pmid": "36638809",
+      "reason": "not_this_route",
+      "note": "Prospective comparison of Bretschneider HTK and blood cardioplegia; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "37036372",
+      "reason": "not_this_route",
+      "note": "RCT of a novel graft-holding solution in hair transplantation; ex vivo graft-preservation solution used in a surgical procedure, not oral histidine supplementation."
+    },
+    {
+      "pmid": "37042756",
+      "reason": "not_intervention",
+      "note": "Meta-analysis of microbial changes associated with osteoporosis; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "37394168",
+      "reason": "off_topic",
+      "note": "Effects of long-term herbaceous plant restoration on soil microbial communities/metabolic profiles in coal-gangue-contaminated soil; environmental/agricultural science study, not human histidine supplementation."
+    },
+    {
+      "pmid": "37640020",
+      "reason": "not_intervention",
+      "note": "Nontargeted metabolomics study of the histidine metabolic pathway's contribution to clozapine-induced sialorrhea; observational drug-side-effect biomarker study, not a histidine supplementation intervention."
+    },
+    {
+      "pmid": "37798628",
+      "reason": "not_this_route",
+      "note": "RCT of Custodiol versus blood cardioplegia in pediatric cardiac surgery; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "37816000",
+      "reason": "not_intervention",
+      "note": "Serum metabolomics of treatment response in myasthenia gravis; broad biomarker-discovery study, not a histidine intervention study."
+    },
+    {
+      "pmid": "37965876",
+      "reason": "not_this_route",
+      "note": "Comparative study of redosing long-acting cardioplegic solutions in adult cardiac surgery; cardioplegia solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "38013229",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of histidine-containing dipeptide (carnosine, anserine, beta-alanine) supplementation on delayed recall; concerns the HCD/carnosine category, belongs to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "38029644",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of human metabolomics and rheumatoid arthritis; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "38172006",
+      "reason": "different_substance",
+      "note": "RCT of carnosine supplementation on glucose control in pre-diabetes/type 2 diabetes; concerns the dipeptide L-carnosine, belongs to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "38325713",
+      "reason": "not_intervention",
+      "note": "Review of metabolomics and lipidomics in non-small cell lung cancer; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "38331891",
+      "reason": "not_intervention",
+      "note": "Study of microbial-derived imidazole propionate (a histidine-derived gut-bacterial metabolite) linking microbiome alterations to heart failure severity; observational biomarker/mechanistic study, not a histidine supplementation intervention."
+    },
+    {
+      "pmid": "38542390",
+      "reason": "not_intervention",
+      "note": "RCT of standard-dose cholecalciferol (vitamin D) effects on glucose and glutamine in obesity-related hypertension; vitamin D is the intervention, with amino acids including histidine/glutamine only measured biomarkers."
+    },
+    {
+      "pmid": "38814343",
+      "reason": "not_intervention",
+      "note": "Observational study of pre-treatment amino acid levels and paclitaxel-induced peripheral neuropathy risk; biomarker-association study, not a histidine supplementation intervention."
+    },
+    {
+      "pmid": "38891881",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of metabolomics and cardiovascular risk in heart failure patients; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "38903973",
+      "reason": "animal_or_invitro",
+      "note": "Comparison of 'Huaxi-1' versus HTK cardioplegia in an animal model; animal study of a cardioplegia (surgical) solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "38948380",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics in knee osteoarthritis; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "39126852",
+      "reason": "off_topic",
+      "note": "Untargeted metabolomics of fungal-microalgae synergistic interactions under cadmium exposure; environmental microbiology study, not human histidine supplementation."
+    },
+    {
+      "pmid": "39241630",
+      "reason": "off_topic",
+      "note": "Antimony toxicity effects on nitrogen/sulfur metabolism in rice plants; plant toxicology/agricultural study, not human histidine supplementation."
+    },
+    {
+      "pmid": "39246394",
+      "reason": "not_intervention",
+      "note": "Effect of green banana and pineapple fibre powder consumption on host gut microbiome; fiber powder is the intervention, not histidine."
+    },
+    {
+      "pmid": "39271063",
+      "reason": "not_intervention",
+      "note": "Metabolomics study of probiotic Lactobacillus plantarum 299v supplementation in major depression; probiotic is the intervention, with histidine (if measured) only a metabolomic biomarker."
+    },
+    {
+      "pmid": "39546323",
+      "reason": "off_topic",
+      "note": "RCT of reducing indoor particulate matter exposure during sleep on cognitive benefits; unrelated to histidine (apparent keyword false match)."
+    },
+    {
+      "pmid": "39602052",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of maternal blood metabolomics and gestational diabetes risk; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "39705879",
+      "reason": "different_substance",
+      "note": "Non-inferiority trial of NPC-25 (zinc histidine hydrate) versus zinc acetate dihydrate for hypozincemia; the therapeutic active agent is zinc delivered via a histidine salt complex, not free L-histidine."
+    },
+    {
+      "pmid": "39739063",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomic profiling for prostate cancer diagnosis; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "39741661",
+      "reason": "animal_or_invitro",
+      "note": "Comparison of Del Nido and HTK cardioplegia solutions in an animal study with prolonged ischaemia; animal study of a cardioplegia (surgical) solution, not oral histidine supplementation."
+    },
+    {
+      "pmid": "40025012",
+      "reason": "not_intervention",
+      "note": "Study of prenatal metal exposure, child neurodevelopment, and metabolic pathway perturbation; observational exposure/biomarker study, not a histidine supplementation intervention."
+    },
+    {
+      "pmid": "40045631",
+      "reason": "animal_or_invitro",
+      "note": "Effect of processing techniques on energy content/amino acid digestibility in corn germ meal fed to growing pigs; animal (swine) feed study."
+    },
+    {
+      "pmid": "40086804",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of metabolic pathways and biomarkers in glaucoma; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "40595242",
+      "reason": "not_intervention",
+      "note": "Meta-analysis of urinary metabolite genome-wide association studies (GWAS); genetic/metabolomics association study, not a histidine intervention study."
+    },
+    {
+      "pmid": "40860967",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics biomarkers for ischemic stroke; broad biomarker-discovery review, not a histidine intervention study."
+    },
+    {
+      "pmid": "40865441",
+      "reason": "off_topic",
+      "note": "Preparation and safety assessment of a BADGE-histidine adduct formed from epoxy-coated food cans; food-packaging chemical-migration safety study, not human histidine supplementation."
+    },
+    {
+      "pmid": "40885396",
+      "reason": "off_topic",
+      "note": "Study of bacterial 'BR-bodies' facilitating stress adaptation in Caulobacter crescentus under copper stress; bacterial cell biology study, not human histidine supplementation."
+    },
+    {
+      "pmid": "41176176",
+      "reason": "not_intervention",
+      "note": "RCT of Health Qigong walking practice on anxiety and serum metabolites in type 2 diabetes; Qigong exercise is the intervention, with histidine (if measured) only a biomarker."
+    },
+    {
+      "pmid": "41377459",
+      "reason": "not_this_route",
+      "note": "Systematic review of static cold perfusion solutions in clinical limb transplantation; organ/limb-preservation perfusate, not oral histidine supplementation."
+    },
+    {
+      "pmid": "41713420",
+      "reason": "off_topic",
+      "note": "Study tuning mechanosensory receptor sensitivity through histidine scanning mutagenesis; protein-engineering/biophysics study, not human histidine supplementation."
+    },
+    {
+      "pmid": "41935270",
+      "reason": "not_intervention",
+      "note": "Integration of a cohort study and RCT examining liver fat content and plasma metabolite profiles; broad biomarker-association study, not a histidine supplementation intervention specifically."
+    },
+    {
+      "pmid": "42308284",
+      "reason": "different_substance",
+      "note": "RCT of carnosine supplementation on physical endurance; concerns the dipeptide L-carnosine, belongs to the separate l_carnosine identity."
+    },
+    {
+      "pmid": "42695325",
+      "reason": "different_substance",
+      "note": "Systematic review of the vascular/neuronal role of L-carnosine; concerns the dipeptide L-carnosine, belongs to the separate l_carnosine identity."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "342692",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "patients treated with either L-histidine 4.5 g daily, or placebo, for 30 weeks"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "L-histidine 4.5 g daily",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "patients with rheumatoid arthritis",
+      "indication_as_stated": "rheumatoid arthritis",
+      "dose_quote": "Patients were treated with either L-histidine 4.5 g daily, or placebo, for 30 weeks.",
+      "primary_outcome_quote": null,
+      "primary_result_quote": "None of the clinical measurements showed an advantage of histidine over placebo.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit overall null result on clinical measures; only minor laboratory changes (rheumatoid factor titer, hematocrit) noted in the histidine group, plus 'suggestive evidence of a beneficial effect... in patients with more acti[ve disease]' per the truncated abstract excerpt, which does not rise to a confirmed positive clinical finding.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-histidine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "3925464",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "18 healthy subjects with increased spontaneous platelet aggregation"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "l-histidine 3g/day for 7 days",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "18 healthy subjects with increased spontaneous platelet aggregation",
+      "indication_as_stated": "platelet function and arachidonic acid metabolism",
+      "dose_quote": "received placebo or l-histidine 3g/day for 7 days",
+      "primary_outcome_quote": "The effect of the amino acid l-histidine on human platelet function and arachidonic acid metabolism was studied",
+      "primary_result_quote": "The intake of l-histidine reduced the degree of spontaneous platelet aggregation (p less than 0.05) and inhibited the generation of platelet TXB2 by 47% (p less than 0.001) whereas platelet PGE2 synthesis was not affected.",
+      "sample_size_quote": "18 healthy subjects with increased spontaneous platelet aggregation",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive on platelet aggregation and thromboxane (TXB2) generation; explicit null on PGE2 synthesis. Biomarker/mechanistic outcomes, not a clinical bleeding/thrombosis endpoint; potential relevance to bleeding-risk/antiplatelet-interaction safety given the platelet-function effect.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'l-histidine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "25921948",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty subjects with high fatigue and sleep disruption scores"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "ingest histidine or a placebo every day for two weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twenty subjects with high fatigue and sleep disruption scores",
+      "indication_as_stated": "mental fatigue, mood states, and cognitive performance",
+      "dose_quote": null,
+      "primary_outcome_quote": "The subjects' mood states were evaluated using the Profile of Mood States (POMS) scale and a visual analog scale (VAS) for eight feelings (fatigue, depression, carelessness, drowsiness, clear thinking, motivation, attentiveness and concentration).",
+      "primary_result_quote": "The fatigue T-scores on the POMS test decreased significantly following histidine ingestion compared to placebo ingestion (p<0.05).",
+      "sample_size_quote": "Twenty subjects with high fatigue and sleep disruption scores were asked to ingest histidine or a placebo every day for two weeks.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Positive on POMS fatigue score, working-memory reaction time, and VAS clear-thinking/attentiveness ratings. Specific histidine dose (grams/day) not stated in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'histidine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29042806",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "adult AD patients (n=24)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "daily oral l-histidine supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "adult atopic dermatitis (AD) patients (n=24)",
+      "indication_as_stated": "atopic dermatitis (eczema) disease severity, linked to skin-barrier filaggrin deficiency",
+      "dose_quote": null,
+      "primary_outcome_quote": "We conducted a randomized, double-blind, placebo-controlled, crossover, nutritional supplementation pilot study to explore the effects of oral l-histidine in adult AD patients (n=24).",
+      "primary_result_quote": "once daily oral l-histidine significantly reduced (P<0.003) AD disease severity by 34% (physician assessment using the SCORingAD tool) and 39% (patient self-assessment using the Patient Oriented Eczema Measure tool) after 4 weeks of treatment",
+      "sample_size_quote": "a randomized, double-blind, placebo-controlled, crossover, nutritional supplementation pilot study to explore the effects of oral l-histidine in adult AD patients (n=24)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Positive on both physician- and patient-assessed disease severity; 'No improvement was noted with the placebo.' Also includes separate in vitro skin-equivalent model data supporting a filaggrin mechanism, not itself human evidence. Specific histidine dose (grams/day) not stated in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'l-histidine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32423010",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "systematic review following PRISMA guidelines covering human and animal species"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "dietary histidine",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "metabolism and physiological effects of histidine",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "In humans, dietary histidine may be associated with factors that improve metabolic syndrome and has an effect on ion absorption.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "mixed",
+      "direction_note": "Broad narrative/systematic review pooling human, rat, fish, and poultry data together; human-specific findings ('metabolic syndrome', 'ion absorption') are stated briefly while more detailed supplementation findings ('histidine supplementation increa[ses]...') are reported for rats in the retrieved excerpt, not isolated as human-only results.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Histidine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32766885",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "n = 20 men and n = 20 women (Study 1); n = 21 men and n = 19 women (Study 2)"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "graded dosages of histidine supplement (4, 8, and 12 g/d, Study 1)... and/or a 16-g/d dosage of histidine (Study 2)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Healthy adults aged 21-50 y",
+      "indication_as_stated": "clinical safety/tolerance of histidine intake above average dietary levels",
+      "dose_quote": "completed graded dosages of histidine supplement (4, 8, and 12 g/d, Study 1) (n = 20 men and n = 20 women) and/or a 16-g/d dosage of histidine (Study 2, n = 21 men and n = 19 women)",
+      "primary_outcome_quote": "Primary outcomes included vitals, select biochemical analytes, anthropometry, serum zinc, and body composition (via DXA).",
+      "primary_result_quote": "the human no-observed adverse effect level was determined to be 8 g/d owing to changes in blood parameters at the 12-g/d dosage",
+      "sample_size_quote": "Healthy adults aged 21-50 y completed graded dosages of histidine supplement (4, 8, and 12 g/d, Study 1) (n = 20 men and n = 20 women) and/or a 16-g/d dosage of histidine (Study 2, n = 21 men and n = 19 women); 27 participants (n = 12 men and n = 15 women) completed both studies.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "'No changes in vitals or body composition occurred' at any dose, but at higher doses: ferritin was lower at 12 g/d than 4 g/d, and at 16 g/d serum zinc decreased and AST increased significantly from baseline; 'values remained within the normal reference ranges for all analytes measured' but the NOAEL was set at 8 g/d given these changes at 12 g/d. Directly establishes an upper-intake dosing ceiling.",
+      "registrations": [
+        "NCT04142294"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'histidine supplement' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "342692",
+    "3925464",
+    "25921948",
+    "29042806",
+    "32766885",
+    "32423010"
+  ],
+  "handoff": [
+    {
+      "pmid": "3925464",
+      "role": "interaction",
+      "reason": "L-histidine (3 g/day) reduced spontaneous platelet aggregation and inhibited platelet thromboxane (TXB2) generation by 47%; relevant to a bleeding-risk/antiplatelet-drug-interaction reviewer."
+    },
+    {
+      "pmid": "32766885",
+      "role": "dosing",
+      "reason": "Dedicated graded-dose tolerance study (4-16 g/day) for establishing a safe upper intake level for histidine supplementation; quantitative tolerance results were truncated in the retrieved abstract excerpt and should be re-verified directly for a dosing-ceiling determination."
+    },
+    {
+      "pmid": "8229500",
+      "role": "interaction",
+      "reason": "Copper-histidine complex is an established subcutaneous therapy for Menkes disease; relevant to a mineral-chelate/copper-interaction reviewer, though rejected here as different_substance (copper is the active agent, not free L-histidine)."
+    },
+    {
+      "pmid": "3591728",
+      "role": "interaction",
+      "reason": "Histidine-zinc complexes increased zinc bioavailability ~25-40% over zinc sulfate; relevant to a mineral-absorption/interaction reviewer for products combining histidine with zinc."
+    }
+  ],
+  "identity_notes": "Genuine oral free-L-histidine human supplementation evidence in this retrieved scope is extremely sparse: only 6 of 160 records concern actual histidine intake in humans, and even among those, several abstracts were truncated before reporting quantitative results in this retrieval. The single most important applicability caveat: the overwhelming majority of 'histidine' records (roughly half of the full 160) concern histidine-tryptophan-ketoglutarate (HTK/Custodiol) solution, an entirely different use case — a buffered organ-preservation and cardioplegia perfusate used ex vivo/intraoperatively in transplant surgery and cardiac surgery, with no relevance to oral dietary supplementation. A second large cluster (~40 records) is generic metabolomics/biomarker-discovery literature (cancer, cardiovascular, metabolic disease) in which histidine appears only as one of dozens of measured plasma/serum/urine metabolites, not as an administered intervention. A third cluster concerns carnosine, anserine, and beta-alanine (histidine-containing dipeptides or its precursor) which are distinct supplements covered under the separate l_carnosine identity and were excluded here as different_substance. The oldest genuine trial (PMID 342692, rheumatoid arthritis, 4.5 g/day x 30 weeks) found no clinical benefit over placebo."
+}

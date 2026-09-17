@@ -1,0 +1,2139 @@
+{
+ "canonical_id": "l_glutamine",
+ "screened": 158,
+ "kept": 48,
+ "rejected": [
+  {
+   "pmid": "789170",
+   "reason": "different_substance",
+   "note": "Tests N-acetyl-L-glutamine ALUMINUM COMPLEX (a distinct pharmaceutical anti-ulcer drug, 'KW'), not free L-glutamine."
+  },
+  {
+   "pmid": "30302048",
+   "reason": "different_substance",
+   "note": "L-Ornithine L-Aspartate (LOLA) for hepatic encephalopathy; a distinct compound from L-glutamine despite biochemical relation."
+  },
+  {
+   "pmid": "7954251",
+   "reason": "not_this_route",
+   "note": "Parenteral glutamine dipeptide supplementation trial (chemotherapy toxicity)"
+  },
+  {
+   "pmid": "8769938",
+   "reason": "not_this_route",
+   "note": "TPN infusion study measuring intestinal glutamine content (parenteral)"
+  },
+  {
+   "pmid": "9990574",
+   "reason": "not_this_route",
+   "note": "Glutamine-supplemented enteral nutrition in critically ill patients"
+  },
+  {
+   "pmid": "10369709",
+   "reason": "not_this_route",
+   "note": "Glutamine supplementation in parenteral nutrition (home/hospital)"
+  },
+  {
+   "pmid": "12352037",
+   "reason": "not_this_route",
+   "note": "Parenteral L-alanyl-L-glutamine in critically ill patients"
+  },
+  {
+   "pmid": "12386487",
+   "reason": "not_this_route",
+   "note": "General Total Parenteral Nutrition guideline/review; route is parenteral by definition"
+  },
+  {
+   "pmid": "14757388",
+   "reason": "not_this_route",
+   "note": "L-alanyl-L-glutamine-supplemented parenteral nutrition in secondary peritonitis"
+  },
+  {
+   "pmid": "15121931",
+   "reason": "not_this_route",
+   "note": "Parenteral glutamine supplementation in extremely low birth weight infants"
+  },
+  {
+   "pmid": "15325681",
+   "reason": "not_this_route",
+   "note": "Glutamine supplementation in infants with GI disease; enteral/tube-fed population, not oral adult supplement use"
+  },
+  {
+   "pmid": "15990633",
+   "reason": "not_this_route",
+   "note": "Enteral glutamine supplementation in very low birth weight infants"
+  },
+  {
+   "pmid": "16186995",
+   "reason": "not_this_route",
+   "note": "Parenteral glutamine for allogeneic stem cell transplant patients"
+  },
+  {
+   "pmid": "17325559",
+   "reason": "not_this_route",
+   "note": "Alanyl-glutamine-supplemented ENTERAL formula in children"
+  },
+  {
+   "pmid": "17440526",
+   "reason": "not_this_route",
+   "note": "Glutamine supplementation in home PARENTERAL nutrition"
+  },
+  {
+   "pmid": "17558069",
+   "reason": "not_this_route",
+   "note": "Abstract explicitly states 'enteral administration of glutamine' and 'enteral glutamine 45 g/day'; despite the title saying 'oral', the actual delivery route studied is enteral tube/formula administration in critically ill surgical patients."
+  },
+  {
+   "pmid": "17573745",
+   "reason": "not_this_route",
+   "note": "Abstract specifies parenteral Gln (Dipeptiven) given together with enteral nutrition, not oral."
+  },
+  {
+   "pmid": "18563517",
+   "reason": "not_this_route",
+   "note": "Perioperative INFUSION of glutamine (cardiac surgery); intravenous route."
+  },
+  {
+   "pmid": "18596311",
+   "reason": "not_this_route",
+   "note": "L-alanyl-L-glutamine-supplemented PARENTERAL nutrition in severe acute pancreatitis"
+  },
+  {
+   "pmid": "21633770",
+   "reason": "not_this_route",
+   "note": "Glutamine-enriched NEONATAL PARENTERAL nutrition trial"
+  },
+  {
+   "pmid": "21658010",
+   "reason": "not_this_route",
+   "note": "Scandinavian glutamine trial; intravenous glutamine in ICU patients"
+  },
+  {
+   "pmid": "21499196",
+   "reason": "not_this_route",
+   "note": "Glutamine-enriched nutrition support in pediatric stem-cell transplantation for childhood malignancies; delivered as enteral/parenteral nutritional support in a severe-mucositis SCT population, not oral supplement use."
+  },
+  {
+   "pmid": "23594003",
+   "reason": "not_this_route",
+   "note": "REDOXS-type trial of intravenous glutamine and antioxidants in critically ill patients"
+  },
+  {
+   "pmid": "24556911",
+   "reason": "not_this_route",
+   "note": "Intravenous glutamine supplementation in trauma ICU patients"
+  },
+  {
+   "pmid": "24701410",
+   "reason": "not_this_route",
+   "note": "Intravenous glutamine meta-analysis for severe acute pancreatitis"
+  },
+  {
+   "pmid": "24992652",
+   "reason": "not_this_route",
+   "note": "Enteral glutamine supplementation in head and neck cancer surgery patients"
+  },
+  {
+   "pmid": "26518955",
+   "reason": "not_this_route",
+   "note": "L-alanyl-glutamine infused through the portal vein during liver transplantation"
+  },
+  {
+   "pmid": "27768727",
+   "reason": "not_this_route",
+   "note": "Alanyl-glutamine added to peritoneal dialysis fluid, not ingested"
+  },
+  {
+   "pmid": "28105083",
+   "reason": "not_this_route",
+   "note": "Glutamine meta-analysis in abdominal surgery patients; perioperative glutamine literature in this population is predominantly IV/enteral, not oral"
+  },
+  {
+   "pmid": "28740213",
+   "reason": "not_this_route",
+   "note": "Alanyl-glutamine added to peritoneal dialysis fluid, not ingested"
+  },
+  {
+   "pmid": "29193281",
+   "reason": "not_this_route",
+   "note": "Enteral glutamine supplementation in very preterm children"
+  },
+  {
+   "pmid": "32674232",
+   "reason": "not_this_route",
+   "note": "Glutamine-supported EARLY ENTERAL therapy for severe acute pancreatitis"
+  },
+  {
+   "pmid": "33222464",
+   "reason": "not_this_route",
+   "note": "Glutamine meta-analysis in critically-ill ICU patients; route not restricted to oral (typically IV/enteral in this population)"
+  },
+  {
+   "pmid": "34973853",
+   "reason": "not_this_route",
+   "note": "Abstract specifies '0.5 g/kg/day of enterally delivered glutamine' in severe burn patients."
+  },
+  {
+   "pmid": "36082909",
+   "reason": "not_this_route",
+   "note": "Abstract specifies glutamine given 'through a feeding tube or ... by mouth' in severe burn ICU patients; mixed/predominantly enteral tube delivery, not representative of oral supplement use."
+  },
+  {
+   "pmid": "36880009",
+   "reason": "not_this_route",
+   "note": "Randomized trial of intravenous glutamine vs no glutamine in cardiac surgery (secondary analysis); explicit IV route, not oral."
+  },
+  {
+   "pmid": "37023559",
+   "reason": "not_this_route",
+   "note": "Alanyl-glutamine given by INTRAPERITONEAL instillation for post-myomectomy adhesion prevention, not oral."
+  },
+  {
+   "pmid": "38384124",
+   "reason": "not_this_route",
+   "note": "'Glutamine Oral Care' is a topical mouth-rinse/oral-hygiene intervention applied to oral mucosa, not an ingested oral supplement."
+  },
+  {
+   "pmid": "40295318",
+   "reason": "not_this_route",
+   "note": "Abstract describes 'application of L-glutamine and hyaluronic acid' as a topical gel/rinse for oral mucositis, not an ingested oral supplement."
+  },
+  {
+   "pmid": "40748005",
+   "reason": "not_this_route",
+   "note": "Systematic review explicitly evaluates 'enteral glutamine and arginine supplementation' for pressure ulcer wound healing."
+  },
+  {
+   "pmid": "16697087",
+   "reason": "off_topic",
+   "note": "General ESPEN Enteral Nutrition guideline for intensive care; not glutamine-specific primary data"
+  },
+  {
+   "pmid": "30348463",
+   "reason": "off_topic",
+   "note": "General ESPEN clinical nutrition in ICU guideline; not glutamine-specific primary data"
+  },
+  {
+   "pmid": "41773753",
+   "reason": "off_topic",
+   "note": "General ASPEN head and neck cancer nutrition guideline; glutamine mentioned only among many nutrients discussed"
+  },
+  {
+   "pmid": "19232024",
+   "reason": "off_topic",
+   "note": "Randomized trial of lithium in youths with mood dysregulation; no glutamine intervention"
+  },
+  {
+   "pmid": "24011705",
+   "reason": "off_topic",
+   "note": "Letter/comment on intention-to-treat meta-analysis methodology for burns glutamine trials; not primary trial data"
+  },
+  {
+   "pmid": "27465396",
+   "reason": "off_topic",
+   "note": "Review of ammonia neurotoxicity; not glutamine supplementation"
+  },
+  {
+   "pmid": "28061690",
+   "reason": "off_topic",
+   "note": "Organophosphorus xenobiotic toxicology review; unrelated to glutamine supplementation"
+  },
+  {
+   "pmid": "29536563",
+   "reason": "off_topic",
+   "note": "Neuroimaging meta-analysis in hepatitis C infection (glutamate/glutamine as MRS biomarker, not intervention)"
+  },
+  {
+   "pmid": "31303885",
+   "reason": "off_topic",
+   "note": "Sleep/microdialysis review of histamine and amino acids; not a glutamine supplementation study"
+  },
+  {
+   "pmid": "31313139",
+   "reason": "off_topic",
+   "note": "Branched-chain amino acids and seizures systematic review; not L-glutamine"
+  },
+  {
+   "pmid": "32212237",
+   "reason": "off_topic",
+   "note": "N-acetylcysteine trial for cocaine dependence; anterior cingulate glutamate/glutamine is an MRS biomarker, not the tested intervention"
+  },
+  {
+   "pmid": "32330875",
+   "reason": "off_topic",
+   "note": "Liver cancer ERK pathway/drug resistance mechanistic study; not glutamine supplementation"
+  },
+  {
+   "pmid": "32593895",
+   "reason": "off_topic",
+   "note": "HMB-enriched formula after liver transplantation; title does not establish glutamine as a stated, extractable component"
+  },
+  {
+   "pmid": "32637482",
+   "reason": "off_topic",
+   "note": "Neurometabolite/proton MRS meta-analysis dataset in schizophrenia; glutamate neurotransmission, not glutamine supplementation"
+  },
+  {
+   "pmid": "32804843",
+   "reason": "off_topic",
+   "note": "Oral bioadhesive formulation trial for reflux disease; title does not establish glutamine relevance"
+  },
+  {
+   "pmid": "34192430",
+   "reason": "off_topic",
+   "note": "Transglutaminase 2 inhibitor drug trial for celiac disease; name-collision with 'glutamine' root, unrelated drug"
+  },
+  {
+   "pmid": "34505389",
+   "reason": "off_topic",
+   "note": "Dopamine and glutamate imaging meta-analysis in psychosis risk; neurotransmitter, not glutamine supplementation"
+  },
+  {
+   "pmid": "34849885",
+   "reason": "off_topic",
+   "note": "Candida albicans Tra1/SAGA/NuA4 drug-resistance genetics study; unrelated to glutamine supplementation"
+  },
+  {
+   "pmid": "35069773",
+   "reason": "off_topic",
+   "note": "Five-Flavor Sophora flavescens herbal capsules for ulcerative colitis; unrelated to glutamine"
+  },
+  {
+   "pmid": "35151030",
+   "reason": "off_topic",
+   "note": "Glutamate and white matter damage in neuropsychiatric disorders; neurotransmitter, not glutamine supplementation"
+  },
+  {
+   "pmid": "35620675",
+   "reason": "off_topic",
+   "note": "Hyperammonemia after lung transplantation review; ammonia/urea cycle, not glutamine supplementation"
+  },
+  {
+   "pmid": "35874306",
+   "reason": "off_topic",
+   "note": "Corrigendum to the hyperammonemia-after-lung-transplantation review above"
+  },
+  {
+   "pmid": "36806762",
+   "reason": "off_topic",
+   "note": "Brain glutamate levels in schizophrenia meta/mega-analysis; neurotransmitter, not glutamine supplementation"
+  },
+  {
+   "pmid": "38366114",
+   "reason": "off_topic",
+   "note": "Glutamatergic system systematic review in Alzheimer's disease; neurotransmitter, not glutamine supplementation"
+  },
+  {
+   "pmid": "38796123",
+   "reason": "off_topic",
+   "note": "Neurometabolite MRS meta-analysis in autism; not glutamine supplementation"
+  },
+  {
+   "pmid": "39125644",
+   "reason": "off_topic",
+   "note": "Biomarker review in spinocerebellar ataxia type 3; not glutamine supplementation"
+  },
+  {
+   "pmid": "39233897",
+   "reason": "off_topic",
+   "note": "RNA-binding protein interaction meta-analysis tool (RBPInper); unrelated to glutamine"
+  },
+  {
+   "pmid": "39753948",
+   "reason": "off_topic",
+   "note": "Nucleolar mechanism/TGF\u03b2/ERK proteostasis study; unrelated to glutamine supplementation"
+  },
+  {
+   "pmid": "40097854",
+   "reason": "off_topic",
+   "note": "Molecular pathways of ketamine in PTSD; unrelated to glutamine supplementation"
+  },
+  {
+   "pmid": "40410854",
+   "reason": "off_topic",
+   "note": "Fecal microbiota transplantation trial for hypertension; no glutamine intervention"
+  },
+  {
+   "pmid": "40500407",
+   "reason": "off_topic",
+   "note": "Cannabidiol trial in youth with alcohol use disorder; no glutamine intervention"
+  },
+  {
+   "pmid": "40684250",
+   "reason": "off_topic",
+   "note": "VITACOG B-vitamins trial; no glutamine intervention"
+  },
+  {
+   "pmid": "40698574",
+   "reason": "off_topic",
+   "note": "Antipsychotic drug effects on the glutamatergic system; neurotransmitter, not glutamine supplementation"
+  },
+  {
+   "pmid": "40707608",
+   "reason": "off_topic",
+   "note": "Naltrexone/ketamine glutamatergic-activity trial; neurotransmitter, not glutamine supplementation"
+  },
+  {
+   "pmid": "41341488",
+   "reason": "off_topic",
+   "note": "MRS glutamate meta-analysis protocol in schizophrenia/autism; neurotransmitter, not glutamine supplementation"
+  },
+  {
+   "pmid": "41718472",
+   "reason": "off_topic",
+   "note": "Simvastatin/PKM2 liver fibrosis mechanistic study; unrelated to glutamine supplementation"
+  },
+  {
+   "pmid": "42124939",
+   "reason": "off_topic",
+   "note": "Breast cancer organoid systematic review; no clear glutamine relevance"
+  },
+  {
+   "pmid": "22127760",
+   "reason": "animal_or_invitro",
+   "note": "CHO-DG44 and HEK-293E cell-culture bioprocessing study; in vitro cell line, not a clinical trial"
+  },
+  {
+   "pmid": "33458886",
+   "reason": "animal_or_invitro",
+   "note": "Glutamine tested in gentamicin-induced acute kidney injury in Sprague-Dawley RATS"
+  },
+  {
+   "pmid": "34400629",
+   "reason": "animal_or_invitro",
+   "note": "Ammonium toxicity and glutamine synthetase in Arabidopsis thaliana (plant model)"
+  },
+  {
+   "pmid": "35625656",
+   "reason": "animal_or_invitro",
+   "note": "Glutamine metabolism mechanistic study of alveolar regeneration during lung injury; mechanistic/likely animal or cell model, not a clinical supplementation trial"
+  },
+  {
+   "pmid": "39137608",
+   "reason": "animal_or_invitro",
+   "note": "Arsenic-induced disruption of glutamine anaplerosis in human urothelial CARCINOMA CELL LINE"
+  },
+  {
+   "pmid": "39255693",
+   "reason": "animal_or_invitro",
+   "note": "Oxidative stress/oral carcinogenesis mechanistic study (Thbs1/macrophage polarization); mechanistic, likely animal or cell model"
+  },
+  {
+   "pmid": "39405702",
+   "reason": "animal_or_invitro",
+   "note": "METTL16/glutamine biosynthesis carcinogenesis mechanistic study; mechanistic, likely animal or cell model"
+  },
+  {
+   "pmid": "39667326",
+   "reason": "animal_or_invitro",
+   "note": "METTL16/glutamine metabolism mechanistic study in smoking-induced COPD; mechanistic, likely animal or cell model"
+  },
+  {
+   "pmid": "40838694",
+   "reason": "animal_or_invitro",
+   "note": "Hesperetin/glutaminolysis lipotoxicity mechanistic study; mechanistic, likely cell model"
+  },
+  {
+   "pmid": "41486358",
+   "reason": "animal_or_invitro",
+   "note": "Perfluorooctanoic acid/macrophage ammonia retention and miscarriage mechanistic study; mechanistic, likely animal model"
+  },
+  {
+   "pmid": "11194114",
+   "reason": "not_intervention",
+   "note": "Observational study of diet/exercise on endogenous muscle and plasma glutamine concentrations; not a supplementation trial"
+  },
+  {
+   "pmid": "26652982",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of natural products/complementary therapies for chemotherapy-induced neuropathy; glutamine not named in title, relevance unconfirmed"
+  },
+  {
+   "pmid": "27208380",
+   "reason": "not_intervention",
+   "note": "Metabolomics systematic review/meta-analysis in prediabetes/diabetes; glutamine is a measured biomarker, not an administered intervention"
+  },
+  {
+   "pmid": "28819352",
+   "reason": "not_intervention",
+   "note": "Metabolomics biomarker-discovery review in ovarian cancer; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "31031585",
+   "reason": "not_intervention",
+   "note": "Metabolomics systematic review in dementia; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "32385655",
+   "reason": "not_intervention",
+   "note": "Taste disorder management systematic review; glutamine relevance as an intervention unconfirmed by title"
+  },
+  {
+   "pmid": "32883725",
+   "reason": "not_intervention",
+   "note": "Protocol only (no results yet) for immunonutrition in pediatric traumatic brain injury"
+  },
+  {
+   "pmid": "33648834",
+   "reason": "not_intervention",
+   "note": "Pharmacokinetic study of sodium 4-phenylbutyrate; glutamine is a downstream metabolic consumption pathway, not the tested intervention"
+  },
+  {
+   "pmid": "33725958",
+   "reason": "not_intervention",
+   "note": "Protocol only (no results yet) for alanyl-glutamine in sepsis nutritional support"
+  },
+  {
+   "pmid": "33802012",
+   "reason": "not_intervention",
+   "note": "Both study arms (HMB complex and 'glutamine complex' control) contain glutamine as part of a combination formula; design does not isolate a true glutamine-free placebo comparator"
+  },
+  {
+   "pmid": "33923421",
+   "reason": "not_intervention",
+   "note": "Broad review of vincristine-induced peripheral neuropathy mechanisms/prevention; glutamine not named in title, relevance unconfirmed"
+  },
+  {
+   "pmid": "33956051",
+   "reason": "not_intervention",
+   "note": "Metabolomics systematic review in glaucoma; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "35349649",
+   "reason": "not_intervention",
+   "note": "Metabolomics systematic review/meta-analysis of type 2 diabetes risk; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "35888685",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of nutritional interventions for cancer cachexia; glutamine not named in title, relevance unconfirmed"
+  },
+  {
+   "pmid": "36118235",
+   "reason": "not_intervention",
+   "note": "Metabolomic systematic review in spondyloarthritis; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "37614441",
+   "reason": "not_intervention",
+   "note": "Metabolic fingerprinting systematic review in systemic sclerosis; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "37654090",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of diet/non-pharmacologic supplements for chronic neuropathic pain; glutamine not named in title, relevance unconfirmed"
+  },
+  {
+   "pmid": "37836475",
+   "reason": "not_intervention",
+   "note": "Metabolite systematic review/meta-analysis in osteoarthritis; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "38448329",
+   "reason": "not_intervention",
+   "note": "Protocol only (no results yet) for glutamine/arginine in pressure ulcer wound healing"
+  },
+  {
+   "pmid": "39286637",
+   "reason": "not_intervention",
+   "note": "General narrative review of newer SCD therapies (L-glutamine, voxelotor, crizanlizumab, gene therapies); no glutamine-specific quantitative outcome data extractable, glutamine mentioned only as one of several approved drugs"
+  },
+  {
+   "pmid": "40214076",
+   "reason": "not_intervention",
+   "note": "1H-NMR metabolomic systematic review in Parkinson's disease; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "40304146",
+   "reason": "not_intervention",
+   "note": "Systematic review of circulating amino acids and childhood obesity; glutamine is a measured biomarker, not an intervention"
+  },
+  {
+   "pmid": "41424075",
+   "reason": "not_intervention",
+   "note": "Metabolomic marker systematic review of blood-brain barrier damage; glutamine is a measured biomarker, not an intervention"
+  }
+ ],
+ "records": [
+  {
+   "pmid": "10338217",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral glutamine (GLN) 10 g three times daily, vs glycine control",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "66 patients with 43 hematologic and 23 solid malignancies (21 breast carcinomas) undergoing bone marrow transplantation",
+   "indication_as_stated": "bone marrow transplantation (mucositis/infectious morbidity)",
+   "dose_quote": "10 g three times daily",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Oral and parenteral GLN seemed to be of limited benefit for patients having AUTO or ALLO BMT for hematologic or solid malignancies.",
+   "sample_size_quote": "66 patients with 43 hematologic and 23 solid malignancies (21 breast carcinomas), were randomized, double-blinded, to either oral GLN (n = 35) or glycine-control (GLY) (n = 31)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Patients who needed TPN were later given TPN supplemented with GLN as well; the clean oral-vs-glycine comparison is the primary randomized arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material (oral arm).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10701731",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral glutamine suspension, 16 g in 240 mL normal saline (swish)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "17 patients with head and neck cancer receiving primary or adjuvant irradiation",
+   "indication_as_stated": "radiation-induced oral mucositis",
+   "dose_quote": "glutamine suspension (16 g in 240 ml normal saline)",
+   "primary_outcome_quote": "The duration of objective oral mucositis > or = Grade 1 (p = 0.0097), Grade 2 (p = 0.0232), and Grade 3 (p = 0.0168) was shorter in the glutamine arm.",
+   "primary_result_quote": "Mean maximum grade of objective oral mucositis was less severe in the glutamine arm (1.6 vs. 2.6) (p = 0.0058).",
+   "sample_size_quote": "17 patients with head and neck cancer receiving primary or adjuvant irradiation were randomized to either glutamine suspension (16 g in 240 ml normal saline) (n = 8) or placebo (normal saline) (n = 9) arm",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15334869",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral glutamine, 10 g three times a day x 5 days",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "36 patients with paclitaxel-associated myalgias/arthralgias",
+   "indication_as_stated": "chemotherapy (paclitaxel)-induced myalgia/arthralgia",
+   "dose_quote": "oral glutamine (10 grams three times a day, starting on the day of chemotherapy) x 5 days",
+   "primary_outcome_quote": "glutamine had no effect on the development or severity of paclitaxel-induced myalgias/arthralgias, as recorded either by the patients' daily logs or by physician-reported information.",
+   "primary_result_quote": null,
+   "sample_size_quote": "This trial studied 36 patients who had experienced myalgias/arthralgias related to a prior paclitaxel-containing regimen",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15768732",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "probiotics + soluble fiber, with L-glutamine (GLN) added for non-responders",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "35 HIV-positive men with antiretroviral (NFV or LPV/r)-related diarrhea",
+   "indication_as_stated": "antiretroviral-related diarrhea",
+   "dose_quote": "30g/d L-Glutamine (GLN) was added",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Probiotics, soluble fiber, and GLN significantly reduced diarrhea for subjects receiving NFV or LPV/r.",
+   "sample_size_quote": "Thirty-five HIV-positive men treated with NFV (n = 27) or LPV/r (n = 8) with diarrhea",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Glutamine was added only for the subset of subjects who did not fully respond to probiotics+fiber alone after 4 weeks; not a clean isolated glutamine arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one component of a sequential multi-supplement regimen (probiotics, fiber, then glutamine), not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15984021",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "glutamine (0.6 g/kg/day) and creatine (5 g/day), tested separately/combined",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "50 ambulant boys with Duchenne muscular dystrophy",
+   "indication_as_stated": "Duchenne muscular dystrophy",
+   "dose_quote": "glutamine (0.6 gm/kg/day) and creatine (5 gm/day)",
+   "primary_outcome_quote": "there was no statistically significant effect of either therapy based on manual and quantitative measurements of muscle strength",
+   "primary_result_quote": "a disease-modifying effect of creatine in older Duchenne muscular dystrophy and creatine and glutamine in younger Duchenne muscular dystrophy cannot be excluded",
+   "sample_size_quote": "50 ambulant boys with Duchenne muscular dystrophy in a 6-month, double-blind, placebo-controlled clinical trial",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary manual/quantitative strength measures were not significant; a possible age-subgroup disease-modifying effect is exploratory only.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material, tested alongside (not combined with) creatine.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18293016",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "HMB/glutamine/arginine mixture (Juven) vs isonitrogenous control",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "472 advanced cancer patients with 2-10% weight loss (RTOG 0122)",
+   "indication_as_stated": "cancer cachexia",
+   "dose_quote": "a mixture of beta-hydroxyl beta-methyl butyrate, glutamine, and arginine or an isonitrogenous, isocaloric control mixture taken twice a day for 8 weeks",
+   "primary_outcome_quote": "there was no statistically significant difference in the 8-week lean body mass between the two arms.",
+   "primary_result_quote": "there was a strong trend towards an increased body mass among patients taking the Juven compound using the secondary endpoint of AUC",
+   "sample_size_quote": "Four hundred seventy-two advanced cancer patients with between 2% and 10% weight loss were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary lean-body-mass endpoint not significant (ITT); only 37% completed protocol treatment. Glutamine is one of three actives in a fixed combination.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one of three components (with HMB and arginine) in a fixed combination product, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21890323",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "preconditioning oral nutritional supplement (pONS) enriched with glutamine, antioxidants, and green tea extract",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "36 cancer patients undergoing pancreaticoduodenectomy",
+   "indication_as_stated": "perioperative oxidative stress (pancreatic surgery)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Perioperative pONS administration positively affected plasma vitamin C levels and improved TEAC shortly after surgery, but did not reduce oxidative stress and systemic inflammation markers.",
+   "sample_size_quote": "36 cancer patients undergoing pancreaticoduodenectomy",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one of several actives (with antioxidants and green tea extract) in a combination oral nutritional supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22048324",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "L-glutamine (45 mmol/L) added to a glucose-electrolyte beverage",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "8 trained cyclists",
+   "indication_as_stated": "exogenous carbohydrate oxidation during endurance exercise",
+   "dose_quote": "45 mmol L(-1) L-glutamine",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the effect of L-glutamine was possibly trivial (4.5 \u00b1 7.3%)",
+   "sample_size_quote": "Eight cyclists rode 150 min at 50% of peak power on four occasions",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Title itself states L-arginine (not L-glutamine) increased exogenous carbohydrate oxidation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23389298",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral glutamine (Gln)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "breast cancer patients undergoing radiation therapy",
+   "indication_as_stated": "radiation-induced morbidity (breast conservation surgery)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Patients receiving Gln scored significantly better in RTOG score than the patients receiving placebo.",
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Sample size and exact dose not given in the retrieved abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23471208",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "glutamine, 30 g/d, vs casein placebo 30 g/d",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "69 patients receiving pelvic or abdominal radiotherapy",
+   "indication_as_stated": "acute radiation enteritis",
+   "dose_quote": "glutamine (30 g/d) or placebo (casein, 30 g/d)",
+   "primary_outcome_quote": "More patients developed enteritis with glutamine than with the placebo (55.9% vs 22.0%; P = .002)",
+   "primary_result_quote": "Glutamine does not prevent the development of enteritis during RT.",
+   "sample_size_quote": "69 patients who needed RT because of pelvic or abdominal malignancies",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Notable: more enteritis occurred WITH glutamine than placebo (opposite of hypothesized protective effect); route described only as g/d dosing, not explicitly labeled oral in this abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25933498",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "oral L-glutamine (GLN), 30 g/day, vs L-alanine control",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "33 overweight and obese adults",
+   "indication_as_stated": "gut microbiota composition (obesity)",
+   "dose_quote": "30 g of GLN (GLN group) daily for 14 d",
+   "primary_outcome_quote": "adults in the GLN group exhibited statistically significant differences in the Firmicutes and Actinobacteria phyla compared with those in the ALA group",
+   "primary_result_quote": null,
+   "sample_size_quote": "Thirty-three overweight and obese adults, ages between 23 and 59 y",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Microbiota-composition outcome only; not a clinical efficacy endpoint.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26709241",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral glutamine supplementation, 21 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "39 adults with cystic fibrosis",
+   "indication_as_stated": "cystic fibrosis (pulmonary inflammation)",
+   "dose_quote": "oral glutamine supplementation (21 g/day) for 8 weeks",
+   "primary_outcome_quote": "Glutamine supplementation had no impact on any of the outcome measures in the intention-to-treat analysis.",
+   "primary_result_quote": null,
+   "sample_size_quote": "Thirty-nine individuals were recruited and thirty-six completed the study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Per-protocol (non-ITT) analysis showed a paradoxical increase in inflammatory markers with glutamine.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28421779",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral glutamine, 0.5 g/kg/day, vs maltodextrin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "28 Mexican patients with ischemic heart disease undergoing cardiopulmonary bypass",
+   "indication_as_stated": "cardiac surgery (myocardial injury markers)",
+   "dose_quote": "oral glutamine (0.5 g/kg/day) or maltodextrin 3 days before surgery",
+   "primary_outcome_quote": "At 12 and 24 hours serum markers levels were significantly lower in the glutamine group compared with controls (p = 0.01 and p = 0.001, respectively)",
+   "primary_result_quote": "Overall, complications were significantly lower in the glutamine group (p = 0.01, RR = 0.54, 95% CI 0.31-0.93).",
+   "sample_size_quote": "28 Mexican patients with ischemic heart disease who underwent cardiopulmonary bypass with extracorporeal circulation",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29784526",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "glutamine supplementation (various doses)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "athletes (adults >18)",
+   "indication_as_stated": "athletic performance, body composition, immune function",
+   "dose_quote": null,
+   "primary_outcome_quote": "glutamine has a significant effect on weight reduction (WMD = -1.36 [95% CI: -2.55 to -0.16], p = 0.02)",
+   "primary_result_quote": "glutamine supplementation has no effect on athletics immune system, aerobic performance, and body composition.",
+   "sample_size_quote": "A total of 47 studies were included in the systematic review, and 25 trials matched the inclusion criteria for the meta-analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material; review of sports-nutrition (typically oral) trials.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30021096",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pharmaceutical-grade oral l-glutamine (Endari), 0.3 g/kg/dose twice daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "230 patients (age 5-58) with sickle cell anemia or sickle beta0-thalassemia",
+   "indication_as_stated": "sickle cell disease (vaso-occlusive pain crises)",
+   "dose_quote": "pharmaceutical-grade l-glutamine (0.3 g per kilogram of body weight per dose) administered twice daily by mouth",
+   "primary_outcome_quote": "The patients in the l-glutamine group had significantly fewer pain crises than those in the placebo group (P=0.005), with a median of 3.0 in the l-glutamine group and 4.0 in the placebo group.",
+   "primary_result_quote": "Fewer hospitalizations occurred in the l-glutamine group than in the placebo group (P=0.005), with a median of 2.0 in the l-glutamine group and 3.0 in the placebo group.",
+   "sample_size_quote": "A total of 230 patients (age range, 5 to 58 years; 53.9% female) were randomly assigned, in a 2:1 ratio, to receive l-glutamine (152 patients) or placebo (78 patients).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Pivotal Phase 3 trial supporting FDA approval of l-glutamine (Endari) for SCD; two-thirds of both arms also received background hydroxyurea, held constant across arms.",
+   "registrations": [
+    "NCT01179217"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30108163",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral glutamine, 5 g t.i.d.",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "106 adults with post-infectious diarrhea-predominant IBS and increased intestinal permeability",
+   "indication_as_stated": "postinfectious irritable bowel syndrome (IBS-D)",
+   "dose_quote": "glutamine (5 g/t.i.d.) or placebo for 8 weeks",
+   "primary_outcome_quote": "The primary endpoint occurred in 43 (79.6%) in the glutamine group and 3 (5.8%) in the placebo group (a 14-fold difference).",
+   "primary_result_quote": null,
+   "sample_size_quote": "Fifty-four glutamine and 52 placebo subjects completed the 8-week study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [
+    "NCT01414244"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31146957",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "arginine, glutamine, and fish oil oral nutritional supplementation",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "88 cancer patients (head/neck, esophageal, cervical) receiving concurrent chemoradiotherapy",
+   "indication_as_stated": "cancer treatment toxicity (concurrent chemoradiotherapy)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Significantly higher grade 3-4 hematologic toxicities were found in group A than in group B (23% vs 5%, P= 0.03).",
+   "primary_result_quote": null,
+   "sample_size_quote": "Eighty-eight cancer patients were randomized into 2 groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Glutamine tested only as part of a fixed 3-ingredient combination (arginine + glutamine + fish oil); not isolable to glutamine.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one of three components in a combined nutritional supplement, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32309821",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "L-glutamine, 0.6 g/kg/day (summarizing pivotal trials)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "children and adults with sickle cell disease",
+   "indication_as_stated": "sickle cell disease",
+   "dose_quote": "L-glutamine 0.6 g/kg/day",
+   "primary_outcome_quote": "L-glutamine is safe and associated with a reduction in painful episodes and in hospitalizations",
+   "primary_result_quote": "L-glutamine was only tolerated in two-thirds of patients, anemia and hemolysis did not improve and there are few data on mortality and organ complications.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Narrative review summarizing the pivotal Phase 2/3 trials; notes tolerability limited to ~two-thirds of patients and no demonstrated effect on anemia/hemolysis/mortality.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32411324",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "L-glutamine (Gln) supplementation, 30 days",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "83 elderly individuals (exercisers and non-exercisers)",
+   "indication_as_stated": "inflammatory status/redox balance in elderly, combined with exercise",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "daily supplementation with Gln for 30 days can improve these benefits with putative association with a healthy aging",
+   "sample_size_quote": "34 elderly subject nonpractitioners (NP group, 73.3 \u00b1 6.6 years) and 49 elderly subject practitioners of a combined-exercise training",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Salivary biomarker outcomes only, not a hard clinical endpoint; route not explicitly stated as oral in the abstract though standard for this supplementation design.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32512833",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "glutamine (oral/enteral), 10 g/day + disaccharides",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "cancer patients undergoing chemotherapy/radiation",
+   "indication_as_stated": "radiation and chemotherapy-associated mucositis",
+   "dose_quote": "Glutamine supplementation in a high protein diet (10 grams/day) + disaccharides, such as sucrose and/or trehalose",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Topical and oral glutamine seem to be the preferred routes for this amino acid to promote mucosal healing during and after cancer treatment.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Narrative review; discusses glutamine combined with disaccharides (sucrose/trehalose) to enhance mucosal uptake, and notes topical routes are also used alongside oral.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Review discusses glutamine combined with disaccharides and both topical and oral routes, not isolated oral glutamine alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32729784",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "glutamine, 30 g/d, before meals",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "66 patients with type 2 diabetes",
+   "indication_as_stated": "postprandial glycemia/insulin secretion (type 2 diabetes)",
+   "dose_quote": "30 g/d glutamine or placebo (with instructions to take in half glass of ice-cold water 5 to 10 min before each main meal)",
+   "primary_outcome_quote": "The repeated measures ANOVA revealed no significant difference between the groups for glucose and insulin after 6 weeks of intervention (p > 0.05).",
+   "primary_result_quote": "C-peptide was reduced in both intervention groups at all measurement points. Between-group differences remained significant by the end of the study (p = 0.02).",
+   "sample_size_quote": "33 subjects were recruited in each group",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary glucose/insulin endpoints not significant; secondary C-peptide result mixed/hard to interpret (reduced in both groups).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32826717",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "alanyl-glutamine (Ala-Gln), 3/6/12 g/day dose-response",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "140 children (2-60 months) at risk of environmental enteropathy in Fortaleza, Brazil",
+   "indication_as_stated": "environmental enteropathy (pediatric gut integrity/growth)",
+   "dose_quote": "Ala-Gln at 3 g/day, Ala-Gln at 6 g/day, Ala-Gln at 12 g/day, or an isonitrogenous dose of glycine (Gly) placebo at 12.5 g/day",
+   "primary_outcome_quote": "we detected a modest improvement in urinary lactulose excretion from 0.19% on day 1 to 0.17% on day 10 (P = 0.05)",
+   "primary_result_quote": null,
+   "sample_size_quote": "We enrolled 140 children residing in a low-income community in Fortaleza, Brazil.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Effect described as modest and transient; route given as 'nutritional supplementation' to community-dwelling children, not explicitly confirmed oral (vs. mixed into food/liquid) in this abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Alanyl-glutamine is a dipeptide form (distinct molecule from free L-glutamine), commonly used for solubility/stability.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32992440",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "oral l-glutamine (GLN) beverage, 0.3/0.6/0.9 g/kg FFM",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "14 healthy males",
+   "indication_as_stated": "gastrointestinal tolerance of acute oral glutamine dosing",
+   "dose_quote": "0.3 (LOW), 0.6 (MED) or 0.9 (HIGH) g\u00b7kg\u00b7FFM-1 GLN beverages",
+   "primary_outcome_quote": "24-h accumulated upper- and lower- and total-GI symptoms were all greater in the HIGH, compared to LOW and MED trials (p < 0.05).",
+   "primary_result_quote": null,
+   "sample_size_quote": "Fourteen healthy males (25 \u00b1 5 years; 1.79 \u00b1 0.07 cm; 77.7 \u00b1 9.8 kg; 14.8 \u00b1 4.6% body fat)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "GI-tolerability/dose-response study, not an efficacy trial; higher acute doses produced more (mostly mild) GI symptoms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33580845",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "glutamine, 4 g twice daily, vs glycine placebo",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "53 patients with advanced thoracic malignancies receiving chemoradiotherapy/radiotherapy",
+   "indication_as_stated": "acute radiation-induced esophagitis",
+   "dose_quote": "4 g of glutamine or glycine placebo twice daily",
+   "primary_outcome_quote": "There was no difference in the incidence of esophagitis in the first 6 weeks of radiotherapy between the glutamine and placebo arms (74% versus 68%; P = 1.00).",
+   "primary_result_quote": "The study was terminated for futility following interim analysis.",
+   "sample_size_quote": "53 patients were enrolled: 27 in the glutamine arm and 26 in the placebo arm.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [
+    "NCT01952847"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33809996",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral L-glutamine (Gln), 30 days, with/without exercise",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "44 elderly women (physically active and sedentary), aged 60-80",
+   "indication_as_stated": "glycemia/oxidative stress/knee muscle strength in elderly women",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Post-supplementation, Gln subgroups showed higher levels of GSH, GSSG, and torque peak, besides lower D-fructosamine than pre-supplementation values.",
+   "sample_size_quote": "Physically active (n = 21) and sedentary (n = 23) elderly women aged 60 to 80 years were enrolled in the study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34444657",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "arginine and glutamine supplementation",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "human wound-healing study participants (various conditions)",
+   "indication_as_stated": "wound healing",
+   "dose_quote": null,
+   "primary_outcome_quote": "Regarding glutamine supplementation, there was significant effect on nitrogen balance levels (MD: 0.39, 95% CI: 0.21, 0.58, p < 0.0001)",
+   "primary_result_quote": "length of hospital stay (LOS) (MD: -2.65, 95% CI: -3.10, -2.21, p < 0.00001)",
+   "sample_size_quote": "Five and 39 human studies met the inclusion criteria for arginine and glutamine, respectively.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Glutamine and arginine analyzed as separate meta-analytic arms (39 glutamine studies), not necessarily oral-only; included studies not route-restricted in this abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine analyzed as its own arm within a co-published arginine/glutamine review.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35106632",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "oral cystine and glutamine supplements",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "16 active young men",
+   "indication_as_stated": "exercise-induced gastrointestinal permeability/damage",
+   "dose_quote": "cystine and glutamine supplements, three times a day for 5 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Oral cystine and glutamine supplementation attenuated the markers of gastrointestinal permeability and damage after 1 h of strenuous running in young men.",
+   "sample_size_quote": "Sixteen active men aged 22.7 \u00b1 2.6 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine tested combined with cystine, not alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35964137",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "combination of L-arginine, L-glutamine, and HMB (2 sachets/day)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "70 patients undergoing cardiac surgery",
+   "indication_as_stated": "preoperative recovery (cardiac surgery)",
+   "dose_quote": "2 sachets of a combination of 7 g L-arginine, 7 g L-glutamine, and 1.5 g daily HMB or placebo 30 days before operation",
+   "primary_outcome_quote": "Subjects in the Gln/Arg/HMB group had lower serum levels of CPK-MB (median [IQR] = 49 [39.75] vs. 83 [64.55]; P = 0.011)",
+   "primary_result_quote": null,
+   "sample_size_quote": "60 preoperative patients (30 in each group) with a mean age of 53.13 \u00b1 14.35 years completed the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [
+    "IRCT20120913010826N31"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one of three components (with arginine and HMB) in a fixed combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35979207",
+   "design": "observational",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral L-glutamine (Endari), twice daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "19 pediatric and adult patients with sickle cell disease",
+   "indication_as_stated": "sickle cell disease (real-world follow-up)",
+   "dose_quote": null,
+   "primary_outcome_quote": "patients had significantly fewer pain crises (median change from 3.0 to 0.0; P < 0.00001)",
+   "primary_result_quote": null,
+   "sample_size_quote": "In the observational study, nineteen patients with SCD were treated orally with L-glutamine twice daily for 72 weeks.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Small, uncontrolled real-world follow-up study (not placebo-controlled), consistent with pivotal RCT (30021096).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material (Endari brand).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37314054",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "L-glutamine (one of several mucositis treatments reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "cancer patients undergoing chemotherapy/radiotherapy",
+   "indication_as_stated": "chemotherapy/radiotherapy-induced buccal mucositis",
+   "dose_quote": null,
+   "primary_outcome_quote": "the consumption of L-glutamine are effective in diminishing the severity of OM",
+   "primary_result_quote": null,
+   "sample_size_quote": "A total 287 articles were retrieved, of which 86 were selected by title and abstract, and 18 were included after full-text analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Broad multi-intervention review (mouthwashes, plant extracts, laser therapy, and L-glutamine); glutamine is only one of several treatments assessed.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "L-glutamine is one of several unrelated interventions reviewed together, not the sole focus.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37375676",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "glutamine (compared against omega-3, arginine, vitamin D, probiotics)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "2841 colorectal cancer patients across 34 studies",
+   "indication_as_stated": "colorectal cancer (perioperative nutritional supplementation)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Glutamine was superior in decreasing tumor necrosis factor-\u03b1 (MD -25.2; 95% CrI [-32.62, -17.95])",
+   "primary_result_quote": "glutamine ranked highest in reducing the length of hospital stay (MD -3.71; 95% CrI [-5.89, -1.72]) and the incidence of wound infections (RR 0.12; 95% CrI [0, 0.85])",
+   "sample_size_quote": "In total, 34 studies involving 2841 participants were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Network meta-analysis ranking glutamine against several other supplements (omega-3, arginine, vitamin D, probiotics), not a single-arm glutamine trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine is analyzed as its own comparator arm within a network meta-analysis of multiple supplements.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37836400",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "L-glutamine, co-administered during chemoradiotherapy",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 patients with locally advanced head and neck cancer receiving chemoradiotherapy",
+   "indication_as_stated": "survival outcomes in head and neck cancer (chemoradiotherapy)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "These findings indicate that L-glutamine does not influence the survival of patients with locally advanced head and neck cancer receiving chemoradiotherapy.",
+   "sample_size_quote": "This study, which included 40 patients, investigated whether L-glutamine influences survival.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Follow-up survival analysis of the same population from an earlier mucositis trial by the same group; exact gram dose not given in this abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37882375",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "perioperative immunonutrition (arginine, omega-3 fatty acids, or glutamine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "4825 patients across 48 studies undergoing head/neck or GI cancer surgery",
+   "indication_as_stated": "perioperative surgical complications (head/neck or GI cancer)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Immunonutrition reduced the total postoperative complications (relative risk ratio: 0.78; 95% CI, 0.66-0.93; certainty of evidence: high) and infectious complications (relative risk ratio: 0.71; 95% CI, 0.61-0.82; certainty of evidence: high)",
+   "primary_result_quote": null,
+   "sample_size_quote": "Of the 4825 patients from 48 included studies",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Immunonutrition pooled across arginine, omega-3, and glutamine studies; results are not isolable to glutamine alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one of several immunonutrition substrates pooled together in this meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38243579",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "glutamine supplement (route not restricted)",
+   "combination": false,
+   "route": "mixed",
+   "population_as_stated": "2170 patients with burns across 22 trials",
+   "indication_as_stated": "burn patients (hospital stay/mortality/infection/wound healing)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Pooled the length of hospital stay was shortened by glutamine supplement (weighted mean differences [WMD] = -7.95, 95% confidence interval [CI] -10.53 to -5.36, I2 = 67.9%, 16 trials)",
+   "primary_result_quote": "we do not recommend the routine use of glutamine supplement for burn patients in hospital",
+   "sample_size_quote": "Twenty-two trials that randomized a total of 2170 patients were included in this meta-analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Included burn-glutamine trials in this literature are predominantly enteral/IV, not oral supplement use; authors explicitly do not recommend routine use.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material, but pooled across enteral/IV/oral burn trials, not oral-specific.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38337738",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "L-glutamine, 0.15 g/kg, alone or combined with alkaline water",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "12 male boxing athletes",
+   "indication_as_stated": "salivary immunity/hormone response after training (boxing)",
+   "dose_quote": "0.15 g/kg of L-glutamine with 400 mL of alkaline water",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The concentrations of salivary testosterone after training increased significantly in Group A+G but not in Group A or G",
+   "sample_size_quote": "Twelve male boxing athletes were recruited in this study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Glutamine ALONE (Group G) did not significantly increase salivary testosterone or amylase activity; the effect was seen only in the alkaline-water-plus-glutamine combination group.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine was also tested combined with alkaline water; the isolated-glutamine arm (Group G) showed no significant effect.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38474706",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "perioperative immunonutrition (arginine, omega-3, or glutamine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with upper gastrointestinal cancer surgery (23 studies)",
+   "indication_as_stated": "perioperative surgical complications (upper GI cancer)",
+   "dose_quote": null,
+   "primary_outcome_quote": "immunonutrition reduced infectious complications (relative risk ratio: 0.72; 95% confidence interval: 0.57-0.92; certainty of evidence: Moderate)",
+   "primary_result_quote": null,
+   "sample_size_quote": "After screening, 23 studies were included in the qualitative synthesis and in the quantitative synthesis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Immunonutrition pooled across arginine, omega-3, and glutamine studies; results are not isolable to glutamine alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one of several immunonutrition substrates pooled together in this meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38696907",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "oral nutritional supplement formulas (including an arginine/glutamine/HMB combination)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "741 patients (ages 52-81.7) with chronic wounds across 9 studies",
+   "indication_as_stated": "chronic wound healing (pressure injuries, diabetic foot ulcers, venous ulcers)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Two other studies investigated a combination of arginine, glutamine, and \u03b2-hydroxy-\u03b2-methylbutyrate; however, they did not yield significant results",
+   "sample_size_quote": "nine studies from the past decade involving 741 patients ages 52 to 81.7",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Glutamine appears only within a minority (2 of 9) of included studies, always as part of a fixed arginine/glutamine/HMB combination; those specific studies were not significant.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine appears only inside a fixed multi-ingredient combination formula in this review.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38808890",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "oral effervescent glutamine (EGln), 12.4 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "30 older adults (15/group) recruited from daycare centers",
+   "indication_as_stated": "tolerability of glutamine supplementation in older adults",
+   "dose_quote": "a daily dose of 12.4 g of oral effervescent glutamine (EGln group) or maltodextrin (placebo group) for 60 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "oral glutamine did not induce significant changes in any evaluated parameters, and no adverse effects were reported",
+   "sample_size_quote": "Fifteen patients from each group completed the study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Tolerability/safety study, not an efficacy trial; no significant biochemical changes and no adverse effects reported.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38892699",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "L-alanine and L-glutamine electrolyte/amino-acid hydration beverage with B-vitamins",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "40 men and women (4 groups, n=10)",
+   "indication_as_stated": "hydration/electrolyte beverage tolerability",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Our results indicate the product was well-tolerated at all dosing levels and no significant adverse changes occurred in any of the test parameters compared to the placebo group",
+   "sample_size_quote": "Subjects (n = 40; four groups, n = 10) were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Safety/tolerability study of a multi-ingredient hydration beverage (L-alanine, L-glutamine, and B-vitamins); not isolable to glutamine.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one component (with L-alanine and B-vitamins) of a combination hydration beverage.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39397201",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "oral glutamine supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "352 adults across 10 studies (1998-2014)",
+   "indication_as_stated": "gut (intestinal) permeability in adults",
+   "dose_quote": null,
+   "primary_outcome_quote": "glutamine supplementation did not significantly affect intestinal permeability (WMD: -0.00, 95% CI -0.04, 0.03)",
+   "primary_result_quote": "The glutamine supplements were administered orally in all included studies.",
+   "sample_size_quote": "The systematic review and meta-analysis included 10 studies from 1998 to 2014 with 352 participants.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary pooled result null; a subgroup at doses over 30 g/day showed a significant reduction. All included studies confirmed oral administration.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material; review explicitly confirms oral administration in all included studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39675424",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "HMB/L-arginine/L-glutamine combination beverage + locomotion training",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "20 patients with unresectable hepatocellular carcinoma on lenvatinib (HELLO study, pilot)",
+   "indication_as_stated": "hand-foot-skin reaction and sarcopenia (hepatocellular carcinoma on lenvatinib)",
+   "dose_quote": null,
+   "primary_outcome_quote": "No difference in HFSR was observed.",
+   "primary_result_quote": "a slight retention of L3-SMI values in the intervention group compared with that in the control group was observed (96.5 % vs. 89.9 %, p = 0.407)",
+   "sample_size_quote": "A total of 20 patients were enrolled from the jRCTs031190252 trial in this pilot study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary endpoint (hand-foot-skin reaction) not different; secondary muscle-mass retention trend not significant. Glutamine is one of three actives in a fixed combination beverage.",
+   "registrations": [
+    "jRCTs031190252"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one of three components (with HMB and L-arginine) in a fixed combination beverage.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40603739",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "L-glutamine oral suspension, 5 g + maltodextrin 5 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "69 head and neck cancer patients with radiation-induced oral mucositis",
+   "indication_as_stated": "radiation-induced oral mucositis",
+   "dose_quote": "Group II (glutamine 5 g + maltodextrin 5 g)",
+   "primary_outcome_quote": "By week 5, WHO scale scores differed significantly among groups (p < 0.001), with arginine and glutamine groups exhibiting lower mucositis severity than the maltodextrin group.",
+   "primary_result_quote": null,
+   "sample_size_quote": "69 HNC patients with RIOM were allocated to three groups (n = 23 each)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Glutamine tested as its own oral-suspension arm against an arginine arm and a maltodextrin-only placebo arm.",
+   "registrations": [
+    "NCT06764420"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material (co-formulated with an inert maltodextrin carrier).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40914430",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "preoperative HMB/arginine/glutamine combination, twice daily",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "44 older patients (\u226565 years) undergoing elective cardiac surgery",
+   "indication_as_stated": "preoperative inflammation (cardiac surgery, frailty)",
+   "dose_quote": "1200 mg HMB, 7000 mg l-glutamine, and 7000 mg L-arginine, twice daily",
+   "primary_outcome_quote": "Preoperative HMB supplementation significantly reduced pre-surgery serum TNF-\u03b1 levels compared to the control group (0.85 \u00b1 0.28 pg/mL vs. 1.10 \u00b1 0.44 pg/mL, p = 0.039)",
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty-four patients (mean age 72.5 years, 36 % women) were analyzed.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Combination of HMB, glutamine, and arginine; effect attributed to HMB by the authors, not isolable to glutamine.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine is one of three components (with HMB and arginine) in a fixed combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41384483",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "perioperative immunonutrition (omega-3, glutamine, arginine, or combinations)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "colorectal cancer resection patients across 10 studies",
+   "indication_as_stated": "colorectal cancer surgery (postoperative complications)",
+   "dose_quote": null,
+   "primary_outcome_quote": "significant reductions in minor infectious complications (risk ratio [RR], 0.67; 95% CI, 0.51 to 0.89; P < .01)",
+   "primary_result_quote": null,
+   "sample_size_quote": "Of 1018 studies identified, 10 met the eligibility criteria",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Only 1 of 10 included studies used glutamine as an individual substrate; most used combinations (omega-3+arginine+nucleotides, or omega-3+arginine).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glutamine contributes to only a small minority of the pooled immunonutrition studies in this review.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41479717",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "perioperative glutamine-enriched nutritional support",
+   "combination": false,
+   "route": "mixed",
+   "population_as_stated": "1643 colorectal cancer patients across 27 studies",
+   "indication_as_stated": "colorectal cancer (perioperative nutritional support)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Pooled analysis showed that Gln intervention reduced morbidity associated with postoperative infectious complications (RR = 0.36; 95%CI: 0.24-0.54) and non-infectious complications (RR = 0.32; 95%CI: 0.19-0.55) and shortened the LOS by 2.31 days (MD = -2.31; 95%CI: -3.21 to -1.41)",
+   "primary_result_quote": null,
+   "sample_size_quote": "This meta-analysis ultimately included 27 studies with a total of 1643 patients; 827 patients received perioperative Gln treatment and 816 received conventional nutritional therapy.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Perioperative glutamine literature in this population is typically heterogeneous in route (enteral/parenteral/oral); route not restricted to oral in this abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material, but pooled across perioperative routes, not oral-specific.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41664386",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "L-glutamine added to background hydroxyurea",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "53 pediatric/adolescent patients with sickle cell anemia (HbSS or HbS/\u03b20-thalassemia)",
+   "indication_as_stated": "sickle cell anemia (vaso-occlusive crisis, on hydroxyurea)",
+   "dose_quote": null,
+   "primary_outcome_quote": "the HU + L-glutamine group experienced significantly fewer VOCs (1.00\u00b10.73 vs. 1.65\u00b10.80; p=0.003) and ACS episodes (0.19 vs. 0.77; p=0.006)",
+   "primary_result_quote": null,
+   "sample_size_quote": "53 patients with HbSS or HbS/\u03b20-thalassemia were randomized to the HU + L-glutamine (n=27) or the HU + placebo (n=26) group",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Both arms continued background hydroxyurea (~20 mg/kg/day); glutamine vs. placebo is the isolated randomized variable on top of that constant background.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material; hydroxyurea background held constant across both arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42366260",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "glutamine supplementation (oral or parenteral, pooled)",
+   "combination": false,
+   "route": "mixed",
+   "population_as_stated": "adults >18 years with chronic diseases across 6 RCTs",
+   "indication_as_stated": "inflammatory/oxidative stress markers in chronic diseases",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "glutamine was administered to the participants through oral or parenteral routes",
+   "sample_size_quote": "Six RCTs that assessed the effect of glutamine supplementation on inflammation and oxidative stress markers were included in the study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Explicitly pools oral AND parenteral glutamine studies together; results cannot be isolated to oral supplementation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine matches label material, but pooled across oral and parenteral routes.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42628795",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "l-glutamine (Endari), analyzed alongside voxelotor and crizanlizumab",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "sickle cell disease patients across 8 studies",
+   "indication_as_stated": "sickle cell disease (newer pharmacotherapies benefit-risk)",
+   "dose_quote": null,
+   "primary_outcome_quote": "l-glutamine reduced vaso-occlusive crisis burden in the pivotal trial (rate ratio, 0.75; 95% confidence interval, 0.62-0.90)",
+   "primary_result_quote": null,
+   "sample_size_quote": "Of 742 records identified, 398 remained after deduplication, 52 full-text reports were assessed, and eight studies contributed to the structured synthesis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Comparative review of three separate SCD drugs (l-glutamine, crizanlizumab, voxelotor); l-glutamine's result is separately reported and attributable, referencing the same pivotal trial as 30021096.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Glutamine analyzed as its own therapy within a multi-drug comparative review, referencing the pivotal RCT.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "30021096",
+  "30108163",
+  "10701731",
+  "33580845",
+  "23471208",
+  "39397201",
+  "26709241",
+  "28421779",
+  "34444657",
+  "32826717",
+  "37375676",
+  "41664386"
+ ],
+ "handoff": [
+  {
+   "pmid": "23471208",
+   "role": "safety",
+   "reason": "RCT found MORE radiation enteritis with glutamine 30 g/d than placebo (55.9% vs 22.0%, P=.002) -- a signal against benefit/possible harm in this indication, worth safety-review attention."
+  },
+  {
+   "pmid": "30021096",
+   "role": "safety",
+   "reason": "Pivotal SCD trial: low-grade nausea, noncardiac chest pain, fatigue, and musculoskeletal pain occurred more frequently in the l-glutamine group than placebo; glutamine also only tolerated in about two-thirds of patients per 32309821."
+  },
+  {
+   "pmid": "42366260",
+   "role": "other",
+   "reason": "Review explicitly pools oral AND parenteral glutamine studies together without separating results by route; flagged for anyone reusing its pooled estimates as oral-specific evidence."
+  }
+ ],
+ "identity_notes": "L-glutamine's retrieval set is dominated by two large confounds: (1) a huge body of PARENTERAL/ENTERAL critical-care and perioperative nutrition literature (TPN, alanyl-glutamine dipeptide infusions, dialysis-fluid additives, feeding-tube formulas) that is NOT evidence for oral supplement use and was rejected not_this_route throughout, and (2) a large cluster of neuroscience/metabolomics false matches where 'glutamine'/'glutamate' appears only as a measured neurotransmitter or biomarker (brain MRS studies in schizophrenia, Alzheimer's, autism, psychosis; metabolomics panels in diabetes, cancer, glaucoma, etc.), rejected off_topic or not_intervention. Among genuine oral trials, the strongest, most consistent single-ingredient efficacy signal is in sickle cell disease (pivotal Phase 3 trial 30021096, supporting FDA approval as Endari, corroborated by real-world data 35979207 and reviews 32309821/42628795) -- though tolerability was limited to about two-thirds of patients and adverse events (nausea, chest pain, fatigue, musculoskeletal pain) were more frequent than placebo. A second reasonably clean body of oral-glutamine evidence exists for GI/mucosal indications (postinfectious IBS-D 30108163 positive; radiation esophagitis 33580845 negative/futility; radiation enteritis 23471208 negative and possibly worse with glutamine; gut permeability meta-analysis 39397201 null overall with a high-dose subgroup signal). Sports-nutrition and healthy-aging oral trials (22048324, 25933498, 32411324, 32729784, 32992440, 33809996) are mostly small, mechanistic/biomarker-outcome studies with mixed or null results on hard endpoints. A substantial share of kept records are combination products (HMB/arginine/glutamine 'Juven'-type formulas, cystine+glutamine, arginine+glutamine+fish oil, alanyl-glutamine dipeptide, alkaline-water+glutamine) flagged related_form_differs -- these should not be read as evidence for isolated L-glutamine. Reviewers should weight the small set of clean, single-ingredient, placebo-controlled oral RCTs (30021096, 30108163, 10701731, 33580845, 23471208, 26709241, 28421779) most heavily for a single-ingredient label claim, and note that two of these single-ingredient trials (23471208, and secondary AEs in 30021096) point toward possible harm/no-benefit signals rather than uniformly positive evidence."
+}

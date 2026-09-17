@@ -1,0 +1,2249 @@
+{
+  "canonical_id": "l_carnosine",
+  "screened": 146,
+  "kept": 47,
+  "rejected": [
+    {
+      "pmid": "8894306",
+      "reason": "not_this_route",
+      "note": "N alpha-acetylcarnosine ophthalmic prodrug antioxidant application; topical eye drop delivery, not oral supplementation."
+    },
+    {
+      "pmid": "14705962",
+      "reason": "off_topic",
+      "note": "Dihydropyrimidine dehydrogenase deficiency / beta-aminoisobutyric acid metabolism; unrelated to carnosine supplementation."
+    },
+    {
+      "pmid": "16868650",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation study measuring skeletal muscle carnosine as a downstream biomarker; administered substance is beta-alanine, not carnosine."
+    },
+    {
+      "pmid": "17136505",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "19214556",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation and isokinetic training; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "19917212",
+      "reason": "off_topic",
+      "note": "Broad systematic review of novel/emerging ASD treatments; not carnosine-specific in scope."
+    },
+    {
+      "pmid": "20224285",
+      "reason": "off_topic",
+      "note": "Alzheimer's disease treated with a cholinesterase inhibitor combined with broad 'antioxidants'; not confirmed carnosine-specific."
+    },
+    {
+      "pmid": "21793899",
+      "reason": "not_this_route",
+      "note": "N-acetylcarnosine lubricant eye drops; topical ophthalmic delivery, not oral."
+    },
+    {
+      "pmid": "22270875",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation meta-analysis on exercise performance; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "23170749",
+      "reason": "off_topic",
+      "note": "Preseason altitude-training camp physiological responses in team-sport athletes; not a carnosine intervention study."
+    },
+    {
+      "pmid": "23918656",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation systematic review on performance."
+    },
+    {
+      "pmid": "24350200",
+      "reason": "off_topic",
+      "note": "Broad review of traditional/novel seizure treatments in ASD; not carnosine-specific."
+    },
+    {
+      "pmid": "24457999",
+      "reason": "different_substance",
+      "note": "Doubling of muscle carnosine concentration achieved via beta-alanine supplementation; administered substance is beta-alanine, not carnosine."
+    },
+    {
+      "pmid": "25326781",
+      "reason": "animal_or_invitro",
+      "note": "Zinc carnosine protection against DNA damage in a lymphoblastoid cell line (WIL2-NS); in vitro cell study, not human."
+    },
+    {
+      "pmid": "25510839",
+      "reason": "different_substance",
+      "note": "Beta-alanine ingestion study in soldiers; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "25755079",
+      "reason": "off_topic",
+      "note": "Zinc supplementation alone in an elderly population; not a carnosine intervention."
+    },
+    {
+      "pmid": "25894892",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation and plyometric performance; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "26052147",
+      "reason": "different_substance",
+      "note": "Acute beta-alanine supplementation in trained female cyclists."
+    },
+    {
+      "pmid": "26110349",
+      "reason": "different_substance",
+      "note": "28-day beta-alanine supplementation in female masters athletes."
+    },
+    {
+      "pmid": "26175657",
+      "reason": "different_substance",
+      "note": "International Society of Sports Nutrition position stand on Beta-Alanine; not carnosine."
+    },
+    {
+      "pmid": "26389600",
+      "reason": "not_intervention",
+      "note": "Observational study of plasma carnosinase content/activity relative to aerobic/resistance training in type 2 diabetes; no carnosine supplementation administered."
+    },
+    {
+      "pmid": "27217925",
+      "reason": "different_substance",
+      "note": "Beta-alanine plus creatine supplementation study; administered substances are beta-alanine and creatine, not carnosine."
+    },
+    {
+      "pmid": "27377257",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation systematic review on performance/fatigue."
+    },
+    {
+      "pmid": "27488081",
+      "reason": "off_topic",
+      "note": "Minocycline combination therapy with fluvoxamine for OCD; no carnosine intervention."
+    },
+    {
+      "pmid": "27601217",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation in judo athletes."
+    },
+    {
+      "pmid": "27797728",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation systematic review and meta-analysis on exercise capacity/performance."
+    },
+    {
+      "pmid": "28157726",
+      "reason": "different_substance",
+      "note": "24-week beta-alanine supplementation study on carnosine content/genes/exercise; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "28229390",
+      "reason": "off_topic",
+      "note": "Sodium bicarbonate dosing study in collegiate athletes; no carnosine intervention."
+    },
+    {
+      "pmid": "28245346",
+      "reason": "not_this_route",
+      "note": "N-acetylcarnosine (NAC) eye drops for age-related cataract; topical ophthalmic delivery."
+    },
+    {
+      "pmid": "28349262",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation and muscle relaxation speed; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "28864708",
+      "reason": "not_intervention",
+      "note": "Study protocol for a planned RCT of carnosine in pre-diabetes/T2D; no outcome data reported (protocol only)."
+    },
+    {
+      "pmid": "28910200",
+      "reason": "different_substance",
+      "note": "Comparison of two beta-alanine dosing protocols on muscle carnosine elevation; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "29180884",
+      "reason": "off_topic",
+      "note": "Open-label cosmetic product study for facial contour/anti-aging; composition and route unclear, not confirmed as an oral carnosine supplement."
+    },
+    {
+      "pmid": "29224504",
+      "reason": "animal_or_invitro",
+      "note": "Mechanistic study of carnosine-induced activation of neuronal cells; cell-culture/mechanistic study, not a human clinical trial."
+    },
+    {
+      "pmid": "29482601",
+      "reason": "off_topic",
+      "note": "Study protocol for HIIT vs continuous aerobic training in metabolic syndrome; no carnosine intervention."
+    },
+    {
+      "pmid": "29567852",
+      "reason": "not_intervention",
+      "note": "Protocol for a planned systematic review of carnosine/HCD supplementation on chronic disease risk factors; no results reported (protocol only)."
+    },
+    {
+      "pmid": "29996843",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation and physical performance/executive function; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "30003336",
+      "reason": "different_substance",
+      "note": "Comparison of beta-alanine formulations (sustained- vs rapid-release) on muscle carnosine/histidine content."
+    },
+    {
+      "pmid": "30334920",
+      "reason": "not_intervention",
+      "note": "Observational study of muscle carnosine response to high-intensity interval training in the absence of dietary beta-alanine; no carnosine supplementation administered."
+    },
+    {
+      "pmid": "30563538",
+      "reason": "different_substance",
+      "note": "Comparison of two beta-alanine dosing strategies on rowing performance."
+    },
+    {
+      "pmid": "30980076",
+      "reason": "different_substance",
+      "note": "Systematic risk assessment/meta-analysis of oral beta-alanine supplementation; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "31131735",
+      "reason": "off_topic",
+      "note": "Meta-analysis of 'essence of chicken' consumption and cognitive function; not specifically isolated carnosine supplementation."
+    },
+    {
+      "pmid": "31671464",
+      "reason": "animal_or_invitro",
+      "note": "Nephroprotective role of carnosine against ifosfamide-induced renal injury; animal (rat) model study."
+    },
+    {
+      "pmid": "31703346",
+      "reason": "different_substance",
+      "note": "Pilot study of beta-alanine supplementation on anaerobic performance in collegiate rugby athletes."
+    },
+    {
+      "pmid": "31704198",
+      "reason": "off_topic",
+      "note": "Broad systematic review of nutraceuticals in heart failure; not carnosine-specific in scope as described."
+    },
+    {
+      "pmid": "32127611",
+      "reason": "off_topic",
+      "note": "Author Correction notice only for a carnosine lipidome pilot RCT; no extractable outcome data, and the underlying original study is not separately present in this retrieval set."
+    },
+    {
+      "pmid": "32246262",
+      "reason": "not_intervention",
+      "note": "Observational biomarker study of the anserine:carnosine ratio for discriminating meat consumption in free-living participants; not a carnosine supplementation intervention."
+    },
+    {
+      "pmid": "32423010",
+      "reason": "off_topic",
+      "note": "Systematic review of histidine metabolism and physiological effects; covers the histidine identity, not carnosine specifically."
+    },
+    {
+      "pmid": "32796546",
+      "reason": "off_topic",
+      "note": "Space flight diet-induced deficiency and resistive exercise; not confirmed carnosine-specific in scope."
+    },
+    {
+      "pmid": "32833890",
+      "reason": "different_substance",
+      "note": "Reduced-dose beta-alanine supplementation study on repeated sprint performance."
+    },
+    {
+      "pmid": "32922303",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of the muscle carnosine response to beta-alanine supplementation; administered substance is beta-alanine."
+    },
+    {
+      "pmid": "32984902",
+      "reason": "duplicate",
+      "note": "Corrigendum to the carnosine/HCD dyslipidemia systematic review already captured as PMID 32594145; same underlying study."
+    },
+    {
+      "pmid": "33123356",
+      "reason": "off_topic",
+      "note": "Genetic map of diabetic nephropathy from genetic association studies; no carnosine intervention."
+    },
+    {
+      "pmid": "33278906",
+      "reason": "not_intervention",
+      "note": "Protocol for a planned systematic review/meta-analysis of carnosine or beta-alanine on glycaemic control; no results reported (protocol only)."
+    },
+    {
+      "pmid": "33789445",
+      "reason": "not_intervention",
+      "note": "Observational study of carnosine homeostasis relative to chronic muscle inactivity in spinal cord-injured athletes; no carnosine supplementation administered."
+    },
+    {
+      "pmid": "34024507",
+      "reason": "different_substance",
+      "note": "Meta-analysis of beta-alanine supplementation on Yo-Yo test performance."
+    },
+    {
+      "pmid": "34092191",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation and simulated road cycling performance."
+    },
+    {
+      "pmid": "34098531",
+      "reason": "different_substance",
+      "note": "Individual participant data meta-analysis of beta-alanine supplementation response variation."
+    },
+    {
+      "pmid": "34254485",
+      "reason": "not_intervention",
+      "note": "Observational evaluation of serum/salivary carnosine and cotinine levels in children with passive smoking exposure; biomarker study, not a supplementation intervention."
+    },
+    {
+      "pmid": "34297586",
+      "reason": "animal_or_invitro",
+      "note": "Dual carnosine/aloe vera nanophytosome formulation tested against methylglyoxal-induced angiogenesis impairment; in vitro/mechanistic study."
+    },
+    {
+      "pmid": "34298670",
+      "reason": "off_topic",
+      "note": "Aqualief mucoadhesive tablets for radiation-induced xerostomia; composition not confirmed as carnosine-based in the retrieved title/scope."
+    },
+    {
+      "pmid": "34575593",
+      "reason": "different_substance",
+      "note": "Bioavailability comparison of beta-alanine delivery formulations."
+    },
+    {
+      "pmid": "34687360",
+      "reason": "off_topic",
+      "note": "Clinical trial of HIIT vs continuous aerobic training on insulin resistance in metabolic syndrome; no carnosine intervention."
+    },
+    {
+      "pmid": "34736541",
+      "reason": "off_topic",
+      "note": "Systematic review/meta-analysis of glutamatergic medications (e.g., riluzole, memantine) as adjunctive OCD therapy; no carnosine intervention."
+    },
+    {
+      "pmid": "34882489",
+      "reason": "different_substance",
+      "note": "Systematic review of beta-alanine and sodium bicarbonate co-supplementation on buffering capacity/performance."
+    },
+    {
+      "pmid": "35043647",
+      "reason": "off_topic",
+      "note": "Broad review of side effects of amino acid supplements generally; not carnosine-specific extractable data."
+    },
+    {
+      "pmid": "35128402",
+      "reason": "different_substance",
+      "note": "Beta-glucan food supplement pilot study in autism spectrum disorder; administered substance is beta-glucan, not carnosine."
+    },
+    {
+      "pmid": "35246237",
+      "reason": "off_topic",
+      "note": "Broad network meta-analysis of pharmacological and dietary-supplement treatments for ASD; not carnosine-specific in scope."
+    },
+    {
+      "pmid": "35268036",
+      "reason": "off_topic",
+      "note": "Broad review of food-related carbonyl stress in cardiometabolic/cancer risk; not a carnosine intervention study."
+    },
+    {
+      "pmid": "35888764",
+      "reason": "animal_or_invitro",
+      "note": "Impact of cattle feeding strategy on the beef metabolome; animal/livestock study, not human."
+    },
+    {
+      "pmid": "36014800",
+      "reason": "off_topic",
+      "note": "Anti-inflammatory diet study in ulcerative colitis; broad dietary pattern, not a carnosine-specific intervention."
+    },
+    {
+      "pmid": "36093695",
+      "reason": "different_substance",
+      "note": "Beta 1,3-1,6 glucan supplementation and gut microbiota in ASD; administered substance is beta-glucan, not carnosine."
+    },
+    {
+      "pmid": "36636181",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation and adaptations to resistance training."
+    },
+    {
+      "pmid": "36863678",
+      "reason": "off_topic",
+      "note": "Serum metabolome analysis of amino-acid metabolism associated with knee osteoarthritis pain; observational metabolomics, not a carnosine intervention."
+    },
+    {
+      "pmid": "37654090",
+      "reason": "off_topic",
+      "note": "Broad review of diet and non-pharmacologic supplements for chronic neuropathic pain; not carnosine-specific in scope."
+    },
+    {
+      "pmid": "37686787",
+      "reason": "different_substance",
+      "note": "Systematic review of beta-alanine supplementation in combat sports."
+    },
+    {
+      "pmid": "37742605",
+      "reason": "animal_or_invitro",
+      "note": "Carnosine and cisplatin-induced acute kidney injury via caspase-1/pyroptosis; mechanistic/animal-model study, not a human clinical trial."
+    },
+    {
+      "pmid": "37996766",
+      "reason": "off_topic",
+      "note": "Mechanism of Cr(VI) removal by a resistant bacterial strain; unrelated to carnosine (apparent keyword false match)."
+    },
+    {
+      "pmid": "38348714",
+      "reason": "animal_or_invitro",
+      "note": "Quantitative proteomics study of carnosine in an animal model of Western diet-induced NAFLD."
+    },
+    {
+      "pmid": "38742477",
+      "reason": "off_topic",
+      "note": "Skeletal muscle hypertrophy and glucose metabolism experimental/systematic review; no carnosine intervention."
+    },
+    {
+      "pmid": "38890832",
+      "reason": "animal_or_invitro",
+      "note": "Chicken-herb essence and milk production in a Sprague Dawley animal model."
+    },
+    {
+      "pmid": "38906088",
+      "reason": "animal_or_invitro",
+      "note": "Metabolic/phenotypic changes from PFAS exposure in human hepatocyte cell models; in vitro cell study unrelated to carnosine supplementation."
+    },
+    {
+      "pmid": "38971131",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation and fractional anisotropy in hippocampus/amygdala."
+    },
+    {
+      "pmid": "39032921",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of beta-alanine supplementation on maximal intensity exercise."
+    },
+    {
+      "pmid": "39064783",
+      "reason": "different_substance",
+      "note": "Beta-alanine supplementation in high-intensity functional training."
+    },
+    {
+      "pmid": "39169398",
+      "reason": "off_topic",
+      "note": "Novel metabolic/lipidomic biomarkers of sarcopenia; no carnosine intervention."
+    },
+    {
+      "pmid": "39380951",
+      "reason": "off_topic",
+      "note": "Metabolomics-based biomarkers of fermented dairy and red meat intake; biomarker-discovery RCT, not a carnosine intervention."
+    },
+    {
+      "pmid": "39724872",
+      "reason": "different_substance",
+      "note": "Systematic review of beta-alanine for exercise capacity/muscle strength in older adults."
+    },
+    {
+      "pmid": "39759812",
+      "reason": "off_topic",
+      "note": "Chicken essence consumption and post-exercise hypotension; not confirmed as an isolated carnosine supplement study."
+    },
+    {
+      "pmid": "40859880",
+      "reason": "not_this_route",
+      "note": "Topical carnosine gel for exercise performance in rugby players; topical, not oral."
+    },
+    {
+      "pmid": "40995761",
+      "reason": "different_substance",
+      "note": "Systematic review of beta-alanine dosing strategies for strength/power performance."
+    },
+    {
+      "pmid": "41071465",
+      "reason": "off_topic",
+      "note": "Broad systematic review of antioxidant-based pharmacological therapies in ASD; not carnosine-specific in scope."
+    },
+    {
+      "pmid": "41462868",
+      "reason": "animal_or_invitro",
+      "note": "Exercise and carnosine effects on microbiota-derived metabolites/myokines in rats; animal study."
+    },
+    {
+      "pmid": "41485875",
+      "reason": "off_topic",
+      "note": "Diet-wide biomarker-of-intake panel feeding trial; biomarker discovery, not a carnosine intervention."
+    },
+    {
+      "pmid": "41855025",
+      "reason": "not_this_route",
+      "note": "Zinc-L-carnosine mouthwash for oral mucositis; topical/local oral-cavity application, not a systemic oral supplement."
+    },
+    {
+      "pmid": "41971372",
+      "reason": "different_substance",
+      "note": "Systematic review/multilevel meta-analysis of beta-alanine's ergogenic effect on repeated sprint ability."
+    },
+    {
+      "pmid": "42384726",
+      "reason": "different_substance",
+      "note": "Systematic review/network meta-analysis of combined creatine and beta-alanine supplementation; carnosine not the administered substance."
+    },
+    {
+      "pmid": "42505716",
+      "reason": "not_this_route",
+      "note": "Systematic review of zinc L-carnosine's protective/healing effects on the oral mucosa; topical/local mucosal application."
+    },
+    {
+      "pmid": "42510634",
+      "reason": "off_topic",
+      "note": "Broad systematic review of natural products/functional foods/probiotics for NSAID-induced small intestinal injury; not carnosine-specific in scope."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "12585724",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "31 children with autistic spectrum disorders",
+          "8-week double-blinded study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "800 mg L-carnosine daily",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "31 children with autistic spectrum disorders",
+      "indication_as_stated": "autistic spectrum disorders",
+      "dose_quote": "800 mg L-carnosine daily",
+      "primary_outcome_quote": "Outcome measures were the Childhood Autism Rating Scale, the Gilliam Autism Rating Scale, the Expressive and Receptive One-Word Picture Vocabulary tests, and Clinical Global Impressions of Change.",
+      "primary_result_quote": "After 8 weeks on L-carnosine, children showed statistically significant improvements on the Gilliam Autism Rating Scale (total score and the Behavior, Socialization, and Communication subscales) and the Receptive One-Word Picture Vocabulary test (all P < .05).",
+      "sample_size_quote": "31 children with autistic spectrum disorders",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Positive on Gilliam Autism Rating Scale and receptive vocabulary; Childhood Autism Rating Scale and expressive vocabulary not reported as significant ('improved trends were noted on other outcome measures').",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "22454085",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "perspective article discussing mechanisms and prior human/animal literature",
+          "no new primary participant data"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "carnosine as an anti-neoplastic therapeutic",
+      "combination": false,
+      "route": "unstated",
+      "population_as_stated": null,
+      "indication_as_stated": "malignant brain tumours such as glioblastoma",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "many claims of therapeutic effects have not been substantiated by rigorous experimental examination",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Perspective/opinion piece on carnosine's anti-tumor mechanisms for glioblastoma; explicitly notes prior therapeutic claims are not rigorously substantiated; no primary trial data.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23099060",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Seventy-five symptomatically stable adults with chronic schizophrenia",
+          "randomized double-blind 3-month trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "L-carnosine as adjunctive treatment (2 g/day)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Seventy-five symptomatically stable adults with chronic schizophrenia",
+      "indication_as_stated": "executive cognitive dysfunction in chronic schizophrenia",
+      "dose_quote": "L-carnosine as adjunctive treatment (2 g/day) or a matched placebo",
+      "primary_outcome_quote": "Cognitive domains (executive dysfunction, memory, attention and motor speed) were assessed using a computerized battery at baseline, 4 and 12 weeks",
+      "primary_result_quote": "the L-carnosine group displayed significantly improved strategic efficiency and made fewer perseverative errors compared with placebo. Other cognitive tests showed no significant differences between treatments.",
+      "sample_size_quote": "Seventy-five symptomatically stable adults with chronic schizophrenia",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Adjunctive to standard antipsychotics, not carnosine alone. Improved set-shifting speed and strategic target detection efficiency; memory/attention/other tests not significant; carnosine group had more adverse events (30% vs 14%).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-carnosine' matches label spelling; used as adjuvant to existing antipsychotic treatment."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23618477",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "25 GWI subjects",
+          "randomized double blind placebo controlled 12 week dose escalation study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "L-carnosine was given as 500, 1000, and 1500 mg increasing at 4 week intervals",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "25 GWI subjects (Gulf War illness / Chronic Multisymptom Illness)",
+      "indication_as_stated": "Gulf War illness (GWI) / Chronic Multisymptom Illness (CMI): pain, cognition and fatigue",
+      "dose_quote": "L-carnosine was given as 500, 1000, and 1500 mg increasing at 4 week intervals",
+      "primary_outcome_quote": "Outcomes included subjective fatigue, pain and psychosocial questionnaires, and instantaneous fatigue and activity levels recorded by ActiWatch Score devices. Cognitive function was evaluated by WAIS-R digit symbol substitution test.",
+      "primary_result_quote": "Carnosine had 2 potentially beneficial effects: WAIS-R scores increased significantly, and there was a decrease in diarrhea associated with irritable bowel syndrome. No other significant incremental changes were found.",
+      "sample_size_quote": "25 GWI subjects",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Only 2 of many outcomes improved (WAIS-R digit symbol score, IBS-related diarrhea); 'Fatigue, pain, hyperalgesia, activity and other outcomes were resistant to treatment.' Mostly a null result for the disorder's core symptoms.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-carnosine (B-alanyl-L-histidine)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23835365",
+      "design": "non_randomized_controlled_trial",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Forty-two patients with stage II-IV pressure ulcers",
+          "nonrandomized controlled trial, institutionalized long-term care patients"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "orally received 116 mg/d CAR [L-carnosine]; comparator arm received 150 mg/d PLZ (containing 116 mg CAR and 34 mg zinc)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Forty-two patients with stage II-IV pressure ulcers for 4 or more weeks, institutionalized long-term care",
+      "indication_as_stated": "pressure ulcer healing",
+      "dose_quote": "orally received 116 mg/d CAR",
+      "primary_outcome_quote": "Pressure ulcer severity was measured weekly using the Pressure Ulcer Scale for Healing (PUSH) score.",
+      "primary_result_quote": "the rate of pressure ulcer healing, assessed by the mean weekly improvement in PUSH score, was significantly greater in the CAR (1.6 ± 0.2, P = .02) and PLZ groups (1.8 ± 0.2, P = .009) than in the control group (0.8 ± 0.2)",
+      "sample_size_quote": "Forty-two patients with stage II-IV pressure ulcers for 4 or more weeks",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Nonrandomized (allocated 'in order of recruitment'), not randomized; a parallel Polaprezinc (zinc-carnosine chelate) arm gave a similar effect ('difference between the CAR and PLZ groups was not significant'). Authors state results need confirmation by RCTs with larger samples.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "CAR arm is plain L-carnosine matching label spelling; PLZ arm is the related zinc-L-carnosine chelate (Polaprezinc), noted separately."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "24880197",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fifty-six subjects (65+)",
+          "double-blind, 13-week supplementation, follow-up n=51"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Chicken meat extract (CME) containing 40% of CRC [anserine+carnosine] components (2:1 ratio of anserine to carnosine)... 2.5 g per day which allowed to rich the level of 1g CRC in dipeptides supplement",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "The fifty-six subjects (65+)",
+      "indication_as_stated": "cognitive functioning and physical activity of the elderly",
+      "dose_quote": "Chicken meat extract (CME) containing 40% of CRC components (2:1 ratio of anserine to carnosine) was administered 2.5 g per day",
+      "primary_outcome_quote": "The cognitive function, physical capacity, body measurements, blood pressure and heart rate (HR) were assessed.",
+      "primary_result_quote": "The mean values of the Short Test of Mental Status (STMS) scores showed the significant (p<0.04) increase only in CRC group, in the subscores of construction/copying, abstraction and recall.",
+      "sample_size_quote": "The fifty-six subjects (65+) were allocated to the CRC group or placebo group at a 1:1 ratio",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Anserine:carnosine combination (2:1), not carnosine alone. Authors caveat: 'further studies are needed.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Administered as anserine+carnosine (2:1) combination dipeptide supplement from chicken meat extract, not isolated L-carnosine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "25201708",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fourteen male athletes from the Polish national kayak and canoe teams",
+          "placebo-controlled cross-over study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "supplemented with 4 g/d carnosine for 14 days",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Fourteen male athletes from the Polish national kayak and canoe teams",
+      "indication_as_stated": "pro-antioxidant status in highly trained athletes exposed to intense exercise",
+      "dose_quote": "supplemented with 4 g/d carnosine for 14 days",
+      "primary_outcome_quote": "hydrogen peroxide (H2O2), nitric oxide (NO), markers of RO/NS activity 8-isoprostanes and 3-nitrotyrosine, total (GSHt) and oxidised glutathione (GSSG), antioxidant status (APO) and superoxide dismutase (SOD) were determined",
+      "primary_result_quote": "oral supplementation with 4 g carnosine did not affect RO/NS generation, it significantly attenuated exercise-induced glutathione loss, reduced oxidation/nitration markers concentration and SOD activity",
+      "sample_size_quote": "Fourteen male athletes from the Polish national kayak and canoe teams",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Null on primary ROS markers (H2O2, NO, SOD activity change); positive on secondary oxidative-stress markers (8-isoprostanes, 3-nitrotyrosine, GSSG, glutathione loss). Elite-athlete population; biomarker outcomes only, no performance outcome.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26308179",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twelve healthy participants",
+          "acute crossover supplementation study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "acute combined L-carnosine and β-alanine (Carn-BA) supplementation... 4 h after ingestion of Carn-BA (2 g of L-carnosine and 2 g of β-alanine) or placebo (PLA)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Twelve healthy participants",
+      "indication_as_stated": "isometric and dynamic muscle performance after a fatiguing protocol",
+      "dose_quote": "4 h after ingestion of Carn-BA (2 g of L-carnosine and 2 g of β-alanine) or placebo (PLA)",
+      "primary_outcome_quote": "Isometric and dynamic tests were performed 4 h after ingestion of Carn-BA",
+      "primary_result_quote": "MVC decreased in both PLA and Carn-BA, but it was higher in Carn-BA than in PLA (+15%, P = 0.012), while CMJ did not change.",
+      "sample_size_quote": "Twelve healthy participants",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Co-administered as a 1:1 g L-carnosine + β-alanine acute combination (Carn-BA), not carnosine alone; cannot isolate the carnosine-specific contribution.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "L-carnosine dosed only within an equal-mass combination with β-alanine (a distinct precursor supplement), not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26771282",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty-two patients (44 eyes) with POAG",
+          "randomly assigned, 12-month follow-up"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a food supplement containing forskolin, homotaurine, carnosine, folic acid, vitamins B1, B2, B6, and magnesium... 2 tablets per day",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Twenty-two patients (44 eyes) with primary open angle glaucoma (POAG), already in treatment and compensated by IOP-lowering drugs",
+      "indication_as_stated": "primary open angle glaucoma (POAG): intraocular pressure, PERG amplitude, foveal sensitivity",
+      "dose_quote": "2 tablets per day (1 in the morning, 1 in the evening) given for 1 year of a balanced association of homotaurine, Coleus forskohlii root extract, L-carnosine, folic acid, vitamins B1, B2, B6, and magnesium",
+      "primary_outcome_quote": "Pattern Electroretinogram (PERG) amplitude, foveal sensitivity obtained with the visual field analyzer frequency doubling technology, and IOP were detected at enrollment (T0), 3 months (T1), 6 months (T2), 9 months (T3), and 12 months (T4).",
+      "primary_result_quote": "We observed in treated patients a significant further decrease of IOP and an improvement of PERG amplitude at 6, 9, and 12 months, and foveal sensitivity at 12 months.",
+      "sample_size_quote": "Twenty-two patients (44 eyes) with POAG",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "7-ingredient oral combination (L-carnosine is one, undosed individually); result cannot be attributed to carnosine alone. Adjunct to existing topical IOP-lowering drug therapy.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "L-carnosine present only as one undosed ingredient in a 7-component oral combination supplement."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27040154",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "double-blind randomized pilot trial",
+          "15 individuals per arm, nondiabetic overweight/obese"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "15 individuals were randomly assigned to 2 g carnosine daily and 15 individuals to placebo for 12 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "nondiabetic individuals with overweight and obesity (age 43 ± 8 years; body mass index 31 ± 4 kg/m(2))",
+      "indication_as_stated": "diabetes and cardiovascular risk factors in overweight/obesity",
+      "dose_quote": "15 individuals were randomly assigned to 2 g carnosine daily and 15 individuals to placebo for 12 weeks",
+      "primary_outcome_quote": "Insulin sensitivity and secretion, glucose tolerance (oral glucose tolerance test), blood pressure, plasma lipid profile, skeletal muscle ((1) H-MRS), and urinary carnosine levels were measured.",
+      "primary_result_quote": "An increase in fasting insulin and insulin resistance was hampered in individuals receiving carnosine compared to placebo, and this remained significant after adjustment for age, sex, and change in body weight (P = 0.02, P = 0.04, respectively).",
+      "sample_size_quote": "15 individuals were randomly assigned to 2 g carnosine daily and 15 individuals to placebo",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Pilot trial, small sample (n=30 total); authors frame as prevention-focused pilot data, not confirmatory.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "28485008",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Forty-four patients diagnosed with moderate to severe OCD",
+          "randomized double-blind trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "L-carnosine or placebo as adjuvant to fluvoxamine for 10 weeks",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Forty-four patients diagnosed with moderate to severe OCD",
+      "indication_as_stated": "obsessive-compulsive disorder (OCD), adjuvant to fluvoxamine",
+      "dose_quote": null,
+      "primary_outcome_quote": "The Yale- Brown Obsessive Compulsive Scale (Y-BOCS) was used for assessing the severity of symptoms at baseline and at weeks 4, 8, and 10.",
+      "primary_result_quote": "At week 10, the change from baseline in Y-BOCS scores was 8.86 ± 2.89 (mean ± SD) in the L-carnosine group compared to 5.86 ± 2.88 in the placebo group.",
+      "sample_size_quote": "Forty-four patients diagnosed with moderate to severe OCD",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Adjunct to fluvoxamine (an SSRI), not carnosine monotherapy. No single-span dose quote found in the retrieved abstract excerpt; dose not confidently extractable.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-carnosine' matches label spelling; used as adjuvant to existing SSRI pharmacotherapy."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29858687",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "36 studies met inclusion criteria: 19 in vitro, 15 animal, and two human studies"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "carnosine",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "two human studies (out of 36 total studies reviewed)",
+      "indication_as_stated": "advanced glycation end products (AGEs) formation",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "All but two of the studies indicated that carnosine can prevent the formation of AGEs.",
+      "sample_size_quote": "19 in vitro studies, 15 animal studies and two human studies",
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "positive",
+      "direction_note": "Overwhelming majority of the underlying evidence base is in vitro/animal (34 of 36 studies); only two human studies identified, and 'there were few human studies' per the authors' own caveat.",
+      "registrations": [],
+      "included_studies": "two human studies out of 36 total (19 in vitro, 15 animal)",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "30205427",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty-two overweight or obese otherwise healthy adults",
+          "randomly assigned, 12-week supplementation"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "randomly assigned to receive either 2 g of carnosine (n = 13) or identically looking placebo (n = 9) for 12 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twenty-two overweight or obese otherwise healthy adults",
+      "indication_as_stated": "serum adipokines (adipsin, resistin, leptin) in overweight/obesity",
+      "dose_quote": "randomly assigned to receive either 2 g of carnosine (n = 13) or identically looking placebo (n = 9) for 12 weeks",
+      "primary_outcome_quote": "Serum adipsin, leptin and resistin were analyzed using a bead-based multiplex assay.",
+      "primary_result_quote": "Carnosine supplementation decreased serum resistin concentrations compared to placebo (mean change from baseline: -35 ± 83 carnosine vs. 35 ± 55 ng/mL placebo, p = 0.04).",
+      "sample_size_quote": "Twenty-two overweight or obese otherwise healthy adults were randomly assigned",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for resistin only; leptin showed only a nonsignificant trend (p=0.06); 'no differences between groups in change in adipsin concentrations.' Same small cohort as 27040154 (secondary-outcome paper).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "30592963",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "65 patients",
+          "prospective randomized controlled pilot study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Arm B, 34 patients received FOLFOX-6 regimen and daily oral L-carnosine (500 mg) along the treatment period",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "colorectal cancer patients treated with oxaliplatin-based chemotherapy (FOLFOX-6)",
+      "indication_as_stated": "prophylaxis against oxaliplatin-induced peripheral neuropathy",
+      "dose_quote": "Arm B, 34 patients received FOLFOX-6 regimen and daily oral L-carnosine (500 mg) along the treatment period",
+      "primary_outcome_quote": "both arms were analyzed for neuropathy incidence/grade and any additional toxicities according to National Cancer Institute Common Terminology Criteria for Adverse Events (NCI-CTC version 4)",
+      "primary_result_quote": "17 patients (56.7%) vs 11 patients (35.5%) suffered grade 1, one patient (3.3%) vs 19 patients (61.3%) suffered grade 2, while 12 patients (40%) vs one patient (3.2%) were normal",
+      "sample_size_quote": "Arm A, 31 patients received FOLFOX-6 regimen (oxaliplatin, 5FU & leucovorin) and Arm B, 34 patients received FOLFOX-6 regimen and daily oral L-carnosine",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Adjunct to FOLFOX-6 chemotherapy (oxaliplatin/5FU/leucovorin), not carnosine alone; pilot study.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-carnosine' matches label spelling; add-on to standard chemotherapy regimen."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31119010",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "MCN and placebo groups each included 25 volunteers",
+          "randomized, placebo-controlled, single-blind trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "daily dose of MCN containing 200mg of hyaluronic acid, 500mg of L-carnosine, and 400mg of methylsulfonylmethane",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "female subjects affected by facial skin photoaging",
+      "indication_as_stated": "facial skin aesthetics and well-being (photoaging)",
+      "dose_quote": "daily dose of MCN containing 200mg of hyaluronic acid, 500mg of L-carnosine, and 400mg of methylsulfonylmethane",
+      "primary_outcome_quote": "face skin hydration, elasticity, and sebometry were measured with an instrumental skin tester, and digital images of facial wrinkles were scored",
+      "primary_result_quote": "glabella skin hydration and elasticity improved by 15.2 percent and 22.6 percent, respectively (p=0.03; p=0.004)",
+      "sample_size_quote": "The MCN and placebo groups each included 25 volunteers",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "3-ingredient oral combination (hyaluronic acid, L-carnosine, MSM); cannot isolate a carnosine-specific effect. Cosmetic/aesthetic indication, not a disease outcome.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "L-carnosine dosed only within a 3-ingredient combination nutraceutical, not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31828942",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "30 studies for the systematic review and 23 studies pooled for meta-analysis, human RCTs"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "histidine-containing dipeptides",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "RCT participants across 23-30 pooled trials (obesity/glycaemic outcomes)",
+      "indication_as_stated": "central obesity and glycaemic outcomes",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Histidine-containing dipeptide groups had a lower waist circumference (WMD [95% CI] = -3.53 cm [-5.65, -1.41], p = 0.001) and HbA1c level (WMD [95% CI] = -0.76% (8.5 mmol/mol) [-1.29% (14.3 mmol/mol), -0.24% (2.8 mmol/mol)], p = 0.004) at follow-up compared with controls.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Umbrella category 'histidine-containing dipeptides' (carnosine, anserine, β-alanine, etc.), not carnosine-specific results reported separately in the abstract.",
+      "registrations": [],
+      "included_studies": "30 studies for the systematic review and 23 studies pooled for meta-analysis",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Reviews the broader histidine-containing-dipeptide category, not carnosine-isolated results."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31987255",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Four RCTs studies investigated Carnosine use versus any control for at least 2 weeks",
+          "184-183 participants pooled"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Carnosine",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "184 participants pooled across 4 RCTs",
+      "indication_as_stated": "lipid profile, fasting blood glucose, HbA1C and insulin resistance",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "carnosine intervention reduced HbA1C levels in intervention vs control groups (WMD: -0.92 %, 95 % CI: -1.20, -0.63, I2:69 %)",
+      "sample_size_quote": "184 participants",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for HbA1c only; 'combined results did not show any significant change in HOMA-IR, Cholesterol, fasting blood sugar, or HDL-C'; triglyceride reduction also not significant.",
+      "registrations": [],
+      "included_studies": "Four RCTs (184 participants for HbA1c outcome)",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32063564",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fifty-eight patients with MDD",
+          "randomized double-blind placebo-controlled 6-week study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "400 mg twice daily L-Carnosine or placebo in addition to citalopram (maximum dosage of 40 mg/day)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Fifty-eight patients with MDD (DSM-V) and Hamilton Depression Rating Scale (HAM-D) score ≥ 19",
+      "indication_as_stated": "major depressive disorder (MDD), adjuvant to citalopram",
+      "dose_quote": "400 mg twice daily L-Carnosine or placebo in addition to citalopram (maximum dosage of 40 mg/day) for six weeks",
+      "primary_outcome_quote": "Patients were assessed using the HAM-D scale at baseline and weeks 2, 4, and 6.",
+      "primary_result_quote": "Significantly greater improvement was detected in HAM-D score of the L-Carnosine group compared with the placebo group from baseline to weeks 2, 4 and 6 [Ps = 0.013, 0.028 and 0.023; respectively].",
+      "sample_size_quote": "Fifty-eight patients with MDD (DSM-V)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Adjunct to citalopram (SSRI), not carnosine monotherapy. Authors flag 'short follow-up period and small population size' as limitations.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-Carnosine' matches label spelling; adjuvant to existing SSRI."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32316581",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "four RCTs met eligibility criteria out of 54 unique RCTs found",
+          "IPD meta-analysis"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "polaprezinc (all three doses: 75 mg, 150 mg, and 300 mg)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "patients with zinc deficiency across 4 pooled RCTs",
+      "indication_as_stated": "zinc deficiency (serum zinc concentration)",
+      "dose_quote": "All three doses of polaprezinc (75 mg, 150 mg, and 300 mg) and the placebo group were examined",
+      "primary_outcome_quote": "Randomized placebo-controlled trials that reported the serum zinc concentration were eligible.",
+      "primary_result_quote": "The dose-combined overall polaprezinc increased the change from baseline by a mean of 9.08 µg/dL (95% confidence interval: 5.46, 12.70; heterogeneity: I2 = 0.61%) compared to the placebo.",
+      "sample_size_quote": "four studies met the eligibility criteria, and we could access IPD for all of them",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Efficacy is for polaprezinc (zinc-L-carnosine chelate) treating zinc deficiency via serum zinc concentration, not carnosine's own efficacy for a carnosine-specific indication.",
+      "registrations": [],
+      "included_studies": "four RCTs out of 54 unique RCTs identified",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Polaprezinc is a distinct zinc-carnosine chelate compound studied for zinc-deficiency repletion, not L-carnosine alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32594145",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A total of 21 studies were included; 18 pooled for meta-analysis (n = 913)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Carnosine and other histidine-containing dipeptides (HCDs)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "n = 913 pooled across 18 meta-analyzed RCTs",
+      "indication_as_stated": "cardiovascular risk factors",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "In studies using carnosine, triglycerides levels were also lower in the intervention group vs controls (n = 5 RCTS; n = 309; P < 0.001).",
+      "sample_size_quote": "18 were pooled for meta-analysis (n = 913)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Carnosine-specific subgroup (5 RCTs, n=309) positive for triglycerides; overall HCD pool positive for total cholesterol and triglycerides but 'no significant differences in blood pressure, heart rate, low-density lipoprotein cholesterol, high-density lipoprotein cholesterol (HDL-C) or the total cholesterol to HDL-C ratio.'",
+      "registrations": [
+        "CRD42017075354"
+      ],
+      "included_studies": "21 studies included, 18 pooled for meta-analysis (n=913)",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Primarily an umbrella histidine-containing-dipeptide review; only a subset of pooled RCTs use carnosine specifically."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33704575",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Four double-blinded, placebo-controlled, RCTs and one open label trial with a total of 215 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "L-Carnosine",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "children with autism spectrum disorder (ASD), total of 215 participants across included trials",
+      "indication_as_stated": "autism spectrum disorder (ASD) management in children",
+      "dose_quote": null,
+      "primary_outcome_quote": "The primary outcomes were changes in social, communication and behavioural responses",
+      "primary_result_quote": "Results from the meta-analysis of three studies showed no significant difference between L-Carnosine and placebo groups in the Gilliam autism rating scale (GARS) (MD = - 2.57; 95% CI - 10.30, 5.16, p = 0.52)",
+      "sample_size_quote": "Four double-blinded, placebo-controlled, RCTs and one open label trial with a total of 215 participants",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Meta-analysis of pooled ASD trials found no significant benefit on GARS total score or any subscale, or CARS. Authors conclude 'Current data do not support the use of L-Carnosine in the management of children with ASD.' A null/negative synthesis despite one included primary trial (12585724) reporting a positive result.",
+      "registrations": [],
+      "included_studies": "Four double-blinded RCTs and one open-label trial, 215 participants total",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-Carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33806459",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "We found five studies matching the selection criteria"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Carnosine/anserine... administered for 12 weeks at a dose of 1 g/day",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "elderly subjects and mild cognitive impairment (MCI) patients across 5 pooled studies",
+      "indication_as_stated": "cognitive decline and depressive symptoms in elderly/MCI",
+      "dose_quote": "Carnosine/anserine was administered for 12 weeks at a dose of 1 g/day",
+      "primary_outcome_quote": null,
+      "primary_result_quote": "improved global cognitive function, whereas no effects were detected on depressive symptoms",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Combined carnosine/anserine dosing across pooled studies; positive for global cognitive function, null for depressive symptoms. Authors call this 'preliminary evidence.'",
+      "registrations": [],
+      "included_studies": "five studies matching selection criteria",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Pooled studies used combined carnosine/anserine, not isolated L-carnosine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33914660",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "five subjects supplemented for bioavailability",
+          "study A/B double-blind placebo-controlled crossover"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "preexercise ANS + CARN (20 mg/kg body wt of each) supplementation",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "healthy human subjects (study A/B crossover cycling performance)",
+      "indication_as_stated": "maximal cycling power/performance (Wingate test)",
+      "dose_quote": "preexercise ANS + CARN (20 mg/kg body wt of each) supplementation",
+      "primary_outcome_quote": "two double-blind, placebo-controlled, crossover studies investigated the effect of preexercise ANS + CARN (20 mg/kg body wt of each) supplementation on performance during a single all-out Wingate test following 6-min high-intensity cycling (study A) or three repeated Wingate tests (study B)",
+      "primary_result_quote": "Study A showed significantly higher (+6% ± 11%; P = 0.04) power in the first 5 s of the Wingate test following ANS + CARN (12.8 ± 2.4 W/kg) versus placebo (12.1 ± 2.2 W/kg).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Combined anserine + carnosine (1:1 mg/kg), not carnosine alone; acute preexercise ergogenic-aid indication, not a clinical/disease outcome. Exact study-A/B sample sizes not stated as a single contiguous span in the retrieved abstract excerpt.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Carnosine co-administered in equal amount with anserine (methylated analog), not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34174842",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "40 patients with diabetic nephropathy",
+          "randomly assigned, 12-week active treatment"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "treatment with carnosine (2 g/day) or placebo for 12 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "40 patients with diabetic nephropathy and albuminuria 30-299 mg/day",
+      "indication_as_stated": "diabetic nephropathy: urinary TGF-β level",
+      "dose_quote": "We randomly assigned 40 patients with diabetic nephropathy and albuminuria 30-299 mg/day to treatment with carnosine (2 g/day) or placebo for 12 weeks.",
+      "primary_outcome_quote": "Primary outcome was decrease in urinary levels of TGF-β.",
+      "primary_result_quote": "Urinary TGF-β significantly decreased with carnosine supplement (- 17.8% of the baseline values), whereas it tended to increase with placebo (+ 16.9% of the baseline values) (between-group difference P < 0.05).",
+      "sample_size_quote": "We randomly assigned 40 patients with diabetic nephropathy and albuminuria 30-299 mg/day",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive on the stated primary biomarker outcome (urinary TGF-β); 'blood urea nitrogen, serum creatinine, glomerular filtration rate and other biochemical parameters remained unchanged... including urinary albuminuria' — no change in harder renal function endpoints.",
+      "registrations": [
+        "TCTR20200724002"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine' matches label spelling; add-on to standard diabetic-nephropathy therapy."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34333586",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty studies (n = 4 human, n = 16 rodent) were included"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "carnosine, or its rate-limiting precursor β-alanine",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "human RCT participants across 4 pooled human studies (plus 16 rodent studies)",
+      "indication_as_stated": "glycemic control and insulin resistance markers",
+      "dose_quote": null,
+      "primary_outcome_quote": "Primary outcomes were changes in 1) fasting glucose, 2) glycated hemoglobin (HbA1c), and 3) 2-h glucose following a glucose-tolerance test.",
+      "primary_result_quote": "Supplementation with carnosine or β-alanine may reduce fasting glucose, HbA1c, and HOMA-IR in humans and rodents, and fasting insulin in humans",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Only 4 of the 20 included studies were human (16 were rodent); pools carnosine and β-alanine together, so human-carnosine-specific effect is not isolated. GRADE certainty rated 'moderate (human outcomes) or very low (rodent outcomes).'",
+      "registrations": [
+        "CRD42020191588"
+      ],
+      "included_studies": "20 studies (4 human, 16 rodent)",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Pools carnosine together with β-alanine, a distinct precursor supplement, across mostly non-human studies."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35071521",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Ninety-two patients with dyspepsia symptoms",
+          "randomly assigned"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a 10-d course of modified bismuth quadruple therapy fortified with zinc carnosine: TT in addition to bismuth subcitrate (240 mg twice daily) and zinc carnosine (75 mg twice daily)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Ninety-two patients with dyspepsia symptoms and positive 13C-urea breath test",
+      "indication_as_stated": "Helicobacter pylori eradication",
+      "dose_quote": "zinc carnosine (75 mg twice daily)",
+      "primary_outcome_quote": "A repeated 13C-urea breath test was done 4 wk after the completion of the eradication therapy.",
+      "primary_result_quote": "The eradication rate was higher [93.5% (43/46)] in the modified bismuth quadruple therapy group compared to 69.6% (32/46) in the standard TT group (P = 0.003).",
+      "sample_size_quote": "Ninety-two patients with dyspepsia symptoms",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Zinc carnosine given as one add-on component of a 4-drug antibiotic regimen (bismuth quadruple therapy), not carnosine alone; efficacy is for H. pylori eradication, an antimicrobial-adjuvant indication, not a direct carnosine efficacy claim.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "'Zinc carnosine' is the distinct zinc-L-carnosine chelate, added to a bismuth quadruple antibiotic regimen."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35599917",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "11 men (study A), 15 men (study B), eight men (study C)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "acute-combined carnosine and anserine supplementation... 30 mg.kg-1 of both carnosine and anserine",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "healthy men across studies A (n=11), B (n=15), C (n=8)",
+      "indication_as_stated": "acute ergogenic effect on cycling sprint/isometric performance",
+      "dose_quote": "30 mg.kg-1 of both carnosine and anserine",
+      "primary_outcome_quote": "a 5 x 6 s repeated cycling sprint ability test (RSA), once before the supplement and 30 and 60 minutes after",
+      "primary_result_quote": "Study A showed a 3% peak power (p = 0.0005; 95% CI = 0.07 to 0.27; ES = 0.91) and 4.5% peak torque (p = 0.0006; 95% CI = 0.12 to 0.50; ES = 0.87) improvement on RSA and MVC",
+      "sample_size_quote": "a dose response study A was conducted in which 11 men randomly received placebo, 10, 20, or 30 mg.kg-1 of both carnosine and anserine",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Study A positive on peak power/torque; Study B found 'no performance improvement on group level'; only a correlation with carnosinase activity was significant. Combined carnosine+anserine, not carnosine alone; acute ergogenic-aid indication.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Carnosine co-administered in equal dose with anserine across all three sub-studies."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36235778",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "We included 3 trials with a total of 396 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Polaprezinc (PZN), a mucosal protective zinc-L-carnosine complex",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "396 participants randomized across 3 pooled RCTs (H. pylori)",
+      "indication_as_stated": "Helicobacter pylori eradication",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Pooled OR found a statistical difference favoring the PZN arm in the intention to treat and per protocol H. pylori eradication rates (OR: 2.01 with 95% CI [1.27, 3.21], p = 0.003)",
+      "sample_size_quote": "3 trials with a total of 396 participants",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Polaprezinc added to standard antibiotic triple therapy, not carnosine alone; antimicrobial-adjuvant indication.",
+      "registrations": [
+        "CRD42022349231"
+      ],
+      "included_studies": "3 RCTs, 396 participants",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Polaprezinc is the distinct zinc-L-carnosine chelate, given as an add-on to triple antibiotic therapy."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36722274",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "14 papers were selected for systematic review, with 9 of them being qualified for meta-analysis"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "L-carnosine",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "patients with age-related diseases (cancer, cardiovascular disease, diabetes, neurodegenerative disorders) across 14 pooled studies",
+      "indication_as_stated": "age-related diseases: cancer, cardiovascular disease, diabetes, neurodegenerative disorders",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "in diabetes mellitus, HbA1c [mean difference (MD) 95% CI = -1.25 (-2.49, -0.022); p = 0.05; p = 0.001; I2 = 85%] and fasting blood sugar (FBS) [MD 95% CI = -12.44 (-22.44, -2.44); p = 0.01; p = 0.40; I2 = 0%] and in neurodegenerative disorder, Wechsler Memory Scale Logical Memory 2 (WMS-LM2) [MD 95% CI = 1.34 (0.83, 1.85); p < 0.00001; p = 0.43; I2 = 0%], showed statistically significant difference, favoring the L-carnosine group over the control group",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for diabetes (HbA1c, FBS) and one memory measure (WMS-LM2); negative/favoring control for Alzheimer's ADAS and depression (BDI) measures; 'no clinical studies available for its anti-cancer use' and 'current evidence does not support its use in the treatment of cardiovascular disease.'",
+      "registrations": [
+        "CRD42022314033"
+      ],
+      "included_studies": "14 studies for systematic review, 9 for meta-analysis",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36946070",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "100 eligible patients with predominant negative symptoms",
+          "randomized double-blind placebo-controlled study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "fixed dose of either 400 mg L-Carnosine or identical placebo for 3 months and increased to 800 mg from 13th week till completion of study",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "100 eligible patients with predominant negative symptoms, Schizophrenia diagnosis (ICD-10)",
+      "indication_as_stated": "Schizophrenia, adjuvant therapy for negative and cognitive symptoms",
+      "dose_quote": "fixed dose of either 400 mg L-Carnosine or identical placebo for 3 months and increased to 800 mg from 13th week till completion of study",
+      "primary_outcome_quote": "Primary outcome measures assessed changes in SANS scores with L-Carnosine at 24 weeks compared to baseline, 4 and 12 weeks.",
+      "primary_result_quote": "There were no significant differences in negative symptoms in the two arms at study completion.",
+      "sample_size_quote": "100 eligible patients with predominant negative symptoms",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Negative on the stated primary outcome (SANS negative-symptom score); a secondary cognitive measure (attention score at 800 mg) was positive: 'The attention scores (p = .023) showed significant differences.' Adjuvant to existing antipsychotic regimen.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-Carnosine' matches label spelling; adjuvant to standard antipsychotic treatment."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "37583074",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Seventeen healthy male participants",
+          "allocated to two groups"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "1,500 mg/day of carnosine/anserine supplements (n = 9, C+A group)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Seventeen healthy male participants",
+      "indication_as_stated": "exercise-induced hemolysis and iron regulation (hepcidin) after endurance running",
+      "dose_quote": "participants consuming 1,500 mg/day of carnosine/anserine supplements (n = 9, C+A group) and participants consuming placebo powder supplements (n = 8, PLA group)",
+      "primary_outcome_quote": "Iron regulation and inflammation in response to exercise were evaluated.",
+      "primary_result_quote": "Long-term carnosine/anserine supplementation does not affect iron metabolism after a single endurance exercise session.",
+      "sample_size_quote": "Seventeen healthy male participants",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Combined carnosine/anserine supplement, not isolated carnosine; explicit null result for the stated iron-metabolism/hepcidin outcome.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Administered as combined carnosine/anserine supplement, not isolated L-carnosine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38013229",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Ten articles reporting the use of HCD supplementation were meta-analysed"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "histidine-containing dipeptide (HCD) supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "participants pooled across 10 meta-analyzed RCTs",
+      "indication_as_stated": "cognitive performance (memory recall)",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "HCD treatment significantly increased performance on Wechsler Memory Scale (WMS) -2 Delayed recall (Weighted mean difference (WMD) (95% CI (CI)) = 1.5 (0.6, 2.5), P < .01).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive only for WMS delayed recall; null for ADAS-Cog, MMSE, WAIS digit span forward/backward, and WMS-1 immediate recall ('Treatment with HCDs had no effect on...'). Umbrella HCD category (carnosine, anserine, β-alanine).",
+      "registrations": [
+        "CRD42017075354"
+      ],
+      "included_studies": "Ten articles meta-analysed (out of 94 full-text assessed, 2653 abstracts screened)",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Reviews the broader histidine-containing-dipeptide category, not carnosine results in isolation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38086332",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A total of 9 trials comprising 350 participants were included"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "carnosine/HCD supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "350 participants across 9 pooled trials",
+      "indication_as_stated": "inflammatory and oxidative stress biomarkers",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Carnosine/HCD supplementation led to a significant reduction in CRP (WMD: -0.97 mg/L; 95% CI: -1.59, -0.36), TNF-α (WMD: -3.60 pg/mL; 95% CI: -7.03, -0.18), and MDA (WMD: -0.34 μmol/L; 95% CI: -0.56, -0.12) and an elevation in CAT (WMD: 4.48 U/mL; 95% CI: 2.43, 6.53) compared with placebo.",
+      "sample_size_quote": "9 trials comprising 350 participants",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for CRP, TNF-α, MDA, CAT; 'no effect on IL-6, adiponectin, GSH, SOD, and TAC levels.' Umbrella HCD category, not carnosine-isolated.",
+      "registrations": [
+        "CRD42017075354"
+      ],
+      "included_studies": "9 trials, 350 participants",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Reviews the broader carnosine/histidine-containing-dipeptide category."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38545720",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eighteen studies comprising 776 participants were included in the meta-analysis"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "HCD supplementation (anserine/carnosine, l-carnosine, β-alanine)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "776 participants across 18 pooled meta-analyzed studies",
+      "indication_as_stated": "mental health outcomes: depression and quality of life",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "HCD supplementation (anserine/carnosine, l-carnosine, β-alanine) caused a significant reduction in depression scores measured with the Becks Depression Inventory (-0.79; 95% CI: -1.24, -0.35; moderate certainty on GRADE) when compared with placebo.",
+      "sample_size_quote": "Eighteen studies comprising 776 participants",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for depression score (BDI) and quality-of-life (SF-36, low GRADE certainty); 'the rest of the outcomes did not show a significant change.' Umbrella category pooling anserine/carnosine, L-carnosine, and β-alanine studies together.",
+      "registrations": [
+        "CRD42017075354"
+      ],
+      "included_studies": "20 studies fulfilling inclusion criteria; 18 studies/776 participants in meta-analysis",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Pools anserine/carnosine, L-carnosine, and β-alanine studies together; not carnosine-isolated."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38732615",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "59 participants (age 79.7 ± 4.8 years)",
+          "randomly assigned to intervention (n = 30) or placebo (n = 28)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a DS (containing hydroxy-methyl-butyrate, carnosine, and magnesium... and butyrate and lactoferrin)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "59 participants (age 79.7 ± 4.8 years, body mass index 20.99 ± 2.12 kg/m2)",
+      "indication_as_stated": "sarcopenia: muscle mass, function, inflammation, gut permeability",
+      "dose_quote": null,
+      "primary_outcome_quote": "muscle mass (assessed by dual X-ray absorptiometry (DXA)), muscle function (by handgrip test, chair test, short physical performance battery (SPPB) test, and walking speed test), inflammation (tumor necrosis factor-alpha (TNF-a), C-reactive protein (CRP), and visceral adipose tissue (VAT)) and gut axis (by zonulin)",
+      "primary_result_quote": "The skeletal muscle index (SMI) significantly improved in the supplemented group compared to the placebo one, +1.02 (CI 95%: -0.77; 1.26), p = 0.001",
+      "sample_size_quote": "A total of 59 participants (age 79.7 ± 4.8 years, body mass index 20.99 ± 2.12 kg/m2) were enrolled and randomly assigned to intervention (n = 30) or placebo (n = 28)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "5-ingredient patented combination supplement (HMB, carnosine, magnesium, butyrate, lactoferrin); cannot isolate a carnosine-specific contribution. No single-span dose quote of carnosine's own amount found in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Carnosine dosed only within a 5-ingredient patented combination supplement, not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39599686",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "49 adults with prediabetes or well-controlled T2D eligible; 41 completed"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "randomised to receive 2 g/day of carnosine or a matching placebo for 14 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "49 adults with prediabetes or well-controlled type 2 diabetes (T2D), 41 completed",
+      "indication_as_stated": "inflammatory markers and adipokines in prediabetes/T2D",
+      "dose_quote": "Participants were randomised to receive 2 g/day of carnosine or a matching placebo for 14 weeks.",
+      "primary_outcome_quote": "We measured serum concentrations of monocyte chemoattractant protein-1 (MCP-1), interleukin (IL)-6, IL-10, C-reactive protein (CRP), tumour necrosis factor-α (TNF-α), adiponectin, leptin, adipsin, serpin, and resistin levels at baseline and after 14 weeks.",
+      "primary_result_quote": "In individuals with prediabetes and well-controlled T2D, carnosine supplementation did not result in any significant changes in inflammatory markers.",
+      "sample_size_quote": "Forty-one participants (M = 29/F = 12) aged 53 (42.6, 59.3) years [median (IQR)] completed the trial.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result: secondary analysis of an RCT finding no significant change in any measured inflammatory/adipokine marker. Authors note larger/longer RCTs are needed, especially in poorly controlled T2D.",
+      "registrations": [
+        "NCT02917928"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39737293",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "a 30-year-old woman with DID and comorbid bipolar I disorder"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "L-carnosine, gradually increased from 0.5 g/d to 2 g/d over four months",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "a 30-year-old woman with dissociative identity disorder (DID) and comorbid bipolar I disorder, with zinc deficiency",
+      "indication_as_stated": "dissociative identity disorder (DID), cotreatment with zinc",
+      "dose_quote": "L-carnosine, gradually increased from 0.5 g/d to 2 g/d over four months",
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Five months after adding 2 g/d L-carnosine, the patient's pronounced alternate identities that people around her could notice no longer appeared.",
+      "sample_size_quote": "a 30-year-old woman",
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "positive",
+      "direction_note": "Single case report; L-carnosine added on top of pre-existing zinc supplementation (50 mg/d) and after prior nonresponse to aripiprazole and clonazepam. Symptoms reappeared when both zinc and L-carnosine were discontinued at 3-year follow-up. Not generalizable evidence.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-carnosine' matches label spelling; co-administered with zinc (separate supplement) in this case."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39919936",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "299 participants randomized",
+          "242 useable at Follow-up-1, 231 at Follow-up-2"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "either cornstarch (placebo) or carnosine capsules (2g daily) for up to 12wk",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a study population largely devoid of susceptibility factors or pre-existing conditions (healthy adults); post-hoc age-stratified analysis of the NEAT trial (NCT03314987)",
+      "indication_as_stated": "cognitive performance in healthy adults",
+      "dose_quote": "either cornstarch (placebo) or carnosine capsules (2g daily) for up to 12wk",
+      "primary_outcome_quote": "Cognitive ability was assessed using the Cognition test battery, which consists of ten individual tests known to engage specific brain systems and covering a range of cognitive domains.",
+      "primary_result_quote": "Age-based stratification (23-35 years, 36-50 years, 51-65 years), showed statistically significant improvements in overall speed and efficiency in the youngest age group stratum at both follow-up visits.",
+      "sample_size_quote": "Of the 299 participants who were randomized, we obtained useable measures for 242 participants at Follow-up-1 and 231 ​at Follow-up-2.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Post-hoc secondary-outcome analysis, not the trial's original primary endpoint; benefit was limited to the youngest (23-35y) age stratum — 'the other age groups demonstrated few or no significant improvements.'",
+      "registrations": [
+        "NCT03314987"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine capsules' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39983097",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "thirty-five healthy competitive male athletes"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "carnosine-enriched chicken meat consumption",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "thirty-five healthy competitive male athletes",
+      "indication_as_stated": "micro- and macrovascular endothelium-independent vasodilation, blood pressure",
+      "dose_quote": null,
+      "primary_outcome_quote": "This randomized interventional study aimed to investigate the effect of carnosine-enriched chicken meat consumption on systemic endothelium-dependent and -independent micro- and macrovascular reactivity in thirty-five healthy competitive male athletes.",
+      "primary_result_quote": "Both forearm skin micro- and macrovascular endothelium-independent vasodilation were increased, and diastolic and mean arterial blood pressure (BP) were decreased",
+      "sample_size_quote": "thirty-five healthy competitive male athletes",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Food-form delivery (carnosine-enriched chicken meat) rather than an isolated supplement capsule/powder; specific carnosine dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Delivered as carnosine-enriched whole food (chicken meat), not an isolated dietary-supplement form."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40647235",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "sixteen healthy volunteers underwent a single dose-escalation study"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "oral carnosine... up to a dose of 10 g... At doses of 15 g... Long-term dosing at 5 g twice daily",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "sixteen healthy volunteers (subsets: n=5 for MRI spectroscopy, n=4 for 4-week long-term dosing)",
+      "indication_as_stated": "pharmacokinetics, safety, tolerability, and brain carnosine concentration",
+      "dose_quote": "sixteen healthy volunteers underwent a single dose-escalation study of oral carnosine to establish safety, tolerability, and pharmacokinetics",
+      "primary_outcome_quote": "A subset (n = 5) underwent Proton Magnetic Resonance Imaging (MRI) spectroscopy to evaluate the effect of oral dosing on brain carnosine concentrations, and another subset (n = 4) completed a long-term (4-week) dosing study.",
+      "primary_result_quote": "Oral carnosine was safe and well tolerated up to a dose of 10 g. At doses of 15 g, the frequency of adverse events became unacceptably high, with 77% of participants experiencing side effects, most commonly headache (43.5%), nausea (21.7%) and paraesthesia (21.7%).",
+      "sample_size_quote": "sixteen healthy volunteers underwent a single dose-escalation study of oral carnosine",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Establishes a maximum tolerated single dose (10 g safe; 15 g unacceptably high AE rate) and confirms long-term 5 g BID dosing had no adverse events; directly relevant to dosing/safety, not an efficacy trial.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40999397",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eight trials met the inclusion criteria, totaling 377 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "carnosine or β-alanine supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "377 participants across 8 pooled RCTs, prediabetes and T2DM",
+      "indication_as_stated": "prediabetes and type 2 diabetes mellitus (T2DM): glycemic markers",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "supplementation significantly reduced fasting blood glucose (FBG) (SMD: -0.53; 95% CI: -0.75 to -0.31; p < 0.00001) and hemoglobin A1c (HbA1c) levels (SMD:-0.36; 95% CI:-0.59 to -0.12; p = 0.003) compared to placebo",
+      "sample_size_quote": "Eight trials met the inclusion criteria, totaling 377 participants",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for FBG, HbA1c, HOMA-β; 'No significant effects were observed on body mass index (BMI), fasting insulin. low-density lipoprotein cholesterol (LDL-c) or high-density lipoprotein cholesterol (HDL-c)'; HOMA-IR change not significant. Pools carnosine and β-alanine studies together.",
+      "registrations": [],
+      "included_studies": "Eight trials, 377 participants",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Pools carnosine and β-alanine trials together; not carnosine-isolated results."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "41264559",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "2 cases of CAG"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "oral zinc L-carnosine 39.5 mg twice daily for at least 12 months",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "2 patients with chronic atrophic gastritis (CAG)",
+      "indication_as_stated": "chronic atrophic gastritis (CAG), dyspeptic symptoms",
+      "dose_quote": "oral zinc L-carnosine 39.5 mg twice daily for at least 12 months",
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Clinically significant improvement was observed not only in dyspeptic symptoms but also in histologic features of CAG.",
+      "sample_size_quote": "We report 2 cases of CAG",
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "positive",
+      "direction_note": "Two-patient case report, not a controlled trial; zinc L-carnosine is the chelate form, not isolated L-carnosine.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "'Zinc L-carnosine, a chelate compound of zinc and L-carnosine' — distinct from isolated L-carnosine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "41901102",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "38 CCS participants",
+          "randomized to two groups"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "carnosine-enriched chicken meat",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "38 patients with chronic coronary syndrome (CCS)",
+      "indication_as_stated": "microvascular function, inflammation in chronic coronary syndrome",
+      "dose_quote": null,
+      "primary_outcome_quote": "Skin microvascular reactivity in response to vascular occlusion (PORH), acetylcholine (ACh ID), sodium nitroprusside (SNP ID), and local thermal hyperemia (LTH) was measured.",
+      "primary_result_quote": "The consumption of carnosine-enriched chicken meat improved endothelium-dependent (PORH, LTH) and endothelium-independent vasodilation (SNP ID).",
+      "sample_size_quote": "In total, 38 CCS participants were randomized to two groups",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Food-form delivery (carnosine-enriched chicken meat vs regular chicken meat), 3-week duration; specific carnosine dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Delivered as carnosine-enriched whole food (chicken meat), not an isolated dietary-supplement form."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "42093671",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Sixty infants aged 4 weeks to 7 months",
+          "randomized non-inferiority study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Zinc-L-carnosine-based supplement (Hepilor liquido®)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Sixty infants aged 4 weeks to 7 months with persistent regurgitation",
+      "indication_as_stated": "infant gastroesophageal reflux / persistent regurgitation",
+      "dose_quote": null,
+      "primary_outcome_quote": "The primary outcome was symptom improvement based on the I-GERQ-R (Infant Gastro-Esophageal Reflux Questionnaire-Revised) score.",
+      "primary_result_quote": "Although no statistically significant difference was observed in overall symptomatic remission, the Hepilor liquido® group demonstrated a greater reduction in regurgitation frequency.",
+      "sample_size_quote": "Sixty infants aged 4 weeks to 7 months were randomized",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Non-inferiority design vs. thickened formula, not a placebo-controlled efficacy trial; primary I-GERQ-R remission outcome not significantly different between arms (non-inferior), with only a secondary frequency measure favoring the zinc-L-carnosine product. Pediatric population.",
+      "registrations": [
+        "NCT06678997"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Zinc-L-carnosine (Polaprezinc) chelate product (Hepilor liquido®), not isolated L-carnosine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "42123986",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "A total of 13 distinct studies (12 RCTs; 1 single-arm trial) involving healthy adults and patients with psychiatric or neurocognitive disorders"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "all forms of carnosine (e.g., L-carnosine, zinc-L-carnosine) alone or in combination with other supplements",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "healthy adults and patients with psychiatric or neurocognitive disorders across 13 pooled studies",
+      "indication_as_stated": "cognition, brain structure/function, mood, depression, quality of life",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Results from five RCTs found no significant differences in the majority of the cognitive function measures between L-carnosine supplement and placebo, but random-effects meta-analysis of three RCTs from a single research team found that anserine/L-carnosine supplementation significantly improved WMS-LM2 scores",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Mixed/low-strength evidence: most individual RCTs null on cognition; a pooled subgroup (3 RCTs, single research team) positive for one memory measure and MMSE combined with anserine/antioxidants; 'most of the studies did not show significant effects in a wide range of mood and depression outcome measures or health-related QOL.' Authors rate overall strength of evidence as low.",
+      "registrations": [],
+      "included_studies": "13 distinct studies (12 RCTs, 1 single-arm trial)",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Explicitly pools 'all forms of carnosine (e.g., L-carnosine, zinc-L-carnosine)' alone or combined with other supplements."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "42308284",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "299 participants were randomized"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "carnosine-containing capsules (2 g per day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "299 participants randomized (placebo-controlled trial)",
+      "indication_as_stated": "physical performance: hand grip strength, calf raise, 2-min step test, gait speed",
+      "dose_quote": "299 participants were randomized to consume either placebo or carnosine-containing capsules (2 g per day)",
+      "primary_outcome_quote": "Several assessments of physical performance (hand grip strength, bilateral calf raise, 2-min step test, gait speed) were measured before initiating supplementation (Baseline: Visit-2) and after approximately 6 week (Visit-3) and 12 week (Visit-4) of supplementation.",
+      "primary_result_quote": "No significant (p < 0.05) differences were observed in the carnosine versus placebo supplementation groups for any other physical performance measure.",
+      "sample_size_quote": "299 participants were randomized to consume either placebo or carnosine-containing capsules",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Benefits limited to specific subgroups (calf-raise endurance in under-40s; step-test count in males over 40) and 'the benefits appeared to be limited to males'; no effect on grip strength or the overall sample across most measures. Same NEAT trial cohort as 39919936.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'carnosine-containing capsules' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "42695325",
+      "design": "narrative_review",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "review of preclinical and early clinical studies; no new primary participant data described"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "L-carnosine",
+      "combination": false,
+      "route": "unstated",
+      "population_as_stated": null,
+      "indication_as_stated": "Alzheimer's disease, Parkinson's disease, ischemia-reperfusion injury, Huntington's disease, stroke, depression, traumatic brain injury, cancer, diabetes, ageing",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Evidence from preclinical and early clinical studies suggests benefits in neurological and metabolic disorders.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Mechanistic/narrative review spanning many diseases without pooled quantitative human trial results reported in the abstract; explicitly notes 'challenges such as rapid degradation and limited bioavailability affect clinical translation' and calls for further dosing studies.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'L-carnosine' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "12585724",
+    "23099060",
+    "23618477",
+    "24880197",
+    "27040154",
+    "28485008",
+    "30592963",
+    "32063564",
+    "34174842",
+    "39599686",
+    "39919936",
+    "40647235"
+  ],
+  "handoff": [
+    {
+      "pmid": "40647235",
+      "role": "dosing",
+      "reason": "Dose-escalation safety/tolerability/PK study establishing max tolerated single dose (10g safe, 15g high AE rate) and long-term 5g BID dosing; primary source for dosing-ceiling guidance."
+    },
+    {
+      "pmid": "39737293",
+      "role": "safety",
+      "reason": "Case report of L-carnosine co-administered with zinc in dissociative identity disorder; symptom recurrence on discontinuation and prior drug nonresponse are safety/interaction-relevant context."
+    },
+    {
+      "pmid": "32316581",
+      "role": "dosing",
+      "reason": "Zinc-L-carnosine (Polaprezinc) dose-response IPD meta-analysis for zinc deficiency; relevant to the distinct chelate-form/zinc-interaction owner, not core carnosine efficacy."
+    },
+    {
+      "pmid": "35071521",
+      "role": "interaction",
+      "reason": "Zinc carnosine used as an add-on to a 4-drug H. pylori antibiotic regimen (bismuth quadruple therapy); relevant to a drug-interaction/adjuvant-therapy reviewer."
+    },
+    {
+      "pmid": "36235778",
+      "role": "interaction",
+      "reason": "Polaprezinc (zinc-L-carnosine) as antibiotic adjuvant for H. pylori eradication; relevant to a drug-interaction/adjuvant-therapy reviewer."
+    },
+    {
+      "pmid": "41264559",
+      "role": "safety",
+      "reason": "Zinc L-carnosine case reports (chronic atrophic gastritis); relevant to the chelate-form/zinc owner rather than core L-carnosine efficacy."
+    },
+    {
+      "pmid": "42093671",
+      "role": "dosing",
+      "reason": "Zinc-L-carnosine (Polaprezinc) pediatric (infant) non-inferiority dosing trial; relevant to a pediatric-dosing/chelate-form owner."
+    }
+  ],
+  "identity_notes": "The retrieved literature for 'l_carnosine' is dominated by a large, separate beta-alanine (carnosine's rate-limiting dietary precursor) sports-performance literature (~45 records) that was excluded as different_substance because beta-alanine, not carnosine, is the administered agent in those trials — this is the single most important applicability caveat, since beta-alanine is commonly sold and labeled as its own distinct supplement. A second cluster is Zinc-L-Carnosine / Polaprezinc (a chelate compound of zinc and L-carnosine, marketed and studied separately for H. pylori/gastritis/mucositis/reflux indications) which was kept but flagged related_form_differs throughout, since its GI-mucosal-protectant efficacy should not be read as evidence for plain L-carnosine. A third cluster used carnosine only as an undosed ingredient within multi-component combination nutraceuticals (glaucoma, facial skin, sarcopenia, OCD/depression adjuvant-to-drug trials), limiting attribution to carnosine alone. Several histidine-containing-dipeptide (HCD) systematic reviews pool carnosine, anserine, and beta-alanine data together rather than reporting carnosine-isolated effects. Genuine isolated-oral-L-carnosine human RCT evidence exists across autism, schizophrenia, OCD, MDD, Gulf War illness, diabetic nephropathy, glucose/lipid metabolism, and physical-performance/cognition domains, with results frequently mixed or null on primary/harder endpoints even when secondary measures were positive."
+}

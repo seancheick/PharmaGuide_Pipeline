@@ -1,0 +1,1679 @@
+{
+  "canonical_id": "OI_BEETROOT_POWDER",
+  "screened": 114,
+  "kept": 35,
+  "rejected": [
+    {
+      "pmid": "7626592",
+      "reason": "different_substance",
+      "note": "Chronic/postprandial plasma insulin, glucose and lipid responses to dietary fibre supplements including sugar-beet fibre; sugar-beet fibre is a manufacturing byproduct fiber ingredient, a different product from beetroot root powder/juice."
+    },
+    {
+      "pmid": "8054323",
+      "reason": "different_substance",
+      "note": "Small intestinal motility and blood glucose response to dietary fibre (including sugar beet fibre) in man; distinct fiber-ingredient product, not beetroot powder/juice."
+    },
+    {
+      "pmid": "8117358",
+      "reason": "different_substance",
+      "note": "Sugar-beet fibre effects on cholesterol and bile acid excretion; distinct fiber-ingredient product, not beetroot powder/juice."
+    },
+    {
+      "pmid": "9225834",
+      "reason": "off_topic",
+      "note": "Nitrogen-free hypocaloric diet and growth hormone effects on leucine kinetics in surgical patients; unrelated to beetroot (apparent keyword false match)."
+    },
+    {
+      "pmid": "9505164",
+      "reason": "different_substance",
+      "note": "Sugar beet fiber in formula diet reducing postprandial glucose/insulin/hydroxyproline; distinct fiber-ingredient product, not beetroot powder/juice."
+    },
+    {
+      "pmid": "16523204",
+      "reason": "different_substance",
+      "note": "Sugar beet pectin and polydextrose effects on glycemia and lipids; distinct fiber-ingredient products, not beetroot powder/juice."
+    },
+    {
+      "pmid": "16667696",
+      "reason": "off_topic",
+      "note": "Amino acid transport mechanisms in plasma membrane vesicles from sugar beet leaves; plant cell biology study, not a human/clinical study."
+    },
+    {
+      "pmid": "18817194",
+      "reason": "off_topic",
+      "note": "Effects of steckling weight and planting density on sugar beet seed yield/quality; agricultural/agronomic study, not a clinical study."
+    },
+    {
+      "pmid": "18819650",
+      "reason": "off_topic",
+      "note": "Screening sugar beet tissue culture clones for disease resistance; plant breeding/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "20962874",
+      "reason": "off_topic",
+      "note": "Metagenomics of the canine intestinal microbiome; unrelated to beetroot (apparent keyword false match), animal study."
+    },
+    {
+      "pmid": "22498239",
+      "reason": "off_topic",
+      "note": "Salt stress proteome/transcriptome changes in a sugar beet plant line; plant molecular biology study, not a clinical study."
+    },
+    {
+      "pmid": "23799291",
+      "reason": "off_topic",
+      "note": "Proteomic analysis of salt tolerance in a sugar beet plant line; plant molecular biology study, not a clinical study."
+    },
+    {
+      "pmid": "28390238",
+      "reason": "off_topic",
+      "note": "Response of anaerobic granular sludge to nanoparticles during beet sugar industrial wastewater treatment; environmental engineering study, not a clinical study."
+    },
+    {
+      "pmid": "28434820",
+      "reason": "off_topic",
+      "note": "Interrelationships of metal transfer factor under wastewater reuse and soil pollution; environmental/agricultural study, not clearly beetroot-related, not a clinical study."
+    },
+    {
+      "pmid": "28515063",
+      "reason": "off_topic",
+      "note": "Randomized trial of lactating mothers drinking a mixture of vegetable, beet, celery, and carrot juices to study infant flavor-acceptance; beet is only one of several juices and the outcome (infant vegetable liking) is not a beetroot-specific physiological effect."
+    },
+    {
+      "pmid": "30145877",
+      "reason": "animal_or_invitro",
+      "note": "Sugar beet pulp inclusion and nutrient digestibility in pigs; animal (swine) feed study."
+    },
+    {
+      "pmid": "30699374",
+      "reason": "off_topic",
+      "note": "Pharmaceutical/personal-care-product interactive capacity under heavy-metal soil enrichment and wastewater reuse; environmental science study, not a clinical study."
+    },
+    {
+      "pmid": "30756175",
+      "reason": "off_topic",
+      "note": "Risk assessment of frost damage to sugar beet crops; agronomic/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "30764393",
+      "reason": "off_topic",
+      "note": "Sugar beet cultivar evaluation for storability and disease resistance; plant breeding/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "31121883",
+      "reason": "off_topic",
+      "note": "Impact of foliar fertilization on silicon/macronutrient content in sugar beet crops; agronomic study, not a clinical study."
+    },
+    {
+      "pmid": "31193926",
+      "reason": "animal_or_invitro",
+      "note": "Dietary organic acid and fiber sources (including sugar beet-derived fiber) affecting broiler chicken performance; animal (poultry) feed study."
+    },
+    {
+      "pmid": "31353701",
+      "reason": "animal_or_invitro",
+      "note": "Nephroprotective effects of red beetroot-based beverages against gentamicin-induced renal stress in Sprague Dawley rats; animal model study."
+    },
+    {
+      "pmid": "31547291",
+      "reason": "animal_or_invitro",
+      "note": "Sugar beet pectin supplementation and fecal microbiota... described as a human study title, but investigates a distinct fiber-ingredient product (sugar beet pectin) rather than beetroot root powder/juice; excluded as different_substance from the beetroot-powder identity."
+    },
+    {
+      "pmid": "32023906",
+      "reason": "animal_or_invitro",
+      "note": "High-fiber diet energy values and nutrient digestibility determination methods in growing pigs; animal (swine) study."
+    },
+    {
+      "pmid": "32685432",
+      "reason": "animal_or_invitro",
+      "note": "Beet root protecting against lipopolysaccharide and alcohol-induced liver damage in rats; animal model study."
+    },
+    {
+      "pmid": "32751524",
+      "reason": "animal_or_invitro",
+      "note": "Fodder beet bulb supplementation and rumen fermentation/acidosis risk in dairy cattle; animal (ruminant) feed study."
+    },
+    {
+      "pmid": "32990769",
+      "reason": "off_topic",
+      "note": "Effect of heat stress on sugar beet recombination (plant genetics); agricultural/plant biology study, not a clinical study."
+    },
+    {
+      "pmid": "34127217",
+      "reason": "off_topic",
+      "note": "New pectin derivatives with antimicrobial/emulsification properties via metal-terpyridine complexation; materials chemistry study, not a clinical study."
+    },
+    {
+      "pmid": "34150889",
+      "reason": "animal_or_invitro",
+      "note": "Miscanthus grass as a novel fiber source in extruded feline diets; animal (cat) feed study, and not beetroot-related."
+    },
+    {
+      "pmid": "34161881",
+      "reason": "off_topic",
+      "note": "Cadmium-induced morphological/photosynthetic disruption in sugar beet plants; plant physiology study, not a clinical study."
+    },
+    {
+      "pmid": "34258419",
+      "reason": "animal_or_invitro",
+      "note": "Fiber source effects on growth, immune response, and gut microbiota in weaned piglets; animal (swine) feed study."
+    },
+    {
+      "pmid": "34649625",
+      "reason": "off_topic",
+      "note": "Study protocol for online cognitive behavioural therapy for bulimia nervosa; unrelated to beetroot (apparent keyword false match)."
+    },
+    {
+      "pmid": "35406074",
+      "reason": "different_substance",
+      "note": "Gastrointestinal tolerance of short-chain fructo-oligosaccharides derived from sugar beet; distinct fiber-ingredient (FOS) product, not beetroot root powder/juice."
+    },
+    {
+      "pmid": "35436446",
+      "reason": "off_topic",
+      "note": "Epoxiconazole (a fungicide) effects on mouse liver histology/transcriptome across generations; toxicology study unrelated to beetroot supplementation."
+    },
+    {
+      "pmid": "35720468",
+      "reason": "animal_or_invitro",
+      "note": "Low-starch, high-fiber diet effects on the microbial community of raw bovine milk; animal (dairy cattle) study."
+    },
+    {
+      "pmid": "35966232",
+      "reason": "off_topic",
+      "note": "Chlorophyll response to water stress and crop water stress index in sugar beet farming; agronomic study, not a clinical study."
+    },
+    {
+      "pmid": "36069237",
+      "reason": "different_substance",
+      "note": "Betaine (a distinct compound, also found in beets but chemically and functionally different from nitrate/betalains) ameliorating acute severe ulcerative colitis; appears to be an animal model study, not a beetroot-powder human trial."
+    },
+    {
+      "pmid": "36402074",
+      "reason": "off_topic",
+      "note": "High boron stress and photosystem II disruption in sugar beet plants; plant physiology study, not a clinical study."
+    },
+    {
+      "pmid": "36432323",
+      "reason": "off_topic",
+      "note": "Nanosilica nanotechnology to mitigate nitrogen/phosphorus deficiencies in sugar beet cultivation; agricultural technology study, not a clinical study."
+    },
+    {
+      "pmid": "36712404",
+      "reason": "animal_or_invitro",
+      "note": "Time-course effects of fiber-rich ingredients on energy values and microbiota in growing pigs; animal (swine) feed study."
+    },
+    {
+      "pmid": "36750904",
+      "reason": "not_intervention",
+      "note": "Study protocol for a planned randomized controlled trial of nitrate-rich beet juice on cardiovascular performance in postmenopausal women with hypertension; no outcome results reported."
+    },
+    {
+      "pmid": "37507763",
+      "reason": "not_intervention",
+      "note": "Study protocol (BEET-PKD) for a planned double-blind RCT of beetroot juice for lowering blood pressure in hypertensive adults with autosomal dominant polycystic kidney disease; no outcome results reported."
+    },
+    {
+      "pmid": "36911820",
+      "reason": "off_topic",
+      "note": "Evaluation of resistance/stability of sugar beet genotypes in rhizomania-infected conditions; plant breeding/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "37033299",
+      "reason": "animal_or_invitro",
+      "note": "Nutritional quality of an ensiled orange pulp-wheat straw-sugar beet pulp mixture in sheep; animal (ruminant) feed study."
+    },
+    {
+      "pmid": "37047573",
+      "reason": "off_topic",
+      "note": "General review of abiotic stress in crop production; agricultural science, not a clinical study."
+    },
+    {
+      "pmid": "37050730",
+      "reason": "off_topic",
+      "note": "Systematic review of weed detection using deep learning; agricultural technology/computer science, not a clinical study."
+    },
+    {
+      "pmid": "37104187",
+      "reason": "off_topic",
+      "note": "Systematic review of mycotoxin prevalence in food-industry by-products; food-safety/agricultural science, not a clinical human-supplementation study."
+    },
+    {
+      "pmid": "37340073",
+      "reason": "off_topic",
+      "note": "Stability analysis and genotype selection of sugar beet using statistical models; plant breeding/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "37423275",
+      "reason": "off_topic",
+      "note": "Biochar and zero-valent iron effects on heavy-metal bioavailability in contaminated soil; environmental/agricultural science, not a clinical study."
+    },
+    {
+      "pmid": "37553855",
+      "reason": "off_topic",
+      "note": "Effect of a plant-growth-promoting bacterium on plant growth under cadmium stress; plant biology study, not a clinical study."
+    },
+    {
+      "pmid": "37686725",
+      "reason": "off_topic",
+      "note": "Novel multi-ingredient supplement for weight loss/body composition; beetroot not confirmed as a named ingredient in the retrieved abstract excerpt."
+    },
+    {
+      "pmid": "37894015",
+      "reason": "animal_or_invitro",
+      "note": "Novel prebiotic fibre blend supporting gastrointestinal health of senior dogs; animal (canine) study."
+    },
+    {
+      "pmid": "38029999",
+      "reason": "off_topic",
+      "note": "Thallium content in vegetables and food-safety threshold derivation; environmental/food-safety meta-analysis, not a clinical supplementation study."
+    },
+    {
+      "pmid": "38172529",
+      "reason": "off_topic",
+      "note": "Genotype-by-environment interactions and yield stability in sugar beet; plant breeding/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "38254365",
+      "reason": "animal_or_invitro",
+      "note": "Fiber source effects on digestive function, fecal microbiota, and immune response in adult dogs; animal (canine) study."
+    },
+    {
+      "pmid": "38761896",
+      "reason": "different_substance",
+      "note": "Ferulic acid isolated from sugar beet pulp mitigating obesity-induced diabetes complications via a signaling pathway; a distinct isolated compound (ferulic acid), and appears to be a preclinical/animal-model mechanistic study, not beetroot powder/juice."
+    },
+    {
+      "pmid": "38896726",
+      "reason": "off_topic",
+      "note": "Impact of saline and water stress on agronomic performance of beet crops; agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "38929375",
+      "reason": "different_substance",
+      "note": "Meta-analysis of dietary betaine effects on ruminant milk production/growth/carcass traits; betaine is a distinct compound from nitrate/betalains, and this is an animal (livestock) study."
+    },
+    {
+      "pmid": "38992210",
+      "reason": "off_topic",
+      "note": "Genotype-by-environment interaction and stability analysis for sugar beet harvest date; plant breeding/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "39242626",
+      "reason": "off_topic",
+      "note": "Genotypic interactions in sugar beet for yield stability; plant breeding/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "39253698",
+      "reason": "animal_or_invitro",
+      "note": "Fiber source effects on performance, cecal microflora, and intestinal histology in Japanese quails; animal (poultry) study."
+    },
+    {
+      "pmid": "39375422",
+      "reason": "off_topic",
+      "note": "Cell wall alterations in a multi-stress-tolerant strain of an oleaginous yeast; microbiology/biotechnology study, not clinical and not beetroot-related."
+    },
+    {
+      "pmid": "39409172",
+      "reason": "off_topic",
+      "note": "Effects of growth substances/heavy metals on vacuole dynamics in red beet taproot cells; plant cell biology study, not a clinical study."
+    },
+    {
+      "pmid": "39521894",
+      "reason": "off_topic",
+      "note": "Yield and stability evaluation of sugar beet genotypes; plant breeding/agricultural study, not a clinical study."
+    },
+    {
+      "pmid": "39758378",
+      "reason": "animal_or_invitro",
+      "note": "Beet-pulp concentrate supplementation in athletic horses; animal (equine) feed study."
+    },
+    {
+      "pmid": "40203559",
+      "reason": "off_topic",
+      "note": "Cadmium contamination effects on alkaline tolerance in sugar beet via carbon fixation/tryptophan metabolism; plant physiology study, not a clinical study."
+    },
+    {
+      "pmid": "40329893",
+      "reason": "off_topic",
+      "note": "Global systematic review/meta-analysis of virus prevalence in vegetables and fruits; plant pathology/food-safety study, not a clinical human-supplementation study."
+    },
+    {
+      "pmid": "40360988",
+      "reason": "off_topic",
+      "note": "Synergistic effect of indole-3-acetic acid and nitrogen on salt-stressed sugar beet crop yield; agricultural/plant biology study, not a clinical study."
+    },
+    {
+      "pmid": "40364375",
+      "reason": "off_topic",
+      "note": "Growth performance of tilapia intercropped with wheat and sugar beet in an aquaculture-agriculture system; agricultural/aquaculture study, not a clinical study."
+    },
+    {
+      "pmid": "40380918",
+      "reason": "off_topic",
+      "note": "Jasmonic acid signaling and flame-retardant (DBDPE) tolerance in sugar beet; plant physiology/toxicology study, not a clinical study."
+    },
+    {
+      "pmid": "40560510",
+      "reason": "off_topic",
+      "note": "Broad systematic review of evidence-based supplementation strategies for wrestlers (multiple supplements); beetroot/nitrate not confirmed as specifically isolated with extractable data in the retrieved abstract excerpt."
+    },
+    {
+      "pmid": "40939032",
+      "reason": "off_topic",
+      "note": "Systematic review of sugar industry waste-management approaches in a circular-economy framework; industrial/environmental engineering review, not a clinical study."
+    },
+    {
+      "pmid": "40988030",
+      "reason": "off_topic",
+      "note": "Green-synthesized nanofertilizers to enhance sugar beet growth/quality; agricultural technology study, not a clinical study."
+    },
+    {
+      "pmid": "41162445",
+      "reason": "off_topic",
+      "note": "Zinc nanoparticles and biostimulants modulating water-deficit stress in sugar beet; agricultural science study, not a clinical study."
+    },
+    {
+      "pmid": "41459804",
+      "reason": "different_substance",
+      "note": "Slowly fermentable fiber mixture (against a high-protein diet) on insulin sensitivity in overweight individuals; a distinct fiber-blend product, not beetroot root powder/juice (fiber source composition not confirmed as beetroot-derived in the retrieved abstract)."
+    },
+    {
+      "pmid": "41462426",
+      "reason": "off_topic",
+      "note": "Cadmium toxicity in iron-supplemented hydroponic solutions on Beta vulgaris growth/oxidative damage; plant physiology/toxicology study, not a clinical study."
+    },
+    {
+      "pmid": "41653060",
+      "reason": "off_topic",
+      "note": "Kidney cancer and occupational agricultural exposures in a farming cohort; occupational epidemiology study, not a beetroot-supplementation study."
+    },
+    {
+      "pmid": "42461457",
+      "reason": "off_topic",
+      "note": "Public health risks of cadmium accumulation in wastewater-irrigated crops; environmental/food-safety review, not a clinical supplementation study."
+    },
+    {
+      "pmid": "42486927",
+      "reason": "off_topic",
+      "note": "Nitrogen fertilization and biostimulants in sugar beet crop production, a systematic review/meta-analysis/nutrient-management framework; agricultural science, not a clinical study."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "15964200",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Six healthy, non-smoking female volunteers"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a single oral dose of either 500 mL of a commercial RBJ containing 362.7 mg of betalains and 500 mL of tap water",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Six healthy, non-smoking female volunteers",
+      "indication_as_stated": "urinary pharmacokinetics of betalains",
+      "dose_quote": "a single oral dose of either 500 mL of a commercial RBJ containing 362.7 mg of betalains and 500 mL of tap water",
+      "primary_outcome_quote": "Urine was collected in intervals up to 24 h post-dose. Renal excretion of betalains was determined spectrophotometrically and quantified as betanin-equivalents.",
+      "primary_result_quote": "The amount (mean+/-S.D.) of intact betalains (betanin and isobetanin) recovered in urine was 1001+/-273 microg corresponding to 0.28+/-0.08% of the administered dose.",
+      "sample_size_quote": "Six healthy, non-smoking female volunteers were given a single oral dose",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Pharmacokinetic study, not an efficacy trial; authors conclude 'it is assumed that either the bioavailability of the betalains is low or that renal clearance is a minor route of systemic elimination for these compounds.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'commercial RBJ (red beet juice)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26778277",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twelve apparently healthy normotensive males"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "8.4 mmol inorganic nitrate load (beetroot juice)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twelve apparently healthy normotensive males (36 ± 11 yrs)",
+      "indication_as_stated": "mouthwash's effect on salivary/plasma nitrate-nitrite and blood pressure following a beetroot-juice nitrate load",
+      "dose_quote": "consumed 140 ml of beet juice and then 15 min later gargled with 5 mL of assigned mouthwash",
+      "primary_outcome_quote": "Testing consisted of blood pressure (BP), and saliva and venous blood collection at baseline and each hour for 4 h.",
+      "primary_result_quote": "there was a reduction in both SBP (p ≤ 0.01) and mean arterial BP (p ≤ 0.05) from the antibacterial/chlorhexidine treatments",
+      "sample_size_quote": "Twelve apparently healthy normotensive males (36 ± 11 yrs) completed four testing visits",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Mechanism study on how antibacterial mouthwash disrupts the oral-bacteria-dependent nitrate-to-nitrite conversion pathway that beetroot-juice nitrate relies on for its blood-pressure effect; not itself a beetroot efficacy trial but directly relevant to whether concurrent mouthwash use blunts beetroot's effect.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot juice' matches label spelling; used as the nitrate-load vehicle for this mouthwash-interaction mechanism study."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27278926",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "24 hypertensive subjects aged 25-68 years old"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "250 ml day(-1) of RBJ or 250 g day(-1) of CB each for a period of 2 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "24 hypertensive subjects aged 25-68 years",
+      "indication_as_stated": "blood pressure, endothelial function, and systemic inflammation in hypertension",
+      "dose_quote": "Each participant consumed 250 ml day(-1) of RBJ or 250 g day(-1) of CB each for a period of 2 weeks.",
+      "primary_outcome_quote": "Body weight, BP, flow-mediated dilation (FMD), lipid profile and inflammatory parameters were measured at baseline and after each period.",
+      "primary_result_quote": "FMD was significantly (P<0.05) increased, but systolic and diastolic BP, intracellular adhesion molecule-1 (ICAM-1), vascular endothelial adhesion molecule-1 (VCAM-1), hs-CRP, interleukin-6, E-selectin and TNF-α were significantly (P<0.05) decreased with RBJ or CB.",
+      "sample_size_quote": "24 hypertensive subjects aged 25-68 years old were divided into two groups",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Head-to-head comparison of raw beet juice (RBJ) versus cooked beet (CB), no inert placebo arm; raw juice showed greater antihypertensive/anti-inflammatory effects than cooked beet, but both forms improved outcomes versus baseline.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Compares raw beet juice against cooked whole beet; both are whole-food forms rather than a standardized nitrate-extract powder."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27600147",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "47 studies (76 trials) meeting the inclusion criteria"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "dietary nitrate (NO3-) supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "endurance exercise performance",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Pooled analysis identified a trivial but non-significant effect in favour of dietary NO3- supplementation [effect size (ES) = -0.10, 95 % Cl = -0.27 to 0.06, p > 0.05].",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Overall pooled effect across all protocols was null/trivial; time-to-exhaustion (TTE) trials specifically showed a small-to-moderate significant benefit (ES=0.33, p<0.01), while time-trial (TT) performance measures (arguably more ecologically valid) showed no significant benefit.",
+      "registrations": [],
+      "included_studies": "47 studies, 76 trials (from 1038 identified)",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Search strategy and included studies span 'nitrates OR nitrate OR beetroot OR table beet OR garden beet OR red beet', pooling multiple nitrate sources/forms, not one standardized beetroot powder."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "28329785",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "26 older (mean age = 65.4 years) participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "6 weeks of exercise + BRJ or exercise + placebo",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "26 older adults (mean age 65.4 years)",
+      "indication_as_stated": "neuroplasticity in the aging brain, peak metabolic equivalent capacity",
+      "dose_quote": null,
+      "primary_outcome_quote": "Peak metabolic equivalent (MET) capacity and resting-state magnetic resonance imaging functional brain network organization are reported",
+      "primary_result_quote": "Somatomotor community structure consistency was significantly enhanced in the exercise + BRJ group following the intervention (MBRJ = -2.27, SE = 0.145, MPlacebo = -2.89, SE = 0.156, p = .007).",
+      "sample_size_quote": "26 older (mean age = 65.4 years) participants randomly assigned to 6 weeks of exercise + BRJ or exercise + placebo",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Beet root juice given only as an add-on to a structured exercise program in both arms, not BRJ alone; 'Evaluation of peak MET capacity revealed a trend' (not stated as statistically significant) for higher capacity in the BRJ group. Specific BRJ dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beet root juice (BRJ)' matches label spelling; combined with a supervised exercise program in both study arms."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "28549665",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "patients with controlled HTN (n = 26...) and in patients with HFpEF (n = 20...)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a high nitrate-containing beet juice beverage (BRJ containing 6.1 mmol nitrate for the HFpEF study consumed three times a week and 8 mmol nitrate for the HTN study consumed daily)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "patients with controlled hypertension (n=26, average age 65) and patients with HFpEF (n=20, average age 69)",
+      "indication_as_stated": "exercise tolerance and blood pressure, combined with supervised aerobic exercise training",
+      "dose_quote": "BRJ containing 6.1 mmol nitrate for the HFpEF study consumed three times a week and 8 mmol nitrate for the HTN study consumed daily",
+      "primary_outcome_quote": "aerobic endurance (primary outcome), defined as the exercise time to volitional exhaustion during submaximal cycling at 75% of maximal power output",
+      "primary_result_quote": "The main result was that there was no added benefit observed for any outcomes when comparing BRJ to placebo in either HTN or HFpEF patients undergoing exercise training (p ≥ 0.14).",
+      "sample_size_quote": "patients with controlled HTN (n = 26, average age 65 ± 5 years) and in patients with HFpEF (n = 20, average age 69 ± 7 years)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result: BRJ added no benefit beyond exercise training alone on any outcome in either patient population; both exercise+BRJ and exercise+placebo groups improved similarly from baseline. Two small pilot studies combined.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot juice (BRJ)' matches label spelling; add-on to supervised aerobic exercise training in both arms."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29244746",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fifteen trained men"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "70 mL of BJ (5.6 mmol NO₃-) or placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Fifteen trained men (age 21.46 ± 1.72 years)",
+      "indication_as_stated": "anaerobic performance on a 30-s Wingate inertial cycle ergometer test",
+      "dose_quote": "drinking 70 mL of BJ (5.6 mmol NO₃-) or placebo",
+      "primary_outcome_quote": "a 30-s maximum intensity test on an inertial cycle ergometer",
+      "primary_result_quote": "improvements were produced in peak power (6%) (p = 0.034), average power 0-15 s (6.7%) (p = 0.048) and final blood lactate levels (82.6%) (p < 0.001)",
+      "sample_size_quote": "Fifteen trained men (age 21.46 ± 1.72 years, height 1.78 ± 0.07 cm and weight 76.90 ± 8.67 kg) undertook a 30-s maximum intensity test",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Explicit null on the stated primary outcome ('no impacts of BJ on the mean power recorded during the test'); positive only for secondary measures (peak power, early average power, lactate).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'BJ (Beetroot juice)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "29976553",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "exercise plus placebo group (n=13)... exercise plus beetroot juice group (n=11)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a 36-session exercise rehabilitation program while consuming oral inorganic nitrate (4.2 mmol concentrated beetroot juice)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "patients with peripheral artery disease (PAD) and intermittent claudication",
+      "indication_as_stated": "pain-free walking and skeletal muscle perfusion in PAD, combined with supervised exercise rehabilitation",
+      "dose_quote": "consuming oral inorganic nitrate (4.2 mmol concentrated beetroot juice)",
+      "primary_outcome_quote": "claudication onset time on a maximal treadmill test",
+      "primary_result_quote": "claudication onset time on a maximal treadmill test increased by 59.2±57.3 s for the exercise plus placebo group (n=13) and by 180.3±46.6 s for the exercise plus beetroot juice group (n=11; P≤0.05)",
+      "sample_size_quote": "the exercise plus placebo group (n=13) and by 180.3±46.6 s for the exercise plus beetroot juice group (n=11; P≤0.05)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Beetroot juice given only as an add-on to a 36-session supervised exercise rehabilitation program in patients with peripheral artery disease, not as monotherapy; authors call this 'early pilot study evidence' and caution it is 'premature to speculate on overall clinical utility.'",
+      "registrations": [
+        "NCT01684930",
+        "NCT01785524"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot juice' matches label spelling; combined with supervised exercise rehabilitation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "30155761",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty-eight trained male cyclists"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "betalain-rich beetroot concentrate (BLN) (100 mg/day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twenty-eight trained male cyclists",
+      "indication_as_stated": "cycling time-trial performance",
+      "dose_quote": "BLN (100 mg/day) or placebo (PLA) supplementation occurred over 7 days",
+      "primary_outcome_quote": "performed a 30-min cycling TT with concurrent assessment of several physiological variables and blood markers",
+      "primary_result_quote": "BLN supplementation improved average absolute power compared to PLA (231.6 ± 36.2 vs. 225.3 ± 35.8 W, p = 0.050, d = 0.02).",
+      "sample_size_quote": "Twenty-eight trained male cyclists (29 ± 10 years, 77.3 ± 13.3 kg, and 3.03 ± 0.62 W/kg) performed a counterbalanced crossover study",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Modest positive result (p exactly at 0.050, trivial effect size d=0.02) for average power; 'Average relative power, distance traveled, blood parameters... and inflammatory markers... were not significantly different between conditions'; improvement occurred 'without increasing plasma NOx levels', an unusual finding for a nitrate-mechanism supplement.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "'Betalain-rich beetroot concentrate' is standardized to betalain pigment content (100 mg/day) rather than nitrate content, a different active-marker basis than most other beetroot trials in this set."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "30244181",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "15 patients with PAH"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "nitrate-rich beetroot juice (∼16 mmol nitrate per day)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "15 patients with pulmonary arterial hypertension (PAH)",
+      "indication_as_stated": "pulmonary arterial hypertension: exhaled NO, hemodynamics, exercise capacity",
+      "dose_quote": "received nitrate-rich beetroot juice (∼16 mmol nitrate per day) and placebo in 2 treatment periods of 7 days each",
+      "primary_outcome_quote": "The assessments included; exhaled NO and NO flow-independent parameters (alveolar NO and bronchial NO flux), plasma and salivary nitrate and nitrite, biomarkers and metabolites of the NO-system, N-terminal pro-B-type natriuretic peptide, echocardiography, ergospirometry, diffusing capacity of the lung for carbon monoxide, and the 6-minute walk test.",
+      "primary_result_quote": "A tendency for an improvement in right ventricular function was observed after ingestion of BRJ.",
+      "sample_size_quote": "We prospectively studied 15 patients with PAH in an exploratory randomized, double-blind, placebo-controlled, crossover trial.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Small exploratory trial (n=15); positive on exhaled NO/biomarker measures, but clinical/functional improvements were described only as 'a tendency' (right ventricular function) and only reached significance in a post hoc 'responder' subgroup for peak power/VO2 ratio, not the overall cohort.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nitrate-rich beetroot juice (BRJ)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "30870330",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twelve papers were included in the systematic review with a total of 321 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "inorganic nitrate... administered multiple ways throughout the studies including the following: beetroot juice, beetroot gel, nitric oxide lozenge, high nitrate diet, and raw and cooked beet juice",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "blood pressure in hypertensive adults",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "There is insufficient evidence to support or refute the use of inorganic nitrate for any effect on blood pressure at this time.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Meta-analysis was NOT conducted due to heterogeneity; results presented narratively showed 'no change in systolic blood pressure and diastolic blood pressure, decrease in systolic blood pressure and diastolic blood pressure, or decrease in systolic blood pressure with no change in diastolic blood pressure' across studies — i.e., genuinely mixed findings across the literature, not a consistent effect.",
+      "registrations": [],
+      "included_studies": "12 papers, 321 participants (10 RCTs, 2 quasi-experimental)",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Pools multiple inorganic-nitrate delivery forms (beetroot juice, beetroot gel, nitric oxide lozenge, high-nitrate diet, raw/cooked beet), not one standardized beetroot powder."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31343548",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "27 recreationally active men"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "BEET [400-mg nitrate]",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "27 recreationally active men (age 22 ± 4 years)",
+      "indication_as_stated": "blood flow, energy metabolism, and performance during maximum effort leg extension exercise",
+      "dose_quote": "ingested a treatment beverage (CitMal [8 g], BEET [400-mg nitrate], or placebo [PLA])",
+      "primary_outcome_quote": "ultrasound was used to measure diameter (aDIAM) and blood flow (aBF) of the superficial femoral artery, along with cross-sectional area and echo intensity of the vastus lateralis",
+      "primary_result_quote": "While BEET increased NOx, neither treatment was found to enhance performance, blood flow, metabolic efficiency, nor the hormonal response to leg extension exercise.",
+      "sample_size_quote": "27 recreationally active men (age: 22 ± 4 years) completed 3 visits",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Confirmed a biomarker effect (raised plasma nitrate/nitrite) but explicit null on ALL functional outcomes (performance, blood flow, metabolic efficiency, hormonal response) — a biomarker-outcome dissociation.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'BEET [400-mg nitrate]' matches label spelling; compared head-to-head against citrulline malate, a distinct ergogenic supplement."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31343948",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "23 individuals with RP"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "acute and chronic (14 days) BJ and nitrate-depleted beetroot juice (NDBJ) supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "23 individuals with Raynaud's phenomenon (RP)",
+      "indication_as_stated": "peripheral blood flow, endothelial function, and anti-inflammatory status in Raynaud's phenomenon",
+      "dose_quote": null,
+      "primary_outcome_quote": "Peripheral Tsk and CVC were measured during and after mild hand and foot cooling, and during transdermal delivery of acetylcholine and sodium nitroprusside. Markers of anti-inflammatory status were also measured.",
+      "primary_result_quote": "The key findings are that beetroot supplementation improves thumb blood flow, improves endothelial function and anti-inflammatory status, and reduces BP in people with Raynaud's.",
+      "sample_size_quote": "23 individuals with RP attended four times, in a double-blind, randomized crossover design",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Notably, the NITRATE-DEPLETED comparator (NDBJ) produced nearly identical benefits to the nitrate-containing beetroot juice (BJ) on blood pressure, endothelial function, and anti-inflammatory status, suggesting the observed effects may not be nitrate-specific; no significant effect on skin temperature (Tsk) was observed for either. Specific BJ dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Compares nitrate-containing beetroot juice against a nitrate-depleted beetroot juice control, both beet-derived but differing in nitrate content."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "31456449",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Recreationally active males (n = 27)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "BEET (400 mg nitrate)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Recreationally active males (n=27, age 22 ± 4 yrs)",
+      "indication_as_stated": "blood pressure, blood flow, and energy efficiency during submaximal leg extension",
+      "dose_quote": "CitMal (8 g) and BEET (400 mg nitrate)",
+      "primary_outcome_quote": "Diameter (aDIAM) and blood flow (aBF) of the superficial femoral artery, and cross-sectional area (CSA) and echo intensity (EI) of the vastus lateralis, were measured before and after exercise via ultrasonography.",
+      "primary_result_quote": "Results suggest that neither CitMal nor BEET significantly influence resting BP, blood flow, or metabolic efficiency during submaximal leg extension in recreationally active males.",
+      "sample_size_quote": "Recreationally active males (n = 27; age: 22 ± 4 yrs) completed familiarization, followed by three testing visits.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result: no significant effect on resting BP, blood flow, or metabolic efficiency for BEET (or citrulline malate) during submaximal resistance exercise. Companion study to 31343548 in the same cohort.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'BEET (400 mg nitrate)' matches label spelling; compared head-to-head against citrulline malate."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32470923",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "70 recreational runners"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "70-ml nitrate-rich beetroot juice (containing ∼4.1 mmol of nitrate, Beet It Sport®) or nitrate-depleted placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "70 recreational runners (mean age 33.3 years)",
+      "indication_as_stated": "competitive 5-km time-trial running performance",
+      "dose_quote": "administration of 70-ml nitrate-rich beetroot juice (containing ∼4.1 mmol of nitrate, Beet It Sport®) or nitrate-depleted placebo (containing ∼0.04 mmol of nitrate, Beet It Sport®) 2.5 hr prior to time trials",
+      "primary_outcome_quote": "Time to complete 5 km was recorded for each trial.",
+      "primary_result_quote": "No differences in times were shown between beetroot juice and placebo (0.8 ± 5.7 s, p < .875, d = 0.00).",
+      "sample_size_quote": "70 recreational runners (mean ± SD: age = 33.3 ± 12.3 years, training history = 11.9 ± 8.1 years, and hours per week training = 5.9 ± 3.5)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result (effect size d=0.00) in a real-world competitive-race setting, one of the larger acute-supplementation trials (n=70) in this set.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'nitrate-rich beetroot juice (Beet It Sport®)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32509115",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty-four HIFT participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "70 mL beetroot nitrate supplement, Beet It®, 2 hours prior to beginning the assigned benchmark test",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twenty-four high-intensity functional training (HIFT) participants",
+      "indication_as_stated": "high-intensity functional training performance",
+      "dose_quote": "consuming 70 mL beetroot nitrate supplement, Beet It®, 2 hours prior to beginning the assigned benchmark test",
+      "primary_outcome_quote": "time to completion, pre- and post-exercise blood lactate levels, RPE, and pre-, during, and post-exercising heart rates were measured",
+      "primary_result_quote": "There was no significant difference (p < 0.05) between the control (930 ± 192.6 sec) and supplement (952.8 ± 205.8 sec) on time to complete the performance test.",
+      "sample_size_quote": "Twenty-four HIFT participants (25 ± 6.5 years, 175.17 ± 8.1 cm, 84.94 ± 12.09 kg)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result across all measured performance and physiological outcomes; comparator was a no-supplement control session rather than an inert placebo.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot nitrate supplement, Beet It®' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32605284",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twelve healthy men"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "beetroot juice (BJ) compared to a placebo (PLA)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twelve healthy men",
+      "indication_as_stated": "muscular endurance and movement velocity during resistance training",
+      "dose_quote": null,
+      "primary_outcome_quote": "Movement velocity variables, total number of repetitions performed until concentric failure, blood lactate, and ratings of perceived effort post-training were measured.",
+      "primary_result_quote": "A higher number of repetitions were recorded with BJ compared to those with PLA (13.8 ± 14.4; p < 0.01; effect size (ES) = 0.6).",
+      "sample_size_quote": "Twelve healthy men performed an incremental RT test (back squat and bench press)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive effect on total repetitions was significant at 60% and 70% 1-RM loads but 'no differences were found at 80% 1-RM'; effect present in back squat but not bench press exercise. Specific BJ dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot juice (BJ)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "32715742",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "18 studies met inclusion criteria from a total of 209 articles"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "NO3- derived from BRJ (beetroot juice) intake",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "fatigue resistance during repeated sprints",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "In a third of the selected studies, the consumption of beet juice rich in NO3- contributes to an increase in nitrites in plasma that led to the rise in peak power, mean power, number of sprint repetitions, total work and time to task failure, and causes a decrease in fatigue index and sprints times.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Authors state the positive findings applied to only 'a third of the selected studies' (i.e., most included studies did not show the effect); reports a modest 1.2-5.38% improvement range where present.",
+      "registrations": [],
+      "included_studies": "18 studies (of 209 screened)",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'BRJ (beetroot juice)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33023118",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "meta-analysis of data from 5 studies with 60 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "dietary NO3- supplementation",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "isokinetic peak torque (muscular strength)",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "The meta-analysis of data from 5 studies with 60 participants revealed an overall effect size of -0.01 for the effect of nitrate supplementation on isokinetic peak torque",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit near-zero pooled effect size (-0.01); 'Four of the five studies indicated that dietary NO3- supplementation is not likely to influence voluntary knee extensor isokinetic torque across a variety of angular velocities.'",
+      "registrations": [],
+      "included_studies": "5 studies, 60 participants",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Search strategy used 'nitrate OR beet*', pooling multiple nitrate/beetroot supplement forms, not one standardized product."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33340674",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Seventy-four eligible patients with T2DM"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "NO3--rich beetroot powder (5 g/d contains ~250 mg NO3-)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "patients with type 2 diabetes mellitus (T2DM)",
+      "indication_as_stated": "metabolic parameters (glycemic and lipid) in type 2 diabetes",
+      "dose_quote": "randomly assigned to NO3--rich beetroot powder (5 g/d contains ~250 mg NO3-) and placebo groups to complete intervention over a 24-week period",
+      "primary_outcome_quote": "Blood HbA1c, fasting serum glucose, insulin, C-peptide, as well as lipid profile were assessed at baseline and again at weeks 4, 12, and 24; indices of insulin resistance were also calculated.",
+      "primary_result_quote": "Supplementation with inorganic NO3- had no effect on metabolic parameters in patients with T2DM.",
+      "sample_size_quote": "Seventy-four eligible patients with T2DM were randomly assigned",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result over 24 weeks (the longest-duration RCT in this set); liver and renal safety tests 'showed no undesirable changes during the study follow-up.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'NO3--rich beetroot powder' matches label spelling exactly (the labeled product form for this identity)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34055148",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "14 anaerobically trained male hockey players"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "30-s Wingate placebo/beet juice trials, and 60-s Wingate placebo/beet juice trials",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "14 anaerobically trained male hockey players",
+      "indication_as_stated": "maximal-intensity cycling performance (30-s and 60-s Wingate sprints)",
+      "dose_quote": null,
+      "primary_outcome_quote": "Repeated measures ANOVAs were used to compare the change in power between conditions over the duration of each trial.",
+      "primary_result_quote": "Beet juice supplementation yielded no statistical differences from placebo in any of the measured variables during the 30-s or 60-s tests (p > 0.05).",
+      "sample_size_quote": "14 anaerobically trained male hockey players completed six Wingate cycling tests",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit overall null result; only the percent-change in fatigue index differed between the 30-s and 60-s tests, suggesting a modest fatigue-related effect, but authors conclude 'beet juice supplementation does not improve short-duration exercise performance in anaerobically trained athletes.' Specific beet juice dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beet juice' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34746837",
+      "design": "rct",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "described as 'trained cyclists'",
+          "specific sample size not stated as a contiguous span in the retrieved abstract"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a beet nitric oxide enhancing (NOE) supplement comprised of nitrite and nitrate",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "trained cyclists",
+      "indication_as_stated": "cycling performance indices: lactate threshold, high-intensity interval performance",
+      "dose_quote": null,
+      "primary_outcome_quote": "Subjects completed a lactate threshold test and a high-intensity interval (HIIT) protocol at 50% above functional threshold power with or without oral NOE supplement.",
+      "primary_result_quote": "NOE supplementation enhanced lactate threshold by 7.2% (Placebo = 191.6 ± 37.3 W, NOE = 205.3 ± 39.9; p = 0.01; Effect Size (ES) = 0.40).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Positive across lactate threshold, time-to-exhaustion, and total work in HIIT protocol; specific dose and total enrolled sample size not stated as contiguous quotable spans in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "A branded 'beet nitric oxide enhancing (NOE) supplement' combining both nitrite and nitrate forms, not a plain beetroot powder/juice."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35565845",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "healthy middle- to older-aged adults"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a single dose of Beet It Sport® alone; Beet It Sport®, plus a 200 mg vitamin C supplement; and Beet It Sport® plus 15 g of whey protein",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "healthy middle- to older-aged adults",
+      "indication_as_stated": "acute plasma nitrate and nitrite response, alone versus with vitamin C or protein",
+      "dose_quote": "a single dose of Beet It Sport® alone; Beet It Sport®, plus a 200 mg vitamin C supplement; and Beet It Sport® plus 15 g of whey protein",
+      "primary_outcome_quote": "Plasma levels of nitrate and nitrite were determined prior to and at 1 and 3 h after intervention.",
+      "primary_result_quote": "we observed no differences in log plasma nitrate and nitrite at 1 h and 3 h after co-ingesting beetroot juice with vitamin C or a whey protein supplement compared to beetroot juice alone",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result: co-ingesting vitamin C or whey protein did not alter the plasma nitrate/nitrite response to beetroot juice compared to beetroot juice alone. Specific enrolled sample size not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Beet It Sport®' matches label spelling as the base beetroot juice product."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36305974",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty healthy males"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "prior BR or water beverage ingestion",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twenty healthy males (age 22.2 ± 0.7 years)",
+      "indication_as_stated": "cold-induced vasodilation and fingertip rewarming",
+      "dose_quote": null,
+      "primary_outcome_quote": "Skin temperature at seven body sites, Tfing, finger skin blood flow (SkBFfing), and blood pressure were measured.",
+      "primary_result_quote": "The rewarming speed in Tfing and SkBFfing was significantly faster with BR at 15- (BR 1.24 ± 0.22 vs water 1.11 ± 0.26 °C/min) and 20-min rewarming (P < 0.05).",
+      "sample_size_quote": "Twenty healthy males (mean ± SD; age 22.2 ± 0.7 years, height 172.6 ± 6.0 cm, body mass 61.3 ± 11.7 kg)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Comparator was plain water, not an inert nitrate-depleted placebo; positive on post-immersion rewarming speed, but 'parameters of CIVD (Tfing and SkBFfing) were not different between BR and water conditions' during the cold immersion itself. Specific BR dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot (BR)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36385690",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "49 residents were recruited"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "nitrate containing (400 mg) versus free (0 mg daily) beetroot juice given for 60 days",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "49 UK residential/nursing care home residents, mean age 82 years",
+      "indication_as_stated": "feasibility of dietary nitrate supplementation for preventing/reducing winter infections including COVID-19",
+      "dose_quote": "compared nitrate containing (400 mg) versus free (0 mg daily) beetroot juice given for 60 days",
+      "primary_outcome_quote": "Outcomes comprised feasibility of recruitment, adherence, salivary and urinary nitrate, and ordinal infection/clinical events.",
+      "primary_result_quote": "Together, infections, hospitalisations and deaths occurred in 33% of residents over 60 days.",
+      "sample_size_quote": "49 residents were recruited (median 8 [interquartile range 7-12] per home)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "unresolved",
+      "direction_note": "This was explicitly a FEASIBILITY trial, not powered for clinical efficacy: 'Data paucity precluded clinical between-group comparisons.' Only 6 of 30 targeted care homes participated; authors state 'a larger trial is now required.' Supplement was tolerated and increased urinary nitrate as expected.",
+      "registrations": [
+        "ISRCTN51124684"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot juice' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36670889",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "9 recreationally active men"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "NO3−-rich (BR: 8 mmol NO3−/day) and NO3−-depleted (PL: 0.75 mmol NO3−/day) beetroot powder for 7 days",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "9 recreationally active men",
+      "indication_as_stated": "end-sprint performance after prolonged moderate-intensity exercise",
+      "dose_quote": "ingested NO3−-rich (BR: 8 mmol NO3−/day) and NO3−-depleted (PL: 0.75 mmol NO3−/day) beetroot powder for 7 days",
+      "primary_outcome_quote": "completed 2 h of moderate-intensity cycling, which immediately transitioned into a 60 s maximal-intensity end-sprint",
+      "primary_result_quote": "Mean power output during the final 30 s of the end-sprint was greater after BR (390 ± 38 W) compared to PL (365 ± 41 W; p < 0.05).",
+      "sample_size_quote": "9 recreationally active men ingested NO3−-rich (BR: 8 mmol NO3−/day) and NO3−-depleted (PL: 0.75 mmol NO3−/day) beetroot powder for 7 days",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Very small sample (n=9); positive on end-sprint power and deoxyhaemoglobin kinetics, with 'no differences between BR and PL in any muscle oxygenation variables during moderate-intensity cycling.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot powder' matches label spelling exactly (the labeled product form for this identity)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36703935",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Thirteen national-level swimmers"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a 70-mL Beet-It shot (6.4 mmol of NO3 -beet juice [BJ])",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Thirteen national-level swimmers (six females, seven males)",
+      "indication_as_stated": "repeated maximal swimming effort performance",
+      "dose_quote": "ingested a 70-mL placebo shot (.04 mmol NO3 -; PLA) or a 70-mL Beet-It shot (6.4 mmol of NO3 -beet juice [BJ]) 3 h before undergoing a 6 × 100-m front-crawl maximal effort test",
+      "primary_outcome_quote": "undergoing a 6 × 100-m front-crawl maximal effort test with 7 min rest between each 100 m",
+      "primary_result_quote": "Overall, 100-m times showed no difference between the BJ and PLA groups (p = .364)",
+      "sample_size_quote": "Thirteen national-level swimmers (six females and seven males), participated in this randomized, double-blind crossover study.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null on overall swim times; only non-significant trends toward better recovery/fatigue tolerance were noted, described by authors as merely 'possibly' present using magnitude-based inference, not conventional significance.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Beet-It shot... beet juice (BJ)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "37662597",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "180 people with a mean age of (45.19 ± 14.94) years"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Beetroot juice had 250 mg of beetroot",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "180 people with non-alcoholic fatty liver disease (NAFLD), mean age 45.19 years",
+      "indication_as_stated": "lipid profile, liver enzymes, and hepatic steatosis (sonography) in NAFLD",
+      "dose_quote": "Beetroot juice had 250 mg of beetroot.",
+      "primary_outcome_quote": "Serum Bilirubin, alkaline phosphatase (ALP), alanine transaminase (ALT), serum cholesterol (CHOL), triglyceride (TG), and low-density lipoprotein (LDL) levels were significantly decreased in the BJ + MeD, BJ, and MeD groups (p = 0.001).",
+      "primary_result_quote": "The research findings indicate a significant reduction in hepatic steatosis among the groups receiving beetroot juice (BJ) and beetroot juice combined with the Mediterranean diet (BJ + MeD).",
+      "sample_size_quote": "In this randomized controlled trial, 180 people with a mean age of (45.19 ± 14.94) years participated.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Four-arm design (control, Mediterranean diet alone, beetroot juice alone, and combined); beetroot-juice-alone arm showed benefits similar to the Mediterranean-diet-alone arm, and the combination showed 'enhanced efficacy' over either alone — suggesting beetroot juice's isolated contribution versus a whole dietary-pattern change is not fully separable from the diet's own effect in the combined arm.",
+      "registrations": [
+        "NCT05909631"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Beetroot juice' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38873567",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "20 male and female cyclists"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "The BEET supplement provided 212 mg of nitrates per day, 200 mg caffeine from green tea extract, 44 mg vitamin C from Camu Camu berry, B-vitamins from quinoa sprouts... and 2.5 g of a mushroom blend containing Cordyceps sinensis and Inonotus obliquus",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "20 male and female cyclists",
+      "indication_as_stated": "post-exercise inflammation after intensive cycling",
+      "dose_quote": "The BEET supplement provided 212 mg of nitrates per day, 200 mg caffeine from green tea extract, 44 mg vitamin C from Camu Camu berry, B-vitamins from quinoa sprouts (40% Daily Value for thiamin, riboflavin, niacin, and vitamin B6), and 2.5 g of a mushroom blend containing Cordyceps sinensis and Inonotus obliquus.",
+      "primary_outcome_quote": "Six blood samples were collected before and after supplementation (overnight fasted state), immediately post-exercise, and at 1.5 h-, 3 h-, and 24 h-post-exercise.",
+      "primary_result_quote": "Intake of a BEET-based supplement during a 2-week period was linked to higher plasma levels of NO3 - + NO2 -, elevated post-exercise levels of two anti-inflammatory oxylipins, and a significant decrease in a cluster of proteins involved in complement activation and inflammation.",
+      "sample_size_quote": "20 male and female cyclists",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Multi-ingredient 'mixed beet-based supplement' also containing caffeine, vitamin C, B-vitamins, and a medicinal-mushroom blend (Cordyceps, Inonotus), not isolated beetroot; cannot isolate the beetroot-nitrate-specific contribution to the observed anti-inflammatory proteomic effects.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Beet-derived nitrate is one of five distinct active components in a proprietary multi-ingredient supplement."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39860619",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "36 middle-aged women with sarcopenia and cartilage defects"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "RE with NO3- supplementation (NG, n = 18) or with placebo (PG, n = 18) groups",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "36 middle-aged women with sarcopenia and cartilage defects undergoing mesenchymal stem cell implantation",
+      "indication_as_stated": "muscle mass/strength recovery after knee surgery, combined with resistance exercise",
+      "dose_quote": null,
+      "primary_outcome_quote": "The primary outcomes were thigh muscle cross-sectional area (CSA) and knee strength",
+      "primary_result_quote": "Thigh muscle CSA decreased in the PG but was maintained in the NG.",
+      "sample_size_quote": "36 middle-aged women with sarcopenia and cartilage defects undergoing mesenchymal stem cell implantation",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Nitrate given only as an add-on to a 12-week supervised resistance-exercise program common to both arms, not nitrate alone; positive on muscle CSA and knee extension/flexion strength and some functional scores (SPPB, IKDC), but 'similar improvements were observed for WOMAC scores in both groups.' Specific nitrate dose not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Nitrate supplementation is combined with a resistance-exercise program and post-surgical rehabilitation context, not standalone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39940327",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Healthy MA/O adults (initial n = 26)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "2 cups of 'bull's blood' beet or red cabbage microgreens daily for 2 weeks",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Healthy middle-aged/older adults (initial n=26, final n=24)",
+      "indication_as_stated": "feasibility, gastrointestinal tolerability, and hemodynamic/microbiota effects of daily microgreen consumption",
+      "dose_quote": "randomized to consume either 2 cups of 'bull's blood' beet or red cabbage microgreens daily for 2 weeks in a crossover design",
+      "primary_outcome_quote": "Feasibility was determined through participant retention and intervention compliance (i.e., total doses consumed divided by 14 days), while gastrointestinal tolerability was determined by a gastrointestinal health questionnaire and bowel movement log.",
+      "primary_result_quote": "Daily consumption for 2 weeks of 'bull's blood' beet and red cabbage microgreens was found to be feasible as indicated by high participant retention (final n = 24) and overall treatment compliance of 95.6%.",
+      "sample_size_quote": "Healthy MA/O adults (initial n = 26) were randomized",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "unresolved",
+      "direction_note": "A feasibility/tolerability study, not a powered efficacy trial; explicit null on hemodynamic parameters and gut microbiota diversity ('There were no changes in bowel movement quality, hemodynamic parameters, or on alpha or beta diversity of the gut microbiota'). Authors state 'future studies designed to evaluate their health impacts are needed.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "'Beet microgreens' (young sprouted seedlings) are a distinct product form from mature-root beetroot powder/juice, with likely different nitrate/phytochemical content."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "41048226",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eleven physically active males"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "15 g of beetroot powder (7.26 mmol · L-1 or 450 mg of nitrate)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Eleven physically active males (age 21.36 ± 1.8 years)",
+      "indication_as_stated": "maximal strength, heart rate variability, and muscle oxygenation during resistance exercise",
+      "dose_quote": "ingested either 0.3 g · kg-1 of CR or 15 g of beetroot powder (7.26 mmol · L-1 or 450 mg of nitrate) two hours before each session",
+      "primary_outcome_quote": "Repetition-tofailure, peak velocity, power, Heart rate, and muscle oxygen saturation (SmO2) were recorded during both exercises.",
+      "primary_result_quote": "Both BJ and CR improved peak velocity compared to placebo (p < 0.05).",
+      "sample_size_quote": "Eleven physically active males (age = 21.36 ± 1.8 years) completed a randomized, double-blind, placebocontrolled, crossover protocol.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Very small sample (n=11); positive on peak velocity (matching creatine's effect) and some muscle-oxygenation/autonomic measures, but 'lower -limb strength performance and HRV declined... in all conditions, with no significant differences between BJ and CR' — i.e., beetroot did not outperform an active comparator on the main strength-decline outcome.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot powder' matches label spelling exactly (the labeled product form for this identity); compared head-to-head against creatine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "41704173",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "dose-response design with 200 mg, 400 mg, 800 mg NO3--rich beetroot powder"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "three acute NO3- doses (200 mg, 400 mg, 800 mg NO3--rich beetroot powder)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "healthy adults",
+      "indication_as_stated": "dose-response effects on cardiovascular and endothelial function",
+      "dose_quote": "three acute NO3- doses (200 mg, 400 mg, 800 mg NO3--rich beetroot powder)",
+      "primary_outcome_quote": "Cardiovascular variables and venous blood samples were measured prior to (control) and 2.5 h post supplement ingestion.",
+      "primary_result_quote": "endothelial function only improved following 400 mg (+3.07% compared to control) and aortic systolic BP only improved following 800 mg (-4 mmHg compared to control) dietary NO3- supplementation",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Non-monotonic, endpoint-specific dose-response: endothelial function improved only at the middle (400 mg) dose, not the highest (800 mg) dose, while aortic systolic BP improved only at the highest dose; explicit null on brachial BP and plasma cGMP at any dose. Specific enrolled sample size not stated as a contiguous quotable span in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'NO3--rich beetroot powder' matches label spelling exactly (the labeled product form for this identity)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "42019929",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twelve elite swimmers"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "140 ml of concentrated BRJ (Beet It Sport) or a custom-made, nitrate-depleted placebo",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twelve elite male swimmers (age 20 ± 2 years)",
+      "indication_as_stated": "repeated maximal 200-m front-crawl swimming performance",
+      "dose_quote": "consumed either 140 ml of concentrated BRJ (Beet It Sport) or a custom-made, nitrate-depleted placebo",
+      "primary_outcome_quote": "200-m completion time, blood lactate concentrations, and ratings of perceived exertion were recorded",
+      "primary_result_quote": "No significant differences were observed in completion time for either the first (PL: 116.7 ± 3.0 vs. BRJ: 117.2 ± 3.1 s, p = .19) or the second 200-m time trial (PL: 117.8 ± 2.6 vs. BRJ: 117.8 ± 3.3 s, p = .98)",
+      "sample_size_quote": "Twelve elite swimmers (age: 20 ± 2 years, body fat: 7.1% ± 2.5%, 200-m personal best: 115.7 ± 3.4 s) completed a randomized, double-blind, counterbalanced trial.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result across both time trials, lactate, and perceived exertion in an elite, competition-like setting.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'BRJ (Beet It Sport)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "42662908",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "108 participants were randomized (54/arm)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "daily beetroot juice (dietary nitrate 400 mg)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Pregnant women with stage G2 to G5 chronic kidney disease (CKD), <25 weeks' gestation, at 8 UK centers",
+      "indication_as_stated": "maternal kidney function and neonatal outcomes in CKD pregnancy (feasibility trial)",
+      "dose_quote": "randomized to standard care or daily beetroot juice (dietary nitrate 400 mg) within an observational cohort",
+      "primary_outcome_quote": "The primary outcome was recruitment rate/site/mo. Secondary outcomes included feasibility measures as well as maternal and fetal or neonatal clinical and safety events.",
+      "primary_result_quote": "Seven women receiving dietary nitrate (23.3%) experienced 11 serious adverse events (AEs, SAEs) compared with 27 women receiving standard care (50.9%) who had 53 SAEs (P = 0.02).",
+      "sample_size_quote": "108 participants were randomized (54/arm)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Primary outcome was feasibility (recruitment rate), not clinical efficacy; the reported reduction in serious adverse events and antihypertensive medication use are described as trends/post hoc findings from a small feasibility cohort in a high-risk pregnant population, and authors explicitly state 'further evidence of efficacy is needed from a powered randomized controlled trial.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'beetroot juice (dietary nitrate 400 mg)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "27278926",
+    "27600147",
+    "28549665",
+    "30244181",
+    "30870330",
+    "31456449",
+    "32470923",
+    "33023118",
+    "33340674",
+    "36385690",
+    "41704173",
+    "42019929"
+  ],
+  "handoff": [
+    {
+      "pmid": "36385690",
+      "role": "safety",
+      "reason": "Feasibility RCT of dietary nitrate for preventing winter infections in frail elderly care-home residents (median age 82); relevant to a geriatric-population dosing/tolerability reviewer given the vulnerable population and low completion of the feasibility recruitment target."
+    },
+    {
+      "pmid": "42662908",
+      "role": "safety",
+      "reason": "Feasibility RCT of beetroot juice (400 mg nitrate/day) in pregnant women with chronic kidney disease; relevant to a pregnancy/renal-disease safety reviewer given the specialized, high-risk population."
+    },
+    {
+      "pmid": "26778277",
+      "role": "interaction",
+      "reason": "Shows antibacterial/antiseptic mouthwash use blunts the oral-bacteria-dependent nitrate-to-nitrite conversion that beetroot's blood-pressure effect depends on; relevant to a product-interaction/co-administration reviewer (mouthwash use is common and could silently negate beetroot's intended effect)."
+    },
+    {
+      "pmid": "33340674",
+      "role": "dosing",
+      "reason": "24-week RCT (5 g/day beetroot powder, ~250 mg nitrate) in type 2 diabetes found no effect on glycemic/lipid parameters but confirmed liver/renal safety over long-term use; relevant to a chronic-dosing/diabetes-population reviewer."
+    },
+    {
+      "pmid": "41704173",
+      "role": "dosing",
+      "reason": "Dose-response RCT (200/400/800 mg nitrate-rich beetroot powder) found non-monotonic, endpoint-specific effects (endothelial function only at 400 mg, aortic systolic BP only at 800 mg); directly relevant to a dosing-strategy reviewer determining optimal beetroot-powder dose."
+    }
+  ],
+  "identity_notes": "The retrieved literature for 'OI_BEETROOT_POWDER' is dominated (68 of 114 records) by agricultural/plant-science and livestock/companion-animal-feed studies of sugar beet (Beta vulgaris) as a CROP or FIBER-BYPRODUCT ingredient — entirely unrelated to beetroot as a nitrate-rich human dietary supplement — plus several 1990s-era 'sugar beet fibre' human diabetes/lipid trials that concern a distinct manufactured fiber ingredient, not beetroot root powder/juice; all were excluded as off_topic, animal_or_invitro, or different_substance. The single most important applicability caveat for the genuine human beetroot-nitrate evidence base: results are highly outcome- and dose-dependent and frequently null in well-controlled trials — the largest acute running trial (n=70, PMID 32470923) and the longest RCT (24 weeks, PMID 33340674, in type 2 diabetes) both found NO significant benefit over placebo, and a dose-response trial (PMID 41704173) found different cardiovascular endpoints responded to different, non-overlapping doses (endothelial function only at 400 mg nitrate, aortic blood pressure only at 800 mg, with no effect on brachial blood pressure at any dose tested). Many 'positive' trials combined beetroot/nitrate with a supervised exercise program, another active ingredient (citrulline malate, creatine, vitamin C, whey protein, caffeine, mushroom extracts), or diet intervention common to both study arms, limiting attribution to beetroot alone; product forms also vary substantially (raw juice, cooked beet, betalain-standardized concentrate, nitrate-depleted comparator, powder, and even microgreens), which may not be interchangeable."
+}
