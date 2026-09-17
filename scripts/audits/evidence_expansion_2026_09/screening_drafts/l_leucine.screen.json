@@ -1,0 +1,2488 @@
+{
+ "canonical_id": "l_leucine",
+ "screened": 156,
+ "kept": 61,
+ "rejected": [
+  {
+   "pmid": "28698222",
+   "reason": "off_topic",
+   "note": "Broad protein-supplementation meta-analysis/meta-regression on resistance-training gains; not leucine-specific"
+  },
+  {
+   "pmid": "28978542",
+   "reason": "off_topic",
+   "note": "Whole eggs vs. egg whites postexercise MPS trial; leucine used only as an isotopic tracer, not the tested intervention"
+  },
+  {
+   "pmid": "30063168",
+   "reason": "off_topic",
+   "note": "Aminoacidemia after native whey/casein/blend ingestion; not a leucine supplementation trial"
+  },
+  {
+   "pmid": "32751788",
+   "reason": "off_topic",
+   "note": "Casein protein processing and postprandial amino acid response; not a leucine supplementation trial"
+  },
+  {
+   "pmid": "33668674",
+   "reason": "off_topic",
+   "note": "Acute Cheddar cheese vs. milk consumption on circulating amino acids; not a leucine supplementation trial"
+  },
+  {
+   "pmid": "35609328",
+   "reason": "off_topic",
+   "note": "Non-invasive 13CO2 breath test methodology validation using tracer-dose leucine; not a leucine supplementation efficacy trial"
+  },
+  {
+   "pmid": "39501478",
+   "reason": "off_topic",
+   "note": "Whey plus collagen protein blend trial; leucine measured only as a plasma marker, not the tested intervention"
+  },
+  {
+   "pmid": "40675336",
+   "reason": "off_topic",
+   "note": "Oral microbial protease co-ingested with whey protein; abstract explicitly reports no difference for leucine specifically"
+  },
+  {
+   "pmid": "33337947",
+   "reason": "different_substance",
+   "note": "Tests off-the-shelf leucine METABOLITE supplements (alpha-hydroxyisocaproic acid, HMB free acid, calcium HMB), not free L-leucine itself."
+  },
+  {
+   "pmid": "24057808",
+   "reason": "different_substance",
+   "note": "Beta-hydroxy-beta-methylbutyrate (HMB) systematic review of randomized trials; HMB is a distinct leucine metabolite, not L-leucine itself."
+  },
+  {
+   "pmid": "31531146",
+   "reason": "different_substance",
+   "note": "Mechanism of action and effects of HMB on physical performance, systematic review; HMB is a distinct leucine metabolite, not L-leucine itself."
+  },
+  {
+   "pmid": "32164702",
+   "reason": "different_substance",
+   "note": "Protein and calcium HMB combination trial for leg fat-free mass; HMB is a distinct leucine metabolite, not L-leucine itself."
+  },
+  {
+   "pmid": "36171789",
+   "reason": "different_substance",
+   "note": "Testosterone/cortisol responses to HMB consumption and exercise, meta-analysis; HMB is a distinct leucine metabolite, not L-leucine itself."
+  },
+  {
+   "pmid": "36364934",
+   "reason": "different_substance",
+   "note": "HMB plus vitamin D3 for skeletal muscle health, small RCT; HMB is a distinct leucine metabolite, not L-leucine itself."
+  },
+  {
+   "pmid": "39181037",
+   "reason": "different_substance",
+   "note": "Omega-3 PUFA with HMB addition in COPD RCT; HMB is a distinct leucine metabolite, not L-leucine itself."
+  },
+  {
+   "pmid": "39797501",
+   "reason": "different_substance",
+   "note": "Ergogenic benefits of HMB on body composition/strength, umbrella review; HMB is a distinct leucine metabolite, not L-leucine itself."
+  },
+  {
+   "pmid": "42124050",
+   "reason": "different_substance",
+   "note": "HMB effects on acute fed-state muscle protein turnover, crossover RCT; HMB is a distinct leucine metabolite, not L-leucine itself."
+  },
+  {
+   "pmid": "34387740",
+   "reason": "different_substance",
+   "note": "N-acetyl-L-leucine efficacy/safety in Niemann-Pick disease type C, phase II RCT; N-acetyl-L-leucine/levacetylleucine is a chemically modified pharmaceutical drug form for rare neurological diseases, distinct from the dietary supplement L-leucine."
+  },
+  {
+   "pmid": "36482027",
+   "reason": "different_substance",
+   "note": "N-Acetyl-L-Leucine symptom improvement in multiple sulfatase deficiency, case report; N-acetyl-L-leucine/levacetylleucine is a chemically modified pharmaceutical drug form for rare neurological diseases, distinct from the dietary supplement L-leucine."
+  },
+  {
+   "pmid": "37248494",
+   "reason": "different_substance",
+   "note": "N-acetyl-L-leucine for Niemann-Pick type C, phase III crossover RCT; N-acetyl-L-leucine/levacetylleucine is a chemically modified pharmaceutical drug form for rare neurological diseases, distinct from the dietary supplement L-leucine."
+  },
+  {
+   "pmid": "38294974",
+   "reason": "different_substance",
+   "note": "Trial of N-Acetyl-l-Leucine in Niemann-Pick Disease Type C; N-acetyl-L-leucine/levacetylleucine is a chemically modified pharmaceutical drug form for rare neurological diseases, distinct from the dietary supplement L-leucine."
+  },
+  {
+   "pmid": "38669738",
+   "reason": "different_substance",
+   "note": "N-acetyl-L-leucine in ataxia telangiectasia, randomized crossover trial; N-acetyl-L-leucine/levacetylleucine is a chemically modified pharmaceutical drug form for rare neurological diseases, distinct from the dietary supplement L-leucine."
+  },
+  {
+   "pmid": "40513057",
+   "reason": "different_substance",
+   "note": "N-Acetyl-l-Leucine in adult/pediatric Niemann-Pick Disease Type C, multicenter RCT; N-acetyl-L-leucine/levacetylleucine is a chemically modified pharmaceutical drug form for rare neurological diseases, distinct from the dietary supplement L-leucine."
+  },
+  {
+   "pmid": "42309084",
+   "reason": "different_substance",
+   "note": "Levacetylleucine phase 3 RCT in ataxia-telangiectasia; N-acetyl-L-leucine/levacetylleucine is a chemically modified pharmaceutical drug form for rare neurological diseases, distinct from the dietary supplement L-leucine."
+  },
+  {
+   "pmid": "36807624",
+   "reason": "off_topic",
+   "note": "LRRK2 inhibitor BIIB122 in Parkinson's disease, phase I trial; 'LRRK2' (leucine-rich repeat kinase 2) is a gene/drug target name, not L-leucine supplementation."
+  },
+  {
+   "pmid": "37445652",
+   "reason": "off_topic",
+   "note": "LRRK2 knockout and rotenone-induced oxidative stress in HEK-293 cells; 'LRRK2' (leucine-rich repeat kinase 2) is a gene/drug target name, not L-leucine supplementation."
+  },
+  {
+   "pmid": "41876647",
+   "reason": "off_topic",
+   "note": "LRRK2-targeting antisense oligonucleotide in Parkinson's disease, phase 1 trial; 'LRRK2' (leucine-rich repeat kinase 2) is a gene/drug target name, not L-leucine supplementation."
+  },
+  {
+   "pmid": "40523461",
+   "reason": "off_topic",
+   "note": "Regulation of LRRK2 activity by metabolic stress/heavy metal exposure; 'LRRK2' (leucine-rich repeat kinase 2) is a gene/drug target name, not L-leucine supplementation."
+  },
+  {
+   "pmid": "31038182",
+   "reason": "off_topic",
+   "note": "LRRK2 polymorphism meta-analysis in Alzheimer's disease; 'LRRK2' (leucine-rich repeat kinase 2) is a gene/drug target name, not L-leucine supplementation."
+  },
+  {
+   "pmid": "26559389",
+   "reason": "off_topic",
+   "note": "Immune therapy in autoimmune encephalitis, systematic review; 'LGI1' (leucine-rich glioma inactivated 1) is a protein/gene name in autoimmune encephalitis, not L-leucine supplementation."
+  },
+  {
+   "pmid": "31782181",
+   "reason": "off_topic",
+   "note": "IVIG randomized trial in autoimmune LGI1/CASPR2 epilepsy; 'LGI1' (leucine-rich glioma inactivated 1) is a protein/gene name in autoimmune encephalitis, not L-leucine supplementation."
+  },
+  {
+   "pmid": "32783406",
+   "reason": "off_topic",
+   "note": "Anti-LGI1/GABABR/CASPR2 encephalitides in Asia, systematic review; 'LGI1' (leucine-rich glioma inactivated 1) is a protein/gene name in autoimmune encephalitis, not L-leucine supplementation."
+  },
+  {
+   "pmid": "33808902",
+   "reason": "off_topic",
+   "note": "Neural autoantibody prevalence in epilepsy of unknown etiology, systematic review; 'LGI1' (leucine-rich glioma inactivated 1) is a protein/gene name in autoimmune encephalitis, not L-leucine supplementation."
+  },
+  {
+   "pmid": "34284303",
+   "reason": "off_topic",
+   "note": "Autoimmune encephalitis and epilepsy association, systematic review/meta-analysis; 'LGI1' (leucine-rich glioma inactivated 1) is a protein/gene name in autoimmune encephalitis, not L-leucine supplementation."
+  },
+  {
+   "pmid": "35095736",
+   "reason": "off_topic",
+   "note": "Anti-LGI1 encephalitis clinical features/therapeutic effects, systematic review; 'LGI1' (leucine-rich glioma inactivated 1) is a protein/gene name in autoimmune encephalitis, not L-leucine supplementation."
+  },
+  {
+   "pmid": "38871367",
+   "reason": "off_topic",
+   "note": "MRI findings in anti-LGI1 encephalitis, systematic review/meta-analysis; 'LGI1' (leucine-rich glioma inactivated 1) is a protein/gene name in autoimmune encephalitis, not L-leucine supplementation."
+  },
+  {
+   "pmid": "36075121",
+   "reason": "off_topic",
+   "note": "Chronic microcystin-leucine-arginine exposure and mouse bladder inflammation; microcystin-LR is a cyanobacterial toxin whose name incidentally contains 'leucine-arginine', unrelated to the L-leucine supplement."
+  },
+  {
+   "pmid": "36453240",
+   "reason": "off_topic",
+   "note": "Microcystin-leucine-arginine promotion of colorectal cancer cell proliferation; microcystin-LR is a cyanobacterial toxin whose name incidentally contains 'leucine-arginine', unrelated to the L-leucine supplement."
+  },
+  {
+   "pmid": "20919825",
+   "reason": "not_intervention",
+   "note": "Metabolomics and colorectal cancer detection, systematic review"
+  },
+  {
+   "pmid": "26379905",
+   "reason": "not_intervention",
+   "note": "Metabolomics in bladder cancer, systematic review"
+  },
+  {
+   "pmid": "27208380",
+   "reason": "not_intervention",
+   "note": "Metabolomics in prediabetes/diabetes, systematic review/meta-analysis"
+  },
+  {
+   "pmid": "28513068",
+   "reason": "not_intervention",
+   "note": "BCAA levels and glucose metabolism in obesity/sleep apnea RCT (BCAAs are a measured outcome of CPAP/conservative treatment, not the administered intervention)"
+  },
+  {
+   "pmid": "29079203",
+   "reason": "not_intervention",
+   "note": "Inflammasomes and type 2 diabetes, updated systematic review"
+  },
+  {
+   "pmid": "31782507",
+   "reason": "not_intervention",
+   "note": "Metabolomics signatures in type 2 diabetes, systematic review"
+  },
+  {
+   "pmid": "32473419",
+   "reason": "not_intervention",
+   "note": "Metabolomics in rheumatoid arthritis development/progression, systematic review"
+  },
+  {
+   "pmid": "33228610",
+   "reason": "not_intervention",
+   "note": "Metabolite biomarkers of type 2 diabetes/pre-diabetes, systematic review/meta-analysis"
+  },
+  {
+   "pmid": "33607391",
+   "reason": "not_intervention",
+   "note": "Bariatric surgery reduces BCAA levels, systematic review/meta-analysis"
+  },
+  {
+   "pmid": "33692630",
+   "reason": "not_intervention",
+   "note": "Metabolomic signature of metabolically healthy/unhealthy obesity, systematic review"
+  },
+  {
+   "pmid": "34666854",
+   "reason": "not_intervention",
+   "note": "Casein glycomacropeptide (with added leucine/tryptophan) for mania; leucine appears only in a ratio calculation, not the administered intervention"
+  },
+  {
+   "pmid": "35249118",
+   "reason": "not_intervention",
+   "note": "Bacillus coagulans probiotic supplementation; leucine is a measured downstream plasma marker, not the administered supplement"
+  },
+  {
+   "pmid": "37060383",
+   "reason": "not_intervention",
+   "note": "Metabolomics of osteoporosis, systematic review"
+  },
+  {
+   "pmid": "38646957",
+   "reason": "not_intervention",
+   "note": "Metabolite signature of malignant thyroid tissue, systematic review/meta-analysis"
+  },
+  {
+   "pmid": "39528475",
+   "reason": "off_topic",
+   "note": "Metabolomic signatures for fetal growth restriction, systematic review"
+  },
+  {
+   "pmid": "40304146",
+   "reason": "not_intervention",
+   "note": "Circulating amino acids and childhood obesity, systematic review/meta-analysis"
+  },
+  {
+   "pmid": "41076895",
+   "reason": "not_intervention",
+   "note": "Metabolomics in alcohol use disorder, systematic review"
+  },
+  {
+   "pmid": "41424075",
+   "reason": "not_intervention",
+   "note": "Metabolomic markers of blood-brain barrier damage, systematic review"
+  },
+  {
+   "pmid": "39456659",
+   "reason": "off_topic",
+   "note": "Bifidobacterium breve weight-loss RCT with gut metabolome outcomes (different intervention)"
+  },
+  {
+   "pmid": "32685353",
+   "reason": "off_topic",
+   "note": "Newborn screening for maple syrup urine disease (a leucine/BCAA-metabolism DISORDER requiring restriction, not supplementation)"
+  },
+  {
+   "pmid": "22352721",
+   "reason": "off_topic",
+   "note": "Evolutionary meta-analysis of solanaceous plant resistance genes (unrelated plant genetics)"
+  },
+  {
+   "pmid": "22785534",
+   "reason": "animal_or_invitro",
+   "note": "14-3-3 protein and stress-induced apoptosis (unrelated cell biology)"
+  },
+  {
+   "pmid": "24389518",
+   "reason": "off_topic",
+   "note": "Oral tyrosine supplementation and exercise heat performance (different amino acid)"
+  },
+  {
+   "pmid": "24532269",
+   "reason": "off_topic",
+   "note": "Genetics of essential tremor, meta-analysis (unrelated)"
+  },
+  {
+   "pmid": "29486562",
+   "reason": "off_topic",
+   "note": "Polymer-lipid microparticles for pulmonary drug delivery (unrelated formulation science)"
+  },
+  {
+   "pmid": "30038850",
+   "reason": "off_topic",
+   "note": "Meta-analysis of tomato transcriptomic stress responses (unrelated plant biology)"
+  },
+  {
+   "pmid": "30095245",
+   "reason": "off_topic",
+   "note": "Gold nanosensors for Leucine-Rich Alpha-2-Glycoprotein-1 detection (a different named protein, not L-leucine)"
+  },
+  {
+   "pmid": "30123358",
+   "reason": "off_topic",
+   "note": "LRIG1 protein meta-analysis in malignant tumors (unrelated gene)"
+  },
+  {
+   "pmid": "31178748",
+   "reason": "off_topic",
+   "note": "LRPPRC protein review in energy metabolism/disease (unrelated gene)"
+  },
+  {
+   "pmid": "33129938",
+   "reason": "off_topic",
+   "note": "Polypeptide-mediated antibody fragment assembly (unrelated protein engineering)"
+  },
+  {
+   "pmid": "34316185",
+   "reason": "off_topic",
+   "note": "Dietary tannins and broiler chicken performance meta-analysis (animal/agriculture)"
+  },
+  {
+   "pmid": "34394827",
+   "reason": "animal_or_invitro",
+   "note": "Colonic epithelial PHLPP2 deficiency and pyroptosis (unrelated cell biology)"
+  },
+  {
+   "pmid": "34606862",
+   "reason": "off_topic",
+   "note": "Pesticide effects on soil nitrogen-cycle microbes (unrelated environmental science)"
+  },
+  {
+   "pmid": "34777047",
+   "reason": "off_topic",
+   "note": "Neuropeptide Y polymorphism and alcoholism risk, meta-analysis (unrelated)"
+  },
+  {
+   "pmid": "35548277",
+   "reason": "off_topic",
+   "note": "Cotton transcriptome meta-analysis under drought/salt stress (unrelated plant biology)"
+  },
+  {
+   "pmid": "35637440",
+   "reason": "off_topic",
+   "note": "NLRP3 inflammasome in spermatogenesis/male infertility review (unrelated)"
+  },
+  {
+   "pmid": "36553665",
+   "reason": "off_topic",
+   "note": "Cloning and characterization of SpZIP2 (unrelated molecular biology)"
+  },
+  {
+   "pmid": "37692424",
+   "reason": "off_topic",
+   "note": "Soil microbial biomass/enzyme activity under drought (unrelated environmental science)"
+  },
+  {
+   "pmid": "38337871",
+   "reason": "off_topic",
+   "note": "bZIP transcription factors in drought-stressed plants, meta-analysis (unrelated plant biology)"
+  },
+  {
+   "pmid": "39098817",
+   "reason": "off_topic",
+   "note": "KCTD17-mediated Ras stabilization in hepatocellular carcinoma (unrelated cancer biology)"
+  },
+  {
+   "pmid": "39675352",
+   "reason": "animal_or_invitro",
+   "note": "AMPK and proximal tubular epithelial cell lipotoxicity (unrelated cell biology)"
+  },
+  {
+   "pmid": "39732499",
+   "reason": "off_topic",
+   "note": "Genome-wide association study of anterior uveitis (unrelated)"
+  },
+  {
+   "pmid": "40055814",
+   "reason": "animal_or_invitro",
+   "note": "Gram-positive probiotics and acetaminophen hepatotoxicity via leucine/Hippo-YAP pathway (mechanistic, likely non-human model; different intervention)"
+  },
+  {
+   "pmid": "40556386",
+   "reason": "off_topic",
+   "note": "NLRP12 pathogenic variants and autoinflammatory disease review (unrelated gene)"
+  },
+  {
+   "pmid": "40982097",
+   "reason": "off_topic",
+   "note": "Carotegrast methyl in ulcerative colitis (unrelated drug)"
+  },
+  {
+   "pmid": "41388803",
+   "reason": "animal_or_invitro",
+   "note": "PP2A methylesterase/methyltransferase and tau-related impairment (unrelated cell biology)"
+  },
+  {
+   "pmid": "7752916",
+   "reason": "off_topic",
+   "note": "Plasma arginine/leucine kinetics in burn patients (critical-care IV nutrition context, not oral supplementation)"
+  },
+  {
+   "pmid": "17543818",
+   "reason": "off_topic",
+   "note": "Epidural analgesia and hypocaloric glucose anticatabolic trial (unrelated intervention)"
+  },
+  {
+   "pmid": "26987021",
+   "reason": "off_topic",
+   "note": "Cocoa and whey protein effects on lipid/glucose/satiety markers (not leucine-specific)"
+  },
+  {
+   "pmid": "31334544",
+   "reason": "different_substance",
+   "note": "Medium-chain triglycerides (MCT) tested alone for sarcopenia; leucine-rich amino acids mentioned only as prior combination context, not the tested intervention here."
+  },
+  {
+   "pmid": "32234571",
+   "reason": "off_topic",
+   "note": "IPEX syndrome (immune dysregulation/polyendocrinopathy/enteropathy) systematic review, unrelated to L-leucine."
+  },
+  {
+   "pmid": "29722584",
+   "reason": "off_topic",
+   "note": "Soy vs. animal protein meta-analysis; leucine content discussed as rationale/mechanism but not the tested variable."
+  },
+  {
+   "pmid": "30102677",
+   "reason": "different_substance",
+   "note": "Tests off-the-shelf leucine METABOLITE supplements (alpha-HICA, HMB-Ca, HMB-FA), not free L-leucine itself."
+  },
+  {
+   "pmid": "37836475",
+   "reason": "not_intervention",
+   "note": "Systematic review/meta-analysis of differential metabolites (biomarkers) in osteoarthritis; not a supplementation trial."
+  },
+  {
+   "pmid": "37449706",
+   "reason": "off_topic",
+   "note": "Systematic review of extracellular vesicles as Parkinson's disease biomarkers; unrelated to L-leucine."
+  },
+  {
+   "pmid": "33872235",
+   "reason": "off_topic",
+   "note": "Dual leucine zipper kinase (DLK) inhibitor for chemotherapy-induced neuropathy; DLK is a gene/drug target name, not L-leucine supplementation."
+  },
+  {
+   "pmid": "38201966",
+   "reason": "off_topic",
+   "note": "Enzyme-treated supercritical caviar extract skin anti-aging RCT; unrelated to L-leucine."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "2184659",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "valine, isoleucine, and leucine mixture",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Sixteen adolescents/young adults with phenylketonuria",
+   "indication_as_stated": "phenylketonuria",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Time to completion of a test that required substantial attention with mental processing (Attention Diagnostic Method) was faster during the valine, isoleucine, and leucine periods than during the control mixture periods.",
+   "sample_size_quote": "Sixteen adolescents and young adults with phenylketonuria participated",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Leucine is one of three BCAAs; niche PKU indication.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is one of three BCAAs in a fixed mixture, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12836063",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine (100-200 mg/kg body weight)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "male power athletes (n=16 strength, n=12 running)",
+   "indication_as_stated": "acute strength/running performance",
+   "dose_quote": "leucine (100 mg x kg/body weight before and during SES or 200 mg x kg/body weight before MARE)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the supplementation does not affect an acute physical performance.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19056590",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "whole egg protein (0-40g), leucine oxidation tracer",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Six healthy young men",
+   "indication_as_stated": "muscle/albumin protein synthesis after exercise",
+   "dose_quote": "drinks containing 0, 5, 10, 20, or 40 g whole egg protein",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Ingestion of 20 g intact protein is sufficient to maximally stimulate MPS and APS after resistance exercise.",
+   "sample_size_quote": "Six healthy young men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Studies protein dose-response using leucine oxidation as a tracer method, not leucine supplementation per se.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine used as a metabolic tracer to study whole-egg-protein dose-response, not tested as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19321567",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 2.5 g per meal (7.5 g/d)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Thirty healthy elderly men",
+   "indication_as_stated": "muscle mass/strength/glycemic control",
+   "dose_quote": "Leucine or placebo (2.5 g) was administered with each main meal during a 3-mo intervention period.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Long-term leucine supplementation (7.5 g/d) does not augment skeletal muscle mass or strength and does not improve glycemic control or the blood lipid profile in healthy elderly men.",
+   "sample_size_quote": "Thirty healthy elderly men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [
+    "NCT00807508"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24599772",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral leucine (10 g/day) + exercise programme",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Seventeen outpatients with cirrhosis",
+   "indication_as_stated": "exercise capacity/muscle mass in cirrhosis",
+   "dose_quote": "All patients received oral leucine (10 g/day) during the study.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "exercise capacity improved, as shown by the increase in the 6-min walk test from 365 (160-420) to 445 m (250-500) (p = 0.01)",
+   "sample_size_quote": "Seventeen outpatients with cirrhosis were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Leucine given to ALL patients (both exercise and control arms); improvement attributed to the exercise program, not isolable to leucine.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine given to all participants regardless of randomization arm; effect cannot be isolated from the exercise program.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25827594",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched essential amino acids (LEAA, 3g, 40% leucine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Older women (n=8/group)",
+   "indication_as_stated": "muscle anabolism (sarcopenia)",
+   "dose_quote": "novel low-dose leucine-enriched essential amino acids (EAA) [LEAA; 3 g (40% leucine)]",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "bolus WP offers no trophic advantage over LEAA.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "LEAA equally effective as 20g whey protein at a much lower dose; leucine is 40% of the EAA blend.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is a component (40%) of a broader essential-amino-acid mixture.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25241753",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "essential amino acid supplements (~2.5 g leucine) and HMB",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "adults >=50 years (sarcopenia)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": "Essential amino acid (EAA) supplements, including \u223c2.5 g of leucine, and \u03b2-hydroxy \u03b2-methylbutyric acid (HMB) supplements",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "EAA (with leucine) and HMB may improve muscle outcomes.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Groups leucine-containing EAA supplements with HMB (a different, related compound); protein supplements alone showed no consistent benefit.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine reviewed as a component of EAA supplements, alongside separately-discussed HMB.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26170041",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "vitamin D and leucine-enriched whey protein supplement",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "380 sarcopenic older adults (PROVIDE study)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": null,
+   "primary_outcome_quote": "Primary outcomes of handgrip strength and SPPB score",
+   "primary_result_quote": "The active group gained more appendicular muscle mass than the control group, between-group effect: 0.17 kg (0.004-0.338), P = .045.",
+   "sample_size_quote": "A multicenter, randomized, controlled, double-blind, 2 parallel-group trial among 380 sarcopenic primarily independent-living older adults",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Primary outcomes (handgrip, SPPB) not significantly different between groups; only chair-stand test and muscle mass secondary outcomes differed.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine combined with vitamin D and whey protein in a fixed combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26864356",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "whey protein (22g) + EAA (10.9g, incl. 4g leucine) + vitamin D",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "130 sarcopenic elderly persons",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": "essential amino acids (10.9 g, including 4 g leucine), and vitamin D [2.5 \u03bcg (100 IU)]",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "supplementation plus physical activity increased fat-free mass (1.7-kg gain, P < 0.001)",
+   "sample_size_quote": "A total of 130 sarcopenic elderly people",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Combined with a supervised physical activity program in both arms; leucine is one component of a multi-ingredient supplement.",
+   "registrations": [
+    "NCT02402608"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is one component of a whey/EAA/vitamin D combination, always given alongside physical activity.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28566814",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "leucine and whey protein (10g+10g)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "20 subjects",
+   "indication_as_stated": "acute mTOR signaling/endocrine response",
+   "dose_quote": "ingest either leucine and whey protein (10g+10g; supplement) or a non-caloric placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Relative phosphorylation of AKT and rpS6 were greater with leucine and whey supplementation compared to placebo.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Leucine combined with whey protein; molecular/signaling outcome, not a clinical endpoint.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine combined with whey protein (10g each); effect cannot be isolated to leucine.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29399895",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 5 g/d (human arm; also mouse and cultured-macrophage components)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy adults (human arm; also mice and cultured macrophages)",
+   "indication_as_stated": "macrophage foam-cell formation (atherogenesis)",
+   "dose_quote": "Macrophage incubation with serum obtained from healthy adults supplemented with leucine (5 g/d, 3 weeks)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "significantly decreased cellular cholesterol mass by inhibiting the rate of cholesterol biosynthesis and increasing cholesterol efflux from macrophages.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Mixed-species study; human data are only the serum-source arm (mechanistic ex vivo macrophage assay), not a clinical outcome trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material, though the human evidence here is an ex vivo mechanistic assay, not a clinical endpoint trial.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29529146",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "milk protein beverage with 4.2g leucine (LEU) vs. 1.3g leucine (CON)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Healthy older women (n=11/group)",
+   "indication_as_stated": "muscle protein synthesis (sarcopenia)",
+   "dose_quote": "twice-daily consumption of either 15 g milk protein beverage containing 4.2 g leucine (LEU) or 15 g mixed protein (milk and soy) beverage containing 1.3 g leucine (CON)",
+   "primary_outcome_quote": "acute (hourly) and integrated (daily) myofibrillar protein synthesis (myoPS) response",
+   "primary_result_quote": "A 15-g protein-containing beverage with \u223c4 g leucine induced greater increases in acute and integrated myoPS than did an isonitrogenous, isoenergetic mixed-protein beverage.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Comparison is of higher- vs. lower-leucine protein beverages (leucine content is the variable), not leucine vs. placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine content varied within protein beverages rather than tested as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29890542",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 25 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Ten male volunteers",
+   "indication_as_stated": "endothelial function/glucose/insulin",
+   "dose_quote": "consumed 250 ml water with 25 g of leucine",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Leucine administration prevents hyperglycaemia-mediated endothelial dysfunction probably due to enhanced insulin secretion.",
+   "sample_size_quote": "Ten male volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30340425",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "leucine, 2 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Ten healthy young men",
+   "indication_as_stated": "plasma leucine kinetics/timing",
+   "dose_quote": "intake of 2 g of leucine (LEU), intake of a mixed meal (protein 27.5 g, including 2.15 g of leucine",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "rapid elevations in plasma leucine concentrations are suppressed when leucine is ingested at the same time as a meal suggests that the timing of its intake must be considered to maximize the anabolic response.",
+   "sample_size_quote": "10 healthy young men (age 25 \u00b1 1 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "PK/timing study, not a clinical outcome trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31340611",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "milk protein hydrolysate (native whey origin)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Prediabetic subjects",
+   "indication_as_stated": "postprandial glycemia in prediabetes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Incremental areas under the curve (iAUC) of glucose as the primary outcome were significantly reduced by low-dosed milk peptides compared to placebo",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Native whey hydrolysate is the intervention (attributed partly to leucine content), not isolated leucine.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Intervention is a milk protein hydrolysate valued for its leucine content, not isolated leucine.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31487819",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "native whey (high leucine) vs. milk protein",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "30 healthy elderly men and women",
+   "indication_as_stated": "strength training adaptation (sarcopenia)",
+   "dose_quote": "two daily servings of 20 g of either milk protein or native whey",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Supplementation with milk or native whey during an 11-week strength training period increased muscle mass and strength similarly in healthy elderly individuals.",
+   "sample_size_quote": "a total of 30 healthy men and women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Higher leucine content of native whey did NOT translate into a superior outcome vs. milk protein.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine content compared between two whole protein sources (native whey vs. milk), not tested as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31627427",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine or leucine-enriched protein (1.2-6 g leucine/day)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "older individuals with sarcopenia (23 studies, 13 RCTs)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": "administration of leucine or leucine-enriched proteins (range 1.2-6 g leucine/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "significantly improves sarcopenia in elderly individuals, mainly by improving lean muscle-mass content and in this case most protocols also include vitamin D co-administration.",
+   "sample_size_quote": "23 met our inclusion criteria, analysing the effect of leucine or leucine-enriched protein in the treatment of sarcopenia, and 13 of these studies were based on randomized and placebo-controlled trials (RCTs)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Muscular strength results mixed; most protocols co-administer vitamin D, limiting isolation of leucine's independent effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Most included protocols combine leucine with vitamin D co-administration.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32191600",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 0.06 g/kg/meal",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Older men and women (bed rest study, n=10/group)",
+   "indication_as_stated": "disuse muscle atrophy",
+   "dose_quote": "isoenergetic meals supplemented with leucine (LEU, 0.06 g/kg/meal; n = 10) or an alanine control",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Leucine supplementation reduced the loss of leg lean mass during bed rest (LEU vs. CON: -423 vs. -1035 \u00b1 143 g; P = 0.008) but had limited impact on strength or endurance-based functional outcomes.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No effect on strength, endurance, anabolic signaling, or protein degradation markers.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32230954",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 6 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Fifty institutionalized older individuals",
+   "indication_as_stated": "sarcopenia/respiratory muscle function",
+   "dose_quote": "a daily intake of leucine (6 g/day) or placebo (lactose, 6 g/day)",
+   "primary_outcome_quote": "The primary outcome was to study the effect on sarcopenia and respiratory muscle function.",
+   "primary_result_quote": "Administration of leucine was well-tolerated and significantly improves some criteria of sarcopenia in elderly individuals such as functional performance measured by walking time (p = 0.011), and improved lean mass index.",
+   "sample_size_quote": "fifty participants aged 65 and over",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant effects on functional impairment, cognitive function, nutritional assessment, or inflammatory cytokines.",
+   "registrations": [
+    "NCT03831399"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "L-leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32483625",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "leucine (1 of several nutritional interventions reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "persons aged >=65 (umbrella review of 15 systematic reviews)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Best evidence is available to recommend leucine, because it has a significant effect on muscle mass in elderly people with sarcopenia.",
+   "sample_size_quote": "A total of 15 systematic reviews were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Umbrella review; leucine singled out as having the best evidence among proteins, EAA, HMB, creatine, and multinutrient supplements.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine specifically singled out with the strongest evidence rating among nutritional interventions reviewed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32486007",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "whey (19g, 2g leucine) vs. soy (26g, 2g leucine) protein, leucine-matched",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "61 enrolled (48 completed) untrained men/women",
+   "indication_as_stated": "muscle growth/strength with resistance training",
+   "dose_quote": "consumed 19 grams of whey protein isolate or 26 grams of soy protein isolate, both containing 2 g (grams) of leucine",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "These data indicate that increases in lean mass and strength in untrained participants are comparable when strength training and supplementing with soy or whey matched for leucine.",
+   "sample_size_quote": "Sixty-one untrained young men (n = 19) and women (n = 42)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Leucine content matched between two different protein sources; no leucine-alone arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine content held constant (2g) while protein source varied; not an isolated-leucine comparison.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33310174",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 10 g (intragastric)",
+   "combination": true,
+   "route": "oral (intragastric)",
+   "population_as_stated": "14 males with type 2 diabetes",
+   "indication_as_stated": "glycaemic response/gastric emptying in T2D",
+   "dose_quote": "either 10 g leucine, 10 g isoleucine or control, intragastrically 30 min before a mixed-nutrient drink",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "in T2D, leucine and isoleucine, administered intragastrically in a dose of 10 g, do not lower the glycaemic response to a mixed-nutrient drink.",
+   "sample_size_quote": "14 males with T2D received, on 3 separate occasions",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Tested alongside isoleucine as a separate comparator arm (not combined); intragastric administration, near-oral route.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material; also compared against isoleucine in a separate arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33369909",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine (1.1 g) + sildenafil +/- metformin",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "267 participants with obesity",
+   "indication_as_stated": "weight loss",
+   "dose_quote": "leucine 1.1 g and sildenafil 1.0 mg or 4.0 mg, with and without metformin 500 mg",
+   "primary_outcome_quote": "The primary endpoint was percentage weight change after 24 weeks.",
+   "primary_result_quote": "Placebo-adjusted mean bodyweight reductions in the Leu/Met/Sil 1.0, Leu/Met/Sil 4.0, and Leu/Sil 4.0 groups were -1.99%, -1.69%, and -1.67% (P = 0.015, 0.035, and 0.036, respectively).",
+   "sample_size_quote": "We enrolled 267 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Leucine tested only in fixed combination with sildenafil (and often metformin); effect cannot be isolated to leucine.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine (1.1g, a low dose) always combined with sildenafil and often metformin; not a leucine monotherapy trial.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34208239",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine (1 of 7 supplement types reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "para-athletes (15 studies)",
+   "indication_as_stated": "sport performance in para-athletes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The evidence for each of these supplements remains inconclusive, with varying results between studies.",
+   "sample_size_quote": "Fifteen studies met our inclusion criteria",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Leucine grouped with caffeine, creatine, buffering agents, fish oil, vitamin D without an isolated result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine reviewed among 7 supplement types without an isolated result for the para-athlete population.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34358827",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine (vs. whey, soy, creatine, placebo sub-trials)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "200 pre-frail/frail elderly (154 women/46 men)",
+   "indication_as_stated": "frailty",
+   "dose_quote": null,
+   "primary_outcome_quote": "muscle function (assessed by dynamic and isometric strength and functional tests) and lean mass (assessed by DXA)",
+   "primary_result_quote": "leucine supplementation was ineffective to improve muscle mass and function.",
+   "sample_size_quote": "Two-hundred participants (154 women/46 men, mean age 72 \u00b1 6 years)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Multifactorial trial with a dedicated leucine-vs-placebo sub-investigation; none of the tested supplements (whey, soy, creatine, leucine) enhanced resistance-training adaptations.",
+   "registrations": [
+    "NCT01890382"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine tested in a dedicated sub-investigation vs. placebo.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34424934",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fish oil (2g) + whey protein (20-30g with 3g leucine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "20 randomized (10 completed) older adults losing autonomy",
+   "indication_as_stated": "physical performance",
+   "dose_quote": "2g fish oil with 1500 IU vitamin D3 1x/d + 20-30g whey protein powder with 3g leucine 2x/d",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "20 were randomized, 10 completed the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Pilot feasibility study interrupted due to low eligibility; not powered for efficacy conclusions.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine (3g) is a minor component of a larger fish-oil + whey protein + vitamin D combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35191215",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched protein (LEU-PRO) +/- fish oil",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "83 older adults at risk of sarcopenia",
+   "indication_as_stated": "sarcopenia/metabolic health",
+   "dose_quote": null,
+   "primary_outcome_quote": "appendicular lean mass (ALM), leg strength, timed up-and-go (TUG), and serum triacylglycerol (TG) concentration",
+   "primary_result_quote": "there was minimal interindividual variability in changes in ALM, muscle function, and TG in response to LEU-PRO and LEU-PRO+n-3 supplementation",
+   "sample_size_quote": "older adults (n = 83, 71 \u00b1 6 years)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "Study focus is on interindividual variability, not a simple superiority test; no clear overall efficacy claim in the abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine-enriched protein, optionally combined with omega-3 fatty acids; not isolated leucine.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35888685",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "leucine-rich supplement (1 of several interventions reviewed)",
+   "combination": true,
+   "route": "oral/mixed",
+   "population_as_stated": "cancer cachexia patients (26 publications)",
+   "indication_as_stated": "cancer cachexia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "An upward BW trend was observed in patients treated with L-carnitine, an Ethanwell/Ethanzyme (EE) regimen enriched with \u03c9-3 fatty acids, micronutrients, probiotics, fish oil, a leucine-rich supplement, or total parental nutrition (TPN) with a high dose of a branched-chain amino acid (BCAA).",
+   "sample_size_quote": "Out of 5732 screened records, 26 publications were included",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Leucine-rich supplement grouped among many interventions with only an 'upward trend' (not statistically significant), per GRADE no positive recommendation was made for any.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine-rich supplement is one of many interventions reviewed without an isolated statistically significant result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36126327",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched protein bar (16g protein, ~3g leucine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Eight young adults",
+   "indication_as_stated": "myofibrillar protein synthesis with resistance training",
+   "dose_quote": "consuming the study bar (STRT+Leu, 16 g of protein containing \u223c3 g of leucine)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "MyoPS during STRT+Leu (1.53 \u00b1 0.06%/day) was greater than STRT alone (1.43 \u00b1 0.06%/day).",
+   "sample_size_quote": "eight young adults performed four sessions",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine (~3g) is part of a protein bar, not tested as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36364828",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine (2.5g) + omega-3 (500mg) + probiotic Lactobacillus paracasei PS23",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "60 sarcopenic elderly subjects",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": "omega-3 fatty acids (500 mg), leucine (2.5 g), and probiotic Lactobacillus paracasei PS23 (LPPS23)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "ALM increased significantly in the intervention group (p < 0.05), with no discernible change in the placebo group.",
+   "sample_size_quote": "A total of 60 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine (2.5g) is one of three ingredients in a combination special-medical-purpose food.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36437767",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched whey protein (2,300 mg leucine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "81 older adults with sarcopenia (Japan)",
+   "indication_as_stated": "sarcopenia (de-training effects)",
+   "dose_quote": "PRO supplementation included 11.0 g of protein and 2,300 mg of leucine.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "combined intervention of RT and PRO showed long-term maintenance in treating sarcopenia than RT only at 24 weeks after de-training.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "3-arm trial (RT+PRO, RT only, PRO only); benefit specific to the combined RT+protein arm during de-training.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine-enriched whey protein combined with resistance training; effect cannot be fully isolated to leucine.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36672642",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "leucine (1 of several nutrition/drug approaches reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "sarcopenic patients (narrative review)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Creatine, leucine, branched-chain amino acids, omega 3, and vitamin D can show benefits.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Leucine grouped with several other nutrients and drugs without an isolated result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine reviewed alongside creatine, BCAAs, omega-3, and vitamin D without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36771225",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "whey protein + leucine + vitamin D",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "637 patients with sarcopenia (3 studies)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "appendicular muscle mass significantly improved in the experimental group compared to the control group.",
+   "sample_size_quote": "three studies including 637 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Grip strength/SPPB improved only when combined with a concomitant exercise program.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine combined with whey protein and vitamin D; effect cannot be isolated to leucine.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37340306",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "creatine and leucine food supplement + pelvic floor muscle training",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "32 women with stress urinary incontinence",
+   "indication_as_stated": "stress urinary incontinence",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary outcome was the Urogenital Distress Inventory Short Form (UDI-6) score.",
+   "primary_result_quote": "Between-group analysis revealed no significant differences between the control and treatment group except for mean change (delta) in vaginal squeeze pressure",
+   "sample_size_quote": "Sixteen women in the control group and sixteen in the treatment group completed the trial",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Primary UDI-6 outcome not significantly different between groups on between-group analysis; some within-group and secondary measures improved.",
+   "registrations": [
+    "NCT05358769"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine combined with creatine in a fixed-dose supplement, and combined with pelvic floor muscle training in both arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37375630",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched hyperproteic oral supplement",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "46 patients with cancer-induced sarcopenia",
+   "indication_as_stated": "cancer-induced sarcopenia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "No significant benefits were observed when a leucine-enriched formula was used.",
+   "sample_size_quote": "Forty-six patients were included",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Compared against standard hyperproteic whey-based supplement (active comparator), not placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine-enriched oral supplement compared to a standard whey-based comparator, not placebo.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37887975",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 6 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Fifty institutionalized older adults",
+   "indication_as_stated": "frailty index",
+   "dose_quote": "a daily intake of leucine (6 g/day) or placebo (lactose, 6 g/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There were no statistically significant differences in FI levels at baseline (placebo group FI 0.27 \u00b1 0.08 and leucine group FI 0.27 \u00b1 0.10) and at the 13 week follow-up",
+   "sample_size_quote": "fifty males and females aged 65 and over",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Secondary analysis of the same trial as PMID 32230954 (NCT03831399), examining frailty index specifically.",
+   "registrations": [
+    "NCT03831399"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "L-leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38088883",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "L-leucine, 5 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "35 perimenopausal/postmenopausal women",
+   "indication_as_stated": "body composition/adipokines with resistance training",
+   "dose_quote": "supplementing 5 g of leucine compared with a placebo during a 10-week resistance training program",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There were significant group differences in concentrations of visfatin ( p = 0.020) and leptin ( p = 0.038) between the PLC and LEU groups.",
+   "sample_size_quote": "Thirty-five women were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Both groups showed similar increases in VAT and fat-free mass; only specific adipokines differed between groups.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "L-leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38257103",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "L-leucine supplement + nutritional counseling",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "gastrointestinal-cancer older men",
+   "indication_as_stated": "cancer cachexia/body composition",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "we observed a significant gain in body weight (61.79.9 \u00b1 9.02 versus 64.06 \u00b1 9.45, p = 0.01), ASMM (7.64 \u00b1 1.24 versus 7.81 \u00b1 1.20, p = 0.02) in the Leucine group",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Gains significant within-group but no significant intergroup difference vs. control.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "L-leucine supplement matches label material; combined with nutritional counseling.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38341907",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral nutritional supplement (leucine, EVOO, EPA/DHA, beta-glucans)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "37 patients with cancer and malnutrition",
+   "indication_as_stated": "cancer-related malnutrition",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The use of an enhanced-ONS helps meet the nutritional requirements of cancer patients",
+   "sample_size_quote": "Thirty-seven patients completed the intervention period",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is one of several specific ingredients (with EVOO, EPA/DHA, beta-glucans) in an enhanced oral nutritional supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38345088",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "L-leucine (1 of many specific supplements reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "pressure-ulcer prevention/treatment (33 RCTs, 7920 participants)",
+   "indication_as_stated": "pressure ulcer prevention/treatment",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The evidence is very uncertain about the effects of protein, arginine, zinc and antioxidants; L-carnitine, L-leucine, calcium, magnesium and vitamin D; EPA, GLA and antioxidants; disease-specific supplements on pressure ulcer incidence when compared to standard diet",
+   "sample_size_quote": "We included 33 RCTs with 7920 participants.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "L-leucine evidence specifically rated 'very uncertain' based on only 1 study.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "L-leucine specifically named among reviewed supplements, with very-low-certainty evidence from a single study.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38728455",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched essential amino acids (LEAAs), 12g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "65 knee osteoarthritis patients",
+   "indication_as_stated": "knee osteoarthritis",
+   "dose_quote": "supplementation with 12 g of LEAAs daily for 8 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A significantly higher efficacy was observed in the experimental group than in the control group, as indicated by muscle density in the DEXA scan (P = .001) and SF-36 (P < .001).",
+   "sample_size_quote": "Sixty-five participants, categorized into the experimental (n = 32) and control (n = 33) groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine-enriched essential amino acid blend, not isolated leucine.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39854288",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 50 mg/kg body weight",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "20 basketball players",
+   "indication_as_stated": "athletic performance (transcriptomic mechanism)",
+   "dose_quote": "a functional drink containing either leucine (50 mg/kg body weight) or a placebo for 28 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "leucine supplementation significantly improved 282-foot sprint performance, reducing times from 17.4 \u00b1 0.9 to 16.2 \u00b1 0.9 seconds",
+   "sample_size_quote": "20 basketball players were recruited",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Only sprint time reached significance; other performance metrics showed nonsignificant improving trends.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40219047",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "branched-chain amino acids (isoleucine, leucine, valine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "eleven active males",
+   "indication_as_stated": "exercise substrate metabolism/fatigue",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the fat oxidation rate was significantly higher after 20 and 30 min of CLE (p < 0.05)",
+   "sample_size_quote": "eleven active males completed 1 h of constant load exercise",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Leucine is one of three BCAAs in a combination product; individual contribution not isolated.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is one of three BCAAs in a combination product; individual contribution not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40381110",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched BCAA (60% leucine, 4.5 g/day)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "55 elderly CKD patients",
+   "indication_as_stated": "sarcopenia in CKD",
+   "dose_quote": "60% leucine, 4.5 g/day; 20% valine, 1.5 g/day; 20% isoleucine, 1.5 g/day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "lean muscle mass significantly increased in the leucine group compared to placebo (0.4 kg [95% CI 0.1-0.7] vs. - 0.2 kg [95% CI - 0.6-0.2], P = 0.010).",
+   "sample_size_quote": "Fifty-five patients (mean age 75.4 \u00b1 5.2 years) were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant differences in muscle strength, myostatin, or IGF-1.",
+   "registrations": [
+    "TCTR20200314003"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is the dominant (60%) but not sole component of a mixed BCAA product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40805998",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine (10 RCTs, 566 leucine-arm participants)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "older sarcopenic adults (10 RCTs + 1 prospective study)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Patients receiving leucine and patients receiving a placebo had significantly different handgrip (p = 0.03), appendicular skeletal muscle mass/height2 (p = 0.0.2), and gait speed (p = 0.008).",
+   "sample_size_quote": "The leucine group included 566 participants, whereas the placebo group included 567 patients.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors describe evidence as low-quality; benefit restricted 'when it is used alone without concurrent additional therapy' is limited.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine specifically meta-analyzed with its own pooled effect estimate.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40806155",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "plant protein blends with leucine threshold (~2.5g)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "healthy young adults (24 studies)",
+   "indication_as_stated": "resistance-exercise muscle damage recovery",
+   "dose_quote": "well-formulated plant protein blends (e.g., combinations of pea, rice, and canola) can stimulate MPS at levels comparable to whey when consumed at adequate doses (\u226530 g with ~2.5 g leucine)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Review of plant protein blends generally; leucine content (~2.5g threshold) discussed as a key determinant of efficacy, not tested in isolation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine content is discussed as a threshold determinant within plant protein blends, not as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40926079",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 7.5 g/d",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "19 pre/frail elderly women",
+   "indication_as_stated": "frailty/muscle protein synthesis",
+   "dose_quote": "randomized to 7.5 g/d of leucine (Leu) or placebo 5.1 g/d alanine (Ala)",
+   "primary_outcome_quote": "The primary outcome was myofibrillar fractional synthesis rate (MyoFSR)",
+   "primary_result_quote": "RT with optimal protein intake significantly improved the Frailty Phenotype and increased basal MyoFSR along with type 1 and 2a myofiber CSA and total lean mass, with no added benefit of leucine supplementation.",
+   "sample_size_quote": "Pre/frail elderly women (n = 19, 77.5 \u00b1 1.3 y",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "All benefit attributable to resistance training; leucine added no benefit on top of optimized protein intake plus RT.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40937507",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "leucine-enriched whey protein",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "older adults with sarcopenia (narrative review, 2011-2024)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the combined intervention of leucine-enriched whey protein supplementation and resistance training elicits favourable outcomes regarding increased lean muscle mass, muscle strength and physical performance",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Narrative synthesis; always paired with resistance training, no isolated-leucine data highlighted.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine reviewed only as an enrichment of whey protein, always combined with resistance training.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41228483",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched beta-lactoglobulin (1.57g leucine) vs whey isolate (1.02g leucine)",
+   "combination": true,
+   "route": "oral (with IV tracer)",
+   "population_as_stated": "Ten healthy young men",
+   "indication_as_stated": "muscle protein synthesis",
+   "dose_quote": "BLG (1.57 g LEU) or WPI (1.02 g LEU)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "MPS increased significantly in both FED (~52%) and FED-EX (~58%) states, with no significant differences between supplements.",
+   "sample_size_quote": "Ten healthy young men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "No significant difference despite higher leucine bioavailability from BLG; used IV amino acid tracer methodology alongside oral protein doses.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine content varied between two whole-protein sources (beta-lactoglobulin vs. whey isolate), not tested as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41321015",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dileucine-EAA (2g dileucine+1g leucine) vs BCAA (3g leucine) vs collagen",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "12 healthy adults",
+   "indication_as_stated": "post-exercise muscle anabolism",
+   "dose_quote": "branched chain amino acids (BCAA; 3 g leucine, 1.5 g isoleucine, 1.5 g valine)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Total exogenous leucine retention were similar (p = 0.68) between DIEAA (215.72 \u00b1 42.45 \u03bcmol\u00b7kg-1) and BCAA conditions (219.15 \u00b1 45.26 \u03bcmol\u00b7kg-1), with both DIEAA and BCAA being greater (p < 0.0001) than COL",
+   "sample_size_quote": "12 healthy adults (8 M, 4F, aged 24 \u00b1 3 y)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Leucine present in both active comparator arms (as dileucine and as BCAA), each outperforming collagen hydrolysate.",
+   "registrations": [
+    "NCT05754125"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine tested as both a dipeptide (dileucine) and within a BCAA blend, not as free L-leucine alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41483327",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-rich high protein supplement (6g leucine/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "47 older adults with/at risk of sarcopenia (Malaysia)",
+   "indication_as_stated": "sarcopenia",
+   "dose_quote": "50.6 g of protein/day and 6 g of leucine/day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Leucine-rich high protein supplementation did not produce significant changes in body composition or muscle function in older adults with sarcopenia.",
+   "sample_size_quote": "A total of 47 participants were recruited",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Some gene-expression changes noted (ATP production, cell proliferation, DNA repair genes) despite null functional outcomes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine-rich high protein supplement matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41580240",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine, 5 g 3x daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "48 young and older adults (leg immobilization)",
+   "indication_as_stated": "disuse muscle atrophy",
+   "dose_quote": "supplemented with 5 g of leucine 3 \u00d7 daily with each main meal during 3 d of unilateral knee immobilization",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Leucine supplementation does not attenuate the decline in daily MPS rates or muscle mass during short-term limb immobilization in young or older adults.",
+   "sample_size_quote": "24 young (23 \u00b1 4 y) and 24 older (69 \u00b1 4 y) recreationally active adults",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41786247",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isolated leucine, 6 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "41 participants (23 head/neck cancer, 18 non-cancer comparator)",
+   "indication_as_stated": "cancer cachexia/muscle mass",
+   "dose_quote": "received either 6 g/day of isolated leucine or non-essential amino acids (NEAA) comparator for 4 weeks",
+   "primary_outcome_quote": "The primary endpoint was the change in appendicular skeletal muscle mass index (ASMMI)",
+   "primary_result_quote": "isolated leucine supplementation was associated with modest gains in muscle mass in elderly individuals without cancer but was not linked with improvements in muscle mass or function in patients with HNC.",
+   "sample_size_quote": "This randomized, double-blind, proof-of-concept trial was conducted with 41 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Modest positive effect in the non-cancer comparator cohort only; null in the head-and-neck-cancer population.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isolated leucine matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42171084",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "leucine (1 of several supplements reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "ACL reconstruction patients (15 studies)",
+   "indication_as_stated": "post-surgical rehabilitation nutrition",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Flaxseed oil (omega 3 fatty acids) and leucine showed some promise.",
+   "sample_size_quote": "Fifteen studies were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "High risk of bias across most included studies; leucine grouped with flaxseed oil without an isolated result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine reviewed alongside flaxseed oil and vitamin D without an isolated quantitative result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40610129",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "leucine (indispensable amino acid) and dietary protein",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy individuals across the lifespan (66 unique studies)",
+   "indication_as_stated": "dietary protein/amino acid requirement determination",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "For adults 19-50 y, 16 studies examined requirements for protein, leucine, lysine, methionine, phenylalanine, threonine, and valine",
+   "sample_size_quote": "68 articles reporting on 66 unique studies were eligible for the review",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "A requirements-determination review, not an efficacy/outcome trial.",
+   "registrations": [
+    "CRD42023446618"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Leucine specifically named as one of the indispensable amino acids with requirement data reviewed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "4986053",
+   "design": "case_report",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; no abstract text retrieved"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "leucine",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "leucine-sensitive hypoglycaemia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No abstract text retrieved.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Title-level only; full text needed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "6024228",
+   "design": "case_report",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; no abstract text retrieved"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "leucine",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "leucine-induced hypoglycemia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No abstract text retrieved.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Title-level only; full text needed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31565912",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "whey protein isolate (rich in leucine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "8 resistance-trained young adults",
+   "indication_as_stated": "muscle mass gains with resistance training",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Supplementation with whey protein, combined with RT can increase muscle mass with no effects on muscle strength.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Leucine content of whey discussed as rationale, but whey protein (not isolated leucine) is the tested intervention.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is a component of whey protein isolate; not tested as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35469091",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "branched chain amino acids (BCAA), 12 g/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Sixty patients with cirrhosis and sarcopenia",
+   "indication_as_stated": "sarcopenia in cirrhosis",
+   "dose_quote": "receive either 12 g/day of BCAA orally or a placebo",
+   "primary_outcome_quote": "The primary endpoint was a change in muscle mass based on CT scan (SMI) after 6 months of supplementation.",
+   "primary_result_quote": "Addition of BCAA to exercise, dietary counselling and standard medical therapy did not improve muscle mass in patients with cirrhosis having sarcopenia.",
+   "sample_size_quote": "Sixty patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "BCAA (containing leucine) added to exercise/dietary counselling/standard therapy in both arms.",
+   "registrations": [
+    "CTRI/2019/05/019269"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is one of three BCAAs; given as an addition to exercise and standard care in both study arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30569637",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine (1.1 g) + metformin (0.5 g) + sildenafil (NS-0200)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "91 subjects with obesity",
+   "indication_as_stated": "weight/metabolic parameters in obesity",
+   "dose_quote": "low dose (1.1 g leucine/0.5 g metformin/0.5 mg sildenafil), or high dose (1.1 g leucine/0.5 g metformin/1.0 mg sildenafil) twice daily for 16 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "NS-0200 dose-responsively reduced weight; high dose reduced weight by 2.4 and 5.0 kg in the full and high-triglyceride cohorts, respectively (P < 0.0001).",
+   "sample_size_quote": "A total of 91 subjects with obesity were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Leucine (1.1g, a low dose) tested only within a fixed triple-drug combination (NS-0200) with metformin and sildenafil.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is a minor component of a triple-drug combination (with metformin and sildenafil); not a leucine monotherapy trial.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32961041",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "whey protein formula enriched with leucine and vitamin D",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "140 randomized (127 analyzed) hospitalized older adults",
+   "indication_as_stated": "sarcopenia rehabilitation",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary endpoint was the change in 4 m gait speed per month.",
+   "primary_result_quote": "Supplementation with the experimental formula (n = 64) resulted in greater increase in mean gait speed {0.061 m/s/month [95% confidence interval (CI), 0.043 to 0.080]} than placebo",
+   "sample_size_quote": "A total of 161 patients were screened and 140 were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Leucine is one component (with vitamin D) of a whey-protein-based formula; given alongside a standard hospital diet and rehabilitation program.",
+   "registrations": [
+    "NCT03120026"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Leucine is combined with vitamin D in a whey-protein-based formula, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "40805998",
+  "31627427",
+  "32483625",
+  "19321567",
+  "26170041",
+  "32230954",
+  "34358827",
+  "41580240",
+  "36771225",
+  "33310174",
+  "29890542",
+  "4986053"
+ ],
+ "handoff": [
+  {
+   "pmid": "4986053",
+   "role": "safety",
+   "reason": "Case report of leucine-sensitive hypoglycaemia (classic reactive-hypoglycemia safety signal for leucine ingestion)."
+  },
+  {
+   "pmid": "6024228",
+   "role": "safety",
+   "reason": "Case report of leucine-induced hypoglycemia."
+  },
+  {
+   "pmid": "33369909",
+   "role": "other",
+   "reason": "Leucine tested only as part of a fixed-dose drug combination (sildenafil +/- metformin) for weight loss \u2014 an off-label pharmacological combination, not typical supplement use."
+  }
+ ],
+ "identity_notes": "Unlike valine, L-leucine has a genuinely large, direct human oral-supplementation evidence base, concentrated in sarcopenia/muscle-protein-synthesis research. However, three major false-match clusters inflate the raw retrieval: (1) LRRK2 ('leucine-rich repeat kinase 2') Parkinson's disease drug trials, (2) LGI1 ('leucine-rich glioma inactivated 1') autoimmune encephalitis studies, and (3) microcystin-leucine-arginine cyanotoxin studies -- all rejected as off_topic false keyword matches. A further ~15 records concern N-acetyl-L-leucine/levacetylleucine, a chemically modified PHARMACEUTICAL form used in rare neurological diseases (Niemann-Pick C, ataxia-telangiectasia); these were rejected as different_substance since they are a distinct regulated drug entity, not the dietary L-leucine supplement. HMB (beta-hydroxy-beta-methylbutyrate), a leucine METABOLITE frequently co-studied or reviewed alongside leucine, was also rejected as different_substance throughout. Among genuine L-leucine (or leucine-dominant-combination) trials, the evidence for SARCOPENIA/muscle mass in older adults is the largest and most consistent body, but results are decidedly mixed at the level of individual RCTs -- several well-powered, well-designed trials found NO benefit of leucine alone on muscle mass, strength, or function (19321567, 34358827, 40926079, 41580240, 37375630), while others found positive effects, often specifically when leucine was combined with vitamin D and/or resistance exercise (26170041, 32230954, 40381110) rather than as a monotherapy. A 2025 meta-analysis (40805998, 566 leucine-arm participants) and an umbrella review (32483625) both lean positive but grade the evidence as low quality, and note leucine's benefit is 'restricted when used alone without concurrent additional therapy.' The great majority of kept records deliver leucine as part of a combination product (whey/EAA/vitamin D blends, BCAA mixtures, omega-3/probiotic foods) rather than isolated free L-leucine, and are flagged related_form_differs accordingly -- reviewers should weight the small number of clean leucine-alone RCTs (19321567, 32191600, 32230954, 33310174, 38088883, 39854288, 40926079, 41580240, 41786247) most heavily for a single-ingredient label claim. Two very old (pre-1980), abstract-less case reports document leucine-induced/leucine-sensitive reactive hypoglycemia and are routed to handoff safety."
+}

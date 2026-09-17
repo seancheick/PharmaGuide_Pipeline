@@ -126,7 +126,11 @@ def parse_pubmed_article_xml(xml_text: str) -> list[dict[str, Any]]:
             "publication_types": publication_types,
             "mesh_terms": mesh_terms,
             "supplementary_concepts": supplementary_terms,
-            "retracted": any("retract" in value.lower() for value in publication_types),
+            # A RetractionIn link can precede the "Retracted Publication" type.
+            "retracted": any("retract" in value.lower() for value in publication_types)
+            or "RetractionIn" in correction_refs,
+            # An expression of concern is a hold, not a retraction.
+            "expression_of_concern": "ExpressionOfConcernIn" in correction_refs,
             "has_erratum": any("erratum" in value.lower() for value in correction_refs + publication_types),
             "pubmed_url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else None,
         }

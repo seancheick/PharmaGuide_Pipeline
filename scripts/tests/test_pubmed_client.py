@@ -324,3 +324,49 @@ def test_system_trust_fallback_keeps_credentials_out_of_process_arguments(
     assert "private-key" in captured["input"]
     assert "-k" not in captured["args"]
     assert "insecure" not in captured["input"]
+
+
+def _article_with_correction_refs(publication_type: str, *ref_types: str) -> str:
+    refs = "".join(
+        f'<CommentsCorrections RefType="{ref}"><PMID>99999999</PMID></CommentsCorrections>'
+        for ref in ref_types
+    )
+    return (
+        "<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>11111111</PMID><Article>"
+        "<ArticleTitle>Trial</ArticleTitle><PublicationTypeList>"
+        f"<PublicationType>{publication_type}</PublicationType></PublicationTypeList></Article>"
+        f"<CommentsCorrectionsList>{refs}</CommentsCorrectionsList>"
+        "</MedlineCitation></PubmedArticle></PubmedArticleSet>"
+    )
+
+
+def test_retraction_link_marks_article_retracted_before_pub_type_is_indexed():
+    # PubMed can link RetractionIn before the "Retracted Publication" type lands.
+    from api_audit.pubmed_client import parse_pubmed_article_xml
+
+    article = parse_pubmed_article_xml(
+        _article_with_correction_refs("Randomized Controlled Trial", "RetractionIn"))[0]
+
+    assert article["retracted"] is True
+    assert article["expression_of_concern"] is False
+
+
+def test_expression_of_concern_is_flagged_without_calling_it_a_retraction():
+    from api_audit.pubmed_client import parse_pubmed_article_xml
+
+    article = parse_pubmed_article_xml(
+        _article_with_correction_refs("Randomized Controlled Trial", "ExpressionOfConcernIn"))[0]
+
+    assert article["expression_of_concern"] is True
+    assert article["retracted"] is False
+    assert article["has_erratum"] is False
+
+
+def test_unrelated_comment_links_leave_integrity_flags_clear():
+    from api_audit.pubmed_client import parse_pubmed_article_xml
+
+    article = parse_pubmed_article_xml(
+        _article_with_correction_refs("Randomized Controlled Trial", "CommentIn", "Cites"))[0]
+
+    assert (article["retracted"], article["expression_of_concern"], article["has_erratum"]) == (
+        False, False, False)

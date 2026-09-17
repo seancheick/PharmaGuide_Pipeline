@@ -189,7 +189,7 @@ Clinical evidence notes:
 - `registry_completed_trials_count` is discovery/enrichment metadata, not a substitute for published study counts. Keep it separate from `published_studies_count`.
 - `effect_direction_rationale`, `effect_direction_confidence`, and `endpoint_relevance_tags` are auditability fields. They improve reviewability and operator trust; they are not direct scoring inputs in the current model.
 - `aggregate_canonical_ids` is a narrow mixture-evidence contract, not an alias list. A standalone component must never borrow evidence for the required mixture, and broader formulas require their own reviewed routing rule.
-- Auto-discovery (`discover_clinical_evidence.py discover --apply`) now auto-populates `key_endpoints` from ClinicalTrials.gov primary outcome measures with PubMed PMID cross-references via E-utilities.
+- `discover_clinical_evidence.py discover` is report-only; `--apply` is refused (2026-09-17). New evidence enters as pending study contexts and is applied only after owner review.
 - `study_type` should use repo-native buckets: `rct_single`, `rct_multiple`, `systematic_review_meta`, `observational`, `clinical_strain`, `animal_study`, `in_vitro`.
 - `score_contribution` tier is computed from `study_base_points(study_type) * evidence_multiplier(evidence_level)`: tier_1 ≥ 3.0, tier_2 ≥ 1.5, tier_3 < 1.5.
 

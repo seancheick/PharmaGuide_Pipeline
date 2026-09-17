@@ -1,0 +1,3533 @@
+{
+ "_metadata": {
+  "wave": "evidence-expansion Wave 1 (2026-09)",
+  "status": "AUTHORED, PENDING OWNER REVIEW \u2014 nothing here is applied, scored, or written to scripts/data",
+  "review_status_policy": "Claude authors contexts only as source_verified_pending_clinical_review. Approval is the owner's act, recorded with an attributable reviewer string, and is never 'clinician' unless a clinician signs.",
+  "authored_by": "Claude Opus 5 curation run 2026-09-17",
+  "contract": "scripts/clinical_evidence_schema.py validate_ingredient_context (schema 1.1.0 + ingredient lane)",
+  "sources": "PubMed E-utilities; every PMID re-fetched live (wave1_live_verification.json); quotes are exact substrings of the live abstract",
+  "candidates": "One per canonical identity. proposed_record_level_synthesis is a PROPOSAL for the owner, never applied automatically.",
+  "scorer_compatibility_legend": {
+   "A": "The current generic scorer can represent and apply this evidence without overgeneralising it.",
+   "B": "The context is valid, but the current generic scorer is too coarse to apply it safely; the production synthesis is HELD.",
+   "basis": "Audit/report determination only \u2014 not a production field and not a request for one."
+  }
+ },
+ "candidates": [
+  {
+   "canonical_id": "gotu_kola",
+   "label_name": "Gotu Kola",
+   "catalog_impact": {
+    "slots": 44,
+    "products": 43,
+    "brands": 9,
+    "evidence_zero_products": 25,
+    "evidence_le8_products": 30,
+    "evidence_mean": 4.7,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "gotu kola (unspecified)",
+     "gotu kola aerial extract"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   },
+   "label_reality": "Labels deliver 200-1,000 mg/day of Centella asiatica herb powder or extract; plant part and extract ratio are usually unstated.",
+   "contexts": [
+    {
+     "context_id": "gotu_kola_acute_startle_11106141",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "11106141"
+     ],
+     "components": [
+      "gotu_kola"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Centella asiatica",
+      "plant_part": "not_stated",
+      "preparation": "not_stated (reported only as 'Gotu Kola')"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "evidence_role": "direct_rct",
+     "component_registration_status": "fully_registered",
+     "condition": "acute_startle_response_healthy_adults",
+     "purpose": "physiology",
+     "trial_family": "gotu_kola_asr_11106141",
+     "population": {
+      "age_group": "adult",
+      "description": "Healthy adults, 20 per arm"
+     },
+     "study_design": "rct",
+     "blinding": "double",
+     "funding": "unreported",
+     "sample_size": 40,
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       12000
+      ],
+      "dose_status": "verified",
+      "dose_basis": "single_challenge",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": [],
+      "source_provenance": {
+       "pmid": "11106141",
+       "location": "abstract",
+       "quote": "a single 12-g orally administered dose of Gotu Kola (N = 20) or placebo (N = 20)"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "acoustic_startle_response_amplitude",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "self_rated_mood",
+       "hierarchy": "secondary",
+       "kind": "patient_important",
+       "direction": "null"
+      },
+      {
+       "name": "heart_rate_and_blood_pressure",
+       "hierarchy": "secondary",
+       "kind": "surrogate",
+       "direction": "null"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "11106141",
+       "location": "abstract",
+       "quote": "compared with placebo, Gotu Kola significantly attenuated the peak ASR amplitude 30 and 60 minutes after treatment"
+      },
+      {
+       "pmid": "11106141",
+       "location": "abstract",
+       "quote": "Gotu Kola had no significant effect on self-rated mood, heart rate, or blood pressure"
+      }
+     ],
+     "limitations": [
+      "Single acute 12 g dose \u2014 roughly 12-24x a typical label serving; establishes nothing about 200-1,000 mg/day chronic use.",
+      "Primary endpoint is a physiological startle measure, not a patient-important anxiety outcome; the authors state therapeutic efficacy remains unknown.",
+      "Plant part, extract ratio and standardization are not stated, so the material cannot be matched to a specific label preparation.",
+      "n=40, single site, published 2000; no replication in this bounded search scope."
+     ],
+     "review_status": "source_verified_pending_clinical_review",
+     "human_status": "confirmed",
+     "human_signals": [
+      "humans_mesh",
+      "participants_in_abstract"
+     ],
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "scoring_ineligible_reason": "Tested exposure (single 12 g challenge) is not a label exposure; surrogate primary outcome."
+    },
+    {
+     "context_id": "gotu_kola_mci_adjunct_36420467",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "36420467"
+     ],
+     "components": [
+      "gotu_kola"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Centella asiatica",
+      "plant_part": "not_stated",
+      "preparation": "Gotu kola extract capsule, 500 mg twice daily"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "evidence_role": "direct_rct",
+     "component_registration_status": "fully_registered",
+     "condition": "mild_cognitive_impairment",
+     "purpose": "treatment",
+     "trial_family": "gotu_kola_mci_exercise_36420467",
+     "population": {
+      "age_group": "adult",
+      "description": "Older adults with mild cognitive impairment, mean age 74.6 years"
+     },
+     "study_design": "rct",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "sample_size": 60,
+     "comparator": "multicomponent exercise alone, and placebo control",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       1000
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 84,
+      "dosage_forms": [
+       "capsule"
+      ],
+      "co_therapies": [
+       "Supervised multicomponent exercise programme, three 80-minute sessions per week"
+      ],
+      "reported_regimen": "500 mg twice a day",
+      "normalization": {
+       "basis": "per_administration_to_daily_total",
+       "note": "500 mg x 2 administrations = 1,000 mg/day"
+      },
+      "source_provenance": {
+       "pmid": "36420467",
+       "location": "abstract",
+       "quote": "Each participant received one capsule of placebo or 500 mg twice a day of Gotu kola extract"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "cognitive_function_mmse_digit_span_trail_making",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "tnf_alpha",
+       "hierarchy": "secondary",
+       "kind": "surrogate",
+       "direction": "positive"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "36420467",
+       "location": "abstract",
+       "quote": "Although supplementing with Gotu kola had no additional effects on cognitive function, it may improve the effects of multicomponent exercise on executive function by decreasing TNF-\u03b1 levels"
+      },
+      {
+       "pmid": "36420467",
+       "location": "abstract",
+       "quote": "The primary outcomes, such as cognitive function, inflammatory markers, and oxidative stress, were measured before and after the 12-week intervention"
+      }
+     ],
+     "limitations": [
+      "Gotu kola was an ADD-ON to a supervised exercise programme; the isolated contrast is exercise+gotu kola versus exercise, and the cognitive primary showed no additional effect.",
+      "The positive secondary finding is an inflammatory marker (TNF-\u03b1) reported as a correlation, not a patient-important benefit, and must not be presented as cognitive efficacy.",
+      "20 participants per arm; blinding of the exercise arms is not described; no MeSH Humans indexing at retrieval (human status confirmed from participant description and design).",
+      "Extract standardisation and plant part are not stated."
+     ],
+     "review_status": "source_verified_pending_clinical_review",
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "scoring_ineligible_reason": "Null primary patient-important outcome for the gotu kola contrast; co-therapy confounded."
+    },
+    {
+     "context_id": "gotu_kola_mood_scoping_review_42391143",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "42391143"
+     ],
+     "components": [
+      "gotu_kola"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Centella asiatica",
+      "plant_part": "not_stated",
+      "preparation": "not_stated; review of gotu kola as a Neurotain Plus constituent"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "evidence_role": "systematic_review",
+     "included_study_pmids": "extraction_pending",
+     "component_registration_status": "fully_registered",
+     "condition": "mood_disorders",
+     "purpose": "treatment",
+     "trial_family": "scoping_review_42391143",
+     "population": {
+      "age_group": "mixed",
+      "description": "Mixed human and animal studies; 12 gotu kola studies, three of them human (n = 91)"
+     },
+     "study_design": "systematic_review",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "not applicable",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "mood_disorder_outcomes",
+       "hierarchy": "unresolved",
+       "kind": "patient_important",
+       "direction": "unresolved",
+       "outcome_role": "companion_reported_context"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "42391143",
+       "location": "abstract",
+       "quote": "substantial methodological heterogeneity in design, population, intervention, and outcome measures indicates that the current evidence base remains insufficient to support quantitative synthesis"
+      }
+     ],
+     "limitations": [
+      "Scoping review, not a meta-analysis: it maps the literature and states the evidence base is insufficient for quantitative synthesis.",
+      "Only three human gotu kola studies totalling 91 participants across the whole literature.",
+      "The review's subject is a three-constituent product (gotu kola, phosphatidylcholine, taurine); it reports that no study evaluated any combination of these compounds, so it supports neither the combination nor a gotu-kola-alone claim.",
+      "Included study PMIDs are not listed in the abstract \u2014 membership extraction pending, so overlap with the two RCTs above is unresolved."
+     ],
+     "review_status": "source_verified_pending_clinical_review",
+     "human_status": "ambiguous",
+     "human_signals": [
+      "participants_in_abstract"
+     ],
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "scoring_ineligible_reason": "Mixed human/animal scoping review; states the evidence is insufficient for synthesis."
+    }
+   ],
+   "trial_families": {
+    "gotu_kola_asr_11106141": [
+     "11106141"
+    ],
+    "gotu_kola_mci_exercise_36420467": [
+     "36420467"
+    ],
+    "scoping_review_42391143": [
+     "42391143"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 3,
+    "unique_trials_or_cohorts": 2,
+    "independent_replications": 0,
+    "note": "Two RCTs of different exposures and outcomes plus one scoping review whose included studies are not yet extracted. Nothing here replicates anything."
+   },
+   "handoff": [
+    {
+     "pmid": "16445150",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Case report linking gotu kola use to night-eating syndrome; abstract empty in retrieval, needs full text."
+    },
+    {
+     "pmid": "21334992",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Paediatric hepatotoxicity case report; hepatic safety signal for a botanical sold at 200-1,000 mg/day."
+    }
+   ],
+   "high_risk_flags": [
+    "hepatic",
+    "pediatrics"
+   ],
+   "proposed_record_level_synthesis": {
+    "proposal": "DO NOT create a scoring record yet",
+    "rationale": "The only positive primary outcome comes from a single acute 12 g challenge (12-24x a label serving) on a surrogate endpoint; the one label-range trial (1,000 mg/day, 12 weeks) was null on its cognitive primary; the 2026 scoping review finds three small human studies in total. Creating a record with effect_direction null or mixed would, under the current generic scorer, raise Evidence above zero for 25 products on the strength of evidence that did not show benefit \u2014 see GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md.",
+    "if_owner_approves_anyway": {
+     "study_type": "rct_single",
+     "evidence_level": "ingredient-human",
+     "effect_direction": "null",
+     "min_clinical_dose": null,
+     "note": "No defensible min_clinical_dose: the positive trial's 12 g is not a label exposure."
+    },
+    "review_completeness": "bounded search documented in wave1_search_log.json (18 records retrieved, 8 kept)",
+    "evidence_strength": "sparse; one acute surrogate-endpoint RCT, one null adjunct RCT",
+    "applicability_to_labels": "unresolved \u2014 no trial matches a typical 200-1,000 mg/day label preparation with a patient-important outcome"
+   },
+   "label_dose_profile": {
+    "dosed_rows": 44,
+    "unit_counts": {
+     "mg": 44,
+     "np": 9
+    },
+    "top_forms": {
+     "gotu kola (unspecified)": 33,
+     "gotu kola aerial extract": 11,
+     "(none)": 9
+    },
+    "mg_min": 10.0,
+    "mg_p25": 50.0,
+    "mg_median": 60.0,
+    "mg_p75": 364.25,
+    "mg_max": 950.0
+   },
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "The only positive primary outcome used a single 12 g challenge and the one label-range trial (1,000 mg/day) was null; catalog median is 60 mg/day. The scorer's dose handling (min_clinical_dose guard) cannot express 'positive only far above any label serving'."
+   }
+  },
+  {
+   "canonical_id": "dhea",
+   "label_name": "DHEA (Dehydroepiandrosterone)",
+   "label_reality": "Labels deliver 5-100 mg/day of DHEA to general adult consumers; the studied populations below are patient groups, not general users.",
+   "contexts": [
+    {
+     "context_id": "dhea_depressive_symptoms_meta_32930419",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "32930419"
+     ],
+     "components": [
+      "dhea"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "dehydroepiandrosterone (DHEA)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "depressive_symptoms",
+     "purpose": "treatment",
+     "trial_family": "dhea_depression_meta_brazil_group",
+     "population": {
+      "age_group": "adult",
+      "description": "853 female and male individuals with depression and/or other clinical conditions in which depressive symptoms are present"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "depressive_symptoms",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "32930419",
+       "location": "abstract",
+       "quote": "In comparison with placebo, DHEA improved depressive symptoms (standardized mean difference [SMD] -0.28, 95% (CI) -0.45 to -0.11, p =.001, 12 studies, 742 individuals"
+      },
+      {
+       "pmid": "32930419",
+       "location": "abstract",
+       "quote": "very low quality of evidence"
+      }
+     ],
+     "limitations": [
+      "The review itself grades the evidence as very low quality; the pooled effect (SMD -0.28) is small.",
+      "Populations are people with depression or other clinical conditions, not general consumers taking DHEA for wellbeing.",
+      "No dose is stated in the abstract, so no studied daily exposure can be attached to a label serving.",
+      "PMID 30124161 is an earlier depression meta-analysis from the same line of work; the two reviews are not independent replications and their included trials overlap (membership extraction pending)."
+     ],
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "scoring_ineligible_reason": "Dose unresolved; disease populations; review grades certainty very low."
+    },
+    {
+     "context_id": "dhea_ivf_diminished_ovarian_reserve_meta_31303658",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "31303658"
+     ],
+     "components": [
+      "dhea"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "dehydroepiandrosterone (DHEA)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "diminished_ovarian_reserve_ivf_icsi",
+     "purpose": "treatment",
+     "trial_family": "dhea_ivf_meta_31303658",
+     "population": {
+      "age_group": "adult",
+      "description": "833 patients with diminished ovarian reserve and/or poor ovarian response undergoing IVF or ICSI"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "live_birth_rate",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "clinical_pregnancy_rate",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive"
+      },
+      {
+       "name": "miscarriage_rate",
+       "hierarchy": "secondary",
+       "kind": "patient_important",
+       "direction": "null"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "31303658",
+       "location": "abstract",
+       "quote": "patients treated with DHEA exhibited increases in the number of retrieved oocytes (mean difference, 0.91; 95% confidence interval [CI], 0.23 - 1.59; p = 0.009), clinical pregnancy rate (relative risk [RR] = 1.27; 95% CI, 1.01 - 1.61; p = 0.04), and live birth rate (RR, 1.76; 95% CI, 1.17 - 2.63; p = 0.006)"
+      },
+      {
+       "pmid": "31303658",
+       "location": "abstract",
+       "quote": "there was no intergroup difference in the miscarriage rate"
+      }
+     ],
+     "limitations": [
+      "Population is a fertility-clinic patient group under medical supervision; this says nothing about general adult use.",
+      "No dose or duration is stated in the abstract.",
+      "Included trial PMIDs are not listed in the abstract, so overlap with other DHEA reviews is unresolved."
+     ],
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "scoring_ineligible_reason": "Clinic population and unresolved dose; the scorer cannot express a population gate."
+    },
+    {
+     "context_id": "dhea_bone_mineral_density_meta_31237150",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "31237150"
+     ],
+     "components": [
+      "dhea"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "dehydroepiandrosterone (DHEA)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "bone_mineral_density_healthy_older_adults",
+     "purpose": "prevention",
+     "trial_family": "dhea_bmd_meta_31237150",
+     "population": {
+      "age_group": "adult",
+      "description": "Healthy older adults in randomized placebo-controlled trials; results reported separately for women and men"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "hip_and_trochanter_bone_mineral_density",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "mixed",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "31237150",
+       "location": "abstract",
+       "quote": "Hip BMD increased significantly above placebo group in women who took DHEA supplementation (SMD -0.5[-0.95, -0.04], p = .03)"
+      },
+      {
+       "pmid": "31237150",
+       "location": "abstract",
+       "quote": "Similar results were not observed in men."
+      }
+     ],
+     "limitations": [
+      "Effect is women-only; men showed no comparable effect, so a single product-level direction would misstate half the population.",
+      "Bone mineral density is a surrogate endpoint, not a fracture outcome.",
+      "The review's own conclusion is qualified ('partially increase') and calls for more trials.",
+      "No dose stated in the abstract."
+     ],
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "scoring_ineligible_reason": "Sex-specific surrogate outcome; dose unresolved."
+    },
+    {
+     "context_id": "dhea_addisons_replacement_rct_18000094",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "18000094"
+     ],
+     "components": [
+      "dhea"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "dehydroepiandrosterone (DHEA)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "evidence_role": "direct_rct",
+     "condition": "primary_adrenal_insufficiency",
+     "purpose": "treatment",
+     "trial_family": "dhea_addisons_rct_18000094",
+     "population": {
+      "age_group": "adult",
+      "description": "106 subjects (44 males, 62 females) with Addison's disease"
+     },
+     "study_design": "rct",
+     "blinding": "double",
+     "funding": "unreported",
+     "sample_size": 106,
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       50
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 365,
+      "dosage_forms": [],
+      "co_therapies": [
+       "Lifelong glucocorticoid and mineralocorticoid replacement"
+      ],
+      "reported_regimen": "50 mg daily of micronized DHEA for 12 months",
+      "source_provenance": {
+       "pmid": "18000094",
+       "location": "abstract",
+       "quote": "we randomized 106 subjects (44 males, 62 females) with Addison's disease to receive either 50 mg daily of micronized DHEA or placebo orally for 12 months"
+      },
+      "normalization": {
+       "basis": "already_daily",
+       "note": "Source states 50 mg daily; no conversion applied."
+      }
+     },
+     "outcomes": [
+      {
+       "name": "bone_mineral_density",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "mixed",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "fatigue_cognitive_and_sexual_function",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "null"
+      },
+      {
+       "name": "lean_body_mass",
+       "hierarchy": "secondary",
+       "kind": "surrogate",
+       "direction": "positive"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "18000094",
+       "location": "abstract",
+       "quote": "DHEA reversed ongoing loss of bone mineral density at the femoral neck (P < 0.05) but not at other sites"
+      },
+      {
+       "pmid": "18000094",
+       "location": "abstract",
+       "quote": "There was no significant benefit of DHEA treatment on fatigue or cognitive or sexual function."
+      }
+     ],
+     "limitations": [
+      "Replacement therapy in patients whose own DHEA synthesis has failed \u2014 the opposite of supplementation in people with intact adrenal function.",
+      "Patient-important endpoints (fatigue, cognition, sexual function) were null; only a site-specific BMD change and lean mass moved.",
+      "Co-therapy: all participants remained on glucocorticoid and mineralocorticoid replacement."
+     ],
+     "human_status": "confirmed",
+     "human_signals": [
+      "humans_mesh",
+      "participants_in_abstract"
+     ],
+     "scoring_ineligible_reason": "Hormone-replacement population; null on patient-important endpoints."
+    }
+   ],
+   "trial_families": {
+    "dhea_depression_meta_brazil_group": [
+     "32930419",
+     "30124161"
+    ],
+    "dhea_ivf_meta_31303658": [
+     "31303658"
+    ],
+    "dhea_bmd_meta_31237150": [
+     "31237150"
+    ],
+    "dhea_addisons_rct_18000094": [
+     "18000094"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 5,
+    "unique_trials_or_cohorts": "unresolved \u2014 four reviews pooling overlapping RCT sets plus one primary RCT",
+    "independent_replications": 0,
+    "note": "30124161 and 32930419 are successive depression meta-analyses from the same line of work and must not be counted as two independent confirmations. Review membership is extraction_pending, so overlap between the depression, BMD and IVF reviews is unresolved."
+   },
+   "handoff": [
+    {
+     "pmid": "9951574",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "DHEA safety literature flagged during screening; androgenic effects belong to the safety lane."
+    },
+    {
+     "pmid": "32930419",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Review reports side effects 'commonly related to androgyny' \u2014 androgenic tolerability signal for the safety owner."
+    }
+   ],
+   "high_risk_flags": [
+    "hormonal",
+    "pregnancy_and_fertility",
+    "pediatrics_contraindicated"
+   ],
+   "proposed_record_level_synthesis": {
+    "proposal": "HOLD \u2014 do not create a scoring record in Wave 1",
+    "rationale": "Real meta-analytic human evidence exists, but every positive result sits in a supervised patient population (IVF with diminished ovarian reserve, primary adrenal insufficiency, clinical depression) and no abstract states a daily dose. The generic scorer has no population gate: a positive DHEA record would credit every 25-50 mg consumer product with fertility-clinic and hormone-replacement evidence. That is the 'captured but not enforced' gap, and it is also a safety-sensitive hormone.",
+    "if_owner_approves_anyway": {
+     "study_type": "systematic_review_meta",
+     "evidence_level": "ingredient-human",
+     "effect_direction": "mixed",
+     "min_clinical_dose": null,
+     "note": "No defensible min_clinical_dose: the reviews do not state doses; only the Addison's RCT (50 mg) does, in a replacement population."
+    },
+    "review_completeness": "bounded search documented in wave1_search_log.json (154 records screened, 52 kept)",
+    "evidence_strength": "moderate in specific patient populations; very low certainty for depressive symptoms per the review's own grading",
+    "applicability_to_labels": "unresolved \u2014 population mismatch is the blocker, not evidence volume"
+   },
+   "catalog_impact": {
+    "slots": 33,
+    "products": 33,
+    "brands": 12,
+    "evidence_zero_products": 25,
+    "evidence_le8_products": 25,
+    "evidence_mean": 3.45,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "dhea supplement",
+     "dhea (dehydroepiandrosterone) (unspecified)"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   },
+   "label_dose_profile": {
+    "dosed_rows": 33,
+    "unit_counts": {
+     "mg": 33,
+     "np": 2
+    },
+    "top_forms": {
+     "dhea supplement": 27,
+     "dhea (dehydroepiandrosterone) (unspecified)": 6,
+     "(none)": 2
+    },
+    "mg_min": 5.0,
+    "mg_p25": 25.0,
+    "mg_median": 25.0,
+    "mg_p75": 50.0,
+    "mg_max": 100.0
+   },
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "Positive results sit in supervised patient populations (IVF/diminished ovarian reserve, adrenal insufficiency, clinical depression) and no review states a dose; with no population gate the record would credit 25 mg consumer products. Hormone-related, so it also routes to the high-risk path."
+   }
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "label_name": "Linoleic Acid",
+   "label_reality": "Labels declare linoleic acid as a component of seed/nut oils; measured median 362 mg/day (p25 132, p75 530, max 8,000). Every trial below dosed 7.5-20 g/day or changed whole-diet fat composition \u2014 20-40x the median label amount.",
+   "contexts": [
+    {
+     "context_id": "linoleic_acid_inflammatory_markers_meta_28752873",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "28752873"
+     ],
+     "components": [
+      "linoleic_acid"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "linoleic acid (18:2 n-6)"
+     },
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "exposure_basis": "dietary_substitution",
+     "condition": "blood_inflammatory_markers",
+     "purpose": "physiology",
+     "trial_family": "la_inflammation_meta_28752873",
+     "population": {
+      "age_group": "adult",
+      "description": "1377 subjects across 30 randomized controlled studies in adults"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "lower linoleic acid intake",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "c_reactive_protein",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "tnf_il6_adiponectin_mcp1",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "28752873",
+       "location": "abstract",
+       "quote": "No significant effect of higher LA intake was observed for cytokines"
+      },
+      {
+       "pmid": "28752873",
+       "location": "abstract",
+       "quote": "the C-reactive protein (CRP) concentration was not significantly affected by increasing LA intake (SMD = 0.09, 95% CI: -0.05 to 0.24)"
+      },
+      {
+       "pmid": "28752873",
+       "location": "abstract",
+       "quote": "in subjects with a more profound increase of dietary LA intake, LA might increase the blood CRP level"
+      }
+     ],
+     "limitations": [
+      "Exposure is increased dietary LA intake, not a 362 mg capsule; the pooled trials changed diets or used gram-level oils.",
+      "All endpoints are inflammatory biomarkers, not patient-important outcomes.",
+      "The one directional signal is a subgroup/meta-regression hint that large intake increases may RAISE CRP \u2014 a possible harm signal, not a benefit.",
+      "Included trial PMIDs not listed in the abstract; overlap with the other LA reviews is unresolved."
+     ],
+     "scoring_ineligible_reason": "Surrogate endpoints, dietary-substitution exposure, no label-comparable dose."
+    },
+    {
+     "context_id": "linoleic_acid_oxidative_dna_damage_rct_12504167",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "12504167"
+     ],
+     "components": [
+      "linoleic_acid"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "linoleic acid (18:2 n-6)"
+     },
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "exposure_basis": "supplement_dose",
+     "condition": "oxidative_dna_damage_healthy_volunteers",
+     "purpose": "physiology",
+     "trial_family": "la_dna_damage_rct_12504167",
+     "population": {
+      "age_group": "adult",
+      "description": "Thirty healthy volunteers"
+     },
+     "study_design": "rct",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "sample_size": 30,
+     "comparator": "isocaloric supplement without linoleic acid (15 g palmitic acid/day)",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       7500,
+       15000
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 42,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "high dose 15 g/day or intermediate dose 7.5 g/day for 6 weeks",
+      "normalization": {
+       "basis": "grams_to_milligrams",
+       "note": "15 g = 15,000 mg; 7.5 g = 7,500 mg"
+      },
+      "source_provenance": {
+       "pmid": "12504167",
+       "location": "abstract",
+       "quote": "Thirty volunteers received during 6 weeks either a high dose of linoleic acid (15 g/day), an intermediate dose of linoleic acid (7.5 g/day) or an isocaloric supplement without linoleic acid (15 g palmitic acid/day)"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "oxidative_dna_damage_8_oxodg",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "12504167",
+       "location": "abstract",
+       "quote": "no significant increase in oxidative DNA damage, measured as relative amounts of 7,8-dihydro-8-oxo-2'-deoxyguanosine (8-oxodG) in DNA from peripheral lymphocytes, was observed in both high and intermediate linoleic acid-supplemented groups"
+      }
+     ],
+     "limitations": [
+      "This is a safety/mechanism question (does LA cause oxidative DNA damage), not a benefit question; a null result here is reassurance, not efficacy.",
+      "Doses of 7.5-15 g/day are 20-40x the measured median label amount.",
+      "n=30, 6 weeks, surrogate endpoint."
+     ],
+     "scoring_ineligible_reason": "Safety/mechanistic surrogate endpoint; no efficacy claim supported."
+    },
+    {
+     "context_id": "linoleic_acid_vs_marine_n3_crossover_40058591",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "40058591"
+     ],
+     "components": [
+      "linoleic_acid"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "linoleic acid (18:2 n-6), delivered as safflower oil"
+     },
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "exposure_basis": "supplement_dose",
+     "condition": "inflammatory_markers_abdominal_obesity",
+     "purpose": "physiology",
+     "trial_family": "la_vs_n3_crossover_40058591",
+     "population": {
+      "age_group": "adult",
+      "description": "Females (n = 16) and males (n = 23) aged 30-70 years with abdominal obesity"
+     },
+     "study_design": "crossover_rct",
+     "blinding": "double",
+     "funding": "unreported",
+     "sample_size": 39,
+     "comparator": "3-4 g/d EPA/DHA fish oil",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       15000,
+       20000
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 49,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "15-20 g/d LA (safflower oil) for 7 weeks",
+      "normalization": {
+       "basis": "grams_to_milligrams",
+       "note": "15-20 g/day = 15,000-20,000 mg/day"
+      },
+      "source_provenance": {
+       "pmid": "40058591",
+       "location": "abstract",
+       "quote": "supplemented with 3-4 g/d EPA/DHA (fish oil) or 15-20 g/d LA (safflower oil) for 7 weeks"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "circulating_inflammatory_markers",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "systolic_blood_pressure",
+       "hierarchy": "secondary",
+       "kind": "surrogate",
+       "direction": "negative"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "40058591",
+       "location": "abstract",
+       "quote": "no differences between n-3 and n-6 were found for any circulatory inflammatory markers"
+      },
+      {
+       "pmid": "40058591",
+       "location": "abstract",
+       "quote": "significant differences between treatments in relative change scores were found for systolic blood pressure (n-3 vs. n-6: -1.81% vs. 2.61%, P = 0.003)"
+      }
+     ],
+     "limitations": [
+      "Head-to-head against fish oil, not against placebo: 'no difference in inflammatory markers' is not evidence of benefit.",
+      "The one significant between-treatment difference favours n-3; the LA arm's systolic blood pressure change was in the opposite direction.",
+      "15-20 g/day of LA as safflower oil is far above any label serving.",
+      "Crossover, n=39, surrogate endpoints."
+     ],
+     "scoring_ineligible_reason": "Active-comparator surrogate trial at non-label exposures; no benefit shown for LA."
+    },
+    {
+     "context_id": "linoleic_acid_epa_status_diet_rct_42280457",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "42280457"
+     ],
+     "components": [
+      "linoleic_acid"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "linoleic acid (18:2 n-6)"
+     },
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "exposure_basis": "dietary_substitution",
+     "condition": "fatty_acid_status_healthy_adults",
+     "purpose": "physiology",
+     "trial_family": "la_epa_status_rct_NCT02962128",
+     "trial_registration": "NCT02962128",
+     "population": {
+      "age_group": "adult",
+      "description": "Fifty-two healthy adults completing a 12-week controlled diet intervention"
+     },
+     "study_design": "rct",
+     "blinding": "double",
+     "funding": "unreported",
+     "sample_size": 52,
+     "comparator": "Low-LA diet (2.5% energy)",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 84,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "High-LA diet (10.0% energy) versus Low-LA diet (2.5% energy)"
+     },
+     "outcomes": [
+      {
+       "name": "plasma_epa_status",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "negative",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "42280457",
+       "location": "abstract",
+       "quote": "High LA exposure resulted in marked reductions in plasma n-3 eicosapentaenoic acid (EPA) and eicosatetraenoic acid (ETA) concentrations compared with the Low-LA arm"
+      }
+     ],
+     "limitations": [
+      "Exposure is percentage of dietary energy, not a supplement dose; it cannot be converted to a label serving without inventing an intake assumption.",
+      "Finding is a lowering of n-3 status at high LA intake \u2014 relevant to omega-6/omega-3 balance messaging, not a benefit claim.",
+      "Surrogate fatty-acid and oxylipin endpoints only."
+     ],
+     "scoring_ineligible_reason": "Dietary-percentage exposure; surrogate endpoint; direction is unfavourable."
+    }
+   ],
+   "trial_families": {
+    "la_inflammation_meta_28752873": [
+     "28752873"
+    ],
+    "la_dna_damage_rct_12504167": [
+     "12504167"
+    ],
+    "la_vs_n3_crossover_40058591": [
+     "40058591"
+    ],
+    "la_epa_status_rct_NCT02962128": [
+     "42280457"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 4,
+    "unique_trials_or_cohorts": 3,
+    "independent_replications": 0,
+    "note": "One meta-analysis (membership pending) plus three separate trials of different exposures and endpoints. No two studies replicate the same question."
+   },
+   "handoff": [
+    {
+     "pmid": "28752873",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Meta-regression signal that large LA intake increases may raise CRP \u2014 a possible harm direction worth the safety lane's attention."
+    },
+    {
+     "pmid": "23386268",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Screening flagged this LA-replacement trial for a safety-relevant result; belongs to the safety owner, not the efficacy record."
+    },
+    {
+     "pmid": "27071971",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Screening flagged a safety-relevant cholesterol-lowering-diet result; safety lane, not efficacy."
+    }
+   ],
+   "high_risk_flags": [
+    "cardiovascular"
+   ],
+   "proposed_record_level_synthesis": {
+    "proposal": "RECORD THE REVIEW STATE, CREATE NO SCORING RECORD",
+    "rationale": "A documented bounded search found no human trial of a label-comparable linoleic acid exposure (median 362 mg/day) reporting a patient-important benefit. What exists is gram-level or whole-diet exposure against surrogate endpoints, mostly null, with two unfavourable signals (CRP at high intakes, lowered EPA status). The honest outcome is identity state B \u2014 'reviewed, no qualifying evidence in the documented scope' \u2014 which makes Evidence 0 interpretable for 24 products instead of leaving it unexplained.",
+    "if_owner_approves_anyway": {
+     "study_type": "systematic_review_meta",
+     "evidence_level": "ingredient-human",
+     "effect_direction": "null",
+     "min_clinical_dose": null,
+     "note": "Under the current scorer a null record would ADD points (0.25 multiplier) to products whose evidence showed no benefit \u2014 see GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md."
+    },
+    "review_completeness": "bounded search documented in wave1_search_log.json (160 records screened, 23 kept)",
+    "evidence_strength": "adequate volume, consistently null on surrogate endpoints at supra-label exposures",
+    "applicability_to_labels": "not applicable \u2014 20-40x dose gap and dietary-substitution exposures"
+   },
+   "label_dose_profile": {
+    "dosed_rows": 72,
+    "unit_counts": {
+     "mg": 71,
+     "np": 4,
+     "g": 1,
+     "gram(s)": 1
+    },
+    "top_forms": {
+     "linoleic acid (unspecified)": 73,
+     "(none)": 4
+    },
+    "mg_min": 4.0,
+    "mg_p25": 132.0,
+    "mg_median": 362.5,
+    "mg_p75": 530.0,
+    "mg_max": 8000.0
+   },
+   "catalog_impact": {
+    "slots": 73,
+    "products": 73,
+    "brands": 19,
+    "evidence_zero_products": 24,
+    "evidence_le8_products": 40,
+    "evidence_mean": 7.23,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "linoleic acid (unspecified)"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   },
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "Evidence is gram-level supplementation or whole-diet substitution against surrogate endpoints; the scorer has no exposure-basis concept, so dietary-substitution trials would become capsule efficacy at a 20-40x dose gap."
+   }
+  },
+  {
+   "canonical_id": "isoflavones",
+   "label_name": "Isoflavones",
+   "label_reality": "Labels deliver isolated/concentrated isoflavone extracts (soy hypocotyl, soy germ, NovaSoy, red clover); measured median 80 mg/day (p25 36, p75 150). Studied supplement doses overlap this range, which is unusual in Wave 1.",
+   "contexts": [
+    {
+     "context_id": "isoflavones_bmd_meta_31290343",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "31290343"
+     ],
+     "components": [
+      "isoflavones"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "soy isoflavones (aglycone equivalents: genistein, daidzein, glycitein)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "bone_mineral_density_and_bone_turnover",
+     "purpose": "prevention",
+     "trial_family": "isoflavone_bmd_meta_31290343",
+     "population": {
+      "age_group": "adult",
+      "description": "52 randomized controlled trials of soy isoflavone consumption; subgroups by weight, duration and location"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo or control",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "lumbar_spine_hip_femoral_neck_bmd",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "bone_turnover_markers",
+       "hierarchy": "secondary",
+       "kind": "surrogate",
+       "direction": "mixed"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "31290343",
+       "location": "abstract",
+       "quote": "Consumption of soy isoflavones caused significant improvement in BMD of lumbar spine (mean difference (MD) = 0.76%; 95% CI: 0.09, 1.42%; p = 0.03), hip (MD = 0.22%; 95% CI: 0.02, 0.42%; p = 0.04), and femoral neck (MD = 2.27%; 95% CI: 1.22, 3.31%; p < 0.001)"
+      },
+      {
+       "pmid": "31290343",
+       "location": "abstract",
+       "quote": "osteocalcin and bone alkaline phosphatase did not change"
+      }
+     ],
+     "limitations": [
+      "Bone mineral density is a surrogate: no fracture outcome is reported.",
+      "Effect sizes are small (0.22-2.27% mean difference) and were significant mainly in normal-weight subjects and interventions longer than a year.",
+      "'Consumption of soy isoflavones' pools supplement and food-matrix exposures; the abstract states no dose, so a label-comparable amount cannot be attached from this record alone.",
+      "Included trial PMIDs are not listed; overlap with PMID 37875614 (63 trials) is unresolved and the two reviews are NOT independent replications."
+     ],
+     "scoring_ineligible_reason": "Pending review; dose not stated in this source."
+    },
+    {
+     "context_id": "isoflavones_postmenopausal_bmd_meta_37875614",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "37875614"
+     ],
+     "components": [
+      "isoflavones"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "soy isoflavones (aglycone equivalents: genistein, daidzein, glycitein)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "postmenopausal_bone_mineral_density",
+     "purpose": "prevention",
+     "trial_family": "isoflavone_bmd_meta_37875614",
+     "population": {
+      "age_group": "adult",
+      "description": "Postmenopausal women; 63 RCTs, isoflavone interventions n = 4,754 versus placebo n = 4,272"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       50
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 365,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "subgroup effective when the intervention contained genistein of at least 50 mg/day and duration was at least 12 months",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "50 mg/day refers to GENISTEIN content, not total isoflavones; it is a subgroup threshold, not a tested arm."
+      },
+      "source_provenance": {
+       "pmid": "37875614",
+       "location": "abstract",
+       "quote": "the isoflavone intervention was effective for improving BMD when the duration was \u2265 12 months and when the intervention contained genistein of at least 50 mg/day"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "bmd_lumbar_spine_femoral_neck_distal_radius",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "37875614",
+       "location": "abstract",
+       "quote": "isoflavone interventions significantly improved BMD at the lumbar spine (MD = 0.0175 g/cm2; 95% CI, 0.0088 to 0.0263, P < 0.0001), femoral neck (MD = 0.0172 g/cm2; 95% CI, 0.0046 to 0.0298, P = 0.0073), and distal radius (MD = 0.0138 g/cm2; 95% CI, 0.0077 to 0.0198, P < 0.0001) in postmenopausal women"
+      }
+     ],
+     "limitations": [
+      "Population is postmenopausal women only; the generic scorer cannot gate on population, so a positive record would also credit products aimed at men or premenopausal users.",
+      "The 50 mg/day threshold is GENISTEIN content within the intervention, not total isoflavone content, and labels declare total isoflavones \u2014 the two cannot be equated without the product's genistein fraction.",
+      "Surrogate endpoint (BMD), effect sizes small; benefit required at least 12 months of use.",
+      "Substantially overlapping trial set with PMID 31290343."
+     ],
+     "scoring_ineligible_reason": "Pending review; genistein-fraction threshold is not a total-isoflavone label dose."
+    },
+    {
+     "context_id": "isoflavones_menopausal_symptoms_meta_27327802",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "27327802"
+     ],
+     "components": [
+      "isoflavones"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "soy isoflavones (aglycone equivalents: genistein, daidzein, glycitein)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "menopausal_vasomotor_symptoms_and_vaginal_dryness",
+     "purpose": "treatment",
+     "trial_family": "phytoestrogen_menopause_meta_27327802",
+     "population": {
+      "age_group": "adult",
+      "description": "6653 women across 62 randomized clinical trials of plant-based therapies"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo or control",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "daily_hot_flashes",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "vaginal_dryness_score",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive"
+      },
+      {
+       "name": "night_sweats",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "null"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "27327802",
+       "location": "abstract",
+       "quote": "Individual phytoestrogen interventions such as dietary and supplemental soy isoflavones were associated with improvement in daily hot flashes (pooled mean difference of changes, -0.79 [-1.35 to -0.23])"
+      },
+      {
+       "pmid": "27327802",
+       "location": "abstract",
+       "quote": "but not in the number of night sweats (pooled mean difference of changes, -2.14 [95% CI, -5.57 to 1.29])"
+      },
+      {
+       "pmid": "27327802",
+       "location": "abstract",
+       "quote": "46 (74%) of the included randomized clinical trials demonstrated a high risk of bias within 3 or more areas of study quality"
+      }
+     ],
+     "limitations": [
+      "Effect is modest: about 0.79 fewer hot flashes per day.",
+      "Night sweats showed no significant reduction \u2014 a mixed picture within the same symptom cluster.",
+      "74% of included trials had a high risk of bias in three or more domains, and the authors call the evidence suboptimal and heterogeneous.",
+      "The analysis pools dietary and supplemental soy isoflavones with other phytoestrogens; the isoflavone-specific estimate is the one recorded here.",
+      "Menopausal population; no dose stated in the abstract."
+     ],
+     "scoring_ineligible_reason": "Pending review; population-specific and dose not stated."
+    },
+    {
+     "context_id": "isoflavones_estrogenicity_biomarkers_meta_39433088",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "39433088"
+     ],
+     "components": [
+      "isoflavones"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "soy isoflavones (aglycone equivalents: genistein, daidzein, glycitein)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "estrogenicity_biomarkers_postmenopausal_women",
+     "purpose": "physiology",
+     "trial_family": "isoflavone_estrogenicity_meta_39433088",
+     "population": {
+      "age_group": "adult",
+      "description": "Postmenopausal women; 40 trials, 52 trial comparisons, n = 3285, median reported dose 75 mg/d over a median of 24 weeks"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "non-isoflavone controls",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       75
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 168,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "median reported dose of 75 mg/d over a median of 24 wk",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "Median daily dose as reported; not a single tested arm."
+      },
+      "source_provenance": {
+       "pmid": "39433088",
+       "location": "abstract",
+       "quote": "We included 40 trials (52 trial comparisons, n = 3285) assessing the effect of a median reported dose of 75 mg/d of soy isoflavones in substitution for non-isoflavone controls over a median of 24 wk."
+      }
+     },
+     "outcomes": [
+      {
+       "name": "estrogenicity_endometrial_thickness_vmi_fsh_estradiol",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "39433088",
+       "location": "abstract",
+       "quote": "Soy isoflavones had no statistically significant effect on any measure of estrogenicity"
+      },
+      {
+       "pmid": "39433088",
+       "location": "abstract",
+       "quote": "The certainty of evidence was high to moderate for all outcomes."
+      }
+     ],
+     "limitations": [
+      "This is a safety/mechanism question (do isoflavones act like estrogen), not an efficacy question; the null result is reassurance about estrogenic risk.",
+      "Certainty is high to moderate here, in contrast to the symptom literature \u2014 do not average the two.",
+      "Postmenopausal women only."
+     ],
+     "scoring_ineligible_reason": "Safety/mechanistic endpoint; no efficacy credit."
+    }
+   ],
+   "trial_families": {
+    "isoflavone_bmd_meta_31290343": [
+     "31290343"
+    ],
+    "isoflavone_bmd_meta_37875614": [
+     "37875614"
+    ],
+    "phytoestrogen_menopause_meta_27327802": [
+     "27327802"
+    ],
+    "isoflavone_estrogenicity_meta_39433088": [
+     "39433088"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 4,
+    "unique_trials_or_cohorts": "unresolved \u2014 52 and 63 trial reviews with substantial expected overlap, plus a 62-trial symptom review",
+    "independent_replications": "at most 1 for BMD (two reviews of overlapping trial sets are not two confirmations)",
+    "note": "Review membership is extraction_pending for all four. Counting these as four independent sources would inflate depth for one largely shared trial pool."
+   },
+   "handoff": [
+    {
+     "pmid": "35399656",
+     "role": "interaction",
+     "destination": "ingredient_interaction_rules / curated_interactions owner",
+     "reason": "Crossover trial of ~80 mg/day soy isoflavone extract with rosuvastatin pharmacokinetics \u2014 a PK interaction question, not efficacy."
+    },
+    {
+     "pmid": "35685887",
+     "role": "interaction",
+     "destination": "ingredient_interaction_rules / curated_interactions owner",
+     "reason": "Crossover trial of ~80 mg/day soy isoflavone extract with simvastatin pharmacokinetics \u2014 PK interaction."
+    },
+    {
+     "pmid": "21177797",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Two-year safety trial of 80-120 mg aglycone-equivalent soy hypocotyl isoflavones; tolerability evidence for the safety lane."
+    },
+    {
+     "pmid": "24312387",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Systematic review touching breast-cancer-related concerns for isoflavones; belongs with the safety/contraindication owner."
+    }
+   ],
+   "high_risk_flags": [
+    "hormonal",
+    "breast_cancer_history",
+    "pregnancy_and_fertility"
+   ],
+   "proposed_record_level_synthesis": {
+    "proposal": "HOLD \u2014 do not apply a generic production record (owner decision 2026-09-17)",
+    "rationale": "Two large meta-analyses (52 and 63 RCTs) find small BMD gains and a 62-trial review finds a modest hot-flash and vaginal-dryness benefit, and the measured label median (80 mg/day) sits inside the studied range \u2014 the dose gap that blocks the other Wave 1 identities does not apply here. The blocker is population: every positive result is in peri/postmenopausal women. clinical_applicability.py already carries a studied_population string into its decision (scripts/clinical_applicability.py:241) but never compares it to anything, and the product's target_population is read only by the probiotic lane (studied_formulas.py). So approving this record would credit every isoflavone product, including those marketed to men. Holding the evidence is correct; adding a population gate belongs to the applicability owner, not to this project.",
+    "owner_decisions_needed": [
+     "Population: all positive evidence is in postmenopausal women; the generic scorer has no population gate, so approving this record credits every isoflavone product, including those marketed to men. Accept, or wait for a population mechanism?",
+     "Depth: four reviews over largely overlapping trial pools must not be counted as four independent sources; the record should cite them without claiming replication."
+    ],
+    "review_completeness": "bounded search documented in wave1_search_log.json (155 records screened, 92 kept)",
+    "evidence_strength": "moderate volume, small effects, mixed certainty (high-to-moderate for the estrogenicity null; poor for symptom trials)",
+    "applicability_to_labels": "dose-applicable (median 80 mg/day within studied range); population applicability unresolved",
+    "held_pending": "population enforcement by the canonical applicability owner, or evidence establishing broader applicability",
+    "fields_if_population_is_ever_enforced": {
+     "study_type": "systematic_review_meta",
+     "evidence_level": "ingredient-human",
+     "effect_direction": "positive_weak",
+     "min_clinical_dose": null,
+     "dose_note": "No min_clinical_dose: the only stated threshold (genistein >= 50 mg/day) is a fraction of total isoflavones, which labels do not declare."
+    }
+   },
+   "label_dose_profile": {
+    "dosed_rows": 60,
+    "unit_counts": {
+     "mg": 60,
+     "np": 1
+    },
+    "top_forms": {
+     "isoflavones (unspecified)": 60,
+     "(none)": 1
+    },
+    "mg_min": 20.0,
+    "mg_p25": 35.75,
+    "mg_median": 80.0,
+    "mg_p75": 150.0,
+    "mg_max": 750.0
+   },
+   "catalog_impact": {
+    "slots": 60,
+    "products": 57,
+    "brands": 11,
+    "evidence_zero_products": 31,
+    "evidence_le8_products": 34,
+    "evidence_mean": 6.81,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "isoflavones (unspecified)"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   },
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "Evidence is materially population-specific (peri/postmenopausal women) and the generic scorer has no population gate; applying it would transfer menopause evidence to every consumer."
+   }
+  },
+  {
+   "canonical_id": "ginkgo",
+   "label_name": "Ginkgo",
+   "label_reality": "Measured label median 60 mg/day (p25 40, p75 120); 100 of 140 dosed rows are 'ginkgo (unspecified)' and 42 are 'ginkgo biloba extract (24% flavone glycosides)'. Every positive trial below used the branded standardised extract EGb 761 at 240 mg/day in diagnosed patients.",
+   "contexts": [
+    {
+     "context_id": "ginkgo_gem_dementia_prevention_19017911",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "19017911"
+     ],
+     "components": [
+      "ginkgo"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Ginkgo biloba",
+      "plant_part": "leaf"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "humans_mesh",
+      "participants_in_abstract"
+     ],
+     "evidence_role": "direct_rct",
+     "condition": "dementia_and_alzheimer_incidence",
+     "purpose": "prevention",
+     "trial_family": "ginkgo_evaluation_of_memory_GEM",
+     "population": {
+      "age_group": "adult",
+      "description": "3069 community volunteers aged 75 years or older with normal cognition (n = 2587) or mild cognitive impairment (n = 482)"
+     },
+     "study_design": "rct",
+     "blinding": "double",
+     "funding": "independent",
+     "sample_size": 3069,
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       240
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 2227,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "twice-daily dose of 120-mg extract of G. biloba, median follow-up 6.1 years",
+      "normalization": {
+       "basis": "per_administration_to_daily_total",
+       "note": "120 mg x 2 administrations = 240 mg/day; 6.1 years median follow-up = 2227 days"
+      },
+      "source_provenance": {
+       "pmid": "19017911",
+       "location": "abstract",
+       "quote": "Twice-daily dose of 120-mg extract of G. biloba (n = 1545) or placebo (n = 1524)"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "incident_dementia_and_alzheimer_disease",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "19017911",
+       "location": "abstract",
+       "quote": "Five hundred twenty-three individuals developed dementia (246 receiving placebo and 277 receiving G. biloba)"
+      }
+     ],
+     "limitations": [
+      "The largest and best-powered ginkgo trial (NIH-funded, 6.1-year median follow-up) found no reduction in dementia incidence.",
+      "Dose was 240 mg/day \u2014 four times the measured label median of 60 mg/day.",
+      "Publishes as two papers with PMID 20040554 from the same GEM cohort; they are one trial, not two."
+     ],
+     "scoring_ineligible_reason": "Null primary outcome; non-label dose."
+    },
+    {
+     "context_id": "ginkgo_gem_cognitive_decline_20040554",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "20040554"
+     ],
+     "components": [
+      "ginkgo"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Ginkgo biloba",
+      "plant_part": "leaf"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "humans_mesh",
+      "participants_in_abstract"
+     ],
+     "evidence_role": "companion_analysis",
+     "condition": "cognitive_decline_older_adults",
+     "purpose": "prevention",
+     "trial_family": "ginkgo_evaluation_of_memory_GEM",
+     "population": {
+      "age_group": "adult",
+      "description": "3069 community-dwelling participants aged 72 to 96 years (the GEM cohort)"
+     },
+     "study_design": "rct",
+     "blinding": "double",
+     "funding": "independent",
+     "sample_size": 3069,
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       240
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 2227,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "twice-daily dose of 120-mg extract of G. biloba, median follow-up 6.1 years",
+      "normalization": {
+       "basis": "per_administration_to_daily_total",
+       "note": "120 mg x 2 administrations = 240 mg/day; 6.1 years median follow-up = 2227 days"
+      },
+      "source_provenance": {
+       "pmid": "20040554",
+       "location": "abstract",
+       "quote": "Twice-daily dose of 120-mg extract of G. biloba (n = 1545) or identical-appearing placebo (n = 1524)"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "rate_of_cognitive_decline_memory_attention_language_executive",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "null",
+       "outcome_role": "companion_reported_context"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "20040554",
+       "location": "abstract",
+       "quote": "Annual rates of decline in z scores did not differ between G. biloba and placebo groups in any domains"
+      }
+     ],
+     "limitations": [
+      "SAME COHORT as PMID 19017911 (GEM). Counting both as independent evidence would double-count one trial.",
+      "Null across every cognitive domain at 240 mg/day."
+     ],
+     "scoring_ineligible_reason": "Companion publication of the GEM trial; null primary."
+    },
+    {
+     "context_id": "ginkgo_healthy_cognition_meta_23001963",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "23001963"
+     ],
+     "components": [
+      "ginkgo"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Ginkgo biloba",
+      "plant_part": "leaf"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "humans_mesh",
+      "participants_in_abstract"
+     ],
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "cognitive_function_healthy_individuals",
+     "purpose": "physiology",
+     "trial_family": "ginkgo_healthy_cognition_meta_23001963",
+     "population": {
+      "age_group": "adult",
+      "description": "Healthy individuals; memory n = 1132, executive function n = 534, attention n = 910"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "memory_executive_function_attention",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "23001963",
+       "location": "abstract",
+       "quote": "We report that G. biloba had no ascertainable positive effects on a range of targeted cognitive functions in healthy individuals."
+      },
+      {
+       "pmid": "23001963",
+       "location": "abstract",
+       "quote": "Meta-regressions showed that effect sizes were not related to participant age, duration of the trial, daily dose, total dose or sample size."
+      }
+     ],
+     "limitations": [
+      "This is the population that actually buys ginkgo \u2014 healthy adults seeking memory support \u2014 and the pooled effect is null across memory, executive function and attention.",
+      "The meta-regression found no dose relationship, so a higher label dose would not be expected to help either.",
+      "Included trial PMIDs not listed; overlap with the GEM trial is unresolved."
+     ],
+     "scoring_ineligible_reason": "Null in the consumer-relevant population."
+    },
+    {
+     "context_id": "ginkgo_egb761_dementia_meta_25114079",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "25114079"
+     ],
+     "components": [
+      "ginkgo"
+     ],
+     "identity_scope": "branded_material",
+     "identity": {
+      "branded_material": "EGb 761",
+      "botanical_species": "Ginkgo biloba",
+      "plant_part": "leaf",
+      "standardization": "described by the source only as 'standardized Ginkgo biloba extract EGb761'; the standardisation profile is not stated in the abstract"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "humans_mesh",
+      "participants_in_abstract"
+     ],
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "cognitive_impairment_and_dementia",
+     "purpose": "treatment",
+     "trial_family": "egb761_dementia_meta_25114079",
+     "population": {
+      "age_group": "adult",
+      "description": "2,561 patients with cognitive impairment and dementia across nine trials of 22-26 weeks"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       240
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 168,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "EGb761 at a dose of 240 mg/day, trials of 22-26 weeks duration",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "Source states 240 mg/day; 24 weeks taken as 168 days."
+      },
+      "source_provenance": {
+       "pmid": "25114079",
+       "location": "abstract",
+       "quote": "All these benefits are mainly associated with EGb761 at a dose of 240 mg/day."
+      }
+     },
+     "outcomes": [
+      {
+       "name": "cognition_change_score",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "activities_of_daily_living",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "25114079",
+       "location": "abstract",
+       "quote": "the weighted mean differences in change scores for cognition were in favor of EGb761 compared to placebo (-2.86, 95%CI -3.18; -2.54)"
+      },
+      {
+       "pmid": "25114079",
+       "location": "abstract",
+       "quote": "All these benefits are mainly associated with EGb761 at a dose of 240 mg/day."
+      }
+     ],
+     "limitations": [
+      "Benefit is tied to ONE branded standardised extract (EGb 761) at 240 mg/day in diagnosed patients \u2014 not to ginkgo generally.",
+      "100 of 140 label rows declare only 'ginkgo (unspecified)'; nothing on those labels establishes EGb 761 equivalence.",
+      "Treatment of diagnosed cognitive impairment, not memory support in healthy adults (where PMID 23001963 is null).",
+      "The abstract does not state the standardisation profile, so material equivalence cannot be checked from this source."
+     ],
+     "scoring_ineligible_reason": "Branded material and patient population; label material and dose do not match."
+    },
+    {
+     "context_id": "ginkgo_egb761_mild_dementia_meta_39895346",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "39895346"
+     ],
+     "components": [
+      "ginkgo"
+     ],
+     "identity_scope": "branded_material",
+     "identity": {
+      "branded_material": "EGb 761",
+      "botanical_species": "Ginkgo biloba",
+      "plant_part": "leaf",
+      "standardization": "not stated in the abstract beyond the EGb 761 designation"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "humans_mesh",
+      "participants_in_abstract"
+     ],
+     "evidence_role": "meta_analysis",
+     "included_study_pmids": "extraction_pending",
+     "condition": "mild_dementia",
+     "purpose": "treatment",
+     "trial_family": "egb761_mild_dementia_meta_39895346",
+     "population": {
+      "age_group": "adult",
+      "description": "782 patients with mild dementia (SKT total scores 9 to 15) pooled from four trials"
+     },
+     "study_design": "meta_analysis",
+     "blinding": "unreported",
+     "funding": "industry",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       240
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "240 mg EGb 761 daily",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "Source states 240 mg daily."
+      },
+      "source_provenance": {
+       "pmid": "39895346",
+       "location": "abstract",
+       "quote": "Treatment with 240 mg EGb 761 daily was significantly superior to placebo in cognition (p = 0.04), global assessment (p = 0.01), activities of daily living (p = 0.01) and quality of life (p = 0.02)"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "cognition_global_assessment_adl_quality_of_life",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive",
+       "outcome_role": "post_hoc_subgroup"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "39895346",
+       "location": "abstract",
+       "quote": "Data of patients with mild dementia (defined as the SKT Short Cognitive Performance Test total scores from 9 to 15) were selected."
+      }
+     ],
+     "limitations": [
+      "This is a subgroup meta-analysis: patient subgroups were selected out of four trials, so it re-analyses existing EGb 761 trials rather than adding independent replication.",
+      "Its trials very likely sit inside the pool of PMID 25114079 \u2014 membership extraction pending.",
+      "EGb 761 branded material at 240 mg/day in diagnosed mild dementia.",
+      "The extract's manufacturer sponsors much of the EGb 761 literature; funding recorded as industry."
+     ],
+     "scoring_ineligible_reason": "Branded material, patient subgroup analysis, non-label dose."
+    }
+   ],
+   "trial_families": {
+    "ginkgo_evaluation_of_memory_GEM": [
+     "19017911",
+     "20040554"
+    ],
+    "ginkgo_healthy_cognition_meta_23001963": [
+     "23001963"
+    ],
+    "egb761_dementia_meta_25114079": [
+     "25114079"
+    ],
+    "egb761_mild_dementia_meta_39895346": [
+     "39895346"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 5,
+    "unique_trials_or_cohorts": "1 primary cohort (GEM, two publications) plus three reviews over overlapping EGb 761 and healthy-adult trial pools",
+    "independent_replications": 0,
+    "note": "19017911 and 20040554 are the same 3069-participant GEM cohort. 39895346 re-analyses subgroups of trials expected to sit inside 25114079's pool. Treating these five publications as five sources would badly overstate depth."
+   },
+   "handoff": [
+    {
+     "pmid": "18383637",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Haemorrhage-risk review for ginkgo extracts \u2014 bleeding safety belongs to the safety owner."
+    },
+    {
+     "pmid": "40198642",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Bleeding risk and coagulation observational evidence."
+    },
+    {
+     "pmid": "11826216",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Ginkgo safety signal flagged in screening."
+    },
+    {
+     "pmid": "17010102",
+     "role": "interaction",
+     "destination": "ingredient_interaction_rules / curated_interactions owner",
+     "reason": "Ginkgo drug-interaction study."
+    },
+    {
+     "pmid": "32478963",
+     "role": "interaction",
+     "destination": "ingredient_interaction_rules / curated_interactions owner",
+     "reason": "Ginkgo drug-interaction study."
+    },
+    {
+     "pmid": "23477707",
+     "role": "interaction",
+     "destination": "ingredient_interaction_rules / curated_interactions owner",
+     "reason": "Ginkgo drug-interaction study."
+    },
+    {
+     "pmid": "30761076",
+     "role": "interaction",
+     "destination": "ingredient_interaction_rules / curated_interactions owner",
+     "reason": "Ginkgo drug-interaction study."
+    },
+    {
+     "pmid": "27186927",
+     "role": "interaction",
+     "destination": "ingredient_interaction_rules / curated_interactions owner",
+     "reason": "Ginkgo drug-interaction study."
+    }
+   ],
+   "high_risk_flags": [
+    "anticoagulation_bleeding",
+    "perioperative",
+    "medication_interactions"
+   ],
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "Positive evidence is confined to one branded standardised extract (EGb 761) at 240 mg/day in diagnosed dementia patients, while the consumer-relevant meta-analysis in healthy adults is null and the measured label median is 60 mg/day of mostly unspecified ginkgo. The generic scorer has no population gate and no branded-material equivalence test, so a positive record would transfer dementia-treatment evidence to 124 general-population products at a quarter of the studied dose."
+   },
+   "proposed_record_level_synthesis": {
+    "proposal": "HOLD \u2014 do not create a scoring record",
+    "rationale": "Ginkgo is the clearest split in Wave 1: null for prevention in the largest independent trial (GEM, n=3069, 240 mg/day, 6.1 years) and null for cognition in healthy adults (meta-analysis, no dose relationship), but positive for the branded EGb 761 extract at 240 mg/day in diagnosed dementia. Labels deliver a median 60 mg/day of mostly unspecified ginkgo to healthy buyers. A single record cannot carry that split, and the scorer cannot express material, dose or population.",
+    "if_owner_approves_anyway": {
+     "study_type": "systematic_review_meta",
+     "evidence_level": "ingredient-human",
+     "effect_direction": "mixed",
+     "min_clinical_dose": null,
+     "note": "A 'mixed' record would still credit 60 mg unspecified-ginkgo products with EGb 761 dementia-treatment evidence."
+    },
+    "review_completeness": "bounded search documented in wave1_search_log.json (152 records screened, 79 kept)",
+    "evidence_strength": "large and high quality, but split by material, dose and population",
+    "applicability_to_labels": "not applicable at the measured label median; would require EGb 761 identity plus a 240 mg/day dose to even be considered"
+   },
+   "label_dose_profile": {
+    "dosed_rows": 140,
+    "unit_counts": {
+     "mg": 139,
+     "np": 30,
+     "unspecified": 4,
+     "mcg": 1
+    },
+    "top_forms": {
+     "ginkgo (unspecified)": 100,
+     "ginkgo biloba extract (24% flavone glycosides)": 42,
+     "(none)": 31,
+     "ginkgo leaf powder": 1
+    },
+    "mg_min": 0.12,
+    "mg_p25": 40.0,
+    "mg_median": 60.0,
+    "mg_p75": 120.0,
+    "mg_max": 2000.0
+   },
+   "catalog_impact": {
+    "slots": 140,
+    "products": 124,
+    "brands": 29,
+    "evidence_zero_products": 49,
+    "evidence_le8_products": 57,
+    "evidence_mean": 9.49,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "ginkgo (unspecified)",
+     "ginkgo biloba extract (24% flavone glycosides)",
+     "ginkgo leaf powder"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   }
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "label_name": "Horny Goat Weed (Epimedium)",
+   "label_reality": "Measured label median 50 mg/day (p25 12.5, p75 1,000); sold for libido, erectile function, testosterone and bone health.",
+   "contexts": [
+    {
+     "context_id": "epimedium_prenylflavonoid_pk_30522143",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "30522143"
+     ],
+     "components": [
+      "horny_goat_weed"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Epimedium",
+      "plant_part": "leaf",
+      "standardization": "defined Epimedium prenylflavonoid extract (icariin, icariside I, icariside II, icaritin, desmethylicaritin)"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "condition": "prenylflavonoid_pharmacokinetics_and_tolerability",
+     "purpose": "physiology",
+     "trial_family": "epimedium_pk_30522143",
+     "population": {
+      "age_group": "adult",
+      "description": "30 healthy male subjects"
+     },
+     "study_design": "rct",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "sample_size": 30,
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       370,
+       740,
+       1110
+      ],
+      "dose_status": "verified",
+      "dose_basis": "single_challenge",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "single oral dose of 370, 740, or 1110 mg",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "Single doses as administered; no daily regimen studied."
+      },
+      "source_provenance": {
+       "pmid": "30522143",
+       "location": "abstract",
+       "quote": "A single oral dose of 370, 740, or 1110 mg of a standardized Epimedium prenylflavonoid extract was administered to 30 healthy male subjects in a randomized, placebo-controlled trial."
+      }
+     },
+     "outcomes": [
+      {
+       "name": "prenylflavonoid_metabolite_pharmacokinetics",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "unresolved",
+       "outcome_role": "surrogate"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "30522143",
+       "location": "abstract",
+       "quote": "Epimedium prenylflavonoid extracts were well tolerated and no adverse effects were observed."
+      },
+      {
+       "pmid": "30522143",
+       "location": "abstract",
+       "quote": "Levels of Epimedium prenylflavonoid metabolites observed in this study were consistent with levels demonstrated to have anti-osteoporotic effects in cellular and animal studies."
+      }
+     ],
+     "limitations": [
+      "Pharmacokinetics and tolerability only \u2014 there is NO efficacy endpoint in this trial.",
+      "The abstract's bridge to 'anti-osteoporotic effects' is explicitly to cellular and animal studies; that is mechanism, not human efficacy.",
+      "Single doses in healthy men; nothing about chronic use or the marketed libido/testosterone claims."
+     ],
+     "scoring_ineligible_reason": "Pharmacokinetic study with no efficacy outcome."
+    }
+   ],
+   "trial_families": {
+    "epimedium_pk_30522143": [
+     "30522143"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 1,
+    "unique_trials_or_cohorts": 1,
+    "independent_replications": 0,
+    "note": "One pharmacokinetic trial. No controlled efficacy trial of the marketed indications exists in the documented search scope."
+   },
+   "handoff": [
+    {
+     "pmid": "30034348",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Adverse-event case literature for Epimedium flagged in screening (tachyarrhythmia/hypomania)."
+    },
+    {
+     "pmid": "38327958",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Adverse-event case literature flagged in screening."
+    },
+    {
+     "pmid": "40546602",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Adverse-event case literature flagged in screening."
+    }
+   ],
+   "high_risk_flags": [
+    "cardiovascular",
+    "medication_interactions"
+   ],
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "There is nothing for the scorer to consume: no controlled human efficacy evidence exists in the documented scope, so the correct outcome is a review-state change (A -> B), which the current registry has no field for on an identity with no record."
+   },
+   "proposed_record_level_synthesis": {
+    "proposal": "RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD",
+    "rationale": "A documented bounded search found no controlled human efficacy trial of Epimedium for libido, erectile function, testosterone or bone health. The only human interventional study is a single-dose pharmacokinetic and tolerability trial. Evidence 0 for these 51 products is correct and should be shown as 'reviewed \u2014 no qualifying evidence found', not as 'not yet reviewed'.",
+    "review_completeness": "bounded search documented in wave1_search_log.json (11 records screened, 9 kept)",
+    "evidence_strength": "none for marketed indications",
+    "applicability_to_labels": "not applicable \u2014 no efficacy evidence to apply"
+   },
+   "label_dose_profile": {
+    "dosed_rows": 55,
+    "unit_counts": {
+     "mg": 55,
+     "np": 16,
+     "unspecified": 1
+    },
+    "top_forms": {
+     "(none)": 72
+    },
+    "mg_min": 10.0,
+    "mg_p25": 12.5,
+    "mg_median": 50.0,
+    "mg_p75": 1000.0,
+    "mg_max": 1000.0
+   },
+   "catalog_impact": {
+    "slots": 55,
+    "products": 51,
+    "brands": 9,
+    "evidence_zero_products": 28,
+    "evidence_le8_products": 28,
+    "evidence_mean": 4.86,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "(none)"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   }
+  },
+  {
+   "canonical_id": "tribulus",
+   "label_name": "Tribulus",
+   "label_reality": "Sold for testosterone support and athletic performance; the trials below dose 750-770 mg/day of Tribulus terrestris as a sole agent.",
+   "contexts": [
+    {
+     "context_id": "tribulus_idiopathic_infertility_rct_27337519",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "27337519"
+     ],
+     "components": [
+      "tribulus"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Tribulus terrestris",
+      "plant_part": "not_stated"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "condition": "idiopathic_male_infertility",
+     "purpose": "treatment",
+     "trial_family": "tribulus_infertility_rct_27337519",
+     "population": {
+      "age_group": "adult",
+      "description": "Thirty randomized male patients complaining of idiopathic infertility"
+     },
+     "study_design": "rct",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "sample_size": 30,
+     "comparator": "before-after comparison",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       750
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 90,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "Tribulus terrestris (750 mg) in three divided doses for three months",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "750 mg/day split into three administrations."
+      },
+      "source_provenance": {
+       "pmid": "27337519",
+       "location": "abstract",
+       "quote": "They were given Tribulus terrestris (750 mg) in three divided doses for three months."
+      }
+     },
+     "outcomes": [
+      {
+       "name": "serum_testosterone_lh_and_semen_parameters",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null",
+       "outcome_role": "within_group_change"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "27337519",
+       "location": "abstract",
+       "quote": "No statistically significant difference was observed in the levels of testosterone (total and free) and LH and semen parameters (sperm concentration or motility, or abnormal forms) before and after the treatment."
+      },
+      {
+       "pmid": "27337519",
+       "location": "abstract",
+       "quote": "Tribulus terrestris was ineffective in the treatment of idiopathic infertility."
+      }
+     ],
+     "limitations": [
+      "Before-after comparison in 30 patients; the abstract describes no placebo control group.",
+      "Directly tests the marketed testosterone claim and finds nothing.",
+      "Plant part and extract standardisation are not stated."
+     ],
+     "scoring_ineligible_reason": "Null on the marketed endpoint; uncontrolled before-after design."
+    },
+    {
+     "context_id": "tribulus_crossfit_performance_rct_34836225",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "34836225"
+     ],
+     "components": [
+      "tribulus"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Tribulus terrestris",
+      "plant_part": "not_stated"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "condition": "body_composition_hormones_and_crossfit_performance",
+     "purpose": "physiology",
+     "trial_family": "tribulus_crossfit_rct_34836225",
+     "population": {
+      "age_group": "adult",
+      "description": "30 healthy CrossFit-trained males"
+     },
+     "study_design": "rct",
+     "blinding": "single",
+     "funding": "unreported",
+     "sample_size": 30,
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       770
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 42,
+      "dosage_forms": [],
+      "co_therapies": [
+       "CrossFit training"
+      ],
+      "reported_regimen": "770 mg of TT supplementation or a placebo daily for 6 weeks",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "Source states 770 mg daily."
+      },
+      "source_provenance": {
+       "pmid": "34836225",
+       "location": "abstract",
+       "quote": "a total of 30 healthy CrossFit\u00ae-trained males were randomly allocated to receive either 770 mg of TT supplementation or a placebo daily for 6 weeks"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "body_composition_hormonal_response_and_performance",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "34836225",
+       "location": "abstract",
+       "quote": "There were no significant group x time interactions for the outcomes of the study except for testosterone levels and bench press performance (p < 0.05)."
+      }
+     ],
+     "limitations": [
+      "Single-blind, n=30, 6 weeks.",
+      "Most outcomes null; the two exceptions (testosterone, bench press) are secondary signals within a null primary picture and must not be reported as 'improves performance'.",
+      "Co-therapy: all participants were training."
+     ],
+     "scoring_ineligible_reason": "Predominantly null; isolated secondary signals do not establish efficacy."
+    }
+   ],
+   "trial_families": {
+    "tribulus_infertility_rct_27337519": [
+     "27337519"
+    ],
+    "tribulus_crossfit_rct_34836225": [
+     "34836225"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 2,
+    "unique_trials_or_cohorts": 2,
+    "independent_replications": 0,
+    "note": "Two small independent trials of different endpoints, both essentially null for the marketed claims."
+   },
+   "handoff": [],
+   "high_risk_flags": [],
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "Sole-agent trials are null for the marketed claims; the only positive literature is combination products. The scorer cannot distinguish 'Tribulus alone' from 'Tribulus inside a multi-herb formula', so any record risks importing combination results."
+   },
+   "proposed_record_level_synthesis": {
+    "proposal": "RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD",
+    "rationale": "As a sole agent for its two most-marketed claims (testosterone, athletic performance), the trials are consistently null. Screening also found that the positive literature is combination products, which cannot be attributed to tribulus. Evidence 0 for these 50 products is the correct, and now explainable, result.",
+    "review_completeness": "bounded search documented in wave1_search_log.json (records screened per log; 64 kept)",
+    "evidence_strength": "several small null sole-agent trials",
+    "applicability_to_labels": "no qualifying positive evidence to apply"
+   },
+   "label_dose_profile": {
+    "dosed_rows": 55,
+    "unit_counts": {
+     "mg": 55,
+     "gram(s)": 1,
+     "np": 1
+    },
+    "top_forms": {
+     "tribulus standardized extract": 49,
+     "tribulus (unspecified)": 7,
+     "(none)": 1
+    },
+    "mg_min": 20.0,
+    "mg_p25": 250.0,
+    "mg_median": 500.0,
+    "mg_p75": 1000.0,
+    "mg_max": 1500.0
+   },
+   "catalog_impact": {
+    "slots": 56,
+    "products": 50,
+    "brands": 14,
+    "evidence_zero_products": 28,
+    "evidence_le8_products": 33,
+    "evidence_mean": 6.23,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "tribulus standardized extract",
+     "tribulus (unspecified)"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   }
+  },
+  {
+   "canonical_id": "dandelion",
+   "label_name": "Dandelion",
+   "label_reality": "Measured label median 100 mg/day (p25 80, p75 200), sold mainly for diuretic, digestive and liver support.",
+   "contexts": [
+    {
+     "context_id": "dandelion_acute_diuresis_crossover_42398668",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "42398668"
+     ],
+     "components": [
+      "dandelion"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Taraxacum officinale",
+      "plant_part": "root",
+      "preparation": "commercially available dandelion root powder, four capsules providing about 2.1 g"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "condition": "acute_diuresis",
+     "purpose": "physiology",
+     "trial_family": "dandelion_diuresis_crossover_42398668",
+     "population": {
+      "age_group": "adult",
+      "description": "Physically active young adults (n = 14; M/F, 12/2; age, 25.5 +/- 4.7 years)"
+     },
+     "study_design": "crossover_rct",
+     "blinding": "open",
+     "funding": "unreported",
+     "sample_size": 14,
+     "comparator": "1 L of still water alone",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       2100
+      ],
+      "dose_status": "verified",
+      "dose_basis": "single_challenge",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [
+       "capsule"
+      ],
+      "co_therapies": [
+       "1 L of still water"
+      ],
+      "reported_regimen": "four capsules providing a total of ~2.1 g of a commercially available dandelion root powder, single occasion",
+      "normalization": {
+       "basis": "grams_to_milligrams",
+       "note": "2.1 g = 2,100 mg, single acute dose."
+      },
+      "source_provenance": {
+       "pmid": "42398668",
+       "location": "abstract",
+       "quote": "ingested 1 L of still water with (DAND) or without (CON) four capsules providing a total of \u223c2.1 g of a commercially available dandelion root powder"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "cumulative_urine_output_4h",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "42398668",
+       "location": "abstract",
+       "quote": "Cumulative urine output was 1,164 \u00b1 244 g in CON and 1,268 \u00b1 213 g in DAND, with the mean difference (95% confidence interval) of 105 (-35 to 244) g (p = .13; g = 0.45)"
+      },
+      {
+       "pmid": "42398668",
+       "location": "abstract",
+       "quote": "These results indicate a lack of support for the purported diuretic effect of dandelion."
+      }
+     ],
+     "limitations": [
+      "n=14, open-label, single acute dose, 4-hour window \u2014 small and short.",
+      "Tests the marketed diuretic claim directly and finds no effect.",
+      "The 2.1 g dose is roughly 21x the measured label median of 100 mg/day, so label servings are even less likely to act.",
+      "The authors themselves call for different dosing strategies and sources before definitive conclusions."
+     ],
+     "scoring_ineligible_reason": "Null primary outcome on a surrogate endpoint; acute single dose."
+    }
+   ],
+   "trial_families": {
+    "dandelion_diuresis_crossover_42398668": [
+     "42398668"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 1,
+    "unique_trials_or_cohorts": 1,
+    "independent_replications": 0,
+    "note": "One small single-agent trial. Screening found no large single-ingredient RCT of isolated dandelion for its marketed claims."
+   },
+   "handoff": [],
+   "high_risk_flags": [],
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "No qualifying positive evidence exists to represent; the useful output is a review-state change, which the registry cannot express for an identity with no record."
+   },
+   "proposed_record_level_synthesis": {
+    "proposal": "RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD",
+    "rationale": "The only clean single-agent human trial tested the marketed diuretic claim at 21x the label median and found no effect. Evidence 0 for these 57 products is correct and should read 'reviewed \u2014 no qualifying evidence found'.",
+    "review_completeness": "bounded search documented in wave1_search_log.json (33 records screened, 13 kept)",
+    "evidence_strength": "one small null trial; no qualifying positive evidence",
+    "applicability_to_labels": "no qualifying positive evidence to apply"
+   },
+   "label_dose_profile": {
+    "dosed_rows": 59,
+    "unit_counts": {
+     "np": 91,
+     "mg": 59,
+     "gram(s)": 5
+    },
+    "top_forms": {
+     "(none)": 91,
+     "dandelion extract": 64
+    },
+    "mg_min": 10.0,
+    "mg_p25": 80.0,
+    "mg_median": 100.0,
+    "mg_p75": 200.0,
+    "mg_max": 1575.0
+   },
+   "catalog_impact": {
+    "slots": 58,
+    "products": 57,
+    "brands": 15,
+    "evidence_zero_products": 21,
+    "evidence_le8_products": 27,
+    "evidence_mean": 8.6,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "dandelion extract"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   }
+  },
+  {
+   "canonical_id": "d_ribose",
+   "label_name": "D-Ribose",
+   "label_reality": "Measured label median 1,400 mg/day (p25 1,025, p75 5,000), sold for energy and exercise recovery.",
+   "contexts": [
+    {
+     "context_id": "d_ribose_mcardle_cochrane_25391139",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "25391139"
+     ],
+     "components": [
+      "d_ribose"
+     ],
+     "identity_scope": "exact_form",
+     "identity": {
+      "chemical_form": "D-ribose"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "systematic_review",
+     "included_study_pmids": "extraction_pending",
+     "condition": "mcardle_disease_glycogen_storage_disease_type_v",
+     "purpose": "treatment",
+     "trial_family": "cochrane_mcardle_review",
+     "population": {
+      "age_group": "mixed",
+      "description": "13 included studies totalling 85 participants with McArdle disease; largest trial 19 participants"
+     },
+     "study_design": "systematic_review",
+     "blinding": "unreported",
+     "funding": "independent",
+     "comparator": "placebo or alternative treatments",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "exercise_endurance_and_fatigability",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "25391139",
+       "location": "abstract",
+       "quote": "There was no benefit with: D-ribose,glucagon, verapamil, vitamin B6, branched chain amino acids, dantrolene sodium, and high-dose creatine."
+      },
+      {
+       "pmid": "25391139",
+       "location": "abstract",
+       "quote": "The included studies involved a total of 85 participants, but the number in each individual trial was small; the largest treatment trial included 19 participants and the smallest study included only one participant."
+      }
+     ],
+     "limitations": [
+      "Cochrane review in a rare metabolic disease population, not general consumers seeking energy support.",
+      "Explicitly reports no benefit from D-ribose, and notes oral ribose caused diarrhoea and hypoglycaemia-like symptoms \u2014 a tolerability signal for the safety owner.",
+      "Very small included trials (85 participants across 13 studies).",
+      "This review supersedes the 2004 version (PMID 21154353 is the prior iteration); they are one review lineage, not two independent sources."
+     ],
+     "scoring_ineligible_reason": "No benefit reported; disease population; dose not stated."
+    }
+   ],
+   "trial_families": {
+    "cochrane_mcardle_review": [
+     "25391139",
+     "21154353"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 2,
+    "unique_trials_or_cohorts": 1,
+    "independent_replications": 0,
+    "note": "21154353 and 25391139 are successive versions of ONE Cochrane review. Counting both would double-count the same evidence."
+   },
+   "handoff": [
+    {
+     "pmid": "25391139",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Cochrane review reports oral ribose caused diarrhoea and hypoglycaemia-like symptoms \u2014 tolerability signal."
+    },
+    {
+     "pmid": "24272966",
+     "role": "pharmacokinetic",
+     "destination": "interaction/PK owner",
+     "reason": "Ribose pharmacokinetics with dose-related serum glucose and insulin changes \u2014 PK/glycaemic question, not efficacy."
+    }
+   ],
+   "high_risk_flags": [
+    "hypoglycemia_risk"
+   ],
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "The strongest evidence is a null Cochrane review in a rare disease population plus small exercise trials; approving a null record would add Evidence points under the current 0.25 null multiplier."
+   },
+   "proposed_record_level_synthesis": {
+    "proposal": "HOLD \u2014 record the review state, create no scoring record",
+    "rationale": "The best-quality evidence (Cochrane) reports no benefit in the only disease indication studied, with adverse effects, and the exercise-performance literature is small and split. Under the current scorer a null record would manufacture affirmative Evidence points for 33 products, so this must wait for the null-direction decision.",
+    "review_completeness": "bounded search documented in wave1_search_log.json (44 records screened, 24 kept)",
+    "evidence_strength": "null in the best-quality source; small mixed exercise literature",
+    "applicability_to_labels": "no qualifying positive evidence at label exposures"
+   },
+   "label_dose_profile": {
+    "dosed_rows": 24,
+    "unit_counts": {
+     "mg": 23,
+     "gram(s)": 9,
+     "g": 1
+    },
+    "top_forms": {
+     "d-ribose powder": 33
+    },
+    "mg_min": 1.1,
+    "mg_p25": 1025.0,
+    "mg_median": 1400.0,
+    "mg_p75": 5000.0,
+    "mg_max": 5100.0
+   },
+   "catalog_impact": {
+    "slots": 33,
+    "products": 33,
+    "brands": 9,
+    "evidence_zero_products": 25,
+    "evidence_le8_products": 27,
+    "evidence_mean": 3.35,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "d-ribose powder"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   }
+  },
+  {
+   "canonical_id": "butterbur",
+   "label_name": "Butterbur",
+   "label_reality": "Measured label median 150 mg/day (p25 87.5, p75 150, max 150) \u2014 the studied effective dose. 5 of 33 dosed rows name the exact studied material ('PA-free butterbur extract (Petadolex)'); the other 28 declare only 'butterbur (unspecified)', where pyrrolizidine-alkaloid content is unknown.",
+   "contexts": [
+    {
+     "context_id": "butterbur_migraine_prophylaxis_rct_11020030",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "11020030"
+     ],
+     "components": [
+      "butterbur"
+     ],
+     "identity_scope": "branded_material",
+     "identity": {
+      "branded_material": "Petadolex",
+      "botanical_species": "Petasites hybridus",
+      "plant_part": "root/rhizome",
+      "standardization": "special CO2 root/rhizome extract; PA-free grade on current labels"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "condition": "migraine_prophylaxis",
+     "purpose": "prevention",
+     "trial_family": "petadolex_migraine_rct_11020030",
+     "population": {
+      "age_group": "adult",
+      "description": "60 migraine patients after a 4-week run-in phase"
+     },
+     "study_design": "rct",
+     "blinding": "double",
+     "funding": "unreported",
+     "sample_size": 60,
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       100
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 84,
+      "dosage_forms": [
+       "capsule"
+      ],
+      "co_therapies": [],
+      "reported_regimen": "2 capsules (each capsule contains 25 mg) twice daily over 12 weeks",
+      "normalization": {
+       "basis": "per_administration_to_daily_total",
+       "note": "25 mg x 2 capsules x 2 administrations = 100 mg/day"
+      },
+      "source_provenance": {
+       "pmid": "11020030",
+       "location": "abstract",
+       "quote": "60 patients received either the special Petasites hybridus extract petadolex or placebo at a dosage of 2 capsules (each capsule contains 25 mg) twice daily over 12 weeks"
+      }
+     },
+     "outcomes": [
+      {
+       "name": "migraine_attack_frequency",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "11020030",
+       "location": "abstract",
+       "quote": "This reduction in migraine attacks with petadolex was significant (p < 0.05) compared to placebo."
+      },
+      {
+       "pmid": "11020030",
+       "location": "abstract",
+       "quote": "No adverse events were reported."
+      }
+     ],
+     "limitations": [
+      "n=60, published 2000; small.",
+      "Dose here is 100 mg/day, below the 150 mg/day that the later dose-ranging trial found effective.",
+      "Branded Petadolex CO2 root extract \u2014 not interchangeable with unspecified butterbur."
+     ],
+     "scoring_ineligible_reason": "Pending review."
+    },
+    {
+     "context_id": "butterbur_migraine_dose_ranging_rct_15623680",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "15623680"
+     ],
+     "components": [
+      "butterbur"
+     ],
+     "identity_scope": "branded_material",
+     "identity": {
+      "branded_material": "Petadolex",
+      "botanical_species": "Petasites hybridus",
+      "plant_part": "root/rhizome",
+      "standardization": "special CO2 root/rhizome extract; PA-free grade on current labels"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "direct_rct",
+     "condition": "migraine_prophylaxis",
+     "purpose": "prevention",
+     "trial_family": "petasites_migraine_rct_15623680",
+     "population": {
+      "age_group": "adult",
+      "description": "245 patients with migraine, ages 18 to 65, with two to six attacks per month"
+     },
+     "study_design": "rct",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "sample_size": 245,
+     "comparator": "placebo bid",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       100,
+       150
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "fixed_protocol",
+      "duration_days": 120,
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "Petasites extract 75 mg bid, Petasites extract 50 mg bid, or placebo bid over 4 months",
+      "normalization": {
+       "basis": "per_administration_to_daily_total",
+       "note": "75 mg bid = 150 mg/day; 50 mg bid = 100 mg/day"
+      },
+      "source_provenance": {
+       "pmid": "15623680",
+       "location": "abstract",
+       "quote": "This is a three-arm, parallel-group, randomized trial comparing Petasites extract 75 mg bid, Petasites extract 50 mg bid, or placebo bid in 245 patients with migraine."
+      }
+     },
+     "outcomes": [
+      {
+       "name": "migraine_attack_frequency_per_month",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "mixed",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "15623680",
+       "location": "abstract",
+       "quote": "migraine attack frequency was reduced by 48% for Petasites extract 75 mg bid (p = 0.0012 vs placebo), 36% for Petasites extract 50 mg bid (p = 0.127 vs placebo), and 26% for the placebo group"
+      }
+     ],
+     "limitations": [
+      "Direction is dose-split: 150 mg/day beat placebo, 100 mg/day did NOT (p = 0.127). A record without a dose floor would credit products that deliver the ineffective amount.",
+      "Per-protocol analysis is the one quoted in the abstract.",
+      "Standardised special root extract; material equivalence to an unspecified butterbur label is not established."
+     ],
+     "scoring_ineligible_reason": "Pending review; dose-dependent effect must be carried by a dose floor."
+    },
+    {
+     "context_id": "butterbur_migraine_systematic_review_16987643",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "16987643"
+     ],
+     "components": [
+      "butterbur"
+     ],
+     "identity_scope": "branded_material",
+     "identity": {
+      "branded_material": "Petadolex",
+      "botanical_species": "Petasites hybridus",
+      "plant_part": "root/rhizome",
+      "standardization": "special CO2 root/rhizome extract; PA-free grade on current labels"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "systematic_review",
+     "included_study_pmids": [
+      "11020030",
+      "15623680"
+     ],
+     "condition": "migraine_prophylaxis",
+     "purpose": "prevention",
+     "trial_family": "petadolex_migraine_review_16987643",
+     "population": {
+      "age_group": "adult",
+      "description": "Two trials totalling 293 patients (60 and 233 patients)"
+     },
+     "study_design": "systematic_review",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       100,
+       150
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "extract at higher dose (150 mg) versus lower dose (100 mg)",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "Doses as stated by the review."
+      },
+      "source_provenance": {
+       "pmid": "16987643",
+       "location": "abstract",
+       "quote": "The extract at higher dose (150 mg) showed a greater decreased frequency of migraine attacks and a greater number of responders (improvement>50%) after treatment over 3-4 months than the extract at lower dose (100 mg) and placebo."
+      }
+     },
+     "outcomes": [
+      {
+       "name": "migraine_attack_frequency_and_responder_rate",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "positive",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "16987643",
+       "location": "abstract",
+       "quote": "Moderate evidence of effectiveness is, thus, available for a higher than the recommended dose of the proprietary Petasites root extract Petadolex in the prophylaxis of migraine."
+      },
+      {
+       "pmid": "16987643",
+       "location": "abstract",
+       "quote": "Both trials investigated the proprietary Petasites root extract Petadolex."
+      }
+     ],
+     "limitations": [
+      "The whole positive evidence base is TWO trials (293 patients) \u2014 this review contains both contexts above, so it is not a third independent source.",
+      "Pooling was not carried out because of heterogeneity.",
+      "The review explicitly calls for further rigorous studies to confirm effectiveness AND safety.",
+      "Effectiveness is attributed to the proprietary Petadolex extract specifically."
+     ],
+     "scoring_ineligible_reason": "Pending review; contains the two trials above rather than adding independent evidence."
+    },
+    {
+     "context_id": "butterbur_migraine_guideline_22529203",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "22529203"
+     ],
+     "components": [
+      "butterbur"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Petasites hybridus",
+      "plant_part": "root/rhizome",
+      "preparation": "Petasites (butterbur) as assessed by the AAN/AHS guideline"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "evidence_role": "guideline",
+     "condition": "episodic_migraine_prevention",
+     "purpose": "prevention",
+     "trial_family": "aan_ahs_guideline_22529203",
+     "population": {
+      "age_group": "adult",
+      "description": "Adults with episodic migraine"
+     },
+     "study_design": "guideline",
+     "blinding": "unreported",
+     "funding": "independent",
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "migraine_frequency_and_severity",
+       "hierarchy": "guideline",
+       "kind": "patient_important",
+       "direction": "positive",
+       "outcome_role": "companion_reported_context"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "22529203",
+       "location": "abstract",
+       "quote": "Petasites (butterbur) is effective for migraine prevention and should be offered to patients with migraine to reduce the frequency and severity of migraine attacks (Level A)."
+      }
+     ],
+     "limitations": [
+      "A guideline recommendation summarising the same two trials; it is authoritative but not additional evidence.",
+      "Published 2012 from a literature review window ending May 2009 \u2014 it predates later hepatotoxicity-driven regulatory actions, which belong to the safety owner.",
+      "The guideline names Petasites generally; the underlying trials used the proprietary extract."
+     ],
+     "scoring_ineligible_reason": "Pending review; guidance rather than an independent trial."
+    }
+   ],
+   "trial_families": {
+    "petadolex_migraine_rct_11020030": [
+     "11020030"
+    ],
+    "petasites_migraine_rct_15623680": [
+     "15623680"
+    ],
+    "petadolex_migraine_review_16987643": [
+     "16987643"
+    ],
+    "aan_ahs_guideline_22529203": [
+     "22529203"
+    ]
+   },
+   "publication_vs_trial_count": {
+    "publications": 4,
+    "unique_trials_or_cohorts": 2,
+    "independent_replications": 1,
+    "note": "Two placebo-controlled trials (n=60 and n=245/233) are the entire positive base. The systematic review contains both, and the AAN/AHS guideline rests on the same pair. Four publications, two trials."
+   },
+   "handoff": [
+    {
+     "pmid": "12808361",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Butterbur hepatotoxicity literature \u2014 pyrrolizidine-alkaloid liver injury is the defining safety question for this identity."
+    },
+    {
+     "pmid": "14584971",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Butterbur safety/hepatotoxicity record."
+    },
+    {
+     "pmid": "23277154",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Butterbur safety/hepatotoxicity record."
+    },
+    {
+     "pmid": "28002518",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Butterbur safety/hepatotoxicity record."
+    },
+    {
+     "pmid": "31631423",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Butterbur safety/hepatotoxicity record."
+    },
+    {
+     "pmid": "30790138",
+     "role": "safety",
+     "destination": "safety/CAERS owner",
+     "reason": "Butterbur safety/hepatotoxicity record."
+    },
+    {
+     "pmid": "38603736",
+     "role": "efficacy_other_indication",
+     "destination": "clinical evidence registry owner",
+     "reason": "Allergic-rhinitis meta-analysis where Petasites is the most-studied plant; very-low-to-low certainty, a separate indication from migraine."
+    }
+   ],
+   "high_risk_flags": [
+    "hepatic",
+    "pregnancy_and_fertility"
+   ],
+   "scorer_compatibility": {
+    "class": "B",
+    "reason": "Corrected after a live probe on four real butterbur products (328579, 61929, 293376, 252504). The applicability contract links the PRINTED label row, whose text is e.g. 'Purple Butterbur CO2 extract' with form_id None; the 'PA-free butterbur extract (Petadolex)' identity lives on the enricher's separate row object and is invisible to required_form_terms, so the studied material cannot be selected (clinical_form_mismatch). Products carrying two butterbur rows (328579 Migra-Eeze, 293376 Petadolex Pro-Active) fail to link at all, because _linked_rows returns nothing when more than one canonical candidate row exists. A dose-floor-only record would therefore credit the 150 mg 'butterbur (unspecified)' products \u2014 exactly the pyrrolizidine-alkaloid material the safety literature warns about \u2014 while the branded-extract products it is meant for may not link."
+   },
+   "proposed_record_level_synthesis": {
+    "proposal": "HOLD \u2014 the evidence is the strongest in Wave 1, but the material scoping it requires is not expressible today",
+    "rationale": "Two placebo-controlled trials, a systematic review and an AAN/AHS Level A recommendation support the proprietary PA-free Petasites root extract at 150 mg/day for migraine prophylaxis, and the 100 mg/day arm failed (p = 0.127), so a material-and-dose-scoped record is exactly what the evidence supports. A live probe shows the applicability contract cannot select that material: it matches printed label text, and 'Petadolex'/'PA-free' exist only in enricher-derived form mappings. Approving a dose-floor-only record would credit unspecified butterbur at 150 mg \u2014 the pyrrolizidine-alkaloid hepatotoxicity material \u2014 which is the opposite of the intent.",
+    "owner_decisions_needed": [
+     "Route the pyrrolizidine-alkaloid hepatotoxicity literature to the safety owner regardless of what happens to this record.",
+     "Decide whether the applicability owner should gain material scoping from enricher-resolved forms \u2014 butterbur is the concrete case that would justify it."
+    ],
+    "review_completeness": "bounded search documented in wave1_search_log.json (58 records screened, 51 kept)",
+    "evidence_strength": "guideline-endorsed but thin: two trials, 293 patients, dose-dependent",
+    "applicability_to_labels": "applicable to the PA-free/Petadolex rows at >= 150 mg/day; not applicable to unspecified butterbur",
+    "what_would_unblock_it": [
+     "Let the applicability contract consult the enricher's resolved form identity (form_id / matched_form) for material scoping, with the two-matchers risk handled deliberately \u2014 today required_form_terms only sees label text.",
+     "Make _linked_rows resolve multi-row identities instead of returning nothing when more than one canonical row exists (it silently drops Migra-Eeze and Petadolex Pro-Active).",
+     "Then a record with required_form_terms ['petadolex','pa-free'] + minimum_daily_dose 150 mg would credit exactly the intended products."
+    ],
+    "fields_if_material_scoping_becomes_possible": {
+     "id": "INGR_BUTTERBUR",
+     "study_type": "rct_multiple",
+     "evidence_level": "ingredient-human",
+     "effect_direction": "positive_weak",
+     "min_clinical_dose": 150,
+     "dose_unit": "mg",
+     "applicability": {
+      "scope": "ingredient",
+      "required_form_terms": [
+       "petadolex",
+       "pa-free"
+      ],
+      "dose_unit": "mg",
+      "minimum_daily_dose": 150,
+      "studied_population": "Adults with episodic migraine (2-6 attacks/month)",
+      "supported_outcomes": [
+       "migraine prophylaxis"
+      ]
+     },
+     "note": "positive_weak: the entire base is two trials totalling 293 patients and the lower dose failed."
+    }
+   },
+   "label_dose_profile": {
+    "dosed_rows": 33,
+    "unit_counts": {
+     "mg": 33
+    },
+    "top_forms": {
+     "butterbur (unspecified)": 28,
+     "PA-free butterbur extract (Petadolex)": 5
+    },
+    "mg_min": 7.5,
+    "mg_p25": 87.5,
+    "mg_median": 150.0,
+    "mg_p75": 150.0,
+    "mg_max": 150.0
+   },
+   "catalog_impact": {
+    "slots": 33,
+    "products": 29,
+    "brands": 6,
+    "evidence_zero_products": 25,
+    "evidence_le8_products": 26,
+    "evidence_mean": 1.5,
+    "review_state": "not_reviewed",
+    "top_forms": [
+     "butterbur (unspecified)",
+     "PA-free butterbur extract (Petadolex)"
+    ],
+    "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
+   },
+   "scorer_compatibility_probe": {
+    "method": "read-only probe calling clinical_applicability.assess_clinical_applicability with a candidate policy (required_form_terms ['petadolex','pa free'], minimum_daily_dose 150 mg) against the real enriched products",
+    "results": [
+     {
+      "dsld_id": "328579",
+      "product": "Migra-Eeze",
+      "servings_per_day": 1,
+      "butterbur_rows": [
+       "Butterbur root extract 150 mg (form: butterbur (unspecified))",
+       "Petasin 22.5 mg (form: PA-free butterbur extract (Petadolex))"
+      ],
+      "result": "not_applicable / clinical_source_row_unresolved \u2014 two candidate rows, so no row links"
+     },
+     {
+      "dsld_id": "61929",
+      "product": "Butterbur Extract With Standardized Rosmarinic Acid",
+      "servings_per_day": 2,
+      "butterbur_rows": [
+       "Purple Butterbur CO2 extract 75 mg (form: PA-free butterbur extract (Petadolex))"
+      ],
+      "result": "not_applicable / clinical_form_mismatch \u2014 linked row is the printed label row; its text is 'purple butterbur co2 extract petasins' and contains neither 'petadolex' nor 'pa free', even though 75 mg x 2 servings = the studied 150 mg/day"
+     },
+     {
+      "dsld_id": "293376",
+      "product": "Petadolex Pro-Active",
+      "servings_per_day": 3,
+      "butterbur_rows": [
+       "Purple Butterbur Root Extract 50 mg (form: PA-free butterbur extract (Petadolex))",
+       "Petasins 7.5 mg (form: butterbur (unspecified))"
+      ],
+      "result": "not_applicable / clinical_source_row_unresolved \u2014 two candidate rows; would otherwise be 50 mg x 3 = 150 mg/day"
+     },
+     {
+      "dsld_id": "252504",
+      "product": "Butterbur Extract (BulkSupplements)",
+      "servings_per_day": 1,
+      "butterbur_rows": [
+       "Butterbur extract 150 mg (form: butterbur (unspecified))"
+      ],
+      "result": "not_applicable / clinical_form_mismatch \u2014 correct outcome for unspecified material"
+     }
+    ],
+    "conclusion": "The measured label median of 150 mg/day comes from the UNSPECIFIED-material rows; the products declaring the studied Petadolex material deliver 22.5-75 mg per row and reach 150 mg/day only by serving multiplication. Material scoping is the blocker, and it is not expressible today."
+   }
+  }
+ ]
+}

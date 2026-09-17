@@ -1,0 +1,1724 @@
+{
+ "canonical_id": "pumpkin",
+ "screened": 93,
+ "kept": 45,
+ "rejected": [
+  {
+   "pmid": "9161461",
+   "reason": "off_topic",
+   "note": "Agronomy study of NaCl stress on cation contents in pumpkin seedlings; plant physiology, not human health."
+  },
+  {
+   "pmid": "16477137",
+   "reason": "off_topic",
+   "note": "Duplicate-topic agronomy study of NaCl stress on pumpkin seedling cation contents."
+  },
+  {
+   "pmid": "19093491",
+   "reason": "off_topic",
+   "note": "Agronomy study of stem pruning/nitrogen levels on pumpkin seed physico-chemical characteristics."
+  },
+  {
+   "pmid": "19580007",
+   "reason": "off_topic",
+   "note": "Agronomy study of planting methods/head pruning on medicinal pumpkin seed yield."
+  },
+  {
+   "pmid": "22868114",
+   "reason": "off_topic",
+   "note": "Nutritional/antioxidant profile of pumpkin fruit as influenced by NPK fertilizer; agronomy, not a human trial."
+  },
+  {
+   "pmid": "27308847",
+   "reason": "off_topic",
+   "note": "Tannic acid alleviation of nanoparticle toxicity in pumpkin plants; plant physiology, not human health."
+  },
+  {
+   "pmid": "29259610",
+   "reason": "off_topic",
+   "note": "Comparative meta-analysis of phenotypic differences in domesticated/engineered/wild plants including pumpkin; plant genetics, not human health."
+  },
+  {
+   "pmid": "29316640",
+   "reason": "animal_or_invitro",
+   "note": "Sub-chronic toxicity of Telfairia occidentalis (a different Cucurbitaceae plant) leaf extract in male rats."
+  },
+  {
+   "pmid": "31803152",
+   "reason": "off_topic",
+   "note": "Sorghum silage ensiled with unsalable vegetables including pumpkin; animal feed/agronomy study."
+  },
+  {
+   "pmid": "33394391",
+   "reason": "off_topic",
+   "note": "Effect of fly ash amended soil on pumpkin growth; agronomy, not human health."
+  },
+  {
+   "pmid": "34563888",
+   "reason": "off_topic",
+   "note": "Effects of cadmium on pumpkin seedling metabolite composition; plant physiology, not human health."
+  },
+  {
+   "pmid": "34952181",
+   "reason": "off_topic",
+   "note": "Physiological responses of pumpkin to zinc oxide nanoparticles; plant physiology, not human health."
+  },
+  {
+   "pmid": "35844434",
+   "reason": "off_topic",
+   "note": "Characterization of cultivated pumpkin landraces for agronomic traits; plant breeding, not human health."
+  },
+  {
+   "pmid": "36241498",
+   "reason": "off_topic",
+   "note": "Phosphine gas phytotoxicity in Arabidopsis thaliana; unrelated plant species and topic."
+  },
+  {
+   "pmid": "36363811",
+   "reason": "off_topic",
+   "note": "Soil microbe recruitment in pumpkin rhizospheres; agronomy/microbiology, not human health."
+  },
+  {
+   "pmid": "37863256",
+   "reason": "off_topic",
+   "note": "Transcriptomic/proteomic/metabolomic analysis of tetracycline stress tolerance in pumpkin; plant molecular biology."
+  },
+  {
+   "pmid": "38166490",
+   "reason": "off_topic",
+   "note": "Salinity tolerance in cucumber via selenium biofortification/grafting; different crop, agronomy."
+  },
+  {
+   "pmid": "38519514",
+   "reason": "off_topic",
+   "note": "Effect of salinity on pumpkin seed germination and growth; agronomy, not human health."
+  },
+  {
+   "pmid": "39990716",
+   "reason": "off_topic",
+   "note": "Effects of irrigation/fertilizer on pumpkin yield and water-fertilizer efficiency; agronomy, not human health."
+  },
+  {
+   "pmid": "40561606",
+   "reason": "off_topic",
+   "note": "Physiological/transcriptomic responses of pumpkin to lead and ozone stress; plant physiology, not human health."
+  },
+  {
+   "pmid": "41409485",
+   "reason": "off_topic",
+   "note": "Growth/yield of a different Cucurbita species using goat manure; agronomy, not human health."
+  },
+  {
+   "pmid": "42010286",
+   "reason": "off_topic",
+   "note": "Effects of pumpkin rootstocks on grafted cucumber growth/yield; agronomy, not human health."
+  },
+  {
+   "pmid": "11303489",
+   "reason": "off_topic",
+   "note": "Serum beta-carotene from dark green leafy vegetable supplementation in Mebendazole-treated children; not pumpkin-specific."
+  },
+  {
+   "pmid": "12888387",
+   "reason": "off_topic",
+   "note": "Survey of nitrate/nitrite content of vegetables grown in Korea; food-safety surveillance, not an efficacy/safety trial of pumpkin supplementation."
+  },
+  {
+   "pmid": "33127546",
+   "reason": "off_topic",
+   "note": "Fabrication of a zein/alginate nanofood delivery system based on pumpkin; food-technology/formulation paper, not a human trial."
+  },
+  {
+   "pmid": "30302877",
+   "reason": "off_topic",
+   "note": "Insulin PUMP therapy psychosocial trial in children with type 1 diabetes ('pumpkin' is the trial's nickname/acronym, not the plant); false match."
+  },
+  {
+   "pmid": "31898389",
+   "reason": "off_topic",
+   "note": "Published erratum for the insulin pump therapy trial (PMID 30302877); false match, not the plant pumpkin."
+  },
+  {
+   "pmid": "25626575",
+   "reason": "off_topic",
+   "note": "Ventricular assist device support in children ('Pumpkin' is a specific pediatric VAD device name, not the plant); false match."
+  },
+  {
+   "pmid": "42227475",
+   "reason": "off_topic",
+   "note": "Bcl-2 as a target in multiple sclerosis; unrelated topic, false keyword match."
+  },
+  {
+   "pmid": "42423014",
+   "reason": "animal_or_invitro",
+   "note": "Busulfan effects on gonadal function in male Wistar rats; unrelated topic and non-human."
+  },
+  {
+   "pmid": "12391710",
+   "reason": "off_topic",
+   "note": "Review of respiratory and allergic diseases generally; not pumpkin-specific."
+  },
+  {
+   "pmid": "22560940",
+   "reason": "off_topic",
+   "note": "Prospective study of major dietary patterns and cardiovascular mortality in Bangladesh; not pumpkin-specific supplementation."
+  },
+  {
+   "pmid": "36615704",
+   "reason": "off_topic",
+   "note": "Review of DASH/Indo-Mediterranean dietary approaches to hypertension; not pumpkin-specific."
+  },
+  {
+   "pmid": "41695112",
+   "reason": "off_topic",
+   "note": "Acute effect of whey vs. plant-based protein blend on postprandial metabolism/appetite; pumpkin not confirmed as a specific studied protein source in the abstract."
+  },
+  {
+   "pmid": "41301986",
+   "reason": "off_topic",
+   "note": "Digestibility/palatability of oil mill by-products in CANINE diets; veterinary/animal nutrition, not human."
+  },
+  {
+   "pmid": "38274036",
+   "reason": "animal_or_invitro",
+   "note": "In vitro genotoxicity studies and a 13-week oral toxicity study of pumpkin-derived pectin in Sprague-Dawley RATS, not humans."
+  },
+  {
+   "pmid": "34447849",
+   "reason": "off_topic",
+   "note": "Nutritional content/characterization of pumpkin cream soup with tempeh; a food-composition analysis, not a human efficacy/safety trial."
+  },
+  {
+   "pmid": "34403141",
+   "reason": "off_topic",
+   "note": "Intravenous squalene microemulsion for COVID-19; squalene source not specified as pumpkin-derived, and IV route."
+  },
+  {
+   "pmid": "32751677",
+   "reason": "not_intervention",
+   "note": "Systematic review of plant proteins found NO extracted/isolated pumpkin protein studies meeting inclusion criteria ('No studies on the remaining plant proteins in the extracted form were identified')."
+  },
+  {
+   "pmid": "35273988",
+   "reason": "different_substance",
+   "note": "'Pumpkin pie spice mix' is a spice blend (cinnamon, ginger, nutmeg, allspice) used as a flavoring, not pumpkin seed/fruit material."
+  },
+  {
+   "pmid": "37310415",
+   "reason": "different_substance",
+   "note": "Same trial/spice-mix issue as PMID 35273988; 'pumpkin pie spice' is a cinnamon-ginger-nutmeg-allspice blend, not pumpkin plant material."
+  },
+  {
+   "pmid": "36615694",
+   "reason": "not_intervention",
+   "note": "Pumpkin is one of five protein sources blended into a test plant-protein-fibre product; no isolated pumpkin-specific data reported."
+  },
+  {
+   "pmid": "40352295",
+   "reason": "not_intervention",
+   "note": "Pumpkin is one ingredient in a 6-component complementary food blend (MaSoTFPP) for child malnutrition; no isolated pumpkin effect reported."
+  },
+  {
+   "pmid": "31055010",
+   "reason": "off_topic",
+   "note": "Vegetable-enriched snack bar liking/acceptability study in children; pumpkin/sweet potato is one of three bar flavors, not a health-outcome trial."
+  },
+  {
+   "pmid": "32398091",
+   "reason": "off_topic",
+   "note": "VESSEL study protocol testing cruciferous vegetables; pumpkin appears only as one ingredient in the inactive control soup, not the studied intervention."
+  },
+  {
+   "pmid": "32873263",
+   "reason": "not_intervention",
+   "note": "Child acceptability/consumption study of a pumpkin-bean complementary food blend in Uganda; measures food acceptability, not a health efficacy outcome."
+  },
+  {
+   "pmid": "38489879",
+   "reason": "animal_or_invitro",
+   "note": "Systematic review of in vitro/in vivo (animal) mycotoxin toxicity and bioactive-compound mitigation; not a human pumpkin supplementation study."
+  },
+  {
+   "pmid": "33920888",
+   "reason": "not_intervention",
+   "note": "Pumpkin soup used only as a delivery vehicle for heated corn oil/2,4-decadienal; the studied intervention is the heated oil, not pumpkin."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "1702340",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Curbicin (pumpkin seed and dwarf palm extract)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "53 patients with BPH",
+   "indication_as_stated": "benign prostatic hyperplasia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Urinary flow, micturition time, residual urine, frequency of micturition and a subjective assessment of the effect of treatment were all significantly improved in the treatment group.",
+   "sample_size_quote": "53 patients took part in the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seeds combined with dwarf palm (Sabal serrulata) in the Curbicin product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2054576",
+   "design": "other",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; no abstract text retrieved"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seeds",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "not stated (title-level only)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No abstract text retrieved (Comment/Letter).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Title-level only; full text needed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "3799495",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin-seed supplementation, 60 mg/kg body wt/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "20 boys age 2-7 yr",
+   "indication_as_stated": "oxalcrystalluria/urolithiasis risk in children",
+   "dose_quote": "pumpkin-seed or orthophosphate supplementation 60 mg X kg body wt-1 X day-1",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Pumpkin seeds lowered calcium-oxalate crystal occurrence and calcium level but increased phosphorus, pyrophosphate, glycosaminoglycans, and potassium values in urine as compared with orthophosphate supplementation.",
+   "sample_size_quote": "20 boys age 2-7 yr",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "7538709",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "pumpkin seeds (1 of several phytotherapeutic agents reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "BPH patients (narrative review, Germany)",
+   "indication_as_stated": "benign prostatic hyperplasia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a critical analysis of the data available suggests that the effects of phytotherapy are no better than those of placebo treatment.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "negative",
+   "direction_note": "Reviews multiple phytotherapeutic agents together; skeptical overall verdict, not pumpkin-seed-specific.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seeds reviewed alongside Hypoxis rooperi, stinging nettle, saw palmetto, and rye pollen.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "7964254",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seeds snack",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Thai adolescents",
+   "indication_as_stated": "urolithiasis risk (bladder stone disease)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "pumpkin seeds snack showed inhibition effect to a greater extent than basal mixture.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9123676",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "pumpkin seeds (1 of several phytopharmaceutical agents reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "BPH patients (narrative review)",
+   "indication_as_stated": "benign prostatic hyperplasia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There are several new clinical studies which demonstrate a significant benefit compared with placebo treatment.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Pumpkin seeds grouped with saw palmetto, Radix urticae, pollen extracts, and phytosterols; no pumpkin-specific quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seeds reviewed as one of several phytopharmaceutical agents for BPH.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12022711",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "pumpkin seeds (1 of several phytotherapeutic agents reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "LUTS/BPH patients (narrative review)",
+   "indication_as_stated": "lower urinary tract symptoms/BPH",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A number of short-term randomised trials and some metaanalyses in the recent literature suggest clinical efficacy and good tolerability for some preparations, mainly extracts from Serenoa repens and also Pygeum africanum, products with high concentrations of beta-sitosterol, and pumpkin seeds.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Review cautions that meta-analyses pooling different plant extracts and extraction methods may be misleading.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seeds reviewed alongside Serenoa repens and Pygeum africanum without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12426861",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "pumpkin seeds (1 of several plant extracts reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "LUTS/BPH patients (narrative review)",
+   "indication_as_stated": "lower urinary tract symptoms/BPH",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "more recent studies on pumpkin seeds have shown clinical effects and good tolerability.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seeds reviewed alongside Serenoa repens and Pygeum africanum without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18198398",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed kernels (Cucurbita pepo), 30 g",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Eight healthy female subjects",
+   "indication_as_stated": "iron status/serum iron",
+   "dose_quote": "consumed 30 g of iron fortified ready-to-eat cereal (providing 7.1 mg iron/day) plus 30 g of pumpkin seed kernels (providing 4.0 mg iron/day) for four weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The statistical analysis showed a significant difference between the pre and post consumption phase for higher serum iron (60 +/- 22 vs. 85 +/- 23 ug/dl)",
+   "sample_size_quote": "Eight healthy female, single or non pregnant subjects, aged 20-37 y",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Pumpkin seed kernels co-consumed with iron-fortified cereal; not isolated.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed kernels combined with iron-fortified cereal; effect cannot be fully isolated to pumpkin seeds.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20098586",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil, 320 mg/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "47 BPH patients",
+   "indication_as_stated": "benign prostatic hyperplasia",
+   "dose_quote": "Subjects received either sweet potato starch (group A, placebo, 320 mg/day), pumpkin seed oil (group B, 320 mg/day), saw palmetto oil (group C, 320 mg/day) or pumpkin seed oil plus saw palmetto oil (group D, each 320 mg/day).",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "None of the parameters were significantly improved by combined treatment with pumpkin seed oil and saw palmetto oil.",
+   "sample_size_quote": "47 benign prostatic hyperplasia patients with average age of 53.3 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Pumpkin seed oil alone (group B) did show gradual improvement in maximal urinary flow rate and IPSS at 3 months.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed oil (alone, group B) matches label material; also tested combined with saw palmetto.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21545273",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil, 2 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "35 postmenopausal women",
+   "indication_as_stated": "postmenopausal symptoms/lipids",
+   "dose_quote": "Wheat germ oil (placebo; n = 14) and pumpkin seed oil (n = 21) were administered to eligible participants over a 12-week period at a dose of 2 g per day.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Women receiving pumpkin seed oil showed a significant increase in high density lipoprotein cholesterol concentrations",
+   "sample_size_quote": "35 women who had undergone natural menopause",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed oil matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23532672",
+   "design": "case_report",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; no abstract text retrieved"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "pumpkin",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "not stated (title-level only)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No abstract text retrieved.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Title-level only; full text needed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24578648",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "milled sesame/pumpkin/flax seed mixture (6g/6g/18g)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Thirty patients on hemodialysis",
+   "indication_as_stated": "hemodialysis fatty acid status/inflammation",
+   "dose_quote": "Participants consumed 30 g of milled sesame/pumpkin/flax (6 g/6 g/18 g, resp.) seeds mixture added to their habitual diet.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A significant decrease of the serum triglyceride level (P < 0.001), glucose, insulin, calculated IR HOMA (P < 0.05), and inflammatory markers (TNF-alpha, IL-6, and hs-CRP, P < 0.001) was observed after seed mixture treatment.",
+   "sample_size_quote": "Thirty patients with well nutrition status (18 male, 12 female) were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed is a minor (6 g) component of a 3-seed mixture dominated by flaxseed (18 g).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24864154",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (PSO), 400 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "76 male patients with androgenetic alopecia",
+   "indication_as_stated": "androgenetic alopecia (hair growth)",
+   "dose_quote": "76 male patients with AGA received 400 mg of PSO per day or a placebo for 24 weeks.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Mean hair count increases of 40% were observed in PSO-treated men at 24 weeks, whereas increases of 10% were observed in placebo-treated men (P < 0.001).",
+   "sample_size_quote": "76 male patients with AGA",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed oil matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25196580",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed (5 g b.i.d.) or pumpkin seed extract capsules (500 mg b.i.d.)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1,431 men (50-80 years) with BPH/LUTS (GRANU study)",
+   "indication_as_stated": "lower urinary tract symptoms/BPH",
+   "dose_quote": "pumpkin seed (5 g b.i.d.), capsules with pumpkin seed extract (500 mg b.i.d.) or matching placebo",
+   "primary_outcome_quote": "The primary response criterion was a decrease in International Prostate Symptom Score (IPSS) of \u22655 points from baseline after 12 months.",
+   "primary_result_quote": "After 12 months, the response rate (intention-to-treat/last-observation-carried-forward approach) did not differ between pumpkin seed extract and placebo.",
+   "sample_size_quote": "A total of 1,431 men (50-80 years) with BPH/LUTS were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Descriptively higher response rate with pumpkin seed (58.5% vs 47.3%) but not statistically confirmed as the primary criterion; large, well-powered trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed (whole and extract) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25252490",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (prostafit)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "100 patients with BPH",
+   "indication_as_stated": "benign prostatic hyperplasia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Prostafit is an effective and safe treatment in Benign Prostatic Hyperplasia but not as much as prozasin.",
+   "sample_size_quote": "One hundred patients with Benign Prostatic Hyperplasia were randomly divided into 2 equal groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Inferior to prazosin (active comparator), not placebo-controlled.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed oil (prostafit) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25918542",
+   "design": "other",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; no abstract text retrieved"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "not stated (comment/letter, title-level only)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No abstract text retrieved (Comment on PMID 24864154).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Title-level only; full text needed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30055778",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed, 65 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "normoglycemic adults (n=25 food intake, n=15 glycemia)",
+   "indication_as_stated": "postprandial glycemia",
+   "dose_quote": "Three high-carbohydrate mixed meals presenting no seed (control [C]) or 65 g of the tested seeds (pumpkin seed [P] or flaxseed [F])",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Glucose iAUC was significantly lower in P compared with C (reduction of ~35%, P = .025).",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30271759",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (PSO) phonophoresis",
+   "combination": false,
+   "route": "topical (trans-perineal phonophoresis)",
+   "population_as_stated": "Sixty patients with chronic nonbacterial prostatitis",
+   "indication_as_stated": "chronic nonbacterial prostatitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The current study showed that PSO phonophoresis can produce a significant effect in the management of CNBP",
+   "sample_size_quote": "Sixty patients with CNBP were randomly assigned to three groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Topical/phonophoresis delivery route, not oral ingestion.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed oil delivered via transperineal phonophoresis, not oral ingestion.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31445363",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (PSO), 3 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "23 postmenopausal women with elevated blood pressure",
+   "indication_as_stated": "arterial hemodynamics/hypertension",
+   "dose_quote": "Participants in the PSO group consumed 3 g/day of PSO.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "AIx, brachial and central systolic BP significantly (P < 0.05) decreased following PSO but not after placebo.",
+   "sample_size_quote": "Participants were randomly assigned to either a PSO (n = 12) or a placebo group (n = 11).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Arterial stiffness index and heart rate variability parameters unchanged.",
+   "registrations": [
+    "NCT03716960"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed oil matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31558010",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Proxelan (pumpkin seeds, Centella asiatica, Boswellia, Helichrysum, vitamin E, Melaleuca alternifolia, hyaluronic acid)",
+   "combination": true,
+   "route": "unstated (suppository)",
+   "population_as_stated": "Thirty patients with chronic pelvic pain syndrome",
+   "indication_as_stated": "chronic pelvic pain syndrome/prostatitis",
+   "dose_quote": "Proxelan\u00ae suppositories were prescribed for each patient for a month with a daily dosage of 1 suppository at bed-time.",
+   "primary_outcome_quote": "The primary endpoint of the study included at least a 30% reduction of pain symptoms",
+   "primary_result_quote": "Subjective pain relief was obtained in all the patients with significant decrease of NIH-CPSI pain items (P=0.04).",
+   "sample_size_quote": "Thirty consecutive patients with CP/CPPS symptoms",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No placebo control (open pilot); pumpkin seeds are one of seven ingredients in a suppository formulation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seeds are one of seven ingredients in a multi-component suppository product, delivered rectally/locally rather than as a standard oral supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31680216",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Cucurbita pepo (pumpkin) (1 of 5 plants with the most evidence for hair loss)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated (narrative review)",
+   "indication_as_stated": "hair loss (alopecia)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The plants with the most evidence-based effect against alopecia are Curcuma aeruginosa (pink and blue ginger), Serenoa repens (palmetto), Cucurbita pepo (pumpkin), Trifolium pratense (red clover), and Panax ginseng (Chinese red ginseng).",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Pumpkin named among 5 top plants; no pumpkin-specific quantitative result in the abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Cucurbita pepo (pumpkin) specifically named among the top evidence-based plants for hair loss.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31852006",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "pumpkin seed soft extract",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "men with mild-to-moderate LUTS (expert panel reflection on 2 RCTs)",
+   "indication_as_stated": "lower urinary tract symptoms",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We found a consensus that pumpkin seed soft extract adds to the therapeutic armamentarium for patients who cannot or do not want to apply synthetic drugs.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Expert-panel reflection piece referencing two prior 12-month RCTs (one being GRANU, PMID 25196580), not new primary data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed soft extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32005419",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Femaxeen (pollen, pumpkin seed extract, vitamin E)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "81 women with urinary incontinence",
+   "indication_as_stated": "urinary incontinence",
+   "dose_quote": "allocated to receive Femaxeen or placebo once daily for 90 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Femaxeen produced statistically significant improvements from baseline to Day 90 (p < 0.001 for all comparisons)",
+   "sample_size_quote": "81 women with moderate, severe, or very severe urge (43.4 %), stress (31.6 %) or mixed (25.0 %) UI",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed extract is one of three ingredients in the Femaxeen combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32668470",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "cucurbitacin-containing zucchini/pumpkin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1 patient (66-year-old female)",
+   "indication_as_stated": "food poisoning (cucurbitacin toxicity)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Acute food poisoning due to cucurbitacin - containing pumpkin is rare but can occur in small gardening units in association with higher outside temperatures.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Poisoning from a bitter/wild-type cucurbitacin-containing squash, not a standard edible pumpkin seed supplement.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Cucurbitacin toxicity from bitter zucchini/wild-type squash, not a standard pumpkin seed supplement product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33083301",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Pumpkin ointment",
+   "combination": false,
+   "route": "topical",
+   "population_as_stated": "60 patients with chronic hand eczema",
+   "indication_as_stated": "chronic hand eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Betamethasone and pumpkin ointment were effective and showed significant improvement compared with almond and eucerin and reduce HECSI scores (P=0.002 and P=0.012 respectively).",
+   "sample_size_quote": "60 patients with chronic HE",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Less effective than betamethasone (active comparator) on HECSI, though better on quality-of-life (DLQI) scores.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Topical pumpkin ointment, not an oral supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33178378",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (1 of several natural ingredients reviewed)",
+   "combination": true,
+   "route": "topical",
+   "population_as_stated": "not stated (systematic review, CCCA focus)",
+   "indication_as_stated": "alopecia (hair loss)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "there were no randomized, controlled studies evaluating the use of natural ingredients or aromatherapy in the management of CCCA.",
+   "sample_size_quote": "the selection of eight clinical studies",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No pumpkin-specific CCCA trial data found; some evidence noted for other alopecia types generally.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed oil reviewed among many natural ingredients without an isolated CCCA-specific result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33544448",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (PSO)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 patients with female pattern hair loss",
+   "indication_as_stated": "female pattern hair loss",
+   "dose_quote": "Patients with FPHL were randomly assigned to pumpkin seed oil (n = 30; group A) or minoxidil 5% foam (n = 30; group B) for a period of 3 months.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Findings of the present trial provide evidence of a promising potential role of PSO in treating FPHL.",
+   "sample_size_quote": "Patients with FPHL were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Active-comparator trial (vs. topical minoxidil), not placebo-controlled.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed oil matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34666728",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil, 360 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "73 patients with BPH aged >=50",
+   "indication_as_stated": "benign prostatic hyperplasia",
+   "dose_quote": "the other received 360 mg pumpkin seed oil twice a day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the decrease in IPSS from baseline to 1 month and 3 months was significantly higher in the tamsulosin group compared to the pumpkin group (P = 0.048 and P = 0.020, respectively)",
+   "sample_size_quote": "Of the 73 patients included in this study with a mean age of 63.59 \u00b1 7.04 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Inferior to tamsulosin (active comparator) but still produced significant within-group IPSS improvement and QoL benefit with no side effects.",
+   "registrations": [
+    "IRCT20120215009014N340"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin (Cucurbita pepo) seed oil matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35044013",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (1 of several natural products reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "men with androgenetic alopecia (11 clinical studies)",
+   "indication_as_stated": "male androgenetic alopecia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The selected clinical studies suggest that saw palmetto, caffeine, melatonin, marine extracts, rosemary oil, procyanidin, pumpkin seed oil, and cannabidiol oil might be considered in male AGA treatment.",
+   "sample_size_quote": "11 clinical studies meet the criteria for detailed review",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Pumpkin seed oil grouped with 7 other natural products without an isolated result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed oil reviewed among 8 natural products without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35910475",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "pumpkin seed bezoar",
+   "combination": false,
+   "route": "oral (seed ingestion/impaction)",
+   "population_as_stated": "1 patient (case report)",
+   "indication_as_stated": "rectal bezoar/bowel obstruction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The authors report a case of fecal impaction by pumpkin seed bezoars with abdominal pain",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seeds match label material (adverse ingestion outcome, not supplement dosing).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36449274",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (1 of several nutritional interventions reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "individuals with hair loss (30 articles reviewed)",
+   "indication_as_stated": "hair loss",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Studies of nutritional interventions with the highest-quality evidence showed the potential benefit of Viviscal, Nourkrin, Nutrafol, Lamdapil, Pantogar, capsaicin and isoflavone, omegas 3 and 6 with antioxidants, apple nutraceutical, total glucosides of paeony and compound glycyrrhizin tablets, zinc, tocotrienol, and pumpkin seed oil.",
+   "sample_size_quote": "30 articles were included: 17 randomized clinical trials (RCTs), 11 clinical studies (non-RCT), and 2 case series studies.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Pumpkin seed oil grouped with many other supplements in the 'highest-quality evidence' tier without an isolated result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed oil is one of many nutritional interventions in the highest-evidence tier, without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38402329",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "squalene extracted from pumpkin seed oil (sublingual microemulsion)",
+   "combination": false,
+   "route": "sublingual",
+   "population_as_stated": "602 COVID-19 patients (301 treatment, 301 control)",
+   "indication_as_stated": "COVID-19 mortality/re-hospitalization",
+   "dose_quote": "The treatment group received five drops of sublingual squalene every 4 h for 5 days plus standard treatment",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The sublingual form of squalene in the microemulsion form was associated with a significant decrease in the mortality rate (p < 0.001)",
+   "sample_size_quote": "among 850 admitted patients, 602 eligible COVID-19 patients were divided in two groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Isolated squalene compound, sublingual route, novel indication (COVID-19 mortality), not typical oral pumpkin-seed supplement use.",
+   "registrations": [
+    "IRCT20200927048848N3"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Squalene explicitly extracted from pumpkin seed oil, but delivered as an isolated compound via sublingual route.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38411727",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "pumpkin seeds (1 of several extracts reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "men with LUTS (narrative review)",
+   "indication_as_stated": "lower urinary tract symptoms/UTI",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Most evidence for male LUTS is based on extracts from saw palmetto berries, stinging nettle roots, and pumpkin seeds",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Pumpkin seeds grouped with saw palmetto and stinging nettle; review notes extraction/source differences limit extrapolation between products.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seeds reviewed alongside saw palmetto and stinging nettle without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39911983",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral supplement (l-Cystine, Serenoa repens, Cucurbita pepo, Pygeum africanum, vitamins)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "80 patients with chronic telogen effluvium or androgenetic alopecia",
+   "indication_as_stated": "hair loss (telogen effluvium/androgenetic alopecia)",
+   "dose_quote": "randomized to receive one capsule daily of the oral supplement or placebo for 6 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Hair density increased by 9.9 hairs/cm2 after 3 months and 12.3 hairs/cm2 after 6 months in the oral supplement group and it is statistically significant when compared to placebo.",
+   "sample_size_quote": "Eighty patients of both sexes aged 18-60 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Cucurbita pepo (pumpkin) is one of four active ingredients plus vitamins/micronutrients in a combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40026794",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "pumpkin seed bezoar",
+   "combination": false,
+   "route": "oral (seed ingestion/impaction)",
+   "population_as_stated": "1 patient (case report)",
+   "indication_as_stated": "rectal bezoar/constipation",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "this case reviews considerations around conservative management and helps increase awareness about the increased risk of seed bezoars when large amounts of whole seeds are consumed.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seeds match label material (adverse ingestion outcome from excessive whole-seed consumption).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40210174",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "chamomile-pumpkin seed oleogel (1 of several herbal interventions reviewed)",
+   "combination": true,
+   "route": "topical",
+   "population_as_stated": "psoriasis patients (20 RCTs, 1115 patients)",
+   "indication_as_stated": "psoriasis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Herbal interventions evaluated included Aloe vera, avocado oil, chamomile-pumpkin seed oleogel, indigo naturalis, kukui oil, mahonia aquifolium, turmeric, St. John's wort, and various complex herbal preparations.",
+   "sample_size_quote": "A total of 20 RCTs involving 1115 patients were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Pumpkin seed is combined with chamomile in a topical oleogel; not individually distinguished as effective or ineffective in the abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Combined with chamomile in a topical oleogel formulation, not an oral supplement, and not individually distinguished in results.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40475103",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (1 of 8 non-prescription monotherapies reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "AGA patients (13 studies)",
+   "indication_as_stated": "androgenetic alopecia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A total of 13 studies were included using procyanidin, cetirizine, caffeine, Oryza sativa bran, pumpkin seed oil, rosemary oil, saw palmetto, and watercress.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Pumpkin seed oil grouped with 7 other monotherapies; procyanidin and cetirizine had the most trials.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed oil reviewed as one of 8 monotherapies without an isolated result highlighted.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40654553",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (PSO) (1 of several topical actives reviewed)",
+   "combination": true,
+   "route": "topical",
+   "population_as_stated": "not stated (narrative review)",
+   "indication_as_stated": "hair loss (topical products)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "They have been studied mostly as combined formulations with other agents in randomized controlled trials or prospective cohort studies and have shown promising results.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Topical formulations, mostly studied in combination, small sample sizes noted as a limitation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Topical pumpkin seed oil products reviewed alongside many other actives, mostly as combination formulations.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40771449",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (1 of many herbal remedies reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated (narrative review)",
+   "indication_as_stated": "hair loss",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Studies have suggested potential benefits in promoting hair growth and treating various forms of HL.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Pumpkin seed oil grouped with many other herbal remedies; review notes small sample sizes and short durations as limitations across studies.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed oil reviewed among many herbal remedies without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41018334",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "seed cycling (flax, pumpkin, sesame, and sunflower seeds)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "women aged 15-49 with PMS or PCOS (10 studies, n=635)",
+   "indication_as_stated": "premenstrual syndrome/PCOS",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "seed cycling, particularly flax and sesame seeds, was associated with improved menstrual regularity, reduced PMS symptom severity, favorable modulation of sex hormone levels, and improvements in metabolic profiles.",
+   "sample_size_quote": "Ten studies (n = 635) with low to medium risk of bias",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Review explicitly attributes the benefit particularly to flax and sesame seeds, not pumpkin specifically.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin is one of four seeds in the 'seed cycling' protocol; the review attributes benefit particularly to flax and sesame, not pumpkin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41561175",
+   "design": "network_meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin seed oil (PSO) (1 of 16 dietary supplements compared)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "1,658 AGA patients (19 RCTs)",
+   "indication_as_stated": "androgenetic alopecia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "standardized plant extracts (Nutrafol), apple extract (AMSbzs, AMS), tocotrienols, pumpkin seed oil (PSO), and a compound extract of Cistanche and Laminaria (MK-R7) significantly improved hair density.",
+   "sample_size_quote": "A total of 19 RCTs involving 1,658 AGA patients were included",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Pumpkin seed oil (PSO) also showed higher hair regeneration scores than placebo in blind doctor assessments.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin seed oil (PSO) specifically named and compared with its own effect estimate in the network meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41934368",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "pumpkin (Cucurbita spp.) or its by-products (9 controlled clinical trials)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults with or without T2DM (n=316)",
+   "indication_as_stated": "glycemic control/type 2 diabetes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Pumpkin and its by-products have potential to be used as adjuvants in the prevention and/or treatment of T2DM.",
+   "sample_size_quote": "9 controlled clinical trials (n = 316 participants) were selected for qualitative analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors explicitly state clinical evidence for antihyperglycemic efficacy 'remains inconsistent.'",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Pumpkin (Cucurbita spp.) and its by-products directly matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42639569",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "seed cycling capsules (ZEST: flaxseed + pumpkin seed; ZEN: sesame/sunflower/psyllium/chasteberry)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "40 women aged 21-46 with PMS",
+   "indication_as_stated": "premenstrual syndrome",
+   "dose_quote": "ZEST, comprising organic flaxseed and organic pumpkin seed, was taken during days 1-14 of the cycle",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "participants demonstrated significant improvement in Menstrual Symptom Questionnaire (MSQ) scores",
+   "sample_size_quote": "A total of 40 women aged 21-46 years completed a baseline survey",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Open-label, single-arm design without a control group; pumpkin seed is one of two ingredients in the first-half-cycle capsule only.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seed is combined with flaxseed (ZEST) and the trial has no control group.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40421037",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "mixed tempeh (sunflower seeds, pumpkin seeds, adzuki beans, soybeans)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "57 older participants with mild cognitive impairment",
+   "indication_as_stated": "cognitive function",
+   "dose_quote": "Both groups were instructed to consume 100 g daily over a period of 4 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The mixed tempeh group showed improvement in three cognitive domains (global cognitive, memory, and verbal fluency) before and after the intervention, while the soy tempeh group experienced improvements in two domains (memory and visuospatial).",
+   "sample_size_quote": "This experimental study (a non-randomized controlled trial) included 57 older participants with mild cognitive impairment",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Non-randomized comparative trial (mixed tempeh vs. soy tempeh, no placebo); pumpkin seeds are one of three added ingredients.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pumpkin seeds are one of three added ingredients (with sunflower seeds and adzuki beans) in a fermented soy tempeh product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "25196580",
+  "24864154",
+  "41561175",
+  "41934368",
+  "33544448",
+  "21545273",
+  "20098586",
+  "34666728",
+  "30055778",
+  "31445363",
+  "32005419",
+  "1702340"
+ ],
+ "handoff": [
+  {
+   "pmid": "32668470",
+   "role": "safety",
+   "reason": "Cucurbitacin food-poisoning case report from bitter/wild-type pumpkin/zucchini."
+  },
+  {
+   "pmid": "35910475",
+   "role": "safety",
+   "reason": "Case report of pumpkin seed bezoar causing rectal impaction."
+  },
+  {
+   "pmid": "40026794",
+   "role": "safety",
+   "reason": "Case report of pumpkin seed bezoar causing constipation/bowel obstruction risk."
+  }
+ ],
+ "identity_notes": "The label identity covers multiple distinct pumpkin plant parts and preparations (whole seed, seed kernel, seed oil, seed extract, ointment/oleogel), per the coordinator's note to record plant part and preparation exactly as stated -- this was done in intervention_as_stated for every kept record. Two clearly separated evidence clusters dominate: (1) BENIGN PROSTATIC HYPERPLASIA / lower urinary tract symptoms, with the largest and best trial being the GRANU study (25196580, n=1,431) which found pumpkin seed's superiority over placebo was only descriptive, not statistically confirmed on its pre-specified primary criterion -- despite this, expert consensus/guideline-style pieces (31852006, 38411727) still credit pumpkin seed favorably; other BPH trials mostly compare pumpkin seed oil against active drug comparators (tamsulosin, prazosin, saw palmetto) rather than placebo, and are consistently non-inferior-to-inferior versus the drug, not clearly superior. (2) HAIR LOSS / ANDROGENETIC ALOPECIA, where a single well-designed RCT (24864154) found pumpkin seed oil significantly increased hair count vs. placebo, reinforced by inclusion in a recent network meta-analysis (41561175) with its own effect estimate -- this is probably the single strongest, cleanest positive signal for this identity. Retrieved literature is heavily contaminated by (a) pure plant-agronomy/agricultural-science studies of pumpkin cultivation (irrigation, salinity, fertilizer, heavy metals, nanoparticles, transcriptomics) with zero human relevance, and (b) false keyword matches where 'Pumpkin' is a trial nickname or medical device name unrelated to the plant (an insulin-pump-therapy trial for pediatric diabetes, and 'Pumpkin' as a specific pediatric ventricular-assist-device brand) -- both categories were rejected as off_topic. A safety signal cluster of pumpkin-seed bezoar/rectal-impaction case reports (from excessive whole-seed consumption) and one cucurbitacin food-poisoning case (from bitter/wild-type squash, not a standard supplement) was routed to handoff."
+}

@@ -1,0 +1,570 @@
+{
+ "canonical_id": "dandelion",
+ "screened": 33,
+ "kept": 13,
+ "rejected": [
+  {
+   "pmid": "22844289",
+   "reason": "animal_or_invitro",
+   "note": "Taraxacum hydroalcoholic extract tested on blood cells in mice."
+  },
+  {
+   "pmid": "26125671",
+   "reason": "off_topic",
+   "note": "Phytoremediation of cadmium-contaminated soil by weeds; plant/environmental science, not human health."
+  },
+  {
+   "pmid": "30986894",
+   "reason": "off_topic",
+   "note": "Dandelion cadmium/nickel tolerance in soil; plant/agronomy study, not human health."
+  },
+  {
+   "pmid": "32602832",
+   "reason": "animal_or_invitro",
+   "note": "In vitro E. coli antibiotic-resistance mechanism study; no human subjects, despite a HUMANS MeSH tag."
+  },
+  {
+   "pmid": "33562751",
+   "reason": "off_topic",
+   "note": "Heavy metals in mining-area soils; environmental risk study, not a dandelion supplementation study."
+  },
+  {
+   "pmid": "35487467",
+   "reason": "off_topic",
+   "note": "Polystyrene nanoplastics and lead toxicity in dandelion seedlings; plant/environmental science."
+  },
+  {
+   "pmid": "35940823",
+   "reason": "animal_or_invitro",
+   "note": "Dandelion peptides tested on human umbilical vein endothelial CELLS (HUVEC) in vitro, not a human clinical trial."
+  },
+  {
+   "pmid": "36205775",
+   "reason": "off_topic",
+   "note": "Lead/nanoplastic co-toxicity and flavonoid biosynthesis in dandelion; plant biology, not human health."
+  },
+  {
+   "pmid": "36297038",
+   "reason": "animal_or_invitro",
+   "note": "Taraxaci Herba tested in an OVX (ovariectomized rodent) bone-loss model."
+  },
+  {
+   "pmid": "36621376",
+   "reason": "off_topic",
+   "note": "D-Mannose-based dietary supplement RCT for UTI; dandelion not the studied intervention."
+  },
+  {
+   "pmid": "37660957",
+   "reason": "animal_or_invitro",
+   "note": "Taraxacum coreanum extract tested on Caco-2 cells in vitro, not a human clinical trial."
+  },
+  {
+   "pmid": "37746960",
+   "reason": "not_this_route",
+   "note": "External (topical) application of dandelion combined with borneol after jaw surgery; not oral route."
+  },
+  {
+   "pmid": "38718962",
+   "reason": "off_topic",
+   "note": "Micro/biodegradable plastics and dandelion plant physiology; environmental science, not human health."
+  },
+  {
+   "pmid": "38731087",
+   "reason": "off_topic",
+   "note": "WCFA19 probiotic RCT for body fat; dandelion not the studied intervention."
+  },
+  {
+   "pmid": "39034002",
+   "reason": "off_topic",
+   "note": "Dandelion transcriptome response to plastics/dibutyl phthalate stress; plant molecular biology."
+  },
+  {
+   "pmid": "39266792",
+   "reason": "off_topic",
+   "note": "Laparoscopic liver surgery technique paper; 'dandelion' used only as a visual pattern descriptor for hepatic pedicles, not the plant."
+  },
+  {
+   "pmid": "39519814",
+   "reason": "off_topic",
+   "note": "EPR spectroscopy study of free radicals in dandelion from air pollution; analytical/environmental chemistry."
+  },
+  {
+   "pmid": "41086186",
+   "reason": "animal_or_invitro",
+   "note": "Explicitly an in vitro comparative study of gallstone dissolution, not a human trial."
+  },
+  {
+   "pmid": "41295685",
+   "reason": "animal_or_invitro",
+   "note": "Akebia and dandelion tested in weaned rabbits, not humans."
+  },
+  {
+   "pmid": "41419042",
+   "reason": "animal_or_invitro",
+   "note": "Taraxasterol tested in mouse hepatocytes in vitro and a high-fat-diet MASLD mouse model, not humans."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "1838315",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "7 subjects described",
+    "patch testing"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "dandelion extract (patch test)",
+   "combination": false,
+   "route": "topical (patch test)",
+   "population_as_stated": "7 subjects with suspected dandelion dermatitis",
+   "indication_as_stated": "contact dermatitis/allergy",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "All were positive to dandelion extracts but only 2 reacted to the sesquiterpene-lactone-mix",
+   "sample_size_quote": "7 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Diagnostic patch-testing study of contact allergy, not an oral-supplement efficacy trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Dandelion extract allergy/contact-dermatitis signal directly relevant to the identity's safety profile.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "3827282",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "9-year-old boy described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "dandelion (Taraxacum officinale) (patch test panel)",
+   "combination": true,
+   "route": "topical (patch test)",
+   "population_as_stated": "1 child (9-year-old boy) with atopy",
+   "indication_as_stated": "Compositae contact dermatitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Positive patch test reactions were 2+ for dandelion (Taraxacum officinale)... among other Compositae plants",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Dandelion tested as one of many Compositae-family allergens in a single pediatric case.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Dandelion specifically identified as one of the positive contact allergens.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16093238",
+   "design": "systematic_review",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; no abstract text retrieved"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dandelion (Taraxacum officinale)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "general evidence review",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No abstract text retrieved (Natural Standard evidence-based monograph); full text needed for content.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Dedicated systematic review of dandelion; full text required for detail.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22419300",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "12 RCTs, 1954 participants"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "compound dandelion soup (1 of 12 Chinese herbal formulations reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "1954 participants across 12 RCTs (sore throat/tonsillitis)",
+   "indication_as_stated": "acute purulent tonsillitis (sore throat)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "compound dandelion soup was more effective than sodium penicillin for acute purulent tonsillitis (OR 5.06; 95% CI 1.70 to 15.05)",
+   "sample_size_quote": "12 studies involving 1954 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Compound multi-herb formulation compared against an active antibiotic comparator, not placebo; review authors call overall trial quality poor-to-medium and do not recommend any formulation as an effective remedy.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "'Compound dandelion soup' is a multi-herb TCM decoction, not an isolated dandelion supplement; efficacy cannot be attributed to dandelion alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27682493",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "80 patients described",
+    "Clinical Trial pub type"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "compound monoammonium glycyrrhizinate combined with dandelion",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "80 patients with acute paraquat poisoning",
+   "indication_as_stated": "acute paraquat poisoning",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the TCM group had significantly lower incidence rates of ulceration of oral mucosa, pulmonary fibrosis, and MODS and a significantly lower mortality rate than the routine treatment group (P<0.05)",
+   "sample_size_quote": "80 patients with acute paraquat poisoning who were admitted to our hospital",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Dandelion given only in combination with glycyrrhizinate as an adjunct to routine poisoning treatment; effect cannot be isolated to dandelion.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Dandelion combined with monoammonium glycyrrhizinate; not dandelion alone, and indication (acute poisoning) is far from typical oral-supplement use.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30554882",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "238 outpatients randomized"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "BNO 1030 (Imupret) \u2014 marshmallow root, chamomile, horsetail, walnut leaves, yarrow, oak bark, dandelion herb",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "238 outpatients aged 6-18 years",
+   "indication_as_stated": "acute non-bacterial tonsillitis",
+   "dose_quote": null,
+   "primary_outcome_quote": "sore throat dynamics, throat irritation, general condition, treatment responders",
+   "primary_result_quote": "increase of the number of treatment responders to 81.6% (p < 0.005) versus the control",
+   "sample_size_quote": "randomised 238 outpatients aged 6-18 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "7-ingredient combination product; dandelion herb is one component, effect cannot be isolated to dandelion; pediatric population.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Dandelion herb is 1 of 7 active ingredients in a combination phytotherapy product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31951290",
+   "design": "case_report",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; no abstract text retrieved"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "dandelion juice (oral ingestion)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "vesicular hand eczema (possible allergic trigger)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No abstract text retrieved; title framing ('Treatment or Challenge?') suggests dandelion may have triggered rather than treated the eczema.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral dandelion juice matches label material; full text needed to determine direction.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36636365",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "36-year-old female described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "herbal liver detox tea (burdock root, stinging nettle, cleavers, dandelion root, lemon peel, lemon myrtle)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "1 patient (36-year-old female)",
+   "indication_as_stated": "drug-induced liver injury",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "developed a clinically significant acute liver injury with a cholestatic pattern due to an over-the-counter herbal liver detox tea",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Dandelion root is one of six ingredients in the implicated tea; causal ingredient not isolated.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Dandelion root is one of six ingredients in a combination herbal tea implicated in liver injury; causal attribution to dandelion specifically is not established.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38029215",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "42 women enrolled, previously-randomized subset",
+    "NCT03756324"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Pugongying granules (dandelion extract)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "women with unilateral lactational mastitis (37 paired pre/post samples; 20 dandelion, 17 cefdinir)",
+   "indication_as_stated": "lactational mastitis",
+   "dose_quote": "a 3-day course of either Pugongying granules (20 women) or cefdinir (17 women)",
+   "primary_outcome_quote": "body temperature, breast pain VAS score, breastmilk microbiome",
+   "primary_result_quote": "There was no significant difference in fever and pain between the Pugongying group and cefdinir group... Pugongying granules enhanced microbial diversity in breastmilk samples",
+   "sample_size_quote": "42 paired breastmilk samples... 37 paired pre- and post-treatment breastmilk samples",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Clinical symptom outcomes equivalent to antibiotic comparator (not superiority); microbiome finding is a secondary/mechanistic outcome.",
+   "registrations": [
+    "NCT03756324"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Dandelion extract (as patented Pugongying granules) matches label material; secondary analysis of a prior RCT (NCT03756324).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41554454",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "comprehensive multi-database literature review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "genus Taraxacum (dandelion, 55 species reviewed)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated (ethnobotanical/pharmacological review)",
+   "indication_as_stated": "broad traditional uses (diuretic, laxative, anti-inflammatory, digestive aid, etc.)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "dandelion, a medicinal and edible plant, has been extensively utilized in traditional Chinese medicine since the 7th century... exhibiting a range of biological activities, including anti-cancer, anti-inflammatory, and antioxidant effects",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Ethnobotanical/phytochemical/toxicological review, not a synthesis of controlled human efficacy trials; authors explicitly call for more in vivo/human research.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews the entire Taraxacum genus (55 species) rather than Taraxacum officinale specifically.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41659807",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "130 healthy adults randomized",
+    "CTRI/2023/06/054492"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "plant-based nutraceutical (turmeric, dandelion, milk thistle, ginger)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "130 healthy adults",
+   "indication_as_stated": "liver function support",
+   "dose_quote": "60 mL twice daily for 180 days",
+   "primary_outcome_quote": "change in liver function tests (ALT, AST, ALP, GGT) from baseline",
+   "primary_result_quote": "Mean improvements in ALT, AST, ALP, and GGT were significantly greater with the nutraceutical product than placebo (p <= 0.001)",
+   "sample_size_quote": "130 participants enrolled in the trial; 65 were randomized to each group",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "4-ingredient combination liquid product; dandelion's individual contribution cannot be isolated.",
+   "registrations": [
+    "CTRI/2023/06/054492"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Dandelion is 1 of 4 herbal extracts in a combination liquid nutraceutical.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41909037",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "30 participants randomized (15/arm)",
+    "CTRI/2021/08/035359"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "organic liquid nutraceutical (turmeric extract, dandelion powder, milk thistle extract, ginger powder)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "30 participants with MASLD (fatty liver grades 1-3)",
+   "indication_as_stated": "metabolic dysfunction-associated steatotic liver disease (MASLD)",
+   "dose_quote": "60 mL oral solution twice daily with a meal for 60 days",
+   "primary_outcome_quote": "proportion with improvement in ultrasonography-based fatty liver grading at Day 60",
+   "primary_result_quote": "A significantly higher proportion of patients in the nutraceutical product group had fatty liver grade improvement at Day 60 vs. placebo [60.0% (9/15) vs. 13.3% (2/15); p = 0.008]",
+   "sample_size_quote": "Fifteen patients each were enrolled in the test product and placebo groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Very small (n=15/arm), single-center, preliminary phase 2 trial; dandelion is 1 of 4 combination ingredients.",
+   "registrations": [
+    "CTRI/2021/08/035359"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Dandelion powder is 1 of 4 herbal ingredients in a combination liquid nutraceutical.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42398668",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "14 physically active young adults",
+    "open-label counterbalanced crossover"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "commercially available dandelion root powder (~2.1 g, 4 capsules)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "14 physically active young adults",
+   "indication_as_stated": "purported diuretic effect (weight-category sports use)",
+   "dose_quote": "four capsules providing a total of ~2.1 g of a commercially available dandelion root powder",
+   "primary_outcome_quote": "cumulative urine output over the 4 hr following ingestion",
+   "primary_result_quote": "cumulative urine output was similar regardless of whether dandelion root powder was co-ingested with a large bolus of water... a lack of support for the purported diuretic effect of dandelion",
+   "sample_size_quote": "physically active young adults (n = 14; M/F, 12/2)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Single-dose acute study; explicitly tests the specific label-relevant use claim (diuretic effect) with a clean single-ingredient design.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Commercially available dandelion root powder capsules matches label material exactly.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "42398668",
+  "38029215",
+  "22419300",
+  "30554882",
+  "41659807",
+  "41909037",
+  "16093238",
+  "41554454",
+  "36636365",
+  "1838315"
+ ],
+ "handoff": [
+  {
+   "pmid": "1838315",
+   "role": "safety",
+   "reason": "Dandelion contact-allergy/dermatitis case series (patch testing)."
+  },
+  {
+   "pmid": "3827282",
+   "role": "safety",
+   "reason": "Pediatric Compositae contact dermatitis with a positive dandelion patch test."
+  },
+  {
+   "pmid": "31951290",
+   "role": "safety",
+   "reason": "Possible allergic reaction to oral dandelion juice in a hand-eczema patient (title framing only; full text needed)."
+  },
+  {
+   "pmid": "36636365",
+   "role": "safety",
+   "reason": "Drug-induced liver injury case from a multi-herb detox tea containing dandelion root."
+  }
+ ],
+ "identity_notes": "No large single-ingredient RCT of isolated dandelion (leaf, root, or whole herb) exists for the most commonly marketed label claims (diuretic, digestive/liver support). The single clean single-agent human RCT in this scope (PMID 42398668) is a small (n=14), single-dose, acute crossover trial that found NO diuretic effect -- directly contradicting the traditional/marketed diuretic claim. Most other kept efficacy records are MULTI-INGREDIENT combination products (BNO 1030/Imupret, turmeric+dandelion+milk-thistle+ginger liver nutraceuticals, compound dandelion soup, glycyrrhizinate+dandelion for paraquat poisoning, herbal detox tea) where dandelion's individual contribution cannot be isolated from the abstract data -- these were kept but flagged related_form_differs/combination:true throughout. Applicability caveat requested by the brief: the 'Pugongying granules' extract used for lactational mastitis (PMID 38029215) and the compound-dandelion-soup sore-throat formulations (PMID 22419300) are China-specific patented/traditional preparations, not generic 'dandelion extract' as typically labeled on US supplement products. Retrieved literature is dominated by dandelion-as-a-plant environmental/agronomy studies (heavy metal/microplastic stress response) and in vitro or animal mechanistic work, all rejected as off_topic/animal_or_invitro. Safety signal: dandelion is a known Compositae/Asteraceae contact allergen (2 case series, PMID 1838315 and 3827282), relevant to any handoff safety review given dandelion's frequent co-labeling with other Asteraceae botanicals."
+}

@@ -1,0 +1,908 @@
+{
+ "canonical_id": "d_ribose",
+ "screened": 44,
+ "kept": 24,
+ "rejected": [
+  {
+   "pmid": "8880031",
+   "reason": "not_this_route",
+   "note": "Slow-bolus/infusion IV injection of ribose during a nuclear cardiac stress test, not oral supplementation."
+  },
+  {
+   "pmid": "12427115",
+   "reason": "off_topic",
+   "note": "Ambroxol and peroxynitrite study; not a D-ribose supplementation study (likely a false keyword match)."
+  },
+  {
+   "pmid": "19200398",
+   "reason": "not_this_route",
+   "note": "D-Ribose administered as a 4.5-hour IV infusion during dobutamine stress echocardiography, not oral."
+  },
+  {
+   "pmid": "19793592",
+   "reason": "different_substance",
+   "note": "2-Deoxy-D-ribose (a distinct sugar, not D-ribose) tested on a pancreatic beta-cell line in vitro."
+  },
+  {
+   "pmid": "20940341",
+   "reason": "off_topic",
+   "note": "Origin-of-life chemistry study of chiral histidine selection by D-ribose RNA; not a supplementation study."
+  },
+  {
+   "pmid": "22633049",
+   "reason": "different_substance",
+   "note": "Autoinducer-2 (AI-2) bacterial quorum-sensing molecule, structurally related but distinct from the D-ribose supplement; in vitro biofilm study."
+  },
+  {
+   "pmid": "25789547",
+   "reason": "animal_or_invitro",
+   "note": "D-ribose supplementation studied in horses (equine), not humans."
+  },
+  {
+   "pmid": "28195671",
+   "reason": "off_topic",
+   "note": "Trachycladines synthesis and anticancer evaluation; chemistry paper, not a D-ribose supplementation study."
+  },
+  {
+   "pmid": "32533303",
+   "reason": "off_topic",
+   "note": "Ribose-5-phosphate isomerase enzyme biochemistry review; not a human supplementation study."
+  },
+  {
+   "pmid": "33431610",
+   "reason": "off_topic",
+   "note": "Antisense oligonucleotide drug conjugate chemistry (2'-methoxyethyl-D-ribose backbone); not the D-ribose supplement."
+  },
+  {
+   "pmid": "34114299",
+   "reason": "off_topic",
+   "note": "Untargeted metabolomics of methamphetamine abusers; not a D-ribose supplementation study."
+  },
+  {
+   "pmid": "34647003",
+   "reason": "animal_or_invitro",
+   "note": "D-Ribose-L-Cysteine tested in cisplatin-treated Sprague-Dawley rats, not humans."
+  },
+  {
+   "pmid": "36438006",
+   "reason": "animal_or_invitro",
+   "note": "Systematic review of cognitive/behavioral tests in RODENTS treated with D-ribose."
+  },
+  {
+   "pmid": "37219453",
+   "reason": "off_topic",
+   "note": "OPC-167832 tuberculosis drug PK/safety study; unrelated to the D-ribose supplement."
+  },
+  {
+   "pmid": "38243296",
+   "reason": "off_topic",
+   "note": "Quabodepistat tuberculosis treatment protocol; unrelated to the D-ribose supplement."
+  },
+  {
+   "pmid": "38369503",
+   "reason": "animal_or_invitro",
+   "note": "Autoinducer-2/Lactobacillus rhamnosus GG studied in a neonatal mouse model; also a different substance (AI-2) than D-ribose."
+  },
+  {
+   "pmid": "38909687",
+   "reason": "off_topic",
+   "note": "Review of candidate anti-tuberculosis medicines; unrelated to the D-ribose supplement."
+  },
+  {
+   "pmid": "39830428",
+   "reason": "off_topic",
+   "note": "GLP-1 injection case report on mitochondrial dysfunction/migraines; not a D-ribose study."
+  },
+  {
+   "pmid": "40440331",
+   "reason": "off_topic",
+   "note": "Synthesis of novel antitubercular oxadiazole compounds; unrelated to the D-ribose supplement."
+  },
+  {
+   "pmid": "40831749",
+   "reason": "off_topic",
+   "note": "First-in-human study of BTZ-043 for tuberculosis; unrelated to the D-ribose supplement."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "6122873",
+   "design": "case_report",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; no abstract text retrieved"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "1 patient with myoadenylate deaminase deficiency",
+   "indication_as_stated": "myoadenylate deaminase deficiency (metabolic myopathy)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "No abstract text retrieved; title reports a beneficial effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "D-ribose matches label material; full text needed for detail.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8815168",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "5 patients described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "60 g D-ribose daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "5 patients with McArdle's disease",
+   "indication_as_stated": "McArdle's disease exercise intolerance",
+   "dose_quote": "60 g D-ribose daily... for seven days",
+   "primary_outcome_quote": "peak oxygen consumption / level of leg fatigue during exercise testing",
+   "primary_result_quote": "D-Ribose does not appear to be of benefit to patients with McArdle's disease",
+   "sample_size_quote": "5 patients with McArdle's disease",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Patients also disliked taking the ribose (tolerability issue).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9989253",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "1 patient described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "10 mmol/kg/day of D-ribose",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1 patient with adenylosuccinase deficiency",
+   "indication_as_stated": "inherited purine synthesis disorder (adenylosuccinase deficiency)",
+   "dose_quote": "Oral supplementation of 10 mmol/kg/day of D-ribose",
+   "primary_outcome_quote": "seizure frequency and behavior",
+   "primary_result_quote": "D-Ribose administration was accompanied by a slight improvement of behaviour and a progressive reduction of seizure frequency, which increased dramatically upon two attempts to withdraw the drug",
+   "sample_size_quote": "a patient with an inherited deficit of adenylosuccinase",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Single case, rare inborn error of metabolism, not typical supplement-label use.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12660407",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "19 trained males"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (10 g/d for 5 d)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "19 trained males",
+   "indication_as_stated": "anaerobic exercise capacity",
+   "dose_quote": "capsules containing either 5 g of a dextrose placebo (P) or D-ribose (R) twice daily (10 g/d) for 5 d",
+   "primary_outcome_quote": "total work output during Wingate anaerobic sprint tests",
+   "primary_result_quote": "oral ribose supplementation (10 g/d for 5 d) does not affect anaerobic exercise capacity or metabolic markers in trained subjects",
+   "sample_size_quote": "19 trained males",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "One secondary work-output comparison (2nd sprint decline) favored ribose; overall interpreted as no ergogenic effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14607200",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "15 patients described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral D-ribose",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "15 patients with chronic coronary artery disease and CHF",
+   "indication_as_stated": "congestive heart failure (diastolic function/QoL)",
+   "dose_quote": null,
+   "primary_outcome_quote": "myocardial functional parameters by echocardiography and quality of life (SF-36)",
+   "primary_result_quote": "D-Ribose also demonstrated a significant improvement of the patient's quality of life (417+/-118 vs. 467+/-128, P<=0.01)",
+   "sample_size_quote": "15 patients with chronic coronary artery disease and CHF",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Small feasibility study; multiple echocardiographic diastolic parameters also improved.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16521849",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "12 male cyclists"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "ribose (3 g ribose + 150 microg folate)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "12 moderately trained male cyclists",
+   "indication_as_stated": "anaerobic exercise capacity",
+   "dose_quote": "150 mL placebo or ribose (3 g ribose + 150 microg folate)",
+   "primary_outcome_quote": "anaerobic capacity and metabolic markers during high-intensity cycling",
+   "primary_result_quote": "D-ribose supplementation has no impact on anaerobic exercise capacity and metabolic markers after high-intensity cycling exercise",
+   "sample_size_quote": "Twelve moderately trained male cyclists",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Ribose given combined with folate, not alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Ribose combined with folate in a single drink; effect cannot be fully isolated to ribose alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18178380",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "17 healthy volunteers"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (2000 mg/d)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "17 healthy volunteers",
+   "indication_as_stated": "mental fatigue",
+   "dose_quote": "D-ribose (2000 mg/d)... for 8 d",
+   "primary_outcome_quote": "fatigue-inducing mental task performance and subjective fatigue",
+   "primary_result_quote": "Administration of D-ribose had no effect...research subsequent to our study design has shown that D-ribose dosing higher than we used is needed to see a clinical effect and therefore no conclusions can be made from this study",
+   "sample_size_quote": "17 healthy volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "Authors themselves caution the dose used was likely too low to detect an effect; caffeine (comparator arm) was positive.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19055337",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "2 related individuals (father and son)"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (5-g doses, titrated up to three times daily)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "2 men (ages 71 and 47) with familial restless legs syndrome",
+   "indication_as_stated": "restless legs syndrome",
+   "dose_quote": "5-g doses of D-ribose daily... at all meals, breakfast, lunch, and dinner",
+   "primary_outcome_quote": "severity/onset of restless legs syndrome symptoms",
+   "primary_result_quote": "a further increase in the daily dose of D-ribose eliminated their daily symptoms and the symptoms at night were of a lesser degree",
+   "sample_size_quote": "two affected male individuals, a father and son",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "N=2 case report, dose-titration design, no placebo control.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19627222",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "7 healthy volunteers"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "7 g of ribose in 250 mL of water",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "7 healthy volunteers",
+   "indication_as_stated": "oxidative stress during hypoxic exercise",
+   "dose_quote": "7 g of ribose in 250 mL of water",
+   "primary_outcome_quote": "urinary malondialdehyde (MDA) and plasma reduced glutathione during hypoxic exercise",
+   "primary_result_quote": "Ribose demonstrated a beneficial trend in lower MDA and reduced glutathione levels during hypoxic stress",
+   "sample_size_quote": "Seven healthy volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors describe result as a 'beneficial trend,' small pilot study (n=7).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21154353",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Cochrane systematic review of RCTs"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (1 of several treatments reviewed for McArdle disease)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "McArdle disease patients (13 included RCTs, largest n=19)",
+   "indication_as_stated": "McArdle disease (exercise intolerance)",
+   "dose_quote": null,
+   "primary_outcome_quote": "objective assessment of exercise endurance",
+   "primary_result_quote": "There was no benefit with: D-ribose, glucagon, verapamil, vitamin B(6), branched chain amino acids, dantrolene sodium, and high dose creatine",
+   "sample_size_quote": "The largest treatment trial included 19 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Cochrane review; D-ribose specifically named as showing no benefit among 7 tested agents.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "D-ribose specifically named with a clear negative verdict.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21693564",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "366 patients (308 received D-ribose)"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (perioperative metabolic protocol)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "366 patients undergoing off-pump coronary artery bypass (2004-2008)",
+   "indication_as_stated": "cardiac surgery recovery (cardiac index)",
+   "dose_quote": null,
+   "primary_outcome_quote": "postrevascularization cardiac index change",
+   "primary_result_quote": "D-ribose patients enjoyed a greater improvement in cardiac index postrevascularization compared with non-D-ribose patients (37% vs. 17%, respectively, p < 0.001)",
+   "sample_size_quote": "A perioperative metabolic protocol was used in 366 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Retrospective, non-randomized comparison; D-ribose given as part of a broader perioperative metabolic protocol, likely via a non-oral perioperative route not specified in the abstract \u2014 this is a surgical/perioperative use case, not typical oral-supplement label use.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "unclear",
+   "label_material_note": "Route not stated; context (perioperative surgical protocol) suggests this may not be the oral label-use route.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22692117",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "32 men"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "ribose-containing repletion drink (2.2 g D-ribose)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "32 men",
+   "indication_as_stated": "endurance training/body composition",
+   "dose_quote": "370 kcal, 76 g carbohydrate, 14 g protein, 2.2 g d-ribose",
+   "primary_outcome_quote": "VO2peak, time to exhaustion, percent body fat, fat-free mass",
+   "primary_result_quote": "the TEST drink did not augment BW, V(O2)peak, or TTE beyond carbohydrates alone, it did improve body composition (%fat and FFM) within the first 3-6 weeks",
+   "sample_size_quote": "Thirty-two men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Ribose is a minor component (2.2 g) of a larger carbohydrate/protein drink; effect cannot be isolated to ribose.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "D-ribose is a small component (2.2 g of 370 kcal) of a multi-ingredient recovery drink.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24272966",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "12 healthy adult subjects"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "D-ribose powder for oral solution (2.5, 5.0, 10.0 g)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "12 healthy adult subjects",
+   "indication_as_stated": "pharmacokinetics/dose proportionality/food effect",
+   "dose_quote": "D-ribose powder for oral solution, 2.5, 5.0, and 10.0 g",
+   "primary_outcome_quote": "Cmax, AUC, Tmax, and dose-related serum glucose/insulin changes",
+   "primary_result_quote": "D-ribose was generally safe and well tolerated in the dose range studied",
+   "sample_size_quote": "12 healthy, adult subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "PK study; notes dose-related decreases in serum glucose (up to 30% of baseline) \u2014 a relevant safety/mechanistic finding.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose solution matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25391139",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Cochrane review update, 13 RCTs, 85 participants total"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (1 of several treatments reviewed for McArdle disease)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "85 participants across 13 included RCTs (McArdle disease)",
+   "indication_as_stated": "McArdle disease (exercise intolerance)",
+   "dose_quote": null,
+   "primary_outcome_quote": "objective assessment of exercise endurance",
+   "primary_result_quote": "There was no benefit with: D-ribose,glucagon, verapamil, vitamin B6, branched chain amino acids, dantrolene sodium, and high-dose creatine... Oral ribose caused diarrhoea and symptoms suggestive of hypoglycaemia including light-headedness and hunger",
+   "sample_size_quote": "included studies involved a total of 85 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Updated Cochrane review (2014) of the same 2010 review (PMID 21154353); explicitly reports oral ribose caused diarrhoea and hypoglycemia-like symptoms as adverse effects.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "D-ribose specifically named with a clear negative verdict and adverse-effect detail.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28616881",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "22 studies reviewed"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose supplementation (1 of several dietary modifications reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "chronic fatigue syndrome patients (22 studies)",
+   "indication_as_stated": "chronic fatigue syndrome",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Positive outcomes were highlighted in some included studies for polyphenol intakes in animal studies, D-ribose supplementation in humans and aspects of symptom alleviation for one of three polynutrient supplement studies",
+   "sample_size_quote": "Twenty-two studies met the inclusion criteria",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "D-ribose is one of several dietary interventions reviewed together; overall evidence described by authors as 'narrow and inconsistent.'",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "D-ribose specifically named among reviewed interventions.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29296106",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "26 healthy subjects"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (DR), 10 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "26 healthy subjects (split by fitness level)",
+   "indication_as_stated": "exercise performance and recovery",
+   "dose_quote": "10 g/day of DR to 10 g/day of dextrose (DEX, control)",
+   "primary_outcome_quote": "muscular performance/recovery (power output, RPE, creatine kinase) during multi-day exercise",
+   "primary_result_quote": "Mean and peak PO increased significantly from day 1 to day 3 for the DR trial compared to DEX in the LVO2 group",
+   "sample_size_quote": "26 healthy subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Benefit only observed in the lower-fitness (LVO2) subgroup; no difference in the higher-fitness (HVO2) subgroup.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29606104",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "NCT03133793 (protocol paper)"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "ubiquinol and/or D-ribose",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "patients with heart failure with preserved ejection fraction (HFpEF)",
+   "indication_as_stated": "HFpEF symptom burden",
+   "dose_quote": null,
+   "primary_outcome_quote": "KCCQ, Vigor subscale, EF, 6-min walk test after 12 weeks",
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Study protocol only, no results reported; results paper is PMID 35644694.",
+   "registrations": [
+    "NCT03133793"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "D-ribose matches label material; protocol precursor to the completed trial.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31861049",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "53 patients enrolled"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "creatine, D-ribose, vitamin B1, and vitamin B6 (nutraceutical composition)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "53 patients with ischemic heart disease + exercise program",
+   "indication_as_stated": "exercise/stress tolerance in ischemic heart disease",
+   "dose_quote": null,
+   "primary_outcome_quote": "cardiac double product, delta double product, chronotropic index at 6 months",
+   "primary_result_quote": "the cardiac double product at the peak of the load, the delta double product, and the chronotropic index were higher in the active treatment group than in the placebo group",
+   "sample_size_quote": "53 patients were enrolled and randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "4-ingredient combination nutraceutical combined with a physical exercise program; industry-supplied product (Giellepi S.p.A.); authors caution the double product's use as a surrogate is not well established.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "D-ribose is 1 of 4 active ingredients (with creatine, B1, B6) in a combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32778175",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "21 untrained male college students"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (15 g/dose)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "21 untrained male college students",
+   "indication_as_stated": "delayed onset muscle soreness (DOMS)",
+   "dose_quote": "a 200 ml solution containing 15 g D-ribose 1-h before, 1-h, 12-h, 24-h, and 36-h after exercise",
+   "primary_outcome_quote": "muscle soreness (VAS) at 24-h and 48-h post-exercise",
+   "primary_result_quote": "muscle soreness after 24-h and 48-h in the second exercise session were significantly lower (p < 0.01) than was experienced in the first exercise session",
+   "sample_size_quote": "21 untrained male college students",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Within-subject comparison (2nd exercise bout vs. 1st, with D-ribose only in the 2nd) rather than a clean parallel/crossover comparison against placebo for this specific outcome; no difference in isokinetic strength or antioxidant capacity.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral D-ribose matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35644694",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "216 patients, phase 2 RCT"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "d-ribose powder (15 g/d) with/without ubiquinol",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "216 patients with HFpEF (age >=50, EF >=50%)",
+   "indication_as_stated": "heart failure with preserved ejection fraction",
+   "dose_quote": "d-ribose powder (15 g/d)",
+   "primary_outcome_quote": "KCCQ clinical summary score, vigor score, ejection fraction, BNP, lactate/ATP ratio, 6-min walk test",
+   "primary_result_quote": "Treatment with ubiquinol and/or d-ribose significantly improved the KCCQ clinical summary score (17.30 to 25.82 points)...and EF (7.08% to 8.03%) and reduced B-type natriuretic peptides",
+   "sample_size_quote": "216 patients with HFpEF",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "4-arm factorial design (placebo/placebo, ubiquinol alone, D-ribose alone, both); abstract pools 'ubiquinol and/or d-ribose' results without isolating the D-ribose-alone arm; no significant change in 6-min walk test.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "D-ribose is one of two tested agents in a factorial design that includes a D-ribose-alone arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35684021",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "triple-blind pilot trial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "nicotinamide + D-ribose (RiaGev), 1520 mg twice daily",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "healthy middle-aged adults",
+   "indication_as_stated": "NAD+ metabolome enhancement / fatigue",
+   "dose_quote": "1520 mg RiaGev twice daily for 7 days",
+   "primary_outcome_quote": "NAD+ metabolome change in blood (especially NADP+)",
+   "primary_result_quote": "significantly increased the NAD+ metabolome in blood, especially NADP+ by 27% compared to the placebo group (p = 0.033)",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Combination product (nicotinamide + D-ribose); D-ribose's individual contribution not isolated.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "D-ribose combined with nicotinamide as a fixed-dose combination product (RiaGev); effect cannot be isolated to D-ribose alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39464682",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "19 RCTs included, 2018-2023"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose (1 of several nutritional supplements reviewed for heart failure)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "heart failure patients (19 RCTs)",
+   "indication_as_stated": "heart failure management",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "supplementation with thiamine, ubiquinol, D-ribose, and L-arginine enhances left ventricular ejection fraction",
+   "sample_size_quote": "19 were finalized for inclusion",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "D-ribose is grouped with 3 other supplements in a single pooled statement; individual D-ribose effect size not given in the abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "D-ribose specifically named among the supplements shown to enhance ejection fraction.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41592337",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "68 patients randomized"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "D-ribose combined with either creatine+CoQ10+vitamin E, or ubiquinol",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "68 patients with heart failure and reduced ejection fraction (HFrEF)",
+   "indication_as_stated": "heart failure with reduced ejection fraction (HFrEF)",
+   "dose_quote": null,
+   "primary_outcome_quote": "6-min walk test, peak VO2, perceived exertion after 12-wk HIIT",
+   "primary_result_quote": "Study participants supplemented with creatine + D-ribose+ CoQ10 + Vit. E demonstrated significantly greater improvements in functional exercise capacity...compared with subjects supplemented with ubiquinol + D-ribose",
+   "sample_size_quote": "Sixty-eight patients with heart failure with reduced ejection fraction were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Comparative trial between two different multi-ingredient combinations (both containing D-ribose), not vs. placebo; D-ribose's individual contribution cannot be isolated in either arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "D-ribose present in BOTH compared combination products; trial cannot isolate D-ribose's individual effect.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42707998",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review of 89 studies"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "D-ribose (1 of many oral nutritional supplements reviewed for cardiac surgery)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "cardiac surgery patients (narrative synthesis of 89 studies)",
+   "indication_as_stated": "perioperative nutritional support in cardiac surgery",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Moderate/promising support: coenzyme Q10, vitamin C, melatonin, D-ribose, citrulline, glutamine",
+   "sample_size_quote": "A total of 89 relevant studies were identified",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "D-ribose placed in a 'moderate/promising support' tier alongside 5 other supplements; no D-ribose-specific quantitative result given.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "D-ribose specifically named and tiered in a cardiac-surgery nutritional-support recommendation framework.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "21154353",
+  "25391139",
+  "14607200",
+  "35644694",
+  "12660407",
+  "8815168",
+  "29296106",
+  "32778175",
+  "24272966",
+  "31861049"
+ ],
+ "handoff": [
+  {
+   "pmid": "21693564",
+   "role": "safety/dosing",
+   "reason": "D-ribose used as part of a perioperative metabolic protocol during cardiac surgery \u2014 non-standard, likely non-oral route context."
+  },
+  {
+   "pmid": "24272966",
+   "role": "pharmacokinetic",
+   "reason": "PK/dose-proportionality study noting dose-related serum glucose decreases up to 30% of baseline."
+  },
+  {
+   "pmid": "25391139",
+   "role": "safety",
+   "reason": "Cochrane review reports oral ribose caused diarrhoea and hypoglycemia-like symptoms as adverse effects."
+  }
+ ],
+ "identity_notes": "D-ribose evidence splits cleanly by indication. In McArdle disease (Glycogen Storage Disease type V), two Cochrane systematic reviews (PMID 21154353, updated as 25391139) explicitly report NO benefit from D-ribose and, in the updated review, note adverse effects (diarrhoea, hypoglycemia-like symptoms) \u2014 this is the strongest and most negative evidence in the set. In athletic/exercise performance (anaerobic capacity, recovery, DOMS), results are mixed-to-null in the largest, cleanest single-agent trials (12660407, 16521849, 18178380) with occasional subgroup-specific positive findings (29296106: benefit only in lower-fitness subjects; 32778175: DOMS reduction). In cardiovascular/heart-failure indications, D-ribose is almost always tested as one component of a MULTI-INGREDIENT combination product (with ubiquinol, creatine, CoQ10, vitamin E, vitamin B1/B6, or nicotinamide) rather than alone \u2014 the single positive-leaning factorial RCT with a D-ribose-alone arm (35644694, n=216, HFpEF) reports pooled 'ubiquinol and/or d-ribose' results without isolating the D-ribose-alone arm's effect in the abstract, so the isolated-ribose effect size cannot be confirmed from this scope. Two IV/infusion route studies (8880031, 19200398, both nuclear cardiology stress-imaging contexts) were rejected as not_this_route since the label material is an oral supplement. A perioperative surgical protocol (21693564) used D-ribose in an ambiguous, likely non-oral route and is flagged for reviewer attention. Several off-topic false-positive retrievals occurred from keyword overlap with unrelated chemistry (antisense-oligonucleotide '2'-methoxyethyl-D-ribose' backbones, tuberculosis drug trials, Ribose-5-phosphate isomerase enzymology, Autoinducer-2 bacterial signaling molecule) \u2014 none of these concern the dietary supplement D-ribose."
+}

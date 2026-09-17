@@ -1,0 +1,20 @@
+{
+ "summary": {
+  "unmapped_slots": 6,
+  "distinct_unmapped_names": 2
+ },
+ "items": [
+  {
+   "normalized_name": "natural colors",
+   "slots": 3,
+   "products": 3,
+   "brands": 2
+  },
+  {
+   "normalized_name": "soya lecithin",
+   "slots": 3,
+   "products": 3,
+   "brands": 2
+  }
+ ]
+}
