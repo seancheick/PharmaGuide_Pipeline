@@ -33,7 +33,16 @@ def main() -> int:
     profiles = dose_profiles(args.slim, [c["canonical_id"] for c in payload["candidates"]]) if args.slim else {}
     for candidate in payload["candidates"]:
         if candidate["canonical_id"] in profiles:
-            candidate["label_dose_profile"] = profiles[candidate["canonical_id"]]
+            profile = profiles[candidate["canonical_id"]]
+            candidate["label_dose_profile"] = profile
+            # Generated from the measured distribution, never hand-typed: a prose dose
+            # range written by hand drifts from the corpus within one edit.
+            if profile.get("mg_median"):
+                candidate["label_exposure_measured"] = (
+                    f"Measured label exposure: median {profile['mg_median']:g} mg/day "
+                    f"(p25 {profile['mg_p25']:g}, p75 {profile['mg_p75']:g}, "
+                    f"min {profile['mg_min']:g}, max {profile['mg_max']:g}) across "
+                    f"{profile['dosed_rows']} dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.")
         row = queue[candidate["canonical_id"]]
         candidate["catalog_impact"] = {key: row[key] for key in FIELDS} | {
             "top_forms": [form for form, _ in row["top_forms"][:5]],

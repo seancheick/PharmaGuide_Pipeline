@@ -1319,6 +1319,27 @@
    ],
    "unique_pmids": 160,
    "parsed_records": 160
+  },
+  {
+   "canonical_id": "tribulus",
+   "run_date": "2026-09-17",
+   "source": "NCBI PubMed E-utilities",
+   "scope_note": "Synthesis-level supplement to the Wave 1 bounded search, run at owner request so the review state rests on the strongest available synthesis rather than two selected RCTs.",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Tribulus\"[tiab]) AND (systematic review[pt] OR meta-analysis[pt])",
+     "count": 13,
+     "retrieved": 10,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "records_added_to_contexts": [
+    "40219032",
+    "37697053",
+    "35954909"
+   ]
   }
  ]
 }

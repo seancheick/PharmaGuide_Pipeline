@@ -145,3 +145,20 @@ def test_homonym_exclusions_are_visible_in_the_query():
 
     assert '"Tyrosine"[tiab]' in clause
     assert "NOT" in clause and "tyrosine kinase" in clause
+
+
+def test_quarantined_screening_drafts_are_never_read_by_curation_tooling():
+    """Draft subagent output contains known non-contiguous and composed "quotes".
+
+    It is kept for audit provenance only; nothing in the curation toolchain may read it.
+    """
+    from pathlib import Path
+
+    audit_dir = Path(__file__).resolve().parents[1] / "audits" / "evidence_expansion_2026_09"
+    quarantine = audit_dir / "QUARANTINE_screening_drafts"
+
+    assert quarantine.is_dir(), "the drafts must stay in a directory whose name marks them quarantined"
+    readers = [path.name for path in audit_dir.glob("*.py")
+               if quarantine.name in path.read_text()]
+
+    assert readers == [], f"curation tooling must not read quarantined drafts: {readers}"

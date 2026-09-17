@@ -11,7 +11,9 @@
    "A": "The current generic scorer can represent and apply this evidence without overgeneralising it.",
    "B": "The context is valid, but the current generic scorer is too coarse to apply it safely; the production synthesis is HELD.",
    "basis": "Audit/report determination only \u2014 not a production field and not a request for one."
-  }
+  },
+  "owner_review_2026_09_17": "Owner reviewed the packet and made corrections: gotu kola label-dose prose was internally inconsistent with the measured distribution; DHEA's summary overstated the population claim; butterbur's AAN Level A support is historical (withdrawn 2015); tribulus needed the higher-level syntheses; ginkgo needed current authoritative regulatory context; the horny goat weed PK study belongs to the PK owner. Every Wave 1 identity stays HOLD or review-state-only. No new generic scoring record is applied.",
+  "authoritative_reference_shape": "Non-PubMed authoritative sources are recorded in the shape the registry already uses for them (references_structured: type/authority/title/url/citation + verification), NOT as study contexts: the frozen context contract requires source_pmids, and a regulator assessment has none. No new source system was created."
  },
  "candidates": [
   {
@@ -31,7 +33,7 @@
     ],
     "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
    },
-   "label_reality": "Labels deliver 200-1,000 mg/day of Centella asiatica herb powder or extract; plant part and extract ratio are usually unstated.",
+   "label_reality": "Labels deliver Centella asiatica herb powder or extract; plant part and extract ratio are usually unstated. See label_exposure_measured for the measured distribution \u2014 all dose comparisons below are computed from its median, not from prose.",
    "contexts": [
     {
      "context_id": "gotu_kola_acute_startle_11106141",
@@ -115,7 +117,7 @@
       }
      ],
      "limitations": [
-      "Single acute 12 g dose \u2014 roughly 12-24x a typical label serving; establishes nothing about 200-1,000 mg/day chronic use.",
+      "Single acute 12 g dose. Against the measured label median of 60 mg/day that is ~200x, and ~13x even the measured p75 of 364 mg/day; it establishes nothing about label-range chronic use.",
       "Primary endpoint is a physiological startle measure, not a patient-important anxiety outcome; the authors state therapeutic efficacy remains unknown.",
       "Plant part, extract ratio and standardization are not stated, so the material cannot be matched to a specific label preparation.",
       "n=40, single site, published 2000; no replication in this bounded search scope."
@@ -341,7 +343,7 @@
    ],
    "proposed_record_level_synthesis": {
     "proposal": "DO NOT create a scoring record yet",
-    "rationale": "The only positive primary outcome comes from a single acute 12 g challenge (12-24x a label serving) on a surrogate endpoint; the one label-range trial (1,000 mg/day, 12 weeks) was null on its cognitive primary; the 2026 scoping review finds three small human studies in total. Creating a record with effect_direction null or mixed would, under the current generic scorer, raise Evidence above zero for 25 products on the strength of evidence that did not show benefit \u2014 see GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md.",
+    "rationale": "The only positive primary outcome comes from a single acute 12 g challenge \u2014 about 200x the measured label median of 60 mg/day \u2014 on a surrogate startle endpoint; the one trial inside label range (1,000 mg/day, 12 weeks) was null on its cognitive primary; the 2026 scoping review finds three small human studies in total. Creating a record with effect_direction null or mixed would, under the current generic scorer, raise Evidence above zero for 25 products on the strength of evidence that did not show benefit \u2014 see GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md.",
     "if_owner_approves_anyway": {
      "study_type": "rct_single",
      "evidence_level": "ingredient-human",
@@ -373,7 +375,8 @@
    "scorer_compatibility": {
     "class": "B",
     "reason": "The only positive primary outcome used a single 12 g challenge and the one label-range trial (1,000 mg/day) was null; catalog median is 60 mg/day. The scorer's dose handling (min_clinical_dose guard) cannot express 'positive only far above any label serving'."
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 60 mg/day (p25 50, p75 364.25, min 10, max 950) across 44 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17."
   },
   {
    "canonical_id": "dhea",
@@ -764,7 +767,7 @@
    ],
    "proposed_record_level_synthesis": {
     "proposal": "HOLD \u2014 do not create a scoring record in Wave 1",
-    "rationale": "Real meta-analytic human evidence exists, but every positive result sits in a supervised patient population (IVF with diminished ovarian reserve, primary adrenal insufficiency, clinical depression) and no abstract states a daily dose. The generic scorer has no population gate: a positive DHEA record would credit every 25-50 mg consumer product with fertility-clinic and hormone-replacement evidence. That is the 'captured but not enforced' gap, and it is also a safety-sensitive hormone.",
+    "rationale": "Real meta-analytic human evidence exists, but every positive or mixed finding is population- and indication-specific: IVF patients with diminished ovarian reserve, primary adrenal insufficiency, people with depression or other clinical conditions, and \u2014 in healthy older adults \u2014 a bone-density signal reported for women with no comparable effect in men. No review states a daily dose. The generic scorer has no population or sex gate, so a positive DHEA record would credit every 25-50 mg consumer product with fertility-clinic, hormone-replacement and sex-specific evidence. It is also a safety-sensitive hormone.",
     "if_owner_approves_anyway": {
      "study_type": "systematic_review_meta",
      "evidence_level": "ingredient-human",
@@ -809,8 +812,9 @@
    },
    "scorer_compatibility": {
     "class": "B",
-    "reason": "Positive results sit in supervised patient populations (IVF/diminished ovarian reserve, adrenal insufficiency, clinical depression) and no review states a dose; with no population gate the record would credit 25 mg consumer products. Hormone-related, so it also routes to the high-risk path."
-   }
+    "reason": "Positive and mixed results are population- and indication-specific (IVF/diminished ovarian reserve, adrenal insufficiency, clinical depression, and a women-only bone-density signal in healthy older adults), and no review states a dose. With no population or sex gate the record would credit 25 mg consumer products. Hormone-related, so it also routes to the high-risk path."
+   },
+   "label_exposure_measured": "Measured label exposure: median 25 mg/day (p25 25, p75 50, min 5, max 100) across 33 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17."
   },
   {
    "canonical_id": "linoleic_acid",
@@ -1249,7 +1253,8 @@
    "scorer_compatibility": {
     "class": "B",
     "reason": "Evidence is gram-level supplementation or whole-diet substitution against surrogate endpoints; the scorer has no exposure-basis concept, so dietary-substitution trials would become capsule efficacy at a 20-40x dose gap."
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 362.5 mg/day (p25 132, p75 530, min 4, max 8000) across 72 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17."
   },
   {
    "canonical_id": "isoflavones",
@@ -1707,7 +1712,8 @@
    "scorer_compatibility": {
     "class": "B",
     "reason": "Evidence is materially population-specific (peri/postmenopausal women) and the generic scorer has no population gate; applying it would transfer menopause evidence to every consumer."
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 80 mg/day (p25 35.75, p75 150, min 20, max 750) across 60 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17."
   },
   {
    "canonical_id": "ginkgo",
@@ -2270,7 +2276,24 @@
      "ginkgo leaf powder"
     ],
     "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 60 mg/day (p25 40, p75 120, min 0.12, max 2000) across 140 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.",
+   "authoritative_references": [
+    {
+     "type": "authoritative_guidance",
+     "authority": "EMA Committee on Herbal Medicinal Products (HMPC)",
+     "title": "Ginkgo folium \u2014 EU herbal monograph (EMA/HMPC/321097/2012); public summary EMA/HMPC/324406/2015",
+     "url": "https://www.ema.europa.eu/en/medicines/herbal/ginkgo-folium",
+     "retrieved": "2026-09-17",
+     "verification": "HMPC conclusions section expanded and read on retrieval date",
+     "quotes": [
+      "The HMPC concluded that ginkgo leaf medicines containing the dry extract can be used to improve the age-related cognitive impairment (worsening of mental abilities) and quality of life of adults with mild dementia.",
+      "The HMPC also concluded that, on the basis of their long-standing use, ginkgo leaf medicines containing the powdered leaf can be used for the relief of heaviness in the legs and the sensation of cold hands and feet that may occur with minor circulation problems.",
+      "Ginkgo leaf medicines should only be used in adults. If symptoms of dementia do not improve after 3 months or if symptoms worsen during the treatment, a doctor should be consulted."
+     ],
+     "why_it_does_not_change_the_hold": "The monograph's well-established-use conclusion is for medicines containing the DRY EXTRACT in adults with mild dementia \u2014 the same material-and-population boundary the trials show. The powdered leaf gets only traditional-use status for minor circulation symptoms. 100 of 140 catalog rows declare unspecified ginkgo at a median 60 mg/day to general buyers, so the regulatory context reinforces the hold rather than loosening it."
+    }
+   ]
   },
   {
    "canonical_id": "horny_goat_weed",
@@ -2303,7 +2326,7 @@
       "participants_in_abstract",
       "design_reported_as_randomized_controlled"
      ],
-     "evidence_role": "direct_rct",
+     "evidence_role": "mechanistic_study",
      "condition": "prenylflavonoid_pharmacokinetics_and_tolerability",
      "purpose": "physiology",
      "trial_family": "epimedium_pk_30522143",
@@ -2362,11 +2385,12 @@
       }
      ],
      "limitations": [
-      "Pharmacokinetics and tolerability only \u2014 there is NO efficacy endpoint in this trial.",
+      "Pharmacokinetics and tolerability only \u2014 there is NO efficacy endpoint in this trial. Recorded here as non-efficacy context; its canonical clinical interpretation belongs to the PK/interaction owner.",
       "The abstract's bridge to 'anti-osteoporotic effects' is explicitly to cellular and animal studies; that is mechanism, not human efficacy.",
-      "Single doses in healthy men; nothing about chronic use or the marketed libido/testosterone claims."
+      "Single doses in healthy men; nothing about chronic use or the marketed libido/testosterone claims.",
+      "evidence_role is recorded as mechanistic_study because the frozen contract's EVIDENCE_ROLE vocabulary has no pharmacokinetic value; flagged in CHECKPOINT.md rather than extended for one case."
      ],
-     "scoring_ineligible_reason": "Pharmacokinetic study with no efficacy outcome."
+     "scoring_ineligible_reason": "Pharmacokinetic/tolerability study with no efficacy outcome; non-efficacy role."
     }
    ],
    "trial_families": {
@@ -2398,6 +2422,12 @@
      "role": "safety",
      "destination": "safety/CAERS owner",
      "reason": "Adverse-event case literature flagged in screening."
+    },
+    {
+     "pmid": "30522143",
+     "role": "pharmacokinetic",
+     "destination": "PK/interaction owner",
+     "reason": "Single-dose prenylflavonoid pharmacokinetics and tolerability; the canonical interpretation of this study belongs to the PK owner, not the efficacy record."
     }
    ],
    "high_risk_flags": [
@@ -2443,12 +2473,13 @@
      "(none)"
     ],
     "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 50 mg/day (p25 12.5, p75 1000, min 10, max 1000) across 55 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17."
   },
   {
    "canonical_id": "tribulus",
    "label_name": "Tribulus",
-   "label_reality": "Sold for testosterone support and athletic performance; the trials below dose 750-770 mg/day of Tribulus terrestris as a sole agent.",
+   "label_reality": "Sold for testosterone support and athletic performance. The two primary trials dosed 750-770 mg/day as a sole agent; the syntheses cover 400-750 mg/day for 1-3 months. See label_exposure_measured for what labels actually deliver.",
    "contexts": [
     {
      "context_id": "tribulus_idiopathic_infertility_rct_27337519",
@@ -2624,6 +2655,254 @@
       "Co-therapy: all participants were training."
      ],
      "scoring_ineligible_reason": "Predominantly null; isolated secondary signals do not establish efficacy."
+    },
+    {
+     "context_id": "tribulus_erectile_function_testosterone_review_40219032",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "40219032"
+     ],
+     "components": [
+      "tribulus"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Tribulus terrestris",
+      "plant_part": "not_stated"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "study_design": "systematic_review",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "included_study_pmids": "extraction_pending",
+     "evidence_role": "systematic_review",
+     "condition": "erectile_dysfunction_and_testosterone",
+     "purpose": "treatment",
+     "trial_family": "tribulus_ed_testosterone_review_40219032",
+     "population": {
+      "age_group": "adult",
+      "description": "483 men aged 16-70 across 10 studies: healthy men (5 studies), oligozoospermia, erectile dysfunction, ED with hypogonadism (2), unexplained infertility"
+     },
+     "comparator": "placebo or control (9 clinical trials, 1 uncontrolled quasi-experimental study)",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [
+       400,
+       750
+      ],
+      "dose_status": "verified",
+      "dose_basis": "nominal_assigned_arm",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": [],
+      "reported_regimen": "400 to 750 mg/d for 1 to 3 months",
+      "normalization": {
+       "basis": "already_daily",
+       "note": "Range as stated by the review."
+      },
+      "source_provenance": {
+       "pmid": "40219032",
+       "location": "abstract",
+       "quote": "TT supplementation at doses of 400 to 750 mg/d for 1 to 3 months improved erectile dysfunction in 3 of the 5 studies that assessed this parameter."
+      }
+     },
+     "outcomes": [
+      {
+       "name": "erectile_function",
+       "hierarchy": "primary",
+       "kind": "patient_important",
+       "direction": "mixed",
+       "outcome_role": "direct_between_group_effect"
+      },
+      {
+       "name": "serum_testosterone",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "40219032",
+       "location": "abstract",
+       "quote": "TT supplementation has a low level of evidence regarding its effectiveness in improving erectile function in men with erectile dysfunction, and no robust evidence was found for increasing testosterone levels."
+      },
+      {
+       "pmid": "40219032",
+       "location": "abstract",
+       "quote": "Eight out of ten studies did not report significant changes in androgen profile following TT supplementation"
+      }
+     ],
+     "limitations": [
+      "This is the strongest synthesis for the marketed claims and it splits them: a LOW-LEVEL-evidence signal for erectile function in men WITH erectile dysfunction, and no robust evidence for raising testosterone.",
+      "The review records low methodological quality for 50% of the included studies, and one included study had no control group.",
+      "The two studies showing a testosterone increase were intra-group changes of low clinical magnitude (60-70 ng/dL) in men with hypogonadism \u2014 a clinical population, not general consumers.",
+      "Dose range 400-750 mg/d for 1-3 months."
+     ],
+     "scoring_ineligible_reason": "Low-level evidence confined to men with diagnosed erectile dysfunction; no population gate exists."
+    },
+    {
+     "context_id": "tribulus_testosterone_booster_review_37697053",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "37697053"
+     ],
+     "components": [
+      "tribulus"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Tribulus terrestris",
+      "plant_part": "not_stated"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "study_design": "systematic_review",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "included_study_pmids": "extraction_pending",
+     "evidence_role": "systematic_review",
+     "condition": "serum_total_testosterone",
+     "purpose": "treatment",
+     "trial_family": "testosterone_booster_review_37697053",
+     "population": {
+      "age_group": "adult",
+      "description": "52 studies across 27 proposed testosterone boosters in male athletes, men with late-onset hypogonadism, infertile men and healthy men; 4 studies of Tribulus terrestris"
+     },
+     "comparator": "placebo",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "total_testosterone_versus_placebo",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "37697053",
+       "location": "abstract",
+       "quote": "Our findings indicate that most fail to increase total testosterone."
+      },
+      {
+       "pmid": "37697053",
+       "location": "abstract",
+       "quote": "10 studies of cholecalciferol; 5 zinc/magnesium; 4 Tribulus terrestris and creatine"
+      }
+     ],
+     "limitations": [
+      "A cross-ingredient review: Tribulus is one of 27 boosters assessed, contributing 4 studies, and it is not named among the exceptions the review considers effective.",
+      "No Tribulus-specific pooled estimate or dose is given in the abstract.",
+      "Directly addresses the marketed testosterone claim at synthesis level."
+     ],
+     "scoring_ineligible_reason": "Null for the marketed testosterone claim; no dose stated."
+    },
+    {
+     "context_id": "tribulus_sport_health_biomarkers_review_35954909",
+     "context_schema_version": "1.1.0",
+     "source_pmids": [
+      "35954909"
+     ],
+     "components": [
+      "tribulus"
+     ],
+     "identity_scope": "botanical_preparation",
+     "identity": {
+      "botanical_species": "Tribulus terrestris",
+      "plant_part": "not_stated"
+     },
+     "exposure_basis": "supplement_dose",
+     "route": "oral",
+     "component_registration_status": "fully_registered",
+     "review_status": "source_verified_pending_clinical_review",
+     "source_integrity": "none",
+     "scoring_eligible": false,
+     "human_status": "confirmed",
+     "human_signals": [
+      "participants_in_abstract",
+      "design_reported_as_randomized_controlled"
+     ],
+     "study_design": "systematic_review",
+     "blinding": "unreported",
+     "funding": "unreported",
+     "included_study_pmids": "extraction_pending",
+     "evidence_role": "systematic_review",
+     "condition": "sport_and_health_biomarkers",
+     "purpose": "physiology",
+     "trial_family": "tribulus_sport_review_35954909",
+     "population": {
+      "age_group": "adult",
+      "description": "Physically active adult males; 7 studies met inclusion from 340 records"
+     },
+     "comparator": "placebo or control",
+     "dose": {
+      "measurement_type": "mass",
+      "unit": "mg",
+      "values": [],
+      "dose_status": "source_not_reported",
+      "dose_basis": "not_applicable",
+      "duration_basis": "not_recorded",
+      "dosage_forms": [],
+      "co_therapies": []
+     },
+     "outcomes": [
+      {
+       "name": "muscle_damage_markers_and_hormonal_behaviour",
+       "hierarchy": "primary",
+       "kind": "surrogate",
+       "direction": "null",
+       "outcome_role": "direct_between_group_effect"
+      }
+     ],
+     "outcome_provenance": [
+      {
+       "pmid": "35954909",
+       "location": "abstract",
+       "quote": "there was no clear evidence of the beneficial effects of TT supplementation on muscle damage markers and hormonal behavior"
+      },
+      {
+       "pmid": "35954909",
+       "location": "abstract",
+       "quote": "no TT-induced toxicity was reported"
+      }
+     ],
+     "limitations": [
+      "Seven studies only; the review calls for more research.",
+      "Covers the sports-performance marketing claim at synthesis level and finds no clear benefit.",
+      "No dose stated in the abstract."
+     ],
+     "scoring_ineligible_reason": "Null for the marketed performance claim; no dose stated."
     }
    ],
    "trial_families": {
@@ -2632,26 +2911,35 @@
     ],
     "tribulus_crossfit_rct_34836225": [
      "34836225"
+    ],
+    "tribulus_ed_testosterone_review_40219032": [
+     "40219032"
+    ],
+    "testosterone_booster_review_37697053": [
+     "37697053"
+    ],
+    "tribulus_sport_review_35954909": [
+     "35954909"
     ]
    },
    "publication_vs_trial_count": {
-    "publications": 2,
-    "unique_trials_or_cohorts": 2,
+    "publications": 5,
+    "unique_trials_or_cohorts": "2 primary trials plus 3 syntheses over overlapping trial pools",
     "independent_replications": 0,
-    "note": "Two small independent trials of different endpoints, both essentially null for the marketed claims."
+    "note": "The three reviews draw on overlapping small Tribulus trials (10 studies / 483 men in the largest). They are not independent confirmations of each other, and the two primary trials authored earlier are likely inside their pools \u2014 membership extraction pending."
    },
    "handoff": [],
    "high_risk_flags": [],
    "scorer_compatibility": {
     "class": "B",
-    "reason": "Sole-agent trials are null for the marketed claims; the only positive literature is combination products. The scorer cannot distinguish 'Tribulus alone' from 'Tribulus inside a multi-herb formula', so any record risks importing combination results."
+    "reason": "The only positive signal (erectile function, low level of evidence) is confined to men with diagnosed erectile dysfunction, and the scorer has no population gate; the marketed testosterone and performance claims are null. Sole-agent versus combination also cannot be distinguished, so any record risks importing combination results."
    },
    "proposed_record_level_synthesis": {
     "proposal": "RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD",
-    "rationale": "As a sole agent for its two most-marketed claims (testosterone, athletic performance), the trials are consistently null. Screening also found that the positive literature is combination products, which cannot be attributed to tribulus. Evidence 0 for these 50 products is the correct, and now explainable, result.",
-    "review_completeness": "bounded search documented in wave1_search_log.json (records screened per log; 64 kept)",
-    "evidence_strength": "several small null sole-agent trials",
-    "applicability_to_labels": "no qualifying positive evidence to apply"
+    "rationale": "Corrected after adding the higher-level syntheses the owner asked for, which changed the conclusion rather than confirming it. 'Null across the board' would have been wrong: the 2025 systematic review reports that 400-750 mg/d improved erectile dysfunction in 3 of 5 studies that measured it \u2014 while stating this is a LOW level of evidence, in men with diagnosed erectile dysfunction, with 50% of studies at low methodological quality. For the two claims these products actually market, the syntheses are consistent: no robust testosterone increase (8 of 10 studies showed no androgen change; a cross-booster review finds most fail) and no clear sports-performance benefit. So the honest state is reviewed-with-no-qualifying-evidence for testosterone and performance, with a low-level, population-specific ED signal that the generic scorer cannot gate.",
+    "review_completeness": "bounded search documented in wave1_search_log.json, extended 2026-09-17 with a synthesis-level query at owner request (see the tribulus_synthesis_supplement entry)",
+    "evidence_strength": "two small null primary trials; three syntheses \u2014 null for testosterone and performance, low-level positive for erectile dysfunction in diagnosed men",
+    "applicability_to_labels": "no qualifying evidence for the marketed testosterone or performance claims; the ED signal is confined to a diagnosed population the scorer cannot express"
    },
    "label_dose_profile": {
     "dosed_rows": 55,
@@ -2684,7 +2972,8 @@
      "tribulus (unspecified)"
     ],
     "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 500 mg/day (p25 250, p75 1000, min 20, max 1500) across 55 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17."
   },
   {
    "canonical_id": "dandelion",
@@ -2839,7 +3128,8 @@
      "dandelion extract"
     ],
     "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 100 mg/day (p25 80, p75 200, min 10, max 1575) across 59 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17."
   },
   {
    "canonical_id": "d_ribose",
@@ -2991,7 +3281,8 @@
      "d-ribose powder"
     ],
     "source": "inventory.json / queue.json, corpus re-scored 2026-09-17"
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 1400 mg/day (p25 1025, p75 5000, min 1.1, max 5100) across 24 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17."
   },
   {
    "canonical_id": "butterbur",
@@ -3338,11 +3629,17 @@
       }
      ],
      "limitations": [
-      "A guideline recommendation summarising the same two trials; it is authoritative but not additional evidence.",
-      "Published 2012 from a literature review window ending May 2009 \u2014 it predates later hepatotoxicity-driven regulatory actions, which belong to the safety owner.",
+      "HISTORICAL, NOT CURRENT GUIDANCE: the American Academy of Neurology recommended butterbur for migraine prevention in 2012 and stopped recommending it in 2015 over serious safety concerns (NCCIH, verified 2026-09-17). This context must never be presented as current guideline support.",
+      "A guideline recommendation summarising the same two trials; authoritative in its time, but not additional evidence.",
+      "Its literature review window ended May 2009, predating the hepatotoxicity-driven reassessment.",
       "The guideline names Petasites generally; the underlying trials used the proprietary extract."
      ],
-     "scoring_ineligible_reason": "Pending review; guidance rather than an independent trial."
+     "scoring_ineligible_reason": "Pending review; guidance rather than an independent trial.",
+     "superseded_by": {
+      "authority": "American Academy of Neurology via NCCIH",
+      "status": "recommendation withdrawn in 2015 on safety grounds",
+      "recorded_from": "https://www.nccih.nih.gov/health/butterbur"
+     }
     }
    ],
    "trial_families": {
@@ -3411,7 +3708,8 @@
    ],
    "high_risk_flags": [
     "hepatic",
-    "pregnancy_and_fertility"
+    "pregnancy_and_fertility",
+    "withdrawn_guideline_recommendation"
    ],
    "scorer_compatibility": {
     "class": "B",
@@ -3419,10 +3717,11 @@
    },
    "proposed_record_level_synthesis": {
     "proposal": "HOLD \u2014 the evidence is the strongest in Wave 1, but the material scoping it requires is not expressible today",
-    "rationale": "Two placebo-controlled trials, a systematic review and an AAN/AHS Level A recommendation support the proprietary PA-free Petasites root extract at 150 mg/day for migraine prophylaxis, and the 100 mg/day arm failed (p = 0.127), so a material-and-dose-scoped record is exactly what the evidence supports. A live probe shows the applicability contract cannot select that material: it matches printed label text, and 'Petadolex'/'PA-free' exist only in enricher-derived form mappings. Approving a dose-floor-only record would credit unspecified butterbur at 150 mg \u2014 the pyrrolizidine-alkaloid hepatotoxicity material \u2014 which is the opposite of the intent.",
+    "rationale": "Two placebo-controlled trials and a systematic review support the proprietary PA-free Petasites root extract at 150 mg/day for migraine prophylaxis, and the 100 mg/day arm failed (p = 0.127). The 2012 AAN/AHS Level A recommendation is HISTORICAL: the Academy stopped recommending butterbur in 2015 over safety concerns, and rare liver injury has been reported even for products labelled PA-free. 'PA-free' is a processing claim, not the studied Petadolex material, so the two must not be equated. A live probe also shows the applicability contract cannot select the studied material at all: it matches printed label text, where 'Petadolex' does not appear. A dose-floor-only record would credit unspecified butterbur at 150 mg \u2014 the PA-risk material.",
     "owner_decisions_needed": [
-     "Route the pyrrolizidine-alkaloid hepatotoxicity literature to the safety owner regardless of what happens to this record.",
-     "Decide whether the applicability owner should gain material scoping from enricher-resolved forms \u2014 butterbur is the concrete case that would justify it."
+     "Safety owner leads here: unspecified butterbur carries pyrrolizidine-alkaloid hepatotoxicity risk, and NCCIH reports rare liver injury even in products labelled PA-free. No evidence record should make any butterbur product look endorsed before that is settled.",
+     "If material scoping ever becomes possible, scope to the studied Petadolex material specifically \u2014 not to the generic 'PA-free' claim.",
+     "Treat the AAN/AHS Level A statement as historical in any consumer-facing copy."
     ],
     "review_completeness": "bounded search documented in wave1_search_log.json (58 records screened, 51 kept)",
     "evidence_strength": "guideline-endorsed but thin: two trials, 293 patients, dose-dependent",
@@ -3527,7 +3826,24 @@
      }
     ],
     "conclusion": "The measured label median of 150 mg/day comes from the UNSPECIFIED-material rows; the products declaring the studied Petadolex material deliver 22.5-75 mg per row and reach 150 mg/day only by serving multiplication. Material scoping is the blocker, and it is not expressible today."
-   }
+   },
+   "label_exposure_measured": "Measured label exposure: median 150 mg/day (p25 87.5, p75 150, min 7.5, max 150) across 33 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.",
+   "authoritative_references": [
+    {
+     "type": "authoritative_guidance",
+     "authority": "NCCIH (National Center for Complementary and Integrative Health)",
+     "title": "Butterbur: Usefulness and Safety",
+     "url": "https://www.nccih.nih.gov/health/butterbur",
+     "retrieved": "2026-09-17",
+     "verification": "page read in full on retrieval date",
+     "quotes": [
+      "In 2012, the American Academy of Neurology recommended butterbur for preventing migraines. However, the Academy stopped recommending it in 2015 because of serious concerns about its safety.",
+      "Only butterbur products that have been processed to remove PAs and are labeled or certified as PA-free should be considered for use.",
+      "However, there have been rare cases of liver injury associated with products that were reported to be PA-free."
+     ],
+     "destination": "safety owner holds the PA/hepatotoxicity interpretation; recorded here only as evidence context"
+    }
+   ]
   }
  ]
 }

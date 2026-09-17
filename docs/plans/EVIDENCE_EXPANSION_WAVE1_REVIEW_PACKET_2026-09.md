@@ -13,7 +13,7 @@ Each PMID below was re-fetched live from PubMed after screening; every quote is 
 | [Ginkgo](#ginkgo) | 124 | 49 | 57 | 5 | HOLD | B |
 | [Isoflavones](#isoflavones) | 57 | 31 | 34 | 4 | HOLD | B |
 | [Linoleic Acid](#linoleic-acid) | 73 | 24 | 40 | 4 | RECORD THE REVIEW STATE, CREATE NO SCORING RECORD | B |
-| [Tribulus](#tribulus) | 50 | 28 | 33 | 2 | RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD | B |
+| [Tribulus](#tribulus) | 50 | 28 | 33 | 5 | RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD | B |
 | [Horny Goat Weed (Epimedium)](#horny-goat-weed) | 51 | 28 | 28 | 1 | RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD | B |
 | [Gotu Kola](#gotu-kola) | 43 | 25 | 30 | 3 | DO NOT create a scoring record yet | B |
 | [D-Ribose](#d-ribose) | 33 | 25 | 27 | 1 | HOLD | B |
@@ -29,7 +29,7 @@ Scorer class: **A** = the current generic scorer can apply this evidence safely;
 
 **Label reality.** Measured label median 60 mg/day (p25 40, p75 120); 100 of 140 dosed rows are 'ginkgo (unspecified)' and 42 are 'ginkgo biloba extract (24% flavone glycosides)'. Every positive trial below used the branded standardised extract EGb 761 at 240 mg/day in diagnosed patients.
 
-Measured label dose: median 60 mg/day (p25 40, p75 120, max 2000) across 140 dosed rows.
+Measured label exposure: median 60 mg/day (p25 40, p75 120, min 0.12, max 2000) across 140 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 5 publications, 1 primary cohort (GEM, two publications) plus three reviews over overlapping EGb 761 and healthy-adult trial pools unique trials/cohorts, 0 independent replications. 19017911 and 20040554 are the same 3069-participant GEM cohort. 39895346 re-analyses subgroups of trials expected to sit inside 25114079's pool. Treating these five publications as five sources would badly overstate depth.
 
@@ -110,6 +110,19 @@ Ginkgo is the clearest split in Wave 1: null for prevention in the largest indep
 - Review completeness: bounded search documented in wave1_search_log.json (152 records screened, 79 kept)
 - Scorer compatibility: **class B** — Positive evidence is confined to one branded standardised extract (EGb 761) at 240 mg/day in diagnosed dementia patients, while the consumer-relevant meta-analysis in healthy adults is null and the measured label median is 60 mg/day of mostly unspecified ginkgo. The generic scorer has no population gate and no branded-material equivalence test, so a positive record would transfer dementia-treatment evidence to 124 general-population products at a quarter of the studied dose.
 
+### Authoritative guidance (recorded as references, not study contexts)
+
+The frozen context contract requires a PMID and a regulator assessment has none, so these use the shape the registry already has for non-PubMed sources.
+
+**EMA Committee on Herbal Medicinal Products (HMPC)** — Ginkgo folium — EU herbal monograph (EMA/HMPC/321097/2012); public summary EMA/HMPC/324406/2015  
+https://www.ema.europa.eu/en/medicines/herbal/ginkgo-folium · retrieved 2026-09-17 · HMPC conclusions section expanded and read on retrieval date
+
+> The HMPC concluded that ginkgo leaf medicines containing the dry extract can be used to improve the age-related cognitive impairment (worsening of mental abilities) and quality of life of adults with mild dementia.
+> The HMPC also concluded that, on the basis of their long-standing use, ginkgo leaf medicines containing the powdered leaf can be used for the relief of heaviness in the legs and the sensation of cold hands and feet that may occur with minor circulation problems.
+> Ginkgo leaf medicines should only be used in adults. If symptoms of dementia do not improve after 3 months or if symptoms worsen during the treatment, a doctor should be consulted.
+
+*The monograph's well-established-use conclusion is for medicines containing the DRY EXTRACT in adults with mild dementia — the same material-and-population boundary the trials show. The powdered leaf gets only traditional-use status for minor circulation symptoms. 100 of 140 catalog rows declare unspecified ginkgo at a median 60 mg/day to general buyers, so the regulatory context reinforces the hold rather than loosening it.*
+
 ### Handoffs to other owners (no clinical interpretation here)
 
 | PMID | role | destination | reason |
@@ -137,7 +150,7 @@ Flagged for eventual clinician countersignature; it does not block the owner rev
 
 **Label reality.** Labels deliver isolated/concentrated isoflavone extracts (soy hypocotyl, soy germ, NovaSoy, red clover); measured median 80 mg/day (p25 36, p75 150). Studied supplement doses overlap this range, which is unusual in Wave 1.
 
-Measured label dose: median 80 mg/day (p25 35.75, p75 150, max 750) across 60 dosed rows.
+Measured label exposure: median 80 mg/day (p25 35.75, p75 150, min 20, max 750) across 60 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 4 publications, unresolved — 52 and 63 trial reviews with substantial expected overlap, plus a 62-trial symptom review unique trials/cohorts, at most 1 for BMD (two reviews of overlapping trial sets are not two confirmations) independent replications. Review membership is extraction_pending for all four. Counting these as four independent sources would inflate depth for one largely shared trial pool.
 
@@ -235,7 +248,7 @@ Flagged for eventual clinician countersignature; it does not block the owner rev
 
 **Label reality.** Labels declare linoleic acid as a component of seed/nut oils; measured median 362 mg/day (p25 132, p75 530, max 8,000). Every trial below dosed 7.5-20 g/day or changed whole-diet fat composition — 20-40x the median label amount.
 
-Measured label dose: median 362.5 mg/day (p25 132, p75 530, max 8000) across 72 dosed rows.
+Measured label exposure: median 362.5 mg/day (p25 132, p75 530, min 4, max 8000) across 72 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 4 publications, 3 unique trials/cohorts, 0 independent replications. One meta-analysis (membership pending) plus three separate trials of different exposures and endpoints. No two studies replicate the same question.
 
@@ -325,11 +338,11 @@ Flagged for eventual clinician countersignature; it does not block the owner rev
 
 `tribulus` — 50 products, 14 brands, 56 label rows; Evidence mean 6.23, 28 at zero, 33 at ≤8. Review state today: not_reviewed.
 
-**Label reality.** Sold for testosterone support and athletic performance; the trials below dose 750-770 mg/day of Tribulus terrestris as a sole agent.
+**Label reality.** Sold for testosterone support and athletic performance. The two primary trials dosed 750-770 mg/day as a sole agent; the syntheses cover 400-750 mg/day for 1-3 months. See label_exposure_measured for what labels actually deliver.
 
-Measured label dose: median 500 mg/day (p25 250, p75 1000, max 1500) across 55 dosed rows.
+Measured label exposure: median 500 mg/day (p25 250, p75 1000, min 20, max 1500) across 55 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
-**Publications vs trials.** 2 publications, 2 unique trials/cohorts, 0 independent replications. Two small independent trials of different endpoints, both essentially null for the marketed claims.
+**Publications vs trials.** 5 publications, 2 primary trials plus 3 syntheses over overlapping trial pools unique trials/cohorts, 0 independent replications. The three reviews draw on overlapping small Tribulus trials (10 studies / 483 men in the largest). They are not independent confirmations of each other, and the two primary trials authored earlier are likely inside their pools — membership extraction pending.
 
 ### Contexts (all pending)
 
@@ -354,16 +367,47 @@ Measured label dose: median 500 mg/day (p25 250, p75 1000, max 1500) across 55 d
   - dose > a total of 30 healthy CrossFit®-trained males were randomly allocated to receive either 770 mg of TT supplementation or a placebo daily for 6 weeks
 - Limitations: (1) Single-blind, n=30, 6 weeks. (2) Most outcomes null; the two exceptions (testosterone, bench press) are secondary signals within a null primary picture and must not be reported as 'improves performance'. (3) Co-therapy: all participants were training.
 
+**`tribulus_erectile_function_testosterone_review_40219032`** — PMID 40219032 · systematic_review · systematic_review · funding: unreported
+
+- Identity: botanical_preparation — botanical_species: Tribulus terrestris; plant_part: not_stated
+- Exposure: supplement_dose, route oral, dose 400, 750 mg (verified)
+- Population: 483 men aged 16-70 across 10 studies: healthy men (5 studies), oligozoospermia, erectile dysfunction, ED with hypogonadism (2), unexplained infertility
+- Outcomes: erectile_function (primary/patient_important) → **mixed**; serum_testosterone (primary/surrogate) → **null**
+  - > TT supplementation has a low level of evidence regarding its effectiveness in improving erectile function in men with erectile dysfunction, and no robust evidence was found for increasing testosterone levels.
+  - > Eight out of ten studies did not report significant changes in androgen profile following TT supplementation
+  - dose > TT supplementation at doses of 400 to 750 mg/d for 1 to 3 months improved erectile dysfunction in 3 of the 5 studies that assessed this parameter.
+- Limitations: (1) This is the strongest synthesis for the marketed claims and it splits them: a LOW-LEVEL-evidence signal for erectile function in men WITH erectile dysfunction, and no robust evidence for raising testosterone. (2) The review records low methodological quality for 50% of the included studies, and one included study had no control group. (3) The two studies showing a testosterone increase were intra-group changes of low clinical magnitude (60-70 ng/dL) in men with hypogonadism — a clinical population, not general consumers. (4) Dose range 400-750 mg/d for 1-3 months.
+
+**`tribulus_testosterone_booster_review_37697053`** — PMID 37697053 · systematic_review · systematic_review · funding: unreported
+
+- Identity: botanical_preparation — botanical_species: Tribulus terrestris; plant_part: not_stated
+- Exposure: supplement_dose, route oral, dose not resolved mg (source_not_reported)
+- Population: 52 studies across 27 proposed testosterone boosters in male athletes, men with late-onset hypogonadism, infertile men and healthy men; 4 studies of Tribulus terrestris
+- Outcomes: total_testosterone_versus_placebo (primary/surrogate) → **null**
+  - > Our findings indicate that most fail to increase total testosterone.
+  - > 10 studies of cholecalciferol; 5 zinc/magnesium; 4 Tribulus terrestris and creatine
+- Limitations: (1) A cross-ingredient review: Tribulus is one of 27 boosters assessed, contributing 4 studies, and it is not named among the exceptions the review considers effective. (2) No Tribulus-specific pooled estimate or dose is given in the abstract. (3) Directly addresses the marketed testosterone claim at synthesis level.
+
+**`tribulus_sport_health_biomarkers_review_35954909`** — PMID 35954909 · systematic_review · systematic_review · funding: unreported
+
+- Identity: botanical_preparation — botanical_species: Tribulus terrestris; plant_part: not_stated
+- Exposure: supplement_dose, route oral, dose not resolved mg (source_not_reported)
+- Population: Physically active adult males; 7 studies met inclusion from 340 records
+- Outcomes: muscle_damage_markers_and_hormonal_behaviour (primary/surrogate) → **null**
+  - > there was no clear evidence of the beneficial effects of TT supplementation on muscle damage markers and hormonal behavior
+  - > no TT-induced toxicity was reported
+- Limitations: (1) Seven studies only; the review calls for more research. (2) Covers the sports-performance marketing claim at synthesis level and finds no clear benefit. (3) No dose stated in the abstract.
+
 ### Proposed synthesis (for your decision)
 
 **RECORD THE REVIEW STATE (identity state B), CREATE NO SCORING RECORD**
 
-As a sole agent for its two most-marketed claims (testosterone, athletic performance), the trials are consistently null. Screening also found that the positive literature is combination products, which cannot be attributed to tribulus. Evidence 0 for these 50 products is the correct, and now explainable, result.
+Corrected after adding the higher-level syntheses the owner asked for, which changed the conclusion rather than confirming it. 'Null across the board' would have been wrong: the 2025 systematic review reports that 400-750 mg/d improved erectile dysfunction in 3 of 5 studies that measured it — while stating this is a LOW level of evidence, in men with diagnosed erectile dysfunction, with 50% of studies at low methodological quality. For the two claims these products actually market, the syntheses are consistent: no robust testosterone increase (8 of 10 studies showed no androgen change; a cross-booster review finds most fail) and no clear sports-performance benefit. So the honest state is reviewed-with-no-qualifying-evidence for testosterone and performance, with a low-level, population-specific ED signal that the generic scorer cannot gate.
 
-- Evidence strength: several small null sole-agent trials
-- Applicability to labels: no qualifying positive evidence to apply
-- Review completeness: bounded search documented in wave1_search_log.json (records screened per log; 64 kept)
-- Scorer compatibility: **class B** — Sole-agent trials are null for the marketed claims; the only positive literature is combination products. The scorer cannot distinguish 'Tribulus alone' from 'Tribulus inside a multi-herb formula', so any record risks importing combination results.
+- Evidence strength: two small null primary trials; three syntheses — null for testosterone and performance, low-level positive for erectile dysfunction in diagnosed men
+- Applicability to labels: no qualifying evidence for the marketed testosterone or performance claims; the ED signal is confined to a diagnosed population the scorer cannot express
+- Review completeness: bounded search documented in wave1_search_log.json, extended 2026-09-17 with a synthesis-level query at owner request (see the tribulus_synthesis_supplement entry)
+- Scorer compatibility: **class B** — The only positive signal (erectile function, low level of evidence) is confined to men with diagnosed erectile dysfunction, and the scorer has no population gate; the marketed testosterone and performance claims are null. Sole-agent versus combination also cannot be distinguished, so any record risks importing combination results.
 
 **Actions:** approve · approve with correction · reject · hold · request adjudication · request more source review
 
@@ -375,13 +419,13 @@ As a sole agent for its two most-marketed claims (testosterone, athletic perform
 
 **Label reality.** Measured label median 50 mg/day (p25 12.5, p75 1,000); sold for libido, erectile function, testosterone and bone health.
 
-Measured label dose: median 50 mg/day (p25 12.5, p75 1000, max 1000) across 55 dosed rows.
+Measured label exposure: median 50 mg/day (p25 12.5, p75 1000, min 10, max 1000) across 55 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 1 publications, 1 unique trials/cohorts, 0 independent replications. One pharmacokinetic trial. No controlled efficacy trial of the marketed indications exists in the documented search scope.
 
 ### Contexts (all pending)
 
-**`epimedium_prenylflavonoid_pk_30522143`** — PMID 30522143 · rct · direct_rct · funding: unreported
+**`epimedium_prenylflavonoid_pk_30522143`** — PMID 30522143 · rct · mechanistic_study · funding: unreported
 
 - Identity: botanical_preparation — botanical_species: Epimedium; plant_part: leaf; standardization: defined Epimedium prenylflavonoid extract (icariin, icariside I, icariside II, icaritin, desmethylicaritin)
 - Exposure: supplement_dose, route oral, dose 370, 740, 1110 mg (verified)
@@ -390,7 +434,7 @@ Measured label dose: median 50 mg/day (p25 12.5, p75 1000, max 1000) across 55 d
   - > Epimedium prenylflavonoid extracts were well tolerated and no adverse effects were observed.
   - > Levels of Epimedium prenylflavonoid metabolites observed in this study were consistent with levels demonstrated to have anti-osteoporotic effects in cellular and animal studies.
   - dose > A single oral dose of 370, 740, or 1110 mg of a standardized Epimedium prenylflavonoid extract was administered to 30 healthy male subjects in a randomized, placebo-controlled trial.
-- Limitations: (1) Pharmacokinetics and tolerability only — there is NO efficacy endpoint in this trial. (2) The abstract's bridge to 'anti-osteoporotic effects' is explicitly to cellular and animal studies; that is mechanism, not human efficacy. (3) Single doses in healthy men; nothing about chronic use or the marketed libido/testosterone claims.
+- Limitations: (1) Pharmacokinetics and tolerability only — there is NO efficacy endpoint in this trial. Recorded here as non-efficacy context; its canonical clinical interpretation belongs to the PK/interaction owner. (2) The abstract's bridge to 'anti-osteoporotic effects' is explicitly to cellular and animal studies; that is mechanism, not human efficacy. (3) Single doses in healthy men; nothing about chronic use or the marketed libido/testosterone claims. (4) evidence_role is recorded as mechanistic_study because the frozen contract's EVIDENCE_ROLE vocabulary has no pharmacokinetic value; flagged in CHECKPOINT.md rather than extended for one case.
 
 ### Proposed synthesis (for your decision)
 
@@ -410,6 +454,7 @@ A documented bounded search found no controlled human efficacy trial of Epimediu
 | 30034348 | safety | safety/CAERS owner | Adverse-event case literature for Epimedium flagged in screening (tachyarrhythmia/hypomania). |
 | 38327958 | safety | safety/CAERS owner | Adverse-event case literature flagged in screening. |
 | 40546602 | safety | safety/CAERS owner | Adverse-event case literature flagged in screening. |
+| 30522143 | pharmacokinetic | PK/interaction owner | Single-dose prenylflavonoid pharmacokinetics and tolerability; the canonical interpretation of this study belongs to the PK owner, not the efficacy record. |
 
 ### High-risk queue: cardiovascular, medication_interactions
 
@@ -423,9 +468,9 @@ Flagged for eventual clinician countersignature; it does not block the owner rev
 
 `gotu_kola` — 43 products, 9 brands, 44 label rows; Evidence mean 4.7, 25 at zero, 30 at ≤8. Review state today: not_reviewed.
 
-**Label reality.** Labels deliver 200-1,000 mg/day of Centella asiatica herb powder or extract; plant part and extract ratio are usually unstated.
+**Label reality.** Labels deliver Centella asiatica herb powder or extract; plant part and extract ratio are usually unstated. See label_exposure_measured for the measured distribution — all dose comparisons below are computed from its median, not from prose.
 
-Measured label dose: median 60 mg/day (p25 50, p75 364.25, max 950) across 44 dosed rows.
+Measured label exposure: median 60 mg/day (p25 50, p75 364.25, min 10, max 950) across 44 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 3 publications, 2 unique trials/cohorts, 0 independent replications. Two RCTs of different exposures and outcomes plus one scoping review whose included studies are not yet extracted. Nothing here replicates anything.
 
@@ -440,7 +485,7 @@ Measured label dose: median 60 mg/day (p25 50, p75 364.25, max 950) across 44 do
   - > compared with placebo, Gotu Kola significantly attenuated the peak ASR amplitude 30 and 60 minutes after treatment
   - > Gotu Kola had no significant effect on self-rated mood, heart rate, or blood pressure
   - dose > a single 12-g orally administered dose of Gotu Kola (N = 20) or placebo (N = 20)
-- Limitations: (1) Single acute 12 g dose — roughly 12-24x a typical label serving; establishes nothing about 200-1,000 mg/day chronic use. (2) Primary endpoint is a physiological startle measure, not a patient-important anxiety outcome; the authors state therapeutic efficacy remains unknown. (3) Plant part, extract ratio and standardization are not stated, so the material cannot be matched to a specific label preparation. (4) n=40, single site, published 2000; no replication in this bounded search scope.
+- Limitations: (1) Single acute 12 g dose. Against the measured label median of 60 mg/day that is ~200x, and ~13x even the measured p75 of 364 mg/day; it establishes nothing about label-range chronic use. (2) Primary endpoint is a physiological startle measure, not a patient-important anxiety outcome; the authors state therapeutic efficacy remains unknown. (3) Plant part, extract ratio and standardization are not stated, so the material cannot be matched to a specific label preparation. (4) n=40, single site, published 2000; no replication in this bounded search scope.
 
 **`gotu_kola_mci_adjunct_36420467`** — PMID 36420467 · rct · direct_rct · funding: unreported
 
@@ -466,7 +511,7 @@ Measured label dose: median 60 mg/day (p25 50, p75 364.25, max 950) across 44 do
 
 **DO NOT create a scoring record yet**
 
-The only positive primary outcome comes from a single acute 12 g challenge (12-24x a label serving) on a surrogate endpoint; the one label-range trial (1,000 mg/day, 12 weeks) was null on its cognitive primary; the 2026 scoping review finds three small human studies in total. Creating a record with effect_direction null or mixed would, under the current generic scorer, raise Evidence above zero for 25 products on the strength of evidence that did not show benefit — see GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md.
+The only positive primary outcome comes from a single acute 12 g challenge — about 200x the measured label median of 60 mg/day — on a surrogate startle endpoint; the one trial inside label range (1,000 mg/day, 12 weeks) was null on its cognitive primary; the 2026 scoping review finds three small human studies in total. Creating a record with effect_direction null or mixed would, under the current generic scorer, raise Evidence above zero for 25 products on the strength of evidence that did not show benefit — see GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md.
 
 <details><summary>if owner approves anyway</summary>
 
@@ -507,7 +552,7 @@ Flagged for eventual clinician countersignature; it does not block the owner rev
 
 **Label reality.** Measured label median 1,400 mg/day (p25 1,025, p75 5,000), sold for energy and exercise recovery.
 
-Measured label dose: median 1400 mg/day (p25 1025, p75 5000, max 5100) across 24 dosed rows.
+Measured label exposure: median 1400 mg/day (p25 1025, p75 5000, min 1.1, max 5100) across 24 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 2 publications, 1 unique trials/cohorts, 0 independent replications. 21154353 and 25391139 are successive versions of ONE Cochrane review. Counting both would double-count the same evidence.
 
@@ -555,7 +600,7 @@ Flagged for eventual clinician countersignature; it does not block the owner rev
 
 **Label reality.** Measured label median 150 mg/day (p25 87.5, p75 150, max 150) — the studied effective dose. 5 of 33 dosed rows name the exact studied material ('PA-free butterbur extract (Petadolex)'); the other 28 declare only 'butterbur (unspecified)', where pyrrolizidine-alkaloid content is unknown.
 
-Measured label dose: median 150 mg/day (p25 87.5, p75 150, max 150) across 33 dosed rows.
+Measured label exposure: median 150 mg/day (p25 87.5, p75 150, min 7.5, max 150) across 33 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 4 publications, 2 unique trials/cohorts, 1 independent replications. Two placebo-controlled trials (n=60 and n=245/233) are the entire positive base. The systematic review contains both, and the AAN/AHS guideline rests on the same pair. Four publications, two trials.
 
@@ -600,7 +645,7 @@ Measured label dose: median 150 mg/day (p25 87.5, p75 150, max 150) across 33 do
 - Population: Adults with episodic migraine
 - Outcomes: migraine_frequency_and_severity (guideline/patient_important) → **positive**
   - > Petasites (butterbur) is effective for migraine prevention and should be offered to patients with migraine to reduce the frequency and severity of migraine attacks (Level A).
-- Limitations: (1) A guideline recommendation summarising the same two trials; it is authoritative but not additional evidence. (2) Published 2012 from a literature review window ending May 2009 — it predates later hepatotoxicity-driven regulatory actions, which belong to the safety owner. (3) The guideline names Petasites generally; the underlying trials used the proprietary extract.
+- Limitations: (1) HISTORICAL, NOT CURRENT GUIDANCE: the American Academy of Neurology recommended butterbur for migraine prevention in 2012 and stopped recommending it in 2015 over serious safety concerns (NCCIH, verified 2026-09-17). This context must never be presented as current guideline support. (2) A guideline recommendation summarising the same two trials; authoritative in its time, but not additional evidence. (3) Its literature review window ended May 2009, predating the hepatotoxicity-driven reassessment. (4) The guideline names Petasites generally; the underlying trials used the proprietary extract.
 
 ### Live probe against the current architecture
 
@@ -617,7 +662,7 @@ The measured label median of 150 mg/day comes from the UNSPECIFIED-material rows
 
 **HOLD — the evidence is the strongest in Wave 1, but the material scoping it requires is not expressible today**
 
-Two placebo-controlled trials, a systematic review and an AAN/AHS Level A recommendation support the proprietary PA-free Petasites root extract at 150 mg/day for migraine prophylaxis, and the 100 mg/day arm failed (p = 0.127), so a material-and-dose-scoped record is exactly what the evidence supports. A live probe shows the applicability contract cannot select that material: it matches printed label text, and 'Petadolex'/'PA-free' exist only in enricher-derived form mappings. Approving a dose-floor-only record would credit unspecified butterbur at 150 mg — the pyrrolizidine-alkaloid hepatotoxicity material — which is the opposite of the intent.
+Two placebo-controlled trials and a systematic review support the proprietary PA-free Petasites root extract at 150 mg/day for migraine prophylaxis, and the 100 mg/day arm failed (p = 0.127). The 2012 AAN/AHS Level A recommendation is HISTORICAL: the Academy stopped recommending butterbur in 2015 over safety concerns, and rare liver injury has been reported even for products labelled PA-free. 'PA-free' is a processing claim, not the studied Petadolex material, so the two must not be equated. A live probe also shows the applicability contract cannot select the studied material at all: it matches printed label text, where 'Petadolex' does not appear. A dose-floor-only record would credit unspecified butterbur at 150 mg — the PA-risk material.
 
 <details><summary>fields if material scoping becomes possible</summary>
 
@@ -653,13 +698,27 @@ Two placebo-controlled trials, a systematic review and an AAN/AHS Level A recomm
 - Then a record with required_form_terms ['petadolex','pa-free'] + minimum_daily_dose 150 mg would credit exactly the intended products.
 
 **Decisions needed from you:**
-- Route the pyrrolizidine-alkaloid hepatotoxicity literature to the safety owner regardless of what happens to this record.
-- Decide whether the applicability owner should gain material scoping from enricher-resolved forms — butterbur is the concrete case that would justify it.
+- Safety owner leads here: unspecified butterbur carries pyrrolizidine-alkaloid hepatotoxicity risk, and NCCIH reports rare liver injury even in products labelled PA-free. No evidence record should make any butterbur product look endorsed before that is settled.
+- If material scoping ever becomes possible, scope to the studied Petadolex material specifically — not to the generic 'PA-free' claim.
+- Treat the AAN/AHS Level A statement as historical in any consumer-facing copy.
 
 - Evidence strength: guideline-endorsed but thin: two trials, 293 patients, dose-dependent
 - Applicability to labels: applicable to the PA-free/Petadolex rows at >= 150 mg/day; not applicable to unspecified butterbur
 - Review completeness: bounded search documented in wave1_search_log.json (58 records screened, 51 kept)
 - Scorer compatibility: **class B** — Corrected after a live probe on four real butterbur products (328579, 61929, 293376, 252504). The applicability contract links the PRINTED label row, whose text is e.g. 'Purple Butterbur CO2 extract' with form_id None; the 'PA-free butterbur extract (Petadolex)' identity lives on the enricher's separate row object and is invisible to required_form_terms, so the studied material cannot be selected (clinical_form_mismatch). Products carrying two butterbur rows (328579 Migra-Eeze, 293376 Petadolex Pro-Active) fail to link at all, because _linked_rows returns nothing when more than one canonical candidate row exists. A dose-floor-only record would therefore credit the 150 mg 'butterbur (unspecified)' products — exactly the pyrrolizidine-alkaloid material the safety literature warns about — while the branded-extract products it is meant for may not link.
+
+### Authoritative guidance (recorded as references, not study contexts)
+
+The frozen context contract requires a PMID and a regulator assessment has none, so these use the shape the registry already has for non-PubMed sources.
+
+**NCCIH (National Center for Complementary and Integrative Health)** — Butterbur: Usefulness and Safety  
+https://www.nccih.nih.gov/health/butterbur · retrieved 2026-09-17 · page read in full on retrieval date
+
+> In 2012, the American Academy of Neurology recommended butterbur for preventing migraines. However, the Academy stopped recommending it in 2015 because of serious concerns about its safety.
+> Only butterbur products that have been processed to remove PAs and are labeled or certified as PA-free should be considered for use.
+> However, there have been rare cases of liver injury associated with products that were reported to be PA-free.
+
+*Destination: safety owner holds the PA/hepatotoxicity interpretation; recorded here only as evidence context*
 
 ### Handoffs to other owners (no clinical interpretation here)
 
@@ -673,7 +732,7 @@ Two placebo-controlled trials, a systematic review and an AAN/AHS Level A recomm
 | 30790138 | safety | safety/CAERS owner | Butterbur safety/hepatotoxicity record. |
 | 38603736 | efficacy_other_indication | clinical evidence registry owner | Allergic-rhinitis meta-analysis where Petasites is the most-studied plant; very-low-to-low certainty, a separate indication from migraine. |
 
-### High-risk queue: hepatic, pregnancy_and_fertility
+### High-risk queue: hepatic, pregnancy_and_fertility, withdrawn_guideline_recommendation
 
 Flagged for eventual clinician countersignature; it does not block the owner review above.
 
@@ -687,7 +746,7 @@ Flagged for eventual clinician countersignature; it does not block the owner rev
 
 **Label reality.** Labels deliver 5-100 mg/day of DHEA to general adult consumers; the studied populations below are patient groups, not general users.
 
-Measured label dose: median 25 mg/day (p25 25, p75 50, max 100) across 33 dosed rows.
+Measured label exposure: median 25 mg/day (p25 25, p75 50, min 5, max 100) across 33 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 5 publications, unresolved — four reviews pooling overlapping RCT sets plus one primary RCT unique trials/cohorts, 0 independent replications. 30124161 and 32930419 are successive depression meta-analyses from the same line of work and must not be counted as two independent confirmations. Review membership is extraction_pending, so overlap between the depression, BMD and IVF reviews is unresolved.
 
@@ -738,7 +797,7 @@ Measured label dose: median 25 mg/day (p25 25, p75 50, max 100) across 33 dosed 
 
 **HOLD — do not create a scoring record in Wave 1**
 
-Real meta-analytic human evidence exists, but every positive result sits in a supervised patient population (IVF with diminished ovarian reserve, primary adrenal insufficiency, clinical depression) and no abstract states a daily dose. The generic scorer has no population gate: a positive DHEA record would credit every 25-50 mg consumer product with fertility-clinic and hormone-replacement evidence. That is the 'captured but not enforced' gap, and it is also a safety-sensitive hormone.
+Real meta-analytic human evidence exists, but every positive or mixed finding is population- and indication-specific: IVF patients with diminished ovarian reserve, primary adrenal insufficiency, people with depression or other clinical conditions, and — in healthy older adults — a bone-density signal reported for women with no comparable effect in men. No review states a daily dose. The generic scorer has no population or sex gate, so a positive DHEA record would credit every 25-50 mg consumer product with fertility-clinic, hormone-replacement and sex-specific evidence. It is also a safety-sensitive hormone.
 
 <details><summary>if owner approves anyway</summary>
 
@@ -756,7 +815,7 @@ Real meta-analytic human evidence exists, but every positive result sits in a su
 - Evidence strength: moderate in specific patient populations; very low certainty for depressive symptoms per the review's own grading
 - Applicability to labels: unresolved — population mismatch is the blocker, not evidence volume
 - Review completeness: bounded search documented in wave1_search_log.json (154 records screened, 52 kept)
-- Scorer compatibility: **class B** — Positive results sit in supervised patient populations (IVF/diminished ovarian reserve, adrenal insufficiency, clinical depression) and no review states a dose; with no population gate the record would credit 25 mg consumer products. Hormone-related, so it also routes to the high-risk path.
+- Scorer compatibility: **class B** — Positive and mixed results are population- and indication-specific (IVF/diminished ovarian reserve, adrenal insufficiency, clinical depression, and a women-only bone-density signal in healthy older adults), and no review states a dose. With no population or sex gate the record would credit 25 mg consumer products. Hormone-related, so it also routes to the high-risk path.
 
 ### Handoffs to other owners (no clinical interpretation here)
 
@@ -779,7 +838,7 @@ Flagged for eventual clinician countersignature; it does not block the owner rev
 
 **Label reality.** Measured label median 100 mg/day (p25 80, p75 200), sold mainly for diuretic, digestive and liver support.
 
-Measured label dose: median 100 mg/day (p25 80, p75 200, max 1575) across 59 dosed rows.
+Measured label exposure: median 100 mg/day (p25 80, p75 200, min 10, max 1575) across 59 dosed rows. Source: inventory slim corpus, re-scored 2026-09-17.
 
 **Publications vs trials.** 1 publications, 1 unique trials/cohorts, 0 independent replications. One small single-agent trial. Screening found no large single-ingredient RCT of isolated dandelion for its marketed claims.
 

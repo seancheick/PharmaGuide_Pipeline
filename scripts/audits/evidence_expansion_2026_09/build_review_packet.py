@@ -56,11 +56,9 @@ def main() -> int:
                   f"{impact['evidence_zero_products']} at zero, {impact['evidence_le8_products']} at ≤8. "
                   f"Review state today: {impact['review_state']}.", "",
                   f"**Label reality.** {c['label_reality']}", ""]
-        profile = c.get("label_dose_profile")
-        if profile and profile.get("mg_median"):
-            lines.append(f"Measured label dose: median {profile['mg_median']:g} mg/day "
-                         f"(p25 {profile['mg_p25']:g}, p75 {profile['mg_p75']:g}, "
-                         f"max {profile['mg_max']:g}) across {profile['dosed_rows']} dosed rows.\n")
+        # Generated from the measured corpus distribution, never hand-typed prose.
+        if c.get("label_exposure_measured"):
+            lines += [c["label_exposure_measured"], ""]
         counts = c["publication_vs_trial_count"]
         lines += [f"**Publications vs trials.** {counts['publications']} publications, "
                   f"{counts['unique_trials_or_cohorts']} unique trials/cohorts, "
@@ -108,6 +106,20 @@ def main() -> int:
                   f"- Review completeness: {synthesis['review_completeness']}",
                   f"- Scorer compatibility: **class {c['scorer_compatibility']['class']}** — "
                   f"{c['scorer_compatibility']['reason']}", ""]
+        if c.get("authoritative_references"):
+            lines += ["### Authoritative guidance (recorded as references, not study contexts)", "",
+                      "The frozen context contract requires a PMID and a regulator assessment has none, so these use "
+                      "the shape the registry already has for non-PubMed sources.", ""]
+            for ref in c["authoritative_references"]:
+                lines += [f"**{ref['authority']}** — {ref['title']}  ",
+                          f"{ref['url']} · retrieved {ref['retrieved']} · {ref['verification']}", ""]
+                for q in ref.get("quotes", []):
+                    lines.append(f"> {quote(q, 400)}")
+                lines.append("")
+                if ref.get("why_it_does_not_change_the_hold"):
+                    lines += [f"*{ref['why_it_does_not_change_the_hold']}*", ""]
+                if ref.get("destination"):
+                    lines += [f"*Destination: {ref['destination']}*", ""]
         if c.get("handoff"):
             lines += ["### Handoffs to other owners (no clinical interpretation here)", "",
                       "| PMID | role | destination | reason |", "|---|---|---|---|"]

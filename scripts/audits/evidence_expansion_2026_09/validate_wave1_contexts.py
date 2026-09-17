@@ -40,6 +40,11 @@ def main() -> int:
             if args.candidates_dir:
                 stored = {r["pmid"]: r for r in json.loads(
                     (args.candidates_dir / f"{candidate['canonical_id']}.json").read_text())["records"]}
+                # Records fetched outside the original per-identity retrieval still need a
+                # committed source to verify their quotes against.
+                supplemental = OUT / "wave1_supplemental_records.json"
+                if supplemental.exists():
+                    stored.update({r["pmid"]: r for r in json.loads(supplemental.read_text())["records"]})
                 for pmid in context["source_pmids"]:
                     abstract = (stored.get(pmid) or {}).get("abstract") or ""
                     provenance = (context.get("dose") or {}).get("source_provenance") or {}

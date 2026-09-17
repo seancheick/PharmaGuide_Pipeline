@@ -8,7 +8,7 @@
 - **3549** (87.7%) are blocked by missing evidence curation — this project's target.
 - **496** (12.3%) are blocked elsewhere; more papers cannot move them (see BLOCKER_ROUTING.md).
 - **No scorer-defect bucket**: 0 products have an accepted, point-carrying match yet Evidence 0.
-- **10 identities deeply curated** into **29 pending contexts**; **0 are class A** (the current scorer could apply them safely) and **10 are class B** (valid evidence the scorer is too coarse to apply).
+- **10 identities deeply curated** into **32 pending contexts**; **0 are class A** (the current scorer could apply them safely) and **10 are class B** (valid evidence the scorer is too coarse to apply).
 
 ## What the deeply authored identities cover
 
@@ -51,11 +51,11 @@ Every Wave 1 identity landed in class B. The curated evidence is real; the gener
 
 | measure | value |
 |---|---:|
-| records screened by subagents | 1554 |
-| kept after screening | 668 |
-| rejected with a reason code | 879 |
-| shortlisted for central reading | 159 |
-| handoffs proposed to other owners | 66 |
+| records screened by subagents | 2937 |
+| kept after screening | 1006 |
+| rejected with a reason code | 1863 |
+| shortlisted for central reading | 260 |
+| handoffs proposed to other owners | 88 |
 | shortlist PMIDs re-fetched live by Claude | 65 |
 | PMIDs not found live | 0 |
 | stored-vs-live title drift | 0 |
@@ -104,6 +104,46 @@ All 202 legacy records lack study contexts; 195 carry no dose policy and 194 no 
 | `wave1_contexts.json` | authored pending contexts + proposals |
 | `wave1_live_verification.json` | live re-fetch findings |
 | `docs/plans/EVIDENCE_EXPANSION_WAVE1_REVIEW_PACKET_2026-09.md` | the owner decision packet |
+
+## Owner review (2026-09-17) — decisions and corrections
+
+No Wave 1 identity becomes a generic scoring record. Decisions:
+
+| identity | decision |
+|---|---|
+| Ginkgo | HOLD |
+| Isoflavones | HOLD |
+| Linoleic acid | review-state conclusion only; no scoring record |
+| Tribulus | review-state conclusion only, after the higher-level syntheses were added |
+| Horny goat weed | review-state conclusion only; PK/safety routed to their owners |
+| Gotu kola | HOLD; label-dose inconsistency corrected |
+| D-ribose | HOLD pending null semantics |
+| Butterbur | HOLD |
+| DHEA | HOLD |
+| Dandelion | review-state conclusion only; no scoring record |
+
+Corrections applied to the packet:
+
+- **Gotu kola**: hand-written prose said 200-1,000 mg/day while the measured distribution said median 60 mg/day, and the 12 g trial was described as 12-24x a label serving when it is ~200x the median. Every candidate now carries a `label_exposure_measured` sentence generated from the corpus, and the ratios are computed from it.
+- **DHEA**: 'every positive result sits in a supervised patient population' was wrong — one curated meta-analysis is in healthy older adults with a women-only bone-density signal. Rewritten as population- and indication-specific, including sex-specific findings.
+- **Butterbur**: the 2012 AAN/AHS Level A recommendation is recorded as HISTORICAL; the Academy stopped recommending butterbur in 2015 over safety concerns (NCCIH, verified on retrieval). 'PA-free' is a processing claim and is no longer equated with the studied Petadolex material.
+- **Tribulus**: adding the higher-level syntheses CHANGED the conclusion rather than confirming it. A 2025 systematic review reports 400-750 mg/d improved erectile dysfunction in 3 of 5 studies that measured it (low level of evidence, diagnosed men, 50% of studies low quality), while testosterone and performance remain null. Recorded as null for the marketed claims with a population-specific low-level ED signal.
+- **Ginkgo**: EMA HMPC context added as an authoritative reference — well-established use applies to medicines containing the DRY EXTRACT in adults with mild dementia, which reinforces the hold.
+- **Horny goat weed**: the PK study is recorded as a non-efficacy role and handed to the PK owner.
+- **Screening drafts**: quarantined in `QUARANTINE_screening_drafts/`, with a test asserting no curation script reads them.
+
+Contract limitation noted, not extended: the frozen `EVIDENCE_ROLE` vocabulary has no `pharmacokinetic` value, so the horny goat weed PK study is recorded as `mechanistic_study`. If PK contexts become common in later waves, that is the one case for extending the enum.
+
+## Next phase — applicability repair before more deep curation
+
+All 10 identities landing in class B is too strong a signal to answer with more curation. Curating another 50 identities now risks hundreds of excellent contexts and zero usable records. Sequence:
+
+1. Integrate this infrastructure onto current main; no production evidence writes.
+2. Keep discovery and screening running — that work is cheap and reusable.
+3. Run a separate bounded review of the CANONICAL APPLICABILITY OWNER against the four concrete failures Wave 1 exposed: population applicability (isoflavones, DHEA); material/form applicability from already-resolved enrichment identity (butterbur); multi-row identity linking (butterbur); intervention/exposure compatibility (linoleic acid). Inspect the existing representations first; extend only where one truly cannot carry the decision. No weight or direction-semantics changes.
+4. Re-run these 10 identities through the real production matcher afterwards and show which become safely applicable, which stay held and why, with a read-only corpus projection.
+5. Keep GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW as its own bounded scoring-semantics project.
+6. Resume larger deep-curation waves only after that.
 
 ## Next wave, by leverage
 
