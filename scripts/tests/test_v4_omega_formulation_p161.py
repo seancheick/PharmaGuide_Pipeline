@@ -518,6 +518,62 @@ def test_concentration_not_awarded_without_oil_mass() -> None:
     assert payload["metadata"]["epa_dha_concentration"]["status"] == "missing_oil_mass"
 
 
+def _with_total_fat(product: dict, amount: float, unit: str = "Gram(s)") -> dict:
+    product["nutritionalInfo"] = {"totalFat": {"amount": amount, "unit": unit}}
+    return product
+
+
+def test_concentration_uses_declared_total_fat_upper_bound_when_oil_mass_missing() -> None:
+    """Thorne Prenatal DHA prints DHA 650 mg + EPA 200 mg and Total Fat 1 g, but
+    no oil mass. FDA rounds fat of 0.5-5 g to the nearest 0.5 g, so the oil is at
+    most 1.25 g: concentration is at least 68%, never overstated."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_with_total_fat(
+        _epa_dha_product(name="Prenatal DHA 650 mg", epa=200, dha=650), 1.0,
+    ))
+    concentration = payload["metadata"]["epa_dha_concentration"]
+    assert concentration["oil_mg"] == 1250.0
+    assert concentration["oil_mass_source"] == "total_fat_rounding_upper_bound"
+    assert concentration["ratio"] == 0.68
+    assert payload["components"]["epa_dha_concentration"] == 3.0
+
+
+def test_total_fat_above_five_grams_uses_the_one_gram_rounding_bound() -> None:
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_with_total_fat(
+        _epa_dha_product(name="Fish Oil", epa=1200, dha=800), 6.0,
+    ))
+    assert payload["metadata"]["epa_dha_concentration"]["oil_mg"] == 6500.0
+
+    at_five = score_formulation(_with_total_fat(
+        _epa_dha_product(name="Fish Oil", epa=1200, dha=800), 5.0,
+    ))
+    assert at_five["metadata"]["epa_dha_concentration"]["oil_mg"] == 5500.0
+
+
+def test_declared_oil_mass_wins_over_total_fat() -> None:
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    product = _with_total_fat(_epa_dha_product(
+        name="Fish Oil", epa=500, dha=250,
+        extra_ingredients=[{"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg"}],
+    ), 3.0)
+    concentration = score_formulation(product)["metadata"]["epa_dha_concentration"]
+    assert concentration["oil_mg"] == 1000.0
+    assert concentration["oil_mass_source"] == "label_oil_row"
+
+
+def test_zero_total_fat_does_not_supply_oil_mass() -> None:
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_with_total_fat(
+        _epa_dha_product(name="Fish Oil", epa=500, dha=250), 0.0,
+    ))
+    assert payload["metadata"]["epa_dha_concentration"]["status"] == "missing_oil_mass"
+
+
 def test_sustainability_does_not_credit_when_score_eligible_false() -> None:
     """Score_eligible=False means rules_db flagged the claim as
     proximity_conflict / negation / scope_violation. Do NOT credit."""

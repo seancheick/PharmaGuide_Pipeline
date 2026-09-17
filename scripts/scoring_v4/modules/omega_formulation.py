@@ -309,14 +309,37 @@ def _epa_dha_and_oil_mass_mg(product: Dict[str, Any]) -> Dict[str, float]:
     }
 
 
+def _total_fat_upper_bound_mg(product: Dict[str, Any]) -> Optional[float]:
+    """Largest oil mass the declared Total Fat allows.
+
+    Many omega labels print EPA/DHA and Total Fat but no oil mass. FDA rounds
+    Total Fat to the nearest 0.5 g up to 5 g and to the nearest 1 g above
+    (21 CFR 101.9(c)(2)), so the true fat is below the declared value plus half
+    an increment. Using that bound can only understate concentration.
+    """
+    total_fat = _safe_dict(_safe_dict(product.get("nutritionalInfo")).get("totalFat"))
+    declared_mg = _to_mg(total_fat.get("amount"), total_fat.get("unit"))
+    if declared_mg is None:
+        return None
+    # A declared 5 g may be a rounded 5.49 g, so 5 g takes the 1 g bound.
+    return declared_mg + (250.0 if declared_mg < 5000.0 else 500.0)
+
+
 def _score_epa_dha_concentration(product: Dict[str, Any], cfg: Dict[str, Any]) -> Dict[str, Any]:
     masses = _epa_dha_and_oil_mass_mg(product)
     epa_dha_mg = masses["epa_dha_mg"]
     oil_mg = masses["oil_mg"]
+    oil_mass_source = "label_oil_row"
+    if oil_mg <= 0:
+        fat_bound_mg = _total_fat_upper_bound_mg(product)
+        if fat_bound_mg is not None:
+            oil_mg = fat_bound_mg
+            oil_mass_source = "total_fat_rounding_upper_bound"
     payload: Dict[str, Any] = {
         "score": 0.0,
         "epa_dha_mg": round(epa_dha_mg, 4),
         "oil_mg": round(oil_mg, 4),
+        "oil_mass_source": oil_mass_source,
     }
     if epa_dha_mg <= 0:
         payload["status"] = "missing_epa_dha_mass"
