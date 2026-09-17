@@ -789,6 +789,37 @@ def _stamp_evidence_identity_contract(
     return item
 
 
+_PRINTED_EPA_FORM_RE = re.compile(r"\b(?:eicosapentaenoic|epa)\b", re.IGNORECASE)
+_PRINTED_DHA_FORM_RE = re.compile(r"\b(?:docosahexaenoic|dha)\b", re.IGNORECASE)
+_OMEGA_THREE_NAME_RE = re.compile(r"\bomega[\s-]?3\b", re.IGNORECASE)
+_OIL_NAME_RE = re.compile(r"\boil\b", re.IGNORECASE)
+
+
+def _printed_epa_dha_owner(row: Dict[str, Any]) -> Optional[str]:
+    """EPA/DHA owner of an omega-3 row whose printed forms are only EPA/DHA.
+
+    "Omega-3 Fatty Acids 600 mg (Form: EPA, and DHA)" states an EPA+DHA amount;
+    the same row printed as DHA alone states DHA. An oil row is carrier mass
+    whatever forms it lists, and any other printed form (DPA, ALA) means the
+    amount is not only EPA/DHA.
+    """
+    name = str(row.get("name") or row.get("raw_source_text") or "")
+    if not _OMEGA_THREE_NAME_RE.search(name) or _OIL_NAME_RE.search(name):
+        return None
+    forms = [form for form in _safe_list(row.get("forms")) if isinstance(form, dict)]
+    if not forms:
+        return None
+    nutrients: set[str] = set()
+    for form in forms:
+        form_name = str(form.get("name") or "")
+        epa = bool(_PRINTED_EPA_FORM_RE.search(form_name))
+        dha = bool(_PRINTED_DHA_FORM_RE.search(form_name))
+        if epa == dha:
+            return None
+        nutrients.add("epa" if epa else "dha")
+    return "epa_dha" if nutrients == {"epa", "dha"} else nutrients.pop()
+
+
 def _is_omega_aggregate_row(row: Dict[str, Any]) -> bool:
     text = _row_identity_text(row).lower()
     if any(
@@ -1783,6 +1814,8 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             special_evidence_paths.add(str(row.get("raw_source_path") or ""))
             evidence.append(_sports_primary_identity_without_dose(row, canonical))
 
+        explicit_aggregate = _is_explicit_epa_dha_aggregate_label(_row_identity_text(row))
+        printed_owner = None if explicit_aggregate else _printed_epa_dha_owner(row)
         if (
             not has_explicit_epa_dha_row
             and
@@ -1790,24 +1823,29 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             and quantity is not None
             and _unit_is_mass(unit)
             # The carrier-oil mass is not the sum of its EPA and DHA.
-            # Aggregate dose exists only when the printed row explicitly owns
-            # a combined EPA+DHA amount.
-            and _is_explicit_epa_dha_aggregate_label(_row_identity_text(row))
+            # Dose exists only when the printed row owns an EPA/DHA amount:
+            # a combined EPA+DHA total, or an omega-3 row printed as EPA/DHA.
+            and (explicit_aggregate or printed_owner)
             and canonical not in {"epa", "dha", "epa_dha"}
             and canonical not in _NON_EPA_DHA_OMEGA_CANONICALS
         ):
+            owner = printed_owner or "epa_dha"
             special_evidence_paths.add(str(row.get("raw_source_path") or ""))
             evidence.append(_evidence_base(
                 row=row,
                 evidence_type="omega_epa_dha_aggregate",
-                canonical_id="epa_dha",
+                canonical_id=owner,
                 clean_identity_id=canonical or None,
-                scoring_parent_id="epa_dha",
+                scoring_parent_id=owner,
                 dose_value=quantity,
                 dose_unit=str(unit),
                 evidence_scope="row_level",
                 confidence="high",
-                reason="explicit_epa_dha_aggregate_label_row",
+                reason=(
+                    "explicit_epa_dha_aggregate_label_row"
+                    if explicit_aggregate
+                    else "omega3_row_printed_as_epa_dha_forms"
+                ),
                 name=row.get("name") or "EPA/DHA aggregate",
             ))
 

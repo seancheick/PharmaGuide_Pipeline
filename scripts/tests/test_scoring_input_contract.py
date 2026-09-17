@@ -330,6 +330,86 @@ def test_printed_total_epa_and_dha_row_remains_combined_dose_evidence() -> None:
     assert aggregate[0]["reason"] == "explicit_epa_dha_aggregate_label_row"
 
 
+def _omega_printed_forms_product(rows):
+    return _product(
+        [],
+        activeIngredients=rows,
+        supplement_taxonomy={"primary_type": "omega_3"},
+    )
+
+
+def _omega_aggregate_evidence(product):
+    return sorted(
+        (row["canonical_id"], row["dose_value"], row["raw_source_path"])
+        for row in derive_product_scoring_evidence(product)
+        if row.get("evidence_type") == "omega_epa_dha_aggregate"
+    )
+
+
+def _printed_forms(*names):
+    return [{"name": name, "order": index + 1} for index, name in enumerate(names)]
+
+
+def test_omega3_row_printed_as_epa_and_dha_owns_combined_dose() -> None:
+    """up&up Fish Oil 1,000 mg: "Omega-3 Fatty Acids 600 mg (Form: EPA, and DHA)"
+    under a 2 g fish oil carrier. The 600 mg is EPA+DHA; the 2 g is not."""
+    product = _omega_printed_forms_product([
+        _row(name="Fish Oil", raw_source_text="Fish Oil", canonical_id="fish_oil",
+             quantity=2, unit="Gram(s)", raw_source_path="ingredientRows[3]"),
+        _row(name="Omega-3 Fatty Acids", raw_source_text="Omega-3 Fatty Acids",
+             canonical_id="fish_oil", quantity=600, unit="mg",
+             raw_source_path="ingredientRows[3].nestedRows[0]", parentBlend="Fish Oil",
+             forms=_printed_forms("Docosahexaenoic Acid", "Eicosapentaenoic Acid")),
+    ])
+
+    assert _omega_aggregate_evidence(product) == [
+        ("epa_dha", 600, "ingredientRows[3].nestedRows[0]"),
+    ]
+
+
+def test_omega3_rows_printed_as_single_epa_or_dha_own_that_nutrient() -> None:
+    """Nature Made Fish Oil 500 mg prints "Omega-3 Fatty Acids 488 mg" as EPA and
+    "178 mg" as DHA; Ritual prints "Omega-3 Fatty Acids 330 mg" as DHA."""
+    product = _omega_printed_forms_product([
+        _row(name="Omega-3 Fatty Acids", raw_source_text="Omega-3 Fatty Acids",
+             canonical_id="fish_oil", quantity=488, unit="mg",
+             raw_source_path="ingredientRows[5].nestedRows[0]",
+             forms=_printed_forms("Eicosapentaenoic Acid")),
+        _row(name="Omega-3 Fatty Acids", raw_source_text="Omega-3 Fatty Acids",
+             canonical_id="fish_oil", quantity=178, unit="mg",
+             raw_source_path="ingredientRows[5].nestedRows[1]",
+             forms=_printed_forms("Docosahexaenoic Acid")),
+    ])
+
+    assert _omega_aggregate_evidence(product) == [
+        ("dha", 178, "ingredientRows[5].nestedRows[1]"),
+        ("epa", 488, "ingredientRows[5].nestedRows[0]"),
+    ]
+
+
+def test_printed_epa_dha_forms_never_turn_an_oil_row_into_dose() -> None:
+    """An oil row stays carrier mass even when EPA/DHA are listed as its forms."""
+    product = _omega_printed_forms_product([
+        _row(name="Fish Oil", raw_source_text="Fish Oil", canonical_id="fish_oil",
+             quantity=1000, unit="mg", raw_source_path="ingredientRows[0]",
+             forms=_printed_forms("Eicosapentaenoic Acid", "Docosahexaenoic Acid")),
+    ])
+
+    assert _omega_aggregate_evidence(product) == []
+
+
+def test_omega3_row_with_a_non_epa_dha_form_is_not_epa_dha_dose() -> None:
+    product = _omega_printed_forms_product([
+        _row(name="Omega-3 Fatty Acids", raw_source_text="Omega-3 Fatty Acids",
+             canonical_id="fish_oil", quantity=900, unit="mg",
+             raw_source_path="ingredientRows[0]",
+             forms=_printed_forms("Eicosapentaenoic Acid", "Docosahexaenoic Acid",
+                                  "Docosapentaenoic Acid")),
+    ])
+
+    assert _omega_aggregate_evidence(product) == []
+
+
 def test_stale_native_fish_oil_projection_is_not_consumed_as_epa_dha() -> None:
     """Old enriched artifacts must not keep the retired carrier-mass inference."""
     fish_oil = _row(
