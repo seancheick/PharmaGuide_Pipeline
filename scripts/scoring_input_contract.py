@@ -469,14 +469,6 @@ def _trustworthy_epa_dha_row(row: Dict[str, Any]) -> bool:
     return True
 
 
-def _trustworthy_omega_parent_row(row: Dict[str, Any], canonical: str) -> bool:
-    if canonical not in _OMEGA_EVIDENCE_CANONICALS:
-        return False
-    if _source_is_non_epa_dha_oil(row) and not _source_has_epa_dha_identity(row):
-        return False
-    return _source_is_marine_omega_parent(row) or _source_has_epa_dha_identity(row)
-
-
 def _slug(value: Any) -> str:
     text = _norm(value)
     text = re.sub(r"[^a-z0-9]+", "_", text).strip("_")
@@ -797,15 +789,6 @@ def _stamp_evidence_identity_contract(
     return item
 
 
-def _has_epa_or_dha_signal(row: Dict[str, Any]) -> bool:
-    text = _row_identity_text(row).lower()
-    if re.search(r"\b(epa|dha)\b", text):
-        return True
-    if "eicosapentaenoic" in text or "docosahexaenoic" in text:
-        return True
-    return False
-
-
 def _is_omega_aggregate_row(row: Dict[str, Any]) -> bool:
     text = _row_identity_text(row).lower()
     if any(
@@ -1100,15 +1083,6 @@ def _derive_declared_nutrition_protein_evidence(
             name="Protein",
         )
     ]
-
-
-def _can_emit_omega_aggregate_evidence(row: Dict[str, Any], canonical: str) -> bool:
-    """True when the row identity itself can support EPA/DHA aggregate evidence."""
-    if canonical.startswith("vitamin_") or canonical.startswith("mineral_"):
-        return False
-    if _trustworthy_omega_parent_row(row, canonical):
-        return True
-    return not canonical and _is_omega_aggregate_row(row) and not _source_is_non_epa_dha_oil(row)
 
 
 def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:
@@ -1815,8 +1789,10 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             (ptype in _OMEGA_PRODUCT_TYPES or _is_omega_aggregate_row(row))
             and quantity is not None
             and _unit_is_mass(unit)
-            and _is_omega_aggregate_row(row)
-            and (_can_emit_omega_aggregate_evidence(row, canonical) or _has_epa_or_dha_signal(row))
+            # The carrier-oil mass is not the sum of its EPA and DHA.
+            # Aggregate dose exists only when the printed row explicitly owns
+            # a combined EPA+DHA amount.
+            and _is_explicit_epa_dha_aggregate_label(_row_identity_text(row))
             and canonical not in {"epa", "dha", "epa_dha"}
             and canonical not in _NON_EPA_DHA_OMEGA_CANONICALS
         ):
@@ -1830,8 +1806,8 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 dose_value=quantity,
                 dose_unit=str(unit),
                 evidence_scope="row_level",
-                confidence="medium" if _has_epa_or_dha_signal(row) else "low",
-                reason="omega_epa_dha_aggregate_from_label_row",
+                confidence="high",
+                reason="explicit_epa_dha_aggregate_label_row",
                 name=row.get("name") or "EPA/DHA aggregate",
             ))
 
@@ -2321,6 +2297,20 @@ def _product_scoring_evidence_rows(
         _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
+        if (
+            evidence_type == "omega_epa_dha_aggregate"
+            and item.get("reason") == "omega_epa_dha_aggregate_from_label_row"
+            and not _is_explicit_epa_dha_aggregate_label(
+                item.get("raw_source_text")
+                or item.get("name")
+                or item.get("standardName")
+            )
+        ):
+            # Compatibility containment for enriched artifacts produced by
+            # the retired carrier-mass inference.  Re-enrichment removes these
+            # rows; scoring must also remain safe before that regeneration.
+            rejected.append(_reject(item, "omega_carrier_mass_is_not_epa_dha"))
+            continue
         if item.get("scoreable") is False:
             rejected.append(_reject(item, f"product_evidence_not_scoreable:{item.get('rejection_reason') or 'rejected_by_enrichment'}"))
             continue

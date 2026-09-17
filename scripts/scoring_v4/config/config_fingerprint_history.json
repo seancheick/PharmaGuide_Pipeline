@@ -32,7 +32,8 @@
       "1.8.0-formulation-neutrality": "5eb666e227fc4870",
       "1.8.1-immune-neutrality": "6d600cce3885b10c",
       "1.8.2-audited-gmp-owner": "25a1b960bb871f88",
-      "1.9.0-registry-gmp-tier-poor": "cf1be38dbb423e54"
+      "1.9.0-registry-gmp-tier-poor": "cf1be38dbb423e54",
+      "1.10.0-omega-evidence-boundary": "4a2fd645613f79c6"
     }
   }
 }

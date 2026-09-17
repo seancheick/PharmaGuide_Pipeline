@@ -1,10 +1,10 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.9.0-registry-gmp-tier-poor",
+    "version": "1.10.0-omega-evidence-boundary",
     "schema_version": "1.0.0",
-    "last_updated": "2026-09-16",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, and ingredient-presence Evidence floors. Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). POOR is the verdict of the lowest shipped tier; the module raw score never decides it (1.9.0). v4 is the production catalog scoring contract as of export schema 2.2.0.",
+    "last_updated": "2026-09-17",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose. Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). POOR is the verdict of the lowest shipped tier; the module raw score never decides it (1.9.0). Omega label ownership is enforced in 1.10.0. v4 is the production catalog scoring contract as of export schema 2.2.0.",
     "phase": "rubric_proxy_removal"
   },
   "pillars": {
@@ -271,11 +271,7 @@
       "cap_per_strain_cfu": 7.0,
       "cap_aggregate_cfu_disclosure_proxy": 4.0
     },
-    "omega": {
-      "cap_transparency": 15.0,
-      "data_limited_transparency_floor": 12.0,
-      "data_limited_transparency_min_epa_dha_mg": 750.0
-    }
+    "omega": { "cap_transparency": 15.0 }
   },
   "formulation_variant_magnitudes": {
     "_doc": "Category-specific formulation/profile caps, form-quality points, standardization tiers and botanical dose-band credits — hoisted from the variant score_formulation / botanical / collagen modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across all variant + profile entrypoints). Canonical-ID sets stay in code. Drift-guarded by test_v4_formulation_variant_magnitudes_config. (The generic formulation module's magnitudes live in the flat formulation_magnitudes block.)",
@@ -285,7 +281,7 @@
       "panel_form_neutral_floor": 9.0,
       "bio_score_max": 15.0
     },
-    "omega": { "cap_formulation": 25.0, "data_limited_form_floor": 19.0, "data_limited_form_min_epa_dha_mg": 750.0 },
+    "omega": { "cap_formulation": 25.0 },
     "probiotic": {
       "cap_formulation": 16.0,
       "cap_total_potency_disclosure": 4.0,

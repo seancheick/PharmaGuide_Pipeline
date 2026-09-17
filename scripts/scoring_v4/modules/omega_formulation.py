@@ -41,7 +41,6 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional
 
-from scoring_v4.cert_evidence import verified_product_cert_entries
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import get_active_ingredients
 
@@ -118,19 +117,6 @@ _SOURCE_PATTERN = re.compile(
 # Sustainability cert programs the rubric recognizes. Matched
 # case-insensitively against rules_db evidence display_name.
 _SUSTAINABILITY_PROGRAMS = ("friend of the sea", "msc", "marine stewardship council")
-_QUALITY_PROGRAM_KEYWORDS = (
-    "ifos",
-    "nsf",
-    "usp",
-    "informed",
-    "consumerlab",
-    "eurofins",
-    "bscg",
-)
-DATA_LIMITED_FORM_FLOOR = _FVM["data_limited_form_floor"]
-DATA_LIMITED_FORM_MIN_EPA_DHA_MG = _FVM["data_limited_form_min_epa_dha_mg"]
-
-
 def _load_rubric() -> Dict[str, Any]:
     """Load omega_rubric.json. Loaded fresh per call so tests that monkey-patch
     the config file see the change. In production this is a few-µs JSON parse
@@ -392,42 +378,6 @@ def _sustainability_cert_verified(product: Dict[str, Any]) -> Optional[str]:
     return None
 
 
-def _verified_quality_programs(product: Dict[str, Any]) -> List[str]:
-    """Return score-eligible third-party quality programs.
-
-    This intentionally excludes bare claims and sustainability-only programs.
-    The data-limited fallback below is for products with verified quality/
-    purity evidence, not for commodity fish oil labels that only disclose
-    EPA/DHA + source.
-    """
-    cert_data = _safe_dict(product.get("certification_data"))
-    evidence = _safe_dict(cert_data.get("evidence_based"))
-    programs: List[str] = []
-    for entry in _safe_list(evidence.get("third_party_programs")):
-        if not isinstance(entry, dict) or not entry.get("score_eligible"):
-            continue
-        display = str(entry.get("display_name") or "").strip()
-        rule_id = str(entry.get("rule_id") or "").strip()
-        haystack = f"{display} {rule_id}".lower()
-        if any(token in haystack for token in _QUALITY_PROGRAM_KEYWORDS):
-            programs.append(display or rule_id)
-    for entry in verified_product_cert_entries(product):
-        display = str(entry.get("program") or entry.get("display_name") or "").strip()
-        rule_id = str(entry.get("rule_id") or "").strip()
-        haystack = f"{display} {rule_id}".lower()
-        if any(token in haystack for token in _QUALITY_PROGRAM_KEYWORDS):
-            programs.append(display or rule_id)
-    deduped: List[str] = []
-    seen = set()
-    for program in programs:
-        key = program.lower()
-        if key in seen:
-            continue
-        seen.add(key)
-        deduped.append(program)
-    return deduped
-
-
 def score_formulation(product: Any) -> Dict[str, Any]:
     """Score omega-class Formulation dimension.
 
@@ -496,28 +446,6 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     penalty_magnitude = sum(abs(float(value or 0.0)) for value in penalties.values())
 
     raw_score = sum(components.values())
-    masses = _epa_dha_and_oil_mass_mg(product)
-    quality_programs = _verified_quality_programs(product)
-    data_limited_form_floor: Dict[str, Any] = {
-        "applied": False,
-        "floor": DATA_LIMITED_FORM_FLOOR,
-        "min_epa_dha_mg": DATA_LIMITED_FORM_MIN_EPA_DHA_MG,
-        "epa_dha_mg": round(masses["epa_dha_mg"], 4),
-        "quality_programs": quality_programs,
-    }
-    if (
-        form_detected == "undefined"
-        and "source_disclosed" in components
-        and masses["epa_dha_mg"] >= DATA_LIMITED_FORM_MIN_EPA_DHA_MG
-        and quality_programs
-        and raw_score < DATA_LIMITED_FORM_FLOOR
-    ):
-        floor_adjustment = DATA_LIMITED_FORM_FLOOR - raw_score
-        components["data_limited_formulation_floor"] = round(floor_adjustment, 4)
-        raw_score = sum(components.values())
-        data_limited_form_floor["applied"] = True
-        data_limited_form_floor["adjustment"] = round(floor_adjustment, 4)
-
     pre_penalty_score = raw_score
     score = max(0.0, min(CAP_FORMULATION, raw_score - penalty_magnitude))
 
@@ -530,8 +458,6 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "source_disclosed": "source_disclosed" in components,
         "epa_dha_concentration": concentration,
         "sustainability_cert_program": sustainability_match,
-        "data_limited_form_floor_applied": bool(data_limited_form_floor["applied"]),
-        "data_limited_form_floor": data_limited_form_floor,
         "max_reachable_in_p161": 21.0,
         "_max_reachable_note": (
             "Current sub-components sum to 21/25 maximum (sustainability "

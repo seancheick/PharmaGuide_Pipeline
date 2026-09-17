@@ -275,6 +275,118 @@ def test_broad_total_omega_three_owner_does_not_become_epa_dha_dose() -> None:
     )
 
 
+def test_fish_oil_carrier_mass_does_not_become_epa_dha_dose() -> None:
+    """The oil carrier is not the sum of its EPA and DHA constituents."""
+    product = _product(
+        [],
+        activeIngredients=[
+            _row(
+                name="Fish Oil",
+                raw_source_text="Fish Oil",
+                canonical_id="fish_oil",
+                quantity=1000,
+                unit="mg",
+                raw_source_path="ingredientRows[0]",
+                raw_taxonomy={"category": "omega-3"},
+            )
+        ],
+        supplement_taxonomy={"primary_type": "omega_3"},
+    )
+
+    evidence = derive_product_scoring_evidence(product)
+
+    assert not any(
+        row.get("evidence_type") == "omega_epa_dha_aggregate"
+        for row in evidence
+    )
+
+
+def test_printed_total_epa_and_dha_row_remains_combined_dose_evidence() -> None:
+    product = _product(
+        [],
+        activeIngredients=[
+            _row(
+                name="Total EPA and DHA",
+                raw_source_text="Total EPA and DHA",
+                canonical_id="omega_3_fatty_acids",
+                quantity=600,
+                unit="mg",
+                raw_source_path="ingredientRows[0]",
+                raw_taxonomy={"category": "omega-3"},
+            )
+        ],
+        supplement_taxonomy={"primary_type": "omega_3"},
+    )
+
+    aggregate = [
+        row
+        for row in derive_product_scoring_evidence(product)
+        if row.get("evidence_type") == "omega_epa_dha_aggregate"
+    ]
+
+    assert len(aggregate) == 1
+    assert aggregate[0]["dose_value"] == 600
+    assert aggregate[0]["confidence"] == "high"
+    assert aggregate[0]["reason"] == "explicit_epa_dha_aggregate_label_row"
+
+
+def test_stale_native_fish_oil_projection_is_not_consumed_as_epa_dha() -> None:
+    """Old enriched artifacts must not keep the retired carrier-mass inference."""
+    fish_oil = _row(
+        name="Fish Oil",
+        raw_source_text="Fish Oil",
+        canonical_id="fish_oil",
+        quantity=1000,
+        unit="mg",
+        raw_source_path="ingredientRows[0]",
+        raw_taxonomy={"category": "omega-3"},
+    )
+    product = _product(
+        [fish_oil],
+        activeIngredients=[fish_oil],
+        supplement_taxonomy={"primary_type": "omega_3"},
+        product_scoring_evidence=[
+            {
+                "evidence_type": "omega_epa_dha_aggregate",
+                "canonical_id": "epa_dha",
+                "evidence_canonical_id": "epa_dha",
+                "clean_identity_id": "fish_oil",
+                "scoring_parent_id": "epa_dha",
+                "canonical_source_db": "product_scoring_evidence",
+                "evidence_origin": "native_enrichment",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "dose_value": 1000,
+                "dose_unit": "mg",
+                "source": "ingredientRows[0]",
+                "raw_source_path": "ingredientRows[0]",
+                "evidence_scope": "row_level",
+                "linked_rows": ["ingredientRows[0]"],
+                "confidence": "low",
+                "reason": "omega_epa_dha_aggregate_from_label_row",
+                "name": "Fish Oil",
+                "standardName": "Fish Oil",
+                "source_section": "product",
+                "raw_source_text": "Fish Oil",
+                "raw_taxonomy": {"category": "omega-3"},
+                "identity_contract_required": True,
+                "identity_disposition": "clean",
+                "identity_kind": "verified_ingredient",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert not any(
+        row.get("scoring_input_kind") == "product_level_evidence"
+        and row.get("canonical_id") == "epa_dha"
+        for row in result.rows
+    )
+
+
 def test_strict_mode_does_not_fallback_to_legacy_iqd_ingredients():
     result = get_scoring_ingredients(_product([]), strict=True)
 
