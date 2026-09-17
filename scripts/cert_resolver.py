@@ -86,6 +86,11 @@ def _recency_status(snapshot_date: str | None) -> tuple[str, int | None]:
     # `parsed` is naive (strptime). Treat it as UTC for age math.
     parsed_utc = parsed.replace(tzinfo=timezone.utc)
     age_days = (datetime.now(timezone.utc) - parsed_utc).days
+    # A future snapshot is not current evidence.  Fail closed instead of
+    # treating a negative age as fresh; this catches clock/data-entry errors
+    # and prevents unverifiable future provenance from granting points.
+    if age_days < 0:
+        return ("unknown", age_days)
     if age_days > RECENCY_AUDIT_ONLY_DAYS:
         return ("scoring_blocked", age_days)
     if age_days > RECENCY_NEEDS_REFRESH_WARNING_DAYS:

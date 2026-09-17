@@ -9,6 +9,7 @@ winning over registry, and the audit-only (no scoring effect) shape.
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -27,6 +28,7 @@ from cert_resolver import (  # noqa: E402
     normalize_product,
     normalize_program,
     resolve,
+    _recency_status,
     _sku_dose_tokens,
 )
 
@@ -1115,6 +1117,38 @@ class TestRecencyGate:
         assert out[0].scope == "sku"
         assert out[0].scoring_blocked_reason is not None
         assert out[0].scores_points() is False
+
+    def test_future_snapshot_is_unknown_and_cannot_score(self, tmp_path: Path) -> None:
+        status, age_days = _recency_status("2099-01-01")
+
+        assert status == "unknown"
+        assert age_days is not None and age_days < 0
+
+        registry_path = tmp_path / "registry.json"
+        registry_path.write_text(json.dumps({
+            "_metadata": {
+                "registry_sources": [{
+                    "program": "NSF Sport",
+                    "snapshot_date": "2099-01-01",
+                    "url": "https://registry.example/certified-products",
+                }],
+            },
+            "verified_records": [{
+                "program": "NSF Sport",
+                "record_id": "FUTURE_RECORD",
+                "source_url": "https://registry.example/certified-products",
+                "brand": "Thorne Research",
+                "product": "Magnesium Bisglycinate",
+            }],
+        }))
+        registry = CertRegistry.load(registry_path, tmp_path / "no-overrides.json")
+
+        resolution = resolve(
+            "Thorne", "Magnesium Bisglycinate", ["NSF Sport"], registry
+        )[0]
+        assert resolution.recency_status == "unknown"
+        assert resolution.scoring_blocked_reason is not None
+        assert resolution.scores_points() is False
 
 
 # --- Multi-source registry --------------------------------------------------
