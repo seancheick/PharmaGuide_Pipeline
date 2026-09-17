@@ -8,6 +8,7 @@ named adjustment with explicit pass components and a hard cap.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List
 
@@ -79,8 +80,9 @@ def score_safety_hygiene_base(product: Dict[str, Any]) -> SafetyHygieneResult:
     components: Dict[str, float] = {}
     failed: List[str] = []
 
-    b0_pass = _passes_no_b0_safety_match(product)
-    recalled_pass = _passes_no_recalled_match(product)
+    drivers = _hard_failure_drivers(product)
+    b0_pass = not any(d["status"] in _B0_STATUSES for d in drivers)
+    recalled_pass = not any(d["status"] == "recalled" for d in drivers)
 
     # Phase 5: hard cleanliness failure is gated ONLY on the two retained
     # safety-status components. Overdose / harmful-additive / manufacturer
@@ -99,6 +101,7 @@ def score_safety_hygiene_base(product: Dict[str, Any]) -> SafetyHygieneResult:
                 "raw_score": 0.0,
                 "cap_applied": False,
                 "hard_cleanliness_failure": True,
+                "drivers": drivers,
             },
         )
 
@@ -128,23 +131,30 @@ def _has_product_payload(product: Dict[str, Any]) -> bool:
     return False
 
 
-def _passes_no_b0_safety_match(product: Dict[str, Any]) -> bool:
-    for sig in normalize_safety_signals(product):
-        if not sig.us_applicable:
-            continue
-        if not (sig.policy_eligible or sig.review_required):
-            continue
-        if sig.status in {"banned", "high_risk", "watchlist"}:
-            return False
-    return True
+_B0_STATUSES = ("banned", "high_risk", "watchlist")
+# Most severe first: the explanation leads with the strongest cause.
+_DRIVER_ORDER = ("banned", "recalled", "high_risk", "watchlist")
+_REGISTRY_ID_RE = re.compile(r"^[A-Z0-9_]+$")
 
 
-def _passes_no_recalled_match(product: Dict[str, Any]) -> bool:
+def _hard_failure_drivers(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """US-applicable, policy-eligible signals that zero the hygiene base.
+
+    One list decides the failure and explains it, so the explanation can never
+    name a different cause than the one that removed the points."""
+    drivers: List[Dict[str, Any]] = []
     for sig in normalize_safety_signals(product):
-        if not sig.us_applicable:
+        if not sig.us_applicable or not (sig.policy_eligible or sig.review_required):
             continue
-        if not (sig.policy_eligible or sig.review_required):
+        if sig.status not in _DRIVER_ORDER:
             continue
-        if sig.status == "recalled":
-            return False
-    return True
+        name = (sig.evidence_text or "").strip() or None
+        if name and _REGISTRY_ID_RE.match(name):
+            name = None
+        driver = {"status": sig.status, "name": name}
+        if not any(d["status"] == driver["status"]
+                   and str(d["name"] or "").lower() == str(name or "").lower() for d in drivers):
+            drivers.append(driver)
+    named = {d["status"] for d in drivers if d["name"]}
+    drivers = [d for d in drivers if d["name"] or d["status"] not in named]
+    return sorted(drivers, key=lambda d: _DRIVER_ORDER.index(d["status"]))

@@ -74,3 +74,32 @@ def test_moderate_additive_drops_safety_hygiene_below_10():
     pillar = qs._pillar_safety_hygiene(module_bd, 10.0, cfg)
     assert pillar["score"] < 10.0
     assert pillar["score"] == 8.0  # 10 − min(2.0, cap 4.0)
+
+
+def test_base_safety_driver_is_not_hidden_by_a_small_additive_deduction():
+    """Safety 0 comes from the watchlist match, so the reason must name it even
+    when a 0.5 additive deduction is also present."""
+    cfg = qs._config()
+    module_bd = {
+        "safety_hygiene_base": {"score": 0.0, "max": 4.0, "metadata": {
+            "drivers": [{"status": "watchlist", "name": "Carob color"}]}},
+        "dimensions": {"formulation": {"penalties": {"B1_harmful_additives": -0.5}}},
+    }
+    pillar = qs._pillar_safety_hygiene(module_bd, 10.0, cfg)
+    assert pillar["score"] == 0.0
+    assert pillar["reason"] == (
+        "Safety concern: it contains a watchlisted ingredient (Carob color) "
+        "and it contains additive or sweetener/form-factor concerns."
+    )
+
+
+def test_base_safety_failure_without_driver_detail_keeps_the_generic_cause():
+    cfg = qs._config()
+    module_bd = {
+        "safety_hygiene_base": {"score": 0.0, "max": 4.0},
+        "dimensions": {"formulation": {"penalties": {"B1_harmful_additives": -0.5}}},
+    }
+    pillar = qs._pillar_safety_hygiene(module_bd, 10.0, cfg)
+    assert pillar["reason"].startswith(
+        "Safety concern: it contains a banned, recalled, or watchlisted ingredient and "
+    )
