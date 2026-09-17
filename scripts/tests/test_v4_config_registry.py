@@ -59,7 +59,7 @@ def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
     assert config_version("omega") == "1.1.1-audited-gmp-owner"
-    assert config_version("quality_score") == "1.8.2-audited-gmp-owner"
+    assert config_version("quality_score") == "1.9.0-registry-gmp-tier-poor"
 
 
 def test_all_config_provenance_shape():

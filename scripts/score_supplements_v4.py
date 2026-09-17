@@ -173,26 +173,20 @@ def _verdict_from_score(
     carried_verdict: Any = None,
     raw_score_100: Any = None,
 ) -> str:
-    """Resolve the non-blocking verdict after score assembly.
+    """Resolve the provisional non-blocking verdict after module assembly.
 
-    BLOCKED/UNSAFE/NOT_SCORED return earlier. CAUTION from Layer 1 wins
-    over POOR/SAFE. Since Phase 9, the user-facing score is the raw rubric
-    score; the raw-score guard remains for compatibility with direct module
-    callers and any completeness cap applied after module assembly.
+    BLOCKED/UNSAFE/NOT_SCORED return earlier. CAUTION from Layer 1 wins.
+    POOR is not decided here: it is a quality verdict owned by the shipped
+    public tier (scoring_v4.quality_score.assemble_quality_score). The module
+    raw score is not the score users see and must not decide it.
     """
     if carried_verdict == "CAUTION":
         return "CAUTION"
     try:
-        score = float(score_100)
+        float(score_100)
     except (TypeError, ValueError):
         return carried_verdict or "NOT_SCORED"
-    try:
-        raw_score = float(raw_score_100)
-    except (TypeError, ValueError):
-        raw_score = None
-    if raw_score is not None and raw_score < 40.0:
-        return "POOR"
-    return "POOR" if score < 40.0 else "SAFE"
+    return "SAFE"
 
 
 def _score_after_completeness_policy(score_100: Any, completeness_result: Any) -> Any:

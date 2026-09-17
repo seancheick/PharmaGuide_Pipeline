@@ -993,6 +993,11 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     # Tier from the shipped whole number, so the band name can never disagree
     # with the score printed beside it.
     result["quality_tier"] = _tier(shipped_whole_score(total))
+    # POOR is the quality verdict of the lowest shipped tier. Safety and
+    # data-trust verdicts (CAUTION here; BLOCKED/UNSAFE/NOT_SCORED returned
+    # above) keep precedence.
+    if verdict in {"SAFE", "POOR"}:
+        result["v4_verdict"] = "POOR" if result["quality_tier"] == cfg["tiers"][-1]["name"] else "SAFE"
     result["quality_score_status"] = "scored"
     result["quality_score_suppressed_reason"] = None
     return result

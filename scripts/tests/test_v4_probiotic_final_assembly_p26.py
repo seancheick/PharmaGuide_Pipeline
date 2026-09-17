@@ -300,7 +300,7 @@ def test_sku_certification_does_not_force_aggregate_only_probiotic_above_40() ->
     ])
     out = score_product_v4(product)
     assert out["raw_score_v4_100"] < 40.0
-    assert out["v4_verdict"] == "POOR"
+    assert out["v4_verdict"] == ("POOR" if out["quality_tier"] == "Poor" else "SAFE")
 
 
 def test_shadow_verdict_caution_overrides_score_band() -> None:

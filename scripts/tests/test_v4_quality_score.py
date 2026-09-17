@@ -591,7 +591,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.8.2-audited-gmp-owner"
+    assert out["quality_score_version"] == "1.9.0-registry-gmp-tier-poor"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:
@@ -991,3 +991,49 @@ def test_gmp_signal_wording_matches_its_basis() -> None:
     assert "manufacturer is listed in an audited GMP facility registry" in _verif(facility)["reason"]
     assert "made in an audited GMP facility" not in _verif(facility)["reason"]
     assert "made in an audited GMP facility" in _verif(certified)["reason"]
+
+
+# ---- POOR is owned by the shipped tier (2026-09-16) ---------------------------
+# The verdict used the hidden module raw score (< 40) while users see the
+# six-pillar score and tier: products scoring 55-60 ("Needs improvement") were
+# POOR and products scoring 40-54 ("Poor") were SAFE.
+
+def _lowest_tier() -> str:
+    from scoring_v4.quality_score import _config
+    return _config()["tiers"][-1]["name"]
+
+
+def _poor_band_bd():
+    return _module_bd(form=2, form_max=30, dose=2, evidence=1, transparency=1, verification=0,
+                      manuf_trust=0, hygiene=0)
+
+
+@pytest.mark.parametrize("provisional", ["SAFE", "POOR"])
+def test_poor_verdict_follows_the_lowest_shipped_tier(provisional) -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    low = assemble_quality_score(_shadow(raw=60.0, verdict=provisional, bd=_poor_band_bd()))
+    high = assemble_quality_score(_shadow(raw=30.0, verdict=provisional))
+
+    assert low["quality_tier"] == _lowest_tier()
+    assert low["v4_verdict"] == "POOR"
+    assert high["quality_tier"] != _lowest_tier()
+    assert high["v4_verdict"] == "SAFE"
+
+
+def test_caution_keeps_precedence_over_the_tier() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    out = assemble_quality_score(_shadow(raw=20.0, verdict="CAUTION", bd=_poor_band_bd()))
+
+    assert out["quality_tier"] == _lowest_tier()
+    assert out["v4_verdict"] == "CAUTION"
+
+
+def test_module_score_no_longer_decides_poor() -> None:
+    from score_supplements_v4 import _verdict_from_score
+
+    assert _verdict_from_score(48.2, raw_score_100=31.0) == "SAFE"
+    assert _verdict_from_score(12.0) == "SAFE"
+    assert _verdict_from_score(12.0, "CAUTION") == "CAUTION"
+    assert _verdict_from_score(None, None) == "NOT_SCORED"
