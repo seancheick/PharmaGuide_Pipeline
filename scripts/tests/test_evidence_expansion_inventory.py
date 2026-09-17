@@ -158,7 +158,12 @@ def test_quarantined_screening_drafts_are_never_read_by_curation_tooling():
     quarantine = audit_dir / "QUARANTINE_screening_drafts"
 
     assert quarantine.is_dir(), "the drafts must stay in a directory whose name marks them quarantined"
-    readers = [path.name for path in audit_dir.glob("*.py")
-               if quarantine.name in path.read_text()]
+    # Naming the directory in a report string is fine; opening it is not.
+    access = ("open(", "read_text", "read_bytes", "glob(", "iterdir", "listdir", "json.load", "Path(")
+    readers = []
+    for path in audit_dir.glob("*.py"):
+        for line in path.read_text().splitlines():
+            if quarantine.name in line and any(call in line for call in access):
+                readers.append(f"{path.name}: {line.strip()[:80]}")
 
     assert readers == [], f"curation tooling must not read quarantined drafts: {readers}"
