@@ -24,6 +24,7 @@ from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
     is_scorable,
+    restates_label_row,
     _as_float,
     _safe_list,
 )
@@ -62,7 +63,8 @@ def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _scorable_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    return [ing for ing in _active_ingredients(product) if is_scorable(ing)]
+    rows = _active_ingredients(product)
+    return [ing for ing in rows if is_scorable(ing) and not restates_label_row(ing, rows)]
 
 
 def _score_panel_form_quality(product: Dict[str, Any]) -> tuple[float, float | None, float | None]:
