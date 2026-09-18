@@ -157,6 +157,10 @@ def main() -> int:
         "Every rejected quote was caught before authoring: Claude re-extracts each quote from the abstract itself, "
         "and `validate_wave1_contexts.py` re-checks each one as a substring. The authored contexts contain "
         "0 unverified quotes. The screening brief was tightened mid-run and both agents were corrected.", "",
+        "Stated precisely: no source identifier and no shortlist record fell outside the retrieved corpus, and "
+        "254 quote fields failed exact-source verification and were rejected. That is provenance, not accuracy — "
+        "a retrieved source can still be mischaracterized by a screener without any identifier being wrong, which "
+        "is why screening never authors a context.", "",
         "## Coverage (see COVERAGE.md for the full tables)", "",
         "| measure | value |", "|---|---:|",
         f"| unique mapped identities | {summary['unique_mapped_identities']} |",

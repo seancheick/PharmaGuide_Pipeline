@@ -29,9 +29,14 @@ instead:
 | identities whose self-reported counts disagree with their file | 9 |
 
 About 7% of quote fields are unusable, concentrated in the pre-correction files
-(isoflavones, dhea, ginkgo). The two figures that matter most are zeros: **no PMID was
-invented**, and no shortlist entry points outside the screened records. The count
-mismatches are small self-reporting errors (off by one or two), not missing work.
+(isoflavones, dhea, ginkgo).
+
+State the result precisely: **no source identifier and no shortlist record fell outside the
+retrieved corpus, and 254 quote fields failed exact-source verification and were rejected.**
+That is provenance, not accuracy — a retrieved source can still be mischaracterized by a
+screener without any identifier being wrong. These drafts are therefore useful as triage,
+never as clinical facts. The count mismatches are small self-reporting errors (off by one or
+two), not missing work.
 
 Both agents were corrected mid-run and the brief was tightened, but files written before
 the correction still contain those fields. A quote that is not a contiguous span of the

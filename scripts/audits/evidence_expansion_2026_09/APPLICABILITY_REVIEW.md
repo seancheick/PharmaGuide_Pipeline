@@ -138,6 +138,29 @@ recommending it in 2015, and NCCIH reports rare liver injury even for products l
 | `scripts/audits/evidence_expansion_2026_09/applicability_projection.py` | read-only before/after corpus projection |
 | `scripts/audits/evidence_expansion_2026_09/wave1_applicability_rerun.py` | read-only Wave 1 re-run |
 
+## Invariants pinned by the shared regression suite
+
+The owner is considered stable only with all of these covered (82 tests in
+`scripts/tests/test_clinical_applicability.py`):
+
+| # | invariant | test |
+|---|---|---|
+| 1 | deduplication preserves enrichment's resolved identity | `test_one_source_row_stays_one_logical_row_across_both_projections` |
+| 2 | label + enriched projections of one source row stay one logical row | same test (row count asserted) |
+| 3 | enrichment never overwrites a value the label row already states | `test_deduplication_never_overwrites_what_the_label_row_already_states` |
+| 4 | resolved material/form identity reaches applicability | `test_resolved_material_identity_is_visible_to_a_form_scoped_scope` |
+| 5 | source-required scopes do not inherit enrichment-only identity | `test_source_required_scope_still_refuses_enrichment_resolved_forms` |
+| 6 | multi-row resolves only when exactly one row satisfies the reviewed scope | `test_second_owned_row_no_longer_blocks_a_discriminated_match` |
+| 7 | genuinely ambiguous multi-row cases stay unresolved | `test_two_rows_matching_the_same_scope_remain_unresolved`, `test_multiple_owned_rows_without_a_discriminating_scope_stay_unresolved` |
+| 8 | dose arithmetic cannot borrow an amount from another row | `test_daily_dose_cannot_borrow_an_amount_from_a_different_row` |
+| 9 | serving multiplication uses only the row that satisfied the scope | `test_serving_multiplication_uses_only_the_row_that_satisfied_the_scope` |
+| 10 | unspecified material stays refused even at a matching dose | `test_unspecified_material_stays_out_even_when_the_dose_matches` |
+| 11 | products without resolved forms are untouched by the merge | `test_products_without_enrichment_resolved_forms_are_untouched_by_the_merge` |
+| 12 | legacy applicability results unchanged | the pre-existing 71 tests, plus the zero-delta corpus projection above |
+
+The zero-delta projection over 50,334 existing clinical matches is a release invariant for
+this owner and should be re-run whenever it changes.
+
 ## Remaining architectural limitations
 
 1. **Population-restricted evidence has no honest product-level home.** It belongs to the personalized
