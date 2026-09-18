@@ -342,3 +342,50 @@ def test_load_entries_supports_iqm_map_and_skips_metadata(tmp_path):
     assert [entry["id"] for entry in entries] == ["ingredient_alpha", "ingredient_beta"]
     assert entries[0]["standard_name"] == "Ingredient Alpha"
     assert entries[1]["cui_status"] == "no_confirmed_umls_match"
+
+
+def test_verify_cui_for_entry_bridges_roman_and_arabic_numerals():
+    """BANNED_IGF1 regression: UMLS renders the concept with a Roman numeral
+    ("Insulin-Like Growth Factor I") while the curated entry uses the Arabic
+    form ("...Growth Factor 1"). Substring containment cannot bridge the two,
+    so the entry was reported as MISMATCH and the auditor proposed swapping to
+    C3712803 ("IGF1 protein, human") — a narrower, species-specific concept.
+    C0021665 is the correct broad substance and is pinned by
+    test_banned_recalled_identifier_integrity.py; the comparison is what was
+    wrong, not the data.
+    """
+
+    class RomanNumeralClient:
+        def lookup_cui(self, cui):
+            assert cui == "C0021665"
+            return {
+                "cui": "C0021665",
+                "name": "Insulin-Like Growth Factor I",
+                "semantic_types": [
+                    "Amino Acid, Peptide, or Protein",
+                    "Biologically Active Substance",
+                ],
+            }
+
+        def search_exact(self, term):
+            return None
+
+        def search(self, term, max_results=3):
+            return []
+
+    report = verify_cui_for_entry(
+        RomanNumeralClient(),
+        "BANNED_IGF1",
+        "IGF-1 (Insulin-like Growth Factor 1)",
+        "C0021665",
+        ["igf-1", "igf1", "insulin-like growth factor 1", "somatomedin c"],
+    )
+
+    assert report["status"] == "VERIFIED", (
+        "C0021665 is the correct broad IGF-1 substance concept; a Roman/Arabic "
+        "numeral difference must not be reported as a CUI mismatch"
+    )
+    assert report["match_source"] == "numeral_equivalent", (
+        "the numeral rescue must be visible in the report, not silently "
+        "indistinguishable from a plain name match"
+    )

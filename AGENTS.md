@@ -105,15 +105,15 @@ docs/                         # Technical deep-dives and infographics
 | `scripts/release_full.sh`      | Release-stage owner: catalog, images, interaction DB, Supabase, Flutter |
 | `run_pipeline.py`              | Single-brand/stage Clean → Enrich → Score runner             |
 | `clean_dsld_data.py`           | Stage 1: normalize raw DSLD JSON                            |
-| `enrich_supplements_v3.py`     | Stage 2: match ingredients, classify, enrich (~13K lines)   |
+| `enrich_supplements_v3.py`     | Stage 2: match ingredients, classify, enrich (mega-file)    |
 | `score_products_v4.py`         | Stage 3: v4 artifact batch I/O and atomic writes            |
 | `scoring_v4/scored_artifact.py` | Single scored-artifact assembly and verdict/coverage contract |
-| `enhanced_normalizer.py`       | Core text normalization engine (~7K lines)                  |
+| `enhanced_normalizer.py`       | Core text normalization engine (mega-file)                  |
 | `build_final_db.py`            | Internal/manual final DB builder used by snapshot/release flows |
 | `audit_source_of_truth_contract.py` | Cleaner-first source-of-truth and strict release gates  |
-| `constants.py`                 | Shared constants and mappings (~1.5K lines)                 |
+| `constants.py`                 | Shared constants and mappings                               |
 | `batch_processor.py`           | Batch processing with resume capability                     |
-| `db_integrity_sanity_check.py` | Schema and data validation (~1.5K lines)                    |
+| `db_integrity_sanity_check.py` | Schema and data validation                                  |
 | `coverage_gate.py`             | Quality/coverage threshold enforcement                      |
 
 ## Key Data Files (scripts/data/)
@@ -188,7 +188,7 @@ scoring configuration.
 | `scripts/DATABASE_SCHEMA.md`        | Master schema reference for every data file   |
 | `scripts/SCORING_ENGINE_SPEC.md`    | Detailed scoring formulas and section logic   |
 | `scripts/SCORING_README.md`         | Implementation guide for the scorer           |
-| `scripts/PIPELINE_ARCHITECTURE.md`  | 4-stage pipeline design and contracts         |
+| `scripts/PIPELINE_ARCHITECTURE.md`  | Pipeline design and stage contracts           |
 | `scripts/FINAL_EXPORT_SCHEMA_V1.md` | Flutter MVP data contract                     |
 | `scripts/api_audit/README.md`       | API audit tooling reference                   |
 
@@ -233,7 +233,7 @@ them against `scripts/final_db_output` or a fresh
 
 ## Conventions
 
-- **Data schema version:** currently 5.4.x (6.0.0 for `user_goals_to_clusters.json`) — every JSON data file has a `_metadata` block; read `schema_version` from the file rather than trusting this line
+- **Data schema version:** every JSON data file has a `_metadata` block — read `schema_version` from the file. No version number is reproduced here on purpose: the last one drifted for months while this line told readers not to trust it.
 - **Score field naming is FROZEN:** use `quality_score_v4_100`, `quality_score_status`, and `quality_pillars_v4`; do not reintroduce `score_quality_80` or `score_display_80`
 - **Safety distinction:** `has_banned_substance` / `has_recalled_ingredient` for ingredient-level. Never use `is_recalled` (implies product-level recall, not supported in v1)
 - **Tests are mandatory:** every data file change, scoring logic change, or enrichment change must have test coverage
@@ -248,7 +248,7 @@ These override speed when they conflict.
 - **No hallucinated identifiers — ever.** PMIDs, CUIs, RXCUIs, UNIIs, NCT IDs, CAS, CIDs must be content-verified against the live API (PubMed/UMLS/RxNorm/FDA/ClinicalTrials.gov). Existence is not enough — a real PMID about the wrong topic is a *ghost reference* and is a defect. Use `scripts/api_audit/verify_*.py`. This is a clinical product; one corrupt entry = a red flag for the whole product. See `critical_no_hallucinated_citations` and `critical_clinical_data_integrity` memories.
 - **Code is not cheap.** AI velocity is real, but bad code is *more* expensive than ever because AI works best in good codebases. Optimize for maintainability and the next reader, not lines-per-minute. Boring, idiomatic code beats clever code.
 - **Small batches, decomposed problems.** Solve one thing at a time. Atomic commits. Localize blast radius. The IQM batch cadence is the right shape — keep it.
-- **Deep modules over shallow ones.** Prefer few large modules with simple interfaces (Ousterhout). When working on the mega-files (`enrich_supplements_v3.py` 13K, `enhanced_normalizer.py` 7K): treat them as gray boxes — design and lock the interface, verify at the boundary with tests.
+- **Deep modules over shallow ones.** Prefer few large modules with simple interfaces (Ousterhout). When working on the mega-files (`enrich_supplements_v3.py`, `enhanced_normalizer.py` — run `wc -l`, they grow): treat them as gray boxes — design and lock the interface, verify at the boundary with tests.
 - **Watch for cognitive debt and code bloat.** Generating code is nearly free; understanding it isn't. If a change adds volume without removing complexity, push back. If a CLAUDE.md / doc / config grows without being read, slim it.
 - **AI is an amplifier, not a fixer.** Discipline doesn't get optional with AI — it gets more important. Specs-to-code without humans reviewing produces entropy.
 

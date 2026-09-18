@@ -606,6 +606,40 @@ def _token_set(value: str | None) -> set[str]:
     return set(normalized.split()) if normalized else set()
 
 
+# UMLS renders numerals in substance names as Roman ("Insulin-Like Growth
+# Factor I", "Factor VIII", "Coagulation Factor II") where curated entries
+# often use Arabic ("...Growth Factor 1"). Single-letter C/D/L/M are
+# deliberately absent: they collide with vitamin names ("Vitamin C",
+# "Vitamin D"), and a false VERIFIED silences the CUI audit, which is worse
+# than a false MISMATCH.
+_ROMAN_NUMERAL_TOKENS = {
+    "i": "1", "ii": "2", "iii": "3", "iv": "4", "v": "5",
+    "vi": "6", "vii": "7", "viii": "8", "ix": "9", "x": "10",
+}
+
+
+def _numeral_normalized_tokens(value: str | None) -> list[str]:
+    """Token sequence with standalone Roman numerals folded to Arabic digits."""
+    normalized = _normalize_match_text(value)
+    if not normalized:
+        return []
+    return [_ROMAN_NUMERAL_TOKENS.get(token, token) for token in normalized.split()]
+
+
+def _names_match_ignoring_numeral_style(candidate: str | None, names: list[str]) -> bool:
+    """True when candidate equals one of names once numeral style is folded.
+
+    Deliberately full token-sequence equality rather than the substring
+    containment used by the primary check: this path exists to rescue a
+    correct CUI from a rendering difference, not to widen what counts as a
+    match. A spurious VERIFIED here would silence the audit for that entry.
+    """
+    candidate_tokens = _numeral_normalized_tokens(candidate)
+    if not candidate_tokens:
+        return False
+    return any(_numeral_normalized_tokens(name) == candidate_tokens for name in names)
+
+
 def _exact_match_is_safe_for_entry(
     *,
     standard_name: str,
@@ -692,12 +726,24 @@ def verify_cui_for_entry(
             # Check if the UMLS name reasonably matches
                 name_lower = standard_name.lower()
                 umls_lower = info["name"].lower()
-                if (name_lower in umls_lower or umls_lower in name_lower
-                        or any(a.lower() in umls_lower or umls_lower in a.lower()
-                               for a in aliases)):
+                direct_match = (
+                    name_lower in umls_lower
+                    or umls_lower in name_lower
+                    or any(a.lower() in umls_lower or umls_lower in a.lower()
+                           for a in aliases)
+                )
+                # Distinct match_source: a CUI rescued from a Roman/Arabic
+                # rendering difference should be visible as such in the report,
+                # not indistinguishable from a plain name match.
+                numeral_match = not direct_match and _names_match_ignoring_numeral_style(
+                    info["name"], [standard_name, *aliases]
+                )
+                if direct_match or numeral_match:
                     report["status"] = "VERIFIED"
                     report["action"] = None
-                    report["match_source"] = "existing_cui"
+                    report["match_source"] = (
+                        "existing_cui" if direct_match else "numeral_equivalent"
+                    )
                 else:
                     report["status"] = "MISMATCH"
                     report["action"] = (

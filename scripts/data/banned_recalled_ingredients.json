@@ -1459,9 +1459,15 @@
             "date": "2026-05-12",
             "change": "Added BANNED_DHEA parent entry — resolves asymmetry where 7-Keto-DHEA metabolite was flagged but parent DHEA was not. WADA Prohibited List 2026 (S1.1 anabolic agents), Canada Schedule IV, UK POM, Australia TGA Schedule 4. US legal under DSHEA (DEA-exempt). negative_match_terms exclude 7-Keto/7-oxo metabolite and DHA/Docosahexaenoic Acid/EPA/Fish Oil to prevent false matches.",
             "by": "manual"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set source_category (sibling precedent: BANNED_7_KETO_DHEA)",
+            "by": "claude-audit"
           }
         ]
-      }
+      },
+      "source_category": "high_risk_ingredients"
     },
     {
       "id": "BANNED_ADD_ANATABINE",
@@ -5398,6 +5404,11 @@
             "date": "2026-02-18",
             "change": "Added to banned list. FDA considers it unapproved drug since 1998. EFSA 2025: no safe dose. Banned in AU/CH. 120 deaths from Kobayashi scandal.",
             "by": "online_safety_audit"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Annotated approved null CUI: policy/umbrella record (RYR with enhanced or added lovastatin); no single UMLS concept applies",
+            "by": "claude-audit"
           }
         ]
       },
@@ -5407,7 +5418,9 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "Contains monacolin K, chemically identical to the prescription statin lovastatin. FDA treats standardized products as unapproved drugs. Talk to your doctor before using, especially if on a statin.",
-      "safety_warning_one_liner": "Natural statin — talk to your doctor before use."
+      "safety_warning_one_liner": "Natural statin — talk to your doctor before use.",
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Policy record covering red-yeast-rice products with enhanced or added lovastatin, so no single UMLS concept fits. C0763533 (red yeast rice) is the botanical identity and belongs to RISK_RED_YEAST_RICE, which covers ordinary RYR and is not banned. C0024027 (lovastatin) is the hazard constituent -- monacolin K is chemically lovastatin -- but sibling entries carry the record identity rather than the constituent, and cui ships to consumers, where naming a supplement 'lovastatin' would mislead. Applicability is decided by standard_name + aliases, not by cui."
     },
     {
       "id": "RISK_RED_YEAST_RICE",
@@ -18217,12 +18230,35 @@
             "date": "2026-04-26",
             "change": "Added schema-completion fields (match_mode, review, jurisdiction code/type, ban_context, safety_warning) to satisfy v5.0 release gate.",
             "by": "system"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set source_category (sibling precedent: BANNED_USNIC_ACID)",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Added content-verified LiverTox citation (pulegone hepatotoxicity)",
+            "by": "claude-audit"
           }
         ]
       },
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Hepatotoxic / reproductive-toxic botanical — never an excipient",
-      "cui": "C0939239"
+      "cui": "C0939239",
+      "source_category": "hepatotoxic_botanical",
+      "references_structured": [
+        {
+          "type": "review_article",
+          "authority": "NCBI Bookshelf",
+          "citation": "LiverTox - Pennyroyal Oil",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548673/",
+          "published_date": null,
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "LiverTox - Pennyroyal Oil"
+        }
+      ]
     },
     {
       "id": "BANNED_TANSY",
@@ -18298,12 +18334,35 @@
             "date": "2026-04-26",
             "change": "Added schema-completion fields (match_mode, review, jurisdiction code/type, ban_context, safety_warning) to satisfy v5.0 release gate.",
             "by": "system"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set source_category (sibling precedent: BANNED_ACONITE)",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Added content-verified 21 CFR 172.510 citation (thujone restriction)",
+            "by": "claude-audit"
           }
         ]
       },
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Neurotoxic / reproductive-toxic botanical — never an excipient",
-      "cui": "C1256219"
+      "cui": "C1256219",
+      "source_category": "toxic_botanical",
+      "references_structured": [
+        {
+          "type": "regulation",
+          "title": "21 CFR 172.510 - Tansy (Tanacetum vulgare L.)",
+          "evidence_grade": "R",
+          "url": "https://www.ecfr.gov/current/title-21/section-172.510",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "Permits tansy in alcoholic beverages only; the finished alcoholic beverage must be thujone free."
+        }
+      ]
     },
     {
       "id": "BANNED_BITTER_ORANGE",
@@ -18393,12 +18452,35 @@
             "date": "2026-04-26",
             "change": "Added schema-completion fields (match_mode, review, jurisdiction code/type, ban_context, safety_warning) to satisfy v5.0 release gate.",
             "by": "system"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set source_category (sibling precedent: ADD_HORDENINE)",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Added content-verified NCCIH citation (synephrine safety)",
+            "by": "claude-audit"
           }
         ]
       },
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Synephrine-bearing stimulant — never an excipient",
-      "cui": "C3267737"
+      "cui": "C3267737",
+      "source_category": "stimulant_sympathomimetic",
+      "references_structured": [
+        {
+          "type": "government_consumer_guidance",
+          "authority": "NIH NCCIH",
+          "citation": "Bitter Orange: Usefulness and Safety",
+          "url": "https://www.nccih.nih.gov/health/bitter-orange",
+          "published_date": null,
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Bitter Orange: Usefulness and Safety"
+        }
+      ]
     },
     {
       "id": "RECALLED_BLUE_BULL_EXTREME",
@@ -19370,7 +19452,7 @@
         "test prop",
         "testoviron"
       ],
-      "cui": null,
+      "cui": "C0039607",
       "reason": "Injectable anabolic steroid (DEA Schedule III) found undeclared in sexual-enhancement supplement; causes cardiovascular strain, liver toxicity, and endocrine suppression.",
       "status": "banned",
       "ban_context": "adulterant_in_supplements",
@@ -19440,6 +19522,11 @@
             "date": "2026-05-30",
             "change": "Added from FDA advisory — Erectus Plus found to contain testosterone propionate (Schedule III controlled substance) alongside sildenafil and tadalafil",
             "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set cui C0039607 (UMLS exact name 'testosterone propionate', live-verified)",
+            "by": "claude-audit"
           }
         ]
       },
@@ -19921,9 +20008,15 @@
             "date": "2026-06-07",
             "change": "Added EU-banned additive as high_risk (warns on inactive use)",
             "by": "opus_eu_additive_pass"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set source_category (sibling precedent: BANNED_ADD_TITANIUM_DIOXIDE)",
+            "by": "claude-audit"
           }
         ]
-      }
+      },
+      "source_category": "high_risk_ingredients"
     },
     {
       "id": "BANNED_ADD_PROPYLPARABEN",
@@ -20012,9 +20105,15 @@
             "date": "2026-06-07",
             "change": "Added EU-banned additive as high_risk (warns on inactive use)",
             "by": "opus_eu_additive_pass"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set source_category (sibling precedent: BANNED_ADD_FORMALDEHYDE)",
+            "by": "claude-audit"
           }
         ]
-      }
+      },
+      "source_category": "high_risk_ingredients"
     },
     {
       "id": "BANNED_ADD_AZODICARBONAMIDE",
@@ -20079,7 +20178,7 @@
       "ban_context": "substance",
       "safety_warning": "EU-banned dough conditioner linked to respiratory sensitisation.",
       "safety_warning_one_liner": "Dough conditioner banned in EU food, linked to respiratory irritation.",
-      "cui": null,
+      "cui": "C0043716",
       "external_ids": {},
       "review": {
         "status": "validated",
@@ -20091,9 +20190,20 @@
             "date": "2026-06-07",
             "change": "Added EU-banned additive as high_risk (warns on inactive use)",
             "by": "opus_eu_additive_pass"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set source_category (sibling precedent: BANNED_ADD_POTASSIUM_BROMATE)",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Set cui C0043716 (UMLS exact name 'azodicarbonamide', live-verified)",
+            "by": "claude-audit"
           }
         ]
-      }
+      },
+      "source_category": "high_risk_ingredients"
     },
     {
       "id": "WATCH_BOVINE_BRAIN_PHOSPHATIDYLSERINE",
@@ -20196,6 +20306,11 @@
             "date": "2026-06-09",
             "change": "Added active-only watchlist entry for explicit bovine-brain/cortex phosphatidylserine source-material concern.",
             "by": "codex"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Annotated approved null CUI: no single UMLS concept for the bovine-brain-sourced form",
+            "by": "claude-audit"
           }
         ]
       },
@@ -20208,7 +20323,9 @@
       "functional_roles": [],
       "verification": {
         "verification_report": "scripts/audits/open_decisions_20260609/verification.json"
-      }
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "UMLS has no concept for bovine-brain/cortex-sourced phosphatidylserine. The generic concept (C0301704, phosphatidylserine) must NOT be used: this entry is a BSE/prion source-material watch item and the record states that plant-derived PS should not match it."
     },
     {
       "id": "RISK_MIROESTROL",

@@ -421,6 +421,48 @@ def build_report(
     }
 
 
+def fda_sync_release_blocker(
+    *,
+    release_mode: bool,
+    run_fda_sync_requested: bool,
+    fda_report_in: str | None,
+    fda_sync_result: dict[str, Any] | None,
+) -> str | None:
+    """Fail-closed FDA-sync contract for release mode. Returns a reason, or None.
+
+    ``load_fda_sync_report`` returns None for BOTH a missing and an unparsable
+    file, and ``fda_sync`` is not consulted by ``determine_overall_status`` or
+    ``should_fail_release_gate``. So before this check, a --release run naming a
+    report could pass without ever reading one: the invocation looked audited
+    while ``fda_sync`` was null. Absence of evidence was being accepted as
+    evidence of absence.
+
+    Release mode therefore requires a real FDA sync: either a live --run-fda-sync
+    that exited 0, or a --fda-report-in file that exists AND parses.
+    """
+    if not release_mode:
+        return None
+
+    if run_fda_sync_requested:
+        if not isinstance(fda_sync_result, dict):
+            return "live FDA sync produced no report"
+        rc = fda_sync_result.get("returncode")
+        if rc not in (0, None):
+            return f"live FDA sync failed (returncode={rc})"
+        return None
+
+    if not fda_report_in:
+        return ("release mode requires an FDA sync report: pass "
+                "--fda-report-in <path> or --run-fda-sync")
+
+    path = Path(fda_report_in)
+    if not path.exists():
+        return f"FDA sync report not found: {path}"
+    if fda_sync_result is None:
+        return f"FDA sync report unreadable or malformed: {path}"
+    return None
+
+
 def should_fail_release_gate(report: dict[str, Any], *, strict_cui: bool = False) -> bool:
     if report["status"] == "fail":
         return True
@@ -530,6 +572,16 @@ def main() -> int:
         fda_sync_result = run_fda_sync(args.days, Path(args.fda_report_out))
     elif args.fda_report_in:
         fda_sync_result = load_fda_sync_report(Path(args.fda_report_in))
+
+    fda_blocker = fda_sync_release_blocker(
+        release_mode=bool(args.release or args.release_strict_cui),
+        run_fda_sync_requested=bool(args.run_fda_sync),
+        fda_report_in=args.fda_report_in,
+        fda_sync_result=fda_sync_result,
+    )
+    if fda_blocker:
+        print(f"RELEASE GATE FAILED (FDA sync): {fda_blocker}", file=sys.stderr)
+        return 4
 
     data = load_banned_data(file_path)
     entries = data.get("ingredients", [])

@@ -4,6 +4,8 @@
 import os
 import sys
 import json
+
+import pytest
 from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -15,6 +17,7 @@ from audit_banned_recalled_accuracy import (
     audit_entry_quality,
     determine_overall_status,
     is_umls_available,
+    fda_sync_release_blocker,
     load_fda_sync_report,
     should_fail_release_gate,
 )
@@ -386,3 +389,100 @@ def test_audit_module_docstring_includes_release_runbook():
     assert "--release-strict-cui" in doc
     assert "--run-fda-sync" in doc
     assert "annotated null cui" in doc.lower()
+
+
+# ---------------------------------------------------------------------------
+# FDA sync must be fail-closed in release mode.
+#
+# load_fda_sync_report() returns None for BOTH a missing and an unparsable
+# report, and fda_sync is consumed by neither determine_overall_status() nor
+# should_fail_release_gate(). So a --release run that named a report could pass
+# without ever reading one: the command looked audited while fda_sync was null.
+# These tests pin that absence can no longer be mistaken for a clean check.
+# ---------------------------------------------------------------------------
+
+def _blocker(**kw):
+    base = dict(release_mode=True, run_fda_sync_requested=False,
+                fda_report_in=None, fda_sync_result=None)
+    base.update(kw)
+    return fda_sync_release_blocker(**base)
+
+
+def test_release_without_any_fda_argument_is_blocked():
+    reason = _blocker()
+    assert reason and "requires an FDA sync report" in reason
+
+
+def test_release_with_missing_report_is_blocked(tmp_path):
+    missing = tmp_path / "absent.json"
+    reason = _blocker(fda_report_in=str(missing), fda_sync_result=None)
+    assert reason and "not found" in reason
+
+
+def test_release_with_malformed_report_is_blocked(tmp_path):
+    bad = tmp_path / "bad.json"
+    bad.write_text('{"truncated": ')
+    # load_fda_sync_report swallows the JSONDecodeError and returns None; the
+    # file exists, so "unreadable or malformed" is the honest reason.
+    assert load_fda_sync_report(bad) is None
+    reason = _blocker(fda_report_in=str(bad), fda_sync_result=None)
+    assert reason and "unreadable or malformed" in reason
+
+
+def test_release_with_a_valid_report_is_allowed(tmp_path):
+    good = tmp_path / "good.json"
+    good.write_text(json.dumps({"summary": {"total_fetched": 0}}))
+    loaded = load_fda_sync_report(good)
+    assert loaded is not None
+    assert _blocker(fda_report_in=str(good), fda_sync_result=loaded) is None
+
+
+def test_release_with_a_failed_live_sync_is_blocked():
+    reason = _blocker(run_fda_sync_requested=True,
+                      fda_sync_result={"returncode": 2})
+    assert reason and "live FDA sync failed" in reason
+
+
+def test_release_with_a_successful_live_sync_is_allowed():
+    assert _blocker(run_fda_sync_requested=True,
+                    fda_sync_result={"returncode": 0}) is None
+
+
+def test_non_release_runs_are_not_forced_to_have_an_fda_report(tmp_path):
+    """The contract binds release mode only — local audits stay convenient."""
+    assert fda_sync_release_blocker(
+        release_mode=False, run_fda_sync_requested=False,
+        fda_report_in=str(tmp_path / "absent.json"), fda_sync_result=None) is None
+
+
+def _cli_entrypoints():
+    """Both shipped entry points: the api_audit implementation and the
+    scripts/ compatibility wrapper. The wrapper once called main() instead of
+    sys.exit(main()), so it printed "RELEASE GATE FAILED" and exited 0 -- a
+    release gate that announced failure and passed anyway."""
+    scripts_dir = Path(__file__).resolve().parents[1]
+    wrapper = scripts_dir / "audit_banned_recalled_accuracy.py"
+    real = scripts_dir / "api_audit" / "audit_banned_recalled_accuracy.py"
+    found = sorted(p for p in {wrapper, real} if p.is_file())
+    # An empty parametrize set SKIPS, and a skipped canary is not a passing
+    # canary -- fail loudly instead of silently covering nothing.
+    assert found, f"no audit entry point found under {scripts_dir}"
+    return found
+
+
+@pytest.mark.parametrize("entrypoint", _cli_entrypoints(), ids=lambda p: p.parent.name)
+def test_release_cli_exits_nonzero_when_the_report_is_absent(entrypoint, tmp_path):
+    """End-to-end: a missing FDA report must fail the gate through EVERY entry
+    point, by exit code -- not merely by printing a failure message."""
+    import subprocess
+
+    proc = subprocess.run(
+        [sys.executable, str(entrypoint), "--release",
+         "--fda-report-in", str(tmp_path / "absent.json")],
+        capture_output=True, text=True, timeout=120,
+    )
+    assert "RELEASE GATE FAILED" in proc.stderr, proc.stderr[-400:]
+    assert proc.returncode != 0, (
+        f"{entrypoint} printed the failure but exited {proc.returncode}; a gate "
+        "must signal failure through its exit code"
+    )

@@ -609,6 +609,16 @@ else
     "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live
   run_strict_gate "backed clinical studies PMID content (PubMed)" \
     "$PG_PYTHON" scripts/api_audit/verify_backed_studies_citations.py --strict
+  # AGENTS.md and api_audit/README.md called this "the release gate for
+  # banned/recalled data" since it was written, but it was never actually
+  # invoked here — the docs wrote a check the release train never cashed.
+  # --release fails closed on integrity errors, curation gaps (missing
+  # source_category / reference_urls / cui annotations), any CUI mismatch, and
+  # on a missing or unparsable FDA sync report.
+  run_strict_gate "banned/recalled curation accuracy (UMLS + FDA sync)" \
+    "$PG_PYTHON" scripts/api_audit/audit_banned_recalled_accuracy.py \
+      --release \
+      --fda-report-in "$REPO_ROOT/scripts/fda_sync_report_latest.json"
 fi
 
 run_strict_gate "cleaner/IQD row contract" \

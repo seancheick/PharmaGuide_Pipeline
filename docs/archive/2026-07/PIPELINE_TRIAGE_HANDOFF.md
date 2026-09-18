@@ -1,3 +1,10 @@
+> **ARCHIVED 2026-09-18.** This document is history, not a runbook — do not execute it.
+> Triaged against current code on 2026-09-18: finding 1.4 (allergen negation) is
+> **verified fixed** — `_is_negated` at `scripts/enrich_supplements_v3.py:12199` now
+> carries the scope-limitation contract plus a 60-char window. Finding 1.8
+> (batch-resume data loss) is **verified fixed** with regression tests. **Every other
+> status here is unverified**, and the line numbers no longer match the files.
+
 # Pipeline Triage & Fix — Fresh-Agent Handoff
 
 > **How to use:** Start a fresh agent in this repo (`/Users/seancheick/Downloads/dsld_clean`) and give it this file as its task: *"Read `PIPELINE_TRIAGE_HANDOFF.md` in full and execute it. End in plan mode."* Everything it needs is below — it does not have the context of the session that produced this.

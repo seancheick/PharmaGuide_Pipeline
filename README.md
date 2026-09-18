@@ -15,7 +15,7 @@ A production-grade data pipeline that transforms raw NIH Dietary Supplement Labe
 
 ## Why This Exists
 
-The dietary supplement market is a **$60B industry** with minimal consumer transparency. Labels don't tell you if a form is bioavailable, if an ingredient has been recalled by the FDA, or if clinical evidence actually supports the claimed benefits. PharmaGuide Pipeline bridges that gap by scoring every product against 39 curated reference databases, real clinical evidence, and active FDA safety data.
+The dietary supplement market is a **$60B industry** with minimal consumer transparency. Labels don't tell you if a form is bioavailable, if an ingredient has been recalled by the FDA, or if clinical evidence actually supports the claimed benefits. PharmaGuide Pipeline bridges that gap by scoring every product against a curated reference-database corpus, real clinical evidence, and active FDA safety data.
 
 ---
 
@@ -36,12 +36,12 @@ The dietary supplement market is a **$60B industry** with minimal consumer trans
                        |
                        v
             +--------------------+
-            |   Stage 3: SCORE   |   Legacy score scaffolding + safety gates
+            |   Stage 3: SCORE   |   V4 six-pillar scoring + safety gates
             +--------------------+
                        |
                        v
             +--------------------+
-            |   Final DB Build   |   V4 six-pillar export + Supabase sync
+            |   Final DB Build   |   Catalog export + Supabase sync
             +--------------------+
                        |
                   +----+----+
@@ -89,22 +89,32 @@ contain `score_quality_80` or `score_display_80`.
 
 ## Reference Databases
 
-39 curated JSON databases power the scoring engine:
+Curated JSON databases under `scripts/data/` power the scoring engine.
 
-| Database | Entries | Purpose |
-|----------|---------|---------|
-| `ingredient_quality_map.json` | 588 | Quality scoring for bioavailable forms, premium ingredients |
-| `backed_clinical_studies.json` | 197 | PMID-backed clinical evidence with endpoint classifications |
-| `banned_recalled_ingredients.json` | 143 | FDA-sourced regulatory disqualifications |
-| `harmful_additives.json` | 115 | Penalty scoring for harmful additives and excipients |
-| `caers_adverse_event_signals.json` | -- | FDA CAERS pharmacovigilance signals (B8 penalty scoring) |
-| `fda_unii_cache.json` | 172K | Offline FDA UNII substance registry for identity resolution |
-| `rda_optimal_uls.json` | 47 | RDA/AI/UL dosing adequacy benchmarks |
-| `allergens.json` | 17 | Big 8 allergen classification |
-| `synergy_cluster.json` | 58 | Ingredient combination bonus scoring |
-| `manufacturer_violations.json` | -- | Brand trust penalties from FDA warning letters |
+**Entry counts are deliberately not reproduced here.** They drift within weeks, and a
+stale number in this table is worse than no number. Read `_metadata.total_entries`
+from the file itself, or `scripts/DATABASE_SCHEMA.md`:
 
-All files follow a strict schema contract (`v5.0/5.1/5.2/5.3`) with `_metadata` blocks for versioning and audit trails.
+```bash
+python3 -c "import json;print(json.load(open('scripts/data/ingredient_quality_map.json'))['_metadata'])"
+```
+
+
+| Database | Purpose |
+|----------|---------|
+| `ingredient_quality_map.json` | Quality scoring for bioavailable forms, premium ingredients |
+| `backed_clinical_studies.json` | PMID-backed clinical evidence with endpoint classifications |
+| `banned_recalled_ingredients.json` | FDA-sourced regulatory disqualifications |
+| `harmful_additives.json` | Penalty scoring for harmful additives and excipients |
+| `caers_adverse_event_signals.json` | FDA CAERS pharmacovigilance signals (B8 penalty scoring) |
+| `fda_unii_cache.json` | Offline FDA UNII substance registry for identity resolution |
+| `rda_optimal_uls.json` | RDA/AI/UL dosing adequacy benchmarks |
+| `allergens.json` | Big 8 allergen classification |
+| `synergy_cluster.json` | Ingredient combination bonus scoring |
+| `manufacturer_violations.json` | Brand trust penalties from FDA warning letters |
+
+All files follow a strict schema contract with `_metadata` blocks for versioning and audit
+trails. Read `schema_version` from the file rather than trusting a number written here.
 
 ---
 
@@ -144,7 +154,7 @@ python3 scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/
 # Individual stages
 python3 scripts/clean_dsld_data.py <input> <output>
 python3 scripts/enrich_supplements_v3.py <cleaned_input> <output>
-python3 scripts/score_supplements.py <enriched_input> <output>
+python3 scripts/score_products_v4.py --input-dir <enriched_dir> --output-dir <scored_dir>
 
 # Manual/internal export tools; normal shipping goes through rebuild_dashboard_snapshot.sh + release_full.sh
 python3 scripts/build_final_db.py --enriched-dir <enriched_dir> --scored-dir <scored_dir> --output-dir <output_dir>
@@ -158,7 +168,7 @@ python3 scripts/sync_to_supabase.py scripts/dist --dry-run
 scripts/test.sh fast
 
 # Specific module
-scripts/test.sh fast scripts/tests/test_score_supplements.py
+scripts/test.sh fast scripts/tests/test_v4_scored_artifact.py
 
 # By keyword
 scripts/test.sh fast -k banned
@@ -174,10 +184,10 @@ scripts/
   audit_source_of_truth_contract.py # Strict source-of-truth and release gates
   contracts/source_of_truth_matrix.json # Owner map for clinical/data concepts
   clean_dsld_data.py           # Stage 1: normalize raw DSLD JSON
-  enrich_supplements_v3.py     # Stage 2: ingredient matching & enrichment (12K lines)
-  score_supplements.py         # Stage 3: legacy arithmetic scaffolding + safety gates
+  enrich_supplements_v3.py     # Stage 2: ingredient matching & enrichment (mega-file)
+  score_products_v4.py         # Stage 3: batch CLI, delegates to scoring_v4
   scoring_v4/                  # Production six-pillar /100 scoring model
-  enhanced_normalizer.py       # Core NLP normalization engine (6K lines)
+  enhanced_normalizer.py       # Core NLP normalization engine (mega-file)
   build_final_db.py            # Flutter-ready export builder
   sync_to_supabase.py          # Cloud sync with upsert logic
   batch_processor.py           # Resumable batch processing

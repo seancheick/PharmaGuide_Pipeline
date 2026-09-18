@@ -1,3 +1,10 @@
+> **ARCHIVED 2026-09-18.** This document is history, not a runbook — do not execute it.
+> Triaged against current code on 2026-09-18: finding 1.4 (allergen negation) is
+> **verified fixed** — `_is_negated` at `scripts/enrich_supplements_v3.py:12199` now
+> carries the scope-limitation contract plus a 60-char window. Finding 1.8
+> (batch-resume data loss) is **verified fixed** with regression tests. **Every other
+> status here is unverified**, and the line numbers no longer match the files.
+
 # Pipeline Code Review — Full Findings
 
 **Date:** 2026-07-05

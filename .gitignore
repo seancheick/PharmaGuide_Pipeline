@@ -96,3 +96,16 @@ scripts/dist.preRC_*/
 # Local dev tooling caches (Continue.dev, Playwright MCP)
 .continue/
 .playwright-mcp/
+
+# Regenerated audit reports — rewritten with a fresh timestamp on every run, so
+# tracking them churns the tree on each audit. The dated snapshot reports beside
+# them (fda_sync_report_<YYYYMMDD>.json) are deliberate history and stay tracked.
+scripts/banned_recalled_accuracy_report.json
+scripts/clinical_evidence_strength_report.json
+# NOTE: scripts/fda_sync_report_latest.json is deliberately NOT ignored yet.
+# It stays tracked until the release path is fail-closed on a missing/unparsable
+# FDA sync report; today load_fda_sync_report() returns None and the audit
+# proceeds with fda_sync: null, so untracking it would harden a fail-open path.
+
+# Empty canary fixture with no readers; rebuild locally if a canary DB is needed.
+scripts/products_canaries.db

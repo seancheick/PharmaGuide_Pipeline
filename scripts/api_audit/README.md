@@ -172,15 +172,27 @@ Purpose:
 - One-command release gate for `banned_recalled_ingredients.json`.
 - Combines schema/integrity checks, entry-quality rules, CUI verification, and FDA-report ingestion.
 
+Wired into `scripts/release_full.sh` as a strict gate (live-identity block), so
+`SKIP_LIVE_IDENTITY_GATES=1` skips it and you own the risk for that build.
+
 Inputs:
 
 - `scripts/data/banned_recalled_ingredients.json`
-- optional FDA sync report
-- optional live UMLS access
+- FDA sync report — **required in `--release` mode** (see below)
+- live UMLS access
 
 Outputs:
 
 - JSON accuracy report with status `pass`, `warn`, or `fail`
+
+Exit codes: `0` pass · `1` `--strict` with warnings · `2` status fail ·
+`3` release gate failed · `4` FDA sync missing/unreadable in release mode.
+
+**FDA sync is fail-closed in release mode.** `--release` requires either
+`--run-fda-sync` (exiting 0) or a `--fda-report-in` file that exists *and*
+parses; otherwise it exits `4`. Without this, a missing report made
+`load_fda_sync_report()` return `None` and the audit continued with
+`fda_sync: null` — the command looked audited while nothing had been read.
 
 Common commands:
 
