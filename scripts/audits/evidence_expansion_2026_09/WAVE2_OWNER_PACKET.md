@@ -16,22 +16,32 @@ Not the number of newly approvable records — the number of zeroes that now hav
 | syntheses recorded as verified references (no dose stated) | 6 |
 | context validation failures | 0 |
 | Evidence=0 products in the wave's identities | 860 |
-| scored products at Evidence 0 in the whole corpus | 4231 |
-| ... whose every scorable identity is now reviewed | **646** |
-| ... with at least one identity now reviewed | 33 |
+| Evidence=0 products this wave alone fully reviewed | 646 |
+| ... with at least one identity reviewed by this wave | 33 |
+
+Cumulative coverage, and the distinction between the three numbers, is owned by
+`COVERAGE_MANIFEST.json` and pinned to a corpus snapshot - this packet does not restate it in its
+own words. Snapshot: git `2341b4517f36`, 15109 scored products, 4231 at
+Evidence 0.
+
+| cumulative metric | products | share of the pinned 4231 |
+|---|---:|---:|
+| review state established (supported / null / held / no-qualifying / handoff) | **859** | **20.3%** |
+| deep curated (read centrally, source by source) | 521 | 12.3% |
+| score reachable by an APPROVED scoring record | 32 | - |
 
 ## Decision table
 
 | identity | products | Ev=0 | contexts | direction | dose applicability | proposal | projected products | high risk |
 |---|---:|---:|---:|---|---|---|---:|:--:|
-| `common_bean_extract` | 22 | 21 | 1 | positive_weak | floor 1000 mg | APPROVE | 16 |  |
-| `amla` | 52 | 19 | 1 | positive_weak | floor 500 mg | APPROVE | 18 |  |
-| `devils_claw` | 25 | 16 | 0 | positive_weak | no dose policy | APPROVE | 16 |  |
-| `senna` | 15 | 15 | 0 | positive_strong | no dose policy | APPROVE (high risk - human decision) | 15 | yes |
+| `common_bean_extract` | 22 | 21 | 1 | positive_weak | floor 1000 mg | APPROVED + APPLIED | 16 |  |
+| `amla` | 52 | 19 | 1 | positive_weak | floor 500 mg | APPROVED + APPLIED | 18 |  |
+| `devils_claw` | 25 | 16 | 0 | positive_weak | no dose policy | REVIEWED SUPPORTIVE, scoring HELD | 16 |  |
+| `senna` | 15 | 15 | 0 | positive_strong | no dose policy | REVIEWED SUPPORTIVE, scoring HELD | 15 |  |
+| `d_aspartic_acid` | 28 | 21 | 2 | null | 3-6 g/day | APPLIED as reviewed NULL (earns nothing) | 0 |  |
+| `d_mannose` | 25 | 16 | 1 | null | 2 g/day | APPLIED as reviewed NULL (earns nothing) | 0 |  |
 | `schisandra_berry` | 48 | 19 | 1 | positive_weak | floor 1000 mg | HOLD (blocked upstream, not by evidence) | 0 |  |
 | `globe_artichoke` | 37 | 14 | 0 | positive_weak | no dose policy | HOLD (blocked upstream, not by evidence) | 0 |  |
-| `d_aspartic_acid` | 28 | 21 | 2 | null | 3-6 g/day | HOLD (null direction; parked decision) | 0 |  |
-| `d_mannose` | 25 | 16 | 1 | null | 2 g/day | HOLD (null direction; parked decision) | 0 |  |
 | `horsetail` | 57 | 18 | 0 | positive_weak | - | HOLD + HANDOFF | 0 | yes |
 | `hoodia_gordonii` | 18 | 17 | 0 | null | - | HOLD + HANDOFF | 0 | yes |
 | `mucuna_pruriens` | 31 | 17 | 0 | not_an_efficacy_record | - | HOLD + HANDOFF | 0 | yes |
@@ -56,31 +66,39 @@ Not the number of newly approvable records — the number of zeroes that now hav
 |---|---:|---:|
 | HOLD | 10 | 169 |
 | HOLD + HANDOFF | 4 | 66 |
-| APPROVE | 3 | 56 |
+| APPROVED + APPLIED | 2 | 40 |
+| REVIEWED SUPPORTIVE, scoring HELD | 2 | 31 |
+| APPLIED as reviewed NULL (earns nothing) | 2 | 37 |
 | HOLD (blocked upstream, not by evidence) | 2 | 33 |
-| HOLD (null direction; parked decision) | 2 | 37 |
-| APPROVE (high risk - human decision) | 1 | 15 |
 | HOLD (integrity) | 1 | 21 |
 | HANDOFF | 1 | 19 |
 | REVIEWED_NO_QUALIFYING | 1 | 16 |
 
 ## Reasons
 
-**`common_bean_extract`** — APPROVE
+**`common_bean_extract`** — APPROVED + APPLIED
 
-PMID 42066439 is ingredient-level (oral WKBE, 8 RCTs, n=543, weight -1.62 kg 95% CI -1.99 to -1.25). Catalog prints white kidney bean extract uniformly. Caveat: alpha-amylase inhibitor extracts are not standardised by inhibitor units, so label mg is not a potency guarantee, and the pooled effect is small.
+PMID 42066439 is ingredient-level (oral WKBE, 8 RCTs, n=543, weight -1.62 kg 95% CI -1.99 to -1.25). Catalog prints white kidney bean extract uniformly. Caveat: alpha-amylase inhibitor extracts are not standardised by inhibitor units, so label mg is not a potency guarantee, and the pooled effect is small. APPLIED 2026-09-18 as INGR_WHITE_KIDNEY_BEAN, positive_weak, 1,000 mg/day applicability floor; 16 of 22 products qualify, 16 of them at Evidence 0 today.
 
-**`amla`** — APPROVE
+**`amla`** — APPROVED + APPLIED
 
-PMID 37296402 (9 studies, EO 500-1500 mg/day): LDL-C -15.08 mg/dL, VLDL -5.43, TG -22.35, hsCRP -1.70, with the authors' own caution about heterogeneity. PMID 36934568 (5 RCTs) agrees. A 500 mg/day floor is proposed because that is the lowest dose the syntheses cover; the catalog median is 120 mg, so most products would NOT qualify - that is the point of the floor. The branded AMX-160 RCT (40262554) supports but does not define the record and carries an erratum; the amla syrup alopecia trial (37487962) is off-axis and excluded.
+PMID 37296402 (9 studies, EO 500-1500 mg/day): LDL-C -15.08 mg/dL, VLDL -5.43, TG -22.35, hsCRP -1.70, with the authors' own caution about heterogeneity. PMID 36934568 (5 RCTs) agrees. A 500 mg/day floor is proposed because that is the lowest dose the syntheses cover; the catalog median is 120 mg, so most products would NOT qualify - that is the point of the floor. The branded AMX-160 RCT (40262554) supports but does not define the record and carries an erratum; the amla syrup alopecia trial (37487962) is off-axis and excluded. APPLIED 2026-09-18 as INGR_AMLA, positive_weak, 500 mg/day floor; 19 of 52 products qualify. Limitations verified and recorded on the record after independent review: prediction intervals cross null for LDL-C (-48.29 to 18.13) and triglycerides (-73.47 to 28.77), I2 is 77% and 62%, only hs-CRP is homogeneous, the two syntheses overlap rather than replicate, and the endpoints are biomarkers not events. MEASURED CONSEQUENCE THE OWNER SHOULD SEE: three single-active products (Capros amla extract at exactly 500 mg) go from Evidence 0.0 to 13.2, because the existing primary-mass floor pays 14.0 x 0.85 when a mass-dominant active carries a systematic-review record. That is the scorer's existing behaviour, not a new rule, and it is the largest rise in the batch.
 
-**`devils_claw`** — APPROVE
+**`devils_claw`** — REVIEWED SUPPORTIVE, scoring HELD
 
-Cochrane 2016 update (PMID 26630428, 14 RCTs, 2,050 participants): Harpagophytum procumbens seems to reduce pain more than placebo, evidence moderate quality at best. The 2007 Cochrane (17202897) is superseded and carries an erratum, so it is not cited. No dose policy is proposed: trials dose by harpagoside content and labels print extract mg, and inventing an equivalence is forbidden. Cranberry is the precedent for a record that deliberately carries no dose policy.
+Cochrane 2016 update (PMID 26630428, 14 RCTs, 2,050 participants): Harpagophytum procumbens seems to reduce pain more than placebo, evidence moderate quality at best. The 2007 Cochrane (17202897) is superseded and carries an erratum, so it is not cited. No dose policy is proposed: trials dose by harpagoside content and labels print extract mg, and inventing an equivalence is forbidden. Cranberry is the precedent for a record that deliberately carries no dose policy. APPLIED 2026-09-18 as INGR_DEVILS_CLAW at REFERENCE TIER - reviewed and supportive, scoring nothing. Independent review was right on both counts and both were verified live: the 14 RCTs / 2,050 participants are the Cochrane review's totals across SIX herbal medicines (corrected to 197, the largest devil's-claw-specific trial), and the studied exposure is 50-100 mg/day of harpagoside (PMID 10101629: 600/1200 mg of extract WS 1531 containing 50/100 mg harpagoside; PMID 12509627: Doloteffin with 60 mg). The one catalog label stating harpagoside delivers about 10.5 mg/day, five times below the lowest studied dose.
 
-**`senna`** — APPROVE (high risk - human decision)
+**`senna`** — REVIEWED SUPPORTIVE, scoring HELD
 
-The strongest positive evidence in the wave, and the one that needs a human decision rather than a scoring one. Two independent evidence-based reviews both give senna GRADE A / good evidence as a first-line OTC laxative for chronic constipation, and a third found it superior to or as effective as other laxatives in long-term care. No dose policy is proposed: senna is dosed by sennoside content and all 15 catalog rows print 150 mg of senna leaf extract, so an equivalence would have to be invented. FLAGGED HIGH-RISK: senna is a stimulant laxative, the reviews themselves report abdominal pain, cramping, diarrhoea and nausea, and long-term use raises dependence and electrolyte concerns. Whether a stimulant laxative should earn positive Evidence credit in a consumer supplement score is a product-policy question for the owner, not an evidence question.
+The strongest positive evidence in the wave, and the one that needs a human decision rather than a scoring one. Two independent evidence-based reviews both give senna GRADE A / good evidence as a first-line OTC laxative for chronic constipation, and a third found it superior to or as effective as other laxatives in long-term care. No dose policy is proposed: senna is dosed by sennoside content and all 15 catalog rows print 150 mg of senna leaf extract, so an equivalence would have to be invented. FLAGGED HIGH-RISK: senna is a stimulant laxative, the reviews themselves report abdominal pain, cramping, diarrhoea and nausea, and long-term use raises dependence and electrolyte concerns. Whether a stimulant laxative should earn positive Evidence credit in a consumer supplement score is a product-policy question for the owner, not an evidence question. APPLIED 2026-09-18 as INGR_SENNA at REFERENCE TIER - reviewed and supportive, scoring nothing. Independent review was right about the lineage and it was verified live: PMID 35943487 states it is 'a synopsis of an updated systematic review the authors conducted', so it is not a second independent grade-A confirmation; confidence lowered from high to medium. PMID 29885259 is independent but modest (7 RCTs, 444 long-term-care patients, authors cautioning on duration and quality). 0 of 15 catalog labels state sennosides, so nothing establishes the studied exposure. Stimulant-laxative adverse effects routed to the safety owner and NOT netted against the efficacy direction.
+
+**`d_aspartic_acid`** — APPLIED as reviewed NULL (earns nothing)
+
+Three single-ingredient RCTs, all null for testosterone: 6 g/day for 12 weeks in resistance-trained men (no change in TT or FT), 3 g/day crossover in climbers (no effect on T, cFT, LH), 6 g/day for 14 days in boxers (no effect). The one positive result (40248985) is a three-component combination (DAA + ubiquinol + zinc) in an infertility clinic population and may not lend its direction. Material and dose map cleanly; blocked only by the parked null decision. APPLIED 2026-09-18 as INGR_D_ASPARTIC_ACID, reviewed null, earning zero affirmative credit. A 3,000 mg/day floor applies for the same reason.
+
+**`d_mannose`** — APPLIED as reviewed NULL (earns nothing)
+
+PMID 38587819 (JAMA Intern Med 2024, n=598, placebo-controlled, 2 g/day, 6 months) null on its primary endpoint (51.0% vs 55.7%, RD -5%, 95% CI -13% to 3%); PMID 41004704 (2025, 6 RCTs, n=1,167) RR 0.57 (0.29-1.15). Older positive syntheses rest on open-label studies. Fully scorer-compatible; blocked only by the parked null-direction decision. APPLIED 2026-09-18 as INGR_D_MANNOSE, reviewed null, earning zero affirmative credit under the null = 0.0 decision. A 2,000 mg/day floor keeps products below the studied exposure from being characterised by a result at a dose they do not deliver.
 
 **`schisandra_berry`** — HOLD (blocked upstream, not by evidence)
 
@@ -89,14 +107,6 @@ Two independent single-ingredient placebo-controlled RCTs at 1 g/day for 12 week
 **`globe_artichoke`** — HOLD (blocked upstream, not by evidence)
 
 Three independent ingredient-level meta-analyses of Cynara scolymus agree on modest, consistent effects: total and LDL cholesterol and triglycerides down, insulin and HOMA-IR down, ALT and ALP down, with fasting glucose, HbA1c and HDL unaffected - the 2025 synthesis calls them 'modest but significant'. Endpoints are clinical biomarkers, not patient-important outcomes, and the largest effects concentrate in NAFLD and hypertensive subgroups, both of which must travel with the record as studied_population. No dose is stated in any synthesis, so no dose policy is proposed. BLOCKED UPSTREAM, not by evidence: all 37 catalog rows are classified recognized_non_scorable by the cleaner, so this record would reach ZERO products. Routed to the identity/cleaner owner. The evidence itself is ready to author the moment those rows become scorable actives.
-
-**`d_aspartic_acid`** — HOLD (null direction; parked decision)
-
-Three single-ingredient RCTs, all null for testosterone: 6 g/day for 12 weeks in resistance-trained men (no change in TT or FT), 3 g/day crossover in climbers (no effect on T, cFT, LH), 6 g/day for 14 days in boxers (no effect). The one positive result (40248985) is a three-component combination (DAA + ubiquinol + zinc) in an infertility clinic population and may not lend its direction. Material and dose map cleanly; blocked only by the parked null decision.
-
-**`d_mannose`** — HOLD (null direction; parked decision)
-
-PMID 38587819 (JAMA Intern Med 2024, n=598, placebo-controlled, 2 g/day, 6 months) null on its primary endpoint (51.0% vs 55.7%, RD -5%, 95% CI -13% to 3%); PMID 41004704 (2025, 6 RCTs, n=1,167) RR 0.57 (0.29-1.15). Older positive syntheses rest on open-label studies. Fully scorer-compatible; blocked only by the parked null-direction decision.
 
 **`horsetail`** — HOLD + HANDOFF
 

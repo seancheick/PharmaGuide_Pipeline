@@ -17,6 +17,9 @@ from pathlib import Path
 
 OUT = Path(__file__).resolve().parent
 ACTION_TO_PROPOSAL = {
+    "applied_approved": "APPROVED + APPLIED",
+    "reviewed_supportive_hold": "REVIEWED SUPPORTIVE, scoring HELD",
+    "applied_reviewed_null": "APPLIED as reviewed NULL (earns nothing)",
     "propose": "APPROVE",
     "propose_high_risk": "APPROVE (high risk - human decision)",
     "ready_but_blocked_upstream": "HOLD (blocked upstream, not by evidence)",
@@ -107,9 +110,19 @@ def main() -> int:
         f"| syntheses recorded as verified references (no dose stated) | {ctxs['_metadata']['syntheses_recorded_as_references']} |",
         f"| context validation failures | {ctxs['_metadata']['validation_failures']} |",
         f"| Evidence=0 products in the wave's identities | {sum(i['catalog']['evidence_zero_products'] for i in pre_by.values())} |",
-        f"| scored products at Evidence 0 in the whole corpus | {zero_products} |",
-        f"| ... whose every scorable identity is now reviewed | **{zero_fully_reviewed}** |",
-        f"| ... with at least one identity now reviewed | {zero_partly_reviewed} |",
+        f"| Evidence=0 products this wave alone fully reviewed | {zero_fully_reviewed} |",
+        f"| ... with at least one identity reviewed by this wave | {zero_partly_reviewed} |",
+        "",
+        "Cumulative coverage, and the distinction between the three numbers, is owned by",
+        "`COVERAGE_MANIFEST.json` and pinned to a corpus snapshot - this packet does not restate it in its",
+        "own words. Snapshot: git `{git_head}`, {snapshot_products} scored products, {snapshot_zero} at",
+        "Evidence 0.",
+        "",
+        "| cumulative metric | products | share of the pinned {snapshot_zero} |", "|---|---:|---:|",
+        "| review state established (supported / null / held / no-qualifying / handoff) | "
+        "**{review_state}** | **{review_state_pct}%** |",
+        "| deep curated (read centrally, source by source) | {deep} | {deep_pct}% |",
+        "| score reachable by an APPROVED scoring record | {reachable} | - |",
         "",
         "## Decision table",
         "",
@@ -128,7 +141,17 @@ def main() -> int:
     for r in rows:
         lines += [f"**`{r['identity']}`** — {r['proposal']}", "", r["reason"], ""]
 
-    (OUT / "WAVE2_OWNER_PACKET.md").write_text("\n".join(lines) + "\n")
+    manifest = json.loads((OUT / "COVERAGE_MANIFEST.json").read_text())
+    zero_stats = manifest["products_at_evidence_zero"]
+    body = "\n".join(lines).format(
+        git_head=manifest["corpus_manifest"]["git_head"][:12],
+        snapshot_products=manifest["corpus_manifest"]["scored_products_in_snapshot"],
+        snapshot_zero=zero_stats["total"],
+        review_state=zero_stats["review_state_established"],
+        review_state_pct=zero_stats["review_state_established_pct"],
+        deep=zero_stats["deep_curated"], deep_pct=zero_stats["deep_curated_pct"],
+        reachable=zero_stats["score_reachable_by_an_approved_record"])
+    (OUT / "WAVE2_OWNER_PACKET.md").write_text(body + "\n")
     print(json.dumps({"identities": len(rows), "contexts": ctxs["_metadata"]["contexts"],
                       "evidence_zero_products_corpus": zero_products,
                       "fully_reviewed": zero_fully_reviewed, "partly_reviewed": zero_partly_reviewed,

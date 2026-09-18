@@ -82,13 +82,12 @@ EVIDENCE_LEVEL_MULTIPLIERS: Dict[str, float] = {
     "reference": 0.0,
 }
 
-EFFECT_DIRECTION_MULTIPLIERS: Dict[str, float] = {
-    "positive_strong": 1.0,
-    "positive_weak": 0.85,
-    "mixed": 0.6,
-    "null": 0.25,
-    "negative": 0.0,
-}
+# ONE owner for what an effect direction is worth: scoring_v4/config/quality_score.json.
+# This module used to hard-code the numbers while probiotic_evidence read them from the
+# config, and it hard-coded them a SECOND time for the floor path below - three copies of
+# one decision. 2026-09-18: null is 0.0 in that one place, so a study that did not show a
+# benefit earns no affirmative efficacy credit anywhere.
+EFFECT_DIRECTION_MULTIPLIERS: Dict[str, float] = dict(_EM["effect_direction_multipliers"])
 
 ENROLLMENT_ELIGIBLE_STUDY_TYPES = frozenset(
     {"systematic_review_meta", "rct_multiple", "rct_single"}
@@ -162,16 +161,10 @@ DRI_ESSENTIAL_NUTRIENTS = frozenset({
     "vitamin_b5_pantothenic", "vitamin_b6_pyridoxine", "vitamin_b7_biotin",
     "vitamin_b9_folate", "vitamin_b12_cobalamin", "choline",
 })
-# Effect-strength weight on the primary floor. Mirrors the pipeline's effect
-# multipliers so honest mixed/null human evidence receives proportional credit
-# instead of falling through to raw low-count pipeline math. Negative evidence
-# remains zero and never anchors a floor.
-_EFFECT_FLOOR_MULTIPLIER = {
-    "positive_strong": 1.0,
-    "positive_weak": 0.85,
-    "mixed": 0.6,
-    "null": 0.25,
-}
+# Effect-strength weight on the primary floor. It IS the pipeline's multiplier map, not a
+# copy of it: a direction that earns no affirmative credit in the pipeline may not anchor a
+# floor either. Directions worth 0 (null, negative) are skipped by the caller.
+_EFFECT_FLOOR_MULTIPLIER = EFFECT_DIRECTION_MULTIPLIERS
 # Prototype toggle (Phase 8 spike). Set ENABLED=False for the no-floor baseline.
 # The floor is gated on the strongly-evidenced ingredient being a MASS-DOMINANT
 # active (mass >= PRIMARY_MASS_FRACTION of the heaviest active), so it rewards a

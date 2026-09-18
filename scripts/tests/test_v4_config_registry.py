@@ -59,7 +59,7 @@ def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
     assert config_version("omega") == "1.2.0-label-stated-omega-amounts"
-    assert config_version("quality_score") == "1.10.1-omega-printed-epa-dha"
+    assert config_version("quality_score") == "1.11.0-null-earns-no-affirmative-credit"
 
 
 def test_all_config_provenance_shape():

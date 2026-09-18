@@ -334,7 +334,12 @@ def test_pending_review_is_independent_of_existing_positive_or_null_credit(cid, 
     from scoring_v4.confidence import _evidence_confidence
     p = strain_product(clinical_id=cid, name=name, dose=1e9)
     evidence = score_evidence(p)
-    assert evidence["score"] > 0
+    # What this test pins is that a PENDING review neither grants nor removes credit.
+    # HN019's own curated direction is null, which has earned nothing since the
+    # 2026-09-18 owner decision; the other strains still score. Either way the pending
+    # review must not be what decides it.
+    assert evidence["score"] == (0.0 if cid == "STRAIN_LACTIS_HN019" else pytest.approx(evidence["score"]))
+    assert evidence["score"] > 0 or cid == "STRAIN_LACTIS_HN019"
     assert evidence["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "pending_clinical_review"
     assert _evidence_confidence(p, {"dimensions": {"evidence": evidence}},
         evidence_assessment={"readiness": "complete"}) == ("moderate", ["evidence_review_incomplete"])

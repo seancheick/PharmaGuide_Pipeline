@@ -8,10 +8,7 @@ authored into the registry, no score moved, no catalog rebuilt.** These are prop
 
 | outcome | identities | Evidence=0 products |
 |---|---:|---:|
-| propose for approval | 3 | 56 |
-| propose - HIGH RISK, needs a human decision | 1 | 15 |
 | evidence ready, blocked upstream | 2 | 33 |
-| hold - blocked only by the null decision | 2 | 37 |
 | hold + route to another owner | 4 | 66 |
 | hold - integrity check outstanding | 1 | 21 |
 | hold | 10 | 169 |
@@ -19,7 +16,7 @@ authored into the registry, no score moved, no catalog rebuilt.** These are prop
 | no qualifying evidence | 1 | 16 |
 | **total** | **25** | **432** |
 
-The records proposed for approval would reach **65 products that sit at Evidence 0 today** (measured, `project_record_reach.py`). A further **33** are unreachable for a reason that has nothing to do with evidence — see below.
+The records proposed for approval would reach **0 products that sit at Evidence 0 today** (measured, `project_record_reach.py`). A further **33** are unreachable for a reason that has nothing to do with evidence — see below.
 
 ## Measured reach of each proposed record
 
@@ -32,26 +29,6 @@ The records proposed for approval would reach **65 products that sit at Evidence
 | `schisandra_berry` | 1000 mg | 0 | 0 | 0 | 0 |
 | `globe_artichoke` | none (cranberry precedent) | 0 | 0 | 0 | 0 |
 
-## propose for approval
-
-**`common_bean_extract`** — 22 products, 21 at Evidence 0 — direction **positive_weak**; `systematic_review_meta`; PMIDs 42066439, 39170208; label median 1500 mg; studied 1,000-3,000 mg/day white kidney bean extract
-
-PMID 42066439 is ingredient-level (oral WKBE, 8 RCTs, n=543, weight -1.62 kg 95% CI -1.99 to -1.25). Catalog prints white kidney bean extract uniformly. Caveat: alpha-amylase inhibitor extracts are not standardised by inhibitor units, so label mg is not a potency guarantee, and the pooled effect is small.
-
-**`amla`** — 52 products, 19 at Evidence 0 — direction **positive_weak**; `systematic_review_meta`; PMIDs 37296402, 36934568; label median 120 mg; studied 500-1500 mg/day Emblica officinalis fruit
-
-PMID 37296402 (9 studies, EO 500-1500 mg/day): LDL-C -15.08 mg/dL, VLDL -5.43, TG -22.35, hsCRP -1.70, with the authors' own caution about heterogeneity. PMID 36934568 (5 RCTs) agrees. A 500 mg/day floor is proposed because that is the lowest dose the syntheses cover; the catalog median is 120 mg, so most products would NOT qualify - that is the point of the floor. The branded AMX-160 RCT (40262554) supports but does not define the record and carries an erratum; the amla syrup alopecia trial (37487962) is off-axis and excluded.
-
-**`devils_claw`** — 25 products, 16 at Evidence 0 — direction **positive_weak**; `systematic_review_meta`; PMIDs 26630428; label median 980 mg; studied standardised to harpagoside content; not stated as extract mg
-
-Cochrane 2016 update (PMID 26630428, 14 RCTs, 2,050 participants): Harpagophytum procumbens seems to reduce pain more than placebo, evidence moderate quality at best. The 2007 Cochrane (17202897) is superseded and carries an erratum, so it is not cited. No dose policy is proposed: trials dose by harpagoside content and labels print extract mg, and inventing an equivalence is forbidden. Cranberry is the precedent for a record that deliberately carries no dose policy.
-
-## propose - HIGH RISK, needs a human decision
-
-**`senna`** — 15 products, 15 at Evidence 0 — direction **positive_strong**; `systematic_review_meta`; PMIDs 33767108, 35943487, 29885259; label median 150 mg; studied dosed as sennosides; the reviews do not state an extract-milligram equivalent
-
-The strongest positive evidence in the wave, and the one that needs a human decision rather than a scoring one. Two independent evidence-based reviews both give senna GRADE A / good evidence as a first-line OTC laxative for chronic constipation, and a third found it superior to or as effective as other laxatives in long-term care. No dose policy is proposed: senna is dosed by sennoside content and all 15 catalog rows print 150 mg of senna leaf extract, so an equivalence would have to be invented. FLAGGED HIGH-RISK: senna is a stimulant laxative, the reviews themselves report abdominal pain, cramping, diarrhoea and nausea, and long-term use raises dependence and electrolyte concerns. Whether a stimulant laxative should earn positive Evidence credit in a consumer supplement score is a product-policy question for the owner, not an evidence question.
-
 ## evidence ready, blocked upstream
 
 **`schisandra_berry`** — 48 products, 19 at Evidence 0 — direction **positive_weak**; `rct_multiple`; PMIDs 32260466, 33710261; label median 175 mg; studied 1,000 mg/day Schisandra chinensis extract
@@ -61,16 +38,6 @@ Two independent single-ingredient placebo-controlled RCTs at 1 g/day for 12 week
 **`globe_artichoke`** — 37 products, 14 at Evidence 0 — direction **positive_weak**; `systematic_review_meta`; PMIDs 41270328, 34383355, 33197674; label median 125 mg; studied not stated in the syntheses; no dose policy proposed
 
 Three independent ingredient-level meta-analyses of Cynara scolymus agree on modest, consistent effects: total and LDL cholesterol and triglycerides down, insulin and HOMA-IR down, ALT and ALP down, with fasting glucose, HbA1c and HDL unaffected - the 2025 synthesis calls them 'modest but significant'. Endpoints are clinical biomarkers, not patient-important outcomes, and the largest effects concentrate in NAFLD and hypertensive subgroups, both of which must travel with the record as studied_population. No dose is stated in any synthesis, so no dose policy is proposed. BLOCKED UPSTREAM, not by evidence: all 37 catalog rows are classified recognized_non_scorable by the cleaner, so this record would reach ZERO products. Routed to the identity/cleaner owner. The evidence itself is ready to author the moment those rows become scorable actives.
-
-## hold - blocked only by the null decision
-
-**`d_aspartic_acid`** — 28 products, 21 at Evidence 0 — direction **null**; `rct_multiple`; PMIDs 28841667, 29893592, 38201906; label median 2400 mg; studied 3-6 g/day
-
-Three single-ingredient RCTs, all null for testosterone: 6 g/day for 12 weeks in resistance-trained men (no change in TT or FT), 3 g/day crossover in climbers (no effect on T, cFT, LH), 6 g/day for 14 days in boxers (no effect). The one positive result (40248985) is a three-component combination (DAA + ubiquinol + zinc) in an infertility clinic population and may not lend its direction. Material and dose map cleanly; blocked only by the parked null decision.
-
-**`d_mannose`** — 25 products, 16 at Evidence 0 — direction **null**; `rct_multiple`; PMIDs 38587819, 41004704; label median 1000 mg; studied 2 g/day
-
-PMID 38587819 (JAMA Intern Med 2024, n=598, placebo-controlled, 2 g/day, 6 months) null on its primary endpoint (51.0% vs 55.7%, RD -5%, 95% CI -13% to 3%); PMID 41004704 (2025, 6 RCTs, n=1,167) RR 0.57 (0.29-1.15). Older positive syntheses rest on open-label studies. Fully scorer-compatible; blocked only by the parked null-direction decision.
 
 ## hold + route to another owner
 

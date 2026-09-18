@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.10.1-omega-printed-epa-dha",
+    "version": "1.11.0-null-earns-no-affirmative-credit",
     "schema_version": "1.0.0",
-    "last_updated": "2026-09-17",
+    "last_updated": "2026-09-18",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). POOR is the verdict of the lowest shipped tier; the module raw score never decides it (1.9.0). Omega label ownership is enforced in 1.10.0. v4 is the production catalog scoring contract as of export schema 2.2.0.",
     "phase": "rubric_proxy_removal"
   },
@@ -190,6 +190,7 @@
       "nutrition_authority_floor": 10.0,
       "primary_mass_fraction": 0.5,
       "enrollment_quality_bands": [[50.0, 0.6], [200.0, 0.8], [500.0, 1.0], [1000.0, 1.1]],
+      "effect_direction_multipliers": { "positive_strong": 1.0, "positive_weak": 0.85, "mixed": 0.6, "null": 0.0, "negative": 0.0 },
       "top_n_weights": [1.0, 0.7, 0.5, 0.3],
       "depth_bonus_bands": [[20.0, 0.25], [40.0, 0.5]]
     },
@@ -197,7 +198,7 @@
       "cap_evidence": 20.0,
       "cap_strain_clinical": 12.0,
       "cap_dose_applicability": 8.0,
-      "effect_direction_multipliers": { "positive_strong": 1.0, "positive_weak": 0.85, "mixed": 0.6, "null": 0.25, "negative": 0.0 },
+      "effect_direction_multipliers": { "positive_strong": 1.0, "positive_weak": 0.85, "mixed": 0.6, "null": 0.0, "negative": 0.0 },
       "native_strain_evidence_points": { "strong": 8.0, "high": 8.0, "moderate": 6.0, "medium": 6.0, "weak": 3.0, "low": 3.0, "limited": 3.0 },
       "native_strain_evidence_weights": [1.0, 0.7, 0.5, 0.3],
       "native_context_review_policy": "clinician_only",

@@ -296,10 +296,15 @@ def test_verified_corpus_spelling_variants_keep_exact_native_identity(
     held = {"STRAIN_LACTIS_BB12", "STRAIN_LACTIS_BI07"}
     nonhuman = {"STRAIN_ACIDOPHILUS_NCFM", "STRAIN_LACTIS_BL04",
                 "STRAIN_CASEI_431", "STRAIN_PARACASEI_8700"}
+    # Curated as effect_direction "null": real human evidence that did not show a benefit.
+    # Since the 2026-09-18 owner decision that earns no affirmative credit, so these score 0
+    # for a different reason than a held or non-human strain but with the same result. What
+    # this test pins is identity resolution across spelling variants, which is unaffected.
+    null_direction = {"STRAIN_LACTIS_HN019", "STRAIN_PARACASEI_LPC37"}
     assert independent_clinical_strains(product) == (
         [] if clinical_id in held else product["probiotic_data"]["clinical_strains"])
     score = score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"]
-    if clinical_id in held | nonhuman:
+    if clinical_id in held | nonhuman | null_direction:
         assert score == 0
     else:
         assert score > 0

@@ -2,6 +2,7 @@
 """Regression tests for FDA weekly sync relevance and extraction logic."""
 
 import os
+import re
 import subprocess
 import sys
 import types
@@ -146,3 +147,122 @@ def test_fda_report_contract_uses_operator_neutral_review_language():
     assert '"requiring_review"' in content
     assert '"review_instructions"' in content
     assert "Run /fda-weekly-sync in Claude Code" not in content
+
+
+# ── FDA Medication Health Fraud notifications ────────────────────────────────
+#
+# These pages are the only source for undeclared-drug notifications (biQ-FEL,
+# X10, ZUBB): they are not openFDA enforcement recalls and reach the RSS feeds
+# only sporadically. The fixtures below are trimmed from the real index pages.
+
+_SEXUAL_ENHANCEMENT_ROWS = (
+    '<table><thead><tr><th>Date</th><th>Public Notification</th></tr></thead><tbody>'
+    '<tr><td>5/29/2026</td><td><a href="/drugs/medication-health-fraud-notifications/'
+    'x10-natural-enhancement-supplement-may-be-harmful-due-hidden-drug-ingredients" '
+    'data-entity-type="node">X10 Natural Enhancement Supplement may be harmful due to '
+    'hidden drug ingredients</a></td></tr>'
+    '</tbody></table>'
+)
+
+# The weight-loss index renders the SAME data with the columns reversed.
+_WEIGHT_LOSS_ROWS = (
+    '<table><thead><tr><th>Public Notification</th><th>Date</th></tr></thead><tbody>'
+    '<tr><td><a href="/drugs/medication-health-fraud-notifications/'
+    'zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient" '
+    'data-entity-type="node">ZUBB Dietary Supplement may be harmful due to hidden '
+    'ingredient</a></td><td>9/04/2026</td></tr>'
+    '</tbody></table>'
+)
+
+
+def test_health_fraud_index_parses_both_column_orders():
+    """The four index pages do not agree on column order; one rule must read all."""
+    from api_audit.fda_weekly_sync import (
+        _HEALTH_FRAUD_DATE_RE,
+        _HEALTH_FRAUD_LINK_RE,
+        _HEALTH_FRAUD_ROW_RE,
+    )
+
+    for markup, expected_slug, expected_date in (
+        (_SEXUAL_ENHANCEMENT_ROWS, "x10-natural-enhancement", "5/29/2026"),
+        (_WEIGHT_LOSS_ROWS, "zubb-dietary-supplement", "9/04/2026"),
+    ):
+        parsed = []
+        for row in _HEALTH_FRAUD_ROW_RE.finditer(markup):
+            link = _HEALTH_FRAUD_LINK_RE.search(row.group("row"))
+            date = _HEALTH_FRAUD_DATE_RE.search(row.group("row"))
+            if link and date:
+                parsed.append((link.group("href"), date.group("date")))
+
+        assert len(parsed) == 1, f"expected one data row, got {parsed}"
+        href, date = parsed[0]
+        assert expected_slug in href
+        assert date == expected_date
+
+
+def test_health_fraud_detail_anchor_tolerates_date_spacing():
+    """Real advisories write both "[9-4-2026]" and "[ 8-18-2026]"."""
+    from api_audit.fda_weekly_sync import _strip_html
+
+    chrome = "Skip to main content " * 40
+    for stamp in ("[9-4-2026]", "[ 8-18-2026]", "[ 8 - 18 - 2026 ]"):
+        page = (
+            f"<html><body><nav>{chrome}</nav><p>{stamp} The Food and Drug "
+            "Administration is advising consumers not to purchase or use "
+            "Example Product. FDA laboratory analysis confirmed that it "
+            "contains sibutramine not listed on the product label.</p></body></html>"
+        )
+        text = _strip_html(page)
+        starts = [
+            m.start() for m in (
+                re.search(r"\[\s*\d{1,2}\s*[-/]\s*\d{1,2}\s*[-/]\s*\d{4}\s*\]", text),
+                re.search(r"(?:The\s+)?Food and Drug Administration is advising", text),
+            ) if m
+        ]
+        body = text[min(starts):]
+        assert "Skip to main content" not in body, f"chrome leaked for {stamp}"
+        assert "sibutramine" in body
+
+
+def test_health_fraud_detail_anchor_survives_a_missing_date_stamp():
+    """No bracketed date must still yield prose, not 2000 characters of chrome."""
+    from api_audit.fda_weekly_sync import _strip_html
+
+    page = (
+        "<html><body><nav>" + "Skip to main content " * 40 + "</nav>"
+        "<p>The Food and Drug Administration is advising consumers not to use "
+        "Example Product, which contains sildenafil not listed on the label.</p>"
+        "</body></html>"
+    )
+    text = _strip_html(page)
+    starts = [
+        m.start() for m in (
+            re.search(r"\[\s*\d{1,2}\s*[-/]\s*\d{1,2}\s*[-/]\s*\d{4}\s*\]", text),
+            re.search(r"(?:The\s+)?Food and Drug Administration is advising", text),
+        ) if m
+    ]
+    body = text[min(starts):]
+    assert body.startswith("The Food and Drug Administration is advising")
+    assert "sildenafil" in body
+
+
+def test_health_fraud_records_are_relevant_without_supplement_keywords():
+    """"biQ-FEL" contains no supplement keyword; keyword relevance would drop it."""
+    record = {
+        "product_description": "biQ-FEL may be harmful due to hidden drug ingredients",
+        "reason_for_recall": (
+            "FDA laboratory analysis confirmed that biQ-FEL contains sildenafil "
+            "and tadalafil not listed on the product label."
+        ),
+        "title": "biQ-FEL may be harmful due to hidden drug ingredients",
+        "description": "",
+        "product_type": "Dietary Supplement",
+        "_source_type": "fda_health_fraud",
+    }
+
+    is_relevant, primary_category, signals = classify_record(record)
+
+    assert is_relevant
+    assert primary_category == "illegal_spiking_agents"
+    assert "pharmaceutical_adulterants" in signals
+    assert set(extract_substances(record)) >= {"sildenafil", "tadalafil"}

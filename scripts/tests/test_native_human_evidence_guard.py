@@ -95,7 +95,9 @@ def test_nonhuman_native_fallback_cannot_overrule_independent_match_effect(effec
         assert result["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
 
 
-@pytest.mark.parametrize("direction,multiplier", [("null", .25), ("mixed", .6), ("negative", 0)])
+# null joined negative at 0 on 2026-09-18: a strain trial that did not show a benefit
+# earns no affirmative credit in the probiotic lane either. mixed is unchanged.
+@pytest.mark.parametrize("direction,multiplier", [("null", 0), ("mixed", .6), ("negative", 0)])
 def test_native_primary_effect_direction_is_not_defaulted_to_positive(monkeypatch, direction, multiplier):
     registry = deepcopy(studied_formulas._clinical_strain_registry())
     registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["effect_direction"] = direction

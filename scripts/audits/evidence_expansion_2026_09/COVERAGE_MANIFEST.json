@@ -1,0 +1,30 @@
+{
+ "corpus_manifest": {
+  "git_head": "2341b4517f36689d812adff02c3d957d8fdd7155",
+  "slim_snapshot_sha256": "90cd54c76b6ff38a7e92f02ffeb21351a95f1925df52f21a32e0818e395c86f7",
+  "slim_snapshot_path": "/private/tmp/claude-501/-Users-seancheick-Downloads-dsld-clean/198c0b43-32a9-488c-8f04-6e252fe38fe3/scratchpad/slim_corpus.jsonl",
+  "scored_products_in_snapshot": 15109,
+  "evidence_zero_products_in_snapshot": 4231,
+  "generated": "2026-09-18",
+  "note": "Pin every coverage percentage to this manifest. A different product count means a different snapshot, not progress."
+ },
+ "identities": {
+  "review_state_established": 64,
+  "deep_curated": 39,
+  "wave2_searched": 50,
+  "wave2_deep_curated": 25,
+  "scoring_approved": [
+   "amla",
+   "common_bean_extract"
+  ]
+ },
+ "products_at_evidence_zero": {
+  "total": 4231,
+  "review_state_established": 859,
+  "review_state_established_pct": 20.3,
+  "deep_curated": 521,
+  "deep_curated_pct": 12.3,
+  "partially_reviewed": 68,
+  "score_reachable_by_an_approved_record": 32
+ }
+}
