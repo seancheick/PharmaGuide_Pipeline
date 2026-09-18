@@ -2,7 +2,15 @@
 
 Measured, not changed. No scoring constant moved: not the 14.0/11.0 floors, not the 0.85 direction weight, not the archetype references, not the 20-point scale.
 
-> **The counterfactual in this report is superseded.** Every DECISIVE count and every delta below. They were measured by flipping PRIMARY_FLOOR_ENABLED, which gates BOTH floors: the primary-mass floor and the DRI-essential nutrition-authority floor share one `if` block (generic_evidence.py:317). A DRI-essential product whose mass floor was above 10.0 therefore appeared to fall all the way to its pipeline score, when the authority floor would have caught it at 10.0 raw. That credits the mass floor with points another rule would have supplied. Product 261812 (Airborne): reported here as Evidence 14.0 -> 8.7 without the floor, delta 5.3. With the authority floor left live the correct counterfactual is 14.0 -> 11.8, delta 2.2. Population counts stand; deltas do not. See primary_mass_floor_calibration.json - its `no_primary_mass_floor` policy intercepts only _primary_mass_floor, leaving the authority floor live in every variant.
+> # ⛔ INVALID FOR CALIBRATION
+>
+> **Do not quote any decisive count, Evidence delta, final-score delta or tier-change number from this report.** The counterfactual disabled BOTH the primary-mass floor and the DRI/nutrition-authority floor, so every delta credits the primary-mass rule with points the authority floor would have supplied.
+>
+> Product 261812 (Airborne): reported here as Evidence 14.0 -> 8.7 without the floor, delta 5.3. With the authority floor left live the correct counterfactual is 14.0 -> 11.8, delta 2.2.
+>
+> Population and eligibility counts remain valid - they do not depend on the counterfactual. Everything downstream of them does not.
+>
+> **Use instead:** `primary_mass_floor_calibration.json` and its report `PRIMARY_MASS_FLOOR_CALIBRATION.md`.
 
 Four states, reported separately because the word *material* was ambiguous enough to hide the difference between the last three. They nest.
 

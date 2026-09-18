@@ -144,3 +144,87 @@ def test_percentiles_are_nearest_rank_so_every_number_is_a_real_product():
     for quantile in (0.5, 0.9):
         assert diagnostic._pct(values, quantile) in values
     assert diagnostic._pct([], 0.5) is None
+
+
+# ── anchor resolution: never reverse-match standard_name ──────────────────────
+#
+# An earlier floor audit lost 40 products by mapping the floor's canonical id
+# back to a registry record through `standard_name`. Two real shapes break that,
+# and both are in the shipped data:
+#
+#   INGR_BRANCHED_CHAIN_AMINO_ACIDS  evidence_group_id "bcaa"
+#                                    standard_name     "Branched Chain Amino Acids"
+#   RECOVERED_COLLAGEN_PEPTIDES_V1   a recovered match carried on the product
+#                                    blob - not in reviewed_entries() at all, so
+#                                    no registry lookup of any kind can find it
+#
+# The anchoring entry is always already in the product's resolved matches, so it
+# is found there with the scorer's own accessor.
+
+_calibration = importlib.util.module_from_spec(importlib.util.spec_from_file_location(
+    "primary_mass_floor_calibration",
+    SCRIPTS / "audits/evidence_expansion_2026_09/primary_mass_floor_calibration.py"))
+importlib.util.spec_from_file_location(
+    "primary_mass_floor_calibration",
+    SCRIPTS / "audits/evidence_expansion_2026_09/primary_mass_floor_calibration.py"
+).loader.exec_module(_calibration)
+
+BCAA_MATCH = {"id": "INGR_BRANCHED_CHAIN_AMINO_ACIDS",
+              "evidence_group_id": "bcaa",
+              "standard_name": "Branched Chain Amino Acids",
+              "study_type": "systematic_review_meta", "evidence_level": "ingredient-human",
+              "effect_direction": "positive_weak"}
+RECOVERED_COLLAGEN = {"id": "RECOVERED_COLLAGEN_PEPTIDES_V1", "standard_name": "Collagen",
+                      "study_type": "systematic_review_meta", "evidence_level": "ingredient-human",
+                      "effect_direction": "positive_strong"}
+
+
+def test_anchor_resolves_through_the_products_own_match_not_a_standard_name_lookup():
+    from scoring_v4.modules import generic_evidence as ge
+
+    matches = [BCAA_MATCH, RECOVERED_COLLAGEN]
+    for match in matches:
+        canonical = ge._canonical_from_entry(match)
+        found = _calibration.anchor_entry(ge, matches, canonical)
+        assert found is match, f"{match['id']} did not resolve from canonical {canonical!r}"
+
+
+def test_a_standard_name_reverse_lookup_would_have_missed_bcaa():
+    """Pins WHY the accessor is used, so a future 'simplification' back to a name
+    lookup fails here instead of silently dropping products from an audit."""
+    from scoring_v4.modules import generic_evidence as ge
+
+    canonical = ge._canonical_from_entry(BCAA_MATCH)
+    assert canonical == "bcaa"
+
+    reverse_lookup = {ge._canonical_text(BCAA_MATCH["standard_name"]): BCAA_MATCH}
+    assert canonical not in reverse_lookup, (
+        "if these ever coincide this guard is vacuous and needs a new example")
+    assert _calibration.anchor_entry(ge, [BCAA_MATCH], canonical) is BCAA_MATCH
+
+
+def test_a_recovered_anchor_is_not_reachable_from_the_reviewed_registry():
+    """The collagen half of the same bug: the anchor is not a registry record at
+    all, so no registry-side lookup could ever have found it."""
+    import clinical_applicability as ca
+    from scoring_v4.modules import generic_evidence as ge
+
+    assert RECOVERED_COLLAGEN["id"] not in ca.reviewed_entries()
+    canonical = ge._canonical_from_entry(RECOVERED_COLLAGEN)
+    assert _calibration.anchor_entry(ge, [RECOVERED_COLLAGEN], canonical) is RECOVERED_COLLAGEN
+
+
+def test_anchor_entry_prefers_the_highest_scoring_record_for_one_canonical():
+    from scoring_v4.modules import generic_evidence as ge
+
+    weak = {**BCAA_MATCH, "id": "WEAK", "study_type": "rct_single"}
+    strong = {**BCAA_MATCH, "id": "STRONG", "study_type": "systematic_review_meta"}
+    assert _calibration.anchor_entry(ge, [weak, strong], "bcaa") is strong
+    assert _calibration.anchor_entry(ge, [strong, weak], "bcaa") is strong
+
+
+def test_anchor_entry_returns_none_without_a_canonical():
+    from scoring_v4.modules import generic_evidence as ge
+
+    assert _calibration.anchor_entry(ge, [BCAA_MATCH], None) is None
+    assert _calibration.anchor_entry(ge, [BCAA_MATCH], "not_an_ingredient") is None
