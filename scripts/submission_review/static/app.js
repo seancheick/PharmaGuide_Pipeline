@@ -196,6 +196,9 @@ async function boot() {
   ]) {
     $(id).addEventListener('input', syncScalarFields);
   }
+  for (const id of Object.keys(NUTRITION_FIELDS)) {
+    $(id).addEventListener('input', syncNutritionFields);
+  }
 }
 
 async function signOut() {
@@ -2395,6 +2398,21 @@ function renderStatements() {
   });
 }
 
+// DSLD's own raw nutritionalInfo shape — one {amount, unit} entry per
+// declared macro. enrich_supplements_v3.py's _collect_nutrition_summary
+// already reads this exact key from every product, submitted or catalog, so
+// writing it here is the whole fix: nothing downstream needs to know a
+// submission's label was typed by a reviewer instead of shipped by DSLD.
+const NUTRITION_FIELDS = {
+  'n-calories': { key: 'calories', unit: 'kcal' },
+  'n-total-fat': { key: 'totalFat', unit: 'g' },
+  'n-total-carb': { key: 'totalCarbohydrates', unit: 'g' },
+  'n-fiber': { key: 'dietaryFiber', unit: 'g' },
+  'n-sugars': { key: 'sugars', unit: 'g' },
+  'n-protein': { key: 'protein', unit: 'g' },
+  'n-sodium': { key: 'sodium', unit: 'mg' },
+};
+
 function syncFieldsFromPayload() {
   $('p-brand').value = state.payload.brandName ?? '';
   $('p-name').value = state.payload.fullName ?? '';
@@ -2403,6 +2421,10 @@ function syncFieldsFromPayload() {
   $('p-servings-count').value = state.payload.servingsPerContainer ?? '';
   $('p-serving-qty').value = state.payload.servingSizes?.[0]?.maxQuantity ?? '';
   $('p-serving-unit').value = state.payload.servingSizes?.[0]?.unit ?? '';
+  const nutritionalInfo = state.payload.nutritionalInfo ?? {};
+  for (const [id, { key }] of Object.entries(NUTRITION_FIELDS)) {
+    $(id).value = nutritionalInfo[key]?.amount ?? '';
+  }
   $('other-disclosure').value =
     state.payload.otherIngredientsDisclosure ?? '';
   $('other-ingredients').value = state.payload.otherIngredients ?? '';
@@ -2410,6 +2432,27 @@ function syncFieldsFromPayload() {
     $('other-disclosure').value !== 'present';
   renderRawJson();
   renderStatements();
+}
+
+/** Only the rows a reviewer actually typed in. Most supplements have no
+ * Nutrition Facts panel at all, so a blank row is left out of the payload
+ * entirely rather than saved as a fabricated zero. */
+function syncNutritionFields() {
+  const nutritionalInfo = {};
+  for (const [id, { key, unit }] of Object.entries(NUTRITION_FIELDS)) {
+    const raw = $(id).value.trim();
+    if (raw === '') continue;
+    const amount = Number(raw);
+    if (!Number.isFinite(amount)) continue;
+    nutritionalInfo[key] = { amount, unit };
+  }
+  if (Object.keys(nutritionalInfo).length > 0) {
+    state.payload.nutritionalInfo = nutritionalInfo;
+  } else {
+    delete state.payload.nutritionalInfo;
+  }
+  renderRawJson();
+  updateShaPreview();
 }
 
 function syncScalarFields() {
