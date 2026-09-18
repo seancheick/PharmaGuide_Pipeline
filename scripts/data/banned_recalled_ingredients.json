@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-17",
-    "total_entries": 169,
+    "last_updated": "2026-09-18",
+    "total_entries": 171,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -20436,6 +20436,181 @@
             "by": "manual_entry"
           }
         ]
+      }
+    },
+    {
+      "id": "RECALLED_BIQ_FEL",
+      "standard_name": "biQ-FEL",
+      "aliases": [
+        "biq-fel",
+        "biq fel",
+        "biqfel",
+        "biq-fel usa"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sildenafil and tadalafil — prescription ED drugs that can cause dangerous blood-pressure drops with nitrate medications.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with undeclared prescription drugs.",
+      "safety_warning": "Hidden in this supplement are prescription ED drugs (sildenafil, tadalafil), risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains hidden prescription drugs — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-05-27",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: biQ-FEL may be harmful due to hidden drug ingredients — 2026-05-27",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: biQ-FEL may be harmful due to hidden drug ingredients",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/biq-fel-may-be-harmful-due-hidden-drug-ingredients",
+          "evidence_grade": "R",
+          "date": "2026-05-27",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed biQ-FEL contains sildenafil and tadalafil not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-05-27 — biQ-FEL contains undeclared sildenafil, tadalafil. Notification page fetched and date read live; missed by the weekly sync because health-fraud notifications are not an openFDA enforcement source.",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-05-27",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "biQ-FEL",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-05-27",
+        "effective_to": null,
+        "note": "Promoted for sexual enhancement; sold on walmart.com and biqfelusa.com"
+      }
+    },
+    {
+      "id": "RECALLED_ZUBB",
+      "standard_name": "ZUBB Dietary Supplement",
+      "aliases": [
+        "zubb",
+        "zubb dietary supplement",
+        "zubb supplement"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sildenafil — a prescription ED drug that can cause dangerous blood-pressure drops with nitrate medications. Marketed for weight loss, so buyers have no reason to expect an ED drug or to connect it to their heart medication.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "supplement_weight_loss"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with an undeclared prescription drug.",
+      "safety_warning": "Hidden in this weight-loss supplement is the prescription ED drug sildenafil, risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains a hidden prescription drug — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-04",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: ZUBB Dietary Supplement may be harmful due to hidden ingredient — 2026-09-04",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: ZUBB Dietary Supplement may be harmful due to hidden ingredient",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-09-04",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed ZUBB Dietary Supplement, sold for weight loss, contains sildenafil not listed on the product label. Identified during an examination of international mail shipments."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-04 — ZUBB Dietary Supplement contains undeclared sildenafil. Notification page fetched and date read live; missed by the weekly sync because health-fraud notifications are not an openFDA enforcement source.",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-04",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "ZUBB Dietary Supplement",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-09-04",
+        "effective_to": null,
+        "note": "Promoted and sold for weight loss on various websites; identified in international mail shipments"
       }
     }
   ]
