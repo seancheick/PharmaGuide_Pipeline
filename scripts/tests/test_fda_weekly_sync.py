@@ -2,7 +2,6 @@
 """Regression tests for FDA weekly sync relevance and extraction logic."""
 
 import os
-import re
 import subprocess
 import sys
 import types
@@ -202,7 +201,7 @@ def test_health_fraud_index_parses_both_column_orders():
 
 def test_health_fraud_detail_anchor_tolerates_date_spacing():
     """Real advisories write both "[9-4-2026]" and "[ 8-18-2026]"."""
-    from api_audit.fda_weekly_sync import _strip_html
+    from api_audit.fda_weekly_sync import _strip_html, advisory_body
 
     chrome = "Skip to main content " * 40
     for stamp in ("[9-4-2026]", "[ 8-18-2026]", "[ 8 - 18 - 2026 ]"):
@@ -212,21 +211,14 @@ def test_health_fraud_detail_anchor_tolerates_date_spacing():
             "Example Product. FDA laboratory analysis confirmed that it "
             "contains sibutramine not listed on the product label.</p></body></html>"
         )
-        text = _strip_html(page)
-        starts = [
-            m.start() for m in (
-                re.search(r"\[\s*\d{1,2}\s*[-/]\s*\d{1,2}\s*[-/]\s*\d{4}\s*\]", text),
-                re.search(r"(?:The\s+)?Food and Drug Administration is advising", text),
-            ) if m
-        ]
-        body = text[min(starts):]
+        body = advisory_body(_strip_html(page))
         assert "Skip to main content" not in body, f"chrome leaked for {stamp}"
         assert "sibutramine" in body
 
 
 def test_health_fraud_detail_anchor_survives_a_missing_date_stamp():
     """No bracketed date must still yield prose, not 2000 characters of chrome."""
-    from api_audit.fda_weekly_sync import _strip_html
+    from api_audit.fda_weekly_sync import _strip_html, advisory_body
 
     page = (
         "<html><body><nav>" + "Skip to main content " * 40 + "</nav>"
@@ -234,14 +226,7 @@ def test_health_fraud_detail_anchor_survives_a_missing_date_stamp():
         "Example Product, which contains sildenafil not listed on the label.</p>"
         "</body></html>"
     )
-    text = _strip_html(page)
-    starts = [
-        m.start() for m in (
-            re.search(r"\[\s*\d{1,2}\s*[-/]\s*\d{1,2}\s*[-/]\s*\d{4}\s*\]", text),
-            re.search(r"(?:The\s+)?Food and Drug Administration is advising", text),
-        ) if m
-    ]
-    body = text[min(starts):]
+    body = advisory_body(_strip_html(page))
     assert body.startswith("The Food and Drug Administration is advising")
     assert "sildenafil" in body
 
