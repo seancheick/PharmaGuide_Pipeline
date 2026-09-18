@@ -47,17 +47,25 @@ class Unattributable(RuntimeError):
     """The tree could not be identified, so no verdict about it can be trusted."""
 
 
-def _git(*args: str) -> str:
+def _git(*args: str, strip: bool = True) -> str:
     """Raises rather than returning a placeholder.
 
     An earlier version returned "unavailable: ..." on failure, and the caller fed
     that string to `bool()` to decide whether the tree was dirty - so a git
     failure silently became "dirty" and the run still reported a verdict about a
     tree it could not name. An inability to inspect is a failure, not a value.
+
+    `strip` is False for porcelain output. Each porcelain line is two status
+    characters, a space, then the path, and the FIRST line of an unstaged change
+    starts with a space - so stripping the whole payload eats one character of
+    the first path only, and the dirty-path list this run exists to record comes
+    out as "cripts/audits/...". Only the first entry is corrupted, which is
+    exactly the kind of thing that survives a skim.
     """
     try:
-        return subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True,
-                              text=True, check=True).stdout.strip()
+        out = subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True,
+                             text=True, check=True).stdout
+        return out.strip() if strip else out
     except Exception as exc:
         raise Unattributable(f"git {' '.join(args)} failed: {type(exc).__name__}: {exc}") from exc
 
@@ -66,14 +74,15 @@ def evaluated_state() -> dict:
     """What tree produced this verdict. Without it a PASS is unattributable."""
     config = json.loads((ROOT / "scripts/scoring_v4/config/quality_score.json").read_text())
     registry = json.loads((DATA / "backed_clinical_studies.json").read_text())
-    dirty = _git("status", "--porcelain")
+    dirty = _git("status", "--porcelain", strip=False).rstrip("\n")
     return {
         "head_sha": _git("rev-parse", "HEAD"),
         "head_subject": _git("log", "-1", "--format=%s"),
         "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
         "worktree": str(ROOT),
         "tree_dirty": bool(dirty),
-        "dirty_paths": [line[3:] for line in dirty.splitlines()] if dirty else [],
+        "dirty_paths": [{"status": line[:2], "path": line[3:]}
+                        for line in dirty.splitlines() if line] if dirty else [],
         "quality_score_config_version": config["_metadata"]["version"],
         "quality_score_config_schema": config["_metadata"]["schema_version"],
         "evidence_registry_schema_version": registry["_metadata"]["schema_version"],
@@ -323,6 +332,10 @@ def main() -> int:
         "Which run this is, e.g. 'pre-push' or 'post-push'. The post-push run "
         "against a fresh fetch of origin/main is the authoritative one."))
     parser.add_argument("--out", type=Path, help="Also write the stamped result here.")
+    parser.add_argument("--require-clean", action="store_true", help=(
+        "Refuse to certify a dirty tree. The pre-convergence run may be dirty so "
+        "long as every dirty path is stamped; the authoritative post-push run "
+        "against a freshly fetched origin/main must be clean."))
     args = parser.parse_args()
 
     try:
@@ -333,11 +346,33 @@ def main() -> int:
         return 1
 
     failed = [r for r in RESULTS if not r["ok"]]
+
+    # A dirty tree cannot be certified: the verdict would describe a mixture of
+    # the stamped commit and whatever is sitting uncommitted beside it, and the
+    # SHA in the stamp would name only half of what was actually evaluated.
+    uncertified = args.require_clean and state["tree_dirty"]
+    verdict = "UNCERTIFIED" if uncertified else ("PASS" if not failed else "FAIL")
     payload = {"label": args.label, "evaluated_state": state, "checks": len(RESULTS),
-               "failed": len(failed), "verdict": "PASS" if not failed else "FAIL",
-               "results": RESULTS}
+               "failed": len(failed), "verdict": verdict,
+               "require_clean": args.require_clean,
+               "results": [] if uncertified else RESULTS}
+    if uncertified:
+        payload["uncertified_reason"] = (
+            "--require-clean was set and the tree is dirty; semantic decisions are "
+            "not certified for this run. Dirty paths are stamped above.")
     if args.out:
         args.out.write_text(json.dumps(payload, indent=1))
+
+    if uncertified:
+        if args.json:
+            print(json.dumps(payload, indent=1))
+        else:
+            print("UNCERTIFIED - --require-clean was set and the tree is dirty.")
+            print(f"  tree      {state['head_sha'][:12]} ({state['branch']})")
+            for entry in state["dirty_paths"]:
+                print(f"  dirty     [{entry['status']}] {entry['path']}")
+            print("\nNo semantic decision is certified for this run.")
+        return 1
 
     if args.json:
         print(json.dumps(payload, indent=1))
