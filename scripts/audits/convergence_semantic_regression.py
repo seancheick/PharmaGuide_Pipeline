@@ -12,14 +12,27 @@ Each check names the decision, the owner file, and what the wrong answer would
 look like. Run it from any worktree; it reads that tree.
 
     python3 scripts/audits/convergence_semantic_regression.py
-    python3 scripts/audits/convergence_semantic_regression.py --json
+    python3 scripts/audits/convergence_semantic_regression.py --json --label post-push
 
-Exit 0 when every decision holds, 1 otherwise.
+EXIT SEMANTICS - strict, and deliberately unforgiving:
+
+    every decision holds            -> 0
+    any decision fails              -> 1
+    a check raises                  -> 1 (a check that cannot run is not a pass)
+    an owner file, key or id missing-> 1 (same reason)
+
+An inability to inspect something is NEVER converted into a pass. A green run
+here is a claim about a tree, so every run stamps the tree it evaluated: HEAD
+SHA, whether that tree was dirty, the quality-score config version, the evidence
+registry schema version and entry count, and the timestamp. "13/13 PASS" with no
+SHA beside it is not evidence of anything.
 """
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -28,6 +41,45 @@ DATA = ROOT / "scripts/data"
 sys.path.insert(0, str(ROOT / "scripts"))
 
 RESULTS: list[dict] = []
+
+
+class Unattributable(RuntimeError):
+    """The tree could not be identified, so no verdict about it can be trusted."""
+
+
+def _git(*args: str) -> str:
+    """Raises rather than returning a placeholder.
+
+    An earlier version returned "unavailable: ..." on failure, and the caller fed
+    that string to `bool()` to decide whether the tree was dirty - so a git
+    failure silently became "dirty" and the run still reported a verdict about a
+    tree it could not name. An inability to inspect is a failure, not a value.
+    """
+    try:
+        return subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True,
+                              text=True, check=True).stdout.strip()
+    except Exception as exc:
+        raise Unattributable(f"git {' '.join(args)} failed: {type(exc).__name__}: {exc}") from exc
+
+
+def evaluated_state() -> dict:
+    """What tree produced this verdict. Without it a PASS is unattributable."""
+    config = json.loads((ROOT / "scripts/scoring_v4/config/quality_score.json").read_text())
+    registry = json.loads((DATA / "backed_clinical_studies.json").read_text())
+    dirty = _git("status", "--porcelain")
+    return {
+        "head_sha": _git("rev-parse", "HEAD"),
+        "head_subject": _git("log", "-1", "--format=%s"),
+        "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
+        "worktree": str(ROOT),
+        "tree_dirty": bool(dirty),
+        "dirty_paths": [line[3:] for line in dirty.splitlines()] if dirty else [],
+        "quality_score_config_version": config["_metadata"]["version"],
+        "quality_score_config_schema": config["_metadata"]["schema_version"],
+        "evidence_registry_schema_version": registry["_metadata"]["schema_version"],
+        "evidence_registry_entries": registry["_metadata"]["total_entries"],
+        "evaluated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    }
 
 
 def check(name: str, decision: str, wrong_answer: str):
@@ -267,11 +319,28 @@ def _():
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--label", default="", help=(
+        "Which run this is, e.g. 'pre-push' or 'post-push'. The post-push run "
+        "against a fresh fetch of origin/main is the authoritative one."))
+    parser.add_argument("--out", type=Path, help="Also write the stamped result here.")
     args = parser.parse_args()
 
+    try:
+        state = evaluated_state()
+    except Exception as exc:
+        # Cannot identify the tree -> cannot make a claim about it.
+        print(f"FAIL: could not stamp the evaluated state: {type(exc).__name__}: {exc}")
+        return 1
+
     failed = [r for r in RESULTS if not r["ok"]]
+    payload = {"label": args.label, "evaluated_state": state, "checks": len(RESULTS),
+               "failed": len(failed), "verdict": "PASS" if not failed else "FAIL",
+               "results": RESULTS}
+    if args.out:
+        args.out.write_text(json.dumps(payload, indent=1))
+
     if args.json:
-        print(json.dumps({"checks": len(RESULTS), "failed": len(failed), "results": RESULTS}, indent=1))
+        print(json.dumps(payload, indent=1))
     else:
         for result in RESULTS:
             print(f"[{'PASS' if result['ok'] else 'FAIL'}] {result['check']}")
@@ -279,6 +348,14 @@ def main() -> int:
             if not result["ok"]:
                 print(f"       decision: {result['decision']}")
                 print(f"       regression: {result['regression_would_look_like']}")
+        print()
+        print(f"  tree      {state['head_sha'][:12]} ({state['branch']}) "
+              f"{'DIRTY' if state['tree_dirty'] else 'clean'}")
+        print(f"  config    {state['quality_score_config_version']}")
+        print(f"  registry  schema {state['evidence_registry_schema_version']}, "
+              f"{state['evidence_registry_entries']} entries")
+        print(f"  at        {state['evaluated_at']}"
+              + (f"   [{args.label}]" if args.label else ""))
         print(f"\n{len(RESULTS) - len(failed)}/{len(RESULTS)} owner decisions hold.")
     return 1 if failed else 0
 
