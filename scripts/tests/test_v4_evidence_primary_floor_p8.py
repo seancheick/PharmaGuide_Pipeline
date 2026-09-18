@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from scoring_v4.modules.generic_evidence import (  # noqa: E402
     score_evidence, PRIMARY_FLOOR_STRONG, PRIMARY_FLOOR_MODERATE,
+    PRIMARY_FLOOR_BRANDED_STRONG, EFFECT_DIRECTION_MULTIPLIERS,
 )
 
 
@@ -67,11 +68,18 @@ def test_trace_strong_ingredient_does_not_floor():
 
 
 def test_weak_effect_floors_below_strong_effect():
-    # a meta with positive_WEAK effect must floor below a positive_strong one
-    # (14 * 0.85 = 11.9), mirroring the pipeline's weak-effect discount.
+    """A weak-effect meta must floor below a positive_strong one.
+
+    Pre-lock that was 14 * 0.85 = 11.9; direction_ceiling now caps a non-strong
+    direction at the MODERATE base weighted by its multiplier. The invariant the
+    test exists for — weak sits below strong — is unchanged.
+    """
     p = _product([_ing()], [_match(study_type="rct_multiple", effect_direction="positive_weak")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == round(14.0 * 0.85, 4)
+
+    ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["positive_weak"], 4)
+    assert out["metadata"]["primary_evidence_floor"] == ceiling
+    assert ceiling < PRIMARY_FLOOR_STRONG
 
 
 def test_moderate_study_floors_to_11():
@@ -131,13 +139,21 @@ def test_brand_id_product_human_record_floors_to_18():
     assert out["metadata"]["primary_evidence_floor"] == 18.0
 
 
-def test_branded_strong_weak_effect_discounts():
-    """Effect-strength discount still applies on top of the branded tier
-    (18 * 0.85 = 15.3) — a weak-effect branded meta floors below a strong one."""
+def test_branded_weak_effect_cannot_ride_the_branded_strong_base():
+    """direction_ceiling (locked 2026-09-18): branding does not buy direction.
+
+    Before the lock this floored at 18 * 0.85 = 15.3 — a weak-effect primary
+    keeping a branded STRONG base. Only positive_strong may anchor there; every
+    weaker direction is capped at the MODERATE base weighted by the same
+    multiplier. Derived from the owners so it tracks a constant change.
+    """
     p = _product([_ing()], [_match(study_type="rct_multiple", evidence_level="branded-rct",
                                    effect_direction="positive_weak")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == round(18.0 * 0.85, 4)
+
+    ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["positive_weak"], 4)
+    assert out["metadata"]["primary_evidence_floor"] == ceiling
+    assert ceiling < PRIMARY_FLOOR_BRANDED_STRONG
 
 
 def test_non_branded_strong_stays_14():

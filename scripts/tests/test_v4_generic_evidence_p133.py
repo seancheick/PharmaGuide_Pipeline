@@ -628,9 +628,16 @@ def test_exact_single_active_recovers_verified_ingredient_human_evidence() -> No
     # The NAC record no longer carries the untraceable 2,810-participant
     # aggregate that incorrectly triggered the enrollment multiplier.
     assert payload["components"]["clinical_evidence_pipeline"] == 3.24
-    assert payload["components"]["primary_evidence_floor"] == 8.4
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "n acetylcysteine"
-    assert payload["score"] == 8.4
+    # The floor value is incidental to what this test is about (recovery), so
+    # derive it from the owners rather than pinning a literal that a policy
+    # change has to chase. INGR_NAC is mixed, and direction_ceiling caps a
+    # non-strong direction at the MODERATE base weighted by its multiplier.
+    from scoring_v4.modules.generic_evidence import (
+        EFFECT_DIRECTION_MULTIPLIERS, PRIMARY_FLOOR_MODERATE)
+    ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["mixed"], 4)
+    assert payload["components"]["primary_evidence_floor"] == ceiling
+    assert payload["score"] == ceiling
 
 
 def test_non_nac_primary_active_recovers_verified_ingredient_human_evidence() -> None:
@@ -969,9 +976,16 @@ def test_primary_floor_mirrors_mixed_effect_multiplier() -> None:
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 8.4
-    assert payload["components"]["primary_evidence_floor"] == 8.4
-    assert payload["metadata"]["primary_evidence_floor"] == 8.4
+    # direction_ceiling: mixed evidence is capped at the MODERATE base weighted
+    # by its own multiplier (pre-lock this was 14 * 0.6 = 8.4, a STRONG base).
+    from scoring_v4.modules.generic_evidence import (
+        EFFECT_DIRECTION_MULTIPLIERS, PRIMARY_FLOOR_MODERATE, PRIMARY_FLOOR_STRONG)
+    ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["mixed"], 4)
+
+    assert payload["score"] == ceiling
+    assert payload["components"]["primary_evidence_floor"] == ceiling
+    assert payload["metadata"]["primary_evidence_floor"] == ceiling
+    assert ceiling < PRIMARY_FLOOR_STRONG
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "ashwagandha"
 
 

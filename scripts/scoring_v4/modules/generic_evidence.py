@@ -371,6 +371,14 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
             "primary_evidence_floor": round(primary_floor, 4),
             "primary_evidence_floor_canonical": floor_canonical,
+            # A floor that was COMPUTED is not a floor that DROVE the score.
+            # total = max(pipeline + depth, floor), so the floor only decides the
+            # result when it strictly exceeds the pipeline; equality means the
+            # pipeline already earned that number on its own. The explanation
+            # owner reads this instead of re-deriving the comparison.
+            "primary_evidence_floor_decisive": bool(
+                primary_floor > pipeline_total + depth_bonus
+            ),
             # Compatibility fields remain explicit so old clients distinguish
             # a deliberately retired proxy from missing metadata. Ingredient
             # presence or dose can never manufacture Evidence credit.
@@ -1229,6 +1237,17 @@ def _primary_mass_floor(
         # multiplier so mixed/null evidence gets proportional credit while
         # negative evidence remains ineligible.
         candidate = round(base * effect_multiplier, 4)
+        # direction_ceiling (locked 2026-09-18 after the 13-stratum review): a
+        # floor may not say more than the evidence direction supports. Only a
+        # positive_strong primary may anchor on a STRONG base; every weaker
+        # direction is additionally capped at the MODERATE base weighted by the
+        # same multiplier already applied above. positive_strong is deliberately
+        # excluded, so it keeps the strong/branded base unchanged.
+        #
+        # No new table: the cap reuses PRIMARY_FLOOR_MODERATE and the multiplier
+        # this loop already read from EFFECT_DIRECTION_MULTIPLIERS.
+        if effect != "positive_strong":
+            candidate = min(candidate, round(PRIMARY_FLOOR_MODERATE * effect_multiplier, 4))
         if candidate > floor:
             floor, floor_canon = candidate, canonical
     return floor, floor_canon

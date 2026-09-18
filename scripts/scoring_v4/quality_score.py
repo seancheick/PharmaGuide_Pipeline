@@ -793,7 +793,12 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
     reason = _reason_evidence(_band(val, weight))
     metadata = dim.get("metadata") or {}
-    if _num(metadata.get("primary_evidence_floor")) > 0:
+    # Only claim the floor drove the credit when it actually did. A computed but
+    # shadowed floor (the pipeline already exceeded it) must keep the normal
+    # pipeline explanation, and equality is not floor-driven either. The verdict
+    # comes from generic_evidence, which applies the floor — this does not
+    # recompute it.
+    if metadata.get("primary_evidence_floor_decisive"):
         reason = "Evidence credit is driven by the primary ingredient, not a trial of the whole formula."
     if (
         (metadata.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula"

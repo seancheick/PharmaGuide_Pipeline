@@ -1,7 +1,19 @@
 # PRIMARY-MASS FLOOR — 13-STRATUM SANITY REVIEW
 
-Policy under review: `direction_ceiling`. Representative per stratum is the lowest
-dsld_id among its members, so the selection is reproducible and not curated.
+Policy under review: `direction_ceiling`. Representative per stratum is the first
+dsld_id in sorted order, so the selection is reproducible and not curated.
+
+The ceiling applies to NON-STRONG directions only. `_primary_mass_floor`
+excludes `positive_strong` explicitly, so it keeps the strong/branded base
+(14.0, or 18.0 branded) and is NOT capped at PRIMARY_FLOOR_MODERATE:
+
+| direction | floor behaviour |
+|---|---|
+| `positive_strong` | existing strong-floor path, unchanged |
+| `positive_weak` | ceiling 9.35 (MODERATE x multiplier) |
+| `mixed` | ceiling 6.6 (MODERATE x multiplier) |
+| `null` | 0 — cannot anchor |
+| `negative` | 0 — cannot anchor |
 
 `floor` is the raw floor the anchor proposes; `final` is Evidence after the
 policy applies. A stratum with no member is printed EMPTY rather than filled
@@ -91,9 +103,9 @@ anchor whose multiplier is <= 0. No policy can create this case.
 Structurally empty, not merely absent: `_EFFECT_FLOOR_MULTIPLIER['negative'] = 0.0`, and `_primary_mass_floor` skips any
 anchor whose multiplier is <= 0. No policy can create this case.
 
-## `unreviewed_anchor`  (n=24)
+## `recovered_synthesized_anchor`  (n=24)
 
-*an anchor outside the reviewed registry must not pass as reviewed evidence*
+*a synthesized anchor must resolve to a reviewed record, not pass on its own word*
 
 | field | value |
 |---|---|

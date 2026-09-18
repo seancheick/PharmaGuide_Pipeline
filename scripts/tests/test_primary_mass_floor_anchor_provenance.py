@@ -97,3 +97,64 @@ def test_the_authority_floor_is_a_separate_owner():
     primary-mass floor must not duplicate or overwrite the authority floor."""
     assert ge.NUTRITION_AUTHORITY_FLOOR != ge.PRIMARY_FLOOR_MODERATE
     assert ge.NUTRITION_AUTHORITY_FLOOR != ge.PRIMARY_FLOOR_STRONG
+
+
+# ── direction_ceiling, locked 2026-09-18 ─────────────────────────────────────
+#
+# A floor may prevent under-scoring where reviewed evidence supports an
+# ingredient. It may not manufacture stronger affirmative Evidence than the
+# reviewed direction supports. Locked after the 13-stratum sanity review; these
+# pin the contract so a later change has to argue with a test.
+
+
+def test_only_positive_strong_may_anchor_on_a_strong_base():
+    """positive_strong is deliberately EXCLUDED from the ceiling — it keeps the
+    strong/branded base. It is not capped at PRIMARY_FLOOR_MODERATE."""
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    strong = _floor_for("positive_strong", score_evidence)
+    assert strong == ge.PRIMARY_FLOOR_STRONG
+    assert strong > ge.PRIMARY_FLOOR_MODERATE
+
+
+def test_non_strong_directions_are_capped_at_the_moderate_base():
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    for direction in ("positive_weak", "mixed"):
+        expected = round(ge.PRIMARY_FLOOR_MODERATE
+                         * ge.EFFECT_DIRECTION_MULTIPLIERS[direction], 4)
+        got = _floor_for(direction, score_evidence)
+        assert got == expected, f"{direction}: {got} != {expected}"
+        assert got < ge.PRIMARY_FLOOR_STRONG
+
+
+def test_null_and_negative_anchor_nothing_even_on_a_strong_study():
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    for direction in ("null", "negative"):
+        assert _floor_for(direction, score_evidence) == 0.0
+
+
+def _floor_for(direction, score_evidence):
+    """A single mass-dominant active with a strong-study match in `direction`.
+
+    Product shape mirrors test_v4_evidence_primary_floor_p8's fixtures: the floor
+    reads actives from ingredient_quality_data, so a bare activeIngredients list
+    never reaches the mass gate and every direction would read 0.0.
+    """
+    ingredient = {"name": "Ashwagandha", "standard_name": "Ashwagandha",
+                  "canonical_id": "ashwagandha", "mapped": True,
+                  "bio_score": 11, "score": 11, "quantity": 600, "unit": "mg"}
+    product = {
+        "status": "active", "form_factor": "capsule",
+        "supplement_type": {"type": "single_nutrient"},
+        "ingredient_quality_data": {"ingredients_scorable": [ingredient],
+                                    "ingredients": [ingredient]},
+        "evidence_data": {"clinical_matches": [{
+            "id": "INGR_ASHWAGANDHA", "ingredient": "Ashwagandha",
+            "standard_name": "Ashwagandha", "canonical_id": "ashwagandha",
+            "study_type": "rct_multiple", "evidence_level": "ingredient-human",
+            "effect_direction": direction, "total_enrollment": 500,
+        }]},
+    }
+    return score_evidence(product, apply_primary_floor=True)["metadata"]["primary_evidence_floor"]

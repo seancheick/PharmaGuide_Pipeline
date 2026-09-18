@@ -39,12 +39,42 @@ def test_a_blend_with_undisclosed_amounts_is_never_called_fully_transparent():
 
 
 def test_primary_ingredient_floor_is_not_whole_formula_efficacy_claim():
+    """When the floor DID drive the credit, say so — and do not imply the whole
+    formula was trialled."""
     from scoring_v4.quality_score import _config
     pillar = _pillar_evidence({"score": 18, "metadata": {
         "primary_evidence_floor": 18, "primary_evidence_floor_canonical": "ksm 66",
+        "primary_evidence_floor_decisive": True,
     }}, 20, "generic_botanical_branded", _config())
     assert "primary ingredient" in pillar["reason"].lower()
     assert "whole formula" in pillar["reason"].lower()
+
+
+def test_a_shadowed_floor_does_not_claim_it_drove_the_credit():
+    """A floor that was COMPUTED is not a floor that DROVE the score.
+
+    For 458 products the pipeline already exceeds the floor, so the floor changes
+    nothing. Telling those readers their credit came from the primary ingredient
+    is a false explanation of a true score.
+    """
+    from scoring_v4.quality_score import _config
+    pillar = _pillar_evidence({"score": 18, "metadata": {
+        "primary_evidence_floor": 11, "primary_evidence_floor_canonical": "ksm 66",
+        "primary_evidence_floor_decisive": False,
+    }}, 20, "generic_botanical_branded", _config())
+    assert "primary ingredient" not in pillar["reason"].lower()
+
+
+def test_the_decisive_verdict_comes_from_the_floor_owner_not_a_recomputation():
+    """quality_score must not re-derive decisiveness from the floor value. If it
+    did, a floor equal to the pipeline would read as floor-driven — and equality
+    is not a raise."""
+    from scoring_v4.quality_score import _config
+    pillar = _pillar_evidence({"score": 18, "metadata": {
+        "primary_evidence_floor": 18, "primary_evidence_floor_canonical": "ksm 66",
+        "primary_evidence_floor_decisive": False,   # owner says: equal, not raised
+    }}, 20, "generic_botanical_branded", _config())
+    assert "primary ingredient" not in pillar["reason"].lower()
 
 
 def test_disclosed_panel_with_opaque_blends_is_not_called_fully_disclosed():

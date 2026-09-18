@@ -5,7 +5,7 @@
     "production_entry_point": "scoring_v4.scored_artifact.build_scored_artifact",
     "scoring_formulas_embedded": false,
     "external_identifiers": "none; FIXTURE_* and SYNTHETIC_* values are synthetic case labels, not clinical references",
-    "review_status": "reviewed archetype decision set; expectations re-locked 2026-09-15 after quality_score 1.8.0 formulation-neutrality canaries and frozen packet"
+  "review_status": "reviewed archetype decision set; expectations re-locked 2026-09-18 after locking the direction_ceiling primary-mass floor policy. Only immune_support__ideal moved, and only its raw evidence dimension (11.9 -> 11.8881): that case is positive_weak, so the ceiling stopped the floor lifting it to 14 x 0.85 and the pipeline's own 11.8881 now stands. Pillars, total 88.8 and tier Very good are unchanged. Prior re-lock was 2026-09-15 after quality_score 1.8.0 formulation-neutrality canaries and frozen packet."
   },
   "fixtures": [
     {
@@ -575,7 +575,7 @@
         "raw_dimensions": {
           "formulation": 12.25,
           "dose": 22.0,
-          "evidence": 11.9,
+          "evidence": 11.8881,
           "transparency": 9.0
         }
       }
