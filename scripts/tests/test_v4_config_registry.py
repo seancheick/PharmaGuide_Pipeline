@@ -58,8 +58,8 @@ def test_config_fingerprint_is_stable_hex():
 def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
-    assert config_version("omega") == "1.2.1-dose-band-citations"
-    assert config_version("quality_score") == "1.10.1-omega-printed-epa-dha"
+    assert config_version("omega") == "1.3.0-omega-semantics-2026-09"
+    assert config_version("quality_score") == "1.11.0-omega-semantics-2026-09"
 
 
 def test_all_config_provenance_shape():

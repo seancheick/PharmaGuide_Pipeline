@@ -190,7 +190,7 @@ def test_form_tier_ee_ethyl_ester_match() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Fish Oil Ethyl Esters EPA 500 DHA 200"
     ))
-    assert payload["components"]["form_tier"] == 4.0
+    assert payload["components"]["form_tier"] == 6.0
     assert payload["metadata"]["form_detected"] == "ee"
 
 
@@ -269,7 +269,7 @@ def test_form_tier_undefined_bare_fish_oil_no_form_keyword() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Fish Oil 1000 mg Softgels"
     ))
-    assert payload["components"]["form_tier"] == 2.0
+    assert payload["components"]["form_tier"] == 6.0
     assert payload["metadata"]["form_detected"] == "undefined"
 
 
@@ -291,8 +291,8 @@ def test_certification_cannot_manufacture_omega_formulation_credit() -> None:
 
     assert certified["score"] == uncertified["score"] == 6.0
     assert certified["components"] == uncertified["components"]
-    assert certified["components"]["form_tier"] == 2.0
-    assert certified["components"]["source_disclosed"] == 4.0
+    assert certified["components"]["form_tier"] == 6.0
+    assert "source_disclosed" not in certified["components"]
     assert "premium_form_a2_carry" not in certified["components"]
     assert certified["metadata"]["form_detected"] == "undefined"
 
@@ -325,7 +325,7 @@ def test_form_tier_does_not_treat_mct_carrier_as_omega_tg_form() -> None:
         ],
     )
     payload = score_formulation(product)
-    assert payload["components"]["form_tier"] == 2.0
+    assert payload["components"]["form_tier"] == 6.0
     assert payload["metadata"]["form_detected"] == "undefined"
     assert "premium_form_a2_carry" not in payload["components"]
 
@@ -343,7 +343,7 @@ def test_form_tier_does_not_treat_caprylic_capric_triglycerides_as_omega_tg() ->
         ],
     )
     payload = score_formulation(product)
-    assert payload["components"]["form_tier"] == 2.0
+    assert payload["components"]["form_tier"] == 6.0
     assert payload["metadata"]["form_detected"] == "undefined"
     assert "premium_form_a2_carry" not in payload["components"]
 
@@ -360,16 +360,17 @@ def test_form_tier_pl_wins_over_tg_when_both_match() -> None:
     assert payload["metadata"]["form_detected"] == "pl"
 
 
-# --- Premium-form A2 carryforward (only when form != undefined) ----------
+# --- Premium-form A2 carryforward: retired 2026-09-18 --------------------
 
 
-def test_premium_a2_credit_awarded_when_form_disclosed() -> None:
+def test_premium_a2_carry_is_retired_for_every_form() -> None:
+    """Retired 2026-09-18: it re-paid for the molecular form form_tier scores."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     payload = score_formulation(_epa_dha_product(
         name="Omega-3 Triglycerides EPA+DHA",
     ))
-    assert payload["components"]["premium_form_a2_carry"] == 5.0
+    assert "premium_form_a2_carry" not in payload["components"]
 
 
 def test_premium_a2_credit_not_awarded_when_form_undefined() -> None:
@@ -383,7 +384,7 @@ def test_premium_a2_credit_not_awarded_when_form_undefined() -> None:
     assert "premium_form_a2_carry" not in payload["components"]
 
 
-# --- Source-disclosed credit (+4) ----------------------------------------
+# --- Source detection (recorded in metadata, 0 points since 2026-09-18) ---
 
 
 def test_source_disclosed_fish_oil() -> None:
@@ -392,14 +393,16 @@ def test_source_disclosed_fish_oil() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Omega-3 Fish Oil EPA+DHA"
     ))
-    assert payload["components"]["source_disclosed"] == 4.0
+    assert "source_disclosed" not in payload["components"]  # Transparency owns disclosure
+    assert payload["metadata"]["source_disclosed"] is True
 
 
 def test_source_disclosed_krill() -> None:
     from scoring_v4.modules.omega_formulation import score_formulation
 
     payload = score_formulation(_epa_dha_product(name="Krill Omega"))
-    assert payload["components"]["source_disclosed"] == 4.0
+    assert "source_disclosed" not in payload["components"]  # Transparency owns disclosure
+    assert payload["metadata"]["source_disclosed"] is True
 
 
 def test_source_disclosed_algae_vegan_dha() -> None:
@@ -408,14 +411,16 @@ def test_source_disclosed_algae_vegan_dha() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Algae Oil Vegan DHA 200"
     ))
-    assert payload["components"]["source_disclosed"] == 4.0
+    assert "source_disclosed" not in payload["components"]  # Transparency owns disclosure
+    assert payload["metadata"]["source_disclosed"] is True
 
 
 def test_source_disclosed_cod_liver() -> None:
     from scoring_v4.modules.omega_formulation import score_formulation
 
     payload = score_formulation(_epa_dha_product(name="Norwegian Cod Liver Oil"))
-    assert payload["components"]["source_disclosed"] == 4.0
+    assert "source_disclosed" not in payload["components"]  # Transparency owns disclosure
+    assert payload["metadata"]["source_disclosed"] is True
 
 
 def test_source_not_disclosed_bare_epa_dha_name() -> None:
@@ -426,7 +431,7 @@ def test_source_not_disclosed_bare_epa_dha_name() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Pure EPA+DHA Concentrate"
     ))
-    assert "source_disclosed" not in payload["components"]
+    assert payload["metadata"]["source_disclosed"] is False
 
 
 # --- Sustainability cert (rules_db verified) -----------------------------
@@ -625,9 +630,10 @@ def test_sustainability_does_not_credit_unrelated_cert() -> None:
 # --- Score ceiling + headroom -------------------------------------------
 
 
-def test_maximum_reachable_score_is_21() -> None:
-    """Per the rubric: max reachable today is form 8 + source 4 +
-    premium 5 + concentration 4 = 21/25; sustainability adds 0."""
+def test_maximum_reachable_score_is_12() -> None:
+    """Per the rubric: max reachable today is form 8 + concentration 4 = 12/25.
+    Source disclosure and the premium-form carry were retired 2026-09-18
+    (Transparency owns disclosure); sustainability adds 0."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     product = _epa_dha_product(
@@ -638,13 +644,13 @@ def test_maximum_reachable_score_is_21() -> None:
         certification_data=_verified_sustainability("Friend of the Sea"),
     )
     payload = score_formulation(product)
-    assert payload["score"] == 21.0
-    assert payload["metadata"]["max_reachable_in_p161"] == 21.0
+    assert payload["score"] == 12.0
+    assert payload["metadata"]["max_reachable_in_p161"] == 12.0
 
 
 def test_dimension_cap_clamps_above_25() -> None:
     """Defensive: if a future bug adds enough components to exceed 25,
-    the cap clamps. Verified at 21 today since no path reaches 25+;
+    the cap clamps. Verified at 12 today since no path reaches 25+;
     test exercises the clamp logic shape."""
     from scoring_v4.modules.omega_formulation import score_formulation, CAP_FORMULATION
 
@@ -658,7 +664,7 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
     """Sports Research Omega-3 1055mg Fish Oil (DSLD 327776) has TG form
     (via ingredient panel 'Triglycerides' row), source disclosed
     (Fish Oil Concentrate), and Friend of the Sea rules_db verified.
-    Expected: 21/25 (max reachable today)."""
+    Expected: 12/25 (max reachable today: form 8 + concentration 4)."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     # Synthesize the canary blob shape from the field audit.
@@ -694,7 +700,7 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
         }
     }
     payload = score_formulation(product)
-    assert payload["score"] == 21.0
+    assert payload["score"] == 12.0
     assert payload["metadata"]["form_detected"] == "tg"
     assert payload["metadata"]["sustainability_cert_program"] == "Friend of the Sea"
 
@@ -810,10 +816,60 @@ def test_formulation_weights_match_rubric_config() -> None:
     assert f["form_tier"]["tg"] == 8
     assert f["form_tier"]["pl"] == 7
     assert f["form_tier"]["rtg"] == 8
-    assert f["form_tier"]["ee"] == 4
-    assert f["form_tier"]["undefined"] == 2
-    assert f["source_disclosed"]["score"] == 4
-    assert f["premium_form_a2_carry"]["score"] == 5
+    assert f["form_tier"]["ee"] == 6
+    assert f["form_tier"]["undefined"] == 6
+    assert f["source_disclosed"]["score"] == 0  # retired 2026-09-18
+    assert f["premium_form_a2_carry"]["score"] == 0  # retired 2026-09-18
     assert f["sustainability_cert"]["score"] == 0
     assert f["epa_dha_concentration"]["score_bands"][0]["score"] == 4
     assert f["sustainability_cert"]["eligibility"] == "rules_db_verified"
+
+
+# --- 2026-09-18 omega formulation semantics -------------------------------
+# Formulation measures material facts: molecular form quality and EPA+DHA
+# concentration. Disclosure is Transparency's job and is not paid twice.
+
+
+def test_unknown_form_is_not_scored_below_a_disclosed_ethyl_ester() -> None:
+    """An undisclosed form is "not established", not "known inferior".
+
+    NIH ODS: re-esterified TG, natural TG and free fatty acids are "somewhat
+    higher" in bioavailability than ethyl esters, and every form significantly
+    raises plasma EPA and DHA. REDUCE-IT used an ethyl ester."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    unknown = score_formulation(_epa_dha_product(name="Fish Oil 1000 mg"))
+    ethyl_ester = score_formulation(_epa_dha_product(name="Fish Oil Ethyl Esters EPA 500 DHA 200"))
+
+    assert unknown["components"]["form_tier"] == ethyl_ester["components"]["form_tier"] == 6.0
+
+
+def test_triglyceride_still_outranks_ethyl_ester() -> None:
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    triglyceride = score_formulation(_epa_dha_product(name="Natural Triglyceride Fish Oil"))
+    ethyl_ester = score_formulation(_epa_dha_product(name="Fish Oil Ethyl Esters EPA 500 DHA 200"))
+
+    assert triglyceride["components"]["form_tier"] > ethyl_ester["components"]["form_tier"]
+    assert triglyceride["components"]["form_tier"] == 8.0
+
+
+def test_disclosing_the_form_earns_no_second_formulation_credit() -> None:
+    """The premium-form carry paid for the same fact the form tier already scores,
+    while Transparency separately pays for the disclosure."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    for name in ("Omega-3 Triglycerides EPA+DHA", "Fish Oil Ethyl Esters EPA 500 DHA 200",
+                 "Krill Oil Phospholipid", "Fish Oil 1000 mg"):
+        payload = score_formulation(_epa_dha_product(name=name))
+        assert "premium_form_a2_carry" not in payload["components"], name
+
+
+def test_naming_the_marine_source_earns_no_formulation_points() -> None:
+    """Transparency owns source disclosure; Formulation reads material quality."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_epa_dha_product(name="Fish Oil 1000 mg"))
+
+    assert "source_disclosed" not in payload["components"]
+    assert payload["metadata"]["source_disclosed"] is True

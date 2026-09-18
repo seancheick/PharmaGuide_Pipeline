@@ -155,7 +155,8 @@ def test_band_aha_cvd() -> None:
 
     product = _omega_product(epa=700, dha=400)  # 1100 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 16.0
+    # Band values are anchors: 1000 -> 16, 2000 -> 20, so 1100 sits just above 16.
+    assert payload["components"]["epa_dha_band"] == 16.4
     assert payload["metadata"]["epa_dha_band_label"] == "aha_cvd"
 
 
@@ -165,7 +166,8 @@ def test_band_general_health() -> None:
 
     product = _omega_product(epa=400, dha=300)  # 700 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 10.0
+    # 500 -> 10 and 1000 -> 16 are anchors; 700 interpolates between them.
+    assert payload["components"]["epa_dha_band"] == 12.4
     assert payload["metadata"]["epa_dha_band_label"] == "general_health"
 
 
@@ -175,7 +177,7 @@ def test_band_efsa_ai_zone() -> None:
 
     product = _omega_product(epa=200, dha=100)  # 300 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 5.0
+    assert payload["components"]["epa_dha_band"] == 6.0  # between 250 -> 5 and 500 -> 10
     assert payload["metadata"]["epa_dha_band_label"] == "efsa_ai_zone"
 
 
@@ -190,7 +192,7 @@ def test_band_near_efsa_ai_partial_credit() -> None:
 
     product = _omega_product(epa=125, dha=100)  # 225 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 4.0
+    assert payload["components"]["epa_dha_band"] == 4.5  # between 200 -> 4 and 250 -> 5
     assert payload["metadata"]["epa_dha_band_label"] == "near_efsa_ai"
 
 
@@ -200,7 +202,7 @@ def test_band_low_disclosed_epa_dha_partial_credit() -> None:
 
     product = _omega_product(epa=100, dha=50)  # 150 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 2.5
+    assert payload["components"]["epa_dha_band"] == 3.25  # between 100 -> 2.5 and 200 -> 4
     assert payload["metadata"]["epa_dha_band_label"] == "low_disclosed_epa_dha"
 
 
@@ -454,14 +456,16 @@ def _load_canaries(ids):
     return {did: _canary_cache[did] for did in ids if did in _canary_cache}
 
 
+# Values between two band anchors interpolate (Model C, 2026-09-18); the
+# anchors themselves and the band labels are unchanged.
 @pytest.mark.parametrize("dsld_id,expected_score,expected_band", [
     ("327776", 16.0, "aha_cvd"),    # Sports Research: EPA 690 + DHA 310 = 1000 mg
     ("326270", 16.0, "aha_cvd"),    # Sports Research alt SKU: same EPA/DHA
-    ("288740", 16.0, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
-    ("273630", 16.0, "aha_cvd"),    # Garden of Life Advanced Omega: 1160 mg
+    ("288740", 16.4, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
+    ("273630", 16.64, "aha_cvd"),   # Garden of Life Advanced Omega: 1160 mg
     ("239592", 0.0, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day
     ("182968", 4.0, "near_efsa_ai"),  # Pure Encap Krill-Plex: 240 mg/day
-    ("261863", 4.0, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
+    ("261863", 4.5, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
     ("267461", 0.0, "below_efsa_ai"),  # Vitafusion gummy: only 50 mg aggregate
 ])
 def test_canary_dose_scores(dsld_id, expected_score, expected_band):
@@ -562,3 +566,36 @@ def test_dose_weights_match_rubric_config() -> None:
 
     # The EPA:DHA ratio bonus is gone from the rubric (quality_score 1.2.0).
     assert "ratio_sanity" not in rubric["dose"]
+
+
+# --- Model C: the band values are anchors, not steps ----------------------
+
+def test_dose_has_no_cliff_at_a_band_edge() -> None:
+    """999 mg and 1000 mg EPA+DHA differ by a hair, not by 6 points.
+
+    The 1000 mg step used to move the public score 11 points (6 of Dose plus a
+    5-point Evidence bonus) for one milligram of EPA+DHA."""
+    from scoring_v4.modules.omega_dose import score_dose
+
+    below = score_dose(_omega_product(epa=599, dha=400))   # 999 mg/day
+    at = score_dose(_omega_product(epa=600, dha=400))      # 1000 mg/day
+    assert at["components"]["epa_dha_band"] == 16.0
+    assert abs(at["components"]["epa_dha_band"] - below["components"]["epa_dha_band"]) < 0.1
+
+
+def test_every_shipped_band_value_is_still_its_anchor() -> None:
+    """Interpolation must not move any reviewed policy value."""
+    from scoring_v4.modules.omega_dose import score_dose
+
+    anchors = {250: 5.0, 500: 10.0, 1000: 16.0, 2000: 20.0, 4000: 20.0}
+    for per_day, expected in anchors.items():
+        payload = score_dose(_omega_product(epa=per_day / 2, dha=per_day / 2))
+        assert payload["components"]["epa_dha_band"] == expected, per_day
+
+
+def test_dose_rises_monotonically_with_epa_dha() -> None:
+    from scoring_v4.modules.omega_dose import score_dose
+
+    scores = [score_dose(_omega_product(epa=mg / 2, dha=mg / 2))["score"]
+              for mg in (0, 90, 150, 300, 700, 850, 999, 1000, 1500, 2000, 4000)]
+    assert scores == sorted(scores)

@@ -87,23 +87,24 @@ def test_none_input_scores_zero_safely() -> None:
 # --- Indication relevance bonus -----------------------------------------
 
 
-def test_indication_relevance_awarded_at_aha_cvd_threshold() -> None:
-    """EPA+DHA >= 1000 mg/day → +5 indication relevance."""
+def test_crossing_1000_mg_no_longer_buys_evidence_points() -> None:
+    """Retired 2026-09-18: a milligram threshold is a Dose fact. Scoring it in
+    Evidence too made one milligram worth 11 public points."""
     from scoring_v4.modules.omega_evidence import score_evidence
 
-    product = _epa_dha_product(epa=700, dha=400)  # 1100 mg/day
-    payload = score_evidence(product)
-    assert payload["components"]["indication_relevance"] == 5.0
-    assert payload["metadata"]["indication_relevance_awarded"] is True
+    below = score_evidence(_epa_dha_product(epa=599, dha=400))   # 999 mg/day
+    at = score_evidence(_epa_dha_product(epa=700, dha=400))      # 1100 mg/day
+    assert "indication_relevance" not in at["components"]
+    assert at["metadata"]["indication_relevance_awarded"] is False
+    assert at["score"] == below["score"]
 
 
-def test_indication_relevance_awarded_exactly_at_threshold() -> None:
-    """1000 mg/day exactly → +5 (inclusive boundary)."""
+def test_evidence_does_not_move_with_dose_alone() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
-    product = _epa_dha_product(epa=700, dha=300)  # 1000 mg/day exact
-    payload = score_evidence(product)
-    assert payload["components"]["indication_relevance"] == 5.0
+    scores = {score_evidence(_epa_dha_product(epa=mg / 2, dha=mg / 2))["score"]
+              for mg in (600, 1000, 1500, 2400, 4500)}
+    assert len(scores) == 1
 
 
 def test_indication_relevance_not_awarded_below_threshold() -> None:
@@ -116,22 +117,19 @@ def test_indication_relevance_not_awarded_below_threshold() -> None:
     assert payload["metadata"]["indication_relevance_awarded"] is False
 
 
-def test_indication_relevance_uses_per_day_not_per_serving() -> None:
-    """A product labeled '500 mg EPA+DHA per serving, 2 servings/day'
-    delivers 1000 mg/day and qualifies. Confirms per_day arithmetic
-    (not per_serving) drives indication."""
+def test_per_day_arithmetic_is_still_recorded() -> None:
+    """Per-day EPA+DHA stays in the metadata (Dose scores it; Evidence reads it
+    only for the prenatal indication)."""
     from scoring_v4.modules.omega_evidence import score_evidence
 
     product = _epa_dha_product(epa=300, dha=200, daily_servings=(2.0, 2.0))
     payload = score_evidence(product)
     assert payload["metadata"]["per_day_epa_dha_mg"] == 1000.0
-    assert payload["components"]["indication_relevance"] == 5.0
+    assert "indication_relevance" not in payload["components"]
 
 
-def test_indication_relevance_for_pure_dha_uses_combined_dose() -> None:
-    """A pure-DHA algal product delivering 1000+ mg/day DHA qualifies
-    for indication relevance (no EPA required — the threshold is
-    total EPA+DHA per_day)."""
+def test_pure_dha_without_a_prenatal_indication_earns_no_bonus() -> None:
+    """A high-dose algal DHA product is a Dose fact, not evidence applicability."""
     from scoring_v4.modules.omega_evidence import score_evidence
 
     product = {
@@ -141,7 +139,7 @@ def test_indication_relevance_for_pure_dha_uses_combined_dose() -> None:
         ]},
     }
     payload = score_evidence(product)
-    assert payload["components"].get("indication_relevance") == 5.0
+    assert "indication_relevance" not in payload["components"]
 
 
 def test_indication_relevance_awarded_for_prenatal_dha_target() -> None:
@@ -193,9 +191,9 @@ def test_engine_can_reach_full_twenty_with_clinical_and_indication(monkeypatch) 
         },
     )
 
-    payload = omega_evidence.score_evidence(
-        _epa_dha_product(epa=700, dha=300)
-    )
+    prenatal = _epa_dha_product(epa=200, dha=650)
+    prenatal["product_name"] = "Prenatal DHA"
+    payload = omega_evidence.score_evidence(prenatal)
 
     assert payload["components"] == {
         "clinical_evidence": 15.0,
@@ -214,7 +212,7 @@ def test_disclosed_epa_dha_class_floor_when_no_evidence_data() -> None:
     product = _epa_dha_product(epa=700, dha=400)  # 1100 mg/day, no evidence
     payload = score_evidence(product)
     assert payload["components"]["clinical_evidence"] == 10.0
-    assert payload["components"].get("indication_relevance") == 5.0
+    assert "indication_relevance" not in payload["components"]
     assert payload["metadata"]["generic_evidence_raw_score"] == 0.0
     assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is True
 
@@ -250,7 +248,7 @@ def test_final_blob_omega3_detail_can_drive_evidence_floor() -> None:
 
     assert payload["metadata"]["per_day_epa_dha_mg"] == 1000.0
     assert payload["components"]["clinical_evidence"] == 10.0
-    assert payload["components"]["indication_relevance"] == 5.0
+    assert "indication_relevance" not in payload["components"]
 
 
 # --- Score ceiling ------------------------------------------------------
@@ -307,11 +305,12 @@ def _load_canaries(ids):
     return {did: _canary_cache[did] for did in ids if did in _canary_cache}
 
 
+# Only a prenatal DHA indication earns the bonus since 2026-09-18.
 @pytest.mark.parametrize("dsld_id,expected_indication", [
-    ("327776", True),    # Sports Research: 1000 mg/day
-    ("326270", True),    # Sports Research alt
-    ("288740", True),    # Nordic: 1100 mg/day
-    ("273630", True),    # GoL Advanced Omega: 1160 mg/day
+    ("327776", False),    # Sports Research: 1000 mg/day
+    ("326270", False),    # Sports Research alt
+    ("288740", False),    # Nordic: 1100 mg/day
+    ("273630", False),    # GoL Advanced Omega: 1160 mg/day
     ("239592", False),   # CVS Krill: 74 mg/day
     ("182968", False),   # Pure Encap Krill-Plex: 240 mg/day
 ])
@@ -408,5 +407,5 @@ def test_evidence_weights_match_rubric_config() -> None:
     assert floor["min_epa_dha_mg_day"] == 250
     assert floor["score"] == 10
     ir = ev["indication_relevance"]
-    assert ir["min_epa_dha_mg_day_for_bonus"] == 1000
+    assert ir["min_epa_dha_mg_day_for_bonus"] is None  # retired 2026-09-18
     assert ir["score"] == 5
