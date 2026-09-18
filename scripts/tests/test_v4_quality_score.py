@@ -206,7 +206,7 @@ def test_fish_oil_parent_identity_does_not_imply_molecular_form() -> None:
     ))
     formulation = out["quality_pillars_v4"]["formulation"]
 
-    assert formulation["score"] == 6.7  # 7/21*20; omega formulation reference 21 since 1.2.0
+    assert formulation["score"] == 11.7  # 7/12*20; omega formulation reference 12 since 1.3.0
     assert formulation["components"]["raw_formulation"] == 7.0
     assert "molecular form is not disclosed" in formulation["reason"].lower()
     assert "basic" not in formulation["reason"].lower()
@@ -591,7 +591,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.10.1-omega-printed-epa-dha"
+    assert out["quality_score_version"] == "1.11.0-omega-semantics-2026-09"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:

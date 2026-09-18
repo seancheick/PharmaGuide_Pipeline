@@ -2141,3 +2141,30 @@ def test_omega3_total_with_a_non_epa_dha_child_is_not_owned() -> None:
     ])
 
     assert _omega_aggregate_evidence(product) == []
+
+
+def test_row_naming_epa_and_dha_owns_its_printed_mass() -> None:
+    """Nature Made Fish Oil 1000 mg (DSLD 294083) prints "EPA (Eicosapentaenoic Acid)
+    and DHA (Docosahexaenoic Acid) 500 mg" beside a 2 g fish oil row."""
+    product = _omega_printed_forms_product([
+        _row(name="Fish Oil", raw_source_text="Fish Oil", canonical_id="fish_oil",
+             quantity=2000, unit="mg", raw_source_path="ingredientRows[5]"),
+        _row(name="EPA (Eicosapentaenoic Acid) and DHA (Docosahexaenoic Acid)",
+             raw_source_text="EPA (Eicosapentaenoic Acid) and DHA (Docosahexaenoic Acid)",
+             canonical_id="fish_oil", quantity=500, unit="mg",
+             raw_source_path="ingredientRows[6].nestedRows[0]"),
+    ])
+
+    assert _omega_aggregate_evidence(product) == [
+        ("epa_dha", 500, "ingredientRows[6].nestedRows[0]"),
+    ]
+
+
+def test_a_named_oil_row_never_owns_epa_dha_however_it_is_spelled() -> None:
+    product = _omega_printed_forms_product([
+        _row(name="Fish Oil (EPA/DHA)", raw_source_text="Fish Oil (EPA/DHA)",
+             canonical_id="fish_oil", quantity=1000, unit="mg",
+             raw_source_path="ingredientRows[0]"),
+    ])
+
+    assert _omega_aggregate_evidence(product) == []

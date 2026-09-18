@@ -1003,26 +1003,26 @@
         "archetype": "omega",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 96.3,
-        "quality_tier": "Exceptional",
+        "quality_score_v4_100": 93.1,
+        "quality_tier": "Excellent",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 21.0,
+          "formulation": 12.0,
           "dose": 20.0,
           "evidence": 20.0
         },
         "pillars": {
           "formulation": 20.0,
           "dose": 20.0,
-          "evidence": 19.3,
-          "transparency": 12.0,
+          "evidence": 14.3,
+          "transparency": 13.8,
           "verification": 15.0,
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 21.0,
+          "formulation": 12.0,
           "dose": 20.0,
-          "evidence": 19.26,
+          "evidence": 14.26,
           "transparency": 12.0
         }
       }
@@ -1059,19 +1059,19 @@
         "archetype": "omega",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 21.9,
+        "quality_score_v4_100": 24.5,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 21.0,
+          "formulation": 12.0,
           "dose": 20.0,
           "evidence": 20.0
         },
         "pillars": {
-          "formulation": 1.9,
+          "formulation": 3.3,
           "dose": 0.0,
           "evidence": 0.0,
-          "transparency": 8.0,
+          "transparency": 9.2,
           "verification": 6.0,
           "safety_hygiene": 6.0
         },

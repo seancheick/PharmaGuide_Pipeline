@@ -103,3 +103,41 @@ def test_base_safety_failure_without_driver_detail_keeps_the_generic_cause():
     assert pillar["reason"].startswith(
         "Safety concern: it contains a banned, recalled, or watchlisted ingredient and "
     )
+
+
+def _bd_with_additives(details, penalty):
+    return {
+        "safety_hygiene_base": {"score": 10.0, "max": 10.0},
+        "dimensions": {"formulation": {
+            "penalties": {"B1_harmful_additives": -penalty},
+            "metadata": {"inactive_penalty_details": details},
+        }},
+    }
+
+
+def test_gras_excipients_do_not_reduce_the_safety_pillar():
+    """Silicon dioxide, magnesium stearate and MCC are recorded in PharmaGuide's
+    own additive data as GRAS with no safety finding — "quality signal only".
+    They stay formulation-quality signals and stop charging clinical Safety."""
+    cfg = qs._config()
+    details = [
+        {"matched_rule_id": "ADD_SILICON_DIOXIDE", "penalty_tier": "low", "penalty_applied": 0.5},
+        {"matched_rule_id": "ADD_MAGNESIUM_STEARATE", "penalty_tier": "low", "penalty_applied": 0.5},
+    ]
+    pillar = qs._pillar_safety_hygiene(_bd_with_additives(details, 1.0), 10.0, cfg)
+
+    assert pillar["score"] == 10.0
+    assert "additive_or_sweetener_penalty" not in pillar["components"]
+    assert pillar["reason"] == "No banned, recalled, or watchlisted ingredients."
+
+
+def test_a_moderate_additive_still_reduces_the_safety_pillar():
+    cfg = qs._config()
+    details = [
+        {"matched_rule_id": "ADD_SUCRALOSE", "penalty_tier": "moderate", "penalty_applied": 2.0},
+        {"matched_rule_id": "ADD_SILICON_DIOXIDE", "penalty_tier": "low", "penalty_applied": 0.5},
+    ]
+    pillar = qs._pillar_safety_hygiene(_bd_with_additives(details, 2.5), 10.0, cfg)
+
+    assert pillar["score"] == 8.0  # only the moderate sweetener is charged
+    assert "additive" in pillar["reason"]

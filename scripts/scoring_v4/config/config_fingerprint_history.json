@@ -8,7 +8,9 @@
    "1.0.0": "9185bc5eed37cb0a",
    "1.1.0-rubric-proxy-removal": "449e21c9c8a6210b",
    "1.1.1-audited-gmp-owner": "d5eac70c9ae62c8d",
-   "1.2.0-label-stated-omega-amounts": "aba2c8fb9ece9b77"
+   "1.2.0-label-stated-omega-amounts": "aba2c8fb9ece9b77",
+   "1.2.1-dose-band-citations": "7b98a08d11bbbce3",
+   "1.3.0-omega-semantics-2026-09": "c44235dc3aa7db5c"
   },
   "quality_score": {
    "1.0.4-sports-subtypes": "4e040a97fe26f559",
@@ -36,7 +38,9 @@
    "1.9.0-registry-gmp-tier-poor": "cf1be38dbb423e54",
    "1.10.0-omega-evidence-boundary": "4a2fd645613f79c6",
    "1.10.1-omega-printed-epa-dha": "04af0ba01828345f",
-   "1.11.0-null-earns-no-affirmative-credit": "8b3ba809e3468742"
+   "1.11.0-null-earns-no-affirmative-credit": "8b3ba809e3468742",
+   "1.11.0-omega-semantics-2026-09": "2c15c9bebde09df3",
+   "1.12.0-omega-semantics-and-null-no-credit": "15c0bf887de5680f"
   }
  }
 }

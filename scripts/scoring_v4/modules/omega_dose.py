@@ -265,20 +265,47 @@ def _extract_daily_servings(product: Dict[str, Any]) -> Tuple[float, float, bool
 
 
 def _band_score(per_day_mg: float, bands: List[Dict[str, Any]]) -> Tuple[float, str, Optional[str]]:
-    """Look up the highest band the per-day dose qualifies for.
+    """Score EPA+DHA per day against the rubric bands. Return (score, label, flag).
 
-    Bands in omega_rubric are descending-threshold order
-    (4000, 2000, 1000, 500, 250, 0). Return (score, label, flag).
+    The reviewed band values are anchors, not steps: between two anchors the
+    score follows a straight line, so 999 mg and 1000 mg differ by a hair
+    instead of 6 points. No band value moves — 250 still scores 5, 1000 still
+    scores 16, 2000 and above still score 20. The label and context flag come
+    from the band the amount actually falls in, exactly as before.
+
+    Bands in omega_rubric are in descending-threshold order
+    (4000, 2000, 1000, 500, 250, 200, 100, 0).
     """
+    label, flag = "below_efsa_ai", None
     for band in bands:
-        threshold = float(band.get("min_mg_day", 0) or 0)
-        if per_day_mg >= threshold:
-            return (
-                float(band.get("score", 0) or 0),
-                str(band.get("label") or ""),
-                band.get("flag"),
-            )
-    return 0.0, "below_efsa_ai", None
+        if per_day_mg >= float(band.get("min_mg_day", 0) or 0):
+            label = str(band.get("label") or "")
+            flag = band.get("flag")
+            break
+    if per_day_mg <= 0:
+        return 0.0, "below_efsa_ai", None
+
+    anchors = sorted(
+        (float(band.get("min_mg_day", 0) or 0), float(band.get("score", 0) or 0))
+        for band in bands
+    )
+    if not anchors:
+        return 0.0, label, flag
+    # Below the lowest scoring anchor the rubric is a floor, not a ramp: a trace
+    # omega gummy earns nothing, which is the reviewed policy for <100 mg/day.
+    lowest_scoring = next((mg for mg, score in anchors if score > 0), None)
+    if lowest_scoring is not None and per_day_mg < lowest_scoring:
+        return 0.0, label, flag
+    if per_day_mg >= anchors[-1][0]:
+        return anchors[-1][1], label, flag
+    for (low_mg, low_score), (high_mg, high_score) in zip(anchors, anchors[1:]):
+        if per_day_mg <= high_mg:
+            span = high_mg - low_mg
+            if span <= 0:
+                return high_score, label, flag
+            value = low_score + (high_score - low_score) * (per_day_mg - low_mg) / span
+            return round(value, 2), label, flag
+    return anchors[-1][1], label, flag
 
 
 def score_dose(product: Any) -> Dict[str, Any]:

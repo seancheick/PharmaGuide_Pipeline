@@ -38,7 +38,9 @@ ORIGINAL = {
     },
     # 1.7.0: multi/prenatal Formulation is IQM panel form quality 12 + disclosure 2.
     "multi_prenatal": {"dimension_caps": [["formulation", 14], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
-    "omega": {"dimension_caps": ROUTER_DC},
+    # 1.3.0 omega rubric: transparency 15 -> 13 when the unreachable oxidation
+    # component was retired (Verification owns independently tested oxidation).
+    "omega": {"dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 13]]},
     "probiotic": {"dimension_caps": [["formulation", 16], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
     "b_complex": {"formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0},
     "immune_support": {"evidence_cap": 17.0},
@@ -69,7 +71,7 @@ def test_runtime_constants_read_from_config_no_drift():
     assert generic.MANUFACTURER_TRUST_CAP == 5
     assert generic.MANUFACTURER_VIOLATIONS_FLOOR == -25
     assert multi_prenatal.DIMENSION_CAPS == (("formulation", 14), ("dose", 25), ("evidence", 20), ("transparency", 15))
-    assert omega.DIMENSION_CAPS == (("formulation", 25), ("dose", 25), ("evidence", 20), ("transparency", 15))
+    assert omega.DIMENSION_CAPS == (("formulation", 25), ("dose", 25), ("evidence", 20), ("transparency", 13))
     assert probiotic.DIMENSION_CAPS == (("formulation", 16), ("dose", 25), ("evidence", 20), ("transparency", 15))
     assert b_complex.FORMULATION_CAP == 23.0 and b_complex.B7_CAP == 3.0
     assert immune_support.IMMUNE_EVIDENCE_CAP == 17.0

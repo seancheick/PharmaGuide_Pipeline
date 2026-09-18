@@ -9,10 +9,10 @@ Scores omega-3 evidence against the 20-point rubric in omega_rubric.json:
                               evidence is well-established AHA/EFSA-backed
                               so the pipeline produces meaningful credit
                               when clinical_matches are present.
-    indication_relevance /5   Bonus when EPA+DHA per_day >= 1000 mg/day
-                              (AHA CVD threshold), OR when a prenatal DHA
-                              product meets the prenatal DHA target already
-                              used by omega_dose. 0 otherwise.
+    indication_relevance /5   Bonus when a prenatal DHA product meets the
+                              prenatal DHA target already used by omega_dose.
+                              0 otherwise. The bare >= 1000 mg/day branch was
+                              retired 2026-09-18 as duplicate Dose credit.
 
 Total cap: 20.
 
@@ -112,7 +112,6 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     ev_cfg = rubric["evidence"]
     total_cap = float(ev_cfg.get("cap", 20) or 20)
     indication_cfg = ev_cfg.get("indication_relevance", {}) or {}
-    indication_threshold = float(indication_cfg.get("min_epa_dha_mg_day_for_bonus", 1000) or 1000)
     indication_score_max = float(indication_cfg.get("score", 5) or 5)
     floor_cfg = ev_cfg.get("disclosed_epa_dha_clinical_floor", {}) or {}
     floor_threshold = float(floor_cfg.get("min_epa_dha_mg_day", 250) or 250)
@@ -138,10 +137,10 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     clinical_score = min(clinical_sub_cap, max(raw_generic_score, class_floor_score))
 
     indication_reason = "none"
-    if per_day_epa_dha >= indication_threshold:
-        indication_score = indication_score_max
-        indication_reason = "cv_epa_dha_threshold"
-    elif _prenatal_dha_indication_relevant(product, per_day["dha"]):
+    # The bare "EPA+DHA >= 1000 mg/day" branch was retired 2026-09-18: a
+    # milligram threshold is a Dose fact, and paying for it here scored the
+    # same fact twice. Only indication-specific applicability remains.
+    if _prenatal_dha_indication_relevant(product, per_day["dha"]):
         indication_score = indication_score_max
         indication_reason = "prenatal_dha_target"
     else:
@@ -168,7 +167,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "clinical_evidence_after_cap": round(clinical_score, 4),
         "per_day_epa_dha_mg": round(per_day_epa_dha, 2),
         "per_day_dha_mg": round(per_day["dha"], 2),
-        "indication_threshold_mg_day": indication_threshold,
+        "indication_threshold_mg_day": None,  # retired 2026-09-18 (duplicate Dose credit)
         "indication_relevance_awarded": indication_score > 0,
         "indication_relevance_reason": indication_reason,
         "generic_evidence_metadata": generic_payload.get("metadata", {}),
