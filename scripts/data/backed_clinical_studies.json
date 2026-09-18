@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.14",
-    "last_updated": "2026-09-07",
+    "schema_version": "5.3.15",
+    "last_updated": "2026-09-18",
     "total_entries": 202,
     "changelog": [
+      "5.3.15 (2026-09-18): Scope repair of the four null-direction records, each verified live against its own sources. INGR_VITAMIN_B12 -> reference tier: its single synthesis (PMID 33809274) studied cognition, depression and idiopathic fatigue in people WITHOUT overt deficiency, so it may not act as B12's ingredient-level efficacy direction across 2,176 products; nutrient adequacy stays with the DRI authority path and is not duplicated here. INGR_SAW_PALMETTO: Permixon-specific evidence (NCT02121613, PMID 29694707) and an androgenetic-alopecia trial (PMID 12006122) removed, total_enrollment 833 -> 369 (CAMUS), indication corrected Hormone Balance -> Urinary Tract Health, 'permixon' alias dropped. PRECLIN_DIM: applicability restricted to the BioResponse DIM material both trials used, indole-3-carbinol excluded, total_enrollment 62 -> 551; the tamoxifen-metabolite finding is handed to the interaction owner, not scored here. INGR_BORON: calcium fructoborate separated out (alias removed, form excluded), total_enrollment 30 -> 19, and the two cited PMIDs recorded as two publications of one trial; the entry moves to reference tier because the stored 'observational' study_type was wrong and correcting it to rct_single was measured to raise nine standalone boron products from Evidence 0.5 to 3.1 on one small null trial. No scoring rule, weight or direction multiplier changed.",
       "5.3.14 (2026-09-07): INGR_CRANBERRY cites the current Cochrane version (PMID 37947276, Nov 2023, pub7; verified via PubMed esummary/efetch) in place of the superseded April 2023 record; notes and notable_studies restate that preparation and PAC-dose equivalence is uncertain and that the entry deliberately carries no dose policy. Applicability rules unchanged. clinical_applicability now reads mass units through normalization.canonicalize_mass_unit.",
       "5.3.13 (2026-09-05): Reclassify BRAND_PHOSPHATIDYLSERINE as INGR_PHOSPHATIDYLSERINE (ingredient-human): its own notes and both cited trials (PS-DHA, soybean PS) are ingredient-level, not SerinAid-specific; the serinaid alias remains a name for the ingredient. Registry-count depth-bonus fallback removed in code per DATABASE_SCHEMA.md.",
       "5.3.12 (2026-09-05): Individually reviewed lost botanical joins: add exact registry-projected preparation aliases for Echinacea purpurea aerial/herb/root extract (PMID 24554461) and Astragalus root/extract (PMID 37952511); give INGR_CINNAMON_EXTRACT an explicit Ceylon exclusion scope (PMID 24019277). Real-label review of 5.3.11: PRECLIN_BOSWELLIA required terms now include the printed extract spellings (gum extract, standardized extract, Apres-Flex, Casperome, frankincense phytosome) and its primary outcome uses the locked vocabulary label Joint & Bone Health. Fermented black garlic, whole red-grape extract and DPP-IV enzyme products remain unjoined after review. No enrollment, effect-direction, multiplier, dose-threshold or clinical-approval changes.",
@@ -7800,27 +7801,27 @@
         "cobalamin",
         "methylcobalamin"
       ],
-      "category": "mitochondrial_energy",
-      "evidence_level": "ingredient-human",
+      "category": "vitamin_supplement",
+      "evidence_level": "reference",
       "published_studies": [
-        "RCT",
+        "reference",
         "systematic_review"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "nerve health ↑",
-        "energy ↑ (deficiency)",
-        "fatigue ↓ (deficiency)",
-        "CNS biomarkers ↑"
+        "CNS development, myelination and function (essentiality)",
+        "red blood cell formation and DNA synthesis (essentiality)",
+        "deficiency correction ↑",
+        "cognitive function — no effect in adults without overt deficiency",
+        "depressive symptoms — no effect in adults without overt deficiency"
       ],
       "health_goals_supported": [
-        "Increase Energy",
-        "Focus & Mental Clarity"
+        "Healthy Aging/Longevity"
       ],
-      "notes": "Vitamin B12 clearly benefits deficiency correction and neurologic or hematologic protection in deficient states. In people without overt deficiency, human trial evidence for cognition or fatigue improvement is much weaker.",
-      "notable_studies": "Randomized-trial synthesis PMID 33809274 found no consistent cognitive or depressive benefit from B12 supplementation in people without overt deficiency. NIH ODS also emphasizes B12's established role in deficiency correction and neurologic health rather than general nootropic benefit in replete adults.",
-      "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "notes": "Vitamin B12 is an essential nutrient: NIH ODS documents its requirement for central nervous system development, myelination and function, healthy red blood cell formation and DNA synthesis, with RDAs of 2.4 to 2.8 mcg for adults. Nutritional adequacy is a DRI-authority assessment owned by the dose and nutrition path (rda_optimal_uls.json, nutrition_authority_floor), not by this registry. The one interventional synthesis held here answers a narrower question - cognitive function, depressive symptoms and idiopathic fatigue in people WITHOUT overt B12 deficiency or advanced neurological disorders - and found no effect. That null is not evidence about vitamin B12 generally.",
+      "notable_studies": "PMID 33809274 (Nutrients 2021) pooled 16 RCTs and 6,276 participants in 'patients without advanced neurological disorders or overt vitamin B12 deficiency' and found no evidence for an effect of B12 alone or B-complex supplementation on any subdomain of cognitive function and no overall effect on measures of depression; only one study reported idiopathic fatigue, so no fatigue analysis was possible. The NIH ODS Vitamin B12 Health Professional fact sheet documents essentiality, deficiency and recommended intakes. Scope repair 2026-09-18: that null previously carried an ingredient-human effect direction across every B12-containing product; the entry is now a reference-tier anchor and describes only the question its source answered.",
+      "study_type": "reference",
+      "last_updated": "2026-09-18",
       "references_structured": [
         {
           "type": "pubmed",
@@ -7850,19 +7851,34 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "nih_ods",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin B12 - Health Professional Fact Sheet",
+          "citation": "NIH Office of Dietary Supplements",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+          "published_date": null,
+          "publication_types": [],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "reference",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "nih_ods"
         }
       ],
       "external_ids": {
         "unii": "P6YC3EG204"
       },
-      "effect_direction": "null",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 200,
+      "effect_direction": "mixed",
+      "primary_outcome": "Healthy Aging/Longevity",
+      "total_enrollment": 6276,
       "registry_completed_trials_count": 416,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Increase Energy; published_tags=RCT,systematic_review; registry_completed_trials_count=416; total_enrollment=200; endpoint_tags=glycemic_control; notes/citations include null-effect language.",
+      "effect_direction_rationale": "Reference-tier anchor (2026-09-18 scope repair). The cited randomized-trial synthesis is null for cognition and depression in adults without overt deficiency, while the NIH ODS reference documents essentiality and the benefit of deficiency correction - mixed as a record-level description, and deliberately non-scoring (study_type=reference, evidence_level=reference) so that a narrow null cannot act as vitamin B12's ingredient-level efficacy direction. Nutrient adequacy remains with the DRI authority path.",
       "endpoint_relevance_tags": [
-        "glycemic_control"
+        "healthy_aging"
       ]
     },
     {
@@ -18192,104 +18208,29 @@
       "aliases": [
         "boron",
         "boron citrate",
-        "boron glycinate",
-        "calcium fructoborate"
+        "boron glycinate"
       ],
-      "category": "joint_bone",
-      "evidence_level": "ingredient-human",
+      "category": "sports_performance",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
-        "human study"
+        "reference"
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "bone turnover markers support ↑",
-        "inflammatory markers ↓ (subset)",
-        "hormonal markers support ↑"
+        "plasma total and free testosterone — no effect",
+        "lean body mass — no effect",
+        "1-RM squat and bench press strength — no effect",
+        "plasma boron ↑ (exposure marker only)"
       ],
       "health_goals_supported": [
-        "Joint & Bone Health",
-        "Healthy Aging/Longevity"
+        "Muscle Growth & Recovery"
       ],
-      "notes": "Human evidence for boron is still small and biomarker-focused. Some trials of calcium fructoborate report short-term improvements in inflammatory markers and knee-discomfort scores, while older boron-supplementation studies found no clear anabolic or testosterone benefit in bodybuilders (PMID 25433580, PMID 24940052, PMID 8508192, PMID 7889885).",
-      "notable_studies": "Calcium fructoborate placebo-controlled trials reported reductions in CRP, IL-6, lipids, and selected discomfort scores over 14 to 30 days (PMID 25433580; PMID 24940052). By contrast, earlier boron-supplementation trials in male bodybuilders did not show clear strength or testosterone benefits despite higher plasma boron (PMID 8508192; PMID 7889885).",
-      "study_type": "observational",
-      "last_updated": "2026-03-07",
+      "notes": "The human evidence held on this entry for plain boron is one small randomized placebo-controlled trial: 19 male bodybuilders, 10 given 2.5 mg boron daily and 9 placebo for 7 weeks, with no effect on plasma total or free testosterone, lean body mass or strength. That trial was published twice - PMID 8508192 (Int J Sport Nutr 1993) and PMID 7889885 (Environ Health Perspect 1994) report the same 19 participants and the same measures - so this entry cites two publications of ONE trial, not two trials. Scope repair 2026-09-18: study_type was 'observational' although the source is a randomized controlled trial, and total_enrollment was 30 rather than the 19 the source states. The entry is now held at reference tier - it earns no evidence points - because one small off-axis null trial does not establish ingredient-level efficacy for the bone, joint and multivitamin uses these products carry boron for. Calcium fructoborate was removed from the aliases and excluded in applicability: it is a different compound with its own positive short-term trials, and merging the two materials let a plain-boron null speak for fructoborate products and vice versa. No source on this entry studied bone turnover, joint or inflammatory endpoints, so those key_endpoints were removed.",
+      "notable_studies": "PMID 8508192: 'The effect of boron supplementation on lean body mass, plasma testosterone levels, and strength in male bodybuilders' - 19 men, 2.5 mg/day for 7 weeks; plasma boron rose but 'analysis of variance indicated no significant effect of boron supplementation on any of the dependent variables'. PMID 7889885 is the same trial reported in Environmental Health Perspectives ('boron supplementation affects these variables not at all'). Calcium fructoborate trials - CRP, IL-6 and lipid markers over 30 days, and knee discomfort over 14 days - are a separate material and are deliberately not curated here; their identifiers are recorded in scripts/audits/evidence_expansion_2026_09/NULL_SCOPE_AUDIT.md rather than on this entry, and a calcium-fructoborate record would need its own review.",
+      "study_type": "reference",
+      "last_updated": "2026-09-18",
       "references_structured": [
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "25433580",
-          "doi": "10.1007/s12011-014-0155-9",
-          "title": "Effects of Calcium Fructoborate on Levels of C-Reactive Protein, Total Cholesterol, Low-Density Lipoprotein, Triglycerides, IL-1β, IL-6, and MCP-1: a Double-blind, Placebo-controlled Clinical Study.",
-          "citation": "Biological trace element research (2015-02-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/25433580/",
-          "published_date": "2015-02-01",
-          "publication_types": [
-            "Journal Article",
-            "Randomized Controlled Trial",
-            "Research Support, Non-U.S. Gov't"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "Borates",
-            "C-Reactive Protein",
-            "Chemokine CCL2",
-            "Cholesterol",
-            "Double-Blind Method",
-            "Female",
-            "Fructose",
-            "Humans",
-            "Interleukin-1beta",
-            "Interleukin-6",
-            "Lipoproteins, LDL",
-            "Male",
-            "Middle Aged",
-            "Time Factors",
-            "Triglycerides"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "rct",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "24940052",
-          "doi": "10.2147/CIA.S64590",
-          "title": "Short-term efficacy of calcium fructoborate on subjects with knee discomfort: a comparative, double-blind, placebo-controlled clinical study.",
-          "citation": "Clinical interventions in aging (2014-01-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/24940052/",
-          "published_date": "2014-01-01",
-          "publication_types": [
-            "Comparative Study",
-            "Journal Article",
-            "Randomized Controlled Trial"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "Anti-Inflammatory Agents",
-            "Arthralgia",
-            "Borates",
-            "Double-Blind Method",
-            "Female",
-            "Fructose",
-            "Humans",
-            "Knee Joint",
-            "Male",
-            "Middle Aged",
-            "Osteoarthritis, Knee",
-            "Pain Measurement",
-            "Surveys and Questionnaires"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "rct",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
@@ -18361,14 +18302,30 @@
         "unii": "N9E3X5056Q"
       },
       "effect_direction": "null",
-      "primary_outcome": "Joint & Bone Health",
-      "total_enrollment": 30,
+      "primary_outcome": "Muscle Growth & Recovery",
+      "total_enrollment": 19,
       "registry_completed_trials_count": 526,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=observational; evidence_level=ingredient-human; primary_outcome=Joint & Bone Health; published_tags=RCT,human study; registry_completed_trials_count=526; total_enrollment=30; notes/citations include null-effect language.",
+      "effect_direction_rationale": "Null retained and now sourced to a single material and indication: one randomized placebo-controlled trial of 2.5 mg/day plain boron in 19 male bodybuilders found no effect on testosterone, lean mass or strength. The stored study_type was 'observational', which was simply wrong - the source is an RCT - but correcting it to rct_single was measured on 2026-09-18 to make this entry eligible for the primary-evidence floor and to RAISE nine standalone boron products from Evidence 0.5 to 3.1 on the strength of one small null trial. The entry is therefore anchored at reference tier, the same treatment INGR_VITAMIN_A_BETA_CAROTENE carries: real randomized sources that do not establish ingredient-level efficacy for anything these products are sold for. The source design is stated in notes and key_endpoints rather than being misdescribed in study_type. total_enrollment corrected 30 -> 19. Calcium fructoborate evidence was separated out and no longer contributes to this direction.",
       "endpoint_relevance_tags": [
-        "joint_health"
-      ]
+        "muscle_recovery"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "fructoborate"
+        ],
+        "supported_outcomes": [
+          "testosterone_lean_mass_strength"
+        ],
+        "studied_population": "Nineteen male bodybuilders aged 20-27 supplemented with 2.5 mg boron daily for 7 weeks; no bone, joint or inflammatory population was studied.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "8508192",
+          "7889885"
+        ],
+        "reason": "Calcium fructoborate is a distinct compound with its own randomized placebo-controlled trials reporting reductions in inflammatory markers and knee discomfort (catalogued in scripts/audits/evidence_expansion_2026_09/NULL_SCOPE_AUDIT.md, deliberately not cited here so they stay attached to the material that was actually studied); those results are not evidence about plain boron and are not curated on this entry, so rows resolving to calcium fructoborate are excluded rather than inheriting this null. This exclusion does not establish an effective boron dose, a bone or joint effect, or ineffectiveness of calcium fructoborate."
+      }
     },
     {
       "id": "INGR_ASTRAGALUS",
@@ -18840,25 +18797,27 @@
         "diindolylmethane",
         "3,3'-diindolylmethane"
       ],
-      "category": "metabolic_blood_sugar",
+      "category": "hormonal_endocrine",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
         "early human"
       ],
-      "score_contribution": "tier_2",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "estrogen metabolite profile modulation ↑",
-        "inflammation markers support ↑"
+        "cervical cytology / CIN2+ at 6 months — no clear benefit (PMID 22075942)",
+        "HPV clearance — no clear benefit (PMID 22075942)",
+        "urinary 2/16α-hydroxyestrone ratio ↑ (biomarker, PMID 28560655)",
+        "serum SHBG ↑ (biomarker, PMID 28560655)",
+        "breast density — no change (PMID 28560655)"
       ],
       "health_goals_supported": [
-        "Hormone Balance",
-        "Healthy Aging/Longevity"
+        "Hormone Balance"
       ],
-      "notes": "Human evidence for DIM remains early and indication-specific. Small randomized trials show that DIM can alter estrogen-metabolism biomarkers, but robust clinical outcome evidence is limited and some settings raise interaction concerns, such as reduced tamoxifen-metabolite levels during adjunctive use (PMID 22075942, PMID 28560655).",
-      "notable_studies": "A randomized placebo-controlled trial in women with low-grade cervical cytological abnormalities did not show clear lesion-resolution benefit despite biologic rationale (PMID 22075942). In tamoxifen-treated breast-cancer patients, BR-DIM shifted estrogen-metabolism biomarkers and raised SHBG but also lowered tamoxifen metabolites, making the clinical interpretation mixed (PMID 28560655).",
+      "notes": "Human evidence for diindolylmethane is early, material-specific and confined to clinical populations. Both randomized trials used BioResponse DIM (BR-DIM): 150 mg/day for 6 months in women with newly diagnosed low-grade cervical cytological abnormalities (PMID 22075942, 551 women analysed), where DIM was unlikely to affect cytology or HPV infection and the CIN2+ difference was not significant; and 150 mg twice daily for 12 months in women taking tamoxifen (PMID 28560655, n=130), whose primary endpoint was a urinary estrogen-metabolite ratio - a biomarker, not a patient-important outcome. Neither trial asks whether DIM does anything for the general hormone-balance use these products are sold for. Scope repair 2026-09-18: applicability is now restricted to the branded material the trials used, and indole-3-carbinol rows are excluded.",
+      "notable_studies": "PMID 22075942 (BJC 2012): pragmatic double-blind RCT, 150 mg/day DIM from BioResponse DIM vs placebo for 6 months; of 551 randomised women analysed, 9% on DIM and 12% on placebo had CIN2+ (RR 0.7, 95% CI 0.4-1.2) and the authors conclude DIM 'is unlikely to have an effect on cytology or HPV infection'. PMID 28560655 (BCRT 2017): 130 women on tamoxifen randomised to BR-DIM 150 mg twice daily or placebo for 12 months; the 2/16alpha-OHE1 ratio and SHBG rose and breast density did not change, while plasma tamoxifen metabolites including endoxifen FELL versus placebo (P<0.001). That last finding is a drug-interaction signal and belongs to the interaction owner (ingredient_interaction_rules / curated_interactions), not to an efficacy direction here; it is logged as a handoff, not as a rule, because interaction severity is that owner's review.",
       "study_type": "rct_single",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-09-18",
       "references_structured": [
         {
           "type": "pubmed",
@@ -18936,13 +18895,35 @@
       },
       "effect_direction": "null",
       "primary_outcome": "Hormone Balance",
-      "total_enrollment": 62,
+      "total_enrollment": 551,
       "registry_completed_trials_count": 15,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Hormone Balance; published_tags=RCT,early human; registry_completed_trials_count=15; total_enrollment=62; endpoint_tags=digestive_health; notes/citations include null-effect language.",
+      "effect_direction_rationale": "Null retained. The only trial with a patient-important endpoint (cervical cytology / CIN2+, PMID 22075942) was null on its primary endpoint; the second trial's primary endpoint is a urinary estrogen-metabolite biomarker, and a positive secondary or biomarker result may never convert a null primary into a positive direction. study_type=rct_single because only one trial addresses a clinical outcome; total_enrollment=551 corrected from 62 on 2026-09-18 against the source abstract. evidence_level stays ingredient-human rather than branded-rct: the branded material is expressed in the applicability scope, and promoting the tier would raise this null record's primary-evidence floor without any new evidence.",
       "endpoint_relevance_tags": [
-        "digestive_health"
-      ]
+        "hormone_balance"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "br-dim",
+          "bioresponse"
+        ],
+        "excluded_form_terms": [
+          "indole 3 carbinol",
+          "i3c"
+        ],
+        "supported_outcomes": [
+          "estrogen_metabolite_ratio"
+        ],
+        "studied_population": "Women in defined clinical populations - newly diagnosed low-grade cervical cytological abnormalities, and breast-cancer patients taking tamoxifen - not healthy adults using a hormone-balance supplement.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "22075942",
+          "28560655"
+        ],
+        "reason": "Both reviewed trials administered BioResponse DIM (BR-DIM), an absorption-enhanced branded complex, and equivalence to unspecified crystalline diindolylmethane at the same milligram amount is not established by these sources. Indole-3-carbinol is excluded because it is a different compound (DIM's precursor) that neither trial administered; rows printing it reach this entry only through an upstream identity mapping. This preparation scope does not establish an effective dose, a clinical benefit, or ineffectiveness of an excluded product."
+      }
     },
     {
       "id": "PRECLIN_SHILAJIT_GENERIC",
@@ -20753,8 +20734,7 @@
         "serenoa repens",
         "sabal serrulata",
         "saw palmetto extract",
-        "saw palmetto berry",
-        "permixon"
+        "saw palmetto berry"
       ],
       "category": "urinary_genitourinary",
       "evidence_level": "ingredient-human",
@@ -20762,21 +20742,21 @@
       "published_studies": [
         "RCT"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_2",
       "key_endpoints": [
-        "AUA symptom score",
+        "AUA symptom score — no significant improvement vs placebo (CAMUS)",
         "IPSS score",
-        "peak urinary flow rate",
+        "peak urinary flow rate (Qmax)",
         "post-void residual volume",
         "nocturia frequency",
         "BPH Impact Index"
       ],
       "health_goals_supported": [
-        "Hormone Balance"
+        "Urinary Tract Health"
       ],
-      "notes": "Liposterolic extract of Serenoa repens berries (ChEMBL CHEMBL2108769, max_phase=3). The CAMUS trial (NCT00603304, n=369, NIDDK-sponsored Phase 3) found no significant improvement vs placebo at doses up to 960mg/day over 72 weeks. However, the PERLES trial (NCT02121613, n=833, Phase 4) tested Permixon 160mg BID vs placebo with tamsulosin reference. Evidence remains mixed — earlier meta-analyses were positive but landmark RCTs showed null results. Included for completeness at tier_2 due to volume of human RCT data.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT00603304 (CAMUS, n=369 Phase 3): multisite NIDDK/NCCIH-sponsored double-blind RCT testing saw palmetto extract at escalating doses (320-960mg) for BPH over 72 weeks — no significant AUA symptom score improvement vs placebo (published JAMA 2011). NCT02121613 (PERLES, n=833 Phase 4): Permixon 160mg BID vs placebo with tamsulosin reference for LUTS/BPH across 58 European sites. NCT00037154 (n=224 Phase 3): NIDDK-sponsored RCT of saw palmetto 160mg BID in moderate-to-severe BPH.",
+      "notes": "Liposterolic extract of Serenoa repens berries (ChEMBL CHEMBL2108769, max_phase=3). This entry holds the GENERIC saw palmetto extract evidence only, and it is null: the CAMUS trial (NCT00603304, n=369, NIDDK/NCCIH Phase 3) found no significant AUA symptom score improvement vs placebo at escalating doses up to 960 mg/day over 72 weeks, and NCT00037154 (n=224, Phase 3) tested 160 mg twice daily in moderate-to-severe BPH. Scope repair 2026-09-18: evidence specific to the hexanic extract Permixon - the PERLES trial (NCT02121613) and the Permixon-only meta-analysis PMID 29694707, whose methods state that 'Articles studying S. repens extracts other than Permixon were excluded' and which reports favourable nocturia and Qmax results - was removed from this entry because it is material-specific and does not transfer to the unspecified or liposterolic extracts covered here. PMID 12006122 was removed for the same reason plus indication: it is an androgenetic-alopecia (hair loss) trial of a botanical 5-alpha-reductase blend of LSESr and beta-sitosterol with 10 actively treated subjects, not saw palmetto monotherapy on this entry's urinary endpoints.",
+      "last_updated": "2026-09-18",
+      "notable_studies": "NCT00603304 (CAMUS, n=369, Phase 3, NIDDK/NCCIH): multisite double-blind RCT of saw palmetto extract at escalating doses (320-960 mg/day) for BPH over 72 weeks - no significant AUA symptom score improvement vs placebo (published JAMA 2011). NCT00037154 (n=224, Phase 3, NIDDK/NCCIH): saw palmetto 160 mg twice daily in moderate-to-severe BPH. Hexanic-extract (Permixon) evidence is favourable but material-specific and is deliberately not curated on this generic entry; a Permixon-scoped record would need its own review.",
       "references_structured": [
         {
           "type": "clinical_trial",
@@ -20786,15 +20766,6 @@
           "enrollment": 369,
           "phase": "Phase 3",
           "sponsor": "University of Alabama at Birmingham / NIDDK / NCCIH"
-        },
-        {
-          "type": "clinical_trial",
-          "nct_id": "NCT02121613",
-          "title": "PERLES - Permixon 160mg vs Placebo in LUTS Due to BPH",
-          "evidence_grade": "rct",
-          "enrollment": 833,
-          "phase": "Phase 4",
-          "sponsor": "Pierre Fabre Medicament"
         },
         {
           "type": "clinical_trial",
@@ -20810,29 +20781,17 @@
           "authority": "EMBL-EBI ChEMBL",
           "chembl_id": "CHEMBL2108769",
           "max_phase": 3
-        },
-        {
-          "pmid": "12006122",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/12006122/",
-          "source": "PubMed",
-          "verified": true
-        },
-        {
-          "pmid": "29694707",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/29694707/",
-          "source": "PubMed",
-          "verified": true
         }
       ],
       "effect_direction": "null",
-      "primary_outcome": "Hormone Balance",
-      "total_enrollment": 833,
+      "primary_outcome": "Urinary Tract Health",
+      "total_enrollment": 369,
       "published_studies_count": 21,
       "registry_completed_trials_count": 19,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Hormone Balance; published_tags=RCT; published_studies_count=21; registry_completed_trials_count=19; total_enrollment=833; notes/citations include null-effect language.",
+      "effect_direction_rationale": "Null retained and now sourced to matching material and indication: both remaining trials are placebo-controlled RCTs of non-branded saw palmetto extract for BPH/LUTS and neither showed a significant symptom benefit. study_type=rct_multiple; evidence_level=ingredient-human; total_enrollment=369 (CAMUS, the largest remaining trial; it was 833 from the Permixon PERLES trial before the 2026-09-18 scope repair). Permixon-specific and androgenetic-alopecia citations were removed so the direction describes only what this entry actually covers.",
       "endpoint_relevance_tags": [
-        "hormone_balance"
+        "luts_bph"
       ]
     },
     {

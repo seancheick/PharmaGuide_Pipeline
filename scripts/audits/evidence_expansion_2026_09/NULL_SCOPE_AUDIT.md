@@ -11,8 +11,8 @@ scopes in place would harden a misattribution rather than remove it.
 | record | identity reach | what its sources actually asked | scope verdict |
 |---|---:|---|---|
 | `INGR_VITAMIN_B12` | 2,176 products | cognition/depression/fatigue in people **without** deficiency | over-broad |
-| `INGR_SAW_PALMETTO` | 128 products | BPH/LUTS — but sources mix extracts and one is about hair loss | over-broad + off-axis citation |
-| `PRECLIN_DIM` | 4 products | biomarker endpoints in cervical-abnormality and tamoxifen patients | over-broad |
+| `INGR_SAW_PALMETTO` | 138 products | BPH/LUTS — but sources mix extracts and one is about hair loss | over-broad + off-axis citation |
+| `PRECLIN_DIM` | 46 products | biomarker endpoints in cervical-abnormality and tamoxifen patients | over-broad |
 | `INGR_BORON` | 679 products | two materials at once: calcium fructoborate vs plain boron | material conflation |
 
 ---
@@ -58,7 +58,7 @@ the status quo.
 
 ## 2. `INGR_SAW_PALMETTO` — over-broad, plus a citation that is not on this axis
 
-**Current state:** `rct_multiple` / `ingredient-human` / **null**, enrollment 833, 128 products.
+**Current state:** `rct_multiple` / `ingredient-human` / **null**, enrollment 833, **138 products** (137 outside the probiotic lane). *Correction 2026-09-18: an earlier draft of this file said 128; that number was typed by hand, not measured. The generated table in `GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md` had 137 all along.*
 
 **Sources, verified live:**
 
@@ -82,7 +82,7 @@ the applicability owner can now express material scoping (2026-09-17 repair).
 
 ## 3. `PRECLIN_DIM` — small, but generalises patient-population biomarker results
 
-**Current state:** `rct_single` / `ingredient-human` / **null**, enrollment 62, 4 products.
+**Current state:** `rct_single` / `ingredient-human` / **null**, enrollment 62, **46 products**. *Correction 2026-09-18: an earlier draft of this file said 4 products. That was wrong and hand-typed; the measured count from the corpus and from the generated review table is 46.*
 (The `PRECLIN_` prefix with `ingredient-human` level is the known legacy naming inconsistency.)
 
 **Sources, verified live:**
@@ -94,7 +94,7 @@ the applicability owner can now express material scoping (2026-09-17 repair).
   also lowered tamoxifen metabolites.
 
 **The defect.** Both are specific patient populations with biomarker or lesion endpoints; neither
-asks whether DIM does anything for the "Hormone Balance" use these 4 products are sold for. The
+asks whether DIM does anything for the "Hormone Balance" use these 46 products are sold for. The
 tamoxifen finding is an **interaction** signal and belongs to the interaction owner, not to an
 efficacy direction.
 

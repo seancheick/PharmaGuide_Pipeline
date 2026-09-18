@@ -1,0 +1,41 @@
+{
+ "_metadata": {
+  "created": "2026-09-18",
+  "purpose": "Findings surfaced by the four legacy scope repairs that belong to another canonical owner. Nothing here was written into the destination owner's files; each item is a request for that owner's own review.",
+  "note": "One brain: the evidence registry records what its sources say. Safety, interaction and identity decisions stay with the owners listed."
+ },
+ "handoffs": [
+  {
+   "id": "HANDOFF_DIM_TAMOXIFEN",
+   "kind": "drug_interaction",
+   "destination_owner": "interaction owner",
+   "artefact": "scripts/data/ingredient_interaction_rules.json + scripts/data/curated_interactions/",
+   "ingredient": "diindolylmethane (BioResponse DIM / BR-DIM)",
+   "drug": "tamoxifen",
+   "source_pmids": ["28560655"],
+   "verified_live": "2026-09-18 via scripts/api_audit/pubmed_client.py efetch",
+   "finding": "Randomized, double-blind, placebo-controlled trial: 130 women prescribed tamoxifen took BR-DIM 150 mg twice daily or placebo for 12 months. Plasma tamoxifen metabolites - endoxifen, 4-OH tamoxifen and N-desmethyl-tamoxifen - were REDUCED in the BR-DIM arm versus placebo (P < 0.001). The authors state that further research is warranted to determine whether that decrease attenuates the clinical benefit of tamoxifen.",
+   "why_not_written_here": "This is a pharmacokinetic/safety signal, not an efficacy direction. It carries no efficacy credit on PRECLIN_DIM and must not. Severity, action wording, profile gate and alert copy are the interaction owner's review, not this project's.",
+   "existing_rule": "none - no diindolylmethane rule exists in ingredient_interaction_rules.json or curated_interactions/ as of 2026-09-18",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_I3C_IDENTITY",
+   "kind": "identity_mapping",
+   "destination_owner": "identity / normalization owner",
+   "artefact": "scripts/data/ingredient_quality_map.json canonical identities (enricher canonical_id assignment)",
+   "finding": "22 label rows printing Indole-3-Carbinol (or I3C) resolve to canonical_id 'diindolylmethane'. I3C is DIM's dietary precursor, not DIM; neither DIM trial administered I3C. Measured over the enriched corpus on 2026-09-18: 19 rows named 'Indole-3-Carbinol', 3 'Indole-3 Carbinol'/'l3C'.",
+   "mitigation_applied_here": "PRECLIN_DIM.applicability now carries excluded_form_terms ['indole 3 carbinol', 'i3c'], so the DIM record cannot be applied through an I3C row. That protects this one record; the canonical conflation itself is unchanged and will reach anything else keyed on that identity.",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_NUTRITION_FLOOR_MASS_PROXY",
+   "kind": "scoring_design",
+   "destination_owner": "v4 scoring owner",
+   "artefact": "scripts/scoring_v4/modules/generic_evidence.py nutrition_authority_floor (keyed on the MASS-DOMINANT active)",
+   "finding": "The nutrition-authority floor fires only when the DRI-essential nutrient is the mass-dominant active. A micronutrient-dominant product can therefore miss it: DSLD 243259 (Garden of Life Vitamin B-12 Organic Spray) carries 500 mcg of vitamin B12 (0.5 mg) beside a 2 mg 'Organic Food Blend', so the blend is mass-dominant and the B12 adequacy floor never applies. Before the 2026-09-18 B12 repair that product scored Evidence 1.5 on the narrow null record; after it, 0.0.",
+   "why_not_fixed_here": "Changing a floor is a scoring-rule change, which this project does not make. Reported with measurements so the owner can decide whether mass dominance is the right proxy for micronutrients.",
+   "status": "open"
+  }
+ ]
+}
