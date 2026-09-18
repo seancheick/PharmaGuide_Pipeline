@@ -160,13 +160,28 @@ def _latest_claim_return_columns() -> set[str]:
     # The function has been redefined more than once; only the last definition
     # is live, and rebuilding it from an older ancestor is how a column gets
     # silently dropped.
+    # The gap between the function name and its RETURNS TABLE is its parameter
+    # list and nothing else. Letting `.*?` run free lets a match start at one
+    # statement and finish at an unrelated function's RETURNS TABLE further
+    # down the concatenated migrations: a GRANT naming this function, followed
+    # by any later RETURNS TABLE, produced an 81k-character match spanning ten
+    # CREATE FUNCTION statements and read the admin notification outbox's
+    # columns as the claim's. Refuse to cross a statement or function boundary.
     definitions = list(re.finditer(
         r"FUNCTION public\.claim_product_submission_extraction_jobs\("
-        r".*?RETURNS TABLE \((?P<columns>.*?)\)\s*LANGUAGE",
+        r"(?:(?!\bFUNCTION\b|;).)*?"
+        r"RETURNS TABLE \((?P<columns>.*?)\)\s*LANGUAGE",
         sql, re.S,
     ))
     assert definitions, "the claim function is not defined in any migration"
-    body = definitions[-1].group("columns")
+    live = definitions[-1]
+    # Fail loudly rather than silently reading a neighbour's columns if the
+    # boundary guard above is ever loosened again.
+    assert "CREATE OR REPLACE FUNCTION" not in live.group(0), (
+        "the claim match spans another function definition; it is reading the "
+        "wrong RETURNS TABLE"
+    )
+    body = live.group("columns")
     return {
         line.strip().split()[0]
         for line in body.split(",")

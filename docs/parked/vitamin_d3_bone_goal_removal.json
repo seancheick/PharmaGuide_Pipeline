@@ -1,236 +1,251 @@
 {
-  "_metadata": {
-    "parked": "2026-09-18",
-    "why": "This edit removes the bone goal and bone endpoint from INGR_VITAMIN_D3 and narrows its studied_population. It is a product-facing change affecting roughly 819 products and the owner decision is that it does NOT ship until nutrient-function ownership is settled - vitamin D's role in calcium absorption is established physiology but not a supplementation outcome, and that question has no owner yet.",
-    "how_it_got_here": "It was uncommitted in the shared working tree when commit 48426845 (the amla hold) ran `git add` on scripts/data/backed_clinical_studies.json, so it was swept in. History is not rewritten; the hunks are reverted by a following commit and the patch is preserved here.",
-    "apply_to": "INGR_VITAMIN_D3 in scripts/data/backed_clinical_studies.json",
-    "swept_in_by": "48426845",
-    "reverted_by": "the commit that adds this file"
+ "_metadata": {
+  "status": "RE-APPLIED 2026-09-18. This file is audit history, not a pending patch.",
+  "parked": "2026-09-18",
+  "unparked": "2026-09-18",
+  "apply_to": "INGR_VITAMIN_D3 in scripts/data/backed_clinical_studies.json",
+  "why_it_was_parked": "The stated reason was that removing the bone claim would strip the shipped bone goal from a large number of products, and that nutrient-function ownership had no owner yet.",
+  "why_that_was_wrong": "Both halves were wrong. (1) There is no owner gap: product-facing goal_matches is owned by the bone_health cluster in scripts/data/synergy_cluster.json, which carries vitamin D's nutrient-function relationship (calcium absorption, sourced to NIH ODS). The clinical registry owns intervention evidence - what a trial showed. Two owners, two different claims, and build_final_db.compute_goal_matches never reads the clinical registry. (2) The product count in that rationale had NO measurement behind it. It appeared exactly once in the repo - in this file's own rationale - with no artifact, no script and no output backing it. It was not a number that got misread; it was never measured at all. The digits are deliberately not repeated anywhere in this file, because a specific-looking count outlives the caveat attached to it and becomes lore. That is the lesson worth keeping: a count asserted in prose, with no command next to it, became the reason a correct clinical fix was reverted. The measured numbers below are the replacement, and each one names the script that produced it.",
+  "what_was_actually_measured": {
+   "artifact": "scripts/audits/evidence_expansion_2026_09/vitamin_d_bone_goal_verification.json",
+   "script": "scripts/audits/evidence_expansion_2026_09/vitamin_d_bone_goal_verification.py",
+   "vitamin_d_products_examined": 2541,
+   "products_carrying_the_d3_record": 2400,
+   "shipped_goal_matches_changed": 0,
+   "evidence_total_or_tier_changed": 0,
+   "evidence_card_bone_claims_removed": 2400,
+   "verdict": "CLEAN - no shipped goal or score moved; the bone claim was removed from the evidence card only"
   },
-  "proposed_entry": {
-    "id": "INGR_VITAMIN_D3",
-    "standard_name": "Vitamin D3",
-    "aliases": [
-      "cholecalciferol",
-      "vitamin d"
-    ],
-    "category": "immune",
-    "evidence_level": "ingredient-human",
-    "published_studies": [
-      "RCT",
-      "meta-analysis",
-      "systematic_review"
-    ],
-    "score_contribution": "tier_1",
-    "key_endpoints": [
-      "immunity ↑",
-      "upper respiratory infection risk ↓"
-    ],
-    "health_goals_supported": [
-      "Immune Support",
-      "Healthy Aging/Longevity"
-    ],
-    "applicability": {
-      "scope": "ingredient",
-      "supported_outcomes": [
-        "immune_support",
-        "respiratory_infection_risk"
-      ],
-      "studied_population": "Adults supplemented with vitamin D, across the trial populations pooled by PMID 28202713; the acute respiratory infection benefit was clearest in participants who were vitamin-D deficient at baseline.",
-      "reviewed_at": "2026-09-18",
-      "source_pmids": [
-        "28202713",
-        "30293909"
-      ]
-    },
-    "notes": "Scope is supplementation outcomes only. PMID 28202713 supports reduced acute respiratory infection risk, clearest in people deficient at baseline. Mood and bone claims were removed because this record does not support them: no mood trial is cited at all, and its musculoskeletal reference (PMID 30293909) found no fracture or fall prevention and no clinically meaningful BMD gain from supplementation. Vitamin D's physiological role in calcium absorption is well established but is not a supplementation outcome and needs its own supporting trial before a bone goal returns here; INGR_CALCIUM and other records still carry Joint & Bone Health. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
-    "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
-    "study_type": "systematic_review_meta",
-    "last_updated": "2026-09-18",
-    "references_structured": [
-      {
-        "type": "pubmed",
-        "authority": "NCBI PubMed",
-        "pmid": "30293909",
-        "doi": "10.1016/S2213-8587(18)30265-1",
-        "title": "Effects of vitamin D supplementation on musculoskeletal health: a systematic review, meta-analysis, and trial sequential analysis.",
-        "citation": "The lancet. Diabetes & endocrinology (2018-11-01)",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/30293909/",
-        "published_date": "2018-11-01",
-        "publication_types": [
-          "Journal Article",
-          "Meta-Analysis",
-          "Research Support, Non-U.S. Gov't",
-          "Systematic Review"
-        ],
-        "mesh_terms": [
-          "Accidental Falls",
-          "Bone Density",
-          "Dietary Supplements",
-          "Fractures, Bone",
-          "Humans",
-          "Treatment Outcome",
-          "Vitamin D"
-        ],
-        "supplementary_concepts": [],
-        "evidence_grade": "systematic_review",
-        "retracted": false,
-        "supports_claims": [],
-        "verification_source": "pubmed_eutils"
-      },
-      {
-        "type": "pubmed",
-        "authority": "NCBI PubMed",
-        "pmid": "28202713",
-        "doi": "10.1136/bmj.i6583",
-        "title": "Vitamin D supplementation to prevent acute respiratory tract infections: systematic review and meta-analysis of individual participant data.",
-        "citation": "BMJ (Clinical research ed.) (2017-02-15)",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/28202713/",
-        "published_date": "2017-02-15",
-        "publication_types": [
-          "Journal Article",
-          "Meta-Analysis",
-          "Systematic Review"
-        ],
-        "mesh_terms": [
-          "Dietary Supplements",
-          "Humans",
-          "Randomized Controlled Trials as Topic",
-          "Respiratory Tract Infections",
-          "Vitamin D"
-        ],
-        "supplementary_concepts": [],
-        "evidence_grade": "systematic_review",
-        "retracted": false,
-        "supports_claims": [],
-        "verification_source": "pubmed_eutils"
-      }
-    ],
-    "external_ids": {
-      "unii": "9VU1KI44GP"
-    },
-    "effect_direction": "positive_strong",
-    "primary_outcome": "Immune Support",
-    "total_enrollment": 576,
-    "registry_completed_trials_count": 2067,
-    "effect_direction_confidence": "high",
-    "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=2067; total_enrollment=576; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
-    "endpoint_relevance_tags": [
-      "immune_support"
-    ]
+  "pinned_by": "scripts/tests/test_vitamin_d_bone_goal_ownership.py - one structural tripwire on compute_goal_matches plus two behavioural tests that mutate the bone fields (in the embedded evidence card, and in the record the canonical owner hands out) and assert goal_matches is byte-identical.",
+  "how_it_got_here": "It was uncommitted in the shared working tree when commit 48426845 (the amla hold) ran `git add` on scripts/data/backed_clinical_studies.json, so it was swept in. History was not rewritten: af7b440b reverted only these hunks and parked the patch here; the re-application is its own commit.",
+  "swept_in_by": "48426845",
+  "reverted_by": "af7b440b",
+  "clinical_basis": "PMID 30293909 (Bolland et al., Lancet Diabetes Endocrinol 2018) pooled 81 RCTs and found no reduction in fractures or falls and no clinically meaningful BMD gain from vitamin D supplementation. A bone claim on a record citing that paper is a claim its own citation refutes."
+ },
+ "proposed_entry": {
+  "id": "INGR_VITAMIN_D3",
+  "standard_name": "Vitamin D3",
+  "aliases": [
+   "cholecalciferol",
+   "vitamin d"
+  ],
+  "category": "immune",
+  "evidence_level": "ingredient-human",
+  "published_studies": [
+   "RCT",
+   "meta-analysis",
+   "systematic_review"
+  ],
+  "score_contribution": "tier_1",
+  "key_endpoints": [
+   "immunity \u2191",
+   "upper respiratory infection risk \u2193"
+  ],
+  "health_goals_supported": [
+   "Immune Support",
+   "Healthy Aging/Longevity"
+  ],
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "immune_support",
+    "respiratory_infection_risk"
+   ],
+   "studied_population": "Adults supplemented with vitamin D, across the trial populations pooled by PMID 28202713; the acute respiratory infection benefit was clearest in participants who were vitamin-D deficient at baseline.",
+   "reviewed_at": "2026-09-18",
+   "source_pmids": [
+    "28202713",
+    "30293909"
+   ]
   },
-  "reverted_to": {
-    "id": "INGR_VITAMIN_D3",
-    "standard_name": "Vitamin D3",
-    "aliases": [
-      "cholecalciferol",
-      "vitamin d"
+  "notes": "Scope is supplementation outcomes only. PMID 28202713 supports reduced acute respiratory infection risk, clearest in people deficient at baseline. Mood and bone claims were removed because this record does not support them: no mood trial is cited at all, and its musculoskeletal reference (PMID 30293909) found no fracture or fall prevention and no clinically meaningful BMD gain from supplementation. Vitamin D's physiological role in calcium absorption is well established but is not a supplementation outcome and needs its own supporting trial before a bone goal returns here; INGR_CALCIUM and other records still carry Joint & Bone Health. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
+  "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
+  "study_type": "systematic_review_meta",
+  "last_updated": "2026-09-18",
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "30293909",
+    "doi": "10.1016/S2213-8587(18)30265-1",
+    "title": "Effects of vitamin D supplementation on musculoskeletal health: a systematic review, meta-analysis, and trial sequential analysis.",
+    "citation": "The lancet. Diabetes & endocrinology (2018-11-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/30293909/",
+    "published_date": "2018-11-01",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Research Support, Non-U.S. Gov't",
+     "Systematic Review"
     ],
-    "category": "immune",
-    "evidence_level": "ingredient-human",
-    "published_studies": [
-      "RCT",
-      "meta-analysis",
-      "systematic_review"
+    "mesh_terms": [
+     "Accidental Falls",
+     "Bone Density",
+     "Dietary Supplements",
+     "Fractures, Bone",
+     "Humans",
+     "Treatment Outcome",
+     "Vitamin D"
     ],
-    "score_contribution": "tier_1",
-    "key_endpoints": [
-      "bone health ↑",
-      "immunity ↑",
-      "upper respiratory infection risk ↓"
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "28202713",
+    "doi": "10.1136/bmj.i6583",
+    "title": "Vitamin D supplementation to prevent acute respiratory tract infections: systematic review and meta-analysis of individual participant data.",
+    "citation": "BMJ (Clinical research ed.) (2017-02-15)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/28202713/",
+    "published_date": "2017-02-15",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Systematic Review"
     ],
-    "health_goals_supported": [
-      "Immune Support",
-      "Healthy Aging/Longevity",
-      "Joint & Bone Health"
+    "mesh_terms": [
+     "Dietary Supplements",
+     "Humans",
+     "Randomized Controlled Trials as Topic",
+     "Respiratory Tract Infections",
+     "Vitamin D"
     ],
-    "applicability": {
-      "scope": "ingredient",
-      "supported_outcomes": [
-        "immune_support",
-        "respiratory_infection_risk"
-      ],
-      "studied_population": "Adults. Both reviewed references are population-constrained: PMID 28202713 (BMJ 2017 IPD meta-analysis) found the acute respiratory infection benefit clearest in deficient individuals, so baseline vitamin-D status bounds the claim. Depressive-symptom and mood outcomes are NOT creditable here: this record cites no mood trial, and a favourable pooled effect would still not transfer without baseline status, co-nutrient and psychiatric-treatment context. OPEN: \"Joint & Bone Health\" remains in health_goals_supported but this record's own musculoskeletal reference (PMID 30293909, Lancet Diabetes Endocrinol 2018) reports no fracture/fall prevention and no meaningful BMD gain, so bone is deliberately absent from supported_outcomes pending a separate evidence review.",
-      "reviewed_at": "2026-09-18",
-      "source_pmids": [
-        "28202713",
-        "30293909"
-      ]
-    },
-    "notes": "Reviewed scope is immune function and acute respiratory infection risk, clearest in people who are vitamin-D deficient (PMID 28202713). Mood and depressive-symptom claims are not carried: no mood trial is cited on this record. The cited musculoskeletal meta-analysis (PMID 30293909) found no fracture/fall prevention and no meaningful BMD gain, so the bone claim is under review. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
-    "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
-    "study_type": "systematic_review_meta",
-    "last_updated": "2026-09-18",
-    "references_structured": [
-      {
-        "type": "pubmed",
-        "authority": "NCBI PubMed",
-        "pmid": "30293909",
-        "doi": "10.1016/S2213-8587(18)30265-1",
-        "title": "Effects of vitamin D supplementation on musculoskeletal health: a systematic review, meta-analysis, and trial sequential analysis.",
-        "citation": "The lancet. Diabetes & endocrinology (2018-11-01)",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/30293909/",
-        "published_date": "2018-11-01",
-        "publication_types": [
-          "Journal Article",
-          "Meta-Analysis",
-          "Research Support, Non-U.S. Gov't",
-          "Systematic Review"
-        ],
-        "mesh_terms": [
-          "Accidental Falls",
-          "Bone Density",
-          "Dietary Supplements",
-          "Fractures, Bone",
-          "Humans",
-          "Treatment Outcome",
-          "Vitamin D"
-        ],
-        "supplementary_concepts": [],
-        "evidence_grade": "systematic_review",
-        "retracted": false,
-        "supports_claims": [],
-        "verification_source": "pubmed_eutils"
-      },
-      {
-        "type": "pubmed",
-        "authority": "NCBI PubMed",
-        "pmid": "28202713",
-        "doi": "10.1136/bmj.i6583",
-        "title": "Vitamin D supplementation to prevent acute respiratory tract infections: systematic review and meta-analysis of individual participant data.",
-        "citation": "BMJ (Clinical research ed.) (2017-02-15)",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/28202713/",
-        "published_date": "2017-02-15",
-        "publication_types": [
-          "Journal Article",
-          "Meta-Analysis",
-          "Systematic Review"
-        ],
-        "mesh_terms": [
-          "Dietary Supplements",
-          "Humans",
-          "Randomized Controlled Trials as Topic",
-          "Respiratory Tract Infections",
-          "Vitamin D"
-        ],
-        "supplementary_concepts": [],
-        "evidence_grade": "systematic_review",
-        "retracted": false,
-        "supports_claims": [],
-        "verification_source": "pubmed_eutils"
-      }
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   }
+  ],
+  "external_ids": {
+   "unii": "9VU1KI44GP"
+  },
+  "effect_direction": "positive_strong",
+  "primary_outcome": "Immune Support",
+  "total_enrollment": 576,
+  "registry_completed_trials_count": 2067,
+  "effect_direction_confidence": "high",
+  "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=2067; total_enrollment=576; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
+  "endpoint_relevance_tags": [
+   "immune_support"
+  ]
+ },
+ "reverted_to": {
+  "id": "INGR_VITAMIN_D3",
+  "standard_name": "Vitamin D3",
+  "aliases": [
+   "cholecalciferol",
+   "vitamin d"
+  ],
+  "category": "immune",
+  "evidence_level": "ingredient-human",
+  "published_studies": [
+   "RCT",
+   "meta-analysis",
+   "systematic_review"
+  ],
+  "score_contribution": "tier_1",
+  "key_endpoints": [
+   "bone health \u2191",
+   "immunity \u2191",
+   "upper respiratory infection risk \u2193"
+  ],
+  "health_goals_supported": [
+   "Immune Support",
+   "Healthy Aging/Longevity",
+   "Joint & Bone Health"
+  ],
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "immune_support",
+    "respiratory_infection_risk"
+   ],
+   "studied_population": "Adults. Both reviewed references are population-constrained: PMID 28202713 (BMJ 2017 IPD meta-analysis) found the acute respiratory infection benefit clearest in deficient individuals, so baseline vitamin-D status bounds the claim. Depressive-symptom and mood outcomes are NOT creditable here: this record cites no mood trial, and a favourable pooled effect would still not transfer without baseline status, co-nutrient and psychiatric-treatment context. OPEN: \"Joint & Bone Health\" remains in health_goals_supported but this record's own musculoskeletal reference (PMID 30293909, Lancet Diabetes Endocrinol 2018) reports no fracture/fall prevention and no meaningful BMD gain, so bone is deliberately absent from supported_outcomes pending a separate evidence review.",
+   "reviewed_at": "2026-09-18",
+   "source_pmids": [
+    "28202713",
+    "30293909"
+   ]
+  },
+  "notes": "Reviewed scope is immune function and acute respiratory infection risk, clearest in people who are vitamin-D deficient (PMID 28202713). Mood and depressive-symptom claims are not carried: no mood trial is cited on this record. The cited musculoskeletal meta-analysis (PMID 30293909) found no fracture/fall prevention and no meaningful BMD gain, so the bone claim is under review. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
+  "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
+  "study_type": "systematic_review_meta",
+  "last_updated": "2026-09-18",
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "30293909",
+    "doi": "10.1016/S2213-8587(18)30265-1",
+    "title": "Effects of vitamin D supplementation on musculoskeletal health: a systematic review, meta-analysis, and trial sequential analysis.",
+    "citation": "The lancet. Diabetes & endocrinology (2018-11-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/30293909/",
+    "published_date": "2018-11-01",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Research Support, Non-U.S. Gov't",
+     "Systematic Review"
     ],
-    "external_ids": {
-      "unii": "9VU1KI44GP"
-    },
-    "effect_direction": "positive_strong",
-    "primary_outcome": "Immune Support",
-    "total_enrollment": 576,
-    "registry_completed_trials_count": 2067,
-    "effect_direction_confidence": "high",
-    "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=2067; total_enrollment=576; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
-    "endpoint_relevance_tags": [
-      "immune_support"
-    ]
-  }
+    "mesh_terms": [
+     "Accidental Falls",
+     "Bone Density",
+     "Dietary Supplements",
+     "Fractures, Bone",
+     "Humans",
+     "Treatment Outcome",
+     "Vitamin D"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "28202713",
+    "doi": "10.1136/bmj.i6583",
+    "title": "Vitamin D supplementation to prevent acute respiratory tract infections: systematic review and meta-analysis of individual participant data.",
+    "citation": "BMJ (Clinical research ed.) (2017-02-15)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/28202713/",
+    "published_date": "2017-02-15",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Systematic Review"
+    ],
+    "mesh_terms": [
+     "Dietary Supplements",
+     "Humans",
+     "Randomized Controlled Trials as Topic",
+     "Respiratory Tract Infections",
+     "Vitamin D"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   }
+  ],
+  "external_ids": {
+   "unii": "9VU1KI44GP"
+  },
+  "effect_direction": "positive_strong",
+  "primary_outcome": "Immune Support",
+  "total_enrollment": 576,
+  "registry_completed_trials_count": 2067,
+  "effect_direction_confidence": "high",
+  "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=2067; total_enrollment=576; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
+  "endpoint_relevance_tags": [
+   "immune_support"
+  ]
+ }
 }

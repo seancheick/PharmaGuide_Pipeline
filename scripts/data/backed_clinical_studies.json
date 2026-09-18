@@ -7128,14 +7128,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "bone health ↑",
         "immunity ↑",
         "upper respiratory infection risk ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
-        "Healthy Aging/Longevity",
-        "Joint & Bone Health"
+        "Healthy Aging/Longevity"
       ],
       "applicability": {
         "scope": "ingredient",
@@ -7143,14 +7141,14 @@
           "immune_support",
           "respiratory_infection_risk"
         ],
-        "studied_population": "Adults. Both reviewed references are population-constrained: PMID 28202713 (BMJ 2017 IPD meta-analysis) found the acute respiratory infection benefit clearest in deficient individuals, so baseline vitamin-D status bounds the claim. Depressive-symptom and mood outcomes are NOT creditable here: this record cites no mood trial, and a favourable pooled effect would still not transfer without baseline status, co-nutrient and psychiatric-treatment context. OPEN: \"Joint & Bone Health\" remains in health_goals_supported but this record's own musculoskeletal reference (PMID 30293909, Lancet Diabetes Endocrinol 2018) reports no fracture/fall prevention and no meaningful BMD gain, so bone is deliberately absent from supported_outcomes pending a separate evidence review.",
+        "studied_population": "Adults supplemented with vitamin D, across the trial populations pooled by PMID 28202713; the acute respiratory infection benefit was clearest in participants who were vitamin-D deficient at baseline.",
         "reviewed_at": "2026-09-18",
         "source_pmids": [
           "28202713",
           "30293909"
         ]
       },
-      "notes": "Reviewed scope is immune function and acute respiratory infection risk, clearest in people who are vitamin-D deficient (PMID 28202713). Mood and depressive-symptom claims are not carried: no mood trial is cited on this record. The cited musculoskeletal meta-analysis (PMID 30293909) found no fracture/fall prevention and no meaningful BMD gain, so the bone claim is under review. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
+      "notes": "Scope is supplementation outcomes only. PMID 28202713 supports reduced acute respiratory infection risk, clearest in people deficient at baseline. Mood and bone claims were removed because this record does not support them: no mood trial is cited at all, and its musculoskeletal reference (PMID 30293909) found no fracture or fall prevention and no clinically meaningful BMD gain from supplementation. Vitamin D's physiological role in calcium absorption is well established but is not a supplementation outcome and needs its own supporting trial before a bone goal returns here; INGR_CALCIUM and other records still carry Joint & Bone Health. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations. OWNERSHIP: this file owns INTERVENTION evidence (what a trial showed). Product-facing goal_matches are owned by the bone_health synergy cluster in synergy_cluster.json, which carries the NUTRIENT-FUNCTION relationship (vitamin D aids calcium absorption, NIH ODS) and is unaffected by this record. Do not restore a bone goal here to 'fix' a goal_matches question.",
       "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-09-18",
