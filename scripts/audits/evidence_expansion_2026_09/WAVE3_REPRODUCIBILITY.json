@@ -48,5 +48,17 @@
    "subject": "fix(fda-sync): a known adulterant in an unknown product is news, not noise"
   }
  ],
- "base_note": "Wave 3's pinned base stays af7b440b. Commits landing on this branch from other agents after that point are NOT part of the wave's base and must not silently become it; the isolated worktree is created at af7b440b explicitly."
+ "base_note": "Wave 3's pinned base stays af7b440b. Commits landing on this branch from other agents after that point are NOT part of the wave's base and must not silently become it; the isolated worktree is created at af7b440b explicitly.",
+ "integration_gate_before_any_wave3_record_is_applied": {
+  "rule": "The pinned base establishes WHAT WAS REVIEWED. It does not establish that the review is still compatible with what will ship. Central verification and authoring happen at af7b440b, but no Wave 3 record may be applied to main until its validation and applicability are replayed against main's current HEAD.",
+  "why": "A schema, normalization, scorer or registry change landing on main after af7b440b could silently invalidate an otherwise reproducible review - the record would still validate against the base it was written for and fail against the one it ships into.",
+  "replay_must_cover": [
+   "clinical_evidence_schema.validate_ingredient_context(..., authoring=True) against current main",
+   "clinical_applicability reason codes for every product the record reaches, against current main",
+   "the citation gate: api_audit/verify_backed_studies_citations.py --strict",
+   "db_integrity_sanity_check.py on scripts/data/backed_clinical_studies.json",
+   "a rescore projection on current main, not on the pinned base"
+  ],
+  "recorded": "2026-09-18"
+ }
 }
