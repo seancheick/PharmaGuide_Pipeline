@@ -190,13 +190,41 @@
       "dsld_id": 337853,
       "brand_source": "Thorne",
       "label": "Thorne Boswellia Phytosome — new boswellia phytosome canonical_id coverage"
+    },
+    {
+      "dsld_id": 74716,
+      "brand_source": "Up_and_Up",
+      "label": "up&up Fish Oil 1,000 mg — omega canary: undisclosed molecular form, mid-range EPA+DHA (600 mg/day)"
+    },
+    {
+      "dsld_id": 288742,
+      "brand_source": "nordic-naturals",
+      "label": "Nordic Naturals Ultimate Omega 2X Lemon — omega canary: disclosed triglyceride form, high EPA+DHA (2000 mg/day)"
+    },
+    {
+      "dsld_id": 12043,
+      "brand_source": "Up_and_Up",
+      "label": "up&up Fish Oil 1,000 mg — omega canary: carrier-oil mass only, EPA+DHA must stay withheld"
     }
   ],
   "changelog": [
     {
       "date": "2026-09-08",
       "action": "refrozen_reviewed_september_identity_evidence_and_certification_corrections",
-      "products": [12012, 18141, 239600, 241353, 274498, 278454, 288344, 294077, 298070, 321405, 323080, 327416],
+      "products": [
+        12012,
+        18141,
+        239600,
+        241353,
+        274498,
+        278454,
+        288344,
+        294077,
+        298070,
+        321405,
+        323080,
+        327416
+      ],
       "sprints_covered": [
         "Required active identity ownership",
         "Source- and delivery-specific evidence applicability",
@@ -712,6 +740,10 @@
         "8474ee44 silent-empty-fields fix: delivery detection reads netContents"
       ],
       "notes": "Garden of Life Wobenzym N Joint Health 321405 63.5->66.2. Only Formulation changes (12.4->15.1): A3_delivery_system 0->2.0 because the label's net contents unit reads \"Enteric-Coated\" (netContents[0]), which the reviewed 8474ee44 fix now reads, matching the enhanced_delivery.json enteric-coated entry for stomach-acid protection of enzymes. Dose, Evidence, Transparency, Verification and Safety/Hygiene are unchanged (14.5 / 4.1 / 15.0 / 8.0 / 9.5). Measured on a clean 37-brand enrich+score from checksum-pinned cleaned inputs (worktree at e26c9b98); the 89a5b1fa baseline shows the same 66.2, so this drift predates the certification batch. The five Pure Encapsulations fixtures (182730, 183275, 293924, 293943, 294077) needed no refreeze: their -2 drift from the 55dc2f46 GMP owner change is restored by the sourced NSF/ANSI 455-2 facility registration."
+    },
+    {
+      "date": "2026-09-18",
+      "change": "Added three omega canaries before the omega rubric batch: undisclosed form + mid dose, disclosed TG + high dose, and a carrier-oil-mass-only label whose EPA+DHA stays withheld. They pin omega semantics, not any brand's score."
     }
   ]
 }
