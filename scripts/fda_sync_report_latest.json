@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-18T11:51:56.928699",
+  "generated_at": "2026-09-18T13:38:48.511325",
   "generated_by": "fda_weekly_sync.py",
   "scan_period": {
     "start": "20260828",
@@ -120,17 +120,16 @@
         "pharmaceutical_adulterants"
       ],
       "extracted_substances": [
-        "sibutramine",
-        "sibutramine not listed on the product label"
+        "sibutramine"
       ],
       "substances_already_tracked": [
         "sibutramine"
       ],
-      "substances_new": [
-        "sibutramine not listed on the product label"
-      ],
+      "substances_new": [],
       "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/luze-fit-intensity-may-be-harmful-due-hidden-ingredient",
-      "health_fraud_category": "sexual_enhancement"
+      "health_fraud_category": "sexual_enhancement",
+      "product_name": "LUZE Fit Intensity",
+      "product_already_tracked": false
     },
     {
       "source_type": "fda_health_fraud",
@@ -152,17 +151,16 @@
         "pharmaceutical_adulterants"
       ],
       "extracted_substances": [
-        "sibutramine",
-        "sibutramine not listed on the product label"
+        "sibutramine"
       ],
       "substances_already_tracked": [
         "sibutramine"
       ],
-      "substances_new": [
-        "sibutramine not listed on the product label"
-      ],
+      "substances_new": [],
       "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/beauty-911-may-be-harmful-due-hidden-ingredient",
-      "health_fraud_category": "sexual_enhancement"
+      "health_fraud_category": "sexual_enhancement",
+      "product_name": "Beauty 911",
+      "product_already_tracked": false
     },
     {
       "source_type": "fda_health_fraud",
@@ -185,16 +183,18 @@
       ],
       "extracted_substances": [
         "tadalafil",
-        "amino tadalafil not listed on the product label"
+        "amino tadalafil"
       ],
       "substances_already_tracked": [
         "tadalafil"
       ],
       "substances_new": [
-        "amino tadalafil not listed on the product label"
+        "amino tadalafil"
       ],
       "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/deep-may-be-harmful-due-hidden-ingredient",
-      "health_fraud_category": "sexual_enhancement"
+      "health_fraud_category": "sexual_enhancement",
+      "product_name": "DEEP",
+      "product_already_tracked": false
     },
     {
       "source_type": "fda_health_fraud",
@@ -204,12 +204,12 @@
       "product_type": "Dietary Supplement",
       "classification": "",
       "recall_status": "Ongoing",
-      "product_description": "ZUBB Dietary Supplement may be harmful due to hidden ingredient",
+      "product_description": "MAXMAN Coffee may be harmful due to hidden drug ingredients",
       "recalling_firm": "",
-      "reason_for_recall": "[9/4/2026] The Food and Drug Administration is advising consumers not to purchase or use ZUBB Dietary Supplement, a product promoted and sold for weight loss on various websites and possibly in some retail stores. This product was identified during an examination of international mail shipments. FDA laboratory analysis confirmed that ZUBB Dietary Supplement contains sildenafil not listed on the product label. Sildenafil is the active ingredient in the FDA-approved prescription drug Viagra, used to treat erectile dysfunction. It may interact with nitrates found in some prescription drugs such as nitroglycerin and may lower blood pressure to dangerous levels. This is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease who commonly take nitrate-containing medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA's MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden ingredients. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Weight Loss Product Notifications Dietary Supplements Content current as of: 09/04/2026 Regulated Product(s) Drugs Feedback FDA Archive About FDA Accessibility Visitor Information Website Policies / Privacy No FEAR Act Vulnerability Disclosure Policy FOIA HHS.gov USA.gov Contac",
+      "reason_for_recall": "[9/02/2026] The Food and Drug Administration is advising consumers not to purchase or use MAXMAN Coffee, a product promoted for sexual enhancement on various websites and possibly in some retail stores. FDA laboratory analysis confirmed that MAXMAN Coffee contains sildenafil and tadalafil not listed on the product label. Sildenafil and tadalafil are the active ingredients in the FDA-approved prescription drugs Viagra and Cialis, respectively, used to treat erectile dysfunction. FDA approval of Viagra and Cialis is restricted to use under the supervision of a licensed health care professional. These may interact with nitrates found in some prescription drugs such as nitroglycerin and may lower blood pressure to dangerous levels. This is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease, who commonly take nitrate-containing medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA’s MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online at MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden drug ingredients and chemicals. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Tainted Sexual Enhancement and Energy Products Dietary Supplements Content current as of: 09/02/2026 Regulated Product(s) Dietary Supplements Drugs Feedback FDA Archive About FDA Acce",
       "distribution_pattern": "",
       "recall_initiation_date": "",
-      "report_date": "2026-09-04",
+      "report_date": "2026-09-02",
       "termination_date": null,
       "primary_category": "illegal_spiking_agents",
       "signal_categories": [
@@ -217,16 +217,17 @@
       ],
       "extracted_substances": [
         "sildenafil",
-        "sildenafil not listed on the product label"
+        "tadalafil"
       ],
       "substances_already_tracked": [
-        "sildenafil"
+        "sildenafil",
+        "tadalafil"
       ],
-      "substances_new": [
-        "sildenafil not listed on the product label"
-      ],
-      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient",
-      "health_fraud_category": "weight_loss"
+      "substances_new": [],
+      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/maxman-coffee-may-be-harmful-due-hidden-drug-ingredients",
+      "health_fraud_category": "sexual_enhancement",
+      "product_name": "MAXMAN Coffee",
+      "product_already_tracked": false
     }
   ],
   "records_for_tracked_substances": [
@@ -269,28 +270,28 @@
       "product_type": "Dietary Supplement",
       "classification": "",
       "recall_status": "Ongoing",
-      "product_description": "MAXMAN Coffee may be harmful due to hidden drug ingredients",
+      "product_description": "ZUBB Dietary Supplement may be harmful due to hidden ingredient",
       "recalling_firm": "",
-      "reason_for_recall": "[9/02/2026] The Food and Drug Administration is advising consumers not to purchase or use MAXMAN Coffee, a product promoted for sexual enhancement on various websites and possibly in some retail stores. FDA laboratory analysis confirmed that MAXMAN Coffee contains sildenafil and tadalafil not listed on the product label. Sildenafil and tadalafil are the active ingredients in the FDA-approved prescription drugs Viagra and Cialis, respectively, used to treat erectile dysfunction. FDA approval of Viagra and Cialis is restricted to use under the supervision of a licensed health care professional. These may interact with nitrates found in some prescription drugs such as nitroglycerin and may lower blood pressure to dangerous levels. This is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease, who commonly take nitrate-containing medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA’s MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online at MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden drug ingredients and chemicals. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Tainted Sexual Enhancement and Energy Products Dietary Supplements Content current as of: 09/02/2026 Regulated Product(s) Dietary Supplements Drugs Feedback FDA Archive About FDA Acce",
+      "reason_for_recall": "[9/4/2026] The Food and Drug Administration is advising consumers not to purchase or use ZUBB Dietary Supplement, a product promoted and sold for weight loss on various websites and possibly in some retail stores. This product was identified during an examination of international mail shipments. FDA laboratory analysis confirmed that ZUBB Dietary Supplement contains sildenafil not listed on the product label. Sildenafil is the active ingredient in the FDA-approved prescription drug Viagra, used to treat erectile dysfunction. It may interact with nitrates found in some prescription drugs such as nitroglycerin and may lower blood pressure to dangerous levels. This is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease who commonly take nitrate-containing medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA's MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden ingredients. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Weight Loss Product Notifications Dietary Supplements Content current as of: 09/04/2026 Regulated Product(s) Drugs Feedback FDA Archive About FDA Accessibility Visitor Information Website Policies / Privacy No FEAR Act Vulnerability Disclosure Policy FOIA HHS.gov USA.gov Contac",
       "distribution_pattern": "",
       "recall_initiation_date": "",
-      "report_date": "2026-09-02",
+      "report_date": "2026-09-04",
       "termination_date": null,
       "primary_category": "illegal_spiking_agents",
       "signal_categories": [
         "pharmaceutical_adulterants"
       ],
       "extracted_substances": [
-        "sildenafil",
-        "tadalafil"
+        "sildenafil"
       ],
       "substances_already_tracked": [
-        "sildenafil",
-        "tadalafil"
+        "sildenafil"
       ],
       "substances_new": [],
-      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/maxman-coffee-may-be-harmful-due-hidden-drug-ingredients",
-      "health_fraud_category": "sexual_enhancement"
+      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient",
+      "health_fraud_category": "weight_loss",
+      "product_name": "ZUBB Dietary Supplement",
+      "product_already_tracked": true
     }
   ],
   "stale_recalls_to_verify": [

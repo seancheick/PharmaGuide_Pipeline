@@ -251,3 +251,65 @@ def test_health_fraud_records_are_relevant_without_supplement_keywords():
     assert primary_category == "illegal_spiking_agents"
     assert "pharmaceutical_adulterants" in signals
     assert set(extract_substances(record)) >= {"sildenafil", "tadalafil"}
+
+
+def test_unknown_product_with_known_adulterant_still_enters_the_review_queue():
+    """The core health-fraud case: the drug is always known, the product is not.
+
+    MAXMAN Coffee was filed as informational because sildenafil and tadalafil
+    were already in the substance registry, even though the product itself had
+    never been seen. For this feed that is backwards — the news IS the product.
+    """
+    from api_audit.fda_weekly_sync import _classify_and_crossref
+
+    record = {
+        "title": "MAXMAN Coffee may be harmful due to hidden drug ingredients",
+        "product_description": "MAXMAN Coffee may be harmful due to hidden drug ingredients",
+        "reason_for_recall": (
+            "FDA laboratory analysis confirmed that MAXMAN Coffee contains "
+            "sildenafil and tadalafil not listed on the product label."
+        ),
+        "product_type": "Dietary Supplement",
+        "_source_type": "fda_health_fraud",
+        "_health_fraud_category": "sexual_enhancement",
+        "link": "https://www.fda.gov/drugs/medication-health-fraud-notifications/maxman",
+    }
+    # Both adulterants already tracked; the product is not.
+    index = {"sildenafil": {"id": "SPIKE_SILDENAFIL"},
+             "tadalafil": {"id": "SPIKE_TADALAFIL"}}
+
+    new_records, tracked_records, _, _ = _classify_and_crossref([record], index)
+
+    assert len(new_records) == 1, "an unseen product must reach the review queue"
+    assert not tracked_records
+    entry = new_records[0]
+    assert entry["product_name"] == "MAXMAN Coffee"
+    assert entry["product_already_tracked"] is False
+    # The adulterants are still correctly reported as already known.
+    assert set(entry["substances_already_tracked"]) >= {"sildenafil", "tadalafil"}
+
+
+def test_known_product_with_known_adulterant_stays_informational():
+    """The other side of the split: nothing new, so nothing to action."""
+    from api_audit.fda_weekly_sync import _classify_and_crossref
+
+    record = {
+        "title": "ZUBB Dietary Supplement may be harmful due to hidden ingredient",
+        "product_description": "ZUBB Dietary Supplement may be harmful due to hidden ingredient",
+        "reason_for_recall": (
+            "FDA laboratory analysis confirmed that ZUBB Dietary Supplement "
+            "contains sildenafil not listed on the product label."
+        ),
+        "product_type": "Dietary Supplement",
+        "_source_type": "fda_health_fraud",
+        "_health_fraud_category": "weight_loss",
+        "link": "https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb",
+    }
+    index = {"sildenafil": {"id": "SPIKE_SILDENAFIL"},
+             "zubb dietary supplement": {"id": "RECALLED_ZUBB"}}
+
+    new_records, tracked_records, _, _ = _classify_and_crossref([record], index)
+
+    assert not new_records
+    assert len(tracked_records) == 1
+    assert tracked_records[0]["product_already_tracked"] is True

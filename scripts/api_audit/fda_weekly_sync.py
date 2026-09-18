@@ -945,6 +945,18 @@ def extract_substances(record: dict) -> list:
             for prefix in ("undeclared ", "undisclosed ", "hidden "):
                 if candidate.startswith(prefix):
                     candidate = candidate[len(prefix):]
+            # FDA notifications end the sentence in fixed boilerplate with no
+            # delimiter before it, so the fallback pattern swallows it:
+            # "contains sildenafil not listed on the product label" yielded the
+            # phantom substance "sildenafil not listed on the product label".
+            # A phantom never resolves in the registry, so it reads as a NOVEL
+            # adulterant and makes every health-fraud record look new.
+            for tail in (" not listed on", " not declared on", " that is not listed",
+                         " which is not listed"):
+                cut = candidate.find(tail)
+                if cut > 0:
+                    candidate = candidate[:cut]
+                    break
             candidate = candidate.strip()
             # Filter: reasonable name length, not a stop phrase
             if 3 <= len(candidate) <= 60 and candidate not in found:
@@ -978,6 +990,19 @@ def build_existing_index(db: dict) -> dict:
 
 def find_existing(substance: str, index: dict):
     return index.get(substance.lower())
+
+
+# Health Fraud notification titles are "<product> may be harmful due to ...".
+# The prefix is the product name as FDA writes it, which is what a
+# product-level entry is named after (RECALLED_ZUBB -> "ZUBB Dietary
+# Supplement", RECALLED_X10_NATURAL_ENHANCEMENT -> "X10 Natural Enhancement
+# Supplement"), so it resolves against the same alias index as a substance.
+_HEALTH_FRAUD_TITLE_SPLIT_RE = re.compile(r"\s+may be harmful\b", re.IGNORECASE)
+
+
+def health_fraud_product_name(record: dict) -> str:
+    title = record.get("title") or record.get("product_description") or ""
+    return _HEALTH_FRAUD_TITLE_SPLIT_RE.split(title, maxsplit=1)[0].strip()
 
 
 # ─── Stale Recall Detection ───────────────────────────────────────────────────
@@ -1102,7 +1127,23 @@ def _classify_and_crossref(records: list, existing_index: dict) -> tuple:
             and not substances
         )
 
-        if unknown or is_brand_recall:
+        # A Health Fraud notification's news is "THIS marketed product contains
+        # the hidden drug", and the drug is almost always one we already track
+        # (sildenafil, tadalafil, sibutramine). Bucketing on substance novelty
+        # alone therefore files product-level bans as informational and hides
+        # them — MAXMAN Coffee landed there with both adulterants known. Product
+        # novelty and adulterant novelty are separate questions; either one being
+        # new means an operator has something to act on.
+        product_is_new = False
+        if record.get("_source_type") == "fda_health_fraud":
+            product_name = health_fraud_product_name(record)
+            entry["product_name"] = product_name
+            product_is_new = bool(product_name) and not find_existing(
+                product_name, existing_index
+            )
+            entry["product_already_tracked"] = not product_is_new
+
+        if unknown or is_brand_recall or product_is_new:
             new_records.append(entry)
         elif substances:
             tracked_records.append(entry)
