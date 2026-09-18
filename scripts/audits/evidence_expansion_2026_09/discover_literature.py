@@ -29,6 +29,7 @@ import json
 import re
 import sys
 import xml.etree.ElementTree as ET
+from functools import lru_cache
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -71,8 +72,48 @@ HOMONYM_EXCLUSIONS = {
 }
 
 
+@lru_cache(maxsize=1)
+def _botanical_latin_names() -> dict[str, str]:
+    """Species names from the canonical botanical owner, keyed by id, name and alias.
+
+    Catalog label spellings are what a bottle prints; the literature uses the
+    binomial. Querying only the label name silently under-retrieves botanicals
+    ("Wild Yam Root"[tiab] finds nothing; Dioscorea villosa does), which would let
+    a wave record "no qualifying evidence" for an identity whose evidence exists.
+    The binomial is read from scripts/data/botanical_ingredients.json rather than
+    typed here, so no species name is invented by this tool.
+    """
+    path = ROOT / "scripts/data/botanical_ingredients.json"
+    out: dict[str, str] = {}
+    for entry in json.loads(path.read_text())["botanical_ingredients"]:
+        latin = entry.get("latin_name")
+        if not isinstance(latin, str) or not latin.strip():
+            continue
+        keys = {entry["id"], entry["id"].replace("_", " "),
+                str(entry.get("standard_name") or "")}
+        keys |= {str(alias) for alias in (entry.get("aliases") or [])}
+        for key in keys:
+            key = key.strip().lower()
+            if key:
+                out.setdefault(key, latin.strip())
+    return out
+
+
+def species_for(identity: dict) -> str | None:
+    lookup = _botanical_latin_names()
+    for key in (identity["canonical_id"], identity["canonical_id"].replace("_", " "),
+                identity["label_name"]):
+        found = lookup.get(str(key).strip().lower())
+        if found:
+            return found
+    return None
+
+
 def name_clause(identity: dict) -> str:
     names: list[str] = []
+    species = species_for(identity)
+    if species:
+        names.append(species)
     for raw in [identity["label_name"], *identity.get("label_spellings_seen", [])]:
         for part in re.split(r"[()]", str(raw)):
             part = re.sub(r"[,;]\s*(micronized|powder|extract)$", "", part.strip(), flags=re.I).strip()
