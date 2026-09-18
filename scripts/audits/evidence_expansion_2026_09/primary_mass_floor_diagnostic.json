@@ -7,6 +7,7 @@
    "The DRI-essential nutrition-authority floor (10.0) shares the component key but is a different rule; it is reported separately instead of inside the total.",
    "'Material' is not used. Four explicit states are reported instead."
   ],
+  "INVALID_FOR_CALIBRATION": true,
   "SUPERSEDED_COUNTERFACTUAL": {
    "still_valid": "The population counts - products scored, eligible, receiving a nonzero primary-mass floor, and the separated DRI nutrition-authority population. None of those depend on the counterfactual.",
    "superseded": "Every DECISIVE count and every delta below. They were measured by flipping PRIMARY_FLOOR_ENABLED, which gates BOTH floors: the primary-mass floor and the DRI-essential nutrition-authority floor share one `if` block (generic_evidence.py:317). A DRI-essential product whose mass floor was above 10.0 therefore appeared to fall all the way to its pipeline score, when the authority floor would have caught it at 10.0 raw. That credits the mass floor with points another rule would have supplied.",

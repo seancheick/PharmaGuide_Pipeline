@@ -345,6 +345,7 @@ def build_payload(rows: list[dict], corpus_size: int, eligible: int) -> dict:
             "different rule; it is reported separately instead of inside the total.",
             "'Material' is not used. Four explicit states are reported instead.",
         ],
+        "INVALID_FOR_CALIBRATION": True,
         "SUPERSEDED_COUNTERFACTUAL": {
             "still_valid": "The population counts - products scored, eligible, receiving a "
                            "nonzero primary-mass floor, and the separated DRI nutrition-authority "
@@ -440,10 +441,16 @@ def render_report(payload: dict) -> str:
         "# PRIMARY-MASS FLOOR — PRODUCTION ROUTES ONLY", "",
         "Measured, not changed. No scoring constant moved: not the 14.0/11.0 floors, not the "
         "0.85 direction weight, not the archetype references, not the 20-point scale.", "",
-        "> **The counterfactual in this report is superseded.** " + meta["SUPERSEDED_COUNTERFACTUAL"]["superseded"]
-        + " " + meta["SUPERSEDED_COUNTERFACTUAL"]["worked_example"]
-        + " Population counts stand; deltas do not. See "
-        + meta["SUPERSEDED_COUNTERFACTUAL"]["replaced_by"] + "", "",
+        "> # ⛔ INVALID FOR CALIBRATION", ">",
+        "> **Do not quote any decisive count, Evidence delta, final-score delta or tier-change "
+        "number from this report.** The counterfactual disabled BOTH the primary-mass floor and "
+        "the DRI/nutrition-authority floor, so every delta credits the primary-mass rule with "
+        "points the authority floor would have supplied.", ">",
+        "> " + meta["SUPERSEDED_COUNTERFACTUAL"]["worked_example"], ">",
+        "> Population and eligibility counts remain valid - they do not depend on the "
+        "counterfactual. Everything downstream of them does not.", ">",
+        "> **Use instead:** `" + meta["SUPERSEDED_COUNTERFACTUAL"]["replaced_by"].split(" - ")[0]
+        + "` and its report `PRIMARY_MASS_FLOOR_CALIBRATION.md`.", "",
         "Four states, reported separately because the word *material* was ambiguous enough to "
         "hide the difference between the last three. They nest.", "",
         "```",
