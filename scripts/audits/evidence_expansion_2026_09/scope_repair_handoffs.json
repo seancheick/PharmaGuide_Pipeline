@@ -142,6 +142,18 @@
    "finding": "The identity's own retrieval contains the retracted green-coffee-extract trial 22291473 and its retraction notice 25340633. Of the three candidate syntheses only 34981487 has a PubMed-indexed reference list (33 references), and the retracted trial is NOT in it. The other two have no indexed references, so the same check cannot be run.",
    "why_not_here": "HOLD stands. A meta-analysis does not clear the retraction guard just because the retracted trial is absent from its abstract; the included-study list has to be read.",
    "status": "open"
+  },
+  {
+   "id": "HANDOFF_PRIMARY_MASS_FLOOR_CALIBRATION",
+   "wave": "wave2",
+   "kind": "scoring_design",
+   "destination_owner": "v4 scoring owner",
+   "artefact": "scripts/scoring_v4/modules/generic_evidence.py _primary_mass_floor + the archetype reference rescale",
+   "verified_live": "2026-09-18",
+   "finding": "A single-active product whose one scorable active carries a positive_weak systematic-review record lands at 13.2 of 20 Evidence. The chain, printed on real products: PRIMARY_FLOOR_STRONG 14.0 x positive_weak 0.85 = 11.9 raw, then rescaled by the generic_botanical_branded archetype reference, 11.9 / 18.0 x 20 = 13.2. Measured identically on DSLD 232044 and 64551 (amla, Capros 500 mg) AND on 213183, 213310 (Phase 2 white kidney bean) - so it is structural, not specific to one ingredient. An earlier report of this described only the 14.0 x 0.85 step and left the remaining 1.3 points unexplained; the archetype rescale is that step.",
+   "why_not_fixed_here": "Changing a floor or an archetype reference is a scoring-rule change, which this project does not make. amla is held at reference tier as a per-record owner decision; white kidney bean is deliberately left approved so the owner can judge the calibration on its merits rather than having it decided by a hold.",
+   "status": "open",
+   "priority": "high"
   }
  ]
 }

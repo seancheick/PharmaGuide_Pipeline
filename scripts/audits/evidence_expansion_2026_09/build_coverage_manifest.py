@@ -38,7 +38,8 @@ WAVE1_DEEP = {"butterbur", "ginkgo", "isoflavones", "dhea", "gotu_kola", "linole
 LEGACY_REPAIRED = {"vitamin_b12_cobalamin", "saw_palmetto", "diindolylmethane", "boron"}
 # Records that are approved AND score. Reference-tier and null records are reviewed
 # but contribute nothing, so they never appear here.
-SCORING_APPROVED = {"common_bean_extract": 1000, "amla": 500}
+# amla was held at reference tier on 2026-09-18, so it no longer reaches any score.
+SCORING_APPROVED = {"common_bean_extract": 1000}
 
 
 def git_head() -> str:

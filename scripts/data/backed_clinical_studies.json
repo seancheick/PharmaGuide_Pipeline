@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.4.1",
+    "schema_version": "5.4.2",
     "last_updated": "2026-09-18",
     "total_entries": 208,
     "changelog": [
+      "5.4.2 (2026-09-18): INGR_AMLA scoring HELD at reference tier by owner decision. The direction stays positive_weak and the 500 mg/day dose context is kept - the evidence is not being erased or called null. The measured reason: primary floor 14.0 x 0.85 = 11.9 raw, rescaled by the generic_botanical_branded archetype reference (11.9 / 18.0 x 20) = 13.2 of 20 for three single-active products, which overstates overlapping syntheses whose LDL-C and triglyceride prediction intervals cross null. Diagnostic run on INGR_WHITE_KIDNEY_BEAN shows the SAME 13.2 by the same path, so this is a structural floor-calibration question, not an amla-specific one; white kidney bean is left approved pending that review. No scoring rule changed.",
       "5.4.1 (2026-09-18): Wave 2 corrections after independent review, each re-verified against the live sources. INGR_DEVILS_CLAW moved to reference tier (non-scoring): the stored total_enrollment 2050 was the whole Cochrane review's total across SIX herbal medicines, not devil's claw (corrected to 197), and the studied exposure is 50-100 mg/day of harpagoside (PMID 10101629: extract WS 1531 at 600/1200 mg containing 50/100 mg harpagoside; PMID 12509627: Doloteffin, 60 mg harpagoside) while the single catalog label stating harpagoside delivers about 10.5 mg/day. INGR_SENNA moved to reference tier and its confidence lowered: PMID 35943487 calls itself a synopsis of the authors' own updated systematic review, so it is not a second independent grade-A confirmation; 0 of 15 catalog labels state sennosides. INGR_AMLA stays positive_weak with its limitations made explicit - prediction intervals crossing null for LDL-C and triglycerides, I2 of 77% and 62%, biomarker rather than event endpoints, and two overlapping rather than independent syntheses. No scoring rule changed by these corrections.",
       "5.4.0 (2026-09-18): Wave 2 owner decisions applied. SIX new reviewed identities, 202 -> 208. APPROVED positive_weak: INGR_WHITE_KIDNEY_BEAN (PMID 42066439, 8 RCTs/543, weight -1.62 kg; 1,000 mg/day floor; extract mg is NOT an alpha-amylase potency guarantee) and INGR_AMLA (PMIDs 37296402/36934568, 500-1500 mg/day studied; 500 mg/day floor keeps the 120 mg catalog median out). APPROVED evidence with product scoring HELD by a source-label potency requirement: INGR_DEVILS_CLAW (Cochrane 26630428, moderate quality at best; applies only where the label states harpagoside - 1 of 25 products today) and INGR_SENNA (grade A first-line laxative; applies only where the label states sennosides - 0 of 15 today; stimulant-laxative adverse effects routed to the safety owner and NOT netted against efficacy). REVIEWED-NULL, curated in full and earning zero affirmative credit: INGR_D_MANNOSE (JAMA Intern Med 38587819, n=598, 2 g/day, null on its primary endpoint) and INGR_D_ASPARTIC_ACID (three single-ingredient RCTs null for testosterone). Both carry a dose floor so products below the studied exposure are refused rather than characterised by a result at a dose they do not deliver. Paired with the scoring owner's null = 0.0 decision in scoring_v4/config/quality_score.json.",
       "5.3.15 (2026-09-18): Scope repair of the four null-direction records, each verified live against its own sources. INGR_VITAMIN_B12 -> reference tier: its single synthesis (PMID 33809274) studied cognition, depression and idiopathic fatigue in people WITHOUT overt deficiency, so it may not act as B12's ingredient-level efficacy direction across 2,176 products; nutrient adequacy stays with the DRI authority path and is not duplicated here. INGR_SAW_PALMETTO: Permixon-specific evidence (NCT02121613, PMID 29694707) and an androgenetic-alopecia trial (PMID 12006122) removed, total_enrollment 833 -> 369 (CAMUS), indication corrected Hormone Balance -> Urinary Tract Health, 'permixon' alias dropped. PRECLIN_DIM: applicability restricted to the BioResponse DIM material both trials used, indole-3-carbinol excluded, total_enrollment 62 -> 551; the tamoxifen-metabolite finding is handed to the interaction owner, not scored here. INGR_BORON: calcium fructoborate separated out (alias removed, form excluded), total_enrollment 30 -> 19, and the two cited PMIDs recorded as two publications of one trial; the entry moves to reference tier because the stored 'observational' study_type was wrong and correcting it to rct_single was measured to raise nine standalone boron products from Evidence 0.5 to 3.1 on one small null trial. No scoring rule, weight or direction multiplier changed.",
@@ -7127,14 +7128,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "bone health ↑",
         "immunity ↑",
         "upper respiratory infection risk ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
-        "Healthy Aging/Longevity",
-        "Joint & Bone Health"
+        "Healthy Aging/Longevity"
       ],
       "applicability": {
         "scope": "ingredient",
@@ -7142,14 +7141,14 @@
           "immune_support",
           "respiratory_infection_risk"
         ],
-        "studied_population": "Adults. Both reviewed references are population-constrained: PMID 28202713 (BMJ 2017 IPD meta-analysis) found the acute respiratory infection benefit clearest in deficient individuals, so baseline vitamin-D status bounds the claim. Depressive-symptom and mood outcomes are NOT creditable here: this record cites no mood trial, and a favourable pooled effect would still not transfer without baseline status, co-nutrient and psychiatric-treatment context. OPEN: \"Joint & Bone Health\" remains in health_goals_supported but this record's own musculoskeletal reference (PMID 30293909, Lancet Diabetes Endocrinol 2018) reports no fracture/fall prevention and no meaningful BMD gain, so bone is deliberately absent from supported_outcomes pending a separate evidence review.",
+        "studied_population": "Adults supplemented with vitamin D, across the trial populations pooled by PMID 28202713; the acute respiratory infection benefit was clearest in participants who were vitamin-D deficient at baseline.",
         "reviewed_at": "2026-09-18",
         "source_pmids": [
           "28202713",
           "30293909"
         ]
       },
-      "notes": "Reviewed scope is immune function and acute respiratory infection risk, clearest in people who are vitamin-D deficient (PMID 28202713). Mood and depressive-symptom claims are not carried: no mood trial is cited on this record. The cited musculoskeletal meta-analysis (PMID 30293909) found no fracture/fall prevention and no meaningful BMD gain, so the bone claim is under review. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
+      "notes": "Scope is supplementation outcomes only. PMID 28202713 supports reduced acute respiratory infection risk, clearest in people deficient at baseline. Mood and bone claims were removed because this record does not support them: no mood trial is cited at all, and its musculoskeletal reference (PMID 30293909) found no fracture or fall prevention and no clinically meaningful BMD gain from supplementation. Vitamin D's physiological role in calcium absorption is well established but is not a supplementation outcome and needs its own supporting trial before a bone goal returns here; INGR_CALCIUM and other records still carry Joint & Bone Health. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
       "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-09-18",
@@ -22376,13 +22375,14 @@
         "emblic"
       ],
       "category": "cardiovascular",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
-        "systematic_review"
+        "systematic_review",
+        "reference"
       ],
-      "score_contribution": "tier_2",
-      "study_type": "systematic_review_meta",
+      "score_contribution": "tier_3",
+      "study_type": "reference",
       "effect_direction": "positive_weak",
       "key_endpoints": [
         "LDL cholesterol ↓ (-15.08 mg/dL; prediction interval crosses null)",
@@ -22400,9 +22400,9 @@
       ],
       "total_enrollment": 535,
       "effect_direction_confidence": "medium",
-      "notes": "Two syntheses of Emblica officinalis (amla) fruit agree directionally on cardiometabolic risk markers at a studied 500-1500 mg/day. LIMITATIONS CARRIED DELIBERATELY, verified against the sources on 2026-09-18: the larger synthesis reports substantial heterogeneity (LDL-C I2 = 77%, triglycerides I2 = 62%) and its own PREDICTION INTERVALS CROSS NULL for both (LDL-C -48.29 to 18.13; triglycerides -73.47 to 28.77), meaning a future trial could plausibly show no benefit; only hs-CRP is homogeneous (I2 = 0%). The two syntheses are NOT independent replications - 9 RCTs searched to April 2021 and 5 RCTs searched to December 2022 on the same ingredient and outcomes will substantially overlap - so they are recorded as agreeing, not as confirming one another. The endpoints are physiological and clinical biomarkers, not demonstrated reductions in cardiovascular events. The 500 mg/day floor is supported by the dose range the 9-RCT synthesis itself reports across its included trials, not by one branded preparation; the measured catalog label median is 120 mg/day, so most amla products stay out.",
+      "notes": "Two syntheses of Emblica officinalis (amla) fruit agree directionally on cardiometabolic risk markers at a studied 500-1500 mg/day. LIMITATIONS CARRIED DELIBERATELY, verified against the sources on 2026-09-18: the larger synthesis reports substantial heterogeneity (LDL-C I2 = 77%, triglycerides I2 = 62%) and its own PREDICTION INTERVALS CROSS NULL for both (LDL-C -48.29 to 18.13; triglycerides -73.47 to 28.77), meaning a future trial could plausibly show no benefit; only hs-CRP is homogeneous (I2 = 0%). The two syntheses are NOT independent replications - 9 RCTs searched to April 2021 and 5 RCTs searched to December 2022 on the same ingredient and outcomes will substantially overlap - so they are recorded as agreeing, not as confirming one another. The endpoints are physiological and clinical biomarkers, not demonstrated reductions in cardiovascular events. The 500 mg/day floor is supported by the dose range the 9-RCT synthesis itself reports across its included trials, not by one branded preparation; the measured catalog label median is 120 mg/day, so most amla products stay out. SCORING HELD 2026-09-18 (owner decision, direction NOT changed): the record stays positive_weak and keeps its 500-1500 mg/day dose context, but it is held at reference tier so it contributes no points. Reason: the existing primary-mass floor overstates positive_weak evidence here. Measured on DSLD 232044 (Capros amla extract 500 mg as the only scorable active), the chain is primary floor 14.0 x positive_weak 0.85 = 11.9 raw, then rescaled by the generic_botanical_branded archetype reference (11.9 / 18.0 x 20) = 13.2 of 20 - for overlapping syntheses with LDL-C and triglyceride prediction intervals crossing null and biomarker rather than patient-important endpoints. The hold is on this record, not on the floor: no scoring rule was changed.",
       "notable_studies": "PMID 37296402 (2023): 9 RCTs, n=535, amla 500-1500 mg/day for 14-84 days; LDL-C -15.08 mg/dL (95% CI -25.43 to -4.73), VLDL-C -5.43, triglycerides -22.35, hs-CRP -1.70 mg/L. PMID 36934568 (2023): 5 RCTs; significant reductions in CRP, fasting blood glucose, LDL-C, total cholesterol and triglycerides with an increase in HDL-C. The branded AMX-160 trial (PMID 40262554) carries an erratum and is not cited here; an amla-syrup trial in female androgenetic alopecia is a different preparation and indication and is excluded.",
-      "effect_direction_rationale": "positive_weak and no stronger: consistent direction across two overlapping syntheses, but prediction intervals crossing null for the two lipid endpoints, I2 of 77% and 62%, biomarker rather than event endpoints, and no independent replication. study_type=systematic_review_meta; evidence_level=ingredient-human; total_enrollment=535 (the 9-RCT synthesis's participant total). Authored Wave 2 and corrected after independent review, 2026-09-18.",
+      "effect_direction_rationale": "positive_weak and no stronger: consistent direction across two overlapping syntheses, but prediction intervals crossing null for the two lipid endpoints, I2 of 77% and 62%, biomarker rather than event endpoints, and no independent replication. study_type=systematic_review_meta; evidence_level=ingredient-human; total_enrollment=535 (the 9-RCT synthesis's participant total). Authored Wave 2 and corrected after independent review, 2026-09-18; scoring held at reference tier the same day, with the positive_weak direction deliberately retained rather than converted to null.",
       "applicability": {
         "scope": "ingredient",
         "minimum_daily_dose": 500,

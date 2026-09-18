@@ -21,21 +21,21 @@ Not the number of newly approvable records — the number of zeroes that now hav
 
 Cumulative coverage, and the distinction between the three numbers, is owned by
 `COVERAGE_MANIFEST.json` and pinned to a corpus snapshot - this packet does not restate it in its
-own words. Snapshot: git `2341b4517f36`, 15109 scored products, 4231 at
+own words. Snapshot: git `4ed3178ca17d`, 15109 scored products, 4231 at
 Evidence 0.
 
 | cumulative metric | products | share of the pinned 4231 |
 |---|---:|---:|
 | review state established (supported / null / held / no-qualifying / handoff) | **859** | **20.3%** |
 | deep curated (read centrally, source by source) | 521 | 12.3% |
-| score reachable by an APPROVED scoring record | 32 | - |
+| score reachable by an APPROVED scoring record | 15 | - |
 
 ## Decision table
 
 | identity | products | Ev=0 | contexts | direction | dose applicability | proposal | projected products | high risk |
 |---|---:|---:|---:|---|---|---|---:|:--:|
 | `common_bean_extract` | 22 | 21 | 1 | positive_weak | floor 1000 mg | APPROVED + APPLIED | 16 |  |
-| `amla` | 52 | 19 | 1 | positive_weak | floor 500 mg | APPROVED + APPLIED | 18 |  |
+| `amla` | 52 | 19 | 1 | positive_weak | floor 500 mg | REVIEWED SUPPORTIVE, scoring HELD | 18 |  |
 | `devils_claw` | 25 | 16 | 0 | positive_weak | no dose policy | REVIEWED SUPPORTIVE, scoring HELD | 16 |  |
 | `senna` | 15 | 15 | 0 | positive_strong | no dose policy | REVIEWED SUPPORTIVE, scoring HELD | 15 |  |
 | `d_aspartic_acid` | 28 | 21 | 2 | null | 3-6 g/day | APPLIED as reviewed NULL (earns nothing) | 0 |  |
@@ -66,10 +66,10 @@ Evidence 0.
 |---|---:|---:|
 | HOLD | 10 | 169 |
 | HOLD + HANDOFF | 4 | 66 |
-| APPROVED + APPLIED | 2 | 40 |
-| REVIEWED SUPPORTIVE, scoring HELD | 2 | 31 |
+| REVIEWED SUPPORTIVE, scoring HELD | 3 | 50 |
 | APPLIED as reviewed NULL (earns nothing) | 2 | 37 |
 | HOLD (blocked upstream, not by evidence) | 2 | 33 |
+| APPROVED + APPLIED | 1 | 21 |
 | HOLD (integrity) | 1 | 21 |
 | HANDOFF | 1 | 19 |
 | REVIEWED_NO_QUALIFYING | 1 | 16 |
@@ -80,9 +80,9 @@ Evidence 0.
 
 PMID 42066439 is ingredient-level (oral WKBE, 8 RCTs, n=543, weight -1.62 kg 95% CI -1.99 to -1.25). Catalog prints white kidney bean extract uniformly. Caveat: alpha-amylase inhibitor extracts are not standardised by inhibitor units, so label mg is not a potency guarantee, and the pooled effect is small. APPLIED 2026-09-18 as INGR_WHITE_KIDNEY_BEAN, positive_weak, 1,000 mg/day applicability floor; 16 of 22 products qualify, 16 of them at Evidence 0 today.
 
-**`amla`** — APPROVED + APPLIED
+**`amla`** — REVIEWED SUPPORTIVE, scoring HELD
 
-PMID 37296402 (9 studies, EO 500-1500 mg/day): LDL-C -15.08 mg/dL, VLDL -5.43, TG -22.35, hsCRP -1.70, with the authors' own caution about heterogeneity. PMID 36934568 (5 RCTs) agrees. A 500 mg/day floor is proposed because that is the lowest dose the syntheses cover; the catalog median is 120 mg, so most products would NOT qualify - that is the point of the floor. The branded AMX-160 RCT (40262554) supports but does not define the record and carries an erratum; the amla syrup alopecia trial (37487962) is off-axis and excluded. APPLIED 2026-09-18 as INGR_AMLA, positive_weak, 500 mg/day floor; 19 of 52 products qualify. Limitations verified and recorded on the record after independent review: prediction intervals cross null for LDL-C (-48.29 to 18.13) and triglycerides (-73.47 to 28.77), I2 is 77% and 62%, only hs-CRP is homogeneous, the two syntheses overlap rather than replicate, and the endpoints are biomarkers not events. MEASURED CONSEQUENCE THE OWNER SHOULD SEE: three single-active products (Capros amla extract at exactly 500 mg) go from Evidence 0.0 to 13.2, because the existing primary-mass floor pays 14.0 x 0.85 when a mass-dominant active carries a systematic-review record. That is the scorer's existing behaviour, not a new rule, and it is the largest rise in the batch.
+PMID 37296402 (9 studies, EO 500-1500 mg/day): LDL-C -15.08 mg/dL, VLDL -5.43, TG -22.35, hsCRP -1.70, with the authors' own caution about heterogeneity. PMID 36934568 (5 RCTs) agrees. A 500 mg/day floor is proposed because that is the lowest dose the syntheses cover; the catalog median is 120 mg, so most products would NOT qualify - that is the point of the floor. The branded AMX-160 RCT (40262554) supports but does not define the record and carries an erratum; the amla syrup alopecia trial (37487962) is off-axis and excluded. APPLIED 2026-09-18 as INGR_AMLA, positive_weak, 500 mg/day floor; 19 of 52 products qualify. Limitations verified and recorded on the record after independent review: prediction intervals cross null for LDL-C (-48.29 to 18.13) and triglycerides (-73.47 to 28.77), I2 is 77% and 62%, only hs-CRP is homogeneous, the two syntheses overlap rather than replicate, and the endpoints are biomarkers not events. MEASURED CONSEQUENCE THE OWNER SHOULD SEE: three single-active products (Capros amla extract at exactly 500 mg) go from Evidence 0.0 to 13.2, because the existing primary-mass floor pays 14.0 x 0.85 when a mass-dominant active carries a systematic-review record. That is the scorer's existing behaviour, not a new rule, and it is the largest rise in the batch. OWNER DECISION 2026-09-18: scoring HELD at reference tier, direction and dose context retained. Exact breakdown printed on DSLD 232044: primary floor 14.0 x positive_weak 0.85 = 11.9 raw, rescaled by the generic_botanical_branded archetype reference (11.9 / 18.0 x 20) = 13.2 of 20. After the hold the same product scores 0.0.
 
 **`devils_claw`** — REVIEWED SUPPORTIVE, scoring HELD
 
