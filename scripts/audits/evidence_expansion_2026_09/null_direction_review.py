@@ -97,8 +97,19 @@ def main() -> int:
               "this direction |", "|---|---:|---:|"]
     for direction in WATCHED:
         lines.append(f"| {direction} | {sum(products[direction].values())} | {only_direction[direction]} |")
-    lines += ["", "The second column is the sharp one: those products' Evidence score rests entirely on evidence "
-              "that did not show benefit.", ""]
+    lines += ["", "The second column counts products whose only POINT-CARRYING matches have this direction. ",
+              "**Correction (2026-09-18): that is not the same as the score resting on them.** The production "
+              "projection in `null_direction_projection.json` scored all 2,446 affected products both ways and only "
+              "**151** change at all. For most of the rest a floor already sets the dimension, so the null record's "
+              "points are invisible.", "",
+              "Worked example — 252794 Vitamin B12 1% (Cyanocobalamin), measured with the production scorer:", "",
+              "| | clinical_evidence_pipeline | primary_evidence_floor | dimension score |", "|---|---:|---:|---:|",
+              "| current (null = 0.25) | 1.35 | 10.0 (nutrition authority) | **10.0** |",
+              "| candidate (null = 0) | 0.0 | 10.0 (nutrition authority) | **10.0** |", "",
+              "The DRI-essential nutrition-authority floor sets this product's Evidence, not the null record. Any "
+              "claim that these products are 'scored on evidence that did not show benefit' is wrong for the "
+              "floor-carrying majority; it is true only for the 151 products listed as movers in the projection, "
+              "where the dimension goes 1.5 -> 0.0.", ""]
     for direction in WATCHED:
         if examples[direction]:
             lines += [f"### Examples — Evidence carried only by `{direction}` records", "",
