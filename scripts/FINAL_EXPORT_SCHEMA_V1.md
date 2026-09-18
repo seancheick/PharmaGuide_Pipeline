@@ -98,7 +98,7 @@ CREATE TABLE products_core (
     quality_score_status            TEXT,   -- scored | suppressed_safety | not_scored
     product_safety_status           TEXT,   -- blocked | unsafe | caution | no_known_catalog_concern | not_assessed
     quality_assessment_status       TEXT,   -- complete | partial | failed
-    quality_tier                    TEXT,   -- Elite/Excellent/Strong/Acceptable/Weak/Poor
+    quality_tier                    TEXT,   -- Exceptional/Excellent/Very good/Good/Needs improvement/Poor
     quality_score_suppressed_reason TEXT,
     v4_module                       TEXT,   -- generic/probiotic/omega/multi_or_prenatal/sports
     v4_confidence                   TEXT,
@@ -241,7 +241,7 @@ CREATE INDEX idx_products_core_contains_nootropics ON products_core(contains_noo
 | `supplement_type`              | `enriched.supplement_type.type`                           | Current observed values include `single_nutrient`, `targeted`, `specialty`, `probiotic` |
 | `quality_score_v4_100`         | `quality_score_v4_100` (export adapter)                   | **Canonical shipped score** (/100); NULL when suppressed/not_scored                     |
 | `quality_score_status`         | adapter `quality_score_status`                            | scored / suppressed_safety / not_scored                                                 |
-| `quality_tier`                 | adapter `quality_tier`                                    | Elite/Excellent/Strong/Acceptable/Weak/Poor                                             |
+| `quality_tier`                 | adapter `quality_tier`                                    | Exceptional/Excellent/Very good/Good/Needs improvement/Poor (bands: quality_score.json `tiers`)                             |
 | `score_model_version`          | adapter (`"v4"`)                                          | Loud model stamp                                                                        |
 | `score_display_100_equivalent` | `quality_score_v4_100` → "NN/100"                         | /100 compat mirror (was `scored.display_100`)                                           |
 | `score_100_equivalent`         | `quality_score_v4_100`                                    | /100 compat mirror                                                                      |
@@ -383,11 +383,11 @@ Required rows:
 | ------------------ | ---------------------- |
 | `db_version`       | `2026.03.29.232343`    |
 | `pipeline_version` | `3.4.0`                |
-| `scoring_version`  | `4.2.0`                |
+| `scoring_version`  | `4.4.0`                |
 | `generated_at`     | `2026-03-29T22:33:24Z` |
 | `product_count`    | `180423`               |
 | `min_app_version`  | `1.0.0`                |
-| `schema_version`   | `2.3.0`                |
+| `schema_version`   | `2.5.0`                |
 
 `db_version` is generated from the UTC build timestamp as `YYYY.MM.DD.HHMMSS`.
 The SQLite `export_manifest` table intentionally omits `checksum`, because the

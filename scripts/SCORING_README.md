@@ -1,6 +1,6 @@
 # PharmaGuide Scoring README
 
-> Operational summary | Last verified: 2026-07-16
+> Operational summary | Last verified against code: 2026-09-18 | Engine 4.4.0
 
 ## The short version
 
@@ -25,7 +25,7 @@ preflight, release, export, and audit-preview paths do not invoke it.
 | `quality_score_v4_100` | Canonical shipped score, finite only when status is `scored` |
 | `quality_score_status` | `scored`, `suppressed_safety`, or `not_scored` |
 | `quality_pillars_v4` | Six consumer-facing pillar scores and explanations |
-| `quality_tier` | Elite, Excellent, Strong, Acceptable, Weak, or Poor |
+| `quality_tier` | Exceptional, Excellent, Very good, Good, Needs improvement, or Poor |
 | `raw_score_v4_100` | Audit-only module math; never a display fallback |
 | `score_100_equivalent` | Compatibility mirror of `quality_score_v4_100` |
 | `score_display_100_equivalent` | Compatibility display mirror of the v4 score |
@@ -55,7 +55,8 @@ they are not a cosmetic stretch of legacy section totals.
 | Cleaner row role and score eligibility | `enhanced_normalizer.py` |
 | Canonical enriched scoring rows | `scoring_input_contract.py` |
 | Product taxonomy | `supplement_taxonomy.py` |
-| V4 module dispatch | `scoring_v4/router.py` |
+| V4 route decision | `scoring_input_contract.py` (ScoringClassification v1) |
+| V4 module dispatch adapter | `scoring_v4/router.py` |
 | Safety identity normalization | `identity/safety.py` |
 | V4 safety policy | `scoring_v4/gate_safety.py` |
 | Completeness policy | `scoring_v4/gate_completeness.py` |
@@ -71,7 +72,8 @@ cross-stage regression test.
 
 ## V4 execution order
 
-1. `class_for_product()` selects one module.
+1. `class_for_product()` selects one module via ScoringClassification v1
+   (`scoring_input_contract.py::build_scoring_classification`).
 2. The safety gate consumes canonical safety signals.
 3. BLOCKED or UNSAFE short-circuits numeric scoring.
 4. CAUTION is carried forward while score math continues.
@@ -89,20 +91,30 @@ cross-stage regression test.
 
 ## Module routing
 
-Current routing priority is implemented only in `scoring_v4/router.py`:
+The route decision is implemented in `scoring_input_contract.py`
+(`_classify_route_module`, ScoringClassification v1); `scoring_v4/router.py`
+is a defensive adapter over it. The module set is pinned by
+`SCORING_ROUTE_MODULES` in the same file. Verified decision order
+(2026-09-18):
 
-1. probiotic
-2. prenatal multi intent
-3. B-complex
-4. multivitamin
-5. sports
-6. fiber/digestive
-7. omega-3
-8. generic fallback
+1. probiotic (unless a greens-powder primary type)
+2. omega, when a prenatal title's panel is genuinely omega-primary
+3. multi_or_prenatal on prenatal title intent
+4. sports
+5. generic — protein title intent with no protein mass or collagen identity
+6. omega (omega product types passing class validation)
+7. b_complex
+8. multi_or_prenatal (explicit multivitamin name, then multivitamin taxonomy)
+9. fiber_digestive
+10. taxonomy-claimed routes (omega/sports) validated by class evidence; an
+    unvalidated claim demotes to `generic` with an explicit reason
+11. late omega-class check, then generic safe default
 
-The router uses canonical taxonomy and panel composition before guarded label
+Routing uses canonical taxonomy and panel composition before guarded label
 signals. `general_supplement` is a fallback identity, not evidence that a
-product belongs in the generic module.
+product belongs in the generic module. The generic module applies botanical
+and collagen sub-profiles and recognizes immune-support/joint-support
+Evidence caps.
 
 ## Status and verdict rules
 

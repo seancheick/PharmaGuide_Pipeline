@@ -1,7 +1,9 @@
 # PharmaGuide Pipeline Architecture
 
-> Last verified: 2026-08-05
-> Export schema: 2.3.0 | Core columns: 111 | Pipeline manifest: 3.4.0
+> Last verified: 2026-09-18
+> Export schema: 2.5.0 | Core columns: 117 | Pipeline manifest: 3.4.0
+> Version truth lives in code, not this header: `EXPORT_SCHEMA_VERSION` (build_final_db.py),
+> `PRODUCTS_CORE_COLUMNS` (core_export_model.py), `SCHEMA_VERSION` (stage_manifest.py).
 
 ## 1. System boundary
 
@@ -41,11 +43,12 @@ alternative release process.
 | Stage output ownership | `stage_manifest.py` |
 | Canonical enriched ingredient contract | `scoring_input_contract.py` |
 | Supplement taxonomy | `supplement_taxonomy.py` |
-| V4 module dispatch | `scoring_v4/router.py` |
+| V4 route decision | `scoring_input_contract.py` (ScoringClassification v1) |
+| V4 module dispatch adapter | `scoring_v4/router.py` |
 | Safety identity normalization | `identity/safety.py` |
 | V4 safety verdict policy | `scoring_v4/gate_safety.py` |
-| Production score | `score_supplements_v4.py` + `scoring_v4/` |
-| Complete scored artifact | `scoring_v4/scored_artifact.py` |
+| Production score | `score_supplements_v4.py` (engine 4.4.0) + `scoring_v4/` |
+| Complete scored artifact | `scoring_v4/scored_artifact.py` (Stage-3 artifact schema 4.3.0) |
 | Stage-3 batch I/O | `score_products_v4.py` |
 | Export schema/quarantine | `build_final_db.py` |
 | Snapshot promotion | `rebuild_dashboard_snapshot.sh` + `promote_release_artifacts.py` |
@@ -119,13 +122,15 @@ Authority:
 
 - `score_products_v4.py`
 - `scoring_v4/scored_artifact.py`
-- `score_supplements_v4.py` (engine 4.2.0)
+- `score_supplements_v4.py` (engine 4.4.0)
 - `scoring_v4/`
 - `scoring_v4/config/quality_score.json`
 
 `build_scored_artifact()` is the single production seam. It runs the v4 scorer
-once, consumes shared coverage/strict diagnostics, applies verdict and safety
-precedence, and emits the complete score/status/pillar/provenance contract.
+once, consumes shared coverage/strict diagnostics (including the
+ScoringClassification v1 route decision from `scoring_input_contract.py`),
+applies verdict and safety precedence, and emits the complete
+score/status/pillar/provenance contract.
 The CLI owns only input validation, atomic batch writes, failure reporting,
 and the stage manifest. Failed or partial batches cannot produce a promotable
 manifest.

@@ -1,10 +1,15 @@
 # PharmaGuide Scoring Engine Specification
 
-> Production scoring engine: **4.2.0**
-> V4 quality configuration: **1.0.6-clean-label-registry**
-> Export schema: **2.3.0** / **111 core columns**
-> Stage-3 artifact schema: **4.2.0**
-> Last verified against code: **2026-08-05**
+> Production scoring engine: **4.4.0**
+> V4 quality configuration: **1.12.0-omega-semantics-and-null-no-credit**
+> Export schema: **2.5.0** / **117 core columns**
+> Stage-3 artifact schema: **4.3.0**
+> Last verified against code: **2026-09-18**
+> Live versions: `SCORING_ENGINE_VERSION` (score_supplements_v4.py), the config's
+> `_metadata.version` (scoring_v4/config/quality_score.json),
+> `SCORED_ARTIFACT_SCHEMA_VERSION` (scoring_v4/scored_artifact.py),
+> `EXPORT_SCHEMA_VERSION` (build_final_db.py). If this header disagrees with
+> those stamps, this header is wrong.
 
 ## 1. Scope
 
@@ -14,7 +19,8 @@ remains authoritative when this document and implementation disagree.
 Primary implementation:
 
 - `score_supplements_v4.py`
-- `scoring_v4/router.py`
+- `scoring_input_contract.py` (ScoringClassification v1 route decision)
+- `scoring_v4/router.py` (adapter; classification owner moved to the contract)
 - `scoring_v4/gate_safety.py`
 - `scoring_v4/gate_completeness.py`
 - `scoring_v4/modules/`
@@ -102,21 +108,32 @@ The input dict is not mutated.
 
 ## 5. Routing
 
-`scoring_v4/router.py::class_for_product()` is the sole v4 dispatcher.
+`scoring_input_contract.py::build_scoring_classification()` is the sole
+route authority (ScoringClassification v1, `SCORING_CLASSIFICATION_SCHEMA_VERSION`);
+`scoring_v4/router.py::class_for_product()` is a defensive adapter that calls it.
+Routes are pinned by `SCORING_ROUTE_MODULES` in the same file.
 
-| Priority | Route | Primary evidence |
+The decision order below is a summary, not a spec — the classifier is the truth.
+Verified route decision order (2026-09-18):
+
+| Order | Route | Trigger (summary) |
 |---:|---|---|
-| 1 | `probiotic` | Product-level probiotic identity, strains, and guarded CFU/name evidence |
-| 2 | `multi_or_prenatal` | Prenatal intent plus true multi/B-complex taxonomy or a broad prenatal panel |
-| 3 | `b_complex` | Focused B-vitamin panel without disqualifying competing actives |
-| 4 | `multi_or_prenatal` | Multivitamin taxonomy or guarded broad-panel fallback |
-| 5 | `sports` | Sports protein/active panel plus product intent or native primary-dose evidence |
-| 6 | `fiber_digestive` | Fiber, prebiotic, or digestive-enzyme identity |
-| 7 | `omega` | Omega taxonomy or primary EPA/DHA evidence |
-| 8 | `generic` | Genuine fallback |
+| 1 | `probiotic` | Probiotic-class identity/CFU evidence (unless greens-powder primary type) |
+| 2 | `omega` | Prenatal title whose panel is genuinely omega-primary |
+| 3 | `multi_or_prenatal` | Prenatal title with multi-panel/taxonomy intent |
+| 4 | `sports` | Sports identity or primary-dose evidence |
+| 5 | `generic` | Protein title intent with no protein mass/collagen identity (evidence-missing containment) |
+| 6 | `omega` | Omega product types passing `_route_is_omega_class` |
+| 7 | `b_complex` | B-complex panel decision |
+| 8 | `multi_or_prenatal` | Explicit multivitamin name / multivitamin taxonomy (eligibility-guarded) |
+| 9 | `fiber_digestive` | Fiber/digestive decision |
+| 10 | taxonomy-specific | Taxonomy claims validated by class evidence (omega/sports); else demoted to `generic` with an evidence-missing reason |
+| 11 | `omega` / `generic` | Late omega-class check, then generic safe default |
 
-Routing prefers canonical taxonomy and panel composition. Product-name signals
-are bounded and guarded. The router does not import the legacy scorer.
+Routing prefers canonical taxonomy and panel composition; a taxonomy claim
+without class evidence demotes to `generic` with an explicit reason rather than
+scoring in the claimed module. Product-name signals are bounded and guarded.
+The router does not import the legacy scorer.
 
 ## 6. Safety gate
 
@@ -190,6 +207,27 @@ not in the router or exporter.
 | Verification | 15 |
 | Formula & quality checks (`safety_hygiene`) | 10 |
 
+Pillars are category-aware, purpose-fit adapters, not linear remaps of module
+dimensions: they normalize against reviewed structural ceilings per archetype
+(`category_magnitudes` in the config), verification saturates hard third-party
+signals with a fail-open neutral baseline, and only transparency remains a
+faithful linear source-dimension map. Since config 1.9.0 the rubric proxies are
+removed (ingredient-count breadth, focus bonuses/floors, generic enzyme
+recognition, blanket gummy penalties, organic/Non-GMO/natural-source points,
+the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 caps, ingredient-presence
+Evidence floors, certification-derived omega floors); fish/krill/algal carrier
+mass never becomes EPA+DHA dose, and an omega row printed as EPA and/or DHA
+owns that amount (1.10.x). Since engine 4.4.0, null earns no affirmative
+Evidence credit (Wave 2) and Evidence norms use the primary-mass-floor
+calibration (Wave 3). Dose and Evidence never manufacture Formulation credit.
+
+Besides the eight routes, the generic module applies **sub-profiles** for
+botanical and collagen products, and generic routing recognizes
+**immune-support** and **joint-support** profiles with their own Evidence caps.
+Category Evidence caps currently include generic 20, probiotic 20,
+multi/prenatal 20, omega 20, immune_support 17, joint_support 14 — always read
+the live config rather than trusting this paragraph.
+
 For a scoreable product:
 
 ```text
@@ -211,16 +249,22 @@ claiming that a legal additive is a banned ingredient.
 
 ### 9.1 Tiers
 
-| Score | Tier |
+Tier bands live in `scoring_v4/config/quality_score.json` (`tiers`) and are
+currently:
+
+| Shipped whole score | Tier |
 |---:|---|
-| 95–100 | Elite |
+| 95–100 | Exceptional |
 | 90–94.9 | Excellent |
-| 80–89.9 | Strong |
-| 70–79.9 | Acceptable |
-| 55–69.9 | Weak |
+| 80–89.9 | Very good |
+| 70–79.9 | Good |
+| 55–69.9 | Needs improvement |
 | 0–54.9 | Poor |
 
-Tier is null when the public score is suppressed or not scored.
+Tier is derived from the shipped whole number (`shipped_whole_score`, half-up
+round of the one-decimal total), never from the decimal total, so the hero-card
+number and its tier can never disagree. Tier is null when the public score is
+suppressed or not scored.
 
 ## 10. Verdict and status
 
@@ -230,9 +274,12 @@ Verdict precedence is deterministic:
 BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE
 ```
 
-For non-blocked v4 module results, the current POOR threshold is 40.0. A carried
-CAUTION outranks POOR/SAFE. Completeness policy may impose a tested cap or
-CAUTION ceiling without changing the underlying module breakdown.
+POOR is not decided from the module raw score. It is owned by the shipped
+public tier (the `Poor` band in `scoring_v4/config/quality_score.json` tiers,
+applied by `scoring_v4/quality_score.py`); a carried CAUTION outranks POOR/SAFE
+and the module raw score must never decide the verdict.
+Completeness policy may impose a tested cap or CAUTION ceiling without changing
+the underlying module breakdown.
 
 | Status | Allowed verdicts | Public number |
 |---|---|---|
@@ -297,12 +344,24 @@ enriched product into one scored product artifact. It:
 and summary reporting. `build_final_db.py` validates and exports the artifact;
 it does not rescore or overlay another result.
 
+### 13.1 Change history worth knowing
+
+- **4.2.0 → 4.3.0** (2026-08-20, `17db3e50`): confidence separated from gate
+  state; then AFU dose uncertainty and submission identity preserved (`4b870138`).
+- **4.3.0 → 4.4.0** (2026-09-03, `283d83c1`): probiotic research scored by
+  source-owned applicability; the evidence-expansion wave followed — Wave 2
+  owner decisions (null earns no affirmative credit), primary-mass-floor
+  calibration for Evidence norms, and the vitamin-D bone-goal ownership change
+  (bone goal is synergy-owned, not Evidence-owned).
+- **Config 1.12.0** (2026-09-18): omega semantics + null-no-credit; see the
+  config `_metadata.description` for the full authored rationale.
+
 ## 14. Export contract
 
 `build_final_db.py` owns final schema validation and quarantine.
 
-- Export schema is `2.3.0`.
-- `products_core` currently has 111 columns.
+- Export schema is `2.5.0` (2.4.0 remains importable).
+- `products_core` currently has 117 columns (`PRODUCTS_CORE_COLUMNS` in `core_export_model.py`; 91 ship to the app, 26 are server-only).
 - Ranking and dedup use `quality_score_v4_100` only for status `scored`.
 - Suppressed safety rows may ship with null score and visible verdict/evidence.
 - NOT_SCORED rows are quarantined.
