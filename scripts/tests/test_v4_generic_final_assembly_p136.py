@@ -368,11 +368,16 @@ def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
     # ingredient-human evidence, either of which would lift this contrived
     # -25-violation product above the 40-line.
     # This test verifies the POOR-threshold *mechanic*, not magnesium specifically.
+    # The filler sits in an undisclosed blend: since 2026-09-18 an UNRATED
+    # ingredient form maps to the module's neutral floor rather than 0, so a
+    # contrived product needs a real disclosure failure — not missing curation —
+    # to sit under the line.
     product = _base_product(
         ingredient=_ingredient(
             name="Unverified Filler",
             standard_name="Unverified Filler",
             canonical_id="unverified_filler",
+            is_proprietary_blend=True,
         )
     )
     product["manufacturer_data"] = {

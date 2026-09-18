@@ -506,14 +506,36 @@ def _build_clean_label_flags(enriched_hits: List[Dict[str, Any]]) -> List[Dict[s
     return flags
 
 
+def _low_severity_additive_magnitude(module_bd: Dict[str, Any]) -> float:
+    """Points the formulation penalty took for additives with no safety finding.
+
+    An entry PharmaGuide's own additive data describes as GRAS and "tracked
+    purely as a non-nutritive excipient quality signal" (silicon dioxide,
+    magnesium stearate, microcrystalline cellulose, stearic acid …) is a
+    formulation-quality signal, not a clinical safety concern.
+    """
+    formulation = ((module_bd.get("dimensions") or {}).get("formulation") or {})
+    details = (formulation.get("metadata") or {}).get("inactive_penalty_details") or []
+    return sum(
+        abs(_num(detail.get("penalty_applied")))
+        for detail in details
+        if isinstance(detail, dict) and str(detail.get("penalty_tier") or "").lower() == "low"
+    )
+
+
 def _formulation_additive_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> float:
     """Small public Safety Hygiene deduction for additive/sweetener concerns.
 
     The underlying B1 formulation penalties remain the main scoring signal. This
     separate, capped deduction prevents the public Safety Hygiene pillar from
     claiming 10/10 when the product carries additive or glycemic-sweetener flags.
+
+    2026-09-18: low-severity entries are excluded. Their own reviewed records
+    state no meaningful safety concern, so they keep their formulation-quality
+    penalty and no longer read as a clinical safety finding.
     """
     raw = mirrored_penalty_magnitude(module_bd, FORMULA_QUALITY_MIRROR)
+    raw = max(0.0, raw - _low_severity_additive_magnitude(module_bd))
     sub = cfg.get("safety_hygiene_subscale") or {}
     cap = _num(sub.get("additive_or_sweetener_max_penalty"), 4.0)
     return round(min(raw, cap), 1) if raw > 0 else 0.0
@@ -664,6 +686,20 @@ def _archetype(module: Optional[str], module_bd: Dict[str, Any]) -> str:
     return "generic_single_molecule"
 
 
+def _unrated_form_neutral_ratio() -> float:
+    """The share of the pillar an unrated ingredient form keeps.
+
+    One owner: the multi/prenatal panel's own neutral floor for a row whose form
+    is not rated. Reused here so "we have not rated this" means the same thing
+    everywhere instead of 0 in one module and partial credit in another."""
+    from scoring_v4.modules.multi_prenatal_formulation import (
+        BIO_SCORE_MAX, PANEL_FORM_NEUTRAL_FLOOR)
+    return float(PANEL_FORM_NEUTRAL_FLOOR) / float(BIO_SCORE_MAX)
+
+
+_UNRATED_FORM_NEUTRAL_RATIO = _unrated_form_neutral_ratio()
+
+
 def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
                         cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Category-aware purpose-fit formulation. Normalize to the archetype's ACHIEVABLE
@@ -688,6 +724,11 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
         and not meta.get("collagen_profile_applied")
     ):
         reason = "Ingredient-form quality is not rated in PharmaGuide's current data."
+        # An unrated form is unknown, not poor. The multi panel already treats an
+        # unrated row this way (panel_form_neutral_floor / bio_score_max), so the
+        # pillar uses that same neutral rather than scoring missing curation as 0.
+        neutral = round(float(weight) * _UNRATED_FORM_NEUTRAL_RATIO, 1)
+        val = max(val, neutral)
     if (meta.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
         reason = "The reviewed commercial formula matches the reported strain composition, total AFU potency and prebiotic."
     if archetype == "omega":

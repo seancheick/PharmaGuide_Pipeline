@@ -98,3 +98,28 @@ def test_omega_transparency_blend_opacity_is_named():
         "The marine or algal source is disclosed; EPA/DHA amounts, the molecular form and "
         "oxidation testing are not. A proprietary blend hides individual amounts."
     )
+
+
+def test_an_unrated_ingredient_form_is_neutral_not_zero():
+    """Nature's Bounty Ultra Soya Lecithin (17091): lecithin has no form rating,
+    so Formulation read 0/20 while Dose on the same product gave partial credit
+    for an unavailable benchmark. Unknown is neutral, not worst-case."""
+    from scoring_v4.quality_score import _config, _pillar_formulation
+
+    dim = {"score": 0.0, "max": 30.0, "metadata": {
+        "iqm_form_quality_assessed_count": 0, "formulation_profile": "generic_iqm"}}
+    pillar = _pillar_formulation(dim, 20, "generic_single_molecule", _config())
+
+    assert pillar["score"] == 12.0  # the module's own neutral floor, 0.6 of the pillar
+    assert "not rated" in pillar["reason"].lower()
+
+
+def test_a_rated_but_weak_form_is_not_lifted_to_neutral():
+    """Only 'we have not rated this' is neutral. A form we DID rate stays low."""
+    from scoring_v4.quality_score import _config, _pillar_formulation
+
+    dim = {"score": 4.0, "max": 30.0, "metadata": {
+        "iqm_form_quality_assessed_count": 2, "formulation_profile": "generic_iqm"}}
+    pillar = _pillar_formulation(dim, 20, "generic_single_molecule", _config())
+
+    assert pillar["score"] < 12.0
