@@ -3,7 +3,7 @@
     "schema_version": "6.0.0",
     "description": "Manual overrides for cert verification scope. Used when (a) the fuzzy resolver returns needs_review and a human confirms/downgrades, or (b) a known-good cert isn't in the public registry snapshots yet. Pattern matches scripts/data/curated_overrides/upc_overrides.json.",
     "purpose": "cert_verification_manual_override",
-    "last_updated": "2026-09-17",
+    "last_updated": "2026-09-18",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
     "total_overrides": 715,
     "status_meanings": {
@@ -12748,6 +12748,38 @@
       "triage_reasons": [
         "no_strong_signal"
       ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Advanced DHA 650 mg",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Strength-less registry name blocked discovery. NSF's dietary supplement listing carries “Thorne® Advanced DHA” (Gelcap, 2 Gelcaps), and Thorne sells exactly one Advanced DHA (thorne.com SKU SP606C, 650 mg DHA + 200 mg EPA per 2 gelcaps), so the listing identifies this SKU unambiguously. The sibling record 337871 already resolves through its label claim on the same registry row.",
+      "reviewed_at": "2026-09-18",
+      "review_source": "strengthless_discovery_review_2026-09-18",
+      "reviewer": "Claude",
+      "dsld_id": "298106",
+      "record_id": "NSF_CERTIFIE_2D6C19E75106",
+      "matched_brand": "Thorne®",
+      "matched_product": "Thorne® Advanced DHA",
+      "source_url": "https://info.nsf.org/Certified/Dietary/Listings.asp"
+    },
+    {
+      "brand": "Thorne",
+      "product": "Prenatal DHA 650 mg",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Strength-less registry name blocked discovery on this label version. NSF's dietary supplement listing carries “Thorne® Prenatal DHA” (Gelcap, 2 Gelcaps) and Thorne sells exactly one Prenatal DHA (thorne.com), so the listing identifies this SKU unambiguously. DSLD 337871 is the same product and already resolves through its label claim on this same registry row; this entry removes that inconsistency.",
+      "reviewed_at": "2026-09-18",
+      "review_source": "strengthless_discovery_review_2026-09-18",
+      "reviewer": "Claude",
+      "dsld_id": "291804",
+      "record_id": "NSF_CERTIFIE_2E7EE9588B53",
+      "matched_brand": "Thorne®",
+      "matched_product": "Thorne® Prenatal DHA",
+      "source_url": "https://info.nsf.org/Certified/Dietary/Listings.asp"
     }
   ]
 }
