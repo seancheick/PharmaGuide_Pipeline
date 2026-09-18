@@ -506,6 +506,9 @@ def _build_clean_label_flags(enriched_hits: List[Dict[str, Any]]) -> List[Dict[s
     return flags
 
 
+_ADDITIVE_PENALTY_KEY = "B1_harmful_additives"
+
+
 def _low_severity_additive_magnitude(module_bd: Dict[str, Any]) -> float:
     """Points the formulation penalty took for additives with no safety finding.
 
@@ -516,11 +519,18 @@ def _low_severity_additive_magnitude(module_bd: Dict[str, Any]) -> float:
     """
     formulation = ((module_bd.get("dimensions") or {}).get("formulation") or {})
     details = (formulation.get("metadata") or {}).get("inactive_penalty_details") or []
-    return sum(
+    low = sum(
         abs(_num(detail.get("penalty_applied")))
         for detail in details
         if isinstance(detail, dict) and str(detail.get("penalty_tier") or "").lower() == "low"
     )
+    # The ledger is uncapped and lists every matched excipient, while the charge
+    # it explains is clamped at b1_harmful_additive_cap. Give back no more than
+    # was taken, or the excess comes out of the sweetener penalty standing beside
+    # it in the same mirror group — and a sugary product quietly stops losing
+    # Safety points.
+    charged = abs(_num((formulation.get("penalties") or {}).get(_ADDITIVE_PENALTY_KEY)))
+    return min(low, charged)
 
 
 def _formulation_additive_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> float:

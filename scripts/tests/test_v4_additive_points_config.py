@@ -141,3 +141,44 @@ def test_a_moderate_additive_still_reduces_the_safety_pillar():
 
     assert pillar["score"] == 8.0  # only the moderate sweetener is charged
     assert "additive" in pillar["reason"]
+
+
+def _mirror_breakdown(sugar_penalty, additive_penalty, low_tier_points):
+    """A formulation breakdown whose additive ledger and applied penalty disagree.
+
+    generic_formulation clamps B1_harmful_additives at b1_harmful_additive_cap
+    while inactive_penalty_details keeps every per-item magnitude, so the ledger
+    can legitimately sum to more than the penalty that was actually charged.
+    """
+    return {"dimensions": {"formulation": {
+        "penalties": {
+            "B1_dietary_sugar": sugar_penalty,
+            "B1_harmful_additives": additive_penalty,
+        },
+        "metadata": {"inactive_penalty_details": [
+            {"matched_rule_id": f"ADD_GRAS_{index}", "penalty_tier": "low",
+             "penalty_applied": points}
+            for index, points in enumerate(low_tier_points)
+        ]},
+    }}}
+
+
+def test_capped_additive_ledger_cannot_eat_the_sugar_deduction():
+    """Removing GRAS excipients from Safety must never remove a sweetener.
+
+    The low-severity exclusion subtracts the excipient ledger from the mirrored
+    penalty total. That total carries the CLAMPED additive penalty, so an
+    uncapped ledger must be clamped to what the additive penalty actually
+    charged — otherwise the excess is taken out of B1_dietary_sugar, and a
+    sugary product silently stops losing Safety points.
+    """
+    # 10 GRAS fillers (5.0 of ledger) against a 1.0 charged additive penalty.
+    breakdown = _mirror_breakdown(-4.0, -1.0, [0.5] * 10)
+
+    assert qs._formulation_additive_safety_penalty(breakdown, qs._config()) == 4.0
+
+
+def test_low_severity_magnitude_never_exceeds_the_penalty_it_explains():
+    breakdown = _mirror_breakdown(-3.0, -2.0, [0.5] * 6)
+
+    assert qs._low_severity_additive_magnitude(breakdown) == 2.0
