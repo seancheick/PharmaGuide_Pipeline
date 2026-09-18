@@ -1,0 +1,16 @@
+{
+ "canonical_id": "senna",
+ "class": "A",
+ "action": "propose_high_risk",
+ "direction": "positive_strong",
+ "study_type": "systematic_review_meta",
+ "sources": [
+  "33767108",
+  "35943487",
+  "29885259"
+ ],
+ "studied_dose": "dosed as sennosides; the reviews do not state an extract-milligram equivalent",
+ "label_median_mg": 150,
+ "outcome": "chronic constipation",
+ "note": "The strongest positive evidence in the wave, and the one that needs a human decision rather than a scoring one. Two independent evidence-based reviews both give senna GRADE A / good evidence as a first-line OTC laxative for chronic constipation, and a third found it superior to or as effective as other laxatives in long-term care. No dose policy is proposed: senna is dosed by sennoside content and all 15 catalog rows print 150 mg of senna leaf extract, so an equivalence would have to be invented. FLAGGED HIGH-RISK: senna is a stimulant laxative, the reviews themselves report abdominal pain, cramping, diarrhoea and nausea, and long-term use raises dependence and electrolyte concerns. Whether a stimulant laxative should earn positive Evidence credit in a consumer supplement score is a product-policy question for the owner, not an evidence question."
+}

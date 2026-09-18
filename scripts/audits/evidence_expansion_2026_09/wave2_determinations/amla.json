@@ -1,0 +1,15 @@
+{
+ "canonical_id": "amla",
+ "class": "A",
+ "action": "propose",
+ "direction": "positive_weak",
+ "study_type": "systematic_review_meta",
+ "sources": [
+  "37296402",
+  "36934568"
+ ],
+ "studied_dose": "500-1500 mg/day Emblica officinalis fruit",
+ "label_median_mg": 120,
+ "outcome": "LDL-C, triglycerides, hsCRP, fasting glucose in adults",
+ "note": "PMID 37296402 (9 studies, EO 500-1500 mg/day): LDL-C -15.08 mg/dL, VLDL -5.43, TG -22.35, hsCRP -1.70, with the authors' own caution about heterogeneity. PMID 36934568 (5 RCTs) agrees. A 500 mg/day floor is proposed because that is the lowest dose the syntheses cover; the catalog median is 120 mg, so most products would NOT qualify - that is the point of the floor. The branded AMX-160 RCT (40262554) supports but does not define the record and carries an erratum; the amla syrup alopecia trial (37487962) is off-axis and excluded."
+}

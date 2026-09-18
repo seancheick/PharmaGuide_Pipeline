@@ -1,0 +1,16 @@
+{
+ "canonical_id": "globe_artichoke",
+ "class": "A",
+ "action": "ready_but_blocked_upstream",
+ "direction": "positive_weak",
+ "study_type": "systematic_review_meta",
+ "sources": [
+  "41270328",
+  "34383355",
+  "33197674"
+ ],
+ "studied_dose": "not stated in the syntheses; no dose policy proposed",
+ "label_median_mg": 125,
+ "outcome": "total and LDL cholesterol, triglycerides, insulin/HOMA-IR, ALT and ALP",
+ "note": "Three independent ingredient-level meta-analyses of Cynara scolymus agree on modest, consistent effects: total and LDL cholesterol and triglycerides down, insulin and HOMA-IR down, ALT and ALP down, with fasting glucose, HbA1c and HDL unaffected - the 2025 synthesis calls them 'modest but significant'. Endpoints are clinical biomarkers, not patient-important outcomes, and the largest effects concentrate in NAFLD and hypertensive subgroups, both of which must travel with the record as studied_population. No dose is stated in any synthesis, so no dose policy is proposed. BLOCKED UPSTREAM, not by evidence: all 37 catalog rows are classified recognized_non_scorable by the cleaner, so this record would reach ZERO products. Routed to the identity/cleaner owner. The evidence itself is ready to author the moment those rows become scorable actives."
+}

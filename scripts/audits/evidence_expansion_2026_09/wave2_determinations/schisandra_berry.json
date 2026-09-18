@@ -1,0 +1,15 @@
+{
+ "canonical_id": "schisandra_berry",
+ "class": "A",
+ "action": "ready_but_blocked_upstream",
+ "direction": "positive_weak",
+ "study_type": "rct_multiple",
+ "sources": [
+  "32260466",
+  "33710261"
+ ],
+ "studied_dose": "1,000 mg/day Schisandra chinensis extract",
+ "label_median_mg": 175,
+ "outcome": "knee extensor / quadriceps muscle strength in older adults",
+ "note": "Two independent single-ingredient placebo-controlled RCTs at 1 g/day for 12 weeks: quadriceps strength up in postmenopausal women (n=45) and knee extensor strength up 10.2 Nm (95% CI 3.7-16.8) in older adults on a walking programme, with no change in muscle mass, inflammatory or antioxidant markers. A 1,000 mg/day floor is required - the catalog median is 175 mg. The Omija+soybean mixture trial (35956334) and the multi-herb adaptogen trial (41656269) are combination products and are excluded. studied_population is older adults and must travel with the record. BLOCKED UPSTREAM, not by evidence: all 48 catalog rows are classified recognized_non_scorable by the cleaner, so this record would reach ZERO products however good it is. Routed to the identity/cleaner owner. The evidence itself is ready to author the moment those rows become scorable actives."
+}

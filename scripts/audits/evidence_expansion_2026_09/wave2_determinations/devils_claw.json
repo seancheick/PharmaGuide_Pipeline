@@ -1,0 +1,14 @@
+{
+ "canonical_id": "devils_claw",
+ "class": "A",
+ "action": "propose",
+ "direction": "positive_weak",
+ "study_type": "systematic_review_meta",
+ "sources": [
+  "26630428"
+ ],
+ "label_median_mg": 980,
+ "studied_dose": "standardised to harpagoside content; not stated as extract mg",
+ "outcome": "non-specific low back pain",
+ "note": "Cochrane 2016 update (PMID 26630428, 14 RCTs, 2,050 participants): Harpagophytum procumbens seems to reduce pain more than placebo, evidence moderate quality at best. The 2007 Cochrane (17202897) is superseded and carries an erratum, so it is not cited. No dose policy is proposed: trials dose by harpagoside content and labels print extract mg, and inventing an equivalence is forbidden. Cranberry is the precedent for a record that deliberately carries no dose policy."
+}

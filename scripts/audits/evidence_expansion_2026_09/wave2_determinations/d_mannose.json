@@ -1,0 +1,15 @@
+{
+ "canonical_id": "d_mannose",
+ "class": "A",
+ "action": "hold_null_semantics",
+ "direction": "null",
+ "study_type": "rct_multiple",
+ "sources": [
+  "38587819",
+  "41004704"
+ ],
+ "studied_dose": "2 g/day",
+ "label_median_mg": 1000,
+ "outcome": "recurrent UTI prevention in women with a history of recurrent UTI",
+ "note": "PMID 38587819 (JAMA Intern Med 2024, n=598, placebo-controlled, 2 g/day, 6 months) null on its primary endpoint (51.0% vs 55.7%, RD -5%, 95% CI -13% to 3%); PMID 41004704 (2025, 6 RCTs, n=1,167) RR 0.57 (0.29-1.15). Older positive syntheses rest on open-label studies. Fully scorer-compatible; blocked only by the parked null-direction decision."
+}

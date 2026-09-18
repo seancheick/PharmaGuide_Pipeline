@@ -1,0 +1,11 @@
+{
+ "canonical_id": "hoodia_gordonii",
+ "class": "B",
+ "action": "hold_and_handoff",
+ "direction": "null",
+ "sources": [
+  "21993434"
+ ],
+ "label_median_mg": 500,
+ "note": "The only oral RCT (PMID 21993434, 49 overweight women, 1,110 mg Hoodia gordonii purified extract twice daily = 2,220 mg/day for 15 days) found NO significant effect on ad libitum energy intake or body weight, and significant increases in blood pressure, pulse, heart rate, bilirubin and alkaline phosphatase with worse tolerability than placebo (nausea, emesis, skin sensation disturbance). Efficacy is held twice over: the direction is null, and the studied dose is about four times the 500 mg catalog median, so it would not apply even if null records were approvable. The vital-sign and liver-enzyme signal is the actionable part and is routed to the safety owner."
+}

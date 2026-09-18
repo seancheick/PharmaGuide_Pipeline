@@ -1,0 +1,14 @@
+{
+ "canonical_id": "siberian_ginseng",
+ "class": "B",
+ "action": "hold_and_handoff",
+ "direction": "null",
+ "sources": [
+  "14971626",
+  "11099371",
+  "15207399",
+  "15190050"
+ ],
+ "label_median_mg": 375,
+ "note": "Three trials null on their primary endpoints: chronic fatigue ('overall efficacy was not demonstrated'), endurance cycling at 1,200 mg/day (no difference in steady-state substrate use or 10-km time), and a quality-of-life trial where the social-functioning gain at 4 weeks had attenuated by 8 weeks. The fourth is the reason for a handoff rather than a record: Eleutherococcus senticosus significantly RAISED 90-minute, 120-minute and AUC postprandial glucose. Held twice over - the direction is null and the null was measured at 1,200 mg/day against a 375 mg catalog median - and the glycemic signal is routed to the safety owner."
+}

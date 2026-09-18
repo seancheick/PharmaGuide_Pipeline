@@ -1,0 +1,13 @@
+{
+ "canonical_id": "oregano",
+ "class": "B",
+ "action": "hold",
+ "direction": "mixed",
+ "sources": [
+  "16881679",
+  "34496170",
+  "36609950"
+ ],
+ "label_median_mg": 150,
+ "note": "Three different exposures and three different questions: essential oils of Origanum dubium and O. vulgare hirtum in 34 athletes (HDL-C up over 14 days), oregano phenolics in fortified juice at 300-600 mg/day which was NULL on serum lipids and lipid peroxidation, and a network meta-analysis in which O. vulgare was best for chronic rhinosinusitis without polyps at LOW certainty. The cleanest placebo-controlled supplement exposure is the null one. Catalog forms split between oil of oregano and leaf extract, which are not the same exposure."
+}

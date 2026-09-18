@@ -1,0 +1,13 @@
+{
+ "canonical_id": "mucuna_pruriens",
+ "class": "B",
+ "action": "hold_and_handoff",
+ "direction": "not_an_efficacy_record",
+ "sources": [
+  "28679598",
+  "41269916",
+  "15548480"
+ ],
+ "label_median_mg": 500,
+ "note": "Every Parkinson's trial dose Mucuna as a LEVODOPA SUBSTITUTE at drug scale: 12.5-17.5 mg/kg of L-dopa equivalent, or 15-30 GRAMS of seed powder, compared head to head against dispersible levodopa/benserazide. PMID 41269916 runs MP powder as levodopa monotherapy for 12 months. This is not supplement-efficacy evidence and must not become an efficacy direction for a 500 mg capsule. The actionable finding is the opposite one: these products deliver unsupervised L-dopa, which interacts with carbidopa/levodopa, MAO inhibitors and antipsychotics. Routed to the safety and interaction owner. The seminal-parameter trial (18001713) is an uncontrolled-design infertility study and is not used."
+}

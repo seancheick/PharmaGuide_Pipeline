@@ -1,0 +1,56 @@
+{
+ "_metadata": {
+  "note": "Read-only reach projection for proposed records. No record exists yet; nothing scored.",
+  "dose_floor_semantics": "null means the record deliberately carries no dose policy, as INGR_CRANBERRY does."
+ },
+ "identities": {
+  "common_bean_extract": {
+   "proposed_min_daily_dose_mg": 1000,
+   "products_carrying_the_identity": 22,
+   "products_the_record_would_apply_to": 16,
+   "products_below_the_dose_floor_or_undosed": 6,
+   "products_at_evidence_zero_today": 21,
+   "evidence_zero_products_the_record_would_reach": 16
+  },
+  "amla": {
+   "proposed_min_daily_dose_mg": 500,
+   "products_carrying_the_identity": 52,
+   "products_the_record_would_apply_to": 19,
+   "products_below_the_dose_floor_or_undosed": 33,
+   "products_at_evidence_zero_today": 19,
+   "evidence_zero_products_the_record_would_reach": 18
+  },
+  "devils_claw": {
+   "proposed_min_daily_dose_mg": null,
+   "products_carrying_the_identity": 25,
+   "products_the_record_would_apply_to": 25,
+   "products_below_the_dose_floor_or_undosed": 0,
+   "products_at_evidence_zero_today": 16,
+   "evidence_zero_products_the_record_would_reach": 16
+  },
+  "senna": {
+   "proposed_min_daily_dose_mg": null,
+   "products_carrying_the_identity": 15,
+   "products_the_record_would_apply_to": 15,
+   "products_below_the_dose_floor_or_undosed": 0,
+   "products_at_evidence_zero_today": 15,
+   "evidence_zero_products_the_record_would_reach": 15
+  },
+  "schisandra_berry": {
+   "proposed_min_daily_dose_mg": 1000,
+   "products_carrying_the_identity": 0,
+   "products_the_record_would_apply_to": 0,
+   "products_below_the_dose_floor_or_undosed": 0,
+   "products_at_evidence_zero_today": 0,
+   "evidence_zero_products_the_record_would_reach": 0
+  },
+  "globe_artichoke": {
+   "proposed_min_daily_dose_mg": null,
+   "products_carrying_the_identity": 0,
+   "products_the_record_would_apply_to": 0,
+   "products_below_the_dose_floor_or_undosed": 0,
+   "products_at_evidence_zero_today": 0,
+   "evidence_zero_products_the_record_would_reach": 0
+  }
+ }
+}

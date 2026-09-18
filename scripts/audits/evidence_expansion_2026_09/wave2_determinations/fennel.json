@@ -1,0 +1,13 @@
+{
+ "canonical_id": "fennel",
+ "class": "B",
+ "action": "hold",
+ "direction": "positive_weak",
+ "sources": [
+  "34187122",
+  "33182553",
+  "33725577"
+ ],
+ "label_median_mg": 237,
+ "note": "The dysmenorrhea effect is real and replicated: PMID 34187122 pooled 7 placebo-controlled trials at SMD -0.632 (95% CI -0.827 to -0.436) with I2 = 0%. Held anyway, on exposure: none of the three meta-analyses states a single dose or preparation, the underlying trials mix seed powder, extract capsules and essential-oil drops, and every catalog row's form resolves to (none). Applying it would mean assuming a preparation the label does not state. Routed to the normalization owner as a form-resolution request, not recorded as absent evidence."
+}

@@ -1,0 +1,8 @@
+{
+ "canonical_id": "green_coffee_bean",
+ "class": "B",
+ "action": "hold_integrity",
+ "direction": "unresolved",
+ "sources": [],
+ "note": "All four selected sources are meta-analyses and the identity's own retrieval contains two retracted green-coffee-extract records (22291473, 25340633). No record may be authored until each synthesis's included-study list is checked against those PMIDs."
+}
