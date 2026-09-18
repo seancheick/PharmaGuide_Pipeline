@@ -65,6 +65,24 @@ def test_a_shadowed_floor_does_not_claim_it_drove_the_credit():
     assert "primary ingredient" not in pillar["reason"].lower()
 
 
+def test_the_floor_owner_itself_uses_a_strict_comparison():
+    """The other half of the equality edge, at the layer that DECIDES it.
+
+    The two tests above hand `primary_evidence_floor_decisive` to the copy layer,
+    so they pin that the copy reads the fact - but they would still pass if
+    generic_evidence started computing that fact with `>=`. This drives the owner
+    instead, on the degenerate product where floor and pipeline are both 0.0. If
+    the comparison ever loosens, a product with no evidence at all would report a
+    decisive floor and be told the primary ingredient drove its score of zero.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence({}, apply_primary_floor=True)
+
+    assert payload["metadata"]["primary_evidence_floor"] == 0.0
+    assert payload["metadata"]["primary_evidence_floor_decisive"] is False
+
+
 def test_the_decisive_verdict_comes_from_the_floor_owner_not_a_recomputation():
     """quality_score must not re-derive decisiveness from the floor value. If it
     did, a floor equal to the pipeline would read as floor-driven — and equality
