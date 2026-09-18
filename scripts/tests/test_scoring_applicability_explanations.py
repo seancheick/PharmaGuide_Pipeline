@@ -77,15 +77,16 @@ def test_panel_gap_and_opaque_blends_are_both_named():
 
 
 def test_omega_transparency_names_what_is_missing_not_amounts():
-    # Thorne Advanced DHA (DSLD 298106): EPA/DHA amounts and source are printed;
-    # the molecular form and oxidation testing are not.
+    # Thorne Advanced DHA (DSLD 298106): EPA/DHA amounts and source are printed,
+    # the molecular form is not. Oxidation testing is no longer named here — the
+    # pillar stopped scoring it, so it stopped being a Transparency gap.
     from scoring_v4.quality_score import _omega_transparency_reason
 
     dim = {"score": 9.0, "components": {"epa_or_dha_disclosed": 5.0, "source_disclosed": 3.0,
                                          "b3_claim_compliance": 1.0}, "penalties": {}}
     assert _omega_transparency_reason(dim, "fallback") == (
-        "EPA/DHA amounts and the marine or algal source are disclosed; the molecular form "
-        "and oxidation testing are not."
+        "EPA/DHA amounts and the marine or algal source are disclosed; "
+        "the molecular form is not."
     )
 
 
@@ -95,8 +96,8 @@ def test_omega_transparency_blend_opacity_is_named():
     dim = {"components": {"source_disclosed": 3.0},
            "penalties": {"B5_proprietary_blend_opacity": -2.0}}
     assert _omega_transparency_reason(dim, "fallback") == (
-        "The marine or algal source is disclosed; EPA/DHA amounts, the molecular form and "
-        "oxidation testing are not. A proprietary blend hides individual amounts."
+        "The marine or algal source is disclosed; EPA/DHA amounts and the molecular form "
+        "are not. A proprietary blend hides individual amounts."
     )
 
 
@@ -123,3 +124,19 @@ def test_a_rated_but_weak_form_is_not_lifted_to_neutral():
     pillar = _pillar_formulation(dim, 20, "generic_single_molecule", _config())
 
     assert pillar["score"] < 12.0
+
+
+def test_omega_transparency_never_names_a_disclosure_it_stopped_scoring():
+    """Oxidation testing left Transparency on 2026-09-18 (omega_rubric
+    oxidation_disclosed.score = 0, cap 15 -> 13). While the explanation still
+    listed it, every omega label was told oxidation testing was missing for a
+    pillar that no longer scores it, and the "everything is disclosed" sentence
+    could never be reached — no label can earn a retired component."""
+    from scoring_v4.quality_score import _omega_transparency_reason
+
+    fully_disclosed = {"components": {"epa_or_dha_disclosed": 5.0, "source_disclosed": 3.0,
+                                      "form_disclosed": 4.0}, "penalties": {}}
+    reason = _omega_transparency_reason(fully_disclosed, "fallback")
+
+    assert "oxidation" not in reason.lower()
+    assert reason == "EPA/DHA amounts, the molecular form and the source are all disclosed."

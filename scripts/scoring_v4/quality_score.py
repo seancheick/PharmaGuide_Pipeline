@@ -268,11 +268,15 @@ def _probiotic_transparency_reason(dim: Dict[str, Any], fallback: str) -> str:
 
 
 # Omega Transparency items in rubric order; a missing component was not disclosed.
+# Only what the pillar still SCORES belongs here. Oxidation testing was retired
+# from Transparency on 2026-09-18 (omega_rubric oxidation_disclosed.score = 0):
+# naming it kept telling every omega label that oxidation testing was missing
+# from a pillar that no longer charges for it, and made the "all disclosed"
+# sentence unreachable, since a retired component can never be credited.
 _OMEGA_DISCLOSURE_ITEMS = (
     ("epa_or_dha_disclosed", "EPA/DHA amounts"),
     ("source_disclosed", "the marine or algal source"),
     ("form_disclosed", "the molecular form"),
-    ("oxidation_disclosed", "oxidation testing"),
 )
 
 
@@ -288,7 +292,7 @@ def _omega_transparency_reason(dim: Dict[str, Any], fallback: str) -> str:
     shown = [label for key, label in _OMEGA_DISCLOSURE_ITEMS if _num(components.get(key)) > 0]
     missing = [label for key, label in _OMEGA_DISCLOSURE_ITEMS if _num(components.get(key)) <= 0]
     if not missing:
-        reason = "EPA/DHA amounts, the molecular form, the source and oxidation testing are all disclosed."
+        reason = "EPA/DHA amounts, the molecular form and the source are all disclosed."
     elif not shown:
         reason = f"{_join_items(missing)[0].upper()}{_join_items(missing)[1:]} are not disclosed."
     else:
