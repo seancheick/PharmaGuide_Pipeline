@@ -81,6 +81,7 @@ from identity.safety import (
     negative_match_terms_veto,
     safety_normalize_text,
 )
+from identity.omega_labels import states_only_epa_and_dha as _states_only_epa_and_dha
 from identity_integrity import build_canonical_identity_registry
 
 # Import the UnmappedIngredientTracker
@@ -11835,7 +11836,7 @@ class EnhancedDSLDNormalizer:
             ing.get("isNestedIngredient")
             and quantity is not None
             and str(unit or "").strip().upper() != "NP"
-            and re.fullmatch(r"(?:epa\s*(?:/|\+|and)\s*dha|dha\s*(?:/|\+|and)\s*epa)", normalized_name)
+            and _states_only_epa_and_dha(ing.get("name"))
         )
         if is_disclosed_epa_dha_child:
             # DSLD sometimes copies the parent's ``category=blend`` onto a

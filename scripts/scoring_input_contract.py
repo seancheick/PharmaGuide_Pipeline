@@ -29,6 +29,7 @@ from scoring_reference_resolver import (
 # Single source of truth for identity disposition vocabulary and scoreability.
 # Never copy the disposition list here; the contract must consume the same policy
 # the enricher stamps rows with.
+from identity.omega_labels import states_only_epa_and_dha
 from identity_integrity import (
     IDENTITY_DISPOSITIONS,
     is_identity_scoreable,
@@ -1855,7 +1856,10 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             special_evidence_paths.add(str(row.get("raw_source_path") or ""))
             evidence.append(_sports_primary_identity_without_dose(row, canonical))
 
-        explicit_aggregate = _is_explicit_epa_dha_aggregate_label(_row_identity_text(row))
+        explicit_aggregate = (
+            _is_explicit_epa_dha_aggregate_label(_row_identity_text(row))
+            or states_only_epa_and_dha(row.get("name") or row.get("raw_source_text"))
+        )
         printed_owner = None if explicit_aggregate else (
             _printed_epa_dha_owner(row) or _child_disclosed_epa_dha_owner(row, active_rows)
         )
