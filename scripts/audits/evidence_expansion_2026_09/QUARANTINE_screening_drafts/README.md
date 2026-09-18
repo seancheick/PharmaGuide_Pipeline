@@ -9,12 +9,29 @@ quote is verified as a contiguous substring by `../validate_wave1_contexts.py`.
 
 ## Why this directory is quarantined
 
-Live verification (`../verify_shortlist.py`, results in `../wave1_live_verification.json`)
-found in these files:
+Two passes measured these drafts.
 
-* **25 quote fields** that joined two non-contiguous spans with an ellipsis;
-* **28 quote fields** containing composed summaries rather than copied text
-  (for example items joined with "/" across different sentences).
+**Shortlisted records, re-fetched live** (`../verify_shortlist.py`, results in
+`../wave1_live_verification.json`): 25 quote fields joined two non-contiguous spans with
+an ellipsis, and 28 contained composed summaries rather than copied text.
+
+**Every kept record, against the retrieval it was screened from** (`../qa_screening_drafts.py`,
+ledger in `QA_LEDGER.json`) — the pass the partition-2 agent died during, run deterministically
+instead:
+
+| measure | value |
+|---|---:|
+| quote fields verified as exact contiguous substrings | 3449 |
+| rejected — ellipsis-joined | 119 |
+| rejected — text absent from the source | 135 |
+| PMIDs cited that are not in the retrieval set | **0** |
+| shortlist entries not among kept records | 0 |
+| identities whose self-reported counts disagree with their file | 9 |
+
+About 7% of quote fields are unusable, concentrated in the pre-correction files
+(isoflavones, dhea, ginkgo). The two figures that matter most are zeros: **no PMID was
+invented**, and no shortlist entry points outside the screened records. The count
+mismatches are small self-reporting errors (off by one or two), not missing work.
 
 Both agents were corrected mid-run and the brief was tightened, but files written before
 the correction still contain those fields. A quote that is not a contiguous span of the

@@ -50,6 +50,8 @@ def main() -> int:
             shortlisted += len(screen.get("shortlist") or [])
             handoffs += len(screen.get("handoff") or [])
     findings = collections.Counter(f["finding"] for f in verification.get("findings", []))
+    qa_path = OUT / "QUARANTINE_screening_drafts" / "QA_LEDGER.json"
+    qa = json.loads(qa_path.read_text())["_metadata"] if qa_path.exists() else {}
 
     authored = contexts.get("candidates", [])
     authored_ids = [c["canonical_id"] for c in authored]
@@ -141,8 +143,17 @@ def main() -> int:
         f"| stored-vs-live title drift | {findings.get('TITLE_DRIFT', 0)} |",
         f"| integrity flags (erratum) | {findings.get('INTEGRITY_HAS_ERRATUM', 0)} |",
         f"| human status ambiguous (fails closed) | {findings.get('HUMAN_STATUS_AMBIGUOUS', 0)} |",
-        f"| **quote rejected — ellipsis-joined fragments** | {findings.get('QUOTE_ELIDED_NOT_CONTIGUOUS', 0)} |",
-        f"| **quote rejected — composed, not in source** | {findings.get('QUOTE_NOT_IN_LIVE_ABSTRACT', 0)} |", "",
+        f"| **quote rejected — ellipsis-joined fragments** (shortlist scope) | {findings.get('QUOTE_ELIDED_NOT_CONTIGUOUS', 0)} |",
+        f"| **quote rejected — composed, not in source** (shortlist scope) | {findings.get('QUOTE_NOT_IN_LIVE_ABSTRACT', 0)} |", "",
+        "Across EVERY kept record in the drafts, not only the shortlist "
+        "(`qa_screening_drafts.py`, ledger in QUARANTINE_screening_drafts/QA_LEDGER.json):", "",
+        "| measure | value |", "|---|---:|",
+        f"| quote fields verified as exact contiguous substrings | {qa.get('quotes_verified', 0)} |",
+        f"| rejected — ellipsis-joined | {qa.get('quotes_elided', 0)} |",
+        f"| rejected — absent from the source | {qa.get('quotes_absent', 0)} |",
+        f"| **PMIDs cited that are not in the retrieval set** | {qa.get('pmids_not_in_retrieval', 0)} |",
+        f"| shortlist entries not among kept records | {qa.get('shortlist_entries_not_in_records', 0)} |",
+        f"| identities whose self-reported counts disagree with their file | {qa.get('identities_with_count_mismatch', 0)} |", "",
         "Every rejected quote was caught before authoring: Claude re-extracts each quote from the abstract itself, "
         "and `validate_wave1_contexts.py` re-checks each one as a substring. The authored contexts contain "
         "0 unverified quotes. The screening brief was tightened mid-run and both agents were corrected.", "",

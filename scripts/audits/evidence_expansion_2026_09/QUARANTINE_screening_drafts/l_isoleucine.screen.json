@@ -1,0 +1,1446 @@
+{
+  "canonical_id": "l_isoleucine",
+  "screened": 159,
+  "kept": 20,
+  "rejected": [
+    {
+      "pmid": "27367",
+      "reason": "off_topic",
+      "note": "Review of methylmalonic acidemia, an inborn error of metabolism; concerns disease management/restriction, not isoleucine supplementation."
+    },
+    {
+      "pmid": "808940",
+      "reason": "off_topic",
+      "note": "Case report of a hemoglobin variant (Hb F Sardinia) involving an isoleucine-to-threonine amino acid substitution; genetics/hematology case report, not isoleucine supplementation."
+    },
+    {
+      "pmid": "2171853",
+      "reason": "not_intervention",
+      "note": "Effect of a test meal (with/without protein) on muscle and plasma free amino acids, including isoleucine as one of many measured amino acids; observational biomarker study, not an isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "3709573",
+      "reason": "off_topic",
+      "note": "Review of 3-ketothiolase deficiency, an inborn error of isoleucine catabolism; disease management, not supplementation."
+    },
+    {
+      "pmid": "3943883",
+      "reason": "off_topic",
+      "note": "Study of alpha-methyldopa's central hypotensive effect; unrelated to isoleucine (apparent keyword false match)."
+    },
+    {
+      "pmid": "6806521",
+      "reason": "not_intervention",
+      "note": "Anthropometry and plasma valine/amino acid/protein status in hemodialysis patients; observational nutritional-assessment study, not an isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "9634788",
+      "reason": "off_topic",
+      "note": "Study of antibody VH domains as small recognition units; protein engineering/immunology study, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "10958816",
+      "reason": "not_intervention",
+      "note": "Relationship between plasma taurine and other amino acid levels (including isoleucine) in human sepsis; observational biomarker study centered on taurine, not an isoleucine intervention."
+    },
+    {
+      "pmid": "12801431",
+      "reason": "off_topic",
+      "note": "Case report of mitochondriopathy mimicking amyotrophic lateral sclerosis; disease case report, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "17571315",
+      "reason": "not_this_route",
+      "note": "Impact of intravenous nutrition on plasma free amino acid spectrum and immune function in sepsis patients; parenteral (IV) nutrition study, not oral isoleucine supplementation, and amino acids assessed as biomarkers of a broader nutritional intervention."
+    },
+    {
+      "pmid": "18425887",
+      "reason": "off_topic",
+      "note": "Withdrawn Cochrane review of amino acids for ALS/motor neuron disease; formally withdrawn publication, superseded by the non-withdrawn version already captured as PMID 14583978."
+    },
+    {
+      "pmid": "18583380",
+      "reason": "different_substance",
+      "note": "Effects of oral taurine supplementation on muscle taurine content and exercise substrate metabolism; taurine is a distinct sulfonic-acid compound, not isoleucine."
+    },
+    {
+      "pmid": "19109662",
+      "reason": "off_topic",
+      "note": "Broad meta-analysis of peptides derived from food proteins generally on blood pressure; not isoleucine-isolated extractable data among many different bioactive peptides reviewed."
+    },
+    {
+      "pmid": "23305234",
+      "reason": "off_topic",
+      "note": "Broad meta-analysis of bioactive tripeptides generally on blood pressure; not confirmed as isoleucine-containing-peptide-isolated extractable data in this broad multi-peptide review."
+    },
+    {
+      "pmid": "24180494",
+      "reason": "off_topic",
+      "note": "Phase 2 trial of ponatinib in Philadelphia chromosome-positive leukemias; oncology drug trial unrelated to isoleucine supplementation (apparent keyword false match via 'Philadelphia')."
+    },
+    {
+      "pmid": "24389518",
+      "reason": "off_topic",
+      "note": "Failure of oral tyrosine supplementation to improve exercise performance in heat; concerns tyrosine, a distinct amino acid, not isoleucine."
+    },
+    {
+      "pmid": "24565110",
+      "reason": "animal_or_invitro",
+      "note": "Hydrolyzed protein supplementation effects on skeletal muscle in rats after exhaustive swimming exercise; animal model study."
+    },
+    {
+      "pmid": "24627569",
+      "reason": "not_intervention",
+      "note": "Association between a diabetes-linked amino acid signature and beta-blocker-induced impaired fasting glucose; observational biomarker-association study, not an isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "24750568",
+      "reason": "not_this_route",
+      "note": "Randomized trial of a topical moisturizing cream (rhamnosoft, ceramides, L-isoleucine) for facial atopic eczema in children; topical dermatological application, not oral supplementation."
+    },
+    {
+      "pmid": "25646328",
+      "reason": "off_topic",
+      "note": "Association of a PNPLA3 gene isoleucine-to-methionine substitution variant with gestational diabetes metabolic outcomes; genetic association study, not isoleucine supplementation."
+    },
+    {
+      "pmid": "25964223",
+      "reason": "off_topic",
+      "note": "Association of PNPLA3 gene polymorphism with alcoholic liver disease predisposition/severity; genetic association study, not isoleucine supplementation."
+    },
+    {
+      "pmid": "26268049",
+      "reason": "off_topic",
+      "note": "Case reports of the Heidenhain variant in inherited V210I Creutzfeldt-Jakob disease; a prion-disease genetic variant (valine-to-isoleucine substitution at codon 210), not isoleucine supplementation."
+    },
+    {
+      "pmid": "26713267",
+      "reason": "off_topic",
+      "note": "Systematic review of calpain/cathepsin inhibitor selectivity as cysteine protease therapeutic targets; unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "27208380",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of metabolomics in prediabetes and diabetes; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "27274867",
+      "reason": "not_intervention",
+      "note": "Observational study of postprandial branched-chain/aromatic amino acid levels associated with fasting glycaemia; biomarker-association study, not an isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "27386336",
+      "reason": "animal_or_invitro",
+      "note": "Effects of dietary lysine levels on plasma free amino acid profile (including isoleucine) in finishing pigs; animal (swine) nutrition study."
+    },
+    {
+      "pmid": "27642608",
+      "reason": "not_intervention",
+      "note": "Systematic review of branched-chain-amino-acid-related metabolomic signatures and insulin resistance; broad biomarker-association review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "28102435",
+      "reason": "different_substance",
+      "note": "Effects of tryptophan-containing peptides on ACE activity; concerns tryptophan-containing peptides, not isoleucine."
+    },
+    {
+      "pmid": "28363005",
+      "reason": "off_topic",
+      "note": "Statistical methods paper on multicollinearity in canonical correlation analysis applied to maize; agricultural statistics methodology, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "28513068",
+      "reason": "not_intervention",
+      "note": "RCT of CPAP treatment for obstructive sleep apnea examining whether serum BCAA levels mediate insulin sensitivity improvement; CPAP is the intervention, BCAA levels are a measured mediator, not an administered isoleucine supplement."
+    },
+    {
+      "pmid": "28643618",
+      "reason": "not_intervention",
+      "note": "Randomised trial of heat-stabilised rice bran consumption in colorectal cancer survivors, examining stool metabolite profiles; rice bran is the intervention, not isoleucine."
+    },
+    {
+      "pmid": "28783532",
+      "reason": "not_intervention",
+      "note": "Review of abnormal circulating amino acid profiles across multiple metabolic disorders; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "28888959",
+      "reason": "different_substance",
+      "note": "Genotoxicity/sub-chronic toxicity testing of MYOLUTION (branched chain KETO acids: keto-leucine, keto-isoleucine, keto-valine, as calcium salts); these are distinct keto-acid metabolites of the BCAAs, not the amino acids themselves, and the testing is in vitro/laboratory toxicology, not a human trial."
+    },
+    {
+      "pmid": "28904371",
+      "reason": "not_intervention",
+      "note": "Study of acute hydrocortisone-insulin interaction altering the plasma metabolome; hydrocortisone/insulin is the intervention, amino acids including isoleucine are measured biomarkers."
+    },
+    {
+      "pmid": "29185836",
+      "reason": "off_topic",
+      "note": "Exome-chip meta-analysis of ANKRD26 gene variation and platelet aggregation; genetic association study, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "29368111",
+      "reason": "different_substance",
+      "note": "Systematic review/meta-analysis of taurine supplementation on growth in low-birth-weight infants; taurine is a distinct amino acid/sulfonic acid, not isoleucine."
+    },
+    {
+      "pmid": "29624230",
+      "reason": "off_topic",
+      "note": "Case report of beta-ketothiolase deficiency causing recurrent ketoacidosis; inborn error of isoleucine catabolism, disease management not supplementation."
+    },
+    {
+      "pmid": "29731182",
+      "reason": "off_topic",
+      "note": "RCT of probiotic and prebiotic supplementation on psychological outcomes in major depressive disorder; unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "30227169",
+      "reason": "not_intervention",
+      "note": "Observational amino acid profile study in women with gestational diabetes treated with metformin or insulin; metformin/insulin are the interventions, amino acids including isoleucine are measured biomarkers."
+    },
+    {
+      "pmid": "30591380",
+      "reason": "not_intervention",
+      "note": "RCT of protein bioavailability from Wolffia globosa (duckweed), a novel aquatic plant protein source; isoleucine (if measured) is one of many amino acids assessed for protein-quality purposes, not the supplemented agent."
+    },
+    {
+      "pmid": "30805535",
+      "reason": "off_topic",
+      "note": "Study of low-protein product availability on growth/metabolic control in patients with selected amino acid metabolism disorders; inborn-error dietary-restriction management, not isoleucine supplementation."
+    },
+    {
+      "pmid": "30830397",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics-based biomarker discovery in pancreatic cancer; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "31235103",
+      "reason": "not_intervention",
+      "note": "Observational study of whether dietary amino acids prospectively predict changes in serum lipid profile; biomarker-association study, not an isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "31497040",
+      "reason": "not_intervention",
+      "note": "Meta-analysis of circulating branched-chain amino acids associated with gestational diabetes mellitus risk; observational biomarker-association review, not a BCAA/isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "31681602",
+      "reason": "not_intervention",
+      "note": "Metabolomic profiling study of HBV-related hepatocellular carcinoma subtypes; broad biomarker-discovery study, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "31754808",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics biomarker/pathway discovery for ischemic stroke; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "31782507",
+      "reason": "not_intervention",
+      "note": "Systematic review/integrative analysis of metabolomics signatures in type 2 diabetes; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "31834099",
+      "reason": "off_topic",
+      "note": "Study of low-, medium-, or high-dose tyrosine effects on exercise in a warm environment; concerns tyrosine, a distinct amino acid, not isoleucine."
+    },
+    {
+      "pmid": "32183423",
+      "reason": "not_intervention",
+      "note": "Study of whey-protein appetite-suppressant/GLP-1 effects associated with circulating amino acid levels in obese subjects; whey protein is the intervention, amino acids including isoleucine are measured biomarkers."
+    },
+    {
+      "pmid": "32299366",
+      "reason": "not_intervention",
+      "note": "Study of circulating metabolite profiles predicting response to cardiac resynchronization therapy; broad biomarker-association study, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "32473419",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics in rheumatoid arthritis development/progression; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "32800686",
+      "reason": "off_topic",
+      "note": "Review of the phenotypic spectrum of short-chain enoyl-CoA hydratase-1 (ECHS1) deficiency; inborn error of isoleucine/valine catabolism, disease description not supplementation."
+    },
+    {
+      "pmid": "32823899",
+      "reason": "animal_or_invitro",
+      "note": "Effect of isoleucine supplementation on body weight gain and blood glucose in lean and obese mice; animal model study."
+    },
+    {
+      "pmid": "33096658",
+      "reason": "not_intervention",
+      "note": "Broad quantitative review of amino acids' impact on postprandial glucose/insulin kinetics generally; not an isoleucine-isolated intervention trial with extractable dose/result data."
+    },
+    {
+      "pmid": "33228610",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of metabolite biomarkers of type 2 diabetes and pre-diabetes; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "33387070",
+      "reason": "not_intervention",
+      "note": "Systematic review of salivary metabolomics for periodontal disease diagnosis; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "33459956",
+      "reason": "off_topic",
+      "note": "Systematic review of nutritional status improvement strategies in elderly CKD patients generally; not isoleucine-isolated extractable data in this broad nutrition review."
+    },
+    {
+      "pmid": "33513734",
+      "reason": "not_intervention",
+      "note": "Observational study of blood metabolomics differences in infants consuming meat- versus dairy-based complementary diets; dietary-pattern comparison study, isoleucine (if measured) only a biomarker."
+    },
+    {
+      "pmid": "33607391",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of how bariatric surgery reduces branched-chain amino acid levels; bariatric surgery is the intervention, BCAA/isoleucine levels are the measured outcome, not an administered supplement."
+    },
+    {
+      "pmid": "33692630",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomic signatures distinguishing metabolically healthy versus unhealthy overweight/obese individuals; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "34316185",
+      "reason": "animal_or_invitro",
+      "note": "Meta-analysis of dietary tannin effects on broiler chicken performance and amino acid ileal digestibility; animal (poultry) nutrition study."
+    },
+    {
+      "pmid": "34365036",
+      "reason": "not_intervention",
+      "note": "Observational study of postprandial branched-chain amino acid concentrations predicting dietary carbohydrate content; biomarker-association study, not an isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "34589057",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of amino acid flux signatures in sarcopenia; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "34666854",
+      "reason": "off_topic",
+      "note": "RCT of casein glycomacropeptide (CGMP) reducing plasma phenylalanine/tyrosine as a potential mania treatment in bipolar disorder; concerns phenylalanine/tyrosine reduction via CGMP, not isoleucine administration."
+    },
+    {
+      "pmid": "35111801",
+      "reason": "animal_or_invitro",
+      "note": "Study of amino acid sensing/utilization in response to dietary aromatic amino acid supplementation in an LPS-induced inflammation piglet model; animal (swine) study, and concerns aromatic amino acids generally, not isoleucine specifically."
+    },
+    {
+      "pmid": "35146016",
+      "reason": "animal_or_invitro",
+      "note": "Effect of selenium-yeast supplementation on muscle antioxidant activity, meat quality, and amino acids in goats; animal (livestock) study."
+    },
+    {
+      "pmid": "35221876",
+      "reason": "off_topic",
+      "note": "Case reports of primary microcephaly caused by ASPM gene mutations; genetic disease case reports, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "35249118",
+      "reason": "not_intervention",
+      "note": "RCT of Bacillus coagulans probiotic supplementation on plasma amino acid levels and muscle strength in resistance-trained males consuming whey protein; probiotic/whey protein is the intervention, amino acids including isoleucine are measured biomarkers."
+    },
+    {
+      "pmid": "35576716",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of circulating branched-chain amino acids associated with cardiovascular disease risk; observational biomarker-association review, not a BCAA/isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "35617907",
+      "reason": "off_topic",
+      "note": "Transcriptomic/metabolomic study of pesticide-triggered metabolic disruption in cowpea (Vigna unguiculata) plants; plant toxicology study, unrelated to human isoleucine supplementation."
+    },
+    {
+      "pmid": "35720838",
+      "reason": "animal_or_invitro",
+      "note": "Effect of varying dietary tryptophan levels on aggression/behavior in growing pigs; animal study, and concerns tryptophan, not isoleucine."
+    },
+    {
+      "pmid": "35756860",
+      "reason": "off_topic",
+      "note": "Case report of maple syrup urine disease decompensation misdiagnosed as a psychotic event; inborn error of branched-chain amino acid catabolism, disease case report not supplementation."
+    },
+    {
+      "pmid": "35888764",
+      "reason": "animal_or_invitro",
+      "note": "Impact of cattle feeding strategy on the beef metabolome; animal (livestock) study."
+    },
+    {
+      "pmid": "35945258",
+      "reason": "off_topic",
+      "note": "Analysis of transglutaminase substrate preference via cDNA display and next-generation sequencing; protein biochemistry/bioinformatics methodology study, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "35969711",
+      "reason": "animal_or_invitro",
+      "note": "Influence of age/feed ingredients on ileal amino acid digestibility in broiler chickens; animal (poultry) nutrition study."
+    },
+    {
+      "pmid": "36005642",
+      "reason": "not_intervention",
+      "note": "RCT of multispecies probiotic add-on treatment effects on metabolomics in major depressive disorder; probiotic is the intervention, amino acids including isoleucine are measured biomarkers."
+    },
+    {
+      "pmid": "36124098",
+      "reason": "off_topic",
+      "note": "Study of fish flour as an enrichment material for sago noodle nutrient value; food-science/product-development study, unrelated to human isoleucine supplementation."
+    },
+    {
+      "pmid": "36144264",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics-based exploration of fetal growth restriction; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "36295891",
+      "reason": "animal_or_invitro",
+      "note": "Study of protein source, whole wheat, and butyric acid effects on gut health/amino acid digestibility in broiler chickens; animal (poultry) study."
+    },
+    {
+      "pmid": "36297095",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of circulating branched-chain amino acids and temporal risk of type 2 diabetes; observational biomarker-association review, not a BCAA/isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "36364828",
+      "reason": "different_substance",
+      "note": "RCT of a novel food composed of leucine (not isoleucine), omega-3 fatty acids, and probiotic Lactobacillus paracasei for sarcopenia; the branched-chain amino acid administered is leucine specifically, isoleucine not named as an ingredient."
+    },
+    {
+      "pmid": "36495344",
+      "reason": "not_intervention",
+      "note": "Multi-cohort meta-analysis of depression-associated gut bacteria biomarkers; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "36719059",
+      "reason": "off_topic",
+      "note": "Systematic review of PNPLA3 I148M genetic variant and response to hepatic steatosis treatment; genetic association/pharmacogenomics review, not isoleucine supplementation."
+    },
+    {
+      "pmid": "36898312",
+      "reason": "animal_or_invitro",
+      "note": "Study of toxic effects of maternal cadmium exposure on amino acid metabolism/transport in maternal livers; toxicology/animal-model study."
+    },
+    {
+      "pmid": "37431714",
+      "reason": "not_intervention",
+      "note": "Study of whether short-term disuse affects muscle protein breakdown rates; disuse (inactivity) is the exposure studied, not an isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "37432339",
+      "reason": "not_intervention",
+      "note": "Non-randomized clinical trial of lifestyle interventions on gut microbiota/metabolome in pediatric obesity; broad lifestyle intervention, isoleucine (if measured) only a biomarker."
+    },
+    {
+      "pmid": "37686779",
+      "reason": "not_intervention",
+      "note": "Study of different egg-based diets altering clinical metabolic/hematological parameters; egg-based diet is the intervention, not isoleucine."
+    },
+    {
+      "pmid": "37725184",
+      "reason": "not_intervention",
+      "note": "Meta-analysis of serum branched-chain amino acids and all-cause mortality risk; observational biomarker-association review, not a BCAA/isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "37751784",
+      "reason": "off_topic",
+      "note": "Study of Salmonella mutant strains resistant to herbicides used in the Ames mutagenicity test; laboratory bacterial-assay methodology study, unrelated to human isoleucine supplementation."
+    },
+    {
+      "pmid": "37847288",
+      "reason": "off_topic",
+      "note": "RCT of hemp protein supplementation during resistance training compared to soy protein; hemp/soy whole-protein comparison, not an isolated isoleucine/BCAA supplement (isoleucine present only as a natural constituent of the protein source)."
+    },
+    {
+      "pmid": "37910166",
+      "reason": "not_intervention",
+      "note": "Protocol for a pilot RCT of branched-chain amino acid supplementation on fatigue and tryptophan metabolism after exercise in older adults; no outcome results reported (protocol only)."
+    },
+    {
+      "pmid": "37972527",
+      "reason": "different_substance",
+      "note": "Study of a high-protein diet with excess LEUCINE preventing inactivity-induced insulin resistance in women; the amino acid specifically dosed in excess is leucine, not isoleucine."
+    },
+    {
+      "pmid": "38130073",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of dietary branched-chain amino acid associations with cancer and mortality in observational studies; observational biomarker-association review, not a BCAA/isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "38225608",
+      "reason": "animal_or_invitro",
+      "note": "Study of dietary Clostridium butyricum and rumen-protected fat effects on meat quality in finishing goats; animal (livestock) study."
+    },
+    {
+      "pmid": "38325713",
+      "reason": "not_intervention",
+      "note": "Review of metabolomics and lipidomics in non-small cell lung cancer; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "38420789",
+      "reason": "not_intervention",
+      "note": "Mendelian randomization study of the causal relationship between branched-chain amino acids and hypertension; genetic-instrumental-variable epidemiology, not an administered isoleucine/BCAA intervention."
+    },
+    {
+      "pmid": "38542319",
+      "reason": "not_intervention",
+      "note": "Systematic review of the metabolite signature of bladder cancer; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "38637978",
+      "reason": "not_intervention",
+      "note": "Systematic review of diagnostic biomarkers for cardiovascular disease and diabetes mellitus; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "38646957",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of the metabolite signature of human malignant thyroid tissue; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "38684297",
+      "reason": "off_topic",
+      "note": "Clinical/genetic analysis of three children with isoleucine metabolic disorders due to HSD17B10/ACAT1 gene variants; inborn-error genetic diagnosis, not isoleucine supplementation."
+    },
+    {
+      "pmid": "38742757",
+      "reason": "off_topic",
+      "note": "Rapid classification of a novel ALS-causing SOD1 gene variant (I149S); genetic variant classification study, unrelated to isoleucine supplementation (the 'I' denotes isoleucine only as a single-letter amino-acid code in the mutation name)."
+    },
+    {
+      "pmid": "38815112",
+      "reason": "off_topic",
+      "note": "Meta-analysis of TAS2R38 genotype and taste perception; genetic/sensory-science study, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "38882178",
+      "reason": "not_intervention",
+      "note": "Proof-of-concept trial of home-delivered high-protein medically tailored meals for cirrhosis/hepatic encephalopathy; broad high-protein dietary intervention, not an isolated isoleucine/BCAA supplement."
+    },
+    {
+      "pmid": "39002276",
+      "reason": "not_intervention",
+      "note": "Mendelian randomization study of branched-chain amino acids and epilepsy association; genetic-instrumental-variable epidemiology, not an administered isoleucine/BCAA intervention."
+    },
+    {
+      "pmid": "39169398",
+      "reason": "not_intervention",
+      "note": "Review of novel metabolic and lipidomic biomarkers of sarcopenia; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "39241630",
+      "reason": "off_topic",
+      "note": "Study of antimony toxicity effects on nitrogen/sulfur metabolism in rice plants; plant toxicology study, unrelated to human isoleucine supplementation."
+    },
+    {
+      "pmid": "39252075",
+      "reason": "animal_or_invitro",
+      "note": "Dietary supplementation of valine, isoleucine, and tryptophan in weanling pigs fed corn fermented protein; animal (swine) nutrition study."
+    },
+    {
+      "pmid": "39456659",
+      "reason": "not_intervention",
+      "note": "RCT of Bifidobacterium breve BBr60 probiotic intervention on gut microbiome/metabolome in overweight/obese adults; probiotic is the intervention, isoleucine (if measured) only a biomarker."
+    },
+    {
+      "pmid": "39482484",
+      "reason": "not_intervention",
+      "note": "RCT of low-dose IL-2 therapy metabolic impact in primary Sjogren's Syndrome; IL-2 is the intervention, amino acids including isoleucine are measured metabolomic biomarkers."
+    },
+    {
+      "pmid": "39528475",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomic signatures associated with fetal growth restriction/small for gestational age; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "39537176",
+      "reason": "not_intervention",
+      "note": "RCT of breaking up prolonged sitting via exercise snacks on body composition/plasma metabolomics; exercise-snacks intervention, isoleucine (if measured) only a biomarker."
+    },
+    {
+      "pmid": "39602052",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of maternal blood metabolomics and gestational diabetes risk; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "39726485",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolite biomarkers for early pancreatic ductal adenocarcinoma detection; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "39747109",
+      "reason": "off_topic",
+      "note": "Study of a frameshift variant in the HMG-CoA reductase gene and statin unresponsiveness in type 2 diabetes; pharmacogenomics study, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "39798707",
+      "reason": "off_topic",
+      "note": "Phase I trials of AZD2693 (a PNPLA3 antisense oligonucleotide drug) for MASH in 148M homozygous participants; investigational drug trial tied to a genetic variant, not isoleucine supplementation."
+    },
+    {
+      "pmid": "39824455",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of metabolomic profiles in allergic rhinitis; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "39852392",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics applications in understanding endometriosis; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "40121920",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics profiling in venous thromboembolism and its chronic sequelae; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "40172143",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics analysis as a periodontitis diagnostic tool; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "40418340",
+      "reason": "not_intervention",
+      "note": "Randomized crossover trial comparing acute serum metabolite effects of isocaloric meals based on red meat, fatty fish, or soy protein; meal-source comparison, isoleucine (if measured) only a biomarker."
+    },
+    {
+      "pmid": "40586833",
+      "reason": "not_intervention",
+      "note": "Exploratory secondary analysis of perioperative serum primary metabolite changes after major surgery (TAPIR trial); broad surgical-outcome biomarker study, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "40610129",
+      "reason": "not_intervention",
+      "note": "Broad systematic review evaluating dietary protein and amino acid requirements generally; not an isoleucine-isolated supplementation intervention trial with extractable dose/result data."
+    },
+    {
+      "pmid": "40770907",
+      "reason": "off_topic",
+      "note": "Pilot RCT comparing a digitally enhanced ketogenic diet versus low-fat diet for cardio-renal-metabolic health; dietary-pattern comparison, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "40794151",
+      "reason": "not_intervention",
+      "note": "Review of biomarker discovery in NAFLD via metabolomics and vote-counting meta-analysis; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "40835231",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of the blood metabolome in cardiovascular disease, diabetic kidney disease, and diabetic retinopathy; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "40860967",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomics biomarkers for ischemic stroke; broad biomarker-discovery review, not an isoleucine intervention study (companion review to PMID 31754808)."
+    },
+    {
+      "pmid": "40939730",
+      "reason": "animal_or_invitro",
+      "note": "Study of dietary isoleucine content modulating metabolic/molecular response to a Western diet in mice; animal model study."
+    },
+    {
+      "pmid": "40945053",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolic biomarkers and pathways in pharmacoresistant epilepsy; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "41025050",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of circulating branched-chain amino acids and pre-diabetes risk; observational biomarker-association review, not a BCAA/isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "41061905",
+      "reason": "off_topic",
+      "note": "Study of human serum albumin-adduct biomarkers to prove methanethiol poisoning; forensic/occupational toxicology study, unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "41198897",
+      "reason": "off_topic",
+      "note": "RCT of chlorhexidine and a polyherbal mouthwash on the oral microbiome; unrelated to isoleucine supplementation."
+    },
+    {
+      "pmid": "41295301",
+      "reason": "not_intervention",
+      "note": "Systematic review of predictive biomarkers for methotrexate treatment response in rheumatoid arthritis; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "41424075",
+      "reason": "not_intervention",
+      "note": "Systematic review of metabolomic markers/pathways of blood-brain barrier damage; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "41435614",
+      "reason": "not_intervention",
+      "note": "Systematic review/meta-analysis of metabolomics in systemic lupus erythematosus; broad biomarker-discovery review, not an isoleucine intervention study."
+    },
+    {
+      "pmid": "41469882",
+      "reason": "not_intervention",
+      "note": "Study of dapagliflozin's effects on plasma lipidomic profile and urinary metabolite excretion in type 2 diabetes; dapagliflozin (an SGLT2-inhibitor drug) is the intervention, not isoleucine."
+    },
+    {
+      "pmid": "41523701",
+      "reason": "not_intervention",
+      "note": "Protocol description for the SmART-TBI fully-remote RCT of BCAA dietary supplementation for sleep in veterans; primarily a protocol/feasibility description referencing prior pilot work (PMID 35602971, already captured), without this paper's own new quantitative efficacy results extractable in the retrieved abstract."
+    },
+    {
+      "pmid": "41590497",
+      "reason": "off_topic",
+      "note": "Systematic review of natural protein-restricted diets' impact on linear growth in propionic and methylmalonic acidemia; inborn-error dietary-restriction management, not isoleucine supplementation."
+    },
+    {
+      "pmid": "41816332",
+      "reason": "not_intervention",
+      "note": "Multi-omics mapping of the causal landscape of gout across the circulating-tissue axis; genetic/omics epidemiology, not an isoleucine supplementation intervention."
+    },
+    {
+      "pmid": "41935270",
+      "reason": "not_intervention",
+      "note": "Integration of a cohort study and RCT examining liver fat content and plasma metabolite profiles; broad biomarker-association study, not an isoleucine-specific supplementation intervention."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "2184659",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Sixteen adolescents and young adults with phenylketonuria"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a valine, isoleucine, and leucine mixture or a control mixture",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Sixteen adolescents and young adults with phenylketonuria",
+      "indication_as_stated": "phenylketonuria: cognitive/attention performance",
+      "dose_quote": null,
+      "primary_outcome_quote": "Time to completion of a test that required substantial attention with mental processing (Attention Diagnostic Method) was faster during the valine, isoleucine, and leucine periods than during the control mixture periods.",
+      "primary_result_quote": "These data lent support to the hypothesis that a regimen of valine, isoleucine, and leucine may help individuals unable to maintain low serum phenylalanine levels.",
+      "sample_size_quote": "Sixteen adolescents and young adults with phenylketonuria participated in double-blind trials",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Isoleucine given only as one-third of a 3-amino-acid mixture (valine, isoleucine, leucine), not alone; positive on one attention test, only 'approached significance' on a second, less demanding task. Specific dose not stated in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine dosed only within an undifferentiated valine+isoleucine+leucine mixture, not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "3928919",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "36 cirrhotic patients without encephalopathy"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "infused for 5 days with BCAA (valine, leucine, isoleucine) at doses of 0.5 and 1.0 g/kg/day",
+      "combination": true,
+      "route": "intravenous infusion",
+      "population_as_stated": "36 cirrhotic patients without encephalopathy",
+      "indication_as_stated": "nitrogen balance and plasma amino acid pattern in liver cirrhosis",
+      "dose_quote": "infused for 5 days with BCAA (valine, leucine, isoleucine) at doses of 0.5 and 1.0 g/kg/day, respectively, as the only nitrogen source",
+      "primary_outcome_quote": "Routine chemistry, urinary nitrogen losses, nitrogen balance, and the whole plasma AA pattern were detected before and after the treatment period.",
+      "primary_result_quote": "it improved significantly and became positive during and after the infusions of a double dose of BCAA (B), as it did in the case of selective solutions (C), although to a lesser extent",
+      "sample_size_quote": "36 cirrhotic patients without encephalopathy",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Route is intravenous parenteral infusion of BCAA (isoleucine one of three components), NOT oral supplementation; higher dose (1.0 g/kg/day) reversed negative nitrogen balance to positive, but lower dose (0.5 g/kg/day) 'remained unchanged.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine dosed only within a BCAA mixture (valine, leucine, isoleucine), administered intravenously rather than orally."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "14583978",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "We identified six eligible trials"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "branched-chain amino acids (L-leucine, L-valine and L-isoleucine) or, alternatively, L-threonine",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "amyotrophic lateral sclerosis / motor neuron disease: survival, muscle strength, disability",
+      "dose_quote": null,
+      "primary_outcome_quote": "Our primary outcome measure was survival determined by a pooled hazard ratio of all studies.",
+      "primary_result_quote": "No benefit could be demonstrated for either branched-chain amino acids or L-threonine in improving survival in amyotrophic lateral sclerosis/motor neuron disease.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Cochrane systematic review; explicit null result on survival, muscle strength, and disability rating scales for BCAA (isoleucine one of three components) versus L-threonine; 'no study assessed quality of life.' Both treatments were well tolerated.",
+      "registrations": [],
+      "included_studies": "six eligible trials (of 13 identified)",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine dosed only within a BCAA mixture (leucine, valine, isoleucine), compared against a separate L-threonine treatment arm."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "15288885",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "46 borderline hypertensive men aged 23 to 59 years"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "sour milk, containing two tripeptides (valine-proline-proline and isoleucine-proline-proline)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "46 borderline hypertensive men aged 23 to 59 years",
+      "indication_as_stated": "blood pressure in borderline hypertension",
+      "dose_quote": null,
+      "primary_outcome_quote": "Blood pressure was measured twice at each occasion by a physician, at the health center of the company, with a mercury at baseline, 2 and 4 weeks.",
+      "primary_result_quote": "In the S-group, change in systolic BP at 2 and 4 weeks were -4.3 mm Hg (95% confidence interval [CI] -8.3 to -0.4; P = .032) and -5.2 mm Hg (95% CI -10.1 to -0.3; P = .039), both statistically significant.",
+      "sample_size_quote": "A total of 46 borderline hypertensive men aged 23 to 59 years were recruited",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Isoleucine-proline-proline (IPP) co-delivered with valine-proline-proline (VPP) in a fermented sour-milk food matrix, not isolated isoleucine; positive on systolic BP, but diastolic BP change was not statistically significant in either group.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine present only as part of the tripeptide isoleucine-proline-proline (IPP) within a fermented sour-milk product, alongside valine-proline-proline (VPP)."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "16766776",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "placebo (n = 9)... BCAA (n = 10)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "12 g of BCAAs/day; in capsules: leucine 54%, isoleucine 19%, valine 27%",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Male university students majoring in physical education (19-22 years old)",
+      "indication_as_stated": "urinary protein-breakdown markers after swimming exercise",
+      "dose_quote": "BCAA (n = 10, BMI = 22.7 +/- 1.5 kg/m2; 12 g of BCAAs/day; in capsules: leucine 54%, isoleucine 19%, valine 27%) groups",
+      "primary_outcome_quote": "Urinary and blood samples were collected before, during, and after the prescribed exercise for the measurements of the urinary urea nitrogen, HP, and 3MH concentrations in urine, as well as the glucose, lactate, glutamine, alanine, and BCAA concentrations in plasma.",
+      "primary_result_quote": "Twenty hours after the competition, however, a significant increase in the concentrations of urinary urea nitrogen, HP, and 3MH was found in the placebo group (p < 0.05), but not in the BCAA group.",
+      "sample_size_quote": "placebo (n = 9, BMI = 24.2 +/- 2.1 kg/m2; 12 g of glucose/day; in capsules) and BCAA (n = 10, BMI = 22.7 +/- 1.5 kg/m2; 12 g of BCAAs/day; in capsules: leucine 54%, isoleucine 19%, valine 27%) groups",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Isoleucine is only 19% of a 3-component BCAA capsule (leucine 54%, isoleucine 19%, valine 27%); positive result is for the BCAA mixture preventing exercise-induced muscle proteolysis markers, not isoleucine specifically.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine is 19% of a 12 g/day BCAA capsule blend, not dosed alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26297928",
+      "design": "rct",
+      "human_status": {
+        "value": "not_applicable",
+        "signals": [
+          "spontaneously hypertensive rats (n = 60)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Isoleucine-tryptophan..., a whey protein hydrolysate containing an augmented fraction of isoleucine-tryptophan, or captopril",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "spontaneously hypertensive rats (n=60)",
+      "indication_as_stated": "antihypertensive and cardioprotective effects",
+      "dose_quote": null,
+      "primary_outcome_quote": "Systolic blood pressure age-dependently increased in the Placebo group, whereas the blood pressure rise was effectively blunted by isoleucine-tryptophan, whey protein hydrolysate and captopril",
+      "primary_result_quote": "the blood pressure rise was effectively blunted by isoleucine-tryptophan, whey protein hydrolysate and captopril (-42 ± 3, -38 ± 5, -55 ± 4 mm Hg vs. Placebo)",
+      "sample_size_quote": "spontaneously hypertensive rats (n = 60)",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "This is an ANIMAL (rat) study, not a human trial, despite involving the isoleucine-tryptophan dipeptide of direct relevance to this identity; kept here (rather than rejected as animal_or_invitro) because it is the primary mechanistic evidence source specifically for the isoleucine-tryptophan dipeptide form referenced by related human-product literature, but it should NOT be treated as human clinical evidence.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine present as part of the dipeptide isoleucine-tryptophan, and also tested within a whey protein hydrolysate, not as free isoleucine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "26536628",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eighteen studies (including a total of 1194 subjects) were included"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "lactotripeptides isoleucine-proline-proline (IPP) and valine-proline-proline (VPP)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Japanese subjects across 18 pooled RCTs (1194 subjects)",
+      "indication_as_stated": "systolic blood pressure",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "consumption of IPP/VPP induced a significant reduction in SBP as compared with placebo in Japanese subjects, with an estimated effect of -5.63 mm Hg (95% CI, -6.87 to -4.39, P<0.0001)",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Effect was stronger in hypertensive subjects (-8.35 mm Hg) than non-hypertensive subjects (-3.42 mm Hg); isoleucine present only within the tripeptide IPP, co-administered alongside VPP, not as free isoleucine.",
+      "registrations": [
+        "CRD42014014322"
+      ],
+      "included_studies": "18 studies, 1194 subjects",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine present only within the lactotripeptide isoleucine-proline-proline (IPP), alongside valine-proline-proline (VPP), not as free isoleucine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "27468258",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Healthy resistance-trained males (n = 30)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "3 g/d L-leucine, 1 g/d L-isoleucine and 2 g/d L-valine with 2 g of CHO",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Healthy resistance-trained males (n=30)",
+      "indication_as_stated": "markers of exercise-induced muscle damage/soreness and performance recovery",
+      "dose_quote": "BCAAs and CHO (3 g/d L-leucine, 1 g/d L-isoleucine and 2 g/d L-valine with 2 g of CHO; n = 15)",
+      "primary_outcome_quote": "participants were randomly assigned to consume one of two commercial products in 600 mL of tap water",
+      "primary_result_quote": "BCAA-CHO supplementation did not reduce decrements in lower body strength or improve select markers of muscle damage/soreness compared to CHO supplementation over three consecutive days of intense lower-body training.",
+      "sample_size_quote": "Healthy resistance-trained males (n = 30) performed preliminary testing",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit overall null result versus a carbohydrate-only comparator (not an inert placebo) for strength/soreness/myoglobin outcomes; only monocyte percentage showed a group-by-time effect. Isoleucine is the smallest component (1 g/d) of a 3-amino-acid blend.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine (1 g/d) is the smallest of three BCAAs in a combined BCAA+carbohydrate sports product."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "28638350",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Ten young (20.1 ± 1.3 years), resistance-trained men"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "ingesting either 5.6 g BCAA or a placebo (PLA) drink immediately after resistance exercise",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Ten young, resistance-trained men",
+      "indication_as_stated": "myofibrillar muscle protein synthesis following resistance exercise",
+      "dose_quote": "ingesting either 5.6 g BCAA or a placebo (PLA) drink immediately after resistance exercise",
+      "primary_outcome_quote": "Myofibrillar-MPS was measured during exercise recovery with a primed, constant infusion of L-[ring13C6] phenylalanine and collection of muscle biopsies pre and 4 h-post drink ingestion.",
+      "primary_result_quote": "Myofibrillar-MPS was 22% higher (P = 0.012) in BCAA (0.110 ± 0.009%/h) than PLA (0.090 ± 0.006%/h).",
+      "sample_size_quote": "Ten young (20.1 ± 1.3 years), resistance-trained men completed two trials",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Isoleucine is one of three BCAAs (with leucine and valine) in the 5.6 g dose, not isolated; plasma isoleucine rose 300% post-drink alongside leucine and valine. Very small sample (n=10).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine dosed only within a 5.6 g BCAA-only mixture (leucine, isoleucine, valine), not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33310174",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "14 males with T2D"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "10 g leucine, 10 g isoleucine or control, intragastrically 30 min before a mixed-nutrient drink",
+      "combination": false,
+      "route": "intragastric administration",
+      "population_as_stated": "14 males with type 2 diabetes mellitus (T2D)",
+      "indication_as_stated": "postprandial glycaemia and gastric emptying in type 2 diabetes",
+      "dose_quote": "received, on 3 separate occasions, in double-blind, randomised fashion, either 10 g leucine, 10 g isoleucine or control, intragastrically 30 min before a mixed-nutrient drink",
+      "primary_outcome_quote": "Plasma glucose, insulin and glucagon were measured from 30 min pre- until 120 min post-drink. Gastric emptying of the drink was also measured.",
+      "primary_result_quote": "Neither amino acid affected gastric emptying or plasma glucose (peak (mmol/L): control: 12.0 ± 0.5; leucine: 12.5 ± 0.7; isoleucine: 12.0 ± 0.6).",
+      "sample_size_quote": "14 males with T2D received, on 3 separate occasions, in double-blind, randomised fashion",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Isoleucine tested as its own isolated arm (10 g) versus leucine and control, allowing direct attribution; route was intragastric (via tube), not oral capsule ingestion; explicit null on the primary glycaemic/gastric-emptying outcome in T2D, in contrast to a stimulatory effect on insulin/glucagon. Authors: 'argues against a role for preloads of either leucine or isoleucine in the management of T2D.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'isoleucine' tested as an isolated 10 g arm, matching label spelling, though delivered intragastrically rather than as an oral capsule/tablet."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "33648360",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "20 articles... comprising 13 RCTs and 6 observational cohort studies... 2019 total participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "BCAAs (leucine, isoleucine, and valine) (alone or in combinations)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "cancer patients undergoing surgery, 2019 total participants across pooled studies",
+      "indication_as_stated": "peri-operative outcomes in oncological (predominantly liver cancer) surgery",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Meta-analysis of RCTs found a 38% decreased risk of post-operative infections in BCAAs group compared to controls (RR = 0.62; 95% CI = 0.44 to 0.87; P = .006; number of RCTs, k = 6; total sample size, N = 389; I2 = 0%).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for post-operative infections, ascites, body weight, and hospitalization length; explicit null for 'mortality, recurrence, other post-operative complications..., blood loss, quality of life, ammonia level, and prothrombin time.' Authors note 'substantial risk-of-bias across most RCTs' and call for 'confirmatory trials of higher methodological quality.'",
+      "registrations": [
+        "CRD42018086168"
+      ],
+      "included_studies": "20 articles (13 RCTs, 6 observational cohorts), 2019 participants",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Reviews BCAAs (leucine, isoleucine, valine) 'alone or in combinations', not isoleucine in isolation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34193677",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Eighteen patients with rheumatic diseases treated with prednisolone"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "administration of branched-chain amino acids (BCAA)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Eighteen patients with rheumatic diseases treated with prednisolone (glucocorticoid)",
+      "indication_as_stated": "glucocorticoid-induced myopathy/skeletal muscle atrophy",
+      "dose_quote": null,
+      "primary_outcome_quote": "The relationship between these parameters and the cross-sectional area (CSA) of the biceps femoris (slow-twitch muscle) and rectus femoris (fast-twitch muscle) was assessed using computed tomography.",
+      "primary_result_quote": "a positive correlation was observed between plasma isoleucine, aspartate, and glutamate concentrations and improvement in the biceps femoris muscle atrophy",
+      "sample_size_quote": "Eighteen patients with rheumatic diseases treated with prednisolone were randomly assigned to receive additional BCAAs for 12 wk.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "BCAA given as adjunct to ongoing glucocorticoid (prednisolone) therapy, not isoleucine alone; plasma isoleucine specifically (among BCAAs) correlated with muscle-atrophy improvement, but this is a correlational secondary finding in a very small sample (n=18). Specific BCAA dose not stated in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine dosed only within a BCAA mixture, add-on to glucocorticoid pharmacotherapy."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34612716",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "25 studies were included, consisting of 479 participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "branched-chain amino acids (BCAA)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "479 participants across 25 pooled studies",
+      "indication_as_stated": "muscle damage markers and performance following strenuous exercise",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "significantly lower levels of indirect muscle damage markers (creatine kinase, lactate dehydrogenase and myoglobin) at 48 hours post-exercise (standardised mean difference [SMD] = -0.41; p < 0.05) for the BCAA than placebo conditions",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for muscle damage biomarkers and soreness; explicit null for muscle performance recovery: 'no significant differences were identified between the BCAA and placebo conditions for muscle performance at 24 or 48 hours post-exercise.' Authors conclude 'benefits for muscle performance recovery is questionable.'",
+      "registrations": [
+        "CRD42020191248"
+      ],
+      "included_studies": "25 studies, 479 participants",
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Reviews BCAA (leucine, isoleucine, valine) as a category, not isoleucine in isolation."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35602971",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Thirty-two Veterans with TBI"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "BCAA (30 g, b.i.d. for 21-days)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Thirty-two Veterans with traumatic brain injury (TBI)",
+      "indication_as_stated": "chronic sleep disturbances and cognitive impairment after TBI",
+      "dose_quote": "comparing BCAA (30 g, b.i.d. for 21-days) with one of two placebo arms (microcrystalline cellulose or rice protein, both 30 g, b.i.d. for 21-days)",
+      "primary_outcome_quote": "Pre- and post-intervention outcomes included sleep measures (questionnaires, daily sleep/study diaries, and wrist actigraphy), neuropsychological testing, and blood-based biomarkers related to BCAA consumption.",
+      "primary_result_quote": "BCAA significantly improved subjective insomnia symptoms and objective sleep latency and wake after sleep onset on actigraphy.",
+      "sample_size_quote": "Thirty-two Veterans with TBI were prospectively enrolled in a randomized, double-blinded, placebo-controlled trial",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Pilot feasibility trial (26 of 32 completers); isoleucine given only as one-third of a BCAA (leucine, isoleucine, valine) mixture; authors explicitly frame results as 'preliminary efficacy' requiring 'a larger scale randomized clinical trial.'",
+      "registrations": [
+        "NCT03990909"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine dosed only within a BCAA mixture (leucine, isoleucine, valine), not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36007871",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Ninety-one ALC patients were enrolled"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "a late evening snack (LES) and oral amino acid (OAA) capsules",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Ninety-one alcoholic liver cirrhosis (ALC) patients",
+      "indication_as_stated": "energy metabolism and the Fischer ratio (BCAA/aromatic amino acid ratio) in alcoholic liver cirrhosis",
+      "dose_quote": null,
+      "primary_outcome_quote": "Respiratory quotient (RQ), carbohydrate oxidation rate (CHO%), fat oxidation rate (FAT%), serum isoleucine and the Fischer ratio were measured at baseline and at months 1, 3, and 6 of follow-up.",
+      "primary_result_quote": "In the LES and OAA group, serum isoleucine and the Fischer ratio were markedly increased compared with the LES group and control group (P < 0.05).",
+      "sample_size_quote": "Ninety-one ALC patients were enrolled and randomly divided into three groups: 31 patients in the LES and OAA group, 32 in the LES group, and 28 controls.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Oral amino acid capsules (BCAA-type, containing isoleucine) given as add-on to a late evening snack dietary intervention, not isoleucine alone; specific isoleucine/BCAA dose not stated in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "'Oral amino acid (OAA) capsules' — composition described only via the Fischer ratio (BCAA-to-aromatic-amino-acid ratio) outcome, not confirmed as isolated isoleucine."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "36297065",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "healthy subjects"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "wheat biscuits supplemented with plant flours... enriched either in L-arginine (L-arg) or branched-chain amino acids (BCAAs)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "healthy subjects",
+      "indication_as_stated": "postprandial glucose, GI hormone responses, and appetite",
+      "dose_quote": null,
+      "primary_outcome_quote": "Responses of glucose, insulin, ghrelin, glucagon-like peptide-1 (GLP-1), peptide YY (PYY) and glicentin, as well as those of L-arginine, L-leucine, L-isoleucine and L-valine, were evaluated over 180 min.",
+      "primary_result_quote": "Consumption of ArgB and BCAAsB elicited lower glucose iAUC compared to GS (p < 0.05).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Isoleucine delivered within a BCAA-enriched wheat biscuit food product (with leucine and valine), not isolated; comparator group also included a separate L-arginine-enriched biscuit arm. Specific enrolled sample size and dose not stated as contiguous quotable spans in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine present only within a BCAA-enriched wheat-biscuit food product, not as an isolated supplement."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39453241",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "100 participants (50 men and 50 women)"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "five daily capsules of 500 mg L-leucine, 250 mg L-isoleucine, and 250 mg L-valine for six months",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "100 recreational weightlifters (50 men, 50 women)",
+      "indication_as_stated": "muscle recovery, physical performance, DOMS, and fatigue",
+      "dose_quote": "Subjects in the BCAA group took five daily capsules of 500 mg L-leucine, 250 mg L-isoleucine, and 250 mg L-valine for six months.",
+      "primary_outcome_quote": "This study examined the effects of BCAA supplementation on anthropometric data, physical performance, delayed onset muscle soreness (DOMS), and fatigue in recreational weightlifters.",
+      "primary_result_quote": "significant improvements in muscle recovery, as indicated by reduced DOMS, particularly in women who showed a decrement of 18.1 ± 9.4 mm compared to 0.8 ± 1.2 mm in the placebo group of a horizontal 100 mm line",
+      "sample_size_quote": "The trial involved 100 participants (50 men and 50 women), randomized into BCAA and placebo groups.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Isoleucine is one-quarter (250 mg per capsule) of a 3-component BCAA blend dominated by leucine (500 mg); sex-specific effects noted, with women benefiting more on DOMS/fatigue and men more on strength gains.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine (250 mg/capsule) is a minority component of a leucine-dominant BCAA capsule blend."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40219047",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "eleven active males"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "supplementation with BCAAs or placebo on consecutive three days",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "eleven active males",
+      "indication_as_stated": "exercise-induced substrate metabolism, performance, and post-exercise fatigue",
+      "dose_quote": null,
+      "primary_outcome_quote": "indirect calorimetry was used to measure the carbohydrate (CHO) and fat oxidation rate, as well as the cycling efficiency",
+      "primary_result_quote": "the fat oxidation rate was significantly higher after 20 and 30 min of CLE (p < 0.05)",
+      "sample_size_quote": "eleven active males completed 1 h of constant load exercise (CLE) at 60% VO2max power followed by a time to exhaustion (TTE) test",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Isoleucine given only as one of three BCAAs (isoleucine, leucine, valine), not alone. Very small sample (n=11). Specific dose not stated in the retrieved abstract.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine dosed only within a BCAA mixture, not alone."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40381110",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fifty-five patients (mean age 75.4 ± 5.2 years) were enrolled"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "oral mixed BCAA supplementation (60% leucine, 4.5 g/day; 20% valine, 1.5 g/day; 20% isoleucine, 1.5 g/day)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "CKD patients aged over 65 years (55 enrolled: 29 BCAA, 26 placebo)",
+      "indication_as_stated": "muscle mass and physical performance in elderly chronic kidney disease patients",
+      "dose_quote": "oral mixed BCAA supplementation (60% leucine, 4.5 g/day; 20% valine, 1.5 g/day; 20% isoleucine, 1.5 g/day) (N = 29) or a placebo (N = 26) for 12 weeks",
+      "primary_outcome_quote": "Muscle mass, serum insulin-like growth factor 1 (IGF-1), and myostatin levels were measured at baseline and after 12 weeks.",
+      "primary_result_quote": "lean muscle mass significantly increased in the leucine group compared to placebo (0.4 kg [95% CI 0.1-0.7] vs. - 0.2 kg [95% CI - 0.6-0.2], P = 0.010)",
+      "sample_size_quote": "Fifty-five patients (mean age 75.4 ± 5.2 years) were enrolled.",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Isoleucine is only 20% (1.5 g/day) of a leucine-dominant (60%, 4.5 g/day) BCAA blend, described by authors as 'leucine-enriched BCAA supplementation'; positive on muscle mass, but 'no significant differences were found in muscle strength, serum myostatin, IGF-1, or adverse events.'",
+      "registrations": [
+        "TCTR20200314003"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine (20%, 1.5 g/day) is a minority component of a leucine-dominant BCAA blend."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40860958",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty participants"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "BCAAs-provided in a 2:1:1 ratio of leucine:isoleucine: valine-combined with exercise... exercise + BCAAs (100 mg/kg body weight/d)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "Twenty older adults (63% female, age 70.5 years, BMI 35)",
+      "indication_as_stated": "fatigue, physical performance, and quality of life, combined with exercise",
+      "dose_quote": "randomized to 8 weeks of either exercise + BCAAs (100 mg/kg body weight/d) or exercise + placebo",
+      "primary_outcome_quote": "Physical function was assessed using handgrip strength, chair stands, gait speed, VO2 max, and a 400 m walk.",
+      "primary_result_quote": "Compared to exercise + placebo, exercise + BCAAs showed greater improvements in strength, mobility, and endurance, along with reductions in fatigue (-45% vs. +92%) and depressive symptoms (-29% vs. +5%).",
+      "sample_size_quote": "Twenty participants (63% female; BMI: 35 ± 2 kg/m2; age: 70.5 ± 1.2 years) were randomized",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "BCAA (2:1:1 leucine:isoleucine:valine, isoleucine one part of four) given only as an add-on to a structured aerobic+resistance exercise program common to both arms, not BCAA alone; very small pilot sample (n=20). Authors describe findings as 'preliminary.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "Isoleucine dosed only within a 2:1:1 leucine:isoleucine:valine BCAA mixture, combined with a structured exercise program."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "2184659",
+    "3928919",
+    "14583978",
+    "15288885",
+    "26536628",
+    "27468258",
+    "28638350",
+    "33310174",
+    "33648360",
+    "35602971",
+    "39453241",
+    "40860958"
+  ],
+  "handoff": [
+    {
+      "pmid": "26297928",
+      "role": "dosing",
+      "reason": "Animal (rat) mechanistic study of isoleucine-tryptophan dipeptide's ACE-inhibiting/antihypertensive effects; relevant background for a human-evidence reviewer of isoleucine-tryptophan-containing dairy/whey products, though this record itself is preclinical, not human."
+    },
+    {
+      "pmid": "33310174",
+      "role": "interaction",
+      "reason": "Intragastric isoleucine (10 g) stimulated insulin and glucagon in both healthy subjects and type 2 diabetics without lowering glycaemia in T2D; relevant to a diabetes-management/glucose-interaction reviewer."
+    },
+    {
+      "pmid": "3928919",
+      "role": "dosing",
+      "reason": "Intravenous (not oral) BCAA infusion dosing data (0.5 vs 1.0 g/kg/day) in liver cirrhosis; relevant to a parenteral-nutrition/clinical-dosing reviewer, distinct from oral supplement dosing."
+    }
+  ],
+  "identity_notes": "No retrieved human trial administers isolated free L-isoleucine as a standalone oral supplement at a therapeutic dose with a clean placebo comparison; every kept human RCT/review studies isoleucine only as one component of a combination product — most commonly a branched-chain amino acid (BCAA) blend with leucine and valine (where isoleucine is typically the smallest fraction, e.g., 250 mg of a 1000 mg capsule, or 1.5 g of a 7.5 g blend), or as part of a bioactive di/tripeptide (isoleucine-tryptophan; isoleucine-proline-proline/IPP paired with valine-proline-proline/VPP) embedded in a dairy or whey-protein-hydrolysate food matrix. The single most important applicability caveat: because isoleucine is essentially never tested in isolation, no finding in this evidence base can be confidently attributed to isoleucine specifically rather than to leucine (typically the dominant, most-studied BCAA) or to the combination as a whole — this is true even for the one exception, PMID 33310174, where an isolated 10 g isoleucine arm was compared directly against leucine and control, and found NO benefit on the primary glycemic outcome in type 2 diabetes. The evidence base is overwhelmingly dominated (over 85% of records) by observational metabolomics/biomarker-discovery studies across dozens of diseases (cancer, diabetes, cardiovascular disease, stroke, lupus, endometriosis, etc.) in which isoleucine is measured only as one of many circulating metabolites and is never administered, plus a large cluster of inborn-error-of-metabolism disease case reports/reviews (methylmalonic acidemia, maple syrup urine disease, 3-ketothiolase/beta-ketothiolase deficiency, ECHS1 deficiency) concerning isoleucine catabolism disorders requiring dietary restriction rather than supplementation."
+}

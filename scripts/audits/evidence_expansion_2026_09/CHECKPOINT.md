@@ -8,7 +8,7 @@
 - **3549** (87.7%) are blocked by missing evidence curation — this project's target.
 - **496** (12.3%) are blocked elsewhere; more papers cannot move them (see BLOCKER_ROUTING.md).
 - **No scorer-defect bucket**: 0 products have an accepted, point-carrying match yet Evidence 0.
-- **10 identities deeply curated** into **32 pending contexts**; **0 are class A** (the current scorer could apply them safely) and **10 are class B** (valid evidence the scorer is too coarse to apply).
+- **10 identities deeply curated** into **32 pending contexts**; **1 are class A** (the current scorer could apply them safely) and **9 are class B** (valid evidence the scorer is too coarse to apply).
 
 ## What the deeply authored identities cover
 
@@ -25,8 +25,8 @@
 
 | outcome | Evidence=0 products affected |
 |---|---:|
-| would gain evidence under the CURRENT scorer (class A approvals) | 0 |
-| held back because the current scorer is too coarse (class B) | 281 |
+| would gain evidence under the CURRENT scorer (class A approvals) | 25 |
+| held back because the current scorer is too coarse (class B) | 256 |
 
 Every Wave 1 identity landed in class B. The curated evidence is real; the generic scorer cannot yet apply it without overgeneralising. That is the bridge to Phase 2, and it is measured rather than assumed.
 
@@ -51,18 +51,29 @@ Every Wave 1 identity landed in class B. The curated evidence is real; the gener
 
 | measure | value |
 |---|---:|
-| records screened by subagents | 2937 |
-| kept after screening | 1006 |
-| rejected with a reason code | 1863 |
-| shortlisted for central reading | 260 |
-| handoffs proposed to other owners | 88 |
+| records screened by subagents | 4814 |
+| kept after screening | 1695 |
+| rejected with a reason code | 3119 |
+| shortlisted for central reading | 446 |
+| handoffs proposed to other owners | 142 |
 | shortlist PMIDs re-fetched live by Claude | 65 |
 | PMIDs not found live | 0 |
 | stored-vs-live title drift | 0 |
 | integrity flags (erratum) | 2 |
 | human status ambiguous (fails closed) | 16 |
-| **quote rejected — ellipsis-joined fragments** | 25 |
-| **quote rejected — composed, not in source** | 28 |
+| **quote rejected — ellipsis-joined fragments** (shortlist scope) | 25 |
+| **quote rejected — composed, not in source** (shortlist scope) | 28 |
+
+Across EVERY kept record in the drafts, not only the shortlist (`qa_screening_drafts.py`, ledger in QUARANTINE_screening_drafts/QA_LEDGER.json):
+
+| measure | value |
+|---|---:|
+| quote fields verified as exact contiguous substrings | 3449 |
+| rejected — ellipsis-joined | 119 |
+| rejected — absent from the source | 135 |
+| **PMIDs cited that are not in the retrieval set** | 0 |
+| shortlist entries not among kept records | 0 |
+| identities whose self-reported counts disagree with their file | 9 |
 
 Every rejected quote was caught before authoring: Claude re-extracts each quote from the abstract itself, and `validate_wave1_contexts.py` re-checks each one as a substring. The authored contexts contain 0 unverified quotes. The screening brief was tightened mid-run and both agents were corrected.
 
