@@ -1,0 +1,9 @@
+{"canonical_id": "yohimbe", "recommended_class": "no_qualifying",
+ "one_line_reason": "Shortlist has no isolated-yohimbe efficacy trial; the two dosed studies are higenamine+caffeine+yohimbe combination products and the third is a broad multi-supplement review with no yohimbe-specific effect size.",
+ "selected": [],
+ "blockers": ["The two intervention studies dose yohimbe only as part of a 3-ingredient stack (higenamine + caffeine + yohimbe bark extract), so no single-ingredient yohimbe effect can be isolated.", "The systematic review discusses yohimbe as one of 11 pooled supplements without reporting a yohimbe-specific effect size or conclusion."],
+ "handoff_pmids": [
+   {"pmid": "24139127", "kind": "safety", "note": "Acute RCT of a higenamine + caffeine (270 mg) + yohimbe bark extract combination; raised free fatty acids, energy expenditure, heart rate (~3 bpm), and systolic blood pressure (~12 mmHg); authors attribute the hemodynamic changes mainly to caffeine/yohimbine, not higenamine."},
+   {"pmid": "25591969", "kind": "safety", "note": "8-week RCT titled a clinical safety assessment comparing placebo, higenamine, caffeine, and higenamine+caffeine+yohimbe bark extract; reported no statistically significant changes in vital signs or labs for any group."}
+ ],
+ "excluded_pmids": [{"pmid": "15051593", "reason": "Systematic review of 11 pooled weight-loss dietary supplements (chitosan, chromium picolinate, ephedra, yohimbe, etc.); abstract gives only an overall negative conclusion and does not report yohimbe-specific results."}]}

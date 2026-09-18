@@ -1,0 +1,16 @@
+{"canonical_id": "alfalfa_leaf", "recommended_class": "hold",
+ "one_line_reason": "Most of the shortlist is agronomy/soil-science literature on Medicago sativa as a crop plant; the only two human trials either use alfalfa SEED (not leaf) or combine leaf with sage in an apparently uncontrolled study.",
+ "selected": [
+   {"pmid": "9677811", "population": "30 menopausal women with hot flushes and night sweating", "intervention": "combination phytotherapeutic extract of Salvia officinalis (sage) and Medicago sativa (alfalfa) leaves, oral, 3 months", "dose_as_stated": "not stated", "primary_outcome": "frequency/severity of hot flushes and night sweating", "apparent_direction": "positive", "why_selected": "the only shortlisted human study that actually uses alfalfa LEAF (matching this catalog ingredient's plant part), though combined with sage and apparently without a placebo control group described."},
+   {"pmid": "38103848", "population": "60 men with idiopathic infertility", "intervention": "Medicago sativa (alfalfa) SEED powder plus vitamin E, oral, vs. vitamin E alone, 12 weeks", "dose_as_stated": "6 g/day (seed powder)", "primary_outcome": "sperm count, motility, and morphology", "apparent_direction": "positive", "why_selected": "the only other human RCT of Medicago sativa in the shortlist, with a stated dose, though it uses seed rather than leaf and tests it only as an add-on to vitamin E rather than against a true placebo."}
+ ],
+ "blockers": ["The only trial using alfalfa leaf itself (9677811) combines it with sage (Salvia officinalis) in a fixed product, and the study design does not describe a placebo control, so leaf's own contribution cannot be isolated.", "The other human RCT (38103848) uses alfalfa SEED powder, a different plant part with a different phytochemical profile than the catalog's Alfalfa Leaf products, and adds it to vitamin E rather than comparing to a true placebo.", "No dose is stated for the leaf-containing product, so it cannot be mapped to a catalog label amount."],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "41127617", "reason": "Soil microbiology study using Medicago sativa as a crop plant (rhizosphere bacteria for land restoration); no human exposure."},
+   {"pmid": "38402679", "reason": "Soil-remediation review; Medicago sativa mentioned only as a phytoremediation crop plant; no human exposure."},
+   {"pmid": "38763193", "reason": "Meta-analysis of soil carbon sequestration under alfalfa as a forage/cover crop; no human exposure."},
+   {"pmid": "35685006", "reason": "Agronomy review of forage cropping systems in salt-affected soils; Medicago sativa treated as a crop species; no human exposure."},
+   {"pmid": "22591324", "reason": "Food-science study of aroma compounds in beef from cattle finished on alfalfa-containing feed; an animal-feed context, not a human alfalfa supplement."},
+   {"pmid": "26281014", "reason": "Plant agronomy study of alfalfa stem elongation and fall dormancy; no human exposure."}
+ ]}

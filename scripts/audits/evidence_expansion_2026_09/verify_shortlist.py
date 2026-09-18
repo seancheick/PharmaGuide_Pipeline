@@ -61,6 +61,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--screen-dir", action="append", required=True, type=Path)
     parser.add_argument("--candidates-dir", required=True, type=Path)
+    parser.add_argument("--out", default="wave1_live_verification.json",
+                        help="verification artefact, relative to this audit directory; each wave keeps its own")
     parser.add_argument("--all-kept", action="store_true",
                         help="verify every kept record, not only the shortlist")
     args = parser.parse_args()
@@ -69,7 +71,11 @@ def main() -> int:
                for directory in args.screen_dir for path in sorted(directory.glob("*.screen.json"))]
     wanted: dict[str, set[str]] = {}
     for screen in screens:
-        pmids = {str(p) for p in screen.get("shortlist") or []}
+        # Wave 1 screens carry a "shortlist" of bare PMIDs; Wave 2 screens carry
+        # "selected" objects. One verifier, both shapes - never two verifiers.
+        pmids = {str(p) for p in screen.get("shortlist") or [] if not isinstance(p, dict)}
+        pmids |= {str(item["pmid"]) for item in screen.get("selected") or []
+                  if isinstance(item, dict) and item.get("pmid")}
         if args.all_kept:
             pmids |= {str(r["pmid"]) for r in screen.get("records") or []}
         wanted[screen["canonical_id"]] = pmids
@@ -122,7 +128,7 @@ def main() -> int:
                              "verified_records": len(verified), "findings": len(findings),
                              "scope": "all kept records" if args.all_kept else "shortlisted records"},
                "findings": findings, "verified": verified}
-    (OUT / "wave1_live_verification.json").write_text(json.dumps(payload, indent=1))
+    (OUT / args.out).write_text(json.dumps(payload, indent=1))
     print(json.dumps(payload["_metadata"], indent=1))
     for finding in findings[:40]:
         print("  ", finding.get("canonical_id"), finding.get("pmid"), finding["finding"], finding.get("field", ""))

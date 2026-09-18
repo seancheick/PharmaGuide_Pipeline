@@ -1,0 +1,20 @@
+{"canonical_id": "papaya_fruit_powder", "recommended_class": "hold",
+ "one_line_reason": "Nearly every human trial in the shortlist uses Carica papaya LEAF extract or SEED (for thrombocytopenia/dengue or deworming), not fruit powder; the one fruit-based RCT combines fermented papaya with noni in a fixed formula.",
+ "selected": [
+   {"pmid": "35684003", "population": "adults recovering from moderate-to-severe COVID-19 (n=188, randomized, placebo-controlled)", "intervention": "fermented Carica papaya combined with Morinda citrifolia (noni), oral, twice daily, 20 days, added to conventional treatment", "dose_as_stated": "28 g twice daily (56 g/day of the combined fermented supplement)", "primary_outcome": "post-COVID clinical symptoms; plasma cytokines (IL-6, IL-8), antioxidant activity, phagocytic capacity", "apparent_direction": "positive", "why_selected": "the only shortlisted human RCT using a Carica papaya FRUIT-based product taken by swallowing (not leaf, seed, or topical rinse), though it is fermented and combined with noni rather than being plain papaya fruit powder."}
+ ],
+ "blockers": ["Nearly every other human study of Carica papaya in this shortlist uses a different plant part (LEAF extract for chemotherapy/dengue-related thrombocytopenia, SEED for deworming) or a different preparation (isolated papain enzyme blend, or a topical mouthrinse) rather than fruit powder, so they cannot be used as evidence for this catalog ingredient.", "The one fruit-based candidate (35684003) combines fermented papaya with Morinda citrifolia (noni) in a fixed ratio at a very large dose (56 g/day total), so its effect cannot be isolated to papaya fruit powder alone or mapped to typical catalog capsule/powder doses.", "No dose-response or safety data specific to plain, unfermented papaya fruit powder appears anywhere in the shortlist."],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "40836827", "reason": "Meta-analysis of Carica papaya LEAF extract (CPLE) for chemotherapy-induced thrombocytopenia, combining human and animal data; wrong plant part for this fruit-powder catalog ingredient."},
+   {"pmid": "40841969", "reason": "Bibliometric/ethnobotanical review of plant use in Nigeria; Carica papaya mentioned only as a frequently-cited species, with no specific human efficacy trial data or plant-part/route detail."},
+   {"pmid": "41214477", "reason": "Systematic review of dengue treatments; Carica papaya LEAF extract combined with doxycycline showed benefit, but this is both the wrong plant part and a combination product."},
+   {"pmid": "41602767", "reason": "In vitro study of silver nanoparticles synthesized using plant extracts (including papaya) for antibacterial testing against Klebsiella; not a human supplement exposure at all."},
+   {"pmid": "31601215", "reason": "Meta-analysis of Carica papaya (leaf) extract for dengue; wrong plant part, and concludes current evidence is insufficient to support efficacy."},
+   {"pmid": "26099634", "reason": "Ethnopharmacology review of anti-Buruli-ulcer plants in West Africa; Carica papaya is mentioned only generally among many plants without clear plant-part or route detail."},
+   {"pmid": "24269772", "reason": "Narrative ethnobotanical review of medicinal plants for women's healthcare in Southeast Asia; no specific Carica papaya trial data given."},
+   {"pmid": "19275687", "reason": "Review of herbal antioxidant sources; the Carica papaya finding cited is from an animal study, not a human trial."},
+   {"pmid": "34689451", "reason": "Carica papaya used as a topical mouthrinse (not a swallowed supplement); also found no significant difference from a chlorhexidine control (null result)."},
+   {"pmid": "30228265", "reason": "RCT of a multi-enzyme blend (papain derived from papaya plus fungal-derived enzymes) for non-celiac gluten sensitivity; a combination enzyme product, not whole papaya fruit powder."},
+   {"pmid": "30526582", "reason": "Pilot RCT of papaya SEED (not fruit)-fortified school porridge for deworming in Kenya; wrong plant part and described by the authors as a preliminary survey."}
+ ]}

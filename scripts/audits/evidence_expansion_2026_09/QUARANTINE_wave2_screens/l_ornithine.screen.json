@@ -1,0 +1,24 @@
+{"canonical_id": "l_ornithine", "recommended_class": "hold",
+ "one_line_reason": "Strong human evidence exists, but it is almost entirely L-ornithine L-aspartate (LOLA) given to cirrhosis/hepatic-encephalopathy patients, not free ornithine used by general supplement buyers.",
+ "selected": [
+   {"pmid": "29762873", "population": "people with cirrhosis, with or at risk of hepatic encephalopathy", "intervention": "L-ornithine L-aspartate (LOLA) vs placebo/no intervention or other active agents (Cochrane systematic review of RCTs)", "dose_as_stated": "not stated (review pools multiple RCT doses/routes)", "primary_outcome": "hepatic encephalopathy (reversal/prevention) and related mortality/safety outcomes", "apparent_direction": "unclear", "why_selected": "Highest-quality synthesis (Cochrane review) of the core LOLA/HE evidence base, though its abstract as retrieved does not state a bottom-line verdict"},
+   {"pmid": "31338724", "population": "patients with cirrhosis (minimal or overt hepatic encephalopathy), 384 patients across 6 RCTs", "intervention": "L-ornithine L-aspartate (oral and intravenous formulations) vs placebo/no intervention", "dose_as_stated": "not stated", "primary_outcome": "progression to/reversal of overt hepatic encephalopathy", "apparent_direction": "positive", "why_selected": "Meta-analysis showing significant reduction in progression to overt HE with LOLA, including an oral-route subgroup"},
+   {"pmid": "38403493", "population": "patients with cirrhosis and minimal hepatic encephalopathy, 292 patients across 6 RCTs", "intervention": "L-ornithine L-aspartate vs placebo/no intervention", "dose_as_stated": "not stated", "primary_outcome": "reversal of minimal hepatic encephalopathy and progression to overt HE", "apparent_direction": "positive", "why_selected": "Recent meta-analysis with a clear positive effect estimate, oral subgroup analyzed separately"},
+   {"pmid": "40370740", "population": "patients with hepatic encephalopathy, 858 patients across 12 RCTs", "intervention": "L-ornithine L-aspartate combined with lactulose vs lactulose alone", "dose_as_stated": "not stated", "primary_outcome": "total effective rate and liver-function markers (AST, ALT, NH3, TBIL)", "apparent_direction": "positive", "why_selected": "Recent large meta-analysis with positive result, included despite being a combination (LOLA+lactulose) comparison"}
+ ],
+ "blockers": [
+   "All efficacy evidence in the shortlist is in cirrhosis/hepatic-encephalopathy patients, a clinical disease population, not general supplement users",
+   "The studied exposure is L-ornithine L-aspartate (LOLA), a specific salt/combination form often dosed intravenously or as prescription-strength sachets; dose and route may not map to a plain L-ornithine label amount",
+   "40370740 evaluates LOLA only as an add-on to lactulose, a combination comparison, not the single ingredient alone"
+ ],
+ "handoff_pmids": [
+   {"pmid": "40323503", "kind": "safety", "note": "Systematic review of the safety of oral L-ornithine intake in healthy subjects; establishes a NOAEL and catalogs adverse events, not an efficacy study"}
+ ],
+ "excluded_pmids": [
+   {"pmid": "41631546", "reason": "Reviews aminoglycoside/vancomycin/metronidazole antibiotics for hepatic encephalopathy; L-ornithine L-aspartate is not the intervention studied"},
+   {"pmid": "37746955", "reason": "Reviews prophylactic therapies (rifaximin, lactulose, LOLA, albumin) post-TIPS; narrative synthesis found LOLA prophylaxis not associated with reduced HE occurrence, but LOLA is one of several agents reviewed, not isolated"},
+   {"pmid": "31476436", "reason": "Network meta-analysis comparing multiple HE treatments (rifaximin, lactulose, probiotics, LOLA); LOLA is one of several comparators, not the focal single-ingredient evidence"},
+   {"pmid": "30688711", "reason": "Reviews lactulose management of minimal HE; LOLA appears only as one comparator arm in cited studies"},
+   {"pmid": "29845607", "reason": "Interventions for childhood apraxia of speech; unrelated to L-ornithine, evidently a mismatched retrieval"},
+   {"pmid": "28059938", "reason": "Reviews probiotics/synbiotics for hepatic encephalopathy risk factors; L-ornithine-L-aspartate is mentioned only as a comparator treatment, not the studied exposure"}
+ ]}

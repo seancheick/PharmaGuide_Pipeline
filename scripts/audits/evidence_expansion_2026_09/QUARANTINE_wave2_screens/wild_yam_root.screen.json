@@ -1,0 +1,6 @@
+{"canonical_id": "wild_yam_root", "recommended_class": "no_qualifying",
+ "one_line_reason": "The sole shortlisted human trial tested a topical wild yam cream, not an oral supplement, and found no significant effect versus placebo.",
+ "selected": [],
+ "blockers": ["Wrong route of exposure: the only shortlisted RCT used a topical cream, not an oral product, so it does not represent this catalog ingredient's exposure."],
+ "handoff_pmids": [],
+ "excluded_pmids": [{"pmid": "11428178", "reason": "Double-blind crossover RCT of a topical wild yam extract cream (not an oral supplement) in menopausal women; found no significant difference from placebo on menopausal symptoms, lipids, or sex hormones."}]}

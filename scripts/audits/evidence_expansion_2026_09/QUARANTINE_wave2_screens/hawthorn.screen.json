@@ -1,0 +1,25 @@
+{"canonical_id": "hawthorn", "recommended_class": "hold",
+ "one_line_reason": "The strongest single-ingredient human evidence (Cochrane review of hawthorn monopreparations) is exclusively in diagnosed chronic heart failure patients, a clinical population and a cardiac medical claim, not general supplement use.",
+ "selected": [
+   {"pmid": "18254076", "population": "patients with chronic heart failure, NYHA stage II (per German Commission E indication cited)", "intervention": "hawthorn leaf-and-flower extract monopreparations, oral, double-blind placebo-controlled RCTs", "dose_as_stated": "not stated (abstract as retrieved is truncated before dose/result details)", "primary_outcome": "benefits and harms of hawthorn extract in chronic heart failure (symptom/exercise-tolerance measures implied by review scope)", "apparent_direction": "unclear", "why_selected": "The definitive single-ingredient Cochrane systematic review of hawthorn monopreparation RCTs; the retrieved abstract text is cut off before stating pooled results, so direction cannot be read from what is available"},
+   {"pmid": "31255877", "population": "adults with hypotension", "intervention": "fixed combination of hawthorn extract and camphor (Korodin Herz-Kreislauf-Tropfen®), oral, RCTs pooled (4 trials, 221 patients)", "dose_as_stated": "not stated", "primary_outcome": "systolic and diastolic blood pressure, cognition", "apparent_direction": "positive", "why_selected": "Only shortlisted RCT meta-analysis with a clearly stated directional result (BP increase), included despite being a 2-ingredient combination product rather than hawthorn alone"}
+ ],
+ "blockers": [
+   "18254076's population is diagnosed chronic heart failure (NYHA II) patients under medical supervision, a clinical claim area rather than general wellness use",
+   "31255877 studies a fixed 2-ingredient branded combination product (hawthorn + camphor, Korodin®), not hawthorn alone, and the outcome (raising blood pressure in hypotension) is a different use case from the cardiovascular-support claims typical of catalog hawthorn products",
+   "Several other shortlisted reviews (42277690, 38706368, 37644446, 22718512, 23975682) evaluate hawthorn only as one ingredient among many plant extracts or multi-herb TCM formulations, so no hawthorn-specific effect size can be attributed from those abstracts"
+ ],
+ "handoff_pmids": [
+   {"pmid": "16752934", "kind": "safety", "note": "Systematic review of the adverse-event profile of Crataegus (hawthorn) monopreparations, including drug-interaction data collected from manufacturers and spontaneous reporting"}
+ ],
+ "excluded_pmids": [
+   {"pmid": "42277690", "reason": "Network meta-analysis of 15 different plant extracts (including hawthorn) for heart failure; abstract does not state hawthorn's individual ranking/effect separate from the other 14 extracts"},
+   {"pmid": "42381151", "reason": "Systematic review of multi-herb TCM combination regimens for MASLD; hawthorn is not evaluated as a standalone exposure"},
+   {"pmid": "38706368", "reason": "General review of herbal interventions for cardiovascular disease covering many herbs (Moringa, ginseng, Ginkgo, etc.); no hawthorn-specific data given"},
+   {"pmid": "37644446", "reason": "Review of multiple medicinal/food-homologous substances for NAFLD; not hawthorn-specific"},
+   {"pmid": "34446530", "reason": "Meta-analysis of combined Western medicine plus traditional Chinese medicine (acupuncture and herbs) for stroke rehabilitation; not specific to hawthorn"},
+   {"pmid": "31704198", "reason": "Broad review of nutraceuticals in heart failure (PUFA, CoQ10, iron); hawthorn is not identifiable as a focus of the retrieved abstract text"},
+   {"pmid": "23975682", "reason": "Cochrane review of herbal medicines for fatty liver disease; Crataegus pinnatifida is one of several herbs discussed, not isolated"},
+   {"pmid": "22718512", "reason": "Systematic review of TCM formulations for NAFLD; hawthorn appears only as one of 246 herbs used across 419 multi-herb formulations"},
+   {"pmid": "18206062", "reason": "Study of custodial vs non-custodial criminal sanctions; 'Hawthorn effects' refers to the Hawthorne observer-effect concept, unrelated to the herb"}
+ ]}

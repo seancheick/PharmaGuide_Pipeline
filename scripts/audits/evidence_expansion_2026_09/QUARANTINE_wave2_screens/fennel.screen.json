@@ -1,0 +1,23 @@
+{"canonical_id": "fennel", "recommended_class": "curate",
+ "one_line_reason": "Multiple meta-analyses of RCTs show oral fennel (Foeniculum vulgare) affecting primary dysmenorrhea pain and menopausal symptoms, the exact women's-health outcomes fennel supplements are marketed for.",
+ "selected": [
+   {"pmid": "34187122", "population": "women with primary dysmenorrhea (12 studies pooled)", "intervention": "Foeniculum vulgare (fennel) oral, vs placebo and vs mefenamic acid (NSAID)", "dose_as_stated": "not stated (meta-analysis pools multiple RCT doses)", "primary_outcome": "dysmenorrhea pain intensity", "apparent_direction": "positive", "why_selected": "Meta-analysis (7 articles for the placebo comparison) showing fennel significantly reduced pain intensity vs placebo, with no significant difference from mefenamic acid"},
+   {"pmid": "33182553", "population": "women with primary dysmenorrhea (12 studies pooled, 468-502 participants depending on comparison)", "intervention": "Foeniculum vulgare (fennel) oral, vs placebo and vs conventional drug therapy", "dose_as_stated": "not stated", "primary_outcome": "dysmenorrhea pain reduction", "apparent_direction": "positive", "why_selected": "Independent meta-analysis corroborating a favorable effect of fennel vs placebo (similar to conventional drug therapy), though with very high heterogeneity (I2=98%) that the authors themselves flag"},
+   {"pmid": "33725577", "population": "menopausal women (7 RCTs pooled, n=145 for the placebo comparison)", "intervention": "fennel (Foeniculum vulgare Miller) oral, various treatment forms, vs placebo", "dose_as_stated": "not stated", "primary_outcome": "menopausal symptom severity; secondary outcomes sexual function, quality of life, psychological health", "apparent_direction": "mixed", "why_selected": "Meta-analysis found fennel significantly improved overall menopausal symptoms vs placebo, but other included studies failed to show benefit for sexual function, quality of life, or psychological health"}
+ ],
+ "blockers": [
+   "None of the three selected meta-analyses states a single consistent oral dose or preparation form in the abstract, which will need resolution against the underlying primary RCTs before mapping to a catalog label amount",
+   "33182553's headline placebo-comparison result carries very high statistical heterogeneity (I2=98%), which the review authors flag themselves"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "41653970", "reason": "Pools 5 different Apiaceae-family herbs (anise, dill, cumin, fennel, etc.) for dysmenorrhea; abstract as retrieved does not separate fennel-specific effect estimates from the other 4 herbs"},
+   {"pmid": "38791506", "reason": "In vitro/in silico screen of plant-based HSP90 inhibitors in breast cancer cell models; not a human trial"},
+   {"pmid": "35916457", "reason": "General review of herbal remedies for PCOS covering many plants (aloe, chamomile, Vitex, licorice, ginseng, cinnamon, Stachys, fennel); fennel's specific effect is not isolated in the retrieved abstract text"},
+   {"pmid": "36624949", "reason": "Sustainability/land-footprint meta-analysis of essential oil biopesticide production; agricultural/environmental study, not a human health outcome"},
+   {"pmid": "33962824", "reason": "Reviews many phytoestrogens (Pueraria mirifica, fennel, hops, soy, red clover, black cohosh, etc.) pooled together for urogenital menopause symptoms; fennel's individual result is not isolated"},
+   {"pmid": "31987249", "reason": "Western herbal medicines for IBS review dominated by peppermint oil trials; the one relevant trial used aniseed (Pimpinella anisum), a different Apiaceae species from fennel (Foeniculum vulgare), not fennel itself"},
+   {"pmid": "32421208", "reason": "Cochrane review of oral galactagogues broadly; the retrieved abstract does not state fennel-specific trial results separate from other galactagogues"},
+   {"pmid": "32603204", "reason": "Pools cinnamon, fennel, and ginger trials together for dysmenorrhea; while a fennel-specific WMD is given, the reported confidence interval (0.119-6.829) appears internally inconsistent/unreliable as retrieved, and the same fennel-dysmenorrhea evidence is better represented by 34187122 and 33182553"},
+   {"pmid": "29500924", "reason": "No abstract text was retrieved for this record (title only: 'The effects of fennel on menstrual bleeding'); cannot be screened from the packet as provided"}
+ ]}

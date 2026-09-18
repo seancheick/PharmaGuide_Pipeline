@@ -1,0 +1,25 @@
+{"canonical_id": "l_threonine", "recommended_class": "hold",
+ "one_line_reason": "The one clean single-ingredient trial (positive antispastic effect) is in spinal spasticity patients, and the rest of the human evidence is old ALS trials combining L-threonine with pyridoxal phosphate in a clinical disease population.",
+ "selected": [
+   {"pmid": "8296531", "population": "patients with spinal spasticity (33 patients)", "intervention": "oral L-threonine 6 g/day, double-blind placebo-controlled crossover", "dose_as_stated": "6 g/day", "primary_outcome": "muscle tone (Ashworth Scale)", "apparent_direction": "positive", "why_selected": "The cleanest single-ingredient, dose-stated human RCT in the shortlist, with a stated 'modest but definite antispastic effect'"},
+   {"pmid": "8909433", "population": "patients with amyotrophic lateral sclerosis (95 randomized, 77 completers)", "intervention": "oral L-threonine 4 g/day plus pyridoxal phosphate 160 mg/day vs branched-chain amino acids vs placebo, 6 months", "dose_as_stated": "4 g/day (combined with pyridoxal phosphate)", "primary_outcome": "disease progression (muscle strength, isometric torque, forced vital capacity, weight, activities of daily living)", "apparent_direction": "negative", "why_selected": "Long-running controlled ALS trial reporting greater weight loss and a substantially greater decline in forced vital capacity in the L-threonine group versus placebo, though threonine was combined with pyridoxal phosphate"},
+   {"pmid": "11231032", "population": "patients with amyotrophic lateral sclerosis, multicenter trial", "intervention": "oral L-threonine plus pyridoxal-5-phosphate vs branched-chain amino acids vs placebo, 6 months", "dose_as_stated": "not stated in this electrophysiology sub-analysis", "primary_outcome": "electrophysiologic measures of lower motor neuron loss and reinnervation; primary clinical endpoint was muscle strength", "apparent_direction": "negative", "why_selected": "Companion analysis from the same negative ALS drug trial as 8909433, included for completeness though it reports secondary electrophysiologic endpoints rather than direct efficacy"}
+ ],
+ "blockers": [
+   "The two ALS trials (8909433, 11231032) dose L-threonine only in combination with pyridoxal phosphate/pyridoxal-5-phosphate, not as a standalone exposure",
+   "All three selected trials are in clinical neurological-disease populations (ALS, spinal spasticity) under medical supervision, not general supplement users",
+   "The trials are from 1993-2001, predating current reporting standards, and the underlying disease context (ALS, spasticity) is unrelated to why L-threonine is marketed as a general amino-acid supplement today"
+ ],
+ "handoff_pmids": [
+   {"pmid": "40419835", "kind": "safety", "note": "Randomized, graded-dose (0-12 g/day) safety and tolerability trial of L-threonine in healthy adults; reports biochemical/anthropometric safety parameters, not a health-outcome efficacy claim"}
+ ],
+ "excluded_pmids": [
+   {"pmid": "18425887", "reason": "WITHDRAWN Cochrane review of amino acids (BCAA or L-threonine) for ALS; superseded/withdrawn version of 14583978"},
+   {"pmid": "14583978", "reason": "Cochrane review of amino acids (BCAA or L-threonine) for ALS; a review-level synthesis of the same primary trials already represented by 8909433 and 11231032, not additional primary data"},
+   {"pmid": "28072907", "reason": "Overview of Cochrane reviews of symptomatic treatments for ALS/MND generally; no L-threonine-specific efficacy data given in the retrieved abstract"},
+   {"pmid": "22513921", "reason": "Cochrane review of treatments for cramps in ALS/MND; no L-threonine-specific data given in the retrieved abstract"},
+   {"pmid": "32579549", "reason": "Tests a 5-amino-acid blend (leucine, threonine, lysine, isoleucine, valine) plus chromium picolinate for postprandial glucose; a combination product, not isolated L-threonine"},
+   {"pmid": "12956319", "reason": "Tests a protein supplement (Tonexis HP) plus L-threonine and L-methionine, combined with medroxyprogesterone acetate, in HIV-infected patients; combination product and clinical population"},
+   {"pmid": "12131252", "reason": "Tests an 8-amino-acid blend plus carbohydrates in older men; combination product, and found no significant difference from control on muscle strength/size"},
+   {"pmid": "34347011", "reason": "Metabolomics review of biomarkers in diabetic retinopathy; threonine appears only as a measured biomarker, not a supplementation intervention"}
+ ]}

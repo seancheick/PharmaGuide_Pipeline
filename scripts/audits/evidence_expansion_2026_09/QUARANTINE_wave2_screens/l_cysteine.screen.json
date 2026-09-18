@@ -1,0 +1,23 @@
+{"canonical_id": "l_cysteine", "recommended_class": "hold",
+ "one_line_reason": "The only real single-ingredient human evidence is a branded slow-release L-cysteine lozenge for smoking cessation, with a marginal effect tied to that specific delivery form; the rest of the shortlist is NAC used in unrelated clinical/procedural/biomarker contexts.",
+ "selected": [
+   {"pmid": "41482382", "population": "cigarette smokers (2 RCTs pooled: 423 and 1,998 subjects)", "intervention": "slow-release L-cysteine lozenge (Acetium®) vs placebo lozenge", "dose_as_stated": "not stated (delivered as a lozenge; specific mg dose not given in abstract)", "primary_outcome": "smoking cessation success", "apparent_direction": "mixed", "why_selected": "The only shortlisted trial testing L-cysteine as the primary single-ingredient exposure in a general population; both RCTs trended favorable but only the larger study approached statistical significance (OR 1.26, 95% CI 0.99-1.59)"}
+ ],
+ "blockers": [
+   "The mechanism (locally neutralizing salivary acetaldehyde) is specific to a slow-release lozenge held in the mouth, not systemic absorption from a typical oral L-cysteine capsule/tablet, so this may not generalize to catalog L-cysteine products",
+   "The effect size is small and only marginally significant even in the larger, adequately-powered trial"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "39684553", "reason": "Systematic review of novel antibiofilm compounds for otitis media; does not confirm L-cysteine/NAC is among the specific compounds evaluated in the retrieved abstract text"},
+   {"pmid": "37458885", "reason": "Reviews AAMA, a urinary mercapturic-acid metabolite formed endogenously from acrylamide detoxification; this is an exposure biomarker for acrylamide, not an L-cysteine supplementation study"},
+   {"pmid": "34972259", "reason": "Systematic review of hangover treatments; the retrieved abstract text names clove extract as significant but does not confirm cysteine/NAC was among the tested interventions"},
+   {"pmid": "30919720", "reason": "Review of central venous catheter obstruction management (sodium hydroxide, etc.); no clear relation to L-cysteine supplementation"},
+   {"pmid": "29914599", "reason": "Review of commercial specimen-preservation products for tuberculosis diagnosis; unrelated to L-cysteine supplementation"},
+   {"pmid": "26170140", "reason": "Diagnostic biomarker review for head and neck cancer; S-carboxymethyl-L-cysteine appears only as a diagnostic salivary biomarker, not a treatment/supplement exposure"},
+   {"pmid": "25436356", "reason": "Pre-medication for endoscopic visibility; N-acetyl-L-cysteine was tested but found not to significantly improve visibility -- a procedural/clinical outcome unrelated to L-cysteine's typical marketed uses (antioxidant, respiratory, liver support)"},
+   {"pmid": "23567264", "reason": "Dietary supplements for prostate cancer; N-acetyl-L-cysteine appears only as one ingredient within a multi-component antioxidant/vitamin/mineral combination, not isolated"},
+   {"pmid": "17054219", "reason": "Cochrane review of cysteine/cystine/NAC added to PARENTERAL (IV) nutrition in neonates; wrong exposure route (not oral) and a clinical neonatal population"},
+   {"pmid": "8453693", "reason": "NAC used as a uroprotective agent against ifosfamide chemotherapy toxicity in sarcoma patients; an oncology-supportive-care context, not a general supplement efficacy claim"},
+   {"pmid": "7616753", "reason": "National Cancer Institute chemoprevention drug development strategy document listing NAC among 16 agents; a planning document, not a trial result"}
+ ]}

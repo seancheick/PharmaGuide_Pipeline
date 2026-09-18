@@ -1,0 +1,12 @@
+{"canonical_id": "cascara_sagrada", "recommended_class": "no_qualifying",
+ "one_line_reason": "Only 2 records were shortlisted, and in both cascara sagrada appears only as a minor component of a multi-ingredient blend, not as an isolated tested exposure.",
+ "selected": [],
+ "blockers": [
+   "29958034 tests an 8-ingredient 'detoxification' blend (papaya leaf, cascara sagrada bark, slippery elm bark, peppermint leaf, red raspberry leaf, fenugreek seed, ginger root, senna leaf) as a single combined dose; cascara sagrada's individual contribution cannot be isolated",
+   "15266131 tests ear mushroom (Auricularia) fiber with 'additives including cascara sagrada, etc.'; cascara is an unspecified minor additive, not the tested exposure, and ear mushroom fiber is the primary active"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "29958034", "reason": "8-ingredient proprietary combination 'detoxification' supplement (cascara sagrada is one of 8 components); found no beneficial or harmful effects overall, but no isolated cascara-specific data can be extracted"},
+   {"pmid": "15266131", "reason": "Primary intervention is ear mushroom (Auricularia) fiber for constipation; cascara sagrada appears only as an unspecified minor additive in one comparison arm, not an isolated exposure"}
+ ]}

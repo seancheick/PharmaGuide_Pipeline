@@ -1,0 +1,9 @@
+{"canonical_id": "goldenseal", "recommended_class": "handoff_only",
+ "one_line_reason": "Both shortlisted PMIDs are human CYP450 pharmacokinetic/interaction studies, not efficacy trials for any consumer health outcome.",
+ "selected": [],
+ "blockers": ["No efficacy outcome studied in the shortlist; both records measure CYP450 enzyme activity, which is a pharmacokinetic/interaction endpoint, not an outcome people buy goldenseal for."],
+ "handoff_pmids": [
+   {"pmid": "17495878", "kind": "interaction", "note": "RCT in 16 healthy volunteers; goldenseal supplementation for 14 days significantly inhibited CYP3A activity (via midazolam probe), suggesting herb-drug interaction risk with CYP3A substrates."},
+   {"pmid": "15900287", "kind": "interaction", "note": "RCT in 12 healthy volunteers; goldenseal for 28 days significantly inhibited CYP2D6 (~40%) and CYP3A4/5 (~40%) activity via phenotypic probe drugs, indicating herb-drug interaction risk."}
+ ],
+ "excluded_pmids": []}

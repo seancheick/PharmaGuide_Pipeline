@@ -1,0 +1,24 @@
+{"canonical_id": "goji_berry", "recommended_class": "curate",
+ "one_line_reason": "Multiple RCT meta-analyses show oral Lycium barbarum (goji) supplementation affecting lipid/glucose metabolism in general adult populations, the kind of outcome consumers buy it for.",
+ "selected": [
+   {"pmid": "37773857", "population": "adults (259 subjects across 5 RCTs)", "intervention": "L. barbarum (goji berry) oral supplementation vs placebo/control", "dose_as_stated": "not stated (meta-analysis pools multiple RCT doses)", "primary_outcome": "lipid profile (triglycerides, HDL-C, total cholesterol, LDL-C)", "apparent_direction": "positive", "why_selected": "Recent meta-analysis of RCTs in general adults showing significant TG decrease and HDL-C increase from oral goji supplementation"},
+   {"pmid": "34213407", "population": "general adults (pooled across 7 studies)", "intervention": "Lycium barbarum polysaccharide (LBP) oral supplementation vs control", "dose_as_stated": "not stated", "primary_outcome": "serum triglycerides, fasting blood glucose, LDL and HDL", "apparent_direction": "positive", "why_selected": "Meta-analysis showing significant effects on glucose and lipid markers; note this isolates LBP (the polysaccharide extract) rather than whole berry"},
+   {"pmid": "28401234", "population": "adults (548 subjects across 7 RCTs)", "intervention": "L. barbarum oral supplementation vs control", "dose_as_stated": "not stated", "primary_outcome": "cardiometabolic risk factors (fasting glucose, total cholesterol, triglycerides, bodyweight, blood pressure)", "apparent_direction": "mixed", "why_selected": "Significant reduction in fasting glucose but non-significant trends for lipids and no effect on bodyweight/blood pressure; useful for calibrating the strength of the glucose claim"},
+   {"pmid": "22897500", "population": "adults aged 18-72 (161 subjects across 4 RCTs)", "intervention": "Standardized Lycium barbarum juice (GoChi®) 120 mL/day, oral", "dose_as_stated": "120 mL/day", "primary_outcome": "self-reported general well-being (fatigue, stress, sleep quality, mental acuity, etc.)", "apparent_direction": "positive", "why_selected": "Positive general well-being outcome closer to how goji is marketed, but the exposure is a specific branded standardized juice product"}
+ ],
+ "blockers": [
+   "34213407 and part of the underlying RCTs in 37773857/28401234 study Lycium barbarum polysaccharide (LBP), a standardized extract, which may not correspond to whole dried goji berry or juice products in the catalog",
+   "22897500 studies a specific branded standardized juice (GoChi®, 120 mL/day) the catalog likely does not carry, and dose is a liquid volume that may not map to a label amount",
+   "None of the selected meta-analyses state a single consistent dose in the abstract, complicating dose-to-label mapping"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "42297463", "reason": "Systematic review of neuroprotective therapies in retinitis pigmentosa, a clinical eye-disease population; Lycium barbarum's modest benefit is from a single phase II trial cited within the review (very low certainty), not a primary source and not general supplement use"},
+   {"pmid": "40944134", "reason": "Nutritional intervention review for Sjogren disease (a clinical autoimmune population); Lycium barbarum polysaccharide appears mainly in animal models, not as isolated human efficacy evidence"},
+   {"pmid": "36332761", "reason": "Qiming granules, a multi-herb traditional Chinese medicine combination product (8 herbs); not a single-ingredient goji exposure"},
+   {"pmid": "34404395", "reason": "Review of LBP in osteoarthritis; evidence is described as in vitro/in vivo animal models with an explicit lack of human disease-modifying evidence"},
+   {"pmid": "30891458", "reason": "General review of LBP therapeutic potential across many conditions; only 2 RCTs are cited and the authors state further large-scale trials are needed, not established human efficacy"},
+   {"pmid": "28629116", "reason": "Chemical constituents of the Lycium genus; a phytochemistry catalog, not an efficacy study"},
+   {"pmid": "41032943", "reason": "RCT of Lycium barbarum extract in varicocele patients, a clinical male-infertility population rather than general supplement use"},
+   {"pmid": "41817298", "reason": "RCT of a combination extract (Agastache rugosa + Ficus carica + Lycium barbarum) for skin aging; not a single-ingredient goji exposure"}
+ ]}

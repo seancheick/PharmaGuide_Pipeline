@@ -1,0 +1,10 @@
+{"canonical_id": "l_norvaline", "recommended_class": "no_qualifying",
+ "one_line_reason": "All three shortlisted records measure norvaline as an endogenous blood/plasma biomarker in metabolomics studies, not as an administered oral supplement.",
+ "selected": [],
+ "blockers": ["No shortlisted record administers L-norvaline as a supplement; all are observational metabolomics/biomarker studies."],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "37644353", "reason": "Systematic review of metabolomic biomarkers for head and neck cancer detection; norvaline appears only as one endogenous biofluid metabolite among many biomarker panel candidates, not as a supplement intervention."},
+   {"pmid": "30830377", "reason": "Observational metabolomics study of diabetic kidney disease progression; norvaline is measured as an endogenous plasma metabolite associated with outcome, not administered as a supplement."},
+   {"pmid": "39330485", "reason": "Crossover trial of sitting-interruption modalities (standing/walking breaks) in postmenopausal women measuring postprandial metabolome changes; a norvaline derivative is one of many endogenous metabolites measured, not a supplement intervention."}
+ ]}

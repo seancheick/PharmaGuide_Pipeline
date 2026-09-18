@@ -1,0 +1,9 @@
+{"canonical_id": "eyebright", "recommended_class": "no_qualifying",
+ "one_line_reason": "Both shortlisted records are about 'Eyebright Medical Technology,' a Beijing intraocular-lens device manufacturer, not the herb Euphrasia (eyebright) used in eye-health supplements.",
+ "selected": [],
+ "blockers": ["This appears to be a name-collision retrieval defect: the search matched the medical device company 'Eyebright Medical Technology' rather than the herb Euphrasia officinalis (eyebright)"],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "41793368", "reason": "Evaluates capsular tension rings manufactured by 'Eyebright Medical Technology' for intraocular lens stability after cataract surgery; a surgical device study, unrelated to the herb eyebright"},
+   {"pmid": "29747366", "reason": "Evaluates a Toric intraocular lens manufactured by 'Eyebright Medical Technology (Beijing) Co., Ltd.'; a device trial, unrelated to the herb eyebright"}
+ ]}

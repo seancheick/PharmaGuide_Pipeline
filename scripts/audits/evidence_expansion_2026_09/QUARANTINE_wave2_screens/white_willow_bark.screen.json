@@ -1,0 +1,20 @@
+{"canonical_id": "white_willow_bark", "recommended_class": "hold",
+ "one_line_reason": "The one clear positive trial combines white willow bark with feverfew for migraine; the Cochrane 'herbal medicine for low back pain' review series likely covers willow bark on its own but the retrieved abstracts are truncated before naming it, and the remaining trials are multi-ingredient joint-pain blends.",
+ "selected": [
+   {"pmid": "17163262", "population": "12 patients with migraine without aura", "intervention": "Tanacetum parthenium (feverfew) 300 mg plus Salix alba (white willow) 300 mg (Mig-RL), oral, twice daily, 12 weeks, open-label (no placebo arm)", "dose_as_stated": "300 mg white willow (combined with 300 mg feverfew)", "primary_outcome": "migraine attack frequency, intensity, duration", "apparent_direction": "positive", "why_selected": "The only shortlisted trial with white willow bark as a named, dosed component showing a statistically significant result (57-62% reduction in attack frequency), though it is a 2-herb combination and an open-label study without a placebo arm"}
+ ],
+ "blockers": [
+   "17163262 is a 2-herb combination (feverfew plus willow) and an open-label study with no placebo control, so the effect cannot be attributed to willow bark alone and may be confounded/overestimated",
+   "The Cochrane 'Herbal medicine for low back pain' review series (26630428, 25536022, 17202897, 16625605 -- 4 versions/updates of the same review) plausibly includes Salix alba as one of its evaluated herbs, given willow bark's known salicin/anti-inflammatory rationale for back pain, but the retrieved abstracts are truncated (cutting off after naming Capsicum) before confirming willow-specific results -- central verification should pull the full text of the most recent version (26630428)"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "26630428", "reason": "Cochrane review of herbal medicine for low back pain (14 RCTs, 2050 participants); the retrieved abstract is truncated after naming Capsicum, before any willow-bark-specific result is stated"},
+   {"pmid": "25536022", "reason": "Earlier version of the same Cochrane low-back-pain review; retrieved abstract truncated before results"},
+   {"pmid": "17202897", "reason": "Earlier version of the same Cochrane low-back-pain review (2007); retrieved abstract truncated before results"},
+   {"pmid": "16625605", "reason": "Earliest version of the same Cochrane low-back-pain review (2006); retrieved abstract truncated before results"},
+   {"pmid": "32575480", "reason": "Pain Bloc-R is a 9-ingredient combination (B vitamins, vitamin D, white willow bark, Angelica root, acetyl-L-carnitine, caffeine, L-theanine, benfotiamine, L-tetrahydropalmatine); combination product, not isolated willow bark"},
+   {"pmid": "24274358", "reason": "Instaflex is a 7-ingredient joint-pain blend (glucosamine, MSM, white willow bark 15% salicin, ginger, boswellia, turmeric, cayenne, hyaluronic acid); combination product, not isolated willow bark"},
+   {"pmid": "34766630", "reason": "Greenhouse study of fast-growing tree species (including Salix alba) biomass allocation under cadmium soil stress; a forestry/environmental science study, unrelated to human health"},
+   {"pmid": "42505825", "reason": "Field study of Salix alba leaf volatiles as an insect-trapping attractant for sawfly pest control; an agricultural pest-management study, unrelated to human health"}
+ ]}

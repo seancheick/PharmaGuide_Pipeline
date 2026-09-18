@@ -1,0 +1,8 @@
+{"canonical_id": "hoodia_gordonii", "recommended_class": "curate",
+ "one_line_reason": "One well-conducted RCT directly dosed oral Hoodia gordonii purified extract in overweight women for appetite/weight outcomes, finding no efficacy benefit and some adverse safety signals.",
+ "selected": [
+   {"pmid": "21993434", "population": "healthy, overweight women (n=49: 25 active, 24 placebo), resident-clinic study", "intervention": "Hoodia gordonii purified extract (HgPE), oral, in a yogurt drink, 2 servings/day before breakfast and dinner, 15 days", "dose_as_stated": "1110 mg per serving, twice daily (2220 mg/day total)", "primary_outcome": "ad libitum energy intake and body weight", "apparent_direction": "null", "why_selected": "the only shortlisted RCT that directly administers oral Hoodia gordonii extract to humans and measures a weight-management outcome relevant to why people buy this product; also reports safety data."}
+ ],
+ "blockers": ["The only direct oral-Hoodia RCT found a null effect on energy intake and body weight, so it does not support the efficacy claim consumers buy this ingredient for.", "Same trial reported adverse changes (nausea, vomiting, increased blood pressure/pulse, elevated bilirubin and alkaline phosphatase) versus placebo."],
+ "handoff_pmids": [],
+ "excluded_pmids": [{"pmid": "27522037", "reason": "This RCT tested a taste-matched bitter tastant control mixture (raisin flavor, sucrose octa acetate, quassia extract), not Hoodia gordonii extract itself; Hoodia is referenced only as background from a prior study, so this record is not evidence of Hoodia exposure."}]}

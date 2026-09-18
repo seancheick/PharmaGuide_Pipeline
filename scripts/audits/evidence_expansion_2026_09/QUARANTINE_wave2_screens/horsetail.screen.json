@@ -1,0 +1,24 @@
+{"canonical_id": "horsetail", "recommended_class": "curate",
+ "one_line_reason": "Two clean single-ingredient RCTs of standardized Equisetum arvense extract (900 mg/day) show a real diuretic effect in healthy volunteers and an antihypertensive effect in hypertensive patients versus a diuretic drug comparator.",
+ "selected": [
+   {"pmid": "24723963", "population": "36 healthy male volunteers", "intervention": "standardized dried Equisetum arvense extract (EADE) 900 mg/day oral, vs placebo and vs hydrochlorothiazide 25 mg/day, crossover with washout", "dose_as_stated": "900 mg/day", "primary_outcome": "24-hour urinary water balance (acute diuretic effect)", "apparent_direction": "positive", "why_selected": "Clean single-ingredient, dose-stated RCT in healthy (non-patient) volunteers directly testing the diuretic effect horsetail is traditionally marketed for, with a positive, drug-comparable result"},
+   {"pmid": "35168030", "population": "58 adults with stage I systemic arterial hypertension", "intervention": "Equisetum arvense standardized dry extract 900 mg/day oral vs hydrochlorothiazide 25 mg/day, 3 months", "dose_as_stated": "900 mg/day", "primary_outcome": "systolic and diastolic blood pressure reduction", "apparent_direction": "positive", "why_selected": "Single-ingredient RCT with a stated dose showing a significant antihypertensive effect, though in a clinical hypertensive population compared head-to-head against a prescription diuretic"}
+ ],
+ "blockers": [
+   "35168030 studies diagnosed hypertension patients and benchmarks against a prescription antihypertensive drug (hydrochlorothiazide), which edges toward a medical claim rather than general wellness use",
+   "The two silicon-bioavailability trials (34706374, 34389753) establish that Equisetum-derived silicon is absorbed but do not test a health outcome, so they are handed off rather than counted as efficacy"
+ ],
+ "handoff_pmids": [
+   {"pmid": "34706374", "kind": "pk", "note": "Pilot RCT in healthy men measuring silicon absorption/pharmacokinetics from Equisetum arvense tea versus low-silicon water; safety/immunological parameters were secondary, not a health-outcome efficacy trial"},
+   {"pmid": "34389753", "kind": "pk", "note": "Crossover bioavailability study comparing relative silicon absorption across three different silicon supplement formulations (one containing Equisetum arvense); a PK/absorption comparison, not an efficacy trial"}
+ ],
+ "excluded_pmids": [
+   {"pmid": "30554882", "reason": "BNO 1030 (Imupret®) is a 7-herb combination (marshmallow, chamomile, horsetail, walnut, yarrow, oak bark, dandelion) for pediatric tonsillitis; not a single-ingredient horsetail exposure"},
+   {"pmid": "29385990", "reason": "Urox® is a 3-herb combination (Crataeva nurvala, Equisetum arvense, Lindera aggregata) for overactive bladder; combination product, not isolated horsetail"},
+   {"pmid": "18634442", "reason": "Eviprostat/EVI-F is a 5-ingredient combination (including Equisetum arvense extract) for benign prostatic hyperplasia; combination product"},
+   {"pmid": "40981167", "reason": "Assonal®PEA combines palmitoylethanolamide (600 mg) with Equisetum arvense (300 mg) for chronic pain; combination product, not isolated horsetail"},
+   {"pmid": "19470045", "reason": "Topical nail lacquer combining hydroxypropyl chitosan, horsetail extract, and DMSO2 for nail psoriasis; a topical combination product, not an oral supplement"},
+   {"pmid": "31706286", "reason": "Bedtime Buddy® / Urox® combination herbal product for pediatric nocturnal enuresis; combination product"},
+   {"pmid": "30220668", "reason": "General narrative review of phytotherapy for upper respiratory/GI infections; horsetail is one of several herbs mentioned, no isolated human trial data given"},
+   {"pmid": "25410066", "reason": "RCT of a 'horsetail mixture' for rheumatoid arthritis; abstract does not specify whether this is single-ingredient Equisetum or a blend, and the population is a clinical autoimmune-disease population -- too ambiguous on composition to select as clean evidence"}
+ ]}

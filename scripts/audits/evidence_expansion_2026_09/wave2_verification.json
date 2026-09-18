@@ -1,0 +1,2163 @@
+{
+ "_metadata": {
+  "run_date": "2026-09-18",
+  "source": "NCBI PubMed E-utilities (live)",
+  "verified_records": 112,
+  "findings": 23,
+  "scope": "shortlisted records"
+ },
+ "findings": [
+  {
+   "canonical_id": "activated_charcoal",
+   "pmid": "19194372",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "amla",
+   "pmid": "40262554",
+   "finding": "INTEGRITY_HAS_ERRATUM"
+  },
+  {
+   "canonical_id": "cayenne_pepper",
+   "pmid": "33240029",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "cayenne_pepper",
+   "pmid": "36017333",
+   "finding": "INTEGRITY_HAS_ERRATUM"
+  },
+  {
+   "canonical_id": "cayenne_pepper",
+   "pmid": "36017333",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "chaga",
+   "pmid": "28462133",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "devils_claw",
+   "pmid": "17202897",
+   "finding": "INTEGRITY_HAS_ERRATUM"
+  },
+  {
+   "canonical_id": "fennel",
+   "pmid": "33182553",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "goji_berry",
+   "pmid": "34213407",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": []
+  },
+  {
+   "canonical_id": "green_coffee_bean",
+   "pmid": "32159261",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "holy_basil",
+   "pmid": "8880292",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "holy_basil",
+   "pmid": "26571987",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "hops",
+   "pmid": "33670177",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "horsetail",
+   "pmid": "24723963",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "horsetail",
+   "pmid": "35168030",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "l_ornithine",
+   "pmid": "40370740",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "l_threonine",
+   "pmid": "11231032",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "oregano",
+   "pmid": "34496170",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "pregnenolone",
+   "pmid": "31439071",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "senna",
+   "pmid": "33767108",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "senna",
+   "pmid": "35943487",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "theobromine",
+   "pmid": "37615657",
+   "finding": "INTEGRITY_HAS_ERRATUM"
+  },
+  {
+   "canonical_id": "tudca",
+   "pmid": "25664595",
+   "finding": "INTEGRITY_HAS_ERRATUM"
+  }
+ ],
+ "verified": [
+  {
+   "canonical_id": "activated_charcoal",
+   "pmid": "19194372",
+   "title": "The effect of activated charcoal on drug exposure in healthy volunteers: a meta-analysis.",
+   "journal": "Clinical pharmacology and therapeutics",
+   "year": "2009",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1038/clpt.2008.278",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "alfalfa_leaf",
+   "pmid": "9677811",
+   "title": "[Treatment of neurovegetative menopausal symptoms with a phytotherapeutic agent].",
+   "journal": "Minerva ginecologica",
+   "year": "1998",
+   "publication_types": [
+    "Clinical Trial",
+    "Controlled Clinical Trial",
+    "English Abstract",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": null,
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "alfalfa_leaf",
+   "pmid": "38103848",
+   "title": "Effect of Medicago sativa seed powder (Plus vitamin E vs. vitamin E alone) on semen analysis in men with idiopathic infertility: A double blind randomized clinical trial.",
+   "journal": "Journal of ethnopharmacology",
+   "year": "2024",
+   "publication_types": [
+    "Randomized Controlled Trial",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.jep.2023.117606",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "amla",
+   "pmid": "36934568",
+   "title": "The impact of Emblica Officinalis (Amla) on lipid profile, glucose, and C-reactive protein: A systematic review and meta-analysis of randomized controlled trials.",
+   "journal": "Diabetes & metabolic syndrome",
+   "year": "2023",
+   "publication_types": [
+    "Meta-Analysis",
+    "Systematic Review",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.dsx.2023.102729",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "amla",
+   "pmid": "37296402",
+   "title": "Clinical effects of Emblica officinalis fruit consumption on cardiovascular disease risk factors: a systematic review and meta-analysis.",
+   "journal": "BMC complementary medicine and therapies",
+   "year": "2023",
+   "publication_types": [
+    "Meta-Analysis",
+    "Systematic Review",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1186/s12906-023-03997-8",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "amla",
+   "pmid": "37487962",
+   "title": "The effect of an oral product containing Amla fruit (Phyllanthus emblica L.) on female androgenetic alopecia: A randomized controlled trial.",
+   "journal": "Journal of ethnopharmacology",
+   "year": "2024",
+   "publication_types": [
+    "Randomized Controlled Trial",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.jep.2023.116958",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "amla",
+   "pmid": "40262554",
+   "title": "Effect of Amla Extract on Body Mass Index, Waist Circumference, Total Body Fat, Visceral Fat, Skeletal Muscle Mass, Body Age, and Related Parameters: A Randomized, Open-Label Clinical Study in Obese Participants.",
+   "journal": "Complementary medicine research",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1159/000545247",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "cat_s_claw",
+   "pmid": "11515716",
+   "title": "Persistent response to pneumococcal vaccine in individuals supplemented with a novel water soluble extract of Uncaria tomentosa, C-Med-100.",
+   "journal": "Phytomedicine : international journal of phytotherapy and phytopharmacology",
+   "year": "2001",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1078/0944-7113-00046",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "cat_s_claw",
+   "pmid": "11603848",
+   "title": "Efficacy and safety of freeze-dried cat's claw in osteoarthritis of the knee: mechanisms of action of the species Uncaria guianensis.",
+   "journal": "Inflammation research : official journal of the European Histamine Research Society ... [et al.]",
+   "year": "2001",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't",
+    "Research Support, U.S. Gov't, P.H.S."
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1007/PL00000268",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "cat_s_claw",
+   "pmid": "25495394",
+   "title": "Uncaria tomentosa (cat's claw) improves quality of life in patients with advanced solid tumors.",
+   "journal": "Journal of alternative and complementary medicine (New York, N.Y.)",
+   "year": "2015",
+   "publication_types": [
+    "Clinical Trial, Phase II",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1089/acm.2014.0127",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "cayenne_pepper",
+   "pmid": "24267043",
+   "title": "Capsaicin and evodiamine ingestion does not augment energy expenditure and fat oxidation at rest or after moderately-intense exercise.",
+   "journal": "Nutrition research (New York, N.Y.)",
+   "year": "2013",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.nutres.2013.08.007",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "cayenne_pepper",
+   "pmid": "33240029",
+   "title": "Effects of paprika carotenoid supplementation on bone turnover in postmenopausal women: a randomized, double-blind, placebo-controlled, parallel-group comparison study.",
+   "journal": "Food & nutrition research",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.29219/fnr.v64.4565",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "cayenne_pepper",
+   "pmid": "33262398",
+   "title": "Effects of Capsicum annuum supplementation on the components of metabolic syndrome: a systematic review and meta-analysis.",
+   "journal": "Scientific reports",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1038/s41598-020-77983-2",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "cayenne_pepper",
+   "pmid": "36017333",
+   "title": "Both caffeine and Capsicum annuum fruit powder lower blood glucose levels and increase brown adipose tissue temperature in healthy adult males.",
+   "journal": "Frontiers in physiology",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.3389/fphys.2022.870154",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "chaga",
+   "pmid": "28462133",
+   "title": "Effects of the herb mixture, DTS20, on oxidative stress and plasma alcoholic metabolites after alcohol consumption in healthy young men.",
+   "journal": "Integrative medicine research",
+   "year": "2016",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.imr.2015.10.001",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "common_bean_extract",
+   "pmid": "36303868",
+   "title": "White common bean extract remodels the gut microbiota and ameliorates type 2 diabetes and its complications: A randomized double-blinded placebo-controlled trial.",
+   "journal": "Frontiers in endocrinology",
+   "year": "2022",
+   "publication_types": [
+    "Randomized Controlled Trial",
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.3389/fendo.2022.999715",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "common_bean_extract",
+   "pmid": "38830962",
+   "title": "Proprietary alpha-amylase inhibitor formulation from white kidney bean (Phaseolus vulgaris L.) promotes weight and fat loss: a 12-week, double-blind, placebo-controlled, randomized trial.",
+   "journal": "Scientific reports",
+   "year": "2024",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1038/s41598-024-63443-8",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "common_bean_extract",
+   "pmid": "39170208",
+   "title": "A randomized, double-blinded, placebo-controlled, single-center, comparative study evaluating Phaseolean\u00ae safety and efficacy in overweight/obese participants.",
+   "journal": "Heliyon",
+   "year": "2024",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1016/j.heliyon.2024.e35144",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "common_bean_extract",
+   "pmid": "42066439",
+   "title": "White kidney bean extract reduces body weight and adiposity with acceptable safety in adults with overweight and obese: a systematic review and meta-analysis.",
+   "journal": "Nutrition research (New York, N.Y.)",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.nutres.2026.04.001",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_aspartic_acid",
+   "pmid": "28841667",
+   "title": "The effects of d-aspartic acid supplementation in resistance-trained men over a three month training period: A randomised controlled trial.",
+   "journal": "PloS one",
+   "year": "2017",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1371/journal.pone.0182630",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_aspartic_acid",
+   "pmid": "29893592",
+   "title": "Short-Term d-Aspartic Acid Supplementation Does Not Affect Serum Biomarkers Associated With the Hypothalamic-Pituitary-Gonadal Axis in Male Climbers.",
+   "journal": "International journal of sport nutrition and exercise metabolism",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1123/ijsnem.2018-0076",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_aspartic_acid",
+   "pmid": "38201906",
+   "title": "The Effects of Six-Gram D-Aspartic Acid Supplementation on the Testosterone, Cortisol, and Hematological Responses of Male Boxers Subjected to 11 Days of Nocturnal Exposure to Normobaric Hypoxia.",
+   "journal": "Nutrients",
+   "year": "2023",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/nu16010076",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_aspartic_acid",
+   "pmid": "40248985",
+   "title": "Evaluation of in vivo supplementation of 2660 mg D-aspartic acid and 200 mg ubiquinol and 10 mg zinc on different semen parameters in idiopathic male infertility: a randomized double blind placebo controlled study.",
+   "journal": "Archivio italiano di urologia, andrologia : organo ufficiale [di] Societa italiana di ecografia urologica e nefrologica",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.4081/aiua.2025.13554",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_mannose",
+   "pmid": "32972899",
+   "title": "Role of D-Mannose in the Prevention of Recurrent Urinary Tract Infections: Evidence from a Systematic Review of the Literature.",
+   "journal": "European urology focus",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.euf.2020.09.004",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_mannose",
+   "pmid": "38587819",
+   "title": "d-Mannose for Prevention of Recurrent Urinary Tract Infection Among Women: A Randomized Clinical Trial.",
+   "journal": "JAMA internal medicine",
+   "year": "2024",
+   "publication_types": [
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1001/jamainternmed.2024.0264",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_mannose",
+   "pmid": "39095666",
+   "title": "Nonantibiotic prophylaxis for urinary tract infections: a network meta-analysis of randomized controlled trials.",
+   "journal": "Infection",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Network Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1007/s15010-024-02357-z",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_mannose",
+   "pmid": "41004704",
+   "title": "Efficacy of D-mannose as prophylaxis of recurrent urinary tract infection: a systematic review and meta-analysis of randomized controlled trials.",
+   "journal": "Jornal brasileiro de nefrologia",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1590/2175-8239-JBN-2025-0169en",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "devils_claw",
+   "pmid": "17202897",
+   "title": "Herbal medicine for low back pain: a Cochrane review.",
+   "journal": "Spine",
+   "year": "2007",
+   "publication_types": [
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1097/01.brs.0000249525.70011.fe",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "devils_claw",
+   "pmid": "19856319",
+   "title": "Evidence of effectiveness of herbal medicinal products in the treatment of arthritis. Part I: Osteoarthritis.",
+   "journal": "Phytotherapy research : PTR",
+   "year": "2009",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/ptr.3007",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "devils_claw",
+   "pmid": "26630428",
+   "title": "Herbal Medicine for Low Back Pain: A Cochrane Review.",
+   "journal": "Spine",
+   "year": "2016",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1097/BRS.0000000000001310",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "devils_claw",
+   "pmid": "28872719",
+   "title": "Oral herbal medicines marketed in Brazil for the treatment of osteoarthritis: A systematic review and meta-analysis.",
+   "journal": "Phytotherapy research : PTR",
+   "year": "2017",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/ptr.5910",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dong_quai",
+   "pmid": "42451042",
+   "title": "The Effectiveness of Non-Soy Oral Herbal Supplements for Menopausal Symptoms: A Systematic Review.",
+   "journal": "Nutrients",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/nu18132037",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dong_quai",
+   "pmid": "42542970",
+   "title": "Treatment of Hot Flashes in Men With Prostate Cancer Undergoing Androgen Deprivation Therapy.",
+   "journal": "The Prostate",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/pros.70229",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "fennel",
+   "pmid": "33182553",
+   "title": "Fennel for Reducing Pain in Primary Dysmenorrhea: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "journal": "Nutrients",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.3390/nu12113438",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "fennel",
+   "pmid": "33725577",
+   "title": "Fennel (Foeniculum vulgare Miller) for the management of menopausal women's health: A systematic review and meta-analysis.",
+   "journal": "Complementary therapies in clinical practice",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.ctcp.2021.101360",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "fennel",
+   "pmid": "34187122",
+   "title": "Effect of fennel on primary dysmenorrhea: a systematic review and meta-analysis.",
+   "journal": "Journal of complementary & integrative medicine",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1515/jcim-2019-0212",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "feverfew",
+   "pmid": "14973986",
+   "title": "Feverfew for preventing migraine.",
+   "journal": "The Cochrane database of systematic reviews",
+   "year": "2004",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/14651858.CD002286.pub2",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "feverfew",
+   "pmid": "21631494",
+   "title": "A double-blind placebo-controlled pilot study of sublingual feverfew and ginger (LipiGesic\u2122 M) in the treatment of migraine.",
+   "journal": "Headache",
+   "year": "2011",
+   "publication_types": [
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1111/j.1526-4610.2011.01910.x",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "feverfew",
+   "pmid": "22529203",
+   "title": "Evidence-based guideline update: NSAIDs and other complementary treatments for episodic migraine prevention in adults: report of the Quality Standards Subcommittee of the American Academy of Neurology and the American Headache Society.",
+   "journal": "Neurology",
+   "year": "2012",
+   "publication_types": [
+    "Journal Article",
+    "Practice Guideline",
+    "Research Support, Non-U.S. Gov't",
+    "Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1212/WNL.0b013e3182535d0c",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "feverfew",
+   "pmid": "22961605",
+   "title": "The combined effect of acupuncture and Tanacetum parthenium on quality of life in women with headache: randomised study.",
+   "journal": "Acupuncture in medicine : journal of the British Medical Acupuncture Society",
+   "year": "2012",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1136/acupmed-2012-010195",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "fo_ti",
+   "pmid": "20622335",
+   "title": "[Effect of compound Polygonum multiflorum extract on Alzheimer's disease].",
+   "journal": "Zhong nan da xue xue bao. Yi xue ban = Journal of Central South University. Medical sciences",
+   "year": "2010",
+   "publication_types": [
+    "Controlled Clinical Trial",
+    "English Abstract",
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3969/j.issn.1672-7347.2010.06.012",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "globe_artichoke",
+   "pmid": "23440660",
+   "title": "Metabolic management in overweight subjects with naive impaired fasting glycaemia by means of a highly standardized extract from Cynara scolymus: a double-blind, placebo-controlled, randomized clinical trial.",
+   "journal": "Phytotherapy research : PTR",
+   "year": "2014",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/ptr.4950",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "globe_artichoke",
+   "pmid": "33197674",
+   "title": "The effects of supplementation with Cynara scolymus L. on anthropometric indices: \u0410 systematic review and dose-response meta-analysis of clinical trials.",
+   "journal": "Complementary therapies in medicine",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.ctim.2020.102612",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "globe_artichoke",
+   "pmid": "34383355",
+   "title": "The effects of Cynara scolymus L. supplementation on liver enzymes: A systematic review and meta-analysis.",
+   "journal": "International journal of clinical practice",
+   "year": "2021",
+   "publication_types": [
+    "Meta-Analysis",
+    "Systematic Review",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1111/ijcp.14726",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "globe_artichoke",
+   "pmid": "41270328",
+   "title": "Artichoke and cardiometabolic health: A systematic and meta-analytic synthesis of current evidence.",
+   "journal": "Diabetes & metabolic syndrome",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.dsx.2025.103328",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "goji_berry",
+   "pmid": "22897500",
+   "title": "A meta-analysis of clinical improvements of general well-being by a standardized Lycium barbarum.",
+   "journal": "Journal of medicinal food",
+   "year": "2012",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1089/jmf.2012.0013",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "goji_berry",
+   "pmid": "28401234",
+   "title": "The effects of Lycium barbarum L. (L. barbarum) on cardiometabolic risk factors: a meta-analysis of randomized controlled trials.",
+   "journal": "Food & function",
+   "year": "2017",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1039/c7fo00183e",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "goji_berry",
+   "pmid": "34213407",
+   "title": "The Effect of Lycium Barbarum Polysaccharide on the Glucose and Lipid Metabolism: A Systematic Review and Meta-Analysis.",
+   "journal": "Journal of the American Nutrition Association",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [],
+   "doi": "10.1080/07315724.2021.1925996",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "goji_berry",
+   "pmid": "37773857",
+   "title": "L. barbarum (Lycium barbarum L.) supplementation for lipid profiles in adults: A systematic review and meta-analysis of RCTs.",
+   "journal": "Medicine",
+   "year": "2023",
+   "publication_types": [
+    "Meta-Analysis",
+    "Systematic Review",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1097/MD.0000000000034952",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "green_coffee_bean",
+   "pmid": "29307310",
+   "title": "Effects of green coffee extract supplementation on anthropometric indices, glycaemic control, blood pressure, lipid profile, insulin resistance and appetite in patients with the metabolic syndrome: a randomised clinical trial.",
+   "journal": "The British journal of nutrition",
+   "year": "2018",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1017/S0007114517003439",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "green_coffee_bean",
+   "pmid": "32159261",
+   "title": "The influence of green coffee bean extract supplementation on blood glucose levels: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+   "journal": "Phytotherapy research : PTR",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1002/ptr.6667",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "green_coffee_bean",
+   "pmid": "34981487",
+   "title": "The Effect of Green Coffee Bean Extract on Cardiovascular Risk Factors: A Systematic Review and Meta-analysis.",
+   "journal": "Advances in experimental medicine and biology",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1007/978-3-030-73234-9_21",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "green_coffee_bean",
+   "pmid": "39368321",
+   "title": "The effects of green coffee bean extract on blood pressure and heart rate: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+   "journal": "Diabetes & metabolic syndrome",
+   "year": "2024",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.dsx.2024.103120",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "hawthorn",
+   "pmid": "18254076",
+   "title": "Hawthorn extract for treating chronic heart failure.",
+   "journal": "The Cochrane database of systematic reviews",
+   "year": "2008",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/14651858.CD005312.pub2",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "hawthorn",
+   "pmid": "31255877",
+   "title": "The combination of hawthorn extract and camphor significantly increases blood pressure: A meta-analysis and systematic review.",
+   "journal": "Phytomedicine : international journal of phytotherapy and phytopharmacology",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.phymed.2019.152984",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "holy_basil",
+   "pmid": "8880292",
+   "title": "Randomized placebo-controlled, single blind trial of holy basil leaves in patients with noninsulin-dependent diabetes mellitus.",
+   "journal": "International journal of clinical pharmacology and therapeutics",
+   "year": "1996",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": null,
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "holy_basil",
+   "pmid": "15266492",
+   "title": "Chinese herbal medicines for type 2 diabetes mellitus.",
+   "journal": "The Cochrane database of systematic reviews",
+   "year": "2004",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/14651858.CD003642.pub2",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "holy_basil",
+   "pmid": "26571987",
+   "title": "Holy basil (Ocimum sanctum Linn.) leaf extract enhances specific cognitive parameters in healthy adult volunteers: A placebo controlled study.",
+   "journal": "Indian journal of physiology and pharmacology",
+   "year": "2015",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": null,
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "holy_basil",
+   "pmid": "41656269",
+   "title": "Effects of multi-herb and ashwagandha root formulas on stress modulation: a randomized, double-blind, placebo-controlled clinical study.",
+   "journal": "Trials",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1186/s13063-026-09495-9",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "hoodia_gordonii",
+   "pmid": "21993434",
+   "title": "Effects of 15-d repeated consumption of Hoodia gordonii purified extract on safety, ad libitum energy intake, and body weight in healthy, overweight women: a randomized controlled trial.",
+   "journal": "The American journal of clinical nutrition",
+   "year": "2011",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.3945/ajcn.111.020321",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "hops",
+   "pmid": "33670177",
+   "title": "The Promising Ability of Humulus lupulus L. Iso-\u03b1-acids vs. Diabetes, Inflammation, and Metabolic Syndrome: A Systematic Review.",
+   "journal": "Molecules (Basel, Switzerland)",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.3390/molecules26040954",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "hops",
+   "pmid": "40462685",
+   "title": "Effects of a Valerian-Hops Extract Combination (Ze 91019) on Sleep Duration and Daytime Cognitive and Psychological Parameters in Occasional Insomnia: A Randomized Controlled Feasibility Trial.",
+   "journal": "Brain and behavior",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1002/brb3.70600",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "horsetail",
+   "pmid": "24723963",
+   "title": "Randomized, Double-Blind Clinical Trial to Assess the Acute Diuretic Effect of Equisetum arvense (Field Horsetail) in Healthy Volunteers.",
+   "journal": "Evidence-based complementary and alternative medicine : eCAM",
+   "year": "2014",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.1155/2014/760683",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "horsetail",
+   "pmid": "35168030",
+   "title": "Antihypertensive effect of Equisetum arvense L.: a double-blind, randomized efficacy and safety clinical trial.",
+   "journal": "Phytomedicine : international journal of phytotherapy and phytopharmacology",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.phymed.2022.153955",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_cysteine",
+   "pmid": "41482382",
+   "title": "Slow-release L-cysteine Lozenges in Smoking Cessation: Meta-analysis of Two Randomized Controlled Trials.",
+   "journal": "In vivo (Athens, Greece)",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.21873/invivo.14171",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_ornithine",
+   "pmid": "29762873",
+   "title": "L-ornithine L-aspartate for prevention and treatment of hepatic encephalopathy in people with cirrhosis.",
+   "journal": "The Cochrane database of systematic reviews",
+   "year": "2018",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/14651858.CD012410.pub2",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_ornithine",
+   "pmid": "31338724",
+   "title": "Beneficial effects of L-ornithine L-aspartate for prevention of overt hepatic encephalopathy in patients with cirrhosis: a systematic review with meta-analysis.",
+   "journal": "Metabolic brain disease",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1007/s11011-019-00463-8",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_ornithine",
+   "pmid": "38403493",
+   "title": "Efficacy of L-ornithine L-aspartate for minimal hepatic encephalopathy in patients with cirrhosis: A meta-analysis of randomized controlled trials.",
+   "journal": "Arab journal of gastroenterology : the official publication of the Pan-Arab Association of Gastroenterology",
+   "year": "2024",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.ajg.2024.01.006",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_ornithine",
+   "pmid": "40370740",
+   "title": "Efficacy and safety of L-ornithine L-aspartate combined with lactulose in treatment of hepatic encephalopathy: a systematic review and meta-analysis of randomized controlled trial.",
+   "journal": "Frontiers in medicine",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.3389/fmed.2025.1581792",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_serine",
+   "pmid": "32520991",
+   "title": "l-Serine and EPA Relieve Chronic Low-Back and Knee Pain in Adults: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+   "journal": "The Journal of nutrition",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1093/jn/nxaa156",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_serine",
+   "pmid": "37242260",
+   "title": "Analysis of the Effects of Known Sleep-Support Supplements in Relation to Life Habits, Sleep Conditions, and Sleep Problems.",
+   "journal": "Nutrients",
+   "year": "2023",
+   "publication_types": [
+    "Randomized Controlled Trial",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/nu15102377",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_serine",
+   "pmid": "41265180",
+   "title": "Potential benefits of l-serine in children with GRIN2B loss-of-function variants: Randomized n-of-1 trials.",
+   "journal": "Molecular genetics and metabolism",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.ymgme.2025.109268",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_threonine",
+   "pmid": "8296531",
+   "title": "A double-blind study of L-threonine in patients with spinal spasticity.",
+   "journal": "Acta neurologica Scandinavica",
+   "year": "1993",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1111/j.1600-0404.1993.tb05353.x",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_threonine",
+   "pmid": "8909433",
+   "title": "A controlled trial of amino acid therapy in amyotrophic lateral sclerosis: I. Clinical, functional, and maximum isometric torque data.",
+   "journal": "Neurology",
+   "year": "1996",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't",
+    "Research Support, U.S. Gov't, P.H.S."
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1212/wnl.47.5.1220",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "l_threonine",
+   "pmid": "11231032",
+   "title": "Electrophysiologic endpoint measures in a multicenter ALS drug trial.",
+   "journal": "Journal of the neurological sciences",
+   "year": "2001",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1016/s0022-510x(00)00489-5",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "mucuna_pruriens",
+   "pmid": "15548480",
+   "title": "Mucuna pruriens in Parkinson's disease: a double blind clinical and pharmacological study.",
+   "journal": "Journal of neurology, neurosurgery, and psychiatry",
+   "year": "2004",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1136/jnnp.2003.028761",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "mucuna_pruriens",
+   "pmid": "18001713",
+   "title": "Effect of Mucuna pruriens on semen profile and biochemical parameters in seminal plasma of infertile men.",
+   "journal": "Fertility and sterility",
+   "year": "2008",
+   "publication_types": [
+    "Controlled Clinical Trial",
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.fertnstert.2007.07.1314",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "mucuna_pruriens",
+   "pmid": "28679598",
+   "title": "Mucuna pruriens in Parkinson disease: A double-blind, randomized, controlled, crossover study.",
+   "journal": "Neurology",
+   "year": "2017",
+   "publication_types": [
+    "Clinical Trial, Phase II",
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1212/WNL.0000000000004175",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "mucuna_pruriens",
+   "pmid": "41269916",
+   "title": "Mucuna pruriens in untreated Parkinson's disease in sub-Saharan Africa: A 12-month, multicenter, randomized, controlled trial.",
+   "journal": "Journal of Parkinson's disease",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Clinical Trial, Phase II"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1177/1877718X251383721",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "oregano",
+   "pmid": "16881679",
+   "title": "Consumption of juice fortified with oregano extract markedly increases excretion of phenolic acids but lacks short- and long-term effects on lipid peroxidation in healthy nonsmoking men.",
+   "journal": "Journal of agricultural and food chemistry",
+   "year": "2006",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1021/jf0608928",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "oregano",
+   "pmid": "34496170",
+   "title": "Effect of Origanum dubium, Origanum vulgare subsp. hirtum, and Lavandula angustifolia essential oils on lipid profiles and liver biomarkers in athletes.",
+   "journal": "Zeitschrift fur Naturforschung. C, Journal of biosciences",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1515/znc-2021-0142",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "oregano",
+   "pmid": "36609950",
+   "title": "Herbal Medicines for Rhinosinusitis: A Systematic Review and Network Meta-analysis.",
+   "journal": "Current allergy and asthma reports",
+   "year": "2023",
+   "publication_types": [
+    "Systematic Review",
+    "Journal Article",
+    "Network Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1007/s11882-022-01060-z",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "papaya",
+   "pmid": "34230116",
+   "title": "Proteolytic Enzyme Therapy in Complementary Oncology: A Systematic Review.",
+   "journal": "Anticancer research",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.21873/anticanres.15108",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "papaya_fruit_powder",
+   "pmid": "35684003",
+   "title": "Fermented Carica papaya and Morinda citrifolia as Perspective Food Supplements for the Treatment of Post-COVID Symptoms: Randomized Placebo-Controlled Clinical Laboratory Study.",
+   "journal": "Nutrients",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/nu14112203",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "pregnenolone",
+   "pmid": "25914107",
+   "title": "Sex hormones and oxytocin augmentation strategies in schizophrenia: A quantitative review.",
+   "journal": "Schizophrenia research",
+   "year": "2015",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.schres.2015.04.002",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "pregnenolone",
+   "pmid": "30864461",
+   "title": "Adjunctive use of anti-inflammatory drugs for schizophrenia: A meta-analytic investigation of randomized controlled trials.",
+   "journal": "The Australian and New Zealand journal of psychiatry",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1177/0004867419835028",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "pregnenolone",
+   "pmid": "31439071",
+   "title": "An update on the efficacy of anti-inflammatory agents for patients with schizophrenia: a meta-analysis.",
+   "journal": "Psychological medicine",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Research Support, Non-U.S. Gov't",
+    "Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1017/S0033291719001995",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "pregnenolone",
+   "pmid": "41559638",
+   "title": "Efficacy and safety of anti-inflammatory drug-assisted treatment of symptoms in patients with schizophrenia: a meta-analysis.",
+   "journal": "BMC psychiatry",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1186/s12888-026-07774-y",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "rosemary",
+   "pmid": "40536553",
+   "title": "Pathophysiology, conventional treatments, and evidence-based herbal remedies of hair loss with a systematic review of controlled clinical trials.",
+   "journal": "Naunyn-Schmiedeberg's archives of pharmacology",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1007/s00210-025-04286-6",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "royal_jelly",
+   "pmid": "31126561",
+   "title": "Royal jelly does not improve markers of glycemia: A systematic review and meta-analysis of Randomized Clinical Trials.",
+   "journal": "Complementary therapies in medicine",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.ctim.2019.04.017",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "royal_jelly",
+   "pmid": "40005465",
+   "title": "Aerobic-Resistance Training with Royal Jelly Supplementation Has a Synergistic Effect on Paraoxonase 1 Changes and Liver Function in Women with MASLD.",
+   "journal": "Medicina (Kaunas, Lithuania)",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/medicina61020349",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "royal_jelly",
+   "pmid": "40824557",
+   "title": "Impact of royal jelly consumption on oxidative stress, anti-oxidant markers and physical activities of patients with multiple sclerosis: a randomized double-blind placebo-controlled study.",
+   "journal": "Irish journal of medical science",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1007/s11845-025-04009-z",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "royal_jelly",
+   "pmid": "41401249",
+   "title": "Royal jelly for management of postmenopausal symptoms: a systematic review and meta-analysis.",
+   "journal": "Menopause (New York, N.Y.)",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1097/GME.0000000000002688",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "schisandra_berry",
+   "pmid": "32260466",
+   "title": "Effect of Schisandra Chinensis Extract Supplementation on Quadriceps Muscle Strength and Fatigue in Adult Women: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+   "journal": "International journal of environmental research and public health",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/ijerph17072475",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "schisandra_berry",
+   "pmid": "33710261",
+   "title": "Effect of Schisandra chinensis Baillon extracts and regular low-intensity exercise on muscle strength and mass in older adults: a randomized, double-blind, placebo-controlled trial.",
+   "journal": "The American journal of clinical nutrition",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1093/ajcn/nqaa447",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "schisandra_berry",
+   "pmid": "35956334",
+   "title": "Efficacy and Safety of Omija (Schisandra chinensis) Extract Mixture on the Improvement of Hyperglycemia: A Randomized, Double-Blind, and Placebo-Controlled Clinical Trial.",
+   "journal": "Nutrients",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/nu14153159",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "schisandra_berry",
+   "pmid": "41656269",
+   "title": "Effects of multi-herb and ashwagandha root formulas on stress modulation: a randomized, double-blind, placebo-controlled clinical study.",
+   "journal": "Trials",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1186/s13063-026-09495-9",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "senna",
+   "pmid": "29885259",
+   "title": "Efficacy and safety of laxatives for chronic constipation in long-term care settings: A systematic review.",
+   "journal": "Journal of clinical pharmacy and therapeutics",
+   "year": "2018",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1111/jcpt.12721",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "senna",
+   "pmid": "33767108",
+   "title": "Efficacy and Safety of Over-the-Counter Therapies for Chronic Constipation: An Updated Systematic Review.",
+   "journal": "The American journal of gastroenterology",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.14309/ajg.0000000000001222",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "senna",
+   "pmid": "35758925",
+   "title": "The Efficacy of Senna Bowel Preparation for Colonoscopy: A Systematic Review and Meta-analysis.",
+   "journal": "Gastroenterology nursing : the official journal of the Society of Gastroenterology Nurses and Associates",
+   "year": "2022",
+   "publication_types": [
+    "Meta-Analysis",
+    "Systematic Review",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1097/SGA.0000000000000664",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "senna",
+   "pmid": "35943487",
+   "title": "Evidence-based treatment recommendations for OTC management of chronic constipation.",
+   "journal": "Journal of the American Association of Nurse Practitioners",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1097/JXX.0000000000000760",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "siberian_ginseng",
+   "pmid": "11099371",
+   "title": "The effect of siberian ginseng (Eleutherococcus senticosus) on substrate utilization and performance.",
+   "journal": "International journal of sport nutrition and exercise metabolism",
+   "year": "2000",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1123/ijsnem.10.4.444",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "siberian_ginseng",
+   "pmid": "14971626",
+   "title": "Randomized controlled trial of Siberian ginseng for chronic fatigue.",
+   "journal": "Psychological medicine",
+   "year": "2004",
+   "publication_types": [
+    "Clinical Trial",
+    "Comparative Study",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't",
+    "Research Support, U.S. Gov't, P.H.S."
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1017/s0033291703008791",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "siberian_ginseng",
+   "pmid": "15190050",
+   "title": "Decreasing, null and increasing effects of eight popular types of ginseng on acute postprandial glycemic indices in healthy humans: the role of ginsenosides.",
+   "journal": "Journal of the American College of Nutrition",
+   "year": "2004",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1080/07315724.2004.10719368",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "siberian_ginseng",
+   "pmid": "15207399",
+   "title": "Effects of Siberian ginseng (Eleutherococcus senticosus maxim.) on elderly quality of life: a randomized clinical trial.",
+   "journal": "Archives of gerontology and geriatrics. Supplement",
+   "year": "2004",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.archger.2004.04.012",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "theobromine",
+   "pmid": "33188564",
+   "title": "Effects of theophylline and theobromine on exercise performance and implications for competition sport: A systematic review.",
+   "journal": "Drug testing and analysis",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/dta.2970",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "theobromine",
+   "pmid": "37615657",
+   "title": "Theobromine supplementation in combination with a low-calorie diet improves cardiovascular risk factors in overweight and obese subjects with metabolic syndrome: a randomized controlled trial.",
+   "journal": "Food & function",
+   "year": "2023",
+   "publication_types": [
+    "Randomized Controlled Trial",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1039/d3fo00555k",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "tudca",
+   "pmid": "12183720",
+   "title": "Tauroursodeoxycholic acid (TUDCA) in the prevention of total parenteral nutrition-associated liver disease.",
+   "journal": "The Journal of pediatrics",
+   "year": "2002",
+   "publication_types": [
+    "Clinical Trial",
+    "Comparative Study",
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, U.S. Gov't, Non-P.H.S.",
+    "Research Support, U.S. Gov't, P.H.S."
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1067/mpd.2002.125802",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "tudca",
+   "pmid": "20522594",
+   "title": "Tauroursodeoxycholic Acid may improve liver and muscle but not adipose tissue insulin sensitivity in obese men and women.",
+   "journal": "Diabetes",
+   "year": "2010",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.2337/db10-0308",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "tudca",
+   "pmid": "25664595",
+   "title": "Tauroursodeoxycholic acid in the treatment of patients with amyotrophic lateral sclerosis.",
+   "journal": "European journal of neurology",
+   "year": "2016",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1111/ene.12664",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "tudca",
+   "pmid": "27503949",
+   "title": "Administration of tauroursodeoxycholic acid prevents endothelial dysfunction caused by an oral glucose load.",
+   "journal": "Clinical science (London, England : 1979)",
+   "year": "2016",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1042/CS20160501",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "white_willow_bark",
+   "pmid": "17163262",
+   "title": "Tanacetum parthenium and Salix alba (Mig-RL) combination in migraine prophylaxis: a prospective, open-label study.",
+   "journal": "Clinical drug investigation",
+   "year": "2006",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Meta-Analysis",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.2165/00044011-200626050-00006",
+   "pmc_id": null
+  }
+ ]
+}

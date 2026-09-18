@@ -1,0 +1,24 @@
+{"canonical_id": "rosemary", "recommended_class": "hold",
+ "one_line_reason": "A named systematic review of controlled clinical trials lists rosemary among herbs with promising hair-growth efficacy, but no rosemary-isolated dose, population, or effect size is given in any shortlisted abstract; the cognition evidence is animal-only.",
+ "selected": [
+   {"pmid": "40536553", "population": "not stated (systematic review of 16 RCTs of herbal remedies for hair loss; individual study populations not broken out in the abstract)", "intervention": "rosemary (among green tea, ginseng, Aloe vera, olive, and saw palmetto), form/dose not stated", "dose_as_stated": "not stated", "primary_outcome": "hair growth, hair density, hair shedding, patient satisfaction", "apparent_direction": "positive", "why_selected": "The only shortlisted source that names rosemary specifically as showing 'promising efficacy' for hair growth outcomes in a systematic review of controlled clinical trials, though pooled qualitatively with 5 other herbs"}
+ ],
+ "blockers": [
+   "40536553 does not isolate a rosemary-specific dose, trial population, or effect size from the other 5 herbs reviewed; central verification needs the full text or the individual underlying rosemary RCT(s)",
+   "35170682's rosemary cognition-enhancement evidence is explicitly from lab animal studies only, not human trials",
+   "The essential-oil studies in the shortlist (33865080, 29633892) are topical/aromatherapy applications, not oral supplement exposures"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "40784036", "reason": "Reviews food-plant essential oils (including rosemary) for antibacterial/food-safety applications in meat preservation; not a human health outcome"},
+   {"pmid": "40917836", "reason": "Reviews essential oils (lavender, tea tree, chamomile, etc.) for topical skin-care applications; rosemary is mentioned only briefly for 'anti-inflammatory and anti-aging properties' with no isolated human trial data, and the route is topical, not oral"},
+   {"pmid": "41051009", "reason": "Network meta-analysis of OTC products for androgenetic alopecia vs finasteride/minoxidil; the retrieved abstract does not name which OTC products (rosemary included or not) were compared or their specific results"},
+   {"pmid": "37198356", "reason": "Reviews heavy-metal content of herbal teas including rosemary tea; a contamination/safety survey, not an efficacy study"},
+   {"pmid": "38542668", "reason": "Meta-analysis pools 12 different Mediterranean-diet herbs/spices on glycemic control in T2DM; the abstract names cinnamon, turmeric, ginger, black cumin, and saffron as having significant effects, not rosemary specifically"},
+   {"pmid": "38852607", "reason": "General review of androgenic alopecia treatments; mentions 'supplements' broadly among OTC options without isolating rosemary"},
+   {"pmid": "35170682", "reason": "Meta-analysis of rosemary's cognition-enhancing effect exclusively in lab ANIMAL studies, not human trials"},
+   {"pmid": "33865080", "reason": "Reviews essential oil aromatherapy (topical/inhaled, including rosemary oil) for rheumatic diseases; topical route, and rosemary is one of several oils used alongside lavender and ginger without isolated results"},
+   {"pmid": "29633892", "reason": "Reviews Rosmarinus officinalis essential oil pharmacology broadly (antibacterial, antifungal, antitumor); explicitly states human cardiovascular clinical data are 'scarce,' and this is a topical/EO-focused pharmacology review, not an isolated oral-supplement efficacy trial"},
+   {"pmid": "22432564", "reason": "A general evidence-based monograph on rosemary (pharmacology, interactions, dosing); no specific quantified human efficacy finding is stated in the retrieved abstract"},
+   {"pmid": "19275687", "reason": "Reviews antioxidant medicinal plants; rosemary's lipid-peroxidation-reducing effect is reported only from animal studies, while the human-study-confirmed plants named are cinnamon and Echium amoenum, not rosemary"}
+ ]}

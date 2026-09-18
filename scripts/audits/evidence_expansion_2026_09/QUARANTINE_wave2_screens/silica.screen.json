@@ -1,0 +1,20 @@
+{"canonical_id": "silica", "recommended_class": "no_qualifying",
+ "one_line_reason": "All 12 shortlisted records concern occupational crystalline-silica dust exposure (silicosis, lung cancer, pneumoconiosis) or dental/nanoparticle silica materials, none an oral silica supplement.",
+ "selected": [],
+ "blockers": ["Every shortlisted record is either an occupational-dust inhalation exposure study or an in vitro/dental-material study; none is an oral supplement exposure of silica"],
+ "handoff_pmids": [
+   {"pmid": "37349198", "kind": "toxicity", "note": "Occupational silicosis and tuberculosis risk from inhaled crystalline silica dust"},
+   {"pmid": "38096107", "kind": "toxicity", "note": "Occupational silica dust exposure as a risk factor for idiopathic pulmonary fibrosis"},
+   {"pmid": "38797466", "kind": "toxicity", "note": "Respirable silica exposure among brick kiln workers and respiratory health outcomes"},
+   {"pmid": "39107111", "kind": "toxicity", "note": "Dose-response relationship between cumulative respirable crystalline silica exposure and silicosis"},
+   {"pmid": "36642978", "kind": "toxicity", "note": "Meta-analysis of occupational silica dust exposure and lung cancer risk"},
+   {"pmid": "36858466", "kind": "toxicity", "note": "Incidence and risk factors of occupational pneumoconiosis, including silica dust exposure"}
+ ],
+ "excluded_pmids": [
+   {"pmid": "41489982", "reason": "Dental ceramic crown survival rates; feldspathic/silica-based ceramic is a dental material, not an oral supplement"},
+   {"pmid": "42229663", "reason": "Photodynamic therapy using mesoporous silica nanoparticles as a drug-delivery platform in cancer research, not an oral supplement exposure"},
+   {"pmid": "41031442", "reason": "Meta-analysis of nanoparticle protein-corona composition (silica nanoparticles among several NP types); a materials-science/nanomedicine dataset, not an oral supplement study"},
+   {"pmid": "37992480", "reason": "Effects of ocean warming on coccolithophore/diatom biogenic silica; marine biology, unrelated to human supplementation"},
+   {"pmid": "38776441", "reason": "Occupational exposures and sarcoidosis risk; silica dust is one of several exposures reviewed, not an oral supplement"},
+   {"pmid": "38281846", "reason": "Plasma surface modification of dental silicate ceramics, an in vitro dental-materials study"}
+ ]}

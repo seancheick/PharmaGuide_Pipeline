@@ -1,0 +1,19 @@
+{"canonical_id": "l_proline", "recommended_class": "no_qualifying",
+ "one_line_reason": "All 12 shortlisted records are unrelated (dental bonding), or use 'hydroxyproline' as a collagen/fibrosis biomarker in observational or animal-intervention studies of other compounds; none administer L-proline as an oral supplement to humans.",
+ "selected": [],
+ "blockers": ["No shortlisted record administers L-proline as a supplement to humans; the search results are dominated by 'hydroxyproline' appearing as a collagen-degradation biomarker in unrelated human observational studies and animal studies of other interventions."],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "41622190", "reason": "Meta-analysis of mussel-inspired compounds for dental resin-dentin bonding; unrelated to L-proline supplementation, hydroxyproline release is used only as a marker of collagen degradation in bonded dentin."},
+   {"pmid": "41811105", "reason": "Systematic review comparing intramuscular collagen content between young and older humans; observational, no supplement administered."},
+   {"pmid": "42060186", "reason": "Review of endogenous sources of urinary oxalate; hydroxyproline is discussed only as a minor endogenous metabolic precursor (~15%) of oxalate, not as an administered supplement."},
+   {"pmid": "37592780", "reason": "Preclinical (animal) meta-analysis of mesenchymal stem cell-derived extracellular vesicles for pulmonary fibrosis; hydroxyproline is an outcome biomarker, and the intervention is MSC-EVs, not L-proline, in animals."},
+   {"pmid": "39757623", "reason": "Systematic review of various herbal wound-healing formulations; hydroxyproline is one of several biomarkers measured, but no formulation is isolated L-proline supplementation."},
+   {"pmid": "41049375", "reason": "Preclinical (animal) meta-analysis of resveratrol for liver fibrosis; hydroxyproline is an outcome biomarker, intervention is resveratrol, not L-proline, in animals."},
+   {"pmid": "41585248", "reason": "Preclinical (animal) meta-analysis of emodin for pulmonary fibrosis; hydroxyproline is an outcome biomarker, intervention is emodin, not L-proline, in animals."},
+   {"pmid": "38959546", "reason": "Metabolomics meta-analysis comparing liver cirrhosis patients to controls; L-proline and hydroxyproline are endogenous biomarkers observed, not an administered supplement."},
+   {"pmid": "39120081", "reason": "Preclinical (animal) review of sodium tanshinone IIA sulfonate for pulmonary fibrosis; hydroxyproline is an outcome biomarker, intervention is tanshinone, not L-proline, in animals."},
+   {"pmid": "37899380", "reason": "Systematic review of low-level laser therapy for tendon healing (mostly animal, 5 human studies); hydroxyproline is a biomarker of collagen synthesis, and the intervention is laser therapy, not L-proline."},
+   {"pmid": "38068753", "reason": "Metabolomics meta-analysis of osteopenia/osteoporosis; hydroxyproline is an endogenous biomarker with 'conflicting directions' across studies, not an administered supplement."},
+   {"pmid": "36147352", "reason": "Preclinical (animal) meta-analysis of metformin for pulmonary fibrosis; hydroxyproline is an outcome biomarker, intervention is metformin, not L-proline, in animals."}
+ ]}
