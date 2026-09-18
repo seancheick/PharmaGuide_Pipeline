@@ -18,8 +18,11 @@ fact sheets cited by the cluster — lives in the bone_health cluster and is
 untouched.
 
 Regression for the cycle where the removal was applied, reverted on the belief
-that it cost ~819 products their bone goal, and re-applied once the ownership
-split was measured. Hermetic.
+that it cost a large number of products their bone goal, and re-applied once the
+ownership split was measured: 2,541 vitamin-D products scored both ways, zero
+shipped goals moved. The product count in that revert rationale was asserted and
+never measured, so its digits are deliberately not repeated here - a
+specific-looking number outlives the caveat attached to it. Hermetic.
 """
 import json
 import sys

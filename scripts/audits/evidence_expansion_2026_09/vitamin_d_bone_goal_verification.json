@@ -1,0 +1,42 @@
+{
+ "_metadata": {
+  "question": "Does removing the bone claim from the D3 clinical record take any product's shipped bone goal away? The revert assumed it did, on a count that was asserted and never measured.",
+  "ownership": "goal_matches is owned by the bone_health synergy cluster; the clinical registry owns intervention evidence. Two owners, two claims.",
+  "vitamin_d_products_scored": 2541,
+  "products_carrying_the_d3_record": 2400,
+  "shipped_goal_matches_changes": 0,
+  "evidence_total_or_tier_changes": 0,
+  "d3_cards_with_the_bone_claim_removed": 2400,
+  "d3_cards_that_never_carried_a_bone_claim": 0,
+  "verdict": "CLEAN - no shipped goal or score moved; the bone claim was removed from the evidence card only"
+ },
+ "goal_matches_changes": [],
+ "output_changes": [],
+ "sample_cards_cleared": [
+  "240372",
+  "242948",
+  "242953",
+  "267685",
+  "295328",
+  "64230",
+  "64231",
+  "64232",
+  "64233",
+  "64235",
+  "64260",
+  "64264",
+  "64265",
+  "64267",
+  "72524",
+  "254434",
+  "254440",
+  "294476",
+  "294477",
+  "294795",
+  "294796",
+  "311783",
+  "311853",
+  "312978",
+  "312979"
+ ]
+}
