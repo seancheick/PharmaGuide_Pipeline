@@ -173,10 +173,29 @@ def signature(result: dict):
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--slim", required=True, type=Path)
+    parser.add_argument("--slim", type=Path, help="Required unless --resummarize.")
     parser.add_argument("--out", default="primary_mass_floor_calibration.json")
     parser.add_argument("--report", default="PRIMARY_MASS_FLOOR_CALIBRATION.md")
+    parser.add_argument("--resummarize", type=Path, help=(
+        "Rebuild the comparison from a previous run's per-product rows instead of "
+        "re-scoring. Same build_comparison(), so there is no second implementation."))
     args = parser.parse_args()
+
+    if not args.slim and not args.resummarize:
+        parser.error("--slim is required unless --resummarize is given")
+
+    if args.resummarize:
+        previous = json.loads(args.resummarize.read_text())
+        meta = previous["_metadata"]
+        pop = meta["populations"]
+        variants = [n for n in meta["policies"]]
+        payload = build_comparison(previous["products"], pop["products_scored"],
+                                   pop["eligible_for_primary_mass_floor"], variants,
+                                   meta["contracts"]["detail"])
+        (OUT / args.out).write_text(json.dumps(payload, indent=1))
+        (OUT / args.report).write_text(render_comparison(payload))
+        print(json.dumps(payload["_metadata"]["populations"], indent=1))
+        return 0
 
     assert threading.active_count() == 1, (
         "this simulation swaps a module-level function; a concurrent worker could "
@@ -480,6 +499,20 @@ def build_comparison(rows, corpus_size, eligible, variants, contract_violations)
             },
             "study_hierarchy_inversions": hierarchy_inversions(rows, name, ge.STUDY_TYPE_BASE_POINTS),
         }
+        # Answering "did this policy invert the evidence hierarchy?" needs the
+        # baseline to compare against. The metric groups PRODUCT Evidence by the
+        # anchor's study type, and a product's Evidence is not only its anchor -
+        # the pipeline sums its other matches too - so some orderings are already
+        # inverted before any policy runs. Only inversions this policy ADDS are
+        # attributable to it.
+        baseline_inversions = hierarchy_inversions(rows, "baseline", ge.STUDY_TYPE_BASE_POINTS)
+        baseline_keys = {(i["archetype"], i["direction"], i["stronger_study_type"],
+                          i["weaker_study_type"]) for i in baseline_inversions}
+        introduced = [i for i in summaries[name]["study_hierarchy_inversions"]
+                      if (i["archetype"], i["direction"], i["stronger_study_type"],
+                          i["weaker_study_type"]) not in baseline_keys]
+        summaries[name]["study_hierarchy_inversions_present_at_baseline"] = len(baseline_inversions)
+        summaries[name]["study_hierarchy_inversions_introduced_by_this_policy"] = introduced
 
     regression = next((r for r in rows if r["dsld_id"] == ISOLATION_REGRESSION_PRODUCT), None)
     baseline_weak = [r for r in mass if r["direction"] == "positive_weak"]
@@ -596,15 +629,17 @@ def render_comparison(payload: dict) -> str:
         "```", json.dumps(contracts["direction_ceiling_effective_values"], indent=1), "```", "",
         "## Policy comparison", "",
         "| policy | products changed | % of corpus | Evidence delta med/p90/max | "
-        "final-score delta med/p90/max | tier changes (down/up) | unexpected gains |",
-        "|---|---:|---:|---|---|---|---:|",
+        "final-score delta med/p90/max | tier changes (down/up) | unexpected gains | "
+        "inversions introduced |",
+        "|---|---:|---:|---|---|---|---:|---:|",
     ]
     for name, block in meta["policies"].items():
         out.append(
             f"| `{name}` | {block['products_changed']:,} | {block['pct_of_corpus']} | "
             f"{spread(block['evidence_delta'])} | {spread(block['final_score_delta'])} | "
             f"{block['tier_changes']:,} ({block['tier_changes_downward']:,}/{block['tier_changes_upward']:,}) | "
-            f"{block['unexpected_gains_under_a_weaker_floor']} |")
+            f"{block['unexpected_gains_under_a_weaker_floor']} | "
+            f"{len(block['study_hierarchy_inversions_introduced_by_this_policy'])} |")
     out += ["", "Every mechanism here weakens or leaves the floor unchanged, so **unexpected "
             "gains should be 0**. A nonzero count means a policy raised a product's Evidence, "
             "which would be a defect in the mechanism, not a finding about the floor.", ""]
@@ -619,8 +654,11 @@ def render_comparison(payload: dict) -> str:
                 f"median Evidence after: **{block['positive_strong']['median_evidence_after']}**, "
                 f"p90 **{block['positive_strong']['p90_evidence_after']}**, "
                 f"tier changes {block['positive_strong']['tier_changes']:,}",
-                f"- study-hierarchy inversions introduced downstream: "
-                f"**{len(block['study_hierarchy_inversions'])}**", ""]
+                f"- study-hierarchy inversions: **{len(block['study_hierarchy_inversions'])}** "
+                f"observed, {block['study_hierarchy_inversions_present_at_baseline']} already "
+                f"present at baseline, "
+                f"**{len(block['study_hierarchy_inversions_introduced_by_this_policy'])} "
+                f"introduced by this policy**", ""]
         for label, key in (("effect direction", "by_direction"), ("study type", "by_study_type"),
                            ("module", "by_module"), ("archetype", "by_archetype"),
                            ("single active?", "by_active_count")):
@@ -630,9 +668,11 @@ def render_comparison(payload: dict) -> str:
                 lines.append(f"| `{key_name}` | {cut['products']} | {spread(cut['evidence_delta'])} | "
                              f"{spread(cut['final_score_delta'])} | {cut['changes_tier']} |")
             out += lines + [""]
-        if block["study_hierarchy_inversions"]:
-            out += ["Inversions (within archetype and direction):", "",
-                    "```", json.dumps(block["study_hierarchy_inversions"][:10], indent=1), "```", ""]
+        if block["study_hierarchy_inversions_introduced_by_this_policy"]:
+            out += ["Inversions INTRODUCED by this policy (within archetype and direction):", "",
+                    "```", json.dumps(
+                        block["study_hierarchy_inversions_introduced_by_this_policy"][:10],
+                        indent=1), "```", ""]
 
     out += ["## Placeholder constants", "",
             "```", json.dumps(meta["placeholder_constants"], indent=1), "```", "",
