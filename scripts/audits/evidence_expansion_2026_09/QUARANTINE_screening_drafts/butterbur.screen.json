@@ -1,0 +1,1731 @@
+{
+ "canonical_id": "butterbur",
+ "screened": 58,
+ "kept": 51,
+ "rejected": [
+  {
+   "pmid": "11410074",
+   "reason": "duplicate",
+   "note": "Near-identical abstract to PMID 11020030 (same N=60, same design, same Petadolex 25mg bid dosing, same result); appears to be a duplicate/reprint of the same trial."
+  },
+  {
+   "pmid": "18343939",
+   "reason": "different_substance",
+   "note": "Spirulina RCT for allergic rhinitis; butterbur not the studied intervention."
+  },
+  {
+   "pmid": "24682554",
+   "reason": "off_topic",
+   "note": "Title '[Not Available]'; no extractable content."
+  },
+  {
+   "pmid": "24784964",
+   "reason": "off_topic",
+   "note": "Pesticide residue monitoring in Korean agricultural products; not a butterbur supplementation study."
+  },
+  {
+   "pmid": "28002518",
+   "reason": "animal_or_invitro",
+   "note": "Oral toxicity of Petasites hybridus and 3 other pyrrolizidine-alkaloid-containing plant extracts administered by gavage in an animal (non-human) toxicity protocol."
+  },
+  {
+   "pmid": "31631423",
+   "reason": "animal_or_invitro",
+   "note": "In vitro hepatotoxicity study of Petasites hybridus extract (Ze 339) using human and rodent hepatocyte cell lines, not a human clinical study."
+  },
+  {
+   "pmid": "37369486",
+   "reason": "animal_or_invitro",
+   "note": "Anti-UVC cytotoxicity of butterbur (1 of 108 herbs) tested on human dermal fibroblast and melanoma CELL lines in vitro."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "11020030",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "60 patients described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "special CO2 extract from the rhizome of Petasites hybridus (petadolex)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 patients",
+   "indication_as_stated": "migraine prophylaxis",
+   "dose_quote": "2 capsules (each capsule contains 25 mg) twice daily over 12 weeks",
+   "primary_outcome_quote": "Outcome variables included the frequency, intensity and duration of migraine attacks as well as any accompanying symptoms.",
+   "primary_result_quote": "The frequency of migraine attacks decreased by a maximum of 60% compared to the baseline.",
+   "sample_size_quote": "60 patients received either the special Petasites hybridus extract petadolex or placebo",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petadolex butterbur root extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11799030",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "125 patients randomised"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Butterbur (carbon dioxide extract tablets, ZE 339)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "125 patients with seasonal allergic rhinitis",
+   "indication_as_stated": "seasonal allergic rhinitis",
+   "dose_quote": "Butterbur (carbon dioxide extract tablets, ZE 339) one tablet, four times daily, or cetirizine, one tablet in the evening, both given for two consecutive weeks.",
+   "primary_outcome_quote": "Scores on SF-36 questionnaire and clinical global impression scale.",
+   "primary_result_quote": "Improvement in SF-36 score was similar in the two treatment groups for all items tested hierarchically.",
+   "sample_size_quote": "125 patients were randomised (butterbur 61; cetirizine 64).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Non-inferiority vs. active comparator (cetirizine), not placebo-controlled.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur ZE339 matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12808361",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Petasites hybridus (butterbur)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "migraine/tension headache/urogenital-GI spasm prophylaxis (safety overview)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Until now four cases of a reversible cholestatic hepatitis have been probably associated with long-term administration of butterbur (incidence of 1:175.000).",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "German-language portrait/review focused on mechanism and hepatotoxicity risk.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12859442",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Twenty patients described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Butterbur (BB) or Petasites hybridus, 50 mg twice daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty patients with grass-pollen-sensitized SAR",
+   "indication_as_stated": "seasonal allergic rhinitis",
+   "dose_quote": "Twenty patients with grass-pollen-sensitized SAR were randomized in a double-blind, cross-over manner to receive for 2 weeks either BB 50 mg twice daily or placebo (PL) twice daily during the grass pollen season.",
+   "primary_outcome_quote": "Nasal adenosine monophosphate (AMP) challenge (the primary outcome) was administered as a single 400 mg/mL dose after each randomized treatment.",
+   "primary_result_quote": "Spontaneous recovery following AMP challenge (area under the response time profile curve as % x min+/-SEM) was significantly attenuated (P=0.028) with BB (584+/-289) compared to PL (1438+/-240)",
+   "sample_size_quote": "Twenty patients with grass-pollen-sensitized SAR were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur (Petasites hybridus) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12864764",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative safety report"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "patented special butterbur root extract",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "migraine prevention (safety report)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The patented special butterbur root extract is safe for the treatment in humans.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Narrative safety report summarizing clinical, postmarketing, and pharmacovigilance data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Special butterbur root extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14501441",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Petasites hybridus (1 of 3 herbs reviewed for ocular allergy)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "allergy sufferers with ocular allergy",
+   "indication_as_stated": "ocular allergy",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Certain herbs including Euphrasia officinalis, Petasites hybridus and Argemone mexicana have been evaluated in control studies in the treatment of ocular allergy.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Petasites hybridus is one of three herbs reviewed together for ocular allergy; no butterbur-specific result quoted.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviewed alongside other CAM ocular-allergy herbs without an isolated butterbur result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14584971",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "product/regulatory review"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Petasites hybridus extract (ZE 339, marketed as Tesalin)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "seasonal allergic rhinitis (regulatory/safety overview)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Zeller has stated that hepatotoxicity cannot be totally excluded as a possible adverse reaction to Tesalin.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Product/regulatory overview of ZE 339 (Tesalin) approval and hepatotoxicity caveat.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "ZE 339 (butterbur) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14720270",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Sixteen atopic asthmatic patients"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Butterbur (BB), 25 mg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Sixteen atopic asthmatic patients on inhaled corticosteroids",
+   "indication_as_stated": "asthma (add-on anti-inflammatory activity)",
+   "dose_quote": "received twice daily for 1 week either BB 25 mg or placebo (PL), in a double-blind, cross-over fashion, with a 1-week washout period prior to each randomized treatment.",
+   "primary_outcome_quote": "assessing adenosine monophosphate (AMP) bronchoprovocation (primary outcome variable) along with other surrogate inflammatory markers such as exhaled nitric oxide, serum eosinophil cationic protein and peripheral blood eosinophil count.",
+   "primary_result_quote": "AMP provocative concentration causing a 20% reduction from baseline FEV1 (PC20) as doubling dilution change from baseline, significantly improved (P<0.05) with BB, 0.6 (0.2), compared with PL, -0.1 (0.3); a 0.7 doubling dilution difference.",
+   "sample_size_quote": "Sixteen atopic asthmatic patients with mean (standard error of mean) forced expiratory volume in 1 s (FEV1) of 78 (4)% predicted",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on to inhaled corticosteroids, not butterbur monotherapy.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur matches label material; tested as add-on to inhaled corticosteroids.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14752215",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "33 patients randomised to butterbur, 27 to placebo"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "two capsules 25 mg butterbur twice a day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "33 patients (butterbur arm) and 27 (placebo)",
+   "indication_as_stated": "migraine prophylaxis (reanalysis)",
+   "dose_quote": "33 patients were randomised to treatment with two capsules 25 mg butterbur twice a day and 27 to placebo.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The mean attack frequency per month decreased from 3.4 at baseline to 1.8 after 3 months (p = 0.0024) in the verum group",
+   "sample_size_quote": "33 patients were randomised to treatment with two capsules 25 mg butterbur twice a day and 27 to placebo.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Independent reanalysis of the original trial data following identified methodological shortcomings.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur root extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14989395",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Twenty patients completed the study"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur, 50 mg twice daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty patients (atopic)",
+   "indication_as_stated": "histamine and allergen cutaneous response (allergic rhinitis/asthma)",
+   "dose_quote": "receive for 1 week butterbur, 50 mg twice daily (8 AM and 10 PM)",
+   "primary_outcome_quote": "To evaluate the effects of butterbur compared with fexofenadine and montelukast on the histamine and allergen wheal and flare cutaneous responses.",
+   "primary_result_quote": "Butterbur did not produce any significant effects on the histamine and allergen cutaneous response compared with placebo",
+   "sample_size_quote": "Twenty patients completed the study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Fexofenadine (active comparator) was significantly effective; butterbur and montelukast were not.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15005644",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "64 adults and 16 children/adolescents"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur root extract (Petadolex)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "64 adults and 16 children/adolescents",
+   "indication_as_stated": "asthma",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "This study suggests the Petasites hybridus extract Petadolex is an effective and safe therapy for the treatment of asthma.",
+   "sample_size_quote": "Subjects included 64 adults and 16 children/adolescents treated for two months with the extract",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Prospective, non-randomized, open trial design (no placebo control).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petadolex butterbur root extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15080820",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Sixteen patients randomized"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (BB), 50 mg twice daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Sixteen patients with perennial allergic rhinitis and house dust mite sensitization",
+   "indication_as_stated": "perennial allergic rhinitis",
+   "dose_quote": "receive for 1 week either BB 50 mg twice daily, FEX 180 mg once daily and placebo (PL) once daily, or PL twice daily.",
+   "primary_outcome_quote": "The peak nasal inspiratory flow (PNIF) response to adenosine monophosphate (AMP) challenge administered as a single 400 mg/mL dose was measured over a 60-min period after challenge",
+   "primary_result_quote": "The maximum % PNIF fall from baseline after nasal AMP challenge was significantly attenuated (P<0.05) compared to PL (46+/-3), with BB (34+/-3) and FEX (39+/-3).",
+   "sample_size_quote": "Sixteen patients with perennial allergic rhinitis and house dust mite sensitization were randomized in double-blind cross-over fashion",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No significant differences between butterbur and the fexofenadine comparator arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15264611",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative evidence-based review"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "butter-bur (1 of 4 treatments reviewed for migraine prophylaxis)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "migraine prophylaxis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Current clinical data support the use of fever-few, butterbur, magnesium, and riboflavin in migraine prophylaxis; however, studies are limited but promising regarding the participants' perceived relief.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Reviews 4 treatments together without an isolated butterbur-specific quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur reviewed alongside feverfew, magnesium and riboflavin without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15281472",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Thirty-five patients (14 men and 21 women)"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur, 50 mg twice daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Thirty-five patients (14 men and 21 women) with intermittent allergic rhinitis",
+   "indication_as_stated": "intermittent allergic rhinitis",
+   "dose_quote": "Thirty-five patients (14 men and 21 women) with IAR received butterbur, 50 mg twice daily, or placebo for 2 weeks.",
+   "primary_outcome_quote": "Domiciliary measurements were taken in the morning and evening for peak nasal inspiratory flow (PNIF) (the primary outcome variable), nasal and eye symptoms, and rhinoconjunctivitis-specific quality-of-life score.",
+   "primary_result_quote": "There was no significant clinical efficacy of butterbur use vs placebo use on objective and subjective outcomes in IAR.",
+   "sample_size_quote": "Thirty-five patients (14 men and 21 women) with IAR received butterbur, 50 mg twice daily, or placebo for 2 weeks.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Contrasts with other positive butterbur/allergic-rhinitis trials in this scope; a clean negative placebo-controlled result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15611396",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "One hundred eighty-six patients randomized"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Butterbur extract Ze339",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "One hundred eighty-six patients with intermittent allergic rhinitis",
+   "indication_as_stated": "intermittent allergic rhinitis",
+   "dose_quote": "High-dose group, 1 tablet 3 times daily; low-dose group, 1 tablet twice daily; or matching placebo.",
+   "primary_outcome_quote": "The main efficacy variable was change in symptoms from baseline to end point during the daytime.",
+   "primary_result_quote": "Improvement in the main efficacy variable was significantly superior in the Butterbur Ze339 groups, relative to placebo, and a significant dose relationship was observed between the 2 Butterbur doses.",
+   "sample_size_quote": "One hundred eighty-six patients were randomized (Butterbur Ze339 high dose, 60; low dose, 65; and placebo, 61 patients).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur Ze339 matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15623680",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "245 patients with migraine"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "standardized special root extract from the plant Petasites hybridus",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "245 patients with migraine",
+   "indication_as_stated": "migraine prophylaxis",
+   "dose_quote": "comparing Petasites extract 75 mg bid, Petasites extract 50 mg bid, or placebo bid in 245 patients with migraine.",
+   "primary_outcome_quote": "The main outcome measure was the decrease in migraine attack frequency per month calculated as percentage change from baseline over a 4-month treatment period.",
+   "primary_result_quote": "migraine attack frequency was reduced by 48% for Petasites extract 75 mg bid (p = 0.0012 vs placebo)",
+   "sample_size_quote": "in 245 patients with migraine.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "75 mg bid dose was significantly effective; 50 mg bid dose was NOT significantly more effective than placebo on the primary endpoint.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasites hybridus root extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15836592",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "108 children and adolescents"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur root extract, 50 to 150 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "108 children and adolescents (ages 6-17)",
+   "indication_as_stated": "pediatric migraine prevention",
+   "dose_quote": "Patients were treated with 50 to 150 mg of the butterbur root extract depending on age for a period of 4 months.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "77% of all patients reported a reduction in the frequency of migraine attacks of at least 50%.",
+   "sample_size_quote": "108 children and adolescents between the ages of 6 and 17 were included in a multicenter prospective open-label study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Open-label, non-placebo-controlled study in a pediatric population.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur root extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16114089",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "placebo in 330 patients"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Butterbur extract (Ze 339; 8 mg total petasine)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "330 patients with intermittent allergic rhinitis",
+   "indication_as_stated": "intermittent allergic rhinitis",
+   "dose_quote": "Butterbur extract (Ze 339; 8 mg total petasine; one tablet thrice-daily)",
+   "primary_outcome_quote": "The primary efficacy variable was a change in symptoms from baseline to endpoint during daytime.",
+   "primary_result_quote": "Both active treatments were individually significantly superior to placebo (p<0.001) in improving symptoms of IAR, while there were no differences between the two active treatments (p=0.37).",
+   "sample_size_quote": "fexofenadine (Telfast 180, one tablet once-daily) and placebo in 330 patients.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Non-inferior to fexofenadine active comparator, both superior to placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur Ze339 matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16520304",
+   "design": "systematic_review",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title-level only; abstract is methodology boilerplate with no content"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (Taraxacum-style Natural Standard monograph)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "general evidence review",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Abstract contains only a generic description of the review methodology, no extractable content.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Dedicated Natural Standard systematic review of butterbur; full text needed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16751170",
+   "design": "observational",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "580 patients treated"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur leaf extract Ze 339",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "580 patients with seasonal allergic rhinitis",
+   "indication_as_stated": "seasonal allergic rhinitis (postmarketing)",
+   "dose_quote": "580 patients were treated with an average of 2 tablets of Ze 339 daily for 2 weeks.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Symptoms of seasonal allergic rhinitis improved in 90% of patients.",
+   "sample_size_quote": "580 patients were treated with an average of 2 tablets of Ze 339 daily for 2 weeks.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Open, uncontrolled postmarketing surveillance study (no placebo arm).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur leaf extract Ze 339 matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16784008",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "8 patients with respiratory allergy and 10 healthy volunteers"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Petasin (Ze 339)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "8 patients with respiratory allergy and 10 nonatopic, healthy volunteers",
+   "indication_as_stated": "skin test reactivity (mechanistic)",
+   "dose_quote": null,
+   "primary_outcome_quote": "To evaluate the antiallergic properties of Ze 339 using skin prick tests with different stimuli, such as codeine, histamine, methacholine, and a relevant inhalant allergen.",
+   "primary_result_quote": "no significant inhibition could be demonstrated for Ze 339 with any test solution.",
+   "sample_size_quote": "in 8 patients with respiratory allergy and in 10 nonatopic, healthy volunteers.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Acrivastine (active antihistamine comparator) WAS significantly effective; Ze 339 did not differ from placebo on this mechanistic skin-test endpoint.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasin (Ze 339 / butterbur) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16987643",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "293 patients across 2 trials"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Petasites hybridus preparations (Petadolex)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "293 patients across 2 RCTs",
+   "indication_as_stated": "migraine prophylaxis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Moderate evidence of effectiveness is, thus, available for a higher than the recommended dose of the proprietary Petasites root extract Petadolex in the prophylaxis of migraine.",
+   "sample_size_quote": "Two trials totalling 293 patients (60 and 233 patients) were included in this review.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Only 2 RCTs available; pooling not performed due to heterogeneity.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasites hybridus (Petadolex) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17659990",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "n=19/20/19 across 3 arms"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur root extract (Petadolex)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "58 primary school children (n=19 butterbur, n=20 music therapy, n=19 placebo)",
+   "indication_as_stated": "pediatric migraine prevention",
+   "dose_quote": null,
+   "primary_outcome_quote": "Reduction of headache frequency after treatment (8-week post-treatment) as well as 6 months later (8-week follow-up) was the efficacy variable.",
+   "primary_result_quote": "in the follow-up period both music therapy and butterbur root extract were superior to placebo (p=0.018 and p=0.044, respectively).",
+   "sample_size_quote": "received either butterbur root extract (n=19), music therapy (n=20) or placebo (n=19) over 12 weeks.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "At the immediate post-treatment timepoint only music therapy (not butterbur) was superior to placebo; butterbur reached significance only at 6-month follow-up.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur root extract (Petadolex) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18219828",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "16 eligible RCTs"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Petasites hybridus (butterbur) extract",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with allergic rhinitis (6 RCTs on butterbur)",
+   "indication_as_stated": "allergic rhinitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Six RCTs studied Petasites hybridus (butterbur) extract for AR and suggest that P hybridus is superior to placebo or similarly effective compared with nonsedative antihistamines for intermittent AR.",
+   "sample_size_quote": "Sixteen eligible RCTs, testing 10 different herbal products against placebo or active comparator, were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors caution independent replication is needed given manufacturer financial support of the 3 largest butterbur trials.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasites hybridus (butterbur) extract specifically named with 6 RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18325296",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "butterbur (1 of several nutraceuticals reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "migraine prophylaxis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Patients can choose between evidence-based nutraceuticals such as riboflavin, feverfew, butterbur, or coenzyme Q10, or more traditional pharmacotherapeutics.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Butterbur listed among nutraceutical options without an isolated result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur reviewed alongside multiple other nutraceuticals and pharmacotherapeutics.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19262383",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (1 of several CAM therapies reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "allergic rhinitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A few therapies, including spirulina, butterbur, and phototherapy hold some promise.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Butterbur grouped with spirulina and phototherapy without an isolated result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviewed alongside other CAM therapies without an isolated butterbur result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19274698",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "182 patients randomized"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fixed herbal drug combination Ze 185 (butterbur root, valerian root, passionflower herb, lemon balm leaf)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "182 patients with somatization disorder or undifferentiated somatoform disorder",
+   "indication_as_stated": "somatoform disorders",
+   "dose_quote": "butterbur root, valerian root, passionflower herb, lemon balm leaf versus valerian root, passionflower herb, lemon balm leaf versus placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The 4-combination was significantly superior to the 3-combination and placebo (4-combination > 3-combination > placebo) in all the primary and secondary parameters (PP-population).",
+   "sample_size_quote": "182 patients were randomized for a 3-arm trial",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "3-arm design isolates butterbur's added contribution: adding butterbur to the 3-herb base combination significantly improved outcomes further.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur is one of four ingredients, though this trial's 3-arm design specifically isolates butterbur's added contribution.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20464605",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (1 of several herbal remedies reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "migraine prophylaxis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Among the herbal remedies, butterbur significantly decreases attack frequency, whereas the efficacy of feverfew was not confirmed in a Cochrane review, probably because of the 400% variations in the dosage of its active principle.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Narrative review contrasting butterbur (positive) with feverfew (unconfirmed).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur reviewed alongside other nonpharmacological migraine treatments.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21080124",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur extract",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "migraine and tension-type headache",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Among \"natural\" treatments, both butterbur extract and vitamin B2 have shown efficacy in more than one randomized trial and are thus potentially useful first-line preventive interventions.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur extract specifically named as a potentially useful first-line preventive intervention.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22529203",
+   "design": "guideline",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "AAN/AHS Quality Standards Subcommittee guideline, 49 Class I/II articles reviewed"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Petasites (butterbur)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "adults with migraine",
+   "indication_as_stated": "episodic migraine prevention",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Petasites (butterbur) is effective for migraine prevention and should be offered to patients with migraine to reduce the frequency and severity of migraine attacks (Level A).",
+   "sample_size_quote": "The author panel reviewed 284 abstracts, which ultimately yielded 49 Class I or Class II articles on migraine prevention",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Highest-grade (Level A) evidence rating in this AAN/AHS guideline update.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasites (butterbur) receives a top-tier (Level A) evidence-based recommendation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22683887",
+   "design": "guideline",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Canadian Headache Society guideline"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "patients with episodic migraine",
+   "indication_as_stated": "migraine prophylaxis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "11 prophylactic drugs received a strong recommendation for use (topiramate, propranolol, nadolol, metoprolol, amitriptyline, gabapentin, candesartan, butterbur, riboflavin, coenzyme Q10, and magnesium citrate)",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Butterbur included among 11 drugs given a strong recommendation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur specifically named among strongly-recommended prophylactic options.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23277154",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative analytical review"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "butterbur (Petasites)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "pyrrolizidine alkaloid safety/analytics",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "However, toxic alkaloid content of the plant limits its direct usage.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Analytical/toxicological review focused on pyrrolizidine alkaloid content and alkaloid-free extraction methods.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur (Petasites) matches label material; safety-focused.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23472485",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "overview of 50 systematic reviews of 50 herbal medicines"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Petasites hybridus (1 of 31 herbal medicines with minor adverse effects)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "herbal medicine adverse effects overview",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Minor adverse effects were noted for 31 HMs: Thymus vulgaris, Lavandula angustifolia Miller, Boswellia serrata, Calendula officinalis, Harpagophytum procumbens, Panax ginseng, Vitex agnus-castus, Crataegus spp., Cinnamomum spp., Petasites hybridus, Agave americana, Hypericum perforatum, Echinacea spp., Silybum marianum, Capsicum spp., Genus phyllanthus, Ginkgo biloba, Valeriana officinalis, Hippocastanaceae, Melissa officinalis, Trigonella foenum-graecum, Lagerstroemia speciosa, Cnicus benedictus, Salvia hispanica, Vaccinium myrtillus, Mentha spicata, Rosmarinus officinalis, Crocus sativus, Gymnema sylvestre, Morinda citrifolia and Curcuma longa.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Overview classifies Petasites hybridus in the 'minor adverse effects' tier, not the serious or moderately severe tiers.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasites hybridus specifically classified within a broad herbal-medicine adverse-effects overview.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24443395",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "30 studies reviewed"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (1 of 6 nutraceuticals reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "pediatric migraine patients",
+   "indication_as_stated": "pediatric migraine prophylaxis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Thirty studies were reviewed on six different nutraceuticals: butterbur, riboflavin, ginkgolide B, magnesium, coenzyme Q10 and polyunsaturated fatty acids.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Authors describe overall evidence quality for pediatric migraine nutraceuticals as poor.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur reviewed alongside 5 other nutraceuticals without an isolated butterbur-specific result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26252585",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative guideline summary"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Petasites (butterbur)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "migraine prevention",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "topiramate, propranolol, nadolol, metoprolol, amitriptyline, gabapentin, candesartan, Petasites (butterbur), riboflavin, coenzyme Q10, and magnesium citrate received a strong recommendation for use from the CHS.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Summarizes the same Canadian Headache Society strong recommendation as PMID 22683887.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasites (butterbur) specifically named among strongly-recommended options.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27914909",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "72 articles analyzed"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "petasites hybridus (1 of several herbs reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "otorhinolaryngology patients (rhinosinusitis/allergic rhinitis)",
+   "indication_as_stated": "rhinosinusitis and allergic rhinitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Extracts of various herbs, notably echinacea, eucalyptus, petasites hybridus, pelargonium sidoides, rosemary, spirulina and thyme, show superiority over placebo for rhinosinusitis and allergic rhinitis, as does gingko biloba for selected vertigo.",
+   "sample_size_quote": "Seventy-two articles (18 prospective randomized studies, 4 Cochrane analyses, 4 meta-analysis and 15 reviews of the literature) devoted to clinical studies were analyzed.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Petasites hybridus grouped with 6 other herbs shown superior to placebo, without an isolated result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Grouped with several other herbs shown superior to placebo without an isolated butterbur-specific result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28527067",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "butterbur (herbal preparation)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "migraine prophylaxis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Nutraceutical treatment consists of taking vitamins, supplements (magnesium, riboflavin, coenzyme Q10, and alpha lipoic acid) and herbal preparations (feverfew and butterbur), and its usage is frequently determined by dissatisfaction with conventional medical therapies.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Butterbur grouped with feverfew as herbal preparations, no isolated quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur grouped with feverfew and other nutraceuticals without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28527085",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "butterbur (1 of 6 nutraceuticals)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "children and adolescents with headache",
+   "indication_as_stated": "pediatric/adolescent headache prophylaxis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The most used nutraceuticals for adolescent's and children's headache prophylaxis are: magnesium, coenzyme Q10, riboflavin, butterbur, feverfew and melatonin.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Authors note a lack of official guidelines and few studies with limited efficacy evidence in this population.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur listed among 6 nutraceuticals without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29433687",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "72 healthy male participants"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fixed combination of valerian, passion flower, lemon balm, and butterbur extracts (Ze 185)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "72 healthy male participants",
+   "indication_as_stated": "acute psychosocial stress response",
+   "dose_quote": null,
+   "primary_outcome_quote": "Principle outcomes were salivary cortisol and self-reported anxiety responses to stress assessed at the fourth day.",
+   "primary_result_quote": "participants in the Ze 185 condition showed significantly attenuated responses in self-reported anxiety in comparison to placebo (F(3, 41) = 3.33, p = 0.03)",
+   "sample_size_quote": "72 healthy male participants were randomized to 3 groups (Ze 185, placebo or no treatment)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Groups did not differ in the biological (salivary cortisol) outcome; only the subjective self-reported anxiety outcome was significant.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur is one of four ingredients in the Ze 185 combination product; effect cannot be isolated to butterbur alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29619575",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "21 studies reviewed"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (1 of 6 nutraceuticals reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "children and adolescents with migraine",
+   "indication_as_stated": "pediatric migraine management",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Six different nutraceuticals were included in the review: vitamin D, riboflavin, coenzyme Q10, magnesium, butterbur, and polyunsaturated fatty acids.",
+   "sample_size_quote": "Twenty-one studies were reviewed, of which 11 were observational studies, 7 were randomized controlled trials, and 3 were systematic reviews.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Authors state no definite conclusions can be drawn due to low quality evidence and limited studies.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur reviewed alongside 5 other nutraceuticals without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30627973",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (Petasites hybridus)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "migraine patients",
+   "indication_as_stated": "migraine treatment",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "butterbur is effective with potential risks of hepatotoxicity related to preparation",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Direct contrast with feverfew (mixed evidence) in the same review.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur (Petasites hybridus) specifically named and assessed as effective with a hepatotoxicity caveat.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30790138",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review of 2015-2018 literature"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Butterbur",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "patients with episodic migraine",
+   "indication_as_stated": "episodic migraine (CIM update)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Butterbur needs to be free of pyrrolizidine alkaloids (PA) to ensure safety given their hepatotoxicity.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Places older butterbur efficacy findings alongside a specific hepatotoxicity/PA-content safety caveat.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur specifically flagged for pyrrolizidine-alkaloid hepatotoxicity risk.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31985131",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "3,252 psychiatric in-house patients analysed"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fixed herbal extract combination of valerian, lemon balm, passionflower, and butterbur (Ze 185)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "3,252 hospitalized psychiatric patients (1,548 cases, 1,704 controls)",
+   "indication_as_stated": "stress-related psychiatric/somatoform symptoms (benzodiazepine-sparing)",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary objective was to investigate the effect of Ze 185 on the prescription pattern of benzodiazepines.",
+   "primary_result_quote": "Data showed that both treatment modalities had a comparable clinical effectiveness but with significantly less prescriptions of benzodiazepines in the Ze 185 group (p = .006).",
+   "sample_size_quote": "Cases (n = 1,548) with a prescription of Ze 185 and controls (n = 1,704) were matched by age, gender, hospitalization interval, and main International Classification of Diseases, Version 10 F-diagnoses.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Retrospective case-control design, not a randomized trial; butterbur is one of four combination ingredients.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Butterbur is one of four ingredients in the Ze 185 combination product; effect cannot be isolated to butterbur alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32104974",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "modified Delphi consensus, 220 full-text articles"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur extract (1 of 4 therapies with the highest GRADE rating)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with sinusitis and rhinitis",
+   "indication_as_stated": "sinusitis and rhinitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Most of the therapies had little to no scientific evidence; however, acupuncture, capsaicin, bromelain, and butterbur extract currently have low to moderate-high GRADE rating.",
+   "sample_size_quote": "The literature review included 2066 titles with 220 full-text articles found to be relevant.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Butterbur is one of 4 therapies (of over 60 reviewed) reaching a low-to-moderate-high GRADE rating.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur extract specifically named among the highest-graded alternative therapies reviewed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32310327",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "19 studies identified"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (1 of 9 single-ingredient herbal treatments reviewed for migraine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "migraine patients",
+   "indication_as_stated": "migraine treatment",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "there was positive, albeit limited evidence for butterbur.",
+   "sample_size_quote": "Nineteen studies were identified examining the effects on migraine of feverfew, butterbur, curcumin, menthol/peppermint oil, coriander, citron, Damask rose, chamomile, and lavender.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors caution risk of bias was high for many studies across the review.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur specifically assessed as having positive, albeit limited, evidence.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35585841",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review incorporating new mode-of-action and animal safety data"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur root extract Petadolex",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "migraine patients (clinical trial data reviewed) plus rat/hepatocyte safety data",
+   "indication_as_stated": "migraine prevention",
+   "dose_quote": "150 mg/day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "in randomized, double-blinded and placebo-controlled trials with Petadolex\u00ae migraine attack frequency was reduced significantly at 150 mg/day, and no relevant abnormal liver function was reported.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Also reports non-human safety data: a no-observable-adverse-effect-level established in rats and primary human hepatocyte liver-function testing, both described in prose rather than a single quotable clinical-trial span.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petadolex butterbur root extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38603736",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "29 RCTs, n=1879"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Petasites hybridus (most frequently investigated of the single medicinal plants reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "adults and children with allergic rhinitis",
+   "indication_as_stated": "allergic rhinitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Petasites hybridus was most frequently investigated (studies = 5)",
+   "sample_size_quote": "Twenty-nine randomised controlled trials (n = 1879) were eligible while 27 (n = 1769) contributed data for meta-analyses.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Pooled single-medicinal-plant vs placebo result rated very-low-to-low certainty; no clear difference found vs. antihistamine comparator.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasites hybridus specifically identified as the most-studied medicinal plant in this meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39084196",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "14 studies included"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Petasites hybridus (butterbur) (most frequently studied plant)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "individuals with seasonal allergic rhinitis",
+   "indication_as_stated": "seasonal allergic rhinitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The most frequently studied plant was Petasites hybridus (butterbur), showing beneficial effects on immunological parameters, subjective symptoms, and nasal airflow.",
+   "sample_size_quote": "In total, 14 studies were included, 11 from European/Western PT and three from AM.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Petasites hybridus (butterbur) specifically identified as the most-studied and most-effective plant reviewed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39853578",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative clinical-decision review"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Butterbur or petasites preparations",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "headache/migraine prevention",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Butterbur or petasites preparations have strong evidence for efficacy and concern for hepatotoxicity.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Explicitly pairs a strong-efficacy verdict with a hepatotoxicity safety caveat and directs readers to NCCIH for updated guidance.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur specifically named with a paired efficacy/hepatotoxicity verdict.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40558112",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review of preclinical, clinical, real-world, and pharmacovigilance data"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "P. hybridus (butterbur) leaf extract (Ze 339)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "allergic rhinitis patients (comprehensive data review)",
+   "indication_as_stated": "allergic rhinitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Given its favourable safety profile and lack of sedative side effects, Ze 339 offers a valuable alternative to antihistamines and should therefore continue to be considered by medical practitioners for the treatment of allergic rhinitis symptoms.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Comprehensive 20+ year post-launch review combining clinical trial, real-world, and pharmacovigilance data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Ze 339 (butterbur leaf extract) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11302783",
+   "design": "other",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "narrative monograph; no clinical trial data described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "butterbur (Petasites hybridus)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated",
+   "indication_as_stated": "historical/traditional overview of therapeutic uses",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Currently, the primary therapeutic uses for butterbur are for prophylactic treatment of migraines, and as an anti-spasmodic agent for chronic cough or asthma.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Botanical/historical monograph, not a clinical trial or systematic review of trial data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Butterbur (Petasites hybridus) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "22529203",
+  "22683887",
+  "15623680",
+  "16987643",
+  "15611396",
+  "16114089",
+  "18219828",
+  "38603736",
+  "15281472",
+  "11020030",
+  "14989395",
+  "12808361"
+ ],
+ "handoff": [
+  {
+   "pmid": "12808361",
+   "role": "safety",
+   "reason": "Reports 4 cases of reversible cholestatic hepatitis (1:175,000 incidence) associated with long-term butterbur use."
+  },
+  {
+   "pmid": "14584971",
+   "role": "safety",
+   "reason": "Manufacturer statement that hepatotoxicity cannot be totally excluded for the ZE 339 (Tesalin) product."
+  },
+  {
+   "pmid": "23277154",
+   "role": "safety",
+   "reason": "Analytical review of pyrrolizidine alkaloid (hepatotoxic/carcinogenic) content in butterbur and alkaloid-free extraction methods."
+  },
+  {
+   "pmid": "28002518",
+   "role": "safety",
+   "reason": "Animal oral-toxicity study of butterbur and related pyrrolizidine-alkaloid-containing plant extracts."
+  },
+  {
+   "pmid": "31631423",
+   "role": "safety",
+   "reason": "In vitro hepatotoxicity mechanism study of butterbur extract Ze 339."
+  },
+  {
+   "pmid": "30790138",
+   "role": "safety",
+   "reason": "Flags pyrrolizidine-alkaloid hepatotoxicity as a safety precondition for using butterbur."
+  },
+  {
+   "pmid": "39853578",
+   "role": "safety",
+   "reason": "Pairs a strong-efficacy verdict with an explicit hepatotoxicity concern and directs to NCCIH guidance."
+  },
+  {
+   "pmid": "35585841",
+   "role": "safety",
+   "reason": "Reports non-human safety pharmacology (rat NOAEL, bile duct hyperplasia at supratherapeutic doses, primary human hepatocyte testing) alongside clinical efficacy data."
+  }
+ ],
+ "identity_notes": "Per the coordinator's partition-level guidance, butterbur carries known safety literature (pyrrolizidine alkaloid hepatotoxicity) that is routed to the handoff safety owner rather than folded into efficacy conclusions here; efficacy records are kept and annotated but the identity_notes and handoff list both flag the hepatotoxicity concern prominently. Two distinct, well-separated evidence bodies exist: (1) MIGRAINE PROPHYLAXIS, where the proprietary root extract Petadolex has the strongest guideline-level support (AAN/AHS Level A recommendation, PMID 22529203; Canadian Headache Society strong recommendation, PMID 22683887) built on a small number of placebo-controlled RCTs (11020030, 14752215, 15623680) plus a systematic review of only 2 pooled trials (16987643, 293 patients total) -- the evidence base, while guideline-endorsed, rests on few trials, and one of the largest (15623680) found the 50 mg bid dose was NOT significantly better than placebo, only the 75 mg bid dose was; and (2) ALLERGIC RHINITIS/ASTHMA, where the standardized leaf extract Ze 339 has a larger and more consistent RCT base (11799030, 15611396, 16114089, 16751170) generally showing non-inferiority to antihistamines, but with at least one clean placebo-controlled negative trial (15281472) and a negative skin-test mechanistic trial (16784008, 16784008 comparator acrivastine WAS effective). A substantial share of retrieved 'positive' records for both indications are narrative reviews/guidelines that name butterbur among several other treatments without isolating a butterbur-specific quantitative result (flagged related_form_differs/combination throughout) -- reviewers should weight the small number of primary RCTs, not the large count of reviews that cite them. A distinct third evidence stream concerns the FIXED COMBINATION PRODUCT Ze 185 (butterbur + valerian + passionflower + lemon balm) for stress/somatoform/benzodiazepine-sparing indications (19274698, 29433687, 31985131) -- these are NOT evidence for single-ingredient butterbur and are flagged related_form_differs. Hepatotoxicity from pyrrolizidine alkaloids is the dominant safety theme across this identity (multiple independent sources) and is central to any handoff safety review; PA-free (CO2-extracted) processing is repeatedly cited as the mitigating factor."
+}

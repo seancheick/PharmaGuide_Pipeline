@@ -1,0 +1,25 @@
+{"canonical_id": "hops", "recommended_class": "hold",
+ "one_line_reason": "The clearest human signals for hops are a combination sleep trial (valerian+hops) and a narrative (non-quantified) review of hop iso-alpha-acids on metabolic markers; neither is clean single-ingredient quantified evidence.",
+ "selected": [
+   {"pmid": "40462685", "population": "40 adults with occasional sleep problems", "intervention": "Valerian-hops extract combination (Ze 91019), oral, 21-day treatment period vs placebo", "dose_as_stated": "not stated", "primary_outcome": "sleep duration (via Fitbit tracker); secondary daytime cognitive and psychological measures", "apparent_direction": "positive", "why_selected": "The only shortlisted RCT directly testing the classic hops-for-sleep marketing claim, with a statistically significant increase in sleep duration, though only as a feasibility trial and only as a valerian-hops combination"},
+   {"pmid": "33670177", "population": "human interventional trial subjects (exact populations not specified in this review-level abstract)", "intervention": "Humulus lupulus iso-α-acids (bitter hop acids), oral, across multiple cited human interventional trials", "dose_as_stated": "not stated", "primary_outcome": "weight, lipid metabolism, glucose homeostasis, insulin sensitivity, inflammation", "apparent_direction": "positive", "why_selected": "A hops-specific (not multi-plant-pooled) systematic review summarizing multiple human interventional trials as showing beneficial metabolic effects, though it is a narrative synthesis without a single pooled effect size in the abstract"}
+ ],
+ "blockers": [
+   "40462685 tests a fixed valerian+hops combination product (Ze 91019), not hops alone, and is explicitly framed as a feasibility trial with only exploratory statistical significance",
+   "33670177 is a narrative systematic review of iso-α-acids specifically (a purified bitter-acid fraction of hops), not whole hop extract, and does not report a single quantified effect size or individual trial dose/population details in the abstract",
+   "The two xanthohumol RCTs in the shortlist are in Crohn's disease patients with safety/tolerability as the primary outcome, not general-population efficacy"
+ ],
+ "handoff_pmids": [
+   {"pmid": "41834265", "kind": "safety", "note": "Phase 2 safety and tolerability trial of xanthohumol (a hop flavonoid) 24 mg/day in adults with Crohn's disease; primary outcomes are toxicology labs, vital signs, and adverse events, not efficacy"}
+ ],
+ "excluded_pmids": [
+   {"pmid": "42138225", "reason": "Companion trial to 41834265 (XMaS trial) in Crohn's disease patients, exploring xanthohumol's effect on gut microbiome/bile-acid metabolism; mechanistic/exploratory in a clinical IBD population, not a general-use health-outcome efficacy trial"},
+   {"pmid": "41735208", "reason": "Reviews phytoestrogens broadly (soy, red clover, red grapes, hops, flaxseed, black cohosh); the detailed efficacy discussion in the retrieved abstract centers on soy isoflavones and resveratrol, not hops specifically"},
+   {"pmid": "33962824", "reason": "Reviews many phytoestrogens (Pueraria mirifica, fennel, hops, soy, red clover, black cohosh, etc.) pooled together for urogenital menopause symptoms; hops-specific data is not isolated"},
+   {"pmid": "33650944", "reason": "Systematic review of plants modulating the HPA axis; the plants named in the retrieved abstract (ashwagandha, ginseng, St John's Wort, CBD, Rhodiola, curcumin, etc.) do not include hops"},
+   {"pmid": "29168225", "reason": "Systematic review of GABA-modulating anxiolytic phytomedicines; hops is not named among the plants discussed in the retrieved abstract text"},
+   {"pmid": "32155342", "reason": "Comparative genomics study of Cannabis and Humulus (hops); a plant-genomics analysis, not a human health trial"},
+   {"pmid": "40651529", "reason": "Position paper on oncology pharmacy practice; unrelated to hops, evidently a mismatched retrieval"},
+   {"pmid": "40973663", "reason": "Study of impact/resistance exercise on bone/cartilage biomarkers; 'hops' here refers to jumping movements in the exercise protocol, not the herb Humulus lupulus"},
+   {"pmid": "40455704", "reason": "Forefoot strengthening and athletic performance study; 'hops' refers to foot-ankle jumping movements in the exercise testing, not the herb"}
+ ]}

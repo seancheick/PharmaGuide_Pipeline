@@ -1,0 +1,15 @@
+{
+ "canonical_id": "amla",
+ "class": "A",
+ "action": "reviewed_supportive_hold",
+ "direction": "positive_weak",
+ "study_type": "systematic_review_meta",
+ "sources": [
+  "37296402",
+  "36934568"
+ ],
+ "studied_dose": "500-1500 mg/day Emblica officinalis fruit",
+ "label_median_mg": 120,
+ "outcome": "LDL-C, triglycerides, hsCRP, fasting glucose in adults",
+ "note": "PMID 37296402 (9 studies, EO 500-1500 mg/day): LDL-C -15.08 mg/dL, VLDL -5.43, TG -22.35, hsCRP -1.70, with the authors' own caution about heterogeneity. PMID 36934568 (5 RCTs) agrees. A 500 mg/day floor is proposed because that is the lowest dose the syntheses cover; the catalog median is 120 mg, so most products would NOT qualify - that is the point of the floor. The branded AMX-160 RCT (40262554) supports but does not define the record and carries an erratum; the amla syrup alopecia trial (37487962) is off-axis and excluded. APPLIED 2026-09-18 as INGR_AMLA, positive_weak, 500 mg/day floor; 19 of 52 products qualify. Limitations verified and recorded on the record after independent review: prediction intervals cross null for LDL-C (-48.29 to 18.13) and triglycerides (-73.47 to 28.77), I2 is 77% and 62%, only hs-CRP is homogeneous, the two syntheses overlap rather than replicate, and the endpoints are biomarkers not events. MEASURED CONSEQUENCE THE OWNER SHOULD SEE: three single-active products (Capros amla extract at exactly 500 mg) go from Evidence 0.0 to 13.2, because the existing primary-mass floor pays 14.0 x 0.85 when a mass-dominant active carries a systematic-review record. That is the scorer's existing behaviour, not a new rule, and it is the largest rise in the batch. OWNER DECISION 2026-09-18: scoring HELD at reference tier, direction and dose context retained. Exact breakdown printed on DSLD 232044: primary floor 14.0 x positive_weak 0.85 = 11.9 raw, rescaled by the generic_botanical_branded archetype reference (11.9 / 18.0 x 20) = 13.2 of 20. After the hold the same product scores 0.0."
+}

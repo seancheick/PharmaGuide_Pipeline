@@ -165,6 +165,22 @@
         <label>Serving unit <input id="p-serving-unit" placeholder="Capsule(s)"></label>
       </div>
 
+      <div class="group-head"><h3>Nutrition Facts <span class="muted">(only if the label has this panel)</span></h3></div>
+      <div class="field-grid">
+        <label>Calories (kcal) <input id="n-calories" type="number" step="any" min="0" inputmode="decimal"></label>
+        <label>Total Fat (g) <input id="n-total-fat" type="number" step="any" min="0" inputmode="decimal"></label>
+        <label>Total Carbohydrate (g) <input id="n-total-carb" type="number" step="any" min="0" inputmode="decimal"></label>
+        <label>Dietary Fiber (g) <input id="n-fiber" type="number" step="any" min="0" inputmode="decimal"></label>
+        <label>Total Sugars (g) <input id="n-sugars" type="number" step="any" min="0" inputmode="decimal"></label>
+        <label>Protein (g) <input id="n-protein" type="number" step="any" min="0" inputmode="decimal"></label>
+        <label>Sodium (mg) <input id="n-sodium" type="number" step="any" min="0" inputmode="decimal"></label>
+      </div>
+      <p class="muted step-footnote">
+        Most supplements don't print a Nutrition Facts panel — leave every row
+        blank when this label doesn't have one. Fill in only the rows actually
+        printed; this never blocks approval.
+      </p>
+
       <div class="group-head"><h3>Ingredient rows</h3>
         <div class="group-confirm"><span id="verify-slot-rows" class="verify-slot"></span></div></div>
       <div class="scroll-x">

@@ -1,0 +1,164 @@
+# Evidence expansion — Phase 1 checkpoint (2026-09-17)
+
+**STOP POINT.** No production evidence was written, no score moved, no scoring rule or weight changed, no catalog rebuild, no release. Every authored context is pending owner review.
+
+## Headline
+
+- **4045** non-probiotic products ship Evidence 0 (27.8% of 14561 scored).
+- **3549** (87.7%) are blocked by missing evidence curation — this project's target.
+- **496** (12.3%) are blocked elsewhere; more papers cannot move them (see BLOCKER_ROUTING.md).
+- **No scorer-defect bucket**: 0 products have an accepted, point-carrying match yet Evidence 0.
+- **10 identities deeply curated** into **32 pending contexts**; **1 are class A** (the current scorer could apply them safely) and **9 are class B** (valid evidence the scorer is too coarse to apply).
+
+## What the deeply authored identities cover
+
+| measure | value |
+|---|---:|
+| identities deeply authored | 10 |
+| their product-active slots | 585 (0.8% of mapped slots) |
+| their products | 550 |
+| their Evidence=0 products | 281 |
+| identities searched (bounded, logged) | 40 |
+| their product-active slots | 4141 (6.0% of mapped slots) |
+
+## Projected coverage if the owner approved the proposals
+
+| outcome | Evidence=0 products affected |
+|---|---:|
+| would gain evidence under the CURRENT scorer (class A approvals) | 25 |
+| held back because the current scorer is too coarse (class B) | 256 |
+
+Every Wave 1 identity landed in class B. The curated evidence is real; the generic scorer cannot yet apply it without overgeneralising. That is the bridge to Phase 2, and it is measured rather than assumed.
+
+## Top generic-scorer limitations exposed by real curated evidence
+
+| limitation | evidence that exposed it | consequence |
+|---|---|---|
+| No population gate | isoflavones (all positive results in peri/postmenopausal women); DHEA (IVF with diminished ovarian reserve, adrenal insufficiency) | `clinical_applicability.py` validates and carries a `studied_population` string (line 241) but never compares it to anything, and the product's `target_population` is read only by the probiotic lane. Approving these records would transfer menopause/fertility-clinic evidence to every consumer product. |
+| No material scoping from enricher-resolved forms | butterbur (PA-free Petadolex vs unspecified) | `required_form_terms` matches PRINTED label text; the resolved form identity lives on a different row, so the studied branded material cannot be selected. Probe: 61929 returned `clinical_form_mismatch` at exactly the studied 150 mg/day. |
+| Multi-row identities silently fail to link | butterbur 328579 and 293376 (two butterbur rows each) | `_linked_rows` returns nothing when more than one canonical candidate row exists, so applicability cannot be assessed at all. |
+| No exposure-basis concept | linoleic acid (whole-diet substitution trials at 7.5-20 g/day vs a 362 mg capsule) | Dietary-substitution evidence would become capsule efficacy across a 20-40x dose gap. |
+| Dose floor cannot express 'positive only far above label' | gotu kola (12 g challenge positive, 1,000 mg null; label median 60 mg) | A record would credit label servings with evidence from doses they never deliver. |
+| Null direction manufactures affirmative credit | 4 legacy null records | See GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md. |
+
+## Null-evidence exposure (current behaviour, unchanged)
+
+- 4 legacy records carry `effect_direction: null`; the generic scorer keeps 25% of their points.
+- 2,423 scored products match at least one null record; for 249 of them the ONLY point-carrying evidence is a null record.
+- No Wave 1 null-only record is proposed for approval until that semantic is decided separately.
+
+## Source verification (subagent screening is a draft, never the record)
+
+| measure | value |
+|---|---:|
+| records screened by subagents | 4814 |
+| kept after screening | 1695 |
+| rejected with a reason code | 3119 |
+| shortlisted for central reading | 446 |
+| handoffs proposed to other owners | 142 |
+| shortlist PMIDs re-fetched live by Claude | 65 |
+| PMIDs not found live | 0 |
+| stored-vs-live title drift | 0 |
+| integrity flags (erratum) | 2 |
+| human status ambiguous (fails closed) | 16 |
+| **quote rejected — ellipsis-joined fragments** (shortlist scope) | 25 |
+| **quote rejected — composed, not in source** (shortlist scope) | 28 |
+
+Across EVERY kept record in the drafts, not only the shortlist (`qa_screening_drafts.py`, ledger in QUARANTINE_screening_drafts/QA_LEDGER.json):
+
+| measure | value |
+|---|---:|
+| quote fields verified as exact contiguous substrings | 3449 |
+| rejected — ellipsis-joined | 119 |
+| rejected — absent from the source | 135 |
+| **PMIDs cited that are not in the retrieval set** | 0 |
+| shortlist entries not among kept records | 0 |
+| identities whose self-reported counts disagree with their file | 9 |
+
+Every rejected quote was caught before authoring: Claude re-extracts each quote from the abstract itself, and `validate_wave1_contexts.py` re-checks each one as a substring. The authored contexts contain 0 unverified quotes. The screening brief was tightened mid-run and both agents were corrected.
+
+Stated precisely: no source identifier and no shortlist record fell outside the retrieved corpus, and 254 quote fields failed exact-source verification and were rejected. That is provenance, not accuracy — a retrieved source can still be mischaracterized by a screener without any identifier being wrong, which is why screening never authors a context.
+
+## Coverage (see COVERAGE.md for the full tables)
+
+| measure | value |
+|---|---:|
+| unique mapped identities | 773 |
+| product-active slots | 69575 |
+| identities covering 80% of slots | 66 |
+| identities covering 90% | 143 |
+| identities covering 95% | 248 |
+| identities with a legacy record (review state NOT established) | 175 |
+| identities with no record at all | 598 |
+| identities with a completed review | 0 |
+
+## Blocked outside evidence curation (routed, not fixed here)
+
+| class | products | owner |
+|---|---:|---|
+| C | 86 | identity normalization / applicability owner |
+| E | 2 | clinical evidence registry owner (legacy backfill) |
+| H | 408 | ingredient role / identity classification owner |
+
+## Legacy 202 backfill queue
+
+All 202 legacy records lack study contexts; 195 carry no dose policy and 194 no applicability scope. Grandfathered means temporarily preserved, not permanently exempt — see LEGACY_BACKFILL.md.
+
+## Artefacts
+
+| file | contents |
+|---|---|
+| `COVERAGE.md` | coverage, category rollup, A–H taxonomy |
+| `QUEUE.md` / `queue.json` | gap and exposure queues over 773 identities |
+| `BLOCKER_ROUTING.md` | the products curation cannot fix, by owner |
+| `LEGACY_BACKFILL.md` | the grandfathered 202, by catalog exposure |
+| `GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW.md` | measured null-direction exposure |
+| `wave1_search_log.json` | exact queries, counts, truncation per identity |
+| `wave1_contexts.json` | authored pending contexts + proposals |
+| `wave1_live_verification.json` | live re-fetch findings |
+| `docs/plans/EVIDENCE_EXPANSION_WAVE1_REVIEW_PACKET_2026-09.md` | the owner decision packet |
+
+## Owner review (2026-09-17) — decisions and corrections
+
+No Wave 1 identity becomes a generic scoring record. Decisions:
+
+| identity | decision |
+|---|---|
+| Ginkgo | HOLD |
+| Isoflavones | HOLD |
+| Linoleic acid | review-state conclusion only; no scoring record |
+| Tribulus | review-state conclusion only, after the higher-level syntheses were added |
+| Horny goat weed | review-state conclusion only; PK/safety routed to their owners |
+| Gotu kola | HOLD; label-dose inconsistency corrected |
+| D-ribose | HOLD pending null semantics |
+| Butterbur | HOLD |
+| DHEA | HOLD |
+| Dandelion | review-state conclusion only; no scoring record |
+
+Corrections applied to the packet:
+
+- **Gotu kola**: hand-written prose said 200-1,000 mg/day while the measured distribution said median 60 mg/day, and the 12 g trial was described as 12-24x a label serving when it is ~200x the median. Every candidate now carries a `label_exposure_measured` sentence generated from the corpus, and the ratios are computed from it.
+- **DHEA**: 'every positive result sits in a supervised patient population' was wrong — one curated meta-analysis is in healthy older adults with a women-only bone-density signal. Rewritten as population- and indication-specific, including sex-specific findings.
+- **Butterbur**: the 2012 AAN/AHS Level A recommendation is recorded as HISTORICAL; the Academy stopped recommending butterbur in 2015 over safety concerns (NCCIH, verified on retrieval). 'PA-free' is a processing claim and is no longer equated with the studied Petadolex material.
+- **Tribulus**: adding the higher-level syntheses CHANGED the conclusion rather than confirming it. A 2025 systematic review reports 400-750 mg/d improved erectile dysfunction in 3 of 5 studies that measured it (low level of evidence, diagnosed men, 50% of studies low quality), while testosterone and performance remain null. Recorded as null for the marketed claims with a population-specific low-level ED signal.
+- **Ginkgo**: EMA HMPC context added as an authoritative reference — well-established use applies to medicines containing the DRY EXTRACT in adults with mild dementia, which reinforces the hold.
+- **Horny goat weed**: the PK study is recorded as a non-efficacy role and handed to the PK owner.
+- **Screening drafts**: quarantined in `QUARANTINE_screening_drafts/`, with a test asserting no curation script reads them.
+
+Contract limitation noted, not extended: the frozen `EVIDENCE_ROLE` vocabulary has no `pharmacokinetic` value, so the horny goat weed PK study is recorded as `mechanistic_study`. If PK contexts become common in later waves, that is the one case for extending the enum.
+
+## Next phase — applicability repair before more deep curation
+
+All 10 identities landing in class B is too strong a signal to answer with more curation. Curating another 50 identities now risks hundreds of excellent contexts and zero usable records. Sequence:
+
+1. Integrate this infrastructure onto current main; no production evidence writes.
+2. Keep discovery and screening running — that work is cheap and reusable.
+3. Run a separate bounded review of the CANONICAL APPLICABILITY OWNER against the four concrete failures Wave 1 exposed: population applicability (isoflavones, DHEA); material/form applicability from already-resolved enrichment identity (butterbur); multi-row identity linking (butterbur); intervention/exposure compatibility (linoleic acid). Inspect the existing representations first; extend only where one truly cannot carry the decision. No weight or direction-semantics changes.
+4. Re-run these 10 identities through the real production matcher afterwards and show which become safely applicable, which stay held and why, with a read-only corpus projection.
+5. Keep GENERIC_EVIDENCE_NULL_DIRECTION_REVIEW as its own bounded scoring-semantics project.
+6. Resume larger deep-curation waves only after that.
+
+## Next wave, by leverage
+
+Discovery already covers 40 identities; contexts were authored for the 10 with the best evidence clarity, not to a quota. The gap queue orders what remains.
+

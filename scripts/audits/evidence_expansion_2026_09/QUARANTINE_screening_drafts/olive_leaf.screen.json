@@ -1,0 +1,2274 @@
+{
+ "canonical_id": "olive_leaf",
+ "screened": 121,
+ "kept": 60,
+ "rejected": [
+  {
+   "pmid": "15168036",
+   "reason": "different_substance",
+   "note": "Dietary olive OIL phenolic content RCT (lipids/LDL oxidation); whole olive oil, not olive leaf extract or an isolated marker compound trial."
+  },
+  {
+   "pmid": "15700748",
+   "reason": "different_substance",
+   "note": "Bioavailability of phenolic compounds from olive OIL; not olive leaf extract."
+  },
+  {
+   "pmid": "16458191",
+   "reason": "different_substance",
+   "note": "Postprandial LDL oxidation modulated by olive OIL phenolic compounds; not olive leaf extract."
+  },
+  {
+   "pmid": "22440854",
+   "reason": "different_substance",
+   "note": "LDL oxidation protection by olive OIL polyphenols (CD40-ligand study); not olive leaf extract."
+  },
+  {
+   "pmid": "23642776",
+   "reason": "different_substance",
+   "note": "Extra virgin olive OIL consumption and antioxidant status in elderly; not olive leaf extract."
+  },
+  {
+   "pmid": "23746949",
+   "reason": "different_substance",
+   "note": "Hydroxytyrosol trial for pain in gonarthrosis; source/route not specified as olive leaf extract in title and appears to be an isolated compound trial distinct from the leaf-extract label material."
+  },
+  {
+   "pmid": "25712532",
+   "reason": "different_substance",
+   "note": "Wine phenolic compounds and alcohol promoting hydroxytyrosol generation; source is wine, not olive leaf."
+  },
+  {
+   "pmid": "25801942",
+   "reason": "different_substance",
+   "note": "Ethanol-induced hydroxytyrosol formation; source is alcohol metabolism, not olive leaf extract."
+  },
+  {
+   "pmid": "25833063",
+   "reason": "different_substance",
+   "note": "White wine anti-inflammatory effect in CKD patients; not an olive leaf/oleuropein/hydroxytyrosol supplementation trial."
+  },
+  {
+   "pmid": "25860333",
+   "reason": "animal_or_invitro",
+   "note": "Oleuropein tested on wounded skin in BALB/c mice, not humans."
+  },
+  {
+   "pmid": "27155468",
+   "reason": "off_topic",
+   "note": "Tyrosol/hydroxytyrosol derivatives as antitrypanosomal/antileishmanial agents; parasitology/chemistry context, not human supplementation."
+  },
+  {
+   "pmid": "27429369",
+   "reason": "off_topic",
+   "note": "Analytical LC method development for oleuropein determination in dietary supplements; not an efficacy/safety study."
+  },
+  {
+   "pmid": "27713961",
+   "reason": "animal_or_invitro",
+   "note": "Systematic review of in vivo (animal) studies of olive oil secoiridoid phenols and cancer; not human trials."
+  },
+  {
+   "pmid": "28486416",
+   "reason": "off_topic",
+   "note": "Broad transcriptomics and Mediterranean Diet systematic review; not specific to olive leaf/oleuropein/hydroxytyrosol supplementation."
+  },
+  {
+   "pmid": "28526925",
+   "reason": "animal_or_invitro",
+   "note": "Polyphenolic extract tested on hepatic and endothelial CELLS in vitro, not humans."
+  },
+  {
+   "pmid": "28974441",
+   "reason": "animal_or_invitro",
+   "note": "Tyrosol tested against lipopolysaccharide-induced acute lung injury; an animal/mechanistic model, not a human trial."
+  },
+  {
+   "pmid": "29317147",
+   "reason": "off_topic",
+   "note": "Fusarithioamide B from an endophytic fungus; unrelated chemistry, not olive leaf."
+  },
+  {
+   "pmid": "29397696",
+   "reason": "off_topic",
+   "note": "Phytotoxic phenols from a grapevine trunk disease fungus; unrelated plant pathology chemistry."
+  },
+  {
+   "pmid": "29571746",
+   "reason": "not_intervention",
+   "note": "Review of oleuropein aglycone mechanisms against amyloid toxicity; preclinical/mechanistic, not a human supplementation trial."
+  },
+  {
+   "pmid": "29687366",
+   "reason": "off_topic",
+   "note": "Molecular modeling of Ligustrum lucidum (privet) secoiridoid glucosides; different plant, not olive leaf."
+  },
+  {
+   "pmid": "29800788",
+   "reason": "animal_or_invitro",
+   "note": "Natural antioxidants in cyclophosphamide-induced hepatotoxicity; an animal/mechanistic model study."
+  },
+  {
+   "pmid": "29904393",
+   "reason": "animal_or_invitro",
+   "note": "Oleocanthal-rich EVOO acute anti-platelet effects trial; oleocanthal/olive oil, not olive leaf extract."
+  },
+  {
+   "pmid": "29945446",
+   "reason": "animal_or_invitro",
+   "note": "Oleuropein tested in experimental asthma and emphysema MODELS (animal), not humans."
+  },
+  {
+   "pmid": "30200425",
+   "reason": "different_substance",
+   "note": "Wine and olive oil phenolic compound interaction study; not olive leaf extract."
+  },
+  {
+   "pmid": "30995514",
+   "reason": "animal_or_invitro",
+   "note": "Oleuropein aglycone and hydroxytyrosol interference with amyloid-beta aggregation; in vitro biochemistry, not a human trial."
+  },
+  {
+   "pmid": "31330954",
+   "reason": "animal_or_invitro",
+   "note": "Nano-paramagnetic oleuropein tested on AGS CANCER CELLS in vitro, not humans."
+  },
+  {
+   "pmid": "31353658",
+   "reason": "different_substance",
+   "note": "Moringa oleifera (a different plant) leaf extract tested against diclofenac-induced liver toxicity in rats."
+  },
+  {
+   "pmid": "31540384",
+   "reason": "different_substance",
+   "note": "Hydroxytyrosol generation from tyrosol in beer and red wine; not olive leaf extract."
+  },
+  {
+   "pmid": "31546768",
+   "reason": "off_topic",
+   "note": "Validity of self-reported dietary intake within a Mediterranean Diet RCT; a methodology paper, not an olive leaf/oleuropein efficacy study."
+  },
+  {
+   "pmid": "31585740",
+   "reason": "different_substance",
+   "note": "Oleuropein-enriched chocolate made with extra virgin olive oil; a confectionery food product, not olive leaf extract."
+  },
+  {
+   "pmid": "31766676",
+   "reason": "off_topic",
+   "note": "Broad narrative review of oleuropein as a preventive/therapeutic agent across non-communicable diseases generally, without olive-leaf-specific human trial data highlighted in the abstract."
+  },
+  {
+   "pmid": "31788516",
+   "reason": "off_topic",
+   "note": "Data descriptor on endogenous tyrosol-to-hydroxytyrosol conversion; not an efficacy/safety trial report."
+  },
+  {
+   "pmid": "32438719",
+   "reason": "different_substance",
+   "note": "Combination of citrus flavones/flavanones and olive POLYPHENOLS (not specified as leaf-derived) for cardiovascular risk reduction; source ambiguous and combination product."
+  },
+  {
+   "pmid": "32922473",
+   "reason": "animal_or_invitro",
+   "note": "Oleuropein tested in a pentylenetetrazole kindling model of epilepsy in MICE, not humans."
+  },
+  {
+   "pmid": "33475054",
+   "reason": "off_topic",
+   "note": "Broad ethnomedicinal plants for diabetes systematic review; not olive-leaf-specific efficacy data in the retrieved scope."
+  },
+  {
+   "pmid": "34829550",
+   "reason": "different_substance",
+   "note": "Wine and tyrosol effects on lipid metabolic profile; source is wine, not olive leaf extract."
+  },
+  {
+   "pmid": "35225607",
+   "reason": "off_topic",
+   "note": "Tyrosol 1,2,3-triazole derivative synthesis and phytotoxic (herbicidal) activity against a weed species; unrelated chemistry."
+  },
+  {
+   "pmid": "35310529",
+   "reason": "different_substance",
+   "note": "Olive polyphenols and bioavailable glutathione in Alzheimer's disease; source described as olive polyphenols generally, not olive leaf extract specifically."
+  },
+  {
+   "pmid": "35679085",
+   "reason": "off_topic",
+   "note": "Nutri-epigenetic systematic review of extra virgin olive OIL phenolic compounds; not olive leaf extract."
+  },
+  {
+   "pmid": "36062705",
+   "reason": "animal_or_invitro",
+   "note": "Systematic review explicitly of oral oleuropein/olive leaf extract cardioprotective effects in RODENTS."
+  },
+  {
+   "pmid": "36093647",
+   "reason": "animal_or_invitro",
+   "note": "Chitosan-oleuropein nanoparticle effect on dentin collagen cross-linking; an in vitro dental materials study, not a human clinical trial."
+  },
+  {
+   "pmid": "36513474",
+   "reason": "off_topic",
+   "note": "Broad systematic review of dietary/nutraceutical/probiotic interventions for GERD; olive leaf not identified as a specific included intervention in the abstract."
+  },
+  {
+   "pmid": "37630803",
+   "reason": "off_topic",
+   "note": "Systematic review of fatty acids in treating sarcopenia; not specific to olive leaf/oleuropein/hydroxytyrosol."
+  },
+  {
+   "pmid": "37743489",
+   "reason": "different_substance",
+   "note": "DIRECT PLUS trial of broad dietary polyphenol intake and DNA methylation; not olive-leaf-specific supplementation."
+  },
+  {
+   "pmid": "37834001",
+   "reason": "animal_or_invitro",
+   "note": "Oleuropein aglycone tested against pesticide-induced toxicity in a human keratinocyte CELL model, in vitro."
+  },
+  {
+   "pmid": "38506160",
+   "reason": "animal_or_invitro",
+   "note": "Tyrosol tested in high-fat-diet-induced NAFLD MICE, not humans."
+  },
+  {
+   "pmid": "40282738",
+   "reason": "off_topic",
+   "note": "Food-processing/agronomy study on increasing bioactive compound content of olive oil by paste acidification; not a human efficacy/safety study."
+  },
+  {
+   "pmid": "40507112",
+   "reason": "different_substance",
+   "note": "Systematic review of extra virgin olive OIL and cardiovascular health broadly; not olive leaf extract."
+  },
+  {
+   "pmid": "40526027",
+   "reason": "off_topic",
+   "note": "Systematic review of herbal medicine for herpes labialis broadly; olive leaf not confirmed as a specifically reviewed intervention in the available abstract."
+  },
+  {
+   "pmid": "40722971",
+   "reason": "different_substance",
+   "note": "High-tyrosol/hydroxytyrosol extra virgin olive OIL trial in elderly post-MI patients; olive oil, not olive leaf extract."
+  },
+  {
+   "pmid": "41008517",
+   "reason": "animal_or_invitro",
+   "note": "Oleuropein tested against bleomycin-induced pulmonary fibrosis in MICE, not humans."
+  },
+  {
+   "pmid": "41082645",
+   "reason": "different_substance",
+   "note": "Systematic review of olive OIL and its phenolic compounds on neuroinflammation; not olive leaf extract."
+  },
+  {
+   "pmid": "41090263",
+   "reason": "off_topic",
+   "note": "Review of VNN1 as an inflammation/redox target; not related to olive leaf in the available title/context."
+  },
+  {
+   "pmid": "41429309",
+   "reason": "different_substance",
+   "note": "Olive OIL polyphenol supplementation trial (OleoMetS study); olive oil, not olive leaf extract."
+  },
+  {
+   "pmid": "41979105",
+   "reason": "off_topic",
+   "note": "Adaptive laboratory evolution of E. coli for tyrosol tolerance to enable salidroside biosynthesis; synthetic biology, not a supplement study."
+  },
+  {
+   "pmid": "42072302",
+   "reason": "off_topic",
+   "note": "Broad review of 'olive components (biophenols or polyphenols)' in neurodegenerative disease models; not specific to olive leaf extract as the label material."
+  },
+  {
+   "pmid": "42195994",
+   "reason": "different_substance",
+   "note": "Systematic review of olive OIL fatty acids and bioactive compounds on cognitive function; olive oil, not olive leaf extract."
+  },
+  {
+   "pmid": "42357530",
+   "reason": "animal_or_invitro",
+   "note": "Systematic review explicitly of IN VITRO enzyme-inhibition studies of olive and pomegranate compounds."
+  },
+  {
+   "pmid": "29124388",
+   "reason": "different_substance",
+   "note": "Olive POMACE-enriched biscuits (food product, gut microbiota outcome); not olive leaf extract."
+  },
+  {
+   "pmid": "40870678",
+   "reason": "different_substance",
+   "note": "Systematic review of olive OIL polyphenols in osteosarcopenic obesity, mostly preclinical (8 in vitro, 4 animal, only 3 human trials); not olive leaf extract."
+  },
+  {
+   "pmid": "36875283",
+   "reason": "off_topic",
+   "note": "RETRACTED PUBLICATION; also an in silico molecular docking study (not a human trial) of oleuropein against a COVID-19 protease."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "18947980",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf capsule or liquid extract",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Healthy young adult male and female subjects (n = 45)",
+   "indication_as_stated": "oxidative stress biomarkers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Dietary supplementation with olive leaf extract did not alter the oxidative status of healthy young adults.",
+   "sample_size_quote": "Healthy young adult male and female subjects (n = 45)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21036583",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Olive (Olea europaea L.) leaf extract (EFLA(R)943)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "stage-1 hypertension patients",
+   "indication_as_stated": "hypertension",
+   "dose_quote": "given orally at the dose of 500 mg twice daily in a flat-dose manner throughout the 8 weeks.",
+   "primary_outcome_quote": "The primary efficacy endpoint was reduction in systolic blood pressure (SBP) from baseline to week-8 of treatment.",
+   "primary_result_quote": "both groups experienced a significant reduction of SBP as well as DBP from baseline; while such reductions were not significantly different between groups.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Non-inferior to captopril (active comparator), not placebo-controlled.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22512698",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract, 500 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "79 adults with T2DM (human arm)",
+   "indication_as_stated": "type 2 diabetes",
+   "dose_quote": "treatment with 500 mg olive leaf extract tablet taken orally once daily or matching placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the subjects treated with olive leaf extract exhibited significantly lower HbA1c and fasting plasma insulin levels",
+   "sample_size_quote": "79 adults with T2DM were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Study also includes non-human rat mechanistic arms (excluded from human evidence).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23516412",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE), 51.1 mg oleuropein/9.7 mg hydroxytyrosol per day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "46 middle-aged overweight men",
+   "indication_as_stated": "insulin sensitivity/cardiovascular risk",
+   "dose_quote": "51.1 mg oleuropein, 9.7 mg hydroxytyrosol per day",
+   "primary_outcome_quote": "Primary outcome was insulin sensitivity (Matsuda method).",
+   "primary_result_quote": "OLE supplementation was associated with a 15% improvement in insulin sensitivity (p = 0.024) compared to placebo.",
+   "sample_size_quote": "46 participants (aged 46.4 \u00b1 5.5 years and BMI 28.0 \u00b1 2.0 kg/m(2)) were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No effects on inflammatory markers (other than IL-6/IGFBPs), lipid profile, blood pressure, or carotid intima-media thickness.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24371380",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE) mouth rinse",
+   "combination": false,
+   "route": "topical (oral mucosa rinse)",
+   "population_as_stated": "Twenty-five patients undergoing intensive chemotherapy",
+   "indication_as_stated": "oral mucositis prevention during chemotherapy",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Oral mucositis rates and severity after 2 weeks were significantly lower in the OLE and benzydamine groups compared to the placebo group.",
+   "sample_size_quote": "Twenty-five patients undergoing intensive chemotherapy",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Topical mouth-rinse route, not systemic oral supplement.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered as a topical mouth-rinse, not an ingested oral supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25379688",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "combined extracts of olive leaf, green coffee bean and beetroot",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "37 overweight middle-aged men and women",
+   "indication_as_stated": "blood pressure/cardiovascular risk",
+   "dose_quote": "500 mg olive leaf extract, 100 mg green coffee bean extract and 150 mg beet powder",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was no significant effect of treatment on ABP or any other outcome measure.",
+   "sample_size_quote": "37 overweight middle-aged men and women who completed the trial",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Olive leaf extract is one of three ingredients in a combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26051429",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE), 51 mg oleuropein/10 mg hydroxytyrosol",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "eighteen healthy volunteers",
+   "indication_as_stated": "acute vascular function/inflammation",
+   "dose_quote": "who consumed either OLE (51 mg oleuropein; 10 mg HT), or a matched control",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "DVP-stiffness index and ex vivo IL-8 production were significantly reduced (P< 0.05) after consumption of OLE compared to the control.",
+   "sample_size_quote": "eighteen healthy volunteers (nine male, nine female)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Single-dose acute postprandial study.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26951205",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "phenolic-rich olive leaf extract (OLE), 136 mg oleuropein/6 mg hydroxytyrosol",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 pre-hypertensive males",
+   "indication_as_stated": "blood pressure/lipids",
+   "dose_quote": "consumed either OLE (136 mg oleuropein; 6 mg hydroxytyrosol) or a polyphenol-free control daily for 6 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Daytime [-3.95 (\u00b1SD 11.48) mmHg, p = 0.027] and 24-h SBP [-3.33 (\u00b1SD 10.81) mmHg, p = 0.045]",
+   "sample_size_quote": "A total of 60 pre-hypertensive",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27918443",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE), 20 mL daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy male volunteers (n = 29)",
+   "indication_as_stated": "gene expression (mechanistic)",
+   "dose_quote": "following an eight-week intervention with 20 mL daily consumption of either OLE or PBO",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Subsequent analyses indicated downregulation of genes important in inflammatory pathways, lipid metabolism and cancer as a result of OLE consumption.",
+   "sample_size_quote": "healthy male volunteers (n = 29)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Gene-expression mechanistic outcome, not a clinical endpoint.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30501915",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf tea (OLT)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "31 female volunteers aged 40-70",
+   "indication_as_stated": "hematological parameters",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "RBC count, hemoglobin, and hematocrit were increased significantly in the OLT group than those of in the GT group at 6 and 12 weeks of intervention.",
+   "sample_size_quote": "31 female volunteers aged between 40 and 70 years of old",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Comparator was green tea, not placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered as olive leaf tea, not a capsule/extract supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30744092",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE), equivalent to 20 g olive leaf/100 mg oleuropein",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Thirty-two high school student athletes",
+   "indication_as_stated": "upper respiratory illness in athletes",
+   "dose_quote": "OLE (extent equivalent to 20 g of olive leaf, containing 100 mg oleuropein) supplementation for nine weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "there was a significant 28% reduction in sick days (OR: 0.72 (95% CI 0.56\u207b0.93) p-value = 0.02) when supplemented with OLE.",
+   "sample_size_quote": "Thirty-two high school students",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant difference in illness incidence itself; only sick-day duration was reduced.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31158739",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf tea (OLT)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults 40-70 with prediabetes",
+   "indication_as_stated": "prediabetes lipid metabolism",
+   "dose_quote": "consumption of 330 mL of the test beverage 3 times daily during mealtime, lasted for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "serum levels of log-transformed triglycerides (P < .05) and low-density lipoprotein cholesterol (P < .01) decreased significantly in the OLT group",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Body weight, waist circumference, and insulin were not significantly changed.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered as olive leaf tea beverage, not a capsule/extract supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31266155",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "oleuropein-rich olive leaf extract (OLE), 50 mg oleuropein",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "11 healthy young women (human arm)",
+   "indication_as_stated": "sucrase-isomaltase/glycemic response",
+   "dose_quote": "OLE (50 mg oleuropein) was consumed in capsule form 3 times a day for 1 week by 11 healthy young women",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "this treatment, compared to placebo, did not induce a change in post-prandial blood glucose maximum concentration",
+   "sample_size_quote": "11 healthy young women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Also includes an in vitro Caco-2/TC7 cell component (excluded from human evidence).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31448348",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fenugreek, olive leaf polyphenols and bergamot extract combination",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "100 patients with prediabetes",
+   "indication_as_stated": "prediabetes glucose homeostasis",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary efficacy endpoint was the change in glycated hemoglobin (HbA1c) at 6 months after treatment initiation.",
+   "primary_result_quote": "No significant change in HbA1c was observed in either treatment group.",
+   "sample_size_quote": "patients with prediabetes (N = 100) were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Olive leaf polyphenols are one of three ingredients in a combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31901903",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Olive leaf (Olea europaea L. folium) (narrative review)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not specified (narrative review)",
+   "indication_as_stated": "glycemia and lipidemia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the studies in this subject are usually on cell culture and animal trials.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Review itself flags that most existing evidence is preclinical (cell/animal), with human RCTs still needed.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31930845",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 hypertensive patients aged 30-60",
+   "indication_as_stated": "hypertension (metabolic/liver/kidney/inflammatory markers)",
+   "dose_quote": "receive either OLE or placebo tablets for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "significantly decreased interleukin-6, interleukin-8 and tumor necrosis factor alpha as inflammatory biomarkers (p<0.05) in OLE group compared to the placebo group.",
+   "sample_size_quote": "60 hypertensive patients, aged 30-60 years old had participated",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant effect on glucose metabolism or liver/kidney function markers.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32942738",
+   "design": "observational",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "combination of olive leaf and fruit extracts (Tensiofytol, 100 mg/d oleuropein, 20 mg/d hydroxytyrosol)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "663 (pre)-hypertensive patients",
+   "indication_as_stated": "hypertension/metabolic syndrome",
+   "dose_quote": "supplemented for two months with Tensiofytol\u00ae, two capsules per day (100 mg/d of oleuropein and 20 mg/d of hydroxytyrosol)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Significant reductions (p < 0.0001) in SBP/DBP (13 \u00b1 10/7.1 \u00b1 6.6 mmHg) were observed",
+   "sample_size_quote": "A total of 663 (pre)-hypertensive patients were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "Open, non-controlled, non-randomized pilot observational study.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Combination of olive leaf and olive fruit extracts, not leaf alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33034707",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE), 500 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "77 overweight/obese adults with mildly elevated cholesterol",
+   "indication_as_stated": "cardiovascular health markers",
+   "dose_quote": "randomly assigned to receive 500 mg of OLE (n = 39) or placebo (n = 38) for 8 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "OLE supplementation did not significantly affect blood lipid levels after 4 weeks or after 8 weeks compared to placebo (all p > 0.05).",
+   "sample_size_quote": "77 healthy adult overweight/obese subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [
+    "NCT02990637"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33541815",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Olive Leaf Extract (OLE), 2% cream",
+   "combination": false,
+   "route": "topical",
+   "population_as_stated": "66 patients with HSV-1",
+   "indication_as_stated": "herpes simplex virus labialis",
+   "dose_quote": "receiving 2% OLE cream or 5% acyclovir cream five times a day for six days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The evidence from these trials suggests the OLE cream is superior in the healing of episodes of HSV-1 over the acyclovir cream.",
+   "sample_size_quote": "66 patients who had already been diagnosed with HSV-1",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Topical cream, active-comparator (acyclovir) trial, not oral and not placebo-controlled.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Topical cream formulation, not an oral supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33598284",
+   "design": "case_report",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "minimal abstract detail; no methods/results reported"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated (case report)",
+   "indication_as_stated": "genital herpes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "In this study, olive leaf extract was used for its antiviral properties to treat the infection.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Abstract contains no methods/results detail; authors call for RCTs in this area.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33868820",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (5 trials, 325 patients)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "prehypertensive/hypertensive adults",
+   "indication_as_stated": "cardiometabolic profile",
+   "dose_quote": "1,000 mg per day for a combined formulation of olive leaf extract versus a placebo",
+   "primary_outcome_quote": "The primary outcomes were changes in systolic and diastolic BP.",
+   "primary_result_quote": "500 mg per day of olive leaf extract versus placebo or no treatment, showed a significant reduction in systolic BP over a period of at least 8 weeks of follow up (MD -5.78 mmHg, 95% CI [-10.27 to -1.30])",
+   "sample_size_quote": "Five trials were included involving 325 patients aged 18-80 years.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "1000 mg/day combined-formulation comparison showed no significant BP change; only the 500 mg/day monotherapy comparison was significant.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33920476",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Citrolive (citrus fruit flavonoids and olive leaf extracts)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "23 subjects with cardiovascular risk factors",
+   "indication_as_stated": "LDL oxidation/cardiovascular risk",
+   "dose_quote": "consumed Citrolive\u2122 (500 mg, two capsules/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "oxidized LDL (ox-LDL) decreased significantly in the intervention group from 93.8 \u00b1 19.1 U/L to 62.8 \u00b1 28.7 U/L (p < 0.05)",
+   "sample_size_quote": "Twenty-three untreated subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Olive leaf extract is combined with citrus fruit flavonoids in the Citrolive product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34796136",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "obese women (n=70) on a calorie-restricted diet",
+   "indication_as_stated": "weight loss/metabolic risk",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "significant decreases in BMI, fat mass, and body weight in the OLE group compared to those in the placebo group (p < 0.05).",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "OLE given as an adjunct to a standard weight-loss diet, not alone.",
+   "registrations": [
+    "IRCT20190129042552N2"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35069812",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (Bonolive, 125 mg containing 50 mg oleuropein)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "124 subjects with knee pain/mobility issues",
+   "indication_as_stated": "knee joint pain/function",
+   "dose_quote": "twice a day one capsule of placebo or 125 mg OLE (Bonolive\u2122, an OLE containing 50 mg of oleuropein) for 6 months",
+   "primary_outcome_quote": "The co-primary endpoints were Knee injury and Osteoarthritis Outcome Score (KOOS) and serum Coll2-1NO2.",
+   "primary_result_quote": "OLE group was not efficient on global KOOS score, changes of inflammatory and cartilage remodeling biomarkers compared to placebo.",
+   "sample_size_quote": "This randomized, double-blind, placebo-controlled, multi-centric trial included 124 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Post hoc subgroup with high baseline walking pain showed a significant treatment effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35208268",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "olive leaf extract enriched with oleuropein",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "nine young healthy male athletes",
+   "indication_as_stated": "metabolome/redox status in athletes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Metabolic pathway analysis of the most affected metabolites revealed that tryptophan and acylcarnitine's biochemistries were most influenced.",
+   "sample_size_quote": "nine young, healthy males (physical education students) received either a commercially prepared extract or placebo",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "Exploratory metabolomics study, no defined clinical primary outcome.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35496299",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaves (oleuropein, hydroxytyrosol, verbascoside, etc.) (mini-review)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "COVID-19 patients (proposed use, narrative review)",
+   "indication_as_stated": "COVID-19",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "olive leaves were selected as a potential co-therapy supplement for the treatment and improvement of clinical manifestations in COVID-19 patients.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Narrative review of mechanistic/in vitro/in vivo rationale, not human clinical trial data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaves match label material; proposed rationale, not trial evidence.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36271405",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE) (12 studies, n=819)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "general adult population",
+   "indication_as_stated": "cardiovascular risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "OLE supplementation significantly decreased triglyceride (TG) levels (WMD = - 9.51 mg/dl, 95% CI - 17.83, - 1.18; P = 0.025",
+   "sample_size_quote": "Twelve studies (n = 819 participants) were included in our analyses.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No meaningful changes seen in glucose homeostasis, liver, kidney, or inflammatory markers.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36319585",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "150 hospitalized COVID-19 patients (141 analyzed)",
+   "indication_as_stated": "COVID-19 (hospitalized)",
+   "dose_quote": "intervention A received olive leaf extract (250 mg every 12 hours for five days), intervention B received olive leaf extract (500 mg every 12 hours for five days)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Olive leaf extract can improve the clinical status of the patients and decrease the length of hospitalization.",
+   "sample_size_quote": "Of the 150 patients randomized into groups, 141 completed the follow-up and were analyzed.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36766057",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf tea (OLT)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Eighteen participants (13 completed)",
+   "indication_as_stated": "postprandial glycemia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "OLT did not ameliorate a glycemic curve induced by carbohydrate-rich meal ingestion, suggesting that at least when ingested acutely in a single meal, OLT does not have antihyperglycemic effects.",
+   "sample_size_quote": "Eighteen participants were initially randomized.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered as olive leaf tea, not a capsule/extract supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37375586",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "monacolin K + coenzyme Q10 + grape seed + olive leaf extracts",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "105 subjects with mild hypercholesterolemia",
+   "indication_as_stated": "dyslipidemia",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary endpoint was the reduction of LDL-C and total cholesterol (TC).",
+   "primary_result_quote": "LDL-C decreased by 26.46% on average (p < 0.001) during treatment with 10 mg of monacolin",
+   "sample_size_quote": "105 subjects with mild hypercholesterolemia",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "LDL-lowering attributed primarily to monacolin K (a statin-like compound), not olive leaf extract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Olive leaf extract is one of four ingredients; the primary driver (monacolin K) is unrelated to olive leaf.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38287654",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE) (12 RCTs, 703 patients)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults >=18 years",
+   "indication_as_stated": "cardiometabolic risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The outcomes demonstrated a positive correlation between the intervention group and glucose metabolism (4 RCTs), blood pressure (2 RCTs), lipid profile (2 RCTs), and inflammatory markers (2 RCTs).",
+   "sample_size_quote": "involved 703 patients aged 18 years-79 years.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Meta-analysis of low-dose OLE studies specifically favored the control group for fasting glycemia.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract (pure OLE, oral treatment) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39334699",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oleuropein (OLE) and hydroxytyrosol (HT) supplements/pure compounds/enriched foods",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "683 participants across 12 RCTs",
+   "indication_as_stated": "systemic health effects (CVD, liver, bone, joint, cognitive)",
+   "dose_quote": "ranging from 5 mg/d HT to 990 mL/d olive leaf infusion (320.8 mg OLE and 11.9 mg HT)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The review found contrasting but encouraging results, with some studies reporting significant modulation of body weight, lipid profile, and glucose metabolism, and improvements in bone, joint, and cognitive functions.",
+   "sample_size_quote": "analyzed 12 human randomized controlled trials (RCTs), involving 683 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Pools supplements, pure compounds, and enriched foods (not olive-leaf-specific throughout).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pools oleuropein/hydroxytyrosol from multiple sources (supplements, pure compounds, enriched foods), not olive leaf extract specifically.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39585054",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Greek olive leaf extract (OLE) beverage",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "55 mild Alzheimer's Disease patients",
+   "indication_as_stated": "mild Alzheimer's disease (cognition)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Group 1 participants had statistically significantly higher MMSE scores compared to Group 2 with a p-value of 0.0135.",
+   "sample_size_quote": "compared OLE's effects on cognitive and functional performance in 55 mild AD patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Comparator was Mediterranean diet instructions alone, not placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39599665",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE), 250 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 postmenopausal women aged 47-70",
+   "indication_as_stated": "postmenopausal symptoms",
+   "dose_quote": "60 healthy postmenopausal women aged 47-70 years received either OLE (250 mg/day) or placebo supplementation for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the overall MENQoL score significantly improved (estimated mean difference [95% CI]: -0.2 [-0.4-0.2], p = 0.027) compared to the placebo.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Body composition largely unaffected; TG and BMD in right arm also improved.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39623211",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "topical olive leaf extract (OLE) emulgel",
+   "combination": false,
+   "route": "topical",
+   "population_as_stated": "Forty patients with recurrent herpes labialis",
+   "indication_as_stated": "recurrent herpes labialis",
+   "dose_quote": "instructed to apply the prescribed medication five times a day for five consecutive days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "there were no significant differences in pain intensity between the two groups during the three evaluation times",
+   "sample_size_quote": "Forty patients were randomly divided into two equal groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Pain and healing time not different from acyclovir comparator; only crust-fall-off day differed significantly.",
+   "registrations": [
+    "ISRCTN87606522"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Topical emulgel formulation, not an oral supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39818111",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "31 adults with type 2 diabetes",
+   "indication_as_stated": "type 2 diabetes glycaemic control",
+   "dose_quote": "Participants were randomised to receive OLE or placebo capsules for 24 weeks.",
+   "primary_outcome_quote": "The primary outcome was change in HbA1c.",
+   "primary_result_quote": "Analyses found no statistically significant time-group interactions for HbA1c, diabetes-related distress or health-related quality of life.",
+   "sample_size_quote": "Thirty-one participants were randomly assigned to the OLE (n = 16) and placebo (n = 15) groups.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Pilot/inconclusive trial; insulin sensitivity trended better with OLE but not significantly.",
+   "registrations": [
+    "ACTRN12622000616774"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39955806",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hydroalcoholic olive leaf extract (topical ointment and/or oral capsules)",
+   "combination": false,
+   "route": "mixed (topical and oral)",
+   "population_as_stated": "100 elderly patients with knee osteoarthritis",
+   "indication_as_stated": "knee osteoarthritis pain",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The intervention groups showed significantly more significant reductions in mean pain scores than the control group (p < 0.05).",
+   "sample_size_quote": "conducted in 2022-2023 with 100 elderly participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Combination (oral + topical) group showed the most pronounced pain reduction; oral-only and topical-only arms separately reported.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material (both oral capsule and topical ointment arms tested).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39993475",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "oleuropein, 100 mg from 250 mg olive leaf extract (OLE)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 healthy older males",
+   "indication_as_stated": "muscle energy metabolism",
+   "dose_quote": "received either placebo (PLA) or 100 mg oleuropein from 250 mg olive leaf extract (OLE) supplementation daily for 36 d",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "fractional PDH activity was \u223c25% greater in OLE compared with PLA (49 \u00b1 14 compared with 38 \u00b1 10%; P = 0.016)",
+   "sample_size_quote": "40 healthy older males (60 \u00b1 5y) received either placebo",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Mitochondrial respiration, muscle strength, and fatigue resistance were unaffected despite the PDH-activity change.",
+   "registrations": [
+    "NCT05217433"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40259958",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "edible herbal product (colchicum bulb, olive leaf, black cumin seeds, lavender flower, ginger rhizome)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "150 COVID-19 patients",
+   "indication_as_stated": "severe/critical COVID-19",
+   "dose_quote": "intervention group received two capsules of herbal medicine orally every 8 hours",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Oxygen saturation percentage (SpO2) of the intervention group (median:88.00) was significantly higher than that of the control group (median:86.00)",
+   "sample_size_quote": "This study was conducted on 150 COVID-19 patients.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Olive leaf is one of five ingredients in a combination herbal product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40325976",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Olea europaea L. (olive leaf extract) (3 studies, 248 participants)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "pre-hypertensive and hypertensive adults",
+   "indication_as_stated": "blood pressure",
+   "dose_quote": "the sub-analysis that included the studies with the highest dose (1000 mg/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Olive leaf extract (1000 mg/day) may reduce systolic and diastolic blood pressure by -11.45 and -4.65 mmHg, respectively.",
+   "sample_size_quote": "3 met the eligibility criteria, considering 248 participants analysed.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Only 3 studies met inclusion criteria after excluding multi-preparation interventions.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract (multi-preparation studies explicitly excluded) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40685267",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "phenolic-rich olive leaf extract (OLE), 250 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Seventy women with obesity",
+   "indication_as_stated": "oxidative stress in obesity",
+   "dose_quote": "The intervention group received OLE capsules (250 mg olive leaf extract/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the OLE group showed a lower concentration of serum malondialdehyde compared to the placebo group (-0.61 \u00b1 0.23 vs -0.48 \u00b1 0.21, p = 0.02)",
+   "sample_size_quote": "Seventy women with obesity (BMI> 30, <40 kg/m2) aged 18 and 50 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Total antioxidant capacity and liver enzymes unaffected; only malondialdehyde differed.",
+   "registrations": [
+    "IRCT20190129042552N2"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40728011",
+   "design": "other",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "No human subjects; HEK293T cells and zebrafish assays only"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "hydroxytyrosol extract of fermented olive leaf brine (nanoencapsulation)",
+   "combination": false,
+   "route": "unstated (formulation/delivery study)",
+   "population_as_stated": "HEK293T cells and zebrafish assays (non-human)",
+   "indication_as_stated": "delivery-system safety/stability (formulation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Cytotoxicity studies showed that both the extract and its proniosomal form were nontoxic to HEK293T cells up to 200 \u03bcg mL-1.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "In vitro cell-line and zebrafish toxicity/formulation study, not a human clinical trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hydroxytyrosol from fermented olive leaf matches label material, but tested in cells/zebrafish, not humans.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40943119",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE) adjunct to antifungal therapy",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "59 subjects with Candida-related oral disease",
+   "indication_as_stated": "oral candidiasis (adjunct to antifungal therapy)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was no significant difference between the tested groups in Candida spp. colony number or salivary IL-17A levels.",
+   "sample_size_quote": "The study included 59 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No effect on primary microbiological/inflammatory measures; some symptom-specific secondary benefits noted depending on antifungal pairing.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Olive leaf extract given only as an adjunct combined with nystatin or miconazole, not alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40990594",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "621 hypertensive patients",
+   "indication_as_stated": "hypertension",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary outcome was the change in 24-h SBP and DBP from baseline to week-12.",
+   "primary_result_quote": "OLE significantly reduced 24-h SBP compared to baseline and placebo group [respectively -6.4 mmHg (95% confidence interval, 95% CI -10 to -2.1) and -1.5 mmHg (95% CI -3.9 to 0.51); P < 0.01].",
+   "sample_size_quote": "including 621 participants who were randomly assigned to receive either oral OLE ( n = 307) or placebo ( n = 314).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Large multicenter trial; also improved lipid profile, glucose, CRP, and body weight.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41340653",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE), 250 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Sixty-five healthy postmenopausal women (45-70)",
+   "indication_as_stated": "postmenopausal tissue aging/skin",
+   "dose_quote": "Sixty-five healthy postmenopausal women received 250 mg OLE or placebo daily.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "pore number significantly decreased in the OLE group between weeks 6 and 12 [-12.9 [5.64; 20.16], p = 0.0012]",
+   "sample_size_quote": "Sixty-five healthy postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No statistically significant effects on systemic tissue-aging biomarkers after correction for multiple testing; only exploratory skin outcomes reached significance.",
+   "registrations": [
+    "NCT05744453"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41848522",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract (OLE) and oleuropein (11 RCTs)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults (11 RCTs)",
+   "indication_as_stated": "glucose metabolism/lipid profile/inflammation",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "pooled analyses demonstrated no statistically or clinically significant effects on glycemic or lipid outcomes.",
+   "sample_size_quote": "Eleven RCTs were included (4 short-term and 7 continuous-intake trials).",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Short-term crossover studies showed heterogeneous glycemic/insulin effects, precluding meta-analysis for that subset.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract and oleuropein match label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41935461",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf extract + potassium (1000 mg OLE, >=160 mg oleuropein, 300 mg potassium/day)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "70 adults with mild-moderate hypertension",
+   "indication_as_stated": "hypertension/cardiometabolic markers",
+   "dose_quote": "received an OLE - potassium supplement (1000 mg OLE, \u2265160 mg oleuropein, 300 mg potassium/day) or placebo for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "7-day home-based BP monitoring showed a significant greater response, with morning systolic BP decreasing by 5.4 mmHg, in the verum group.",
+   "sample_size_quote": "70 adults with untreated mildly to moderately elevated BP",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Office BP fell in both groups; only home-based BP monitoring and lipid/insulin markers showed a significant verum-specific effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Olive leaf extract combined with potassium; effect cannot be fully isolated to olive leaf alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41979147",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "oleuropein-based olive leaf extract (OLE)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy males (n=11 MICE, n=10 SIE)",
+   "indication_as_stated": "muscle mitochondrial bioenergetics with exercise",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "OLE improved the decline of power output during the first sprint in SIE and reduced heart rate during MICE but did not affect knee extensor fatigability after both exercise modalities.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Effects were exercise-modality-dependent (moderate-intensity vs. sprint-interval).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oleuropein-based olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42061085",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "standardized olive leaf extract enriched to 40% oleuropein",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "60 participants aged >=50 with periodontitis",
+   "indication_as_stated": "periodontitis (adjunct to periodontal therapy)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Primary and secondary outcomes were probing pocket depth (PPD) and clinical attachment level (CAL).",
+   "primary_result_quote": "Compared with placebo, the treatment group achieved greater reductions in \u0394PPD and gains in \u0394CAL across multiple tooth categories and surfaces.",
+   "sample_size_quote": "Sixty participants aged \u226550 years were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Given as adjunct to non-surgical periodontal therapy, not alone.",
+   "registrations": [
+    "NCT05482373"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oleuropein-enriched olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42303499",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "olive leaf (OL) or olive pomace (OP) supplementation (30 RCTs, n=1726)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults (30 RCTs)",
+   "indication_as_stated": "cardiometabolic and anthropometric health markers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "OL supplementation significantly improved lipid parameters (total cholesterol, triglycerides, LDL-C, ApoB, oxLDL) and increased ApoA1, while reducing TNF-\u03b1, systolic and diastolic blood pressure, body weight, and BMI.",
+   "sample_size_quote": "included 30 randomized controlled trials (n = 1726)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Olive pomace (OP) supplementation, a related by-product also covered by this review, showed NO consistent cardiometabolic benefit and increased IL-8.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf supplementation matches label material (olive pomace is a separate, less effective comparator within the same review).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12548315",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "virgin olive oil (tyrosol and hydroxytyrosol absorption)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Seven healthy volunteers",
+   "indication_as_stated": "tyrosol/hydroxytyrosol bioavailability",
+   "dose_quote": "Ingestion of a single dose of virgin olive oil (50 ml)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tyrosol and hydroxytyrosol are absorbed from realistic doses of virgin olive oil.",
+   "sample_size_quote": "Seven healthy volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Source is dietary virgin olive oil, not olive leaf extract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tyrosol/hydroxytyrosol sourced from olive oil consumption, not olive leaf extract.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23766098",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "olive (Olea europaea L.) leaf extract (OLE), oleuropein and hydroxytyrosol",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "nine volunteers (five males)",
+   "indication_as_stated": "oleuropein/hydroxytyrosol bioavailability",
+   "dose_quote": "receive either capsulated or liquid OLE as a single lower (51.1 mg oleuropein, 9.7 mg hydroxytyrosol) or higher (76.6 mg oleuropein, 14.5 mg hydroxytyrosol) dose",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "OLE effectively delivers oleuropein and hydroxytrosol metabolites to plasma in humans.",
+   "sample_size_quote": "nine volunteers (five males) aged 42.8 \u00b1 7.4 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Olive leaf extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29524000",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oleuropein prepared from olive leaves (OLE), water-soluble form",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy volunteers (7 crossover studies)",
+   "indication_as_stated": "post-prandial glucose spikes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "OLE, in capsules, in solution or as naturally present in olives, did not affect post-prandial glucose derived from bread, while OLE in solution attenuated post-prandial blood glucose after consumption of 25 g sucrose",
+   "sample_size_quote": "We conducted 7 separate crossover, controlled, randomised intervention studies on healthy volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Effect depended on the co-ingested sugar (sucrose vs. glucose vs. bread) and the in vitro enzyme-inhibition threshold.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oleuropein prepared from olive leaves matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29577365",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oleuropein, 20 mg (a component of extra virgin olive oil)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty healthy subjects",
+   "indication_as_stated": "postprandial glycaemia",
+   "dose_quote": "randomly allocated in a cross-over design to 20 mg oleuropein or placebo immediately before lunch",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "subjects who assumed oleuropein had significantly lower blood glucose, DPP-4 activity and higher insulin and glucagon-like peptide-1 compared to placebo.",
+   "sample_size_quote": "Twenty healthy subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Isolated oleuropein dose sourced/described as an olive-oil component rather than a leaf-extract product.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Isolated oleuropein studied as an olive-oil-derived compound, not a leaf-extract product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31479717",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tyrosol capsules (25 mg) combined with white wine",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "33 individuals at cardiovascular risk",
+   "indication_as_stated": "cardiovascular health (endothelial function)",
+   "dose_quote": "white wine (WW) (females 1, males 2 standard drinks/day), WW plus Tyr capsules (WW + Tyr) (25 mg Tyr capsule, one per WW drink)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "WW + Tyr improved endothelial function, increased plasma HDL-cholesterol and antithrombin IIII, and decreased plasma homocysteine, endothelin 1, and CD40L",
+   "sample_size_quote": "Individuals at cardiovascular risk (n = 33)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Tyrosol capsules always co-administered with white wine, not tested alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tyrosol capsules combined with white wine intake; effect cannot be isolated to tyrosol alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32524230",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "hydroxytyrosol, 5 mg (via diverse food matrices)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "20 volunteers",
+   "indication_as_stated": "hydroxytyrosol pharmacokinetics/bioavailability",
+   "dose_quote": "ingested 5 mg of hydroxytyrosol through diverse food matrices",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the intake of extra virgin olive exhibited significantly higher plasma concentrations after 30 min of oral intake (3.79 ng/mL) relative to the control.",
+   "sample_size_quote": "including 20 volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "PK study; extra virgin olive oil (not olive leaf) identified as the best-absorbed matrix for hydroxytyrosol.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hydroxytyrosol delivered via oils (olive, flax, grapeseed), not olive leaf extract.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36678196",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "olive-derived hydroxytyrosol (HT) food supplements",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "12 healthy volunteers",
+   "indication_as_stated": "hydroxytyrosol bioavailability/metabolism",
+   "dose_quote": "comparing two olive-derived watery supplements containing different doses of HT (30.58 and 61.48 mg of HT/dosage)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "dietary HT administered through the food supplements is bioavailable and bioavailability increases with the administered dose.",
+   "sample_size_quote": "evaluated in 12 healthy volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hydroxytyrosol food supplements matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39828996",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oleuropein (OLE), hydroxytyrosol (HT), and tyrosol (TYR) supplementation (14 studies, 594 participants)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "594 participants",
+   "indication_as_stated": "cardiometabolic risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "OLE, HT, and TYR significantly reduced total cholesterol (SMD = -0.19, CI: -0.37 to -0.01, p = 0.04, I2 = 35%), triacylglycerol",
+   "sample_size_quote": "Fourteen human intervention studies with 594 participants were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Pools three related but distinct compounds together without isolating each one's independent effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oleuropein, hydroxytyrosol, and tyrosol all match label material forms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28687937",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "combined nutraceutical (red yeast rice 10 mg, phytosterols 800 mg, L-tyrosol 5 mg)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "60 patients with polygenic hypercholesterolemia",
+   "indication_as_stated": "hypercholesterolemia/cardiovascular risk",
+   "dose_quote": "a combined nutraceutical containing red yeast rice (10 mg), phytosterols (800 mg), and L-tyrosol (5 mg)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the active treated patients experienced a more favorable percentage change in total cholesterol (-16.3% vs 9.9%, P < 0.001 always), LDL-C (-23.4% vs -13.2%, P < 0.001 always)",
+   "sample_size_quote": "a group of 60 patients with polygenic hypercholesterolemia",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "L-tyrosol is a minor (5 mg) component; red yeast rice (a statin-like agent) is the likely primary driver.",
+   "registrations": [
+    "NCT02492464"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tyrosol is a minor (5 mg) component of a combination dominated by red yeast rice.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41805711",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "standardised olive dry extract, 440 mg (123.5 mg oleuropein, 25.0 mg hydroxytyrosol)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "56 participants with systolic blood pressure >= 130 mmHg",
+   "indication_as_stated": "blood pressure/cardiovascular risk",
+   "dose_quote": "received capsules containing 440 mg olive dry extract (123.5 \u00b1 9.4 mg oleuropein, 25.0 \u00b1 3.8 mg hydroxytyrosol) or placebo on a daily basis over eight weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "this decrease was not found significantly different between the two groups.",
+   "sample_size_quote": "In this trial, 56 participants with a systolic blood pressure \u2265 130 mmHg",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Both groups improved similarly, paralleling typical placebo responses in hypertension trials.",
+   "registrations": [
+    "NCT04874961"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Standardized olive dry extract with oleuropein/hydroxytyrosol content; plant part (leaf vs. fruit) not specified.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "42303499",
+  "40990594",
+  "38287654",
+  "36271405",
+  "33868820",
+  "40325976",
+  "21036583",
+  "23516412",
+  "39599665",
+  "35069812",
+  "41848522",
+  "39818111"
+ ],
+ "handoff": [
+  {
+   "pmid": "40728011",
+   "role": "pharmacokinetic",
+   "reason": "Nanoencapsulation/delivery-system study for hydroxytyrosol bioavailability enhancement; formulation-science handoff, not clinical efficacy."
+  }
+ ],
+ "identity_notes": "This identity's label spellings ('Olive Leaf Extract', 'Oleuropein', 'Tyrosol', 'Hydroxytyrosol/Tyrosol', 'Verbascoside/Oleuropein', 'Benolea') cover both whole olive leaf extract products and isolated marker compounds (oleuropein, hydroxytyrosol, tyrosol). A very large share of the retrieved literature instead studies these same marker compounds sourced from OLIVE OIL or WINE (measuring endogenous formation/bioavailability from those different product categories) -- these were rejected as different_substance since they do not concern the leaf-extract or isolated-supplement label material; reviewers should treat this as a judgment call given the compounds are chemically identical, and reconsider if the curator wants oil/wine-sourced PK data folded in as supporting mechanism evidence. Among kept olive-LEAF-specific records, the best-supported, most consistent EXACT-MATCH efficacy signal is for BLOOD PRESSURE in hypertensive/prehypertensive adults, with a large multicenter RCT (40990594, n=621) and multiple concordant meta-analyses (33868820, 36271405, 40325976, 42303499) generally finding benefit that is more pronounced at doses >=500-1000 mg/day. Glycemic-control evidence is mixed-to-null in most single-agent trials and the two most recent meta-analyses (38287654, 41848522) reach different conclusions on glucose/lipid outcomes depending on trial-quality stratification. A meaningful fraction of positive records are combination products (olive leaf + green coffee/beetroot, + citrus flavonoids, + potassium, + fenugreek/bergamot, + monacolin K/CoQ10/grape seed) or non-oral routes (topical creams for herpes labialis, a mouth rinse for chemotherapy-induced mucositis) and were flagged related_form_differs/route caveats accordingly. One retracted publication (36875283, an in silico COVID-19 docking study) was excluded entirely as off_topic. No serious human safety signals (hepatotoxicity, organ injury) were identified in this retrieved scope, in contrast to several other botanicals in this partition."
+}

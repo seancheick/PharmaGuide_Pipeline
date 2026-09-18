@@ -1,0 +1,12 @@
+{
+ "canonical_id": "horsetail",
+ "class": "B",
+ "action": "hold_and_handoff",
+ "direction": "positive_weak",
+ "sources": [
+  "24723963",
+  "35168030"
+ ],
+ "label_median_mg": 6.25,
+ "note": "Two single-ingredient RCTs of a standardised dry extract at 900 mg/day: an acute diuretic effect equivalent to hydrochlorothiazide 25 mg in healthy volunteers, and a 3-month antihypertensive effect in stage-I hypertension (SBP -12.6, DBP -8.1 mmHg) comparable to HCTZ. Held for scoring on two grounds: the catalog median is 6.25 mg (horsetail is a trace silica source in hair and nail formulas, ~150x below the studied dose), and diuresis and blood-pressure lowering are drug-like claims in a clinical population. The HCTZ-equivalent effect is a safety and interaction signal for anyone on diuretics or antihypertensives and is routed to that owner."
+}

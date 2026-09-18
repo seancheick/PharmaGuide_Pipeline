@@ -1,0 +1,12 @@
+{
+ "canonical_id": "feverfew",
+ "class": "B",
+ "action": "hold",
+ "direction": "mixed",
+ "sources": [
+  "22529203",
+  "14973986"
+ ],
+ "label_median_mg": 300,
+ "note": "The AAN guideline's Level B names MIG-99, a specific CO2 extract, not feverfew generally; the Cochrane review of generic feverfew (5 trials, 343 patients) reports mixed results. The other two selected trials are combination designs (acupuncture arm; sublingual feverfew+ginger). Catalog rows are mostly unspecified feverfew, and the potency axis is parthenolide, not extract mg. Same material-scope shape as Permixon."
+}

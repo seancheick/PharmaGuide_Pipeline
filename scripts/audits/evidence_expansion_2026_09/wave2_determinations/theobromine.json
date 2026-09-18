@@ -1,0 +1,12 @@
+{
+ "canonical_id": "theobromine",
+ "class": "B",
+ "action": "hold",
+ "direction": "mixed",
+ "sources": [
+  "37615657",
+  "33188564"
+ ],
+ "label_median_mg": 200,
+ "note": "The metabolic-syndrome trial (erratum-flagged) was null on body weight, BMI, blood pressure and fasting lipids and positive only on lipid RATIOS, with a low-calorie diet co-intervention in both arms - a null primary may not become a positive direction through secondary findings. The exercise evidence is a single 7-15 subject study inside a systematic review whose subject is theophylline."
+}

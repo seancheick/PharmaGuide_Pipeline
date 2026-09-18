@@ -1,0 +1,9 @@
+{
+ "canonical_id": "l_serine",
+ "class": "B",
+ "action": "no_qualifying",
+ "direction": "unresolved",
+ "sources": [],
+ "label_median_mg": 1650,
+ "note": "None of the three selected records is single-ingredient L-serine efficacy evidence for a general use: PMID 32520991 co-administers L-serine with EPA so the pain result cannot be attributed, PMID 41265180 is four n-of-1 trials in children with GRIN2B neurodevelopmental disorder, and PMID 37242260 is a personalisation survey across several sleep supplements rather than a placebo-controlled L-serine trial. Screening called this curate; central reading downgrades it."
+}

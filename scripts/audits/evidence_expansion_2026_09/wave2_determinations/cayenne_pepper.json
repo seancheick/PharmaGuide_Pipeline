@@ -1,0 +1,12 @@
+{
+ "canonical_id": "cayenne_pepper",
+ "class": "B",
+ "action": "hold",
+ "direction": "mixed",
+ "sources": [
+  "33262398",
+  "24267043"
+ ],
+ "label_median_mg": 33.4,
+ "note": "Four materials and four questions. The meta-analysis (PMID 33262398, 11 studies, n=609) reports LDL-C SMD -0.39 (95% CI -0.72 to -0.07) but its own PREDICTION interval is -1.28 to 0.50, and body weight is only marginal (P = 0.09). The one trial at a catalog-relevant supplement dose - 500 mg cayenne delivering 1.25 mg capsaicin - was explicitly NULL for thermogenesis and fat oxidation. The remaining two are a paprika carotenoid extract for bone turnover and an acute thermogenesis study with an erratum. Catalog median is 33 mg and 95 of 109 rows have no resolved form. Capsaicin content, not cayenne milligrams, is the potency axis."
+}

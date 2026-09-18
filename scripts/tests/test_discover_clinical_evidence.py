@@ -303,3 +303,27 @@ def test_backfill_auditability_skips_entries_with_existing_rationale_and_confide
     )
 
     assert [u["id"] for u in updates] == ["NEEDS_WORK"]
+
+
+def test_discover_apply_refuses_to_write_evidence_before_any_network_call(monkeypatch, tmp_path, capsys):
+    # Registry trial counts cannot create evidence records; new evidence goes
+    # through pending contexts and owner review instead.
+    import api_audit.discover_clinical_evidence as discover
+
+    clinical_db = tmp_path / "backed_clinical_studies.json"
+    clinical_db.write_text('{"_metadata": {}, "backed_clinical_studies": []}')
+    before = clinical_db.read_text()
+
+    def network_forbidden(*args, **kwargs):
+        raise AssertionError("discover --apply must refuse before any API work")
+
+    monkeypatch.setattr(discover, "discover_candidates", network_forbidden)
+    monkeypatch.setattr(sys, "argv", ["discover_clinical_evidence.py", "discover", "--apply",
+                                      "--clinical-db", str(clinical_db)])
+
+    with pytest.raises(SystemExit) as exit_info:
+        discover.main()
+
+    assert exit_info.value.code != 0
+    assert "pending" in capsys.readouterr().err
+    assert clinical_db.read_text() == before

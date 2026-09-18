@@ -1,0 +1,9 @@
+{"canonical_id": "dimethyl_glycine", "recommended_class": "no_qualifying",
+ "one_line_reason": "Both shortlisted records study C31G, a topical antimicrobial mouthrinse containing alkyl dimethyl glycine, not oral supplement N,N-dimethylglycine (DMG) ingestion.",
+ "selected": [],
+ "blockers": ["Shortlist records concern a topical mouthrinse (C31G, alkyl dimethyl glycine/alkyl dimethyl amine oxide surfactant) applied to gums/saliva, not an ingested supplement exposure of DMG"],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "29396643", "reason": "C31G mouthrinse vs chlorhexidine for periodontal wound healing after surgery; topical dental antiseptic study, not an oral supplement exposure of dimethylglycine, and outcome (plaque/wound healing) is not a reason consumers buy DMG supplements"},
+   {"pmid": "2090157", "reason": "C31G mouthrinse effect on salivary bacterial counts; topical antimicrobial mouthwash study, not an oral supplement exposure of dimethylglycine"}
+ ]}

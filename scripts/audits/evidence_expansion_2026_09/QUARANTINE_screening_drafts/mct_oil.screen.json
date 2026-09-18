@@ -1,0 +1,2469 @@
+{
+ "canonical_id": "mct_oil",
+ "screened": 158,
+ "kept": 61,
+ "rejected": [
+  {
+   "pmid": "27792142",
+   "reason": "not_intervention",
+   "note": "Broad systematic review/meta-analysis of meal energy content and diet-induced thermogenesis; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "32064649",
+   "reason": "not_intervention",
+   "note": "Literature study/case compilation of dietary lipid manipulations in glycogen storage disease type III generally; MCT-specific extractable data not confirmed."
+  },
+  {
+   "pmid": "29368111",
+   "reason": "off_topic",
+   "note": "Taurine supplementation and growth in low birth weight infants; no MCT relevance."
+  },
+  {
+   "pmid": "31349671",
+   "reason": "off_topic",
+   "note": "Efficacy of PUFA on inflammatory markers in dialysis patients; no MCT relevance."
+  },
+  {
+   "pmid": "32897506",
+   "reason": "off_topic",
+   "note": "Triheptanoin (a distinct 7-carbon anaplerotic compound) regulatory approval review; not a medium-chain (6-10 carbon) triglyceride."
+  },
+  {
+   "pmid": "35167760",
+   "reason": "off_topic",
+   "note": "Impact of human milk on outcomes for infants with congenital heart disease; no MCT-specific relevance confirmed."
+  },
+  {
+   "pmid": "39161240",
+   "reason": "off_topic",
+   "note": "Greenness assessment of analytical methods for cannabinoid determination in oils; analytical chemistry methodology, not a clinical MCT study."
+  },
+  {
+   "pmid": "41127218",
+   "reason": "off_topic",
+   "note": "Case report of Chanarin-Dorfman syndrome (a neutral lipid storage disorder); no MCT-specific trial data confirmed in the retrieved abstract."
+  },
+  {
+   "pmid": "1778219",
+   "reason": "not_this_route",
+   "note": "Medium- and long-chain triglyceride INFUSION (intravenous) in healthy subjects; not oral."
+  },
+  {
+   "pmid": "3133924",
+   "reason": "not_this_route",
+   "note": "Neonatal PARENTERAL nutrition with MCT-containing fat emulsion; intravenous, not oral."
+  },
+  {
+   "pmid": "7815676",
+   "reason": "not_this_route",
+   "note": "INFUSION of long-chain or medium-chain triglycerides; intravenous, not oral."
+  },
+  {
+   "pmid": "8486876",
+   "reason": "not_this_route",
+   "note": "PARENTERAL nutrition with MCT emulsion in critically ill patients; intravenous, not oral."
+  },
+  {
+   "pmid": "9840235",
+   "reason": "not_this_route",
+   "note": "Long-chain vs medium-chain lipid emulsion in ARDS patients; intravenous PN, not oral."
+  },
+  {
+   "pmid": "10338218",
+   "reason": "not_this_route",
+   "note": "Structured vs long-chain triglycerides in colorectal surgical patients; parenteral nutrition, not oral."
+  },
+  {
+   "pmid": "11350261",
+   "reason": "not_this_route",
+   "note": "Intra-duodenal INFUSION of triglycerides on superior mesenteric artery blood flow; direct tube infusion, not oral ingestion."
+  },
+  {
+   "pmid": "11952008",
+   "reason": "not_this_route",
+   "note": "Metabolic effects of INTRAVENOUS medium-chain triglycerides in neonates."
+  },
+  {
+   "pmid": "12351269",
+   "reason": "not_this_route",
+   "note": "Propofol formulated in an MCT/LCT emulsion; MCT is an anesthetic-drug excipient, intravenous route."
+  },
+  {
+   "pmid": "12459665",
+   "reason": "not_this_route",
+   "note": "Pharmacodynamics/pharmacokinetics of propofol in MCT emulsion; MCT is an anesthetic-drug excipient, intravenous route."
+  },
+  {
+   "pmid": "15983144",
+   "reason": "not_this_route",
+   "note": "Injection pain with MCT/LCT emulsive propofol; MCT is an anesthetic-drug excipient, intravenous route."
+  },
+  {
+   "pmid": "16643226",
+   "reason": "not_this_route",
+   "note": "Propofol with long-/medium-chain triglycerides reduces injection pain; MCT is an anesthetic-drug excipient, intravenous route."
+  },
+  {
+   "pmid": "24285251",
+   "reason": "not_this_route",
+   "note": "SMOFlipid vs MCT/LCT intravenous lipid emulsion in GI surgery patients; parenteral nutrition, not oral."
+  },
+  {
+   "pmid": "25725185",
+   "reason": "not_this_route",
+   "note": "Massage with MCT oil on weight gain in premature neonates; topical/dermal application via massage, not oral ingestion."
+  },
+  {
+   "pmid": "26842939",
+   "reason": "not_this_route",
+   "note": "Structured triglycerides vs physical mixtures of MCT/LCT for PARENTERAL nutrition in surgical/ICU patients."
+  },
+  {
+   "pmid": "28065480",
+   "reason": "not_this_route",
+   "note": "Influence of intravenous lipid emulsions in home parenteral nutrition patients; intravenous, not oral."
+  },
+  {
+   "pmid": "28596227",
+   "reason": "not_this_route",
+   "note": "Perioperative fat emulsions containing omega-3 fatty acid; intravenous PN, not oral MCT."
+  },
+  {
+   "pmid": "28932742",
+   "reason": "not_this_route",
+   "note": "Structured triglyceride vs physical mixture MCT/LCT for PARENTERAL nutrition in liver resection patients."
+  },
+  {
+   "pmid": "29306619",
+   "reason": "not_this_route",
+   "note": "Overnight infusion of lipid or carbohydrate in obese patients undergoing CABG; intravenous infusion, not oral."
+  },
+  {
+   "pmid": "29310893",
+   "reason": "not_this_route",
+   "note": "Enteral nutrition fat composition in Crohn's disease; enteral tube feeding formula, not oral MCT supplementation, and MCT-specific content not confirmed."
+  },
+  {
+   "pmid": "30098847",
+   "reason": "not_this_route",
+   "note": "Meta-analysis of structured triglyceride lipid emulsions in PARENTERAL nutrition therapy."
+  },
+  {
+   "pmid": "32758383",
+   "reason": "not_this_route",
+   "note": "Influence of intravenous lipid emulsions in home parenteral nutrition patients (duplicate of 28065480); intravenous, not oral."
+  },
+  {
+   "pmid": "34409063",
+   "reason": "not_this_route",
+   "note": "Systematic review of MCT content of adult ENTERAL TUBE feeding formulas; tube-fed critical-care population, not oral supplement use."
+  },
+  {
+   "pmid": "36878111",
+   "reason": "not_this_route",
+   "note": "Omega-3 fatty acids in PARENTERAL nutrition network meta-analysis; intravenous, not oral MCT."
+  },
+  {
+   "pmid": "39519287",
+   "reason": "not_this_route",
+   "note": "n-3 PUFA-enriched vs olive-oil-based lipid emulsion in critically ill post-surgery adults; intravenous PN, not oral."
+  },
+  {
+   "pmid": "41214458",
+   "reason": "not_this_route",
+   "note": "Soybean oil vs mixed-oil INTRAVENOUS lipid emulsions in neonates; intravenous, not oral."
+  },
+  {
+   "pmid": "42745676",
+   "reason": "not_this_route",
+   "note": "Intravenous lipid emulsions with/without fish oil for VLBW neonates; intravenous, not oral."
+  },
+  {
+   "pmid": "31998762",
+   "reason": "animal_or_invitro",
+   "note": "Ketogenic diet with MCT intermittent fasting study in healthy DOGS."
+  },
+  {
+   "pmid": "33268017",
+   "reason": "animal_or_invitro",
+   "note": "MCT dietary supplement in CANINE epilepsy."
+  },
+  {
+   "pmid": "33415132",
+   "reason": "animal_or_invitro",
+   "note": "Ketogenic MCT diet effects on feces in DOGS with idiopathic epilepsy."
+  },
+  {
+   "pmid": "35197174",
+   "reason": "animal_or_invitro",
+   "note": "Caprylic acid tested in C57BL/6J MICE and RAW264.7 CELLS (in vitro)."
+  },
+  {
+   "pmid": "35240032",
+   "reason": "animal_or_invitro",
+   "note": "MCT with organic acids tested in weaning PIGS."
+  },
+  {
+   "pmid": "36277072",
+   "reason": "animal_or_invitro",
+   "note": "Metabolic fingerprinting of DOGS with idiopathic epilepsy on ketogenic MCT oil."
+  },
+  {
+   "pmid": "38091342",
+   "reason": "animal_or_invitro",
+   "note": "Ketogenic diets systematic review in DOGS and CATS."
+  },
+  {
+   "pmid": "38496308",
+   "reason": "animal_or_invitro",
+   "note": "Cannabidiol safety study in healthy DOGS."
+  },
+  {
+   "pmid": "42719537",
+   "reason": "animal_or_invitro",
+   "note": "Dietary caprylic acid and Campylobacter jejuni colonisation in BROILERS (poultry agriculture study)."
+  },
+  {
+   "pmid": "30324610",
+   "reason": "animal_or_invitro",
+   "note": "Perampanel and decanoic acid synergistic action against AMPA receptors and seizures; mechanistic/preclinical study."
+  },
+  {
+   "pmid": "29649104",
+   "reason": "animal_or_invitro",
+   "note": "GPR40/ketogenesis signaling by medium chain fatty acids in beta cell function; mechanistic/likely preclinical or in vitro study."
+  },
+  {
+   "pmid": "1594079",
+   "reason": "off_topic",
+   "note": "Case report of congenital intestinal lymphangiectasia in a newborn; describes MCT diet only as standard background treatment, not primary trial data."
+  },
+  {
+   "pmid": "7488827",
+   "reason": "off_topic",
+   "note": "Case report of postoperative chylous ascites; no MCT-specific trial data."
+  },
+  {
+   "pmid": "9288526",
+   "reason": "off_topic",
+   "note": "Case report of isolated primary chylopericardium; no MCT-specific trial data."
+  },
+  {
+   "pmid": "9885742",
+   "reason": "off_topic",
+   "note": "Case report of Hennekam syndrome; no MCT-specific trial data."
+  },
+  {
+   "pmid": "22362456",
+   "reason": "off_topic",
+   "note": "Case report of chylous ascites; no MCT-specific trial data."
+  },
+  {
+   "pmid": "30013774",
+   "reason": "off_topic",
+   "note": "Case report series of mycobacterial chylous ascites; no MCT-specific trial data."
+  },
+  {
+   "pmid": "31235335",
+   "reason": "off_topic",
+   "note": "Case report of stretching-associated chylothorax; no MCT-specific trial data."
+  },
+  {
+   "pmid": "33419463",
+   "reason": "off_topic",
+   "note": "Case report of familial chylomicronemia syndrome; no MCT-specific trial data."
+  },
+  {
+   "pmid": "35154903",
+   "reason": "off_topic",
+   "note": "Case report of an extremely low birth weight infant's respiratory/GI management; no MCT-specific trial data."
+  },
+  {
+   "pmid": "35769185",
+   "reason": "off_topic",
+   "note": "Case report of chyloperitoneum due to gastric carcinoma; no MCT-specific trial data."
+  },
+  {
+   "pmid": "17634165",
+   "reason": "off_topic",
+   "note": "Licorice flavonoid oil (LFO) dissolved in MCT as a solvent/vehicle; the tested active is glabridin (a licorice flavonoid), not MCT itself."
+  },
+  {
+   "pmid": "30836363",
+   "reason": "off_topic",
+   "note": "Tomato phytonutrients and UV skin response; unrelated to MCT (weak keyword match)."
+  },
+  {
+   "pmid": "35263547",
+   "reason": "off_topic",
+   "note": "Longevity of hand sanitisers on fingers; unrelated to MCT."
+  },
+  {
+   "pmid": "33599431",
+   "reason": "off_topic",
+   "note": "Omega-3 fatty acid supplementation for autism; different supplement identity, no MCT relevance."
+  },
+  {
+   "pmid": "34444963",
+   "reason": "off_topic",
+   "note": "Omega-7 mixed fatty acid supplementation; different supplement identity, no MCT relevance."
+  },
+  {
+   "pmid": "34624443",
+   "reason": "off_topic",
+   "note": "Lipid-based formulations for cannabidiol bioavailability; MCT (if present) is a delivery excipient for CBD, not the tested supplement."
+  },
+  {
+   "pmid": "34931256",
+   "reason": "off_topic",
+   "note": "Nanostructured lipid carriers for topical antifungal therapy; MCT as an excipient in a topical drug-delivery system, not an oral supplement."
+  },
+  {
+   "pmid": "35311593",
+   "reason": "off_topic",
+   "note": "Shrimp oil effects on cardio-metabolic risk factors; different supplement identity, no MCT relevance."
+  },
+  {
+   "pmid": "35714419",
+   "reason": "off_topic",
+   "note": "Ketogenic therapy for Parkinson's disease spanning ANIMAL and human trials without meta-analysis; too broad/mixed, no MCT-specific extractable human result confirmed."
+  },
+  {
+   "pmid": "35749148",
+   "reason": "off_topic",
+   "note": "Multi-component artificial tear product; unrelated to MCT oral supplementation."
+  },
+  {
+   "pmid": "35787693",
+   "reason": "off_topic",
+   "note": "Pharmacokinetics of cannabidiol/THC in a novel delivery system; MCT (if present) is a delivery excipient, not the tested supplement."
+  },
+  {
+   "pmid": "36687710",
+   "reason": "off_topic",
+   "note": "Postprandial lipemic response to sheep vs cow milk; no MCT relevance."
+  },
+  {
+   "pmid": "38061271",
+   "reason": "off_topic",
+   "note": "Arachidonic and docosahexaenoic acid supplementation in preterm infants; no MCT relevance."
+  },
+  {
+   "pmid": "38904150",
+   "reason": "off_topic",
+   "note": "Hemp-derived cannabidiol product trial; unrelated to MCT."
+  },
+  {
+   "pmid": "40082070",
+   "reason": "off_topic",
+   "note": "Medicinal cannabis pilot trial in Tourette syndrome; unrelated to MCT."
+  },
+  {
+   "pmid": "40580806",
+   "reason": "off_topic",
+   "note": "High-dose arachidonic and docosahexaenoic acid in preterm infants; no MCT relevance."
+  },
+  {
+   "pmid": "41365395",
+   "reason": "off_topic",
+   "note": "Nutritive/non-nutritive sweeteners and acne vulgaris; unrelated to MCT."
+  },
+  {
+   "pmid": "41435614",
+   "reason": "off_topic",
+   "note": "Metabolomics in systemic lupus erythematosus; unrelated to MCT."
+  },
+  {
+   "pmid": "41444640",
+   "reason": "off_topic",
+   "note": "Virgin coconut oil and cardiovascular disease risk; coconut oil is a related but distinct whole-food product (lauric-acid dominant), not standardized MCT oil."
+  },
+  {
+   "pmid": "41481294",
+   "reason": "off_topic",
+   "note": "Omega-3 fatty acids in pediatric major depressive disorder; different supplement identity, no MCT relevance."
+  },
+  {
+   "pmid": "39533425",
+   "reason": "off_topic",
+   "note": "Omega-3 fatty acid supplementation in hemodialysis patients; different supplement identity, no MCT relevance."
+  },
+  {
+   "pmid": "28702868",
+   "reason": "not_intervention",
+   "note": "Broad ketogenic diet systematic review for refractory childhood epilepsy generally; MCT not confirmed as the specific focus (classic KD is LCT/fat-based)."
+  },
+  {
+   "pmid": "28807434",
+   "reason": "not_intervention",
+   "note": "Broad Alzheimer's disease nutritional-strategies network meta-analysis; no MCT-specific extractable result confirmed."
+  },
+  {
+   "pmid": "30740404",
+   "reason": "not_intervention",
+   "note": "Broad fatty acid oxidation disorders review; general disease overview, not an MCT intervention trial."
+  },
+  {
+   "pmid": "32290868",
+   "reason": "not_intervention",
+   "note": "Broad 'are ketogenic diets promising for Alzheimer's disease' translational review; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "32560503",
+   "reason": "not_intervention",
+   "note": "Broad ketogenic diet review for pediatric refractory epilepsy generally; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "32588435",
+   "reason": "not_intervention",
+   "note": "Broad Cochrane review of ketogenic diets for drug-resistant epilepsy generally; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "32597927",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of ketogenic therapy RCTs for Alzheimer's disease generally; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "32757903",
+   "reason": "not_intervention",
+   "note": "Broad review of ketogenic diets for CNS diseases generally; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "36846143",
+   "reason": "not_intervention",
+   "note": "Broad review of ketogenic interventions in MCI/AD/PD generally; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "37027832",
+   "reason": "not_intervention",
+   "note": "Broad review of previous reviews on dietary/nutritional-supplement effects on cognition in MCI; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "37400987",
+   "reason": "not_intervention",
+   "note": "Broad review of reviews on ketogenic diet for pediatric refractory epilepsy generally; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "38318932",
+   "reason": "not_intervention",
+   "note": "Modified dietary fat intake for gallstone disease; traditional low-fat diet focus, MCT not confirmed as a specific tested component."
+  },
+  {
+   "pmid": "38432994",
+   "reason": "not_intervention",
+   "note": "Review of MCT as an excipient in drug-delivery systems; MCT functions as a formulation vehicle for other drugs, not itself the tested supplement/outcome."
+  },
+  {
+   "pmid": "38533170",
+   "reason": "not_intervention",
+   "note": "Broad review of ketogenic diet efficacy/safety/mechanisms in pediatric epilepsy generally; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "41637153",
+   "reason": "not_intervention",
+   "note": "Mediterranean-ketogenic intervention crossover trial in Parkinson's disease; MCT not confirmed as the specific focus."
+  },
+  {
+   "pmid": "26117431",
+   "reason": "not_intervention",
+   "note": "Broad review of treatment options for chylous ascites after abdominal surgery; MCT diet not confirmed as an extractable specific result in this excerpt."
+  },
+  {
+   "pmid": "34515211",
+   "reason": "not_intervention",
+   "note": "Broad systematic analysis of congenital chylothorax case management; MCT diet not confirmed as an extractable specific result in this excerpt."
+  },
+  {
+   "pmid": "36702544",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of chylopericardium case characteristics/management; MCT diet not confirmed as an extractable specific result in this excerpt."
+  },
+  {
+   "pmid": "37801640",
+   "reason": "not_intervention",
+   "note": "Broad systematic review/meta-analysis of nonoperative chylothorax management after cardiothoracic surgery; MCT diet not confirmed as an extractable specific result in this excerpt."
+  },
+  {
+   "pmid": "39845922",
+   "reason": "not_intervention",
+   "note": "Broad evidence summary for nutritional management of chyle leaks after surgery; MCT diet not confirmed as an extractable specific quantitative result in this excerpt."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "1568535",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dietary MCT (77.5% of fat calories as MCT)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "10 NIDDM patients, 6 nondiabetic controls",
+   "indication_as_stated": "non-insulin-dependent diabetes (glucose metabolism)",
+   "dose_quote": "a 40% fat diet containing 77.5% of fat calories as MCT",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "MCT failed to alter fasting serum glucose concentrations but reduced preprandial glycemic excursions by 45% (F = 7.9, P less than 0.01)",
+   "sample_size_quote": "10 non-insulin-dependent diabetes mellitus (NIDDM) patients, 4 hypertriglyceridemic, and 6 normotriglyceridemic nondiabetic control subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2739575",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT, 40% of fat in overfeeding diet",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "10 male volunteers",
+   "indication_as_stated": "thermogenesis (overfeeding)",
+   "dose_quote": "overfed (150% of estimated energy requirement) liquid formula diets containing 40% of fat as either MCT or LCT",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The thermic response to food (TEF) was greater on day 1 following a meal (1,000 kcal) containing MCT than following an isocaloric meal containing LCT",
+   "sample_size_quote": "ten male volunteers (ages 22 to 44)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "4665095",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT, alone or with cholestyramine (as Portagen)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "11 patients with chronic diarrhea/steatorrhea after ileal resection",
+   "indication_as_stated": "cholerrheic enteropathy (ileal resection/bypass)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The maximal response occurred when cholestyramine was given with Portagen - significantly reduced stool frequency and weight in all patients and stool fat in five.",
+   "sample_size_quote": "Of 11 patients with chronic disabling diarrhea and steatorrhea after ileal resection or bypass",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Best response required combining cholestyramine with MCT (Portagen); MCT alone not isolated as the primary effective arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT most effective when combined with cholestyramine (Portagen product).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "5694098",
+   "design": "review",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title only, no abstract text retrieved"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglycerides",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "general (narrative review)",
+   "indication_as_stated": "general nutrition/metabolism",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Old general review; no abstract text available to extract quotes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8806933",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT beverage, 4.3%, alone or with carbohydrate",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "6 endurance-trained cyclists",
+   "indication_as_stated": "cycling performance (fuel metabolism)",
+   "dose_quote": "4.3% medium-chain triglycerides (MCTs); or 10% glucose + 4.3% MCTs (CHO+MCT)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "replacing CHO with MCTs slowed the T-trials from 66.8 +/- 0.4 (SE) to 72.1 +/- 0.6 min (P < 0.001), adding MCTs to CHO improved the T-trials from 66.8 +/- 0.4 to 65.1 +/- 0.5 min (P < 0.05)",
+   "sample_size_quote": "six endurance-trained cyclists",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "MCT alone (replacing carbohydrate) worsened performance; MCT added to carbohydrate improved it -- direction depends on comparison arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material; tested alone and combined with carbohydrate.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8927947",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT oil (vs long-chain triglyceride butter)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "6 patients with severe pancreatic steatorrhea",
+   "indication_as_stated": "pancreatic insufficiency (fat absorption)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Fecal weight and nitrogen losses were the same during MCT",
+   "sample_size_quote": "Six patients with severe pancreatic steatorrhea",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT oil matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10642370",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT 4.2%, combined with carbohydrate",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "8 endurance-trained men",
+   "indication_as_stated": "cycling time trial performance",
+   "dose_quote": "a 6% carbohydrate + 4.2% MCT solution (C+M)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Time to complete the set amount of work was reduced in both C and C+M compared with P by 7 and 5%, respectively",
+   "sample_size_quote": "Eight endurance-trained men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "MCT combined with carbohydrate; carbohydrate alone performed similarly or slightly better.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT combined with carbohydrate, not tested alone vs. placebo.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10642384",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT (tricaprin, C10:0), ~25 g, combined with carbohydrate",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "7 well-trained men",
+   "indication_as_stated": "muscle glycogen use during exercise",
+   "dose_quote": "0.36 g tricaprin (C10:0)/kg plus 0.72 g sucrose/kg",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "seven well-trained men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT combined with sucrose, not tested alone vs. placebo.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12535437",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium chain triglyceride content of formula",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "preterm infants across included RCTs",
+   "indication_as_stated": "preterm infant growth",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT tested as a proportion of fat content in infant formula, not as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12619672",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT, 10 g single dose",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "25 healthy men",
+   "indication_as_stated": "postprandial triglyceride concentration",
+   "dose_quote": "the test diet containing 10 g of MCT or LCT",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The LCT diet resulted in significantly greater increases in areas under the curves (AUCs) for serum and chylomicron triglyceride in the BMI > or = 23 kg/m2 group than those in the BMI < 23 kg/m2 group.",
+   "sample_size_quote": "Twenty-five males participated as volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12634436",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT-rich diet, 28 days",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "24 overweight men",
+   "indication_as_stated": "body composition/energy expenditure (overweight)",
+   "dose_quote": "consumed diets rich in MCT or LCT for 28 days each",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty-four healthy, overweight men with body mass indexes between 25 and 31 kg/m(2)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16483884",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "phytosterols + MCT + high-oleic canola oil",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "23 overweight, hyperlipidemic men",
+   "indication_as_stated": "plasma lipids (overweight/hyperlipidemia)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty-three overweight, hyperlipidemic men consumed both types of oil in a randomized, crossover trial for 6 weeks each",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT combined with phytosterols and high-oleic canola oil, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19033611",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "creatine + arginine AKG + amino acids + MCT combination",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "35 men",
+   "indication_as_stated": "exercise performance/body composition",
+   "dose_quote": "a commercial dietary supplement of Cr, A-AKG, glutamine, taurine, branched-chain amino acids, and medium-chain triglycerides",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Thirty-five men (approximately 23 yr)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT is one of several components in a multi-ingredient commercial supplement, primarily built around creatine.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22566308",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium chain triglycerides",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 14 included studies",
+   "indication_as_stated": "body composition/energy expenditure/satiety",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Fourteen articles were selected",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT dietary intake studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24172309",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT oil, 20 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "insulin-resistant men",
+   "indication_as_stated": "apolipoprotein B kinetics (insulin resistance)",
+   "dose_quote": "20 g MCT oil/d or 20 g corn oil/d",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Compared with corn oil, MCT supplements had no significant effect on plasma lipoprotein profile or TRL apo B-48 and VLDL apo B-100 kinetics.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [
+    "NCT01806142"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT oil matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25636220",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglycerides (C8:0 and C10:0)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy adults across included RCTs",
+   "indication_as_stated": "weight loss/body composition",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT (C8/C10) vs. LCT RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26420178",
+   "design": "observational",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "other",
+   "intervention_as_stated": "MCT dietary/enteral therapy",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "46 hospitalized patients (China)",
+   "indication_as_stated": "MCT usage patterns/outcomes (retrospective)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "A retrospective analysis was conducted on 46 hospitalized patients who were administered MCTs therapy",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Retrospective descriptive analysis of indications/outcomes, not a controlled efficacy trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material; mixed dietary and enteral administration.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27075909",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT 6g + leucine 1.2g + vitamin D 20mcg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "38 frail elderly nursing home residents",
+   "indication_as_stated": "sarcopenia (frail elderly)",
+   "dose_quote": "a daily l-leucine (1.2 g) and cholecalciferol (20 \u03bcg)-enriched supplement with 6 g medium-chain triglycerides",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "38 elderly nursing home residents (11 men and 27 women with a mean \u00b1 SD age of 86.6 \u00b1 4.8 y)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT combined with leucine and vitamin D in a fixed formula.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27188898",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT beverage",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "19 healthy participants",
+   "indication_as_stated": "satiety/food intake",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Nineteen healthy participants were tested",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "MCT tested against CLA and control oil as separate arms, not combined.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT-alone arm is a clean single-ingredient comparison alongside a separate CLA arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28361739",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT content of nutritional supplement (high/moderate/low)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "30 inpatients with anorexia nervosa",
+   "indication_as_stated": "ghrelin activation (anorexia nervosa)",
+   "dose_quote": "MCT high' (>6 g/day), (2) 'MCT moderate' (1-6 g/day), and (3) 'MCT low' (<1 g/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Thirty participants were selected from among inpatients diagnosed with anorexia nervosa (AN)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28689741",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT oil (vs coconut oil)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "participants (satiety comparison)",
+   "indication_as_stated": "satiety/food intake",
+   "dose_quote": "MCT oil compared to coconut oil and control oil",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The results showed a significant difference in energy and macronutrient intakes at the ad libitum meal between the three oils with the MCT oil reducing food intake compared to the coconut and control oil.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT oil matches label material; compared head-to-head with coconut oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28727654",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "human milk fortifier containing MCT + DHA",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "153 preterm infants",
+   "indication_as_stated": "growth/nutritional biomarkers (preterm infants)",
+   "dose_quote": null,
+   "primary_outcome_quote": "weight gain",
+   "primary_result_quote": null,
+   "sample_size_quote": "a sample of preterm infants \u226432 weeks or \u22641500 g were randomized to receive nHMF (n = 77) or cHMF (n = 76)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT is one of several components (with DHA, protein, micronutrients) in a fortifier formula, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28871440",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "triheptanoin (C7) vs trioctanoin (C8, a medium-chain triglyceride)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "32 subjects with long-chain fatty acid oxidation disorders",
+   "indication_as_stated": "long-chain fatty acid oxidation disorders",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "A double blinded, randomized controlled trial of 32 subjects with LC-FAODs",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Compares triheptanoin (a distinct 7-carbon anaplerotic triglyceride) against trioctanoin (a true medium-chain, C8, triglyceride).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Trioctanoin (C8) is a medium-chain triglyceride; triheptanoin (C7) is a distinct odd-chain compound tested as the comparator.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29596218",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT dietary supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "12 preterm infants with Candida colonization",
+   "indication_as_stated": "Candida gastrointestinal colonization (preterm infants)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Preterm infants with Candida colonization (n = 12)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30868125",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT (octanoate + decanoate) vs triheptanoin add-on",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults with drug-resistant epilepsy",
+   "indication_as_stated": "refractory epilepsy",
+   "dose_quote": "titrated over 3 weeks to a maximum of 100 mL/d to be distributed over 3 meals and mixed into food",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Active-comparator design (MCT vs. triheptanoin), not vs. placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT (octanoate+decanoate) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31319633",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT, solid or liquid form",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "29 participants",
+   "indication_as_stated": "satiety/energy intake (food form)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Ad libitum energy intake was h",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31334544",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT (8:0 and 10:0), 6 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "64 frail elderly nursing home residents",
+   "indication_as_stated": "sarcopenia (frail elderly)",
+   "dose_quote": "6 g",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "64 elderly nursing home residents (85.5 \u00b1 6.8 y)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Tests whether MCT alone (without leucine/vitamin D) is sufficient, following up on the combination trial 27075909.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material; tested alone in this follow-up study.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31869355",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT oil, 6-week supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "22 subjects without diabetes",
+   "indication_as_stated": "insulin sensitivity/beta cell function",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "22 subjects without diabetes (8 males, 14 females, mean \u00b1 standard error age 39\u00b12.9 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT oil matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31870908",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium chain triglycerides",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with MCI/Alzheimer's disease across included studies",
+   "indication_as_stated": "Alzheimer's disease/cognitive impairment (ketosis)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to oral MCT intake studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32212947",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglycerides",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included studies",
+   "indication_as_stated": "acute satiety/food intake",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT vs. LCT satiety/food-intake studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33374218",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT (3-arm)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "middle-aged sedentary persons",
+   "indication_as_stated": "fat oxidation during aerobic exercise (sex differences)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33620090",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium chain triglyceride content of formula",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "preterm infants across included RCTs",
+   "indication_as_stated": "preterm infant growth",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Updated Cochrane version of 12535437.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT tested as a proportion of fat content in infant formula, not as an isolated supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34208933",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT emulsion (betaquik), add-on to modified Atkins diet",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "pre-menopausal women with epilepsy and catamenial seizure pattern",
+   "indication_as_stated": "catamenial epilepsy (add-on to modified Atkins diet)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on design; MAD background held constant, MCT emulsion added on top.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT emulsion (betaquik) added to an existing modified Atkins diet, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34255085",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglyceride oil (6:0-10:0)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included RCTs (min. 2-week intervention)",
+   "indication_as_stated": "blood lipids",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT oil vs. other fat/oil RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34960106",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT (vs liposomes, vs cyclodextrins) for fat-soluble vitamin delivery",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "pancreatic-insufficient cystic fibrosis patients",
+   "indication_as_stated": "fat-soluble vitamin deficiency (cystic fibrosis)",
+   "dose_quote": "2000 IU of retinyl palmitate, 4000 IU of vitamin D3, 200 IU of RRR-\u03b1-tocopherol, and 200 \u00b5g of vitamin K2",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "MCT is one of three delivery-vehicle arms (vs. liposomes and cyclodextrins) for the same fat-soluble vitamins.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT-alone arm is a clean single-ingredient delivery-vehicle comparison.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35122097",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT (8:0 and 10:0), 6 g/day, timing comparison",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 frail elderly nursing home residents",
+   "indication_as_stated": "muscle mass/function/cognition (frail elderly)",
+   "dose_quote": "6 g/day of medium-chain triglycerides (MCTs) at dinnertime",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "40 elderly nursing home residents (85.9 \u00b1 7.7 years)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material; compares breakfast vs. dinner timing.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35268094",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT, 2 g/day for 2 weeks",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "sedentary participants (BMI 25-30)",
+   "indication_as_stated": "postprandial fat consumption/energy expenditure",
+   "dose_quote": "A daily 2 g of MCTs were ingested for two weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35766559",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT-milk",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "45 tunnel workers (China)",
+   "indication_as_stated": "diarrhea/immune status/gut microbiome (occupational)",
+   "dose_quote": null,
+   "primary_outcome_quote": "the incidence of respiratory infection and diarrhea",
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty-five workers were randomly divided into an MCT group (n=30) and control group (n=15)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT delivered in a milk-based beverage, not as isolated oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36096496",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglyceride oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy populations (narrative systematic review)",
+   "indication_as_stated": "endurance performance/substrate utilization",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "mixed",
+   "direction_note": "Notes contradicting study results on ergogenic benefit.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT oil supplementation for endurance performance.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36273115",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglyceride",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "non-demented older adults across included RCTs",
+   "indication_as_stated": "memory function (older adults without cognitive impairment)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36633304",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain fatty acids",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included studies",
+   "indication_as_stated": "Alzheimer's disease prevention/treatment",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to medium-chain fatty acid interventions.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36716045",
+   "design": "network_meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium chain triglyceride diet (one of several dietary therapies)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "children with drug-resistant epilepsy across included RCTs",
+   "indication_as_stated": "childhood drug-resistant epilepsy",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "MCT diet analyzed as its own distinct arm alongside classic ketogenic diet, modified Atkins diet, and low glycemic index therapy.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT diet analyzed as a distinct dietary-therapy arm within this network meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37248908",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium chain triglycerides",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with MCI or Alzheimer's disease across 10 included studies",
+   "indication_as_stated": "Alzheimer's disease-related cognitive impairment",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "nine (n = 10 studies) met",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to human MCT interventions.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37686724",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "EPA + MCT structured lipid (interesterified vs physical mixture)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "19 healthy men",
+   "indication_as_stated": "endurance performance",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "19 healthy men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT combined and interesterified with EPA in a structured lipid, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38561682",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT-supplemented ketogenic diet (MCT-KD)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with Parkinson's disease",
+   "indication_as_stated": "Parkinson's disease (feasibility)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "MCT tested as part of a ketogenic diet regimen vs. standard diet, not as an isolated supplement on a normal diet.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT supplements a broader ketogenic diet regimen, not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38715705",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglycerides",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with dementia-related diseases across 21 included studies",
+   "indication_as_stated": "dementia-related diseases (symptomatic treatment)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "A total of 21 studies were included, comprising eigh",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT supplementation studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38936302",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglycerides (pure MCT vs MLCT)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "individuals with overweight or obesity across included studies",
+   "indication_as_stated": "weight loss/metabolic health",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Distinguishes pure MCT from medium-long-chain triglycerides (MLCT), a structured/blended form.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review distinguishes pure MCT from MLCT blends.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39027784",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "MCT oil (vs butter)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy adults (military population)",
+   "indication_as_stated": "lipid profile",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT oil matches label material; compared head-to-head with butter.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39125337",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "caprylic acid (C8:0)/MCT",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included studies",
+   "indication_as_stated": "ketogenesis (carbohydrate interaction)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to C8-containing MCT interventions.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40044083",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT (14g octanoic + 10g capric acid), alone or with DHA",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "280 Chinese older adults with mild cognitive impairment",
+   "indication_as_stated": "mild cognitive impairment",
+   "dose_quote": "MCT group (14 g/d octanoic acid+10 g/d capric acid), DHA group (800 mg/d) and MCT + DHA (14 g/d octanoic acid, 10 g/d capric acid and 800 mg/d DHA) group",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "A total of 280 MCI participants were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "MCT-alone arm exists separately from the MCT+DHA combination arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT-alone arm is a clean single-ingredient comparison alongside a combination arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40431345",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "structured medium- and long-chain triglycerides (sMLCT)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "40 female adults",
+   "indication_as_stated": "muscular recovery after resistance exercise",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty female adults (mean \u00b1 SD age = 22 \u00b1 3 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Structured MCT/LCT blend (sMLCT), not pure MCT.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40507074",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "medium-chain triglycerides and decanoic acid",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "children with developmental epileptic encephalopathies (narrative review)",
+   "indication_as_stated": "pediatric epilepsy",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT/decanoic acid nutritional intervention for pediatric epilepsy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40674442",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT dietary supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "46 patients with acute severe encephalopathy (NICU)",
+   "indication_as_stated": "acute severe encephalopathy",
+   "dose_quote": null,
+   "primary_outcome_quote": "180-day poor neurologic outcome (modified Rankin Scale score >4) and all-cause mortality",
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty-six patients were randomized to MCT supplementation (n = 23) or control (n = 23)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41001501",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "exogenous ketone bodies (incl. MCT-derived)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with MCI/Alzheimer's disease and healthy adults across included studies",
+   "indication_as_stated": "cognition (exogenous ketosis)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Exogenous ketones (EK) include MCT oil among other forms (ketone esters/salts); MCT-specific breakdown not confirmed in this excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews exogenous ketone bodies broadly; MCT is one of several EK sources, not isolated throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41097203",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "exogenous ketosis (incl. MCT-derived)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "adults with medical conditions across included studies",
+   "indication_as_stated": "clinical benefits of exogenous ketosis (multiple diseases)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Exogenous ketosis includes MCT oil among other forms (ketone esters/salts); MCT-specific breakdown not confirmed in this excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews exogenous ketosis broadly; MCT is one of several sources, not isolated throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41443401",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT, 12 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "36 young participants",
+   "indication_as_stated": "cognitive function (young adults, acute and chronic)",
+   "dose_quote": "MCT (12 g of MCT) and LCT (olive oil) groups",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Thirty-six young participants (21 \u00b1 1 years; 20/16 males/females)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41698796",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT, 30 g/day, alone or with fibre",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "61 rheumatoid arthritis patients",
+   "indication_as_stated": "rheumatoid arthritis (quality of life)",
+   "dose_quote": "twice-daily MCT supplementation (30 g/day) for 8 weeks, followed by 8 weeks of MCTs (30 g/day) combined with fibre (30 g/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "61 RA patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "MCT-alone phase exists before the MCT+fibre combination phase.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT-alone phase is a clean single-ingredient comparison against an LCT control arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41992745",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "EPA + MCT structured lipid (interesterified vs physical mixture)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "28 healthy young men",
+   "indication_as_stated": "muscle performance/EPA-AA ratio",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty-eight healthy young men were randomly as",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT combined and interesterified with EPA in a structured lipid, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42688103",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "medium-chain triglycerides",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "humans across included studies of oral, gastric or enteral MCT administration",
+   "indication_as_stated": "gastrointestinal side effects (MCT tolerability)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Studies reporting side effects following oral, gastric or enteral MCT administration were included.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Route-mixed review (oral, gastric, enteral), though the majority concerns oral consumption; GI side effects are the predominant tolerability issue.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to MCT consumption side-effect studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11571605",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MCT-enriched very low calorie diet (VLCD)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "obese women (BMI>30)",
+   "indication_as_stated": "weight loss (very low calorie diet)",
+   "dose_quote": "an isoenergetic (578.5 kcal) VLCD (Adinax, Novo Vital, Sweden) enriched with MCT or LCT (8.0 and 9.9 g/100 g Adinax respectively)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "MCT tested as an enrichment of a branded VLCD product, compared against LCT-enriched and low-fat/high-carbohydrate VLCD arms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MCT is an enrichment of a branded VLCD formula (Adinax), not tested as a standalone supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33103819",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "ketogenic MCT drink (kMCT), 15 g twice/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "83 adults with mild cognitive impairment",
+   "indication_as_stated": "mild cognitive impairment",
+   "dose_quote": "a ketogenic drink containing medium chain triglyceride (ketogenic medium chain triglyceride [kMCT]; 15 g twice/day; n = 39) or placebo (n = 44)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Free and cued recall (Trial 1; P = .047), verbal fluency (categories; P = .024), Boston Naming Test (total correct answers; P = .033), and the Trail-Making Test (total",
+   "sample_size_quote": "medium chain triglyceride [kMCT]; 15 g twice/day; n = 39) or placebo (n = 44)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "MCT matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "31870908",
+  "37248908",
+  "25636220",
+  "32212947",
+  "27075909",
+  "31334544",
+  "34255085",
+  "36716045",
+  "41698796",
+  "22566308",
+  "42688103",
+  "34960106"
+ ],
+ "handoff": [
+  {
+   "pmid": "42688103",
+   "role": "safety",
+   "reason": "Systematic review specifically on GI side effects of MCT consumption -- useful standing safety/tolerability reference for any oral MCT recommendation."
+  }
+ ],
+ "identity_notes": "MCT oil's retrieval set is dominated by a large PARENTERAL/INTRAVENOUS cluster -- MCT/LCT lipid emulsions used in parenteral nutrition, propofol anesthetic formulations (MCT is a common excipient), and IV fat infusion/tolerance studies -- all rejected not_this_route since these are intravenous, not oral supplement use. A second cluster is rare chylous/lymphatic conditions (chylothorax, chylous ascites, chylopericardium, intestinal lymphangiectasia): individual case reports were rejected off_topic as purely descriptive of the underlying disease, and broader treatment-option reviews for these conditions were rejected not_intervention since MCT-diet-specific extractable data was not confirmed in the retrieved abstracts, even though MCT diet is understood to be standard adjunct therapy for these conditions in clinical practice. A third recurring confound is generic 'ketogenic diet' and Alzheimer's/epilepsy reviews that do not name MCT specifically in the title or visible abstract -- classic ketogenic diets are LCT/fat-based, and only a subset are the MCT-variant, so these were rejected not_intervention unless MCT was explicitly confirmed as the reviewed intervention (in which case they were kept, e.g. 36716045's network meta-analysis explicitly comparing 'medium chain triglyceride diet' as its own arm). A fourth pattern is MCT used purely as a delivery excipient/solvent for an unrelated active (licorice flavonoids, cannabidiol, topical antifungal nanocarriers) -- these were rejected off_topic/not_intervention since MCT itself is not the tested variable. Among genuine oral MCT trials, the most consistent and repeated evidence clusters are: acute satiety/energy-intake effects (generally positive vs. LCT), sarcopenia/frailty in elderly adults (a coherent trial program: 27075909 combination, then 31334544 and 35122097 isolating MCT alone), cognitive function in MCI/Alzheimer's via mild ketosis induction (multiple positive meta-analyses: 31870908, 37248908, 36633304, 36273115, 38715705), and exercise/endurance performance (mixed results, often when MCT is combined with carbohydrate or structured with EPA). Two reviews (41001501, 41097203) cover 'exogenous ketones/ketosis' broadly, of which MCT is one source among ketone esters and salts; these are flagged related_form_differs since MCT-specific results are not isolated within them."
+}

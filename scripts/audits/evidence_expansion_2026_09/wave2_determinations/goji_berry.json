@@ -1,0 +1,12 @@
+{
+ "canonical_id": "goji_berry",
+ "class": "B",
+ "action": "hold",
+ "direction": "positive_weak",
+ "sources": [
+  "37773857",
+  "28401234"
+ ],
+ "label_median_mg": 1000,
+ "note": "Every synthesis is on Lycium barbarum polysaccharide-standardised preparations or berry/juice exposures; catalog rows are unspecified goji berry at 1,000 mg and extract mg does not state LBP content. A retracted LBP trial (29527188) sits in the same literature and must be checked against each meta-analysis's included list first."
+}

@@ -29,7 +29,7 @@ Keep these utilities here so they stay separate from the cleaning, enrichment, a
    - Run `verify_clinical_trials.py` on `backed_clinical_studies.json` (NCT ID verification).
    - Run `discover_clinical_evidence.py audit` to check all entries for internal consistency.
    - Run `discover_clinical_evidence.py discover --limit 20` to find missing high-value compounds.
-   - Run `discover_clinical_evidence.py discover --limit 50 --apply` to add qualifying compounds with auto-populated key_endpoints and PubMed PMIDs.
+   - `discover --apply` is disabled (2026-09-17): trial counts never create evidence records; candidates go through reviewed pending-context curation (`scripts/audits/evidence_expansion_2026_09/`).
    - Run `discover_clinical_evidence.py enrich --apply` to update enrollment data and registry completed-trial counts from ClinicalTrials.gov.
    - Run `discover_clinical_evidence.py backfill-auditability --limit 50 --apply` to add rationale/confidence/tags on the highest-impact entries first.
 4. Bioactivity validation
@@ -612,7 +612,7 @@ Inputs:
 Outputs:
 
 - JSON reports auto-saved to `scripts/api_audit/reports/` (timestamped, no `--output` needed).
-- Optional in-file updates when `--apply` is used (discover adds entries with auto-populated `key_endpoints`, enrich updates enrollment).
+- Optional in-file updates when `--apply` is used (enrich updates enrollment; discover refuses `--apply`).
 - Entries with auto-populated endpoints note "Key endpoints auto-populated from registered outcome measures with PubMed cross-references."
 - Entries where no outcome measures were found note "Requires human review for key_endpoints."
 
@@ -621,10 +621,6 @@ Common commands:
 ```bash
 # Discover top 20 missing compounds (dry-run — report only)
 python3 scripts/api_audit/discover_clinical_evidence.py discover --limit 20
-
-# Discover and auto-add qualifying compounds (>= 5 completed trials)
-# Key endpoints auto-populated with PubMed PMIDs when available
-python3 scripts/api_audit/discover_clinical_evidence.py discover --limit 50 --apply --min-trials 5
 
 # Discover a single compound
 python3 scripts/api_audit/discover_clinical_evidence.py discover --compound "spirulina"

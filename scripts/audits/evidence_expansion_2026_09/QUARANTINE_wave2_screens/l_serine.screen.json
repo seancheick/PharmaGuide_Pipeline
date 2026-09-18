@@ -1,0 +1,24 @@
+{"canonical_id": "l_serine", "recommended_class": "curate",
+ "one_line_reason": "A general-population single-ingredient sleep-supplement RCT arm and a pain-relief trial with an isolated l-serine dose provide real human efficacy evidence, alongside a rare-genetic-disease pediatric trial with mixed results.",
+ "selected": [
+   {"pmid": "37242260", "population": "160 general adult subjects (open, randomized, cross-over)", "intervention": "oral l-serine 300 mg/day, tested as its own arm alongside l-theanine, GABA, and Apocynum venetum leaf extract arms", "dose_as_stated": "300 mg/day", "primary_outcome": "sleep quality/sleep problems relative to pre-supplementation life habits and sleep conditions", "apparent_direction": "unclear", "why_selected": "The cleanest single-ingredient, dose-stated RCT arm in a general (non-clinical) population testing a mainstream marketed use (sleep support); the retrieved abstract is truncated before result values are given"},
+   {"pmid": "32520991", "population": "120 adults aged 20+ with chronic low-back and knee pain (≥3 months)", "intervention": "l-serine 594 mg plus EPA 149 mg, oral, daily for 8 weeks vs placebo", "dose_as_stated": "594 mg/day (combined with 149 mg/day EPA)", "primary_outcome": "low-back pain (JLEQ) and knee osteoarthritis (JKOM) scores", "apparent_direction": "positive", "why_selected": "Statistically significant pain-score improvement (P<0.001) with a clearly stated l-serine dose, though co-administered with EPA"},
+   {"pmid": "41265180", "population": "4 children with GRIN2B loss-of-function variants (rare genetic neurodevelopmental disorder)", "intervention": "oral l-serine supplementation, randomized n-of-1 trials, 2 cycles of 6 months", "dose_as_stated": "not stated", "primary_outcome": "cognitive/adaptive function (PRPP-A), with secondary quality-of-life, sleep, irritability, language measures", "apparent_direction": "mixed", "why_selected": "The only shortlisted trial testing l-serine alone (no co-ingredient) with a statistically significant result on one measure, though in an ultra-rare pediatric genetic-disease population with mostly non-significant secondary outcomes"}
+ ],
+ "blockers": [
+   "32520991 co-administers l-serine with EPA, so the pain-relief effect cannot be attributed to l-serine alone from this trial",
+   "41265180 is in an ultra-rare pediatric genetic disorder (GRIN2B loss-of-function), not general supplement use, and most outcome measures were not statistically significant",
+   "37242260's actual result values are not present in the retrieved abstract text, so direction could not be determined from the packet alone"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "23792047", "reason": "Meta-analysis of blood/CSF serine levels in schizophrenia patients vs controls; an observational biomarker comparison, not a supplementation trial"},
+   {"pmid": "29699895", "reason": "Observational study of endogenous serum d-serine and cognitive training gains in schizophrenia; no oral l-serine was administered"},
+   {"pmid": "31959849", "reason": "Meta-analysis of peripheral blood metabolites (including L-serine) in major depressive disorder; observational biomarker study, not an intervention trial"},
+   {"pmid": "32773395", "reason": "Review of targeted therapies for hereditary peripheral neuropathies (ascorbic acid, PXT3003); l-serine is not identified as a studied therapy in the retrieved abstract"},
+   {"pmid": "40629394", "reason": "RCT of subway air-pollution exposure on lung function and serum biomarkers; l-serine is not an administered exposure, evidently a metabolite-panel retrieval artifact"},
+   {"pmid": "41021739", "reason": "RCT of exercise training on plasma lipidome in diabetes/prediabetes; l- and d-serine are measured biomarkers (found unchanged), not an administered supplement"},
+   {"pmid": "36493386", "reason": "Crossover study of THC/CBD on plasma endocannabinoid levels; no relation to l-serine supplementation apparent in the abstract"},
+   {"pmid": "36703196", "reason": "Combined Metabolic Activators (12.35 g L-serine plus nicotinamide riboside, N-acetyl-L-cysteine, and L-carnitine tartrate) in Alzheimer's disease patients; a 4-component combination in a clinical dementia population"},
+   {"pmid": "34180141", "reason": "Combined Metabolic Activators (l-serine, N-acetyl-l-cysteine, nicotinamide riboside, l-carnitine tartrate) in COVID-19 patients; combination product in an acute-infection clinical population"}
+ ]}

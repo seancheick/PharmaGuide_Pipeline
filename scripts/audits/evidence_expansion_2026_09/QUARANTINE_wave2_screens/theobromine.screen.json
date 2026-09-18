@@ -1,0 +1,23 @@
+{"canonical_id": "theobromine", "recommended_class": "curate",
+ "one_line_reason": "A single-ingredient RCT of pure theobromine supplementation in metabolic syndrome and an older exercise-performance review provide real (if modest) human efficacy evidence.",
+ "selected": [
+   {"pmid": "37615657", "population": "overweight/obese adults aged 40-55 with metabolic syndrome (n=72 completers)", "intervention": "pure theobromine 450 mg/day oral, both arms also following a low-calorie diet, 12 weeks vs placebo+diet", "dose_as_stated": "450 mg/day", "primary_outcome": "anthropometric and metabolic syndrome indices (waist circumference, lipid ratios, HDL-c)", "apparent_direction": "positive", "why_selected": "The only shortlisted RCT of theobromine as a standalone oral supplement (both arms shared the same background diet), with a stated dose and modest but statistically significant favorable lipid/waist changes"},
+   {"pmid": "33188564", "population": "healthy subjects (single small theobromine study, 7-15 subjects)", "intervention": "oral theobromine, single-dose or short-term (exact dose not given in this review-level abstract)", "dose_as_stated": "not stated", "primary_outcome": "exercise performance (3 km treadmill time trial)", "apparent_direction": "positive", "why_selected": "Older human data showing theobromine outperformed placebo and matched caffeine on a time trial, though it is a single very small study summarized within a broader review"}
+ ],
+ "blockers": [
+   "37615657 dosed theobromine on top of a shared low-calorie diet in both arms; effect sizes are small and diet is a major co-intervention even though it was matched between groups",
+   "33188564 is a narrative summary of a single small (7-15 subject) exercise study; the review itself does not restate the theobromine dose or full methodology"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "38987932", "reason": "In vitro dental-enamel remineralization study (topical, not human oral supplementation, and not human at all)"},
+   {"pmid": "33206095", "reason": "Epidemiological review of dietary methylxanthines (caffeine, theophylline, theobromine pooled together) and colorectal cancer; no theobromine-isolated human trial data, and the meta-analysis found no association for caffeine specifically"},
+   {"pmid": "24360219", "reason": "Observational review of whole chocolate consumption and preeclampsia risk in pregnant women; dietary whole-food exposure, not an isolated theobromine supplement, and a clinical/pregnant population"},
+   {"pmid": "20799759", "reason": "Reviews pentoxifylline, a synthetic theobromine-derivative drug, in preterm neonates; different (synthetic, prescription) compound, not the natural supplement ingredient"},
+   {"pmid": "40583613", "reason": "Urinary stone disease management guideline; no theobromine-specific content evident in the retrieved abstract"},
+   {"pmid": "40284238", "reason": "RCT of whole dark chocolate (flavonoids, polyphenols, magnesium, and theobromine together) on athletic performance; a multi-compound whole-food matrix, not an isolated theobromine exposure"},
+   {"pmid": "40850526", "reason": "RCT of caffeine ingestion in cyclists; theobromine and theophylline are measured only as endogenous metabolites of caffeine, not administered as the exposure"},
+   {"pmid": "38150009", "reason": "RCT of cocoa flavanol supplementation; the placebo was explicitly caffeine- and theobromine-matched, meaning theobromine was held constant/not the tested exposure"},
+   {"pmid": "22895979", "reason": "Cochrane review of cocoa/flavanol-rich chocolate on blood pressure; the studied active is flavanols, not theobromine, and exposure is whole cocoa product"},
+   {"pmid": "38141101", "reason": "Lipidomic/metabolomic analysis of a low-carbohydrate diet and HIIT; no theobromine exposure studied"}
+ ]}

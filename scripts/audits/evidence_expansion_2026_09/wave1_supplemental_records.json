@@ -1,0 +1,97 @@
+{
+ "_metadata": {
+  "purpose": "Records fetched live outside the original per-identity retrieval (owner-requested synthesis supplement). Stored so every authored quote has a committed source to verify against.",
+  "retrieved": "2026-09-17",
+  "source": "NCBI PubMed E-utilities (efetch, rettype=abstract)"
+ },
+ "records": [
+  {
+   "pmid": "40219032",
+   "doi": "10.3390/nu17071275",
+   "title": "Effects of Tribulus (Tribulus terrestris L.) Supplementation on Erectile Dysfunction and Testosterone Levels in Men-A Systematic Review of Clinical Trials.",
+   "abstract": "Background: Tribulus terrestris L. Zygophyllaceae (TT) is a plant that has been claimed to increase testosterone levels and improve sexual function, particularly erectile dysfunction, with potential benefits for male sexual health. Purpose: This systematic review aimed to evaluate the effectiveness of TT supplementation in improving sexual function and serum testosterone levels in men. Methods: We conducted a systematic review adhering to the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) guidelines. After searching the literature (n = 162), 52 studies were selected for full-text reading, and 10 studies were eligible for this review, comprising 9 clinical trials and 1 quasi-experimental study (a study without a control). The Jadad score revealed low methodological quality for 50% of the studies. Results: The studies involved 15 to 172 participants (total = 483) aged between 16 and 70 years with different health conditions: healthy men (n = 5), oligozoospermia (n = 1), erectile dysfunction (n = 1), erectile dysfunction associated with hypogonadism (n = 2), and unexplained infertility (n = 1). TT supplementation at doses of 400 to 750 mg/d for 1 to 3 months improved erectile dysfunction in 3 of the 5 studies that assessed this parameter. Eight out of ten studies did not report significant changes in androgen profile following TT supplementation, but the subjects in the neutral studies did not have low androgen levels at baseline. Therefore, only 2 studies showed significant intra-group increase in total testosterone levels, which had low clinical magnitude (60-70 ng/dL) and involved subjects with hypogonadism. Conclusions: TT supplementation has a low level of evidence regarding its effectiveness in improving erectile function in men with erectile dysfunction, and no robust evidence was found for increasing testosterone levels.",
+   "journal": "Nutrients",
+   "published_date": "2025-04-06",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "mesh_terms": [
+    "Humans",
+    "Male",
+    "Tribulus",
+    "Erectile Dysfunction",
+    "Testosterone",
+    "Dietary Supplements",
+    "Middle Aged",
+    "Adult",
+    "Plant Extracts",
+    "Aged",
+    "Young Adult",
+    "Adolescent",
+    "Clinical Trials as Topic"
+   ],
+   "supplementary_concepts": [],
+   "retracted": false,
+   "expression_of_concern": false,
+   "has_erratum": false,
+   "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/40219032/"
+  },
+  {
+   "pmid": "37697053",
+   "doi": "10.1038/s41443-023-00763-9",
+   "title": "Do \"testosterone boosters\" really increase serum total testosterone? A systematic review.",
+   "abstract": "Testosterone boosters are heavily marketed on social media and marketplaces to men with claims to significantly increase testosterone. Lax industry regulation has allowed sales of supplements to thrive in the absence of verification of their purported benefits. Our primary objective was to systematically review all data published in the last two decades on testosterone boosters and determine their efficacy. Our outcome of interest was total testosterone increase versus placebo in four different populations: male athletes, men with late-onset hypogonadism infertile men and healthy men. Following search and screening, 52 studies were included in our review, relating to 27 proposed testosterone boosters: 10 studies of cholecalciferol; 5 zinc/magnesium; 4 Tribulus terrestris and creatine; 3 Eurycoma longifolia and Withania somnifera; 2 betaine, D-aspartic acid, Lepidium meyenii and isoflavones; while the remainder were single reports. Our findings indicate that most fail to increase total testosterone. The exceptions were \u03b2-hydroxy \u03b2-methylbutyrate and betaine, which can be considered effective for male athletes. Eurycoma longifolia, a blend of Punica granatum fruit rind and Theobroma cacao seed extracts (Tesnor\u2122) and purified Shilajit extract (PrimaVie\u2122) can be considered possibly effective for men with late-onset hypogonadism; Eurycoma longifolia and Withania somnifera possibly effective for healthy men; and a non-hormonal aromatase inhibitor (Novadex XT\u2122) possibly effective for male athletes.",
+   "journal": "International journal of impotence research",
+   "published_date": "2024-06-01",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "mesh_terms": [
+    "Humans",
+    "Male",
+    "Athletes",
+    "Creatine",
+    "Dietary Supplements",
+    "Hypogonadism",
+    "Infertility, Male",
+    "Plant Extracts",
+    "Testosterone",
+    "Tribulus"
+   ],
+   "supplementary_concepts": [],
+   "retracted": false,
+   "expression_of_concern": false,
+   "has_erratum": false,
+   "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/37697053/"
+  },
+  {
+   "pmid": "35954909",
+   "doi": "10.3390/ijerph19159533",
+   "title": "Effects of Tribulus terrestris L. on Sport and Health Biomarkers in Physically Active Adult Males: A Systematic Review.",
+   "abstract": "Tribulus terrestris L. (TT) is a plant used in traditional Chinese medicine, Ayurvedic medicine, and sports nutrition to improve health and performance. However, no conclusive evidence exists about the potential beneficial effects of TT on sport and health biomarkers in physically active adults. Based on the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) guidelines, and the modified McMaster Critical Review Form for methodological quality assessment, we systematically reviewed studies indexed in Web of Science, Scopus, and PubMed, to assess the effects of TT on immunological, hematological, biochemical, renal, lipidic, hormonal behavior, and anti-inflammatory response in physically active adult males. Among 340 records identified in the search, a total of 7 studies met the inclusion and exclusion criteria. Overall, participants supplemented with TT displayed significant improvements in lipid profile. Inflammatory and hematological biomarkers showed moderate beneficial effects with no significant changes on renal biomarkers. No positive effects were observed on the immune system response. Additionally, no TT-induced toxicity was reported. In conclusion, there was no clear evidence of the beneficial effects of TT supplementation on muscle damage markers and hormonal behavior. More studies are needed to confirm the benefits of TT due to the limited number of studies available in the current literature.",
+   "journal": "International journal of environmental research and public health",
+   "published_date": "2022-08-03",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "mesh_terms": [
+    "Adult",
+    "Biomarkers",
+    "Dietary Supplements",
+    "Humans",
+    "Male",
+    "Plant Extracts",
+    "Sports",
+    "Tribulus"
+   ],
+   "supplementary_concepts": [],
+   "retracted": false,
+   "expression_of_concern": false,
+   "has_erratum": false,
+   "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/35954909/"
+  }
+ ]
+}

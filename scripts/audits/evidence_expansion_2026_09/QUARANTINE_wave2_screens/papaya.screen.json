@@ -1,0 +1,20 @@
+{"canonical_id": "papaya", "recommended_class": "hold",
+ "one_line_reason": "The only human oral-intake record involving actual papaya material (papain) tests it only as part of a 3-enzyme blend in cancer patients and concludes evidence is insufficient; every other human trial in the shortlist uses papaya LEAF, not fruit/papain.",
+ "selected": [
+   {"pmid": "34230116", "population": "cancer patients across GI, gynecologic, head-and-neck, lung, and hematologic malignancies (systematic review, 15 studies, 3008 patients)", "intervention": "oral proteolytic enzyme therapy including papain (derived from papaya) combined with bromelain and chymotrypsin, alongside conventional cancer therapy", "dose_as_stated": "not stated", "primary_outcome": "side-effects of anticancer therapy, quality of life, anticancer effects, survival", "apparent_direction": "null", "why_selected": "the only shortlisted record where humans actually ingest a papaya-derived compound (papain), though only as part of a multi-enzyme blend, and the review concludes evidence is insufficient to attribute a clear benefit."}
+ ],
+ "blockers": ["Papain is combined with bromelain and chymotrypsin in every study reviewed; no trial isolates papaya-derived papain alone.", "The population studied is cancer patients receiving concurrent conventional anticancer therapy, not general supplement users, and the review's own conclusion is that evidence is insufficient to show a clear benefit.", "Every other human record in this shortlist tests papaya LEAF (for chemotherapy/dengue-related thrombocytopenia, or as a galactagogue) rather than the fruit or its papain enzyme, an important plant-part mismatch for this catalog identity."],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "42328085", "reason": "Agricultural/horticultural systematic review of tropical fruit crop research trends in the Mediterranean Basin; not a human health study."},
+   {"pmid": "40836827", "reason": "Meta-analysis of Carica papaya LEAF extract (CPLE) for chemotherapy-induced thrombocytopenia, combining human and animal data; wrong plant part."},
+   {"pmid": "40841969", "reason": "Bibliometric/ethnobotanical review of plant use in Nigeria; Carica papaya mentioned only as a frequently-cited species with no specific human efficacy trial data."},
+   {"pmid": "41214477", "reason": "Systematic review of dengue treatments; Carica papaya LEAF extract combined with doxycycline; wrong plant part and a combination product."},
+   {"pmid": "41602767", "reason": "In vitro study of silver nanoparticles synthesized using plant extracts (including papaya) for antibacterial testing; not a human supplement exposure."},
+   {"pmid": "31601215", "reason": "Meta-analysis of Carica papaya (leaf) extract for dengue; wrong plant part, and concludes current evidence is insufficient."},
+   {"pmid": "26099634", "reason": "Ethnopharmacology review of anti-Buruli-ulcer plants; Carica papaya mentioned only generally among many plants without clear plant-part or route detail."},
+   {"pmid": "24269772", "reason": "Narrative ethnobotanical review of medicinal plants for women's healthcare; no specific Carica papaya trial data given."},
+   {"pmid": "19275687", "reason": "Review of herbal antioxidant sources; the Carica papaya finding cited is from an animal study, not a human trial."},
+   {"pmid": "38644615", "reason": "RCT of a polyherbal galactagogue containing papaya LEAVES (not fruit) as one of three herbs, compared against a single-herb commercial product that does not even contain papaya; wrong plant part, combination product, and no arm isolating papaya's own effect."},
+   {"pmid": "37189446", "reason": "Fermented papaya combined with fermented mangosteen in a topical shampoo/lotion for hair loss; a topical cosmetic application, not an oral supplement, and a combination product."}
+ ]}

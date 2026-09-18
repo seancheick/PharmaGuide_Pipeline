@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-17",
-    "total_entries": 169,
+    "last_updated": "2026-09-18",
+    "total_entries": 171,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -19459,7 +19459,7 @@
       ],
       "cui": null,
       "reason": "FDA laboratory analysis confirmed undeclared sildenafil and tadalafil — prescription ED drugs that can cause dangerous blood-pressure drops with nitrate medications.",
-      "status": "banned",
+      "status": "recalled",
       "ban_context": "adulterant_in_supplements",
       "class_tags": [
         "illegal_spiking_agents",
@@ -19494,6 +19494,20 @@
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
           "last_verified_date": "2026-05-30"
+        },
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-09-15",
+          "source": {
+            "type": "fda_recall",
+            "citation": "A&P Creations LLC Issues Nationwide Recall of X10 Natural Enhancement Supplement Due to Undeclared Sildenafil and Tadalafil. Company announcement 2026-09-14; FDA publish date 2026-09-15.",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
         }
       ],
       "references_structured": [
@@ -19507,13 +19521,24 @@
             "regulatory_action"
           ],
           "evidence_summary": "FDA laboratory analysis confirmed X10 Natural Enhancement Supplement contains sildenafil, tadalafil not listed on the product label."
+        },
+        {
+          "type": "fda_recall",
+          "title": "A&P Creations LLC Issues Nationwide Recall of X10 Natural Enhancement Supplement Due to Undeclared Sildenafil and Tadalafil",
+          "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ap-creations-llc-issues-nationwide-recall-x10-natural-enhancement-supplement-due-undeclared",
+          "evidence_grade": "R",
+          "date": "2026-09-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "A&P Creations LLC recalled X10 Natural Enhancement Supplement to the consumer level nationwide because it was found to contain undeclared sildenafil and tadalafil."
         }
       ],
       "source_category": "illegal_spiking_agents",
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-05-30",
+        "last_reviewed_at": "2026-09-18",
         "next_review_due": "2026-11-30",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
@@ -19521,19 +19546,33 @@
             "date": "2026-05-30",
             "change": "Added from FDA advisory 2026-05-29 — X10 Natural Enhancement Supplement contains undeclared sildenafil, tadalafil",
             "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Added the 2026-09-15 A&P Creations LLC nationwide recall beside the existing 2026-05-29 public notification; status banned -> recalled",
+            "by": "pharmaguide_clinical_team"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Corrected recall_scope.lots: the X10 recall is lot-scoped (3 lots), not whole-product. The recalls index row carries no lot column; the lots are only on the recall detail page.",
+            "by": "pharmaguide_clinical_team"
           }
         ]
       },
       "supersedes_ids": null,
-      "regulatory_date": "2026-05-29",
-      "regulatory_date_label": "FDA advisory publication date",
+      "regulatory_date": "2026-09-15",
+      "regulatory_date_label": "FDA recall publication date (2026-09-15); FDA public-notification date was 2026-05-29",
       "recall_scope": {
         "brand": "X10 Natural Enhancement Supplement",
         "formulations": null,
-        "lots": null,
-        "effective_from": "2026-05-29",
+        "lots": [
+          "F090824LN16 (exp 08/2026)",
+          "F170325LN19 (exp 03/2027)",
+          "F300326LN28 (exp 03/2028)"
+        ],
+        "effective_from": "2026-09-15",
         "effective_to": null,
-        "note": "Sold on naturefuel.us"
+        "note": "Consumer-level nationwide recall of three lots by A&P Creations LLC (Clermont, FL). Liquid in a red and gold box of 7 lightning-bolt sachets, 15 mL each (105 mL total), UPC 7708075247094; original Spanish-language package labels it “Bebida energizante”. Sold on naturefuel.us."
       }
     },
     {
@@ -20436,6 +20475,214 @@
             "by": "manual_entry"
           }
         ]
+      }
+    },
+    {
+      "id": "RECALLED_BIQ_FEL",
+      "standard_name": "biQ-FEL",
+      "aliases": [
+        "biq-fel",
+        "biq fel",
+        "biqfel",
+        "biq-fel usa"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sildenafil and tadalafil — prescription ED drugs that can cause dangerous blood-pressure drops with nitrate medications.",
+      "status": "recalled",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with undeclared prescription drugs.",
+      "safety_warning": "Hidden in this supplement are prescription ED drugs (sildenafil, tadalafil), risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains hidden prescription drugs — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-05-27",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: biQ-FEL may be harmful due to hidden drug ingredients — 2026-05-27",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        },
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-09-15",
+          "source": {
+            "type": "fda_recall",
+            "citation": "A&P Creations LLC Issues Nationwide Recall of biQ-FEL Due to Undeclared Sildenafil and Tadalafil. Company announcement 2026-09-14; FDA publish date 2026-09-15.",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: biQ-FEL may be harmful due to hidden drug ingredients",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/biq-fel-may-be-harmful-due-hidden-drug-ingredients",
+          "evidence_grade": "R",
+          "date": "2026-05-27",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed biQ-FEL contains sildenafil and tadalafil not listed on the product label."
+        },
+        {
+          "type": "fda_recall",
+          "title": "A&P Creations LLC Issues Nationwide Recall of biQ-FEL Due to Undeclared Sildenafil and Tadalafil",
+          "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ap-creations-llc-issues-nationwide-recall-biq-fel-due-undeclared-sildenafil-and-tadalafil",
+          "evidence_grade": "R",
+          "date": "2026-09-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "A&P Creations LLC recalled biQ-FEL 500 mL supplement bottle to the consumer level nationwide because it was found to contain undeclared sildenafil and tadalafil."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-05-27 — biQ-FEL contains undeclared sildenafil, tadalafil. Notification page fetched and date read live; missed by the weekly sync because health-fraud notifications are not an openFDA enforcement source.",
+            "by": "pharmaguide_clinical_team"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Added the 2026-09-15 A&P Creations LLC nationwide recall beside the existing 2026-05-27 public notification; status banned -> recalled",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-15",
+      "regulatory_date_label": "FDA recall publication date (2026-09-15); FDA public-notification date was 2026-05-27",
+      "recall_scope": {
+        "brand": "biQ-FEL",
+        "formulations": null,
+        "lots": [
+          "biQ-f001-06-25 (exp 05/06/27)",
+          "biQ-003-01-26 (exp 01/01/28, UPC 7709799120663)"
+        ],
+        "effective_from": "2026-09-15",
+        "effective_to": null,
+        "note": "Consumer-level nationwide recall of certain lots by A&P Creations LLC (Clermont, FL), which distributed but did not manufacture the product. Label carries Spanish-language text. Originally promoted for sexual enhancement on walmart.com and biqfelusa.com."
+      }
+    },
+    {
+      "id": "RECALLED_ZUBB",
+      "standard_name": "ZUBB Dietary Supplement",
+      "aliases": [
+        "zubb",
+        "zubb dietary supplement",
+        "zubb supplement"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sildenafil — a prescription ED drug that can cause dangerous blood-pressure drops with nitrate medications. Marketed for weight loss, so buyers have no reason to expect an ED drug or to connect it to their heart medication.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "supplement_weight_loss"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with an undeclared prescription drug.",
+      "safety_warning": "Hidden in this weight-loss supplement is the prescription ED drug sildenafil, risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains a hidden prescription drug — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-04",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: ZUBB Dietary Supplement may be harmful due to hidden ingredient — 2026-09-04",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: ZUBB Dietary Supplement may be harmful due to hidden ingredient",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-09-04",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed ZUBB Dietary Supplement, sold for weight loss, contains sildenafil not listed on the product label. Identified during an examination of international mail shipments."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-04 — ZUBB Dietary Supplement contains undeclared sildenafil. Notification page fetched and date read live; missed by the weekly sync because health-fraud notifications are not an openFDA enforcement source.",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-04",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "ZUBB Dietary Supplement",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-09-04",
+        "effective_to": null,
+        "note": "Promoted and sold for weight loss on various websites; identified in international mail shipments"
       }
     }
   ]

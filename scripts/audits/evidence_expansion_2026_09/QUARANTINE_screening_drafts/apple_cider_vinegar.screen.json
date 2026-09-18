@@ -1,0 +1,800 @@
+{
+  "canonical_id": "apple_cider_vinegar",
+  "screened": 37,
+  "kept": 18,
+  "rejected": [
+    {
+      "pmid": "2789884",
+      "reason": "off_topic",
+      "note": "'Honey and cider vinegar diets' — abstract empty in retrieved record; appears to be a general commentary on a honey/cider-vinegar fad diet, no carnosine... no extractable ACV-specific human outcome data, and combines with honey."
+    },
+    {
+      "pmid": "22251397",
+      "reason": "off_topic",
+      "note": "Topical vitamin A treatment of recalcitrant common warts; no apparent connection to apple cider vinegar (likely keyword false match)."
+    },
+    {
+      "pmid": "22980269",
+      "reason": "not_this_route",
+      "note": "Chemical burn from topical apple cider vinegar; topical skin application, not oral supplementation."
+    },
+    {
+      "pmid": "25144853",
+      "reason": "off_topic",
+      "note": "Effect of GutsyGum (a chewing gum product) on GERD symptoms; unrelated to apple cider vinegar."
+    },
+    {
+      "pmid": "29091513",
+      "reason": "animal_or_invitro",
+      "note": "Apple Cider Vinegar effects in high-fat-fed male Wistar rats; animal model study."
+    },
+    {
+      "pmid": "29393529",
+      "reason": "not_this_route",
+      "note": "Surreptitious topical apple cider vinegar treatment of a melanocytic nevus (skin lesion); topical application, not oral."
+    },
+    {
+      "pmid": "31043910",
+      "reason": "off_topic",
+      "note": "Broad naturopathic treatment review for GI dysfunction in Parkinson's disease; not confirmed as ACV-specific extractable data."
+    },
+    {
+      "pmid": "31328306",
+      "reason": "not_this_route",
+      "note": "Apple cider vinegar soaks for atopic dermatitis; topical skin application, not oral."
+    },
+    {
+      "pmid": "34077434",
+      "reason": "not_this_route",
+      "note": "Apple cider vinegar soaks and skin bacterial microbiome in atopic dermatitis; topical application, not oral."
+    },
+    {
+      "pmid": "34620303",
+      "reason": "off_topic",
+      "note": "'Potion or Poison? Apple cider vinegar' — abstract empty in retrieved record; general-interest/perspective title with no extractable outcome data."
+    },
+    {
+      "pmid": "35978745",
+      "reason": "not_this_route",
+      "note": "Apple cider vinegar applied for dental plaque/gingival inflammation in children with cerebral palsy; topical dental/oral-cavity application, not systemic oral supplementation."
+    },
+    {
+      "pmid": "36084000",
+      "reason": "off_topic",
+      "note": "SCFAs provided via a combination of resistant starch, inulin, AND apple cider vinegar as one of three dietary SCFA sources; cannot isolate an apple-cider-vinegar-specific effect."
+    },
+    {
+      "pmid": "37451111",
+      "reason": "off_topic",
+      "note": "Comparative effectiveness of six herbs (broad) for glycemic status in T2DM; not apple-cider-vinegar-isolated data in this network meta-analysis scope."
+    },
+    {
+      "pmid": "38019566",
+      "reason": "off_topic",
+      "note": "Broad systematic review of nutritional supplements in atopic dermatitis; not apple-cider-vinegar-specific extractable data."
+    },
+    {
+      "pmid": "39775415",
+      "reason": "off_topic",
+      "note": "Broad network meta-analysis of natural-based endodontic (dental) antimicrobial solutions; not apple-cider-vinegar-specific human outcome data."
+    },
+    {
+      "pmid": "40982748",
+      "reason": "off_topic",
+      "note": "Gallbladder flush case report combining olive oil, lemon juice, and apple cider vinegar plus dietary restrictions; three-component undosed regimen, cannot isolate an ACV-specific effect."
+    },
+    {
+      "pmid": "41278183",
+      "reason": "not_this_route",
+      "note": "Herbal shampoo containing vinegar and ajwain against head lice; topical scalp application, not oral, and vinegar type not confirmed as apple cider vinegar specifically."
+    },
+    {
+      "pmid": "41789013",
+      "reason": "duplicate",
+      "note": "Retraction notice for the weight-management RCT already captured as PMID 38966098; same underlying study, retraction flagged there via integrity.retracted=true."
+    },
+    {
+      "pmid": "42196941",
+      "reason": "not_intervention",
+      "note": "Survey of patient perceptions/beliefs about dietary supplement use (including ACV) in kidney stone disease; measures patient beliefs, not an ACV efficacy or safety outcome."
+    }
+  ],
+  "records": [
+    {
+      "pmid": "9736833",
+      "design": "case_report",
+      "human_status": {
+        "value": "ambiguous",
+        "signals": [
+          "title describes a specific patient case",
+          "abstract not retrievable/empty in this record"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "large amounts of cider vinegar (title only; no abstract text)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a patient (per title)",
+      "indication_as_stated": null,
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": null,
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "unresolved",
+      "direction_note": "Abstract field empty in retrieved record; title reports hypokalemia, hyperreninemia and osteoporosis in a patient ingesting large amounts of cider vinegar.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "Title uses 'cider vinegar', consistent with label spelling 'Apple Cider Vinegar'."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "15983536",
+      "design": "product_quality_analysis",
+      "human_status": {
+        "value": "not_applicable",
+        "signals": [
+          "laboratory testing of commercial tablet products, not a human clinical study"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "eight apple cider vinegar tablet products were tested for pH, component acid content, and microbial growth",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": null,
+      "indication_as_stated": "product quality/label accuracy of commercial ACV tablets, prompted by an adverse event report",
+      "dose_quote": null,
+      "primary_outcome_quote": "eight apple cider vinegar tablet products were tested for pH, component acid content, and microbial growth",
+      "primary_result_quote": "Doubt remains as to whether apple cider vinegar was in fact an ingredient in the evaluated products.",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Not a human efficacy/safety outcome study; laboratory product-quality testing prompted by a reported adverse event. Found major inconsistency/inaccuracy in commercial ACV tablet labeling and content.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "unclear",
+        "note": "Study itself found 'doubt remains as to whether apple cider vinegar was in fact an ingredient' in several tested commercial products."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "18093343",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Ten patients with type 1 diabetes and diabetic gastroparesis",
+          "investigator-blinded crossover trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "200 ml water with 30 ml apple cider vinegar",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Ten patients with type 1 diabetes and diabetic gastroparesis, including one patient who had undergone vagotomy",
+      "indication_as_stated": "delayed gastric emptying in type 1 diabetes mellitus with diabetic gastroparesis",
+      "dose_quote": "drank 200 ml water with 30 ml vinegar daily before breakfast for two weeks before the measurement of GER2",
+      "primary_outcome_quote": "The gastric emptying rate (GER) was measured using standardized real-time ultrasonography.",
+      "primary_result_quote": "This study shows that vinegar affects insulin-dependent diabetes mellitus patients with diabetic gastroparesis by reducing the gastric emptying rate even further, and this might be a disadvantage regarding to their glycaemic control.",
+      "sample_size_quote": "Ten patients with type 1 diabetes and diabetic gastroparesis",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Effect was directionally adverse for this population: vinegar further slowed already-delayed gastric emptying, a stated disadvantage for glycemic control in diabetic gastroparesis.",
+      "registrations": [
+        "ISRCTN33841495"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'apple cider vinegar' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "19963157",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "5 subjects had 4 studies at 1-week intervals"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "20 mL apple cider vinegar, 40 mL water",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "5 subjects (crossover mechanistic study)",
+      "indication_as_stated": "enteral carbohydrate absorption / antiglycemic mechanism of vinegar",
+      "dose_quote": "20 mL apple cider vinegar, 40 mL water",
+      "primary_outcome_quote": "the rate of rise of glucose was modestly but significantly (P = .01) greater after vinegar ingestion compared to placebo",
+      "primary_result_quote": "suggesting that vinegar does not act to decrease glycemia by interference with enteral carbohydrate absorption",
+      "sample_size_quote": "5 subjects had 4 studies at 1-week intervals",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Small mechanistic crossover study (n=5); rules out one proposed mechanism (enteral carbohydrate-absorption blockade) as the explanation for vinegar's antiglycemic effect — glucose actually rose modestly more after vinegar than placebo under insulin suppression.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'apple cider vinegar' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "23373303",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "a 15-year-old girl",
+          "single patient case"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "daily consumption of a glass of apple cider vinegar",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a 15-year-old girl with a Moroccan background",
+      "indication_as_stated": "used for weight loss; resulted in erosive tooth wear",
+      "dose_quote": "daily consumption of a glass of apple cider vinegar",
+      "primary_outcome_quote": null,
+      "primary_result_quote": "it was concluded that the erosive tooth wear was induced by daily consumption of a glass of apple cider vinegar",
+      "sample_size_quote": "a 15-year-old girl",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Single case report of dental erosion from daily oral ACV consumption used for weight-loss purposes; notes this use pattern is culturally known in North-African women and bodybuilders for weight reduction.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'apple cider vinegar' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34055150",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "16 healthy subjects",
+          "randomized, double blind, crossover design"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "ACV (30-ml/d) mixed in 1 L of a non-nutritive lemon-flavored drink",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "16 healthy subjects",
+      "indication_as_stated": "resting and exercise energy expenditure and substrate utilization",
+      "dose_quote": "ACV (30-ml/d) mixed in 1 L of a non-nutritive lemon-flavored drink",
+      "primary_outcome_quote": "assessed via indirect calorimetry for resting energy expenditure (REE) and substrate utilization",
+      "primary_result_quote": "Neither REE nor resting substrate utilization were significantly different between groups (p ≥ .05).",
+      "sample_size_quote": "16 healthy subjects",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Null result for a 4-day (semi-acute) ACV supplementation period on resting/exercise energy expenditure and substrate utilization, despite the authors citing prior findings of body-weight/fat reduction with more chronic acetic acid supplementation.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'acetic acid (apple cider vinegar; ACV)' explicitly equates the intervention with apple cider vinegar."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34187442",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "nine studies, including 10 study arms, were included in this meta-analysis"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "apple cider vinegar (ACV)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "adults across 9 pooled clinical trials",
+      "indication_as_stated": "lipid profiles and glycemic parameters",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "ACV consumption significantly decreased serum total cholesterol (- 6.06 mg/dL; 95% CI: - 10.95, - 1.17; I2: 39%), fasting plasma glucose (- 7.97 mg/dL; 95% CI: - 13.74, - 2.21; I2: 75%), and HbA1C concentrations (- 0.50; 95% CI: - 0.90, - 0.09; I2: 91%).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for total cholesterol, fasting glucose, HbA1c; 'No significant effect of ACV consumption was found on serum LDL-C, HDL-C, fasting insulin concentrations, or HOMA-IR.' Also notes 'ACV intake appeared to elicit an increase in FPG and HDL-C concentrations in apparently healthy participants' — i.e., possibly adverse direction in non-diabetic subgroup.",
+      "registrations": [],
+      "included_studies": "nine studies, 10 study arms",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'apple cider vinegar (ACV)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "34803538",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "a 25-year-old female and first year graduate student"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "an elimination diet and the use of apple cider vinegar and L-glutamine powder, in addition to a compounded homeopathic formula containing UNDA #4 and Nux vomica",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "a 25-year-old female graduate student",
+      "indication_as_stated": "functional dyspepsia",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "Within 1 week, the patient reported significant improvement in presenting concerns, and within 1 month had denied the presence of every presenting symptom except for straining with stool.",
+      "sample_size_quote": "a 25-year-old female",
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "positive",
+      "direction_note": "Single case report; ACV given simultaneously with an elimination diet, L-glutamine powder, and a compounded homeopathic formula — cannot isolate an ACV-specific effect.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "ACV administered only as one of several simultaneous naturopathic interventions, undosed individually."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "35783333",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Fourteen healthy participants",
+          "randomized, double-blind, clinical trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "500 mL of either commercial ACV or CSD 1 h before endurance exercise",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Fourteen healthy athlete participants",
+      "indication_as_stated": "ergogenic/endurance exercise performance",
+      "dose_quote": "consume 500 mL of either commercial ACV or CSD 1 h before endurance exercise (bicycle ergometer)",
+      "primary_outcome_quote": "Blood samples were collected at baseline, 0, 20, 40, 60 min until exhaustion to assess glucose, lactate, ammonia and non-esterified fatty acids (NEFA).",
+      "primary_result_quote": "Overall this trial showcases that ACV did not significantly improve the ergogenic activity over the CSD.",
+      "sample_size_quote": "Fourteen healthy participants were enrolled in this trial",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "ACV performed comparably to (not better than) a commercial sports drink comparator; explicitly did not significantly improve ergogenic activity over that comparator.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'apple cider vinegar (ACV)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "37608660",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "25 clinical trials (33 arms) comprising 1320 adults were entered in this study"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "apple cider vinegar (ACV) consumption",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "1320 adults across 25 pooled clinical trials",
+      "indication_as_stated": "cardiometabolic syndrome (CMS) risk factors",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "ACV consumption could significantly improve the levels of FBG (-21.20 mg/dl; 95% CI: -32.31 to -2.21; I2: 95.8%), HbA1c (-0.91mg/dl; 95% CI: -1.62 to -0.21; I2: 98.9%), and TC (-6.72 mg/dl; 95% CI: -12.91 to -0.53; I2:50.8%).",
+      "sample_size_quote": "25 clinical trials (33 arms) comprising 1320 adults",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for FBG, HbA1c, TC (especially in diabetic-patient subgroup); 'No significant results were observed for BMI, HOMA-IR, serum insulin, TG, LDL-C, and HDL-C' in the overall pooled analysis. High heterogeneity noted (I2 up to ~99%).",
+      "registrations": [],
+      "included_studies": "25 clinical trials, 33 arms, 1320 adults",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Apple cider vinegar (ACV)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38028980",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "adults with type 2 diabetes",
+          "randomized clinical trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "The ACV group was treated with 30 ml of ACV per day",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "adults with type 2 diabetes",
+      "indication_as_stated": "blood glucose indices and lipid profile in type 2 diabetes",
+      "dose_quote": "The ACV group was treated with 30 ml of ACV per day",
+      "primary_outcome_quote": "Before and after eight weeks, fasting blood glucose, insulin, hemoglobin A1C, insulin resistance, total cholesterol (Chol), low-density lipoprotein (LDL), high-density lipoprotein (HDL) and triglyceride were measured.",
+      "primary_result_quote": "Fasting blood glucose decreased after intervention in both groups, which was only significant in the ACV group (p = 0.01).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Positive on fasting glucose, HbA1c, LDL, total cholesterol ratios in the ACV group vs control over 8 weeks; exact enrolled sample size not stated as a single contiguous quotable span in the retrieved abstract.",
+      "registrations": [
+        "IRCT20140107016123N13"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'apple cider vinegar (ACV)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "38966098",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "120 overweight and obese individuals",
+          "randomly assigned"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "intervention group receiving 5, 10 or 15 mL of ACV or a control group receiving a placebo (group 4) over a 12-week period",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "120 overweight and obese individuals",
+      "indication_as_stated": "weight, blood glucose, triglyceride and cholesterol levels",
+      "dose_quote": "intervention group receiving 5, 10 or 15 mL of ACV or a control group receiving a placebo (group 4) over a 12-week period",
+      "primary_outcome_quote": "Measurements of anthropometric parameters, fasting blood glucose, triglyceride and cholesterol levels were taken at weeks 0, 4, 8 and 12.",
+      "primary_result_quote": "daily consumption of the three doses of ACV for a duration of between 4 and 12 weeks is associated with significant reductions in anthropometric variables (weight, body mass index, waist/hip circumferences and body fat ratio), blood glucose, triglyceride and cholesterol levels",
+      "sample_size_quote": "120 overweight and obese individuals were recruited",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "IMPORTANT INTEGRITY FLAG: this exact study (same title/PMID-linked cohort) was subsequently retracted — see PMID 41789013, 'Retraction: Apple cider vinegar for weight management in lebanese adolescents and young adults with overweight and obesity...'. Positive result should be treated as unreliable pending review of the retraction notice.",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'ACV' / 'apple cider vinegar' matches label spelling."
+      },
+      "integrity": {
+        "retracted": true,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39238884",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "an 84-year-old woman"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "a recently introduced weight loss supplement containing apple cider vinegar",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "an 84-year-old woman",
+      "indication_as_stated": "acute pancreatitis possibly linked to an ACV-containing weight-loss supplement",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "We discuss an 84-year-old woman with acute pancreatitis possibly linked to a recently introduced weight loss supplement containing apple cider vinegar.",
+      "sample_size_quote": "an 84-year-old woman",
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "negative",
+      "direction_note": "Single case report; supplement is a combination product containing ACV (not isolated ACV), and authors note 'scant data regarding the risks of acute pancreatitis associated with less rigorously studied and regulated supplements, such as apple cider vinegar products.'",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "related_form_differs",
+        "note": "ACV was one component of a combination weight-loss supplement product, not isolated ACV."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "40666072",
+      "design": "case_report",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "a 60-year-old man"
+        ]
+      },
+      "evidence_role": "safety",
+      "intervention_as_stated": "a long history of vinegar consumption",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "a 60-year-old man",
+      "indication_as_stated": "vinegar-induced hepatotoxicity",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "We describe the case of a 60-year-old man who had a long history of vinegar consumption and now had vinegar-induced hepatotoxicity. After the patient stopped using vinegar, his condition improved.",
+      "sample_size_quote": "a 60-year-old man",
+      "funding_quote": null,
+      "primary_outcome_identifiable": false,
+      "direction_primary": "negative",
+      "direction_note": "Single case report of idiosyncratic hepatotoxicity attributed to long-term apple cider vinegar consumption, with improvement on cessation (positive dechallenge).",
+      "registrations": [],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "Title/abstract use 'apple cider vinegar' and 'vinegar' matching label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "39949546",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "we included seven studies in this meta-analysis"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Apple cider vinegar (ACV)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "type 2 diabetes patients (T2DM) across 7 pooled controlled trials",
+      "indication_as_stated": "glycemic profile in type 2 diabetes",
+      "dose_quote": null,
+      "primary_outcome_quote": null,
+      "primary_result_quote": "ACV significantly reduced fasting blood sugar (FBS) (WMD: -21.929 mg/dL, 95% CI: -29.19, -14.67, p < 0.001) and HbA1c (WMD: -1.53, 95% CI: -2.65, -0.41, p = 0.008) and increased insulin (WMD: 2.059 μu/ml, 95% CI: 0.26, 3.86, p = 0.025), while it did not affect hemostatic model assessment for insulin resistance (HOMA-IR).",
+      "sample_size_quote": null,
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "mixed",
+      "direction_note": "Positive for FBS and HbA1c; null for HOMA-IR; dose-response analysis suggests greater FBS benefit at >10 mL/day.",
+      "registrations": [
+        "CRD42023457493"
+      ],
+      "included_studies": "seven studies",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Apple cider vinegar (ACV)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "41010525",
+      "design": "systematic_review",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "10 RCTs comprising a total of 789 participants were eligible for inclusion"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "Apple cider vinegar (ACV)",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "789 participants across 10 pooled RCTs; adults with excess body weight or metabolic complications",
+      "indication_as_stated": "body composition / anthropometric measurements",
+      "dose_quote": null,
+      "primary_outcome_quote": "Primary outcomes included changes in body weight, BMI, waist circumference, and other anthropometric measures.",
+      "primary_result_quote": "daily ACV intake significantly reduced body weight [SMD: -0.39; 95% CI: -0.63, -0.15; p = 0.001; I2 = 62%], BMI [SMD: -0.65; 95% CI: -1.05, -0.26; p = 0.001; I2 = 83%], and WC [SMD: -0.34; 95% CI: -0.67, -0.02; p = 0.04; I2 = 61%]",
+      "sample_size_quote": "10 RCTs comprising a total of 789 participants were eligible for inclusion in this meta-analysis",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "'no significant effects of ACV were observed on the other body composition parameters analyzed' beyond weight/BMI/WC; benefit subgroup-concentrated at ~30 mL/day for up to 12 weeks in overweight/obese/T2D adults. Note: this pooled analysis may include the subsequently retracted study 38966098 among its 10 RCTs (not separately confirmed here).",
+      "registrations": [],
+      "included_studies": "10 RCTs, 789 participants (out of 2961 reports screened)",
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'Apple cider vinegar (ACV)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "41351751",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "Twenty participants were enrolled",
+          "randomized crossover trial"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "ACV, coconut water, lemon water, and orange soda",
+      "combination": false,
+      "route": "oral",
+      "population_as_stated": "Twenty non-stone-forming participants (eight female)",
+      "indication_as_stated": "24-h urinary citrate, pH, and volume (kidney stone prevention)",
+      "dose_quote": null,
+      "primary_outcome_quote": "To evaluate the potential stone-preventative effects of apple cider vinegar (ACV) supplementation on 24-h urinary citrate, pH, and volume.",
+      "primary_result_quote": "ACV did not significantly change 24-h urinary parameters.",
+      "sample_size_quote": "Twenty participants were enrolled. Eight were female. Six consumed ACV",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "negative",
+      "direction_note": "Explicit null result for ACV on urinary citrate/pH/volume, in contrast to comparators (coconut water and lemon water both significantly increased urinary citrate).",
+      "registrations": [
+        "NCT04073719"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'apple cider vinegar (ACV)' matches label spelling."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    },
+    {
+      "pmid": "42215584",
+      "design": "rct",
+      "human_status": {
+        "value": "confirmed",
+        "signals": [
+          "94 women meeting the Rotterdam criteria for PCOS",
+          "randomized 1:1"
+        ]
+      },
+      "evidence_role": "efficacy",
+      "intervention_as_stated": "ACV capsules (1500 mg/day) or placebo... adjunctive effects of apple cider vinegar (ACV) on MetS components and IR in PCOS patients receiving standard metformin treatment (1500 mg/day)",
+      "combination": true,
+      "route": "oral",
+      "population_as_stated": "94 women meeting the Rotterdam criteria for PCOS, NCEP ATP III criteria for MetS, and HOMA-IR > 2.5",
+      "indication_as_stated": "metabolic syndrome and insulin resistance in polycystic ovary syndrome, adjunctive to metformin",
+      "dose_quote": "receive either ACV capsules (1500 mg/day) or placebo",
+      "primary_outcome_quote": "Primary outcomes were changes in IR and MetS components; secondary outcomes included serum testosterone, hirsutism (modified Ferriman-Gallwey score), sexual function (FSFI), and quality of life (mPCOSQ).",
+      "primary_result_quote": "resolution of MetS was significantly higher in the ACV group (74.5%) than controls (40.4%) (p = 0.001)",
+      "sample_size_quote": "94 women meeting the Rotterdam criteria for PCOS",
+      "funding_quote": null,
+      "primary_outcome_identifiable": true,
+      "direction_primary": "positive",
+      "direction_note": "Adjunctive to standard metformin therapy (1500 mg/day), not ACV monotherapy; positive across primary (MetS resolution, IR) and secondary (hirsutism, sexual function, QoL) outcomes.",
+      "registrations": [
+        "IRCT20150905023897N7"
+      ],
+      "included_studies": null,
+      "label_material_match": {
+        "value": "exact_match",
+        "note": "'ACV capsules' matches label spelling; add-on to existing metformin pharmacotherapy."
+      },
+      "integrity": {
+        "retracted": false,
+        "expression_of_concern": false,
+        "has_erratum": false
+      }
+    }
+  ],
+  "shortlist": [
+    "18093343",
+    "19963157",
+    "34187442",
+    "35783333",
+    "37608660",
+    "38028980",
+    "39238884",
+    "40666072",
+    "41010525",
+    "41351751",
+    "42215584",
+    "9736833"
+  ],
+  "handoff": [
+    {
+      "pmid": "9736833",
+      "role": "safety",
+      "reason": "Case report of hypokalemia, hyperreninemia and osteoporosis from large-quantity cider vinegar ingestion; abstract unavailable in this scope for full verification — relevant to a safety/electrolyte-risk reviewer."
+    },
+    {
+      "pmid": "23373303",
+      "role": "safety",
+      "reason": "Case report of erosive tooth wear from daily ACV consumption; relevant to a dental-safety/dosing-form (dilution/undiluted) reviewer."
+    },
+    {
+      "pmid": "15983536",
+      "role": "dosing",
+      "reason": "Laboratory testing found major inconsistency/inaccuracy in commercial ACV tablet labeling, pH, and acid content, and doubted whether ACV was even present in some products; relevant to a product-quality/label-verification reviewer."
+    },
+    {
+      "pmid": "39238884",
+      "role": "safety",
+      "reason": "Case report of acute pancreatitis possibly linked to an ACV-containing weight-loss supplement in an 84-year-old woman; relevant to a supplement-safety-signal reviewer."
+    },
+    {
+      "pmid": "40666072",
+      "role": "safety",
+      "reason": "Case report of hepatotoxicity from long-term vinegar consumption with improvement on cessation; relevant to a hepatic-safety-signal reviewer."
+    },
+    {
+      "pmid": "18093343",
+      "role": "interaction",
+      "reason": "ACV further slowed gastric emptying in type 1 diabetics with gastroparesis, a stated disadvantage for glycemic control; relevant to a diabetes-management/drug-timing interaction reviewer."
+    }
+  ],
+  "identity_notes": "Most human efficacy evidence concerns oral apple cider vinegar (ACV) at approximately 15-30 mL/day for glycemic/lipid/weight outcomes, generally showing small, heterogeneous benefits on fasting glucose, HbA1c, and anthropometrics but consistently null results on insulin resistance (HOMA-IR) and LDL/HDL across multiple systematic reviews. The single most important applicability caveat: one of the larger positive weight-management RCTs in this set (PMID 38966098, 120 participants) was subsequently RETRACTED (PMID 41789013) and should not be relied upon; some pooled meta-analyses in this set may have been published before the retraction and could include that study's data. Separately, a recurring safety theme across case reports is local/topical tissue injury (esophageal injury from tablets, dental erosion from daily undiluted consumption, chemical skin burns from topical use) and rare systemic adverse events (hepatotoxicity, pancreatitis, and a hypokalemia/hyperreninemia/osteoporosis case from very large intake), consistent with ACV's acidity and typically undiluted/high-volume misuse patterns rather than at standard studied doses."
+}

@@ -1,0 +1,52 @@
+{
+ "wave": "evidence-expansion Wave 3",
+ "generated": "2026-09-18T13:53:12",
+ "discovery_launched_at_head": "48426845",
+ "head_now": "9325384691fb3049e5983655134b1567d368fdaf",
+ "base_commit_for_this_wave": "af7b440b",
+ "main_commits_deliberately_not_merged": 3,
+ "working_tree_dirty_when_discovery_started": true,
+ "dirty_files_when_discovery_started": [
+  "scripts/data/banned_recalled_ingredients.json"
+ ],
+ "restored_fda_work_before_discovery_started": true,
+ "does_dirt_affect_this_wave": {
+  "verdict": "no",
+  "reason": "discover_literature.py reads only the files hashed below plus the PubMed API. The restored FDA work touches scripts/data/banned_recalled_ingredients.json and the FDA sync reports, which are not among them and are not read by discovery, screening or context authoring. The claim is checkable: the input hashes are recorded, so a rerun that produces different bytes is detectable rather than arguable."
+ },
+ "input_hashes_sha256_16": {
+  "scripts/audits/evidence_expansion_2026_09/queue.json": "ef89f375838f3938",
+  "scripts/audits/evidence_expansion_2026_09/wave2_prescreen.json": "a8f6dffd658f7796",
+  "scripts/data/botanical_ingredients.json": "2017232ac825fd2f",
+  "scripts/audits/evidence_expansion_2026_09/discover_literature.py": "406f177a217d8628"
+ },
+ "partition_sha256_16": "e1249e29593dc456",
+ "corpus_snapshot": {
+  "path": "/private/tmp/claude-501/-Users-seancheick-Downloads-dsld-clean/198c0b43-32a9-488c-8f04-6e252fe38fe3/scratchpad/slim_corpus.jsonl",
+  "sha256_16": "90cd54c76b6ff38a",
+  "regenerate_with": "python3 scripts/audits/evidence_expansion_2026_09/extract_corpus.py"
+ },
+ "plan": {
+  "discovery": "already running against the base above; outputs archived, not rerun",
+  "central_verification_and_authoring": "to be done from a clean isolated git worktree pinned to af7b440b, so no uncommitted change can reach it",
+  "integration": "main's newer commits are merged AFTER the wave closes, never midway"
+ },
+ "scoring_freeze_for_this_wave": "No scoring constant, archetype maximum, evidence multiplier or global floor changes during Wave 3. New positive_weak records whose result depends on the unresolved primary-mass floor are authored and reviewed but NOT applied - they stay pending until that calibration is decided.",
+ "current_dirty_files": [
+  "scripts/banned_recalled_accuracy_report.json",
+  "scripts/audits/evidence_expansion_2026_09/WAVE3_REPRODUCIBILITY.json",
+  "scripts/audits/evidence_expansion_2026_09/primary_mass_floor_diagnostic.py",
+  "scripts/audits/evidence_expansion_2026_09/wave3_search_log.json"
+ ],
+ "head_moved_during_this_wave_by_other_agents": [
+  {
+   "sha": "93253846",
+   "subject": "feat(submission-review): capture Nutrition Facts in the reviewer console"
+  },
+  {
+   "sha": "8b878cc5",
+   "subject": "fix(fda-sync): a known adulterant in an unknown product is news, not noise"
+  }
+ ],
+ "base_note": "Wave 3's pinned base stays af7b440b. Commits landing on this branch from other agents after that point are NOT part of the wave's base and must not silently become it; the isolated worktree is created at af7b440b explicitly."
+}

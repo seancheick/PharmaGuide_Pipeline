@@ -1,0 +1,934 @@
+{
+ "_metadata": {
+  "wave": "evidence-expansion Wave 2 (2026-09)",
+  "status": "AUTHORED, PENDING OWNER REVIEW - nothing here is applied, scored or written to scripts/data",
+  "contract": "scripts/clinical_evidence_schema.py validate_ingredient_context (schema 1.1.0 + ingredient lane), authoring=True",
+  "review_status_policy": "Every context is source_verified_pending_clinical_review. Approval is the owner's act.",
+  "quote_policy": "Every quote was extracted programmatically from the stored live abstract and asserted to be an exact contiguous substring. No quote was retyped.",
+  "not_approvable_is_not_uncurated": "Identities whose production proposal is HELD (null direction, upstream blockage, preparation unresolved) are authored in full anyway; the hold is recorded on the proposal, not by leaving the evidence uncurated.",
+  "dose_less_synthesis_policy": "A systematic review that states no dose is recorded as a verified source on the proposal, not as a study context: the frozen contract requires a positive dose value and no number may be invented to satisfy it.",
+  "contexts": 6,
+  "syntheses_recorded_as_references": 6,
+  "identities": 9,
+  "validation_failures": 0
+ },
+ "contexts_by_identity": {
+  "d_mannose": [
+   {
+    "context_id": "d_mannose_recurrent_uti_prophylaxis_38587819",
+    "context_schema_version": "1.1.0",
+    "source_pmids": [
+     "38587819"
+    ],
+    "components": [
+     "d_mannose"
+    ],
+    "identity_scope": "exact_form",
+    "identity": {
+     "chemical_form": "d-mannose powder"
+    },
+    "exposure_basis": "supplement_dose",
+    "route": "oral",
+    "evidence_role": "direct_rct",
+    "component_registration_status": "fully_registered",
+    "condition": "recurrent_urinary_tract_infection_prophylaxis_women",
+    "purpose": "prevention",
+    "trial_family": "d_mannose_recurrent_uti_prophylaxis_38587819",
+    "population": {
+     "age_group": "adult",
+     "description": "Women 18 or older living in the community with primary-care records of at least 2 UTIs in 6 months or 3 in 12 months; mean age 58"
+    },
+    "study_design": "rct",
+    "blinding": "double",
+    "funding": "public",
+    "sample_size": 598,
+    "comparator": "placebo",
+    "human_status": "confirmed",
+    "source_integrity": "none",
+    "review_status": "source_verified_pending_clinical_review",
+    "scoring_eligible": false,
+    "dose": {
+     "measurement_type": "mass",
+     "unit": "g",
+     "values": [
+      2
+     ],
+     "dose_status": "verified",
+     "dose_basis": "nominal_assigned_arm",
+     "duration_basis": "fixed_protocol",
+     "duration_days": 180,
+     "dosage_forms": [
+      "powder"
+     ],
+     "co_therapies": [],
+     "source_provenance": {
+      "pmid": "38587819",
+      "location": "abstract",
+      "quote": "Two grams daily of d-mannose powder or matched volume of placebo powder."
+     }
+    },
+    "outcomes": [
+     {
+      "name": "medically_attended_clinically_suspected_uti_within_6_months",
+      "hierarchy": "primary",
+      "kind": "patient_important",
+      "direction": "null",
+      "outcome_role": "direct_between_group_effect"
+     },
+     {
+      "name": "symptom_duration_antibiotic_use_time_to_next_uti_hospital_admission",
+      "hierarchy": "secondary",
+      "kind": "patient_important",
+      "direction": "null"
+     }
+    ],
+    "outcome_provenance": [
+     {
+      "pmid": "38587819",
+      "location": "abstract",
+      "quote": "The proportion contacting ambulatory care with a clinically suspected UTI was 150 of 294 (51.0%) in the d-mannose group and 161 of 289 (55.7%) in the placebo group (risk difference, -5%; 95% CI, -13% to 3%; P = .26)."
+     },
+     {
+      "pmid": "38587819",
+      "location": "abstract",
+      "quote": "There were no statistically significant differences in any secondary outcome measures."
+     }
+    ],
+    "limitations": [
+     "Primary-care population with a history of recurrent UTI, not general adult use.",
+     "The studied 2 g/day sits at the 75th percentile of the measured catalog label distribution (median 1,000 mg), so most products deliver less than the studied exposure."
+    ]
+   }
+  ],
+  "common_bean_extract": [
+   {
+    "context_id": "common_bean_extract_phaseolean_rct_39170208",
+    "context_schema_version": "1.1.0",
+    "source_pmids": [
+     "39170208"
+    ],
+    "components": [
+     "common_bean_extract"
+    ],
+    "identity_scope": "branded_material",
+    "identity": {
+     "branded_material": "Phaseolean",
+     "standardization": "standardised water extract of Phaseolus vulgaris",
+     "botanical_species": "Phaseolus vulgaris",
+     "plant_part": "seed"
+    },
+    "exposure_basis": "supplement_dose",
+    "route": "oral",
+    "evidence_role": "direct_rct",
+    "component_registration_status": "fully_registered",
+    "condition": "overweight_and_obesity_body_composition",
+    "purpose": "treatment",
+    "trial_family": "common_bean_extract_phaseolean_rct_39170208",
+    "population": {
+     "age_group": "adult",
+     "description": "Overweight or obese participants; 62 of 66 completed"
+    },
+    "study_design": "rct",
+    "blinding": "double",
+    "funding": "unreported",
+    "sample_size": 66,
+    "comparator": "placebo",
+    "human_status": "confirmed",
+    "source_integrity": "none",
+    "review_status": "source_verified_pending_clinical_review",
+    "scoring_eligible": false,
+    "dose": {
+     "measurement_type": "mass",
+     "unit": "mg",
+     "values": [
+      1500,
+      3000
+     ],
+     "dose_status": "verified",
+     "dose_basis": "nominal_assigned_arm",
+     "duration_basis": "fixed_protocol",
+     "duration_days": 45,
+     "dosage_forms": [
+      "capsule"
+     ],
+     "co_therapies": [],
+     "reported_regimen": "500 mg or 1000 mg per meal, three times a day before meals",
+     "normalization": {
+      "basis": "The source states the daily totals itself (1,500 and 3,000 mg/day); the per-meal regimen is preserved beside them and no conversion was applied."
+     },
+     "source_provenance": {
+      "pmid": "39170208",
+      "location": "abstract",
+      "quote": "Each group was assigned a specific daily dosage for three meals: Phaseolean\u00ae 1500 mg/day (500 mg per meal), Phaseolean\u00ae 3000 mg/day (1000 mg per meal), or placebo 1500 mg/day (500 mg per meal), administered thrice a day before meals for 45 consecutive days."
+     }
+    },
+    "outcomes": [
+     {
+      "name": "body_weight",
+      "hierarchy": "primary",
+      "kind": "patient_important",
+      "direction": "positive",
+      "outcome_role": "direct_between_group_effect"
+     },
+     {
+      "name": "bmi_body_fat_skinfold_waist_hip_thigh",
+      "hierarchy": "secondary",
+      "kind": "surrogate",
+      "direction": "positive"
+     }
+    ],
+    "outcome_provenance": [
+     {
+      "pmid": "39170208",
+      "location": "abstract",
+      "quote": "Treatment with Phaseolean\u00ae 1500 mg/day reduced the weight by an average of 2.10 kg (0.33 kg/week), while that with 3000 mg/day was 1.94 kg (0.30 kg/week); 0.13 kg weight loss (0.02 kg/week) was observed in the placebo group after 45 days, showing significant differences between the Phaseolean\u00ae and placebo groups (p < 0.01)."
+     }
+    ],
+    "limitations": [
+     "A branded standardised extract; it supports the ingredient-level synthesis but does not establish that every white kidney bean extract is equivalent.",
+     "The lower dose outperformed the higher one, which the source notes without explaining."
+    ]
+   }
+  ],
+  "amla": [
+   {
+    "context_id": "amla_cardiometabolic_meta_37296402",
+    "context_schema_version": "1.1.0",
+    "source_pmids": [
+     "37296402"
+    ],
+    "components": [
+     "amla"
+    ],
+    "identity_scope": "botanical_preparation",
+    "identity": {
+     "botanical_species": "Phyllanthus emblica (Emblica officinalis)",
+     "plant_part": "fruit",
+     "preparation": "oral Emblica officinalis fruit preparations, 500-1500 mg/day"
+    },
+    "exposure_basis": "supplement_dose",
+    "route": "oral",
+    "evidence_role": "systematic_review",
+    "component_registration_status": "fully_registered",
+    "condition": "cardiovascular_risk_markers_adults",
+    "purpose": "treatment",
+    "trial_family": "amla_cardiometabolic_meta_37296402",
+    "population": {
+     "age_group": "adult",
+     "description": "Adults; parallel-group and crossover trials"
+    },
+    "study_design": "meta_analysis",
+    "blinding": "not_applicable",
+    "funding": "unreported",
+    "sample_size": 0,
+    "comparator": "placebo",
+    "human_status": "confirmed",
+    "source_integrity": "none",
+    "review_status": "source_verified_pending_clinical_review",
+    "scoring_eligible": false,
+    "dose": {
+     "measurement_type": "mass",
+     "unit": "mg",
+     "values": [
+      500,
+      1500
+     ],
+     "dose_status": "verified",
+     "dose_basis": "nominal_assigned_arm",
+     "duration_basis": "participant_specific",
+     "dosage_forms": [],
+     "co_therapies": [],
+     "source_provenance": {
+      "pmid": "37296402",
+      "location": "abstract",
+      "quote": "Included studies followed parallel-group (n = 6) and crossover (n = 3) designs, with EO dosage ranging from 500 mg/day to 1500 mg/day, and treatment duration ranging from 14 to 84 days."
+     }
+    },
+    "outcomes": [
+     {
+      "name": "ldl_cholesterol",
+      "hierarchy": "primary",
+      "kind": "surrogate",
+      "direction": "positive",
+      "outcome_role": "direct_between_group_effect"
+     },
+     {
+      "name": "vldl_triglycerides_hscrp",
+      "hierarchy": "secondary",
+      "kind": "surrogate",
+      "direction": "positive"
+     }
+    ],
+    "outcome_provenance": [
+     {
+      "pmid": "37296402",
+      "location": "abstract",
+      "quote": "Meta-analyses revealed EO to have a significant composite effect at lowering low-density lipoprotein cholesterol (LDL-C; Mean difference (MD) = -15.08 mg/dL [95% Confidence interval (CI) = -25.43 to -4.73], I2 = 77%, prediction interval = -48.29 to 18.13), very low-density lipoprotein cholesterol (VLDL-C; MD = -5.43 mg/dL [95% CI = -8.37 to -2.49], I2 = 44%), triglycerides (TG; MD = -22.35 mg/dL [95% CI = -39.71 to -4.99], I2 = 62%, prediction interval = -73.47 to 28.77), and high-sensitivity C-reactive protein (hsCRP; MD = -1.70 mg/L [95% CI = -2.06 to -1.33], I2 = 0%) compared with placebo."
+     }
+    ],
+    "limitations": [
+     "The authors state the results should be interpreted with caution because of statistical and clinical heterogeneity in a limited number of trials.",
+     "Endpoints are cardiovascular risk markers, not patient-important outcomes.",
+     "The measured catalog label median is 120 mg/day, far below the studied 500-1500 mg range."
+    ],
+    "included_study_pmids": "extraction_pending"
+   }
+  ],
+  "d_aspartic_acid": [
+   {
+    "context_id": "d_aspartic_acid_testosterone_trained_men_28841667",
+    "context_schema_version": "1.1.0",
+    "source_pmids": [
+     "28841667"
+    ],
+    "components": [
+     "d_aspartic_acid"
+    ],
+    "identity_scope": "exact_form",
+    "identity": {
+     "chemical_form": "d-aspartic acid"
+    },
+    "exposure_basis": "supplement_dose",
+    "route": "oral",
+    "evidence_role": "direct_rct",
+    "component_registration_status": "fully_registered",
+    "condition": "basal_testosterone_resistance_trained_men",
+    "purpose": "treatment",
+    "trial_family": "d_aspartic_acid_testosterone_trained_men_28841667",
+    "population": {
+     "age_group": "adult",
+     "description": "Healthy resistance-trained men aged 18-36 with at least 2 years of training"
+    },
+    "study_design": "rct",
+    "blinding": "double",
+    "funding": "unreported",
+    "sample_size": 22,
+    "comparator": "placebo",
+    "human_status": "confirmed",
+    "source_integrity": "none",
+    "review_status": "source_verified_pending_clinical_review",
+    "scoring_eligible": false,
+    "dose": {
+     "measurement_type": "mass",
+     "unit": "g",
+     "values": [
+      6
+     ],
+     "dose_status": "verified",
+     "dose_basis": "nominal_assigned_arm",
+     "duration_basis": "fixed_protocol",
+     "duration_days": 84,
+     "dosage_forms": [],
+     "co_therapies": [],
+     "source_provenance": {
+      "pmid": "28841667",
+      "location": "abstract",
+      "quote": "D-aspartic acid (6 g.d-1, DAA) versus equal-weight, visually-matched placebo (PLA)."
+     }
+    },
+    "outcomes": [
+     {
+      "name": "basal_total_and_free_testosterone",
+      "hierarchy": "primary",
+      "kind": "surrogate",
+      "direction": "null",
+      "outcome_role": "direct_between_group_effect"
+     },
+     {
+      "name": "estradiol",
+      "hierarchy": "secondary",
+      "kind": "surrogate",
+      "direction": "negative"
+     }
+    ],
+    "outcome_provenance": [
+     {
+      "pmid": "28841667",
+      "location": "abstract",
+      "quote": "No change in basal TT or FT were observed after the intervention."
+     }
+    ],
+    "limitations": [
+     "22 participants.",
+     "The studied 6 g/day is 2.5x the measured catalog label median of 2,400 mg."
+    ]
+   },
+   {
+    "context_id": "d_aspartic_acid_hpg_axis_climbers_29893592",
+    "context_schema_version": "1.1.0",
+    "source_pmids": [
+     "29893592"
+    ],
+    "components": [
+     "d_aspartic_acid"
+    ],
+    "identity_scope": "exact_form",
+    "identity": {
+     "chemical_form": "d-aspartic acid"
+    },
+    "exposure_basis": "supplement_dose",
+    "route": "oral",
+    "evidence_role": "direct_rct",
+    "component_registration_status": "fully_registered",
+    "condition": "hypothalamic_pituitary_gonadal_biomarkers_male_athletes",
+    "purpose": "treatment",
+    "trial_family": "d_aspartic_acid_hpg_axis_climbers_29893592",
+    "population": {
+     "age_group": "adult",
+     "description": "Male climbers maintaining normal weekly training"
+    },
+    "study_design": "crossover_rct",
+    "blinding": "single",
+    "funding": "unreported",
+    "sample_size": 16,
+    "comparator": "placebo",
+    "human_status": "confirmed",
+    "source_integrity": "none",
+    "review_status": "source_verified_pending_clinical_review",
+    "scoring_eligible": false,
+    "dose": {
+     "measurement_type": "mass",
+     "unit": "g",
+     "values": [
+      3
+     ],
+     "dose_status": "verified",
+     "dose_basis": "nominal_assigned_arm",
+     "duration_basis": "fixed_protocol",
+     "duration_days": 14,
+     "dosage_forms": [],
+     "co_therapies": [],
+     "source_provenance": {
+      "pmid": "29893592",
+      "location": "abstract",
+      "quote": "Using a single-blinded, placebo-controlled design, 16 climbers were randomly assigned to either a DAA (3 g/day) or placebo (3 g/day) supplement for 2 weeks."
+     }
+    },
+    "outcomes": [
+     {
+      "name": "serum_testosterone_free_testosterone_luteinizing_hormone",
+      "hierarchy": "primary",
+      "kind": "surrogate",
+      "direction": "null",
+      "outcome_role": "direct_between_group_effect"
+     }
+    ],
+    "outcome_provenance": [
+     {
+      "pmid": "29893592",
+      "location": "abstract",
+      "quote": "The DAA supplement did not significantly affect serum T, cFT, and luteinizing hormone levels."
+     }
+    ],
+    "limitations": [
+     "16 participants, single-blinded.",
+     "Short 2-week exposure."
+    ]
+   }
+  ],
+  "schisandra_berry": [
+   {
+    "context_id": "schisandra_muscle_strength_older_adults_33710261",
+    "context_schema_version": "1.1.0",
+    "source_pmids": [
+     "33710261"
+    ],
+    "components": [
+     "schisandra_berry"
+    ],
+    "identity_scope": "botanical_preparation",
+    "identity": {
+     "botanical_species": "Schisandra chinensis",
+     "plant_part": "fruit",
+     "preparation": "Schisandra chinensis Baillon extract"
+    },
+    "exposure_basis": "supplement_dose",
+    "route": "oral",
+    "evidence_role": "direct_rct",
+    "component_registration_status": "fully_registered",
+    "condition": "skeletal_muscle_strength_older_adults",
+    "purpose": "treatment",
+    "trial_family": "schisandra_muscle_strength_older_adults_33710261",
+    "population": {
+     "age_group": "older_adult",
+     "description": "Older adults performing regular low-intensity walking, 30-60 min/day on at least 3 days/week"
+    },
+    "study_design": "rct",
+    "blinding": "double",
+    "funding": "unreported",
+    "sample_size": 0,
+    "comparator": "placebo",
+    "human_status": "confirmed",
+    "source_integrity": "none",
+    "review_status": "source_verified_pending_clinical_review",
+    "scoring_eligible": false,
+    "dose": {
+     "measurement_type": "mass",
+     "unit": "g",
+     "values": [
+      1
+     ],
+     "dose_status": "verified",
+     "dose_basis": "nominal_assigned_arm",
+     "duration_basis": "fixed_protocol",
+     "duration_days": 84,
+     "dosage_forms": [],
+     "co_therapies": [
+      "low-intensity walking programme in both arms"
+     ],
+     "source_provenance": {
+      "pmid": "33710261",
+      "location": "abstract",
+      "quote": "Fifty-four participants were randomly assigned into 2 groups and, for 12 wk, received either 1 g SCe/d or a placebo."
+     }
+    },
+    "outcomes": [
+     {
+      "name": "knee_extensor_strength",
+      "hierarchy": "primary",
+      "kind": "surrogate",
+      "direction": "positive",
+      "outcome_role": "direct_between_group_effect"
+     },
+     {
+      "name": "muscle_mass_inflammatory_and_antioxidative_markers_quality_of_life",
+      "hierarchy": "secondary",
+      "kind": "surrogate",
+      "direction": "null"
+     }
+    ],
+    "outcome_provenance": [
+     {
+      "pmid": "33710261",
+      "location": "abstract",
+      "quote": "SCe supplementation over 12 wk caused a higher increase in right knee extensor strength by 10.2 Nm (95% CI: 3.7, 16.8 Nm; P = 0.003) and left knee extensor strength by 6.7 Nm (95% CI: 0.3, 13.1 Nm; P = 0.041) than did the placebo."
+     },
+     {
+      "pmid": "33710261",
+      "location": "abstract",
+      "quote": "However, no differences were observed in the muscle mass, anti-inflammatory markers, antioxidative markers, and EQ-5D score between the groups."
+     }
+    ],
+    "limitations": [
+     "Strength improved but muscle mass did not, and quality of life did not.",
+     "Studied at 1 g/day against a measured catalog label median of 175 mg.",
+     "Every catalog row for this identity is classified recognized_non_scorable upstream, so this record would reach no product until that classification changes."
+    ]
+   }
+  ]
+ },
+ "syntheses_recorded_as_references": [
+  {
+   "context_id": "d_mannose_recurrent_uti_meta_41004704",
+   "context_schema_version": "1.1.0",
+   "source_pmids": [
+    "41004704"
+   ],
+   "components": [
+    "d_mannose"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "d-mannose"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "recurrent_urinary_tract_infection_prophylaxis",
+   "purpose": "prevention",
+   "trial_family": "d_mannose_recurrent_uti_meta_41004704",
+   "population": {
+    "age_group": "adult",
+    "description": "Patients at high risk for recurrent UTI; 521 of 534 D-mannose recipients were women"
+   },
+   "study_design": "meta_analysis",
+   "blinding": "not_applicable",
+   "funding": "unreported",
+   "sample_size": 1167,
+   "comparator": "placebo_or_antibiotic",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "outcomes": [
+    {
+     "name": "recurrent_uti_incidence",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "outcome_provenance": [
+    {
+     "pmid": "41004704",
+     "location": "abstract",
+     "quote": "D-mannose was not associated with a reduction in recurrent UTI compared with control (RR: 0.57, 95% CI 0.29 - 1.15; p < 0.01) or antibiotics (RR: 0.39, 95% CI 0.12 - 1.25; p < 0.01)."
+    }
+   ],
+   "limitations": [
+    "The synthesis states no dose, so it cannot establish an applicable exposure by itself.",
+    "Six RCTs of mixed comparators (no intervention or antibiotics) pooled together."
+   ],
+   "included_study_pmids": "extraction_pending",
+   "recorded_as": "authoritative_synthesis_reference",
+   "why_not_a_context": "The frozen context contract requires at least one positive dose value. This synthesis states no dose, and inventing one is forbidden, so it is recorded on the proposal as a verified source rather than as a study context.",
+   "dose_as_reported": "not stated in the synthesis"
+  },
+  {
+   "context_id": "common_bean_extract_weight_meta_42066439",
+   "context_schema_version": "1.1.0",
+   "source_pmids": [
+    "42066439"
+   ],
+   "components": [
+    "common_bean_extract"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Phaseolus vulgaris",
+    "plant_part": "seed (white kidney bean)",
+    "preparation": "oral white kidney bean extract, alpha-amylase inhibitor rich; inhibitor units not standardised across trials"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "overweight_and_obesity_body_composition",
+   "purpose": "treatment",
+   "trial_family": "common_bean_extract_weight_meta_42066439",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults with overweight and obesity"
+   },
+   "study_design": "meta_analysis",
+   "blinding": "not_applicable",
+   "funding": "unreported",
+   "sample_size": 543,
+   "comparator": "placebo",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "outcomes": [
+    {
+     "name": "body_weight",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "bmi_fat_mass_waist_hip_circumference",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive"
+    },
+    {
+     "name": "fasting_glucose_triglycerides_insulin",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "null"
+    }
+   ],
+   "outcome_provenance": [
+    {
+     "pmid": "42066439",
+     "location": "abstract",
+     "quote": "Random-effects meta-analyses showed reductions in weight (MD -1.62 kg, 95% confidence interval [CI] -1.99 to -1.25), body mass index (MD -0.58 kg/m\u00b2, 95% CI -0.73 to -0.43), fat mass (MD -1.17 kg, 95% CI -1.80 to -0.55), waist (MD -1.58 cm, 95% CI -2.19 to -0.96), and hip (MD -0.99 cm, 95% CI -1.94 to -0.05) (all P < .05)."
+    },
+    {
+     "pmid": "42066439",
+     "location": "abstract",
+     "quote": "No significant differences were observed in fasting blood glucose, triglycerides, or random insulin."
+    }
+   ],
+   "limitations": [
+    "Eight RCTs and 543 participants is a small pooled base for an ingredient-level claim.",
+    "Alpha-amylase inhibitor extracts are not standardised by inhibitor units, so label milligrams do not establish equivalent activity. No potency conversion is proposed."
+   ],
+   "included_study_pmids": "extraction_pending",
+   "recorded_as": "authoritative_synthesis_reference",
+   "why_not_a_context": "The frozen context contract requires at least one positive dose value. This synthesis states no dose, and inventing one is forbidden, so it is recorded on the proposal as a verified source rather than as a study context.",
+   "dose_as_reported": "pooled across 8 RCTs; the synthesis states no single dose"
+  },
+  {
+   "context_id": "devils_claw_low_back_pain_cochrane_26630428",
+   "context_schema_version": "1.1.0",
+   "source_pmids": [
+    "26630428"
+   ],
+   "components": [
+    "devils_claw"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Harpagophytum procumbens",
+    "plant_part": "root/tuber",
+    "preparation": "oral extract standardised to harpagoside content; the review states no extract-milligram equivalent"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "nonspecific_low_back_pain",
+   "purpose": "treatment",
+   "trial_family": "devils_claw_low_back_pain_cochrane_26630428",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults over 18 with acute, sub-acute or chronic non-specific low back pain"
+   },
+   "study_design": "meta_analysis",
+   "blinding": "not_applicable",
+   "funding": "unreported",
+   "sample_size": 2050,
+   "comparator": "placebo",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "outcomes": [
+    {
+     "name": "low_back_pain",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "outcome_provenance": [
+    {
+     "pmid": "26630428",
+     "location": "abstract",
+     "quote": "Although Harpagophytum procumbens (devil's claw), Salix alba (white willow bark), Symphytum officinale L."
+    }
+   ],
+   "limitations": [
+    "The review's own grading is that the evidence for devil's claw was of moderate quality at best.",
+    "Trials dose by harpagoside content while labels print extract milligrams; no conversion is proposed and none may be inferred.",
+    "The 2007 Cochrane version (PMID 17202897) is superseded and carries an erratum; it is not cited."
+   ],
+   "included_study_pmids": "extraction_pending",
+   "recorded_as": "authoritative_synthesis_reference",
+   "why_not_a_context": "The frozen context contract requires at least one positive dose value. This synthesis states no dose, and inventing one is forbidden, so it is recorded on the proposal as a verified source rather than as a study context.",
+   "dose_as_reported": "standardised to harpagoside content; no extract-milligram dose stated"
+  },
+  {
+   "context_id": "senna_chronic_constipation_otc_review_33767108",
+   "context_schema_version": "1.1.0",
+   "source_pmids": [
+    "33767108"
+   ],
+   "components": [
+    "senna"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Senna alexandrina",
+    "plant_part": "leaf",
+    "preparation": "oral senna; dosed as sennosides, which the reviews do not convert to extract milligrams"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "chronic_constipation",
+   "purpose": "treatment",
+   "trial_family": "senna_chronic_constipation_otc_review_33767108",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults with chronic constipation using OTC products"
+   },
+   "study_design": "meta_analysis",
+   "blinding": "not_applicable",
+   "funding": "unreported",
+   "sample_size": 0,
+   "comparator": "placebo_or_active",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "outcomes": [
+    {
+     "name": "chronic_constipation_relief",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "outcome_provenance": [
+    {
+     "pmid": "33767108",
+     "location": "abstract",
+     "quote": "We found good evidence to recommend polyethylene glycol or senna as first-line laxatives and moderate evidence supporting fiber supplements, fruits, stimulant laxatives, and magnesium-based products."
+    }
+   ],
+   "limitations": [
+    "Senna is a stimulant laxative: the same reviews report diarrhoea, nausea, bloating and abdominal pain as common adverse events, and long-term use raises dependence and electrolyte concerns. Routed to the safety owner.",
+    "Dosed by sennoside content; all 15 catalog rows print 150 mg of senna leaf extract and no conversion may be inferred."
+   ],
+   "included_study_pmids": "extraction_pending",
+   "recorded_as": "authoritative_synthesis_reference",
+   "why_not_a_context": "The frozen context contract requires at least one positive dose value. This synthesis states no dose, and inventing one is forbidden, so it is recorded on the proposal as a verified source rather than as a study context.",
+   "dose_as_reported": "sennoside dosing; no extract-milligram equivalent stated"
+  },
+  {
+   "context_id": "globe_artichoke_cardiometabolic_meta_41270328",
+   "context_schema_version": "1.1.0",
+   "source_pmids": [
+    "41270328"
+   ],
+   "components": [
+    "globe_artichoke"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Cynara scolymus",
+    "plant_part": "leaf",
+    "preparation": "oral artichoke supplementation; the synthesis states no single dose"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "cardiometabolic_risk_markers_adults",
+   "purpose": "treatment",
+   "trial_family": "globe_artichoke_cardiometabolic_meta_41270328",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults; the largest effects concentrate in NAFLD and hypertensive subgroups"
+   },
+   "study_design": "meta_analysis",
+   "blinding": "not_applicable",
+   "funding": "unreported",
+   "sample_size": 0,
+   "comparator": "placebo",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "outcomes": [
+    {
+     "name": "total_and_ldl_cholesterol_triglycerides",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "insulin_and_homa_ir_alt_alp",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive"
+    },
+    {
+     "name": "fasting_blood_glucose_hba1c_hdl_creatinine",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "null"
+    }
+   ],
+   "outcome_provenance": [
+    {
+     "pmid": "41270328",
+     "location": "abstract",
+     "quote": "Artichoke supplementation may offer modest but significant improvements in several cardiometabolic risk markers."
+    },
+    {
+     "pmid": "41270328",
+     "location": "abstract",
+     "quote": "Regarding glycemic indices, insulin (WMD = -1.83 mU/L, 95 % CI: 3.33 to -0.32) and homeostatic model assessment for insulin resistance (WMD = -0.92, 95 % CI: 1.33 to -0.51) were significantly reduced, whereas fasting blood glucose and HbA1c were unaffected."
+    }
+   ],
+   "limitations": [
+    "All endpoints are clinical biomarkers, not patient-important outcomes.",
+    "No dose is stated, so no dose policy can be proposed.",
+    "Every catalog row for this identity is classified recognized_non_scorable upstream, so this record would reach no product until that classification changes."
+   ],
+   "included_study_pmids": "extraction_pending",
+   "recorded_as": "authoritative_synthesis_reference",
+   "why_not_a_context": "The frozen context contract requires at least one positive dose value. This synthesis states no dose, and inventing one is forbidden, so it is recorded on the proposal as a verified source rather than as a study context.",
+   "dose_as_reported": "not stated in the synthesis"
+  },
+  {
+   "context_id": "green_coffee_cardiovascular_meta_34981487",
+   "context_schema_version": "1.1.0",
+   "source_pmids": [
+    "34981487"
+   ],
+   "components": [
+    "green_coffee_bean"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Coffea (unroasted bean)",
+    "plant_part": "seed (green coffee bean)",
+    "preparation": "green coffee bean extract; chlorogenic-acid standardisation varies across trials"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "cardiovascular_risk_factors_adults",
+   "purpose": "treatment",
+   "trial_family": "green_coffee_cardiovascular_meta_34981487",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults across 15 studies and 19 arms"
+   },
+   "study_design": "meta_analysis",
+   "blinding": "not_applicable",
+   "funding": "unreported",
+   "sample_size": 637,
+   "comparator": "placebo",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "outcomes": [
+    {
+     "name": "total_cholesterol",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "fasting_plasma_glucose_blood_pressure_body_weight_bmi",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive"
+    },
+    {
+     "name": "triglycerides_hdl_hba1c_homa_ir",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "null"
+    }
+   ],
+   "outcome_provenance": [
+    {
+     "pmid": "34981487",
+     "location": "abstract",
+     "quote": "The results indicated that green coffee bean extract significantly reduced levels of total cholesterol (-5.93 mg/dl; 95% CI: -9.21, -2.65; I2: 0%), fasting plasma glucose (-2.21 mg/dl; 95% CI: -3.94, -0.48; I2: 32%), systolic blood pressure (-3.08 mmHg; 95% CI: -4.41, -1.75; I2: 26%), diastolic blood pressure (-2.27 mmHg; 95% CI: -3.82, -0.72; I2: 61%), body weight (-1.24 kg; 95% CI: -1.82, -0.66; I2: 15%), and BMI (-0.55 kg/m2; 95% CI: -0.88, -0.22; I2: 73%)."
+    },
+    {
+     "pmid": "34981487",
+     "location": "abstract",
+     "quote": "No significant effect was detected for triglycerides, HDL-C, HbA1C, and HOMA-IR."
+    }
+   ],
+   "limitations": [
+    "Integrity check performed 2026-09-18: this synthesis's PubMed-indexed reference list (33 references) does NOT contain the retracted green-coffee trial PMID 22291473. The other three selected green coffee sources have no indexed reference list, so the same check could not be run on them and they are excluded from this record.",
+    "Effect sizes are small and several were driven by individual studies on the authors' own sensitivity analysis.",
+    "Chlorogenic acid content, not extract milligrams, is the studied potency axis."
+   ],
+   "included_study_pmids": "extraction_pending",
+   "recorded_as": "authoritative_synthesis_reference",
+   "why_not_a_context": "The frozen context contract requires at least one positive dose value. This synthesis states no dose, and inventing one is forbidden, so it is recorded on the proposal as a verified source rather than as a study context.",
+   "dose_as_reported": "not stated in the synthesis"
+  }
+ ]
+}

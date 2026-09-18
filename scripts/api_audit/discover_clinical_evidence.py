@@ -28,17 +28,6 @@ QUICK START — copy-paste these commands from the repo root
   python3 scripts/api_audit/discover_clinical_evidence.py discover \
       --limit 50 --output scripts/api_audit/reports/discovery_candidates.json
 
-  # 5b. DISCOVER + AUTO-ADD — search AND add qualifying entries to DB
-  #     (only adds compounds with >= 3 completed trials, no safety flags)
-  #     Key endpoints auto-populated from ClinicalTrials.gov outcome measures
-  #     with PubMed PMID cross-references (requires NCBI_API_KEY in .env)
-  python3 scripts/api_audit/discover_clinical_evidence.py discover \
-      --limit 20 --apply
-
-  # 5c. DISCOVER + AUTO-ADD — stricter (10+ trials required)
-  python3 scripts/api_audit/discover_clinical_evidence.py discover \
-      --limit 50 --apply --min-trials 10
-
   # 6. ENRICH — find entries with low/missing total_enrollment and
   #    query ClinicalTrials.gov for the real largest trial (dry-run)
   python3 scripts/api_audit/discover_clinical_evidence.py enrich
@@ -77,8 +66,8 @@ WHAT THIS SCRIPT DOES
                 outcome measures
               - Queries ChEMBL for compound data (max_phase, safety flags,
                 withdrawn_flag, black_box_warning)
-              - With --apply: cross-references NCT IDs against PubMed to
-                find published PMIDs and auto-populates key_endpoints
+              - Report only: --apply is refused. Registry trial counts cannot
+                create evidence; curation goes through pending study contexts
               - Generates candidate entries with suggested evidence_level,
                 study_type, effect_direction, total_enrollment
               - All candidates flagged requires_human_review=true
@@ -1077,52 +1066,6 @@ def candidate_to_clinical_entry(
     }
 
 
-def apply_candidates_to_db(
-    clinical_db: dict,
-    candidates: list[dict],
-    *,
-    min_trials: int = 3,
-    pm_client: Optional[PubMedClient] = None,
-) -> list[dict]:
-    """Convert candidates to entries and append to clinical DB.
-
-    Only adds candidates with >= min_trials completed trials and no safety flags.
-    Skips candidates whose standard_name already exists in the DB.
-    If pm_client is provided, key_endpoints are auto-populated with PMIDs.
-    Returns list of entries that were added.
-    """
-    existing_names = get_clinical_names(clinical_db)
-    entries = clinical_db.get("backed_clinical_studies", [])
-    existing_ids = {e.get("id") for e in entries}
-    added = []
-
-    for candidate in candidates:
-        # Skip low-evidence candidates
-        if candidate.get("ct_total_trials", 0) < min_trials:
-            continue
-
-        entry = candidate_to_clinical_entry(candidate, pm_client)
-        if entry is None:
-            continue
-
-        # Skip duplicates
-        if entry["standard_name"].lower().strip() in existing_names:
-            continue
-        if entry["id"] in existing_ids:
-            continue
-
-        entries.append(entry)
-        existing_ids.add(entry["id"])
-        existing_names.add(entry["standard_name"].lower().strip())
-        added.append(entry)
-
-    # Update metadata
-    clinical_db["_metadata"]["total_entries"] = len(entries)
-    clinical_db["_metadata"]["last_updated"] = datetime.now(UTC).strftime("%Y-%m-%d")
-
-    return added
-
-
 # ---------------------------------------------------------------------------
 # AUDIT mode
 # ---------------------------------------------------------------------------
@@ -1411,8 +1354,7 @@ def main():
     p_discover = subparsers.add_parser("discover", help="Find IQM compounds missing from clinical DB")
     p_discover.add_argument("--limit", type=int, default=10, help="Max compounds to search (default: 10)")
     p_discover.add_argument("--compound", type=str, help="Search a single compound by name")
-    p_discover.add_argument("--apply", action="store_true", help="Auto-add qualifying candidates to clinical DB")
-    p_discover.add_argument("--min-trials", type=int, default=3, help="Min completed trials to auto-add (default: 3)")
+    p_discover.add_argument("--apply", action="store_true", help="Disabled: refuses; evidence is added only through reviewed curation")
     p_discover.add_argument("--output", type=str, help="Save report to file")
     p_discover.add_argument("--clinical-db", type=str, default=str(DEFAULT_CLINICAL_DB))
     p_discover.add_argument("--iqm-db", type=str, default=str(DEFAULT_IQM_DB))
@@ -1444,6 +1386,17 @@ def main():
         parser.print_help()
         sys.exit(1)
 
+    if args.command == "discover" and args.apply:
+        # Registry trial counts are not evidence. New evidence is authored as
+        # pending study contexts and applied only after owner review.
+        print(
+            "discover --apply is disabled: registry trial counts cannot create evidence records. "
+            "Author source-verified pending contexts and apply them through the reviewed "
+            "curation workflow (scripts/audits/evidence_expansion_2026_09/).",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+
     # Init client
     cache_path = CACHE_DIR / f"discover_cache_{args.command}.json"
     client = APIClient(cache_path=cache_path)
@@ -1462,60 +1415,12 @@ def main():
             client, gaps, limit=args.limit, compound=args.compound
         )
 
-        added = []
-        if args.apply:
-            # Initialize PubMed client for PMID cross-referencing
-            pm_cache = CACHE_DIR / "pubmed_nct_cache.json"
-            pm_client = PubMedClient(cache_path=pm_cache)
-            print(
-                f"PubMed client initialized "
-                f"(API key: {'yes' if pm_client.config.api_key else 'no'})",
-                file=sys.stderr,
-            )
-
-            added = apply_candidates_to_db(
-                clinical_db, candidates,
-                min_trials=args.min_trials,
-                pm_client=pm_client,
-            )
-            if added:
-                # Count how many got endpoints populated
-                with_endpoints = sum(
-                    1 for e in added if e.get("key_endpoints")
-                )
-                # Update changelog
-                names_added = ", ".join(
-                    e["standard_name"] for e in added
-                )
-                endpoint_note = (
-                    f" {with_endpoints}/{len(added)} with "
-                    f"auto-populated key_endpoints."
-                    if with_endpoints
-                    else " All flagged for human review of "
-                    "key_endpoints and effect_direction."
-                )
-                clinical_db["_metadata"]["changelog"].insert(0,
-                    f"auto ({datetime.now(UTC).strftime('%Y-%m-%d')}): "
-                    f"discover --apply added {len(added)} entries: "
-                    f"{names_added}.{endpoint_note}"
-                )
-                with open(Path(args.clinical_db), "w") as f:
-                    json.dump(clinical_db, f, indent=2, ensure_ascii=False)
-                print(f"\nAdded {len(added)} entries to clinical DB (min_trials={args.min_trials}).", file=sys.stderr)
-                for entry in added:
-                    print(f"  + {entry['id']:40s} trials={entry['published_studies']:>5}  enrollment={entry.get('total_enrollment', 'N/A'):>6}  ({entry['standard_name']})", file=sys.stderr)
-            else:
-                print("\nNo candidates met the min_trials threshold.", file=sys.stderr)
-
         report = {
             "mode": "discover",
             "timestamp": datetime.now(UTC).isoformat(),
             "total_gaps": len(gaps),
             "searched": len(candidates),
             "candidates": candidates,
-            "applied": args.apply,
-            "entries_added": len(added),
-            "added_ids": [e["id"] for e in added],
             "api_requests": client._request_count,
         }
 

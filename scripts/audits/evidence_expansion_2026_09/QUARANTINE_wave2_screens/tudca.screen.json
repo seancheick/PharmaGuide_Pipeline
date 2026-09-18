@@ -1,0 +1,25 @@
+{"canonical_id": "tudca", "recommended_class": "curate",
+ "one_line_reason": "Real single-ingredient human RCT evidence exists for TUDCA on endothelial function and insulin sensitivity in general/at-risk adults, alongside mixed results in ALS, liver-disease, and neonatal clinical trials.",
+ "selected": [
+   {"pmid": "27503949", "population": "12 young healthy subjects (7 men, 5 women)", "intervention": "TUDCA 1500 mg, oral, single acute dose, single-blind randomized crossover vs placebo", "dose_as_stated": "1500 mg (single dose)", "primary_outcome": "brachial artery flow-mediated dilation (endothelial function) after an oral glucose challenge", "apparent_direction": "positive", "why_selected": "Clean single-ingredient, dose-stated RCT in healthy volunteers showing TUDCA prevented the endothelial dysfunction normally caused by a glucose load"},
+   {"pmid": "20522594", "population": "20 obese men and women (BMI 37±4)", "intervention": "TUDCA 1750 mg/day, oral, 4 weeks vs placebo", "dose_as_stated": "1750 mg/day", "primary_outcome": "hepatic, muscle, and adipose-tissue insulin sensitivity (hyperinsulinemic-euglycemic clamp)", "apparent_direction": "positive", "why_selected": "Dose-stated RCT in a general obese (non-diagnosed-disease) population showing ~30% improvement in hepatic and muscle insulin sensitivity, though not adipose tissue"},
+   {"pmid": "25664595", "population": "34 patients with amyotrophic lateral sclerosis, already on riluzole", "intervention": "TUDCA 1 g twice daily, oral, 54 weeks, add-on to riluzole vs placebo add-on", "dose_as_stated": "1 g twice daily (2 g/day)", "primary_outcome": "proportion of ALSFRS-R responders (≥15% improvement in disease-progression slope)", "apparent_direction": "positive", "why_selected": "Proof-of-principle positive signal in a serious clinical disease population, illustrating the strongest disease-context evidence for TUDCA, though as an add-on therapy rather than standalone supplement use"},
+   {"pmid": "12183720", "population": "22 neonates receiving total parenteral nutrition (TPN) after surgery, vs 30 untreated/placebo controls", "intervention": "TUDCA 30 mg/kg/day, enteral, for TPN-associated cholestasis prevention", "dose_as_stated": "30 mg/kg/day", "primary_outcome": "peak serum conjugated bilirubin, liver enzymes, and bile acids (liver injury markers)", "apparent_direction": "negative", "why_selected": "A dose-stated pediatric clinical trial with a clearly negative result (TUDCA appeared ineffective), included to show the evidence is not uniformly positive across clinical populations"}
+ ],
+ "blockers": [
+   "25664595 and 12183720 are in serious clinical disease populations (ALS patients on riluzole; TPN-dependent neonates), not general wellness supplement use",
+   "Doses vary widely across trials (1500 mg single dose, 1750 mg/day, 2 g/day, 30 mg/kg/day), complicating a single label-dose mapping",
+   "25664595 tests TUDCA only as an add-on to riluzole, an approved ALS drug, not TUDCA alone"
+ ],
+ "handoff_pmids": [
+   {"pmid": "39447576", "kind": "safety", "note": "Double-blind RCT of TUDCA 2 g/day for 16 weeks in progressive multiple sclerosis; primary outcomes were explicitly safety and tolerability, with only exploratory clinical/microbiome outcomes"}
+ ],
+ "excluded_pmids": [
+   {"pmid": "38053196", "reason": "This is the statistical analysis plan for the ongoing TUDCA-ALS phase III trial, published before results; no efficacy data available yet"},
+   {"pmid": "27893675", "reason": "Head-to-head TUDCA vs UDCA trial in primary biliary cholangitis patients; a clinical liver-disease population, and TUDCA showed comparable (not superior) efficacy to UDCA"},
+   {"pmid": "23592128", "reason": "Head-to-head TUDCA vs UDCA trial in liver cirrhosis patients (China); a clinical liver-disease population with a small sample (18 analyzed)"},
+   {"pmid": "33471487", "reason": "Both study arms received the same TUDCA 500 mg dose; the tested variable was acupoint catgut embedding as an add-on, not TUDCA itself"},
+   {"pmid": "30657576", "reason": "Animal (rat) model of TUDCA for acute cerebral infarction; not a human trial"},
+   {"pmid": "42653271", "reason": "Preclinical (cell line and rodent) systematic review of TUDCA/4-PBA for beta-cell secretory failure; not a human trial"},
+   {"pmid": "34601012", "reason": "Systematic review of bile acids (UDCA/GUDCA/TUDCA) in pre-clinical (animal/cell) models of brain disease; not a human trial"}
+ ]}

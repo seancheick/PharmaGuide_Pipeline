@@ -123,8 +123,36 @@ def _valid_policy(policy: Any) -> bool:
     return True
 
 
+def _resolved_identity_by_ref(product: Mapping) -> dict:
+    """Enrichment's resolved form identity, keyed by the label row it belongs to.
+
+    The same printed row reaches this module twice: once as the label projection
+    (``activeIngredients``) and once as the enriched projection, which is the only
+    one carrying ``form_id``/``matched_form``. Deduplication keeps the label copy,
+    so a reviewed scope that names a material ("Petadolex") could never see it.
+    """
+    resolved: dict = {}
+    iqd = product.get("ingredient_quality_data") or {}
+    if not isinstance(iqd, Mapping):
+        return resolved
+    for rows in (iqd.get("ingredients_scorable"), iqd.get("ingredients")):
+        for row in rows or []:
+            if not isinstance(row, Mapping):
+                continue
+            ref = row.get("raw_source_path") or row.get("source_row_ref")
+            if not isinstance(ref, str) or not ref.strip() or ref in resolved:
+                continue
+            identity = {key: row.get(key) for key in ("form_id", "matched_form") if row.get(key)}
+            if identity:
+                resolved[ref] = identity
+    return resolved
+
+
 def _rows(product: Mapping, *, source_only: bool = False):
     seen = set()
+    # A source-required scope distrusts enrichment-derived names, so it never
+    # receives them; every other scope reads the identity enrichment resolved.
+    resolved = {} if source_only else _resolved_identity_by_ref(product)
 
     def walk(rows):
         for row in rows or []:
@@ -135,7 +163,9 @@ def _rows(product: Mapping, *, source_only: bool = False):
             identity = (ref, row.get("name"), str(row.get("quantity")), row.get("unit"))
             if valid_reference and identity not in seen and _is_exposure_row(row):
                 seen.add(identity)
-                yield row
+                missing = {key: value for key, value in (resolved.get(ref) or {}).items()
+                           if not row.get(key)}
+                yield {**row, **missing} if missing else row
             yield from walk(row.get("nestedIngredients"))
 
     originals = product.get("activeIngredients") or []
@@ -148,7 +178,8 @@ def _rows(product: Mapping, *, source_only: bool = False):
     yield from walk(iqd.get("ingredients_scorable") or iqd.get("ingredients"))
 
 
-def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False):
+def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
+                 discriminating_terms: Any = ()):
     source_refs = entry.get("matched_source_row_refs")
     if source_refs is not None and (
         not isinstance(source_refs, list)
@@ -171,7 +202,19 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False)
     # Legacy boundary only: one canonical row is unambiguous. Multiple forms of
     # the same nutrient may not lend their amount to an unmatched source form.
     candidates = [r for r in rows if _key(r.get("canonical_id")) in canonicals]
-    return candidates if len(candidates) == 1 else []
+    if len(candidates) == 1:
+        return candidates
+    if not candidates:
+        return []
+    # Several owned rows: resolve only when the reviewed scope itself names the
+    # material and exactly one row carries it (Petadolex beside a plain petasins
+    # row). Anything the scope cannot tell apart stays unresolved.
+    terms = [term for term in (discriminating_terms or []) if isinstance(term, str) and term.strip()]
+    if not terms:
+        return []
+    discriminated = [row for row in candidates
+                     if any(" " + _key(term) + " " in _row_text(row) for term in terms)]
+    return discriminated if len(discriminated) == 1 else []
 
 
 def assess_clinical_applicability(product: Mapping, entry: Mapping) -> dict:
@@ -197,7 +240,8 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping) -> dict:
     reasons = []
     source_only = policy.get("require_source_label_form", False)
     excluded_canonicals = {_key(value) for value in policy.get("excluded_canonical_ids", [])}
-    for row in _linked_rows(product, entry, source_only=source_only):
+    for row in _linked_rows(product, entry, source_only=source_only,
+                            discriminating_terms=policy.get("required_form_terms")):
         text = _row_text(row, source_only=source_only)
         if source_only and not text:
             reasons.append("clinical_source_label_unresolved")

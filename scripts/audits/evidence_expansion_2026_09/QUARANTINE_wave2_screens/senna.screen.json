@@ -1,0 +1,24 @@
+{"canonical_id": "senna", "recommended_class": "curate",
+ "one_line_reason": "Multiple independent OTC-laxative systematic reviews give senna 'good (grade A)' evidence for chronic constipation, the classic outcome it is marketed for, though as qualitative synthesis rather than a single pooled effect size.",
+ "selected": [
+   {"pmid": "33767108", "population": "adults with chronic constipation (updated systematic review of 41 RCTs ≥4 weeks)", "intervention": "oral senna (stimulant laxative) vs other OTC constipation treatments or placebo", "dose_as_stated": "not stated", "primary_outcome": "constipation symptom relief/efficacy", "apparent_direction": "positive", "why_selected": "Systematic review grading senna as 'good evidence (grade A recommendation)' for chronic constipation, on par with polyethylene glycol"},
+   {"pmid": "35943487", "population": "adults with chronic constipation (synopsis of an updated systematic review, 41 RCTs)", "intervention": "oral senna vs other OTC constipation treatments", "dose_as_stated": "not stated", "primary_outcome": "short- and long-term constipation efficacy", "apparent_direction": "positive", "why_selected": "A companion/updated publication reaching the same grade-A conclusion for senna as first-line therapy; included as corroborating evidence though likely drawing on an overlapping trial base with 33767108"},
+   {"pmid": "29885259", "population": "long-term care (nursing home) patients (7 RCTs, 444 patients)", "intervention": "oral senna (with or without fibre) vs lactulose, sodium picosulphate, docusate, PEG, or Chinese herbal medicine", "dose_as_stated": "not stated", "primary_outcome": "constipation efficacy and safety", "apparent_direction": "positive", "why_selected": "Independent systematic review in an older, institutionalized population finding senna superior to or as effective as other studied laxatives"},
+   {"pmid": "35758925", "population": "patients undergoing colonoscopy (11 trials, 3,343 patients)", "intervention": "senna-based bowel preparation regimen vs other bowel-prep regimens", "dose_as_stated": "not stated", "primary_outcome": "bowel cleanliness for colonoscopy", "apparent_direction": "null", "why_selected": "A different, well-quantified use case (pre-colonoscopy bowel prep) where senna showed no significant advantage in bowel cleanliness versus comparators, despite better patient tolerance/compliance -- useful counterpoint showing senna's efficacy is outcome-specific"}
+ ],
+ "blockers": [
+   "33767108 and 35943487 appear to be closely related/updated publications from the same review program and likely share much of the same underlying trial evidence, so they should not be double-counted as independent confirmations",
+   "None of the selected reviews states a specific senna dose or effect size (e.g., relative risk) for the constipation-relief claim; the grading is qualitative (grade A/B/C)",
+   "35758925's bowel-prep use case (single large-volume dose before colonoscopy) is a different exposure pattern from the low-dose chronic-use constipation claim most catalog senna products market"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "37243443", "reason": "Meta-analysis pools senna (2 RCTs) together with kiwifruit, magnesium oxide, Ziziphus jujuba, and Malva sylvestris; no senna-specific pooled effect size is given in the retrieved abstract text"},
+   {"pmid": "32761813", "reason": "Cochrane review of interventions for preventing postpartum constipation broadly; senna is not isolated with specific results in the retrieved abstract"},
+   {"pmid": "29352437", "reason": "Systematic review of cost-effectiveness of constipation treatments; an economic analysis, not an efficacy trial"},
+   {"pmid": "27531591", "reason": "Cochrane review of osmotic and stimulant laxatives for childhood constipation; senna-specific results are not isolated in the retrieved abstract"},
+   {"pmid": "25967924", "reason": "Cochrane review of laxatives in palliative care; the authors explicitly state they drew no conclusions on individual laxative effectiveness due to limited evaluations"},
+   {"pmid": "28932092", "reason": "One trial within this IBD colon-cleansing review compared senna to castor oil and found no difference; small, clinical (IBD) population and not senna's marketed constipation-relief use case"},
+   {"pmid": "24659864", "reason": "Review of adjuncts to colonic cleansing before colonoscopy; senna is discussed as one of several adjuncts without isolated efficacy data in the retrieved abstract"},
+   {"pmid": "33883007", "reason": "Tropical forestry study of tree-legume fertilization; 'Senna reticulata' here is an unrelated tree species sharing the genus name, not the medicinal senna (Cassia/Senna alexandrina) used in laxative supplements"}
+ ]}

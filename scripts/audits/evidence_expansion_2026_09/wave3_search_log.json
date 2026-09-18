@@ -1,0 +1,1984 @@
+{
+ "identities": [
+  {
+   "canonical_id": "l_glutamine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Glutamine\"[tiab] OR \"l-glutamine powder\"[tiab] OR \"n-acetyl-l-glutamine\"[tiab] OR \"l-alanyl-l-glutamine\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 27,
+     "retrieved": 27,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Glutamine\"[tiab] OR \"l-glutamine powder\"[tiab] OR \"n-acetyl-l-glutamine\"[tiab] OR \"l-alanyl-l-glutamine\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 164,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Glutamine\"[tiab] OR \"l-glutamine powder\"[tiab] OR \"n-acetyl-l-glutamine\"[tiab] OR \"l-alanyl-l-glutamine\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 156,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 120,
+   "parsed_records": 120
+  },
+  {
+   "canonical_id": "cla",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"CLA\"[tiab] OR \"cla 80%\"[tiab] OR \"clarinol\"[tiab] OR \"tonalin\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 94,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"CLA\"[tiab] OR \"cla 80%\"[tiab] OR \"clarinol\"[tiab] OR \"tonalin\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 284,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"CLA\"[tiab] OR \"cla 80%\"[tiab] OR \"clarinol\"[tiab] OR \"tonalin\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 257,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 158,
+   "parsed_records": 158
+  },
+  {
+   "canonical_id": "l_lysine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Lysine\"[tiab] OR \"l-lysine hcl\"[tiab] OR \"l-lysine base\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 9,
+     "retrieved": 9,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Lysine\"[tiab] OR \"l-lysine hcl\"[tiab] OR \"l-lysine base\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 108,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Lysine\"[tiab] OR \"l-lysine hcl\"[tiab] OR \"l-lysine base\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 307,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 105,
+   "parsed_records": 105
+  },
+  {
+   "canonical_id": "l_carnosine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Carnosine\"[tiab] OR \"n-acetyl-l-carnosine\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 16,
+     "retrieved": 16,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Carnosine\"[tiab] OR \"n-acetyl-l-carnosine\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 46,
+     "retrieved": 46,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Carnosine\"[tiab] OR \"n-acetyl-l-carnosine\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 57,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 78,
+   "parsed_records": 78
+  },
+  {
+   "canonical_id": "maca",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Maca\"[tiab] OR \"maca root powder\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 13,
+     "retrieved": 13,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Maca\"[tiab] OR \"maca root powder\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 27,
+     "retrieved": 27,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Maca\"[tiab] OR \"maca root powder\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 31,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 60,
+   "parsed_records": 60
+  },
+  {
+   "canonical_id": "l_tyrosine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Tyrosine\"[tiab] OR \"l-tyrosine powder\"[tiab] OR \"n-acetyl l-tyrosine\"[tiab] OR \"d-tyrosine\"[tiab]) NOT (\"tyrosine kinase\"[tiab] OR \"tyrosine phosphatase\"[tiab] OR \"tyrosine residue\"[tiab] OR \"tyrosine hydroxylase\"[tiab] OR protein-tyrosine kinases[mh]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 11,
+     "retrieved": 11,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Tyrosine\"[tiab] OR \"l-tyrosine powder\"[tiab] OR \"n-acetyl l-tyrosine\"[tiab] OR \"d-tyrosine\"[tiab]) NOT (\"tyrosine kinase\"[tiab] OR \"tyrosine phosphatase\"[tiab] OR \"tyrosine residue\"[tiab] OR \"tyrosine hydroxylase\"[tiab] OR protein-tyrosine kinases[mh]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 65,
+     "retrieved": 65,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Tyrosine\"[tiab] OR \"l-tyrosine powder\"[tiab] OR \"n-acetyl l-tyrosine\"[tiab] OR \"d-tyrosine\"[tiab]) NOT (\"tyrosine kinase\"[tiab] OR \"tyrosine phosphatase\"[tiab] OR \"tyrosine residue\"[tiab] OR \"tyrosine hydroxylase\"[tiab] OR protein-tyrosine kinases[mh]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 144,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 95,
+   "parsed_records": 95
+  },
+  {
+   "canonical_id": "mct_oil",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"MCT Oil\"[tiab] OR \"c10 mct oil\"[tiab] OR \"capric acid\"[tiab] OR \"mct oil c8/c10\"[tiab] OR \"c8 mct oil\"[tiab] OR \"pure caprylic\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 7,
+     "retrieved": 7,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"MCT Oil\"[tiab] OR \"c10 mct oil\"[tiab] OR \"capric acid\"[tiab] OR \"mct oil c8/c10\"[tiab] OR \"c8 mct oil\"[tiab] OR \"pure caprylic\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 66,
+     "retrieved": 66,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"MCT Oil\"[tiab] OR \"c10 mct oil\"[tiab] OR \"capric acid\"[tiab] OR \"mct oil c8/c10\"[tiab] OR \"c8 mct oil\"[tiab] OR \"pure caprylic\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 55,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 89,
+   "parsed_records": 89
+  },
+  {
+   "canonical_id": "garcinia_cambogia",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Garcinia Cambogia\"[tiab] OR \"Hydroxycitric Acid\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 14,
+     "retrieved": 14,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Garcinia Cambogia\"[tiab] OR \"Hydroxycitric Acid\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 36,
+     "retrieved": 36,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Garcinia Cambogia\"[tiab] OR \"Hydroxycitric Acid\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 75,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 67,
+   "parsed_records": 67
+  },
+  {
+   "canonical_id": "pomegranate",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Punica granatum\"[tiab] OR \"Pomegranate\"[tiab] OR \"pomegranate whole fruit extract\"[tiab] OR \"pom pomegranate extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 106,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Punica granatum\"[tiab] OR \"Pomegranate\"[tiab] OR \"pomegranate whole fruit extract\"[tiab] OR \"pom pomegranate extract\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 283,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Punica granatum\"[tiab] OR \"Pomegranate\"[tiab] OR \"pomegranate whole fruit extract\"[tiab] OR \"pom pomegranate extract\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 197,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 156,
+   "parsed_records": 156
+  },
+  {
+   "canonical_id": "methionine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Methionine\"[tiab]) NOT (\"methionine synthase\"[tiab] OR \"methionine aminopeptidase\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 28,
+     "retrieved": 28,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Methionine\"[tiab]) NOT (\"methionine synthase\"[tiab] OR \"methionine aminopeptidase\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 141,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Methionine\"[tiab]) NOT (\"methionine synthase\"[tiab] OR \"methionine aminopeptidase\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 199,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 123,
+   "parsed_records": 123
+  },
+  {
+   "canonical_id": "l_phenylalanine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Phenylalanine\"[tiab] OR \"l-phenylalanine base\"[tiab] OR \"dl-phenylalanine\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 9,
+     "retrieved": 9,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Phenylalanine\"[tiab] OR \"l-phenylalanine base\"[tiab] OR \"dl-phenylalanine\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 78,
+     "retrieved": 78,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Phenylalanine\"[tiab] OR \"l-phenylalanine base\"[tiab] OR \"dl-phenylalanine\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 189,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 106,
+   "parsed_records": 106
+  },
+  {
+   "canonical_id": "nattokinase",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Nattokinase\"[tiab] OR \"nattokinase standard\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 2,
+     "retrieved": 2,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Nattokinase\"[tiab] OR \"nattokinase standard\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 17,
+     "retrieved": 17,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Nattokinase\"[tiab] OR \"nattokinase standard\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 25,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 36,
+   "parsed_records": 36
+  },
+  {
+   "canonical_id": "acai_berry",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Euterpe oleracea\"[tiab] OR \"Acai Berry\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 4,
+     "retrieved": 4,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Euterpe oleracea\"[tiab] OR \"Acai Berry\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 14,
+     "retrieved": 14,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Euterpe oleracea\"[tiab] OR \"Acai Berry\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 24,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 35,
+   "parsed_records": 35
+  },
+  {
+   "canonical_id": "gamma_linolenic_acid",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Gamma-Linolenic Acid\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 42,
+     "retrieved": 42,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Gamma-Linolenic Acid\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 222,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Gamma-Linolenic Acid\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 127,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 135,
+   "parsed_records": 135
+  },
+  {
+   "canonical_id": "l_leucine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Leucine\"[tiab] OR \"l-leucine powder\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 7,
+     "retrieved": 7,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Leucine\"[tiab] OR \"l-leucine powder\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 92,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Leucine\"[tiab] OR \"l-leucine powder\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 102,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 102,
+   "parsed_records": 102
+  },
+  {
+   "canonical_id": "lecithin",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Lecithin\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 27,
+     "retrieved": 27,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Lecithin\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 343,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Lecithin\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 576,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 127,
+   "parsed_records": 127
+  },
+  {
+   "canonical_id": "pumpkin",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Cucurbita pepo\"[tiab] OR \"Pumpkin\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 11,
+     "retrieved": 11,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Cucurbita pepo\"[tiab] OR \"Pumpkin\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 85,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Cucurbita pepo\"[tiab] OR \"Pumpkin\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 147,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 106,
+   "parsed_records": 106
+  },
+  {
+   "canonical_id": "evening_primrose_oil",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Evening Primrose Oil\"[tiab] OR \"cold-pressed evening primrose oil\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 44,
+     "retrieved": 44,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Evening Primrose Oil\"[tiab] OR \"cold-pressed evening primrose oil\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 129,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Evening Primrose Oil\"[tiab] OR \"cold-pressed evening primrose oil\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 43,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 135,
+   "parsed_records": 135
+  },
+  {
+   "canonical_id": "citrus_bioflavonoids",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Citrus limon\"[tiab] OR \"Citrus Bioflavonoids\"[tiab] OR \"citrus bioflavonoids complex\"[tiab] OR \"rutin\"[tiab] OR \"hesperidin\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 73,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Citrus limon\"[tiab] OR \"Citrus Bioflavonoids\"[tiab] OR \"citrus bioflavonoids complex\"[tiab] OR \"rutin\"[tiab] OR \"hesperidin\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 224,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Citrus limon\"[tiab] OR \"Citrus Bioflavonoids\"[tiab] OR \"citrus bioflavonoids complex\"[tiab] OR \"rutin\"[tiab] OR \"hesperidin\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 472,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 157,
+   "parsed_records": 157
+  },
+  {
+   "canonical_id": "l_tryptophan",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Tryptophan\"[tiab] OR \"l-tryptophan powder\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 18,
+     "retrieved": 18,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Tryptophan\"[tiab] OR \"l-tryptophan powder\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 229,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Tryptophan\"[tiab] OR \"l-tryptophan powder\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 463,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 116,
+   "parsed_records": 116
+  },
+  {
+   "canonical_id": "olive_leaf",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Olea europaea\"[tiab] OR \"Olive Leaf\"[tiab] OR \"olive leaf extract\"[tiab] OR \"olive leaf extract standardized\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 23,
+     "retrieved": 23,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Olea europaea\"[tiab] OR \"Olive Leaf\"[tiab] OR \"olive leaf extract\"[tiab] OR \"olive leaf extract standardized\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 87,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Olea europaea\"[tiab] OR \"Olive Leaf\"[tiab] OR \"olive leaf extract\"[tiab] OR \"olive leaf extract standardized\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 107,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 117,
+   "parsed_records": 117
+  },
+  {
+   "canonical_id": "apple_cider_vinegar",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Apple Cider Vinegar\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 7,
+     "retrieved": 7,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Apple Cider Vinegar\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 15,
+     "retrieved": 15,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Apple Cider Vinegar\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 13,
+     "retrieved": 13,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 35,
+   "parsed_records": 35
+  },
+  {
+   "canonical_id": "l_histidine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Histidine\"[tiab] OR \"l-histidine standard\"[tiab]) NOT (\"histidine kinase\"[tiab] OR \"histidine tag\"[tiab] OR \"histidine-rich\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 4,
+     "retrieved": 4,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Histidine\"[tiab] OR \"l-histidine standard\"[tiab]) NOT (\"histidine kinase\"[tiab] OR \"histidine tag\"[tiab] OR \"histidine-rich\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 41,
+     "retrieved": 41,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Histidine\"[tiab] OR \"l-histidine standard\"[tiab]) NOT (\"histidine kinase\"[tiab] OR \"histidine tag\"[tiab] OR \"histidine-rich\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 82,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 63,
+   "parsed_records": 63
+  },
+  {
+   "canonical_id": "lycopene",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Lycopene\"[tiab] OR \"lycopene extract\"[tiab] OR \"synthetic lycopene\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 166,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Lycopene\"[tiab] OR \"lycopene extract\"[tiab] OR \"synthetic lycopene\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 537,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Lycopene\"[tiab] OR \"lycopene extract\"[tiab] OR \"synthetic lycopene\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 380,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 157,
+   "parsed_records": 157
+  },
+  {
+   "canonical_id": "blueberry",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Vaccinium corymbosum\"[tiab] OR \"Blueberry\"[tiab] OR \"blueberry extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 36,
+     "retrieved": 36,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Vaccinium corymbosum\"[tiab] OR \"Blueberry\"[tiab] OR \"blueberry extract\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 170,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Vaccinium corymbosum\"[tiab] OR \"Blueberry\"[tiab] OR \"blueberry extract\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 216,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 135,
+   "parsed_records": 135
+  },
+  {
+   "canonical_id": "broccoli",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Brassica oleracea var. italica\"[tiab] OR \"Broccoli\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 23,
+     "retrieved": 23,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Brassica oleracea var. italica\"[tiab] OR \"Broccoli\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 197,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Brassica oleracea var. italica\"[tiab] OR \"Broccoli\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 168,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 118,
+   "parsed_records": 118
+  },
+  {
+   "canonical_id": "l_isoleucine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Isoleucine\"[tiab] OR \"l-isoleucine powder\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 6,
+     "retrieved": 6,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Isoleucine\"[tiab] OR \"l-isoleucine powder\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 28,
+     "retrieved": 28,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Isoleucine\"[tiab] OR \"l-isoleucine powder\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 29,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 51,
+   "parsed_records": 51
+  },
+  {
+   "canonical_id": "l_valine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"L-Valine\"[tiab] OR \"l-valine powder\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 4,
+     "retrieved": 4,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"L-Valine\"[tiab] OR \"l-valine powder\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 29,
+     "retrieved": 29,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"L-Valine\"[tiab] OR \"l-valine powder\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 32,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 53,
+   "parsed_records": 53
+  },
+  {
+   "canonical_id": "flaxseed",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Linum usitatissimum\"[tiab] OR \"Flaxseed\"[tiab] OR \"flaxseed oil\"[tiab] OR \"flaxseed meal/powder\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 86,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Linum usitatissimum\"[tiab] OR \"Flaxseed\"[tiab] OR \"flaxseed oil\"[tiab] OR \"flaxseed meal/powder\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 344,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Linum usitatissimum\"[tiab] OR \"Flaxseed\"[tiab] OR \"flaxseed oil\"[tiab] OR \"flaxseed meal/powder\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 143,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 158,
+   "parsed_records": 158
+  },
+  {
+   "canonical_id": "celery",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Apium graveolens\"[tiab] OR \"Celery\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 10,
+     "retrieved": 10,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Apium graveolens\"[tiab] OR \"Celery\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 49,
+     "retrieved": 49,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Apium graveolens\"[tiab] OR \"Celery\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 190,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 76,
+   "parsed_records": 76
+  },
+  {
+   "canonical_id": "raspberry_ketones",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Raspberry Ketones\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 0,
+     "retrieved": 0,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Raspberry Ketones\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 1,
+     "retrieved": 1,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Raspberry Ketones\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 2,
+     "retrieved": 2,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 3,
+   "parsed_records": 3
+  },
+  {
+   "canonical_id": "reishi",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Reishi\"[tiab] OR \"reishi fruiting body\"[tiab] OR \"reishi standardized extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 8,
+     "retrieved": 8,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Reishi\"[tiab] OR \"reishi fruiting body\"[tiab] OR \"reishi standardized extract\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 10,
+     "retrieved": 10,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Reishi\"[tiab] OR \"reishi fruiting body\"[tiab] OR \"reishi standardized extract\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 16,
+     "retrieved": 16,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 29,
+   "parsed_records": 29
+  },
+  {
+   "canonical_id": "agmatine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Agmatine Sulfate\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 0,
+     "retrieved": 0,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Agmatine Sulfate\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 3,
+     "retrieved": 3,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Agmatine Sulfate\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 2,
+     "retrieved": 2,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 4,
+   "parsed_records": 4
+  },
+  {
+   "canonical_id": "chlorophyll",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Chlorophyll\"[tiab] OR \"copper chlorophyllin\"[tiab] OR \"sodium magnesium chlorophyllin\"[tiab] OR \"natural chlorophyll\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 85,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Chlorophyll\"[tiab] OR \"copper chlorophyllin\"[tiab] OR \"sodium magnesium chlorophyllin\"[tiab] OR \"natural chlorophyll\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 666,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Chlorophyll\"[tiab] OR \"copper chlorophyllin\"[tiab] OR \"sodium magnesium chlorophyllin\"[tiab] OR \"natural chlorophyll\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 4137,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 160,
+   "parsed_records": 160
+  },
+  {
+   "canonical_id": "bee_pollen",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Bee Pollen\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 6,
+     "retrieved": 6,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Bee Pollen\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 4,
+     "retrieved": 4,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Bee Pollen\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 37,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 30,
+   "parsed_records": 30
+  },
+  {
+   "canonical_id": "gymnema_sylvestre",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Gymnema sylvestre\"[tiab] OR \"gymnema leaf extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 10,
+     "retrieved": 10,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Gymnema sylvestre\"[tiab] OR \"gymnema leaf extract\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 23,
+     "retrieved": 23,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Gymnema sylvestre\"[tiab] OR \"gymnema leaf extract\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 17,
+     "retrieved": 17,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 46,
+   "parsed_records": 46
+  },
+  {
+   "canonical_id": "dmae",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"DMAE\"[tiab] OR \"Dimethylaminoethanol\"[tiab] OR \"dmae bitartrate\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 1,
+     "retrieved": 1,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"DMAE\"[tiab] OR \"Dimethylaminoethanol\"[tiab] OR \"dmae bitartrate\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 16,
+     "retrieved": 16,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"DMAE\"[tiab] OR \"Dimethylaminoethanol\"[tiab] OR \"dmae bitartrate\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 30,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 34,
+   "parsed_records": 34
+  },
+  {
+   "canonical_id": "sarsaparilla",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Smilax ornata\"[tiab] OR \"Sarsaparilla\"[tiab] OR \"sarsaparilla root extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 0,
+     "retrieved": 0,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Smilax ornata\"[tiab] OR \"Sarsaparilla\"[tiab] OR \"sarsaparilla root extract\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 1,
+     "retrieved": 1,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Smilax ornata\"[tiab] OR \"Sarsaparilla\"[tiab] OR \"sarsaparilla root extract\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 6,
+     "retrieved": 6,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 7,
+   "parsed_records": 7
+  },
+  {
+   "canonical_id": "wheatgrass_powder",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Triticum aestivum\"[tiab] OR \"Wheatgrass Powder\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 35,
+     "retrieved": 35,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Triticum aestivum\"[tiab] OR \"Wheatgrass Powder\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 175,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Triticum aestivum\"[tiab] OR \"Wheatgrass Powder\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 621,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 135,
+   "parsed_records": 135
+  },
+  {
+   "canonical_id": "chicory_root",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Cichorium intybus\"[tiab] OR \"Chicory Root\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 7,
+     "retrieved": 7,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Cichorium intybus\"[tiab] OR \"Chicory Root\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 26,
+     "retrieved": 26,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Cichorium intybus\"[tiab] OR \"Chicory Root\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 29,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 51,
+   "parsed_records": 51
+  },
+  {
+   "canonical_id": "stinging_nettle",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Stinging Nettle\"[tiab] OR \"stinging nettle root extract\"[tiab] OR \"stinging nettle leaf extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 3,
+     "retrieved": 3,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Stinging Nettle\"[tiab] OR \"stinging nettle root extract\"[tiab] OR \"stinging nettle leaf extract\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 23,
+     "retrieved": 23,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Stinging Nettle\"[tiab] OR \"stinging nettle root extract\"[tiab] OR \"stinging nettle leaf extract\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 23,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 40,
+   "parsed_records": 40
+  },
+  {
+   "canonical_id": "barberry_root",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Berberis vulgaris\"[tiab] OR \"Barberry Root\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 12,
+     "retrieved": 12,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Berberis vulgaris\"[tiab] OR \"Barberry Root\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 16,
+     "retrieved": 16,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Berberis vulgaris\"[tiab] OR \"Barberry Root\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 12,
+     "retrieved": 12,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 37,
+   "parsed_records": 37
+  },
+  {
+   "canonical_id": "uva_ursi_leaf",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Arctostaphylos uva-ursi\"[tiab] OR \"Uva-Ursi Leaf\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 0,
+     "retrieved": 0,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Arctostaphylos uva-ursi\"[tiab] OR \"Uva-Ursi Leaf\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 2,
+     "retrieved": 2,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Arctostaphylos uva-ursi\"[tiab] OR \"Uva-Ursi Leaf\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 4,
+     "retrieved": 4,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 6,
+   "parsed_records": 6
+  },
+  {
+   "canonical_id": "red_clover",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Trifolium pratense\"[tiab] OR \"Red Clover\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 40,
+     "retrieved": 40,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Trifolium pratense\"[tiab] OR \"Red Clover\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 101,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Trifolium pratense\"[tiab] OR \"Red Clover\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 96,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 136,
+   "parsed_records": 136
+  },
+  {
+   "canonical_id": "naringin",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Naringin\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 21,
+     "retrieved": 21,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Naringin\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 45,
+     "retrieved": 45,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Naringin\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 103,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 85,
+   "parsed_records": 85
+  },
+  {
+   "canonical_id": "juniper",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Juniperus communis\"[tiab] OR \"Juniper\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 8,
+     "retrieved": 8,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Juniperus communis\"[tiab] OR \"Juniper\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 56,
+     "retrieved": 56,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Juniperus communis\"[tiab] OR \"Juniper\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 46,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 81,
+   "parsed_records": 81
+  },
+  {
+   "canonical_id": "blueberry_fruit",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Vaccinium corymbosum\"[tiab] OR \"Blueberry Fruit\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 1,
+     "retrieved": 1,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Vaccinium corymbosum\"[tiab] OR \"Blueberry Fruit\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 8,
+     "retrieved": 8,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Vaccinium corymbosum\"[tiab] OR \"Blueberry Fruit\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 12,
+     "retrieved": 12,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 20,
+   "parsed_records": 20
+  },
+  {
+   "canonical_id": "catuaba",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Trichilia catigua\"[tiab] OR \"Catuaba\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 0,
+     "retrieved": 0,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Trichilia catigua\"[tiab] OR \"Catuaba\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 0,
+     "retrieved": 0,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Trichilia catigua\"[tiab] OR \"Catuaba\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 4,
+     "retrieved": 4,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 4,
+   "parsed_records": 4
+  },
+  {
+   "canonical_id": "lithium",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Lithium\"[tiab] OR \"lithium orotate\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 673,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Lithium\"[tiab] OR \"lithium orotate\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 2162,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Lithium\"[tiab] OR \"lithium orotate\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 7371,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 159,
+   "parsed_records": 159
+  },
+  {
+   "canonical_id": "caralluma",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Caralluma fimbriata\"[tiab] OR \"Caralluma\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 6,
+     "retrieved": 6,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Caralluma fimbriata\"[tiab] OR \"Caralluma\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 7,
+     "retrieved": 7,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Caralluma fimbriata\"[tiab] OR \"Caralluma\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 12,
+     "retrieved": 12,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 22,
+   "parsed_records": 22
+  },
+  {
+   "canonical_id": "coptis_rhizome",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Coptis chinensis\"[tiab] OR \"Coptis Rhizome\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 11,
+     "retrieved": 11,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Coptis chinensis\"[tiab] OR \"Coptis Rhizome\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 9,
+     "retrieved": 9,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Coptis chinensis\"[tiab] OR \"Coptis Rhizome\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 38,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 36,
+   "parsed_records": 36
+  },
+  {
+   "canonical_id": "cnidium",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Cnidium monnieri\"[tiab] OR \"Cnidium\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 2,
+     "retrieved": 2,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Cnidium monnieri\"[tiab] OR \"Cnidium\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 0,
+     "retrieved": 0,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Cnidium monnieri\"[tiab] OR \"Cnidium\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 13,
+     "retrieved": 13,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 15,
+   "parsed_records": 15
+  },
+  {
+   "canonical_id": "jujube",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Ziziphus jujuba\"[tiab] OR \"Jujube\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 13,
+     "retrieved": 13,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Ziziphus jujuba\"[tiab] OR \"Jujube\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 29,
+     "retrieved": 29,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Ziziphus jujuba\"[tiab] OR \"Jujube\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 46,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 60,
+   "parsed_records": 60
+  },
+  {
+   "canonical_id": "lemon",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Citrus limon\"[tiab] OR \"Lemon\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 61,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Citrus limon\"[tiab] OR \"Lemon\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 259,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Citrus limon\"[tiab] OR \"Lemon\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 331,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 155,
+   "parsed_records": 154
+  },
+  {
+   "canonical_id": "oolong_tea_leaf",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Camellia sinensis\"[tiab] OR \"Oolong Tea Leaf\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 58,
+     "retrieved": 58,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Camellia sinensis\"[tiab] OR \"Oolong Tea Leaf\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 94,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Camellia sinensis\"[tiab] OR \"Oolong Tea Leaf\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 180,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 155,
+   "parsed_records": 155
+  },
+  {
+   "canonical_id": "phenylethylamine",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Phenylethylamine\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 7,
+     "retrieved": 7,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Phenylethylamine\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 31,
+     "retrieved": 31,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Phenylethylamine\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 89,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 58,
+   "parsed_records": 58
+  },
+  {
+   "canonical_id": "turkey_rhubarb_root",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Rheum palmatum\"[tiab] OR \"Turkey Rhubarb\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 6,
+     "retrieved": 6,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Rheum palmatum\"[tiab] OR \"Turkey Rhubarb\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 14,
+     "retrieved": 14,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Rheum palmatum\"[tiab] OR \"Turkey Rhubarb\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 29,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 38,
+   "parsed_records": 38
+  },
+  {
+   "canonical_id": "zeaxanthin",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Zeaxanthin\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 66,
+     "retrieved": 60,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Zeaxanthin\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 299,
+     "retrieved": 80,
+     "truncated": true,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Zeaxanthin\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 171,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 154,
+   "parsed_records": 154
+  },
+  {
+   "canonical_id": "hibiscus_extract",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Hibiscus Extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 0,
+     "retrieved": 0,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Hibiscus Extract\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 1,
+     "retrieved": 1,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Hibiscus Extract\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 1,
+     "retrieved": 1,
+     "truncated": false,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 2,
+   "parsed_records": 2
+  },
+  {
+   "canonical_id": "spearmint",
+   "run_date": "2026-09-18",
+   "source": "NCBI PubMed E-utilities",
+   "queries": [
+    {
+     "role": "reviews",
+     "term": "(\"Spearmint\"[tiab] OR \"spearmint extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 4,
+     "retrieved": 4,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "trials",
+     "term": "(\"Spearmint\"[tiab] OR \"spearmint extract\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt] OR randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR crossover[tiab]) NOT (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR guideline[pt] OR \"systematic review\"[ti] OR \"meta-analysis\"[ti]) NOT (animals[mh] NOT humans[mh])",
+     "count": 21,
+     "retrieved": 21,
+     "truncated": false,
+     "sort": "relevance"
+    },
+    {
+     "role": "safety",
+     "term": "(\"Spearmint\"[tiab] OR \"spearmint extract\"[tiab]) AND (adverse effects[sh] OR toxicity[sh] OR case reports[pt] OR hepatotoxicity[tiab] OR \"adverse event\"[tiab] OR \"adverse events\"[tiab] OR poisoning[sh]) NOT (animals[mh] NOT humans[mh])",
+     "count": 32,
+     "retrieved": 20,
+     "truncated": true,
+     "sort": "relevance"
+    }
+   ],
+   "unique_pmids": 44,
+   "parsed_records": 44
+  }
+ ]
+}

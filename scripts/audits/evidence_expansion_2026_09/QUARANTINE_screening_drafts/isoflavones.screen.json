@@ -1,0 +1,3334 @@
+{
+ "canonical_id": "isoflavones",
+ "screened": 155,
+ "kept": 92,
+ "rejected": [
+  {
+   "pmid": "9839524",
+   "reason": "off_topic",
+   "note": "Soymilk consumption (whole food), not an isolated isoflavone supplement."
+  },
+  {
+   "pmid": "10578479",
+   "reason": "off_topic",
+   "note": "Generic 'soy intake' (dietary), not framed around isolated isoflavones."
+  },
+  {
+   "pmid": "11965512",
+   "reason": "off_topic",
+   "note": "Whole soy food trial for hypercholesterolaemia, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "14692708",
+   "reason": "different_substance",
+   "note": "Vitamin E RCT; no isoflavone intervention."
+  },
+  {
+   "pmid": "16263208",
+   "reason": "off_topic",
+   "note": "Generic 'dietary supplement' in prostate cancer trial; no isoflavone-specific identification in title."
+  },
+  {
+   "pmid": "16297576",
+   "reason": "off_topic",
+   "note": "Whole soy-rich diet, not isolated isoflavone supplement."
+  },
+  {
+   "pmid": "16730418",
+   "reason": "off_topic",
+   "note": "Soy protein and bone mineral density; whole-protein matrix, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "17533209",
+   "reason": "off_topic",
+   "note": "Soy nuts (whole food), not isolated isoflavone extract."
+  },
+  {
+   "pmid": "17825101",
+   "reason": "animal_or_invitro",
+   "note": "Mouse (C57BL/6J) model of LPS-induced bone/vascular inflammation, not a human study."
+  },
+  {
+   "pmid": "18608549",
+   "reason": "off_topic",
+   "note": "Soy bean (whole food) and paraoxonase activity, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "21711174",
+   "reason": "off_topic",
+   "note": "Soy and seaweed combination supplement study; whole-food/mixed matrix, not isolated isoflavones."
+  },
+  {
+   "pmid": "21742946",
+   "reason": "off_topic",
+   "note": "Generic 'soy trial' measuring nipple aspirate fluid estrogen; whole-food/protein matrix implied, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "22293063",
+   "reason": "off_topic",
+   "note": "Generic 'soy trial' urinary estrogen metabolites; whole-food/protein matrix implied, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "23187956",
+   "reason": "off_topic",
+   "note": "Soybean protein and cardiovascular risk factors; whole-protein matrix, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "23567264",
+   "reason": "off_topic",
+   "note": "Systematic review of dietary supplements broadly for prostate cancer; not isoflavone-specific per title."
+  },
+  {
+   "pmid": "27079631",
+   "reason": "different_substance",
+   "note": "Dietary polyphenols broadly; not isoflavone-specific."
+  },
+  {
+   "pmid": "27687296",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of epidemiologic (dietary intake) studies of phytoestrogens and prostate cancer, not a supplementation trial."
+  },
+  {
+   "pmid": "27918846",
+   "reason": "not_intervention",
+   "note": "Observational biomarker study of dietary soy food intake, not a supplementation trial."
+  },
+  {
+   "pmid": "28067550",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of observational studies of soy consumption and CVD risk, not a supplementation trial."
+  },
+  {
+   "pmid": "28992429",
+   "reason": "off_topic",
+   "note": "Broad review of nutraceutical/dietary supplement adverse effects generally; not isoflavone-specific."
+  },
+  {
+   "pmid": "29072172",
+   "reason": "off_topic",
+   "note": "Flavonoid intake and mortality; broad flavonoid class, epidemiological, not isoflavone-specific supplementation."
+  },
+  {
+   "pmid": "29300347",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of observational soy consumption and prostate cancer risk, not a supplementation trial."
+  },
+  {
+   "pmid": "29665798",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of dietary isoflavone intake and gastric cancer risk (epidemiological), not a supplementation trial."
+  },
+  {
+   "pmid": "29722584",
+   "reason": "off_topic",
+   "note": "Soy protein vs animal protein for muscle mass; whole-protein comparison, not isoflavone-specific."
+  },
+  {
+   "pmid": "29759310",
+   "reason": "different_substance",
+   "note": "Flavanols (different flavonoid subclass), not isoflavones."
+  },
+  {
+   "pmid": "29768032",
+   "reason": "different_substance",
+   "note": "Flavonoid subclasses broadly and diabetes risk (epidemiological); not isoflavone-specific supplementation."
+  },
+  {
+   "pmid": "30079364",
+   "reason": "off_topic",
+   "note": "Broad strategies for menopausal quality of life; not isoflavone-specific."
+  },
+  {
+   "pmid": "30195577",
+   "reason": "different_substance",
+   "note": "Flavonoid subclasses and diabetes risk (Comment/Letter); not isoflavone-specific."
+  },
+  {
+   "pmid": "30314925",
+   "reason": "off_topic",
+   "note": "Generic 'soy' and hs-CRP; whole-food/protein matrix implied, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "31213463",
+   "reason": "off_topic",
+   "note": "Modifiable risk factors for myelodysplastic syndrome; not isoflavone-specific."
+  },
+  {
+   "pmid": "31343517",
+   "reason": "off_topic",
+   "note": "Generic 'acute soy supplementation'; likely soy protein, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "31466381",
+   "reason": "off_topic",
+   "note": "Broad nutraceutical review of menopausal complaints; not isoflavone-specific in title."
+  },
+  {
+   "pmid": "31666473",
+   "reason": "not_intervention",
+   "note": "Observational dietary pattern (vegetable-fruit-soybean) and breast cancer, not a supplementation trial."
+  },
+  {
+   "pmid": "32485302",
+   "reason": "animal_or_invitro",
+   "note": "DNCB-induced contact dermatitis model in HaCaT keratinocytes and mice; also explicitly topical ('Instead of oral administration'), not oral."
+  },
+  {
+   "pmid": "32932251",
+   "reason": "not_intervention",
+   "note": "Observational association of urinary equol levels with atopic dermatitis prevalence, not a supplementation trial."
+  },
+  {
+   "pmid": "33008006",
+   "reason": "animal_or_invitro",
+   "note": "Soybean embryo extract anti-obesity mechanism study; not a human isoflavone supplementation trial per available title/context."
+  },
+  {
+   "pmid": "33066630",
+   "reason": "different_substance",
+   "note": "Antiangiogenic flavonoids broadly; not isoflavone-specific."
+  },
+  {
+   "pmid": "33496707",
+   "reason": "animal_or_invitro",
+   "note": "Biochanin A mechanistic study of particulate-matter oxidative damage; not a human supplementation trial."
+  },
+  {
+   "pmid": "33562090",
+   "reason": "off_topic",
+   "note": "Fermented soy product (whole food) and cholesterol; not isolated isoflavone extract."
+  },
+  {
+   "pmid": "33564828",
+   "reason": "off_topic",
+   "note": "Soy protein supplementation after prostatectomy; whole-protein matrix, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "33628321",
+   "reason": "animal_or_invitro",
+   "note": "Explicitly a systematic review of PRECLINICAL (murine) evidence on isoflavone and testicular function."
+  },
+  {
+   "pmid": "33764851",
+   "reason": "off_topic",
+   "note": "Soy protein isolate after prostatectomy; whole-protein matrix, not isolated isoflavone extract."
+  },
+  {
+   "pmid": "34470681",
+   "reason": "different_substance",
+   "note": "Flavonoid subclasses and CHD risk (epidemiological); not isoflavone-specific."
+  },
+  {
+   "pmid": "35031904",
+   "reason": "different_substance",
+   "note": "Flavonoids broadly and neuroinflammation; not isoflavone-specific."
+  },
+  {
+   "pmid": "35308286",
+   "reason": "not_intervention",
+   "note": "Systematic review of soy/soy isoflavone/soy protein consumption and cancer incidence/mortality (epidemiological), not supplementation."
+  },
+  {
+   "pmid": "35404174",
+   "reason": "off_topic",
+   "note": "Protocol only for a planned review of soy-based meal replacement and weight loss; whole-food matrix, no results."
+  },
+  {
+   "pmid": "35425953",
+   "reason": "off_topic",
+   "note": "Dietary interventions for gastroparesis broadly; not isoflavone-specific."
+  },
+  {
+   "pmid": "35668938",
+   "reason": "animal_or_invitro",
+   "note": "Explicitly preclinical evidence from small animal studies of myocardial ischemia/reperfusion."
+  },
+  {
+   "pmid": "36118757",
+   "reason": "not_intervention",
+   "note": "Systematic review of soy consumption and serum uric acid (observational), not a supplementation trial."
+  },
+  {
+   "pmid": "37373864",
+   "reason": "off_topic",
+   "note": "Topical or oral soy supplementation in dermatology; mixed/unclear route and generic 'soy', not isolated isoflavone extract."
+  },
+  {
+   "pmid": "37697053",
+   "reason": "off_topic",
+   "note": "Testosterone boosters broadly; not isoflavone-specific."
+  },
+  {
+   "pmid": "37943034",
+   "reason": "not_intervention",
+   "note": "Prospective analysis and meta-analysis of dietary isoflavone INTAKE and breast cancer prognosis (epidemiological), not supplementation."
+  },
+  {
+   "pmid": "38070485",
+   "reason": "not_intervention",
+   "note": "Systematic review of observational studies of phytonutrients and breast cancer outcomes, not a supplementation trial."
+  },
+  {
+   "pmid": "38429765",
+   "reason": "different_substance",
+   "note": "RETRACTED review of dietary polyphenols broadly and metabolic syndrome; not isoflavone-specific, and retracted."
+  },
+  {
+   "pmid": "38684926",
+   "reason": "off_topic",
+   "note": "Broad nutritional interventions for PMS; not isoflavone-specific."
+  },
+  {
+   "pmid": "38870019",
+   "reason": "different_substance",
+   "note": "Dietary flavonoid intake and mortality (epidemiological); broad flavonoid class, not isoflavone-specific."
+  },
+  {
+   "pmid": "39220340",
+   "reason": "animal_or_invitro",
+   "note": "Meta-analysis of transcriptome data from breast cancer CELL studies, not a human clinical trial."
+  },
+  {
+   "pmid": "39480044",
+   "reason": "animal_or_invitro",
+   "note": "Effects of dietary isoflavones on tumor growth analyzed from experimental ANIMAL MODELS of female hormone-dependent cancers (1998-2024), not human trials."
+  },
+  {
+   "pmid": "39804624",
+   "reason": "off_topic",
+   "note": "Broad review of oral supplements and photoprotection; not isoflavone-specific."
+  },
+  {
+   "pmid": "40611279",
+   "reason": "off_topic",
+   "note": "Nutritional supplements network meta-analysis in PCOS; isoflavones not identified as an included arm in the title/available context."
+  },
+  {
+   "pmid": "40639456",
+   "reason": "different_substance",
+   "note": "Probiotics during menopause transition; different substance class."
+  },
+  {
+   "pmid": "41010462",
+   "reason": "off_topic",
+   "note": "Fermented soy (whole food) and cognition; not isolated isoflavone extract."
+  },
+  {
+   "pmid": "41561175",
+   "reason": "off_topic",
+   "note": "Dietary supplements broadly for androgenetic alopecia; isoflavones not identified as an included arm in the title/available context."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "9437184",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "80-mg daily isoflavones (45 mg genistein)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "21 menopausal/perimenopausal women",
+   "indication_as_stated": "cardiovascular/arterial compliance",
+   "dose_quote": "80-mg daily isoflavones (45 mg genistein)",
+   "primary_outcome_quote": "Systemic arterial compliance (arterial elasticity)",
+   "primary_result_quote": "improved 26% (P < .001) compared with placebo",
+   "sample_size_quote": "21 women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Arterial pressure and plasma lipids unaffected (mixed on secondary).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isolated soy isoflavone extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10084567",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavones derived from red clover (40 mg and 80 mg)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "17 women",
+   "indication_as_stated": "cardiovascular/arterial compliance",
+   "dose_quote": "40 mg and then 80 mg isoflavones derived from red clover",
+   "primary_outcome_quote": "arterial compliance",
+   "primary_result_quote": "Arterial compliance rose by 23% relative to that during the placebo period with the 80-mg isoflavone dose",
+   "sample_size_quote": "17 women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Plasma lipids not significantly affected.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Red clover isoflavones, not soy; different plant source of isoflavones.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": true
+   }
+  },
+  {
+   "pmid": "10746892",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "standardized soy extract (SOYSELECT) 400 mg/day (50 mg isoflavones)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women",
+   "indication_as_stated": "climacteric symptoms",
+   "dose_quote": "400 mg/day of a standardized soy extract, corresponding to 50 mg/daily of isoflavones",
+   "primary_outcome_quote": "reduction in mean number of hot flushes per week",
+   "primary_result_quote": "significant (p < 0.01) reduction in the mean number of hot flushes per week was observed in participants who were receiving the standardized soy extract",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Also compared to/combined with conjugated equine estrogen (CEE) phase.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Standardized soy extract dosed by isoflavone content; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11449083",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "red clover isoflavone preparation (Rimostil) 28.5/57/85.5 mg phytoestrogens/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "46 postmenopausal women",
+   "indication_as_stated": "lipid and bone metabolism",
+   "dose_quote": "28.5 mg, 57 mg, or 85.5 mg of phytoestrogens daily for a 6-month period",
+   "primary_outcome_quote": "HDL cholesterol and bone mineral density changes",
+   "primary_result_quote": "bone mineral density of the proximal radius and ulna rose significantly by 4.1% over 6 months with 57 mg/day",
+   "sample_size_quote": "46 postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No concurrent control group (single-blind placebo lead-in only) \u2014 authors caution interpretation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Red clover isoflavone preparation, not soy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11920488",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dietary supplement of isoflavones (40 mg per day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "68 premenopausal women",
+   "indication_as_stated": "estrogen metabolism/breast cancer risk",
+   "dose_quote": "isoflavones (40 mg per day)",
+   "primary_outcome_quote": "change in steroid hormones and menstrual cycle length",
+   "primary_result_quote": "mean menstrual cycle length increased by 3.52 days compared with a mean decrease of 0.06 days for women in the placebo group (P = 0.04)",
+   "sample_size_quote": "Sixty-eight consecutively recruited, premenopausal ... women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavone supplement matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12072038",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral soy isoflavone concentrate containing 80 mg of soy isoflavones",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "29 healthy menopausal women",
+   "indication_as_stated": "endothelial function/cardiovascular",
+   "dose_quote": "80 mg of soy isoflavones... for 2 weeks",
+   "primary_outcome_quote": "flow-mediated dilation (%FMD(max))",
+   "primary_result_quote": "short-term oral isoflavone supplements do not improve endothelial function in healthy menopausal women",
+   "sample_size_quote": "Twenty-nine healthy menopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral soy isoflavone concentrate matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12163662",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "soybean isoflavone glycosides and red clover isoflavone aglycones",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "14 subjects",
+   "indication_as_stated": "isoflavone absorption",
+   "dose_quote": null,
+   "primary_outcome_quote": "24-h excretions of isoflavones in urine",
+   "primary_result_quote": "approximately 25% of each isoflavone was recovered in urine, suggesting that similar amounts were absorbed",
+   "sample_size_quote": "14 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "Comparative PK study, no clinical efficacy endpoint.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Compares soy vs red clover isoflavone absorption directly.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12714433",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavones enriched in either biochanin or formononetin (80 mg/d)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "80 healthy subjects (46 men, 34 women)",
+   "indication_as_stated": "arterial stiffness/cardiovascular",
+   "dose_quote": "80 mg/d",
+   "primary_outcome_quote": "large artery stiffness (systemic arterial compliance and pulse wave velocity)",
+   "primary_result_quote": "Isoflavone intervention significantly reduced arterial stiffness with improved systemic arterial compliance (P=0.04)",
+   "sample_size_quote": "80 healthy subjects, 46 men and 34 women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No effect on blood pressure or flow-mediated vasodilation (mixed); benefit limited to formononetin-enriched arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Isolated biochanin/formononetin-enriched isoflavones (red-clover-type), not standard soy genistein/daidzein mixture.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12791624",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "soybean isoflavones (aglycone or glucoside form)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Fifteen American women",
+   "indication_as_stated": "isoflavone bioavailability",
+   "dose_quote": null,
+   "primary_outcome_quote": "C(max), t(max), and AUC for daidzein and genistein",
+   "primary_result_quote": "The apparent bioavailability of genistein and daidzein is not different when consumed as either aglycone or glucoside by American women",
+   "sample_size_quote": "Fifteen American women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "PK study, no clinical outcome.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soybean isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12792289",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "55 mg soy-extracted isoflavones per pill (110 mg total/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "56 postmenopausal women (SOPHIA study)",
+   "indication_as_stated": "cognitive function",
+   "dose_quote": "two pills per day, each containing 55 mg of soy-extracted isoflavones (110 mg total isoflavones per day)",
+   "primary_outcome_quote": "cognitive function tests (Trails A/B, category fluency, verbal memory)",
+   "primary_result_quote": "greater improvement in category fluency for women on active treatment as compared with the case of those on placebo (P = 0.02)",
+   "sample_size_quote": "56 women aged 55 to 74 years were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Other cognitive measures improved nonsignificantly.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy-extracted isoflavone supplement matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14627440",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavones (soy phyto-estrogens), tablets/isolated soy protein/soy diets",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "adults (853 subjects, 17 studies)",
+   "indication_as_stated": "serum lipids",
+   "dose_quote": "up to 150 mg per day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Isoflavones tablets, isolated or mixtures with up to 150 mg per day, seemed to have no overall statistical and clinical benefits on serum lipids",
+   "sample_size_quote": "Seventeen studies (21 comparisons) with 853 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Pools tablets, isolated soy protein, and soy diets together \u2014 heterogeneous intervention forms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Meta-analysis mixes isolated isoflavone tablets with soy-protein and whole-soy-diet interventions.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14706761",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "80 mg of soy isoflavones",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "262 randomized (388 screened) women",
+   "indication_as_stated": "climacteric symptoms",
+   "dose_quote": "80 mg of soy isoflavones, 3 mg of pure melatonin or placebo",
+   "primary_outcome_quote": "Greene Climacteric Scale score change",
+   "primary_result_quote": "Present data do not show any advantage of isoflavones or melatonin over placebo for the relief of menopausal symptoms",
+   "sample_size_quote": "388 consecutive women were screened... Randomized 262 and analyzed 232",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "2x2 factorial with melatonin; isoflavones+melatonin combo showed higher improvement in psychological symptoms only (secondary).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material (also tested combined with melatonin).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14965665",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "40 mg or 80 mg of isoflavones",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "18 women randomized to treatment",
+   "indication_as_stated": "cyclical mastalgia",
+   "dose_quote": "40 mg or 80 mg of isoflavones",
+   "primary_outcome_quote": "improvement in breast pain",
+   "primary_result_quote": "Nine of the 12 women on treatment had a worthwhile improvement in their pain compared to only two of six on placebo",
+   "sample_size_quote": "Eighteen women were randomized to the treatment phase",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Very small sample; first such trial per authors.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15283929",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy germ isoflavones (60 mg per day, capsules)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 postmenopausal women with HRT contraindication",
+   "indication_as_stated": "vasomotor symptoms/lipids",
+   "dose_quote": "60 mg per day, capsules",
+   "primary_outcome_quote": "reduction in hot flushes",
+   "primary_result_quote": "isoflavone was significantly superior to placebo in reducing hot flushes (44% versus 10%, respectively) (P < 0.05)",
+   "sample_size_quote": "50 postmenopausal women randomly divided into two groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "'Soy germ extract' appears explicitly in the identity's label_spellings_seen \u2014 exact match.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15640479",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy protein containing 99 mg isoflavones/d",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "202 postmenopausal women",
+   "indication_as_stated": "vascular function/blood pressure",
+   "dose_quote": "soy protein containing 99 mg isoflavones/d (aglycone weights)",
+   "primary_outcome_quote": "endothelial function and blood pressure change",
+   "primary_result_quote": "results of this trial do not support the hypothesis that soy protein containing isoflavones have beneficial effects on vascular function... systolic blood pressure increased in the soy group significantly more than it did in the placebo group",
+   "sample_size_quote": "202 postmenopausal women aged 60-75 y",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Adverse-direction signal (BP increase) in overall group; equol-producer subgroup showed opposite (beneficial) trend.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Intervention is soy PROTEIN (whole-food matrix) standardized to isoflavone content, not an isolated isoflavone extract.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16414215",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "100 mg/day isoflavone supplement",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "29 healthy postmenopausal women",
+   "indication_as_stated": "lipid profile/platelet function",
+   "dose_quote": "100 mg/day isoflavone supplement",
+   "primary_outcome_quote": "lipoprotein status and platelet thromboxane A2 receptor density",
+   "primary_result_quote": "platelet thromboxane A2 receptor density declined significantly... remaining mostly unchanged in the placebo group",
+   "sample_size_quote": "Twenty-nine healthy postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Plasma lipids unaffected; platelet receptor density (secondary/mechanistic) changed.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone supplement matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16907966",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavone-enriched cereal bars (50 mg isoflavones/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "34 healthy postmenopausal women",
+   "indication_as_stated": "appetite hormones/body weight",
+   "dose_quote": "50 mg isoflavones/day",
+   "primary_outcome_quote": "body weight and energy intake change",
+   "primary_result_quote": "Soy isoflavone supplementation for eight weeks did not significantly reduce energy intake or body weight, even though plasma PYY increased during isoflavone treatment",
+   "sample_size_quote": "34 healthy postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "PYY (secondary/mechanistic marker) increased significantly; primary weight/intake outcomes null.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered via isoflavone-enriched cereal bars (food matrix), not a supplement capsule/tablet.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16957676",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones (60 mg) + lactobacilli + Magnolia bark extract + vitamin D3 + calcium (Estromineral serena)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "89 symptomatic menopausal women",
+   "indication_as_stated": "menopausal mood/sleep symptoms",
+   "dose_quote": "1 tablet/day of ES ... for 24 weeks",
+   "primary_outcome_quote": "efficacy and acceptability judgements",
+   "primary_result_quote": "Woman wellbeing (good/very good 66.7% vs 20%) judgement on efficacy (72.7% vs 17.1%) ... significantly better for ES",
+   "sample_size_quote": "Eighty-nine women (44 ES and 45 Ca+D)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Multi-ingredient combination product (not isoflavones alone); comparator was calcium+vitamin D, not placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Isoflavones are only one of five active ingredients in a combination product; effect cannot be attributed to isoflavones alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17081400",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy protein isolate (40 g soy protein, 118 mg isoflavones)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "213 healthy volunteers",
+   "indication_as_stated": "blood pressure/lipids",
+   "dose_quote": "40 g soy protein, 118 mg isoflavones",
+   "primary_outcome_quote": "blood pressure and lipid change",
+   "primary_result_quote": "blood pressure was significant reduced in soy protein group than that in cassin placebo group",
+   "sample_size_quote": "Two hundred thirteen healthy volunteers (108 men and 105 post-menopausal women)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Whole soy protein isolate (40 g) standardized to isoflavone content, not an isolated isoflavone extract.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17927495",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavone mixture capsule (40 mg twice daily)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "71 men with prostate cancer/rising PSA",
+   "indication_as_stated": "prostate cancer (PSA progression)",
+   "dose_quote": "capsule containing 40 mg of a soy isoflavone mixture ... twice daily orally",
+   "primary_outcome_quote": "serum PSA decline/stable disease",
+   "primary_result_quote": "22 of 33 (67%) evaluable patients in the lycopene plus soy isoflavone group achieved stable disease... there may not be an additive effect between the 2 compounds when taken together",
+   "sample_size_quote": "71 eligible patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Combination trial with lycopene; lycopene-alone arm performed numerically better (95%) than the combination arm (67%) on stable disease.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone mixture matches label material; tested in combination with lycopene.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18788990",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavone supplement (70 mg)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 obese postmenopausal women",
+   "indication_as_stated": "cardiovascular risk factors",
+   "dose_quote": "70 mg",
+   "primary_outcome_quote": "clinical cardiovascular disease (CVD) risk factors (body composition, biochemical)",
+   "primary_result_quote": "isoflavones did not favorably affect risk factors predisposing to CVD (biochemical or body composition) compared with placebo",
+   "sample_size_quote": "50 obese postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavone supplement matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19209289",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "extracted soy isoflavones alone (average 70 mg/day, 27-132 mg aglycone)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adult humans (normocholesterolemic menopausal women)",
+   "indication_as_stated": "serum lipids",
+   "dose_quote": "average of 70 mg soy isoflavones/day (27-132 mg, as the aglycone form)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "ingestion of about 70 mg extracted soy isoflavones/day alone for 1-3 months does not improve total and LDL cholesterol levels",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Explicitly restricted to isoflavones given ALONE (not with soy protein) \u2014 most directly relevant of the lipid meta-analyses to the label material.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Explicitly isolates isoflavones-alone trials, matching label material precisely.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19339127",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones extract (SIE), 120 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "84 climacteric outpatients",
+   "indication_as_stated": "depressive symptoms of climacteric syndrome",
+   "dose_quote": "daily dose of 120mg SIE",
+   "primary_outcome_quote": "percent reduction in CES-D depression scores",
+   "primary_result_quote": "The treatment with soy isoflavones did not produce significant reduction on the depressive symptoms",
+   "sample_size_quote": "84 climacteric outpatients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Authors attribute initial within-group improvement to nonspecific/placebo response.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19948385",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavones derived from red clover extracts (MF11RCE), 80mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "109 postmenopausal women",
+   "indication_as_stated": "depressive and anxiety symptoms",
+   "dose_quote": "80mg red clover isoflavones",
+   "primary_outcome_quote": "HADS and Zung SDS score change",
+   "primary_result_quote": "Red clover derived isoflavones (MF11RCE) were effective in reducing depressive and anxiety symptoms",
+   "sample_size_quote": "One hundred and nine postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Placebo arm also improved substantially (21.7%), though less than active arm (76.9-80.6%).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Red clover isoflavone extract, not soy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19951216",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "purified red clover isoflavone (86 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "23 premenopausal women",
+   "indication_as_stated": "serum homocysteine",
+   "dose_quote": "86 mg/day",
+   "primary_outcome_quote": "serum homocysteine and folate concentration change",
+   "primary_result_quote": "supplementation with purified isoflavones that are predominantly methoxylated has no effect on serum homocysteine or folate",
+   "sample_size_quote": "Twenty-three premenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Purified red clover isoflavone, not soy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20025635",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "80 mg isoflavones (corresponding to 60 mg of genistein)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "180 women aged 40-65",
+   "indication_as_stated": "menopausal hot flushes",
+   "dose_quote": "one tablet a day of 80 mg isoflavones",
+   "primary_outcome_quote": "reduction in moderate-to-severe hot flushes",
+   "primary_result_quote": "the reduction was greater in the isoflavones arm at 6 (36.2%) and 12 weeks (41.2%) than in the placebo arm...(P = 0.038)... (P = 0.023)",
+   "sample_size_quote": "A total of 180 women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy extract phytoestrogens dosed as isoflavones; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20432816",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "low and high dose isoflavone (16 or 48 mg)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "12 hypercholesterolemic children",
+   "indication_as_stated": "pediatric hypercholesterolemia",
+   "dose_quote": "low and high dose isoflavone (16 or 48 mg)",
+   "primary_outcome_quote": "cholesterol/LDL-C/insulin resistance change",
+   "primary_result_quote": "isoflavones had no effect on cholesterol, LDL-C, high-density lipoprotein-cholesterol (HDL-C), triglycerides, lipoprotein (a), Apo B, or insulin resistance",
+   "sample_size_quote": "Twelve hypercholesterolemic children",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Pediatric population \u2014 distinct from typical adult label use.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy-derived isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20732799",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones extract (Fisiogen, 80 mg isoflavone)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "87 healthy obese postmenopausal women",
+   "indication_as_stated": "cytokines/inflammation, combined with diet+exercise",
+   "dose_quote": "80 mg of isoflavone (60.8 mg genistein, 16 mg daidzein, 3.2 mg glicitein)",
+   "primary_outcome_quote": "serum leptin, adiponectin, TNF-alpha change",
+   "primary_result_quote": "only women in the soy isoflavones group showed a significant increase of mean serum levels of adiponectin",
+   "sample_size_quote": "sample of 87 healthy obese postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Isoflavone extract given alongside a 1200-kcal diet and exercise program in both study arms design (combination:true).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone extract matches label material; co-administered with diet/exercise.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20924975",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "200 mg soy isoflavone",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "42 patients with prostate cancer",
+   "indication_as_stated": "radiation therapy adverse effects (prostate cancer)",
+   "dose_quote": "200 mg soy isoflavone ... daily for 6 mo",
+   "primary_outcome_quote": "urinary/bowel/sexual adverse symptom scores during radiation therapy",
+   "primary_result_quote": "urinary, bowel, and sexual adverse symptoms induced by radiation therapy were decreased in the soy isoflavone group compared to placebo group",
+   "sample_size_quote": "Forty-two patients with prostate cancer",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Given as an adjunct alongside curative radiation therapy, not isoflavones alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone matches label material; combined with radiation therapy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21177797",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "soy hypocotyl isoflavones (80 or 120 mg aglycone equivalent) + calcium and vitamin D",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "403 postmenopausal women",
+   "indication_as_stated": "2-year safety of soy isoflavone supplementation",
+   "dose_quote": "80 or 120 mg aglycone equivalent soy hypocotyl isoflavones plus calcium and vitamin D",
+   "primary_outcome_quote": "clinical blood chemistry and safety outcomes over 2 years",
+   "primary_result_quote": "Daily supplementation for 2 y with 80-120 mg soy hypocotyl isoflavones has minimal risk in healthy menopausal women",
+   "sample_size_quote": "403 postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Longest-duration safety trial identified (2 y); secondary outcome of a bone-health trial. Two serious adverse events (breast cancer, endometrial cancer) noted as below expected population rate.",
+   "registrations": [
+    "NCT00665860"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy hypocotyl isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21244439",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "interaction",
+   "intervention_as_stated": "kudzu extract (total isoflavone dose of 750 mg/d)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "12 healthy adult volunteers",
+   "indication_as_stated": "alcohol interaction",
+   "dose_quote": "kudzu extract (total isoflavone dose of 750 mg/d)",
+   "primary_outcome_quote": "subjective/psychomotor response to an acute alcohol challenge",
+   "primary_result_quote": "Kudzu extract did not alter participants' subjective responses to the alcohol challenge or to alcohol's effects on stance stability or vigilance/reaction time",
+   "sample_size_quote": "Twelve (12) healthy adult men and women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Kudzu-derived isoflavones (puerarin-type), a different botanical source than soy; also a novel (alcohol-use) indication, not typical supplement-label use.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Kudzu root isoflavone extract, botanically distinct from soy isoflavones.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21311416",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavones 60 mg + Lactobacillus sporogenes +/- magnolia bark extract",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "634 menopausal women",
+   "indication_as_stated": "menopausal symptoms",
+   "dose_quote": "isoflavones 60 mg + Lactobacillus sporogenes + calcium and vitamin D3",
+   "primary_outcome_quote": "reduction in menopausal symptoms vs baseline",
+   "primary_result_quote": "Isoflavones are effective in improving the classical menopause symptoms",
+   "sample_size_quote": "634 women were treated (300 with E and 334 with ES)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Multi-ingredient combination product; no placebo arm (active comparator only).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Isoflavones combined with probiotic/vitamin/mineral product; not isoflavones alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21870906",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "80 mg red clover isoflavones",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "109 postmenopausal women",
+   "indication_as_stated": "vasomotor/menopausal symptoms",
+   "dose_quote": "80 mg red clover isoflavones",
+   "primary_outcome_quote": "daily hot flush/night sweat frequency and Kupperman Index",
+   "primary_result_quote": "Red clover isoflavone supplementation was more effective than placebo in reducing daily vasomotor frequency and overall menopausal intensity",
+   "sample_size_quote": "One hundred and nine postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Red clover isoflavones, not soy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22268969",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "40 mg of isoflavones daily (Soylife 40)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "176 men with BPH",
+   "indication_as_stated": "benign prostate hyperplasia",
+   "dose_quote": "40 mg of isoflavones daily from Soylife 40",
+   "primary_outcome_quote": "peak urine flow rate (Qmax)",
+   "primary_result_quote": "showed only slight superiority of isoflavones over placebo over 12 months with otherwise surprising beneficial effects in both groups",
+   "sample_size_quote": "One hundred and seventy-six (176) participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Marginal/borderline significance on primary and secondary endpoints (p~0.05).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavones (Soylife) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22313171",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavones + berberine (ISB)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "120 women",
+   "indication_as_stated": "menopausal symptoms and dyslipidaemia",
+   "dose_quote": null,
+   "primary_outcome_quote": "plasma cholesterol and triglyceride change",
+   "primary_result_quote": "EL treatment significantly lowered plasma total cholesterol (-13.5%)... and improved menopausal symptoms compared with CaD treatment",
+   "sample_size_quote": "One hundred twenty women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Combination product (isoflavones + berberine); comparator was calcium+vitamin D, not placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Isoflavones combined with berberine; effect cannot be isolated to isoflavones.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22338607",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavones (70 mg/day)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "70 overweight postmenopausal women",
+   "indication_as_stated": "physical capacity/muscle strength, +/- exercise",
+   "dose_quote": "70 mg/day",
+   "primary_outcome_quote": "maximal muscle strength (1RM), muscle mass index, relative strength",
+   "primary_result_quote": "Isoflavones, irrespective of exercise, did not produce changes in these variables",
+   "sample_size_quote": "70 overweight-to-obese postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "2x2 design with exercise; isoflavones alone had no additive benefit over exercise.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavones matches label material; tested with/without exercise.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22552034",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "80 mg soy hypocotyl isoflavones",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "24 menopausal women",
+   "indication_as_stated": "nitric oxide metabolism/blood pressure",
+   "dose_quote": "80 mg soy hypocotyl isoflavones",
+   "primary_outcome_quote": "nitric oxide synthesis and blood pressure change",
+   "primary_result_quote": "Daily supplementation with 80 mg soy hypocotyl isoflavones over a 6-wk period had no effect on nitric oxide metabolism or blood pressure",
+   "sample_size_quote": "24 menopausal women with 12 women per group",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy hypocotyl isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23070022",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "interaction",
+   "intervention_as_stated": "standardized kudzu extract (NPI-031), 250 mg isoflavones t.i.d.",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "17 nontreatment-seeking male heavy drinkers",
+   "indication_as_stated": "alcohol use disorder",
+   "dose_quote": "kudzu extract (250 mg isoflavones, t.i.d.)",
+   "primary_outcome_quote": "number of drinks consumed per week",
+   "primary_result_quote": "kudzu extract significantly reduced the number of drinks consumed each week by 34-57%",
+   "sample_size_quote": "Seventeen men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Novel indication (alcohol reduction), not typical supplement-label efficacy use.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Kudzu root isoflavone extract, botanically distinct from soy isoflavones.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24312387",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy and red clover isoflavones",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "women with or at risk of breast cancer",
+   "indication_as_stated": "breast cancer / menopausal symptoms",
+   "dose_quote": "traditional Japanese diet (2-3 servings daily, containing 25-50mg isoflavones)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Five RCTs reported on the efficacy of soy for hot flashes, showing no significant reductions in hot flashes compared to placebo",
+   "sample_size_quote": "131 articles: 40 RCTs, 11 uncontrolled trials, and 80 observational studies",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Mixes interventional soy/isoflavone trials with observational dietary-intake data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews both isolated isoflavones and whole-food soy/red clover intake together.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24600575",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "75 mg/day isoflavones tablet",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "43 oophorectomized women",
+   "indication_as_stated": "antioxidant/cardioprotective mechanism",
+   "dose_quote": "75 mg/day isoflavones tablet",
+   "primary_outcome_quote": "red blood cell antioxidant parameters (lipid peroxidation, SOD, catalase, GSH-Px)",
+   "primary_result_quote": "there was no statistically significant difference in lipid peroxidation... catalase... SOD... and GSH-Px",
+   "sample_size_quote": "A total of 43 women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavones tablet matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25003621",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavone (SIF) supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women (1,024 participants, 10 RCTs)",
+   "indication_as_stated": "cognitive function",
+   "dose_quote": null,
+   "primary_outcome_quote": "summary cognitive function test scores",
+   "primary_result_quote": "The overall SMD in summary cognitive function test scores (0.08) was statistically significant (95% CI, 0.02-0.15; P = 0.014)",
+   "sample_size_quote": "10 placebo-controlled RCTs of SIF supplementation (1,024 participants)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Small effect size; authors flag geography/age/duration as effect modifiers.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone supplementation meta-analysis matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25263312",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral phytoestrogen (isoflavones, coumestrol, soy, red clover)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "peri/postmenopausal women (15 RCTs)",
+   "indication_as_stated": "menopausal symptoms",
+   "dose_quote": null,
+   "primary_outcome_quote": "Kupperman index (KI) and hot flush frequency change",
+   "primary_result_quote": "phytoestrogens result in a significantly greater reduction in hot flush frequency compared to placebo (pooled mean difference = 0.89, p < 0.005)",
+   "sample_size_quote": "15 RCTs meeting the inclusion criteria",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "KI (a broader symptom index) showed no significant effect; only hot flush frequency was significant.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Phytoestrogen class broader than isoflavones alone (includes coumestrol); pools soy and red clover sources.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25441486",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "100 mg/day soy isoflavone",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "190 postmenopausal Indonesian women",
+   "indication_as_stated": "endothelial dysfunction/oxidative stress, equol-producer status",
+   "dose_quote": "100 mg/day soy isoflavone",
+   "primary_outcome_quote": "VCAM-1, nitric oxide, and MDA marker change",
+   "primary_result_quote": "MDA concentrations were significantly lower in the soy-isoflavone equol producers compared with equol nonproducers (p=0.021)",
+   "sample_size_quote": "190 postmenopausal Indonesian women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Positive effect confined to the equol-producer subgroup and to the MDA marker only; VCAM-1/NO not significant.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone supplement matches label material (co-administered with calcium carbonate in both arms).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25648211",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy biscuits (~54 mg isoflavones)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "61 postmenopausal women",
+   "indication_as_stated": "postmenopausal symptoms/blood pressure",
+   "dose_quote": "33 g of soy in the form of biscuits that contained approximately 54 mg isoflavones",
+   "primary_outcome_quote": "Kuppermann index symptom score change",
+   "primary_result_quote": "the mean total score from 26.8% at pre phase decreased to 9.38% at post phase (p < 0.001)",
+   "sample_size_quote": "61 postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered as soy biscuits (whole-food matrix), not an isolated isoflavone supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26396720",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones capsules",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "67 patients with IBS (45 completed)",
+   "indication_as_stated": "irritable bowel syndrome",
+   "dose_quote": null,
+   "primary_outcome_quote": "reduction in IBS symptom severity score",
+   "primary_result_quote": "no significant changes in mean differences of symptoms severity score between the two groups; however soy isoflavone supplementation could significantly improve the quality of life scores (p=0.009)",
+   "sample_size_quote": "67 patients with IBS were allocated",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary outcome (symptom severity) null; secondary QoL outcome significant.",
+   "registrations": [
+    "NCT02026518"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones capsules matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26413190",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "160 mgs of isoflavone",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 subjects with acne vulgaris",
+   "indication_as_stated": "acne vulgaris",
+   "dose_quote": "160 mgs of isoflavone group... duration is 12 weeks",
+   "primary_outcome_quote": "total acne vulgaris lesion count change",
+   "primary_result_quote": "supplementation with 160 mgs/day of soybean isoflavone can reduce total AV lesion as a result of decreased DHT level",
+   "sample_size_quote": "40 samples randomized into 2 groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soybean isoflavone matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27327802",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "phytoestrogens (dietary and supplemental soy isoflavones, herbal remedies)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "women with menopausal symptoms (62 studies, 6653 women)",
+   "indication_as_stated": "menopausal symptoms",
+   "dose_quote": null,
+   "primary_outcome_quote": "daily hot flashes, night sweats, vaginal dryness score",
+   "primary_result_quote": "Individual phytoestrogen interventions such as dietary and supplemental soy isoflavones were associated with improvement in daily hot flashes (pooled mean difference of changes, -0.79...) and vaginal dryness score",
+   "sample_size_quote": "62 studies, including 6653 individual women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant effect on night sweats; 74% of included RCTs judged high risk of bias.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pools dietary intake, supplements, and multiple plant-based therapy types together.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28168353",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "isolated isoflavones (IF)-containing dietary supplements",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women (general)",
+   "indication_as_stated": "menopause symptom claims / regulatory safety review",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the European Food Safety Authority (EFSA) has rejected all submitted health claims for IFs due to insufficient scientific evidence for any of the postulated health effects... the assessment does not allow a general statement on the safety of IF-containing dietary supplements",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "Regulatory/safety narrative review (German-language chapter), directly relevant to label claims.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isolated isoflavone dietary supplements matches label material exactly.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28562117",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soybean isoflavones (54.4 mg/tablet, two tablets/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "68 postmenopausal women (comparative arms)",
+   "indication_as_stated": "vasomotor symptoms",
+   "dose_quote": "two tablets/day of soybean isoflavones (54.4 mg of isoflavones/tablet)",
+   "primary_outcome_quote": "reduction in moderate/severe hot flash frequency",
+   "primary_result_quote": "in the case of isoflavones, there was a significant difference in severe (p = .02) hot flashes after 4 months, but not in moderate hot flashes (p = .077)",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Comparative (not placebo-controlled) trial vs. omega-3; omega-3 arm showed earlier/broader significance.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soybean isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28768649",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavone therapies (aglycone and glycoside forms)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "peri/postmenopausal women (26 RCTs, n=2652)",
+   "indication_as_stated": "bone mineral density",
+   "dose_quote": null,
+   "primary_outcome_quote": "BMD change at lumbar spine and femoral neck",
+   "primary_result_quote": "isoflavone treatment was associated with a significantly (P < 0.00001) higher weighted mean difference (WMD) of BMD change of 0.01 (95% CI: 0.01, 0.02) than the control",
+   "sample_size_quote": "Twenty-six RCTs (n = 2652)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Effect was substantially larger and only significant for the aglycone-form subgroup; glycoside-predominant formulations showed no protective effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "unclear",
+   "label_material_note": "Direction of effect depends heavily on isoflavone chemical form (aglycone vs glycoside); label spellings do not specify form.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29129666",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavone supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults (973 subjects, 10 studies)",
+   "indication_as_stated": "plasma lipoprotein(a)",
+   "dose_quote": null,
+   "primary_outcome_quote": "plasma Lp(a) concentration change",
+   "primary_result_quote": "Meta-analysis did not suggest any significant alteration of plasma Lp(a) levels after supplementation with soy isoflavones",
+   "sample_size_quote": "Ten eligible studies comprising 11 treatment arms with 973 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone supplementation matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29708073",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "soy isoflavones (genistein, daidzein)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not specified (mechanistic/PK review)",
+   "indication_as_stated": "xenobiotic metabolism/drug interaction potential",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "soy isoflavones on drug and xenobiotic metabolism involve in regulation of phase I cytochrome P450 (CYPs) enzyme",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Review notes 'lack of clinical research for evaluation of the proper dosage' \u2014 mechanistic/PK focus, not efficacy.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29844781",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "phytoestrogens / soybeans",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "women with vaginal atrophy (RCTs)",
+   "indication_as_stated": "menopausal vaginal atrophy",
+   "dose_quote": null,
+   "primary_outcome_quote": "vaginal cell maturation index change",
+   "primary_result_quote": "soybeans and phytoestrogens have non-significant positive effects on the vaginal atrophy index",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pools phytoestrogens generally and soybean studies, not isolated isoflavone extract specifically.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29849181",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy germ extract (100 mg isoflavone glycosides)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "192 women (136 analyzed for hot flushes)",
+   "indication_as_stated": "menopausal hot flushes",
+   "dose_quote": "soy germ extract (100 mg isoflavone glycosides) daily",
+   "primary_outcome_quote": "reduction in number of hot flushes",
+   "primary_result_quote": "Hot flushes were reduced by 43.3% (-3.5 hot flushes) with soy and by 30.8% with placebo (-2.6; p < 0.001)",
+   "sample_size_quote": "A total of 192 women were included",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "'Soy germ extract' appears explicitly in label_spellings_seen \u2014 exact match.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30254609",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy phytoestrogen (66 mg) + 30 g soy protein",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "44 patients with subclinical hypothyroidism",
+   "indication_as_stated": "thyroid function",
+   "dose_quote": "66 mg phytoestrogen with 30 g soy protein",
+   "primary_outcome_quote": "progression to overt hypothyroidism",
+   "primary_result_quote": "A pharmacological dose of 66 mg of soy phytoestrogens did not increase the overt thyroid failure rate or alter thyroid function tests",
+   "sample_size_quote": "Forty four patients with subclinical hypothyroidism",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Phytoestrogen dose given together with 30 g soy protein in both active and placebo arms (protein constant, phytoestrogen varied).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered together with 30 g soy protein powder, not an isolated isoflavone supplement alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30516108",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones / S-equol",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "general adult population (narrative review)",
+   "indication_as_stated": "cardiovascular/cognitive health",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A recent randomized controlled trial (RCT) of soy isoflavones on atherosclerosis in the US, however, failed to show their benefit... Only 20-30% of Westerners produce S-equol",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Narrative review highlighting equol-producer status as a key effect modifier explaining inconsistent RCT results.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews both soy isoflavones broadly and the specific metabolite S-equol.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30707970",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones (randomized clinical trial, n=265)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "265 subjects with poorly controlled asthma",
+   "indication_as_stated": "asthma exacerbation",
+   "dose_quote": null,
+   "primary_outcome_quote": "oral corticosteroid use for asthma exacerbation, PAI-1 genotype interaction",
+   "primary_result_quote": "soy isoflavones significantly reduced the use of oral corticosteroids (number of events/person-year) by 4-fold compared with placebo in the 4G4G/4G5G genotype",
+   "sample_size_quote": "randomized clinical trial of soy isoflavones (n = 265)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Benefit confined to a specific PAI-1 genotype subgroup (4G4G/4G5G), not the overall population.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30873023",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "interaction",
+   "intervention_as_stated": "soy isoflavone extract (Super-Absorbable Soy Isoflavones)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "10 healthy male volunteers",
+   "indication_as_stated": "alcohol interaction",
+   "dose_quote": "four capsules of a soy extract product... 2 h later, the same dose of alcohol",
+   "primary_outcome_quote": "alcohol pharmacokinetics and pharmacological effects",
+   "primary_result_quote": "a single dose of a soy isoflavone extract did not influence alcohol pharmacokinetics and pharmacological effects and did not induce any disulfiram-reaction symptoms",
+   "sample_size_quote": "Ten healthy male volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Named commercial soy isoflavone extract product matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31031706",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "soy protein with 66 mg isoflavones (SPI) vs soy protein alone (SP)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "400 patients (200 men, 200 postmenopausal women)",
+   "indication_as_stated": "steroid hormone metabolism",
+   "dose_quote": "15 g soy protein with 66 mg isoflavones (SPI) or 15 g soy protein alone",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "SPI decreased serum dehydroepiandrosterone sulfate (DHEAS) levels in both men and women (P < 0.01)",
+   "sample_size_quote": "two studies comprising 400 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Mechanistic/post-hoc analysis; also includes in vitro cell-line confirmation work.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Compares soy protein WITH vs WITHOUT isoflavones (15 g soy protein base in both arms).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31142156",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones (75 mg/2/d)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "75 postmenopausal women",
+   "indication_as_stated": "climacteric symptoms (vs acupuncture, vs HT)",
+   "dose_quote": "soy isoflavones (75 mg/2/d)",
+   "primary_outcome_quote": "Greene's climacteric scale score change",
+   "primary_result_quote": "Mean Greene's vasomotor sub-score declined less during phytoestrogens than HT",
+   "sample_size_quote": "A total of 75 postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Isoflavones were the weakest of three active arms (HT > acupuncture > isoflavones) though still significant vs baseline.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material; compared against acupuncture and hormone therapy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31290343",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones (consumption)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "adults (52 trials, osteoporosis-relevant)",
+   "indication_as_stated": "bone mineral density/bone turnover",
+   "dose_quote": null,
+   "primary_outcome_quote": "BMD change at lumbar spine, hip, femoral neck",
+   "primary_result_quote": "Consumption of soy isoflavones caused significant improvement in BMD of lumbar spine (MD = 0.76%...), hip (MD = 0.22%...), and femoral neck (MD = 2.27%...)",
+   "sample_size_quote": "52 trials were included in the meta-analysis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Effect more pronounced at doses <90 mg/day and in overweight/obese subjects (subgroup-dependent).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones meta-analysis matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31535213",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "136.6 mg isoflavones (aglycone equivalents)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "197 premenopausal women (99 isoflavone, 98 placebo)",
+   "indication_as_stated": "blood pressure homeostasis with calcium",
+   "dose_quote": "136.6 mg isoflavones (as aglycone equivalents)... for up to 2 years",
+   "primary_outcome_quote": "systolic and diastolic blood pressure change",
+   "primary_result_quote": "Isoflavones did not affect blood pressure per intake dose assignment (intention-to-treat)... but significantly affected blood pressure per measured urinary excretion of isoflavones (per protocol analysis)",
+   "sample_size_quote": "99 premenopausal women... and 98 to placebo",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Intention-to-treat analysis null; per-protocol (compliance-based) analysis positive \u2014 a notable ITT-vs-per-protocol discrepancy.",
+   "registrations": [
+    "NCT00204490"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31689947",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavone supplements (daidzein, genistein, S-equol)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "menopausal women (68 full-text articles reviewed)",
+   "indication_as_stated": "menopausal symptoms/BMD/BP/cognition",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "isoflavones reduce hot flashes even accounting for placebo effect, attenuate lumbar spine bone mineral density (BMD) loss, show beneficial effects on systolic blood pressure during early menopause",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors note no standardized research protocols across trials (component, dosage, duration) limit firm conclusions; no benefit found for urogenital symptoms/cognition.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavone supplements matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32048288",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "soybean meal (SBM) and fermented soybean meal (FSBM) biscuits",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "not stated (adults)",
+   "indication_as_stated": "isoflavone bioavailability/metabolism",
+   "dose_quote": null,
+   "primary_outcome_quote": "urinary excretion of isoflavones and metabolites",
+   "primary_result_quote": "After FSBM consumption, total urinary excretion of aglycones and metabolites was 54% higher when compared to SBM biscuits",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "PK/food-processing study delivered via biscuit food matrix, not a supplement capsule.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered as soybean-meal biscuits (whole-food matrix), not an isoflavone extract supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32292572",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "aglycone isoflavones (40 mgs, 20 mgs BID)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "70 randomized (62 completed) men with localized prostate cancer",
+   "indication_as_stated": "prostate cancer (pre-surgical chemoprevention)",
+   "dose_quote": "40 mgs of aglycone isoflavones... 20 mgs BID for 3-6 weeks",
+   "primary_outcome_quote": "tissue markers of proliferation and serum PSA",
+   "primary_result_quote": "did not reduce tissue markers of proliferation... significant reduction in serum PSA was observed with isoflavone supplementation in CM compared to the placebo arm, but not observed in AAM",
+   "sample_size_quote": "Thirty six participants... randomized to the isoflavone arm and 34... to the placebo arm",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Race-stratified effect: PSA benefit only in Caucasian men (CM), not African American men (AAM); primary proliferation marker null in both.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Aglycone isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32488754",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "100 mg soy isoflavones",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 peritoneal dialysis patients",
+   "indication_as_stated": "bone turnover in dialysis patients",
+   "dose_quote": "100 mg soy isoflavones daily for 8 weeks",
+   "primary_outcome_quote": "bone resorption/formation marker change",
+   "primary_result_quote": "Serum N-telopeptide concentration decreased significantly up to 27% in the soy isoflavone group",
+   "sample_size_quote": "40 PD patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Bone-formation markers (osteocalcin, alkaline phosphatase) unchanged; only resorption markers improved.",
+   "registrations": [
+    "NCT03773029"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32824177",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dietary phytoestrogens (soy and other legumes)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "humans across the lifespan (pregnancy to postmenopause)",
+   "indication_as_stated": "hormone-related outcomes across lifespan",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the reported impacts on hormones are inconsistent, although beneficial goitrogenic effects and improved glycemic control and cardiovascular risk markers have been described in postmenopausal individuals",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Broad narrative review across life stages; results vary by age/sex/exposure and are explicitly called inconsistent.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews dietary phytoestrogen exposure broadly, not an isolated isoflavone supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33383165",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "soy foods, soy protein, or isoflavone extracts (from soy or red clover)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "men (up to 1753, 41 studies)",
+   "indication_as_stated": "male reproductive hormones",
+   "dose_quote": null,
+   "primary_outcome_quote": "total testosterone (TT), free testosterone (FT), estradiol, estrone, SHBG",
+   "primary_result_quote": "no significant effects of soy protein or isoflavone intake on any of the outcomes measured were found",
+   "sample_size_quote": "A total of 41 studies were included",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Pools soy foods, soy protein, and isoflavone extracts together; not isoflavone-extract-specific throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33669783",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "equol (soy isoflavone metabolite)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not specified (in vivo/in vitro review)",
+   "indication_as_stated": "breast cancer chemoprotection",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "It is postulated that equol producers benefit more than non-equol producers for all the endocrine-related effects",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Review explicitly covers in vivo AND in vitro studies, not confined to human clinical data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Equol is a gut-bacterial metabolite of soy isoflavones, not the parent compound the label typically lists.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33920485",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "red clover (Trifolium pratense) isoflavones",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "peri/postmenopausal women (8 trials, 10 comparisons)",
+   "indication_as_stated": "hot flushes/menopausal symptoms",
+   "dose_quote": "isoflavone dose of >=80 mg/day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a statistically significant reduction in the daily incidence of hot flushes in women receiving red clover compared to those receiving placebo: WMD -1.73 hot flushes per day...p = 0.0292",
+   "sample_size_quote": "eight trials (ten comparisons)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Red clover isoflavones, not soy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35224058",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fermented red clover extract (RC), 60 mg isoflavones/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "10 healthy early post-menopausal women",
+   "indication_as_stated": "vascular inflammation",
+   "dose_quote": "60 mg isoflavones per day",
+   "primary_outcome_quote": "VCAM-1 (vascular inflammation marker) change",
+   "primary_result_quote": "statistically significant reduction (~5.4%) in vascular cell adhesion molecule 1 (VCAM-1) following 2 weeks of RC supplementation compared to PLA (p = 0.03)",
+   "sample_size_quote": "n = 10",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Very small (n=10), short (2-week) trial; no effect on skeletal-muscle estrogen-receptor markers (secondary).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Fermented red clover extract, not soy; fermentation alters isoflavone bioavailability.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35241506",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy and isoflavones (consumption amount)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "pre/postmenopausal women (prospective studies)",
+   "indication_as_stated": "breast cancer risk",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "clear inverse correlation between the amount of isoflavones consumed and breast cancer occurrence in pre- and post-menopausal women",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Based on prospective observational consumption studies rather than controlled supplementation trials, despite being framed as a meta-analysis.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Analyzes dietary consumption amount of soy/isoflavones, not controlled isoflavone-extract supplementation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35399656",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "interaction",
+   "intervention_as_stated": "soy isoflavone extract (~80 mg once daily)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "20 healthy Chinese male subjects",
+   "indication_as_stated": "drug interaction (rosuvastatin pharmacokinetics)",
+   "dose_quote": "soy isoflavones-80 mg once daily for 14 days",
+   "primary_outcome_quote": "rosuvastatin AUC/Cmax change",
+   "primary_result_quote": "Soy isoflavones had no significant effect on rosuvastatin pharmacokinetics",
+   "sample_size_quote": "Twenty healthy male subjects completed the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Green tea extract arm (comparator) DID significantly reduce rosuvastatin exposure; isoflavone arm was null.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone extract matches label material; tested for statin drug interaction.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35651836",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavone supplementation (49.3-135 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women (11 RCTs)",
+   "indication_as_stated": "menopausal symptoms/hormones",
+   "dose_quote": "49.3 and 135 mg of isoflavones per day for 12 wk-2 yrs",
+   "primary_outcome_quote": "estradiol and Kupperman index change",
+   "primary_result_quote": "supplementation of isoflavones significantly increased the estradiol levels...and Kupperman index (SMD = 3.121, P = 0.003) but had no significant effect on hot flashes, follicle-stimulating hormone, and luteinizing hormone",
+   "sample_size_quote": "Eleven studies were included",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Kupperman index INCREASED (worse) with isoflavones per this meta-analysis, an unusual/counterintuitive direction the authors flag as high-heterogeneity and to be interpreted with caution.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavone supplementation meta-analysis matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35685887",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "interaction",
+   "intervention_as_stated": "soy isoflavone extracts (~80 mg once daily)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "18 healthy male Chinese subjects",
+   "indication_as_stated": "drug interaction (simvastatin pharmacokinetics)",
+   "dose_quote": "soy isoflavones about 80 mg once daily for 14 days",
+   "primary_outcome_quote": "simvastatin acid AUC change",
+   "primary_result_quote": "Intake of soy isoflavones was associated with reduced systemic exposure to simvastatin acid... (P < 0.05)",
+   "sample_size_quote": "All the 18 subjects completed the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Effect genotype-dependent (SLCO1B1 521TT only); direction is a reduction in statin exposure, a safety-relevant interaction.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone extract matches label material; tested for statin drug interaction.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36012916",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy phytoestrogens (genistein extracts, soy isoflavone extracts, soy protein isolate, foods)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "menopausal women (18 RCTs)",
+   "indication_as_stated": "bone mineral density",
+   "dose_quote": "106 (range, 40-300) mg of isoflavones for 6-24 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "daily intake of 106 (range, 40-300) mg of isoflavones for 6-24 months moderately but statistically significantly positively affects BMD",
+   "sample_size_quote": "Eighteen randomized controlled trials",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Pools several different isoflavone-containing forms (extracts, soy protein isolate, foods) together.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Meta-analysis explicitly pools isoflavone extracts, soy protein isolate, and whole foods together.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36678170",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "100 mg/day ISF Supplement or 50 mg/day ISF Diet",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "118 enrolled (91 completed) Malaysian women",
+   "indication_as_stated": "mammographic density (breast cancer biomarker)",
+   "dose_quote": "100 mg/day ISF Supplement, or 50 mg/day ISF Diet, or control arm",
+   "primary_outcome_quote": "change in mammographic dense area",
+   "primary_result_quote": "The ISF supplement arm participants observed a larger decline in dense area (-1.3 cm2)...though it was not statistically significant (p = 0.48)",
+   "sample_size_quote": "118 women enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "Three-armed trial (supplement vs. diet vs. control); primary comparison not statistically significant overall, though a subgroup (within 5y of menopause) showed a larger, still-nonsignificant effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "One study arm is an explicit isoflavone supplement matching the label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36678189",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "phytoestrogens (isoflavones, coumestans, resorcylic acid lactones, enterolignans)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "humans (narrative review, animal data where human absent)",
+   "indication_as_stated": "general health effects",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Broad narrative review of the entire phytoestrogen class, human data supplemented by animal data where absent.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews the whole phytoestrogen class (isoflavones + coumestans + lignans etc.), not isoflavones specifically.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37633413",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "interaction",
+   "intervention_as_stated": "soy isoflavones / soy products",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients on levothyroxine (narrative review)",
+   "indication_as_stated": "levothyroxine drug interaction (hypothyroidism)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the only prospective randomized cross-over study showed no differences in L-T4 absorption when L-T4 and soy isoflavones were assumed concomitantly... the inference of soy products on L-T4 absorption, if present, seems to have little clinical impact",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Narrative review of mostly case reports plus one prospective crossover RCT; relevant primarily as a drug-interaction handoff item.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews 'soy' broadly (products, milk, isoflavones) rather than an isolated isoflavone extract specifically.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37875614",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavone interventions (>=50 mg/day genistein subgroup notable)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women (63 RCTs, n=4754 isoflavone arm)",
+   "indication_as_stated": "bone mineral density",
+   "dose_quote": "genistein of at least 50 mg/day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "isoflavone interventions significantly improved BMD at the lumbar spine (MD = 0.0175 g/cm2...), femoral neck..., and distal radius",
+   "sample_size_quote": "63 randomized controlled trials comparing isoflavone interventions (n = 4,754) and placebo (n = 4,272)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Largest bone-density meta-analysis in this set (63 RCTs); effect strongest with duration >=12 months and genistein-predominant formulations.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavone interventions meta-analysis matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37940087",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "title-level signal only; no abstract text retrieved"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "soy isoflavones",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "not stated (Letter, no abstract available)",
+   "indication_as_stated": "hepatotoxicity signal (transaminase elevation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Letter with no abstract text retrieved; title alone reports a possible hepatotoxicity signal with soy isoflavones \u2014 route to safety owner for full-text follow-up.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Title-level safety signal for soy isoflavones matches label material; full text not available in this scope.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39000493",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "isoflavone-rich Fabaceae/legume plant extracts",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not specified (in vitro/in vivo cancer-cell review)",
+   "indication_as_stated": "chemoprevention of hormone-dependent cancers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We analyzed the results of 63 articles from in vitro and in vivo studies describing the effect of plant extracts containing isoflavones on cancer cells",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Explicitly an in vitro/in vivo (non-human-clinical) mechanistic review despite covering isoflavone-rich plants broadly.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews isoflavone-rich legume plants broadly (Fabaceae family), not the specific soy-isoflavone label material, and via non-clinical (cell/animal) studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39433088",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones (median 75 mg/d)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women (40 trials, n=3285)",
+   "indication_as_stated": "estrogenicity biomarkers",
+   "dose_quote": "median reported dose of 75 mg/d of soy isoflavones",
+   "primary_outcome_quote": "endometrial thickness, vaginal maturation index, FSH, estradiol",
+   "primary_result_quote": "Soy isoflavones had no statistically significant effect on any measure of estrogenicity",
+   "sample_size_quote": "40 trials (52 trial comparisons, n = 3285)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "High-to-moderate certainty of evidence (GRADE) supporting a null estrogenic effect \u2014 directly relevant to safety/mechanism claims.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39962892",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "isoflavone treatment",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women (10 RCTs, 675 participants)",
+   "indication_as_stated": "vaginal dryness and dyspareunia",
+   "dose_quote": null,
+   "primary_outcome_quote": "vaginal dryness and dyspareunia score change",
+   "primary_result_quote": "significant change after isoflavone therapy [for vaginal dryness]...whereas those for dyspareunia did not show a significant change",
+   "sample_size_quote": "Ten randomized controlled trials (RCTs), totaling 675 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Vaginal dryness significant; dyspareunia not significant \u2014 split result across two related endpoints.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Isoflavone treatment matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40718787",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "perimenopausal women (12 RCTs, 533 participants)",
+   "indication_as_stated": "menopausal symptoms",
+   "dose_quote": null,
+   "primary_outcome_quote": "composite menopausal symptom score change",
+   "primary_result_quote": "soy isoflavones were effective for treating menopausal symptoms (seven studies, 533 participants, Hedges' g = -0.25...p = 0.00)",
+   "sample_size_quote": "12 were eligible for meta-analysis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No significant effect on hot flushes/vasomotor symptoms specifically, despite overall composite benefit; authors caution small sample sizes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones meta-analysis matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41557447",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones (open-label)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "9 subjects with severe cocaine use disorder",
+   "indication_as_stated": "cocaine use disorder",
+   "dose_quote": null,
+   "primary_outcome_quote": "cocaine consumption reduction (Substance Use Report)",
+   "primary_result_quote": "three subjects (33.3%) reported a cocaine consumption of less than 20%...from two (22.2%) at baseline, although non-significant",
+   "sample_size_quote": "Nine subjects with severe cocaine use disorder",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "Open-label, uncontrolled pilot (n=9); primary consumption-reduction result explicitly non-significant.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9240932",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dietary phytoestrogens (isoflavones, coumestans, lignans)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "general population (narrative review)",
+   "indication_as_stated": "menopausal symptoms/osteoporosis/cancer/heart disease",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "dietary phytoestrogens play an important role in prevention of menopausal symptoms, osteoporosis, cancer, and heart disease",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Early (1997) broad narrative review of the whole phytoestrogen class citing human, animal, and cell-culture evidence together.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews phytoestrogens broadly (isoflavones + coumestans + lignans), not isoflavones specifically.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22307566",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "mixed soy isoflavones (PTIG-2535)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "98 evaluable high-risk women (of 126 consented)",
+   "indication_as_stated": "breast cancer risk reduction (proliferation biomarker)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Ki-67 labeling index change in breast epithelium",
+   "primary_result_quote": "did not reduce breast epithelial proliferation, suggesting a lack of efficacy for breast cancer prevention and a possible adverse effect in premenopausal women",
+   "sample_size_quote": "Ninety-eight women were evaluable for Ki-67 labeling index",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Signal of a possible ADVERSE effect (increased Ki-67) specifically in premenopausal women \u2014 important safety caveat.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Mixed soy isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23874588",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavone capsules (80 mg/d total isoflavones)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "86 men with localized prostate cancer",
+   "indication_as_stated": "prostate cancer biomarkers pre-prostatectomy",
+   "dose_quote": "soy isoflavone capsules (80 mg/d of total isoflavones, 51 mg/d aglucon units)",
+   "primary_outcome_quote": "serum PSA, hormones, and cholesterol change",
+   "primary_result_quote": "short-term intake of soy isoflavones did not affect serum hormone levels, total cholesterol, or PSA",
+   "sample_size_quote": "Eighty-six men were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Tissue gene-expression changes (secondary/exploratory) were observed despite null serum biomarker results.",
+   "registrations": [
+    "NCT00255125"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone capsules matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27490918",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavones 50 mg/d",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "70 women with PCOS",
+   "indication_as_stated": "polycystic ovary syndrome metabolic status",
+   "dose_quote": "50 mg/d soy isoflavones",
+   "primary_outcome_quote": "insulin and HOMA-IR change",
+   "primary_result_quote": "soy isoflavone administration significantly decreased circulating serum levels of insulin...and homeostasis model of assessment-estimated insulin resistance...(P < .001)",
+   "sample_size_quote": "70 women diagnosed with PCOS",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No significant effect on other lipid profiles or inflammatory markers (mixed across full outcome panel).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavones matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38429385",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavone (100 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 patients with NAFLD",
+   "indication_as_stated": "non-alcoholic fatty liver disease",
+   "dose_quote": "two tablets of soy isoflavone (100 mg/day)",
+   "primary_outcome_quote": "ALT, AST, and CAP score change",
+   "primary_result_quote": "the serum levels of alanine amino transferase (ALT), aspartate amino transferase (AST) and controlled attenuation parameter (CAP) score were significantly decreased only in the soy isoflavone group (P < 0.05)",
+   "sample_size_quote": "50 patients with non-alcoholic fatty liver disease",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Open-label (not blinded) design; no significant change in fibrosis grade.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Soy isoflavone matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38454401",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "meta-analysis of RCTs in adults"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "soy isoflavone supplementation (alone, vs matched placebo)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults (24 studies, 1945 participants)",
+   "indication_as_stated": "blood pressure",
+   "dose_quote": null,
+   "primary_outcome_quote": "systolic and diastolic blood pressure change",
+   "primary_result_quote": "supplementation with soy isoflavones alone effectively reduces blood pressure",
+   "sample_size_quote": "24 studies involving 1945 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Explicitly restricted to isoflavones vs. a matched placebo lacking isoflavone (same matrix); moderate overall evidence quality per authors.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Explicitly isolates isoflavone-alone trials vs. matched placebo, matching label material precisely.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "27327802",
+  "33920485",
+  "28768649",
+  "37875614",
+  "31290343",
+  "25263312",
+  "31689947",
+  "39433088",
+  "21177797",
+  "24312387",
+  "35399656",
+  "35685887"
+ ],
+ "handoff": [
+  {
+   "pmid": "35399656",
+   "role": "pharmacokinetic/interaction",
+   "reason": "Soy isoflavone effect (null) on rosuvastatin pharmacokinetics \u2014 drug-interaction owner."
+  },
+  {
+   "pmid": "35685887",
+   "role": "pharmacokinetic/interaction",
+   "reason": "Soy isoflavone reduces simvastatin exposure, genotype-dependent \u2014 drug-interaction owner."
+  },
+  {
+   "pmid": "37633413",
+   "role": "interaction",
+   "reason": "Soy/levothyroxine absorption interference \u2014 drug-interaction owner."
+  },
+  {
+   "pmid": "21244439",
+   "role": "interaction",
+   "reason": "Kudzu isoflavone extract and acute alcohol challenge \u2014 interaction/safety owner."
+  },
+  {
+   "pmid": "23070022",
+   "role": "interaction",
+   "reason": "Kudzu isoflavone extract reduces alcohol consumption \u2014 interaction/safety owner (also substance-use indication, not typical label use)."
+  },
+  {
+   "pmid": "30873023",
+   "role": "interaction",
+   "reason": "Soy isoflavone extract and acute alcohol ingestion \u2014 interaction/safety owner."
+  },
+  {
+   "pmid": "37940087",
+   "role": "safety",
+   "reason": "Letter reporting soy isoflavones associated with increased transaminases \u2014 hepatotoxicity signal, safety owner."
+  },
+  {
+   "pmid": "21177797",
+   "role": "dosing/UL guidance",
+   "reason": "Longest-duration (2-year) human safety data for soy hypocotyl isoflavones \u2014 relevant to dose/UL guidance owner."
+  }
+ ],
+ "identity_notes": "This label identity ('Isoflavones' / 'Soy Isoflavones' / 'NovaSoy' / 'Soy germ extract') refers to an ISOLATED/CONCENTRATED isoflavone extract, not whole soy food, soy protein powder, soy milk, soy nuts, or fermented soy. A large fraction of the retrieved literature studies whole-food or soy-protein matrices standardized to isoflavone content rather than isolated extracts; those records were REJECTED as off_topic (whole-food/protein matrix) rather than kept, since the brief instructs relevance to be judged against the SAME material the label delivers -- reviewers should treat this as a judgment call, not a hard rule, since many 'soy protein containing X mg isoflavones' trials are the closest available human evidence for isoflavone dosing. Among KEPT records, a second major applicability split exists between soy-derived isoflavones (the dominant label form) and red-clover-derived isoflavones (Promensil/Rimostil/MF11RCE-type products; flagged related_form_differs throughout) and kudzu-derived isoflavones (flagged related_form_differs, and often studied for alcohol-use indications rather than menopausal/bone/lipid claims). The best-supported, most consistent EXACT-MATCH signal in this scope is for menopausal vasomotor symptoms (multiple positive RCTs and meta-analyses, e.g., 20025635, 29849181, 15283929, 40718787) and bone mineral density (28768649, 31290343, 37875614, 36012916), with effect sizes generally small-to-moderate and dependent on isoflavone chemical form (aglycone vs glycoside) and individual equol-producer status (25441486, 15640479, 30516108). Cardiovascular endpoints (lipids, endothelial function, blood pressure) and cognitive endpoints are predominantly null-to-mixed across the largest/most rigorous individual RCTs and meta-analyses (19209289, 29129666, 12072038, 22552034, 39433088), even where earlier or smaller trials were positive. Estrogenicity biomarker data (39433088, high-certainty GRADE) support a null estrogenic effect, relevant to breast-cancer and hormone-sensitive-condition safety questions. Multiple combination products (isoflavones + lactobacilli + magnolia bark + calcium/vitamin D, isoflavones + berberine) were kept but flagged related_form_differs since the isoflavone-specific contribution cannot be isolated from the combination effect."
+}

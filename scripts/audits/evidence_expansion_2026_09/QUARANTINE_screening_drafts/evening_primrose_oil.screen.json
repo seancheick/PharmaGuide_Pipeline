@@ -1,0 +1,2981 @@
+{
+ "canonical_id": "evening_primrose_oil",
+ "screened": 135,
+ "kept": 84,
+ "rejected": [
+  {
+   "pmid": "29196903",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of concurrent prescription-drug and herbal-medicinal-product use in older adults generally; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "22336810",
+   "reason": "not_intervention",
+   "note": "Cochrane review of dietary supplements for atopic eczema explicitly states: 'Evening primrose oil, borage oil, and probiotics are covered in other Cochrane reviews' -- EPO is excluded from this review's own analysis."
+  },
+  {
+   "pmid": "10442214",
+   "reason": "not_this_route",
+   "note": "Topically applied evening primrose oil on epidermal barrier function; topical skin application, not oral ingestion."
+  },
+  {
+   "pmid": "1461182",
+   "reason": "off_topic",
+   "note": "Cytokine theory of headache; no evening primrose oil mention in the retrieved abstract."
+  },
+  {
+   "pmid": "10617990",
+   "reason": "off_topic",
+   "note": "Dark adaptation/motor skills/DHA and dyslexia; no evening primrose oil relevance."
+  },
+  {
+   "pmid": "14965665",
+   "reason": "off_topic",
+   "note": "Isoflavones for cyclical mastalgia; different intervention, no EPO relevance."
+  },
+  {
+   "pmid": "15512224",
+   "reason": "off_topic",
+   "note": "Prostanoid precursor/inhibitor effects on platelet angiotensin II binding in pregnancy hypertension; no explicit EPO mention confirmed."
+  },
+  {
+   "pmid": "19208048",
+   "reason": "off_topic",
+   "note": "Retrospective survey of CAM/nonhormonal alternatives for post-HT vasomotor symptoms; observational survey, not an EPO intervention trial."
+  },
+  {
+   "pmid": "23628953",
+   "reason": "off_topic",
+   "note": "News article reporting on the Cochrane EPO/borage-oil eczema review (23633319); not primary data."
+  },
+  {
+   "pmid": "28244297",
+   "reason": "off_topic",
+   "note": "Korean Red Ginseng extract in a MURINE model of atopic dermatitis; no EPO relevance."
+  },
+  {
+   "pmid": "29072514",
+   "reason": "off_topic",
+   "note": "Matricaria chamomilla (chamomile) extract for cyclic mastalgia; different herb, no EPO relevance."
+  },
+  {
+   "pmid": "29476434",
+   "reason": "off_topic",
+   "note": "Survey of healthcare-professional recommendations on complementary medicines in pregnancy; not an EPO intervention trial."
+  },
+  {
+   "pmid": "30391814",
+   "reason": "off_topic",
+   "note": "Ratio of unsaturated to saturated fatty acids in Oenothera biennis oil under water-deficit agricultural stress; plant physiology/agriculture, not a human trial."
+  },
+  {
+   "pmid": "31076942",
+   "reason": "off_topic",
+   "note": "Omega-3 PUFA (EPA/DHA) effects on platelet aggregation in RA patients; no EPO/omega-6 relevance confirmed."
+  },
+  {
+   "pmid": "34644846",
+   "reason": "off_topic",
+   "note": "Evening primrose and fish oil combination vs. hydrogenated coconut oil for seasonal pruritus in HORSES; veterinary study."
+  },
+  {
+   "pmid": "38677067",
+   "reason": "off_topic",
+   "note": "Oenothera biennis copper-toxicity resistance and seed copper enrichment under polluted soil; plant physiology/agriculture, not a human trial."
+  },
+  {
+   "pmid": "38681262",
+   "reason": "off_topic",
+   "note": "Low-dose isotretinoin for rosacea systematic review; no EPO relevance."
+  },
+  {
+   "pmid": "3608284",
+   "reason": "not_intervention",
+   "note": "Generic 'approach to management of PMS' title with no retrievable abstract text; EPO-specific content unconfirmed."
+  },
+  {
+   "pmid": "6350579",
+   "reason": "not_intervention",
+   "note": "Discusses prostaglandin E1/prolactin mechanism theory in PMS; no explicit evening primrose oil trial data in the retrieved abstract."
+  },
+  {
+   "pmid": "6355785",
+   "reason": "not_intervention",
+   "note": "Discusses EPO only as a theoretical/narrative option for gastric-pathology prevention; not primary trial data."
+  },
+  {
+   "pmid": "11070144",
+   "reason": "not_intervention",
+   "note": "Broad lupus-and-nutrition literature review spanning animal AND human models; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "11134919",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of atopic eczema treatments generally; no EPO-specific extractable result confirmed in this excerpt (EPO/borage covered in dedicated reviews already kept)."
+  },
+  {
+   "pmid": "14501609",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of herbal medicinal products for menopausal symptoms generally; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "14716179",
+   "reason": "not_intervention",
+   "note": "NAMS position statement on menopausal vasomotor symptoms generally; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "15292498",
+   "reason": "not_intervention",
+   "note": "Broad nonestrogen treatment review for vasomotor symptoms; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "16670364",
+   "reason": "not_intervention",
+   "note": "Broad natural health products review for osteoporosis; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "19445808",
+   "reason": "not_intervention",
+   "note": "BMJ Clinical Evidence-style broad systematic review of pre-eclampsia/eclampsia/hypertension treatments generally; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "19445810",
+   "reason": "not_intervention",
+   "note": "BMJ Clinical Evidence-style broad systematic review of chronic fatigue syndrome treatments generally; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "19454068",
+   "reason": "not_intervention",
+   "note": "BMJ Clinical Evidence-style broad systematic review of breast pain treatments generally; no EPO-specific extractable result confirmed (dedicated EPO/mastalgia reviews already kept)."
+  },
+  {
+   "pmid": "19454075",
+   "reason": "not_intervention",
+   "note": "BMJ Clinical Evidence-style broad systematic review of PMS treatments generally; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "19923637",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of herbs/vitamins/minerals for PMS; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "21171936",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of herbal treatments for PMS; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "21477394",
+   "reason": "not_intervention",
+   "note": "Duplicate/updated version of the breast pain BMJ Clinical Evidence review (19454068); no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "21615974",
+   "reason": "not_intervention",
+   "note": "Duplicate/updated version of the chronic fatigue syndrome BMJ Clinical Evidence review (19445810); no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "21718554",
+   "reason": "not_intervention",
+   "note": "Duplicate/updated version of the pre-eclampsia BMJ Clinical Evidence review (19445808); no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "23497959",
+   "reason": "not_intervention",
+   "note": "Systematic review of survey prevalence of CAM use by menopausal women; observational survey of surveys, not an intervention trial."
+  },
+  {
+   "pmid": "23981095",
+   "reason": "not_intervention",
+   "note": "Systematic review of herbal therapy in IBD; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "25518050",
+   "reason": "not_intervention",
+   "note": "Systematic review of CAM in IBD explicitly states it excludes 'dietary and nutritional supplements' such as EPO."
+  },
+  {
+   "pmid": "25622761",
+   "reason": "not_intervention",
+   "note": "Summary of 22 systematic reviews on atopic eczema; no EPO-specific extractable result confirmed (probiotics identified as most promising, not EPO)."
+  },
+  {
+   "pmid": "27388911",
+   "reason": "not_intervention",
+   "note": "Broad review of CAM for atopic dermatitis generally; no EPO-specific extractable result confirmed in this excerpt."
+  },
+  {
+   "pmid": "27648380",
+   "reason": "not_intervention",
+   "note": "Broad review of dietary supplements for atopic dermatitis generally; no EPO-specific extractable result confirmed in this excerpt."
+  },
+  {
+   "pmid": "27655839",
+   "reason": "not_intervention",
+   "note": "Systematic review of dietary supplement interactions with antiretrovirals generally; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "33197658",
+   "reason": "not_intervention",
+   "note": "Systematic review of CAM for uremic pruritus generally; no EPO-specific extractable result confirmed in this excerpt (dedicated EPO/uremic-pruritus trial 9933750 already kept)."
+  },
+  {
+   "pmid": "33331798",
+   "reason": "not_intervention",
+   "note": "RCT of an unspecified 'nutraceutical' for menopausal symptoms; composition not confirmed to include EPO."
+  },
+  {
+   "pmid": "33689238",
+   "reason": "not_intervention",
+   "note": "Study protocol only (no results yet) comparing cervical ripening balloon, EPO and misoprostol."
+  },
+  {
+   "pmid": "36501137",
+   "reason": "not_intervention",
+   "note": "Preconception 'micronutrient supplement' fecundability cohort study; composition not confirmed to include EPO; observational design."
+  },
+  {
+   "pmid": "36958415",
+   "reason": "not_intervention",
+   "note": "Systematic review of phytotherapy for pediatric skin disorders generally; no EPO-specific extractable result confirmed."
+  },
+  {
+   "pmid": "38011464",
+   "reason": "not_intervention",
+   "note": "Systematic review of diet and multiple sclerosis outcomes generally; no EPO-specific extractable result confirmed (dedicated EPO/MS trial 29928122 already kept)."
+  },
+  {
+   "pmid": "38021953",
+   "reason": "not_intervention",
+   "note": "Development of a mastalgia treatment algorithm with psychological assessment focus; EPO-specific trial data not confirmed."
+  },
+  {
+   "pmid": "38783644",
+   "reason": "not_intervention",
+   "note": "EAACI task force systematic review of nutritional interventions for atopic dermatitis in children; EPO not named among the listed supplement categories (vitamins, minerals, probiotics, prebiotics, symbiotics, postbiotics)."
+  },
+  {
+   "pmid": "38963342",
+   "reason": "not_intervention",
+   "note": "Systematic review of herbal medicine for atopic dermatitis generally; no EPO-specific extractable result confirmed."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "1871184",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "GLA as evening primrose seed oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "11 children with insulin-dependent diabetes mellitus",
+   "indication_as_stated": "diabetes mellitus (fatty acid/prostaglandin metabolism)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "11 children with insulin-dependent diabetes mellitus completed a double-blind, placebo-controlled study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA delivered as evening primrose seed oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "1913008",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 6 g/day (540 mg GLA/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 patients with RA and NSAID-related GI lesions",
+   "indication_as_stated": "rheumatoid arthritis (NSAID side-effect mitigation)",
+   "dose_quote": "evening primrose oil 6 g/day) and 21 received placebo (olive oil 6 g/day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a significant reduction in morning stiffness with gamma-linolenic acid at 3 months and reduction in pain and articular index at 6 months with",
+   "sample_size_quote": "Forty patients with rheumatoid arthritis and upper gastrointestinal lesions due to non-steroidal anti-inflammatory drugs",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "1943500",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "evening primrose oil (72% linoleic acid, 10% GLA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "15 patients with atopic dermatitis",
+   "indication_as_stated": "atopic dermatitis (fatty acid metabolism)",
+   "dose_quote": "Three different dose levels, 4, 8 and 12 capsules per day containing 0.5 g oil",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The highest dose increased dihomo-gamma-linolenic acid by 45% in neutrophil phospholipids",
+   "sample_size_quote": "15 patients with atopic dermatitis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "1969596",
+   "design": "review",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title only, no abstract text retrieved"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with atopic eczema",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Letter/meta-analysis commentary; no abstract text available to extract quotes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2201888",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (Efamol, Vita-Glow)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "38 women",
+   "indication_as_stated": "premenstrual syndrome",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "no significant differences in the scoring between the active and placebo groups were found over six cycles",
+   "sample_size_quote": "38 women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2649022",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "evening primrose oil, 20 mL (9% GLA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "18 patients with rheumatoid arthritis",
+   "indication_as_stated": "rheumatoid arthritis (serum lipids/fatty acids)",
+   "dose_quote": "20 ml of evening primrose oil containing 9% of gamma-linolenic acid",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The serum concentrations of oleic acid, eicosapentaenoic acid, and apolipoprotein B decreased and those of linoleic acid, gamma-linolenic acid, dihomo-gamma-linolenic acid, and arachidonic acid increased during treatment with evening primrose oil.",
+   "sample_size_quote": "18 patients with rheumatoid arthritis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2667620",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "Epogam (evening primrose oil)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with atopic eczema across 9 included controlled trials",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the effect of Epogam was significantly better than placebo",
+   "sample_size_quote": "Nine controlled trials of evening primrose oil were performed in eight centres.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO delivered as Epogam, a specific branded preparation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2717651",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose seed oil (Efamol)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with atopic asthma",
+   "indication_as_stated": "atopic asthma",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We have found no effect on the asthma or challenge tests although Efamol produced an alteration in fatty acid profile.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2735560",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose seed oil, 15-20 mL/day, alone or with fish oil",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "29 asthmatics",
+   "indication_as_stated": "bronchial asthma",
+   "dose_quote": "daily dietary supplementation with 15 to 20 mL of evening primrose seed oil or fish oil",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There were no differences between regimes with regard to peak flow rates, symptoms, or drug consumption.",
+   "sample_size_quote": "29 asthmatics",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "EPO and fish oil tested as separate regimens, each vs. olive oil placebo, not combined.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "3048953",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (Efamol)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "24 children with atopic eczema",
+   "indication_as_stated": "atopic eczema (children)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "24 children with atopic eczema: 12 of them were treated with a higher dose of evening primrose oil than in previous studies and 12 with placebo olive oil",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "3307886",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "25 patients with atopic eczema",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The patients receiving EPO showed a significantly greater reduction in inflammation than those receiving placebo.",
+   "sample_size_quote": "patients with atopic eczema received either oral evening primrose oil (EPO) (n = 14) or placebo (n = 11) for 12 weeks",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "3529370",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (Efamol)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "28 patients with primary Sjogren's syndrome",
+   "indication_as_stated": "primary Sjogren's syndrome",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty-four female and 4 male patients, all fulfilling the Copenhagen criteria for primary Sj\u00f6gren's syndrome",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "3908514",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 2-4 g (children) or 6-8 g (adults)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "123 patients with atopic eczema",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": "oral doses of evening primrose oil (2 or 4 gm in children, 6 or 8 gm in adults)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We observed no significant effect on erythema, scale, excoriation, lichenification, or overall severity in 123 patients with atopic eczema of average severity",
+   "sample_size_quote": "123 patients with atopic eczema",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "4082084",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (Efamol), 12 capsules/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "21 patients with Raynaud's phenomenon",
+   "indication_as_stated": "Raynaud's phenomenon",
+   "dose_quote": "12 capsules/day of evening primrose oil (EPO)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "As the weather worsened the placebo group experienced significantly more attacks than the EPO group.",
+   "sample_size_quote": "21 patients received a two week course of placebo, thereafter 11 received EPO for 8 weeks and 10 patients received placebo",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "6109930",
+   "design": "review",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title only, no abstract text retrieved"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with atopic eczema",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Letter; no abstract text available to extract quotes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "6128449",
+   "design": "rct",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title only, no abstract text retrieved"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral evening-primrose-seed oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with atopic eczema",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Letter; no abstract text available to extract quotes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "6130264",
+   "design": "review",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title only, no abstract text retrieved"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose seed oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with ichthyosis vulgaris",
+   "indication_as_stated": "ichthyosis vulgaris",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Letter; no abstract text available to extract quotes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "7823743",
+   "design": "review",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "title only, no abstract text retrieved"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with atopic eczema",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Letter; no abstract text available to extract quotes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "7921757",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Efamol Marine (evening primrose oil + fish oil)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "38 patients with psoriatic arthritis",
+   "indication_as_stated": "psoriatic arthritis (skin and joint symptoms)",
+   "dose_quote": "12 Efamol Marine capsules or 12 placebo capsules daily for 9 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "38 patients with PsA",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO combined with fish oil in a fixed branded product (Efamol Marine).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8050140",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil combined with marine (fish) oil",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "37 patients with chronic stable plaque psoriasis",
+   "indication_as_stated": "psoriasis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was no significant improvement in clinical severity of psoriasis or change in transepidermal water loss.",
+   "sample_size_quote": "Thirty-seven patients in a double-blind parallel trial were studied.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO combined with marine (fish) oil, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8415806",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil 4g + sardine oil 2.4g + vitamin E",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "18 patients with non-insulin-dependent diabetes",
+   "indication_as_stated": "non-insulin-dependent diabetes",
+   "dose_quote": "administered 4 g evening primrose oil, 2.4 g sardine oil and 200 mg vitamin E for 4 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "levels of changes in these parameters were not different from 11 patients who did not receive the oils",
+   "sample_size_quote": "Seven patients were administered",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "EPO combined with fish oil and vitamin E.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO combined with sardine oil and vitamin E, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8485269",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "super evening primrose oil",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "43 patients with stable ulcerative colitis",
+   "indication_as_stated": "ulcerative colitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Treatment with super evening primrose oil increased red-cell membrane concentrations of dihomogamma-linolenic acid (DGLA) by 40% at 6 months (P < 0.05)",
+   "sample_size_quote": "43 patients with stable ulcerative colitis were randomized to receive either MaxEPA (n = 16), super evening primrose oil (n = 19), or olive oil as placebo (n = 8)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "EPO tested as its own separate arm vs. a fish-oil (MaxEPA) arm and placebo, not combined.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison alongside a separate fish-oil arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8721802",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with PMS across 7 included trials",
+   "indication_as_stated": "premenstrual syndrome",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The two most well-controlled studies failed to show any beneficial effects for EPO",
+   "sample_size_quote": "Only seven placebo-controlled trials were found but only in five trials was randomization clearly indicated.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO trials.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8884146",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral evening primrose oil (Epogam)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "39 patients with chronic hand dermatitis",
+   "indication_as_stated": "chronic hand dermatitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Thirty-nine patients with chronic (> 1 year), stable ha",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material; results described as 'disappointing' in the title.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9014601",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Epogam evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "58 children with atopic dermatitis (22 with asthma)",
+   "indication_as_stated": "atopic dermatitis and asthma",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "58 out of 60 children, with atopic dermatitis and the need for regular treatment with topical skin steroids, completed a 16 weeks' treatment period",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9707349",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "evening primrose oil (Epogam)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "6 healthy volunteers",
+   "indication_as_stated": "GLA pharmacokinetics",
+   "dose_quote": "Six capsules of Epogam were administered to each subject in the morning at 7:00 and further 6 capsules in the evening at 19:00.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Gamma-linolenic acid shows an absorption-elimination pattern after the administration of Epogam",
+   "sample_size_quote": "From 6 volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO delivered as Epogam, a specific branded preparation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9933750",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "GLA-rich evening primrose oil, 2 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "9 hemodialysis patients (EPO arm; 7 in LA comparator arm)",
+   "indication_as_stated": "uremic skin symptoms (hemodialysis)",
+   "dose_quote": "gamma-linolenic acid (GLA)-rich evening primrose oil (EPO) or linoleic acid (LA) (2 g/day each) for 6 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "9 and 7 dialysis patients were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Active comparator design vs. linoleic acid (LA), not vs. placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10233322",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "borage oil (>=23% GLA), 500 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "160 adults with atopic eczema",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": "daily either 500 mg of borage oil-containing capsules",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "One hundred and sixty patients were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Notes prior EPO (10% GLA) trials yielded contradictory results, prompting testing of higher-GLA borage oil.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Borage oil is a different (higher-GLA) botanical source than evening primrose oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10796622",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil (or fish oil)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with schizophrenia across included RCTs",
+   "indication_as_stated": "schizophrenia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Reviews EPO and fish oil jointly as PUFA sources for schizophrenia.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviewed jointly with fish oil, not isolated to EPO alone throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10933121",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Efamol (evening primrose oil)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "18 subjects with ADHD",
+   "indication_as_stated": "attention-deficit/hyperactivity disorder (zinc-moderated response)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Efamol benefit was evident only with borderline zinc.",
+   "sample_size_quote": "18-subject double-blind, placebo-controlled crossover treatment comparison",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Post-hoc re-analysis; EPO (Efamol) benefit was zinc-status dependent, not uniform; compared against d-amphetamine.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12439536",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, alone or with fish oil",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "120 premenopausal women with severe chronic mastalgia",
+   "indication_as_stated": "chronic mastalgia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "One hundred twenty women were placed randomly into four groups: (1) fish oil and control oil, (2) evening primrose oil and control oil, (3) fish and evening primrose oils, or (4) both control oils",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "EPO-alone arm exists separately from the fish-oil-alone and combination arms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17168667",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "Efamol evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1207 patients across 26 included clinical studies",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "establishes that Efamol EPO has a simultaneous, beneficial effect on itch/pruritus, crusting, oedema and redness (erythema) that becom",
+   "sample_size_quote": "A decade of further testing and subsequent independent reanalysis of 26 clinical studies including 1207 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO delivered as Efamol, a specific branded preparation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17509880",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil (vs Bromocriptine, Danazol, Tamoxifen)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with mastalgia across included RCTs",
+   "indication_as_stated": "mastalgia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Danazol produced a significant benefit with a mean pain score difference -20.23(95% CI -28.12 to -12.34).",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "EPO analyzed as its own comparator arm alongside Bromocriptine, Danazol and Tamoxifen; EPO's own effect size not visible in this excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO analyzed as a distinct treatment arm in this meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17764919",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with epilepsy (safety review)",
+   "indication_as_stated": "epilepsy (seizure safety)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the association of evening primrose oil with seizures is shown to be spurious",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "negative",
+   "direction_note": "Safety re-analysis concluding the original epilepsy-risk concern was not substantiated.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18492193",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Efamol evening primrose oil, 3x500 mg b.i.d.",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy adults",
+   "indication_as_stated": "skin biophysical parameters (aging)",
+   "dose_quote": "Efamol EPO was administered orally in soft gel capsules, 3 x 500 mg b.i.d. for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO delivered as Efamol, a specific branded preparation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19052401",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 500 mg capsules",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 patients with atopic dermatitis",
+   "indication_as_stated": "atopic dermatitis",
+   "dose_quote": "evening primrose oil was supplied as 500-mg oval clear unmarked capsules",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Data of the first 25 patients from each group",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21328257",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "GLA (from evening primrose, borage, or blackcurrant seed oil)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with rheumatoid arthritis across 22 included studies",
+   "indication_as_stated": "rheumatoid arthritis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There is moderate evidence that oils containing GLA (evening primrose, borage, or blackcurrant seed oil) afford some benefit in relieving symptoms for RA",
+   "sample_size_quote": "Twelve new studies were added to the update, a total of 22 studies were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO pooled together with other GLA sources (borage, blackcurrant seed oil).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23625331",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "56 menopausal women (45-59 years)",
+   "indication_as_stated": "menopausal hot flashes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "a total of 56 menopausal women aged 45-59 years were participated in this study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23633319",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil and borage oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1596 participants across 27 included trials",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Oral borage oil and evening primrose oil lack effect on eczema; improvement was similar to respective placebos used in trials.",
+   "sample_size_quote": "A total of 27 studies (1596 participants) met the inclusion criteria: 19 studies assessed evening primrose oil, and 8 studies assessed borage oil.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Notes a case report of risk with EPO taken beyond one year and possible increased bleeding with warfarin.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Cochrane review restricted to oral EPO and borage oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25177120",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with mastalgia",
+   "indication_as_stated": "mastalgia (breast pain)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Gamma-linolenic acid or evening primrose oil though commonly prescribed is not effective.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO specifically assessed within this narrative systematic review of mastalgia treatments.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25473222",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, add-on to isotretinoin",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "40 Korean acne patients on isotretinoin",
+   "indication_as_stated": "xerotic cheilitis prevention (isotretinoin side effect)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty Korean volunteers of Fitzpatrick skin types III and IV, having moderate acne, were enrolled and randomized to receive either isotretinoin with or without EPO for 8 weeks",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on design: isotretinoin background held constant, EPO vs. no-EPO is the isolated randomized variable.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material; isotretinoin background held constant across arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26781763",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "vitamin D 1000 IU + evening primrose oil 1000 mg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "60 women with gestational diabetes",
+   "indication_as_stated": "gestational diabetes mellitus",
+   "dose_quote": "1000 IU vitamin D3 and 1000 mg EPO or placebo for 6 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "60 participants with GDM",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO combined with vitamin D, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28742409",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "vitamin D 1000 IU + evening primrose oil 1000 mg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "60 vitamin D-deficient women with PCOS",
+   "indication_as_stated": "polycystic ovary syndrome (vitamin D-deficient)",
+   "dose_quote": "1000 IU vitamin D3 plus 1000 mg EPO (n = 30) or placebo (n = 30)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "60 vitamin D-deficient women with PCOS",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "This publication is a RETRACTED PUBLICATION per the index metadata; should not be used as standalone evidence.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO combined with vitamin D, not tested alone.",
+   "integrity": {
+    "retracted": true,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29114553",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (vs flaxseed, vs vitamin E)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "90 patients with periodic breast pain",
+   "indication_as_stated": "cyclical breast pain",
+   "dose_quote": "The first group received 30 g of powdered flaxseed",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "ninety patients complaining of breast periodic pain",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Quasi-randomized (not fully randomized); EPO is its own separate arm compared with flaxseed and vitamin E arms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison alongside flaxseed and vitamin E arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29426270",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 1000 mg twice daily for 7 days",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "80 nulliparous low-risk pregnant women (40 weeks gestation)",
+   "indication_as_stated": "labor induction/duration of pregnancy",
+   "dose_quote": "EvPO capsules were administered, 1000 mg, twice daily, for 7 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "In total, 80 women finished the study (40 in each group)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29928122",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "52 patients with multiple sclerosis",
+   "indication_as_stated": "multiple sclerosis (fatigue/quality of life)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "52 patients with MS were chosen",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30065580",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 450 mg (40 mg GLA) capsules",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 Korean patients with mild atopic dermatitis",
+   "indication_as_stated": "atopic dermatitis",
+   "dose_quote": "an oval unmarked capsule containing 450 mg of EPO (40 mg of GLA) per capsule",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Fifty mild AD patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31738736",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 1000 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women",
+   "indication_as_stated": "psychological symptoms (menopause)",
+   "dose_quote": "1,000 mg of evening primrose oil capsules daily or matching placebo for 8 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32441049",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 6 included RCTs",
+   "indication_as_stated": "lipid profile",
+   "dose_quote": null,
+   "primary_outcome_quote": "a significant reduction in TG at a dose of \u22644 g/day (weighted mean difference [WMD] = -37.28 mg/dl; 95% CI: -73.53 to -1.03, p = .044) and a significant increase in HDL in hyperlipidemic subjects",
+   "primary_result_quote": "Oral intake of EPO at a dose of \u22644 g/day significantly reduces serum TG levels and significantly increases HDL levels in hyperlipidemic subjects.",
+   "sample_size_quote": "six RCTs were included in the meta-analysis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32637272",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "evening primrose oil, combined with black seed oil (self-directed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "69-year-old female with endometrial adenocarcinoma",
+   "indication_as_stated": "severe thrombocytopenia (post-surgical)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The thrombocytopenia reached a nadir of 31,000/mL3 from a baseline of 410,000/mL3 and resolved without intervention.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Temporally associated with concurrent black seed oil and EPO use prior to surgery; causality not established (case report).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO taken concurrently with black seed oil, not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33854910",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "80 adults undergoing appendectomy",
+   "indication_as_stated": "postoperative pain (appendectomy)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "a total of 80 adults patients with acute appendicitis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33913585",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "mixed",
+   "population_as_stated": "pregnant women across included clinical trials",
+   "indication_as_stated": "labor induction/cervical ripening",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Notes EPO is 'applied to soften the cervix', consistent with both oral and vaginal administration routes being pooled in this literature.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO trials; route (oral vs. vaginal) not distinguished in this excerpt.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33942584",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 1000 mg twice daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women",
+   "indication_as_stated": "hot flashes and night sweats",
+   "dose_quote": "The intervention group took one capsule (1,000 mg) of evening primrose oil twice daily, while the control group received the same amount of placebo.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34200727",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "women with mastalgia across included RCTs",
+   "indication_as_stated": "mastalgia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO trials for mastalgia treatment.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34261202",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "mixed",
+   "population_as_stated": "pregnant women (term) across included trials",
+   "indication_as_stated": "cervical ripening (term pregnancy)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Route (oral vs. vaginal) not distinguished in this abstract excerpt; this literature includes both.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO trials for cervical ripening.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34463069",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "100 menopausal women",
+   "indication_as_stated": "psychological symptoms (menopause)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "The subjects were 100 menopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34606560",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "borage oil, 880 mg GLA/day, vs evening primrose oil 540 mg GLA/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "overweight young adults with family history of obesity",
+   "indication_as_stated": "resting metabolic rate/lipid profile (overweight)",
+   "dose_quote": "borage oil (880 mg GLA per day) or evening primrose oil (540 mg GLA per day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "borage oil did lower plasma triglyceride readings and raise HDL cholesterol readings",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No effect on resting metabolic rate for either oil; borage oil (not EPO) improved lipid markers.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Compares two GLA sources (borage oil and EPO) as separate arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35405955",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, add-on to isotretinoin",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "50 acne vulgaris patients on isotretinoin",
+   "indication_as_stated": "acne vulgaris (isotretinoin side-effect mitigation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "conventional with isotretinoin (25 patients) and novel with isotretinoin combined wi",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on design: isotretinoin background held constant, EPO vs. no-EPO is the isolated randomized variable.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material; isotretinoin background held constant across arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35440333",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose VAGINAL capsule, 500 mg x2",
+   "combination": false,
+   "route": "vaginal",
+   "population_as_stated": "100 nulliparous women",
+   "indication_as_stated": "cervix preparation/first stage of labor",
+   "dose_quote": "one evening primrose capsule (500 mg) was used vaginally and then two hours later, another capsule was used",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "100 nulliparous women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Vaginal (intravaginal) route, not oral ingestion.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO administered vaginally rather than swallowed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36187740",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 100 mg (vaginal placement)",
+   "combination": false,
+   "route": "vaginal",
+   "population_as_stated": "160 women undergoing diagnostic hysteroscopy",
+   "indication_as_stated": "cervical preparation before hysteroscopy",
+   "dose_quote": "Group A received 100 mg EPO as a soft gel capsule 6 hr before the hysterectomy in the posterior",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "160 women candidates for diagnostic hysteroscopy",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Route is vaginal (posterior vaginal fornix placement), not swallowed oral ingestion.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO delivered vaginally rather than swallowed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36846678",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "mixed",
+   "population_as_stated": "pregnant women across included trials",
+   "indication_as_stated": "cervical ripening/birth outcomes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Route (oral vs. vaginal) not distinguished in this abstract excerpt; this literature includes both.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO trials for cervical ripening/birth outcomes.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37081029",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fish oil + evening primrose oil (351 mg GLA)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "32 breast cancer patients undergoing chemotherapy (29 completed)",
+   "indication_as_stated": "breast cancer chemotherapy (inflammation)",
+   "dose_quote": "2 gel capsules of fish oil and 3 gel capsules of EPO (400 mg eicosapentaenoic acid, 600 mg docosahexaenoic acid, and 351 mg gamma-linolenic acid)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Of the 32 eligible patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [
+    "NCT03516253"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO combined with fish oil, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37102338",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "vaginal evening primrose oil, 2000 mg",
+   "combination": false,
+   "route": "vaginal",
+   "population_as_stated": "40 hysteroscopy/D&C candidates",
+   "indication_as_stated": "cervical preparation (gynecological surgery)",
+   "dose_quote": "2000 mg of vaginal EPO (n = 20) or 200 \u03bcg of vaginal misoprostol (n = 20)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "40 hysteroscopy and dilation and curettage candidates were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Route is vaginal, not oral ingestion; active comparator is vaginal misoprostol.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO administered vaginally rather than swallowed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37200751",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "vaginal evening primrose oil, 1000 mg",
+   "combination": false,
+   "route": "vaginal",
+   "population_as_stated": "110 prim gravid women (40+ weeks gestation)",
+   "indication_as_stated": "cervical preparation (term pregnancy)",
+   "dose_quote": "1000 mg evenin",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "110 prim gravid pregnant women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Route is vaginal, not oral ingestion; active comparator is vaginal misoprostol.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO administered vaginally rather than swallowed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37468886",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "vaginal evening primrose oil capsule, add-on to vaginal misoprostol",
+   "combination": true,
+   "route": "vaginal",
+   "population_as_stated": "82 women with intrauterine fetal death (12-20 weeks)",
+   "indication_as_stated": "induced abortion (intrauterine fetal death)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "We randomized 82 women with indications of",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Route is vaginal, not oral ingestion; EPO tested as an add-on to vaginal misoprostol vs. misoprostol alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO administered vaginally, combined with misoprostol in the intervention arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37694196",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (vs fennel)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "125 participants",
+   "indication_as_stated": "menopausal problems/hormonal levels",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "125 participants randomly assigned to",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "EPO is its own separate arm compared with a fennel arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison alongside a separate fennel arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38360611",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil (Oenothera biennis)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with various inflammatory conditions across included clinical trials",
+   "indication_as_stated": "inflammatory diseases (multiple)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "In rheumatoid arthritis, mixed results were observed",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "EPO showed some positive results in diabetes, atopic eczema, menopausal hot flashes and mastalgia, but not in chronic hand dermatitis, tardive dyskinesia, psoriatic arthritis, cystic fibrosis, hepatitis B, PMS, contact-lens dry eyes, acne, breast cyst, pre-eclampsia, psoriasis, or primary Sjogren's syndrome.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO across multiple reviewed indications.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38377980",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 1000 mg vaginal capsule",
+   "combination": false,
+   "route": "vaginal",
+   "population_as_stated": "low-risk term pregnant women",
+   "indication_as_stated": "cervical ripening (term pregnancy)",
+   "dose_quote": "1,000 mg vaginal EPO capsule",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Route is vaginal, not oral ingestion.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO administered vaginally rather than swallowed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38752050",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, alone or with vitamin E",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "126 premenopausal women with cyclical mastalgia",
+   "indication_as_stated": "cyclical mastalgia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Premenopausal women (n=126) with cyclical mastalgia were",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "EPO-alone arm exists separately from the EPO+vitamin-E combination arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison alongside a combination arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39829189",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "menopausal women across included RCTs",
+   "indication_as_stated": "menopausal hot flashes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO trials for hot flashes.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40255948",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (Oenothera biennis), 1000 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "76 adolescent girls with PCOS",
+   "indication_as_stated": "polycystic ovary syndrome (adolescents)",
+   "dose_quote": "oral placebo or EPO (1000 mg/day) for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "76 patients completed the study in two groups (38 in the placebo and 38 in the EPO groups)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40418820",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 1000 mg soft gel",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with painful diabetic neuropathy",
+   "indication_as_stated": "painful diabetic neuropathy",
+   "dose_quote": "1,000 mg of EPO soft gel capsules every 12 h",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Group A, consisted of 24 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41883983",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "menopausal women across included RCTs",
+   "indication_as_stated": "menopausal symptoms",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to EPO trials for menopausal symptoms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "1668100",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "evening primrose oil (Efamol, rich in linoleic and GLA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "39 lactating women",
+   "indication_as_stated": "breast milk fat composition (maternal supplementation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Total fat and EFA contents of the milk declined in the placebo group but rose in the primrose oil supplemented group.",
+   "sample_size_quote": "a variety of evening primrose oil (Efamol) rich in linoleic and gamma-linolenic acids, or a matching placebo were given to 39 women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO delivered as Efamol, a specific branded preparation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2540757",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "evening primrose oil rich in GLA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "19 hypercholesterolemic patients",
+   "indication_as_stated": "hypercholesterolemia/hypertriglyceridemia (lipoproteins)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "there was a significant decrease in low density lipoprotein-cholesterol and plasma apolipoprotein B compared with the levels observed during safflower oil administration",
+   "sample_size_quote": "Nineteen hypercholesterolemic patients (10 without and 9 with hypertriglyceridemia)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8099640",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, alone or with fish oil",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "123 patients with atopic dermatitis (102 completed)",
+   "indication_as_stated": "atopic dermatitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "No improvement with active treatment was",
+   "sample_size_quote": "Of 123 subjects recruited, 102 completed the treatment period.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "EPO-alone arm exists separately from the EPO+fish-oil combination arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison alongside a combination arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10548762",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Cellasene (multi-herb product incl. evening primrose oil)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "women (cellulite study)",
+   "indication_as_stated": "cellulite",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "No significant changes were found in these parameters compared with the starting values, nor compared with the placebo control after a 2 month course of Cellasene",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO is one of six ingredients (with Ginkgo biloba, sweet clover, seaweed, grape seed oil, lecithin) in a fixed combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18313350",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (oral omega-6 EFA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "76 female soft contact lens wearers",
+   "indication_as_stated": "contact lens associated dry eye",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "76 female soft contact lens wearers were treated for 6 months",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20359269",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 3000 mg/day, alone or with vitamin E",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "85 women with cyclical mastalgia",
+   "indication_as_stated": "cyclical mastalgia",
+   "dose_quote": "EPO (3,000 mg per day), vitamin E (1,200 IU per day) plus EPO (3,000 mg per day), or double placebo",
+   "primary_outcome_quote": "change in breast pain, measured by the modified McGill Pain Qu",
+   "primary_result_quote": null,
+   "sample_size_quote": "Eighty-five women with premenstrual cyclical breast discomfort were enrolled.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "EPO-alone arm exists separately from the vitamin-E-alone and combination arms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison alongside vitamin E and combination arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22952490",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Femicomfort (vitamin B6 + vitamin E + evening primrose oil)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "women with PMS",
+   "indication_as_stated": "premenstrual syndrome",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO is one of three components (with vitamin B6 and vitamin E) in a fixed combination supplement (Femicomfort).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34690016",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (systemic therapy)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "2 patients with multiple oral mucoceles",
+   "indication_as_stated": "oral mucoceles (minor salivary gland)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We report two cases that responded entirely following systemic therapy with evening primrose oil. No recurrence was reported over a two-year follow-up period.",
+   "sample_size_quote": "two cases",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Confirmed 'systemic therapy', i.e. oral/systemic route, not topical application to the lesion.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35791734",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "evening primrose oil (omega-6 fatty acids)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women",
+   "indication_as_stated": "platelet reactivity (postmenopausal women)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "EPO is its own separate arm compared with a fish-oil (omega-3) arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "EPO-alone arm is a clean single-ingredient comparison alongside a separate fish-oil arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8136666",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil 500 mg + vitamin E 10 mg (gamolenic acid)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "56 menopausal women with hot flushes",
+   "indication_as_stated": "menopausal hot flushes",
+   "dose_quote": "Four capsules twice a day of 500 mg evening primrose oil with 10 mg natural vitamin E or 500 mg liquid paraffin for six months",
+   "primary_outcome_quote": "Change in the number of hot flushes or sweating episodes",
+   "primary_result_quote": null,
+   "sample_size_quote": "56 menopausal women suffering hot flushes at least three times a day",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "EPO combined with vitamin E in a fixed capsule formulation, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35889936",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (Oenothera paradoxa), add-on to isotretinoin",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with acne vulgaris treated with isotretinoin",
+   "indication_as_stated": "acne vulgaris (isotretinoin skin side-effects)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on design: isotretinoin background held constant, EPO vs. no-EPO is the isolated randomized variable.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Sourced from Oenothera paradoxa, a different evening-primrose species from the more commonly used O. biennis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "8721802",
+  "23633319",
+  "34200727",
+  "17509880",
+  "1913008",
+  "8485269",
+  "33913585",
+  "39829189",
+  "38360611",
+  "29928122",
+  "40418820",
+  "32441049"
+ ],
+ "handoff": [
+  {
+   "pmid": "28742409",
+   "role": "other",
+   "reason": "This vitamin D + EPO co-supplementation trial in PCOS is a RETRACTED PUBLICATION per the index metadata; kept here with retracted=True flagged but should not be used as standalone supporting evidence."
+  },
+  {
+   "pmid": "32637272",
+   "role": "safety",
+   "reason": "Case report of severe thrombocytopenia temporally associated with concurrent black seed oil + EPO use before surgery; causality not established, but a safety signal worth downstream review."
+  },
+  {
+   "pmid": "23633319",
+   "role": "safety",
+   "reason": "Cochrane review notes a case report of risk (inflammation, thrombosis, immunosuppression) with EPO/borage oil taken beyond one year, and a separate report of increased bleeding risk when combined with warfarin."
+  }
+ ],
+ "identity_notes": "Evening primrose oil (EPO) has an unusually focused, EPO-specific literature compared to most other identities in this screen -- the large majority of candidate records are genuine EPO trials or reviews, with comparatively little off-topic contamination (mainly a handful of agricultural/plant-physiology papers on Oenothera biennis cultivation and unrelated fatty-acid/prostaglandin theory pieces without primary EPO data). The largest reject bucket is broad, non-EPO-specific systematic reviews or clinical-evidence summaries (BMJ Clinical Evidence-style reviews of breast pain, PMS, chronic fatigue syndrome, pre-eclampsia; broad herbal-medicine-for-menopause/eczema/IBD reviews) where EPO is, at most, one of many treatments mentioned in passing with no EPO-specific extractable result visible -- these were rejected not_intervention in favor of the many dedicated EPO-specific reviews that ARE kept (e.g., 8721802/PMS, 23633319/eczema, 34200727 and 17509880/mastalgia, 33913585 and 34261202 and 36846678/cervical ripening, 39829189 and 41883983/menopause hot flashes, 38360611/broad EPO-only review). A recurring and clinically important route distinction is oral (swallowed) EPO versus VAGINAL EPO capsules used off-label for cervical ripening/labor induction (35440333, 36187740, 37102338, 37200751, 37468886, 38377980) -- these are flagged related_form_differs by route, and the cervical-ripening review-level records (33913585, 34261202, 36846678) likely pool both oral and vaginal studies without distinguishing them, which is noted explicitly. EPO's classic indications (atopic eczema/dermatitis, mastalgia, PMS, menopausal vasomotor symptoms, rheumatoid arthritis) show a genuinely mixed evidence base -- individual RCTs and meta-analyses skew toward null or modest effects for eczema and PMS specifically, while mastalgia and some skin-barrier outcomes show more consistent positive signals. One retracted publication (28742409, vitamin D+EPO in PCOS) was kept with retracted=True flagged and routed to handoff rather than silently discarded, since the brief's schema includes an integrity.retracted field precisely for this case."
+}

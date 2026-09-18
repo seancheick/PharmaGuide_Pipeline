@@ -1,0 +1,21 @@
+{"canonical_id": "chrysin", "recommended_class": "no_qualifying",
+ "one_line_reason": "Nothing in the shortlist is isolated human efficacy evidence for oral chrysin: it appears only as a minor component of multi-ingredient 'andro' hormone blends, a topical propolis product, or in preclinical/in vitro flavonoid reviews.",
+ "selected": [],
+ "blockers": [
+   "The only human RCTs involving chrysin (14559928, 11601567, 11725694) are 5-6 ingredient combination products dominated by potent steroid precursors (androstenedione, DHEA, androstenediol); any hormonal effects cannot be attributed to chrysin, which was included as a purported aromatase inhibitor alongside these"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "14559928", "reason": "6-ingredient 'andro' supplement (DHEA, androstenedione, Tribulus terrestris, chrysin, indole-3-carbinol, saw palmetto); chrysin is a minor component in a blend dominated by steroid precursors"},
+   {"pmid": "11601567", "reason": "5-ingredient androstenediol-herbal blend (androstenediol, saw palmetto, indole-3-carbinol, chrysin, gamma-linolenic acid, Tribulus terrestris); combination product, not isolated chrysin"},
+   {"pmid": "11725694", "reason": "6-ingredient 'DION' blend (androstenedione, DHEA, saw palmetto, indole-3-carbinol, chrysin, Tribulus terrestris); combination product, not isolated chrysin"},
+   {"pmid": "30575794", "reason": "Topical oromucosal propolis-niosome film for aphthous ulcers; chrysin is one of several flavonoids identified in the whole propolis extract by chemical analysis, not an oral chrysin supplement"},
+   {"pmid": "41987687", "reason": "In vitro/in vivo/molecular-pathway review of flavonoids (a broad class) against breast cancer; not isolated human chrysin data"},
+   {"pmid": "40014123", "reason": "Review of many flavonoids (quercetin, kaempferol, chrysin, baicalein, etc.) for neuroprotection; chrysin is one of 15+ compounds discussed, not isolated"},
+   {"pmid": "41108373", "reason": "Preclinical (animal/in vitro) systematic review of propolis compounds (including chrysin) on adipose tissue browning; not human"},
+   {"pmid": "38378652", "reason": "Preclinical (animal model) meta-analysis of natural products for premature ovarian failure; not human, and chrysin not specifically isolated"},
+   {"pmid": "36144652", "reason": "Review of bioactive natural products (including chrysin) for antimicrobial chemical control; in vitro/microbial context, not a human health efficacy trial"},
+   {"pmid": "34051735", "reason": "Study of XRCC2 gene expression and prognosis in glioma; no evident connection to chrysin in the retrieved abstract"},
+   {"pmid": "34601080", "reason": "Review of flavonoids from Chinese herbal medicine for hypertension, based on animal experiments; explicitly states insufficient evidence for clinical application, and chrysin is not isolated"},
+   {"pmid": "27829351", "reason": "Review of natural compounds for multiple sclerosis; the compounds specifically named (vitamins, minerals, n-3 PUFAs, lipoic acid, statins, resveratrol, EGCG, probiotics) do not include chrysin in the retrieved abstract text"}
+ ]}

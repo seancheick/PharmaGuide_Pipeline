@@ -1,0 +1,16 @@
+{
+ "_metadata": {
+  "baseline_ref": "HEAD",
+  "products_evaluated": 15418,
+  "clinical_matches_evaluated": 50334,
+  "products_with_a_changed_result": 0,
+  "match_results_changed": 0,
+  "match_results_newly_applicable": 0,
+  "match_results_no_longer_applicable": 0,
+  "note": "Applicability decisions only. No score was computed or moved; no production data written."
+ },
+ "transitions": {},
+ "by_evidence_record": {},
+ "reason_codes_after": {},
+ "changes": []
+}

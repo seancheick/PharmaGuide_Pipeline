@@ -29,6 +29,11 @@ EXPECTED = {
         "primary_floor_strong": 14.0, "primary_floor_moderate": 11.0,
         "primary_floor_branded_strong": 18.0, "primary_floor_branded_moderate": 17.0,
         "nutrition_authority_floor": 10.0, "primary_mass_fraction": 0.5,
+        # ONE owner for what a direction is worth; generic_evidence reads this rather than
+        # hard-coding it, and its primary-floor path reads the same map. null = 0.0 since
+        # 2026-09-18: evidence that did not show a benefit earns no affirmative credit.
+        "effect_direction_multipliers": {"positive_strong": 1.0, "positive_weak": 0.85,
+                                         "mixed": 0.6, "null": 0.0, "negative": 0.0},
         "enrollment_quality_bands": [[50.0, 0.6], [200.0, 0.8], [500.0, 1.0], [1000.0, 1.1]],
         "top_n_weights": [1.0, 0.7, 0.5, 0.3],
         "depth_bonus_bands": [[20.0, 0.25], [40.0, 0.5]],
@@ -36,7 +41,7 @@ EXPECTED = {
     "probiotic": {
         "cap_evidence": 20.0, "cap_strain_clinical": 12.0, "cap_dose_applicability": 8.0,
         "effect_direction_multipliers": {"positive_strong": 1.0, "positive_weak": 0.85,
-                                         "mixed": 0.6, "null": 0.25, "negative": 0.0},
+                                         "mixed": 0.6, "null": 0.0, "negative": 0.0},
         "native_strain_evidence_points": {"strong": 8.0, "high": 8.0, "moderate": 6.0,
                                           "medium": 6.0, "weak": 3.0, "low": 3.0, "limited": 3.0},
         "native_strain_evidence_weights": [1.0, 0.7, 0.5, 0.3],
@@ -81,6 +86,9 @@ def test_runtime_constants_read_from_config_no_drift():
     assert probiotic_evidence.CAP_STRAIN_CLINICAL == EM["probiotic"]["cap_strain_clinical"] == 12.0
     assert probiotic_evidence.CAP_DOSE_APPLICABILITY == EM["probiotic"]["cap_dose_applicability"] == 8.0
     assert probiotic_evidence.EFFECT_DIRECTION_MULTIPLIERS == EXPECTED["probiotic"]["effect_direction_multipliers"]
+    # Both lanes and both generic paths read the one config owner - no second copy anywhere.
+    assert generic_evidence.EFFECT_DIRECTION_MULTIPLIERS == EXPECTED["generic"]["effect_direction_multipliers"]
+    assert generic_evidence._EFFECT_FLOOR_MULTIPLIER is generic_evidence.EFFECT_DIRECTION_MULTIPLIERS
     assert probiotic_evidence.NATIVE_STRAIN_EVIDENCE_POINTS == EXPECTED["probiotic"]["native_strain_evidence_points"]
     assert probiotic_evidence.NATIVE_STRAIN_EVIDENCE_WEIGHTS == (1.0, 0.7, 0.5, 0.3)
     assert multi_prenatal_evidence.CAP_EVIDENCE == multi_prenatal_evidence.GENERIC_CAP_EVIDENCE == 20.0

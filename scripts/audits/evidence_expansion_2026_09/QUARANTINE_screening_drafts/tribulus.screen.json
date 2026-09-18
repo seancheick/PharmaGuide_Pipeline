@@ -1,0 +1,2191 @@
+{
+ "canonical_id": "tribulus",
+ "screened": 78,
+ "kept": 64,
+ "rejected": [
+  {
+   "pmid": "11601567",
+   "reason": "different_substance",
+   "note": "Androstenediol-herbal supplement RCT; androstenediol is a different, distinct prohormone substance."
+  },
+  {
+   "pmid": "11725694",
+   "reason": "different_substance",
+   "note": "Androstenedione-herbal supplement RCT; androstenedione is a different, distinct prohormone substance."
+  },
+  {
+   "pmid": "14559928",
+   "reason": "different_substance",
+   "note": "DHEA and androstenedione dietary supplement RCT; not a tribulus study."
+  },
+  {
+   "pmid": "22529679",
+   "reason": "off_topic",
+   "note": "Shunthi-Guduchi (ginger/Tinospora) formulations for osteoarthritis; not a tribulus study."
+  },
+  {
+   "pmid": "22971393",
+   "reason": "off_topic",
+   "note": "Comment/letter responding to PMID 22177370 with no new data (empty abstract)."
+  },
+  {
+   "pmid": "25471616",
+   "reason": "animal_or_invitro",
+   "note": "In vitro cytotoxicity/genotoxicity/endocrine-disruption assay of Tribulus terrestris extracts (cell lines, bacterial and yeast assays), not a human study."
+  },
+  {
+   "pmid": "28595608",
+   "reason": "animal_or_invitro",
+   "note": "In vitro antimicrobial/antioxidant/anti-inflammatory assay of 4 ethnomedicinal plant extracts including Tribulus terrestris; not a human study."
+  },
+  {
+   "pmid": "30084707",
+   "reason": "not_this_route",
+   "note": "Vaginal suppository (Forzejeh, containing Tribulus terrestris) for bacterial vaginosis; topical/vaginal route, not oral."
+  },
+  {
+   "pmid": "30811417",
+   "reason": "off_topic",
+   "note": "Review of photosensitisation outbreaks in livestock; veterinary/animal, not human."
+  },
+  {
+   "pmid": "30932202",
+   "reason": "off_topic",
+   "note": "Broad systematic review of medicinal plants for urinary tract infection naming tribulus among several plants, with no tribulus-specific trial data in the abstract."
+  },
+  {
+   "pmid": "36771371",
+   "reason": "animal_or_invitro",
+   "note": "Hypoglycemic/hypocholesterolemic activity of a 3-plant cell-culture biomass tested in high-fat-diet obese rats, not humans."
+  },
+  {
+   "pmid": "41537313",
+   "reason": "off_topic",
+   "note": "Electroacupuncture RCT for sperm motility/morphology in varicocele; tribulus is not the studied intervention."
+  },
+  {
+   "pmid": "34626781",
+   "reason": "animal_or_invitro",
+   "note": "In vitro cytotoxicity assays and a 28-day Sprague-Dawley rat toxicokinetic study of an isolated Tribulus terrestris saponin (Terrestrosin D); not a human study."
+  },
+  {
+   "pmid": "39399723",
+   "reason": "animal_or_invitro",
+   "note": "In vivo rat model of carboplatin-induced nephro/hepatotoxicity treated with Tribulus terrestris extract; not a human study."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "10861339",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tribulus (3.21 mg per kg body weight daily)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Fifteen subjects (resistance-trained males)",
+   "indication_as_stated": "body composition/exercise performance",
+   "dose_quote": "placebo or tribulus (3.21 mg per kg body weight daily) group",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Supplementation with tribulus does not enhance body composition or exercise performance in resistance-trained males.",
+   "sample_size_quote": "Fifteen subjects were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10997957",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "ANDRO-6 (300 mg androstenedione, 150 mg DHEA, 750 mg Tribulus terrestris, 625 mg Chrysin, 300 mg Indole-3-carbinol, 540 mg Saw palmetto)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "20 young men",
+   "indication_as_stated": "anabolic/testosterone effects with resistance training",
+   "dose_quote": "300 mg androstenedione, 150 mg DHEA, 750 mg Tribulus terrestris, 625 mg Chrysin, 300 mg Indole-3-carbinol, and 540 mg Saw palmetto",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "these herbal extracts to androstenedione does not result in increased serum testosterone concentrations",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "6-ingredient combination product dominated by androstenedione/DHEA; tribulus is a minor component, not the studied agent.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus is one of six ingredients in a prohormone-dominant combination product; not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15994038",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris extract (20 and 10 mg/kg body weight per day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty-one healthy young men",
+   "indication_as_stated": "androgen production (aphrodisiac claim)",
+   "dose_quote": "20 and 10 mg/kg body weight per day of Tribulus terrestris extract",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tribulus terrestris steroid saponins possess neither direct nor indirect androgen-increasing properties.",
+   "sample_size_quote": "Twenty-one healthy young 20-36 years old men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17530942",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris extract (450 mg.d(-1))",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty-two Australian elite male rugby league players",
+   "indication_as_stated": "muscle strength/body composition (athletic performance)",
+   "dose_quote": "A T. terrestris extract (450 mg.d(-1)) or placebo capsules were consumed once daily for 5 weeks.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "T. terrestris did not produce the large gains in strength or lean muscle mass that many manufacturers claim can be experienced within 5-28 days.",
+   "sample_size_quote": "Twenty-two Australian elite male rugby league players",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20722793",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (1 of 9 plants reviewed for female sexual dysfunction)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "climacteric women (narrative review)",
+   "indication_as_stated": "female sexual dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Humulus lupulus and Tribulus terrestris may help with desire disorder studies.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Narrative review; author states no plant has strong enough evidence overall.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus reviewed alongside 8 other plants without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21948222",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (1 of several herbal medications reviewed for ED)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "not stated (narrative review)",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Unfortunately, these published trials on humans were not robust.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Only Panax ginseng, Butea superba and yohimbine (not tribulus) had published human studies noted as more substantial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus listed among herbal ED medications without human trial data highlighted.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22177370",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "standardized extracts of Murraya koenigii and Tribulus terrestris leaves",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "46 men with BPH aged >50 years",
+   "indication_as_stated": "benign prostatic hyperplasia",
+   "dose_quote": "the plant drug in a dose of 2 capsules BID",
+   "primary_outcome_quote": "The primary effectiveness measure was reduction in the International Prostate Symptom Score (IPSS).",
+   "primary_result_quote": "intergroup values showed no statistically significant difference at any point of time.",
+   "sample_size_quote": "Forty-six patients were randomized (23 per group)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Both the plant drug and tamsulosin significantly reduced IPSS from baseline, but no significant difference between arms (non-inferiority-style result, not superiority).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is combined with Murraya koenigii; effect cannot be isolated to tribulus alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23173697",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tradamixina (150 mg Alga Ecklonia Bicyclis, 396 mg Tribulus Terrestris, 144 mg D-Glucosamine/N-Acetyl-D-Glucosamine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Seventy patients (67.3 +/- 3.7 years) with reduced libido",
+   "indication_as_stated": "libido/erectile dysfunction in elderly men",
+   "dose_quote": "150 mg of Alga Ecklonia Bicyclis, 396 mg of Tribulus Terrestris and 144 mg of D-Glucosamine and N-Acetyl-D-Glucosamine",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The treatment twice a day with \"Tradamixina\" for 2 months improved libido in elderly men without side effects of Tadalafil.",
+   "sample_size_quote": "Seventy patients (67.3 \u00b1 3.7 years)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "3-ingredient combination product compared to active comparator (tadalafil), not placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus is one of three ingredients in the Tradamixina combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23723641",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Gokshura (Tribulus terrestris) granules",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "subjects aged 21-50 with Oligozoospermia",
+   "indication_as_stated": "oligozoospermia (male infertility)",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary outcome measures were percentage changes in the Pratyatmaka Lakshanas (cardinal symptoms) of Kshina Shukra, Agni bala, Deha bala, Satva bala, the semenogram, and in the Quality of the Sexual Health Questionnaire.",
+   "primary_result_quote": "the Gokshura granules showed 78.11% improvement in Rogi bala",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Placebo arm also improved substantially (70.95%); the gap between active and placebo is narrow.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Gokshura (Tribulus terrestris) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24559105",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (TT) as sole or combined supplement",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "healthy human subjects (11 studies)",
+   "indication_as_stated": "testosterone enhancement/aphrodisiac claim",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Evidence to date suggests that TT is ineffective for increasing testosterone levels in humans, thus marketing claims are unsubstantiated.",
+   "sample_size_quote": "Eleven studies met the inclusion criteria, including one patent application.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "A significant increase in testosterone was noted only when TT was part of a combined supplement, not as sole treatment.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24630840",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris, 800 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "thirty healthy men with erectile dysfunction",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": "The study group received 800 mg of Tribulus terrestris, divided into two doses per day for thirty days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tribulus terrestris was not more effective than placebo on improving symptoms of erectile dysfunction or serum total testosterone.",
+   "sample_size_quote": "thirty healthy men selected from 100 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24773615",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris extract (7.5 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Sixty seven women with hypoactive sexual desire disorder",
+   "indication_as_stated": "female hypoactive sexual desire disorder",
+   "dose_quote": "Tribulus terrestris extract (7.5 mg/day) or placebo for 4 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "patients in the Tribulus terrestris group had experienced significant improvement in their total FSFI (p < 0.001)",
+   "sample_size_quote": "Sixty seven women with hypoactive sexual desire disorder",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25114736",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (TT) supplements",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "athletes (narrative review)",
+   "indication_as_stated": "athletic performance/testosterone booster claim",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a TT extract used alone without additional components does not improve androgenic status or physical performance among athletes.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "negative",
+   "direction_note": "Combination-with-other-ingredients data suggested possible testosterone increases, but the contributing component was not identified.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25136552",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "alga Ecklonia bicyclis, Tribulus terrestris, and glucosamine oligosaccharide (Tradamix TX1000)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "177 patients with mild-moderate erectile dysfunction",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Therapy with Tradamix improves erectile and ejaculation function and sexual quality of life in patients with mild-moderate ED",
+   "sample_size_quote": "177 patients diagnosed with mild-moderate ED (IIEF-EF < 26) were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of three ingredients in the Tradamix combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25295577",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Tribulus terrestris",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1 young healthy male",
+   "indication_as_stated": "acute kidney injury/hyperbilirubinemia (toxicity)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We describe a case of Tribulus terrestris toxicity in a young healthy male, presenting with severe hyperbilirubinemia followed by acute renal failure and bile containing casts in the tubules.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25524718",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (1 of 6 herbal medicines reviewed for PCOS)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "women with PCOS/menstrual irregularities/hyperandrogenism (762 women across studies)",
+   "indication_as_stated": "PCOS/hyperandrogenism",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Interventions included herbal extracts of Vitex agnus-castus, Cimicifuga racemosa, Tribulus terrestris, Glycyrrhiza spp., Paeonia lactiflora and Cinnamomum cassia.",
+   "sample_size_quote": "762 women with menstrual irregularities, hyperandrogenism and/or PCOS",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Tribulus grouped with 5 other herbs; equivalence claims in the abstract are specific to Vitex and Cimicifuga, not tribulus.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus reviewed alongside 5 other herbal medicines without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25574150",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris extract, 250 mg (1 tablet thrice daily)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "female patients with sexual dysfunction (120 subjects)",
+   "indication_as_stated": "female sexual dysfunction",
+   "dose_quote": "250 mg Tribulus terrestris extract (1 tablet thrice daily for 90 days)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "it is concluded that the T. terrestris extract is safe and effective in the treatment of female sexual dysfunction.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Retrospective hospital-record based study, not a randomized placebo-controlled design; also notes free testosterone DECREASED despite symptom improvement.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26631925",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Tribulus terrestris",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1 patient (36-year-old Caucasian man)",
+   "indication_as_stated": "priapism",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A 36-year-old Caucasian man was diagnosed with a 72-h-lasting priapism that occurred after the assumption of a Herbal supplement based on Tribulus terrestris",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26902700",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 postmenopausal women with sexual dysfunction",
+   "indication_as_stated": "menopausal female sexual dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "we found Tribulus terrestris to be effective in treating sexual problems among menopausal women.",
+   "sample_size_quote": "60 postmenopausal women with sexual dysfunction",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant difference between groups in orgasm and sexual satisfaction domains specifically.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27255456",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hydroalcoholic extract of Tribulus terrestris (1000 mg/d)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Ninety-eight women with diabetes mellitus type 2",
+   "indication_as_stated": "type 2 diabetes (glucose/lipid profile)",
+   "dose_quote": "the T terrestris (1000 mg/d) or placebo for 3 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tribulus terrestris showed a significant blood glucose-lowering effect in diabetic women compared to placebo (P < .05).",
+   "sample_size_quote": "Ninety-eight women with diabetes mellitus type 2",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No significant effect on triglyceride or HDL levels.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hydroalcoholic Tribulus terrestris extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27337519",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (750 mg)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Thirty randomized male patients with idiopathic infertility",
+   "indication_as_stated": "unexplained male infertility",
+   "dose_quote": "Tribulus terrestris (750 mg) in three divided doses for three months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tribulus terrestris was ineffective in the treatment of idiopathic infertility.",
+   "sample_size_quote": "Thirty randomized male patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27711088",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tryptophan, Satureja montana, Tribulus terrestris, Phyllanthus emblica extracts",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with premature ejaculation (across 5 urological centers)",
+   "indication_as_stated": "premature ejaculation",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "patients affected by PE may significantly benefit from oral therapy with a combination of tryptophan, Satureja montana, Tribulus terrestris, Phyllanthus emblica extracts in terms of IELT and PEDT scores improvement.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "4-ingredient combination product compared to a non-randomized behavioral-counseling control group, not placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of four ingredients in a combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27760089",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris, 750 mg/d",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "45 postmenopausal women with diminished libido",
+   "indication_as_stated": "postmenopausal hypoactive sexual desire disorder",
+   "dose_quote": "750 mg/d of T terrestris or placebo for 120 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tribulus terrestris might be a safe alternative for the treatment of hypoactive sexual desire disorder in postmenopausal women, because it was effective in reducing symptoms with few side effects.",
+   "sample_size_quote": "A total of 45 healthy sexually active postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Lubrication domain improved only in the study group, not placebo; 6 participants dropped out due to side effects.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27840471",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hydro alcoholic extract of T. terrestris (1000 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Ninety-eight diabetic women",
+   "indication_as_stated": "type 2 diabetes (glucose/lipid profile)",
+   "dose_quote": "the T. terrestris (1000 mg/day) or placebo for three months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "T. terrestris showed a significant blood glucose lowering effect in diabetic women compared to placebo (P<0.05).",
+   "sample_size_quote": "Ninety-eight diabetic women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Near-duplicate cohort/design to PMID 27255456 (same institution, same n=98, same dose); likely overlapping or companion publication.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hydroalcoholic Tribulus terrestris extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28058714",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Myo-Inositol, Tribulus Terrestris, Alga Ecklonia, and Biovis (Tradafertil)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Sixty patients with male infertility",
+   "indication_as_stated": "male infertility (sperm DNA fragmentation)",
+   "dose_quote": "Myo-inositol 1000 mg, Tribulus Terrestris 300 mg, Alga Ecklonia Bicyclis 200 mg and Biovis one tablet a day for 90 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Sperm concentration and progressive motility improved after treatment with Tradafertil",
+   "sample_size_quote": "Sixty patients were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of four ingredients in the Tradafertil combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28364864",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (Tribestan), 250mg standardized to furostanol saponins",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "180 males aged 18-65 with mild-moderate ED",
+   "indication_as_stated": "male erectile dysfunction",
+   "dose_quote": "Each Tribestan film-coated tablet contains the active substance Tribulus terrestris, herba extractum siccum (35-45:1) 250mg which is standardized to furostanol saponins (not less than 112.5mg).",
+   "primary_outcome_quote": "The primary outcome measure was the change in IIEF score after 12 weeks of treatment.",
+   "primary_result_quote": "The IIEF score improved significantly in the TT group compared with the placebo group (\u0420<0.0001).",
+   "sample_size_quote": "This study included 180 males aged between 18 and 65 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris (Tribestan) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28546803",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Aphrodit capsule (40 mg Tribulus terrestris, 12.27 mg ginger, 3 mg saffron, 11 mg Cinnamomum)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "80 postmenopausal women aged 50-60 years",
+   "indication_as_stated": "menopausal symptoms",
+   "dose_quote": "Each Aphrodit capsule contained 40 mg of Tribulus terrestris, 12.27 mg of Zingiber officinale, 3 mg of Crocus sativus extract, and 11 mg of Cinnamomum zeylanicum",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The results of the study demonstrate that the Aphrodit capsule was effective in reducing menopausal symptoms.",
+   "sample_size_quote": "The participants were 80 postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of four ingredients (relatively low-dose, 40 mg) in the Aphrodit combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28685911",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (tablet 2, alongside a Tablet 1 herbal combination)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "122 overweight women with PCOS",
+   "indication_as_stated": "polycystic ovary syndrome",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary outcome was oligomenorrhoea/amenorrhoea.",
+   "primary_result_quote": "women in the combination group recorded a reduction in oligomenorrhoea of 32.9% (95% confidence interval 23.3-42.6, p < 0.01) compared with controls",
+   "sample_size_quote": "One hundred and twenty-two women gave their consent.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Tribulus terrestris (Tablet 2) given alongside a 4-herb Tablet 1 combination and a lifestyle intervention; effect cannot be isolated to tribulus.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is a separate tablet within a larger multi-herb + lifestyle intervention package.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29172782",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 premenopausal women with hypoactive sexual desire disorder",
+   "indication_as_stated": "premenopausal hypoactive sexual desire disorder",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Patients treated with T. terrestris experienced improvement in total score of FSFI (p < .001)",
+   "sample_size_quote": "40 premenopausal women reporting diminished libido",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29261340",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (narrative review)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "men with infertility (narrative review)",
+   "indication_as_stated": "male infertility",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the exact role of Tribulus terrestris in male infertility is still controversial and needs future double-blind placebo-controlled studies that deploy larger cohorts.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29633089",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (2 monopreparation RCTs, n=202)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with erectile dysfunction (24 RCTs total, 2080 patients)",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "saffron and T. terrestris treatment produced mixed results.",
+   "sample_size_quote": "two Tribulus terrestris [n = 202]",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Ginseng (a different herb in the same review) was the one shown to significantly improve erectile function; tribulus was not.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris specifically identified as one of the monopreparations analyzed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29901295",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "EFFEX Tribulus and Tribestan (Tribulus Terrestris herb dry extract)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "173 patients with erectile dysfunction",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The herbal preparations EFFEX Tribulus and Tribestan have a similar efficacy and safety profiles.",
+   "sample_size_quote": "A total of 173 patients were enrolled in the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Comparative trial between two tribulus-based products, not vs. placebo.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Both compared products are Tribulus terrestris herb dry extracts, matching label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30253697",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "70 randomized aging patients with erectile dysfunction and lower urinary tract symptoms",
+   "indication_as_stated": "late-onset hypogonadism with ED/LUTS",
+   "dose_quote": "Thirty-five patients (group A) received Tribulus terrestris three times daily for 3 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "this study replicates the findings of previous reports about the robust effect of this herbal medicine in elevating the testosterone level and improving the sexual function of patients",
+   "sample_size_quote": "A total of 70 randomized aging patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Aspartate transaminase and total PSA both significantly elevated after treatment (liver/prostate safety signals worth noting).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30598928",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hydro-alcohol extract of Tribulus terrestris (0.9 mg syrup)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 postmenopausal women",
+   "indication_as_stated": "postmenopausal sexual satisfaction",
+   "dose_quote": "a syrup containing T. terrestris extract at a concentration of 0.9 mg and placebo for 8 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Taking T. terrestris syrup increased sexual satisfaction in postmenopausal women.",
+   "sample_size_quote": "A total of 60 postmenopausal women were randomly assigned into two groups of 30",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30670288",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris L. (7 articles included)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "men with idiopathic infertility",
+   "indication_as_stated": "male idiopathic infertility (sperm parameters)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The results of the present systematic review showed that the consumption of T terrestris L., in general, resulted in the improvement of sperm parameters.",
+   "sample_size_quote": "Finally, 7 articles were included in this systematic review.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "One uncontrolled quasi-experimental study reported no effect; the other 6 reported improvement.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris L. matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31424962",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "herbal extracts (mangosteen, Lithospermum officinale, Tribulus terrestris L., Houttuynia cordata)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Sixty patients with mild to moderate acne vulgaris",
+   "indication_as_stated": "acne vulgaris",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "both inflammatory and non-inflammatory acne lesion counts were significantly decreased in herbal extracts group (p< .05).",
+   "sample_size_quote": "Sixty patients were randomized in a 1:1 ratio",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of four herbal extracts in a combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32375572",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus Terrestris (TT), two 250-mg capsules",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Eighteen healthy non-athlete males",
+   "indication_as_stated": "muscle damage/inflammation after resistance exercise",
+   "dose_quote": "The participants consumed two 250-mg capsules of TT or placebo (maltodextrin) per day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "post-exercise LDH in supplementation group were lower than placebo group (p=0.015).",
+   "sample_size_quote": "Eighteen healthy non-athlete males",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant effect on IL-6, hs-CRP, or CPK; only LDH differed.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus Terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32736394",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "T. terrestris (5 RCTs, n=279)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "premenopausal and postmenopausal women with FSD",
+   "indication_as_stated": "female sexual dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "premenopausal and postmenopausal women randomized to T. terrestris had a significant increase in sexual function scores.",
+   "sample_size_quote": "5 RCTs (n = 279 participants) were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Certainty of evidence rated very low (GRADE); no meta-analysis performed due to heterogeneity.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "T. terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33728269",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Herbal Based Syrup (Tribulus terrestris, Panax ginseng, Zingiber officinale, Ceratonia siliqua, Papaver rhoeas, Palm tree pollen)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "100 married men",
+   "indication_as_stated": "male sexual experience",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Results of this study indicated a significant improvement in sexual experience of men following consumption of HBS.",
+   "sample_size_quote": "The ASEX was completed by 100 married and seemingly healthy men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of six ingredients in a combination herbal syrup.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33793146",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Kh\u0101r-i-khasak (Tribulus terrestris Linn.), 6g powdered dried fruits",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "prehypertensive individuals over 18 years of age",
+   "indication_as_stated": "prehypertension",
+   "dose_quote": "powdered dried fruits of Kh\u0101r-i-khasak (6g) and matched placebo (6g) in three divided doses for two months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Both systolic and diastolic blood pressure showed a significant decline in the test group (p<0.001) as compared to the placebo group.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Kh\u0101r-i-khasak (Tribulus terrestris) matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34142638",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (94mg tid or 280mg once daily)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "104 pre- and postmenopausal women",
+   "indication_as_stated": "female sexual dysfunction",
+   "dose_quote": "receive 94mg, three times/day (TT3) or 280mg once/day for 90 days (TT1)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "TTerrestris can be a safe alternative for the treatment of sexual dysfunction in pre and postmenopausal women as it is effective in reducing the symptoms with no side effects.",
+   "sample_size_quote": "A total of 104 women were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "'Satisfaction' domain did not improve in the TT3 premenopausal group; 'orgasm' did not improve in the TT1 postmenopausal group.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34552783",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (1 of several herbal ED treatments reviewed)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "men with ED (42 articles)",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Panax ginseng, Pygnogenol, Prelox and Tribulus terrestris have promising evidence as herbal products, alongside L-arginine as a nutritional supplement, for ED based on IIEF outcomes, and warrant further clinical investigation.",
+   "sample_size_quote": "a total of 42 articles were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Tribulus grouped with 3 other products as having 'promising' (not definitive) evidence.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus reviewed alongside several other herbal ED treatments without an isolated result.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34638031",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "women with female sexual dysfunction (20 studies, 536 identified)",
+   "indication_as_stated": "female sexual dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tribulus terrestris showed a significant positive effect in improving overall female sexual function (SMD = 1.12, 95% CI = 0.46 - 1.79, p = 0.001)",
+   "sample_size_quote": "A total of 536 studies were identified, with 20 of them meeting the criteria.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34836225",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris L. (TT), 770 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "30 healthy CrossFit-trained males",
+   "indication_as_stated": "body composition/hormonal response/CrossFit performance",
+   "dose_quote": "770 mg of TT supplementation or a placebo daily for 6 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "TT supplementation did not impact enhance performance or body composition in CrossFit\u00ae male athletes.",
+   "sample_size_quote": "a total of 30 healthy CrossFit\u00ae-trained males",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Testosterone levels and bench press performance were the only significant interactions found.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris L. matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34895755",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "exogenous androgenic booster (Tribulus terrestris)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "2 male patients (of 4 total in the case series)",
+   "indication_as_stated": "ventricular fibrillation/aborted sudden cardiac death",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "2 patients with ventricular fibrillation associated with exogenous androgenic booster (Tribulus terrestris) intake.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "2 of 4 cases in this case series were specifically linked to Tribulus terrestris intake.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35954909",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris L. (TT) (7 studies)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "physically active adult males",
+   "indication_as_stated": "sport/health biomarkers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "there was no clear evidence of the beneficial effects of TT supplementation on muscle damage markers and hormonal behavior.",
+   "sample_size_quote": "a total of 7 studies met the inclusion and exclusion criteria.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Lipid profile showed significant improvements; hormonal/muscle-damage markers did not.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris L. matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35986353",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (TT), 500 mg twice daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Thirty-four recreational runners (protocol)",
+   "indication_as_stated": "inflammation/oxidative stress/performance (protocol)",
+   "dose_quote": "to receive 500 mg TT supplement or placebo capsules twice daily for 2 weeks",
+   "primary_outcome_quote": "Changes in oxidative stress, anti/inflammatory biomarkers, and sports performance will be assessed as primary outcomes.",
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Study protocol only, no results reported.",
+   "registrations": [
+    "IRCT20150205020965N8"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36073362",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris L.",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "thirteen healthy men",
+   "indication_as_stated": "exercise-induced oxidative stress/DOMS",
+   "dose_quote": "either a daily supplement of Tribulus terrestris L. or a placebo for 4 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tribulus terrestris L. administration did not affect DOMS, thigh girth, or KJRM (p > 0.050).",
+   "sample_size_quote": "thirteen healthy men received either a daily supplement",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Oxidative stress markers (GSH, GSSG, TBARS) improved but DOMS itself did not.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris L. matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36498228",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris L. (TT), 770 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Thirty trained male CrossFit athletes",
+   "indication_as_stated": "muscle/inflammation/antioxidant biomarkers",
+   "dose_quote": "supplemented with 770 mg/day of TT",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "No significant (p > 0.05) decreases in muscle damage or inflammation biomarkers were observed, although a slight downward trend was observed after 6 weeks for supplemented athletes.",
+   "sample_size_quote": "Thirty trained male CrossFit\u00ae athletes",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris L. matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37686709",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (1 of several marketed ED nutraceuticals analyzed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "men with ED (marketed products analysis)",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A metanalysis identified some nutraceuticals, such as Panax ginseng, Tribulus terrestris and L-arginine, that are able to improve male sexual function.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": "80% of the Italian-marketed products analyzed matched the 'no expected efficacy' cluster based on dosing.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus grouped with other nutraceuticals; most marketed products analyzed used inadequate doses.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37697053",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris and creatine (4 studies)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "male athletes, hypogonadal men, infertile men, healthy men",
+   "indication_as_stated": "testosterone boosting claim",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Our findings indicate that most fail to increase total testosterone.",
+   "sample_size_quote": "4 Tribulus terrestris and creatine",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Tribulus/creatine not among the substances found effective (beta-hydroxy beta-methylbutyrate and betaine were the exceptions for athletes).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris studies are pooled together with creatine studies in this count; not separated in the abstract.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37763782",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Aphrodite (ginger, saffron, cinnamon, thistle, and Tribulus terrestris)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "41 females with major depressive disorder and SSRI-induced sexual dysfunction",
+   "indication_as_stated": "SSRI-induced sexual dysfunction and depression",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Aphrodite appeared to improve symptoms of sexual dysfunction, depression, and anxiety among females with diagnosed MDD and SSRI-induced sexual dysfunction.",
+   "sample_size_quote": "A total of 41 females (mean age: 35.05 years)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of five ingredients in the Aphrodite combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37829299",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "interaction",
+   "intervention_as_stated": "Tribulus terrestris (interacting with antidepressants)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "adverse-event reports (retrospective chart review, 1,816 reports evaluated)",
+   "indication_as_stated": "adaptogen-antidepressant drug interactions",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tribulus terrestris: citalopram (generalized pruritus), escitalopram (galactorrhea), and trazodone (psoriasis relapse);",
+   "sample_size_quote": "A total of 1,816 reports of adverse events were evaluated.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Retrospective pharmacovigilance chart review, not a prospective trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris specifically named with 3 documented antidepressant interactions.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38328764",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Tribulus terrestris (tribulus supplements)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1 patient (46-year-old man)",
+   "indication_as_stated": "severe liver and renal injury",
+   "dose_quote": "took tribulus supplements daily for 2 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "His liver biopsy showed features consistent with drug-induced liver injury.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38716323",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris, Urtica dioica, Adiantum capillus-veneris, Stigma maydis, and Cucumis melo (oral solution)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "54 randomized patients (27 drug, 27 placebo)",
+   "indication_as_stated": "urolithiasis",
+   "dose_quote": "60 drops 3 times daily for 4 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the stone size decreased significantly in the drug group compared to the placebo group (P = 0.049).",
+   "sample_size_quote": "participants meeting inclusion criteria were randomly allocated to the drug (n = 27) and placebo (n = 27) groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of five herbal extracts in a combination oral solution.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38731094",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Icarifil (L-Citrulline, L-Carnitine, Eruca vesicaria, Panax ginseng, Tribulus terrestris, Turnera diffusa, Taurine, Vitamin E, Zinc)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "164 patients with erectile dysfunction",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": "Icarifil\u00ae 1 sachet every 24 h",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a statistically significant difference was reported between Group 2 (+7.4) and Group 1 (+4.1) or Group 3 (+5.1)",
+   "sample_size_quote": "52 patients in Group 1, 55 in Group 2 and 57 in Group 3 were analyzed.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Icarifil is a 9-ingredient combination product; tribulus is one component, and the trial compared Icarifil+tadalafil vs. Icarifil alone vs. tadalafil alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris is one of nine ingredients in the Icarifil combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38948316",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "ginseng, Tribulus terrestris, and L-arginine (protodioscin standardized)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "98 men with erectile dysfunction",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": "Each herbal tablet contained 100 mg of protodioscin, 35 mg of ginsenosides, and 250 mg of L-arginine.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "all parameters related to the improvement of sexual function in patients with erectile dysfunction improved in the herbal treatment group (p < 0.001).",
+   "sample_size_quote": "98 men with erectile dysfunction were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No significant difference vs. control in the diabetic-patient subgroup specifically.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus terrestris (as protodioscin) combined with ginseng and L-arginine; effect cannot be isolated to tribulus.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39012853",
+   "design": "case_report",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "interaction",
+   "intervention_as_stated": "Tribulus terrestris (with atorvastatin)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "1 patient (71-year-old man)",
+   "indication_as_stated": "rhabdomyolysis (drug-supplement interaction)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A 71-year-old man presented to the Emergency Department in rhabdomyolysis with a mild transaminitis after taking the over-the-counter supplement Tribulus terrestris while on long-term atorvastatin.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Proposed mechanism: tribulus as a moderate CYP3A4 inhibitor affecting statin metabolism.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39759925",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Forzejehe (Tribulus terrestris + Myrtus communis + Foeniculum vulgare + Tamarindus indica)",
+   "combination": true,
+   "route": "vaginal",
+   "population_as_stated": "women of childbearing age with bacterial vaginosis (20 studies, 2685 participants)",
+   "indication_as_stated": "bacterial vaginosis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "some medicinal plant products alone such as Forzejehe (Tribulus terrestris + Myrtus communis + Foeniculum vulgare + Tamarindus indica), Zataria multiflora, and Calendula officinalis had therapeutic effects similar to metronidazole.",
+   "sample_size_quote": "In total, 20 studies comprising 2685 participants were included in our review.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Vaginal (topical) route, not oral; combination product, not isolated tribulus.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus is one of four ingredients in a vaginal (non-oral) combination product, not the isolated oral label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40219032",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris L. (TT), 400 to 750 mg/d",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "men with various conditions (10 studies, 483 total participants)",
+   "indication_as_stated": "erectile dysfunction/testosterone levels",
+   "dose_quote": "TT supplementation at doses of 400 to 750 mg/d for 1 to 3 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "TT supplementation has a low level of evidence regarding its effectiveness in improving erectile function in men with erectile dysfunction, and no robust evidence was found for increasing testosterone levels.",
+   "sample_size_quote": "The studies involved 15 to 172 participants (total = 483)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Half of included studies rated low methodological quality (Jadad score); only significant testosterone increases were in hypogonadal-subgroup studies with low clinical magnitude.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris L. matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40360723",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (8 studies)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with erectile dysfunction",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary endpoint in this study is International Index of Erectile Function, that may be in abridged form (IIEF-5) or full form (IIEF-15).",
+   "primary_result_quote": "Tribulus terrestris outperformed placebo.",
+   "sample_size_quote": "Eight studies were selected for inclusion.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No significant difference in total testosterone levels between tribulus and placebo despite IIEF improvement.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40880746",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Dietary Tribulus Terrestris (TT), functional food",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "20 elite male basketball athletes",
+   "indication_as_stated": "jump performance (with blood flow restriction)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Acute intake of TT modulates early-phase force responses but may impair sustained power output during PAP.",
+   "sample_size_quote": "elite male basketball athletes (n = 20)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Placebo condition showed superior power metrics at 8-16 min; TT only transiently improved early-phase force dynamics.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Dietary Tribulus Terrestris matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41599865",
+   "design": "observational",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Tribulus terrestris (Tt) (consumer survey)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "510 analyzed respondents (Italian gym/fitness club members)",
+   "indication_as_stated": "awareness/risk behavior around supplement use",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Current Tt use was reported by 7.8% of respondents, while 10.5% declared ever using a Tt-containing product.",
+   "sample_size_quote": "after removal of duplicate, incomplete and ineligible entries, 510 responses were analyzed.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Cross-sectional survey of usage patterns and motivations, not an efficacy or safety-outcomes study.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Tribulus terrestris matches label material; survey of usage/awareness, not clinical efficacy.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41696741",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Tribulus terrestris (1 of several herbal ED supplements reviewed)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "1227 males with ED (14 RCTs)",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "evidence for other agents such as Tribulus terrestris and Maca remains insufficient, underscoring the need for larger, high-quality trials with longer follow-up.",
+   "sample_size_quote": "Fourteen RCTs with a total of 1227 males with ED were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "Saffron and ginseng (not tribulus) were the agents specifically shown effective in this meta-analysis.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tribulus reviewed alongside several other herbal ED supplements; specifically flagged as having insufficient evidence.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "40360723",
+  "34638031",
+  "32736394",
+  "24559105",
+  "28364864",
+  "24630840",
+  "27760089",
+  "29172782",
+  "27255456",
+  "20722793",
+  "25295577",
+  "38328764"
+ ],
+ "handoff": [
+  {
+   "pmid": "25295577",
+   "role": "safety",
+   "reason": "Case report of acute kidney injury and hyperbilirubinemia after Tribulus terrestris ingestion."
+  },
+  {
+   "pmid": "26631925",
+   "role": "safety",
+   "reason": "Case report of priapism caused by Tribulus terrestris."
+  },
+  {
+   "pmid": "34895755",
+   "role": "safety",
+   "reason": "2 of 4 cases in a cardiology case series link Tribulus terrestris intake to ventricular fibrillation/aborted sudden cardiac death."
+  },
+  {
+   "pmid": "34626781",
+   "role": "safety",
+   "reason": "Animal/in vitro mechanistic study finding hepatorenal toxicity of an isolated Tribulus terrestris saponin (Terrestrosin D)."
+  },
+  {
+   "pmid": "37829299",
+   "role": "interaction",
+   "reason": "Pharmacovigilance review documents 3 Tribulus terrestris-antidepressant drug interactions (citalopram, escitalopram, trazodone)."
+  },
+  {
+   "pmid": "38328764",
+   "role": "safety",
+   "reason": "Case report of severe liver and renal injury from Tribulus terrestris."
+  },
+  {
+   "pmid": "39012853",
+   "role": "interaction",
+   "reason": "Case report of rhabdomyolysis from a Tribulus terrestris-atorvastatin interaction (proposed CYP3A4 inhibition)."
+  },
+  {
+   "pmid": "39399723",
+   "role": "safety",
+   "reason": "Animal (rat) mechanistic study of Tribulus terrestris nephro/hepatoprotection against carboplatin toxicity."
+  },
+  {
+   "pmid": "30253697",
+   "role": "safety",
+   "reason": "Trial found significant elevation of aspartate transaminase and total PSA after 3 months of Tribulus terrestris."
+  }
+ ],
+ "identity_notes": "Tribulus terrestris evidence splits sharply by indication and, crucially, by whether it is given ALONE or in combination. As a SOLE agent for its two most-marketed claims -- testosterone/androgen enhancement and athletic/strength performance -- the single-ingredient trials are consistently negative (10861339, 15994038, 17530942, 24630840, 27337519, 34836225, 36498228) and a dedicated systematic review concludes 'TT is ineffective for increasing testosterone levels in humans' as a sole agent (24559105); positive testosterone findings only appear when tribulus is combined with other ingredients, and the contributing component cannot be isolated. For FEMALE sexual dysfunction (desire/arousal), sole-agent tribulus trials are more consistently positive (24773615, 26902700, 27760089, 29172782, 34142638) and a meta-analysis (34638031) and systematic review (32736394) both report positive pooled effects, though certainty of evidence is graded very low. For MALE erectile dysfunction, results are decidedly mixed: some sole-agent trials are positive (28364864, large n=180) while others are negative (24630840) or of low evidence quality (40219032); most other 'ED' evidence in this scope involves tribulus as one ingredient in a combination product (Tradamixina, Tradamix, Icarifil, ginseng+tribulus+L-arginine, etc.) and should not be credited to tribulus alone -- these are flagged related_form_differs/combination throughout. A distinct and clinically important SAFETY signal cluster exists: multiple case reports of acute kidney injury, priapism, ventricular fibrillation, and severe liver/renal injury attributed to tribulus supplements, plus a documented CYP3A4-mediated rhabdomyolysis interaction with atorvastatin and 3 antidepressant interactions -- all routed to handoff. One trial (30253697) also found significant elevations in AST and PSA after 3 months of use, a hepatic/prostate safety signal worth flagging alongside the case reports."
+}

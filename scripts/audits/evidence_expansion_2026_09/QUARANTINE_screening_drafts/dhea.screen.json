@@ -1,0 +1,2248 @@
+{
+ "canonical_id": "dhea",
+ "screened": 154,
+ "kept": 52,
+ "rejected": [
+  {
+   "pmid": "9951574",
+   "reason": "other_reject_see_handoff",
+   "note": "Case report of possible DHEA-induced mania; routed to handoff (safety), not efficacy-screened."
+  },
+  {
+   "pmid": "11363087",
+   "reason": "off_topic",
+   "note": "Newspaper Article, not a scientific study."
+  },
+  {
+   "pmid": "11451621",
+   "reason": "off_topic",
+   "note": "Intervention is HRT; DHEA-S is a measured biomarker, not the studied intervention."
+  },
+  {
+   "pmid": "11570065",
+   "reason": "off_topic",
+   "note": "Newspaper Article, not a scientific study."
+  },
+  {
+   "pmid": "14998946",
+   "reason": "off_topic",
+   "note": "Intervention is low-dose dexamethasone + metformin in PCOS; DHEA not the studied agent."
+  },
+  {
+   "pmid": "10890672",
+   "reason": "not_intervention",
+   "note": "DHEA is a measured plasma biomarker during experimental endotoxemia, not an administered supplement."
+  },
+  {
+   "pmid": "11134118",
+   "reason": "not_intervention",
+   "note": "DHEA is a measured plasma biomarker during experimental endotoxinemia, not an administered supplement."
+  },
+  {
+   "pmid": "16401657",
+   "reason": "not_intervention",
+   "note": "Assay/methodology paper on saliva collection method for cortisol/DHEA, not a supplementation study."
+  },
+  {
+   "pmid": "17636833",
+   "reason": "different_substance",
+   "note": "Testosterone for schizophrenia \u2014 different hormone, not DHEA."
+  },
+  {
+   "pmid": "17998023",
+   "reason": "different_substance",
+   "note": "Metabolic/hormonal effects of caffeine \u2014 different substance."
+  },
+  {
+   "pmid": "18598765",
+   "reason": "not_this_route",
+   "note": "Intravaginal DHEA administration \u2014 not oral supplement route."
+  },
+  {
+   "pmid": "20459349",
+   "reason": "not_this_route",
+   "note": "Intravaginal DHEA for vaginal atrophy \u2014 not oral route."
+  },
+  {
+   "pmid": "20471889",
+   "reason": "off_topic",
+   "note": "Glucocorticoid-induced myopathy review; not DHEA-supplementation focused."
+  },
+  {
+   "pmid": "23944295",
+   "reason": "not_intervention",
+   "note": "DHEA measured as endogenous hormone affected by an oral contraceptive; DHEA itself not administered."
+  },
+  {
+   "pmid": "24018996",
+   "reason": "off_topic",
+   "note": "Medical perspective on burnout; not about DHEA supplementation."
+  },
+  {
+   "pmid": "24351072",
+   "reason": "different_substance",
+   "note": "Myo-inositol vs D-chiro-inositol in PCOS \u2014 different substances."
+  },
+  {
+   "pmid": "25511551",
+   "reason": "not_this_route",
+   "note": "Intravaginal DHEA for vulvovaginal atrophy \u2014 not oral route."
+  },
+  {
+   "pmid": "25968836",
+   "reason": "not_this_route",
+   "note": "Intravaginal DHEA endometrial safety study \u2014 not oral route."
+  },
+  {
+   "pmid": "26122298",
+   "reason": "not_intervention",
+   "note": "Observational correlation of endogenous salivary DHEA/DHEAS with EEG emotional-processing responses; DHEA not administered as an intervention in this study."
+  },
+  {
+   "pmid": "26291918",
+   "reason": "not_this_route",
+   "note": "Intravaginal 0.50% DHEA \u2014 not oral route."
+  },
+  {
+   "pmid": "26395129",
+   "reason": "different_substance",
+   "note": "Purified Shilajit and testosterone levels \u2014 different substance."
+  },
+  {
+   "pmid": "26666519",
+   "reason": "different_substance",
+   "note": "Oral carnitine supplementation in PCOS \u2014 different substance; DHEA not the intervention."
+  },
+  {
+   "pmid": "26969211",
+   "reason": "off_topic",
+   "note": "Biomarker review for psychotic bipolar disorder; not DHEA supplementation."
+  },
+  {
+   "pmid": "28595797",
+   "reason": "different_substance",
+   "note": "Chromium supplementation and PCOS \u2014 different substance."
+  },
+  {
+   "pmid": "28668711",
+   "reason": "not_intervention",
+   "note": "Meta-analytic review of endogenous DHEA/DHEA-S levels in PTSD (biomarker association), not a supplementation trial."
+  },
+  {
+   "pmid": "29164377",
+   "reason": "not_this_route",
+   "note": "Vaginal DHEA (NCCTG N10C1/Alliance) \u2014 not oral route."
+  },
+  {
+   "pmid": "29250843",
+   "reason": "different_substance",
+   "note": "Cinnamon powder in PCOS \u2014 different substance."
+  },
+  {
+   "pmid": "29334627",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of endogenous testosterone/DHEA/DHEA-S levels in schizophrenia (biomarker), not a supplementation trial."
+  },
+  {
+   "pmid": "30096932",
+   "reason": "off_topic",
+   "note": "Horticultural therapy RCT; not DHEA supplementation."
+  },
+  {
+   "pmid": "30244783",
+   "reason": "not_this_route",
+   "note": "Efficacy of intravaginal DHEA \u2014 not oral route."
+  },
+  {
+   "pmid": "30277569",
+   "reason": "off_topic",
+   "note": "Radiotherapy effect on ovarian androgen production; DHEA not the intervention."
+  },
+  {
+   "pmid": "30364915",
+   "reason": "off_topic",
+   "note": "Physiological markers and multimorbidity systematic review; not DHEA-specific."
+  },
+  {
+   "pmid": "30524675",
+   "reason": "animal_or_invitro",
+   "note": "Mouse oocyte/meiotic spindle study."
+  },
+  {
+   "pmid": "30854916",
+   "reason": "off_topic",
+   "note": "Ashwagandha RCT; DHEA only a measured hormone outcome, not the intervention."
+  },
+  {
+   "pmid": "30983988",
+   "reason": "not_intervention",
+   "note": "Systematic review/meta-analysis of endogenous DHEA/DHEAS levels in Alzheimer's disease (biomarker), not supplementation."
+  },
+  {
+   "pmid": "31517876",
+   "reason": "different_substance",
+   "note": "Ashwagandha extract RCT \u2014 different substance."
+  },
+  {
+   "pmid": "31633158",
+   "reason": "off_topic",
+   "note": "Lopinavir-ritonavir effect on adrenal function in infants; not DHEA supplementation."
+  },
+  {
+   "pmid": "31814707",
+   "reason": "different_substance",
+   "note": "AZD7594 inhaled glucocorticoid receptor modulator \u2014 different drug."
+  },
+  {
+   "pmid": "31914834",
+   "reason": "different_substance",
+   "note": "Whole soy/daidzein RCT; DHEA only a measured outcome, not the intervention."
+  },
+  {
+   "pmid": "31960275",
+   "reason": "different_substance",
+   "note": "Magnesium supplementation in PCOS \u2014 different substance."
+  },
+  {
+   "pmid": "32183671",
+   "reason": "not_intervention",
+   "note": "Systematic review of endogenous DHEA/DHEAS in Alzheimer's disease (biomarker), not supplementation."
+  },
+  {
+   "pmid": "32256745",
+   "reason": "different_substance",
+   "note": "Vitamin D meta-analysis in PCOS \u2014 different substance."
+  },
+  {
+   "pmid": "32273234",
+   "reason": "off_topic",
+   "note": "Androgens and survival in metastatic prostate cancer on docetaxel; not DHEA supplementation."
+  },
+  {
+   "pmid": "32386521",
+   "reason": "animal_or_invitro",
+   "note": "Rat model of DHEA-induced PCOS treated with glutamine."
+  },
+  {
+   "pmid": "33307219",
+   "reason": "not_this_route",
+   "note": "Network meta-analysis of GSM therapies; DHEA arm is intravaginal (prasterone), not oral."
+  },
+  {
+   "pmid": "33482034",
+   "reason": "off_topic",
+   "note": "Atorvastatin effect on testosterone levels; not DHEA."
+  },
+  {
+   "pmid": "33555671",
+   "reason": "off_topic",
+   "note": "Pilates training RCT; DHEA not the intervention."
+  },
+  {
+   "pmid": "34121351",
+   "reason": "off_topic",
+   "note": "Mindfulness-Based Stress Reduction RCT; DHEA-S only a measured outcome."
+  },
+  {
+   "pmid": "34295276",
+   "reason": "not_intervention",
+   "note": "Systematic review/meta-analysis of DHEA as a biomarker of stress, not a supplementation trial."
+  },
+  {
+   "pmid": "34384109",
+   "reason": "off_topic",
+   "note": "Clomiphene citrate effect on steroid profile; not DHEA supplementation."
+  },
+  {
+   "pmid": "34453504",
+   "reason": "off_topic",
+   "note": "Electro-acupuncture RCT in PCOS; not DHEA."
+  },
+  {
+   "pmid": "34506989",
+   "reason": "off_topic",
+   "note": "Guideline abstract is generic/structural with no DHEA-specific content stated in the abstract itself."
+  },
+  {
+   "pmid": "34517034",
+   "reason": "off_topic",
+   "note": "Meta-analysis of gonadal steroid hormones and memory; not DHEA-specific supplementation."
+  },
+  {
+   "pmid": "34548863",
+   "reason": "off_topic",
+   "note": "Physiological biomarkers of chronic stress review; not DHEA-specific."
+  },
+  {
+   "pmid": "34684123",
+   "reason": "off_topic",
+   "note": "Case report on adrenal involvement in Long COVID; not about DHEA supplementation."
+  },
+  {
+   "pmid": "34829300",
+   "reason": "off_topic",
+   "note": "PCOS phenotype study protocol; not about DHEA."
+  },
+  {
+   "pmid": "34880036",
+   "reason": "off_topic",
+   "note": "Case report of hypercalcaemia with disseminated cryptococcosis; not DHEA-related."
+  },
+  {
+   "pmid": "34932604",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of case-control studies of endogenous DHEA levels in PCOS (biomarker), not supplementation."
+  },
+  {
+   "pmid": "34936049",
+   "reason": "off_topic",
+   "note": "Exercise training systematic review; DHEA only a measured hormone outcome."
+  },
+  {
+   "pmid": "35063687",
+   "reason": "off_topic",
+   "note": "Sex differences in hormones and depression in HIV; not DHEA supplementation."
+  },
+  {
+   "pmid": "35339652",
+   "reason": "off_topic",
+   "note": "Massage chair RCT; not DHEA."
+  },
+  {
+   "pmid": "35551117",
+   "reason": "not_intervention",
+   "note": "Systematic review of endogenous testosterone/DHEAS and CKD outcomes (biomarker), not supplementation."
+  },
+  {
+   "pmid": "35691183",
+   "reason": "different_substance",
+   "note": "Acute arginine supplementation RCT \u2014 different substance."
+  },
+  {
+   "pmid": "35767730",
+   "reason": "off_topic",
+   "note": "Cognitive dysfunction in primary adrenal insufficiency systematic review; not DHEA-supplementation specific."
+  },
+  {
+   "pmid": "35776991",
+   "reason": "off_topic",
+   "note": "Metformin protocol for precocious puberty; not DHEA."
+  },
+  {
+   "pmid": "36135356",
+   "reason": "off_topic",
+   "note": "Salivary biomarkers in burning mouth syndrome; not DHEA-specific."
+  },
+  {
+   "pmid": "36190945",
+   "reason": "off_topic",
+   "note": "Resilient performance in defence/security settings review; not DHEA."
+  },
+  {
+   "pmid": "36300276",
+   "reason": "not_this_route",
+   "note": "Intravaginal DHEA for genitourinary symptoms of menopause \u2014 not oral route."
+  },
+  {
+   "pmid": "36516657",
+   "reason": "off_topic",
+   "note": "Salivary biomarkers of skeletal maturity; not DHEA-specific."
+  },
+  {
+   "pmid": "36566478",
+   "reason": "different_substance",
+   "note": "7-keto-DHEA is a distinct metabolite/different material from DHEA."
+  },
+  {
+   "pmid": "36649577",
+   "reason": "not_intervention",
+   "note": "Systematic review of endogenous DHEA and depression (observational studies), not supplementation."
+  },
+  {
+   "pmid": "36884123",
+   "reason": "off_topic",
+   "note": "Resistance training RCT; DHEA not the intervention."
+  },
+  {
+   "pmid": "37100008",
+   "reason": "off_topic",
+   "note": "Allostatic load consensus/meta-analysis; not DHEA-specific."
+  },
+  {
+   "pmid": "37130371",
+   "reason": "not_this_route",
+   "note": "Topical DHEA therapy after pelvic organ prolapse surgery \u2014 not oral route."
+  },
+  {
+   "pmid": "37543737",
+   "reason": "not_this_route",
+   "note": "Systematic review of nonestrogen GSM therapies; DHEA arm is vaginal, not oral."
+  },
+  {
+   "pmid": "37633225",
+   "reason": "animal_or_invitro",
+   "note": "Rat ovarian tissue mechanism study."
+  },
+  {
+   "pmid": "37645769",
+   "reason": "off_topic",
+   "note": "Alcohol intake and endogenous sex hormones meta-analysis; not DHEA supplementation."
+  },
+  {
+   "pmid": "37669399",
+   "reason": "not_intervention",
+   "note": "Systematic review of adrenal hormones (incl. DHEA) in anorexia nervosa (biomarker), not supplementation."
+  },
+  {
+   "pmid": "38010274",
+   "reason": "different_substance",
+   "note": "Vitamin C supplementation RCT \u2014 different substance."
+  },
+  {
+   "pmid": "38257791",
+   "reason": "off_topic",
+   "note": "Opioid withdrawal psychobiology in HIV; not DHEA supplementation."
+  },
+  {
+   "pmid": "38281572",
+   "reason": "off_topic",
+   "note": "Lead exposure and glucocorticoids review; not DHEA-specific."
+  },
+  {
+   "pmid": "38779452",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of androgen levels (incl. DHEA) in autism spectrum disorder (biomarker), not supplementation."
+  },
+  {
+   "pmid": "38824654",
+   "reason": "off_topic",
+   "note": "Alcohol intake and endogenous sex hormones meta-analysis (duplicate topic to 37645769); not DHEA supplementation."
+  },
+  {
+   "pmid": "38866976",
+   "reason": "off_topic",
+   "note": "Time-restricted eating vs calorie restriction RCT; DHEA not the intervention."
+  },
+  {
+   "pmid": "39055422",
+   "reason": "off_topic",
+   "note": "Case report of postmenopausal hirsutism from an ovarian tumor; not DHEA supplementation."
+  },
+  {
+   "pmid": "39109519",
+   "reason": "off_topic",
+   "note": "Meta-analysis of sex hormones and pulmonary fibrosis; not DHEA-specific."
+  },
+  {
+   "pmid": "39250810",
+   "reason": "not_this_route",
+   "note": "Systematic review of hormonal treatments/vaginal moisturizers for GSM; DHEA arm vaginal, not oral."
+  },
+  {
+   "pmid": "39305127",
+   "reason": "off_topic",
+   "note": "Diagnostic accuracy of androgen measurement in PCOS; not a supplementation study."
+  },
+  {
+   "pmid": "39319339",
+   "reason": "off_topic",
+   "note": "Metformin-cabergoline in PCOS; not DHEA."
+  },
+  {
+   "pmid": "39617882",
+   "reason": "off_topic",
+   "note": "Portfolio diet RCT in PCOS; not DHEA."
+  },
+  {
+   "pmid": "39978319",
+   "reason": "off_topic",
+   "note": "Ketogenic diet systematic review in PCOS; not DHEA."
+  },
+  {
+   "pmid": "40600860",
+   "reason": "off_topic",
+   "note": "Nerve stimulation RCT measuring stress biomarkers; DHEA not the intervention."
+  },
+  {
+   "pmid": "40611279",
+   "reason": "off_topic",
+   "note": "Nutritional supplements network meta-analysis in PCOS; DHEA not identified as an included arm in the abstract."
+  },
+  {
+   "pmid": "40753449",
+   "reason": "off_topic",
+   "note": "Case series of personalized IVF protocols; DHEA not established as the studied intervention in the abstract."
+  },
+  {
+   "pmid": "40806019",
+   "reason": "off_topic",
+   "note": "Intermittent fasting systematic review in PCOS; not DHEA."
+  },
+  {
+   "pmid": "40834760",
+   "reason": "off_topic",
+   "note": "Prenatal microplastic exposure and cord blood hormones; not DHEA supplementation."
+  },
+  {
+   "pmid": "40847811",
+   "reason": "not_intervention",
+   "note": "Observational study of endogenous DHEA decline as a predictor of erectile dysfunction/mood in men on dutasteride (biomarker), not supplementation."
+  },
+  {
+   "pmid": "41141267",
+   "reason": "off_topic",
+   "note": "Trace element supplementation systematic review in PCOS; not DHEA."
+  },
+  {
+   "pmid": "41243102",
+   "reason": "off_topic",
+   "note": "Male PCOS phenotype meta-analysis; not DHEA supplementation."
+  },
+  {
+   "pmid": "41903372",
+   "reason": "not_this_route",
+   "note": "Vaginal DHEA and estradiol RCT for dyspareunia \u2014 not oral route."
+  },
+  {
+   "pmid": "42114679",
+   "reason": "off_topic",
+   "note": "Mechanistic granulosa-cell study (AIM2-PANoptosis) in PCOS; not a human DHEA supplementation study."
+  },
+  {
+   "pmid": "28077245",
+   "reason": "not_intervention",
+   "note": "Systematic review of endogenous adrenarcheal DHEA/DHEA-S hormone levels and neurodevelopment/mental health (biomarker/observational), not a supplementation trial."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "2146282",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Eight healthy men)"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dehydroepiandrosterone (DHEA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Eight healthy men",
+   "indication_as_stated": "body composition/energy-protein metabolism claim testing",
+   "dose_quote": "DHEA treatment [5.55 mmol/day (1600 mg/day), orally]",
+   "primary_outcome_quote": "examine whether these effects could be explained by increased energy expenditure and muscle protein synthesis",
+   "primary_result_quote": "DHEA had no effect on any of the parameters of energy and protein metabolism",
+   "sample_size_quote": "Eight healthy men were given placebo and DHEA",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary metabolic endpoints (energy expenditure, leucine flux) all null; no positive finding reported.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA, matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9253337",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (ten patients)"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "dehydroepiandrosterone (DHEA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "ten patients with complete panhypopituitarism",
+   "indication_as_stated": "panhypopituitarism / steroid metabolism model",
+   "dose_quote": "two single oral doses of DHEA (50 mg and 200 mg) and placebo",
+   "primary_outcome_quote": "conversion of DHEA given orally into delta 5 derivatives, androgens, androgen metabolites, and estrogens",
+   "primary_result_quote": "administration of a 50 mg dose of DHEA restored plasma T to levels similar to those observed in young women",
+   "sample_size_quote": "ten patients with complete panhypopituitarism",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "PK/conversion study, not an efficacy endpoint in the disease sense.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA dosing matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9626121",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (nine healthy female volunteers)"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "orally administered DHEA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "nine healthy female volunteers with dexamethasone-suppressed adrenal androgens",
+   "indication_as_stated": "adrenal androgen replacement (PK)",
+   "dose_quote": "dex + placebo, dex + 50 mg DHEA or dex + 100 mg DHEA in a randomized cross-over design",
+   "primary_outcome_quote": "define a suitable dose for DHEA replacement",
+   "primary_result_quote": "50 mg DHEA seems to be a suitable replacement dose in females with adrenal insufficiency",
+   "sample_size_quote": "nine healthy female volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "PK dose-finding conclusion, not a clinical efficacy trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9660430",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Thirteen ... postmenopausal women)",
+    "Randomized, double-blind, parallel trial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral micronized DHEA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Thirteen normal-weight or overweight, healthy, nonsmoking, postmenopausal women",
+   "indication_as_stated": "postmenopausal hormone/metabolic status",
+   "dose_quote": "Administration of oral micronized DHEA (25 mg/d)",
+   "primary_outcome_quote": "physiologic endpoints including lipoproteins and insulin-like growth factor-I (IGF-I)",
+   "primary_result_quote": "no statistically significant differences in morphometric indices, immune indices, or insulin-sensitizing properties were observed... High-density lipoprotein and apolipoprotein A1 levels declined",
+   "sample_size_quote": "Thirteen normal-weight or overweight, healthy, nonsmoking, postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No benefit on primary morphometric/immune/insulin endpoints; HDL and apoA1 declined (adverse direction).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral micronized DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10096389",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Forty patients)",
+    "prospective, double-blind, randomized, placebo-controlled"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral dose of 50 mg DHEA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Forty patients from an impotence clinic",
+   "indication_as_stated": "erectile dysfunction",
+   "dose_quote": "oral dose of 50 mg DHEA... one time a day for 6 months",
+   "primary_outcome_quote": "International Index of Erectile Function (IIEF) ... rate the success of this therapy",
+   "primary_result_quote": "DHEA treatment was associated with higher mean scores for all five domains of the IIEF",
+   "sample_size_quote": "Forty patients from our impotence clinic were recruited and randomly divided into two groups of 20 patients each",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors caveat: sample too small for relevant statistical analysis despite reporting a positive trend.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10323374",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (n = 39)",
+    "double blind, cross-over, randomized"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "replacement dose DHEA (oral use of 100 mg DHEA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy older men (n = 39)",
+   "indication_as_stated": "aging / well-being",
+   "dose_quote": "oral use of 100 mg DHEA for 3 months compared with placebo",
+   "primary_outcome_quote": "Lean body mass, blood hematology, chemistry and endocrine values, as well as urological and psychological data were measured",
+   "primary_result_quote": "Well publicized effects of the drug reported by others, such as a sense of well-being or improved sexual function, were not found in this study",
+   "sample_size_quote": "healthy older men (n = 39)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10342710",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (21 patients)",
+    "double-blinded, placebo-controlled, randomized clinical trial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA 200 mg/d",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "21 patients with severe and active SLE",
+   "indication_as_stated": "systemic lupus erythematosus",
+   "dose_quote": "DHEA 200 mg/d vs. placebo for 6 months",
+   "primary_outcome_quote": "a prospectively defined responder analysis, based on a quantitatively specified improvement of the principal severe lupus manifestation at 6 months",
+   "primary_result_quote": "Eleven patients were responders: 7/9 patients on DHEA vs. 4/10 patients on placebo (P<0.10)",
+   "sample_size_quote": "21 patients with severe and active SLE",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Primary responder analysis P<0.10 (not conventionally significant); secondary SLE-DAI P<0.07; authors note baseline imbalance limits generalizability.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA as adjunct to conventional SLE treatment; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10368794",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (n = 22)",
+    "randomized comparison of oral DHEAS arms"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral DHEAS (50 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Postmenopausal women (n = 22)",
+   "indication_as_stated": "postmenopausal neuroendocrine/behavioral status",
+   "dose_quote": "oral DHEAS (n = 8) (50 mg/day)... DHEAS 50 mg/day, estradiol 50 micrograms/patch",
+   "primary_outcome_quote": "investigate neuroendocrine and behavioral effects of three months of DHEAS supplementation",
+   "primary_result_quote": "Restoration of the beta-endorphin response to specific stimuli suggests that DHEAS and/or its active metabolites modulates the neuroendocrine control of pituitary beta-endorphin secretion",
+   "sample_size_quote": "Postmenopausal women (n = 22) were divided in three groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Small 3-arm study (n=6-8/arm); DHEAS alone and DHEAS+estradiol both restored beta-endorphin response.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEAS matches label material (also combination arm with transdermal estradiol; combination flag True would apply to that arm only).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10639021",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "Oral dehydroepiandrosterone (DHEA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "14 elderly males and 9 healthy females (dexamethasone-pretreated)",
+   "indication_as_stated": "urinary steroid metabolite excretion",
+   "dose_quote": "two single DHEA doses (50 and 100 mg)",
+   "primary_outcome_quote": "studied the influence of two single DHEA doses (50 and 100 mg) on the excretion of steroid metabolites",
+   "primary_result_quote": "an oral dose of 30 to 50 mg DHEA restores a physiological urinary steroid profile in subjects with DHEA deficiency",
+   "sample_size_quote": "14 elderly males ... and in 9 healthy females",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "PK/metabolite study, not a clinical efficacy endpoint.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10760294",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Two hundred and eighty)",
+    "double-blind, placebo-controlled study"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA, 50 mg... orally, daily",
+   "combination": "False",
+   "route": "oral",
+   "population_as_stated": "280 healthy individuals (women and men 60-79 years old)",
+   "indication_as_stated": "aging (DHEAge Study)",
+   "dose_quote": "DHEA, 50 mg, or placebo, orally, daily for a year",
+   "primary_outcome_quote": "counteracts defects associated with aging",
+   "primary_result_quote": "Bone turnover improved selectively in women >70 years old... A significant increase in most libido parameters was also found in these older women. Improvement of the skin status was observed, particularly in women",
+   "sample_size_quote": "Two hundred and eighty healthy individuals (women and men 60-79 years old)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Positive findings confined to subgroups (women, bone/libido/skin); no global primary endpoint stated as met across all participants.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10796526",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "systematic review of RCTs"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA or DHEAS (administration)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "older adults and individuals with dementia",
+   "indication_as_stated": "cognition and well-being",
+   "dose_quote": "50mg/day for men and 25mg/day for women",
+   "primary_outcome_quote": "establish whether administration of DHEA ... improves psychological well-being and/or ... cognitive function",
+   "primary_result_quote": "The data offer no support at present for an improvement in memory or other aspects of cognitive function following DHEA treatment... limited support for improvement in a sense of well-being following DHEA treatment",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Well-being: weak positive signal only in one longer US study; cognition: no support. Early Cochrane-style review (year 2000), later trials not yet incorporated.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Reviews oral/general DHEA administration; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11581005",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Twenty)",
+    "randomly assigned"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "micronized DHEA, 25 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty healthy postmenopausal women with DHEA-S <2.5 micromol/l",
+   "indication_as_stated": "postmenopausal metabolic status",
+   "dose_quote": "micronized DHEA, 25 mg/day at 0800 h for 12 months",
+   "primary_outcome_quote": "insulin sensitivity (euglycemic hyperinsulinemic clamp: M index) and plasma lipid profile",
+   "primary_result_quote": "the group treated with DHEA showed a considerable improvement of insulin sensitivity (M index +29.55%, P=0.01) and lipid pattern",
+   "sample_size_quote": "Twenty healthy postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral micronized DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15261843",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "healthy elderly subjects; adrenal insufficiency patients",
+   "indication_as_stated": "aging / adrenal insufficiency",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "in healthy elderly subjects, current evidence from randomised, controlled trials does not justify the use of DHEA, with no major beneficial effects reported",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Narrative review distinguishes: benefit in adrenal insufficiency vs. no justified benefit in healthy elderly.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Narrative review of DHEA administration generally; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15334433",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (14 DHEA and 14 placebo)",
+    "randomized, double-blinded, pilot trial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral DHEA (200 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "28 subjects with Sjogren's syndrome",
+   "indication_as_stated": "Sjogren's syndrome",
+   "dose_quote": "oral DHEA (200 mg/day) versus placebo",
+   "primary_outcome_quote": "Response criteria required 20% improvement in at least 2 of 3 domains",
+   "primary_result_quote": "DHEA showed no evidence of efficacy in SS... patients with SS should avoid using unregulated DHEA supplements",
+   "sample_size_quote": "Randomization resulted in 14 DHEA and 14 placebo group subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15636426",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Twenty patients)",
+    "placebo-controlled, randomized study"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA 50 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty patients (13 men, 7 women) with hypoadrenalism",
+   "indication_as_stated": "hypoadrenalism (Addison's disease / central hypoadrenalism)",
+   "dose_quote": "DHEA 50 mg/day or placebo for 4 months",
+   "primary_outcome_quote": "Hormone levels, carbohydrate and lipid parameters, bone metabolism, body composition and psychological parameters",
+   "primary_result_quote": "DHEA replacement did not cause any relevant variation of subjective health scales and sexuality in both sexes... only in patients with Addison's disease a significant decrease in total cholesterol and in low-density lipoproteins",
+   "sample_size_quote": "Twenty patients (13 men, 7 women, 26-76 yr, 11 with Addison's disease, 9 with central hypoadrenalism)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Well-being endpoints null; some hormonal/metabolic subgroup effects positive.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15996074",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (A total of 52)",
+    "double-blind crossover study"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA supplementation (50 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women with fibromyalgia",
+   "indication_as_stated": "fibromyalgia",
+   "dose_quote": "DHEA supplementation (50 mg/day) or placebo for 3 months",
+   "primary_outcome_quote": "The primary outcome was well being",
+   "primary_result_quote": "there was no improvement in well-being, pain, fatigue, cognitive dysfunction, functional impairment, depression, or anxiety",
+   "sample_size_quote": "A total of 52 patients were randomized, 47 patients completed the DHEA treatment period, and 45 the placebo treatment period",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Explicit null primary outcome (well-being) and all secondary outcomes also null; androgenic side effects more common on DHEA.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16390890",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (One hundred forty-five)",
+    "randomly assigned"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA (flexible dosing 100-400 mg/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "145 HIV-positive patients with subsyndromal depression or dysthymia",
+   "indication_as_stated": "nonmajor depression in HIV/AIDS",
+   "dose_quote": "DHEA dosing was flexible (100-400 mg/day)",
+   "primary_outcome_quote": "a Clinical Global Impression improvement rating of 1 or 2 ... plus a final Hamilton Depression Rating Scale score <or=8",
+   "primary_result_quote": "the response rate was 56% (43 of 77) for the DHEA group versus 31% (21 of 68) for the placebo group",
+   "sample_size_quote": "One hundred forty-five patients with subsyndromal depression or dysthymia were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16393880",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "double-blind",
+    "Administration, Oral MeSH"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women (elderly)",
+   "indication_as_stated": "cognition",
+   "dose_quote": null,
+   "primary_outcome_quote": "24-h measurements of DHEA, DHEAS, and cortisol to determine if cognitive decrease with treatment is mediated by DHEA's impact on endogenous cortisol",
+   "primary_result_quote": "Increased cortisol does not explain the cognitive deficits associated with DHEA, suggesting a direct negative effect of exogenous DHEA on cognition",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Secondary/mechanistic analysis of a prior RCT reporting adverse cognitive signal.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16888459",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "dehydroepiandrosterone (DHEA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "men (prohormone supplement users)",
+   "indication_as_stated": "ergogenic/anabolic use",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "research to date indicates that the use of prohormone nutritional supplements (DHEA, androstenedione, androstenediol, and other steroid hormone supplements) does not produce either anabolic or ergogenic effects in men... may raise the risk for negative health consequences",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Review focused mainly on androstenedione, with DHEA discussed alongside; treat as a related-form review, not DHEA-specific primary data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Covers DHEA together with androstenedione/androstenediol prohormones as a class; DHEA-specific data not separated in abstract.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16997936",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Twenty-five women)",
+    "case-control, before/after design"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA (75 mg of DHEA daily (25 mg three times daily))",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty-five women with significantly diminished ovarian reserve",
+   "indication_as_stated": "diminished ovarian reserve / IVF",
+   "dose_quote": "Women received 75 mg of DHEA daily (25 mg three times daily) for an average of 17.6 +/- 2.13 weeks",
+   "primary_outcome_quote": "peak estradiol (E2) levels, oocyte and embryo numbers, oocyte and embryo quality and embryo transfer statistics",
+   "primary_result_quote": "significant increases in fertilized oocytes (P < 0.001), normal day 3 embryos (P = 0.001), embryos transferred (P = 0.005) and average embryo scores per oocyte (P < 0.001) after DHEA treatment",
+   "sample_size_quote": "Twenty-five women with significantly diminished ovarian reserve had one IVF cycle before and after DHEA treatment",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Before/after within-patient comparison, not randomized/placebo-controlled.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17050889",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "NCT00254371",
+    "2-year, placebo-controlled, randomized, double-blind"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "87 elderly men and 57 elderly women with low DHEA-S/testosterone",
+   "indication_as_stated": "aging (physical performance, body composition)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Outcome measures included physical performance, body composition, bone mineral density (BMD), glucose tolerance, and quality of life",
+   "primary_result_quote": "Neither DHEA nor low-dose testosterone replacement in elderly people has physiologically relevant beneficial effects on body composition, physical performance, insulin sensitivity, or quality of life",
+   "sample_size_quote": "87 elderly men ... and 57 elderly women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Women in BMD subgroup did show increase at ultradistal radius (secondary/site-specific), but overall primary functional endpoints null.",
+   "registrations": [
+    "NCT00254371"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17263636",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (40 subjects)",
+    "randomized, double-blind, placebo-controlled"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 subjects with suppressed HIV viremia on stable antiretroviral therapy",
+   "indication_as_stated": "HIV/AIDS adjunct therapy",
+   "dose_quote": null,
+   "primary_outcome_quote": "determine DHEA's impact on latent HIV infection, persistent viral replication, immunity, and nonimmune aspects of health restoration",
+   "primary_result_quote": "DHEA supplementation ... appeared to have no beneficial antiviral, immunomodulatory, hormonal, or body composition effects, suggesting that it not be routinely used as an adjunctive therapy in this population",
+   "sample_size_quote": "A randomized, double-blind, placebo-controlled 24-week outpatient intervention included 40 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Quality of life improved (secondary) but no antiviral/immune/body-composition benefit; overall not recommended as adjunct.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18000094",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (106 subjects)",
+    "double-blind trial, randomized"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "50 mg daily of micronized DHEA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "106 subjects (44 males, 62 females) with Addison's disease",
+   "indication_as_stated": "primary adrenal insufficiency (Addison's disease)",
+   "dose_quote": "50 mg daily of micronized DHEA or placebo orally for 12 months",
+   "primary_outcome_quote": "evaluate its longer-term effects on bone mineral density, body composition, and cognitive function together with well-being and fatigue",
+   "primary_result_quote": "There was no significant benefit of DHEA treatment on fatigue or cognitive or sexual function... our results support some beneficial effects of prolonged DHEA treatment in Addison's disease",
+   "sample_size_quote": "we randomized 106 subjects (44 males, 62 females) with Addison's disease",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Bone density (femoral neck) and lean mass improved; fatigue, cognition, sexual function null.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18182447",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (10 women)",
+    "randomized cross-over intervention study"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA 50 mg/d",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "10 women on long-term glucocorticoid therapy",
+   "indication_as_stated": "glucocorticoid-induced protein wasting",
+   "dose_quote": "GH 0.8 mg/d, DHEA 50 mg/d, or GH and DHEA (combination treatment)",
+   "primary_outcome_quote": "assess the effect of GH and dehydroepiandrosterone (DHEA) on protein metabolism",
+   "primary_result_quote": "DHEA did not significantly change leucine metabolism alone or when combined with GH... DHEA 50 mg/d does not enhance the effect of GH",
+   "sample_size_quote": "10 women (age 71+/-3 yr) treated with long-term GCs",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "DHEA arm (alone and combined with GH) had no effect on leucine/protein metabolism, unlike GH alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material; also tested combined with GH (combination arm).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19098687",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Twenty)",
+    "randomized"
+   ],
+   "evidence_role": "pharmacokinetic",
+   "intervention_as_stated": "25 mg/d of dehydroepiandrosterone",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty healthy postmenopausal women",
+   "indication_as_stated": "postmenopausal PK",
+   "dose_quote": "25 mg/d of dehydroepiandrosterone or placebo for 6 months",
+   "primary_outcome_quote": "daily exposure (AUC) of dehydroepiandrosterone and its principal androgenic metabolites",
+   "primary_result_quote": "the daily exposure (AUC) of dehydroepiandrosterone and its principal androgenic metabolites was found to be similar during 6 months of treatment despite increased serum baseline concentrations",
+   "sample_size_quote": "Twenty healthy postmenopausal women were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "PK study; no clinical efficacy outcome reported.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19619146",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Ninety-three)",
+    "52-week randomized, double-blind, placebo controlled trial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA 50 mg or placebo (PL) daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Ninety-three postmenopausal women with low libido, not using estrogen therapy",
+   "indication_as_stated": "menopausal sexual dysfunction/low libido",
+   "dose_quote": "DHEA 50 mg or placebo (PL) daily",
+   "primary_outcome_quote": "the change in total satisfying sexual events (SSE) and the change in the Sabbatsberg Sexual Self-Rating Scale (SSS) total score",
+   "primary_result_quote": "There were no significant differences between the DHEA and PL groups in the change in total SSE per month or the SSS, PGWB, and MENQOL change scores",
+   "sample_size_quote": "Ninety-three postmenopausal women not using concurrent estrogen therapy were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20863330",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Ninety-nine women)",
+    "Double-blind, randomized, placebo-controlled trial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "50 mg/d DHEA",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Ninety-nine frail older women (mean age 76.6) with low DHEAS and low bone mass",
+   "indication_as_stated": "frailty / muscle strength",
+   "dose_quote": "Participants received 50 mg/d DHEA or placebo for 6 months; all received calcium and cholecalciferol",
+   "primary_outcome_quote": "bone mass, strength, and physical function",
+   "primary_result_quote": "DHEA supplementation resulted in gains in lower extremity strength (from 459 +/- 121 N to 484 +/- 147 N; P=.01)... There were no significant changes in BMD or bone turnover markers",
+   "sample_size_quote": "Ninety-nine women (mean age 76.6 +/- 6.0)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Strength/function improved; no BMD benefit. Combined with a twice-weekly exercise program and calcium/vitamin D (combination:true).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material; co-administered with exercise + calcium/vitamin D.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21566261",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Fifty-seven men and 68 women)",
+    "randomized double blind study"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "50 mg DHEA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "57 men and 68 women aged 65-75 yr",
+   "indication_as_stated": "aging / insulin resistance",
+   "dose_quote": "50 mg DHEA or placebo once daily",
+   "primary_outcome_quote": "determine whether a longer period of DHEA replacement improves glucose tolerance",
+   "primary_result_quote": "DHEA replacement improved glucose tolerance in participants who had abnormal GT initially, reduced plasma triglycerides, and the inflammatory cytokines IL6 and TNFa",
+   "sample_size_quote": "Fifty-seven men and 68 women aged 65 to 75 yr were randomly assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Benefit reported was in the subgroup with abnormal baseline glucose tolerance, not stated for all participants.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23737215",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review of published studies 1990-2013"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA supplementation",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "women with diminished ovarian reserve undergoing IVF",
+   "indication_as_stated": "diminished ovarian reserve",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Several studies have suggested an improvement in pregnancy rates with the use of DHEA... While the role of DHEA is intriguing, evidence-based recommendations are lacking",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Despite Meta-Analysis pub-type tag, abstract describes a narrative rationale review, not pooled statistics; large RCTs explicitly called for as still needed.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Reviews DHEA supplementation for IVF; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25022952",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Dehydroepiandrosterone (DHEA)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "adrenal insufficiency, elderly, SLE, IBD, asthma/allergy, women (mixed populations)",
+   "indication_as_stated": "multiple (anti-aging, adrenal insufficiency, SLE, sexual/vaginal atrophy)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a growing body of evidence supports the notion that DHEA is not just an overrated dietary supplement but a useful drug for some, but not all, human diseases. Large-scale randomised controlled trials are needed",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Broad narrative review spanning many indications with mixed evidence quality; explicitly calls current evidence inconsistent across dosing/populations.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Reviews DHEA as dietary supplement generally; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25731680",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative editorial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral DHEA",
+   "combination": false,
+   "route": "oral, with note on vaginal DHEA",
+   "population_as_stated": "postmenopausal women",
+   "indication_as_stated": "postmenopausal anti-aging / sexual dysfunction",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Recent clinical trials of oral DHEA and reviews of those trials have failed to show any health benefits for postmenopausal women. However, there may be a role for vaginal DHEA.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Editorial explicitly distinguishes oral (no benefit) from vaginal DHEA (possible role) \u2014 directly relevant applicability caveat for an oral-label identity.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Explicitly discusses oral DHEA (label-relevant) and separately flags vaginal DHEA as a different use-case.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26105109",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (n=13 men, n=10 women)",
+    "crossover study"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "DHEA",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "men (n=13) and women (n=10) with midlife depression",
+   "indication_as_stated": "midlife depression (antidepressant mechanism)",
+   "dose_quote": "DHEA and placebo were administered for 6 weeks each",
+   "primary_outcome_quote": "Depression severity was measured by the Center for Epidemiologic Studies Depression Scale (CES-D)",
+   "primary_result_quote": "ADT levels (but not allopregnanolone, pregnanolone, and pregnenolone) increased after DHEA but not after placebo (F 2,42 = 3.3, p < 0.05)",
+   "sample_size_quote": "men (n = 13) and women (n = 10) with midlife depression who previously participated in a crossover study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Mechanistic sub-study of a prior antidepressant RCT; the primary clinical depression outcome is not reported here (only neurosteroid biomarker).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material (has_erratum flag set).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27346309",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "narrative review"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Dehydroepiandrosterone(DHEA)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "aging adults",
+   "indication_as_stated": "bone metabolism/osteoporosis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "DHEA has anti-osteoporosis effects to increase bone mineral density in randomized controlled trials(RCTs)... there is no report on fracture risk by DHEA administration, further studies are required",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Narrative (Japanese-language) review; no pooled quantitative result quoted; no fracture data.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Reviews DHEA administration generally; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27486153",
+   "design": "guideline",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Practice Guidelines as Topic MeSH",
+    "clinical guideline development process described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "dehydroepiandrosterone (as one of several natural health products)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "adults with major depressive disorder",
+   "indication_as_stated": "major depressive disorder (complementary/alternative medicine section)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Other physical treatments and natural health products have less evidence but may be considered as third-line treatments",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "unresolved",
+   "direction_note": "DHEA is bundled into a 'natural health products' category with SAM-e, folate, Crocus sativus etc.; no DHEA-specific quote in abstract; implied third-line/weak-evidence tier at best.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "DHEA is one of several natural health products with a class recommendation, not DHEA-specific data.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28118059",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "systematic review",
+    "38 eligible studies identified"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA (DHEA treatment / DHEA use)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "populations with sexual dysfunction, especially perimenopausal/postmenopausal women",
+   "indication_as_stated": "sexual function",
+   "dose_quote": null,
+   "primary_outcome_quote": "evaluating the effect of DHEA use on aspects of sexual function",
+   "primary_result_quote": "DHEA improved aspects such as sexual interest, lubrication, pain, arousal, orgasm and sexual frequency... but this effect did not reach all the populations studied",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Abstract does not separate oral vs. vaginal DHEA route within the pooled 38 studies (label_material_match=unclear).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "unclear",
+   "label_material_note": "Abstract does not state whether included studies used oral or vaginal DHEA; route mix cannot be determined from abstract alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28405122",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Twenty patients)",
+    "randomized, double-blinded, placebo-controlled study"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA (oral 25 mg three times a day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Twenty patients with diminished ovarian reserve (DOR)",
+   "indication_as_stated": "diminished ovarian reserve",
+   "dose_quote": "DHEA (oral 25 mg three times a day)",
+   "primary_outcome_quote": "D2/3 age-specific FSH, anti-mullerian hormone (AMH) levels, and antral follicle count (AFC)",
+   "primary_result_quote": "significant improvement of AMH levels (1.15 +/- 1.49 vs. 1.53 +/- 1.62) found before and after supplementation in the DHEA group. When the AMH values between DHEA and placebo group were compared, pre- and post-supplementation, no significant difference was found",
+   "sample_size_quote": "Twenty patients with DOR received DHEA",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Within-group AMH change significant, but between-group (DHEA vs placebo) comparison was NOT significant \u2014 classic within-group vs between-group confound; not a clean positive trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29940669",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (Eleven young female volunteers)",
+    "double-blind and randomized protocol"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA (100 mg/day/28days)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "Eleven young female recreationally trained volunteers",
+   "indication_as_stated": "athletic performance (WADA-banned ergogenic use)",
+   "dose_quote": "oral placebo or DHEA (100 mg/day/28days)",
+   "primary_outcome_quote": "determine whether short-term DHEA intake would improve performance during a supramaximal field exercise",
+   "primary_result_quote": "There was no significant difference in body composition or performance parameters after DHEA administration, despite a tendency toward increased peak power and decreased fat mass",
+   "sample_size_quote": "Eleven young female volunteers completed four running-based anaerobic sprint tests",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30124161",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "systematic search of Medline/EMBASE/LILACS/Cochrane",
+    "only RCTs included"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "subjects with depression not resulting from other psychiatric/medical comorbidities",
+   "indication_as_stated": "depression",
+   "dose_quote": null,
+   "primary_outcome_quote": "investigate whether DHEA is more effective than placebo in the treatment of depressive symptoms",
+   "primary_result_quote": "The meta-analysis applied in this review pointed to a significant effect in favor of treatment with DHEA compared to placebo",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Meta-analysis of DHEA RCTs; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30264977",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (20 young healthy recreational athletes)",
+    "double-blind and randomized protocol"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral placebo or DHEA (100 mg/day for 4 weeks)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "20 young healthy recreational athletes (10 men, 10 women)",
+   "indication_as_stated": "athletic/body composition, food intake",
+   "dose_quote": "oral placebo or DHEA (100 mg/day for 4 weeks)",
+   "primary_outcome_quote": "Body weight, segmental body composition and adipokines... were determined before and at the end of each treatment",
+   "primary_result_quote": "Body weight and segmental body composition showed no significant change... Total food intake was not affected by DHEA in any subject... a young healthy population... was not significantly affected by short-term DHEA administration",
+   "sample_size_quote": "20 young healthy recreational athletes (10 men and 10 women)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "One isolated positive finding: increased fat intake in men only (P<0.05); overall composition/appetite/mood endpoints null.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31237150",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "systematic search up to October 2018",
+    "random effect models"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA supplementation / DHEA replacement therapy",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "healthy older adults",
+   "indication_as_stated": "bone mineral density",
+   "dose_quote": null,
+   "primary_outcome_quote": "Bone mineral density of hip and trochanter, total body, lumbar spine, and femoral neck",
+   "primary_result_quote": "Hip BMD increased significantly above placebo group in women who took DHEA supplementation (SMD -0.5[-0.95, -0.04], p = .03)... In summary... DHEA replacement therapy can partially increase BMD of hip and trochanter in women. Similar results were not observed in men",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Positive in women only (hip/trochanter), not in men; authors call for more trials to confirm clinical significance.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Meta-analysis of DHEA-supplementation RCTs; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31303658",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "nine prospective RCTs, 833 patients"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dehydroepiandrosterone (DHEA) supplementation",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "patients with DOR and/or POR undergoing IVF/ICSI",
+   "indication_as_stated": "diminished/poor ovarian reserve response",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "patients treated with DHEA exhibited increases in the number of retrieved oocytes (mean difference, 0.91...), clinical pregnancy rate (relative risk [RR] = 1.27...), and live birth rate (RR, 1.76...)",
+   "sample_size_quote": "we identified nine prospective RCTs involving 833 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No intergroup difference in miscarriage rate (one negative secondary outcome noted).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Meta-analysis of DHEA-supplementation RCTs; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32045470",
+   "design": "network_meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "46 trials / 19 trials in NMA reporting on 6312 / 2677 women",
+    "PROSPERO CRD42018086217"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dehydroepiandrosterone (DHEA)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "women with poor ovarian response (POR) undergoing IVF",
+   "indication_as_stated": "poor ovarian response",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Compared with controls, DHEA and CoQ10 treatments resulted in a significantly higher chance of clinical pregnancy [odds ratio (OR) 2.46, 95% CI 1.16 to 5.23; 2.22, 1.08-4.58, respectively]",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Network meta-analysis of 10 different adjuvant treatments (testosterone, DHEA, letrozole, GH, CoQ10, etc.) \u2014 DHEA is one arm among many; route not explicitly stated in abstract.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "DHEA specifically named and reported with its own effect estimate within the network meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32451660",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (25/group)",
+    "randomized clinical trial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA supplementation 25 mg/8 h",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 infertile women with poor ovarian reserve (25 per group)",
+   "indication_as_stated": "poor ovarian reserve / ovarian stimulation",
+   "dose_quote": "DHEA supplementation 25 mg/8 h for two consecutive cycles before induction of ovulation",
+   "primary_outcome_quote": "number of mature follicles at the time of ovulation, ... duration of ovarian stimulation, E2 level",
+   "primary_result_quote": "The outcomes of induction of ovulation in the study group showed a statistically better response than the control group",
+   "sample_size_quote": "each of 25 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "RETRACTED PUBLICATION \u2014 exclude from any evidentiary use; retained here only for completeness of the screened set.",
+   "registrations": [
+    "PACTR201911829230395"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material, but record is RETRACTED.",
+   "integrity": {
+    "retracted": true,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32930419",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "Fifteen RCTs, 853 individuals",
+    "GRADE-rated"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "individuals with depression and/or other conditions with depressive symptoms",
+   "indication_as_stated": "depressive symptoms",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "In comparison with placebo, DHEA improved depressive symptoms (standardized mean difference [SMD] -0.28, 95% (CI) -0.45 to -0.11, p =.001, 12 studies, 742 individuals..., I2 = 24%), very low quality of evidence",
+   "sample_size_quote": "Fifteen studies with 853 female and male individuals were included in this review",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors explicitly flag 'very low quality of evidence' and caution the result should be viewed with caution.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Meta-analysis of DHEA RCTs; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34094503",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "trial protocol / design paper, NCT-style registration implied"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "orally administered DHEA 50 mg daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "men (n = 13) and pre- and post-menopausal women (n = 13) with Group 1 PAH",
+   "indication_as_stated": "pulmonary arterial hypertension",
+   "dose_quote": "orally administered DHEA 50 mg daily for 18 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "men (n = 13) and pre- and post-menopausal women (n = 13)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Protocol/design paper only \u2014 no results reported; superseded by completed trial PMID 40766123 (same EDIPHY trial).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material; results paper is 40766123.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34706964",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "study protocol, CTRI/2020/06/025918"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA 25 mg two times a day for 15 days",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "women with low serum testosterone undergoing frozen embryo transfer (FET)",
+   "indication_as_stated": "embryo implantation (adjuvant to progesterone)",
+   "dose_quote": "DHEA 25 mg two times a day for 15 days from the day of starting progesterone supplementation",
+   "primary_outcome_quote": "live birth rate",
+   "primary_result_quote": null,
+   "sample_size_quote": "sample size, calculated for the primary outcome measure-live birth rate, is 140",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Protocol only \u2014 no results reported. DHEA given as adjuvant to progesterone (combination:true).",
+   "registrations": [
+    "CTRI/2020/06/025918"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material; results not yet available in this scope.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37464357",
+   "design": "network_meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "16 RCTs, 2323 women, PRISMA/PROSPERO CRD42022304723"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA (adjuvant treatment strategy)",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "women with poor ovarian response (POR) undergoing IVF-ET",
+   "indication_as_stated": "poor ovarian response",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "DHEA (OR 1.92, 95% CI: 1.16 to 3.16) had obvious advantages in improving the clinical pregnancy rate... DHEA increased the embryo implantation rate (OR 2.80...) and the high-quality embryo rate (OR 2.01...)",
+   "sample_size_quote": "Sixteen RCTs (2323 women)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Network meta-analysis of 4 adjuvant strategies (DHEA, CoQ10, GH, TEAS) vs. control; DHEA reported with its own effect estimates.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "DHEA specifically named with its own effect estimates within the network meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37941864",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "21 studies identified, 1966-2023 search"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Dehydroepiandrosterone (DHEA)",
+   "combination": false,
+   "route": "unstated",
+   "population_as_stated": "patients with rheumatic diseases (SLE, SS, RA, fibromyalgia)",
+   "indication_as_stated": "rheumatic diseases",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "DHEA use in SLE has shown a mild to moderate effect on disease activity, a positive effect on bone mineral density (BMD), and improved fatigue... its performance did not differ from placebo in disease activity [SS]... a questionable effect on disease activity [RA]... failed to show any improvement [FM]",
+   "sample_size_quote": "Twenty-one studies were identified: 13 in SLE, 5 in SS, 2 in RA, and 1 in fibromyalgia",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Direction differs sharply by indication: SLE mild-moderate positive; SS/RA/FM null or questionable.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Systematic review of DHEA supplementation across rheumatic diseases; matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39332623",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "38 RCTs, PROSPERO CRD42022346117"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dehydroepiandrosterone",
+   "combination": true,
+   "route": "unstated",
+   "population_as_stated": "women with diminished ovarian reserve (POSEIDON criteria)",
+   "indication_as_stated": "diminished ovarian reserve",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary outcome was live birth rate or ongoing pregnancy if data on live birth were unavailable",
+   "primary_result_quote": "Testosterone supplementation is associated with higher live birth rates compared with nonsupplemented women among all interventions evaluated... dehydroepiandrosterone (WMD 0.60, 95% CI: 0.07-1.13; 4 studies, n = 418 patients)... significantly improved the total number of eggs collected",
+   "sample_size_quote": "38 randomized controlled trials were included",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "On the PRIMARY outcome (live birth rate), only testosterone (not DHEA) was significant; DHEA's significant effect reported was on a SECONDARY outcome (total oocytes retrieved) \u2014 not a positive primary-outcome trial for DHEA.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "One of 13 interventions compared; DHEA-specific secondary-outcome estimate reported separately.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40766123",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "NCT03648385",
+    "randomized, double-blind, placebo-controlled crossover clinical trial"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA (orally administered, dose not restated in this abstract beyond 18-week duration)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "26 participants with pulmonary arterial hypertension (20 female)",
+   "indication_as_stated": "pulmonary arterial hypertension",
+   "dose_quote": null,
+   "primary_outcome_quote": "The primary outcome was change in RV longitudinal strain as measured by MRI after 18 weeks",
+   "primary_result_quote": "DHEA had no effect on RV longitudinal strain... DHEA improved RV short axis radial strain... as well as emPHasis-10 scores (p = 0.037) and Short Form-36 physical component scores (p = 0.044)... DHEA may have worsened RV circumferential strain as compared to placebo",
+   "sample_size_quote": "A total of 26 participants were randomized to DHEA first or placebo first",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary endpoint (RV longitudinal strain) explicitly null; some secondary strain/QoL measures improved, one secondary strain measure possibly worsened.",
+   "registrations": [
+    "NCT03648385"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material; completed results for the EDIPHY protocol (PMID 34094503).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41185971",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "16 studies, 2773 participants",
+    "Newcastle Ottawa Scale quality assessment"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dehydroepiandrosterone (DHEA) as part of oral nutritional supplements (vitamins, CoQ10, DHEA)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with diminished ovarian reserve (DOR)",
+   "indication_as_stated": "diminished ovarian reserve",
+   "dose_quote": null,
+   "primary_outcome_quote": "outcomes including serum follicle stimulating hormone (FSH) levels, anti Mullerian hormone (AMH) levels, antral follicle count (AFC), retrieved oocytes, and clinical pregnancy rate",
+   "primary_result_quote": "we found that the use of coenzyme Q10 alone was more effective than the use of DHEA alone through subgroup analysis",
+   "sample_size_quote": "The meta-analysis consisted of 16 studies with 2773 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Pooled result across vitamins+CoQ10+DHEA is positive, but DHEA-alone subgroup was explicitly LESS effective than CoQ10-alone \u2014 do not credit the pooled positive result to DHEA specifically.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral nutritional supplement meta-analysis with a DHEA-alone subgroup comparison explicitly reported.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35481572",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described (28 participants)",
+    "crossover trial, block randomization"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "DHEA supplements (25 mg twice daily)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "28 participants with Sheehan syndrome (age 39.7 +/- 8.6 years)",
+   "indication_as_stated": "female sexual dysfunction in Sheehan syndrome",
+   "dose_quote": "DHEA supplements (25 mg twice daily) or matched placebo sequentially for 3 months each",
+   "primary_outcome_quote": "Female Sexual Functioning Index (FSFI) score",
+   "primary_result_quote": "There was significant improvement in FSFI score from baseline to end of the study in the DHEA group compared with the placebo group (P = 0.006)",
+   "sample_size_quote": "28 participants with SS (age 39.7 +/- 8.6 years) were divided into 2 groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral DHEA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "17050889",
+  "31303658",
+  "32930419",
+  "30124161",
+  "31237150",
+  "18000094",
+  "10342710",
+  "37941864",
+  "17263636",
+  "16390890",
+  "16888459",
+  "25731680"
+ ],
+ "handoff": [
+  {
+   "pmid": "9951574",
+   "role": "safety",
+   "reason": "Case report of possible DHEA-induced mania \u2014 adverse-event signal, not efficacy evidence."
+  }
+ ],
+ "identity_notes": "DHEA-in-humans evidence is heavily fragmented by indication (adrenal insufficiency, aging/well-being, depression, IVF/diminished ovarian reserve, SLE/rheumatic disease, sexual function) with no single population generalizable to the generic label. A major recurring applicability split: oral DHEA (the label material) shows little-to-no benefit for healthy-aging/well-being/sexual-function outcomes in the largest, best-controlled trials (e.g., PMID 17050889, 15996074, 19619146), while a separate and much larger evidence base concerns INTRAVAGINAL DHEA (prasterone/Intrarosa) for genitourinary syndrome of menopause \u2014 that route is NOT the oral supplement route and was excluded (not_this_route) throughout this screen (e.g., 18598765, 20459349, 25511551, 25968836, 26291918, 29164377, 30244783, 33307219, 36300276, 37130371, 37543737, 39250810, 41903372); reviewers should not let vaginal-DHEA trial volume leak into oral-supplement conclusions. Best-supported oral-DHEA signal in this retrieved scope is in primary/secondary adrenal insufficiency (bone density, some well-being subscales) and possibly diminished ovarian reserve/IVF adjuvant use (multiple meta-analyses, though these mix DHEA with other adjuvants such as CoQ10/testosterone/GH and the DHEA-specific primary-outcome signal is inconsistent, e.g. 39332623). Depression evidence (30124161, 32930419) is graded very-low-to-low quality by the reviews' own GRADE assessments. One retracted RCT (32451660) is included in the screened/kept counts for completeness but flagged integrity=retracted and excluded from the shortlist."
+}

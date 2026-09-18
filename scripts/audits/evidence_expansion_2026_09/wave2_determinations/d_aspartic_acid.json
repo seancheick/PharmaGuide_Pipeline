@@ -1,0 +1,16 @@
+{
+ "canonical_id": "d_aspartic_acid",
+ "class": "A",
+ "action": "applied_reviewed_null",
+ "direction": "null",
+ "study_type": "rct_multiple",
+ "sources": [
+  "28841667",
+  "29893592",
+  "38201906"
+ ],
+ "studied_dose": "3-6 g/day",
+ "label_median_mg": 2400,
+ "outcome": "total and free testosterone in healthy trained men",
+ "note": "Three single-ingredient RCTs, all null for testosterone: 6 g/day for 12 weeks in resistance-trained men (no change in TT or FT), 3 g/day crossover in climbers (no effect on T, cFT, LH), 6 g/day for 14 days in boxers (no effect). The one positive result (40248985) is a three-component combination (DAA + ubiquinol + zinc) in an infertility clinic population and may not lend its direction. Material and dose map cleanly; blocked only by the parked null decision. APPLIED 2026-09-18 as INGR_D_ASPARTIC_ACID, reviewed null, earning zero affirmative credit. A 3,000 mg/day floor applies for the same reason."
+}

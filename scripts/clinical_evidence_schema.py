@@ -71,6 +71,32 @@ OUTCOME_ROLE = frozenset(
     }
 )
 
+# --- ingredient lane ---------------------------------------------------------
+# The probiotic lane's identity scopes cannot describe a non-probiotic material,
+# so the ingredient lane names its own. Everything else (dose, outcomes, review
+# state, provenance) stays on the shared contract above.
+INGREDIENT_IDENTITY_SCOPES = frozenset(
+    {"exact_form", "ingredient_general", "branded_material", "botanical_preparation", "combination"}
+)
+
+# How the study delivered the exposure. A diet that replaces saturated fat with
+# linoleic-acid-rich oil is not the exposure a 500 mg capsule delivers.
+EXPOSURE_BASIS = frozenset(
+    {"supplement_dose", "dietary_substitution", "food_matrix", "fortification", "infusion"}
+)
+
+ROUTES = frozenset({"oral", "sublingual", "iv", "im", "enteral_tube", "topical", "vaginal",
+                    "intranasal", "inhaled", "other"})
+
+# Human status is decided from several signals, because a very recent record is
+# not yet MeSH-indexed. Ambiguous fails closed instead of counting as human.
+HUMAN_STATUS = frozenset({"confirmed", "ambiguous", "nonhuman"})
+
+# A retraction and a correction are not the same event.
+SOURCE_INTEGRITY = frozenset({"none", "retracted", "expression_of_concern", "corrected", "erratum"})
+
+REVIEW_ROLES = frozenset({"systematic_review", "meta_analysis", "network_meta_analysis"})
+
 COMPONENT_REGISTRATION_STATUS = frozenset(
     {"fully_registered", "unregistered_components_present", "identity_uncertain"}
 )
@@ -301,4 +327,92 @@ def validate_frozen_context(
         errors.append("context.scoring_eligible_invalid")
     errors.extend(_dose_errors(context, known_component_ids))
     errors.extend(_outcome_errors(context))
+    return errors
+
+
+def validate_ingredient_context(
+    context: Mapping,
+    *,
+    known_component_ids: Set[str] | None = None,
+    authoring: bool = False,
+) -> list[str]:
+    """Return stable error codes for an ingredient-lane study context.
+
+    Runs the shared frozen contract first, then the rules a non-probiotic
+    material needs: which identity the study actually used, how the exposure was
+    delivered, its route, human status and source integrity. ``authoring=True``
+    additionally refuses anything but a pending review status, so a curation run
+    cannot mint its own approval.
+    """
+
+    if not isinstance(context, Mapping):
+        return ["context.invalid"]
+    errors = list(validate_frozen_context(context, known_component_ids=known_component_ids))
+
+    scope = context.get("identity_scope")
+    if scope not in INGREDIENT_IDENTITY_SCOPES:
+        errors.append("identity.scope_invalid")
+    identity = context.get("identity")
+    identity = identity if isinstance(identity, Mapping) else {}
+    if scope == "botanical_preparation":
+        if not _nonempty_text(identity.get("botanical_species")):
+            errors.append("identity.botanical_species_required")
+        if not _nonempty_text(identity.get("plant_part")):
+            errors.append("identity.plant_part_required")
+    if scope == "branded_material":
+        if not _nonempty_text(identity.get("branded_material")):
+            errors.append("identity.branded_material_required")
+        # A trademark alone does not establish material equivalence.
+        if not any(_nonempty_text(identity.get(key))
+                   for key in ("manufacturer", "standardization", "marker", "extract_ratio")):
+            errors.append("identity.branded_material_source_required")
+    if scope == "exact_form" and not _nonempty_text(identity.get("chemical_form")):
+        errors.append("identity.chemical_form_required")
+
+    exposure = context.get("exposure_basis")
+    if exposure is None:
+        errors.append("exposure.basis_required")
+    elif exposure not in EXPOSURE_BASIS:
+        errors.append("exposure.basis_invalid")
+
+    route = context.get("route")
+    if route is None:
+        errors.append("route.required")
+    elif route not in ROUTES:
+        errors.append("route.invalid")
+
+    human = context.get("human_status")
+    if human not in HUMAN_STATUS:
+        errors.append("human_status.invalid")
+    elif human == "nonhuman":
+        errors.append("human_status.nonhuman_not_eligible")
+    elif human == "ambiguous" and context.get("scoring_eligible") is True:
+        errors.append("human_status.ambiguous_cannot_be_scoring_eligible")
+
+    integrity = context.get("source_integrity")
+    if integrity not in SOURCE_INTEGRITY:
+        errors.append("source_integrity.invalid")
+    elif context.get("scoring_eligible") is True:
+        if integrity == "retracted":
+            errors.append("source_integrity.retracted_cannot_be_scoring_eligible")
+        if integrity == "expression_of_concern":
+            errors.append("source_integrity.expression_of_concern_must_be_held")
+
+    if context.get("evidence_role") in REVIEW_ROLES:
+        included = context.get("included_study_pmids")
+        if included == "extraction_pending":
+            pass
+        elif not _text_list(included):
+            errors.append("included_studies.required_for_review_roles")
+
+    dose = context.get("dose")
+    dose = dose if isinstance(dose, Mapping) else {}
+    if _nonempty_text(dose.get("reported_regimen")) and dose.get("values"):
+        normalization = dose.get("normalization")
+        if not isinstance(normalization, Mapping) or not _nonempty_text(normalization.get("basis")):
+            errors.append("dose.normalization_provenance_required")
+
+    if authoring and context.get("review_status") != "source_verified_pending_clinical_review":
+        errors.append("review_status.pending_required_for_authoring")
+
     return errors

@@ -1,0 +1,17 @@
+{"canonical_id": "fo_ti", "recommended_class": "hold",
+ "one_line_reason": "No shortlisted trial compares oral Fo-Ti/Polygonum multiflorum against a true placebo alone, and this identity's own shortlist includes strong, repeated hepatotoxicity warnings for this exact herb.",
+ "selected": [
+   {"pmid": "20622335", "population": "Chinese patients with Alzheimer's disease (n=209 total: 120 compound-extract group, 60 Polygonum multiflorum-extract-alone group, 29 western-medicine control)", "intervention": "Polygonum multiflorum extract alone (Chinese herb control arm), oral, 12 weeks", "dose_as_stated": "not stated", "primary_outcome": "MMSE and ADL scores; overall therapeutic effective rate", "apparent_direction": "positive", "why_selected": "the only shortlisted record with any outcome data for Polygonum multiflorum (Fo-Ti) extract used largely on its own (as a comparator arm, effective rate 73.33%), though the study's main positive finding belongs to a separate 'compound' extract group, and there is no placebo control or described blinding."}
+ ],
+ "blockers": ["No shortlisted trial compares oral Fo-Ti/Polygonum multiflorum extract against a true placebo; the only outcome data available (20622335) is from a three-active-arm comparison with no blinding described, and the study's main positive result belongs to a 'compound' extract, not Fo-Ti alone.", "This identity's own shortlist includes a systematic review of herb-induced liver injury (30639232) naming Polygonum multiflorum as one of the leading causes of hepatotoxic reactions among herbal products — a serious safety concern that should be weighed heavily against any efficacy claim.", "A comprehensive toxicology review (25449462) also documents hepatotoxicity, nephrotoxicity, and embryonic toxicity associated with this plant's quinone compounds (emodin, rhein)."],
+ "handoff_pmids": [
+   {"pmid": "30639232", "kind": "toxicity", "note": "Systematic review of herb-induced liver injury (HILI) across 31 studies; Polygonum multiflorum is named among the main herbs implicated, with HILI skewing toward hepatocellular injury and being more common in women."},
+   {"pmid": "25449462", "kind": "toxicity", "note": "Comprehensive review of Polygonum multiflorum's botany, pharmacology, and toxicology; documents hepatotoxicity, nephrotoxicity, and embryonic toxicity attributed to quinone compounds (emodin, rhein) alongside its purported therapeutic uses."}
+ ],
+ "excluded_pmids": [
+   {"pmid": "40244282", "reason": "Narrative review of TSG (a Polygonum multiflorum compound) anti-aging mechanisms, mostly preclinical; explicitly states standardized systems for evaluating clinical efficacy are still needed."},
+   {"pmid": "28933127", "reason": "Historical bencao (materia medica) textual investigation of Heshouwu's origin and processing; not clinical trial data."},
+   {"pmid": "26612980", "reason": "RCT of a 9-ingredient multi-ingredient 'fat-loss' product (Fo-Ti is one of nine, including caffeine and yohimbine); effect cannot be isolated to Fo-Ti, and overall results were largely non-significant between conditions."},
+   {"pmid": "24517060", "reason": "RCT of a multi-herb formula (astragalus, Polygonum multiflorum, Pyrrosia) combined with a pharmaceutical drug (Tripterygium wilfordii) for chronic kidney disease; a combination product with a drug, not isolated Fo-Ti."},
+   {"pmid": "24834096", "reason": "RCT of a 6-herb Crataegus-based combination formula for dyslipidemia, with Polygonum multiflorum as one ingredient; effect cannot be isolated to Fo-Ti alone."}
+ ]}

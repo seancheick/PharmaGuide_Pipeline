@@ -189,14 +189,21 @@ def test_ksm66_branded_rct_scores_3_6_not_zero() -> None:
     assert payload["metadata"]["ingredient_points"]["ksm 66"] == 3.6
 
 
-def test_effect_direction_null_downweights_but_does_not_drop_to_zero() -> None:
+def test_effect_direction_null_earns_no_affirmative_credit() -> None:
+    """A study that did not show a benefit is not a weaker kind of benefit.
+
+    Owner decision 2026-09-18, replacing the earlier 0.25 downweight: a rigorous
+    null result raises confidence that benefit was NOT demonstrated, which is a
+    review state, not affirmative efficacy points. Reviewed-null and unreviewed
+    are still different states; they just contribute the same zero here.
+    """
     from scoring_v4.modules.generic_evidence import score_evidence
 
     payload = score_evidence(
         _product(matches=[_match(effect_direction="null", total_enrollment=8563)])
     )
 
-    assert payload["score"] == 1.62
+    assert payload["score"] == 0.0
 
 
 def test_effect_direction_negative_scores_zero() -> None:
@@ -968,11 +975,13 @@ def test_primary_floor_mirrors_mixed_effect_multiplier() -> None:
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "ashwagandha"
 
 
-def test_primary_floor_mirrors_null_effect_multiplier() -> None:
+def test_primary_floor_gives_a_null_primary_no_floor() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     # P5: non-essential primary (ashwagandha) isolates the null-effect multiplier
-    # from the DRI nutrition-authority floor.
+    # from the DRI nutrition-authority floor. The floor reads the SAME multiplier
+    # map as the pipeline, so a direction that earns nothing there anchors nothing
+    # here - the 2026-09-18 null decision closed both paths at once.
     payload = score_evidence(
         _product(
             ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
@@ -982,9 +991,9 @@ def test_primary_floor_mirrors_null_effect_multiplier() -> None:
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 3.5
-    assert payload["components"]["primary_evidence_floor"] == 3.5
-    assert payload["metadata"]["primary_evidence_floor"] == 3.5
+    assert payload["score"] == 0.0
+    # No floor fires at all, so the component is absent rather than present-and-zero.
+    assert "primary_evidence_floor" not in payload["components"]
 
 
 def test_primary_floor_still_rejects_negative_effect() -> None:

@@ -1,0 +1,19 @@
+{"canonical_id": "aloe_vera", "recommended_class": "no_qualifying",
+ "one_line_reason": "Every shortlisted record applies Aloe vera topically or locally (skin wounds/burns, psoriasis, scalp, cosmeceutical skincare, or a gel/rinse on oral-cavity lesions) rather than as a swallowed oral supplement.",
+ "selected": [],
+ "blockers": ["Every shortlisted record uses Aloe vera as a topical/local application (skin wounds, burns, psoriasis/dermatitis, scalp treatment for hair loss, cosmeceutical skin care, or a gel/rinse applied directly to mouth lesions), not a swallowed oral supplement exposure.", "Several records were retrieved via an 'oral' keyword match to disease names (oral lichen planus, oral submucous fibrosis, oral mucositis) referring to the mouth as an anatomical location, not to the ingested/swallowed route of administration this catalog ingredient represents."],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "40676793", "reason": "Review of traditional medicines for diabetic wound healing; Aloe barbadensis is used topically on wounds, not as a swallowed supplement."},
+   {"pmid": "40210174", "reason": "Systematic review of herbal medicine for psoriasis; Aloe vera is evaluated as a topical skin treatment."},
+   {"pmid": "40293693", "reason": "Systematic review of natural biomedicines for inflammatory dermatologic diseases; Aloe vera's benefits are reported for skin conditions (SCORAD, lichen planus severity), consistent with topical dermatologic application."},
+   {"pmid": "40536553", "reason": "Systematic review of herbal remedies for hair loss; Aloe vera is applied topically to the scalp, not ingested."},
+   {"pmid": "40995635", "reason": "Review of chitosan-curcumin delivery systems; aloe vera appears only as an add-on ingredient in topical wound-dressing/hydrogel formulations, and the review is not focused on aloe vera itself."},
+   {"pmid": "41305573", "reason": "Review of interventions for pediatric oral mucositis; Aloe vera is listed among topically applied agents used directly on mouth lesions, not swallowed."},
+   {"pmid": "38155549", "reason": "Systematic review of antioxidant treatments for oral submucous fibrosis; Aloe vera is applied locally to the affected oral mucosa, not swallowed as a systemic supplement."},
+   {"pmid": "39233460", "reason": "Review of cosmeceuticals for photoaging; Aloe Vera is used as a topical skincare ingredient."},
+   {"pmid": "35916457", "reason": "Narrative review of herbal remedies for PCOS; the aloe vera/fertility claim is vague, gives no trial-level detail, dose, or route, and is not a focused efficacy trial."},
+   {"pmid": "37828490", "reason": "Review of drug treatments for oral submucous fibrosis; aloe vera is used as a local/topical treatment for mouth lesions, not swallowed."},
+   {"pmid": "35524296", "reason": "Review of oral lichen planus treatments; explicitly describes 'aloe-vera gel' applied topically to lesions, not an ingested supplement."},
+   {"pmid": "36264753", "reason": "Meta-analysis explicitly of topical aloe vera products for burn wound healing; not an oral supplement exposure."}
+ ]}

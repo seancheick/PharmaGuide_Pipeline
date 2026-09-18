@@ -1,0 +1,1194 @@
+{
+ "canonical_id": "l_valine",
+ "screened": 159,
+ "kept": 13,
+ "rejected": [
+  {
+   "pmid": "19088493",
+   "reason": "off_topic",
+   "note": "BDNF Val66Met polymorphism meta-analysis in anxiety disorders; 'Val' denotes a valine residue at a specific protein position (a genetic polymorphism), not the dietary supplement L-valine."
+  },
+  {
+   "pmid": "24300663",
+   "reason": "off_topic",
+   "note": "COMT Val158Met polymorphism meta-analysis in anxiety-related traits; 'Val' denotes a valine residue at a specific protein position (a genetic polymorphism), not the dietary supplement L-valine."
+  },
+  {
+   "pmid": "31354790",
+   "reason": "off_topic",
+   "note": "COMT Val158/108Met polymorphism meta-analysis in Parkinson's disease; 'Val' denotes a valine residue at a specific protein position (a genetic polymorphism), not the dietary supplement L-valine."
+  },
+  {
+   "pmid": "39174571",
+   "reason": "off_topic",
+   "note": "BDNF Val66Met polymorphism and mismatch negativity in schizophrenia; 'Val' denotes a valine residue at a specific protein position (a genetic polymorphism), not the dietary supplement L-valine."
+  },
+  {
+   "pmid": "10434231",
+   "reason": "off_topic",
+   "note": "Valganciclovir single-dose pharmacokinetics; unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "10991864",
+   "reason": "off_topic",
+   "note": "Valganciclovir oral absorption in liver transplant recipients; unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "28839339",
+   "reason": "off_topic",
+   "note": "Valbenazine safety/tolerability/pharmacokinetics; unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "31322739",
+   "reason": "off_topic",
+   "note": "Patisiran pharmacokinetics in hATTR amyloidosis (APOLLO trial); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "37364710",
+   "reason": "off_topic",
+   "note": "Ecnoglutide (GLP-1 analog) discovery/RCT; unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "7542804",
+   "reason": "off_topic",
+   "note": "AZT-3TC antiretroviral combination therapy mechanism; unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "9848038",
+   "reason": "off_topic",
+   "note": "Thrombospondin-1 cysteine-serine-valine-threonine-cysteine-glycine receptor in burn wounds (a protein sequence motif); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "12539083",
+   "reason": "off_topic",
+   "note": "Fluoroquinolone resistance in Streptococcus pyogenes; unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "7916208",
+   "reason": "off_topic",
+   "note": "Homeodomain determinants of major groove recognition (unrelated molecular biology); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "4218236",
+   "reason": "off_topic",
+   "note": "Myxobacter AL-1 enzyme glucanase/chitosanase activity (unrelated microbiology); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "9630252",
+   "reason": "off_topic",
+   "note": "Isoleucine:RNA sites with associated coding sequences (unrelated molecular biology); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "28363005",
+   "reason": "off_topic",
+   "note": "Multicollinearity in canonical correlation analysis in maize (unrelated statistics/agronomy); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "29669325",
+   "reason": "off_topic",
+   "note": "Characterization of the sigma-pore in mutant hKv1.3 potassium channels (unrelated ion channel biophysics); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "35793453",
+   "reason": "off_topic",
+   "note": "Enzymatically cleavable tripeptide linker for antibody-drug conjugates (unrelated chemistry); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "35945258",
+   "reason": "off_topic",
+   "note": "Transglutaminase substrate preference analysis (unrelated biochemistry); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "32145395",
+   "reason": "off_topic",
+   "note": "N-(2-Hydroxyethyl)-l-valyl-l-leucine as a urinary biomarker of ethylene oxide exposure (unrelated exposure biomarker chemistry); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "29111443",
+   "reason": "off_topic",
+   "note": "Endogenous equivalent values for ethylene oxide risk assessment (unrelated toxicology); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "18997402",
+   "reason": "off_topic",
+   "note": "Enhanced valine PRODUCTION in Corynebacterium glutamicum via genetic engineering (industrial biotechnology, not a human supplementation study); unrelated to L-valine dietary supplementation (false keyword match)."
+  },
+  {
+   "pmid": "20919825",
+   "reason": "not_intervention",
+   "note": "Metabolomics and colorectal cancer detection systematic review."
+  },
+  {
+   "pmid": "23896378",
+   "reason": "not_intervention",
+   "note": "Metabolomic profiling of oesophago-gastric cancer systematic review."
+  },
+  {
+   "pmid": "26379905",
+   "reason": "not_intervention",
+   "note": "Metabolomics in bladder cancer systematic review."
+  },
+  {
+   "pmid": "27208380",
+   "reason": "not_intervention",
+   "note": "Metabolomics in prediabetes and diabetes systematic review/meta-analysis."
+  },
+  {
+   "pmid": "27642608",
+   "reason": "not_intervention",
+   "note": "BCAA-related metabolomic signature and insulin resistance systematic review."
+  },
+  {
+   "pmid": "28783532",
+   "reason": "not_intervention",
+   "note": "Abnormal circulating amino acid profiles in multiple metabolic disorders meta-analysis."
+  },
+  {
+   "pmid": "31497040",
+   "reason": "not_intervention",
+   "note": "Circulating BCAA and gestational diabetes mellitus meta-analysis."
+  },
+  {
+   "pmid": "31754808",
+   "reason": "not_intervention",
+   "note": "Metabolomic biomarkers/pathways for ischemic stroke systematic review."
+  },
+  {
+   "pmid": "31782507",
+   "reason": "not_intervention",
+   "note": "Metabolomics signatures in type 2 diabetes systematic review."
+  },
+  {
+   "pmid": "32221803",
+   "reason": "not_intervention",
+   "note": "Salivary metabolites to detect cancer systematic review."
+  },
+  {
+   "pmid": "32296585",
+   "reason": "not_intervention",
+   "note": "Metabolomic profiling of gastric and esophageal cancer systematic review."
+  },
+  {
+   "pmid": "32473419",
+   "reason": "not_intervention",
+   "note": "Metabolomics in rheumatoid arthritis development/progression systematic review."
+  },
+  {
+   "pmid": "33228610",
+   "reason": "not_intervention",
+   "note": "Metabolite biomarkers of type 2 diabetes/pre-diabetes systematic review/meta-analysis."
+  },
+  {
+   "pmid": "33387070",
+   "reason": "not_intervention",
+   "note": "Salivary metabolomics for periodontal disease diagnosis systematic review."
+  },
+  {
+   "pmid": "33495028",
+   "reason": "not_intervention",
+   "note": "Biomarkers for essential hypertension based on metabolomics."
+  },
+  {
+   "pmid": "33607391",
+   "reason": "not_intervention",
+   "note": "Bariatric surgery reduces BCAA levels systematic review/meta-analysis (BCAA as a measured outcome of surgery, not a supplementation study)."
+  },
+  {
+   "pmid": "33692630",
+   "reason": "not_intervention",
+   "note": "Metabolomic signature between metabolically healthy/unhealthy overweight/obese systematic review."
+  },
+  {
+   "pmid": "34225013",
+   "reason": "not_intervention",
+   "note": "Metabolomics application on Chinese herbal medicine for depressive disorder (different intervention)."
+  },
+  {
+   "pmid": "35195909",
+   "reason": "not_intervention",
+   "note": "Genotyping of H3G34 diffuse hemispheric gliomas (unrelated to valine supplementation)."
+  },
+  {
+   "pmid": "36144264",
+   "reason": "not_intervention",
+   "note": "Fetal growth restriction metabolomics systematic review."
+  },
+  {
+   "pmid": "36282436",
+   "reason": "not_intervention",
+   "note": "Periodontal disease metabolomics signatures systematic review."
+  },
+  {
+   "pmid": "37060383",
+   "reason": "not_intervention",
+   "note": "Metabolomics of osteoporosis systematic review."
+  },
+  {
+   "pmid": "37178220",
+   "reason": "not_intervention",
+   "note": "Low circulating valine and hip fracture risk meta-analysis (biomarker association, not a supplementation trial)."
+  },
+  {
+   "pmid": "37669626",
+   "reason": "not_intervention",
+   "note": "Circulating metabolites and cardiovascular disease in CKD meta-analysis."
+  },
+  {
+   "pmid": "37725184",
+   "reason": "not_intervention",
+   "note": "Serum branched amino acids and all-cause mortality meta-analysis (biomarker association)."
+  },
+  {
+   "pmid": "38420789",
+   "reason": "not_intervention",
+   "note": "Branched-chain amino acids and hypertension Mendelian randomization study."
+  },
+  {
+   "pmid": "38646957",
+   "reason": "not_intervention",
+   "note": "Metabolite signature of malignant thyroid tissue systematic review/meta-analysis."
+  },
+  {
+   "pmid": "38680576",
+   "reason": "not_intervention",
+   "note": "Metabolomics for bladder cancer diagnosis systematic review."
+  },
+  {
+   "pmid": "39002276",
+   "reason": "not_intervention",
+   "note": "Branched-chain amino acids and epilepsy Mendelian randomization study."
+  },
+  {
+   "pmid": "39528475",
+   "reason": "not_intervention",
+   "note": "Metabolomic signatures for fetal growth restriction/small for gestational age systematic review."
+  },
+  {
+   "pmid": "39824455",
+   "reason": "not_intervention",
+   "note": "Metabolomic profiles in allergic rhinitis systematic review/meta-analysis."
+  },
+  {
+   "pmid": "40121920",
+   "reason": "not_intervention",
+   "note": "Metabolomics profiling in venous thromboembolism systematic review."
+  },
+  {
+   "pmid": "40172143",
+   "reason": "not_intervention",
+   "note": "Metabolomics analysis in periodontitis diagnosis systematic review."
+  },
+  {
+   "pmid": "40304146",
+   "reason": "not_intervention",
+   "note": "Circulating amino acids and childhood obesity systematic review/meta-analysis."
+  },
+  {
+   "pmid": "40794151",
+   "reason": "not_intervention",
+   "note": "Biomarker discovery in NAFLD via metabolomics meta-analysis."
+  },
+  {
+   "pmid": "40860967",
+   "reason": "not_intervention",
+   "note": "Metabolomics biomarkers for ischemic stroke systematic review."
+  },
+  {
+   "pmid": "41076895",
+   "reason": "not_intervention",
+   "note": "Metabolomics in alcohol use disorder systematic review."
+  },
+  {
+   "pmid": "41087955",
+   "reason": "not_intervention",
+   "note": "Metabolomics/proteomics biomarkers for tuberculous meningitis systematic review."
+  },
+  {
+   "pmid": "41424075",
+   "reason": "not_intervention",
+   "note": "Metabolomic markers of blood-brain barrier damage systematic review."
+  },
+  {
+   "pmid": "31235103",
+   "reason": "not_intervention",
+   "note": "Dietary amino acids prospectively predicting serum lipid profile (observational)."
+  },
+  {
+   "pmid": "34365036",
+   "reason": "not_intervention",
+   "note": "Postprandial circulating BCAA predicting carbohydrate content of a meal (observational)."
+  },
+  {
+   "pmid": "34959840",
+   "reason": "not_intervention",
+   "note": "Changes in circulating metabolites during weight loss/maintenance (observational)."
+  },
+  {
+   "pmid": "38257154",
+   "reason": "not_intervention",
+   "note": "PNPLA3 genotype and dietary fat modifying plasma BCAA (observational/genetic)."
+  },
+  {
+   "pmid": "38369656",
+   "reason": "not_intervention",
+   "note": "Gut microbiome/serum amino acid metabolome in autism spectrum disorder (observational)."
+  },
+  {
+   "pmid": "38814343",
+   "reason": "not_intervention",
+   "note": "Pre-treatment amino acids and paclitaxel-induced neuropathy risk (observational biomarker)."
+  },
+  {
+   "pmid": "39365058",
+   "reason": "not_intervention",
+   "note": "Dietary amino acids and vaginal microbiome in pregnancy (observational)."
+  },
+  {
+   "pmid": "40418340",
+   "reason": "not_intervention",
+   "note": "Serum metabolites from red meat/fish/soy meals crossover study (observational metabolite response, not valine supplementation)."
+  },
+  {
+   "pmid": "41282284",
+   "reason": "not_intervention",
+   "note": "SGLT2 inhibitors and renal BCAA catabolism (drug effect on BCAA metabolism, not BCAA supplementation)."
+  },
+  {
+   "pmid": "30624689",
+   "reason": "not_intervention",
+   "note": "COMT and alpha-tocopherol gene-supplement interaction in cancer prevention trials (different supplement)."
+  },
+  {
+   "pmid": "33459956",
+   "reason": "not_intervention",
+   "note": "Nutritional status improvement methods in elderly CKD systematic review (valine is one of many measured outcome markers, not the studied intervention)."
+  },
+  {
+   "pmid": "39651578",
+   "reason": "not_intervention",
+   "note": "Amino acid status and Parkinson's disease meta-analysis (observational biomarker levels)."
+  },
+  {
+   "pmid": "26688726",
+   "reason": "animal_or_invitro",
+   "note": "Dietary protein sources/crude protein and free amino acid profile in finishing GILTS (pigs), not a human study."
+  },
+  {
+   "pmid": "27386336",
+   "reason": "animal_or_invitro",
+   "note": "Dietary lysine levels and plasma free amino acid profile in finishing PIGS, not a human study."
+  },
+  {
+   "pmid": "35146016",
+   "reason": "animal_or_invitro",
+   "note": "Selenium-yeast supplementation and amino acids in GOATS, not a human study."
+  },
+  {
+   "pmid": "36295891",
+   "reason": "animal_or_invitro",
+   "note": "Protein source/whole wheat/butyric acid in BROILER CHICKENS, not a human study."
+  },
+  {
+   "pmid": "38577544",
+   "reason": "animal_or_invitro",
+   "note": "Organic trace minerals in SHEEP, not a human study."
+  },
+  {
+   "pmid": "35720838",
+   "reason": "animal_or_invitro",
+   "note": "Dietary tryptophan and behavior in growing PIGS, not a human study."
+  },
+  {
+   "pmid": "39252075",
+   "reason": "animal_or_invitro",
+   "note": "Dietary valine/isoleucine/tryptophan in weanling PIGS, not a human study."
+  },
+  {
+   "pmid": "37497117",
+   "reason": "animal_or_invitro",
+   "note": "Dietary L-valine histopathology in Japanese QUAIL chicks, not a human study."
+  },
+  {
+   "pmid": "38281954",
+   "reason": "animal_or_invitro",
+   "note": "Abomasal BCAA/BCKA infusion in fresh COWS, not a human study."
+  },
+  {
+   "pmid": "27870266",
+   "reason": "animal_or_invitro",
+   "note": "Cyclophosphamide nephrotoxicity urinary biomarkers in RATS, not a human study."
+  },
+  {
+   "pmid": "27934766",
+   "reason": "animal_or_invitro",
+   "note": "Depleting dietary valine for nonmyeloablative hematopoietic stem cell transplant in MICE, not a human study."
+  },
+  {
+   "pmid": "34551205",
+   "reason": "animal_or_invitro",
+   "note": "Taurodeoxycholic acid and valine reversing alloimmune responses in obese MICE, not a human study."
+  },
+  {
+   "pmid": "33458487",
+   "reason": "animal_or_invitro",
+   "note": "Doxorubicin-induced toxicity evaluation via metabolomics in RATS, not a human study."
+  },
+  {
+   "pmid": "35549583",
+   "reason": "animal_or_invitro",
+   "note": "L-BAIBA subchronic toxicity study in Sprague Dawley RATS, not a human study."
+  },
+  {
+   "pmid": "27367",
+   "reason": "off_topic",
+   "note": "Methylmalonic acidemia case report; a rare inborn error of valine/BCAA metabolism requiring dietary RESTRICTION or diagnosis, not L-valine supplementation."
+  },
+  {
+   "pmid": "32800686",
+   "reason": "off_topic",
+   "note": "Short-chain enoyl-CoA hydratase-1 (ECHS1) deficiency phenotypic spectrum review; a rare inborn error of valine/BCAA metabolism requiring dietary RESTRICTION or diagnosis, not L-valine supplementation."
+  },
+  {
+   "pmid": "32685353",
+   "reason": "off_topic",
+   "note": "Newborn screening for maple syrup urine disease systematic review; a rare inborn error of valine/BCAA metabolism requiring dietary RESTRICTION or diagnosis, not L-valine supplementation."
+  },
+  {
+   "pmid": "31679561",
+   "reason": "off_topic",
+   "note": "3-hydroxyisobutyryl-CoA hydrolase deficiency case report; a rare inborn error of valine/BCAA metabolism requiring dietary RESTRICTION or diagnosis, not L-valine supplementation."
+  },
+  {
+   "pmid": "33868929",
+   "reason": "off_topic",
+   "note": "Maple syrup urine disease in pregnancy case report; a rare inborn error of valine/BCAA metabolism requiring dietary RESTRICTION or diagnosis, not L-valine supplementation."
+  },
+  {
+   "pmid": "34176136",
+   "reason": "off_topic",
+   "note": "3-Hydroxyisobutyrate dehydrogenase (HIBADH) deficiency case report (valine metabolism DISORDER); a rare inborn error of valine/BCAA metabolism requiring dietary RESTRICTION or diagnosis, not L-valine supplementation."
+  },
+  {
+   "pmid": "40823510",
+   "reason": "off_topic",
+   "note": "Thiamine-responsive maple syrup urine disease missed by newborn screen case report; a rare inborn error of valine/BCAA metabolism requiring dietary RESTRICTION or diagnosis, not L-valine supplementation."
+  },
+  {
+   "pmid": "41623317",
+   "reason": "off_topic",
+   "note": "Branched-chain amino acid transferase 2 (BCAT2) deficiency case series/review; a rare inborn error of valine/BCAA metabolism requiring dietary RESTRICTION or diagnosis, not L-valine supplementation."
+  },
+  {
+   "pmid": "3495653",
+   "reason": "off_topic",
+   "note": "Infant formula whey/casein protein ratio comparison (not L-valine supplementation)"
+  },
+  {
+   "pmid": "11345180",
+   "reason": "off_topic",
+   "note": "Preterm protein hydrolysate formula growth study (not L-valine supplementation)"
+  },
+  {
+   "pmid": "6806521",
+   "reason": "off_topic",
+   "note": "Plasma valine as a nutritional assessment marker in hemodialysis patients (observational, not supplementation)"
+  },
+  {
+   "pmid": "9481725",
+   "reason": "off_topic",
+   "note": "Amino acid losses during hemodialysis with different membranes (not a supplementation study)"
+  },
+  {
+   "pmid": "3928919",
+   "reason": "off_topic",
+   "note": "Standard or BCAA IV infusions in liver cirrhosis (intravenous route, not oral supplementation)"
+  },
+  {
+   "pmid": "17571315",
+   "reason": "off_topic",
+   "note": "Intravenous nutrition amino acid spectrum in sepsis patients (IV route, not oral supplementation)"
+  },
+  {
+   "pmid": "16186281",
+   "reason": "off_topic",
+   "note": "Glycated/oxidized protein degradation products in diabetes (unrelated to valine supplementation)"
+  },
+  {
+   "pmid": "16195478",
+   "reason": "off_topic",
+   "note": "LPL S447X carrier lipoprotein metabolism study (unrelated)"
+  },
+  {
+   "pmid": "19109662",
+   "reason": "off_topic",
+   "note": "Food-protein-derived peptides and blood pressure meta-analysis (different intervention)"
+  },
+  {
+   "pmid": "19240225",
+   "reason": "off_topic",
+   "note": "GSTP1 polymorphism and lung cancer meta-analysis (unrelated genetics)"
+  },
+  {
+   "pmid": "19414484",
+   "reason": "off_topic",
+   "note": "GWAS meta-analysis of serum bilirubin levels (unrelated)"
+  },
+  {
+   "pmid": "19776143",
+   "reason": "off_topic",
+   "note": "Intermittent fasting and whole-body metabolism (not valine supplementation)"
+  },
+  {
+   "pmid": "23135367",
+   "reason": "off_topic",
+   "note": "Caffeine and systemic urea in soccer players (different substance)"
+  },
+  {
+   "pmid": "23756700",
+   "reason": "off_topic",
+   "note": "Dietary acrylamide exposure biomarkers in teenagers (unrelated)"
+  },
+  {
+   "pmid": "24184274",
+   "reason": "off_topic",
+   "note": "Bed rest and MLC2 post-translational modification in muscle (not valine supplementation)"
+  },
+  {
+   "pmid": "27659321",
+   "reason": "off_topic",
+   "note": "Maternal MTHFR polymorphism and Down syndrome risk meta-analysis (unrelated)"
+  },
+  {
+   "pmid": "30277160",
+   "reason": "off_topic",
+   "note": "Herbal drug use in sickle cell disease management systematic review (unrelated herbs)"
+  },
+  {
+   "pmid": "15288885",
+   "reason": "off_topic",
+   "note": "Sour milk and blood pressure RCT (different intervention)"
+  },
+  {
+   "pmid": "34216108",
+   "reason": "off_topic",
+   "note": "L-carnitine treatment mortality benefit in septic shock (different supplement)"
+  },
+  {
+   "pmid": "34666854",
+   "reason": "off_topic",
+   "note": "Casein glycomacropeptide (with added leucine/tryptophan) for mania; valine appears only in a ratio calculation, not as the administered intervention"
+  },
+  {
+   "pmid": "35249118",
+   "reason": "off_topic",
+   "note": "Bacillus coagulans probiotic supplementation; valine is a measured downstream plasma marker, not the administered supplement"
+  },
+  {
+   "pmid": "36364828",
+   "reason": "off_topic",
+   "note": "Novel food of leucine+omega-3+probiotic for sarcopenia; valine is a measured downstream marker, not part of the administered product"
+  },
+  {
+   "pmid": "28513068",
+   "reason": "off_topic",
+   "note": "CPAP vs. conservative treatment RCT for sleep apnea; BCAA/valine are measured biomarkers, not the administered intervention"
+  },
+  {
+   "pmid": "28888959",
+   "reason": "off_topic",
+   "note": "Genotoxicity/sub-chronic toxicity of MYOLUTION, a branched-chain KETO ACID (calcium salt) product distinct from free L-valine; also an in vitro/animal toxicology study"
+  },
+  {
+   "pmid": "37431714",
+   "reason": "off_topic",
+   "note": "Muscle protein breakdown study using intravenous phenylalanine tracer infusion and simulated postprandial IV amino acid infusion; not oral L-valine supplementation"
+  },
+  {
+   "pmid": "36184601",
+   "reason": "off_topic",
+   "note": "Dose-response absorption kinetics of L-Beta-Aminoisobutyric Acid (L-BAIBA), a distinct BCAA-related metabolite, not L-valine itself"
+  },
+  {
+   "pmid": "36005642",
+   "reason": "off_topic",
+   "note": "Multispecies probiotic add-on treatment metabolomics in major depression (different intervention)"
+  },
+  {
+   "pmid": "36124098",
+   "reason": "off_topic",
+   "note": "Fish flour sago noodle nutrient enrichment (unrelated food product)"
+  },
+  {
+   "pmid": "36201395",
+   "reason": "off_topic",
+   "note": "Nicotine pouch biomarkers of exposure protocol (unrelated)"
+  },
+  {
+   "pmid": "36798243",
+   "reason": "off_topic",
+   "note": "Bifidobacterium animalis BB-12 gut microbiome characterization in healthy children (different intervention)"
+  },
+  {
+   "pmid": "37333640",
+   "reason": "off_topic",
+   "note": "Duplicate/companion report of Bifidobacterium animalis BB-12 gut microbiome study (different intervention)"
+  },
+  {
+   "pmid": "37485388",
+   "reason": "off_topic",
+   "note": "Lactiplantibacillus/Lacticaseibacillus probiotics and faecal metabolome in coeliac disease (different intervention)"
+  },
+  {
+   "pmid": "37847288",
+   "reason": "off_topic",
+   "note": "Hemp supplementation during resistance training (different substance)"
+  },
+  {
+   "pmid": "38815112",
+   "reason": "off_topic",
+   "note": "TAS2R38 taste perception polymorphism meta-analysis (unrelated)"
+  },
+  {
+   "pmid": "38882178",
+   "reason": "off_topic",
+   "note": "Medically tailored meals for cirrhosis/hepatic encephalopathy proof-of-concept trial (not valine-specific)"
+  },
+  {
+   "pmid": "39079894",
+   "reason": "off_topic",
+   "note": "Rheumatoid factor/ACPA and treatment response in early rheumatoid arthritis (unrelated)"
+  },
+  {
+   "pmid": "39181037",
+   "reason": "off_topic",
+   "note": "Omega-3 PUFA and beta-hydroxy-beta-methylbutyrate (HMB) in COPD RCT (different supplements)"
+  },
+  {
+   "pmid": "39271063",
+   "reason": "off_topic",
+   "note": "Probiotic Lactobacillus plantarum 299v in major depression metabolomics study (different intervention)"
+  },
+  {
+   "pmid": "39452914",
+   "reason": "off_topic",
+   "note": "Grass-fed vs. conventional beef postprandial metabolomics RCT (different intervention, dietary pattern)"
+  },
+  {
+   "pmid": "39456659",
+   "reason": "off_topic",
+   "note": "Bifidobacterium breve BBr60 weight-loss intervention RCT (different intervention)"
+  },
+  {
+   "pmid": "40048707",
+   "reason": "off_topic",
+   "note": "Gut microbiome and chemotherapy outcomes in CNS lymphoma (unrelated)"
+  },
+  {
+   "pmid": "35716471",
+   "reason": "off_topic",
+   "note": "Metabolomic analysis of a Korean herbal formula (Gyejibongnyeong-Hwan) for shoulder pain (different intervention)"
+  },
+  {
+   "pmid": "35883378",
+   "reason": "off_topic",
+   "note": "Soybean meal quality indicators for Nile TILAPIA diet meta-analysis"
+  },
+  {
+   "pmid": "34150339",
+   "reason": "off_topic",
+   "note": "Stroke prevalence in sickle cell anemia systematic review ('valine' refers to the glutamate-to-valine hemoglobin point mutation, not a supplement)"
+  },
+  {
+   "pmid": "40073467",
+   "reason": "off_topic",
+   "note": "Lysine-Proline-Valine (KPV) tripeptide tested on human keratinocyte CELLS in vitro against particulate-matter damage"
+  },
+  {
+   "pmid": "33613319",
+   "reason": "off_topic",
+   "note": "STRRIDE exercise-training trials analysis of insulin resistance/diabetes risk indices (not valine supplementation)"
+  },
+  {
+   "pmid": "31834099",
+   "reason": "off_topic",
+   "note": "Tyrosine dose-response exercise trial (different amino acid/substance)"
+  },
+  {
+   "pmid": "10958816",
+   "reason": "off_topic",
+   "note": "Plasma taurine and amino acid levels in sepsis patients on total parenteral nutrition (IV route, taurine-focused, not valine supplementation)"
+  },
+  {
+   "pmid": "7091024",
+   "reason": "off_topic",
+   "note": "Plasma amino acid response to evening meals of differing composition (dietary observational study, not valine supplementation)"
+  },
+  {
+   "pmid": "31976308",
+   "reason": "off_topic",
+   "note": "Ameloblastoma BRAF V600E mutation targeted therapies systematic review ('V600E' is a genetic valine-to-glutamate mutation notation, not the supplement)"
+  },
+  {
+   "pmid": "34015424",
+   "reason": "off_topic",
+   "note": "Bioactivation of estragole and anethole herbal metabolites into DNA/hemoglobin adducts (unrelated)"
+  }
+ ],
+ "records": [
+  {
+   "pmid": "2184659",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "valine, isoleucine, and leucine mixture",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Sixteen adolescents and young adults with phenylketonuria",
+   "indication_as_stated": "phenylketonuria (cognitive protection)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Time to completion of a test that required substantial attention with mental processing (Attention Diagnostic Method)",
+   "primary_result_quote": "Time to completion of a test that required substantial attention with mental processing (Attention Diagnostic Method) was faster during the valine, isoleucine, and leucine periods than during the control mixture periods.",
+   "sample_size_quote": "Sixteen adolescents and young adults with phenylketonuria participated",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Valine given only as part of a 3-BCAA mixture, not alone; niche inborn-error-of-metabolism indication, not typical label use.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is one of three BCAAs in a fixed combination; effect cannot be isolated to valine alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32703216",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "amino acid mixture (1.8 g arginine, 1.1 g valine, 0.1 g serine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Twenty healthy recreationally active males",
+   "indication_as_stated": "exercise-induced cortisol response",
+   "dose_quote": "ingested either an AA mixture containing 1.8 g of arginine, 1.1 g of valine, and 0.1 g of serine or a placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the increase in plasma cortisol before and after exercise was significantly lower in the AA condition than in the placebo condition",
+   "sample_size_quote": "Twenty healthy recreationally active males",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Valine combined with arginine and serine; effect cannot be isolated to valine alone.",
+   "registrations": [
+    "UMIN000023587"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is one of three amino acids (with arginine and serine) in a combination mixture.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33648360",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "branched-chain amino acids (BCAAs; leucine, isoleucine, and valine)",
+   "combination": true,
+   "route": "oral/mixed",
+   "population_as_stated": "cancer surgery patients (13 RCTs, 2019 participants)",
+   "indication_as_stated": "oncological peri-operative nutrition",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Meta-analysis of RCTs found a 38% decreased risk of post-operative infections in BCAAs group compared to controls (RR = 0.62; 95% CI = 0.44 to 0.87; P = .006; number of RCTs, k = 6; total sample size, N = 389; I2 = 0%).",
+   "sample_size_quote": "20 articles were included comprising 13 RCTs and 6 observational cohort studies in 7 reports and 2019 total participants overall.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No difference for mortality, recurrence, other complications, blood loss, or quality of life; authors explicitly call for oral, short-term BCAA trials given route/quality issues across included studies.",
+   "registrations": [
+    "CRD42018086168"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is one of three BCAAs studied as a combination; route (oral vs. IV) not uniformly specified across pooled studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34612716",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "branched-chain amino acids (BCAA)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "479 participants across 25 studies",
+   "indication_as_stated": "exercise-induced muscle damage/performance",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "significantly lower levels of indirect muscle damage markers (creatine kinase, lactate dehydrogenase and myoglobin) at 48 hours post-exercise (standardised mean difference [SMD] = -0.41; p < 0.05) for the BCAA than placebo conditions",
+   "sample_size_quote": "25 studies were included, consisting of 479 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant difference for muscle performance recovery, only for damage biomarkers/soreness.",
+   "registrations": [
+    "CRD42020191248"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is one of three BCAAs studied as a combination; individual valine contribution not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37910166",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "BCAA (2:1:1 leucine:isoleucine:valine), 100 mg/kg body weight/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "30 older adults (protocol; pilot RCT)",
+   "indication_as_stated": "fatigue/tryptophan metabolism with exercise",
+   "dose_quote": "consume daily either 100 mg/kg body weight of BCAA (2:1:1 leucine:isoleucine:valine) or placebo (maltodextrin) throughout the 8-week intervention",
+   "primary_outcome_quote": "Our primary outcomes include changes in mental and physical fatigue and metabolism after the 8-week exercise training between the 2 groups.",
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Study protocol only, no results reported yet.",
+   "registrations": [
+    "NCT05484661"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is one component (in a fixed 2:1:1 ratio) of a BCAA combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40219047",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "branched-chain amino acids (BCAAs, isoleucine, leucine, and valine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "eleven active males",
+   "indication_as_stated": "exercise substrate metabolism/fatigue",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the fat oxidation rate was significantly higher after 20 and 30 min of CLE (p < 0.05)",
+   "sample_size_quote": "eleven active males completed 1 h of constant load exercise",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Multiple metabolic parameters affected; cycling efficiency and CHO oxidation also improved during time-to-exhaustion test.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is one of three BCAAs in a combination product; individual contribution not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40381110",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "leucine-enriched BCAA (60% leucine 4.5 g/day, 20% valine 1.5 g/day, 20% isoleucine 1.5 g/day)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "55 elderly CKD patients (>65 years)",
+   "indication_as_stated": "sarcopenia in chronic kidney disease",
+   "dose_quote": "oral mixed BCAA supplementation (60% leucine, 4.5 g/day; 20% valine, 1.5 g/day; 20% isoleucine, 1.5 g/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "lean muscle mass significantly increased in the leucine group compared to placebo (0.4 kg [95% CI 0.1-0.7] vs. - 0.2 kg [95% CI - 0.6-0.2], P = 0.010)",
+   "sample_size_quote": "Fifty-five patients (mean age 75.4 \u00b1 5.2 years) were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No significant differences in muscle strength, myostatin, IGF-1, or adverse events.",
+   "registrations": [
+    "TCTR20200314003"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is a minor (1.5 g/day, 20%) component of a leucine-dominant BCAA combination.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40860958",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "BCAAs (2:1:1 ratio leucine:isoleucine:valine), 100 mg/kg body weight/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "Twenty older adults",
+   "indication_as_stated": "physical function/quality of life",
+   "dose_quote": "8 weeks of either exercise + BCAAs (100 mg/kg body weight/d) or exercise + placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Compared to exercise + placebo, exercise + BCAAs showed greater improvements in strength, mobility, and endurance, along with reductions in fatigue (-45% vs. +92%) and depressive symptoms (-29% vs. +5%).",
+   "sample_size_quote": "Twenty participants (63% female; BMI: 35 \u00b1 2 kg/m2; age: 70.5 \u00b1 1.2 years)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Small pilot trial (n=20); BCAAs always combined with an exercise program.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is one component (2:1:1 ratio) of a BCAA combination, and always combined with an exercise program.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41321015",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "BCAA (3 g leucine, 1.5 g isoleucine, 1.5 g valine) vs. dileucine-EAA vs. collagen hydrolysate",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "12 healthy adults",
+   "indication_as_stated": "post-exercise muscle anabolism",
+   "dose_quote": "branched chain amino acids (BCAA; 3 g leucine, 1.5 g isoleucine, 1.5 g valine)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Total exogenous leucine retention were similar (p = 0.68) between DIEAA (215.72 \u00b1 42.45 \u03bcmol\u00b7kg-1) and BCAA conditions (219.15 \u00b1 45.26 \u03bcmol\u00b7kg-1), with both DIEAA and BCAA being greater (p < 0.0001) than COL",
+   "sample_size_quote": "12 healthy adults (8 M, 4F, aged 24 \u00b1 3 y) performed a 60 min bout of whole-body resistance exercise",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "BCAA and a dileucine-EAA formula performed similarly; both outperformed collagen hydrolysate; valine is a minor (1.5 g) component of the BCAA comparator arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine (1.5 g) is a minor component of the BCAA comparator arm, not the primary tested formula (DIEAA).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33096658",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "branched-chain amino acids (incl. l-valine) and other individual amino acids",
+   "combination": true,
+   "route": "oral/IV",
+   "population_as_stated": "healthy adults, obese, and T2DM individuals (55 studies)",
+   "indication_as_stated": "postprandial glucose/insulin kinetics",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Oral ingestion of most individual AAs induced an insulin response, but did not alter glucose concentrations in healthy participants.",
+   "sample_size_quote": "The systematic literature search identified 55 studies",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Pools many individual amino acids and both oral and IV routes together; leucine and isoleucine (not valine specifically) are highlighted for the synergistic glucose-lowering effect when co-ingested with glucose.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine included only as part of the pooled 'branched-chain AAs' category; not individually distinguished from leucine/isoleucine in the abstract's specific findings.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40610129",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "valine (indispensable amino acid) and dietary protein",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy individuals across the lifespan (66 unique studies)",
+   "indication_as_stated": "dietary protein/amino acid requirement determination",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "For adults 19-50 y, 16 studies examined requirements for protein, leucine, lysine, methionine, phenylalanine, threonine, and valine and for adults 51->70 y, and 6 studies examined requirements for protein, leucine, and phenylalanine.",
+   "sample_size_quote": "We identified 11,408 studies, of which 68 articles reporting on 66 unique studies were eligible",
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "A requirements-determination review, not an efficacy/outcome trial; notes valine requirement data is available only for males in the adult 19-50y studies.",
+   "registrations": [
+    "CRD42023446618"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Valine specifically named as one of the indispensable amino acids with requirement data reviewed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37972527",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "BCAA-enriched high-protein diet (leucine/valine/isoleucine = 2/1/1, 0.15 g/kg/day BCAA)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "16 healthy young women (bed rest study)",
+   "indication_as_stated": "inactivity-induced insulin resistance",
+   "dose_quote": "1.45 g of protein/kg per day enriched with 0.15 g/kg per day of BCAAs (leucine/valine/isoleucine = 2/1/1)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "percent changes of insulin-mediated glucose uptake significantly (p = 0.01) decreased in the conventional diet group from 155 \u00b1 23 % to 84 \u00b1 10 % while did not change significantly in the high protein-BCAA diet group",
+   "sample_size_quote": "two groups of healthy, young women receiving eucaloric diets containing 1 g of protein/kg per day (n = 8) or 1.45 g of protein/kg per day enriched with 0.15 g/kg per day of BCAAs",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Very small study (n=8/arm); valine is a minor part of a leucine-dominant high-protein diet, not tested alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is a minor component (1 part of a 2:1:1 leucine:valine:isoleucine ratio) within a broader high-protein diet intervention.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41523701",
+   "design": "other",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "branched chain amino acids (BCAAs; isoleucine, leucine, valine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "120 veterans with traumatic brain injury (protocol)",
+   "indication_as_stated": "sleep disturbance in TBI",
+   "dose_quote": "3 BCAA doses b.i.d. (\"high\" 30 g; \"medium\" 20 g; and \"low\" 10 g) and one placebo-control (rice protein, 10 g b.i.d.)",
+   "primary_outcome_quote": "The primary outcomes are overall feasibility/acceptability metrics, and secondarily, preliminary efficacy for BCAAs to improve subjective sleep",
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "unresolved",
+   "direction_note": "Protocol/feasibility paper; prior pilot in humans described only as showing 'limited efficacy.'",
+   "registrations": [
+    "NCT04603443"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Valine is one of three BCAAs in the tested combination; novel indication (sleep in TBI) rather than typical label use.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "33648360",
+  "34612716",
+  "2184659",
+  "40381110",
+  "40860958",
+  "40219047",
+  "41321015",
+  "40610129",
+  "32703216",
+  "33096658"
+ ],
+ "handoff": [
+  {
+   "pmid": "33607391",
+   "role": "safety/other",
+   "reason": "Bariatric surgery lowers circulating BCAA levels \u2014 relevant to a BCAA-status/dosing owner tracking post-surgical nutrient status, not an L-valine efficacy trial."
+  },
+  {
+   "pmid": "28888959",
+   "role": "safety",
+   "reason": "Genotoxicity/sub-chronic toxicity data for MYOLUTION (branched-chain keto acids), a related-but-distinct compound class to free L-valine; relevant background for a BCAA-family safety review."
+  }
+ ],
+ "identity_notes": "As flagged by the partition brief, L-valine retrieval in this scope is overwhelmingly NOT about oral L-valine supplementation. The single largest category (~40 records) is metabolomics/biomarker systematic reviews and Mendelian-randomization studies across dozens of diseases (cancer, diabetes, hypertension, stroke, periodontal disease, etc.) where circulating valine/BCAA levels are measured as a biomarker, never administered -- all rejected as not_intervention. A second large category (~20 records) are complete false keyword matches: 'Val' as a genetic polymorphism position (BDNF Val66Met, COMT Val158Met), drug names containing 'val' (valganciclovir, valbenazine, patisiran), or valine as an incidental amino acid in an unrelated protein/peptide sequence or industrial-biotech context -- all rejected as off_topic. A third category (~15 records) are inborn errors of valine/BCAA metabolism (maple syrup urine disease, HIBADH deficiency, methylmalonic acidemia) where the clinical need is valine RESTRICTION, the opposite of supplementation. A fourth category is animal/agricultural feeding studies (pigs, cattle, goats, sheep, quail) -- rejected as animal_or_invitro. Among the genuinely relevant human oral-supplementation records that remain (~13), NONE test L-valine alone: every kept record delivers valine only as part of a branched-chain amino acid (BCAA) mixture (typically a 2:1:1 leucine:isoleucine:valine ratio) or a broader amino acid blend, so label_material_match is related_form_differs throughout and no record can isolate an L-valine-specific effect from the leucine/isoleucine co-ingredients. The best-supported BCAA-combination signal is for exercise-induced muscle damage markers (34612716, meta-analysis) and post-operative infection/ascites in oncological surgery (33648360, meta-analysis), both mixed/oral route findings for the BCAA combination, not valine specifically. No qualifying evidence exists in this scope for a standalone, isolated L-valine supplement matching a typical single-ingredient label."
+}

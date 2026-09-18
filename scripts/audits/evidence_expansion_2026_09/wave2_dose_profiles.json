@@ -1,0 +1,344 @@
+{
+ "feverfew": {
+  "dosed_rows": 23,
+  "unit_counts": {
+   "mg": 23
+  },
+  "top_forms": {
+   "feverfew (unspecified)": 16,
+   "feverfew extract (parthenolide)": 7
+  },
+  "mg_min": 86.0,
+  "mg_p25": 200.0,
+  "mg_median": 300.0,
+  "mg_p75": 380.0,
+  "mg_max": 380.0
+ },
+ "devils_claw": {
+  "dosed_rows": 26,
+  "unit_counts": {
+   "mg": 26
+  },
+  "top_forms": {
+   "devil's claw extract": 13,
+   "devil's claw standardized (harpagoside)": 8,
+   "devil's claw (unspecified)": 5
+  },
+  "mg_min": 50.0,
+  "mg_p25": 290.0,
+  "mg_median": 980.0,
+  "mg_p75": 1000.0,
+  "mg_max": 1000.0
+ },
+ "d_aspartic_acid": {
+  "dosed_rows": 23,
+  "unit_counts": {
+   "mg": 23,
+   "gram(s)": 5
+  },
+  "top_forms": {
+   "d-aspartic acid powder": 28
+  },
+  "mg_min": 100.0,
+  "mg_p25": 500.0,
+  "mg_median": 2400.0,
+  "mg_p75": 3000.0,
+  "mg_max": 3000.0
+ },
+ "goji_berry": {
+  "dosed_rows": 24,
+  "unit_counts": {
+   "np": 27,
+   "mg": 24,
+   "gram(s)": 1
+  },
+  "top_forms": {
+   "(none)": 27,
+   "goji berry (unspecified)": 25
+  },
+  "mg_min": 50.0,
+  "mg_p25": 212.5,
+  "mg_median": 1000.0,
+  "mg_p75": 1000.0,
+  "mg_max": 1000.0
+ },
+ "activated_charcoal": {
+  "dosed_rows": 19,
+  "unit_counts": {
+   "mg": 19
+  },
+  "top_forms": {
+   "activated charcoal (unspecified)": 19
+  },
+  "mg_min": 520.0,
+  "mg_p25": 560.0,
+  "mg_median": 560.0,
+  "mg_p75": 1200.0,
+  "mg_max": 1500.0
+ },
+ "amla": {
+  "dosed_rows": 51,
+  "unit_counts": {
+   "np": 127,
+   "mg": 51,
+   "gram(s)": 1
+  },
+  "top_forms": {
+   "(none)": 126,
+   "amla extract (standardized)": 31,
+   "amla (unspecified)": 20,
+   "amla fruit powder": 2
+  },
+  "mg_min": 5.0,
+  "mg_p25": 30.0,
+  "mg_median": 120.0,
+  "mg_p75": 1000.0,
+  "mg_max": 1000.0
+ },
+ "schisandra_berry": {
+  "dosed_rows": 47,
+  "unit_counts": {
+   "mg": 47,
+   "gram(s)": 1
+  },
+  "top_forms": {
+   "(none)": 48
+  },
+  "mg_min": 40.0,
+  "mg_p25": 100.0,
+  "mg_median": 175.0,
+  "mg_p75": 750.0,
+  "mg_max": 1000.0
+ },
+ "theobromine": {
+  "dosed_rows": 42,
+  "unit_counts": {
+   "mg": 42
+  },
+  "top_forms": {
+   "theobromine (unspecified)": 42
+  },
+  "mg_min": 50.0,
+  "mg_p25": 100.0,
+  "mg_median": 200.0,
+  "mg_p75": 250.0,
+  "mg_max": 400.0
+ },
+ "horsetail": {
+  "dosed_rows": 57,
+  "unit_counts": {
+   "mg": 57,
+   "np": 33
+  },
+  "top_forms": {
+   "horsetail extract (unspecified)": 57,
+   "(none)": 33
+  },
+  "mg_min": 3.0,
+  "mg_p25": 3.0,
+  "mg_median": 6.25,
+  "mg_p75": 450.0,
+  "mg_max": 1000.0
+ },
+ "oregano": {
+  "dosed_rows": 21,
+  "unit_counts": {
+   "np": 31,
+   "mg": 21
+  },
+  "top_forms": {
+   "(none)": 31,
+   "oil of oregano": 10,
+   "oregano leaf extract": 9,
+   "oregano (unspecified)": 2
+  },
+  "mg_min": 19.0,
+  "mg_p25": 43.75,
+  "mg_median": 150.0,
+  "mg_p75": 500.0,
+  "mg_max": 500.0
+ },
+ "fennel": {
+  "dosed_rows": 37,
+  "unit_counts": {
+   "mg": 37,
+   "np": 30
+  },
+  "top_forms": {
+   "(none)": 67
+  },
+  "mg_min": 4.0,
+  "mg_p25": 45.0,
+  "mg_median": 237.0,
+  "mg_p75": 1000.0,
+  "mg_max": 1000.0
+ },
+ "hoodia_gordonii": {
+  "dosed_rows": 18,
+  "unit_counts": {
+   "mg": 18
+  },
+  "top_forms": {
+   "(none)": 18
+  },
+  "mg_min": 25.0,
+  "mg_p25": 500.0,
+  "mg_median": 500.0,
+  "mg_p75": 500.0,
+  "mg_max": 500.0
+ },
+ "mucuna_pruriens": {
+  "dosed_rows": 31,
+  "unit_counts": {
+   "mg": 31,
+   "unspecified": 1
+  },
+  "top_forms": {
+   "mucuna pruriens standardized extract": 26,
+   "mucuna pruriens (unspecified)": 5,
+   "(none)": 1
+  },
+  "mg_min": 100.0,
+  "mg_p25": 500.0,
+  "mg_median": 500.0,
+  "mg_p75": 500.0,
+  "mg_max": 1000.0
+ },
+ "cayenne_pepper": {
+  "dosed_rows": 109,
+  "unit_counts": {
+   "mg": 109,
+   "unspecified": 2
+  },
+  "top_forms": {
+   "(none)": 95,
+   "cayenne pepper (unspecified)": 16
+  },
+  "mg_min": 1.0,
+  "mg_p25": 33.34,
+  "mg_median": 33.4,
+  "mg_p75": 100.0,
+  "mg_max": 500.0
+ },
+ "l_serine": {
+  "dosed_rows": 26,
+  "unit_counts": {
+   "mg": 26,
+   "np": 9
+  },
+  "top_forms": {
+   "l-serine standard": 26,
+   "(none)": 9
+  },
+  "mg_min": 17.0,
+  "mg_p25": 200.0,
+  "mg_median": 1650.0,
+  "mg_p75": 2000.0,
+  "mg_max": 2000.0
+ },
+ "tudca": {
+  "dosed_rows": 16,
+  "unit_counts": {
+   "mg": 16
+  },
+  "top_forms": {
+   "tudca (standard)": 16
+  },
+  "mg_min": 250.0,
+  "mg_p25": 500.0,
+  "mg_median": 500.0,
+  "mg_p75": 500.0,
+  "mg_max": 500.0
+ },
+ "royal_jelly": {
+  "dosed_rows": 17,
+  "unit_counts": {
+   "mg": 17
+  },
+  "top_forms": {
+   "royal jelly": 17
+  },
+  "mg_min": 2.0,
+  "mg_p25": 583.5,
+  "mg_median": 1000.0,
+  "mg_p75": 1000.0,
+  "mg_max": 1000.0
+ },
+ "senna": {
+  "dosed_rows": 13,
+  "unit_counts": {
+   "mg": 13,
+   "gram(s)": 2
+  },
+  "top_forms": {
+   "senna leaf extract": 15
+  },
+  "mg_min": 125.0,
+  "mg_p25": 150.0,
+  "mg_median": 150.0,
+  "mg_p75": 150.0,
+  "mg_max": 150.0
+ },
+ "cat_s_claw": {
+  "dosed_rows": 23,
+  "unit_counts": {
+   "mg": 23,
+   "np": 4,
+   "gram(s)": 2
+  },
+  "top_forms": {
+   "cat's claw (unspecified)": 25,
+   "(none)": 4
+  },
+  "mg_min": 10.0,
+  "mg_p25": 160.0,
+  "mg_median": 240.0,
+  "mg_p75": 500.0,
+  "mg_max": 500.0
+ },
+ "globe_artichoke": {
+  "dosed_rows": 37,
+  "unit_counts": {
+   "mg": 37
+  },
+  "top_forms": {
+   "(none)": 37
+  },
+  "mg_min": 20.0,
+  "mg_p25": 100.0,
+  "mg_median": 125.0,
+  "mg_p75": 600.0,
+  "mg_max": 1800.0
+ },
+ "holy_basil": {
+  "dosed_rows": 37,
+  "unit_counts": {
+   "np": 81,
+   "mg": 37
+  },
+  "top_forms": {
+   "(none)": 81,
+   "holy basil extract": 21,
+   "holy basil (unspecified)": 16
+  },
+  "mg_min": 15.0,
+  "mg_p25": 200.0,
+  "mg_median": 450.0,
+  "mg_p75": 500.0,
+  "mg_max": 600.0
+ },
+ "siberian_ginseng": {
+  "dosed_rows": 25,
+  "unit_counts": {
+   "mg": 25
+  },
+  "top_forms": {
+   "(none)": 25
+  },
+  "mg_min": 12.5,
+  "mg_p25": 105.0,
+  "mg_median": 375.0,
+  "mg_p75": 500.0,
+  "mg_max": 520.0
+ }
+}

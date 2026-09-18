@@ -1,0 +1,24 @@
+{"canonical_id": "d_aspartic_acid", "recommended_class": "curate",
+ "one_line_reason": "Multiple human RCTs of oral D-aspartic acid on serum testosterone exist (the outcome it is marketed for); the single-ingredient trials found null/negative effects, which is itself worth central verification and consumer-facing accuracy.",
+ "selected": [
+   {"pmid": "28841667", "population": "healthy resistance-trained men, ages 18-36 (n=22)", "intervention": "D-aspartic acid 6 g/day oral vs placebo, 12 weeks, alongside supervised resistance training", "dose_as_stated": "6 g/day", "primary_outcome": "basal total and free testosterone, plus strength/muscle measures", "apparent_direction": "negative", "why_selected": "Longest-duration single-ingredient RCT directly testing DAA's marketed claim (testosterone increase) in a general athletic population; found a reduction in testosterone with DAA"},
+   {"pmid": "29893592", "population": "male climbers (n=16)", "intervention": "D-aspartic acid 3 g/day oral vs placebo, 2-week crossover with washout", "dose_as_stated": "3 g/day", "primary_outcome": "serum testosterone and hypothalamic-pituitary-gonadal axis biomarkers", "apparent_direction": "null", "why_selected": "Single-ingredient, crossover-controlled human trial on the same marketed outcome (testosterone), general athletic population"},
+   {"pmid": "38201906", "population": "male boxers undergoing 11 days of nocturnal normobaric hypoxia exposure (n=16)", "intervention": "D-aspartic acid 6 g/day oral vs control, 14 days, during simulated-altitude training", "dose_as_stated": "6 g/day", "primary_outcome": "testosterone, cortisol, and hematological responses", "apparent_direction": "null", "why_selected": "Another single-ingredient RCT on testosterone; included for completeness though the hypoxia-training context is a blocker"},
+   {"pmid": "40248985", "population": "75 men with idiopathic male infertility", "intervention": "2660 mg D-aspartic acid + 200 mg ubiquinol + 10 mg zinc, once daily, 3 months, vs placebo", "dose_as_stated": "2660 mg D-aspartic acid (combined with ubiquinol and zinc)", "primary_outcome": "semen parameters (progressive motility) and serum testosterone", "apparent_direction": "positive", "why_selected": "Most recent human RCT with a positive signal, but it is a 3-ingredient combination product and a clinical infertility population, not a clean single-ingredient exposure"}
+ ],
+ "blockers": [
+   "40248985 is a 3-component combination product (DAA + ubiquinol + zinc) in a clinical infertility population, not a single-ingredient general-use exposure",
+   "38201906 studies DAA specifically under a nocturnal normobaric hypoxia/altitude-training protocol, not ordinary supplement use",
+   "The systematic review (37697053) covers 27 different 'testosterone booster' ingredients pooled together; only 2 of its 52 included studies are D-aspartic acid, so it cannot be cited as DAA-specific evidence"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "37697053", "reason": "Broad systematic review of 27 different testosterone-booster ingredients (D-aspartic acid is only 2 of 52 included studies); not DAA-specific primary evidence, though it corroborates the null pattern"},
+   {"pmid": "31814547", "reason": "Anti-androgen drugs for OCD; unrelated to D-aspartic acid, evidently indexed on an unrelated term match"},
+   {"pmid": "29884518", "reason": "Timing of anti-seizure treatment in status epilepticus; mentions NMDA (N-methyl-D-aspartic acid) receptors, not D-aspartic acid supplementation"},
+   {"pmid": "22479339", "reason": "YMDD motif mutation in hepatitis B virus; 'aspartic acid' appears only as part of the amino-acid mutation code, unrelated substance/context"},
+   {"pmid": "15728066", "reason": "Meta-analysis of preemptive analgesia including NMDA (N-methyl-D-aspartic acid) receptor antagonist drugs; not D-aspartic acid supplementation"},
+   {"pmid": "38789968", "reason": "Esketamine (an NMDA receptor antagonist drug) for postoperative fatigue; unrelated to D-aspartic acid supplement"},
+   {"pmid": "35018643", "reason": "Esketamine for anesthesia induction in elderly patients; unrelated to D-aspartic acid supplement"},
+   {"pmid": "29489895", "reason": "tDCS effect on cortical NMDA neurotransmission measured via auditory response; unrelated to D-aspartic acid supplementation"}
+ ]}

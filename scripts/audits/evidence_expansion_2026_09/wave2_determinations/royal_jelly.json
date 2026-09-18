@@ -1,0 +1,12 @@
+{
+ "canonical_id": "royal_jelly",
+ "class": "B",
+ "action": "hold",
+ "direction": "mixed",
+ "sources": [
+  "41401249",
+  "31126561"
+ ],
+ "label_median_mg": 1000,
+ "note": "The postmenopausal-symptom effect is real but thin: PMID 41401249 reports SMD 0.73 (95% CI 0.50-0.96, I2 = 0%) and states in the same breath that this rests on TWO studies and 312 participants at moderate quality, with no dose given. The identity's other outcome is null - PMID 31126561 found royal jelly did not improve fasting plasma glucose or HbA1c. Held on the thin base, the absent dose and the population restriction; a Wave 3 candidate if the owner wants it."
+}

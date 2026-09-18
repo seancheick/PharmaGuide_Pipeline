@@ -1,0 +1,25 @@
+{"canonical_id": "activated_charcoal", "recommended_class": "curate",
+ "one_line_reason": "One human meta-analysis in healthy volunteers directly shows oral activated charcoal reduces GI drug absorption when given shortly after ingestion, the core adsorption claim behind the product.",
+ "selected": [
+   {"pmid": "19194372", "population": "healthy volunteers (pooled across 64 controlled studies)", "intervention": "oral activated charcoal administered at varying times (0 min to 4+ h) after drug intake", "dose_as_stated": "not stated (dose expressed only as an AC/drug ratio correlate, not a fixed amount)", "primary_outcome": "systemic drug exposure (AUC) of a co-ingested drug", "apparent_direction": "positive", "why_selected": "The clearest human interventional evidence of activated charcoal's core adsorption mechanism, in a meta-analysis of controlled studies in healthy (non-patient) volunteers"}
+ ],
+ "blockers": [
+   "The evidence base is decontamination/overdose pharmacology (charcoal given within hours of a specific drug ingestion to reduce its absorption), not the chronic 'detox' or GI-comfort use most catalog activated-charcoal supplements are marketed for",
+   "No fixed oral dose is stated in the abstract (effect is reported only as correlated with an AC/drug mass ratio), complicating any label-dose mapping"
+ ],
+ "handoff_pmids": [
+   {"pmid": "24284289", "kind": "pk", "note": "Notes activated charcoal (with cholestyramine) decreases leflunomide half-life via interrupting enterohepatic circulation, used for acute drug-toxicity management, not an efficacy claim"},
+   {"pmid": "23406298", "kind": "pk", "note": "Position paper on ipecac syrup for GI decontamination; activated charcoal is discussed only as an alternative/interacting decontamination measure"},
+   {"pmid": "12944888", "kind": "pk", "note": "Review of whether gastric lavage propels poison past the pylorus; activated charcoal is mentioned as part of standard poisoning management, not the study's own intervention"},
+   {"pmid": "28139533", "kind": "toxicity", "note": "Review of amitraz pesticide poisoning; activated charcoal appears only within general poisoning-management context"}
+ ],
+ "excluded_pmids": [
+   {"pmid": "37000410", "reason": "Systematic review of taste additives for activated charcoal palatability; primary outcome is palatability/adherence, not health efficacy"},
+   {"pmid": "35232774", "reason": "Review of interventions (magnesium, sodium thiosulfate, etc.) to slow vascular calcification in CKD; activated charcoal is not the studied intervention"},
+   {"pmid": "32716060", "reason": "Cochrane review of pharmacological interventions (e.g., ursodeoxycholic acid, SAMe) for intrahepatic cholestasis of pregnancy; activated charcoal is not a primary studied intervention"},
+   {"pmid": "23794285", "reason": "Cochrane review of interventions for cholestasis in pregnancy; activated charcoal not a primary studied intervention"},
+   {"pmid": "11687082", "reason": "Earlier version of the same cholestasis-of-pregnancy Cochrane review; activated charcoal not a primary studied intervention"},
+   {"pmid": "17938343", "reason": "Consensus panel on wound dressings; concerns topical charcoal dressings, not an oral supplement exposure"},
+   {"pmid": "15807753", "reason": "Review of pressure-ulcer wound care; describes a laboratory (non-human) test of charcoal's odor-absorbing capacity, not an oral supplement trial"},
+   {"pmid": "18206062", "reason": "Study of custodial vs non-custodial criminal sanctions; the 'Hawthorn effects' mention is the Hawthorne observer-effect concept, unrelated to activated charcoal"}
+ ]}

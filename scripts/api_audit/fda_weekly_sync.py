@@ -23,6 +23,7 @@ Options:
 """
 
 import argparse
+import html
 import json
 import os
 import re
@@ -347,6 +348,36 @@ RSS_RELEVANT_TEXT_HINTS = [
     "dietary supplement", "supplement", "herbal", "botanical",
 ]
 
+# FDA Medication Health Fraud notifications — the Health Fraud Product Database.
+#
+# This is where tainted-supplement public notifications live (biQ-FEL, X10, ZUBB).
+# They are NOT openFDA enforcement recalls and reach the MedWatch/Drugs RSS feeds
+# only sporadically, so without this source the single highest-severity category
+# we track — undeclared prescription drugs in supplements — is a blind spot.
+FDA_HEALTH_FRAUD_BASE = "https://www.fda.gov"
+
+FDA_HEALTH_FRAUD_INDEXES = [
+    ("sexual-enhancement-and-energy-product-notifications", "sexual_enhancement"),
+    ("weight-loss-product-notifications", "weight_loss"),
+    ("pain-and-arthritis-products-containing-hidden-ingredients", "pain_arthritis"),
+    ("sleep-skin-bodybuilding-and-other-product-notifications", "sleep_skin_bodybuilding"),
+]
+
+# Index rows are a machine-generated two-column table, but the column ORDER is
+# not consistent across the four pages: weight-loss renders
+#   <tr><td><a href="/drugs/...">Title</a></td><td>9/04/2026</td></tr>
+# while sexual-enhancement renders the date first. So match the row, then pull
+# the link and the date out of it independently — one rule for every layout.
+_HEALTH_FRAUD_ROW_RE = re.compile(r"<tr\b[^>]*>(?P<row>.*?)</tr>", re.IGNORECASE | re.DOTALL)
+
+_HEALTH_FRAUD_LINK_RE = re.compile(
+    r"<a\s+[^>]*href=\"(?P<href>/drugs/medication-health-fraud-notifications/[^\"]+)\"[^>]*>"
+    r"(?P<title>.*?)</a>",
+    re.IGNORECASE | re.DOTALL,
+)
+
+_HEALTH_FRAUD_DATE_RE = re.compile(r"\b(?P<date>\d{1,2}/\d{1,2}/\d{4})\b")
+
 
 # ─── openFDA API ──────────────────────────────────────────────────────────────
 
@@ -520,6 +551,121 @@ def fetch_fda_rss(rss_url: str, days_back: int) -> list:
     return items
 
 
+def _strip_html(markup: str) -> str:
+    """Collapse an HTML fragment to plain text. Good enough for advisory prose."""
+    text = re.sub(r"(?is)<(script|style).*?</\1>", " ", markup)
+    text = re.sub(r"(?s)<[^>]+>", " ", text)
+    return re.sub(r"\s+", " ", html.unescape(text)).strip()
+
+
+# The advisory body is preceded by site chrome shared by every FDA page, which
+# buries the substance under ~2000 characters of navigation. Two markers open the
+# body: the bracketed publication date — whose spacing varies, e.g. "[ 8-18-2026]"
+# — and the stock opening phrase. Anchoring on only one silently returns chrome,
+# so take whichever appears first.
+_ADVISORY_DATE_RE = re.compile(r"\[\s*\d{1,2}\s*[-/]\s*\d{1,2}\s*[-/]\s*\d{4}\s*\]")
+_ADVISORY_PHRASE_RE = re.compile(r"(?:The\s+)?Food and Drug Administration is advising")
+
+
+def advisory_body(text: str, limit: int = 2000) -> str:
+    """Trim FDA page chrome from plain advisory text."""
+    starts = [m.start() for m in (_ADVISORY_DATE_RE.search(text),
+                                  _ADVISORY_PHRASE_RE.search(text)) if m]
+    return (text[min(starts):] if starts else text)[:limit]
+
+
+def _fetch_health_fraud_detail(url: str) -> str:
+    """Return the advisory prose for one notification, or "" if unavailable.
+
+    The adulterant is named only on the detail page, and extract_substances()
+    needs that text to identify what was found. Fails soft: a detail page we
+    cannot read still yields a record for review, just without the substance.
+    """
+    try:
+        resp = requests.get(
+            url, timeout=30, headers={"User-Agent": "fda-weekly-sync/1.0"}
+        )
+        resp.raise_for_status()
+    except requests.RequestException as e:
+        print(f"[WARN] health-fraud detail {url}: {e}", file=sys.stderr)
+        return ""
+
+    return advisory_body(_strip_html(resp.text))
+
+
+def fetch_fda_health_fraud(days_back: int) -> list:
+    """
+    Fetch FDA Medication Health Fraud notifications published in the last N days.
+
+    Every item on these index pages is, by FDA's own construction, a product
+    marketed as a supplement that lab analysis found to contain an undeclared
+    drug. Relevance is therefore not re-derived from keywords downstream — see
+    classify_record().
+
+    Returns items as dicts with _source_type='fda_health_fraud'.
+    """
+    cutoff = datetime.now() - timedelta(days=days_back)
+    items = []
+    seen_urls = set()
+
+    for slug, category in FDA_HEALTH_FRAUD_INDEXES:
+        index_url = (
+            f"{FDA_HEALTH_FRAUD_BASE}/drugs/medication-health-fraud-notifications/{slug}"
+        )
+        try:
+            resp = requests.get(
+                index_url, timeout=30,
+                headers={"User-Agent": "fda-weekly-sync/1.0"},
+            )
+            resp.raise_for_status()
+        except requests.RequestException as e:
+            print(f"[WARN] health-fraud index {slug}: {e}", file=sys.stderr)
+            continue
+
+        for row in _HEALTH_FRAUD_ROW_RE.finditer(resp.text):
+            markup = row.group("row")
+            link = _HEALTH_FRAUD_LINK_RE.search(markup)
+            date_match = _HEALTH_FRAUD_DATE_RE.search(markup)
+            if not link or not date_match:
+                continue  # header row, or a row without a notification link
+
+            try:
+                pub_date = datetime.strptime(date_match.group("date"), "%m/%d/%Y")
+            except ValueError:
+                continue  # unparseable date — keep scanning the rest of the index
+            if pub_date < cutoff:
+                continue
+
+            url = FDA_HEALTH_FRAUD_BASE + link.group("href")
+            if url in seen_urls:
+                continue  # a product can be listed on more than one index page
+            seen_urls.add(url)
+
+            title = _strip_html(link.group("title"))
+            iso_date = pub_date.strftime("%Y-%m-%d")
+            items.append({
+                "title": title,
+                "description": "",
+                "link": url,
+                "pub_date": iso_date,
+                "product_description": title,
+                "reason_for_recall": _fetch_health_fraud_detail(url),
+                "product_type": "Dietary Supplement",
+                "recalling_firm": "",
+                "recall_number": "",
+                "classification": "",
+                "status": "Ongoing",
+                "recall_initiation_date": "",
+                "report_date": iso_date,
+                "termination_date": None,
+                "distribution_pattern": "",
+                "_source_type": "fda_health_fraud",
+                "_health_fraud_category": category,
+            })
+
+    return items
+
+
 def fetch_dea_federal_register(days_back: int) -> list:
     """
     Fetch DEA scheduling actions from the Federal Register API.
@@ -684,6 +830,13 @@ def classify_record(record: dict) -> tuple:
     if source_type == "dea_federal_register":
         return True, "schedule_I_psychoactive", ["manufacturing_violation"]
 
+    # Health Fraud notifications are relevant by construction: FDA publishes one
+    # only after lab analysis finds an undeclared drug in a marketed supplement.
+    # Re-deriving relevance from keywords would drop them — a product name like
+    # "biQ-FEL" contains no supplement keyword at all.
+    if source_type == "fda_health_fraud":
+        return True, "illegal_spiking_agents", ["pharmaceutical_adulterants"]
+
     if source_type == "fda_rss" and not _is_relevant_rss_record(record, combined):
         return False, "", []
 
@@ -792,6 +945,18 @@ def extract_substances(record: dict) -> list:
             for prefix in ("undeclared ", "undisclosed ", "hidden "):
                 if candidate.startswith(prefix):
                     candidate = candidate[len(prefix):]
+            # FDA notifications end the sentence in fixed boilerplate with no
+            # delimiter before it, so the fallback pattern swallows it:
+            # "contains sildenafil not listed on the product label" yielded the
+            # phantom substance "sildenafil not listed on the product label".
+            # A phantom never resolves in the registry, so it reads as a NOVEL
+            # adulterant and makes every health-fraud record look new.
+            for tail in (" not listed on", " not declared on", " that is not listed",
+                         " which is not listed"):
+                cut = candidate.find(tail)
+                if cut > 0:
+                    candidate = candidate[:cut]
+                    break
             candidate = candidate.strip()
             # Filter: reasonable name length, not a stop phrase
             if 3 <= len(candidate) <= 60 and candidate not in found:
@@ -825,6 +990,19 @@ def build_existing_index(db: dict) -> dict:
 
 def find_existing(substance: str, index: dict):
     return index.get(substance.lower())
+
+
+# Health Fraud notification titles are "<product> may be harmful due to ...".
+# The prefix is the product name as FDA writes it, which is what a
+# product-level entry is named after (RECALLED_ZUBB -> "ZUBB Dietary
+# Supplement", RECALLED_X10_NATURAL_ENHANCEMENT -> "X10 Natural Enhancement
+# Supplement"), so it resolves against the same alias index as a substance.
+_HEALTH_FRAUD_TITLE_SPLIT_RE = re.compile(r"\s+may be harmful\b", re.IGNORECASE)
+
+
+def health_fraud_product_name(record: dict) -> str:
+    title = record.get("title") or record.get("product_description") or ""
+    return _HEALTH_FRAUD_TITLE_SPLIT_RE.split(title, maxsplit=1)[0].strip()
 
 
 # ─── Stale Recall Detection ───────────────────────────────────────────────────
@@ -907,6 +1085,9 @@ def format_record_for_report(record: dict, primary_category: str,
     elif source_type == "fda_rss":
         entry["fda_source_url"] = record.get("link", "")
         entry["rss_source"] = record.get("_rss_url", "")
+    elif source_type == "fda_health_fraud":
+        entry["fda_source_url"] = record.get("link", "")
+        entry["health_fraud_category"] = record.get("_health_fraud_category", "")
     elif source_type == "dea_federal_register":
         entry["fda_source_url"] = record.get("link", "")
 
@@ -946,7 +1127,23 @@ def _classify_and_crossref(records: list, existing_index: dict) -> tuple:
             and not substances
         )
 
-        if unknown or is_brand_recall:
+        # A Health Fraud notification's news is "THIS marketed product contains
+        # the hidden drug", and the drug is almost always one we already track
+        # (sildenafil, tadalafil, sibutramine). Bucketing on substance novelty
+        # alone therefore files product-level bans as informational and hides
+        # them — MAXMAN Coffee landed there with both adulterants known. Product
+        # novelty and adulterant novelty are separate questions; either one being
+        # new means an operator has something to act on.
+        product_is_new = False
+        if record.get("_source_type") == "fda_health_fraud":
+            product_name = health_fraud_product_name(record)
+            entry["product_name"] = product_name
+            product_is_new = bool(product_name) and not find_existing(
+                product_name, existing_index
+            )
+            entry["product_already_tracked"] = not product_is_new
+
+        if unknown or is_brand_recall or product_is_new:
             new_records.append(entry)
         elif substances:
             tracked_records.append(entry)
@@ -1008,11 +1205,16 @@ def _fetch_all_sources(date_start: str, date_end: str,
     )
     print(f"           {len(drugs_rss)} items")
 
+    print("[FDA Sync] Fetching FDA Medication Health Fraud notifications...")
+    health_fraud = fetch_fda_health_fraud(days_back)
+    print(f"           {len(health_fraud)} items")
+
     print("[FDA Sync] Fetching DEA Federal Register scheduling actions...")
     dea_records = fetch_dea_federal_register(days_back)
     print(f"           {len(dea_records)} items")
 
-    raw = food_records + drug_records + medwatch_rss + drugs_rss + dea_records
+    raw = (food_records + drug_records + medwatch_rss + drugs_rss
+           + health_fraud + dea_records)
     print(f"[FDA Sync] Raw total: {len(raw)}")
 
     deduped = dedup_records(raw)
@@ -1021,6 +1223,7 @@ def _fetch_all_sources(date_start: str, date_end: str,
         "openfda_drug_enforcement": len(drug_records),
         "fda_medwatch_rss": len(medwatch_rss),
         "fda_drugs_rss": len(drugs_rss),
+        "fda_health_fraud": len(health_fraud),
         "dea_federal_register": len(dea_records),
         "duplicates_removed": len(raw) - len(deduped),
     }

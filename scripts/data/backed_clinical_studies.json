@@ -2,10 +2,14 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.14",
-    "last_updated": "2026-09-07",
-    "total_entries": 202,
+    "schema_version": "5.4.2",
+    "last_updated": "2026-09-18",
+    "total_entries": 208,
     "changelog": [
+      "5.4.2 (2026-09-18): INGR_AMLA scoring HELD at reference tier by owner decision. The direction stays positive_weak and the 500 mg/day dose context is kept - the evidence is not being erased or called null. The measured reason: primary floor 14.0 x 0.85 = 11.9 raw, rescaled by the generic_botanical_branded archetype reference (11.9 / 18.0 x 20) = 13.2 of 20 for three single-active products, which overstates overlapping syntheses whose LDL-C and triglyceride prediction intervals cross null. Diagnostic run on INGR_WHITE_KIDNEY_BEAN shows the SAME 13.2 by the same path, so this is a structural floor-calibration question, not an amla-specific one; white kidney bean is left approved pending that review. No scoring rule changed.",
+      "5.4.1 (2026-09-18): Wave 2 corrections after independent review, each re-verified against the live sources. INGR_DEVILS_CLAW moved to reference tier (non-scoring): the stored total_enrollment 2050 was the whole Cochrane review's total across SIX herbal medicines, not devil's claw (corrected to 197), and the studied exposure is 50-100 mg/day of harpagoside (PMID 10101629: extract WS 1531 at 600/1200 mg containing 50/100 mg harpagoside; PMID 12509627: Doloteffin, 60 mg harpagoside) while the single catalog label stating harpagoside delivers about 10.5 mg/day. INGR_SENNA moved to reference tier and its confidence lowered: PMID 35943487 calls itself a synopsis of the authors' own updated systematic review, so it is not a second independent grade-A confirmation; 0 of 15 catalog labels state sennosides. INGR_AMLA stays positive_weak with its limitations made explicit - prediction intervals crossing null for LDL-C and triglycerides, I2 of 77% and 62%, biomarker rather than event endpoints, and two overlapping rather than independent syntheses. No scoring rule changed by these corrections.",
+      "5.4.0 (2026-09-18): Wave 2 owner decisions applied. SIX new reviewed identities, 202 -> 208. APPROVED positive_weak: INGR_WHITE_KIDNEY_BEAN (PMID 42066439, 8 RCTs/543, weight -1.62 kg; 1,000 mg/day floor; extract mg is NOT an alpha-amylase potency guarantee) and INGR_AMLA (PMIDs 37296402/36934568, 500-1500 mg/day studied; 500 mg/day floor keeps the 120 mg catalog median out). APPROVED evidence with product scoring HELD by a source-label potency requirement: INGR_DEVILS_CLAW (Cochrane 26630428, moderate quality at best; applies only where the label states harpagoside - 1 of 25 products today) and INGR_SENNA (grade A first-line laxative; applies only where the label states sennosides - 0 of 15 today; stimulant-laxative adverse effects routed to the safety owner and NOT netted against efficacy). REVIEWED-NULL, curated in full and earning zero affirmative credit: INGR_D_MANNOSE (JAMA Intern Med 38587819, n=598, 2 g/day, null on its primary endpoint) and INGR_D_ASPARTIC_ACID (three single-ingredient RCTs null for testosterone). Both carry a dose floor so products below the studied exposure are refused rather than characterised by a result at a dose they do not deliver. Paired with the scoring owner's null = 0.0 decision in scoring_v4/config/quality_score.json.",
+      "5.3.15 (2026-09-18): Scope repair of the four null-direction records, each verified live against its own sources. INGR_VITAMIN_B12 -> reference tier: its single synthesis (PMID 33809274) studied cognition, depression and idiopathic fatigue in people WITHOUT overt deficiency, so it may not act as B12's ingredient-level efficacy direction across 2,176 products; nutrient adequacy stays with the DRI authority path and is not duplicated here. INGR_SAW_PALMETTO: Permixon-specific evidence (NCT02121613, PMID 29694707) and an androgenetic-alopecia trial (PMID 12006122) removed, total_enrollment 833 -> 369 (CAMUS), indication corrected Hormone Balance -> Urinary Tract Health, 'permixon' alias dropped. PRECLIN_DIM: applicability restricted to the BioResponse DIM material both trials used, indole-3-carbinol excluded, total_enrollment 62 -> 551; the tamoxifen-metabolite finding is handed to the interaction owner, not scored here. INGR_BORON: calcium fructoborate separated out (alias removed, form excluded), total_enrollment 30 -> 19, and the two cited PMIDs recorded as two publications of one trial; the entry moves to reference tier because the stored 'observational' study_type was wrong and correcting it to rct_single was measured to raise nine standalone boron products from Evidence 0.5 to 3.1 on one small null trial. No scoring rule, weight or direction multiplier changed.",
       "5.3.14 (2026-09-07): INGR_CRANBERRY cites the current Cochrane version (PMID 37947276, Nov 2023, pub7; verified via PubMed esummary/efetch) in place of the superseded April 2023 record; notes and notable_studies restate that preparation and PAC-dose equivalence is uncertain and that the entry deliberately carries no dose policy. Applicability rules unchanged. clinical_applicability now reads mass units through normalization.canonicalize_mass_unit.",
       "5.3.13 (2026-09-05): Reclassify BRAND_PHOSPHATIDYLSERINE as INGR_PHOSPHATIDYLSERINE (ingredient-human): its own notes and both cited trials (PS-DHA, soybean PS) are ingredient-level, not SerinAid-specific; the serinaid alias remains a name for the ingredient. Registry-count depth-bonus fallback removed in code per DATABASE_SCHEMA.md.",
       "5.3.12 (2026-09-05): Individually reviewed lost botanical joins: add exact registry-projected preparation aliases for Echinacea purpurea aerial/herb/root extract (PMID 24554461) and Astragalus root/extract (PMID 37952511); give INGR_CINNAMON_EXTRACT an explicit Ceylon exclusion scope (PMID 24019277). Real-label review of 5.3.11: PRECLIN_BOSWELLIA required terms now include the printed extract spellings (gum extract, standardized extract, Apres-Flex, Casperome, frankincense phytosome) and its primary outcome uses the locked vocabulary label Joint & Bone Health. Fermented black garlic, whole red-grape extract and DPP-IV enzyme products remain unjoined after review. No enrollment, effect-direction, multiplier, dose-threshold or clinical-approval changes.",
@@ -7126,19 +7130,30 @@
       "key_endpoints": [
         "bone health ↑",
         "immunity ↑",
-        "mood ↑",
         "upper respiratory infection risk ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
-        "Reduce Stress/Anxiety",
         "Healthy Aging/Longevity",
         "Joint & Bone Health"
       ],
-      "notes": "Extensive evidence from systematic reviews and meta-analyses (2024-2025) supports vitamin D3 for bone health, immune function, and mood. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
+      "applicability": {
+        "scope": "ingredient",
+        "supported_outcomes": [
+          "immune_support",
+          "respiratory_infection_risk"
+        ],
+        "studied_population": "Adults. Both reviewed references are population-constrained: PMID 28202713 (BMJ 2017 IPD meta-analysis) found the acute respiratory infection benefit clearest in deficient individuals, so baseline vitamin-D status bounds the claim. Depressive-symptom and mood outcomes are NOT creditable here: this record cites no mood trial, and a favourable pooled effect would still not transfer without baseline status, co-nutrient and psychiatric-treatment context. OPEN: \"Joint & Bone Health\" remains in health_goals_supported but this record's own musculoskeletal reference (PMID 30293909, Lancet Diabetes Endocrinol 2018) reports no fracture/fall prevention and no meaningful BMD gain, so bone is deliberately absent from supported_outcomes pending a separate evidence review.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "28202713",
+          "30293909"
+        ]
+      },
+      "notes": "Reviewed scope is immune function and acute respiratory infection risk, clearest in people who are vitamin-D deficient (PMID 28202713). Mood and depressive-symptom claims are not carried: no mood trial is cited on this record. The cited musculoskeletal meta-analysis (PMID 30293909) found no fracture/fall prevention and no meaningful BMD gain, so the bone claim is under review. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
       "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-09-18",
       "references_structured": [
         {
           "type": "pubmed",
@@ -7800,27 +7815,27 @@
         "cobalamin",
         "methylcobalamin"
       ],
-      "category": "mitochondrial_energy",
-      "evidence_level": "ingredient-human",
+      "category": "vitamin_supplement",
+      "evidence_level": "reference",
       "published_studies": [
-        "RCT",
+        "reference",
         "systematic_review"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "nerve health ↑",
-        "energy ↑ (deficiency)",
-        "fatigue ↓ (deficiency)",
-        "CNS biomarkers ↑"
+        "CNS development, myelination and function (essentiality)",
+        "red blood cell formation and DNA synthesis (essentiality)",
+        "deficiency correction ↑",
+        "cognitive function — no effect in adults without overt deficiency",
+        "depressive symptoms — no effect in adults without overt deficiency"
       ],
       "health_goals_supported": [
-        "Increase Energy",
-        "Focus & Mental Clarity"
+        "Healthy Aging/Longevity"
       ],
-      "notes": "Vitamin B12 clearly benefits deficiency correction and neurologic or hematologic protection in deficient states. In people without overt deficiency, human trial evidence for cognition or fatigue improvement is much weaker.",
-      "notable_studies": "Randomized-trial synthesis PMID 33809274 found no consistent cognitive or depressive benefit from B12 supplementation in people without overt deficiency. NIH ODS also emphasizes B12's established role in deficiency correction and neurologic health rather than general nootropic benefit in replete adults.",
-      "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "notes": "Vitamin B12 is an essential nutrient: NIH ODS documents its requirement for central nervous system development, myelination and function, healthy red blood cell formation and DNA synthesis, with RDAs of 2.4 to 2.8 mcg for adults. Nutritional adequacy is a DRI-authority assessment owned by the dose and nutrition path (rda_optimal_uls.json, nutrition_authority_floor), not by this registry. The one interventional synthesis held here answers a narrower question - cognitive function, depressive symptoms and idiopathic fatigue in people WITHOUT overt B12 deficiency or advanced neurological disorders - and found no effect. That null is not evidence about vitamin B12 generally.",
+      "notable_studies": "PMID 33809274 (Nutrients 2021) pooled 16 RCTs and 6,276 participants in 'patients without advanced neurological disorders or overt vitamin B12 deficiency' and found no evidence for an effect of B12 alone or B-complex supplementation on any subdomain of cognitive function and no overall effect on measures of depression; only one study reported idiopathic fatigue, so no fatigue analysis was possible. The NIH ODS Vitamin B12 Health Professional fact sheet documents essentiality, deficiency and recommended intakes. Scope repair 2026-09-18: that null previously carried an ingredient-human effect direction across every B12-containing product; the entry is now a reference-tier anchor and describes only the question its source answered.",
+      "study_type": "reference",
+      "last_updated": "2026-09-18",
       "references_structured": [
         {
           "type": "pubmed",
@@ -7850,19 +7865,34 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "nih_ods",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin B12 - Health Professional Fact Sheet",
+          "citation": "NIH Office of Dietary Supplements",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+          "published_date": null,
+          "publication_types": [],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "reference",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "nih_ods"
         }
       ],
       "external_ids": {
         "unii": "P6YC3EG204"
       },
-      "effect_direction": "null",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 200,
+      "effect_direction": "mixed",
+      "primary_outcome": "Healthy Aging/Longevity",
+      "total_enrollment": 6276,
       "registry_completed_trials_count": 416,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Increase Energy; published_tags=RCT,systematic_review; registry_completed_trials_count=416; total_enrollment=200; endpoint_tags=glycemic_control; notes/citations include null-effect language.",
+      "effect_direction_rationale": "Reference-tier anchor (2026-09-18 scope repair). The cited randomized-trial synthesis is null for cognition and depression in adults without overt deficiency, while the NIH ODS reference documents essentiality and the benefit of deficiency correction - mixed as a record-level description, and deliberately non-scoring (study_type=reference, evidence_level=reference) so that a narrow null cannot act as vitamin B12's ingredient-level efficacy direction. Nutrient adequacy remains with the DRI authority path.",
       "endpoint_relevance_tags": [
-        "glycemic_control"
+        "healthy_aging"
       ]
     },
     {
@@ -18192,104 +18222,29 @@
       "aliases": [
         "boron",
         "boron citrate",
-        "boron glycinate",
-        "calcium fructoborate"
+        "boron glycinate"
       ],
-      "category": "joint_bone",
-      "evidence_level": "ingredient-human",
+      "category": "sports_performance",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
-        "human study"
+        "reference"
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "bone turnover markers support ↑",
-        "inflammatory markers ↓ (subset)",
-        "hormonal markers support ↑"
+        "plasma total and free testosterone — no effect",
+        "lean body mass — no effect",
+        "1-RM squat and bench press strength — no effect",
+        "plasma boron ↑ (exposure marker only)"
       ],
       "health_goals_supported": [
-        "Joint & Bone Health",
-        "Healthy Aging/Longevity"
+        "Muscle Growth & Recovery"
       ],
-      "notes": "Human evidence for boron is still small and biomarker-focused. Some trials of calcium fructoborate report short-term improvements in inflammatory markers and knee-discomfort scores, while older boron-supplementation studies found no clear anabolic or testosterone benefit in bodybuilders (PMID 25433580, PMID 24940052, PMID 8508192, PMID 7889885).",
-      "notable_studies": "Calcium fructoborate placebo-controlled trials reported reductions in CRP, IL-6, lipids, and selected discomfort scores over 14 to 30 days (PMID 25433580; PMID 24940052). By contrast, earlier boron-supplementation trials in male bodybuilders did not show clear strength or testosterone benefits despite higher plasma boron (PMID 8508192; PMID 7889885).",
-      "study_type": "observational",
-      "last_updated": "2026-03-07",
+      "notes": "The human evidence held on this entry for plain boron is one small randomized placebo-controlled trial: 19 male bodybuilders, 10 given 2.5 mg boron daily and 9 placebo for 7 weeks, with no effect on plasma total or free testosterone, lean body mass or strength. That trial was published twice - PMID 8508192 (Int J Sport Nutr 1993) and PMID 7889885 (Environ Health Perspect 1994) report the same 19 participants and the same measures - so this entry cites two publications of ONE trial, not two trials. Scope repair 2026-09-18: study_type was 'observational' although the source is a randomized controlled trial, and total_enrollment was 30 rather than the 19 the source states. The entry is now held at reference tier - it earns no evidence points - because one small off-axis null trial does not establish ingredient-level efficacy for the bone, joint and multivitamin uses these products carry boron for. Calcium fructoborate was removed from the aliases and excluded in applicability: it is a different compound with its own positive short-term trials, and merging the two materials let a plain-boron null speak for fructoborate products and vice versa. No source on this entry studied bone turnover, joint or inflammatory endpoints, so those key_endpoints were removed.",
+      "notable_studies": "PMID 8508192: 'The effect of boron supplementation on lean body mass, plasma testosterone levels, and strength in male bodybuilders' - 19 men, 2.5 mg/day for 7 weeks; plasma boron rose but 'analysis of variance indicated no significant effect of boron supplementation on any of the dependent variables'. PMID 7889885 is the same trial reported in Environmental Health Perspectives ('boron supplementation affects these variables not at all'). Calcium fructoborate trials - CRP, IL-6 and lipid markers over 30 days, and knee discomfort over 14 days - are a separate material and are deliberately not curated here; their identifiers are recorded in scripts/audits/evidence_expansion_2026_09/NULL_SCOPE_AUDIT.md rather than on this entry, and a calcium-fructoborate record would need its own review.",
+      "study_type": "reference",
+      "last_updated": "2026-09-18",
       "references_structured": [
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "25433580",
-          "doi": "10.1007/s12011-014-0155-9",
-          "title": "Effects of Calcium Fructoborate on Levels of C-Reactive Protein, Total Cholesterol, Low-Density Lipoprotein, Triglycerides, IL-1β, IL-6, and MCP-1: a Double-blind, Placebo-controlled Clinical Study.",
-          "citation": "Biological trace element research (2015-02-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/25433580/",
-          "published_date": "2015-02-01",
-          "publication_types": [
-            "Journal Article",
-            "Randomized Controlled Trial",
-            "Research Support, Non-U.S. Gov't"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "Borates",
-            "C-Reactive Protein",
-            "Chemokine CCL2",
-            "Cholesterol",
-            "Double-Blind Method",
-            "Female",
-            "Fructose",
-            "Humans",
-            "Interleukin-1beta",
-            "Interleukin-6",
-            "Lipoproteins, LDL",
-            "Male",
-            "Middle Aged",
-            "Time Factors",
-            "Triglycerides"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "rct",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "24940052",
-          "doi": "10.2147/CIA.S64590",
-          "title": "Short-term efficacy of calcium fructoborate on subjects with knee discomfort: a comparative, double-blind, placebo-controlled clinical study.",
-          "citation": "Clinical interventions in aging (2014-01-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/24940052/",
-          "published_date": "2014-01-01",
-          "publication_types": [
-            "Comparative Study",
-            "Journal Article",
-            "Randomized Controlled Trial"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "Anti-Inflammatory Agents",
-            "Arthralgia",
-            "Borates",
-            "Double-Blind Method",
-            "Female",
-            "Fructose",
-            "Humans",
-            "Knee Joint",
-            "Male",
-            "Middle Aged",
-            "Osteoarthritis, Knee",
-            "Pain Measurement",
-            "Surveys and Questionnaires"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "rct",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
@@ -18361,14 +18316,30 @@
         "unii": "N9E3X5056Q"
       },
       "effect_direction": "null",
-      "primary_outcome": "Joint & Bone Health",
-      "total_enrollment": 30,
+      "primary_outcome": "Muscle Growth & Recovery",
+      "total_enrollment": 19,
       "registry_completed_trials_count": 526,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=observational; evidence_level=ingredient-human; primary_outcome=Joint & Bone Health; published_tags=RCT,human study; registry_completed_trials_count=526; total_enrollment=30; notes/citations include null-effect language.",
+      "effect_direction_rationale": "Null retained and now sourced to a single material and indication: one randomized placebo-controlled trial of 2.5 mg/day plain boron in 19 male bodybuilders found no effect on testosterone, lean mass or strength. The stored study_type was 'observational', which was simply wrong - the source is an RCT - but correcting it to rct_single was measured on 2026-09-18 to make this entry eligible for the primary-evidence floor and to RAISE nine standalone boron products from Evidence 0.5 to 3.1 on the strength of one small null trial. The entry is therefore anchored at reference tier, the same treatment INGR_VITAMIN_A_BETA_CAROTENE carries: real randomized sources that do not establish ingredient-level efficacy for anything these products are sold for. The source design is stated in notes and key_endpoints rather than being misdescribed in study_type. total_enrollment corrected 30 -> 19. Calcium fructoborate evidence was separated out and no longer contributes to this direction.",
       "endpoint_relevance_tags": [
-        "joint_health"
-      ]
+        "muscle_recovery"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "fructoborate"
+        ],
+        "supported_outcomes": [
+          "testosterone_lean_mass_strength"
+        ],
+        "studied_population": "Nineteen male bodybuilders aged 20-27 supplemented with 2.5 mg boron daily for 7 weeks; no bone, joint or inflammatory population was studied.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "8508192",
+          "7889885"
+        ],
+        "reason": "Calcium fructoborate is a distinct compound with its own randomized placebo-controlled trials reporting reductions in inflammatory markers and knee discomfort (catalogued in scripts/audits/evidence_expansion_2026_09/NULL_SCOPE_AUDIT.md, deliberately not cited here so they stay attached to the material that was actually studied); those results are not evidence about plain boron and are not curated on this entry, so rows resolving to calcium fructoborate are excluded rather than inheriting this null. This exclusion does not establish an effective boron dose, a bone or joint effect, or ineffectiveness of calcium fructoborate."
+      }
     },
     {
       "id": "INGR_ASTRAGALUS",
@@ -18840,25 +18811,27 @@
         "diindolylmethane",
         "3,3'-diindolylmethane"
       ],
-      "category": "metabolic_blood_sugar",
+      "category": "hormonal_endocrine",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
         "early human"
       ],
-      "score_contribution": "tier_2",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "estrogen metabolite profile modulation ↑",
-        "inflammation markers support ↑"
+        "cervical cytology / CIN2+ at 6 months — no clear benefit (PMID 22075942)",
+        "HPV clearance — no clear benefit (PMID 22075942)",
+        "urinary 2/16α-hydroxyestrone ratio ↑ (biomarker, PMID 28560655)",
+        "serum SHBG ↑ (biomarker, PMID 28560655)",
+        "breast density — no change (PMID 28560655)"
       ],
       "health_goals_supported": [
-        "Hormone Balance",
-        "Healthy Aging/Longevity"
+        "Hormone Balance"
       ],
-      "notes": "Human evidence for DIM remains early and indication-specific. Small randomized trials show that DIM can alter estrogen-metabolism biomarkers, but robust clinical outcome evidence is limited and some settings raise interaction concerns, such as reduced tamoxifen-metabolite levels during adjunctive use (PMID 22075942, PMID 28560655).",
-      "notable_studies": "A randomized placebo-controlled trial in women with low-grade cervical cytological abnormalities did not show clear lesion-resolution benefit despite biologic rationale (PMID 22075942). In tamoxifen-treated breast-cancer patients, BR-DIM shifted estrogen-metabolism biomarkers and raised SHBG but also lowered tamoxifen metabolites, making the clinical interpretation mixed (PMID 28560655).",
+      "notes": "Human evidence for diindolylmethane is early, material-specific and confined to clinical populations. Both randomized trials used BioResponse DIM (BR-DIM): 150 mg/day for 6 months in women with newly diagnosed low-grade cervical cytological abnormalities (PMID 22075942, 551 women analysed), where DIM was unlikely to affect cytology or HPV infection and the CIN2+ difference was not significant; and 150 mg twice daily for 12 months in women taking tamoxifen (PMID 28560655, n=130), whose primary endpoint was a urinary estrogen-metabolite ratio - a biomarker, not a patient-important outcome. Neither trial asks whether DIM does anything for the general hormone-balance use these products are sold for. Scope repair 2026-09-18: applicability is now restricted to the branded material the trials used, and indole-3-carbinol rows are excluded.",
+      "notable_studies": "PMID 22075942 (BJC 2012): pragmatic double-blind RCT, 150 mg/day DIM from BioResponse DIM vs placebo for 6 months; of 551 randomised women analysed, 9% on DIM and 12% on placebo had CIN2+ (RR 0.7, 95% CI 0.4-1.2) and the authors conclude DIM 'is unlikely to have an effect on cytology or HPV infection'. PMID 28560655 (BCRT 2017): 130 women on tamoxifen randomised to BR-DIM 150 mg twice daily or placebo for 12 months; the 2/16alpha-OHE1 ratio and SHBG rose and breast density did not change, while plasma tamoxifen metabolites including endoxifen FELL versus placebo (P<0.001). That last finding is a drug-interaction signal and belongs to the interaction owner (ingredient_interaction_rules / curated_interactions), not to an efficacy direction here; it is logged as a handoff, not as a rule, because interaction severity is that owner's review.",
       "study_type": "rct_single",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-09-18",
       "references_structured": [
         {
           "type": "pubmed",
@@ -18936,13 +18909,35 @@
       },
       "effect_direction": "null",
       "primary_outcome": "Hormone Balance",
-      "total_enrollment": 62,
+      "total_enrollment": 551,
       "registry_completed_trials_count": 15,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Hormone Balance; published_tags=RCT,early human; registry_completed_trials_count=15; total_enrollment=62; endpoint_tags=digestive_health; notes/citations include null-effect language.",
+      "effect_direction_rationale": "Null retained. The only trial with a patient-important endpoint (cervical cytology / CIN2+, PMID 22075942) was null on its primary endpoint; the second trial's primary endpoint is a urinary estrogen-metabolite biomarker, and a positive secondary or biomarker result may never convert a null primary into a positive direction. study_type=rct_single because only one trial addresses a clinical outcome; total_enrollment=551 corrected from 62 on 2026-09-18 against the source abstract. evidence_level stays ingredient-human rather than branded-rct: the branded material is expressed in the applicability scope, and promoting the tier would raise this null record's primary-evidence floor without any new evidence.",
       "endpoint_relevance_tags": [
-        "digestive_health"
-      ]
+        "hormone_balance"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "br-dim",
+          "bioresponse"
+        ],
+        "excluded_form_terms": [
+          "indole 3 carbinol",
+          "i3c"
+        ],
+        "supported_outcomes": [
+          "estrogen_metabolite_ratio"
+        ],
+        "studied_population": "Women in defined clinical populations - newly diagnosed low-grade cervical cytological abnormalities, and breast-cancer patients taking tamoxifen - not healthy adults using a hormone-balance supplement.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "22075942",
+          "28560655"
+        ],
+        "reason": "Both reviewed trials administered BioResponse DIM (BR-DIM), an absorption-enhanced branded complex, and equivalence to unspecified crystalline diindolylmethane at the same milligram amount is not established by these sources. Indole-3-carbinol is excluded because it is a different compound (DIM's precursor) that neither trial administered; rows printing it reach this entry only through an upstream identity mapping. This preparation scope does not establish an effective dose, a clinical benefit, or ineffectiveness of an excluded product."
+      }
     },
     {
       "id": "PRECLIN_SHILAJIT_GENERIC",
@@ -20753,8 +20748,7 @@
         "serenoa repens",
         "sabal serrulata",
         "saw palmetto extract",
-        "saw palmetto berry",
-        "permixon"
+        "saw palmetto berry"
       ],
       "category": "urinary_genitourinary",
       "evidence_level": "ingredient-human",
@@ -20762,21 +20756,21 @@
       "published_studies": [
         "RCT"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_2",
       "key_endpoints": [
-        "AUA symptom score",
+        "AUA symptom score — no significant improvement vs placebo (CAMUS)",
         "IPSS score",
-        "peak urinary flow rate",
+        "peak urinary flow rate (Qmax)",
         "post-void residual volume",
         "nocturia frequency",
         "BPH Impact Index"
       ],
       "health_goals_supported": [
-        "Hormone Balance"
+        "Urinary Tract Health"
       ],
-      "notes": "Liposterolic extract of Serenoa repens berries (ChEMBL CHEMBL2108769, max_phase=3). The CAMUS trial (NCT00603304, n=369, NIDDK-sponsored Phase 3) found no significant improvement vs placebo at doses up to 960mg/day over 72 weeks. However, the PERLES trial (NCT02121613, n=833, Phase 4) tested Permixon 160mg BID vs placebo with tamsulosin reference. Evidence remains mixed — earlier meta-analyses were positive but landmark RCTs showed null results. Included for completeness at tier_2 due to volume of human RCT data.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT00603304 (CAMUS, n=369 Phase 3): multisite NIDDK/NCCIH-sponsored double-blind RCT testing saw palmetto extract at escalating doses (320-960mg) for BPH over 72 weeks — no significant AUA symptom score improvement vs placebo (published JAMA 2011). NCT02121613 (PERLES, n=833 Phase 4): Permixon 160mg BID vs placebo with tamsulosin reference for LUTS/BPH across 58 European sites. NCT00037154 (n=224 Phase 3): NIDDK-sponsored RCT of saw palmetto 160mg BID in moderate-to-severe BPH.",
+      "notes": "Liposterolic extract of Serenoa repens berries (ChEMBL CHEMBL2108769, max_phase=3). This entry holds the GENERIC saw palmetto extract evidence only, and it is null: the CAMUS trial (NCT00603304, n=369, NIDDK/NCCIH Phase 3) found no significant AUA symptom score improvement vs placebo at escalating doses up to 960 mg/day over 72 weeks, and NCT00037154 (n=224, Phase 3) tested 160 mg twice daily in moderate-to-severe BPH. Scope repair 2026-09-18: evidence specific to the hexanic extract Permixon - the PERLES trial (NCT02121613) and the Permixon-only meta-analysis PMID 29694707, whose methods state that 'Articles studying S. repens extracts other than Permixon were excluded' and which reports favourable nocturia and Qmax results - was removed from this entry because it is material-specific and does not transfer to the unspecified or liposterolic extracts covered here. PMID 12006122 was removed for the same reason plus indication: it is an androgenetic-alopecia (hair loss) trial of a botanical 5-alpha-reductase blend of LSESr and beta-sitosterol with 10 actively treated subjects, not saw palmetto monotherapy on this entry's urinary endpoints.",
+      "last_updated": "2026-09-18",
+      "notable_studies": "NCT00603304 (CAMUS, n=369, Phase 3, NIDDK/NCCIH): multisite double-blind RCT of saw palmetto extract at escalating doses (320-960 mg/day) for BPH over 72 weeks - no significant AUA symptom score improvement vs placebo (published JAMA 2011). NCT00037154 (n=224, Phase 3, NIDDK/NCCIH): saw palmetto 160 mg twice daily in moderate-to-severe BPH. Hexanic-extract (Permixon) evidence is favourable but material-specific and is deliberately not curated on this generic entry; a Permixon-scoped record would need its own review.",
       "references_structured": [
         {
           "type": "clinical_trial",
@@ -20786,15 +20780,6 @@
           "enrollment": 369,
           "phase": "Phase 3",
           "sponsor": "University of Alabama at Birmingham / NIDDK / NCCIH"
-        },
-        {
-          "type": "clinical_trial",
-          "nct_id": "NCT02121613",
-          "title": "PERLES - Permixon 160mg vs Placebo in LUTS Due to BPH",
-          "evidence_grade": "rct",
-          "enrollment": 833,
-          "phase": "Phase 4",
-          "sponsor": "Pierre Fabre Medicament"
         },
         {
           "type": "clinical_trial",
@@ -20810,29 +20795,17 @@
           "authority": "EMBL-EBI ChEMBL",
           "chembl_id": "CHEMBL2108769",
           "max_phase": 3
-        },
-        {
-          "pmid": "12006122",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/12006122/",
-          "source": "PubMed",
-          "verified": true
-        },
-        {
-          "pmid": "29694707",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/29694707/",
-          "source": "PubMed",
-          "verified": true
         }
       ],
       "effect_direction": "null",
-      "primary_outcome": "Hormone Balance",
-      "total_enrollment": 833,
+      "primary_outcome": "Urinary Tract Health",
+      "total_enrollment": 369,
       "published_studies_count": 21,
       "registry_completed_trials_count": 19,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Hormone Balance; published_tags=RCT; published_studies_count=21; registry_completed_trials_count=19; total_enrollment=833; notes/citations include null-effect language.",
+      "effect_direction_rationale": "Null retained and now sourced to matching material and indication: both remaining trials are placebo-controlled RCTs of non-branded saw palmetto extract for BPH/LUTS and neither showed a significant symptom benefit. study_type=rct_multiple; evidence_level=ingredient-human; total_enrollment=369 (CAMUS, the largest remaining trial; it was 833 from the Permixon PERLES trial before the 2026-09-18 scope repair). Permixon-specific and androgenetic-alopecia citations were removed so the direction describes only what this entry actually covers.",
       "endpoint_relevance_tags": [
-        "hormone_balance"
+        "luts_bph"
       ]
     },
     {
@@ -22280,6 +22253,771 @@
         "cardiovascular",
         "muscle_recovery"
       ]
+    },
+    {
+      "id": "INGR_WHITE_KIDNEY_BEAN",
+      "standard_name": "White Kidney Bean Extract",
+      "aliases": [
+        "white kidney bean extract",
+        "white kidney bean seed extract",
+        "white kidney bean",
+        "phaseolus vulgaris extract",
+        "common bean extract",
+        "phase 2 carb controller"
+      ],
+      "category": "metabolic_blood_sugar",
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "RCT",
+        "systematic_review"
+      ],
+      "score_contribution": "tier_2",
+      "study_type": "systematic_review_meta",
+      "effect_direction": "positive_weak",
+      "key_endpoints": [
+        "body weight ↓ (-1.62 kg)",
+        "BMI ↓",
+        "fat mass ↓",
+        "waist circumference ↓",
+        "fasting glucose, triglycerides, insulin — no significant change"
+      ],
+      "health_goals_supported": [
+        "Weight Management"
+      ],
+      "primary_outcome": "Weight Management",
+      "endpoint_relevance_tags": [
+        "weight_management"
+      ],
+      "total_enrollment": 543,
+      "effect_direction_confidence": "medium",
+      "notes": "Oral white kidney bean (Phaseolus vulgaris) extract is rich in alpha-amylase inhibitors. A 2026 ingredient-level meta-analysis of 8 randomized controlled trials (543 adults with overweight or obesity) found reductions in weight, BMI, fat mass, waist and hip circumference, with no significant change in fasting glucose, triglycerides or insulin and no serious adverse events. The pooled weight effect is modest (-1.62 kg). IMPORTANT LIMITATION carried deliberately: alpha-amylase inhibitor extracts are not standardised by inhibitor units, so label milligrams do not guarantee equivalent activity, and no potency conversion is proposed or implied.",
+      "notable_studies": "PMID 42066439 (Nutrition Research 2026): 8 RCTs, n=543; weight -1.62 kg (95% CI -1.99 to -1.25), BMI -0.58 kg/m2, fat mass -1.17 kg, waist -1.58 cm, hip -0.99 cm, all P < .05. PMID 39170208: randomized, double-blind, placebo-controlled trial of the branded standardised extract Phaseolean at 1,500 and 3,000 mg/day for 45 days, positive at both doses; it supports the ingredient-level synthesis without establishing that every white kidney bean extract is equivalent.",
+      "effect_direction_rationale": "positive_weak, not positive_strong: the pooled base is 8 trials and 543 participants and the weight effect is -1.62 kg. study_type=systematic_review_meta; evidence_level=ingredient-human; total_enrollment=543 (the synthesis's own participant total). Authored Wave 2, 2026-09-18, sources re-fetched live.",
+      "applicability": {
+        "scope": "ingredient",
+        "minimum_daily_dose": 1000,
+        "dose_unit": "mg",
+        "supported_outcomes": [
+          "body_weight",
+          "body_composition"
+        ],
+        "studied_population": "Adults with overweight or obesity; not a claim for people at a healthy weight.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "42066439",
+          "39170208"
+        ],
+        "reason": "The reviewed trials dose 1,000-3,000 mg/day, so a 1,000 mg/day floor keeps products below the studied exposure out rather than letting the ingredient name carry the evidence. This scope establishes neither an alpha-amylase inhibitor potency equivalence nor ineffectiveness of a lower dose."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "42066439",
+          "title": "White kidney bean extract reduces body weight and adiposity with acceptable safety in adults with overweight and obese: a systematic review and meta-analysis.",
+          "citation": "Nutrition research (New York, N.Y.) (2026-06-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42066439/",
+          "published_date": "2026-06-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review",
+            "Meta-Analysis"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Phaseolus",
+            "Plant Extracts",
+            "Obesity",
+            "Overweight",
+            "Adiposity",
+            "Body Mass Index",
+            "Weight Loss",
+            "Randomized Controlled Trials as Topic",
+            "Energy Intake"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1016/j.nutres.2026.04.001"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39170208",
+          "title": "A randomized, double-blinded, placebo-controlled, single-center, comparative study evaluating Phaseolean® safety and efficacy in overweight/obese participants.",
+          "citation": "Heliyon (2024-08-15)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39170208/",
+          "published_date": "2024-08-15",
+          "publication_types": [
+            "Journal Article"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1016/j.heliyon.2024.e35144"
+        }
+      ],
+      "last_updated": "2026-09-18"
+    },
+    {
+      "id": "INGR_AMLA",
+      "standard_name": "Amla",
+      "aliases": [
+        "amla",
+        "amla extract",
+        "amla fruit extract",
+        "emblica officinalis",
+        "phyllanthus emblica",
+        "indian gooseberry",
+        "emblic"
+      ],
+      "category": "cardiovascular",
+      "evidence_level": "reference",
+      "published_studies": [
+        "RCT",
+        "systematic_review",
+        "reference"
+      ],
+      "score_contribution": "tier_3",
+      "study_type": "reference",
+      "effect_direction": "positive_weak",
+      "key_endpoints": [
+        "LDL cholesterol ↓ (-15.08 mg/dL; prediction interval crosses null)",
+        "triglycerides ↓ (-22.35 mg/dL; prediction interval crosses null)",
+        "hs-CRP ↓ (-1.70 mg/L; I2 = 0%)",
+        "VLDL cholesterol ↓",
+        "fasting blood glucose ↓"
+      ],
+      "health_goals_supported": [
+        "Cardiovascular/Heart Health"
+      ],
+      "primary_outcome": "Cardiovascular/Heart Health",
+      "endpoint_relevance_tags": [
+        "cardiovascular"
+      ],
+      "total_enrollment": 535,
+      "effect_direction_confidence": "medium",
+      "notes": "Two syntheses of Emblica officinalis (amla) fruit agree directionally on cardiometabolic risk markers at a studied 500-1500 mg/day. LIMITATIONS CARRIED DELIBERATELY, verified against the sources on 2026-09-18: the larger synthesis reports substantial heterogeneity (LDL-C I2 = 77%, triglycerides I2 = 62%) and its own PREDICTION INTERVALS CROSS NULL for both (LDL-C -48.29 to 18.13; triglycerides -73.47 to 28.77), meaning a future trial could plausibly show no benefit; only hs-CRP is homogeneous (I2 = 0%). The two syntheses are NOT independent replications - 9 RCTs searched to April 2021 and 5 RCTs searched to December 2022 on the same ingredient and outcomes will substantially overlap - so they are recorded as agreeing, not as confirming one another. The endpoints are physiological and clinical biomarkers, not demonstrated reductions in cardiovascular events. The 500 mg/day floor is supported by the dose range the 9-RCT synthesis itself reports across its included trials, not by one branded preparation; the measured catalog label median is 120 mg/day, so most amla products stay out. SCORING HELD 2026-09-18 (owner decision, direction NOT changed): the record stays positive_weak and keeps its 500-1500 mg/day dose context, but it is held at reference tier so it contributes no points. Reason: the existing primary-mass floor overstates positive_weak evidence here. Measured on DSLD 232044 (Capros amla extract 500 mg as the only scorable active), the chain is primary floor 14.0 x positive_weak 0.85 = 11.9 raw, then rescaled by the generic_botanical_branded archetype reference (11.9 / 18.0 x 20) = 13.2 of 20 - for overlapping syntheses with LDL-C and triglyceride prediction intervals crossing null and biomarker rather than patient-important endpoints. The hold is on this record, not on the floor: no scoring rule was changed.",
+      "notable_studies": "PMID 37296402 (2023): 9 RCTs, n=535, amla 500-1500 mg/day for 14-84 days; LDL-C -15.08 mg/dL (95% CI -25.43 to -4.73), VLDL-C -5.43, triglycerides -22.35, hs-CRP -1.70 mg/L. PMID 36934568 (2023): 5 RCTs; significant reductions in CRP, fasting blood glucose, LDL-C, total cholesterol and triglycerides with an increase in HDL-C. The branded AMX-160 trial (PMID 40262554) carries an erratum and is not cited here; an amla-syrup trial in female androgenetic alopecia is a different preparation and indication and is excluded.",
+      "effect_direction_rationale": "positive_weak and no stronger: consistent direction across two overlapping syntheses, but prediction intervals crossing null for the two lipid endpoints, I2 of 77% and 62%, biomarker rather than event endpoints, and no independent replication. study_type=systematic_review_meta; evidence_level=ingredient-human; total_enrollment=535 (the 9-RCT synthesis's participant total). Authored Wave 2 and corrected after independent review, 2026-09-18; scoring held at reference tier the same day, with the positive_weak direction deliberately retained rather than converted to null.",
+      "applicability": {
+        "scope": "ingredient",
+        "minimum_daily_dose": 500,
+        "dose_unit": "mg",
+        "supported_outcomes": [
+          "lipid_profile",
+          "hs_crp",
+          "fasting_glucose"
+        ],
+        "studied_population": "Adults, typically 40-58 years with an average BMI around 25.5.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "37296402",
+          "36934568"
+        ],
+        "reason": "The reviewed exposure is 500-1500 mg/day, a range the 9-RCT synthesis reports across its own included trials rather than one branded product. A 500 mg/day floor keeps the majority of catalog products, whose measured median is 120 mg/day, out of this evidence rather than extending credit below the supported exposure because the ingredient name matches. It establishes no effect at lower doses either way, and it does not convert between preparations."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "37296402",
+          "title": "Clinical effects of Emblica officinalis fruit consumption on cardiovascular disease risk factors: a systematic review and meta-analysis.",
+          "citation": "BMC complementary medicine and therapies (2023-06-09)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37296402/",
+          "published_date": "2023-06-09",
+          "publication_types": [
+            "Meta-Analysis",
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "mesh_terms": [
+            "Adult",
+            "Humans",
+            "Adolescent",
+            "Cardiovascular Diseases",
+            "Cholesterol",
+            "Phyllanthus emblica",
+            "Fruit",
+            "Cholesterol, LDL"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1186/s12906-023-03997-8"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "36934568",
+          "title": "The impact of Emblica Officinalis (Amla) on lipid profile, glucose, and C-reactive protein: A systematic review and meta-analysis of randomized controlled trials.",
+          "citation": "Diabetes & metabolic syndrome (2023-03-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36934568/",
+          "published_date": "2023-03-01",
+          "publication_types": [
+            "Meta-Analysis",
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Adult",
+            "Glucose",
+            "C-Reactive Protein",
+            "Phyllanthus emblica",
+            "Randomized Controlled Trials as Topic",
+            "Cholesterol, HDL",
+            "Dietary Supplements"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1016/j.dsx.2023.102729"
+        }
+      ],
+      "last_updated": "2026-09-18"
+    },
+    {
+      "id": "INGR_DEVILS_CLAW",
+      "standard_name": "Devil's Claw",
+      "aliases": [
+        "devil's claw",
+        "devils claw",
+        "devil's claw extract",
+        "devil's claw root extract",
+        "harpagophytum procumbens",
+        "harpagophytum"
+      ],
+      "category": "joint_bone",
+      "evidence_level": "reference",
+      "published_studies": [
+        "RCT",
+        "systematic_review",
+        "reference"
+      ],
+      "score_contribution": "tier_3",
+      "study_type": "reference",
+      "effect_direction": "positive_weak",
+      "key_endpoints": [
+        "non-specific low back pain ↓ vs placebo (moderate quality at best)"
+      ],
+      "health_goals_supported": [
+        "Joint & Bone Health"
+      ],
+      "primary_outcome": "Joint & Bone Health",
+      "endpoint_relevance_tags": [
+        "joint_pain"
+      ],
+      "total_enrollment": 197,
+      "effect_direction_confidence": "low",
+      "notes": "REVIEWED AND SUPPORTIVE, BUT NON-SCORING. The 2016 Cochrane update reports that Harpagophytum procumbens seems to reduce non-specific low back pain more than placebo, with evidence of moderate quality at best. The exposure it describes is HARPAGOSIDE, not extract mass, and the primary trials state the figures: PMID 10101629 gave Harpagophytum extract WS 1531 at 600 and 1200 mg containing 50 and 100 mg of harpagoside, and PMID 12509627 gave Doloteffin containing 60 mg of harpagoside daily. Measured against the catalog on 2026-09-18: exactly 1 of 25 products states harpagoside on its label (standardised to 1.5% of a 700 mg extract, about 10.5 mg/day) - roughly five times BELOW the lowest studied harpagoside dose. No catalog product currently establishes the studied exposure, so this entry is held at reference tier and contributes no evidence points. No extract-milligram to harpagoside conversion is proposed, and no harpagoside floor is encoded, because the applicability owner compares extract mass and a numeric marker floor there would wrongly pass a 700 mg extract against a 50 mg marker threshold. Correction 2026-09-18: an earlier draft of this entry recorded total_enrollment 2050, which is the whole Cochrane review's participant total across six different herbal medicines, not devil's claw alone; it now records 197, the largest devil's-claw-specific trial.",
+      "notable_studies": "PMID 26630428 (Spine 2016, Cochrane update, 14 RCTs and 2,050 participants ACROSS SIX HERBAL MEDICINES): Harpagophytum procumbens, Salix alba, Symphytum officinale, Solidago chilensis and lavender essential oil seem to reduce pain more than placebo, with evidence of moderate quality at best; Capsicum frutescens reduces pain more than placebo. PMID 10101629 (n=197): 600 and 1200 mg of extract WS 1531 containing 50 and 100 mg harpagoside vs placebo over 4 weeks; more pain-free patients on the higher dose (P = 0.027), with the effect concentrated in patients with more severe radiating pain. PMID 12509627 (n=88 pilot): Doloteffin containing 60 mg harpagoside daily vs rofecoxib 12.5 mg.",
+      "effect_direction_rationale": "positive_weak as a DESCRIPTION of the literature, held at reference tier so it earns nothing: the Cochrane grading is moderate quality at best, devil's claw is one of six herbs pooled in that review, and the studied exposure is 50-100 mg/day of harpagoside which no catalog label establishes. study_type=reference; evidence_level=reference; total_enrollment=197 (largest devil's-claw-specific trial, corrected from the review-wide 2,050). Authored and corrected Wave 2, 2026-09-18.",
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "harpagoside"
+        ],
+        "supported_outcomes": [
+          "low_back_pain"
+        ],
+        "studied_population": "Adults over 18 with acute, sub-acute or chronic non-specific low back pain.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "26630428"
+        ],
+        "reason": "Efficacy in the reviewed trials is characterised by harpagoside content of 50-100 mg/day, not by extract mass, and the one catalog label that states harpagoside delivers about 10.5 mg/day. The source label must itself establish harpagoside standardisation, and the entry is additionally held at reference tier because even that label does not reach the studied exposure. No extract-milligram to harpagoside conversion is inferred. A refused product is not thereby shown to be ineffective."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "26630428",
+          "title": "Herbal Medicine for Low Back Pain: A Cochrane Review.",
+          "citation": "Spine (2016-01-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26630428/",
+          "published_date": "2016-01-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Analgesics",
+            "Evidence-Based Medicine",
+            "Humans",
+            "Low Back Pain",
+            "Pain Measurement",
+            "Plant Preparations",
+            "Randomized Controlled Trials as Topic",
+            "Research Design",
+            "Treatment Outcome"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1097/BRS.0000000000001310"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "10101629",
+          "title": "Effectiveness of Harpagophytum extract WS 1531 in the treatment of exacerbation of low back pain: a randomized, placebo-controlled, double-blind study.",
+          "citation": "European journal of anaesthesiology (1999-03)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10101629/",
+          "published_date": "1999-03-01",
+          "publication_types": [
+            "Clinical Trial",
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "last_updated": "2026-09-18"
+    },
+    {
+      "id": "INGR_SENNA",
+      "standard_name": "Senna",
+      "aliases": [
+        "senna",
+        "senna leaf",
+        "senna leaf extract",
+        "senna alexandrina",
+        "cassia angustifolia",
+        "alexandrian senna"
+      ],
+      "category": "digestive_gut",
+      "evidence_level": "reference",
+      "published_studies": [
+        "RCT",
+        "systematic_review",
+        "reference"
+      ],
+      "score_contribution": "tier_1",
+      "study_type": "reference",
+      "effect_direction": "positive_strong",
+      "key_endpoints": [
+        "chronic constipation relief ↑ (grade A / first-line)",
+        "adverse effects: abdominal pain, cramping, bloating, diarrhoea, nausea"
+      ],
+      "health_goals_supported": [
+        "Digestive Health"
+      ],
+      "primary_outcome": "Digestive Health",
+      "endpoint_relevance_tags": [
+        "digestive_health"
+      ],
+      "effect_direction_confidence": "medium",
+      "notes": "REVIEWED AND SUPPORTIVE, BUT NON-SCORING. That senna works as a laxative is not in dispute: PMID 33767108 grades the short- and long-term efficacy of senna as good (grade A) evidence supporting first-line use for chronic constipation. IMPORTANT LINEAGE CORRECTION 2026-09-18: an earlier draft of this entry presented PMID 35943487 as a second independent grade-A review. It is not - it states in its own abstract that it is 'a synopsis of an updated systematic review the authors conducted', so it shares an evidence base with the first and may not be counted as independent confirmation. PMID 29885259 IS independent, but it is modest: 7 RCTs and 444 patients in long-term care, senna superior to or as effective as other laxatives, with the authors noting short trial durations and low quality in some included trials. The applicability problem is potency, not efficacy: the evidence is characterised by SENNOSIDE exposure while catalog labels state senna leaf extract mass, and no source establishes an extract-milligram equivalence. Measured 2026-09-18: 0 of 15 catalog products state sennosides on the label, so nothing establishes the studied exposure and this entry contributes no evidence points. SAFETY IS A SEPARATE OWNER: senna is a stimulant laxative with abdominal pain, cramping, bloating, diarrhoea and nausea reported as common adverse events and dependence and electrolyte concerns on chronic use; those are routed to the safety owner and do not reduce the efficacy direction recorded here.",
+      "notable_studies": "PMID 33767108 (Am J Gastroenterol 2021): 'We found good evidence to recommend polyethylene glycol or senna as first-line laxatives'. PMID 35943487 (J Am Assoc Nurse Pract 2022) is a synopsis of the authors' own updated systematic review of 41 randomized trials of at least 4 weeks, reaching the same grade A conclusion - the same evidence base restated, not a replication. PMID 29885259 (2018) is an independent systematic review of 7 RCTs and 444 long-term-care patients in which senna was superior to or as effective as other laxatives, with the authors cautioning that short durations and variable quality leave long-term efficacy and safety inconclusive.",
+      "effect_direction_rationale": "positive_strong as a DESCRIPTION of the laxative literature - one grade A systematic review plus an independent long-term-care review agreeing - held at reference tier so it earns nothing, because no catalog label establishes the sennoside exposure the evidence is characterised by. Confidence lowered from high to medium on 2026-09-18 after verifying that PMID 35943487 is the authors' own synopsis rather than a second independent grade-A review. study_type=reference; evidence_level=reference; total_enrollment omitted because no synthesis states a pooled participant total.",
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "sennoside",
+          "sennosides"
+        ],
+        "supported_outcomes": [
+          "chronic_constipation"
+        ],
+        "studied_population": "Adults with chronic constipation, including long-term-care residents.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "33767108",
+          "35943487",
+          "29885259"
+        ],
+        "reason": "Laxative effect is characterised by sennoside content and no source states an extract-milligram equivalence, so the source label must itself state sennosides; 0 of 15 catalog products do. Inventing that conversion is forbidden. A refused product is not thereby shown to be ineffective."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "33767108",
+          "title": "Efficacy and Safety of Over-the-Counter Therapies for Chronic Constipation: An Updated Systematic Review.",
+          "citation": "The American journal of gastroenterology (2021-06-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33767108/",
+          "published_date": "2021-06-01",
+          "publication_types": [
+            "Journal Article",
+            "Research Support, Non-U.S. Gov't",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Bisacodyl",
+            "Cathartics",
+            "Chronic Disease",
+            "Citrates",
+            "Constipation",
+            "Defecation",
+            "Fruit",
+            "Gastrointestinal Agents",
+            "Glucans",
+            "Humans",
+            "Inulin",
+            "Laxatives",
+            "Magnesium",
+            "Nonprescription Drugs",
+            "Oligosaccharides",
+            "Organometallic Compounds",
+            "Picolines",
+            "Polyethylene Glycols",
+            "Psyllium",
+            "Senna Extract",
+            "Yogurt"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.14309/ajg.0000000000001222"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "35943487",
+          "title": "Evidence-based treatment recommendations for OTC management of chronic constipation.",
+          "citation": "Journal of the American Association of Nurse Practitioners (2022-09-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35943487/",
+          "published_date": "2022-09-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Constipation",
+            "Dietary Fiber",
+            "Humans",
+            "Laxatives",
+            "Nonprescription Drugs",
+            "Polyethylene Glycols",
+            "Treatment Outcome"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1097/JXX.0000000000000760"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "29885259",
+          "title": "Efficacy and safety of laxatives for chronic constipation in long-term care settings: A systematic review.",
+          "citation": "Journal of clinical pharmacy and therapeutics (2018-10-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29885259/",
+          "published_date": "2018-10-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Animals",
+            "Constipation",
+            "Drug-Related Side Effects and Adverse Reactions",
+            "Humans",
+            "Laxatives",
+            "Long-Term Care",
+            "Randomized Controlled Trials as Topic"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1111/jcpt.12721"
+        }
+      ],
+      "last_updated": "2026-09-18"
+    },
+    {
+      "id": "INGR_D_MANNOSE",
+      "standard_name": "D-Mannose",
+      "aliases": [
+        "d-mannose",
+        "d mannose",
+        "mannose"
+      ],
+      "category": "urinary_genitourinary",
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "RCT",
+        "systematic_review"
+      ],
+      "score_contribution": "tier_3",
+      "study_type": "rct_multiple",
+      "effect_direction": "null",
+      "key_endpoints": [
+        "medically attended recurrent UTI — no reduction vs placebo",
+        "symptom duration, antibiotic use, time to next UTI — no significant difference"
+      ],
+      "health_goals_supported": [
+        "Urinary Tract Health"
+      ],
+      "primary_outcome": "Urinary Tract Health",
+      "endpoint_relevance_tags": [
+        "recurrent_uti_prevention"
+      ],
+      "total_enrollment": 598,
+      "effect_direction_confidence": "high",
+      "notes": "REVIEWED NULL, not unreviewed. The decisive source is a 598-participant double-blind placebo-controlled trial across 99 UK primary care centres: 2 g/day of D-mannose powder for 6 months did not reduce the proportion of women with recurrent UTI who went on to contact ambulatory care with a clinically suspected UTI (51.0% vs 55.7%; risk difference -5%, 95% CI -13% to 3%), with no significant difference in any secondary outcome, and the authors conclude it should not be recommended for prophylaxis in this group. A 2025 meta-analysis of 6 RCTs and 1,167 participants agrees (RR 0.57, 95% CI 0.29-1.15). Earlier favourable syntheses rest on open-label and secondary-care studies that the placebo-controlled trial supersedes. Under the 2026-09-18 owner decision a null direction contributes zero affirmative efficacy credit: this record exists so the review state is known and explainable, not to add or subtract points.",
+      "notable_studies": "PMID 38587819 (JAMA Internal Medicine 2024, ISRCTN13283516): 598 women 18 or older with recurrent UTI, 2 g/day D-mannose powder vs matched placebo for 6 months; primary outcome 150/294 (51.0%) vs 161/289 (55.7%), P = .26, with similar results in per protocol, imputation and preplanned subgroup analyses. PMID 41004704 (2025): 6 RCTs, 1,167 participants, no reduction versus control or antibiotics, including in postmenopausal women.",
+      "effect_direction_rationale": "null with high confidence: the largest placebo-controlled trial in the target population was null on its primary endpoint and the most recent pairwise meta-analysis of RCTs agrees. study_type=rct_multiple; evidence_level=ingredient-human; total_enrollment=598 (the largest trial). Authored Wave 2, 2026-09-18. This is a reviewed no-benefit finding, not an absence of review, and it is not a safety penalty.",
+      "applicability": {
+        "scope": "ingredient",
+        "minimum_daily_dose": 2000,
+        "dose_unit": "mg",
+        "supported_outcomes": [
+          "recurrent_uti_prevention"
+        ],
+        "studied_population": "Women 18 or older living in the community with a documented history of recurrent UTI; mean age 58.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "38587819",
+          "41004704"
+        ],
+        "reason": "The null result was measured at 2 g/day. A product delivering less was not studied, so this evidence does not speak to it in either direction; it is refused as below the applicable clinical dose rather than being told that benefit was disproved at a dose nobody tested."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38587819",
+          "title": "d-Mannose for Prevention of Recurrent Urinary Tract Infection Among Women: A Randomized Clinical Trial.",
+          "citation": "JAMA internal medicine (2024-06-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38587819/",
+          "published_date": "2024-06-01",
+          "publication_types": [
+            "Journal Article",
+            "Multicenter Study",
+            "Randomized Controlled Trial",
+            "Research Support, Non-U.S. Gov't"
+          ],
+          "mesh_terms": [
+            "Adult",
+            "Aged",
+            "Female",
+            "Humans",
+            "Middle Aged",
+            "Double-Blind Method",
+            "Mannose",
+            "Recurrence",
+            "Urinary Tract Infections"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1001/jamainternmed.2024.0264"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "41004704",
+          "title": "Efficacy of D-mannose as prophylaxis of recurrent urinary tract infection: a systematic review and meta-analysis of randomized controlled trials.",
+          "citation": "Jornal brasileiro de nefrologia (2025-01-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41004704/",
+          "published_date": "2025-01-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review",
+            "Meta-Analysis"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Urinary Tract Infections",
+            "Randomized Controlled Trials as Topic",
+            "Mannose",
+            "Female",
+            "Secondary Prevention",
+            "Recurrence",
+            "Anti-Bacterial Agents",
+            "Treatment Outcome"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1590/2175-8239-JBN-2025-0169en"
+        }
+      ],
+      "last_updated": "2026-09-18"
+    },
+    {
+      "id": "INGR_D_ASPARTIC_ACID",
+      "standard_name": "D-Aspartic Acid",
+      "aliases": [
+        "d-aspartic acid",
+        "d aspartic acid",
+        "daa",
+        "d-aspartate"
+      ],
+      "category": "sports_performance",
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "RCT"
+      ],
+      "score_contribution": "tier_3",
+      "study_type": "rct_multiple",
+      "effect_direction": "null",
+      "key_endpoints": [
+        "total and free testosterone — no effect",
+        "luteinizing hormone — no effect",
+        "lean body mass and strength — no effect"
+      ],
+      "health_goals_supported": [
+        "Muscle Growth & Recovery"
+      ],
+      "primary_outcome": "Muscle Growth & Recovery",
+      "endpoint_relevance_tags": [
+        "muscle_recovery"
+      ],
+      "total_enrollment": 22,
+      "effect_direction_confidence": "medium",
+      "notes": "REVIEWED NULL, not unreviewed. Three independent single-ingredient randomized trials in healthy trained men all found no testosterone effect: 6 g/day for 12 weeks in resistance-trained men (no change in total or free testosterone), 3 g/day in a placebo-controlled crossover in male climbers (no effect on testosterone, calculated free testosterone or luteinizing hormone), and 6 g/day for 14 days in boxers under simulated altitude (no effect on testosterone, cortisol or haematological responses). A fourth trial reporting benefit gave D-aspartic acid together with ubiquinol and zinc to men attending an infertility clinic; a three-component combination in a clinical population may not lend its direction to this ingredient. Under the 2026-09-18 owner decision a null direction contributes zero affirmative efficacy credit.",
+      "notable_studies": "PMID 28841667 (PLoS One 2017): randomised, double-blind, placebo-controlled, 22 resistance-trained men, 6 g/day for 12 weeks - no change in basal total or free testosterone; estradiol fell 16%. PMID 29893592 (IJSNEM 2019): single-blinded placebo-controlled crossover, 16 male climbers, 3 g/day for 2 weeks - no significant effect on testosterone, calculated free testosterone or luteinizing hormone. PMID 38201906 (Nutrients 2023): 16 male boxers, 6 g/day for 14 days with normobaric hypoxia - no significant effect on testosterone, cortisol or haematology.",
+      "effect_direction_rationale": "null: three single-ingredient RCTs concordant on the same primary biomarker at two different doses. Confidence is medium rather than high because each trial is small (16-22 participants). study_type=rct_multiple; evidence_level=ingredient-human; total_enrollment=22 (the largest single trial, per the field's convention). Authored Wave 2, 2026-09-18.",
+      "applicability": {
+        "scope": "ingredient",
+        "minimum_daily_dose": 3000,
+        "dose_unit": "mg",
+        "supported_outcomes": [
+          "testosterone",
+          "lean_mass",
+          "strength"
+        ],
+        "studied_population": "Healthy resistance-trained or competitive male athletes aged 18-36.",
+        "reviewed_at": "2026-09-18",
+        "source_pmids": [
+          "28841667",
+          "29893592",
+          "38201906"
+        ],
+        "reason": "The null results were measured at 3-6 g/day. A product delivering less than 3 g/day was not studied and is refused as below the applicable clinical dose rather than being characterised by a result at a dose it does not deliver."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "28841667",
+          "title": "The effects of d-aspartic acid supplementation in resistance-trained men over a three month training period: A randomised controlled trial.",
+          "citation": "PloS one (2017-01-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28841667/",
+          "published_date": "2017-01-01",
+          "publication_types": [
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [
+            "Adult",
+            "D-Aspartic Acid",
+            "Dietary Supplements",
+            "Double-Blind Method",
+            "Electromyography",
+            "Humans",
+            "Male",
+            "Placebos",
+            "Weight Lifting",
+            "Young Adult"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1371/journal.pone.0182630"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "29893592",
+          "title": "Short-Term d-Aspartic Acid Supplementation Does Not Affect Serum Biomarkers Associated With the Hypothalamic-Pituitary-Gonadal Axis in Male Climbers.",
+          "citation": "International journal of sport nutrition and exercise metabolism (2019-05-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29893592/",
+          "published_date": "2019-05-01",
+          "publication_types": [
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [
+            "Adult",
+            "Biomarkers",
+            "Cross-Over Studies",
+            "D-Aspartic Acid",
+            "Dietary Supplements",
+            "Humans",
+            "Hydrocortisone",
+            "Hypothalamo-Hypophyseal System",
+            "Luteinizing Hormone",
+            "Male",
+            "Mountaineering",
+            "Pituitary-Adrenal System",
+            "Sex Hormone-Binding Globulin",
+            "Single-Blind Method",
+            "Sports Nutritional Physiological Phenomena",
+            "Testosterone"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.1123/ijsnem.2018-0076"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38201906",
+          "title": "The Effects of Six-Gram D-Aspartic Acid Supplementation on the Testosterone, Cortisol, and Hematological Responses of Male Boxers Subjected to 11 Days of Nocturnal Exposure to Normobaric Hypoxia.",
+          "citation": "Nutrients (2023-12-25)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38201906/",
+          "published_date": "2023-12-25",
+          "publication_types": [
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Male",
+            "Aspartic Acid",
+            "D-Aspartic Acid",
+            "Dietary Supplements",
+            "Hydrocortisone",
+            "Hypoxia",
+            "Luteinizing Hormone",
+            "Testosterone"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "doi": "10.3390/nu16010076"
+        }
+      ],
+      "last_updated": "2026-09-18"
     }
   ]
 }

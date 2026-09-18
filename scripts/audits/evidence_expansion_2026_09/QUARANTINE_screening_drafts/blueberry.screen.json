@@ -1,0 +1,2887 @@
+{
+ "canonical_id": "blueberry",
+ "screened": 135,
+ "kept": 81,
+ "rejected": [
+  {
+   "pmid": "33838291",
+   "reason": "not_intervention",
+   "note": "Broad mechanistic review of endothelial-cell apoptosis suppression by unspecified 'natural medicines' for atherosclerosis; not a blueberry-specific clinical intervention synthesis."
+  },
+  {
+   "pmid": "36454906",
+   "reason": "not_intervention",
+   "note": "Study protocol only (no results yet) for an acute blueberry vascular-function trial in older subjects."
+  },
+  {
+   "pmid": "9747250",
+   "reason": "off_topic",
+   "note": "'Blueberry muffin baby' is a dermatological sign of congenital dermal erythropoiesis, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "26204964",
+   "reason": "off_topic",
+   "note": "'The blueberry sign' -- a medical/dermatologic term (no abstract text retrieved), unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "28523896",
+   "reason": "off_topic",
+   "note": "'Blueberry Muffin Baby' dermatological sign case report, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "28759392",
+   "reason": "off_topic",
+   "note": "'Blueberry Muffin' rash case report, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "29329126",
+   "reason": "off_topic",
+   "note": "'Blueberry Muffin Baby' dermatological sign case report, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "29554165",
+   "reason": "off_topic",
+   "note": "'Blueberry muffin rash' secondary to hereditary spherocytosis, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "30499825",
+   "reason": "off_topic",
+   "note": "Congenital syphilis case report; likely references 'blueberry muffin' rash as a differential sign, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "31468564",
+   "reason": "off_topic",
+   "note": "Dermoscopic findings in neonatal leukemia cutis; likely references 'blueberry muffin' rash, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "31712398",
+   "reason": "off_topic",
+   "note": "Neuroblastoma case report; likely references 'blueberry muffin' rash, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "34339539",
+   "reason": "off_topic",
+   "note": "'Blueberry muffin' lesions in Gaucher disease case report, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "36394113",
+   "reason": "off_topic",
+   "note": "'Blueberry muffin baby' secondary to ganglioneuroblastoma case report, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "36787930",
+   "reason": "off_topic",
+   "note": "Neurocristic cutaneous hamartoma case report; likely references 'blueberry muffin' rash, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "38406084",
+   "reason": "off_topic",
+   "note": "'Blueberry Muffin Syndrome' newborn case report, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "38688891",
+   "reason": "off_topic",
+   "note": "Newborn with 'Blueberry Muffin' lesions case report, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "39827506",
+   "reason": "off_topic",
+   "note": "Langerhans cell histiocytosis case report; likely references 'blueberry muffin' rash, unrelated to blueberry supplementation."
+  },
+  {
+   "pmid": "17492798",
+   "reason": "not_intervention",
+   "note": "Systematic review explicitly states: 'No relevant trials of blueberry products were identified.' All included data are cranberry trials."
+  },
+  {
+   "pmid": "27551767",
+   "reason": "animal_or_invitro",
+   "note": "Blueberry extract tested in acute inflammation and collagen-induced arthritis in RATS"
+  },
+  {
+   "pmid": "31746877",
+   "reason": "animal_or_invitro",
+   "note": "Blueberry and strawberry serum metabolites tested explicitly IN VITRO"
+  },
+  {
+   "pmid": "28212306",
+   "reason": "animal_or_invitro",
+   "note": "Six berries tested in a C57BL/6 MOUSE model of polygenic obesity"
+  },
+  {
+   "pmid": "37128328",
+   "reason": "animal_or_invitro",
+   "note": "Blueberry and cranberry extracts tested in a CCl4-induced liver damage model (rodent toxicology model)"
+  },
+  {
+   "pmid": "41109184",
+   "reason": "animal_or_invitro",
+   "note": "Blueberry anthocyanins tested against acrylamide-induced ferroptosis in HepG2 CELLS (in vitro)"
+  },
+  {
+   "pmid": "29243625",
+   "reason": "off_topic",
+   "note": "Exogenous abscisic acid effects on southern highbush blueberry fruit quality; agricultural/horticultural study, not a human supplementation trial"
+  },
+  {
+   "pmid": "29385610",
+   "reason": "off_topic",
+   "note": "Ground woody plants vs. cottonseed hulls in lamb feedlot diets; animal agriculture, unrelated to blueberry supplementation"
+  },
+  {
+   "pmid": "29579903",
+   "reason": "off_topic",
+   "note": "Berry extracts as antioxidants in meat products; food-science/preservation study, not human supplementation"
+  },
+  {
+   "pmid": "31126074",
+   "reason": "off_topic",
+   "note": "Carvacrol/caprylic acid inactivation of E. coli serogroups; food-safety microbiology, unrelated to blueberry"
+  },
+  {
+   "pmid": "33232452",
+   "reason": "off_topic",
+   "note": "ComBase models for Listeria monocytogenes on raw produce; food-safety microbiology modeling, unrelated to blueberry"
+  },
+  {
+   "pmid": "33239941",
+   "reason": "off_topic",
+   "note": "Tissue flossing and dynamic stretching on hamstring muscle function; unrelated to blueberry supplementation"
+  },
+  {
+   "pmid": "34228763",
+   "reason": "off_topic",
+   "note": "Water/fertilizer coupling on rabbiteye blueberry growth; agricultural/horticultural study"
+  },
+  {
+   "pmid": "35875206",
+   "reason": "off_topic",
+   "note": "Development of blueberry waste powder as a food ingredient; food-product-development characterization, not a human trial"
+  },
+  {
+   "pmid": "40250086",
+   "reason": "off_topic",
+   "note": "Synbiotics for radiation-induced tissue damage in rectal cancer patients; no blueberry relevance"
+  },
+  {
+   "pmid": "40666674",
+   "reason": "off_topic",
+   "note": "Blueberry ripening mechanism; plant physiology/molecular biology review, not a human supplementation study"
+  },
+  {
+   "pmid": "40871137",
+   "reason": "off_topic",
+   "note": "Gelatin/PVA films with blueberry extract for shrimp freshness detection; food-packaging technology, unrelated to human supplementation"
+  },
+  {
+   "pmid": "40909898",
+   "reason": "off_topic",
+   "note": "Meta-analysis of plant growth regulator use in blueberry production; agricultural/horticultural review"
+  },
+  {
+   "pmid": "32090247",
+   "reason": "off_topic",
+   "note": "Letter/comment on effect-size calculation errors in a blueberry cognition systematic review (30941401); methodological critique, not primary data"
+  },
+  {
+   "pmid": "32658969",
+   "reason": "off_topic",
+   "note": "Response letter to comments on the same blueberry cognition systematic review (30941401); correspondence, not primary data"
+  },
+  {
+   "pmid": "29486772",
+   "reason": "off_topic",
+   "note": "Postprandial insulin/glucose comparison across five polyphenol-profile beverages; focused on bilberry, not clearly confirmed to include blueberry (Vaccinium corymbosum/angustifolium) as a tested arm"
+  },
+  {
+   "pmid": "40635529",
+   "reason": "not_this_route",
+   "note": "Topical product containing blueberry extract and Pro-Xylane combined with micro-focused ultrasound for anti-aging; topical skin application, not oral supplementation."
+  },
+  {
+   "pmid": "29703387",
+   "reason": "not_intervention",
+   "note": "Broad review of food-drug interactions from fruit juices generally (orange, pomegranate, etc.); blueberry not confirmed as the specific focus"
+  },
+  {
+   "pmid": "31757061",
+   "reason": "not_intervention",
+   "note": "Systematic review of berry phytochemical contribution to the human metabolome across multiple commonly-consumed berries; no blueberry-specific extractable primary result confirmed"
+  },
+  {
+   "pmid": "35807796",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of plant-based foods and vascular function in older subjects (many foods); no blueberry-specific extractable primary result confirmed in scope"
+  },
+  {
+   "pmid": "36445874",
+   "reason": "not_intervention",
+   "note": "Dairy-based, high-flavonoid pre-workout beverage on exercise-induced intestinal injury; blueberry not confirmed as the specific flavonoid source"
+  },
+  {
+   "pmid": "37111125",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of berries and berry bioactives in metabolic syndrome; no blueberry-specific extractable primary result confirmed"
+  },
+  {
+   "pmid": "37499164",
+   "reason": "not_intervention",
+   "note": "Systematic review of intake biomarkers across six different types of berries generally; no blueberry-specific extractable primary result confirmed"
+  },
+  {
+   "pmid": "38813444",
+   "reason": "not_intervention",
+   "note": "Dietary supplement for postpartum blues; composition not confirmed to include blueberry"
+  },
+  {
+   "pmid": "39063294",
+   "reason": "not_intervention",
+   "note": "Systematic review of berry diet and muscle health spanning both human AND ANIMAL trials; too broad, no blueberry-specific human result confirmed"
+  },
+  {
+   "pmid": "40221242",
+   "reason": "not_intervention",
+   "note": "Broad dietary-intervention systematic review for familial hypercholesterolaemia in children; blueberry not named"
+  },
+  {
+   "pmid": "40701649",
+   "reason": "not_intervention",
+   "note": "Fermentable fiber/polyphenol blend (inulin, galacto-oligosaccharide, etc.) for gut permeability in hypobaric hypoxia; blueberry not confirmed as a component"
+  },
+  {
+   "pmid": "41228518",
+   "reason": "not_intervention",
+   "note": "Systematic review of berries and bone health spanning human, ANIMAL, and in vitro data; too broad, no blueberry-specific human result confirmed"
+  },
+  {
+   "pmid": "41237379",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of dietary flavonoids and mental health; blueberry not the specific focus"
+  },
+  {
+   "pmid": "41470804",
+   "reason": "not_intervention",
+   "note": "Feasibility study of functional foods/nutraceuticals within a Mediterranean diet pattern; blueberry not confirmed as a specific tested component"
+  },
+  {
+   "pmid": "41544470",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of dietary polyphenols and NK cell function/immunosenescence; blueberry not the specific focus"
+  },
+  {
+   "pmid": "42651362",
+   "reason": "not_intervention",
+   "note": "Network meta-analysis of nutritional strategies for gestational diabetes prevention/management; blueberry not confirmed as a specific tested arm"
+  }
+ ],
+ "records": [
+  {
+   "pmid": "10822287",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "blueberry juice, 500 mL",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "9 healthy female volunteers",
+   "indication_as_stated": "plasma antioxidant capacity",
+   "dose_quote": "nine volunteers consumed 500 ml of blueberry juice, cranberry juice or a sucrose solution (control)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "nine volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Tested alongside cranberry juice as a comparator/co-tested arm, not combined into one product.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry juice matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19135520",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "blueberries, 200 g",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "11 healthy human volunteers",
+   "indication_as_stated": "antioxidant bioavailability (food matrix effect)",
+   "dose_quote": "200 g of blueberries plus 200 ml of water",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Ingestion of blueberries increased plasma levels of reducing and chain-breaking potential (+6.1%, p<0.001; +11.1%, p<0.05) and enhanced plasma concentrations of caffeic and ferulic acid.",
+   "sample_size_quote": "11 healthy human volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Compares blueberries with water vs. with milk (matrix effect); milk arm reported to impair antioxidant benefit.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22060186",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "wild blueberry (Vaccinium angustifolium) powder drink",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "human volunteers",
+   "indication_as_stated": "gut microbiota (bifidobacteria)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Bifidobacterium spp. significantly increased following blueberry treatment (P \u2264 0.05)",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22111516",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberries, 250 g/day for 6 weeks + 375 g pre-exercise",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "25 well-trained subjects",
+   "indication_as_stated": "oxidative stress/inflammation/immune (endurance running)",
+   "dose_quote": "250 g of blueberries per day for 6 weeks and 375 g given 1 h prior to 2.5 h of running",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty-five well-trained subjects were recruited and randomized into blueberry (BB) (N = 13) or control (CON) (N = 12) groups.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25335781",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry anthocyanin extract (271/346 mg C3g eq)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "72 (trial S2) and 59 (trial L1) subjects",
+   "indication_as_stated": "dark vision/night vision/photobleaching recovery",
+   "dose_quote": "two anthocyanin doses (271 and 7.11 mg cyanidin 3-glucoside equivalents (C3g eq)), and placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "in both trials anthocyanin consumption hastened the recovery of visual acuity after ph",
+   "sample_size_quote": "One trial, S2 (n = 72), employed a 3 week intervention and a 3 week washout, two anthocyanin doses (271 and 7.11 mg cyanidin 3-glucoside equivalents (C3g eq)), and placebo.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Neither dark adaptation nor night vision was improved; only photobleaching recovery speed was affected.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tested as a purified blueberry anthocyanin extract, not whole fruit.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26437830",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "freeze-dried wild blueberry powder, 15 or 30 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "21 children (7-10 years)",
+   "indication_as_stated": "cognition (children)",
+   "dose_quote": "blueberry drinks containing 15 or 30 g freeze-dried wild blueberry (WBB) powder",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "children (n = 21; 7-10 years) consumed placebo (vehicle) or blueberry drinks",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry powder matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26477692",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry juice, 50 mL/day, add-on to etanercept",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "201 patients with juvenile idiopathic arthritis",
+   "indication_as_stated": "juvenile idiopathic arthritis (add-on to etanercept)",
+   "dose_quote": "matched etanercept and 50 ml blueberry juice daily",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Two hundred and one JIA patients were selected",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on design: etanercept background held constant, blueberry juice vs. placebo juice is the isolated randomized variable.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry juice matches label material; etanercept background held constant across arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27571052",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "wild blueberries, daily for 30 days",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "18 healthy men",
+   "indication_as_stated": "polyphenol bioavailability (plasma/urine metabolites)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A total of 61 phenolic metabolites were quantified in plasma at baseline, of which 43 increased after acute or chronic consumption of blueberries over one month.",
+   "sample_size_quote": "18 healthy men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27654329",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included RCTs",
+   "indication_as_stated": "blood pressure",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Meta-analysis of blueberry supplementation and blood pressure; abstract excerpt available does not include final pooled effect estimate.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28221821",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "blueberry supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "older adults at risk for dementia",
+   "indication_as_stated": "mild cognitive impairment (neural activation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "fMRI-based mechanistic study of brain activation during working memory task; abstract excerpt does not include full quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28230732",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "flavonoid-rich blueberry drink",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "21 young adults (study 1) and 50 children (study 2)",
+   "indication_as_stated": "mood/executive function",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Study 1: 21 young adults (18-21 years old) consumed a flavonoid-rich blueberry drink and a matched placebo in a counterbalanced cross-over design.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry drink matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28249119",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry concentrate, 30 mL (387 mg anthocyanidins)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "26 healthy older adults",
+   "indication_as_stated": "brain perfusion/task-related activation/cognitive function",
+   "dose_quote": "30 mL blueberry concentrate providing 387 mg anthocyanidins",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "5 female, 7 male; age 67.5 \u00b1 3.0 y; body mass index, 25.9 \u00b1 3.3 kg\u00b7m-2) or isoenergetic placebo",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry concentrate matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28283823",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "freeze-dried blueberry, 24 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "37 older adults (60-75 years)",
+   "indication_as_stated": "cognition/mobility (older adults)",
+   "dose_quote": "freeze-dried blueberry (24 g/day, equivalent to 1 cup of fresh blueberries) or a blueberry placebo for 90 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "13 men and 24 women, between the ages of 60 and 75 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Freeze-dried blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28887907",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "wild blueberry beverage, 25 g freeze-dried WBB powder",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "human subjects",
+   "indication_as_stated": "polyphenol bioavailability/kinetics",
+   "dose_quote": "a WBB beverage (25 g freeze dried WBB powder) or placebo beverage",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Bioavailability of WBB anthocyanins and 3-CGA was 1.1 and 0.2%, respectively.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29345498",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry and cranberry consumption",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "type 2 diabetes patients across included RCTs",
+   "indication_as_stated": "type 2 diabetes glycemic control",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Reviews blueberry and cranberry together; per-berry breakdown not visible in abstract excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviewed jointly with cranberry, not isolated to blueberry alone throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29856175",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry juice, 500 mL/day for 14 preoperative days",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "26 patients undergoing elective major surgery",
+   "indication_as_stated": "postoperative cognitive dysfunction (neuroprotection)",
+   "dose_quote": "500 mL/day of blueberry juice within 14 preoperative days (G1)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty-six patients undergoing elective major surgery were randomized into two groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry juice matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30327868",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "flavonoid-rich wild blueberry (WBB) drink",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "7-10-year-old schoolchildren",
+   "indication_as_stated": "cognition (children)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Companion/extension study to 26437830 in the same population.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30669469",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "whole blueberries, 140 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "17 healthy adults",
+   "indication_as_stated": "postprandial glucose metabolism/GI hormones/appetite",
+   "dose_quote": "adding 140 g of blueberries to a higher-carbohydrate breakfast meal",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "17 healthy adults",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Whole blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30699971",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberries",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "individuals with symptomatic knee osteoarthritis",
+   "indication_as_stated": "knee osteoarthritis (pain/gait/inflammation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Abstract excerpt available does not include exact dose or quantitative primary result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30941401",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry (acute and chronic interventions)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "human subjects across 11 included studies",
+   "indication_as_stated": "cognitive performance (aging)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "The results of 11 studies are reported with 4 studies considering blueberry intervention with children aged 7-10 years, 4 considering adults aged 60 years and older, and 3 considering adults suffering from mild cognitive impa",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Subsequently critiqued for effect-size calculation errors in comment/response letters (32090247, 32658969); use with caution.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry intervention studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30999017",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberries and blueberry products (freeze-dried, whole, concentrate)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "children, young adults, and older people across 12 included studies",
+   "indication_as_stated": "cognitive performance and mood",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "eleven articles (that included 12 studies) were identified using freeze-dried blueberries (n = 9 studies), whole blueberries (n = 2) and blueberry concentrate (n = 1)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry/blueberry-product RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31629347",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry powder, 4 days supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "14 runners",
+   "indication_as_stated": "running performance/blood lactate",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "14 runners completed an 8-km time trial (TT)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31698695",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "flavonoid-rich mixed berries",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "40 young healthy adults",
+   "indication_as_stated": "executive function/mood (6-hour period)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty participants ag",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered as a mixed-berry intervention, not isolated blueberry.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31776541",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberries",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "general population (narrative review)",
+   "indication_as_stated": "cardiovascular disease prevention",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The beneficial effects of blueberry (poly)phenols are particularly clear when measuring flow-mediated dilation over various timeframes and study populations.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "mixed",
+   "direction_note": "Notes effects on blood pressure, arterial stiffness and blood lipid profile are less clear/consistent than on flow-mediated dilation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31861125",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "grape and blueberry polyphenol-rich extract (PEGB), 600 mg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "30 healthy students",
+   "indication_as_stated": "cognitive performance (sustained cognitive effort)",
+   "dose_quote": "30 healthy students consumed 600 mg of PEGB or a placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "30 healthy students",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry combined with grape polyphenol extract, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31941864",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry (Vaccinium ashei Reade) LEAVES",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "subjects with high fasting triacylglycerol",
+   "indication_as_stated": "postprandial hypertriglyceridemia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Tests blueberry LEAVES, not the fruit/berry.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry leaves are a different plant part from the typical fruit/berry supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32151287",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "wild blueberry (WBB), ~253 mg anthocyanins/day for 4 weeks",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy 12-17-year-olds",
+   "indication_as_stated": "depression symptoms (adolescents)",
+   "dose_quote": "4 weeks, daily WBB supplementation (containing about 253 mg anthocyanins)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Healthy 12-17-year",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32153825",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "100% wild blueberry juice, 240 mL",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "19 women at risk for type 2 diabetes",
+   "indication_as_stated": "cardiometabolic biomarkers (type 2 diabetes risk)",
+   "dose_quote": "consumed 240 mL of wild blueberry juice or a placebo beverage as part of their free-living diet for 7 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "adults (women, n = 19, ages 39-64 y)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry juice matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32337475",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberries, 8-week consumption",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "52 men (US veterans) with type 2 diabetes",
+   "indication_as_stated": "cardiometabolic health parameters (type 2 diabetes)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "52 men who are US veterans",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32426759",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "wild blueberry intervention (acute)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "7-10-year-olds",
+   "indication_as_stated": "memory/executive function (children)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Shorter memory reaction times were observed on the visuo-spatial grid task and shorter executive function reaction times were o",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32535781",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "berries (incl. blueberry powder)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "adults across 45 included chronic RCTs",
+   "indication_as_stated": "cardiovascular disease risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty-five chronic (\u2265 1 week) randomised controlled trials assessing CVD risk factors",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Reviews berries, citrus and cherries jointly (barberry, cranberry, grape, pomegranate, blueberry powder, raspberry, freeze-dried etc.); blueberry is one of several fruits pooled.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry pooled together with multiple other berries, citrus, and cherries in this review.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32747995",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "wild blueberry (WBB) drink, 1-cup equivalent",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "35 middle-aged adults (40-65 years)",
+   "indication_as_stated": "cognitive/metabolic function (middle-aged adults)",
+   "dose_quote": "1-cup equivalent WBB drink",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Thirty-five individuals aged 40-65 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32850939",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "freeze-dried blueberry, 26 g/day, alone or with banana",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "59 cyclists",
+   "indication_as_stated": "oxylipin generation during recovery from cycling",
+   "dose_quote": "26 grams/d (1 cup/d blueberries equivalent) for 2 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Cyclists (n = 59, 39 \u00b1 2 years of age)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Blueberry-alone arm exists separately from a banana co-ingestion sub-randomization.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry-alone arm is a clean single-ingredient comparison; banana co-ingestion tested as a further factorial variable.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33058743",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults (evidence mapping)",
+   "indication_as_stated": "exercise performance/inflammatory markers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "mixed",
+   "direction_note": "Evidence-mapping gap analysis rather than a quantitative meta-analysis.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry consumption and exercise literature.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33066847",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included RCTs",
+   "indication_as_stated": "cardiovascular disease risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Meta-analysis restricted to RCTs using blueberry supplements (not other berries) to modify CVD risk factors.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33331835",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "freeze-dried blueberry, 24 g/day for 90 days",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "38 healthy older adults (60-75 years)",
+   "indication_as_stated": "cognitive function (older adults)",
+   "dose_quote": "freeze-dried BB (24 g d-1, equivalent to 1 cup of fresh BB)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "38 healthy older adults (60-75 years)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Freeze-dried blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33693835",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "whole blueberries 280 g + soluble fiber 12 g/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "34 pregnant women with obesity at high risk of GDM",
+   "indication_as_stated": "gestational diabetes mellitus risk (obesity)",
+   "dose_quote": "280 g whole blueberries and 12 g soluble fiber per day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Women (n = 34; mean \u00b1 SD age: 27 \u00b1 5 y",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry combined with soluble fiber supplementation, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33781280",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberries, 4 days supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "11 experienced runners",
+   "indication_as_stated": "running performance in normobaric hypoxia",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Eleven experienced runners completed a 30-minute time-trial (TT) in normobaric hypoxia",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34000994",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "freeze-dried highbush blueberry powder, 50 g/day for 8 weeks",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "49 adults at risk of metabolic syndrome",
+   "indication_as_stated": "metabolic syndrome (immune-related pathways)",
+   "dose_quote": "Participants consumed 50 g daily of either a freeze-dried highbush blueberry powder (BBP) or a placebo powder for 8 weeks (n = 49)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "n = 49",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry powder matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34023938",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "wild blueberry (WBB) drink, daily for 4 weeks",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy 7-10-year-old children (pilot study)",
+   "indication_as_stated": "cognition/urinary metabolites (children)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Pilot study; abstract excerpt does not include the full quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34139510",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 25 included studies (21 in meta-analysis)",
+   "indication_as_stated": "metabolic syndrome risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": "Meta-analyses of the data showed that blueberry intervention had a significant effect on lipid levels, decreasing total cholesterol and low-density lipoprotein (LDL) levels.",
+   "primary_result_quote": null,
+   "sample_size_quote": "In total, 18 randomized controlled trials (RCTs) were included in this systematic review, and 12 studies were selected for meta-analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry intervention studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34439566",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "whole blueberries + soluble fiber",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "34 pregnant women with obesity at risk for GDM",
+   "indication_as_stated": "gestational diabetes risk (obesity, oxidative stress)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "pregnant women with obesity (n = 34)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry combined with soluble fiber; companion study to 33693835 in the same cohort.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35217779",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "berry-based supplements/foods (incl. frozen blueberry, concentrate, beverage, capsule, extract, powder)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "older adults across 11 included studies",
+   "indication_as_stated": "cognitive function (older adults)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "eleven articles were identified using frozen blueberry (n = 4 studies), blueberry concentrate (n = 2), beverage (n = 3), capsule (n = 1), extract and pow",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Review of berry-based supplements broadly, though blueberry forms dominate the included studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35282984",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry and cranberry",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "individuals with or without diabetes across included RCTs",
+   "indication_as_stated": "type 2 diabetes parameters",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviewed jointly with cranberry, not isolated to blueberry alone throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35445669",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "human subjects across 25 included studies (21 in meta-analysis)",
+   "indication_as_stated": "metabolic syndrome components",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The results of the meta-analysis demonstrated that BB had no significant effect on waist circumference, bo",
+   "sample_size_quote": "25 studies were eligible for inclusion in the review.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry (BB) supplementation studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35458181",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "daily blueberry supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "overweight, insulin-resistant men and women aged 50-65 with subjective cognitive decline",
+   "indication_as_stated": "dementia risk reduction (midlife)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Abstract excerpt does not include exact dose or full quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35564709",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry juice, 60 mL/day for 20 days",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "45 adults",
+   "indication_as_stated": "cardiometabolic health (three-arm: tart cherry, blueberry, placebo)",
+   "dose_quote": "of which they drank 60 mL per day for 20 days",
+   "primary_outcome_quote": "systolic blood pressure",
+   "primary_result_quote": "There were no statistically significant differences (p > 0.05) for systolic blood pressure; however, total and LDL cholesterol were sign",
+   "sample_size_quote": "Forty-five adults were randomly assigned to receive tart cherry, blueberry, or a placebo",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Blueberry juice is its own separate arm (not combined with tart cherry).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry-juice arm is a clean single-ingredient comparison alongside a separate tart-cherry arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35676847",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "human subjects across included intervention studies",
+   "indication_as_stated": "cognitive performance/mood",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Results of clinical trials described as inconclusive.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry supplementation studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35807742",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "whole blueberry and freeze-dried blueberry powder",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "young adults",
+   "indication_as_stated": "cardiovascular health (endothelial function, blood pressure)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Compares whole blueberry vs. freeze-dried powder vs. control, each as separate arms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry matches label material; compares two preparation forms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36066009",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lyophilized wild blueberry powder, 6-month intervention",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "86 participants with mild cognitive decline (44 blueberry, 42 placebo)",
+   "indication_as_stated": "mild cognitive decline (speed of processing)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "randomized to consume either wild blueberry (n = 44) or placebo (n = 42) powder daily for 6",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry powder matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36150681",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberries and their bioactives",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "human subjects across 45 included intervention studies",
+   "indication_as_stated": "oxidative stress/inflammation/cardio-vascular function",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the evidence suggests that blueberries may play a role in the improvement of markers of vascular func",
+   "sample_size_quote": "A total of 45 human intervention studies were included in this review.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to human blueberry intervention studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36847333",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "daily blueberry consumption for 12 weeks",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "postmenopausal women with above-normal blood pressure",
+   "indication_as_stated": "endothelial function (postmenopausal women)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Abstract excerpt does not include exact dose or full quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36972800",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "freeze-dried wild blueberry powder, 26 g (302 mg anthocyanins)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "61 healthy older individuals (65-80 y)",
+   "indication_as_stated": "vascular function/cognitive performance (older adults)",
+   "dose_quote": "26 g of freeze-dried wild blueberry (WBB) powder (302 mg anthocyanins)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "61 healthy older individuals aged 65-80 y",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry powder matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37063535",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "grape and blueberry extract (Memophenol), 150 mg twice daily",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "143 older adults (60-80 years) with mild cognitive impairment",
+   "indication_as_stated": "mild cognitive impairment (cognitive function)",
+   "dose_quote": "150 mg of Memophenol\u2122, twice daily",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "One hundred and forty-three volunteers aged 60 to 80 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry combined with grape extract in a patented standardized product (Memophenol), not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37242279",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "freeze-dried blueberries (equivalent to 180 g fresh)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "43 patients with functional gastrointestinal disorders",
+   "indication_as_stated": "functional gastrointestinal disorders",
+   "dose_quote": "freeze-dried blueberries (equivalent to 180 g fresh blueberries)",
+   "primary_outcome_quote": "Gastrointestinal Clinical Rating Scale (GSRS) scores and abdominal symptom relief",
+   "primary_result_quote": "Blueberry treatment resulted in more patients with relevant abdominal symptom relief",
+   "sample_size_quote": "Forty-three patients with FGID",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Freeze-dried blueberries matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37963472",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry and cranberry",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with cardiovascular diseases across included RCTs",
+   "indication_as_stated": "blood pressure (cardiovascular disease)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviewed jointly with cranberry (alone and in concert), not isolated to blueberry alone throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38300292",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "wild blueberry (acute drink then 6 weeks daily)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 emerging adults with depressive symptoms",
+   "indication_as_stated": "depressive symptoms (emerging adults)",
+   "dose_quote": null,
+   "primary_outcome_quote": "Beck Depression Inventory-II (BDI-II) scores at 6-week follow-up",
+   "primary_result_quote": null,
+   "sample_size_quote": "60 emerging adults (Mage = 20.0 years, 32% male)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Titled 'biphasic response', suggesting acute vs. chronic effects differed.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38542806",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "whole fresh blueberry (160 g) or freeze-dried blueberry powder (20 g)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "37 healthy participants",
+   "indication_as_stated": "vascular/cognitive endpoints (inter-individual variation)",
+   "dose_quote": "whole fresh blueberry (160 g), freeze-dried blueberry powder (20 g) or a placebo control (microcrystalline cellulose)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Extensive inter-individual variation was found in",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Focuses on characterizing inter-individual response variation rather than a single pooled effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry matches label material; compares two preparation forms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38674870",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "wild blueberry extract (WBE)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy older adults (multi-study)",
+   "indication_as_stated": "cognitive/cardiovascular function (acute, older adults)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Multi-study investigation; abstract excerpt does not include a single pooled quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Tested as a concentrated wild blueberry extract, not whole fruit.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38887319",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 16 included studies (11 in meta-analysis)",
+   "indication_as_stated": "endothelial function",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Blueberry consumption significantly imp",
+   "sample_size_quote": "16 studies were included in the systematic review, and 11 were used for the meta-analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry intervention studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39593399",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry mousse, 250 g (480 mg anthocyanins)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "20 volunteers over 60 years old",
+   "indication_as_stated": "peripheral vascular function (older subjects)",
+   "dose_quote": "a blueberry mousse (250 g, providing 480 mg of anthocyanins - ACNs)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "a group of 20 volunteers over 60 years old",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry delivered as a mousse (processed food format), not whole fruit.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40169604",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blueberry juice (low/mid/high volume), with/without low-intensity aerobics",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "48 young adults",
+   "indication_as_stated": "arterial stiffness (young adults)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "48 young adults",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Multiple arms combine blueberry juice with low-intensity aerobic exercise; blueberry-alone arms also exist.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry-juice-alone arms exist separately from the exercise-combination arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40195645",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fermented blueberry LEAF tea, 200 mL 3x/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 healthy individuals",
+   "indication_as_stated": "sleep quality",
+   "dose_quote": "200 mL of active tea (1.8 mg hyperoside/serving) or placebo tea three times daily",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We observed significantly higher sleep efficiency (active: from 82.2 \u00b1 1.4% to 81.2 \u00b1 1.6%, placebo: from 83.8 \u00b1 1.6% to 80.4 \u00b1 1.8%)",
+   "sample_size_quote": "Fifty healthy individuals",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Tests fermented blueberry LEAF tea, not the fruit/berry.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry leaves (fermented tea) are a different plant part from the typical fruit/berry supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40218958",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lyophilized blueberry powder (equivalent to 1.5 cups)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "55 older adults with overweight or obesity",
+   "indication_as_stated": "fecal microbiome/circulating lipids (BEACTIVE Trial)",
+   "dose_quote": "lyophilized blueberry powder (equivalent to 1.5 cups of blueberries)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Participants (n = 55)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Both groups also participated in weekly supervised exercise classes (constant background).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry powder matches label material; exercise background held constant across both arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40537085",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "trisodium citrate + creatine monohydrate + leucine + blueberry extract (TCLB)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "28 recreationally active men",
+   "indication_as_stated": "leg extension strength/endurance/muscle size (resistance training)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty-eight recreationally active men ingested either TCLB (n = 10), CM (n = 10), or PLA (n = 8)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry extract is one of four components in a fixed combination blend.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40734444",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberries and their polyphenols",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "human subjects (narrative review of 45 human studies)",
+   "indication_as_stated": "inflammation/oxidative stress/vascular/cardiometabolic function",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "more high-quality, well-controlled human trials are nee",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "mixed",
+   "direction_note": "Notes most supporting mechanistic evidence comes from in vitro/animal studies; human evidence remains limited.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberries and their bioactive components.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40772130",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "Vaccinium meridionale Swartz (agraz/Andean blueberry)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with metabolic syndrome across 6 included RCTs",
+   "indication_as_stated": "metabolic syndrome (inflammatory/oxidative stress markers)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "6 studies were included in this review.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Agraz is a distinct wild Vaccinium species native to Colombia (Andean blueberry), botanically related to but not the same species as common commercial blueberry.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Vaccinium meridionale (agraz) is a different Vaccinium species from the common blueberry (V. corymbosum/angustifolium).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40856863",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "elderly individuals with prior cognitive decline across included RCTs",
+   "indication_as_stated": "cognitive function (elderly with cognitive decline)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry consumption RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40944184",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "freeze-dried blueberry powder, up to 10 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "breastfed U.S. infants (complementary feeding period)",
+   "indication_as_stated": "allergy/immune biomarkers/gut microbiome (early life)",
+   "dose_quote": "up to 10 g/day of freeze-dried blueberry powder or an isocaloric placebo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry powder matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40977976",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "freeze-dried blueberry powder, up to 10 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "U.S. human-milk-fed infants (complementary feeding)",
+   "indication_as_stated": "gut microbiota development (infants)",
+   "dose_quote": "up to 10 g of freeze-dried blueberry powder or an isocaloric placebo powder",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Companion study to 40944184 in the same infant cohort, focused on microbiota outcomes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry powder matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41374012",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "daily blueberry supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "rural Louisiana population (pilot study)",
+   "indication_as_stated": "depression and anxiety symptoms",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Pilot crossover study; abstract excerpt does not include exact dose or full quantitative result.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41470833",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberries (Vaccinium spp.), alongside honeysuckle berries",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "general population (narrative review)",
+   "indication_as_stated": "vascular endothelial health/cardiovascular disease prevention",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviews blueberries alongside a second, botanically distinct species (haskap/blue honeysuckle).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41974068",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "632 healthy participants across 14 included RCTs",
+   "indication_as_stated": "vascular function and cognitive abilities",
+   "dose_quote": null,
+   "primary_outcome_quote": "flow-mediated dilation (FMD)",
+   "primary_result_quote": "blueberry intervention significantly improved flow-mediated dilation (FMD) by 1.11% (95% CI: 0.50, 1.72; I\u00b2 = 23%)",
+   "sample_size_quote": "14 randomized controlled trials (RCTs) involving 632 participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Vascular function improved (FMD) but blood pressure and cognitive measures were not significantly affected.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to blueberry consumption RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42191861",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "wild blueberry drink, 150/300/450 mg anthocyanins",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "24 healthy participants",
+   "indication_as_stated": "postprandial metabolic/cognitive outcomes (dose-dependent)",
+   "dose_quote": "a wild blueberry or placebo-matched drink (250 mL) providing 0, 150, 300 or 450 mg anthocyanins",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty-four healthy participants (F = 22)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Wild blueberry matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23930843",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "antioxidant beverage (apple, grape, blueberry, pomegranate juices + extracts)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "14 overweight volunteers",
+   "indication_as_stated": "endogenous antioxidant response (high-fat meal)",
+   "dose_quote": "HFM+500 ml antioxidant beverage 1 (HFM-AB1; apple, grape, blueberry and pomegranate juices and grape skin, grape seed and green tea extracts)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "fourteen overweight volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Blueberry is one of several fruit juices/extracts in a multi-ingredient antioxidant beverage.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry is one of several fruit components in a mixed antioxidant beverage.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29115354",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "blueberry juice, daily for 28 days",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "17 volunteers",
+   "indication_as_stated": "anthocyanin bioavailability (intake duration/dosing)",
+   "dose_quote": "28 days of blueberry juice intake",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Total and parent anthocyanin content in urine varied 10-fold among the 17 participants.",
+   "sample_size_quote": "Urine from volunteers (n = 17)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Blueberry juice matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32731478",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "phenolic-rich blueberry extract (300 mg anthocyanins), combined with beetroot/ginseng/sage",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "32 healthy adults (18-49 years)",
+   "indication_as_stated": "acute cognitive/cerebral blood flow effects",
+   "dose_quote": "a phenolic-rich extract derived from apple (containing 234 mg flavanols), blueberry (300 mg anthocyanins) or coffee berry (440 mg chlorogenic",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "32 healthy adults aged 18-49 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry extract is one of three phenolic sources, each combined with a fixed beetroot/ginseng/sage base.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33099465",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberries (alongside fish oil/omega-3)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "adults (dementia risk) across included clinical trials",
+   "indication_as_stated": "cognitive functioning (dementia prevention)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Reviews blueberries and omega-3/fish oil as the two named dietary supplementation categories.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviewed alongside fish oil/omega-3 as a separate named category, not isolated throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35743929",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Alaskan blueberry extract, combined with Morinda citrifolia and omega-3",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with FMF-related AA amyloidosis",
+   "indication_as_stated": "familial Mediterranean fever-related AA amyloidosis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Patients were >18 years and had proteinuria (>3500 mg/day)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Non-randomized, open-label; blueberry combined with two other natural products.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Alaskan blueberry extract is one of three components (with Morinda citrifolia and omega-3) in a combination regimen.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39065269",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "wild blueberry (WBB) treatment + chicory inulin powder",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "healthy children (small pilot trial portion)",
+   "indication_as_stated": "gut microbiota/cognitive function (children, small pilot)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Study combines in vitro gut-model fermentation with a small in vivo pilot trial in children; blueberry combined with inulin.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Blueberry combined with chicory inulin, not tested alone; human data limited to a small pilot portion.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36676944",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "blueberry (BB) and bilberry (BiB)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "adults across 31 included studies (8 clinical)",
+   "indication_as_stated": "obesity and diabetes mellitus outcomes",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Thirty-one studies were eligible for inclusion in this review: eight clini",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Reviewed jointly with bilberry (BiB), not isolated to blueberry alone throughout.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "28283823",
+  "36972800",
+  "22111516",
+  "30699971",
+  "37242279",
+  "33693835",
+  "36066009",
+  "32337475",
+  "30941401",
+  "36150681",
+  "28249119",
+  "37063535"
+ ],
+ "handoff": [],
+ "identity_notes": "Blueberry's retrieval set is dominated by a large false-match cluster around 'blueberry muffin baby/rash/sign', a well-established dermatological/hematological term for congenital dermal erythropoiesis (seen in TORCH infections, neonatal leukemia, neuroblastoma, Gaucher disease, histiocytosis, etc.) that has nothing to do with blueberry food or supplementation -- all rejected off_topic (~15 case reports). A second cluster is agricultural/horticultural and food-science research on blueberry cultivation, ripening, packaging, and meat/shrimp preservation, also off_topic. Among genuine human intervention trials, blueberry has an unusually large and consistent evidence base for cognitive function (children, healthy adults, older adults, and mild cognitive impairment -- both acute and chronic dosing), vascular/endothelial function (flow-mediated dilation is the most consistently positive endpoint per meta-analyses 38887319/41974068), and cardiometabolic/type 2 diabetes parameters, generally with more consistent positive signals for vascular and cognitive endpoints than for hard blood-pressure or lipid endpoints. A recurring nuance is plant part and preparation: most trials use whole/freeze-dried fruit, juice, or standardized anthocyanin extract (all flagged exact_match), but a minority use blueberry LEAVES (as tea or leaf extract; 31941864, 40195645) or a different Vaccinium species (V. meridionale/agraz, 40772130) -- these are flagged related_form_differs since they represent a different plant part or species from the fruit typically meant by 'blueberry' on a supplement label. Many kept records combine blueberry with cranberry, grape, banana, soluble fiber, creatine/leucine blends, or other natural products, also flagged related_form_differs where blueberry's isolated contribution cannot be determined. A 2019 systematic review on blueberry and cognition (30941401) was subsequently subject to published methodological critique regarding effect-size calculation errors (32090247, 32658969, both rejected as correspondence rather than primary data) -- reviewers should weight 30941401's conclusions with this caveat in mind."
+}

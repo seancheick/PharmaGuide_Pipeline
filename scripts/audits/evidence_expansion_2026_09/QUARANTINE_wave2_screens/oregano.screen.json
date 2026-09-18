@@ -1,0 +1,24 @@
+{"canonical_id": "oregano", "recommended_class": "curate",
+ "one_line_reason": "A few single-ingredient human RCTs of oregano essential oil or extract exist, with mixed results (one positive lipid signal, one null antioxidant/lipid signal, one positive but low-certainty symptom signal in a clinical population).",
+ "selected": [
+   {"pmid": "34496170", "population": "34 trained athletes", "intervention": "Origanum vulgare subsp. hirtum essential oil (oral), 14-day intervention, vs control (also compared against Origanum dubium and Lavandula angustifolia oils)", "dose_as_stated": "not stated (essential oil intervention duration given as 14 days, no mg/mL dose stated in abstract)", "primary_outcome": "lipid profile (HDL-C) and liver biomarkers", "apparent_direction": "positive", "why_selected": "Single-ingredient (true oregano subspecies) RCT in a general athletic population with a statistically significant favorable HDL-C change"},
+   {"pmid": "16881679", "population": "45 healthy nonsmoking men", "intervention": "Origanum vulgare (oregano) extract delivered via fortified juice, 300 mg/day or 600 mg/day total phenolic compounds, oral, 4 weeks vs placebo juice", "dose_as_stated": "300 mg/day or 600 mg/day (as total phenolic compounds from oregano extract)", "primary_outcome": "serum lipids and biomarkers of lipid peroxidation", "apparent_direction": "null", "why_selected": "Clean single-ingredient, dose-stated RCT in healthy volunteers on the antioxidant claim oregano is often marketed for; found increased phenolic excretion but no significant effect on lipids or lipid peroxidation"},
+   {"pmid": "36609950", "population": "patients with chronic rhinosinusitis without nasal polyps (CRSsNP), within a network meta-analysis of 47 RCTs across 18 herbal medicines", "intervention": "Origanum vulgare (herbal preparation, specific form/dose not given in this review-level abstract)", "dose_as_stated": "not stated", "primary_outcome": "symptom improvement and health-related quality of life", "apparent_direction": "positive", "why_selected": "Identified within a network meta-analysis as the most beneficial single herbal treatment for this specific rhinosinusitis subtype, though rated low certainty of evidence"}
+ ],
+ "blockers": [
+   "34496170 and 34496170-type essential-oil dosing (mL or drops) may not map cleanly to a capsule/softgel label amount; exact oral dose not given in the abstract",
+   "16881679 delivered oregano extract via a fortified juice vehicle rather than a standalone capsule, with dose expressed as phenolic-compound content rather than a whole-extract amount",
+   "36609950's oregano evidence comes from a network meta-analysis in a clinical chronic-rhinosinusitis population with low-certainty GRADE evidence, and the specific oregano preparation/dose is not stated in the abstract"
+ ],
+ "handoff_pmids": [],
+ "excluded_pmids": [
+   {"pmid": "38542668", "reason": "Meta-analysis pools 12 different Mediterranean-diet herbs/spices on glycemic control in T2DM; the abstract names cinnamon, turmeric, ginger, black cumin, and saffron as the herbs with significant fasting-glucose reductions, and does not separately state an oregano-specific effect size"},
+   {"pmid": "32211803", "reason": "Tests a 13-spice blend (including oregano) on postprandial cytokines; a combination product, not an isolated oregano exposure"},
+   {"pmid": "23791894", "reason": "Sensory/psychophysical study of carvacrol (an oregano constituent) and eugenol on tongue warmth/heat-pain perception; not a health outcome oregano is marketed for, and tests an isolated compound rather than an oregano supplement"},
+   {"pmid": "34359086", "reason": "Systematic review of medicinal plants (including Origanum vulgare) for infectious disease in poultry; animal/veterinary, not human"},
+   {"pmid": "27268043", "reason": "Systematic review of medicinal plants for GI/respiratory disease in calves and piglets; animal/veterinary, not human"},
+   {"pmid": "36624949", "reason": "Sustainability/land-footprint meta-analysis of essential oil biopesticide production; agricultural/environmental study, not a human health outcome"},
+   {"pmid": "33966619", "reason": "Review of bioactive compounds (quercetin, kaempferol, rosmarinic acid, etc.) for type 2 diabetes; oregano is not among the compounds or sources discussed"},
+   {"pmid": "40266814", "reason": "Insecticidal/repellent activity of plant powders (including Origanum vulgare) against stored-grain weevils; agricultural pest control, not a human health outcome"},
+   {"pmid": "39203882", "reason": "Systematic review of dietary supplements for military physical performance and recovery; oregano is not among the reviewed supplement categories (protein, beta-alanine, creatine, probiotics, HMB) named in the abstract"}
+ ]}

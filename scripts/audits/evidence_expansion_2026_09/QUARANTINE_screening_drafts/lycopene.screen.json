@@ -1,0 +1,2436 @@
+{
+ "canonical_id": "lycopene",
+ "screened": 155,
+ "kept": 60,
+ "rejected": [
+  {
+   "pmid": "10426704",
+   "reason": "different_substance",
+   "note": "Bioavailability of lutein vs. beta-carotene from vegetables; not lycopene-specific."
+  },
+  {
+   "pmid": "30190194",
+   "reason": "different_substance",
+   "note": "Vitamin A and breast cancer survival systematic review; not lycopene-specific."
+  },
+  {
+   "pmid": "11204525",
+   "reason": "not_intervention",
+   "note": "Case report of lycopenaemia (skin/serum discoloration from excess dietary lycopene intake); a safety case report, not an efficacy record -- see handoff."
+  },
+  {
+   "pmid": "16556016",
+   "reason": "not_intervention",
+   "note": "Narrative review of lycopene and prostate cancer that draws mainly on cell-culture, animal, epidemiologic and case-control studies; no clinical RCT synthesis."
+  },
+  {
+   "pmid": "40487500",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of antioxidants in melasma (vitamin C, cysteamine, silymarin, PLE, tomato extract/lycopene, zinc sulfate, melatonin, and others); tomato extract/lycopene is only one of many antioxidants covered, no lycopene-specific extractable result."
+  },
+  {
+   "pmid": "26242042",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene added ex vivo to human sperm cryopreservation medium; in vitro gamete exposure, not oral human supplementation"
+  },
+  {
+   "pmid": "32151764",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene tested on nucleus pulposus cells (NPCs) in vitro; human-derived cell culture mechanistic study, not a clinical trial"
+  },
+  {
+   "pmid": "27550537",
+   "reason": "not_this_route",
+   "note": "Lycopene-enriched olive oil delivered as an ORAL CAVITY SPRAY to treat drug-induced xerostomia (local moisturizing effect), not swallowed/systemic ingestion"
+  },
+  {
+   "pmid": "28929051",
+   "reason": "not_this_route",
+   "note": "Calendula officinalis extract gel vs. lycopene GEL applied topically to leukoplakia lesions, not ingested"
+  },
+  {
+   "pmid": "33151615",
+   "reason": "not_this_route",
+   "note": "Skin-lightening CREAM containing lycopene and wheat bran extract for melasma; topical skin application"
+  },
+  {
+   "pmid": "36283632",
+   "reason": "not_this_route",
+   "note": "Explicit 'Topical lycopene emulgel' applied to skin, not ingested"
+  },
+  {
+   "pmid": "9438978",
+   "reason": "off_topic",
+   "note": "Tea catechins (EGCG/EGC) plasma absorption study; not lycopene"
+  },
+  {
+   "pmid": "28642916",
+   "reason": "off_topic",
+   "note": "Baeckea frutescens microemulsion dietary supplement (different plant), not lycopene"
+  },
+  {
+   "pmid": "30583381",
+   "reason": "off_topic",
+   "note": "Integrated/organic pest management effects on tomato crop yield; agricultural, not a human supplementation study"
+  },
+  {
+   "pmid": "31167726",
+   "reason": "off_topic",
+   "note": "Nutritional status/food intake of children with cow's milk allergy; no lycopene relevance"
+  },
+  {
+   "pmid": "31182955",
+   "reason": "off_topic",
+   "note": "Case report of endoscopic findings in a Tylosis patient; unrelated to lycopene"
+  },
+  {
+   "pmid": "33740332",
+   "reason": "off_topic",
+   "note": "Generic vitamin/mineral complex metabolic efficiency study in athletes; lycopene relevance unconfirmed by title"
+  },
+  {
+   "pmid": "36002948",
+   "reason": "off_topic",
+   "note": "Genetic diversity/growth of Indonesian tomato genotypes under lead stress; plant agriculture, not a supplement trial"
+  },
+  {
+   "pmid": "36104169",
+   "reason": "off_topic",
+   "note": "Modulation of phytochemicals in tomato cultivars by an endophytic fungus; plant biology, not a supplement trial"
+  },
+  {
+   "pmid": "36645625",
+   "reason": "off_topic",
+   "note": "Pesticide (novaluron/lambda-cyhalothrin) residue kinetics in tomato crop; agricultural residue study"
+  },
+  {
+   "pmid": "36987766",
+   "reason": "off_topic",
+   "note": "Supplemental antioxidant-based therapy in COVID-19 patients; generic antioxidant therapy, lycopene relevance unconfirmed by title"
+  },
+  {
+   "pmid": "37939150",
+   "reason": "off_topic",
+   "note": "Nano/chelated iron fertilization effects on tomato yield/phytochemicals; agricultural study"
+  },
+  {
+   "pmid": "40754325",
+   "reason": "off_topic",
+   "note": "Canadian adaptive platform trial protocol for COVID-19 community treatments; no lycopene-specific arm evident from title"
+  },
+  {
+   "pmid": "30008038",
+   "reason": "off_topic",
+   "note": "Acute walking-exercise-intensity effects on cytokines/oxidative stress; no lycopene intervention evident from title"
+  },
+  {
+   "pmid": "42508715",
+   "reason": "off_topic",
+   "note": "Broad review of conventional/nonconventional therapies for pesticide-induced cardiotoxicity; lycopene relevance unconfirmed by title"
+  },
+  {
+   "pmid": "29629346",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene tested for prevention of spontaneous ovarian cancer formation in laying HENS"
+  },
+  {
+   "pmid": "31480156",
+   "reason": "animal_or_invitro",
+   "note": "Dietary lycopene tested in finishing PIGS"
+  },
+  {
+   "pmid": "33948854",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene tested against As2O3-induced oxidative stress in SH-SY5Y CELLS (in vitro)"
+  },
+  {
+   "pmid": "34339943",
+   "reason": "animal_or_invitro",
+   "note": "Neuroprotective potential of carotenoids explicitly reviewed 'in vitro and in vivo' (preclinical)"
+  },
+  {
+   "pmid": "32982734",
+   "reason": "animal_or_invitro",
+   "note": "Anti-cancer effects of lycopene explicitly reviewed in ANIMAL MODELS of hepatocellular carcinoma"
+  },
+  {
+   "pmid": "35260874",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene tested against atrazine-induced pyroptosis in spleen; mechanistic animal toxicology study"
+  },
+  {
+   "pmid": "35940575",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene tested in etoposide-treated male RATS"
+  },
+  {
+   "pmid": "36134885",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene tested against atrazine-induced oxidative damage via miR-27a-3p/Foxo1; mechanistic animal/cell toxicology study"
+  },
+  {
+   "pmid": "39253362",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene tested against celecoxib-induced fat deposition in liver CELLS (in vitro)"
+  },
+  {
+   "pmid": "41654705",
+   "reason": "animal_or_invitro",
+   "note": "Lycopene tested against T-2 toxin-induced hepatic ferroptosis in MICE"
+  },
+  {
+   "pmid": "9209014",
+   "reason": "not_intervention",
+   "note": "General diet/nutrition and prostate cancer review; observational, not lycopene-specific intervention"
+  },
+  {
+   "pmid": "10750670",
+   "reason": "not_intervention",
+   "note": "General fruit/vegetable intake randomized intervention; lycopene not the tested variable"
+  },
+  {
+   "pmid": "10827213",
+   "reason": "not_intervention",
+   "note": "General fruit/vegetable intake trial on plasma carotenoids/homocysteine; lycopene not the tested variable"
+  },
+  {
+   "pmid": "15142129",
+   "reason": "not_intervention",
+   "note": "Diet/anthropometric measures and prostate cancer risk review of prospective cohort studies; observational"
+  },
+  {
+   "pmid": "18689373",
+   "reason": "not_intervention",
+   "note": "Carotenoids and lung cancer risk systematic review; observational dietary-intake studies"
+  },
+  {
+   "pmid": "21901390",
+   "reason": "not_intervention",
+   "note": "Carotenoids and breast cancer risk meta-analysis/meta-regression; observational"
+  },
+  {
+   "pmid": "23909722",
+   "reason": "not_intervention",
+   "note": "Broad dietary antioxidants and prostate cancer review; not lycopene-specific intervention"
+  },
+  {
+   "pmid": "24073964",
+   "reason": "not_intervention",
+   "note": "Carotenoid-rich dietary PATTERNS and cognitive function; observational dietary pattern study"
+  },
+  {
+   "pmid": "24356061",
+   "reason": "not_intervention",
+   "note": "Vitamin A/carotenoids and Parkinson's disease risk systematic review; observational"
+  },
+  {
+   "pmid": "24423117",
+   "reason": "not_intervention",
+   "note": "General fruit/vegetable intake RCT and carotenoid/PON-1/LCAT activity; lycopene not the tested variable"
+  },
+  {
+   "pmid": "24848940",
+   "reason": "not_intervention",
+   "note": "Dietary and circulating lycopene and stroke risk meta-analysis of PROSPECTIVE STUDIES; observational"
+  },
+  {
+   "pmid": "25981647",
+   "reason": "not_intervention",
+   "note": "Generic prostate cancer prevention title; broad review, lycopene-specific extractable data not confirmed"
+  },
+  {
+   "pmid": "26287411",
+   "reason": "not_intervention",
+   "note": "Lycopene and prostate cancer risk systematic review/meta-analysis; predominantly observational dietary-intake literature"
+  },
+  {
+   "pmid": "27356952",
+   "reason": "not_intervention",
+   "note": "Antioxidant intake and pancreatic cancer risk meta-analysis; observational"
+  },
+  {
+   "pmid": "27472298",
+   "reason": "not_intervention",
+   "note": "Lycopene consumption and colorectal cancer risk meta-analysis explicitly of OBSERVATIONAL STUDIES"
+  },
+  {
+   "pmid": "27689064",
+   "reason": "not_intervention",
+   "note": "Oxidative stress in prostate cancer patients systematic review of CASE CONTROL STUDIES; observational"
+  },
+  {
+   "pmid": "27911854",
+   "reason": "not_intervention",
+   "note": "Carotenoids and fracture risk meta-analysis of OBSERVATIONAL STUDIES"
+  },
+  {
+   "pmid": "27913933",
+   "reason": "not_intervention",
+   "note": "General fatigue-reduction diet pattern pilot trial in breast cancer survivors; not lycopene-specific"
+  },
+  {
+   "pmid": "28102015",
+   "reason": "not_intervention",
+   "note": "Circulating antioxidant levels and prostate cancer risk by genotype; observational biomarker study"
+  },
+  {
+   "pmid": "28318092",
+   "reason": "not_intervention",
+   "note": "Lycopene and cardiovascular disease risk meta-analysis of OBSERVATIONAL STUDIES"
+  },
+  {
+   "pmid": "28333357",
+   "reason": "not_intervention",
+   "note": "Dietary patterns/foods/nutrients and male fertility systematic review of OBSERVATIONAL STUDIES"
+  },
+  {
+   "pmid": "28935150",
+   "reason": "not_intervention",
+   "note": "Mediterranean diet and colorectal cancer systematic review; broad diet pattern, not lycopene-specific"
+  },
+  {
+   "pmid": "28983399",
+   "reason": "not_intervention",
+   "note": "Carotenoids as potential antioxidants in stroke prevention; broad narrative/observational review"
+  },
+  {
+   "pmid": "29713542",
+   "reason": "not_intervention",
+   "note": "Broad antioxidant types/doses in male infertility systematic review; lycopene not named in title"
+  },
+  {
+   "pmid": "29757945",
+   "reason": "not_intervention",
+   "note": "Abstract confirmed 'lycopene' does not appear anywhere in the text; composition of the 'new nutraceutical' unconfirmed/unrelated"
+  },
+  {
+   "pmid": "30111493",
+   "reason": "not_intervention",
+   "note": "Broad oral antioxidant therapy review for preeclampsia; not lycopene-specific"
+  },
+  {
+   "pmid": "30475939",
+   "reason": "not_intervention",
+   "note": "Systematic review explicitly of CIRCULATING or DIETARY INTAKE of lycopene and metabolic syndrome; observational"
+  },
+  {
+   "pmid": "31217968",
+   "reason": "not_intervention",
+   "note": "Systematic review explicitly of circulating/dietary lycopene and cognitive function via cross-sectional/longitudinal (observational) studies"
+  },
+  {
+   "pmid": "31577095",
+   "reason": "not_intervention",
+   "note": "Broad nutraceutical review for BPH/prostate cancer prevention; lycopene not the specific focus"
+  },
+  {
+   "pmid": "32127134",
+   "reason": "not_intervention",
+   "note": "Broad preeclampsia prevention factors systematic review; lycopene not named"
+  },
+  {
+   "pmid": "32503160",
+   "reason": "not_intervention",
+   "note": "Broad bioactive compounds and blood pressure review; lycopene not named"
+  },
+  {
+   "pmid": "32977711",
+   "reason": "not_intervention",
+   "note": "Circulating lycopene and chronic inflammation systematic review; observational biomarker literature"
+  },
+  {
+   "pmid": "33714110",
+   "reason": "not_intervention",
+   "note": "Polycyclic aromatic hydrocarbons and serum nutritional biomarkers association study; lycopene one of several measured biomarkers, not tested"
+  },
+  {
+   "pmid": "33977977",
+   "reason": "not_intervention",
+   "note": "Carotenoids and overweight/obesity systematic review; observational"
+  },
+  {
+   "pmid": "34311540",
+   "reason": "not_intervention",
+   "note": "Molecular-targets review of lycopene anti-cancer mechanisms; mechanistic, not clinical intervention outcomes"
+  },
+  {
+   "pmid": "34836103",
+   "reason": "not_intervention",
+   "note": "Breast milk micronutrients and infant neurodevelopment systematic review; observational, infant population"
+  },
+  {
+   "pmid": "35096612",
+   "reason": "not_intervention",
+   "note": "Gene polymorphisms/serum antioxidants and prostate cancer risk (Prostate Cancer Prevention Trial); observational genetic association analysis"
+  },
+  {
+   "pmid": "35223939",
+   "reason": "not_intervention",
+   "note": "Plasma carotenoids/vitamins and AMD risk matched case-control study/meta-analysis; observational"
+  },
+  {
+   "pmid": "35327434",
+   "reason": "not_intervention",
+   "note": "Dietary carotenoids and frailty syndrome systematic review; observational"
+  },
+  {
+   "pmid": "35389473",
+   "reason": "not_intervention",
+   "note": "Carotenoid concentrations in human milk/infant blood systematic review; observational"
+  },
+  {
+   "pmid": "35845801",
+   "reason": "not_intervention",
+   "note": "Retinol/carotenoids in diet and serum vs colorectal cancer risk meta-analysis; observational"
+  },
+  {
+   "pmid": "35956264",
+   "reason": "not_intervention",
+   "note": "General fruit/vegetable intake trial in children with asthma; lycopene not the tested variable"
+  },
+  {
+   "pmid": "36358577",
+   "reason": "not_intervention",
+   "note": "Dietary carotenoid intake and depressive symptoms systematic review; observational"
+  },
+  {
+   "pmid": "36501056",
+   "reason": "not_intervention",
+   "note": "Dietary intakes and gynecological cancers cross-sectional study; observational"
+  },
+  {
+   "pmid": "36501182",
+   "reason": "not_intervention",
+   "note": "Anti-cancer molecular-mechanism review of 72 human AND animal in vivo studies; mechanistic, not a clinical-outcome synthesis"
+  },
+  {
+   "pmid": "36986267",
+   "reason": "not_intervention",
+   "note": "Broad dietary/nutraceutical interventions as periodontal-therapy adjunct systematic review; lycopene not named, too generic"
+  },
+  {
+   "pmid": "37107211",
+   "reason": "not_intervention",
+   "note": "Broad antioxidant supplementation and male fertility systematic review; lycopene not named"
+  },
+  {
+   "pmid": "38010776",
+   "reason": "not_intervention",
+   "note": "Nutrient intake and female infertility, NHANES database association study; observational"
+  },
+  {
+   "pmid": "38287248",
+   "reason": "not_intervention",
+   "note": "Carotenoids and gastric cancer risk systematic review; observational dietary-intake literature"
+  },
+  {
+   "pmid": "38566359",
+   "reason": "not_intervention",
+   "note": "Diet-derived circulating antioxidants and periodontitis/caries MENDELIAN RANDOMIZATION study; genetic-proxy observational design"
+  },
+  {
+   "pmid": "38745492",
+   "reason": "not_intervention",
+   "note": "Dietary/nutritional factors and cognitive decline/dementia association study; observational"
+  },
+  {
+   "pmid": "38935105",
+   "reason": "not_intervention",
+   "note": "Broad multi-nutrient (vitamins, iron, omega-3, lycopene) deficiency review in postmenopausal women; too broad, lycopene not the specific focus"
+  },
+  {
+   "pmid": "39064656",
+   "reason": "not_intervention",
+   "note": "Generic 'antioxidant lipid supplement' and cardiovascular risk factors review; lycopene relevance unconfirmed, too generic"
+  },
+  {
+   "pmid": "39229651",
+   "reason": "not_intervention",
+   "note": "Dietary and circulating carotenoids and liver disease systematic review; observational"
+  },
+  {
+   "pmid": "40566597",
+   "reason": "not_intervention",
+   "note": "Association between lycopene and metabolic disease risk/mortality; title indicates observational association design"
+  },
+  {
+   "pmid": "40672103",
+   "reason": "not_intervention",
+   "note": "Genetically proxied risk/protective factors for pancreatic cancer, Mendelian randomization meta-analysis; genetic-proxy observational design"
+  },
+  {
+   "pmid": "40876538",
+   "reason": "not_intervention",
+   "note": "APOE4-dependent associations between blood carotenoid levels and cognitive decline within the MIND diet RCT; carotenoid level examined as an observational biomarker, not the tested intervention (the diet is)"
+  },
+  {
+   "pmid": "41049369",
+   "reason": "not_intervention",
+   "note": "Broad nutrition and HPV-associated inflammation systematic review; lycopene not named"
+  },
+  {
+   "pmid": "41214650",
+   "reason": "not_intervention",
+   "note": "Lycopene intake and prostate cancer risk explicitly in a PROSPECTIVE COHORT STUDY; observational"
+  },
+  {
+   "pmid": "41587736",
+   "reason": "not_intervention",
+   "note": "Carotenoids/alpha-tocopherol measured as an OUTCOME of multivitamin supplementation in the COSMOS trial; lycopene is a biomarker outcome, not the tested intervention"
+  }
+ ],
+ "records": [
+  {
+   "pmid": "9832077",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato lycopene (juice, spaghetti sauce, tomato oleoresin)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "19 healthy human subjects",
+   "indication_as_stated": "LDL oxidation/coronary heart disease risk",
+   "dose_quote": "Dietary lycopene was provided using tomato juice, spaghetti sauce, and tomato oleoresin for a period of 1 wk each.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "serum lipid peroxidation and LDL oxidation were significantly decreased",
+   "sample_size_quote": "19 healthy human subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene delivered via whole tomato food sources.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9924277",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "tomato puree or raw tomato (16.5 mg total lycopene)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "ten healthy female subjects",
+   "indication_as_stated": "lycopene bioavailability (food matrix)",
+   "dose_quote": "16.5 mg total lycopene (all-trans + cis forms)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Plasma total lycopene concentration was higher after the tomato pur\u00e9e intake than after the raw tomato in both the first (F(1,8) 7.597; P < 0.025) and the second experiments (F(1,8) 12.193; P < 0.01)",
+   "sample_size_quote": "ten healthy female subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Bioavailability/food-matrix study, not a clinical efficacy trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene from whole tomato food sources.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12424331",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "carotenoid-rich vegetable juice (V-8), predominantly lycopene",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "23 healthy young adults",
+   "indication_as_stated": "ozone-induced lung oxidative damage",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Mean lung concentrations of lycopene increased by 12%, and lung epithelial cell DNA damage as measured by the Comet Assay decreased 20% in supplemented subjects.",
+   "sample_size_quote": "Healthy young adults (n = 23) were exposed to 0.4 ppm ozone",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Authors state they were not able to separate the effects of lycopene from other carotenoids/antioxidants in the V-8 juice, though lycopene is 88% of total carotenoids.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Delivered as a multi-carotenoid vegetable juice, not isolated lycopene.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12514275",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "mixed carotenoid supplement (beta-carotene, lutein, lycopene, 8 mg/d each)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "volunteers with skin type II (n=12/group)",
+   "indication_as_stated": "UV-induced erythema (photoprotection)",
+   "dose_quote": "24 mg/d of a carotenoid mix consisting of the three main dietary carotenoids, beta-carotene, lutein and lycopene (8 mg/d each)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The intensity of erythema 24 h after irradiation was diminished in both groups that received carotenoids and was significantly lower than baseline after 12 wk of supplementation",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of three carotenoids (with beta-carotene and lutein) in the mixed-carotenoid arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12923651",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato products (raw, sauce, paste; ~8 mg lycopene/day)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "12 healthy female volunteers",
+   "indication_as_stated": "lipid oxidation/atherosclerosis risk markers",
+   "dose_quote": "providing approximately eight mg lycopene/day for three weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "LDL oxidizability decreased after tomato consumption, as demonstrated by a shortening of the lag phase (P < 0.001)",
+   "sample_size_quote": "Twelve females",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene from whole tomato food products.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "14564460",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "synthetic lycopene (Lycovit) vs tomato-based lycopene (Lyc-O-Mato), 15 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "36 healthy, normolipemic adults (3 groups of 12)",
+   "indication_as_stated": "lycopene bioavailability (synthetic vs natural source)",
+   "dose_quote": "took a dose of 15 mg/day total lycopene for 28 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The mean serum total lycopene response to synthetic and natural lycopene was not significantly different.",
+   "sample_size_quote": "Three groups (n=12/group)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Bioavailability study; confirms synthetic and tomato-derived lycopene forms are equivalent.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Compares two lycopene source/forms, both counted as lycopene.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15063387",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral lycopene, 8 mg/day or 4 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "58 patients with oral leukoplakia",
+   "indication_as_stated": "oral leukoplakia",
+   "dose_quote": "Group A: (n = 20; 8 mg lycopene/day), Group B: (n = 20; 4 mg lycopene/day) and Group C: (n = 18; placebo)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the patients in Groups A, B, C had a mean response of 80%, 66.25% and 12.5% respectively",
+   "sample_size_quote": "Fifty-eight clinically and histologically diagnosed patients of oral leukoplakia",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15116084",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "lycopene from red carrots vs tomato paste",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "9-10 subjects per crossover study",
+   "indication_as_stated": "lycopene/beta-carotene bioavailability (food source)",
+   "dose_quote": "red carrots (5 mg/day), and tomato paste (20 mg/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the lycopene in the red carrot is about 44% as bioavailable as that from tomato paste",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene bioavailability compared across whole-food sources.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15369594",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "watermelon or tomato juice, 20 mg lycopene",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "10 healthy men and women",
+   "indication_as_stated": "cardiovascular/antioxidant status (middle-aged adults)",
+   "dose_quote": "supplemented with watermelon or tomato juice each containing 20 mg lycopene",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the lycopene-containing foods did not affect plasma lipid concentrations or antioxidant biomarkers",
+   "sample_size_quote": "Ten healthy men and women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene delivered via whole-food juice sources.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15927929",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "tomatoes cooked with olive oil (food matrix)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "11-12 healthy subjects",
+   "indication_as_stated": "lycopene bioavailability (cooking/food matrix effect)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was an 82% increase in plasma trans-lycopene (P< 0.001) and a 40% in cis-lycopene (P = 0.002) concentrations in the 11 subjects who consumed tomatoes cooked in olive oil.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Food-matrix bioavailability study, not a clinical efficacy trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene from whole tomatoes, olive oil is a co-ingested matrix enhancer not a separate active.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16263208",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "dietary supplement (soy, isoflavones, lycopene, silymarin, antioxidants)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "49 patients with history of prostate cancer and rising PSA",
+   "indication_as_stated": "prostate cancer (PSA progression)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Per protocol analysis showed a significant decrease in PSA slope (p = 0.030) and (2)log PSA slope (p = 0.041).",
+   "sample_size_quote": "49 patients with a history of prostate cancer and rising PSA levels",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Multi-ingredient combination supplement; effect not isolable to lycopene alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of several ingredients (soy, isoflavones, silymarin, antioxidants) in a combination supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17054142",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "lycopene (one of several leukoplakia treatments reviewed)",
+   "combination": true,
+   "route": "mixed",
+   "population_as_stated": "501 participants across 9 included RCTs",
+   "indication_as_stated": "oral leukoplakia (malignant transformation prevention)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Treatment with beta carotene, lycopene and vitamin A or retinoids, was associated with significant rates of clinical resolution, compared with placebo or absence of treatment.",
+   "sample_size_quote": "nine studies to be included in the review (501 patients)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Broad review of leukoplakia treatments (vitamin A, beta carotene, lycopene, bleomycin, mixed tea, ketorolac); none of the treatments showed benefit for the primary outcome of preventing malignant transformation.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of several unrelated interventions in this Cochrane-style review, not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19583878",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato extract capsule, 15 mg lycopene/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "36 prehypertensive healthy adults",
+   "indication_as_stated": "prehypertension (blood pressure)",
+   "dose_quote": "one tomato extract capsule containing 15 mg lycopene per day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Blood pressure changes over time within groups and between groups were not significant and independent of treatment.",
+   "sample_size_quote": "Thirty-six prehypertensive healthy adult volunteers completed the 6-month trial.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [
+    "ACTRN12609000047291"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene delivered as a standardized tomato extract capsule.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21194693",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene, 6 mg or 15 mg daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "126 healthy men",
+   "indication_as_stated": "oxidative stress/endothelial function",
+   "dose_quote": "placebo (n=38), 6 mg (n=41), or 15 mg (n=37) lycopene daily for 8-week",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The 15 mg/day group had greater increase in plasma SOD activity (P=0.014) and reduction in lymphocyte DNA comet tail length (P=0.042) than the placebo group.",
+   "sample_size_quote": "Healthy men (n=126)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22406705",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "systemic lycopene, 8 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "30 symptomatic oral lichen planus patients",
+   "indication_as_stated": "oral lichen planus",
+   "dose_quote": "administered lycopene 8 mg/day and an identical placebo, respectively, for 8 consecutive weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A higher (84%) reduction in burning sensation was seen in lycopene than in the placebo group (67%).",
+   "sample_size_quote": "Thirty symptomatic OLP patients, randomly divided into two groups of 15 each",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene matches label material; explicitly systemic administration.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23069270",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato juice, 330 mL/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "106 overweight or obese female students",
+   "indication_as_stated": "systemic inflammation (overweight/obesity)",
+   "dose_quote": "consuming 330 ml/d of tomato juice or water",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Serum concentrations of IL-8 and TNF-\u03b1 decreased significantly in the intervention group compared with the control group and with baseline.",
+   "sample_size_quote": "106 overweight or obese female students",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene delivered via tomato juice.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23225211",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene-enriched virgin olive oil, 7 mg lycopene/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "young, middle-aged, and elderly subjects",
+   "indication_as_stated": "antioxidant status",
+   "dose_quote": "consumption of a lycopene-enriched virgin olive oil (7 mg lycopene day(-1))",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the administration of a lycopene-enriched virgin olive oil produced higher antioxidant effects in all of the three age groups assayed",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene added to an olive oil vehicle; single active ingredient tested.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23291317",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato juice",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "15 anaerobically trained athletes",
+   "indication_as_stated": "exercise-induced muscle damage markers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Tomato juice administration significantly reduced LDH and CPK levels, which returned back to almost normal levels.",
+   "sample_size_quote": "Fifteen anaerobically trained athletes",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene delivered via tomato juice.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23478703",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "raw and processed (cooked) tomatoes",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "15 healthy subjects",
+   "indication_as_stated": "lycopene bioavailability (cooking method)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Consumption of raw crushed tomato with olive oil and cooked tomatoes with olive oil, significantly increased blood lycopene levels.",
+   "sample_size_quote": "Fifteen healthy subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Bioavailability/food-preparation study, not a clinical efficacy trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene from whole tomatoes.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24651682",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "V8 100% vegetable juice, 29.4 mg lycopene/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "40 patients with heart failure",
+   "indication_as_stated": "heart failure (inflammation biomarkers)",
+   "dose_quote": "The lycopene intervention group received 29.4 mg of lycopene intake per day by drinking an 11.5 oz serving of V8 100% vegetable juice for 30 days.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "C-reactive protein levels decreased significantly in the intervention group in women and but not in men (P = .04).",
+   "sample_size_quote": "Forty participants with HF",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Effect on CRP was significant in women but not men.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene delivered as part of a mixed-vegetable juice (V8), not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26024575",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene capsule vs tomato paste",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "20 subjects (10/group)",
+   "indication_as_stated": "UV photoprotection (skin)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Lycopene regular intake was safe and demonstrated no effect for systemic photoprotection against ultraviolet B; no correlation with serum lycopene was detected.",
+   "sample_size_quote": "20 subjects, divided in two groups: 10 for capsule and 10 for tomato paste intake",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene matches label material (capsule and tomato-paste forms compared).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26086066",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato juice, 330 mL/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "75 overweight or obese female students",
+   "indication_as_stated": "antioxidant status (overweight/obesity)",
+   "dose_quote": "consuming 330 ml/d of tomato juice or water, respectively, for a 20-day period",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Lycopene consumption had no effect on these aforementioned variables.",
+   "sample_size_quote": "seventy-five overweight or obese female students",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Companion/related study to 23069270 in a similar but not identical cohort (different outcome markers: antioxidant capacity/enzymes here vs cytokines there).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene delivered via tomato juice.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27406859",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato products, 30 mg lycopene/day (alone or as 'tomato-plus' combination)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "79 patients with prostate cancer",
+   "indication_as_stated": "prostate cancer (PSA)",
+   "dose_quote": "tomato products containing 30 mg lycopene per day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The main analysis, which included patients in all risk categories, did not reveal differences in changes of PSA-values between the intervention and control groups.",
+   "sample_size_quote": "79 patients with prostate cancer were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary analysis null; post-hoc exploratory subgroup analyses suggested benefit in intermediate-risk patients and in a combination 'tomato-plus' arm (selenium, omega-3, soy isoflavones, grape/pomegranate juice, tea).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "One arm is tomato alone, another combines tomato with several additional actives (selenium, omega-3, soy isoflavones, grape/pomegranate juice, tea).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27471845",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "lycopene (one of several leukoplakia treatments reviewed)",
+   "combination": true,
+   "route": "mixed",
+   "population_as_stated": "909 participants across 14 included RCTs",
+   "indication_as_stated": "oral leukoplakia (cancer prevention)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "None of the studies provided evidence that active treatment reduced the risk of oral cancer more than placebo",
+   "sample_size_quote": "We included 14 studies (909 participants) in this review.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Updated Cochrane review of leukoplakia treatments; some individual studies suggested lycopene (and vitamin A, beta carotene) were effective for clinical/histological resolution, but not for the primary cancer-prevention outcome.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of several unrelated interventions in this Cochrane review, not isolated.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28129549",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "tomato and lycopene supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults >18 years across 21 included intervention trials",
+   "indication_as_stated": "cardiovascular risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "lycopene supplementation reduced systolic-BP (-5.66 mmHg; p = 0.002)",
+   "sample_size_quote": "Out of 1189 publications identified, 21 fulfilled inclusion criteria and were meta-analysed.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to intervention trials of tomato products and lycopene supplementation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28323947",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "mixed-carotenoid supplement (beta-carotene, alpha-carotene, lutein, zeaxanthin, lycopene, astaxanthin, gamma-tocopherol)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "20 children with obesity",
+   "indication_as_stated": "abdominal adiposity/adipokines in childhood obesity",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "MCS led to a greater reduction in BMI z-score, waist-to-height ratio, and SAT compared with placebo.",
+   "sample_size_quote": "Twenty (6 male and 14 female) children with simple obesity",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of seven components in a mixed-carotenoid supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28975094",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "oral lycopene",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "120 cancer patients receiving cisplatin",
+   "indication_as_stated": "cisplatin-induced nephrotoxicity",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a significant decreasing trend was seen in GFR during the study, which was more marked in the control group (P = 0.004)",
+   "sample_size_quote": "120 patients were randomly assigned to two groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Lycopene given as adjuvant alongside a standard kidney-injury-prevention regimen in both groups; benefit is additive to standard care.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene matches label material; explicitly stated to be orally taken.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29901405",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "dose_guidance",
+   "intervention_as_stated": "lycopene supplementation (dose not specified in abstract)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "32 healthy volunteers (30-40 years)",
+   "indication_as_stated": "lycopene supplementation status monitoring (biomarker method validation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "lycopene supplementation leads to a significant increase in serum lycopene concentration after 2 and 4 weeks by 2.6- and 3.4-fold over control, respectively",
+   "sample_size_quote": "32 healthy volunteers, 30-40 years old, were supplemented with lycopene (n = 15) or placebo (n = 17) for a period of 4 weeks",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Method-validation study (novel skin immunofluorescence assay vs HPLC), not a clinical efficacy trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30059188",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene capsules, 8 mg twice daily",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "90 patients with oral submucous fibrosis",
+   "indication_as_stated": "oral submucous fibrosis (OSMF)",
+   "dose_quote": "Group B patients (n = 30) received lycopene capsules (8 mg) twice daily",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Statistically significant improvement in clinical findings was observed in both curcumin and lycopene treatment groups in comparison with placebo.",
+   "sample_size_quote": "ninety OSMF patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Three-arm trial comparing lycopene, curcumin, and placebo (not a lycopene+curcumin combination); listed as combination only because curcumin is a co-tested comparator arm in the same trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene arm is a clean single-ingredient oral capsule.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30258622",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene, 7 mg/day, as lactolycopene or lycosome-formulated GA lycopene",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "142 patients with coronary vascular disease",
+   "indication_as_stated": "coronary vascular disease (inflammation/oxidation markers)",
+   "dose_quote": "supplemented with a single 7 mg daily dose of lycopene ingested either in the form of lactolycopene (68 patients) or in the form of lycosome-formulated GA lycopene (74 patients)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Lycosome formulation of lycopene resulted by the end of the trial in a threefold reduction in Chlamydia pneumoniae IgG and reduction to the same degree of the inflammatory oxidative damage marker.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Lycosome-formulated lycopene showed benefits; lactolycopene form did not cause significant changes in the parameters studied -- formulation/bioavailability strongly affected outcomes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Compares two proprietary encapsulated lycopene delivery forms (lactolycopene, lycosome) with differing bioavailability.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30447975",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene-enriched ice cream",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy volunteers",
+   "indication_as_stated": "systemic and skin antioxidant effects",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "both inflammatory oxidative damage and low-density lipoprotein peroxidase protein values significantly decreased by the end of intervention with lycopene-enriched ice cream, but remained unchanged during control ice cream consumption",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene delivered via an enriched functional food (ice cream) matrix.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30836363",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato-derived carotenoid supplement (15 mg lycopene + phytoene/phytofluene/beta-carotene/tocopherols/carnosic acid)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "149 healthy volunteers",
+   "indication_as_stated": "UVB-induced erythema/skin photoprotection",
+   "dose_quote": "15 mg lycopene, 5.8 mg phytoene and phytofluene, 0.8 mg \u03b2-carotene, 5.6 mg tocopherols from tomato extract, and 4 mg carnosic acid from rosemary extract per day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the carotenoid-containing supplement significantly protected against UVB-induced erythema formation measured as \u0394a* after the intervention minus \u0394a* after the washout phase as compared to the placebo",
+   "sample_size_quote": "One hundred and forty-nine healthy volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "No significant difference in minimal erythemal dose (MED) itself between groups; significant effect only on the \u0394a* colorimetric erythema measure and inflammatory cytokines.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of several tomato- and rosemary-extract phytonutrients in a combined supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31198349",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Lycored lycopene, 16 mg/day (oral) alone or plus intralesional hyaluronidase",
+   "combination": true,
+   "route": "mixed",
+   "population_as_stated": "45 patients with oral submucous fibrosis",
+   "indication_as_stated": "oral submucous fibrosis (OSMF)",
+   "dose_quote": "Patients in Group A were given Lycored 16 mg daily in two equally divided doses for 3 months.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was statistically significant change in mouth opening and burning sensation for lycopene and lycopene-hyaluronidase combination than in the placebo group",
+   "sample_size_quote": "45 patients with OSMF divided into three equal groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Group A is a clean oral lycopene monotherapy arm; Group B combines the same oral lycopene with intralesional hyaluronidase injection (a different, non-oral route) -- route/combination differs by arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Oral-monotherapy arm matches label material; combination arm adds a non-oral injected agent.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31204333",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "capsule lycopene (alone or with injectable dexamethasone)",
+   "combination": true,
+   "route": "mixed",
+   "population_as_stated": "60 patients with stage II oral submucous fibrosis",
+   "indication_as_stated": "oral submucous fibrosis (OSMF)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Improvement in mouth opening, reduced burning sensation in OSMF patients was also shown by lycopene.",
+   "sample_size_quote": "Sixty patients were included in the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Group 1 is oral lycopene capsule monotherapy; groups 2-3 combine or replace it with injected dexamethasone/hyaluronidase (non-oral routes) which performed better than lycopene alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Group 1 (capsule lycopene) is a clean oral monotherapy arm; other arms add non-oral injected drugs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31591650",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lactolycopene, 14 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 healthy male participants",
+   "indication_as_stated": "semen quality (male fertility)",
+   "dose_quote": "14 mg daily lactolycopene for 12 weeks",
+   "primary_outcome_quote": "The primary endpoint was a change in motile sperm concentration.",
+   "primary_result_quote": "There was no significant change in the primary endpoint (motile sperm concentration) post-intervention (p = 0.058). However, the proportion of fast progressive sperm (p = 0.006) and sperm with normal morphology (p < 0.001) did improve significantly",
+   "sample_size_quote": "Sixty healthy male participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Primary endpoint (motile sperm concentration) not significant; secondary sperm-quality endpoints improved.",
+   "registrations": [
+    "ISRCTN33248724"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lactolycopene is a proprietary encapsulated (dairy-protein-matrix) lycopene formulation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31947953",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene-rich tomato sauce with oregano and basil extracts, plus calorie restriction",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "61 obese children with NAFLD (52 completed)",
+   "indication_as_stated": "non-alcoholic fatty liver disease (obese children)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Reduction in BMI, HOMA-IR, cholesterol, triglycerides, liver size, and steatosis was more profound in tomato-supplemented group.",
+   "sample_size_quote": "61 obese children with fatty liver were enrolled, 52 completed the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene-rich tomato sauce combined with oregano/basil extracts and a calorie-restriction diet regimen, not isolated lycopene.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32652029",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "dietary and/or supplemental lycopene",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 43 included intervention trials",
+   "indication_as_stated": "cardiovascular risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "there were no significant differences between lycopene intervention and control groups for blood pressure and lipids (total cholesterol, LDL cholesterol, HDL cholesterol, and triglycerides)",
+   "sample_size_quote": "Forty-three studies were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Notes wide variability in dose (1.44-75 mg/d) and delivery mode (supplement vs. tomato-based food) across included studies, contributing to conflicting findings.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to intervention trials of dietary/supplemental lycopene.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32695957",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "100% watermelon juice, 14.4 mg lycopene/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "16 postmenopausal women",
+   "indication_as_stated": "serum lycopene response/genetic variation (cardiovascular biomarkers)",
+   "dose_quote": "provided a daily dose of 14.4 \u00b1 0.34 mg lycopene",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Watermelon juice supplementation did not result in improvements in serum lipids or antioxidant capacity; however, results support findings in which watermelon juice significantly, yet differentially, increased circulating lycopene.",
+   "sample_size_quote": "postmenopausal women (n = 16, mean \u00b1 SD age: 60 \u00b1 4.1 y)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [
+    "NCT03626168"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene delivered via whole watermelon juice.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33072506",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "lycopene",
+   "combination": false,
+   "route": "mixed",
+   "population_as_stated": "1181 subjects with oral submucous fibrosis across 19 included studies",
+   "indication_as_stated": "oral submucous fibrosis (OSMF)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The results of meta-analysis showed non-significant differences between lycopene and other interventions used in the treatment of OSMF.",
+   "sample_size_quote": "16 randomized control trials and 3 non-randomized control trials comprising 1181 subjects were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Includes OSMF trials that use lycopene both orally and, in some included studies, combined with intralesional injections; route not restricted to oral in the pooled review.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review of lycopene as an OSMF intervention, though pooled across oral and combination/injected regimens.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33131949",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "tomato intake / dietary and serum lycopene",
+   "combination": false,
+   "route": "mixed",
+   "population_as_stated": "humans across 17 included systematic reviews/meta-analyses (20 health outcomes)",
+   "indication_as_stated": "multiple health outcomes (umbrella review)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The intake of tomato or lycopene was generally safe and beneficial for multiple health outcomes in humans. But the quality of the evidence was not high.",
+   "sample_size_quote": "A total of 174 articles were searched, 17 articles with 20 health outcomes were identified",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Umbrella review pooling both observational dietary/serum-lycopene associations and intervention evidence; explicitly notes evidence quality is low/very low for most outcomes.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Reviews both dietary intake and supplemental lycopene together.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33998846",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "carotenoids supplementation (lycopene analyzed individually)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "adults across 26 included RCTs (35 effect sizes)",
+   "indication_as_stated": "inflammation (RCT meta-analysis)",
+   "dose_quote": null,
+   "primary_outcome_quote": "only lycopene (WMD: \u20121.08 pg/ml, 95%CI: \u20122.03, \u20120.12, P = 0.027) led to a significant decrease in IL-6",
+   "primary_result_quote": null,
+   "sample_size_quote": "A total of 26 trials with 35 effect sizes were included in this meta-analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Lycopene analyzed as its own separate carotenoid arm within a broader carotenoids meta-analysis (alongside astaxanthin, lutein/zeaxanthin, beta-cryptoxanthin).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene-specific result extractable from a multi-carotenoid meta-analysis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34268742",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "oral lycopene intake",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults \u226518 years across 12 trial arms (n=781, HDL) / 11 studies (n=854, TG)",
+   "indication_as_stated": "HDL-cholesterol and triglyceride levels",
+   "dose_quote": null,
+   "primary_outcome_quote": "Meta-analysis including 12 trial arms (n = 781) revealed a significantly increased HDL-c level in the lycopene group compared with that in the control group (SMD = 0.33 [95% CI: 0.12, 0.54], p = 0.002)",
+   "primary_result_quote": null,
+   "sample_size_quote": "Meta-analysis including 12 trial arms (n = 781)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Meta-analysis restricted to human interventional trials of oral lycopene intake.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review explicitly restricted to oral lycopene intake interventional trials.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34745860",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "systemically administered lycopene, 10 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "100 patients with chronic gingivitis (split-mouth design)",
+   "indication_as_stated": "chronic gingivitis/periodontal health",
+   "dose_quote": "received 10 mg of Lycopene a day for two weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Both clinical parameters were significantly reduced (p < 0.001) in the OP-lycopene group relative to the non-OP-placebo group and non-OP lycopene group",
+   "sample_size_quote": "The participants were randomly assigned to one of two treatment groups: the experimental group (n = 50), which received 10 mg of Lycopene a day for two weeks, or the control group (n = 50) received a placebo for two weeks.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Explicitly systemic (oral) administration.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34799132",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "black pepper and canola oil emulsion (carotenoid absorption enhancer)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "healthy young adults",
+   "indication_as_stated": "carotenoid (incl. lycopene) bioavailability from raw vegetables",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "COE + BP increased AUC0-10h of plasma lutein, \u03b1-carotene, \u03b2-carotene, and lycopene by 4.8, 9.7, 7.6, and 5.5-fold than the control, respectively (p < 0.0001)",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Bioavailability-enhancement study of raw-vegetable carotenoids (incl. lycopene) using black pepper/oil emulsion, not a lycopene supplement trial per se.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene measured as one of several carotenoids from raw vegetables; black pepper/oil emulsion is the tested enhancer.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34810387",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "natural lycopene with green tea extract (commercial antioxidant product)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "48 systemically healthy participants with generalized gingivitis",
+   "indication_as_stated": "periodontal disease progression",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Oral lycopene and green tea extract supplementation is positively associated with salivary uric acid levels and plays an important role in the management of gingivitis.",
+   "sample_size_quote": "48 systemically healthy participants",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Commercial product combines lycopene with green tea extract, not isolated lycopene.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35031434",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "supplemental lycopene / tomato extract",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 9 studies (6 in meta-analysis)",
+   "indication_as_stated": "prostate specific antigen (PSA)",
+   "dose_quote": null,
+   "primary_outcome_quote": "The pooled analysis of the 6 studies showed no significant differences in PSA levels in subjects treated with lycopene or tomato extract containing lycopene (WMD= -0.12 ng/ml; 95% CI: -0.62, 0.38 ng/ml; P = 0.64) compared to the control.",
+   "primary_result_quote": null,
+   "sample_size_quote": "9 were included in the systematic review and 6 in meta-analysis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to supplemental lycopene/tomato-extract RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35707307",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "LycoRed lycopene, 8 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "198 postmenopausal women screened; 100 completed on LycoRed vs placebo",
+   "indication_as_stated": "cardiovascular and osteoporosis protection at menopause",
+   "dose_quote": "57 of the 100 women on LycoRed 8 mg (antioxidant potency is equivalent to 24 mg of lycopene) and 43 placebos for 6 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "LycoRed supplementation increases lycopene levels and P1NP and nonsignificant fall in \u03b2-CTx levels in healthy postmenopausal women.",
+   "sample_size_quote": "screened 198 postmenopausal women at 21 centers across 12 cities in India",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "LycoRed is a lycopene brand/formulation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36110830",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene 6 mg + vitamin E 400 IU + selenium 200 \u03bcg, twice daily",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "52 patients with oral leukoplakia",
+   "indication_as_stated": "oral leukoplakia",
+   "dose_quote": "Group I patients were prescribed 6 mg of lycopene, 400 I.U. of vitamin E, and 200 \u03bcg of selenium twice a day.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was a significant reduction in the size of lesion in group I compared to group II (P < 0.05).",
+   "sample_size_quote": "52 patients of oral leukoplakia were divided into 2 groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Described as a cross-sectional observational prospective study (not explicitly randomized), though it has a concurrent placebo comparison group.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of three components (with vitamin E and selenium) in a fixed combination.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36407517",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene 25 mg/day, plus/minus FruHis 10 mg/day",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "52 patients with benign prostatic hyperplasia",
+   "indication_as_stated": "benign prostatic hyperplasia (BPH)",
+   "dose_quote": "lycopene plus FruHis (n = 11, 25 mg/day lycopene and 10 mg/day FruHis), lycopene (n = 12, 25 mg/day lycopene), FruHis (n = 12, 10 mg/day FruHis), and placebo (n = 13)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "except for IGF-1, these reductions were not statistically significant compared with the placebo, and the intakes of lycopene and FruHis alone, however, were clinically important",
+   "sample_size_quote": "52 BPH patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "A clean lycopene-alone arm exists alongside the lycopene+FruHis combination arm; most reductions were not statistically significant vs. placebo.",
+   "registrations": [
+    "IRCT20190522043669N1"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene-alone arm is a clean single-ingredient comparison; a separate arm combines it with FruHis.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36606553",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "tomato and lycopene",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy subjects across 21 included intervention trials",
+   "indication_as_stated": "UV-induced skin photodamage/photoaging",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "interventions supplementing tomato and lycopene were associated with significant reductions in \u0394a*, MMP-1, ICAM-1 and skin pigmentation",
+   "sample_size_quote": "Out of 19336 publications identified, 21 fulfilled the inclusion criteria and were meta-analysis.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review explicitly restricted to population intervention experiments (not observational).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36615780",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "oral lycopene intake",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults \u226518 years across 11 trial arms (n=750)",
+   "indication_as_stated": "fasting blood glucose",
+   "dose_quote": null,
+   "primary_outcome_quote": "A meta-analysis including 11 trial arms (n = 750) revealed a tendency towards a significant decrease in FBG level with not-important heterogeneity [SMD = -0.15 (95% CI: -0.31, 0.00), p = 0.05, I2 = 9%]",
+   "primary_result_quote": null,
+   "sample_size_quote": "A meta-analysis including 11 trial arms (n = 750)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review explicitly restricted to human interventional studies of oral lycopene intake.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36921903",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "dietary fat type/emulsification (carotenoid absorption vehicle)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "16 subjects",
+   "indication_as_stated": "carotenoid (incl. lycopene) absorption from a carotenoid-rich salad",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the positive iAUC1-10h of TC, \u03b1-carotene, and lycopene were 55.2%, 110.8%, and 45.8%, respectively, higher with olive oil than with coconut oil",
+   "sample_size_quote": "Sixteen subjects consumed salad with 4 test fats in random order",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Lycopene is one of several carotenoids measured from a mixed salad; the tested variable is the co-ingested fat type/emulsification, not lycopene dose.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene measured as one of several carotenoids from a mixed vegetable salad.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40507061",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "oral lycopene intake (supplement, functional food, or regular food)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 6 included RCTs",
+   "indication_as_stated": "mental health (quality of life, depression/anxiety, stress, mood)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The evidence gathered within the systematic review of RCTs did not confirm any influence of lycopene on mental health.",
+   "sample_size_quote": "finally, six RCTs were included",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to RCTs of oral lycopene intake in any form.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40806357",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "lycopene supplementation",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "151 participants across 4 clinical studies",
+   "indication_as_stated": "male fertility outcomes",
+   "dose_quote": null,
+   "primary_outcome_quote": "Lycopene supplementation significantly improved sperm concentration (SMD 0.33, 95% CI [0.02-0.65], p = 0.037) and nonprogressive motility (SMD 0.45, 95% CI [0.04-0.87], p = 0.032)",
+   "primary_result_quote": null,
+   "sample_size_quote": "Four clinical studies involving 151 participants were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Two of the four key sperm outcomes were significant; most other outcomes (total/progressive motility, morphology, semen volume, DNA damage) were not.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to clinical studies of lycopene supplementation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40936452",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "lycopene-rich tomato juice, 15.0 mg or 26.7 mg lycopene",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "75 healthy adults with borderline flow-mediated dilatation",
+   "indication_as_stated": "vascular endothelial function",
+   "dose_quote": "placebo juice (0.7 mg lycopene), tomato juice (TJ, 15.0 mg), or high-lycopene tomato juice (HLTJ, 26.7 mg) groups",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "At week 12, FMD was significantly higher in the TJ (6.1 \u00b1 0.5%, p < 0.001) and HLTJ groups (7.0 \u00b1 0.7%, p < 0.001) than in the placebo group (5.4 \u00b1 0.6%).",
+   "sample_size_quote": "Seventy-five healthy adults with borderline FMD (4-7%)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [
+    "UMIN000051176"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene delivered via tomato juice, dose-ranged.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41760279",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "combination of 7 micronutrients (chokeberry, red grape seed, red clover extracts, curcumin, selenium, tangeretin, lycopene)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "53 newly diagnosed glioblastoma patients",
+   "indication_as_stated": "glioblastoma (overall survival)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the overall survival for the active and placebo groups was 14 and 13 months respectively, the results were not statistically significant (p=0.752)",
+   "sample_size_quote": "Fifty-three newly diagnosed patients (37 males and 16 females) with glioblastoma",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of seven components in a fixed nutraceutical combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42397564",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "carotenoid-rich tomato sauce (OsteoCol\u00ae), from vine-ripened tomatoes",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "98 adults with MASLD",
+   "indication_as_stated": "metabolic dysfunction-associated steatotic liver disease (MASLD)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A greater reduction in liver fat content was observed in participants consuming OsteoCol\u00ae compared to those receiving the placebo (CAP score: - 33 \u00b1 44 dB/m vs. - 12 \u00b1 38 dB/m, p = 0.014)",
+   "sample_size_quote": "A total of 98 patients were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene delivered via a branded functional tomato sauce; other tomato phytonutrients also present.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42588099",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato consumption (200 g/day raw + 50 g/day sauce)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "79 adults with MASLD",
+   "indication_as_stated": "metabolic dysfunction-associated steatotic liver disease (MASLD)",
+   "dose_quote": "consuming 200 g/day of raw tomatoes and 50 g/day of tomato sauce",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the treatment-by-time interaction was significant (\u03b2 = -26.63, 95% CI -44.00 to -9.25; p = 0.0030), demonstrating a significantly greater reduction in hepatic steatosis in the tomato intervention group compared to the control group",
+   "sample_size_quote": "79 adults with MASLD (BMI \u2264 30 kg/m2) were assigned",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Whole-food tomato consumption (raw tomatoes + sauce), not an isolated lycopene supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16679825",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "combination antioxidant supplement (lycopene, lutein/beta-carotene, alpha-tocopherol, selenium)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "39 volunteers with healthy, normal skin (skin type 2)",
+   "indication_as_stated": "skin structure/aging parameters",
+   "dose_quote": "Group 1 received a mixture of lycopene (3 mg/day), lutein (3 mg/day), beta-carotene (4.8 mg/day), alpha-tocopherol (10 mg/day) and selenium (75 microg/day).",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A significant increase for both parameters was determined in the verum groups.",
+   "sample_size_quote": "Thirty-nine volunteers with healthy, normal skin of skin type 2 were divided into 3 groups (n = 13)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Lycopene is one of 4-5 components (with lutein/beta-carotene, alpha-tocopherol, selenium) in both active combination arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17927495",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "tomato extract capsule, 15 mg lycopene, alone or with soy isoflavone capsule",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "71 men with prostate cancer and rising PSA",
+   "indication_as_stated": "prostate cancer (PSA relapse)",
+   "dose_quote": "a tomato extract capsule containing 15 mg of lycopene alone (n = 38) or together with a capsule containing 40 mg of a soy isoflavone mixture (n = 33) twice daily orally for a maximum of 6 mo",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "35 of 37 (95%) evaluable patients in the lycopene group and 22 of 33 (67%) evaluable patients in the lycopene plus soy isoflavone group achieved stable disease described as stabilization in serum PSA level",
+   "sample_size_quote": "Study population included 71 eligible patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "No partial/complete PSA response in either group, but a high rate of stable disease; combining with soy isoflavones did not appear additive (lycopene-alone arm performed numerically better).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Lycopene-alone arm is a clean single-ingredient oral comparison; a separate arm adds soy isoflavones.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "15063387",
+  "21194693",
+  "28129549",
+  "32652029",
+  "35031434",
+  "19583878",
+  "40936452",
+  "34745860",
+  "31591650",
+  "28975094",
+  "36606553",
+  "22406705"
+ ],
+ "handoff": [
+  {
+   "pmid": "11204525",
+   "role": "safety",
+   "reason": "Case report of lycopenaemia (excess dietary lycopene intake causing skin/serum discoloration) -- safety signal for high-dose/long-term lycopene intake, not an efficacy record."
+  }
+ ],
+ "identity_notes": "Lycopene's retrieval set is dominated by a huge body of OBSERVATIONAL literature (prospective cohorts, case-control studies, Mendelian randomization, cross-sectional/NHANES analyses, and reviews explicitly restricted to 'dietary intake' or 'circulating' lycopene) that measures lycopene as a biomarker of intake or genetic exposure rather than as an administered intervention -- all rejected not_intervention. A second large cluster is agricultural/horticultural tomato-crop science (pest management, fertilization, genetics, pesticide residues) and animal/in-vitro mechanistic studies (rats, pigs, hens, mice, human-derived cell lines), rejected off_topic/animal_or_invitro. Among genuine human oral intervention trials, lycopene is frequently delivered as whole tomato/watermelon food products (juice, sauce, paste) rather than as an isolated capsule, which is appropriate to this identity but means 'oral supplement' claims often reflect a food matrix; these are flagged exact_match when lycopene is the named/measured active, and related_form_differs when it is one of several actives in a combined product (mixed-carotenoid blends, lycopene+arginine/vitamin/selenium combinations, lactolycopene or lycosome-formulated proprietary forms). A recurring route nuance is in oral-mucosal-lesion trials (oral leukoplakia, oral lichen planus, oral submucous fibrosis): most use genuinely oral (swallowed) lycopene capsules and were kept, but some OSMF trials also test intralesional injection or topical gel forms in comparator arms within the same study, flagged accordingly, and topical creams/gels/mouth sprays for skin or xerostomia were rejected not_this_route. The strongest, most consistent efficacy signals across clean single-ingredient RCTs are modest cardiovascular/endothelial effects (21194693, 40936452, 28129549 meta-analysis) and reductions in UV/skin oxidative markers (30836363, 36606553 meta-analysis), while prostate-cancer PSA evidence is predominantly null at the RCT/meta-analysis level (27406859, 35031434) despite a large positive observational-epidemiology literature (rejected here as not_intervention). Bioavailability/pharmacokinetic studies (food matrix, cooking method, co-ingested fat/black pepper) were kept as mechanistic evidence since they directly test lycopene absorption, per the pattern used for other identities."
+}

@@ -1,0 +1,159 @@
+{
+ "_metadata": {
+  "created": "2026-09-18",
+  "purpose": "Findings surfaced by the evidence-expansion waves that belong to another canonical owner. Nothing here was written into the destination owner's files; each item is a request for that owner's own review. ONE ledger for every wave - a second file would be a second brain.",
+  "note": "One brain: the evidence registry records what its sources say. Safety, interaction and identity decisions stay with the owners listed.",
+  "waves": [
+   "legacy scope repair 2026-09-18",
+   "Wave 2 deep curation 2026-09-18"
+  ]
+ },
+ "handoffs": [
+  {
+   "id": "HANDOFF_DIM_TAMOXIFEN",
+   "kind": "drug_interaction",
+   "destination_owner": "interaction owner",
+   "artefact": "scripts/data/ingredient_interaction_rules.json + scripts/data/curated_interactions/",
+   "ingredient": "diindolylmethane (BioResponse DIM / BR-DIM)",
+   "drug": "tamoxifen",
+   "source_pmids": [
+    "28560655"
+   ],
+   "verified_live": "2026-09-18 via scripts/api_audit/pubmed_client.py efetch",
+   "finding": "Randomized, double-blind, placebo-controlled trial: 130 women prescribed tamoxifen took BR-DIM 150 mg twice daily or placebo for 12 months. Plasma tamoxifen metabolites - endoxifen, 4-OH tamoxifen and N-desmethyl-tamoxifen - were REDUCED in the BR-DIM arm versus placebo (P < 0.001). The authors state that further research is warranted to determine whether that decrease attenuates the clinical benefit of tamoxifen.",
+   "why_not_written_here": "This is a pharmacokinetic/safety signal, not an efficacy direction. It carries no efficacy credit on PRECLIN_DIM and must not. Severity, action wording, profile gate and alert copy are the interaction owner's review, not this project's.",
+   "existing_rule": "none - no diindolylmethane rule exists in ingredient_interaction_rules.json or curated_interactions/ as of 2026-09-18",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_I3C_IDENTITY",
+   "kind": "identity_mapping",
+   "destination_owner": "identity / normalization owner",
+   "artefact": "scripts/data/ingredient_quality_map.json canonical identities (enricher canonical_id assignment)",
+   "finding": "22 label rows printing Indole-3-Carbinol (or I3C) resolve to canonical_id 'diindolylmethane'. I3C is DIM's dietary precursor, not DIM; neither DIM trial administered I3C. Measured over the enriched corpus on 2026-09-18: 19 rows named 'Indole-3-Carbinol', 3 'Indole-3 Carbinol'/'l3C'.",
+   "mitigation_applied_here": "PRECLIN_DIM.applicability now carries excluded_form_terms ['indole 3 carbinol', 'i3c'], so the DIM record cannot be applied through an I3C row. That protects this one record; the canonical conflation itself is unchanged and will reach anything else keyed on that identity.",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_NUTRITION_FLOOR_MASS_PROXY",
+   "kind": "scoring_design",
+   "destination_owner": "v4 scoring owner",
+   "artefact": "scripts/scoring_v4/modules/generic_evidence.py nutrition_authority_floor (keyed on the MASS-DOMINANT active)",
+   "finding": "The nutrition-authority floor fires only when the DRI-essential nutrient is the mass-dominant active. A micronutrient-dominant product can therefore miss it: DSLD 243259 (Garden of Life Vitamin B-12 Organic Spray) carries 500 mcg of vitamin B12 (0.5 mg) beside a 2 mg 'Organic Food Blend', so the blend is mass-dominant and the B12 adequacy floor never applies. Before the 2026-09-18 B12 repair that product scored Evidence 1.5 on the narrow null record; after it, 0.0.",
+   "why_not_fixed_here": "Changing a floor is a scoring-rule change, which this project does not make. Reported with measurements so the owner can decide whether mass dominance is the right proxy for micronutrients.",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_ACTIVATED_CHARCOAL_DRUG_ADSORPTION",
+   "wave": "wave2",
+   "kind": "drug_interaction",
+   "destination_owner": "interaction owner",
+   "artefact": "scripts/data/ingredient_interaction_rules.json + scripts/data/curated_interactions/",
+   "ingredient": "activated charcoal",
+   "catalog_products": 19,
+   "source_pmids": [
+    "19194372"
+   ],
+   "verified_live": "2026-09-18",
+   "finding": "Meta-analysis of 64 controlled studies: activated charcoal given 0-5 minutes after a drug reduced median drug exposure by 88.4%, and the reduction remained statistically significant when given up to 4 hours after ingestion (median 27.4%). The effect correlates with the charcoal-to-drug ratio.",
+   "why_not_here": "Screening classified this identity as an efficacy candidate; central reading found the only source is decontamination pharmacology. It is a drug-interaction signal for 19 products sold for detox, not efficacy evidence, and it earns no efficacy credit.",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_MUCUNA_LEVODOPA",
+   "wave": "wave2",
+   "kind": "safety_and_interaction",
+   "destination_owner": "safety / interaction owner",
+   "artefact": "scripts/data/ingredient_interaction_rules.json + scripts/data/curated_interactions/",
+   "ingredient": "mucuna pruriens",
+   "catalog_products": 31,
+   "source_pmids": [
+    "28679598",
+    "41269916",
+    "15548480"
+   ],
+   "verified_live": "2026-09-18",
+   "finding": "Every Parkinson's disease trial doses Mucuna as a LEVODOPA SUBSTITUTE at drug scale - 12.5-17.5 mg/kg of L-dopa equivalent, or 15-30 grams of seed powder - head to head against dispersible levodopa/benserazide, and one runs MP powder as levodopa monotherapy for 12 months. These products deliver unsupervised L-dopa.",
+   "why_not_here": "Drug-substitution evidence is not supplement-efficacy evidence and must not become an efficacy direction for a 500 mg capsule. The actionable finding is the interaction risk with carbidopa/levodopa, MAO inhibitors and antipsychotics.",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_HORSETAIL_DIURETIC_ANTIHYPERTENSIVE",
+   "wave": "wave2",
+   "kind": "safety_and_interaction",
+   "destination_owner": "safety / interaction owner",
+   "artefact": "scripts/data/ingredient_interaction_rules.json + scripts/data/curated_interactions/",
+   "ingredient": "horsetail (Equisetum arvense)",
+   "catalog_products": 57,
+   "source_pmids": [
+    "24723963",
+    "35168030"
+   ],
+   "verified_live": "2026-09-18",
+   "finding": "Standardised dry extract at 900 mg/day produced an acute diuretic effect equivalent to hydrochlorothiazide 25 mg in healthy volunteers, and over 3 months lowered systolic and diastolic blood pressure by 12.6 and 8.1 mmHg in stage-I hypertension, comparable to HCTZ.",
+   "why_not_here": "A diuretic and antihypertensive effect comparable to a thiazide is a safety and interaction concern for anyone on diuretics, antihypertensives or lithium. Efficacy is separately held: the catalog median is 6.25 mg, roughly 150x below the studied dose.",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_SIBERIAN_GINSENG_GLYCEMIC",
+   "wave": "wave2",
+   "kind": "safety",
+   "destination_owner": "safety / interaction owner",
+   "artefact": "scripts/data/ingredient_interaction_rules.json + scripts/data/curated_interactions/",
+   "ingredient": "siberian ginseng (Eleutherococcus senticosus)",
+   "catalog_products": 25,
+   "source_pmids": [
+    "15190050"
+   ],
+   "verified_live": "2026-09-18",
+   "finding": "In a comparison of ginseng species, Siberian ginseng significantly RAISED 90-minute, 120-minute and AUC postprandial glucose (p < 0.05).",
+   "why_not_here": "Its efficacy record is null on fatigue, endurance and sustained quality of life and is held. A glycemic rise is a safety signal for people managing blood glucose and belongs to that owner; it is not turned into an efficacy penalty here.",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_SCHISANDRA_ARTICHOKE_NON_SCORABLE",
+   "wave": "wave2",
+   "kind": "identity_classification",
+   "destination_owner": "identity / cleaner owner",
+   "artefact": "the cleaner's role_classification for these canonical identities",
+   "ingredient": "schisandra_berry, globe_artichoke",
+   "catalog_products": 85,
+   "evidence_zero_products_blocked": 33,
+   "verified_live": "2026-09-18",
+   "finding": "All 48 schisandra rows and all 37 globe artichoke rows are classified recognized_non_scorable, so no evidence record can reach any of those products however good it is. Both identities already have completed, verified evidence: two independent single-ingredient RCTs at 1 g/day for schisandra (knee extensor strength in older adults) and three agreeing ingredient-level meta-analyses for Cynara scolymus.",
+   "why_not_here": "This is an upstream classification question, not an evidence one, and the evidence layer must not compensate for it downstream. If the classification is wrong, repairing it once at the canonical owner unlocks 33 Evidence=0 products from curation already paid for.",
+   "status": "open",
+   "priority": "high - highest leverage item in the wave"
+  },
+  {
+   "id": "HANDOFF_GREEN_COFFEE_RETRACTION_MEMBERSHIP",
+   "wave": "wave2",
+   "kind": "source_integrity",
+   "destination_owner": "evidence owner (this project, next wave)",
+   "artefact": "scripts/data/backed_clinical_studies.json - no green coffee record exists",
+   "ingredient": "green coffee bean",
+   "catalog_products": 76,
+   "source_pmids": [
+    "34981487",
+    "39368321",
+    "32159261"
+   ],
+   "verified_live": "2026-09-18",
+   "finding": "The identity's own retrieval contains the retracted green-coffee-extract trial 22291473 and its retraction notice 25340633. Of the three candidate syntheses only 34981487 has a PubMed-indexed reference list (33 references), and the retracted trial is NOT in it. The other two have no indexed references, so the same check cannot be run.",
+   "why_not_here": "HOLD stands. A meta-analysis does not clear the retraction guard just because the retracted trial is absent from its abstract; the included-study list has to be read.",
+   "status": "open"
+  },
+  {
+   "id": "HANDOFF_PRIMARY_MASS_FLOOR_CALIBRATION",
+   "wave": "wave2",
+   "kind": "scoring_design",
+   "destination_owner": "v4 scoring owner",
+   "artefact": "scripts/scoring_v4/modules/generic_evidence.py _primary_mass_floor + the archetype reference rescale",
+   "verified_live": "2026-09-18",
+   "finding": "A single-active product whose one scorable active carries a positive_weak systematic-review record lands at 13.2 of 20 Evidence. The chain, printed on real products: PRIMARY_FLOOR_STRONG 14.0 x positive_weak 0.85 = 11.9 raw, then rescaled by the generic_botanical_branded archetype reference, 11.9 / 18.0 x 20 = 13.2. Measured identically on DSLD 232044 and 64551 (amla, Capros 500 mg) AND on 213183, 213310 (Phase 2 white kidney bean) - so it is structural, not specific to one ingredient. An earlier report of this described only the 14.0 x 0.85 step and left the remaining 1.3 points unexplained; the archetype rescale is that step.",
+   "why_not_fixed_here": "Changing a floor or an archetype reference is a scoring-rule change, which this project does not make. amla is held at reference tier as a per-record owner decision; white kidney bean is deliberately left approved so the owner can judge the calibration on its merits rather than having it decided by a hold.",
+   "status": "open",
+   "priority": "high"
+  }
+ ]
+}

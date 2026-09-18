@@ -1,0 +1,8 @@
+{"canonical_id": "chaga", "recommended_class": "hold",
+ "one_line_reason": "Only human trial testing chaga is a 4-herb combination product (chaga ~20% of the blend) for an alcohol/hangover outcome, not chaga alone or a typical use case.",
+ "selected": [
+   {"pmid": "28462133", "population": "healthy, nonsmoking young men (n=20), crossover design", "intervention": "DTS20 herbal mixture: Viscum album 40%, Lycium chinense 30%, Inonotus obliquus (chaga) 20%, Acanthopanax senticosus 10%, taken before alcohol consumption", "dose_as_stated": "not stated (one package of DTS20 mixture; composition given as % of blend only)", "primary_outcome": "oxidative stress markers and plasma alcohol/acetaldehyde levels after alcohol consumption", "apparent_direction": "positive", "why_selected": "only human RCT-type record in the shortlist that includes chaga as an ingredient."}
+ ],
+ "blockers": ["Combination herbal product — chaga (Inonotus obliquus) is only about 20% of a 4-herb blend, so the observed effect cannot be attributed to chaga alone.", "Outcome studied (post-alcohol oxidative stress/hangover) is not a mapped catalog use for chaga products, which are generally marketed for immune/antioxidant support."],
+ "handoff_pmids": [],
+ "excluded_pmids": []}

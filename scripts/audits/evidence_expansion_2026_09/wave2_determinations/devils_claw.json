@@ -1,0 +1,14 @@
+{
+ "canonical_id": "devils_claw",
+ "class": "A",
+ "action": "reviewed_supportive_hold",
+ "direction": "positive_weak",
+ "study_type": "systematic_review_meta",
+ "sources": [
+  "26630428"
+ ],
+ "label_median_mg": 980,
+ "studied_dose": "standardised to harpagoside content; not stated as extract mg",
+ "outcome": "non-specific low back pain",
+ "note": "Cochrane 2016 update (PMID 26630428, 14 RCTs, 2,050 participants): Harpagophytum procumbens seems to reduce pain more than placebo, evidence moderate quality at best. The 2007 Cochrane (17202897) is superseded and carries an erratum, so it is not cited. No dose policy is proposed: trials dose by harpagoside content and labels print extract mg, and inventing an equivalence is forbidden. Cranberry is the precedent for a record that deliberately carries no dose policy. APPLIED 2026-09-18 as INGR_DEVILS_CLAW at REFERENCE TIER - reviewed and supportive, scoring nothing. Independent review was right on both counts and both were verified live: the 14 RCTs / 2,050 participants are the Cochrane review's totals across SIX herbal medicines (corrected to 197, the largest devil's-claw-specific trial), and the studied exposure is 50-100 mg/day of harpagoside (PMID 10101629: 600/1200 mg of extract WS 1531 containing 50/100 mg harpagoside; PMID 12509627: Doloteffin with 60 mg). The one catalog label stating harpagoside delivers about 10.5 mg/day, five times below the lowest studied dose."
+}

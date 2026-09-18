@@ -1,0 +1,2307 @@
+{
+ "canonical_id": "gamma_linolenic_acid",
+ "screened": 134,
+ "kept": 59,
+ "rejected": [
+  {
+   "pmid": "16797388",
+   "reason": "not_this_route",
+   "note": "Explicit 'topical gamma-linolenic acid' applied to skin for uremic pruritus, not ingested oral supplement."
+  },
+  {
+   "pmid": "21663641",
+   "reason": "off_topic",
+   "note": "Systematic review of dietary linoleic acid and tissue arachidonic acid content; linoleic acid is a different omega-6 fatty acid, no GLA relevance."
+  },
+  {
+   "pmid": "33523763",
+   "reason": "off_topic",
+   "note": "Pomegranate juice consumption and dyslipidemia; no GLA relevance."
+  },
+  {
+   "pmid": "36252151",
+   "reason": "off_topic",
+   "note": "Endourage Formula C is a cannabidiol (CBD)-rich, whole-flower terpene preparation for post-acute COVID-19 syndrome; no GLA relevance."
+  },
+  {
+   "pmid": "12679162",
+   "reason": "not_this_route",
+   "note": "GLA administered via INTRATUMORAL/intracerebral delivery (cerebral reservoir into tumor bed) in human gliomas, not oral ingestion."
+  },
+  {
+   "pmid": "16843307",
+   "reason": "not_this_route",
+   "note": "IV fat emulsion (Intralipid vs. GLA-supplemented emulsion) intravenous fat tolerance test; not oral supplementation."
+  },
+  {
+   "pmid": "17933438",
+   "reason": "not_this_route",
+   "note": "Enteral diet enriched with EPA/GLA/vitamins in ICU patients with acute lung injury; enteral tube feeding, not oral supplement use."
+  },
+  {
+   "pmid": "18974237",
+   "reason": "not_this_route",
+   "note": "Meta-analysis of enteral EPA+GLA immunomodulating diet in mechanically ventilated ALI/ARDS patients; enteral tube feeding formula."
+  },
+  {
+   "pmid": "21976613",
+   "reason": "not_this_route",
+   "note": "Enteral omega-3/GLA/antioxidant supplementation in acute lung injury; enteral tube feeding formula."
+  },
+  {
+   "pmid": "25368541",
+   "reason": "not_this_route",
+   "note": "Oxepa enteral formula (EPA+DHA+GLA+antioxidants) in head/neck cancer surgery patients; standard enteral tube-feeding immunonutrition formula."
+  },
+  {
+   "pmid": "25672274",
+   "reason": "not_this_route",
+   "note": "Preemptive enteral nutrition enriched with EPA/GLA/antioxidants in severe multiple trauma; enteral tube feeding."
+  },
+  {
+   "pmid": "26015869",
+   "reason": "not_this_route",
+   "note": "Enteral diet enriched with EPA/GLA/antioxidants in sepsis-induced ARDS; enteral tube feeding formula."
+  },
+  {
+   "pmid": "26184293",
+   "reason": "not_this_route",
+   "note": "Updated systematic review/meta-analysis of enteral immunomodulatory diet (omega-3/GLA/antioxidant) for ALI/ARDS; enteral tube feeding formula."
+  },
+  {
+   "pmid": "30677127",
+   "reason": "not_this_route",
+   "note": "Meta-analysis of immunonutrition (enteral formula) for ARDS in adults; enteral tube feeding."
+  },
+  {
+   "pmid": "31506339",
+   "reason": "not_this_route",
+   "note": "Cochrane review of immunonutrition (enteral formula) for adults with ARDS; enteral tube feeding."
+  },
+  {
+   "pmid": "33024925",
+   "reason": "not_this_route",
+   "note": "Genetic (rs174537) secondary analysis of the OMEGA enteral EPA/GLA/antioxidant trial in critically ill ALI patients; enteral ICU population, genetic subgroup analysis."
+  },
+  {
+   "pmid": "34323346",
+   "reason": "not_this_route",
+   "note": "Systematic review/meta-analysis of enteral immunomodulatory nutrition formula in critically ill patients; enteral tube feeding."
+  },
+  {
+   "pmid": "38663051",
+   "reason": "not_this_route",
+   "note": "Systematic review/network meta-analysis of dietary supplements in sepsis/septic shock, dominated by enteral immunonutrition formula literature; not oral supplement use."
+  },
+  {
+   "pmid": "22411689",
+   "reason": "different_substance",
+   "note": "Dihomo-\u03b3-linolenic acid (DGLA)-enriched oil supplementation; DGLA is a distinct downstream metabolite of GLA, not GLA itself."
+  },
+  {
+   "pmid": "28490483",
+   "reason": "different_substance",
+   "note": "Ratio of DGLA (a GLA metabolite) to deoxycholic acid as an obesity biomarker; observational, not a GLA intervention."
+  },
+  {
+   "pmid": "37571402",
+   "reason": "different_substance",
+   "note": "Supplementation of dihomo-\u03b3-linolenic acid (DGLA) for pollen-induced allergic symptoms; DGLA is a distinct downstream metabolite of GLA, not GLA itself."
+  },
+  {
+   "pmid": "10480663",
+   "reason": "off_topic",
+   "note": "Broad tardive dyskinesia treatment review (baclofen, deanol, diazepam, etc.); not GLA-specific."
+  },
+  {
+   "pmid": "11001754",
+   "reason": "not_intervention",
+   "note": "Observational fatty acid profile of skeletal muscle phospholipids in trained/untrained men; not a GLA supplementation trial."
+  },
+  {
+   "pmid": "12010583",
+   "reason": "off_topic",
+   "note": "EPA and DHA from fish oils and lipid responses; no GLA relevance."
+  },
+  {
+   "pmid": "12804390",
+   "reason": "off_topic",
+   "note": "Broad 'miscellaneous treatments' review for tardive dyskinesia (essential fatty acid is only one of many unrelated agents: botulin toxin, endorphin, ganglioside, insulin, lithium, etc.); no GLA-specific extractable data."
+  },
+  {
+   "pmid": "22981812",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of erythrocyte membrane PUFA composition in schizophrenia; observational biomarker, not a GLA intervention."
+  },
+  {
+   "pmid": "23176247",
+   "reason": "off_topic",
+   "note": "Commentary/opinion piece on whether omega-3/GLA/antioxidants are immunomodulators or inert supplements; not primary trial data."
+  },
+  {
+   "pmid": "23332800",
+   "reason": "off_topic",
+   "note": "n-3 LC-PUFA-supplemented yoghurt; no GLA relevance (omega-3 only)."
+  },
+  {
+   "pmid": "23682371",
+   "reason": "off_topic",
+   "note": "Broad systematic review of probiotics, prebiotics, formula, and fatty acids for atopic dermatitis prevention in infants <3y; too broad, no GLA-specific extractable result identified."
+  },
+  {
+   "pmid": "24823311",
+   "reason": "not_intervention",
+   "note": "Genome-wide association study of plasma N6 PUFA; genetic association study, not an intervention."
+  },
+  {
+   "pmid": "24965302",
+   "reason": "not_intervention",
+   "note": "Observational plasma fatty acid lipidome and cirrhosis/liver transplantation prognosis; not a GLA intervention."
+  },
+  {
+   "pmid": "25828602",
+   "reason": "not_intervention",
+   "note": "Systematic review/meta-analysis of long-chain PUFA status in obesity; observational biomarker status, not an intervention."
+  },
+  {
+   "pmid": "26134547",
+   "reason": "not_intervention",
+   "note": "Systematic review explicitly of OBSERVATIONAL studies of dietary PUFA intake and COPD; not an intervention trial synthesis."
+  },
+  {
+   "pmid": "26571451",
+   "reason": "off_topic",
+   "note": "Omega-6 fats (predominantly linoleic acid) for primary CVD prevention systematic review; not GLA-specific."
+  },
+  {
+   "pmid": "26744325",
+   "reason": "not_intervention",
+   "note": "Genome-wide meta-analysis of n-3/n-6 PUFA levels; genetic association study, not an intervention."
+  },
+  {
+   "pmid": "26793308",
+   "reason": "off_topic",
+   "note": "Buglossoides arvensis seed oil (omega-3 rich) phase I trial; no GLA relevance."
+  },
+  {
+   "pmid": "28138734",
+   "reason": "off_topic",
+   "note": "Enteral omega-3 diet after thoracic esophagectomy; no GLA relevance (omega-3 only) and enteral route."
+  },
+  {
+   "pmid": "29248520",
+   "reason": "off_topic",
+   "note": "Broad review of new atopic dermatitis treatment classes (topical, oral systemic, biologic agents); no GLA-specific extractable result identified in scope."
+  },
+  {
+   "pmid": "29352828",
+   "reason": "off_topic",
+   "note": "Fatty acid desaturation/elongation sensitivity to plasma zinc in children; zinc trial, GLA only a measured metabolic pathway marker."
+  },
+  {
+   "pmid": "29552749",
+   "reason": "off_topic",
+   "note": "Broad Cochrane 'miscellaneous treatments' review for antipsychotic-induced tardive dyskinesia (dietary/herb supplements as one of many unrelated categories); no GLA-specific extractable data."
+  },
+  {
+   "pmid": "30019765",
+   "reason": "off_topic",
+   "note": "Omega-6 fats (predominantly linoleic acid) for CVD prevention Cochrane review; not GLA-specific."
+  },
+  {
+   "pmid": "30488422",
+   "reason": "off_topic",
+   "note": "Omega-6 fats for CVD prevention Cochrane review (updated version); not GLA-specific."
+  },
+  {
+   "pmid": "30703574",
+   "reason": "off_topic",
+   "note": "Omega-3 PUFA in critically ill ARDS patients systematic review; no GLA relevance (omega-3 only)."
+  },
+  {
+   "pmid": "31130146",
+   "reason": "off_topic",
+   "note": "Systematic review of increasing arachidonic acid intake on PUFA status; no GLA relevance."
+  },
+  {
+   "pmid": "31653011",
+   "reason": "not_intervention",
+   "note": "Observational fatty acid/antioxidant profile in sarcopenic elderly patients (diet and exercise); not a GLA supplementation trial."
+  },
+  {
+   "pmid": "32627952",
+   "reason": "off_topic",
+   "note": "Exercise training effects on RBC fatty acid desaturase indices; exercise trial, not a GLA supplementation trial."
+  },
+  {
+   "pmid": "32748305",
+   "reason": "off_topic",
+   "note": "Review of diet's effect on acne (glycemic index, dairy focus); no GLA-specific extractable content evident."
+  },
+  {
+   "pmid": "33097936",
+   "reason": "off_topic",
+   "note": "ALA-rich and DHA-rich supplement oxylipin trial; no GLA relevance."
+  },
+  {
+   "pmid": "33128473",
+   "reason": "off_topic",
+   "note": "Lipase-treated borage oil tested on tyrosinase/melanin in MURINE melanocytes (B16F10 cell line); in vitro animal cell study."
+  },
+  {
+   "pmid": "33331250",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of FADS1 genetic variant association with long-chain PUFA levels; genetic association study, not an intervention."
+  },
+  {
+   "pmid": "33786486",
+   "reason": "not_intervention",
+   "note": "Cross-sectional study of nutrient intake/supplementation and female stress; observational, no GLA-specific intervention data."
+  },
+  {
+   "pmid": "33928830",
+   "reason": "off_topic",
+   "note": "Broad systematic review of redox signaling/antioxidant therapies in ARDS; not GLA-specific."
+  },
+  {
+   "pmid": "34036355",
+   "reason": "off_topic",
+   "note": "Zinc-biofortified wheat and zinc status; no GLA relevance."
+  },
+  {
+   "pmid": "34092255",
+   "reason": "off_topic",
+   "note": "Topical sunflower seed oil on systemic fatty acids in malnourished children; sunflower oil is low in GLA, and route is topical."
+  },
+  {
+   "pmid": "34282053",
+   "reason": "off_topic",
+   "note": "Plasma metabolite changes in heroin addicts during withdrawal; no GLA relevance."
+  },
+  {
+   "pmid": "34552635",
+   "reason": "off_topic",
+   "note": "Improved fatty acid profile via exercise and dietary restriction in obese adolescents; not a GLA supplementation trial."
+  },
+  {
+   "pmid": "34847784",
+   "reason": "off_topic",
+   "note": "Zinc-biofortified staple food crops systematic review; no GLA relevance."
+  },
+  {
+   "pmid": "35873799",
+   "reason": "off_topic",
+   "note": "Broad systematic review of herbs/nutritional supplements in premenstrual syndrome; no GLA-specific extractable result confirmed in scope."
+  },
+  {
+   "pmid": "36296994",
+   "reason": "off_topic",
+   "note": "Fatty acid/eicosanoid changes during a high-fiber diet in NAFLD; not a GLA supplementation trial."
+  },
+  {
+   "pmid": "36517361",
+   "reason": "not_intervention",
+   "note": "Observational study of cognitive impairment and fatty acids/carnitine in hemodialysis patients; not a GLA intervention."
+  },
+  {
+   "pmid": "36568282",
+   "reason": "not_intervention",
+   "note": "Observational metabolite patterns and exercise-therapy response in intermittent claudication; not a GLA supplementation trial."
+  },
+  {
+   "pmid": "37121039",
+   "reason": "off_topic",
+   "note": "Fate of bisphenol derivatives in Chlamydomonas mexicana algae; unrelated toxicology study."
+  },
+  {
+   "pmid": "37156409",
+   "reason": "not_intervention",
+   "note": "Observational serum metabolomic profiling in systemic sclerosis; not a GLA intervention."
+  },
+  {
+   "pmid": "37367848",
+   "reason": "off_topic",
+   "note": "Plasma lipid mediators and headache outcomes on a low-linoleic-acid diet with/without omega-3; no GLA relevance."
+  },
+  {
+   "pmid": "38656373",
+   "reason": "not_intervention",
+   "note": "Observational RBC PUFA and mortality following breast cancer; not a GLA intervention."
+  },
+  {
+   "pmid": "38728475",
+   "reason": "not_intervention",
+   "note": "Mendelian randomization study of dietary nutrient intake and type 2 diabetes; genetic-proxy observational design."
+  },
+  {
+   "pmid": "39275147",
+   "reason": "off_topic",
+   "note": "Omega-3 PUFA supplementation for atopic dermatitis in children; no GLA relevance (omega-3 only)."
+  },
+  {
+   "pmid": "39523851",
+   "reason": "not_intervention",
+   "note": "Meta-analysis of FADS2 SNP association with long-chain PUFA levels; genetic association study, not an intervention."
+  },
+  {
+   "pmid": "39597805",
+   "reason": "off_topic",
+   "note": "Combined EPA and GLA administration in experimentally induced colitis in RATS."
+  },
+  {
+   "pmid": "40106045",
+   "reason": "not_intervention",
+   "note": "Systematic review of clinical AND GENETIC evidence linking unsaturated fatty acids and acne; predominantly genetic/observational framing, no GLA-specific extractable intervention result."
+  },
+  {
+   "pmid": "40182955",
+   "reason": "off_topic",
+   "note": "Spirulina supplementation systematic review; different supplement, no GLA relevance."
+  },
+  {
+   "pmid": "42181198",
+   "reason": "not_intervention",
+   "note": "Umbrella review/meta-analyses of lipid biomarkers for type 2 diabetes risk, explicitly of PROSPECTIVE OBSERVATIONAL studies."
+  },
+  {
+   "pmid": "42264150",
+   "reason": "not_intervention",
+   "note": "Systematic review/meta-analysis of sex differences in omega-3/omega-6 PUFA status from cross-sectional comparisons; observational."
+  },
+  {
+   "pmid": "42409074",
+   "reason": "not_intervention",
+   "note": "Circulating metabolites/fatty acids associated with ultra-processed food consumption (EPIC study); observational."
+  },
+  {
+   "pmid": "16373736",
+   "reason": "off_topic",
+   "note": "Systematic review of alcohol hangover interventions; no GLA relevance."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "2159860",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid, 360 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "22 patients with distal diabetic polyneuropathy",
+   "indication_as_stated": "diabetic peripheral neuropathy",
+   "dose_quote": "360 mg gamma-linolenic acid (12 patients) or indistinguishable placebo capsules (10 patients) for 6 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "patients on gamma-linolenic acid showed statistically significant improvement in neuropathy symptom scores (p less than 0.001)",
+   "sample_size_quote": "Twenty-two patients with distal diabetic polyneuropathy",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "2667620",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "Epogam (evening primrose oil, GLA source)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with atopic eczema across 9 included controlled trials",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the effect of Epogam was significantly better than placebo",
+   "sample_size_quote": "Nine controlled trials of evening primrose oil were performed in eight centres.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as Epogam, a specific evening primrose oil preparation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "7910570",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid, 3 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "children with atopic dermatitis (mean age 11.4 months)",
+   "indication_as_stated": "infantile atopic dermatitis",
+   "dose_quote": "openly treated with 3 g/day gamma-linolenic acid, for 28 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A gradual improvement in erythema, excoriations and lichenification was seen; significant differences were shown for itching (P < 0.01)",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Open-label (non-placebo-controlled) trial.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8380765",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "GLA, 480 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "111 patients with mild diabetic neuropathy",
+   "indication_as_stated": "diabetic neuropathy",
+   "dose_quote": "GLA at a dose of 480 mg/day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "For all 16 parameters, the change over 1 yr in response to GLA was more favorable than the change with placebo, and for 13 parameters, the difference was statistically significant.",
+   "sample_size_quote": "We entered 111 patients with mild diabetic neuropathy from seven centers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8415806",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil 4g + sardine (fish) oil 2.4g + vitamin E",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "18 patients with non-insulin-dependent diabetes",
+   "indication_as_stated": "non-insulin-dependent diabetes (lipid/glucose metabolism)",
+   "dose_quote": "administered 4 g evening primrose oil, 2.4 g sardine oil and 200 mg vitamin E for 4 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Fasting plasma glucose, hemoglobin A1c, total cholesterol, body weight and % body fat mass were significantly decreased after the treatment, and levels of changes in these parameters were not different from 11 patients who did not receive the oils.",
+   "sample_size_quote": "Seven patients were administered",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "EPO and fish oil given together as a combination; the described metabolic changes were not significantly different from the untreated comparison group.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA (via EPO) combined with fish oil and vitamin E, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8740271",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "concentrated essential fatty acids (GLA-based)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "25 patients with systemic sclerosis",
+   "indication_as_stated": "systemic sclerosis (vascular symptoms)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was no significant difference between the active and placebo groups in terms of maximum blood flow after warming, minimum blood flow after cooling or the recovery time after cooling.",
+   "sample_size_quote": "Twenty-five patients with systemic sclerosis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Described as 'concentrated essential fatty acids'; GLA is the named active but exact single-ingredient composition not detailed in abstract.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "8912502",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid, 2.8 g/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "56 patients with active rheumatoid arthritis",
+   "indication_as_stated": "rheumatoid arthritis",
+   "dose_quote": "treated with 2.8 gm/day of GLA as the free fatty acid or with sunflower seed oil (placebo)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Overall meaningful responses (at least 25% improvement in 4 measures) were also better in the GLA treatment group (14 of 22 patients versus 4 of 19 in the placebo group; P = 0.015).",
+   "sample_size_quote": "Fifty-six patients with active RA",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "High dose (2.8 g/day) far exceeds typical commercial supplement doses, per the authors' own caveat.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material (free fatty acid form).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9237935",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "gamma-linolenic acid, 1.5-6.0 g/d",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "29 healthy volunteers",
+   "indication_as_stated": "fatty acid/eicosanoid metabolism (mechanistic)",
+   "dose_quote": "supplemented the diets of 29 volunteers with GLA in doses of 1.5-6.0 g/d",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Neutrophils obtained from subjects after 3 wk of supplementation with 3.0 g/d GLA synthesized less leukotriene B4 (P < 0.05) and platelet-activating factor.",
+   "sample_size_quote": "29 volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9244815",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic-acid-rich borage seed oil, 360 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "24 children (3-17 years) with atopic dermatitis",
+   "indication_as_stated": "atopic dermatitis (children)",
+   "dose_quote": "Every patient received 360 mg of gamma-linolenic acid daily",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "After 10 to 14 weeks of treatment there was no improvement of the eczema in the verum phase compared to placebo.",
+   "sample_size_quote": "we studied 24 patients, 3-17 years old",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered via borage seed oil capsules.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9364289",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid, 274 mg twice a day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "60 patients with atopic dermatitis (15-30 years)",
+   "indication_as_stated": "atopic dermatitis",
+   "dose_quote": "gamma-linolenic acid of (C18:3 n-6) at a dosage of 274 mg twice a day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The patients who received gamma-linolenic acid, showed gradual improvements in pruritus, erythema, vesiculation and oozing, which were statistically significant compared with the control group (P < 0.001).",
+   "sample_size_quote": "Of 60 patients with atopic dermatitis (30 males and 30 females, 15-30 years old) 30 were treated",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9707349",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "evening primrose oil (Epogam), GLA-containing",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "6 healthy volunteers",
+   "indication_as_stated": "GLA pharmacokinetics (healthy volunteers)",
+   "dose_quote": "Six capsules of Epogam were administered to each subject in the morning at 7:00 and further 6 capsules in the evening at 19:00.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Gamma-linolenic acid shows an absorption-elimination pattern after the administration of Epogam and its AUC24h and Cmax are significantly increased over the baseline values.",
+   "sample_size_quote": "From 6 volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as Epogam, a specific evening primrose oil preparation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "9932142",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "GLA + eicosapentaenoic acid (EPA), with calcium",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "65 women (mean age 79.5) with senile osteoporosis",
+   "indication_as_stated": "senile osteoporosis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "lumbar spine density remained the same in the treatment group, but decreased 3.2% in the placebo group. Femoral bone density increased 1.3% in the treatment group, but decreased 2.1% in the placebo group.",
+   "sample_size_quote": "Sixty-five women (mean age 79.5)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with EPA; both groups also received calcium carbonate.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10205349",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid combined with eicosapentaenoic acid",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "120 men and women with stable intermittent claudication",
+   "indication_as_stated": "peripheral arterial disease",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a combination of polyunsaturated fatty acids produced a statistically significant reduction in systolic blood pressure, but no other significant benefits on risk factors",
+   "sample_size_quote": "120 men and women with stable intermittent claudication were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with eicosapentaenoic acid, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11435508",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "gamma-linolenic acid, 770 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy older humans (55-75 y)",
+   "indication_as_stated": "T lymphocyte proliferation (immune function)",
+   "dose_quote": "770 mg of GLA",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "GLA and FO caused a significant decrease (up to 65%) in lymphocyte proliferation.",
+   "sample_size_quote": "Healthy subjects ages 55-75 y",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Immune-suppressive direction (decreased lymphocyte proliferation); clinical significance unclear.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material; tested as a separate arm alongside ALNA, ARA, DHA and fish oil arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12605039",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "linoleic acid (28.5 mg) + gamma-linolenic acid (15 mg)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "26 patients with aqueous-deficient keratoconjunctivitis sicca",
+   "indication_as_stated": "dry eye syndrome",
+   "dose_quote": "LA (28.5 mg) and GLA (15 mg) twice daily for 45 days",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Statistically significant changes in symptoms (p < 0.005), lissamine green staining (p < 0.005), and ocular surface inflammation (p < 0.05) occurred in the study group compared with controls.",
+   "sample_size_quote": "26 patients with aqueous-deficient keratoconjunctivitis sicca",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with linoleic acid in a fixed tablet, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12768289",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "linoleic acid (28.5 mg) + gamma-linolenic acid (15.1 mg)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "60 subjects undergoing photorefractive keratectomy",
+   "indication_as_stated": "post-PRK ocular surface/tear production",
+   "dose_quote": "tablets containing LA (28.5 mg) and GLA (15.1 mg)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The Schirmer 1 test varied from 16.3+/-6.9 (T(0)) to 17.6+/-7.2 (T(1)) for the treated group and from 18.3+/-6.2 (T(0)) to 15.7+/-7.4 (T(1)) for the untreated group ( P<0.0001, two-tailed unpaired t-test).",
+   "sample_size_quote": "Sixty subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with linoleic acid in a fixed tablet, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15069395",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid (as arachidonic acid precursor) with fish oil/borage oil, LCPUFA formula",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "238 preterm infants",
+   "indication_as_stated": "preterm infant neurodevelopment/growth",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There were no significant differences in neurodevelopment between groups overall. In preplanned subgroup analyses, LCPUFA-supplemented boys had significantly higher Bayley MDI than did control boys",
+   "sample_size_quote": "Preterm (<35 weeks, < or =2000 g birth weight) infants (n=238)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA (via borage oil) combined with fish oil as a joint LCPUFA-supplemented formula.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15099370",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma-linolenic acid",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "atopic dermatitis patients across 11 included GLA trials",
+   "indication_as_stated": "atopic dermatitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Supplementation with EFA has no clinically relevant effect on the severity of AD.",
+   "sample_size_quote": "Nineteen trials of gamma-linolenic acid (GLA) and five trials of fish oil matched our inclusion criterion",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA meta-analyzed as its own arm, separate from fish oil trials.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "16618360",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid (maternal/infant supplementation)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "131 eligible infants (breastfed via maternal supplementation, or direct)",
+   "indication_as_stated": "atopic eczema prevention in infancy",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "We could not find an influence of GLA on the development of AD.",
+   "sample_size_quote": "Of 131 eligible infants, 24 developed AD within the first year of life.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "17413949",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "linoleic acid (28.5 mg) + gamma-linolenic acid (15 mg)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "57 patients with meibomian gland dysfunction",
+   "indication_as_stated": "meibomian gland dysfunction",
+   "dose_quote": "tablets containing linoleic acid (28.5 mg) and gamma-linolenic acid (15 mg) once daily",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "After 180-day therapy, group A showed significant reduction in secretion turbidity (P = 0.02) and meibomian gland obstruction (P = 0.0001)",
+   "sample_size_quote": "Fifty-seven patients with MGD (27 men and 30 women)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with linoleic acid in a fixed tablet, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "18492193",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil (Efamol), 3g GLA-containing capsules",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy adults",
+   "indication_as_stated": "skin biophysical parameters (aging)",
+   "dose_quote": "Efamol EPO was administered orally in soft gel capsules, 3 x 500 mg b.i.d. for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "At week 12, however, all measured variables, with the exception of skin redness, were significantly different in the EPO group compared with placebo.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as Efamol evening primrose oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19052401",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 500 mg capsules",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 patients with atopic dermatitis",
+   "indication_as_stated": "atopic dermatitis",
+   "dose_quote": "evening primrose oil was supplied as 500-mg oval clear unmarked capsules",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "At the end of the fifth month, 24 (96%) patients of EPO group and 8 (32%) patients of placebo group showed improvement.",
+   "sample_size_quote": "Data of the first 25 patients from each group",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as evening primrose oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23199523",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid, 600 mg/capsule",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "504 healthy men with serum PSA <= 2.5 ng/ml",
+   "indication_as_stated": "serum prostate-specific antigen (PSA)",
+   "dose_quote": "n-6 fatty acid (600 mg \u03b3-linolenic acid (GLA) each capsule) (group 2, n 126)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "GLA therapy significantly increased serum PSA concentration by 15\u00b70 (95 % CI 11, 20) % (P= 0\u00b702).",
+   "sample_size_quote": "A total of 504 healthy men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "GLA significantly INCREASED PSA (an undesired direction for prostate health), in contrast with the EPA and CoQ10 arms which decreased PSA.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23633319",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil and borage oil (oral)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "1596 participants across 27 included trials",
+   "indication_as_stated": "atopic eczema",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Oral borage oil and evening primrose oil lack effect on eczema; improvement was similar to respective placebos used in trials. Oral BO and EPO are not effective treatments for eczema.",
+   "sample_size_quote": "A total of 27 studies (1596 participants) met the inclusion criteria: 19 studies assessed evening primrose oil, and 8 studies assessed borage oil.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Notes a case report of risk with EPO taken beyond one year (inflammation, thrombosis, immunosuppression) and possible increased bleeding with warfarin.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Cochrane review restricted to oral EPO/borage oil (GLA sources).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24553997",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "borage oil containing 400 mg gamma-linolenic acid",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "45 participants with mild to moderate acne",
+   "indication_as_stated": "acne vulgaris",
+   "dose_quote": "a \u03b3-linoleic acid group (borage oil containing 400 mg \u03b3-linoleic acid)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "After 10 weeks of omega-3 fatty acid or \u03b3-linoleic acid supplementation, inflammatory and non-inflammatory acne lesions decreased significantly.",
+   "sample_size_quote": "45 participants with mild to moderate acne",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "GLA (borage oil) and omega-3 tested as separate arms, each vs. control; not combined.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered via borage oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28210282",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Borago officinalis extract (GLA source), 5 mL three times a day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "38 subjects with moderate persistent asthma",
+   "indication_as_stated": "moderate persistent asthma",
+   "dose_quote": "Borago extract (5 mL three times a day) or a matched placebo for one month",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Cough, dyspnea, wheezing, nocturnal symptoms, and airway hyper-responsiveness reduced significantly in the Borago group after the treatment and ACT scores improved significantly",
+   "sample_size_quote": "Thirty-eight subjects with a mean age of 46.8\u00b115.3 years",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Clinical symptom scores improved but objective physiological measures (spirometry, FENO, sputum cytology) did not change significantly.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as Borago officinalis (borage) extract.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30065580",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 450 mg (40 mg GLA) capsules",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 Korean patients with mild atopic dermatitis",
+   "indication_as_stated": "atopic dermatitis",
+   "dose_quote": "an oval unmarked capsule containing 450 mg of EPO (40 mg of GLA) per capsule",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "At the end of month 4, the patients of the EPO group showed a significant improvement in the EASI score (p=0.040), whereas the patients of the placebo group did not.",
+   "sample_size_quote": "Fifty mild AD patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as evening primrose oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31701699",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid, 320 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "100 type 2 diabetes patients with painful diabetic peripheral neuropathy",
+   "indication_as_stated": "painful diabetic peripheral neuropathy",
+   "dose_quote": "GLA (320 mg/day) and placebo or ALA (600 mg/day) and placebo for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "GLA treatment in patients with painful DPN was noninferior to ALA in terms of reducing pain intensity measured by the VAS over 12 weeks.",
+   "sample_size_quote": "This study included 100 T2DM patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material; active comparator (non-inferiority) design vs. alpha-lipoic acid.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31987113",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "curcumin, EPA, astaxanthin and gamma-linolenic acid (CEAG) combination",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "80 healthy volunteers",
+   "indication_as_stated": "cardiovascular health (blood pressure, inflammation, endothelial function)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was a significant reduction in mean SBP at 4 weeks in the CEAG group compared to placebo [mean \u00b1 SD 4.7 \u00b1 6.8 (p = 0.002)].",
+   "sample_size_quote": "80 individuals (30 men and 50 women)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [
+    "NCT03906825"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA is one of four components (with curcumin, EPA, astaxanthin) in a fixed combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32167131",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "borage oil (GLA-containing) vs soybean oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "64 healthy adults",
+   "indication_as_stated": "GLA metabolism (FADS1 genetic variation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a modest daily dose of BO elevated serum concentrations of GLA and DGLA in an rs174537 genotype-dependent manner",
+   "sample_size_quote": "Healthy adults (n = 64) participated",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [
+    "NCT02337231"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered via borage oil; genetic (FADS1) modifier of metabolism is the primary study variable.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32441049",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 6 included RCTs",
+   "indication_as_stated": "lipid profile",
+   "dose_quote": null,
+   "primary_outcome_quote": "a significant reduction in TG at a dose of \u22644 g/day (weighted mean difference [WMD] = -37.28 mg/dl; 95% CI: -73.53 to -1.03, p = .044) and a significant increase in HDL in hyperlipidemic subjects",
+   "primary_result_quote": "Oral intake of EPO at a dose of \u22644 g/day significantly reduces serum TG levels and significantly increases HDL levels in hyperlipidemic subjects.",
+   "sample_size_quote": "six RCTs were included in the meta-analysis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as evening primrose oil.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33534427",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "borage oil rich in gamma-linolenic acid, 1000 mg, plus vitamin E",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "96 postmenopausal hypertensive women",
+   "indication_as_stated": "body fat/hypertension (postmenopausal women)",
+   "dose_quote": "1,000 mg of borage oil rich in gamma-linolenic acid + vitamin E (drug) or only vitamin E (placebo)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There was a significant reduction in the systolic and diastolic pressure as well as a significant change in waist-hip ratio (P < 0.01) in the drug group as compared with the placebo group.",
+   "sample_size_quote": "involving 96 postmenopausal women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA (borage oil) combined with vitamin E; placebo arm also received vitamin E alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33911789",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma linolenic acid (Evoprim), 320 mg/day, add-on to minocycline",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "31 patients with rosacea",
+   "indication_as_stated": "rosacea (add-on to minocycline)",
+   "dose_quote": "320 mg/day of GLA (Evoprim\u00ae) (n=16) or placebo (n=15) in addition to 100 mg/day of minocycline",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "a higher proportion of patients achieved treatment success (IGA\u22641) at week 8 (68.75% vs. 33.33%)",
+   "sample_size_quote": "This prospective, double-blind, randomized, placebo-controlled trial enrolled 31 rosacea patients.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on design: both arms received minocycline; GLA vs. placebo is the isolated randomized variable on top of that constant background.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA matches label material (Evoprim brand), background minocycline held constant across both arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35855192",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma linolenic acid with methylcobalamine and vitamin C",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "113 women with mastalgia",
+   "indication_as_stated": "mastalgia (breast pain)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "In this study Ormeloxifene and GLA were not superior to placebo for pain relief in mastalgia.",
+   "sample_size_quote": "A total of 113 consecutive women with mastalgia were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Open-label (not blinded) three-arm trial; GLA arm combined with methylcobalamine and vitamin C.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with methylcobalamine and vitamin C, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36187740",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "evening primrose oil, 100 mg (vaginal)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "160 women undergoing diagnostic hysteroscopy",
+   "indication_as_stated": "cervical preparation before hysteroscopy",
+   "dose_quote": "Group A received 100 mg EPO as a soft gel capsule 6 hr before the hysterectomy in the posterior vaginal fornix.",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The average Hegar size in the EPO group was larger than in the control group (p < 0.001 for both).",
+   "sample_size_quote": "160 women candidates for diagnostic hysteroscopy",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Route is vaginal (intravaginal capsule placement), not swallowed oral ingestion -- distinct from the systemic-oral EPO trials in this identity.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as evening primrose oil, administered vaginally rather than swallowed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37081029",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "fish oil + evening primrose oil (351 mg GLA)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "32 breast cancer patients undergoing chemotherapy (29 completed)",
+   "indication_as_stated": "breast cancer chemotherapy (inflammation)",
+   "dose_quote": "2 gel capsules of fish oil and 3 gel capsules of EPO (400 mg eicosapentaenoic acid, 600 mg docosahexaenoic acid, and 351 mg gamma-linolenic acid)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the level of IL-6 decreased in both groups and was significantly lower in the intervention group at the end of the study",
+   "sample_size_quote": "Of the 32 eligible patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [
+    "NCT03516253"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA (via EPO) combined with fish oil, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38295879",
+   "design": "network_meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma linolenic acid (vs alpha lipoic acid)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults with diabetic peripheral neuropathy across 11 included studies",
+   "indication_as_stated": "diabetic peripheral neuropathy",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "GLA (SMD -2.39, 95% CI -4.3 to -0.5) had significantly lower TSSs compared with placebo. Moreover, GLA had the highest probability of being the best (52.7%) for improving DN symptoms.",
+   "sample_size_quote": "11 studies were included in this review and combined meta-analysis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA ranked as its own treatment arm against alpha lipoic acid and placebo.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38360611",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "evening primrose oil (Oenothera biennis)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with various inflammatory conditions across included clinical trials",
+   "indication_as_stated": "inflammatory diseases (multiple)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "EPO showed some results in diabetes mellitus, atopic eczema, menopausal hot flashes, and mastalgia. However, it did not demonstrate effectiveness in chronic hand dermatitis, tardive dyskinesia, psoriatic arthritis, cystic fibrosis, hepatitis B, premenstrual syndrome, contact lens-associated dry eyes, acne vulgaris, breast cyst, pre-eclampsia, psoriasis, or primary Sjogren's syndrome.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as evening primrose oil across multiple reviewed indications.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42588106",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "EPA + DHA + gamma-linolenic acid (one of several intervention compositions)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "women with breast cancer undergoing chemotherapy across 10 included prospective trials",
+   "indication_as_stated": "breast cancer chemotherapy (omega-3/GLA co-supplementation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "independent clinical efficacy of DHA alone, EPA + DHA without another active nutrient, EPA + DHA + GLA, or EPA + DHA with or without vitamin D during breast cancer chemotherapy remains unproven",
+   "sample_size_quote": "Fourteen reports representing ten prospective interventional trials were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "GLA appears only within one intervention composition (EPA+DHA+GLA) among several stratified arms reviewed; not isolable to GLA alone.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA is combined with EPA and DHA in this stratified review, not analyzed alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "10933121",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Efamol (evening primrose oil, GLA-rich)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "18 subjects with ADHD",
+   "indication_as_stated": "attention-deficit/hyperactivity disorder (zinc-moderated EFA response)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Efamol benefit was evident only with borderline zinc.",
+   "sample_size_quote": "18-subject double-blind, placebo-controlled crossover treatment comparison",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Post-hoc re-analysis; GLA (Efamol) benefit was zinc-status dependent (U-shaped relationship), not a uniform effect.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA delivered as Efamol evening primrose oil; compared against d-amphetamine, not a placebo-only design for GLA itself.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "11279784",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma-linolenic acid (herbal medicine)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with rheumatoid arthritis across 11 included studies (7 on GLA)",
+   "indication_as_stated": "rheumatoid arthritis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "the better quality studies suggest potential relief of pain, morning stiffness and joint tenderness",
+   "sample_size_quote": "Eleven studies met the inclusion criteria. Seven of the studies compared gamma-linolenic acid (GLA) to placebo",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Cochrane review with GLA studies specifically extracted and analyzed.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12030955",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid 1.6 g + EPA 270 mg + DHA 45 mg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "63 patients with quiescent ulcerative colitis",
+   "indication_as_stated": "ulcerative colitis (remission maintenance)",
+   "dose_quote": "gamma-linolenic acid, 1.6 g, eicosapentaenoic acid, 270 mg, and docosahexaenoic acid, 45 mg, per day",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Disease relapse rates were similar at 12 months (placebo, 38%; essential fatty acids, 55%)",
+   "sample_size_quote": "Sixty-three patients were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with EPA and DHA in a fixed essential-fatty-acid formula.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "12709541",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma-linolenic acid (herbal medicines)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with rheumatoid arthritis across 14 included RCTs",
+   "indication_as_stated": "rheumatoid arthritis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There is moderate support for gamma-linolenic acid (GLA), which is found in some herbal medicines, for reducing pain, tender joint count and stiffness.",
+   "sample_size_quote": "A computerized search of eight electronic databases and the bibliographies of identified articles resulted in 14 studies meeting the inclusion criteria.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA specifically analyzed within this systematic review of herbal RA medicines.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "15164103",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "EPA 1.4g + DHA 0.211g + GLA 0.5g plus micronutrients",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "66 patients with active rheumatoid arthritis (55 completed)",
+   "indication_as_stated": "rheumatoid arthritis",
+   "dose_quote": "omega-6 fatty acid gamma-linolenic acid (0.5 g GLA) and micronutrients",
+   "primary_outcome_quote": "The primary end point was the change in tender joint count at 2 and 4 months.",
+   "primary_result_quote": "This double-blind, placebo-controlled study in RA patients did not show superior clinical benefit of daily nutrient supplementation with EPA, GLA and micronutrients at the doses tested as compared to placebo.",
+   "sample_size_quote": "In all, 66 patients enrolled, 55 completed the study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with EPA, DHA and micronutrients in a liquid nutrient formula.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "19941324",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma linolenic acid (from borage, blackcurrant, or evening primrose oil)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with rheumatoid arthritis across 20 included studies (7 GLA in meta-analysis)",
+   "indication_as_stated": "rheumatoid arthritis",
+   "dose_quote": "GLA doses equal or higher than 1400 mg/day showed benefit in the alleviation of rheumatic complaints whereas lower doses ( approximately 500 mg) were ineffective",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty studies (10 identified for this review update, and 10 of the 11 studies of the original review) investigating 14 HMPs were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Effect was dose-dependent: >=1400 mg/day showed benefit, ~500 mg/day did not.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA sourced from borage, blackcurrant, or evening primrose oil, pooled across sources.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "21328257",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma linolenic acid (from evening primrose, borage, or blackcurrant seed oil)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with rheumatoid arthritis across 22 included studies (7 on GLA)",
+   "indication_as_stated": "rheumatoid arthritis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There is moderate evidence that oils containing GLA (evening primrose, borage, or blackcurrant seed oil) afford some benefit in relieving symptoms for RA",
+   "sample_size_quote": "Twelve new studies were added to the update, a total of 22 studies were included.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Notes a non-statistically-significant increase in adverse events with GLA (20%) vs. placebo (3%).",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA sourced from multiple seed oils, pooled across sources; updated Cochrane version of 11279784.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22007257",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "borage seed oil rich in gamma-linolenic acid",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with rheumatoid arthritis",
+   "indication_as_stated": "rheumatoid arthritis (dyslipidemia/cardiovascular risk)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "No significant differences were observed between the three groups: All three treatment groups exhibited similar meaningful improvement in the lipid profile at 9 and 18 months.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Borage oil (GLA) alone performed similarly to fish oil alone and to the combination; effect attributable to either oil.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Borage-oil-alone arm is a clean single-ingredient comparison alongside fish-oil and combination arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24560325",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma-linolenic acid (as a component of PUFA regimens)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "children with ADHD across 18 included RCTs",
+   "indication_as_stated": "attention-deficit hyperactivity disorder",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Multivariable meta-regression showed that longer study duration, \u03b3-linolenic acid (GLA), and the interaction between GLA and eicosapentaenoic acid (EPA) were associated with significant decreases in inattention",
+   "sample_size_quote": "The overall pooled estimate from 18 studies showed that combined ADHD symptoms rated by all raters decreased with PUFA supplementation",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Meta-regression identifies GLA content (and its interaction with EPA) as associated with benefit on inattention specifically, within pooled heterogeneous PUFA regimens.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA content analyzed as one predictor variable within heterogeneous multi-PUFA regimens across studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "24803948",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "borage seed oil rich in gamma linolenic acid",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with rheumatoid arthritis (18-month trial)",
+   "indication_as_stated": "rheumatoid arthritis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "No significant differences were observed in changes in disease activity among the three randomized groups.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Borage oil (GLA) alone produced significant reductions in disease activity similar in magnitude to fish oil alone and the combination.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Borage-oil-alone arm is a clean single-ingredient comparison alongside fish-oil and combination arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25068233",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma linolenic acid, vitamin E, vitamin C, beta-carotene, CoQ10, Vitis vinifera",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "48 patients with nodular acne on isotretinoin",
+   "indication_as_stated": "isotretinoin side-effect reduction (acne)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Patients treated with dietary supplement had lower side effects, with a less degree of erythema and dryness, and greater degree of hydration",
+   "sample_size_quote": "Forty-eight patients with nodular acne (32 females and 16 males)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA is one of six components in a fixed multi-ingredient antioxidant supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25177120",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma-linolenic acid / evening primrose oil",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with mastalgia",
+   "indication_as_stated": "mastalgia (breast pain)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Gamma-linolenic acid or evening primrose oil though commonly prescribed is not effective.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA/EPO specifically assessed within this narrative systematic review of mastalgia treatments.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29237134",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "gamma-linolenic acid 1 g + iodine 750 mcg + selenium 70 mcg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "188 women with cyclic breast pain and fibrocystic breast changes",
+   "indication_as_stated": "cyclic breast pain (fibrocystic breast changes)",
+   "dose_quote": "1 g gamma-linolenic acid [GLA], 750 \u03bcg iodine, and 70 \u03bcg selenium",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Breast pain scores decreased similarly in the experimental (-32.2%) and control (-33.1%) groups (p = 0.64).",
+   "sample_size_quote": "Women were randomized to receive a specifically designed liquid formulation (n = 93) (1 g gamma-linolenic acid [GLA], 750 \u03bcg iodine, and 70 \u03bcg selenium) or control formula (n = 95) (without GLA, iodine, and selenium) daily for three cycles.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": "Primary pain endpoint not different from control; nodularity (secondary) was reduced in the GLA+iodine+selenium group.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA combined with iodine and selenium in a fixed liquid formulation.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31991898",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "omega-6 (1800 mg GLA + 3150 mg linoleic acid) with omega-3 and antioxidant vitamins",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "46 older adults with mild cognitive impairment (36 completed)",
+   "indication_as_stated": "mild cognitive impairment (cognitive/functional decline)",
+   "dose_quote": "omega-6 fatty acids (1800 mg gamma-Linolenic acid and 3150 mg Linoleic acid) (1:1 w/w)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A significant interaction between supplementation and time was found on cognitive function (Addenbrooke's Cognitive Examination -Revised (ACE-R), Mini-Mental State Examination (MMSE) and Stroop Color and Word Test (STROOP) color test; p < 0.001, p = 0.011 and p = 0.037, respectively)",
+   "sample_size_quote": "Forty-six older adults with MCI",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA is one component of a multi-ingredient omega-3/omega-6/antioxidant-vitamin formula (Neuroaspis PLP10).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34423427",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma-linolenic acid (dietary)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "general acne population (narrative review)",
+   "indication_as_stated": "acne (diet review)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "docosapentaenoic acid and \u03b3-linolenic acid have demonstrated improved acne lesions",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA specifically named with a positive acne finding within this narrative diet review.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34607196",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "omega-6 (1800 mg GLA + 3150 mg linoleic acid) with omega-3 and antioxidant vitamins (Neuroaspis PLP10)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "40 patients with early Parkinson's disease",
+   "indication_as_stated": "Parkinson's disease (adjuvant)",
+   "dose_quote": "omega-6 fatty acids (1800 mg gamma-Linolenic acid and 3150 mg Linoleic acid) (1:1 w/w)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Neuroaspis PLP10\u2122 supplementation as an adjuvant treatment for 30 months in PD patients significantly delayed disease progression according to UPDRS (p \u2264 0.05) Vs placebo.",
+   "sample_size_quote": "Forty patients were randomized 1:1",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA is one component of a multi-ingredient omega-3/omega-6/antioxidant-vitamin formula (Neuroaspis PLP10), same formula as 31991898.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34882608",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "EPA 1200mg + DHA 300mg + gamma-linoleic acid 150mg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "50 participants with dry eye disease (24 treatment, 26 placebo)",
+   "indication_as_stated": "dry eye disease",
+   "dose_quote": "1200 mg eicosapentaenoic acid, 300 mg docosahexaenoic acid, 150 mg \u03b3-linoleic acid",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "participants with baseline OSDI scores >52 demonstrated an even larger significant improvement in symptoms with the treatment at 3 months compared with baseline",
+   "sample_size_quote": "Fifty participants (mean \u00b1 standard deviation baseline OSDI score, 52.2 \u00b1 16.5) completed the study",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA is a minor component (150 mg) of a combined omega-3/omega-6 supplement dominated by EPA/DHA.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35644107",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "omega 3-6-9 (docosahexaenoic acid, eicosapentaenoic acid, gamma-linolenic acid, oleic acid)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "31 preterm toddlers (18-38 months) with autism symptomatology",
+   "indication_as_stated": "behavior/sleep in preterm toddlers with ASD symptoms",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Children randomized to omega 3-6-9 experienced a medium magnitude benefit of supplementation on anxious and depressed behaviors",
+   "sample_size_quote": "Thirty-one children aged 18-38 months received omega 3-6-9 (n = 15) or canola oil placebo (n = 16)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [
+    "NCT01683565"
+   ],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA is one of four fatty acids in a combined omega-3-6-9 formula.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35672606",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "EPA 279mg + DHA 87mg + GLA 30mg (per capsule, two capsules)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "160 Italian children with inattentive ADHD",
+   "indication_as_stated": "attention-deficit hyperactivity disorder (inattentive subtype)",
+   "dose_quote": "two capsules containing 279 mg eicosapentaenoic acid [EPA], 87 mg Docosahexaenoic Acid [DHA], 30 mg gamma linolenic acid [GLA] each",
+   "primary_outcome_quote": "ADHD-RS-inattention score",
+   "primary_result_quote": "No superiority of Omega-3/6 supplement to placebo was observed on the primary outcome (ADHD-RS-inattention score) after the first 6-months",
+   "sample_size_quote": "In total 160 subjects were enrolled.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "GLA is a minor component (30 mg/capsule) of a combined omega-3/omega-6 supplement dominated by EPA/DHA.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42152652",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "gamma-linolenic acid (GLA)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "children with atopic dermatitis (narrative review)",
+   "indication_as_stated": "atopic dermatitis (prevention/treatment)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "There is no strong evidence supporting the use of GLA, omega-3, vitamin E, or other micronutrient supplementation for the prevention or treatment of AD.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "GLA specifically named and assessed within this narrative review of AD dietary interventions.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "8912502",
+  "21328257",
+  "2159860",
+  "8380765",
+  "31701699",
+  "23633319",
+  "15099370",
+  "23199523",
+  "32441049",
+  "33911789",
+  "19052401",
+  "9364289"
+ ],
+ "handoff": [
+  {
+   "pmid": "23199523",
+   "role": "safety",
+   "reason": "RCT found GLA 600 mg/day significantly INCREASED serum PSA by 15% versus baseline (opposite direction to EPA and CoQ10 arms, which decreased PSA) -- a safety-relevant signal for men monitoring PSA."
+  },
+  {
+   "pmid": "23633319",
+   "role": "safety",
+   "reason": "Cochrane review notes a case report of risk (inflammation, thrombosis, immunosuppression) with EPO/GLA taken beyond one year, and a separate report of increased bleeding risk when combined with warfarin."
+  }
+ ],
+ "identity_notes": "GLA's retrieval set includes a large cluster of ENTERAL critical-care immunonutrition formula studies (Oxepa-type EPA+GLA+antioxidant diets for ALI/ARDS, sepsis, trauma, head/neck surgery) that are tube-fed in ICU settings, not oral supplement use -- all rejected not_this_route, consistent with the route hard-rule. A second cluster is genetic/observational PUFA-biomarker studies (GWAS, Mendelian randomization, FADS1/FADS2 SNP meta-analyses, cross-sectional PUFA-status comparisons) that measure endogenous n-6 fatty acid levels rather than testing a GLA intervention, rejected not_intervention. A third recurring pattern is dihomo-gamma-linolenic acid (DGLA), a distinct downstream elongase metabolite of GLA, tested as its own supplement in several records -- rejected different_substance, though DGLA appears as a measured biomarker within several kept GLA trials. GLA's genuine oral evidence base is concentrated in atopic dermatitis/eczema (mixed results across many small trials; Cochrane review 23633319 and meta-analysis 15099370 both conclude no clinically relevant benefit), rheumatoid arthritis (a more consistent positive signal, especially at doses >=1400 mg/day per Cochrane reviews 19941324/21328257), diabetic peripheral neuropathy (consistently positive: 2159860, 8380765, and noninferior to alpha-lipoic acid in 31701699 and network meta-analysis 38295879), and dry-eye/ocular-surface indications (usually combined with linoleic acid). A very large share of kept records deliver GLA via evening primrose oil or borage seed oil (whole-plant-oil sources, appropriate to how GLA is typically supplemented) or combined with other omega-3/omega-6 fatty acids and antioxidants in proprietary multi-ingredient formulas (Neuroaspis PLP10, CEAG, various dry-eye/ADHD blends) -- these are flagged related_form_differs since GLA's own contribution cannot be isolated. Two notable safety-relevant findings are routed to handoff: GLA significantly increased serum PSA in healthy men (23199523), and EPO/GLA taken beyond one year carries a case-report safety signal per the Cochrane eczema review (23633319)."
+}

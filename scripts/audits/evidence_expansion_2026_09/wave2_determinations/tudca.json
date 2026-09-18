@@ -1,0 +1,14 @@
+{
+ "canonical_id": "tudca",
+ "class": "B",
+ "action": "hold",
+ "direction": "mixed",
+ "sources": [
+  "20522594",
+  "27503949",
+  "25664595",
+  "12183720"
+ ],
+ "label_median_mg": 500,
+ "note": "Every endpoint is a biomarker or a disease-specific outcome: insulin sensitivity by tracer/clamp in insulin-resistant subjects, flow-mediated dilation during a glucose challenge, ALSFRS-R slope in ALS (a serious clinical population, and the record carries an erratum), and TPN-associated cholestasis in neonates, which was NULL. There is no general-use patient-important outcome here, and the studied doses sit above the uniform 500 mg catalog amount."
+}

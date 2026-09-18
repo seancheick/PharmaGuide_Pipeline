@@ -1,44 +1,46 @@
 {
-  "_metadata": {
-    "schema_version": "1.0.0",
-    "purpose": "Pins each production scoring-config version to its reviewed content fingerprint. A content change must use a new version or explicitly amend this ledger."
+ "_metadata": {
+  "schema_version": "1.0.0",
+  "purpose": "Pins each production scoring-config version to its reviewed content fingerprint. A content change must use a new version or explicitly amend this ledger."
+ },
+ "configs": {
+  "omega": {
+   "1.0.0": "9185bc5eed37cb0a",
+   "1.1.0-rubric-proxy-removal": "449e21c9c8a6210b",
+   "1.1.1-audited-gmp-owner": "d5eac70c9ae62c8d",
+   "1.2.0-label-stated-omega-amounts": "aba2c8fb9ece9b77",
+   "1.2.1-dose-band-citations": "7b98a08d11bbbce3",
+   "1.3.0-omega-semantics-2026-09": "c44235dc3aa7db5c"
   },
-  "configs": {
-    "omega": {
-      "1.0.0": "9185bc5eed37cb0a",
-      "1.1.0-rubric-proxy-removal": "449e21c9c8a6210b",
-      "1.1.1-audited-gmp-owner": "d5eac70c9ae62c8d",
-      "1.2.0-label-stated-omega-amounts": "aba2c8fb9ece9b77",
-      "1.2.1-dose-band-citations": "7b98a08d11bbbce3",
-      "1.3.0-omega-semantics-2026-09": "c44235dc3aa7db5c"
-    },
-    "quality_score": {
-      "1.0.4-sports-subtypes": "4e040a97fe26f559",
-      "1.0.5-b7-single-source": "2c007207652c7765",
-      "1.0.6-clean-label-registry": "c5fb7ec5a35556d8",
-      "1.1.0-probiotic-applicability": "d90bc61d7d09f688",
-      "1.1.1-probiotic-label-dose": "18b7ff59dc1c4baa",
-      "1.1.2-tier-ladder": "37b6ff82d02aecbb",
-      "1.1.3-achievable-ceilings": "0a6fd6b1c1964f0b",
-      "1.1.4-audited-ceilings": "9950f0f48c4e714f",
-      "1.1.5-probiotic-aggregate-potency": "c316830407fbc9a7",
-      "1.1.6-probiotic-clinical-gates": "cec328ccfdafea7b",
-      "1.2.0-rubric-proxy-removal": "4ac34f04fcef8f39",
-      "1.2.1-audit-fixes": "4706ed93c0a940c6",
-      "1.3.0-verification-tiers": "fc3ea6c4e59a92bc",
-      "1.4.0-dri-dose-adequacy": "a24b317ce65e8d90",
-      "1.5.0-verified-clinical-anchors": "f0b27e914c16aafa",
-      "1.5.1-clinical-anchor-corrections": "ab494b97da60ef2c",
-      "1.5.2-evidence-boundary-fixes": "ce30f35851632687",
-      "1.6.0-probiotic-completeness": "ab9f5a61fd77e879",
-      "1.7.0-vitamin-form-ownership": "32da1b7296417cad",
-      "1.8.0-formulation-neutrality": "5eb666e227fc4870",
-      "1.8.1-immune-neutrality": "6d600cce3885b10c",
-      "1.8.2-audited-gmp-owner": "25a1b960bb871f88",
-      "1.9.0-registry-gmp-tier-poor": "cf1be38dbb423e54",
-      "1.10.0-omega-evidence-boundary": "4a2fd645613f79c6",
-      "1.10.1-omega-printed-epa-dha": "04af0ba01828345f",
-      "1.11.0-omega-semantics-2026-09": "2c15c9bebde09df3"
-    }
+  "quality_score": {
+   "1.0.4-sports-subtypes": "4e040a97fe26f559",
+   "1.0.5-b7-single-source": "2c007207652c7765",
+   "1.0.6-clean-label-registry": "c5fb7ec5a35556d8",
+   "1.1.0-probiotic-applicability": "d90bc61d7d09f688",
+   "1.1.1-probiotic-label-dose": "18b7ff59dc1c4baa",
+   "1.1.2-tier-ladder": "37b6ff82d02aecbb",
+   "1.1.3-achievable-ceilings": "0a6fd6b1c1964f0b",
+   "1.1.4-audited-ceilings": "9950f0f48c4e714f",
+   "1.1.5-probiotic-aggregate-potency": "c316830407fbc9a7",
+   "1.1.6-probiotic-clinical-gates": "cec328ccfdafea7b",
+   "1.2.0-rubric-proxy-removal": "4ac34f04fcef8f39",
+   "1.2.1-audit-fixes": "4706ed93c0a940c6",
+   "1.3.0-verification-tiers": "fc3ea6c4e59a92bc",
+   "1.4.0-dri-dose-adequacy": "a24b317ce65e8d90",
+   "1.5.0-verified-clinical-anchors": "f0b27e914c16aafa",
+   "1.5.1-clinical-anchor-corrections": "ab494b97da60ef2c",
+   "1.5.2-evidence-boundary-fixes": "ce30f35851632687",
+   "1.6.0-probiotic-completeness": "ab9f5a61fd77e879",
+   "1.7.0-vitamin-form-ownership": "32da1b7296417cad",
+   "1.8.0-formulation-neutrality": "5eb666e227fc4870",
+   "1.8.1-immune-neutrality": "6d600cce3885b10c",
+   "1.8.2-audited-gmp-owner": "25a1b960bb871f88",
+   "1.9.0-registry-gmp-tier-poor": "cf1be38dbb423e54",
+   "1.10.0-omega-evidence-boundary": "4a2fd645613f79c6",
+   "1.10.1-omega-printed-epa-dha": "04af0ba01828345f",
+   "1.11.0-null-earns-no-affirmative-credit": "8b3ba809e3468742",
+   "1.11.0-omega-semantics-2026-09": "2c15c9bebde09df3",
+   "1.12.0-omega-semantics-and-null-no-credit": "15c0bf887de5680f"
   }
+ }
 }

@@ -1,0 +1,1039 @@
+[
+ {
+  "canonical_id": "l_glutamine",
+  "label_name": "L-Glutamine",
+  "label_spellings_seen": [
+   "l-glutamine powder",
+   "n-acetyl-l-glutamine",
+   "l-alanyl-l-glutamine"
+  ],
+  "catalog": {
+   "products": 182,
+   "slots": 189,
+   "evidence_zero_products": 64,
+   "brands": 27,
+   "modules": {
+    "multi_or_prenatal": 31,
+    "generic": 103,
+    "sports": 46,
+    "omega": 1,
+    "fiber_digestive": 8
+   }
+  }
+ },
+ {
+  "canonical_id": "cla",
+  "label_name": "CLA",
+  "label_spellings_seen": [
+   "cla 80%",
+   "clarinol",
+   "tonalin"
+  ],
+  "catalog": {
+   "products": 87,
+   "slots": 104,
+   "evidence_zero_products": 58,
+   "brands": 17,
+   "modules": {
+    "generic": 88,
+    "sports": 16
+   }
+  }
+ },
+ {
+  "canonical_id": "l_lysine",
+  "label_name": "L-Lysine",
+  "label_spellings_seen": [
+   "l-lysine hcl",
+   "l-lysine base"
+  ],
+  "catalog": {
+   "products": 98,
+   "slots": 98,
+   "evidence_zero_products": 56,
+   "brands": 23,
+   "modules": {
+    "generic": 62,
+    "sports": 22,
+    "multi_or_prenatal": 14
+   }
+  }
+ },
+ {
+  "canonical_id": "l_carnosine",
+  "label_name": "L-Carnosine",
+  "label_spellings_seen": [
+   "l-carnosine",
+   "n-acetyl-l-carnosine"
+  ],
+  "catalog": {
+   "products": 70,
+   "slots": 70,
+   "evidence_zero_products": 51,
+   "brands": 6,
+   "modules": {
+    "generic": 60,
+    "fiber_digestive": 1,
+    "multi_or_prenatal": 9
+   }
+  }
+ },
+ {
+  "canonical_id": "maca",
+  "label_name": "Maca",
+  "label_spellings_seen": [
+   "maca",
+   "maca root powder"
+  ],
+  "catalog": {
+   "products": 81,
+   "slots": 87,
+   "evidence_zero_products": 46,
+   "brands": 18,
+   "modules": {
+    "generic": 81,
+    "multi_or_prenatal": 6
+   }
+  }
+ },
+ {
+  "canonical_id": "l_tyrosine",
+  "label_name": "L-Tyrosine",
+  "label_spellings_seen": [
+   "l-tyrosine powder",
+   "n-acetyl l-tyrosine",
+   "d-tyrosine"
+  ],
+  "catalog": {
+   "products": 155,
+   "slots": 157,
+   "evidence_zero_products": 45,
+   "brands": 23,
+   "modules": {
+    "generic": 85,
+    "sports": 45,
+    "multi_or_prenatal": 27
+   }
+  }
+ },
+ {
+  "canonical_id": "mct_oil",
+  "label_name": "MCT Oil",
+  "label_spellings_seen": [
+   "c10 mct oil (capric acid)",
+   "mct oil c8/c10",
+   "c8 mct oil (pure caprylic)"
+  ],
+  "catalog": {
+   "products": 75,
+   "slots": 75,
+   "evidence_zero_products": 45,
+   "brands": 15,
+   "modules": {
+    "generic": 53,
+    "multi_or_prenatal": 4,
+    "sports": 17,
+    "omega": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "garcinia_cambogia",
+  "label_name": "Garcinia Cambogia (Hydroxycitric Acid)",
+  "label_spellings_seen": [
+   "garcinia cambogia"
+  ],
+  "catalog": {
+   "products": 80,
+   "slots": 85,
+   "evidence_zero_products": 41,
+   "brands": 20,
+   "modules": {
+    "generic": 74,
+    "multi_or_prenatal": 9,
+    "fiber_digestive": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "pomegranate",
+  "label_name": "Pomegranate",
+  "label_spellings_seen": [
+   "pomegranate whole fruit extract",
+   "pomegranate",
+   "pom pomegranate extract"
+  ],
+  "catalog": {
+   "products": 104,
+   "slots": 114,
+   "evidence_zero_products": 41,
+   "brands": 16,
+   "modules": {
+    "generic": 67,
+    "sports": 3,
+    "multi_or_prenatal": 42,
+    "fiber_digestive": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "methionine",
+  "label_name": "L-Methionine",
+  "label_spellings_seen": [
+   "l-methionine"
+  ],
+  "catalog": {
+   "products": 125,
+   "slots": 131,
+   "evidence_zero_products": 39,
+   "brands": 16,
+   "modules": {
+    "generic": 55,
+    "sports": 49,
+    "multi_or_prenatal": 25,
+    "fiber_digestive": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "l_phenylalanine",
+  "label_name": "L-Phenylalanine",
+  "label_spellings_seen": [
+   "l-phenylalanine base",
+   "dl-phenylalanine"
+  ],
+  "catalog": {
+   "products": 63,
+   "slots": 63,
+   "evidence_zero_products": 35,
+   "brands": 12,
+   "modules": {
+    "generic": 36,
+    "sports": 21,
+    "multi_or_prenatal": 6
+   }
+  }
+ },
+ {
+  "canonical_id": "nattokinase",
+  "label_name": "Nattokinase",
+  "label_spellings_seen": [
+   "nattokinase standard"
+  ],
+  "catalog": {
+   "products": 38,
+   "slots": 38,
+   "evidence_zero_products": 35,
+   "brands": 7,
+   "modules": {
+    "generic": 38
+   }
+  }
+ },
+ {
+  "canonical_id": "acai_berry",
+  "label_name": "Acai Berry",
+  "label_spellings_seen": [
+   "acai berry"
+  ],
+  "catalog": {
+   "products": 39,
+   "slots": 39,
+   "evidence_zero_products": 34,
+   "brands": 12,
+   "modules": {
+    "generic": 38,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "gamma_linolenic_acid",
+  "label_name": "Gamma-Linolenic Acid",
+  "label_spellings_seen": [
+   "gamma-linolenic acid"
+  ],
+  "catalog": {
+   "products": 97,
+   "slots": 97,
+   "evidence_zero_products": 33,
+   "brands": 29,
+   "modules": {
+    "generic": 55,
+    "omega": 39,
+    "multi_or_prenatal": 3
+   }
+  }
+ },
+ {
+  "canonical_id": "l_leucine",
+  "label_name": "L-Leucine",
+  "label_spellings_seen": [
+   "l-leucine powder"
+  ],
+  "catalog": {
+   "products": 375,
+   "slots": 393,
+   "evidence_zero_products": 30,
+   "brands": 26,
+   "modules": {
+    "sports": 291,
+    "generic": 73,
+    "multi_or_prenatal": 29
+   }
+  }
+ },
+ {
+  "canonical_id": "lecithin",
+  "label_name": "Lecithin",
+  "label_spellings_seen": [
+   "lecithin"
+  ],
+  "catalog": {
+   "products": 47,
+   "slots": 47,
+   "evidence_zero_products": 29,
+   "brands": 14,
+   "modules": {
+    "generic": 41,
+    "multi_or_prenatal": 5,
+    "b_complex": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "pumpkin",
+  "label_name": "Pumpkin",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 67,
+   "slots": 67,
+   "evidence_zero_products": 29,
+   "brands": 10,
+   "modules": {
+    "generic": 42,
+    "multi_or_prenatal": 25
+   }
+  }
+ },
+ {
+  "canonical_id": "evening_primrose_oil",
+  "label_name": "Evening Primrose Oil",
+  "label_spellings_seen": [
+   "cold-pressed evening primrose oil"
+  ],
+  "catalog": {
+   "products": 38,
+   "slots": 38,
+   "evidence_zero_products": 29,
+   "brands": 14,
+   "modules": {
+    "generic": 35,
+    "omega": 3
+   }
+  }
+ },
+ {
+  "canonical_id": "citrus_bioflavonoids",
+  "label_name": "Citrus Bioflavonoids",
+  "label_spellings_seen": [
+   "citrus bioflavonoids complex",
+   "rutin",
+   "hesperidin"
+  ],
+  "catalog": {
+   "products": 185,
+   "slots": 250,
+   "evidence_zero_products": 27,
+   "brands": 21,
+   "modules": {
+    "generic": 95,
+    "fiber_digestive": 2,
+    "multi_or_prenatal": 152,
+    "b_complex": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "l_tryptophan",
+  "label_name": "L-Tryptophan",
+  "label_spellings_seen": [
+   "l-tryptophan powder"
+  ],
+  "catalog": {
+   "products": 56,
+   "slots": 56,
+   "evidence_zero_products": 26,
+   "brands": 13,
+   "modules": {
+    "generic": 34,
+    "sports": 21,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "olive_leaf",
+  "label_name": "Olive Leaf",
+  "label_spellings_seen": [
+   "olive leaf extract",
+   "olive leaf extract standardized"
+  ],
+  "catalog": {
+   "products": 34,
+   "slots": 36,
+   "evidence_zero_products": 24,
+   "brands": 14,
+   "modules": {
+    "generic": 31,
+    "multi_or_prenatal": 5
+   }
+  }
+ },
+ {
+  "canonical_id": "apple_cider_vinegar",
+  "label_name": "Apple Cider Vinegar",
+  "label_spellings_seen": [
+   "apple cider vinegar"
+  ],
+  "catalog": {
+   "products": 52,
+   "slots": 52,
+   "evidence_zero_products": 23,
+   "brands": 19,
+   "modules": {
+    "generic": 47,
+    "fiber_digestive": 5
+   }
+  }
+ },
+ {
+  "canonical_id": "l_histidine",
+  "label_name": "L-Histidine",
+  "label_spellings_seen": [
+   "l-histidine standard"
+  ],
+  "catalog": {
+   "products": 41,
+   "slots": 41,
+   "evidence_zero_products": 23,
+   "brands": 9,
+   "modules": {
+    "generic": 18,
+    "sports": 19,
+    "multi_or_prenatal": 4
+   }
+  }
+ },
+ {
+  "canonical_id": "lycopene",
+  "label_name": "Lycopene",
+  "label_spellings_seen": [
+   "lycopene extract",
+   "synthetic lycopene"
+  ],
+  "catalog": {
+   "products": 461,
+   "slots": 461,
+   "evidence_zero_products": 22,
+   "brands": 42,
+   "modules": {
+    "generic": 63,
+    "multi_or_prenatal": 398
+   }
+  }
+ },
+ {
+  "canonical_id": "blueberry",
+  "label_name": "Blueberry",
+  "label_spellings_seen": [
+   "blueberry extract"
+  ],
+  "catalog": {
+   "products": 86,
+   "slots": 92,
+   "evidence_zero_products": 22,
+   "brands": 10,
+   "modules": {
+    "generic": 59,
+    "multi_or_prenatal": 32,
+    "fiber_digestive": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "broccoli",
+  "label_name": "Broccoli",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 64,
+   "slots": 66,
+   "evidence_zero_products": 20,
+   "brands": 6,
+   "modules": {
+    "generic": 33,
+    "multi_or_prenatal": 33
+   }
+  }
+ },
+ {
+  "canonical_id": "l_isoleucine",
+  "label_name": "L-Isoleucine",
+  "label_spellings_seen": [
+   "l-isoleucine powder"
+  ],
+  "catalog": {
+   "products": 227,
+   "slots": 240,
+   "evidence_zero_products": 16,
+   "brands": 20,
+   "modules": {
+    "sports": 193,
+    "generic": 21,
+    "multi_or_prenatal": 26
+   }
+  }
+ },
+ {
+  "canonical_id": "l_valine",
+  "label_name": "L-Valine",
+  "label_spellings_seen": [
+   "l-valine powder"
+  ],
+  "catalog": {
+   "products": 225,
+   "slots": 238,
+   "evidence_zero_products": 14,
+   "brands": 20,
+   "modules": {
+    "sports": 193,
+    "generic": 19,
+    "multi_or_prenatal": 26
+   }
+  }
+ },
+ {
+  "canonical_id": "flaxseed",
+  "label_name": "Flaxseed",
+  "label_spellings_seen": [
+   "flaxseed oil",
+   "flaxseed meal/powder"
+  ],
+  "catalog": {
+   "products": 85,
+   "slots": 86,
+   "evidence_zero_products": 14,
+   "brands": 23,
+   "modules": {
+    "generic": 68,
+    "multi_or_prenatal": 9,
+    "omega": 4,
+    "sports": 3,
+    "fiber_digestive": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "celery",
+  "label_name": "Celery",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 14,
+   "slots": 14,
+   "evidence_zero_products": 14,
+   "brands": 2,
+   "modules": {
+    "generic": 14
+   }
+  }
+ },
+ {
+  "canonical_id": "raspberry_ketones",
+  "label_name": "Raspberry Ketones",
+  "label_spellings_seen": [
+   "raspberry ketones"
+  ],
+  "catalog": {
+   "products": 14,
+   "slots": 14,
+   "evidence_zero_products": 14,
+   "brands": 2,
+   "modules": {
+    "generic": 14
+   }
+  }
+ },
+ {
+  "canonical_id": "reishi",
+  "label_name": "Reishi",
+  "label_spellings_seen": [
+   "reishi fruiting body",
+   "reishi",
+   "reishi standardized extract"
+  ],
+  "catalog": {
+   "products": 23,
+   "slots": 27,
+   "evidence_zero_products": 13,
+   "brands": 13,
+   "modules": {
+    "generic": 25,
+    "multi_or_prenatal": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "agmatine",
+  "label_name": "Agmatine Sulfate",
+  "label_spellings_seen": [
+   "agmatine sulfate"
+  ],
+  "catalog": {
+   "products": 56,
+   "slots": 60,
+   "evidence_zero_products": 13,
+   "brands": 9,
+   "modules": {
+    "generic": 31,
+    "sports": 26,
+    "multi_or_prenatal": 3
+   }
+  }
+ },
+ {
+  "canonical_id": "chlorophyll",
+  "label_name": "Chlorophyll",
+  "label_spellings_seen": [
+   "copper chlorophyllin",
+   "sodium magnesium chlorophyllin",
+   "natural chlorophyll"
+  ],
+  "catalog": {
+   "products": 53,
+   "slots": 53,
+   "evidence_zero_products": 13,
+   "brands": 9,
+   "modules": {
+    "generic": 36,
+    "multi_or_prenatal": 16,
+    "fiber_digestive": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "bee_pollen",
+  "label_name": "Bee Pollen",
+  "label_spellings_seen": [
+   "bee pollen"
+  ],
+  "catalog": {
+   "products": 14,
+   "slots": 14,
+   "evidence_zero_products": 13,
+   "brands": 5,
+   "modules": {
+    "generic": 14
+   }
+  }
+ },
+ {
+  "canonical_id": "gymnema_sylvestre",
+  "label_name": "Gymnema Sylvestre",
+  "label_spellings_seen": [
+   "gymnema leaf extract",
+   "gymnema sylvestre"
+  ],
+  "catalog": {
+   "products": 30,
+   "slots": 31,
+   "evidence_zero_products": 13,
+   "brands": 11,
+   "modules": {
+    "generic": 23,
+    "multi_or_prenatal": 8
+   }
+  }
+ },
+ {
+  "canonical_id": "dmae",
+  "label_name": "DMAE (Dimethylaminoethanol)",
+  "label_spellings_seen": [
+   "dmae bitartrate",
+   "dmae (dimethylaminoethanol)"
+  ],
+  "catalog": {
+   "products": 25,
+   "slots": 25,
+   "evidence_zero_products": 13,
+   "brands": 7,
+   "modules": {
+    "generic": 15,
+    "multi_or_prenatal": 10
+   }
+  }
+ },
+ {
+  "canonical_id": "sarsaparilla",
+  "label_name": "Sarsaparilla",
+  "label_spellings_seen": [
+   "sarsaparilla root extract",
+   "sarsaparilla"
+  ],
+  "catalog": {
+   "products": 19,
+   "slots": 19,
+   "evidence_zero_products": 13,
+   "brands": 3,
+   "modules": {
+    "generic": 19
+   }
+  }
+ },
+ {
+  "canonical_id": "wheatgrass_powder",
+  "label_name": "Wheatgrass Powder",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 18,
+   "slots": 18,
+   "evidence_zero_products": 13,
+   "brands": 5,
+   "modules": {
+    "generic": 14,
+    "multi_or_prenatal": 4
+   }
+  }
+ },
+ {
+  "canonical_id": "chicory_root",
+  "label_name": "Chicory Root",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 17,
+   "slots": 17,
+   "evidence_zero_products": 13,
+   "brands": 5,
+   "modules": {
+    "generic": 14,
+    "multi_or_prenatal": 2,
+    "fiber_digestive": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "stinging_nettle",
+  "label_name": "Stinging Nettle",
+  "label_spellings_seen": [
+   "stinging nettle",
+   "stinging nettle root extract",
+   "stinging nettle leaf extract"
+  ],
+  "catalog": {
+   "products": 42,
+   "slots": 43,
+   "evidence_zero_products": 12,
+   "brands": 11,
+   "modules": {
+    "generic": 37,
+    "multi_or_prenatal": 6
+   }
+  }
+ },
+ {
+  "canonical_id": "barberry_root",
+  "label_name": "Barberry Root",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 20,
+   "slots": 20,
+   "evidence_zero_products": 12,
+   "brands": 3,
+   "modules": {
+    "generic": 17,
+    "multi_or_prenatal": 3
+   }
+  }
+ },
+ {
+  "canonical_id": "uva_ursi_leaf",
+  "label_name": "Uva-Ursi Leaf",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 35,
+   "slots": 35,
+   "evidence_zero_products": 12,
+   "brands": 11,
+   "modules": {
+    "generic": 27,
+    "sports": 1,
+    "multi_or_prenatal": 7
+   }
+  }
+ },
+ {
+  "canonical_id": "red_clover",
+  "label_name": "Red Clover",
+  "label_spellings_seen": [
+   "red clover"
+  ],
+  "catalog": {
+   "products": 28,
+   "slots": 29,
+   "evidence_zero_products": 12,
+   "brands": 11,
+   "modules": {
+    "generic": 22,
+    "fiber_digestive": 1,
+    "multi_or_prenatal": 6
+   }
+  }
+ },
+ {
+  "canonical_id": "naringin",
+  "label_name": "Naringin",
+  "label_spellings_seen": [
+   "naringin"
+  ],
+  "catalog": {
+   "products": 14,
+   "slots": 14,
+   "evidence_zero_products": 12,
+   "brands": 2,
+   "modules": {
+    "generic": 14
+   }
+  }
+ },
+ {
+  "canonical_id": "juniper",
+  "label_name": "Juniper",
+  "label_spellings_seen": [
+   "juniper"
+  ],
+  "catalog": {
+   "products": 22,
+   "slots": 22,
+   "evidence_zero_products": 12,
+   "brands": 7,
+   "modules": {
+    "generic": 21,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "blueberry_fruit",
+  "label_name": "Blueberry Fruit",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 20,
+   "slots": 20,
+   "evidence_zero_products": 12,
+   "brands": 4,
+   "modules": {
+    "generic": 12,
+    "multi_or_prenatal": 8
+   }
+  }
+ },
+ {
+  "canonical_id": "catuaba",
+  "label_name": "Catuaba",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 19,
+   "slots": 19,
+   "evidence_zero_products": 12,
+   "brands": 4,
+   "modules": {
+    "generic": 19
+   }
+  }
+ },
+ {
+  "canonical_id": "lithium",
+  "label_name": "Lithium",
+  "label_spellings_seen": [
+   "lithium orotate",
+   "lithium"
+  ],
+  "catalog": {
+   "products": 16,
+   "slots": 16,
+   "evidence_zero_products": 12,
+   "brands": 3,
+   "modules": {
+    "generic": 15,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "caralluma",
+  "label_name": "Caralluma",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 14,
+   "slots": 14,
+   "evidence_zero_products": 12,
+   "brands": 2,
+   "modules": {
+    "generic": 14
+   }
+  }
+ },
+ {
+  "canonical_id": "coptis_rhizome",
+  "label_name": "Coptis Rhizome",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 13,
+   "slots": 13,
+   "evidence_zero_products": 12,
+   "brands": 2,
+   "modules": {
+    "generic": 13
+   }
+  }
+ },
+ {
+  "canonical_id": "cnidium",
+  "label_name": "Cnidium",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 12,
+   "slots": 12,
+   "evidence_zero_products": 12,
+   "brands": 1,
+   "modules": {
+    "generic": 12
+   }
+  }
+ },
+ {
+  "canonical_id": "jujube",
+  "label_name": "Jujube",
+  "label_spellings_seen": [
+   "jujube"
+  ],
+  "catalog": {
+   "products": 12,
+   "slots": 12,
+   "evidence_zero_products": 12,
+   "brands": 1,
+   "modules": {
+    "generic": 12
+   }
+  }
+ },
+ {
+  "canonical_id": "lemon",
+  "label_name": "Lemon",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 12,
+   "slots": 12,
+   "evidence_zero_products": 12,
+   "brands": 1,
+   "modules": {
+    "generic": 12
+   }
+  }
+ },
+ {
+  "canonical_id": "oolong_tea_leaf",
+  "label_name": "Oolong Tea Leaf",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 12,
+   "slots": 12,
+   "evidence_zero_products": 12,
+   "brands": 1,
+   "modules": {
+    "generic": 12
+   }
+  }
+ },
+ {
+  "canonical_id": "phenylethylamine",
+  "label_name": "Phenylethylamine",
+  "label_spellings_seen": [
+   "phenylethylamine"
+  ],
+  "catalog": {
+   "products": 12,
+   "slots": 12,
+   "evidence_zero_products": 12,
+   "brands": 1,
+   "modules": {
+    "generic": 12
+   }
+  }
+ },
+ {
+  "canonical_id": "turkey_rhubarb_root",
+  "label_name": "Turkey Rhubarb",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 12,
+   "slots": 12,
+   "evidence_zero_products": 12,
+   "brands": 1,
+   "modules": {
+    "generic": 12
+   }
+  }
+ },
+ {
+  "canonical_id": "zeaxanthin",
+  "label_name": "Zeaxanthin",
+  "label_spellings_seen": [
+   "zeaxanthin"
+  ],
+  "catalog": {
+   "products": 440,
+   "slots": 451,
+   "evidence_zero_products": 11,
+   "brands": 41,
+   "modules": {
+    "generic": 111,
+    "multi_or_prenatal": 335,
+    "fiber_digestive": 1,
+    "omega": 4
+   }
+  }
+ },
+ {
+  "canonical_id": "hibiscus_extract",
+  "label_name": "Hibiscus Extract",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 17,
+   "slots": 17,
+   "evidence_zero_products": 11,
+   "brands": 6,
+   "modules": {
+    "generic": 16,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "spearmint",
+  "label_name": "Spearmint",
+  "label_spellings_seen": [
+   "spearmint extract",
+   "spearmint"
+  ],
+  "catalog": {
+   "products": 15,
+   "slots": 15,
+   "evidence_zero_products": 11,
+   "brands": 4,
+   "modules": {
+    "generic": 14,
+    "multi_or_prenatal": 1
+   }
+  }
+ }
+]

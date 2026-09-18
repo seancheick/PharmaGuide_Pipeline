@@ -1,0 +1,15 @@
+{
+ "canonical_id": "common_bean_extract",
+ "class": "A",
+ "action": "applied_approved",
+ "direction": "positive_weak",
+ "study_type": "systematic_review_meta",
+ "sources": [
+  "42066439",
+  "39170208"
+ ],
+ "studied_dose": "1,000-3,000 mg/day white kidney bean extract",
+ "label_median_mg": 1500,
+ "outcome": "body weight, BMI, fat mass, waist circumference in adults with overweight",
+ "note": "PMID 42066439 is ingredient-level (oral WKBE, 8 RCTs, n=543, weight -1.62 kg 95% CI -1.99 to -1.25). Catalog prints white kidney bean extract uniformly. Caveat: alpha-amylase inhibitor extracts are not standardised by inhibitor units, so label mg is not a potency guarantee, and the pooled effect is small. APPLIED 2026-09-18 as INGR_WHITE_KIDNEY_BEAN, positive_weak, 1,000 mg/day applicability floor; 16 of 22 products qualify, 16 of them at Evidence 0 today."
+}

@@ -1,0 +1,2732 @@
+{
+ "canonical_id": "citrus_bioflavonoids",
+ "screened": 157,
+ "kept": 71,
+ "rejected": [
+  {
+   "pmid": "28474555",
+   "reason": "not_intervention",
+   "note": "Broad review of isolated compounds from natural products with antidiabetic activity generally, using in vitro and in vivo models; citrus bioflavonoid-specific human clinical data not confirmed."
+  },
+  {
+   "pmid": "36279373",
+   "reason": "not_intervention",
+   "note": "Broad review of non-drug rehabilitation methods for post-thrombophlebitic syndrome; citrus bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "20810980",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of urinary polyphenol-intake biomarkers generally; citrus bioflavonoid-specific extractable result not confirmed."
+  },
+  {
+   "pmid": "27079631",
+   "reason": "not_intervention",
+   "note": "Broad systematic review of dietary polyphenols on metabolic syndrome features generally; citrus bioflavonoid-specific extractable result not confirmed."
+  },
+  {
+   "pmid": "39683546",
+   "reason": "not_intervention",
+   "note": "Broad updated systematic review of polyphenol intervention for NAFLD generally; citrus bioflavonoid-specific extractable result not confirmed."
+  },
+  {
+   "pmid": "28643618",
+   "reason": "off_topic",
+   "note": "Heat-stabilised rice bran consumption in colorectal cancer survivors; unrelated food source, not citrus."
+  },
+  {
+   "pmid": "29235159",
+   "reason": "not_this_route",
+   "note": "Green tea ointment for episiotomy pain/wound healing; topical application, and green tea (not citrus) is the tested botanical."
+  },
+  {
+   "pmid": "34065966",
+   "reason": "off_topic",
+   "note": "Bioactive compounds in different buckwheat species; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "37372511",
+   "reason": "animal_or_invitro",
+   "note": "Dietary rutin tested on meat quality/fatty acid profile in Qingyuan Partridge CHICKENS; animal agriculture study."
+  },
+  {
+   "pmid": "40405281",
+   "reason": "animal_or_invitro",
+   "note": "Systematic review explicitly of 'non-clinical studies' on hesperidin/hesperetin against chemotherapy-induced cardiotoxicity; not human clinical trials."
+  },
+  {
+   "pmid": "32977511",
+   "reason": "animal_or_invitro",
+   "note": "Systematic review explicitly of 'In Vitro and In Vivo Studies' (preclinical), not human clinical trials."
+  },
+  {
+   "pmid": "35796456",
+   "reason": "animal_or_invitro",
+   "note": "Systematic review explicitly based on 'in vivo studies' (preclinical animal studies), not human clinical trials."
+  },
+  {
+   "pmid": "39647419",
+   "reason": "animal_or_invitro",
+   "note": "Explicitly a 'systematic review of preclinical studies' (in vitro and in vivo), not human clinical trials."
+  },
+  {
+   "pmid": "19046494",
+   "reason": "off_topic",
+   "note": "CystoProtek composition described as glucosamine sulfate, sodium hyaluronate and chondroitin sulfate; no citrus bioflavonoid component confirmed in the retrieved abstract."
+  },
+  {
+   "pmid": "23354394",
+   "reason": "off_topic",
+   "note": "Citrus aurantium (bitter orange) extract is a synephrine-based stimulant product, chemically distinct from citrus bioflavonoids (flavanones/flavonols)."
+  },
+  {
+   "pmid": "25281912",
+   "reason": "off_topic",
+   "note": "Cuscuta chinensis Lam. review; unrelated herb, not a citrus bioflavonoid."
+  },
+  {
+   "pmid": "27942500",
+   "reason": "off_topic",
+   "note": "Salvia officinalis (Sage) leaf extract trial; unrelated herb, not a citrus bioflavonoid."
+  },
+  {
+   "pmid": "28049156",
+   "reason": "animal_or_invitro",
+   "note": "Rutin extracted from mulberry (not citrus) tested in genetically obese MICE; wrong source plant and animal model."
+  },
+  {
+   "pmid": "29734688",
+   "reason": "off_topic",
+   "note": "Skin nutraceuticals review focused on probiotics, vitamin E, and green tea catechins; no citrus bioflavonoid-specific content confirmed."
+  },
+  {
+   "pmid": "30657033",
+   "reason": "off_topic",
+   "note": "Capparis spinosa extract trial; unrelated herb, not a citrus bioflavonoid."
+  },
+  {
+   "pmid": "32155536",
+   "reason": "off_topic",
+   "note": "Onion by-product-enriched bread bioavailability study; unrelated food matrix, not citrus."
+  },
+  {
+   "pmid": "32585837",
+   "reason": "off_topic",
+   "note": "Whey protein + omega-3 + generic 'polyphenols' combination; citrus-bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "32739428",
+   "reason": "off_topic",
+   "note": "Chinese patent medicines for influenza guideline; unrelated to citrus bioflavonoids."
+  },
+  {
+   "pmid": "32950005",
+   "reason": "off_topic",
+   "note": "Systematic review of phytochemicals in oat and buckwheat; unrelated plants, not citrus."
+  },
+  {
+   "pmid": "33086604",
+   "reason": "animal_or_invitro",
+   "note": "Azolla pinnata ethanolic extract tested in lead-exposed RATS; unrelated plant, animal study."
+  },
+  {
+   "pmid": "33330589",
+   "reason": "off_topic",
+   "note": "Bioactive components in salt-tolerant vegetable amaranth; unrelated plant, agricultural study."
+  },
+  {
+   "pmid": "33569370",
+   "reason": "off_topic",
+   "note": "Broad diabetes-angiopathy inflammatory-activities review; citrus bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "33966619",
+   "reason": "off_topic",
+   "note": "Broad review of bioactive compounds for type 2 diabetes generally; citrus bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "34511168",
+   "reason": "off_topic",
+   "note": "Alfacalcidol trial in Henoch-Schoenlein purpura; unrelated intervention, no citrus bioflavonoid relevance."
+  },
+  {
+   "pmid": "34601080",
+   "reason": "off_topic",
+   "note": "Broad review of flavonoids from Chinese Herbal Medicine for hypertension; citrus-specific content not confirmed."
+  },
+  {
+   "pmid": "34715717",
+   "reason": "off_topic",
+   "note": "Broad nutrition phytochemicals and platelet signaling review; citrus bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "34781232",
+   "reason": "off_topic",
+   "note": "Apocynum venetum leaf extract trial; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "35092896",
+   "reason": "off_topic",
+   "note": "Quercetin/rutin nano-formulations for cancer treatment; nanoformulation/mechanistic cancer review, not a human supplementation synthesis."
+  },
+  {
+   "pmid": "35160718",
+   "reason": "animal_or_invitro",
+   "note": "Sambucus nigra flavonoid extract tested in a RAT model of gentamicin nephrotoxicity; unrelated plant and animal study."
+  },
+  {
+   "pmid": "35691258",
+   "reason": "off_topic",
+   "note": "Pistacia atlantica standardized herbal product trial; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "35719836",
+   "reason": "off_topic",
+   "note": "Lycii Fructus extract trial; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "36120362",
+   "reason": "off_topic",
+   "note": "Broad review of natural platelet-activating factor receptor antagonists for stroke; citrus-specific content not confirmed."
+  },
+  {
+   "pmid": "36159792",
+   "reason": "off_topic",
+   "note": "Broad dietary polyphenol review for NAFLD generally; citrus bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "36372923",
+   "reason": "off_topic",
+   "note": "Nanoparticle-based Acanthamoeba disease treatment review; unrelated to citrus bioflavonoids."
+  },
+  {
+   "pmid": "36432034",
+   "reason": "off_topic",
+   "note": "Systematic review explicitly of 'Experimental Studies'; human clinical trial synthesis not confirmed."
+  },
+  {
+   "pmid": "36476253",
+   "reason": "off_topic",
+   "note": "Rutin solid lipid nanoparticles tested on ex vivo skin biopsies against UVB damage; topical/ex vivo, not oral human supplementation."
+  },
+  {
+   "pmid": "36556161",
+   "reason": "off_topic",
+   "note": "Buckwheat and cardiometabolic health review; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "37023336",
+   "reason": "off_topic",
+   "note": "Dental remineralization RCT of natural vs synthetic materials; unrelated to citrus bioflavonoids."
+  },
+  {
+   "pmid": "37033930",
+   "reason": "off_topic",
+   "note": "Broad dietary polyphenols in rheumatoid arthritis review (47 RCTs); citrus bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "37328127",
+   "reason": "off_topic",
+   "note": "Arsenic-induced metabolic dynamics in wheat genotypes; unrelated agricultural study."
+  },
+  {
+   "pmid": "37375892",
+   "reason": "animal_or_invitro",
+   "note": "Citrus medica phytochemical profile/biological activities review; broad narrative, human clinical trial synthesis not confirmed."
+  },
+  {
+   "pmid": "37444239",
+   "reason": "off_topic",
+   "note": "Salinity treatments and phenolic compound accumulation in germinated brown rice; unrelated agricultural study."
+  },
+  {
+   "pmid": "37655445",
+   "reason": "animal_or_invitro",
+   "note": "Antioxidant/phenolic supplementation in ruminant feeding and dairy products; animal agriculture, not human supplementation."
+  },
+  {
+   "pmid": "37731978",
+   "reason": "off_topic",
+   "note": "Light spectrum effects on rutin levels in microtomato plants; unrelated agricultural study."
+  },
+  {
+   "pmid": "37763811",
+   "reason": "off_topic",
+   "note": "Broad review of salivary gland atrophy from drugs/chemicals; citrus bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "37835340",
+   "reason": "off_topic",
+   "note": "Systematic review of lemon by-product extraction technologies for functional food application; food-technology/extraction review, not a clinical trial synthesis."
+  },
+  {
+   "pmid": "38168664",
+   "reason": "off_topic",
+   "note": "Peppermint and menthol review; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "38247460",
+   "reason": "off_topic",
+   "note": "Plant-based multivitamin/mineral supplement with 33 phytochemicals analyzed via omics; too broad/multi-ingredient, citrus-bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "38550882",
+   "reason": "off_topic",
+   "note": "Exogenous silicon effects on tomato nutritional quality; unrelated agricultural study."
+  },
+  {
+   "pmid": "38645558",
+   "reason": "off_topic",
+   "note": "Indigofera argentea bioactive extract cream for skin rejuvenation; unrelated plant, topical application."
+  },
+  {
+   "pmid": "39100330",
+   "reason": "animal_or_invitro",
+   "note": "Rutin wound healing study in metformin-controlled diabetic RATS; animal study."
+  },
+  {
+   "pmid": "39277221",
+   "reason": "off_topic",
+   "note": "Chinese cabbage metabolome/transcriptome taste study; unrelated agricultural study."
+  },
+  {
+   "pmid": "39579122",
+   "reason": "off_topic",
+   "note": "Cross-linking agents and root caries lesion size; in vitro dental study, unrelated to citrus bioflavonoids."
+  },
+  {
+   "pmid": "40014123",
+   "reason": "off_topic",
+   "note": "Broad review of flavonoids in neuroprotection (brain/spinal cord injury); citrus bioflavonoid-specific content not confirmed."
+  },
+  {
+   "pmid": "40145937",
+   "reason": "off_topic",
+   "note": "Native Brazilian fruits glycemic control study; different fruit sources, not citrus."
+  },
+  {
+   "pmid": "40280477",
+   "reason": "off_topic",
+   "note": "WWP1-SHARP1-C/EBP\u03b2 signaling in MASLD; mechanistic study, no flavonoid intervention."
+  },
+  {
+   "pmid": "40357890",
+   "reason": "off_topic",
+   "note": "Broad review of rutin mechanisms/therapeutic prospects for liver disorders; human clinical trial synthesis not confirmed."
+  },
+  {
+   "pmid": "40395731",
+   "reason": "off_topic",
+   "note": "Systematic review of rutin for IBD explicitly summarizing 'preclinical effects'; not a human clinical trial synthesis."
+  },
+  {
+   "pmid": "41470797",
+   "reason": "off_topic",
+   "note": "Yerba Mate and rheumatoid arthritis review; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "41519619",
+   "reason": "off_topic",
+   "note": "Mentha spicata and Amaranthus caudatus extract trial; unrelated plants, not citrus (flavonoids mentioned only generically)."
+  },
+  {
+   "pmid": "41744261",
+   "reason": "off_topic",
+   "note": "Hawthorn fruit extract effects on NAFLD; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "41750550",
+   "reason": "off_topic",
+   "note": "Parthenocissus quinquefolia bioactive components review; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "41987687",
+   "reason": "off_topic",
+   "note": "Systematic review of flavonoids against breast cancer spanning in-vitro, in-vivo, and molecular pathway studies; too broad/preclinical, no citrus-specific human clinical data confirmed."
+  },
+  {
+   "pmid": "42160899",
+   "reason": "off_topic",
+   "note": "Xanthoceras sorbifolium leaves trial for hyperuricemia; unrelated plant, not citrus."
+  },
+  {
+   "pmid": "42411078",
+   "reason": "off_topic",
+   "note": "Systematic review of rutin-containing cosmetic patents; patent/product review, not a clinical trial synthesis."
+  },
+  {
+   "pmid": "12750232",
+   "reason": "animal_or_invitro",
+   "note": "Chemoprevention systematic review in Min MICE colon cancer model; animal model, not human."
+  },
+  {
+   "pmid": "33830595",
+   "reason": "animal_or_invitro",
+   "note": "Hesperidin tested in SH-SY5Y CELLS (in vitro) against bupivacaine-induced neurotoxicity."
+  },
+  {
+   "pmid": "34260953",
+   "reason": "animal_or_invitro",
+   "note": "Hesperidin tested in vitro against combined toxicity of decabromodiphenyl ether and sodium nitrite."
+  },
+  {
+   "pmid": "35218767",
+   "reason": "animal_or_invitro",
+   "note": "Hesperidin tested in MICE fed a high-fat diet and in HepG2 CELLS (in vitro)."
+  },
+  {
+   "pmid": "35304134",
+   "reason": "animal_or_invitro",
+   "note": "Rutin tested in vitro against cisplatin-induced cochlear damage."
+  },
+  {
+   "pmid": "35668938",
+   "reason": "animal_or_invitro",
+   "note": "Phytoestrogen systematic review explicitly of pre-clinical evidence from small ANIMAL studies."
+  },
+  {
+   "pmid": "36861869",
+   "reason": "animal_or_invitro",
+   "note": "Hesperidin tested topically in Pseudomonas aeruginosa keratitis in RATS."
+  },
+  {
+   "pmid": "37367061",
+   "reason": "animal_or_invitro",
+   "note": "Gallic acid + hesperidin tested against colorectal cancer CELL growth (in vitro)."
+  },
+  {
+   "pmid": "37886008",
+   "reason": "animal_or_invitro",
+   "note": "Rutin tested against perfluorooctanoic-acid-induced liver injury, likely a rodent/cell model (mechanistic pathway study)."
+  },
+  {
+   "pmid": "38394735",
+   "reason": "animal_or_invitro",
+   "note": "Rutin tested against diabetic NAFLD via AMPK/SREBP1 pathway, likely a rodent/cell mechanistic model."
+  },
+  {
+   "pmid": "38249555",
+   "reason": "animal_or_invitro",
+   "note": "Palmitoyl-glucosamine + hesperidin tested in FELINE (cat) idiopathic cystitis; veterinary study."
+  },
+  {
+   "pmid": "40017447",
+   "reason": "animal_or_invitro",
+   "note": "Hesperidin tested in a MOUSE model of CPT-11-induced diarrhea."
+  },
+  {
+   "pmid": "40315639",
+   "reason": "animal_or_invitro",
+   "note": "Hesperidin tested against deoxynivalenol-induced liver injury, likely a rodent/cell mechanistic model."
+  },
+  {
+   "pmid": "41038147",
+   "reason": "animal_or_invitro",
+   "note": "Hesperidin tested against deoxynivalenol-induced renal injury, likely a rodent/cell mechanistic model."
+  },
+  {
+   "pmid": "41509136",
+   "reason": "animal_or_invitro",
+   "note": "Hesperidin tested on cleft lip surgical wound healing in RATS."
+  },
+  {
+   "pmid": "41808862",
+   "reason": "animal_or_invitro",
+   "note": "Rutin systematic review explicitly of ANIMAL MODELS of diabetic nephropathy."
+  }
+ ],
+ "records": [
+  {
+   "pmid": "8203791",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "safety",
+   "intervention_as_stated": "Daflon 500 mg (90% diosmin, 10% hesperidin)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with venous insufficiency and hemorrhoidal disease",
+   "indication_as_stated": "chronic venous insufficiency/hemorrhoidal disease (safety)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Daflon 500 mg has no mutagenic action nor any significant effect on reproductive function.",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Diosmin (90%) is the dominant active, with hesperidin (10%) as the minor citrus flavonoid component.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20401289",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "micronized purified flavonoid fraction (Daflon 500 mg)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "43 CABG patients with impaired ejection fraction",
+   "indication_as_stated": "cardiac function after CABG",
+   "dose_quote": "oral Daflon 500 mg",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "43 patients who had an impaired preoperative left ventricular ejection fraction",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MPFF (diosmin-dominant with hesperidin), not isolated hesperidin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "20441150",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "flavanones in orange beverages",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "10 healthy volunteers",
+   "indication_as_stated": "flavanone bioavailability (orange juice)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "a crossover study with 10 healthy volunteers",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Flavanones from orange beverages match label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "22731245",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "forskolin + rutin",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with primary open angle glaucoma on maximum tolerated therapy",
+   "indication_as_stated": "glaucoma (intraocular pressure)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Rutin combined with forskolin, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "23761871",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "veno-active drugs (VAD, including citrus-flavonoid-based)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "136 patients with chronic venous disease (CEAP 2-5)",
+   "indication_as_stated": "chronic venous disease",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "136 patients with CVD (CEAP grades 2-5) were randomly allocated into four groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Multiple VAD classes compared; specific citrus-bioflavonoid arm(s) not isolated in this excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Venoactive drug class includes but is not limited to citrus bioflavonoid products.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25630350",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hydroxyethylrutosides (semisynthetic rutoside derivatives)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with chronic venous insufficiency across included trials",
+   "indication_as_stated": "chronic venous insufficiency",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hydroxyethylrutosides are semisynthetic derivatives of rutoside (rutin), not the natural citrus flavonoid itself.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25865966",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "blond orange juice (hesperidin source)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "25 male volunteers with mild hypercholesterolemia",
+   "indication_as_stated": "hypercholesterolemia (antioxidant/endothelial function)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Twenty five male volunteers with two cardiovascular ri",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin delivered via whole orange juice.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "25893991",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "diosmin + troxerutin + hesperidin mixture",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "134 patients with acute hemorrhoidal disease",
+   "indication_as_stated": "acute hemorrhoidal disease",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "One hundred and thirty-four consecutive patients with an acute hemorrhoidal crisis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hesperidin is one of three flavonoids (with diosmin and troxerutin) in a fixed mixture.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "26018925",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "hesperetin-7-O-rutinoside (hesperidin) and hesperetin-7-O-glucoside",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy human volunteers",
+   "indication_as_stated": "flavanone glycoside absorption/metabolism",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Hesperetin-7-O-rutinoside (hesperidin) reduces blood pressure in healthy volunteers",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Perfused directly into the proximal jejunum rather than swallowed as a typical oral dose in the mechanistic portion of the study.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "27310527",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "diosmin-hesperidin micronized purified flavonoids (DH), alone or with sulodexide",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "70 patients with venous leg ulcers",
+   "indication_as_stated": "venous leg ulcers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "70 patients (90 venous ulcers) were treated with multi-layer bandaging, local measures and DH",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "DH-alone arm exists separately from the DH+sulodexide combination arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Diosmin-hesperidin MPFF, diosmin-dominant with hesperidin as the citrus-flavonoid component.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "28805022",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin, 500 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "64 patients with type 2 diabetes",
+   "indication_as_stated": "type 2 diabetes (oxidative DNA damage/lipid peroxidation)",
+   "dose_quote": "500 mg/day hesperidin or placebo capsules for 6 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "In hesperidin group, TAC increased (0.74 \u00b1 0.16 vs. 0.82 \u00b1 0.18), while serum froctoseamin (5.79 \u00b1 5.86 vs. 5.01 \u00b1 4.95; p = 0.001)",
+   "sample_size_quote": "Sixty-four patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "29468764",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin, 500 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "64 patients with type 2 diabetes",
+   "indication_as_stated": "type 2 diabetes (blood pressure/inflammation)",
+   "dose_quote": "500 mg/day hesperidin or placebo capsules for 6 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "64 patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Companion study to 28805022 in the same cohort.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30632207",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 10 included RCTs (577 participants)",
+   "indication_as_stated": "lipid profile/blood pressure",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Ten RCTs (577 participants) were eligible to be included in the systemat",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30638420",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "orange juice (hesperidin and naringin source)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "10 apparently healthy women",
+   "indication_as_stated": "gut microbiota/blood glucose/lipids",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "10 apparently healthy women (28.5 \u00b1 8.4 years, 24.1 \u00b1 3.3 kg/m2)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin/naringin delivered via whole orange juice.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "30991044",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "human adults across included RCTs",
+   "indication_as_stated": "inflammatory markers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31264313",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin, 1 g/day capsule",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 patients with NAFLD",
+   "indication_as_stated": "nonalcoholic fatty liver disease",
+   "dose_quote": "1-g hesperidin capsule or identical placebo capsule for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "hesperidin supplementation, compared with placebo, was associated with a significant reduction in alanine aminotransferase (p = .005)",
+   "sample_size_quote": "50 NAFLD patients",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31271436",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin (animal and human studies)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "animal models and human subjects across included studies",
+   "indication_as_stated": "cardiovascular risk biomarkers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Explicitly pools animal studies with human RCTs; human-specific findings not isolated in this excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Review combines animal and human hesperidin evidence, not human-only.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31336963",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "subjects exposed to ionizing radiation across included studies",
+   "indication_as_stated": "radioprotection (ionizing radiation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Human vs. animal composition of included studies not confirmed in this excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin radioprotection studies.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31416212",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "2S-Hesperidin (Cardiose), 500 mg acute",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "15 amateur cyclists",
+   "indication_as_stated": "athletic performance (acute, cyclists)",
+   "dose_quote": "acute intake of 500 mg of 2S-Hesperidin (Cardiose\u00ae)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "15 cyclists (>1 year of training)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "2S-Hesperidin is a specific diastereoisomer-enriched branded form (Cardiose).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31489695",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included RCTs",
+   "indication_as_stated": "blood glucose control",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31844967",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin, 500 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "49 patients with metabolic syndrome",
+   "indication_as_stated": "metabolic syndrome",
+   "dose_quote": "500-mg hesperidin or p",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "49 patients with MetS",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "This publication is a RETRACTED PUBLICATION per the index metadata; should not be used as standalone evidence.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material.",
+   "integrity": {
+    "retracted": true,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "31987106",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "rutin + vitamin C",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "53 patients with type 2 diabetes",
+   "indication_as_stated": "type 2 diabetes (oxidative stress/glycemic control)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "53 type 2 diabetes patients randomized into 3 groups",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Rutin+vitamin C arm exists separately from vitamin-C-alone and antidiabetic-treatment-only arms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Rutin combined with vitamin C in the primary tested arm.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32296931",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin 1 g/day, alone or with flaxseed",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "98 patients with metabolic syndrome",
+   "indication_as_stated": "metabolic syndrome",
+   "dose_quote": "whole flaxseed powder (30 g/day), or hesperidin (1 g/day), or combination of 30 g flaxseed and 1 g hesperidin",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "ninety-eight patients with metabolic syndrome",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Hesperidin-alone arm exists separately from the flaxseed-alone and combination arms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin-alone arm is a clean single-ingredient comparison alongside flaxseed and combination arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32647367",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin, alone or with flaxseed",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "100 patients with NAFLD",
+   "indication_as_stated": "nonalcoholic fatty liver disease",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "one hundred eligible patients with NAFLD were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Hesperidin-alone arm exists separately from the flaxseed-alone and combination arms.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin-alone arm is a clean single-ingredient comparison alongside flaxseed and combination arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32661681",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin-enriched orange juice (EOJ)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "159 mildly hypertensive individuals",
+   "indication_as_stated": "hypertension (blood/pulse pressure)",
+   "dose_quote": "500 mL/day of control drink, OJ, or EOJ for 12 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": "A single EOJ dose (500 mL) reduced systolic BP (SBP) and PP, with greater changes afte",
+   "sample_size_quote": "participants (n = 159)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material (via orange juice).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "32935866",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "monoglucosyl rutin (MR), 200 or 400 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "66 healthy Japanese men and women",
+   "indication_as_stated": "abdominal visceral fat",
+   "dose_quote": "MR200 group (MR 200 mg/day), MR400 group (MR 400mg/day), or placebo group",
+   "primary_outcome_quote": "change in the AVF area after 8 weeks of intervention",
+   "primary_result_quote": null,
+   "sample_size_quote": "66 healthy Japanese men and women with a body mass index of \u226523 and <30 kg/m2",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Monoglucosyl rutin is a water-soluble alpha-glycosylated rutin derivative, not native rutin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33407631",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "citrus flavonoid extract (CFE), 400/500 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "moderately trained athletes",
+   "indication_as_stated": "anaerobic exercise capacity (athletes)",
+   "dose_quote": "daily dosages of 400 and 500 mg for a period of 4 and 8 weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Citrus flavonoid extract matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "33983078",
+   "design": "network_meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "venoactive drugs incl. MPFF, hydroxyethylrutosides, Ruscus+HMC+VitC",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with chronic venous disease across included RCTs/observational studies",
+   "indication_as_stated": "chronic venous disease",
+   "dose_quote": null,
+   "primary_outcome_quote": "Proportion of patients with complete venous ulcer healing was the primary outcome a",
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "MPFF and hydroxyethylrutosides (citrus-flavonoid-related) analyzed as separate arms alongside sulodexide, calcium dobesilate, and HCSE.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "MPFF/HR analyzed as distinct venoactive-drug arms within a broader network meta-analysis of multiple drug classes.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34014143",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin in 100% orange juice",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 20 included articles",
+   "indication_as_stated": "chronic disease biomarkers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "Results showed that overall effect sizes from the studies were considerably weak.",
+   "sample_size_quote": "Twenty articles met the inclusion criteria.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "negative",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin from 100% orange juice.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34024506",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin supplementation or orange juice consumption",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across 11 included RCTs (512 individuals)",
+   "indication_as_stated": "anthropometric measures",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Eleven eligible RCTs, with 512 individuals, were included in this study.",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin/orange juice RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34166347",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "needle extract + hesperidin + vitamin C",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with chronic venous disease",
+   "indication_as_stated": "chronic venous disease",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hesperidin combined with needle (Ruscus) extract and vitamin C in a fixed combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34248662",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "alpha-glucosyl hesperidin beverage, 4g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "6 healthy women",
+   "indication_as_stated": "gravity-induced lower-leg swelling",
+   "dose_quote": "4 G -\u03b1-glucopyranosyl hesperidin (G-Hsp) beverage",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "six healthy women",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Alpha-glucosyl hesperidin is a glycosylated hesperidin derivative, not native hesperidin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34272817",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "hesperidin-enriched orange juice (EOJ)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "subsample of the CITRUS study (pre- and stage-1 hypertension, N=159)",
+   "indication_as_stated": "hypertension (metabolomic biomarkers)",
+   "dose_quote": "500 mL day-1 of control drink, OJ, or hesperidin-enriched OJ (EOJ) for 12-weeks",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "a subsample with pre- and stage-1 hypertension subjects of the CITRUS study (N = 159)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material (via enriched orange juice).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34561541",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "alpha-glucosyl hesperidin, combined with green tea (EGCG)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "participants (obesity prevention)",
+   "indication_as_stated": "obesity prevention",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hesperidin combined with green tea catechins (EGCG); also a glucosylated hesperidin derivative.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34626134",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "citrus flavonoids (Rutaceae family)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "general (narrative/systematic review of chemistry and pharmacology)",
+   "indication_as_stated": "various (multi-indication narrative review)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Broad chemical/pharmacological review; human clinical trial synthesis not confirmed in this excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to citrus (Rutaceae) flavonoids.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35625464",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "2S-hesperidin, 500 mg, 8 weeks",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 amateur cyclists",
+   "indication_as_stated": "athletic performance (acid-base status, cyclists)",
+   "dose_quote": "eight weeks of 2S-hesperidin supplementation (500 mg/",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty amateur cyclists (n = 20 per group)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "2S-Hesperidin is a specific diastereoisomer-enriched form.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35745211",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "hesperidin, micronized vs 2S-diastereoisomer",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "30 (phase 1) / 15 (phase 2) healthy individuals",
+   "indication_as_stated": "hesperidin bioavailability",
+   "dose_quote": "500 mL of orange juice with 345 mg of hesperidin",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "thirty healthy individuals",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material; compares micronization and diastereoisomer forms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35762134",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "healthy people across 18 included studies",
+   "indication_as_stated": "anti-inflammatory/antioxidant response",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "eighteen studies were chosen",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin human intervention trials.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "35946912",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin and diosmin, individually or in combination",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "129 T2DM patients with metabolic syndrome and neuropathy",
+   "indication_as_stated": "type 2 diabetes with neuropathy and metabolic syndrome",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "129 T2DM patients with MetS and neuropathy were recruited",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Hesperidin-alone and diosmin-alone arms exist separately from the combination arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin-alone arm is a clean single-ingredient comparison alongside diosmin-alone and combination arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36101997",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "rutin, 500 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 patients with type 2 diabetes",
+   "indication_as_stated": "type 2 diabetes mellitus",
+   "dose_quote": "500 mg rutin or placebo per day for 3-months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "50 T2DM patients (supplement, n = 25 and placebo, n = 25)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Rutin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36156675",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "citrus and pomegranate complex (CPC)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "36 healthy elderly (60-75 years)",
+   "indication_as_stated": "physical fitness/mental well-being (healthy elderly)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "36 healthy elderly aged 60-75 years old",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Citrus component combined with pomegranate in a fixed complex.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36160426",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "rutin + vitamin C (vs vitamin C alone)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "hemodialysis patients",
+   "indication_as_stated": "oxidative stress/inflammation (hemodialysis)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Notes prior rat data (CKD model) as mechanistic rationale, but this study itself is conducted in human HD patients.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Rutin combined with vitamin C, compared against vitamin-C-alone control.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36326144",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "venoactive drug therapy (diosmin/hesperidin-class)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with varicose veins",
+   "indication_as_stated": "varicose veins (vascular inflammation biomarker)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Specific venoactive drug composition not explicitly named in this excerpt, though this drug class is dominated by diosmin/hesperidin MPFF products in the literature.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Venoactive drug class assumed to include diosmin/hesperidin-based products, not explicitly itemized in this excerpt.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36387348",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin, 1000 mg once daily",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "216 nonvaccinated COVID-19 subjects",
+   "indication_as_stated": "COVID-19 symptoms",
+   "dose_quote": "hesperidin 1000 mg once daily for 14 days in 216 symptomatic nonvaccinated COVID-19 subjects",
+   "primary_outcome_quote": "the proportion of subjects with any of four cardinal (group A) symptoms: fever, cough, shortness of breath, or anosmia",
+   "primary_result_quote": null,
+   "sample_size_quote": "216 symptomatic nonvaccinated COVID-19 subjects",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36482520",
+   "design": "controlled_nonrandomized",
+   "human_status": "ambiguous",
+   "human_status_signals": [
+    "protocol publication, results not yet reported"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "glucosyl hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with primary biliary cholangitis",
+   "indication_as_stated": "primary biliary cholangitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "This index entry is tagged as a CLINICAL TRIAL PROTOCOL (no results yet); the completed results are reported separately in 42463117.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glucosyl hesperidin is a glycosylated hesperidin derivative, not native hesperidin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "36857626",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "2S-hesperidin, 500 mg/day for 8 weeks",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "40 amateur cyclists",
+   "indication_as_stated": "athletic performance (submaximal gas exchange, cyclists)",
+   "dose_quote": "the intake of 2S-hesperidin (500 mg d-1, 8 weeks)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Forty amateur cyclists (n = 20 2S-hesperidin, n = 20 placebo)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "2S-Hesperidin is a specific diastereoisomer-enriched form.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37119360",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin methyl chalcone (HMC), 500 mg",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "31 sedentary young men",
+   "indication_as_stated": "delayed-onset muscle soreness",
+   "dose_quote": "HMC 500 mg or one placebo capsule \u00d7 3 days before an intense dynamic exercise protocol",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "31 sedentary young men",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hesperidin methyl chalcone is a synthetic (semi-synthetic) hesperidin derivative, not native hesperidin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37502716",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included RCTs",
+   "indication_as_stated": "cardiovascular risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "The results showed that hesperidin supplementation had a",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37571297",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "rutin, 12-week intervention",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "87 adults with overweight (normoglycemia or prediabetes)",
+   "indication_as_stated": "pancreatic beta-cell function/gut microbiota (overweight)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Eighty-seven participants were enrolled",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Rationale cited prior glycaemic improvement in transgenic MOUSE models; this study itself is in human adults.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Rutin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37599700",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "rutin, 1 g",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "50 patients with type 2 diabetes",
+   "indication_as_stated": "type 2 diabetes (blood pressure/antioxidant enzymes)",
+   "dose_quote": "treated with 1 g of rutin or placebo for three months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "fifty patients were randomly divided into intervention (n = 25) and control groups (n = 25)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Rutin matches label material.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37939436",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "citrus bioflavonoids",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with type 2 diabetes across included studies",
+   "indication_as_stated": "type 2 diabetes mellitus (glycemic control/mechanisms)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to citrus bioflavonoids and their diabetes-related mechanisms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "37970408",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "Eriomin (70% eriocitrin, 5% hesperidin, 4% naringin)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "prediabetic patients",
+   "indication_as_stated": "prediabetes (intestinal dysbiosis)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Eriocitrin (a different citrus flavanone from lemon) is the dominant component (70%), with hesperidin and naringin as minor components.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38234970",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin and hesperetin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "general (narrative/systematic review of molecular/cellular/metabolic effects)",
+   "indication_as_stated": "diabetes and its complications",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Broad molecular/cellular mechanism review; human clinical trial synthesis not confirmed in this excerpt.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin/hesperetin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38462779",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included RCTs",
+   "indication_as_stated": "blood pressure/lipid profile",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38772688",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "diabetic patients and healthy individuals across included RCTs",
+   "indication_as_stated": "blood pressure (diabetic vs. healthy)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38794179",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "diosmin 450 mg + hesperidin 50 mg (vs loratadine)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with vinca-alkaloid-induced neuropathy",
+   "indication_as_stated": "chemotherapy (vinca alkaloid)-induced neuropathy",
+   "dose_quote": "450 mg diosmin and 50 mg hesperidin combination orally twice daily",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hesperidin combined with diosmin (diosmin-dominant), compared against loratadine as an active comparator.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "38940246",
+   "design": "controlled_nonrandomized",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "six-component myophlebotropic preparation (incl. citrus flavonoids)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with stage II-III hemorrhoidal disease",
+   "indication_as_stated": "hemorrhoidal disease",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Citrus flavonoid component is part of a six-ingredient myophlebotropic combination product.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39038797",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "adults across included RCTs",
+   "indication_as_stated": "cardiometabolic markers",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin supplementation RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39279783",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "citrus flavanone hesperidin extracts or purified hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "humans across included RCTs",
+   "indication_as_stated": "cardiovascular disease risk factors",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin extract/purified hesperidin RCTs.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39588453",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "proteolytic enzyme + rutin",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "65 post-operative patients",
+   "indication_as_stated": "post-operative inflammation",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "a total of 65 patients were randomized",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Rutin combined with a proteolytic enzyme in a fixed tablet (EnMax), not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39594533",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "AM3 150mg + spermidine 0.6mg + hesperidin 50mg",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "41 participants (30-63 years)",
+   "indication_as_stated": "immune function/biological age",
+   "dose_quote": "a blend of AM3 (150 mg), spermidine (0.6 mg), and hesperidin (50 mg) for 2 months",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "41 participants (30-63 years)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hesperidin is one of three components (with AM3 and spermidine) in a fixed combination supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39926929",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "hesperidin, 500 mg/day, adjunct to scaling and root planing",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "84 patients with chronic periodontitis",
+   "indication_as_stated": "chronic periodontitis",
+   "dose_quote": "500 mg of hesperidin daily or a control group receiving a placebo both alongside scaling and root planing (SRP)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "A total of 84 patients with moderate to severe chronic periodontitis",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on design: SRP background held constant, hesperidin vs. placebo is the isolated randomized variable.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Hesperidin matches label material; SRP background held constant across both arms.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40348378",
+   "design": "review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "venoactive compounds (incl. citrus-flavonoid-based)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with chronic venous disease (narrative review)",
+   "indication_as_stated": "chronic venous disease",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Venoactive compounds class includes but is not limited to citrus-bioflavonoid-based products.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40509268",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "naringinase-treated flavonoids (incl. citrus)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "general (food science/bioavailability review)",
+   "indication_as_stated": "flavonoid bioavailability (food processing)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Focuses on naringinase enzyme treatment/deglycosylation as a food-processing technique to improve flavonoid bioavailability.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Naringinase modifies citrus flavonoids (e.g., naringin) as a processing technique, not tested as a standalone supplement.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "40855727",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "MPFF 1000mg, diosmin 600mg, or hesperidin+diosmin combination (HDC)",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "150 women with pelvic varicose veins",
+   "indication_as_stated": "pelvic venous disorder",
+   "dose_quote": "micronized purified flavonoid fraction (MPFF) 1000 mg; (2) diosmin 600 mg, or (3) hesperidin and diosmin combination (HDC)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "150 women with symptomatic PeVD",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Multiple diosmin-containing arms compared; hesperidin only appears in the combination (HDC) arm.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hesperidin appears only in the combination (HDC) arm; other arms are diosmin-based without hesperidin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41143521",
+   "design": "systematic_review",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hesperidin (drug delivery/formulation)",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "general (formulation/bioavailability review)",
+   "indication_as_stated": "hesperidin bioavailability/formulation",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": false,
+   "direction_primary": null,
+   "direction_note": "Focuses on formulation/delivery technologies to overcome hesperidin's poor solubility and bioavailability.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "exact_match",
+   "label_material_note": "Review restricted to hesperidin formulation/delivery approaches.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "41300470",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "mechanistic",
+   "intervention_as_stated": "micellar chrysin-quercetin-rutin formulation",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "16 healthy adults",
+   "indication_as_stated": "pharmacokinetics/safety (novel flavonoid formulation)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "Sixteen healthy a",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Rutin combined with chrysin and quercetin in a co-encapsulated micellar formulation, not tested alone.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42270667",
+   "design": "crossover_rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "monoglucosyl hesperidin, 300 mg/day",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "30 healthy human adults",
+   "indication_as_stated": "lymphatic circulatory function",
+   "dose_quote": "monoglucosyl hesperidin intake (300 mg/day)",
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": "healthy human adults (n = 30)",
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": null,
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Monoglucosyl hesperidin is a glycosylated hesperidin derivative, not native hesperidin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "42463117",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "glucosyl hesperidin",
+   "combination": false,
+   "route": "oral",
+   "population_as_stated": "patients with primary biliary cholangitis",
+   "indication_as_stated": "primary biliary cholangitis",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Full results paper corresponding to the protocol registered as 36482520.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Glucosyl hesperidin is a glycosylated hesperidin derivative, not native hesperidin.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "34371883",
+   "design": "rct",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "efficacy",
+   "intervention_as_stated": "berberine + hesperidin + chromium picolinate (BHC), add-on to metformin",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "type 2 diabetes patients with suboptimal glycemic control on metformin",
+   "indication_as_stated": "type 2 diabetes (add-on to metformin)",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": "participants in the group receiving metformin plus BHC, compared to the group receiving metformin only, saw a significant improvement in their glucose profile",
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "positive",
+   "direction_note": "Add-on design: metformin background held constant, BHC vs. metformin-only is the isolated randomized variable.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Hesperidin is one of three components (with berberine and chromium picolinate) in a fixed nutraceutical formula.",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  },
+  {
+   "pmid": "39861707",
+   "design": "meta_analysis",
+   "human_status": "confirmed",
+   "human_status_signals": [
+    "Humans MeSH",
+    "participants described"
+   ],
+   "evidence_role": "review",
+   "intervention_as_stated": "hydroxyethylrutoside and other rutin-derivative venoactive drugs",
+   "combination": true,
+   "route": "oral",
+   "population_as_stated": "patients with chronic venous insufficiency across included studies",
+   "indication_as_stated": "chronic venous insufficiency",
+   "dose_quote": null,
+   "primary_outcome_quote": null,
+   "primary_result_quote": null,
+   "sample_size_quote": null,
+   "funding_quote": null,
+   "primary_outcome_identifiable": true,
+   "direction_primary": "mixed",
+   "direction_note": "Reviews hydroxyethylrutoside, Pycnogenol, aminaphthone, coumarin+troxerutin, and Venoruton as separate emerging pharmacological interventions.",
+   "registrations": [],
+   "included_studies": "extraction_pending",
+   "label_material_match": "related_form_differs",
+   "label_material_note": "Rutin-derivative drugs (hydroxyethylrutoside, Venoruton) analyzed alongside several non-citrus agents (Pycnogenol, aminaphthone).",
+   "integrity": {
+    "retracted": false,
+    "expression_of_concern": false,
+    "has_erratum": false
+   }
+  }
+ ],
+ "shortlist": [
+  "28805022",
+  "31264313",
+  "32661681",
+  "39926929",
+  "36387348",
+  "33407631",
+  "30632207",
+  "37939436",
+  "38462779",
+  "8203791",
+  "25893991",
+  "31987106"
+ ],
+ "handoff": [
+  {
+   "pmid": "31844967",
+   "role": "other",
+   "reason": "This hesperidin/metabolic-syndrome RCT is a RETRACTED PUBLICATION per the index metadata; kept here with retracted=True flagged but should not be used as standalone evidence."
+  }
+ ],
+ "identity_notes": "Citrus bioflavonoids' retrieval set is dominated by a huge false-match cluster of unrelated medicinal plants (Cuscuta chinensis, Salvia officinalis, Sambucus nigra, Pistacia atlantica, Lycii Fructus, Apocynum venetum, Azolla pinnata, Indigofera argentea, Xanthoceras sorbifolium, Mentha spicata, hawthorn, Parthenocissus, buckwheat, oat, amaranth) and agricultural/crop-science studies on tomato, rice, wheat, cabbage, and microtomato -- all rejected off_topic, likely retrieved via generic 'flavonoid'/'rutin' keyword overlap rather than citrus specificity. A second large cluster is animal and in vitro mechanistic studies of hesperidin and rutin (rats, mice, cats, cell lines such as SH-SY5Y and HepG2) investigating toxicology/hepatoprotection/nephroprotection pathways -- rejected animal_or_invitro throughout, including several reviews that explicitly self-describe as covering 'in vitro and in vivo' or 'preclinical' evidence only. Among genuine human oral evidence, two coherent clinical clusters dominate: (1) hesperidin/diosmin-based VENOACTIVE DRUGS (Daflon/MPFF, diosmin-hesperidin combinations, hydroxyethylrutosides) for chronic venous insufficiency, hemorrhoidal disease, and varicose veins -- a long-established, well-studied drug class where hesperidin is typically the minor component alongside dominant diosmin, flagged related_form_differs; and (2) isolated hesperidin or rutin supplementation trials for type 2 diabetes, NAFLD, blood pressure/lipids, and cardiometabolic markers, where results are decidedly mixed across individual RCTs and meta-analyses (e.g., 30632207 and 31489695 found no effect on lipids/BP or glucose control respectively, while 28805022/29468764 and several diabetes RCTs found positive effects). A recurring pattern is hesperidin delivered in modified/glycosylated forms (alpha-glucosyl hesperidin, monoglucosyl hesperidin, 2S-hesperidin, hesperidin methyl chalcone, glucosyl hesperidin) developed specifically to overcome hesperidin's native low bioavailability -- these are flagged related_form_differs since they are chemically distinct from native hesperidin as typically declared on a supplement label. One retracted publication (31844967) was kept with retracted=True flagged and routed to handoff rather than silently discarded."
+}

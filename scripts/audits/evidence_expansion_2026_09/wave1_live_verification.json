@@ -1,0 +1,1658 @@
+{
+ "_metadata": {
+  "run_date": "2026-09-17",
+  "source": "NCBI PubMed E-utilities (live)",
+  "verified_records": 65,
+  "findings": 71,
+  "scope": "shortlisted records"
+ },
+ "findings": [
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "8815168",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "dose_quote",
+   "quote": "60 g D-ribose daily... for seven days"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "8815168",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "peak oxygen consumption / level of leg fatigue during exercise testing"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "12660407",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "total work output during Wingate anaerobic sprint tests"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "14607200",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "myocardial functional parameters by echocardiography and quality of life (SF-36)"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "14607200",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_result_quote",
+   "quote": "D-Ribose also demonstrated a significant improvement of the patient's quality of life (417+/-118 vs. 467+/-128, P<=0.01)"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "24272966",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "Cmax, AUC, Tmax, and dose-related serum glucose/insulin changes"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "25391139",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "There was no benefit with: D-ribose,glucagon, verapamil, vitamin B6, branched chain amino acids, dantrolene sodium, and high-dose creatine... Oral ribose caused"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "29296106",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "muscular performance/recovery (power output, RPE, creatine kinase) during multi-day exercise"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "31861049",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "cardiac double product, delta double product, chronotropic index at 6 months"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "32778175",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "muscle soreness (VAS) at 24-h and 48-h post-exercise"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "35644694",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "KCCQ clinical summary score, vigor score, ejection fraction, BNP, lactate/ATP ratio, 6-min walk test"
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "35644694",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "Treatment with ubiquinol and/or d-ribose significantly improved the KCCQ clinical summary score (17.30 to 25.82 points)...and EF (7.08% to 8.03%) and reduced B-"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "16093238",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "30554882",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "sore throat dynamics, throat irritation, general condition, treatment responders"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "36636365",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "38029215",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "body temperature, breast pain VAS score, breastmilk microbiome"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "38029215",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "There was no significant difference in fever and pain between the Pugongying group and cefdinir group... Pugongying granules enhanced microbial diversity in bre"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "38029215",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "sample_size_quote",
+   "quote": "42 paired breastmilk samples... 37 paired pre- and post-treatment breastmilk samples"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41554454",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41554454",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "dandelion, a medicinal and edible plant, has been extensively utilized in traditional Chinese medicine since the 7th century... exhibiting a range of biological"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41659807",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "dose_quote",
+   "quote": "60 mL twice daily for 180 days"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41659807",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "change in liver function tests (ALT, AST, ALP, GGT) from baseline"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41659807",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_result_quote",
+   "quote": "Mean improvements in ALT, AST, ALP, and GGT were significantly greater with the nutraceutical product than placebo (p <= 0.001)"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41909037",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "dose_quote",
+   "quote": "60 mL oral solution twice daily with a meal for 60 days"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41909037",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "proportion with improvement in ultrasonography-based fatty liver grading at Day 60"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "42398668",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "dose_quote",
+   "quote": "four capsules providing a total of ~2.1 g of a commercially available dandelion root powder"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "42398668",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "cumulative urine output was similar regardless of whether dandelion root powder was co-ingested with a large bolus of water... a lack of support for the purport"
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "42398668",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "sample_size_quote",
+   "quote": "physically active young adults (n = 14; M/F, 12/2)"
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "16390890",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_outcome_quote",
+   "quote": "a Clinical Global Impression improvement rating of 1 or 2 ... plus a final Hamilton Depression Rating Scale score <or=8"
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "16888459",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "research to date indicates that the use of prohormone nutritional supplements (DHEA, androstenedione, androstenediol, and other steroid hormone supplements) doe"
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "17050889",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "sample_size_quote",
+   "quote": "87 elderly men ... and 57 elderly women"
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "17263636",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "DHEA supplementation ... appeared to have no beneficial antiviral, immunomodulatory, hormonal, or body composition effects, suggesting that it not be routinely "
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "18000094",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "There was no significant benefit of DHEA treatment on fatigue or cognitive or sexual function... our results support some beneficial effects of prolonged DHEA t"
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "31237150",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "Hip BMD increased significantly above placebo group in women who took DHEA supplementation (SMD -0.5[-0.95, -0.04], p = .03)... In summary... DHEA replacement t"
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "31303658",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "31303658",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "patients treated with DHEA exhibited increases in the number of retrieved oocytes (mean difference, 0.91...), clinical pregnancy rate (relative risk [RR] = 1.27"
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "32930419",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "In comparison with placebo, DHEA improved depressive symptoms (standardized mean difference [SMD] -0.28, 95% (CI) -0.45 to -0.11, p =.001, 12 studies, 742 indiv"
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "37941864",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": []
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "37941864",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "DHEA use in SLE has shown a mild to moderate effect on disease activity, a positive effect on bone mineral density (BMD), and improved fatigue... its performanc"
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "30034348",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": []
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "38327958",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "40546602",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "21177797",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "clinical blood chemistry and safety outcomes over 2 years"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "25263312",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "Kupperman index (KI) and hot flush frequency change"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "27327802",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "daily hot flashes, night sweats, vaginal dryness score"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "27327802",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "Individual phytoestrogen interventions such as dietary and supplemental soy isoflavones were associated with improvement in daily hot flashes (pooled mean diffe"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "27327802",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "sample_size_quote",
+   "quote": "62 studies, including 6653 individual women"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "28768649",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "BMD change at lumbar spine and femoral neck"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "31290343",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "BMD change at lumbar spine, hip, femoral neck"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "31290343",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "Consumption of soy isoflavones caused significant improvement in BMD of lumbar spine (MD = 0.76%...), hip (MD = 0.22%...), and femoral neck (MD = 2.27%...)"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "31689947",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "33920485",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "dose_quote",
+   "quote": "isoflavone dose of >=80 mg/day"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "33920485",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "a statistically significant reduction in the daily incidence of hot flushes in women receiving red clover compared to those receiving placebo: WMD -1.73 hot flu"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "35399656",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "35399656",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "rosuvastatin AUC/Cmax change"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "35685887",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "35685887",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "simvastatin acid AUC change"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "35685887",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "Intake of soy isoflavones was associated with reduced systemic exposure to simvastatin acid... (P < 0.05)"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "37875614",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "isoflavone interventions significantly improved BMD at the lumbar spine (MD = 0.0175 g/cm2...), femoral neck..., and distal radius"
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "39433088",
+   "finding": "QUOTE_NOT_IN_LIVE_ABSTRACT",
+   "field": "primary_outcome_quote",
+   "quote": "endometrial thickness, vaginal maturation index, FSH, estradiol"
+  },
+  {
+   "canonical_id": "gotu_kola",
+   "pmid": "36420467",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "gotu_kola",
+   "pmid": "42391143",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "21663641",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "participants_in_abstract"
+   ]
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "23386268",
+   "finding": "INTEGRITY_HAS_ERRATUM"
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "27071971",
+   "finding": "INTEGRITY_HAS_ERRATUM"
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "38714425",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "dose_quote",
+   "quote": "intervention diets enriched with...sunflower oil (LA diet) 30-50 mL/day based on their BMI"
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "39820582",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "40058591",
+   "finding": "HUMAN_STATUS_AMBIGUOUS",
+   "signals": [
+    "humans_mesh"
+   ]
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "40058591",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "no differences between n-3 and n-6 were found for any circulatory inflammatory markers...compared with baseline, n-3 was followed by reductions in circulating T"
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "40600308",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "the H3L6 group significantly reduced headache days/month (-2.1, 95% confidence interval [CI]: -3.5 to -0.8, p = 0.002) and average headache intensity (-0.9, 95%"
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "42280457",
+   "finding": "QUOTE_ELIDED_NOT_CONTIGUOUS",
+   "field": "primary_result_quote",
+   "quote": "High LA exposure resulted in marked reductions in plasma n-3 eicosapentaenoic acid (EPA) and eicosatetraenoic acid (ETA) concentrations compared with the Low-LA"
+  }
+ ],
+ "verified": [
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "8815168",
+   "title": "A double blind, placebo controlled, crossover trial of D-ribose in McArdle's disease.",
+   "journal": "Journal of the neurological sciences",
+   "year": "1996",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/0022-510x(95)00320-2",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "12660407",
+   "title": "Effects of oral D-ribose supplementation on anaerobic capacity and selected metabolic markers in healthy males.",
+   "journal": "International journal of sport nutrition and exercise metabolism",
+   "year": "2003",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1123/ijsnem.13.1.76",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "14607200",
+   "title": "D-Ribose improves diastolic function and quality of life in congestive heart failure patients: a prospective feasibility study.",
+   "journal": "European journal of heart failure",
+   "year": "2003",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/s1388-9842(03)00060-6",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "21154353",
+   "title": "Pharmacological and nutritional treatment for McArdle disease (Glycogen Storage Disease type V).",
+   "journal": "The Cochrane database of systematic reviews",
+   "year": "2010",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/14651858.CD003458.pub4",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "24272966",
+   "title": "Evaluation of D-ribose pharmacokinetics, dose proportionality, food effect, and pharmacodynamics after oral solution administration in healthy male and female subjects.",
+   "journal": "Journal of clinical pharmacology",
+   "year": "2014",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/jcph.241",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "25391139",
+   "title": "Pharmacological and nutritional treatment for McArdle disease (Glycogen Storage Disease type V).",
+   "journal": "The Cochrane database of systematic reviews",
+   "year": "2014",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/14651858.CD003458.pub5",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "29296106",
+   "title": "The influence of D-ribose ingestion and fitness level on performance and recovery.",
+   "journal": "Journal of the International Society of Sports Nutrition",
+   "year": "2017",
+   "publication_types": [
+    "Clinical Trial",
+    "Comparative Study",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1186/s12970-017-0205-8",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "31861049",
+   "title": "A Randomized, Double-Blind, Placebo-Controlled Study to Evaluate the Effectiveness of a Food Supplement Containing Creatine and D-Ribose Combined with a Physical Exercise Program in Increasing Stress Tolerance in Patients with Ischemic Heart Disease.",
+   "journal": "Nutrients",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/nu11123075",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "32778175",
+   "title": "Effect of D-ribose supplementation on delayed onset muscle soreness induced by plyometric exercise in college students.",
+   "journal": "Journal of the International Society of Sports Nutrition",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1186/s12970-020-00371-8",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "d_ribose",
+   "pmid": "35644694",
+   "title": "Effects of Ubiquinol and/or D-ribose in Patients With Heart Failure With Preserved Ejection Fraction.",
+   "journal": "The American journal of cardiology",
+   "year": "2022",
+   "publication_types": [
+    "Clinical Trial, Phase II",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.amjcard.2022.04.031",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "1838315",
+   "title": "Dandelion dermatitis.",
+   "journal": "Contact dermatitis",
+   "year": "1991",
+   "publication_types": [
+    "Case Reports",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1111/j.1600-0536.1991.tb01826.x",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "16093238",
+   "title": "Evidence-based systematic review of dandelion (Taraxacum officinale) by natural standard research collaboration.",
+   "journal": "Journal of herbal pharmacotherapy",
+   "year": "2005",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": null,
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "22419300",
+   "title": "Chinese medicinal herbs for sore throat.",
+   "journal": "The Cochrane database of systematic reviews",
+   "year": "2012",
+   "publication_types": [
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/14651858.CD004877.pub3",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "30554882",
+   "title": "A randomized, open-label, multicenter, comparative study of therapeutic efficacy, safety and tolerability of BNO 1030 extract, containing marshmallow root, chamomile flowers, horsetail herb, walnut leaves, yarrow herb, oak bark, dandelion herb in the treatment of acute non-bacterial tonsillitis in children aged 6 to 18 years.",
+   "journal": "American journal of otolaryngology",
+   "year": "2019",
+   "publication_types": [
+    "Comparative Study",
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.amjoto.2018.10.012",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "36636365",
+   "title": "Drug-Induced Liver Injury from Herbal Liver Detoxification Tea.",
+   "journal": "Case reports in gastroenterology",
+   "year": "2022",
+   "publication_types": [
+    "Case Reports",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.1159/000526311",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "38029215",
+   "title": "Breastmilk microbiome changes associated with lactational mastitis and treatment with dandelion extract.",
+   "journal": "Frontiers in microbiology",
+   "year": "2023",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.3389/fmicb.2023.1247868",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41554454",
+   "title": "Unveiling the genus Taraxacum: From folk medicine to chemodiversity-driven pharmacological and toxicological outcomes-A systematic review.",
+   "journal": "Journal of ethnopharmacology",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1016/j.jep.2026.121231",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41659807",
+   "title": "Long-term safety and efficacy of a highly purified plant-based nutraceutical for improving clinical parameters of liver function in healthy participants: a randomized, double-blind, placebo-controlled clinical trial.",
+   "journal": "Frontiers in nutrition",
+   "year": "2025",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.3389/fnut.2025.1721748",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "41909037",
+   "title": "Effectiveness and safety of an ayurvedic nutraceutical for improving clinical parameters of liver function in participants with metabolic dysfunction-associated steatotic liver disease: a randomized, placebo-controlled, preliminary phase 2 exploratory clinical trial.",
+   "journal": "Frontiers in nutrition",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.3389/fnut.2026.1761666",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dandelion",
+   "pmid": "42398668",
+   "title": "Co-Ingestion of a Commercially Available Dandelion Root Powder Elicited No Additional Diuretic Effect Over 4 Hr Compared to Ingestion of Water Alone in Physically Active Young Adults.",
+   "journal": "International journal of sport nutrition and exercise metabolism",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1123/ijsnem.2026-0001",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "10342710",
+   "title": "A double-blind, placebo-controlled, clinical trial of dehydroepiandrosterone in severe systemic lupus erythematosus.",
+   "journal": "Lupus",
+   "year": "1999",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, U.S. Gov't, P.H.S."
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1191/096120399678847588",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "16390890",
+   "title": "Placebo-controlled trial of dehydroepiandrosterone (DHEA) for treatment of nonmajor depression in patients with HIV/AIDS.",
+   "journal": "The American journal of psychiatry",
+   "year": "2006",
+   "publication_types": [
+    "Comparative Study",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1176/appi.ajp.163.1.59",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "16888459",
+   "title": "Testosterone prohormone supplements.",
+   "journal": "Medicine and science in sports and exercise",
+   "year": "2006",
+   "publication_types": [
+    "Journal Article",
+    "Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1249/01.mss.0000228928.69512.2e",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "17050889",
+   "title": "DHEA in elderly women and DHEA or testosterone in elderly men.",
+   "journal": "The New England journal of medicine",
+   "year": "2006",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1056/NEJMoa054629",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "17263636",
+   "title": "Dehydroepiandrosterone (DHEA) effects on HIV replication and host immunity: a randomized placebo-controlled study.",
+   "journal": "AIDS research and human retroviruses",
+   "year": "2007",
+   "publication_types": [
+    "Comparative Study",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1089/aid.2006.0170",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "18000094",
+   "title": "Long-term DHEA replacement in primary adrenal insufficiency: a randomized, controlled trial.",
+   "journal": "The Journal of clinical endocrinology and metabolism",
+   "year": "2008",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1210/jc.2007-1134",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "25731680",
+   "title": "DHEA replacement for postmenopausal women: placebo or panacea?",
+   "journal": "Climacteric : the journal of the International Menopause Society",
+   "year": "2015",
+   "publication_types": [
+    "Editorial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3109/13697137.2015.1017706",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "30124161",
+   "title": "Dehydroepiandrosterone (DHEA) for Depression: A Systematic Review and Meta-Analysis.",
+   "journal": "CNS & neurological disorders drug targets",
+   "year": "2018",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.2174/1871527317666180817153914",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "31237150",
+   "title": "A systematic review and meta-analysis of randomized placebo-controlled trials of DHEA supplementation of bone mineral density in healthy adults.",
+   "journal": "Gynecological endocrinology : the official journal of the International Society of Gynecological Endocrinology",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1080/09513590.2019.1616175",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "31303658",
+   "title": "The Effect of Dehydroepiandrosterone (DHEA) Supplementation on IVF or ICSI: A Meta-Analysis of Randomized Controlled Trials.",
+   "journal": "Geburtshilfe und Frauenheilkunde",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.1055/a-0882-3791",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "32930419",
+   "title": "Dehydroepiandrosterone for depressive symptoms: A systematic review and meta-analysis of randomized controlled trials.",
+   "journal": "Journal of neuroscience research",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1002/jnr.24721",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "dhea",
+   "pmid": "37941864",
+   "title": "Dehydroepiandrosterone (DHEA) Supplementation in Rheumatic Diseases: A Systematic Review.",
+   "journal": "Mediterranean journal of rheumatology",
+   "year": "2023",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [],
+   "doi": "10.31138/mjr.20230825.dd",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "30034348",
+   "title": "Mania Associated With Herbal Medicines, Other Than Cannabis: A Systematic Review and Quality Assessment of Case Reports.",
+   "journal": "Frontiers in psychiatry",
+   "year": "2018",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [],
+   "doi": "10.3389/fpsyt.2018.00280",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "30522143",
+   "title": "Pharmacokinetics of Prenylflavonoids following Oral Ingestion of Standardized Epimedium Extract in Humans.",
+   "journal": "Planta medica",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1055/a-0806-7673",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "31036522",
+   "title": "An Analysis of Popular Online Erectile Dysfunction Supplements.",
+   "journal": "The journal of sexual medicine",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.jsxm.2019.03.269",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "32358510",
+   "title": "A systematic review and evidence-based analysis of ingredients in popular male testosterone and erectile dysfunction supplements.",
+   "journal": "International journal of impotence research",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1038/s41443-020-0285-x",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "38327958",
+   "title": "Herba Epimedii and Increased Opioid Cravings While on Buprenorphine: A Case Report.",
+   "journal": "Cureus",
+   "year": "2024",
+   "publication_types": [
+    "Case Reports",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.7759/cureus.51886",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "horny_goat_weed",
+   "pmid": "40546602",
+   "title": "Herba Epimedium (Horny Goat Weed) Toxicity With Severe Muscle Spasms and Elevated Creatine Kinase and Creatinine: A Case Report.",
+   "journal": "Cureus",
+   "year": "2025",
+   "publication_types": [
+    "Case Reports",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.7759/cureus.84608",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "21177797",
+   "title": "Clinical outcomes of a 2-y soy isoflavone supplementation in menopausal women.",
+   "journal": "The American journal of clinical nutrition",
+   "year": "2011",
+   "publication_types": [
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, U.S. Gov't, Non-P.H.S."
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.3945/ajcn.110.008359",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "24312387",
+   "title": "Soy, red clover, and isoflavones and breast cancer: a systematic review.",
+   "journal": "PloS one",
+   "year": "2013",
+   "publication_types": [
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1371/journal.pone.0081968",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "25263312",
+   "title": "Efficacy of phytoestrogens for menopausal symptoms: a meta-analysis and systematic review.",
+   "journal": "Climacteric : the journal of the International Menopause Society",
+   "year": "2015",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3109/13697137.2014.966241",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "27327802",
+   "title": "Use of Plant-Based Therapies and Menopausal Symptoms: A Systematic Review and Meta-analysis.",
+   "journal": "JAMA",
+   "year": "2016",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1001/jama.2016.8012",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "28768649",
+   "title": "A systematic review and meta-analysis of the effects of isoflavone formulations against estrogen-deficient bone resorption in peri- and postmenopausal women.",
+   "journal": "The American journal of clinical nutrition",
+   "year": "2017",
+   "publication_types": [
+    "Comparative Study",
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3945/ajcn.116.151464",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "31290343",
+   "title": "Soy isoflavones prevent bone resorption and loss, a systematic review and meta-analysis of randomized controlled trials.",
+   "journal": "Critical reviews in food science and nutrition",
+   "year": "2020",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1080/10408398.2019.1635078",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "31689947",
+   "title": "Isoflavone Supplements for Menopausal Women: A Systematic Review.",
+   "journal": "Nutrients",
+   "year": "2019",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.3390/nu11112649",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "33920485",
+   "title": "Evaluation of Clinical Meaningfulness of Red Clover (Trifolium pratense L.) Extract to Relieve Hot Flushes and Menopausal Symptoms in Peri- and Post-Menopausal Women: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "journal": "Nutrients",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.3390/nu13041258",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "35399656",
+   "title": "Effect of Green Tea Extract and Soy Isoflavones on the Pharmacokinetics of Rosuvastatin in Healthy Volunteers.",
+   "journal": "Frontiers in nutrition",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.3389/fnut.2022.850318",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "35685887",
+   "title": "Effects of Soy Isoflavones and Green Tea Extract on Simvastatin Pharmacokinetics and Influence of the SLCO1B1 521T > C Polymorphism.",
+   "journal": "Frontiers in nutrition",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.3389/fnut.2022.868126",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "37875614",
+   "title": "Isoflavone intervention and its impact on bone mineral density in postmenopausal women: a systematic review and meta-analysis of randomized controlled trials.",
+   "journal": "Osteoporosis international : a journal established as result of cooperation between the European Foundation for Osteoporosis and the National Osteoporosis Foundation of the USA",
+   "year": "2024",
+   "publication_types": [
+    "Meta-Analysis",
+    "Systematic Review",
+    "Journal Article"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1007/s00198-023-06944-y",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "isoflavones",
+   "pmid": "39433088",
+   "title": "Effect of Soy Isoflavones on Measures of Estrogenicity: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "journal": "Advances in nutrition (Bethesda, Md.)",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis",
+    "Research Support, Non-U.S. Gov't",
+    "Research Support, U.S. Gov't, Non-P.H.S."
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.advnut.2024.100327",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "gotu_kola",
+   "pmid": "11106141",
+   "title": "A double-blind, placebo-controlled study on the effects of Gotu Kola (Centella asiatica) on acoustic startle response in healthy subjects.",
+   "journal": "Journal of clinical psychopharmacology",
+   "year": "2000",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1097/00004714-200012000-00015",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "gotu_kola",
+   "pmid": "36420467",
+   "title": "Does Gotu kola supplementation improve cognitive function, inflammation, and oxidative stress more than multicomponent exercise alone? - a randomized controlled study.",
+   "journal": "Journal of exercise rehabilitation",
+   "year": "2022",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.12965/jer.2244388.194",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "gotu_kola",
+   "pmid": "42391143",
+   "title": "Therapeutic Potential of Gotu Kola (Centella asiatica), Phosphatidylcholine, and Taurine in Mood Disorders: A Systematic Scoping Review.",
+   "journal": "Complementary medicine research",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.1159/000553172",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "12504167",
+   "title": "Analysis of oxidative DNA damage after human dietary supplementation with linoleic acid.",
+   "journal": "Food and chemical toxicology : an international journal published for the British Industrial Biological Research Association",
+   "year": "2003",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/s0278-6915(02)00237-5",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "21663641",
+   "title": "Increasing dietary linoleic acid does not increase tissue arachidonic acid content in adults consuming Western-type diets: a systematic review.",
+   "journal": "Nutrition & metabolism",
+   "year": "2011",
+   "publication_types": [
+    "Journal Article"
+   ],
+   "human_signals": [
+    "participants_in_abstract"
+   ],
+   "doi": "10.1186/1743-7075-8-36",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "22959954",
+   "title": "Lowering dietary linoleic acid reduces bioactive oxidized linoleic acid metabolites in humans.",
+   "journal": "Prostaglandins, leukotrienes, and essential fatty acids",
+   "year": "2012",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.plefa.2012.08.004",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "23386268",
+   "title": "Use of dietary linoleic acid for secondary prevention of coronary heart disease and death: evaluation of recovered data from the Sydney Diet Heart Study and updated meta-analysis.",
+   "journal": "BMJ (Clinical research ed.)",
+   "year": "2013",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, N.I.H., Intramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1136/bmj.e8707",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "27071971",
+   "title": "Re-evaluation of the traditional diet-heart hypothesis: analysis of recovered data from Minnesota Coronary Experiment (1968-73).",
+   "journal": "BMJ (Clinical research ed.)",
+   "year": "2016",
+   "publication_types": [
+    "Historical Article",
+    "Journal Article",
+    "Meta-Analysis",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, U.S. Gov't, P.H.S.",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1136/bmj.i1246",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "28752873",
+   "title": "Dietary linoleic acid intake and blood inflammatory markers: a systematic review and meta-analysis of randomized controlled trials.",
+   "journal": "Food & function",
+   "year": "2017",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1039/c7fo00433h",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "34526307",
+   "title": "Dietary alteration of n-3 and n-6 fatty acids for headache reduction in adults with migraine: randomized controlled trial.",
+   "journal": "BMJ (Clinical research ed.)",
+   "year": "2021",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.1136/bmj.n1448",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "38714425",
+   "title": "Dietary n-3 alpha-linolenic and n-6 linoleic acids modestly lower serum lipoprotein(a) concentration but differentially influence other atherogenic lipoprotein traits: A randomized trial.",
+   "journal": "Atherosclerosis",
+   "year": "2024",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1016/j.atherosclerosis.2024.117562",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "39820582",
+   "title": "Are Seed Oils the Culprit in Cardiometabolic and Chronic Diseases? A Narrative Review.",
+   "journal": "Nutrition reviews",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Review"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1093/nutrit/nuae205",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "40058591",
+   "title": "Inflammatory markers after supplementation with marine n-3 or plant n-6 PUFAs: A randomized double-blind crossover study.",
+   "journal": "Journal of lipid research",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh"
+   ],
+   "doi": "10.1016/j.jlr.2025.100770",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "40600308",
+   "title": "A High Omega-3, Low Omega-6 Diet Reduces Headache Frequency and Intensity in Persistent Post-Traumatic Headache: A Randomized Trial.",
+   "journal": "Journal of neurotrauma",
+   "year": "2025",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract"
+   ],
+   "doi": "10.1089/neu.2025.0126",
+   "pmc_id": null
+  },
+  {
+   "canonical_id": "linoleic_acid",
+   "pmid": "42280457",
+   "title": "Effect of Dietary Linoleic Acid Intake on Eicosapentaenoic Acid Status and Lipoxygenase-Mediated Oxylipin Biosynthesis in Healthy Adults: A Randomized Controlled Trial.",
+   "journal": "Nutrients",
+   "year": "2026",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "human_signals": [
+    "humans_mesh",
+    "participants_in_abstract",
+    "trial_registration"
+   ],
+   "doi": "10.3390/nu18111814",
+   "pmc_id": null
+  }
+ ]
+}

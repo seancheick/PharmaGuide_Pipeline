@@ -1,0 +1,13 @@
+{
+ "canonical_id": "cat_s_claw",
+ "class": "B",
+ "action": "hold",
+ "direction": "mixed",
+ "sources": [
+  "11603848",
+  "11515716",
+  "25495394"
+ ],
+ "label_median_mg": 240,
+ "note": "Species and material do not line up with the catalog. The osteoarthritis trial used Uncaria GUIANENSIS and reported no significant reduction in pain at rest or at night or in knee circumference; the immune trial used C-Med-100, a branded U. tomentosa extract, with a vaccine-antibody biomarker endpoint; the third is a Phase II quality-of-life study in advanced cancer patients. All 25 catalog rows read cat's claw (unspecified)."
+}

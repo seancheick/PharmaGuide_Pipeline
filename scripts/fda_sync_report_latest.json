@@ -1,17 +1,18 @@
 {
-  "generated_at": "2026-03-23T13:13:08.030176",
+  "generated_at": "2026-09-18T13:38:48.511325",
   "generated_by": "fda_weekly_sync.py",
   "scan_period": {
-    "start": "20260221",
-    "end": "20260323",
-    "days_back": 30
+    "start": "20260828",
+    "end": "20260918",
+    "days_back": 21
   },
-  "data_file": "/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data/banned_recalled_ingredients.json",
+  "data_file": "/Users/seancheick/Downloads/dsld_clean/scripts/data/banned_recalled_ingredients.json",
   "data_sources": {
-    "openfda_food_enforcement": 61,
-    "openfda_drug_enforcement": 5,
-    "fda_medwatch_rss": 16,
+    "openfda_food_enforcement": 41,
+    "openfda_drug_enforcement": 0,
+    "fda_medwatch_rss": 14,
     "fda_drugs_rss": 20,
+    "fda_health_fraud": 5,
     "dea_federal_register": 0,
     "duplicates_removed": 0
   },
@@ -20,203 +21,303 @@
     "warning": null
   },
   "summary": {
-    "total_fetched": 102,
-    "skipped_not_relevant": 96,
-    "requiring_claude_review": 1,
-    "already_tracked": 5,
-    "stale_recalled_entries_to_verify": 3,
+    "total_fetched": 80,
+    "skipped_not_relevant": 71,
+    "requiring_review": 7,
+    "requiring_claude_review": 7,
+    "already_tracked": 2,
+    "stale_recalled_entries_to_verify": 4,
     "by_category": {
-      "microbial_contamination": 1,
-      "supplement_adulterant": 5
+      "supplement_general": 3,
+      "stimulant_designer": 1,
+      "illegal_spiking_agents": 5
     }
   },
   "new_records_requiring_review": [
     {
       "source_type": "openfda_enforcement",
-      "recall_number": "H-0546-2026",
-      "event_id": "98433",
+      "recall_number": "H-1278-2026",
+      "event_id": "99629",
       "fda_endpoint": "food/enforcement",
       "product_type": "Food",
-      "classification": "Class I",
+      "classification": "Class II",
       "recall_status": "Ongoing",
-      "product_description": "Rosabella brand MORINGA; DIETARY SUPPLEMENT CAPSULES; 60 capsules per bottle; Distributed by: Ambrosia Brands, LLC, 625 Randall Ave, St. 100, Cheyenne, WY 82001; SUGGESTED USE: As a dietary supplement, take two (2) veggie capsules once a day. For best results, take 20-30 min before a meal with an 8oz. glass of water or as directed by your health professional; UPC: 8 60012 16172 0",
-      "recalling_firm": "Ambrosia Brands LLC",
-      "reason_for_recall": "Product may be contaminated with Salmonella",
-      "distribution_pattern": "Nationwide in the United States, including American Samoa, Northern Mariana Islands, Puerto Rico, and Virgin Islands.  International distribution to consumers in: Algeria, Anguilla, Australia, Austria, Bahrain, Belgium, Bosnia and Herzegovina, Brazil, Brunei, Bulgaria, Canada, Chile, Colombia, Croatia, Cyprus, Czech Republic, Denmark, Djibouti, Dominican Republic, Egypt, Estonia, Faroe Islands, Finland, France, French Polynesia,  Georgia, Germany, Gibraltar, Greece, Hong Kong, Hungary, Iceland, India, Indonesia, Ireland, Israel, Italy, Japan, Jordan, Kuwait, Latvia, Lithuania, Luxembourg, Malaysia, Malta, Marshall Islands, Mexico, Nauru, New Zealand, Netherlands,  Norway, Oman, Pakistan, Peru, Philippines, Poland, Portugal, Qatar, Romania, Saudi Arabia, Serbia, Singapore, Slovakia, Slovenia, South Africa, South Korea, Spain, Suriname, Sweden, Switzerland, Taiwan, Thailand, Trinidad and Tobago, Turkey, United Arab Emirates, United Kingdom, Venezuela, and Zimbabwe.",
-      "recall_initiation_date": "20260213",
-      "report_date": "20260318",
+      "product_description": "Byron White FORMULAS A-FNG Herbal Supplement 1.0 fl. oz./30 mL  May Contain Nuts (Juglans nigra hull)  Byron White Formulas Inc. 3315 Chanate Rd. Suite 1C Santa Rosa, CA 95404",
+      "recalling_firm": "Byron White Formulas, Inc.",
+      "reason_for_recall": "Label does not declare walnuts in English",
+      "distribution_pattern": "Domestic: AK, AL, AR, AZ, CA, CO, CT, DC, DE, FL, GA, HI, IA, ID, IL, IN, KS, KY, LA, MA, MD, ME, MI, MN, MO, MT, NC, NE, NH, NJ, NM, NV, NY, OH, OK, OR, PA, PR, RI, SC, SD, TN, TX, UT, VA, VT, WA, WI, WV, WY. Foreign: Canada, Switzerland, Colombia, Germany, Spain, United Kingdom, Japan, Norway, New Zealand, Saudi Arabia.",
+      "recall_initiation_date": "20260811",
+      "report_date": "20260902",
       "termination_date": null,
-      "primary_category": "microbial_contamination",
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [],
+      "substances_already_tracked": [],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-1278-2026"
+    },
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "H-1277-2026",
+      "event_id": "99629",
+      "fda_endpoint": "food/enforcement",
+      "product_type": "Food",
+      "classification": "Class II",
+      "recall_status": "Ongoing",
+      "product_description": "Byron White FORMULAS A-P Herbal Supplement 1.0 fl. oz./30 mL  May Contain Nuts (Juglans nigra hull)  Byron White Formulas Inc. 3315 Chanate Rd. Suite 1C Santa Rosa, CA 95404",
+      "recalling_firm": "Byron White Formulas, Inc.",
+      "reason_for_recall": "Label does not declare walnuts in English",
+      "distribution_pattern": "Domestic: AK, AL, AR, AZ, CA, CO, CT, DC, DE, FL, GA, HI, IA, ID, IL, IN, KS, KY, LA, MA, MD, ME, MI, MN, MO, MT, NC, NE, NH, NJ, NM, NV, NY, OH, OK, OR, PA, PR, RI, SC, SD, TN, TX, UT, VA, VT, WA, WI, WV, WY. Foreign: Canada, Switzerland, Colombia, Germany, Spain, United Kingdom, Japan, Norway, New Zealand, Saudi Arabia.",
+      "recall_initiation_date": "20260811",
+      "report_date": "20260902",
+      "termination_date": null,
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [],
+      "substances_already_tracked": [],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-1277-2026"
+    },
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "H-1276-2026",
+      "event_id": "99629",
+      "fda_endpoint": "food/enforcement",
+      "product_type": "Food",
+      "classification": "Class II",
+      "recall_status": "Ongoing",
+      "product_description": "Byron White FORMULAS A-L Complex Herbal Supplement 1.0 fl. oz./30 mL  May Contain Nuts (Juglans nigra hull)  Byron White Formulas Inc. 3315 Chanate Rd. Suite 1C Santa Rosa, CA 95404",
+      "recalling_firm": "Byron White Formulas, Inc.",
+      "reason_for_recall": "Label does not declare walnuts in English",
+      "distribution_pattern": "Domestic: AK, AL, AR, AZ, CA, CO, CT, DC, DE, FL, GA, HI, IA, ID, IL, IN, KS, KY, LA, MA, MD, ME, MI, MN, MO, MT, NC, NE, NH, NJ, NM, NV, NY, OH, OK, OR, PA, PR, RI, SC, SD, TN, TX, UT, VA, VT, WA, WI, WV, WY. Foreign: Canada, Switzerland, Colombia, Germany, Spain, United Kingdom, Japan, Norway, New Zealand, Saudi Arabia.",
+      "recall_initiation_date": "20260811",
+      "report_date": "20260902",
+      "termination_date": null,
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [],
+      "substances_already_tracked": [],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-1276-2026"
+    },
+    {
+      "source_type": "fda_health_fraud",
+      "recall_number": "",
+      "event_id": null,
+      "fda_endpoint": null,
+      "product_type": "Dietary Supplement",
+      "classification": "",
+      "recall_status": "Ongoing",
+      "product_description": "LUZE Fit Intensity may be harmful due to hidden ingredient",
+      "recalling_firm": "",
+      "reason_for_recall": "[9/15/2026] The Food and Drug Administration is advising consumers not to purchase or use LUZE Fit Intensity, a product promoted and sold for weight loss on various websites, including https://shop.app , and possibly in some retail stores. FDA laboratory analysis confirmed that LUZE Fit Intensity contains sibutramine not listed on the product label. Sibutramine is a controlled substance that was removed from the market due to safety concerns. It is known to significantly raise blood pressure and/or heart rate in some people, posing serious risks for those with a history of heart disease, heart failure, irregular heartbeat or stroke. This product may also interact in life-threatening ways with other medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA's MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden ingredients. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Tainted Sexual Enhancement and Energy Products Dietary Supplements Content current as of: 09/15/2026 Regulated Product(s) Dietary Supplements Drugs Feedback FDA Archive About FDA Accessibility Visitor Information Website Policies / Privacy No FEAR Act Vulnerability Disclosure Policy FOIA HHS.gov USA.gov Contact FDA Follow FDA on Facebook Follow FDA on X Follow FDA on Instagram Foll",
+      "distribution_pattern": "",
+      "recall_initiation_date": "",
+      "report_date": "2026-09-15",
+      "termination_date": null,
+      "primary_category": "illegal_spiking_agents",
       "signal_categories": [
-        "microbial_contamination"
+        "pharmaceutical_adulterants"
       ],
       "extracted_substances": [
-        "salmonella"
+        "sibutramine"
       ],
-      "substances_already_tracked": [],
+      "substances_already_tracked": [
+        "sibutramine"
+      ],
+      "substances_new": [],
+      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/luze-fit-intensity-may-be-harmful-due-hidden-ingredient",
+      "health_fraud_category": "sexual_enhancement",
+      "product_name": "LUZE Fit Intensity",
+      "product_already_tracked": false
+    },
+    {
+      "source_type": "fda_health_fraud",
+      "recall_number": "",
+      "event_id": null,
+      "fda_endpoint": null,
+      "product_type": "Dietary Supplement",
+      "classification": "",
+      "recall_status": "Ongoing",
+      "product_description": "Beauty 911 may be harmful due to hidden ingredient",
+      "recalling_firm": "",
+      "reason_for_recall": "[9/15/2026] The Food and Drug Administration is advising consumers not to purchase or use Beauty 911, a product promoted and sold for weight loss on various websites, including https://shop.app , and possibly in some retail stores. FDA laboratory analysis confirmed that Beauty 911 contains sibutramine not listed on the product label. Sibutramine is a controlled substance that was removed from the market due to safety concerns. It is known to significantly raise blood pressure and/or heart rate in some people, posing serious risks for those with a history of heart disease, heart failure, irregular heartbeat or stroke. This product may also interact in life-threatening ways with other medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA's MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden ingredients. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Tainted Sexual Enhancement and Energy Products Dietary Supplements Content current as of: 09/15/2026 Regulated Product(s) Dietary Supplements Drugs Feedback FDA Archive About FDA Accessibility Visitor Information Website Policies / Privacy No FEAR Act Vulnerability Disclosure Policy FOIA HHS.gov USA.gov Contact FDA Follow FDA on Facebook Follow FDA on X Follow FDA on Instagram Follow FDA on Linked",
+      "distribution_pattern": "",
+      "recall_initiation_date": "",
+      "report_date": "2026-09-15",
+      "termination_date": null,
+      "primary_category": "illegal_spiking_agents",
+      "signal_categories": [
+        "pharmaceutical_adulterants"
+      ],
+      "extracted_substances": [
+        "sibutramine"
+      ],
+      "substances_already_tracked": [
+        "sibutramine"
+      ],
+      "substances_new": [],
+      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/beauty-911-may-be-harmful-due-hidden-ingredient",
+      "health_fraud_category": "sexual_enhancement",
+      "product_name": "Beauty 911",
+      "product_already_tracked": false
+    },
+    {
+      "source_type": "fda_health_fraud",
+      "recall_number": "",
+      "event_id": null,
+      "fda_endpoint": null,
+      "product_type": "Dietary Supplement",
+      "classification": "",
+      "recall_status": "Ongoing",
+      "product_description": "DEEP may be harmful due to hidden ingredient",
+      "recalling_firm": "",
+      "reason_for_recall": "[9/15/2026] The Food and Drug Administration is advising consumers not to purchase or use DEEP, a product promoted for sexual enhancement on various websites and in some retail stores. FDA laboratory analysis confirmed that DEEP contains amino tadalafil not listed on the product label. Amino tadalafil is similar to tadalafil, the active ingredient in Cialis, an FDA- approved prescription drug for erectile dysfunction. It may interact with nitrates found in some prescription drugs such as nitroglycerin and may lower blood pressure to dangerous levels. This is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease, who commonly take nitrate-containing medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA's MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden ingredients. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Tainted Sexual Enhancement and Energy Products Dietary Supplements Content current as of: 09/15/2026 Regulated Product(s) Dietary Supplements Drugs Feedback FDA Archive About FDA Accessibility Visitor Information Website Policies / Privacy No FEAR Act Vulnerability Disclosure Policy FOIA HHS.gov USA.gov Contact FDA Follow FDA on Facebook Follow FDA on X Follow FDA on Instagram Follow",
+      "distribution_pattern": "",
+      "recall_initiation_date": "",
+      "report_date": "2026-09-15",
+      "termination_date": null,
+      "primary_category": "illegal_spiking_agents",
+      "signal_categories": [
+        "pharmaceutical_adulterants"
+      ],
+      "extracted_substances": [
+        "tadalafil",
+        "amino tadalafil"
+      ],
+      "substances_already_tracked": [
+        "tadalafil"
+      ],
       "substances_new": [
-        "salmonella"
+        "amino tadalafil"
       ],
-      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0546-2026"
+      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/deep-may-be-harmful-due-hidden-ingredient",
+      "health_fraud_category": "sexual_enhancement",
+      "product_name": "DEEP",
+      "product_already_tracked": false
+    },
+    {
+      "source_type": "fda_health_fraud",
+      "recall_number": "",
+      "event_id": null,
+      "fda_endpoint": null,
+      "product_type": "Dietary Supplement",
+      "classification": "",
+      "recall_status": "Ongoing",
+      "product_description": "MAXMAN Coffee may be harmful due to hidden drug ingredients",
+      "recalling_firm": "",
+      "reason_for_recall": "[9/02/2026] The Food and Drug Administration is advising consumers not to purchase or use MAXMAN Coffee, a product promoted for sexual enhancement on various websites and possibly in some retail stores. FDA laboratory analysis confirmed that MAXMAN Coffee contains sildenafil and tadalafil not listed on the product label. Sildenafil and tadalafil are the active ingredients in the FDA-approved prescription drugs Viagra and Cialis, respectively, used to treat erectile dysfunction. FDA approval of Viagra and Cialis is restricted to use under the supervision of a licensed health care professional. These may interact with nitrates found in some prescription drugs such as nitroglycerin and may lower blood pressure to dangerous levels. This is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease, who commonly take nitrate-containing medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA’s MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online at MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden drug ingredients and chemicals. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Tainted Sexual Enhancement and Energy Products Dietary Supplements Content current as of: 09/02/2026 Regulated Product(s) Dietary Supplements Drugs Feedback FDA Archive About FDA Acce",
+      "distribution_pattern": "",
+      "recall_initiation_date": "",
+      "report_date": "2026-09-02",
+      "termination_date": null,
+      "primary_category": "illegal_spiking_agents",
+      "signal_categories": [
+        "pharmaceutical_adulterants"
+      ],
+      "extracted_substances": [
+        "sildenafil",
+        "tadalafil"
+      ],
+      "substances_already_tracked": [
+        "sildenafil",
+        "tadalafil"
+      ],
+      "substances_new": [],
+      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/maxman-coffee-may-be-harmful-due-hidden-drug-ingredients",
+      "health_fraud_category": "sexual_enhancement",
+      "product_name": "MAXMAN Coffee",
+      "product_already_tracked": false
     }
   ],
   "records_for_tracked_substances": [
     {
       "source_type": "openfda_enforcement",
-      "recall_number": "D-0396-2026",
-      "event_id": "97796",
-      "fda_endpoint": "drug/enforcement",
-      "product_type": "Drugs",
+      "recall_number": "H-1263-2026",
+      "event_id": "98691",
+      "fda_endpoint": "food/enforcement",
+      "product_type": "Food",
       "classification": "Class I",
       "recall_status": "Ongoing",
-      "product_description": "Mojo Max Fusion XXX, 500 mg, one capsule per blister card, 20 count box, Distributed by: Max Nutrition Inc. UPC 6 78945 36675 0",
-      "recalling_firm": "Mohamed Hagar",
-      "reason_for_recall": "Marketed Without an Approved NDA/ANDA-FDA analysis revealed undeclared sildenafil (13.1 mg/capsule) and tadalafil (13.8 mg/capsule).",
-      "distribution_pattern": "U.S. Nationwide",
-      "recall_initiation_date": "20251008",
-      "report_date": "20260311",
+      "product_description": "Addall XR Shot 1 single bottle, 2 fl. oz., liquid dietary supplement",
+      "recalling_firm": "ZMB Enterprises",
+      "reason_for_recall": "The product contains  1,4-DMAA, Phenylethylamine and Phenibut.",
+      "distribution_pattern": "The firm markets their products online via their website addallxr.com",
+      "recall_initiation_date": "20260403",
+      "report_date": "20260902",
       "termination_date": null,
-      "primary_category": "supplement_adulterant",
+      "primary_category": "stimulant_designer",
       "signal_categories": [
-        "supplement_adulterant",
-        "pharmaceutical_contaminant"
+        "stimulant_designer",
+        "nootropic_banned"
       ],
       "extracted_substances": [
-        "sildenafil",
-        "tadalafil"
+        "dmaa",
+        "phenibut"
       ],
       "substances_already_tracked": [
-        "sildenafil",
-        "tadalafil"
+        "dmaa",
+        "phenibut"
       ],
       "substances_new": [],
-      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0396-2026"
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-1263-2026"
     },
     {
-      "source_type": "openfda_enforcement",
-      "recall_number": "D-0397-2026",
-      "event_id": "98256",
-      "fda_endpoint": "drug/enforcement",
-      "product_type": "Drugs",
-      "classification": "Class I",
+      "source_type": "fda_health_fraud",
+      "recall_number": "",
+      "event_id": null,
+      "fda_endpoint": null,
+      "product_type": "Dietary Supplement",
+      "classification": "",
       "recall_status": "Ongoing",
-      "product_description": "MR. 7 SUPER 700000 capsules, 1 capsule blister card, Distributed by mR. 7",
-      "recalling_firm": "StuffbyNainax",
-      "reason_for_recall": "Marketed Without an Approved NDA/ANDA: FDA analysis revealed the presence of undeclared sildenafil and tadalafil",
-      "distribution_pattern": "Product was distributed to 4 customers in the US.",
-      "recall_initiation_date": "20251215",
-      "report_date": "20260311",
+      "product_description": "ZUBB Dietary Supplement may be harmful due to hidden ingredient",
+      "recalling_firm": "",
+      "reason_for_recall": "[9/4/2026] The Food and Drug Administration is advising consumers not to purchase or use ZUBB Dietary Supplement, a product promoted and sold for weight loss on various websites and possibly in some retail stores. This product was identified during an examination of international mail shipments. FDA laboratory analysis confirmed that ZUBB Dietary Supplement contains sildenafil not listed on the product label. Sildenafil is the active ingredient in the FDA-approved prescription drug Viagra, used to treat erectile dysfunction. It may interact with nitrates found in some prescription drugs such as nitroglycerin and may lower blood pressure to dangerous levels. This is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease who commonly take nitrate-containing medications. Health care professionals and consumers should report adverse events or side effects related to the use of this product to FDA's MedWatch Safety Information and Adverse Event Reporting Program: Complete and submit the report online MedWatch Online Voluntary Reporting Form , or Download and complete the form , then submit it via fax at 1-800-FDA-0178. This notification is to inform the public of products potentially marketed as dietary supplements or conventional foods with hidden ingredients. These products are typically promoted for sexual enhancement, weight loss, pain relief and body building and are often represented as being all natural. Consumers should exercise caution before purchasing these products. FDA is unable to test and identify all products marketed as dietary supplements that have potentially harmful hidden ingredients. For more information: Medication Health Fraud Weight Loss Product Notifications Dietary Supplements Content current as of: 09/04/2026 Regulated Product(s) Drugs Feedback FDA Archive About FDA Accessibility Visitor Information Website Policies / Privacy No FEAR Act Vulnerability Disclosure Policy FOIA HHS.gov USA.gov Contac",
+      "distribution_pattern": "",
+      "recall_initiation_date": "",
+      "report_date": "2026-09-04",
       "termination_date": null,
-      "primary_category": "supplement_adulterant",
+      "primary_category": "illegal_spiking_agents",
       "signal_categories": [
-        "supplement_adulterant",
-        "pharmaceutical_contaminant"
+        "pharmaceutical_adulterants"
       ],
       "extracted_substances": [
-        "sildenafil",
-        "tadalafil"
+        "sildenafil"
       ],
       "substances_already_tracked": [
-        "sildenafil",
-        "tadalafil"
+        "sildenafil"
       ],
       "substances_new": [],
-      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0397-2026"
-    },
-    {
-      "source_type": "openfda_enforcement",
-      "recall_number": "D-0345-2026",
-      "event_id": "98011",
-      "fda_endpoint": "drug/enforcement",
-      "product_type": "Drugs",
-      "classification": "Class II",
-      "recall_status": "Ongoing",
-      "product_description": "Agebox iKids-Growth (Night Formula), 60-count bottles, Manufactured Exclusively For: AGEBOX Inc., Wilmington, DE 19801 USA, UPC 850065597027",
-      "recalling_firm": "Agebox",
-      "reason_for_recall": "Marketed Without an Approved NDA/ANDA: presence of undeclared ibutamoren",
-      "distribution_pattern": "The product was distributed nationwide in the U.S. Agebox sells its U.S. products through Agebox.com (using Shopify) and Amazon.com. All orders are shipped to customers by Agebox itself; other parties are not involved in the distribution of the physical product.",
-      "recall_initiation_date": "20251028",
-      "report_date": "20260304",
-      "termination_date": null,
-      "primary_category": "supplement_adulterant",
-      "signal_categories": [
-        "supplement_adulterant",
-        "sarms_prohibited"
-      ],
-      "extracted_substances": [
-        "ibutamoren"
-      ],
-      "substances_already_tracked": [
-        "ibutamoren"
-      ],
-      "substances_new": [],
-      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0345-2026"
-    },
-    {
-      "source_type": "openfda_enforcement",
-      "recall_number": "D-0344-2026",
-      "event_id": "98011",
-      "fda_endpoint": "drug/enforcement",
-      "product_type": "Drugs",
-      "classification": "Class II",
-      "recall_status": "Ongoing",
-      "product_description": "Agebox iKids-Growth (Day Formula) capsules, 60-count bottles, Manufactured Exclusively For: AGEBOX Inc., Wilmington, DE 19801 USA, UPC 8 50065 59701 0",
-      "recalling_firm": "Agebox",
-      "reason_for_recall": "Marketed Without an Approved NDA/ANDA: presence of undeclared ibutamoren",
-      "distribution_pattern": "The product was distributed nationwide in the U.S. Agebox sells its U.S. products through Agebox.com (using Shopify) and Amazon.com. All orders are shipped to customers by Agebox itself; other parties are not involved in the distribution of the physical product.",
-      "recall_initiation_date": "20251028",
-      "report_date": "20260304",
-      "termination_date": null,
-      "primary_category": "supplement_adulterant",
-      "signal_categories": [
-        "supplement_adulterant",
-        "sarms_prohibited"
-      ],
-      "extracted_substances": [
-        "ibutamoren"
-      ],
-      "substances_already_tracked": [
-        "ibutamoren"
-      ],
-      "substances_new": [],
-      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0344-2026"
-    },
-    {
-      "source_type": "openfda_enforcement",
-      "recall_number": "D-0388-2026",
-      "event_id": "98258",
-      "fda_endpoint": "drug/enforcement",
-      "product_type": "Drugs",
-      "classification": "Class I",
-      "recall_status": "Ongoing",
-      "product_description": "SILINTAN 25/pills, packaged in a 25-count bottle, Shanghai Chinese Medical Works, Shanghai, China",
-      "recalling_firm": "ANTHONY TRINH, 123Herbals LLC",
-      "reason_for_recall": "Marketed Without an Approved NDA/ANDA: FDA analysis  revealed the presence of undeclared meloxicam.",
-      "distribution_pattern": "USA nationwide",
-      "recall_initiation_date": "20251020",
-      "report_date": "20260311",
-      "termination_date": null,
-      "primary_category": "supplement_adulterant",
-      "signal_categories": [
-        "supplement_adulterant",
-        "pharmaceutical_contaminant"
-      ],
-      "extracted_substances": [
-        "meloxicam"
-      ],
-      "substances_already_tracked": [
-        "meloxicam"
-      ],
-      "substances_new": [],
-      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0388-2026"
+      "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient",
+      "health_fraud_category": "weight_loss",
+      "product_name": "ZUBB Dietary Supplement",
+      "product_already_tracked": true
     }
   ],
   "stale_recalls_to_verify": [
     {
+      "id": "RECALLED_GREEN_LUMBER",
+      "standard_name": "Green Lumber Dietary Supplement",
+      "regulatory_date": "2025-08-29",
+      "age_days": 385,
+      "recall_scope": {
+        "brand": "Green Lumber Dietary Supplement",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2025-08-29",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "active",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 385 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    },
+    {
       "id": "RECALLED_HYDROXYCUT",
       "standard_name": "Hydroxycut (Multiple Formulations)",
       "regulatory_date": "2009-05-01",
-      "age_days": 6170,
+      "age_days": 6349,
       "recall_scope": {
         "brand": "Hydroxycut (Multiple Formulations)",
         "formulations": null,
@@ -228,13 +329,13 @@
       "match_mode": "historical",
       "action": "verify_still_active",
       "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
-      "note": "Entry is 6170 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+      "note": "Entry is 6349 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
     },
     {
       "id": "RECALLED_JACK3D",
       "standard_name": "Jack3d",
       "regulatory_date": "2012-01-01",
-      "age_days": 5195,
+      "age_days": 5374,
       "recall_scope": {
         "brand": "Jack3d",
         "formulations": null,
@@ -246,13 +347,13 @@
       "match_mode": "historical",
       "action": "verify_still_active",
       "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
-      "note": "Entry is 5195 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+      "note": "Entry is 5374 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
     },
     {
       "id": "RECALLED_OXYELITE_PRO",
       "standard_name": "OxyElite Pro",
       "regulatory_date": "2013-11-08",
-      "age_days": 4518,
+      "age_days": 4697,
       "recall_scope": {
         "brand": "OxyElite Pro",
         "formulations": null,
@@ -264,8 +365,9 @@
       "match_mode": "historical",
       "action": "verify_still_active",
       "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
-      "note": "Entry is 4518 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+      "note": "Entry is 4697 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
     }
   ],
-  "claude_instructions": "Review 'new_records_requiring_review'. Each entry has a 'primary_category' that maps to a source_category in banned_recalled_ingredients.json and 'signal_categories' listing all detected concern types. For supplement brand recalls with no extracted substance (primary_category=supplement_general or microbial_contamination): create a RECALLED_<BRAND_SNAKE> entry with entity_type=product and recall_scope=<product name>. For substance-level recalls: create full ingredient entries. Check stale_recalls_to_verify and set match_mode=historical for terminated product recalls. Update _metadata after all changes."
+  "proposed_safety_alerts": {},
+  "review_instructions": "Review 'new_records_requiring_review'. Each entry has a 'primary_category' that maps to a source_category in banned_recalled_ingredients.json and 'signal_categories' listing all detected concern types. For supplement brand recalls with no extracted substance (primary_category=supplement_general or microbial_contamination): create a RECALLED_<BRAND_SNAKE> entry with entity_type=product and recall_scope=<product name>. For substance-level recalls: create full ingredient entries. Check stale_recalls_to_verify and set match_mode=historical for terminated product recalls. Update _metadata after all changes."
 }

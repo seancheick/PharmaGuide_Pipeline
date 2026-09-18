@@ -1,0 +1,855 @@
+[
+ {
+  "canonical_id": "goldenseal",
+  "label_name": "Goldenseal",
+  "label_spellings_seen": [
+   "goldenseal",
+   "standardized goldenseal (berberine/hydrastine)",
+   "goldenseal root powder"
+  ],
+  "catalog": {
+   "products": 51,
+   "slots": 52,
+   "evidence_zero_products": 23,
+   "brands": 13,
+   "modules": {
+    "generic": 46,
+    "fiber_digestive": 1,
+    "multi_or_prenatal": 5
+   }
+  }
+ },
+ {
+  "canonical_id": "dimethyl_glycine",
+  "label_name": "Dimethyl Glycine",
+  "label_spellings_seen": [
+   "dimethyl glycine"
+  ],
+  "catalog": {
+   "products": 23,
+   "slots": 23,
+   "evidence_zero_products": 22,
+   "brands": 2,
+   "modules": {
+    "generic": 23
+   }
+  }
+ },
+ {
+  "canonical_id": "green_coffee_bean",
+  "label_name": "Green Coffee Bean",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 76,
+   "slots": 80,
+   "evidence_zero_products": 21,
+   "brands": 18,
+   "modules": {
+    "generic": 48,
+    "multi_or_prenatal": 17,
+    "sports": 13,
+    "fiber_digestive": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "d_aspartic_acid",
+  "label_name": "D-Aspartic Acid",
+  "label_spellings_seen": [
+   "d-aspartic acid powder"
+  ],
+  "catalog": {
+   "products": 28,
+   "slots": 28,
+   "evidence_zero_products": 21,
+   "brands": 8,
+   "modules": {
+    "generic": 27,
+    "sports": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "l_ornithine",
+  "label_name": "L-Ornithine",
+  "label_spellings_seen": [
+   "l-ornithine standard",
+   "l-ornithine l-aspartate (lola)"
+  ],
+  "catalog": {
+   "products": 27,
+   "slots": 27,
+   "evidence_zero_products": 21,
+   "brands": 6,
+   "modules": {
+    "generic": 25,
+    "sports": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "common_bean_extract",
+  "label_name": "Common Bean Extract",
+  "label_spellings_seen": [
+   "white kidney bean extract"
+  ],
+  "catalog": {
+   "products": 22,
+   "slots": 22,
+   "evidence_zero_products": 21,
+   "brands": 7,
+   "modules": {
+    "generic": 22
+   }
+  }
+ },
+ {
+  "canonical_id": "goji_berry",
+  "label_name": "Goji Berry",
+  "label_spellings_seen": [
+   "goji berry"
+  ],
+  "catalog": {
+   "products": 24,
+   "slots": 25,
+   "evidence_zero_products": 20,
+   "brands": 6,
+   "modules": {
+    "generic": 25
+   }
+  }
+ },
+ {
+  "canonical_id": "silica",
+  "label_name": "Silica",
+  "label_spellings_seen": [
+   "silica",
+   "bamboo silica"
+  ],
+  "catalog": {
+   "products": 258,
+   "slots": 258,
+   "evidence_zero_products": 20,
+   "brands": 29,
+   "modules": {
+    "generic": 40,
+    "multi_or_prenatal": 218
+   }
+  }
+ },
+ {
+  "canonical_id": "yohimbe",
+  "label_name": "Yohimbe",
+  "label_spellings_seen": [
+   "yohimbe"
+  ],
+  "catalog": {
+   "products": 56,
+   "slots": 59,
+   "evidence_zero_products": 20,
+   "brands": 11,
+   "modules": {
+    "generic": 47,
+    "multi_or_prenatal": 3,
+    "sports": 9
+   }
+  }
+ },
+ {
+  "canonical_id": "feverfew",
+  "label_name": "Feverfew",
+  "label_spellings_seen": [
+   "feverfew",
+   "feverfew extract (parthenolide)"
+  ],
+  "catalog": {
+   "products": 21,
+   "slots": 23,
+   "evidence_zero_products": 20,
+   "brands": 6,
+   "modules": {
+    "generic": 23
+   }
+  }
+ },
+ {
+  "canonical_id": "pregnenolone",
+  "label_name": "Pregnenolone",
+  "label_spellings_seen": [
+   "pregnenolone"
+  ],
+  "catalog": {
+   "products": 22,
+   "slots": 22,
+   "evidence_zero_products": 20,
+   "brands": 4,
+   "modules": {
+    "generic": 22
+   }
+  }
+ },
+ {
+  "canonical_id": "amla",
+  "label_name": "Amla (Phyllanthus emblica)",
+  "label_spellings_seen": [
+   "amla extract",
+   "amla",
+   "amla fruit powder"
+  ],
+  "catalog": {
+   "products": 52,
+   "slots": 52,
+   "evidence_zero_products": 19,
+   "brands": 16,
+   "modules": {
+    "generic": 29,
+    "multi_or_prenatal": 23
+   }
+  }
+ },
+ {
+  "canonical_id": "schisandra_berry",
+  "label_name": "Schisandra Berry",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 48,
+   "slots": 48,
+   "evidence_zero_products": 19,
+   "brands": 13,
+   "modules": {
+    "generic": 37,
+    "multi_or_prenatal": 11
+   }
+  }
+ },
+ {
+  "canonical_id": "theobromine",
+  "label_name": "Theobromine",
+  "label_spellings_seen": [
+   "theobromine"
+  ],
+  "catalog": {
+   "products": 42,
+   "slots": 42,
+   "evidence_zero_products": 19,
+   "brands": 5,
+   "modules": {
+    "generic": 30,
+    "sports": 11,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "hawthorn",
+  "label_name": "Hawthorn (Crataegus)",
+  "label_spellings_seen": [
+   "hawthorn leaf and flower extract",
+   "hawthorn",
+   "hawthorn berry extract"
+  ],
+  "catalog": {
+   "products": 31,
+   "slots": 32,
+   "evidence_zero_products": 19,
+   "brands": 10,
+   "modules": {
+    "generic": 26,
+    "multi_or_prenatal": 6
+   }
+  }
+ },
+ {
+  "canonical_id": "activated_charcoal",
+  "label_name": "Activated Charcoal",
+  "label_spellings_seen": [
+   "activated charcoal"
+  ],
+  "catalog": {
+   "products": 19,
+   "slots": 19,
+   "evidence_zero_products": 19,
+   "brands": 7,
+   "modules": {
+    "generic": 19
+   }
+  }
+ },
+ {
+  "canonical_id": "wild_yam_root",
+  "label_name": "Wild Yam Root",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 19,
+   "slots": 19,
+   "evidence_zero_products": 19,
+   "brands": 1,
+   "modules": {
+    "generic": 19
+   }
+  }
+ },
+ {
+  "canonical_id": "horsetail",
+  "label_name": "Horsetail",
+  "label_spellings_seen": [
+   "horsetail extract"
+  ],
+  "catalog": {
+   "products": 57,
+   "slots": 57,
+   "evidence_zero_products": 18,
+   "brands": 15,
+   "modules": {
+    "generic": 29,
+    "multi_or_prenatal": 28
+   }
+  }
+ },
+ {
+  "canonical_id": "oregano",
+  "label_name": "Oregano",
+  "label_spellings_seen": [
+   "oil of oregano",
+   "oregano leaf extract",
+   "oregano"
+  ],
+  "catalog": {
+   "products": 20,
+   "slots": 21,
+   "evidence_zero_products": 18,
+   "brands": 5,
+   "modules": {
+    "generic": 21
+   }
+  }
+ },
+ {
+  "canonical_id": "l_norvaline",
+  "label_name": "L-Norvaline",
+  "label_spellings_seen": [
+   "l-norvaline"
+  ],
+  "catalog": {
+   "products": 21,
+   "slots": 21,
+   "evidence_zero_products": 18,
+   "brands": 3,
+   "modules": {
+    "generic": 18,
+    "sports": 3
+   }
+  }
+ },
+ {
+  "canonical_id": "fennel",
+  "label_name": "Fennel",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 37,
+   "slots": 37,
+   "evidence_zero_products": 17,
+   "brands": 12,
+   "modules": {
+    "generic": 29,
+    "multi_or_prenatal": 4,
+    "fiber_digestive": 4
+   }
+  }
+ },
+ {
+  "canonical_id": "cascara_sagrada",
+  "label_name": "Cascara Sagrada",
+  "label_spellings_seen": [
+   "cascara sagrada bark extract",
+   "cascara sagrada bark powder"
+  ],
+  "catalog": {
+   "products": 20,
+   "slots": 20,
+   "evidence_zero_products": 17,
+   "brands": 4,
+   "modules": {
+    "generic": 17,
+    "fiber_digestive": 3
+   }
+  }
+ },
+ {
+  "canonical_id": "dong_quai",
+  "label_name": "Dong Quai (Angelica sinensis)",
+  "label_spellings_seen": [
+   "dong quai root extract",
+   "dong quai",
+   "dong quai root powder"
+  ],
+  "catalog": {
+   "products": 33,
+   "slots": 35,
+   "evidence_zero_products": 17,
+   "brands": 11,
+   "modules": {
+    "generic": 28,
+    "multi_or_prenatal": 7
+   }
+  }
+ },
+ {
+  "canonical_id": "l_threonine",
+  "label_name": "L-Threonine",
+  "label_spellings_seen": [
+   "l-threonine powder"
+  ],
+  "catalog": {
+   "products": 32,
+   "slots": 32,
+   "evidence_zero_products": 17,
+   "brands": 9,
+   "modules": {
+    "generic": 12,
+    "sports": 19,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "mucuna_pruriens",
+  "label_name": "Mucuna Pruriens (Velvet Bean)",
+  "label_spellings_seen": [
+   "mucuna pruriens standardized extract",
+   "mucuna pruriens"
+  ],
+  "catalog": {
+   "products": 31,
+   "slots": 31,
+   "evidence_zero_products": 17,
+   "brands": 8,
+   "modules": {
+    "generic": 27,
+    "sports": 2,
+    "multi_or_prenatal": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "alfalfa_leaf",
+  "label_name": "Alfalfa Leaf",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 18,
+   "slots": 18,
+   "evidence_zero_products": 17,
+   "brands": 4,
+   "modules": {
+    "generic": 17,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "hoodia_gordonii",
+  "label_name": "Hoodia Gordonii",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 18,
+   "slots": 18,
+   "evidence_zero_products": 17,
+   "brands": 2,
+   "modules": {
+    "generic": 18
+   }
+  }
+ },
+ {
+  "canonical_id": "cayenne_pepper",
+  "label_name": "Cayenne Pepper",
+  "label_spellings_seen": [
+   "cayenne pepper"
+  ],
+  "catalog": {
+   "products": 105,
+   "slots": 109,
+   "evidence_zero_products": 16,
+   "brands": 17,
+   "modules": {
+    "generic": 55,
+    "multi_or_prenatal": 28,
+    "sports": 26
+   }
+  }
+ },
+ {
+  "canonical_id": "d_mannose",
+  "label_name": "D-Mannose",
+  "label_spellings_seen": [
+   "d-mannose"
+  ],
+  "catalog": {
+   "products": 25,
+   "slots": 25,
+   "evidence_zero_products": 16,
+   "brands": 5,
+   "modules": {
+    "generic": 25
+   }
+  }
+ },
+ {
+  "canonical_id": "papaya_fruit_powder",
+  "label_name": "Papaya Fruit Powder",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 18,
+   "slots": 18,
+   "evidence_zero_products": 16,
+   "brands": 3,
+   "modules": {
+    "generic": 16,
+    "fiber_digestive": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "hops",
+  "label_name": "Hops (Humulus lupulus)",
+  "label_spellings_seen": [
+   "hops extract"
+  ],
+  "catalog": {
+   "products": 46,
+   "slots": 46,
+   "evidence_zero_products": 16,
+   "brands": 14,
+   "modules": {
+    "generic": 39,
+    "multi_or_prenatal": 7
+   }
+  }
+ },
+ {
+  "canonical_id": "l_proline",
+  "label_name": "L-Proline",
+  "label_spellings_seen": [
+   "l-proline powder",
+   "hydroxyproline"
+  ],
+  "catalog": {
+   "products": 29,
+   "slots": 29,
+   "evidence_zero_products": 16,
+   "brands": 7,
+   "modules": {
+    "generic": 23,
+    "sports": 5,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "l_serine",
+  "label_name": "L-Serine",
+  "label_spellings_seen": [
+   "l-serine standard"
+  ],
+  "catalog": {
+   "products": 26,
+   "slots": 26,
+   "evidence_zero_products": 16,
+   "brands": 8,
+   "modules": {
+    "generic": 20,
+    "multi_or_prenatal": 2,
+    "sports": 4
+   }
+  }
+ },
+ {
+  "canonical_id": "devils_claw",
+  "label_name": "Devil's Claw (Harpagophytum procumbens)",
+  "label_spellings_seen": [
+   "devil's claw extract",
+   "devil's claw standardized (harpagoside)",
+   "devil's claw"
+  ],
+  "catalog": {
+   "products": 25,
+   "slots": 26,
+   "evidence_zero_products": 16,
+   "brands": 4,
+   "modules": {
+    "generic": 26
+   }
+  }
+ },
+ {
+  "canonical_id": "chaga",
+  "label_name": "Chaga",
+  "label_spellings_seen": [
+   "chaga",
+   "chaga sclerotium",
+   "chaga extract"
+  ],
+  "catalog": {
+   "products": 19,
+   "slots": 19,
+   "evidence_zero_products": 16,
+   "brands": 6,
+   "modules": {
+    "generic": 19
+   }
+  }
+ },
+ {
+  "canonical_id": "tudca",
+  "label_name": "TUDCA",
+  "label_spellings_seen": [
+   "tudca"
+  ],
+  "catalog": {
+   "products": 16,
+   "slots": 16,
+   "evidence_zero_products": 16,
+   "brands": 3,
+   "modules": {
+    "generic": 16
+   }
+  }
+ },
+ {
+  "canonical_id": "aloe_vera",
+  "label_name": "Aloe Vera",
+  "label_spellings_seen": [
+   "aloe vera"
+  ],
+  "catalog": {
+   "products": 32,
+   "slots": 34,
+   "evidence_zero_products": 15,
+   "brands": 10,
+   "modules": {
+    "generic": 25,
+    "fiber_digestive": 8,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "chrysin",
+  "label_name": "Chrysin",
+  "label_spellings_seen": [
+   "chrysin"
+  ],
+  "catalog": {
+   "products": 26,
+   "slots": 26,
+   "evidence_zero_products": 15,
+   "brands": 6,
+   "modules": {
+    "generic": 24,
+    "multi_or_prenatal": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "royal_jelly",
+  "label_name": "Royal Jelly",
+  "label_spellings_seen": [
+   "royal jelly"
+  ],
+  "catalog": {
+   "products": 17,
+   "slots": 17,
+   "evidence_zero_products": 15,
+   "brands": 5,
+   "modules": {
+    "generic": 17
+   }
+  }
+ },
+ {
+  "canonical_id": "senna",
+  "label_name": "Senna",
+  "label_spellings_seen": [
+   "senna leaf extract"
+  ],
+  "catalog": {
+   "products": 15,
+   "slots": 15,
+   "evidence_zero_products": 15,
+   "brands": 4,
+   "modules": {
+    "generic": 15
+   }
+  }
+ },
+ {
+  "canonical_id": "rosemary",
+  "label_name": "Rosemary",
+  "label_spellings_seen": [
+   "rosemary extract standardized",
+   "rosemary"
+  ],
+  "catalog": {
+   "products": 38,
+   "slots": 38,
+   "evidence_zero_products": 14,
+   "brands": 5,
+   "modules": {
+    "generic": 30,
+    "fiber_digestive": 3,
+    "multi_or_prenatal": 5
+   }
+  }
+ },
+ {
+  "canonical_id": "cat_s_claw",
+  "label_name": "Cat's Claw",
+  "label_spellings_seen": [
+   "cat's claw"
+  ],
+  "catalog": {
+   "products": 22,
+   "slots": 25,
+   "evidence_zero_products": 14,
+   "brands": 10,
+   "modules": {
+    "generic": 23,
+    "fiber_digestive": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "l_cysteine",
+  "label_name": "L-Cysteine",
+  "label_spellings_seen": [
+   "l-cysteine base"
+  ],
+  "catalog": {
+   "products": 37,
+   "slots": 37,
+   "evidence_zero_products": 14,
+   "brands": 8,
+   "modules": {
+    "generic": 15,
+    "multi_or_prenatal": 18,
+    "sports": 4
+   }
+  }
+ },
+ {
+  "canonical_id": "papaya",
+  "label_name": "Papaya",
+  "label_spellings_seen": [
+   "papaya fruit"
+  ],
+  "catalog": {
+   "products": 19,
+   "slots": 19,
+   "evidence_zero_products": 14,
+   "brands": 6,
+   "modules": {
+    "generic": 12,
+    "fiber_digestive": 7
+   }
+  }
+ },
+ {
+  "canonical_id": "siberian_ginseng",
+  "label_name": "Siberian Ginseng",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 25,
+   "slots": 25,
+   "evidence_zero_products": 14,
+   "brands": 5,
+   "modules": {
+    "generic": 23,
+    "multi_or_prenatal": 2
+   }
+  }
+ },
+ {
+  "canonical_id": "fo_ti",
+  "label_name": "Fo-Ti (Polygonum multiflorum)",
+  "label_spellings_seen": [
+   "processed fo-ti root extract",
+   "fo-ti",
+   "raw fo-ti root powder"
+  ],
+  "catalog": {
+   "products": 16,
+   "slots": 16,
+   "evidence_zero_products": 14,
+   "brands": 3,
+   "modules": {
+    "generic": 16
+   }
+  }
+ },
+ {
+  "canonical_id": "white_willow_bark",
+  "label_name": "White Willow Bark",
+  "label_spellings_seen": [
+   "white willow bark extract",
+   "white willow bark standardized"
+  ],
+  "catalog": {
+   "products": 33,
+   "slots": 35,
+   "evidence_zero_products": 14,
+   "brands": 10,
+   "modules": {
+    "generic": 35
+   }
+  }
+ },
+ {
+  "canonical_id": "globe_artichoke",
+  "label_name": "Globe Artichoke",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 37,
+   "slots": 37,
+   "evidence_zero_products": 14,
+   "brands": 13,
+   "modules": {
+    "generic": 31,
+    "fiber_digestive": 5,
+    "multi_or_prenatal": 1
+   }
+  }
+ },
+ {
+  "canonical_id": "holy_basil",
+  "label_name": "Holy Basil",
+  "label_spellings_seen": [
+   "holy basil extract",
+   "holy basil"
+  ],
+  "catalog": {
+   "products": 37,
+   "slots": 37,
+   "evidence_zero_products": 14,
+   "brands": 6,
+   "modules": {
+    "generic": 33,
+    "multi_or_prenatal": 4
+   }
+  }
+ },
+ {
+  "canonical_id": "eyebright",
+  "label_name": "Eyebright",
+  "label_spellings_seen": [],
+  "catalog": {
+   "products": 20,
+   "slots": 21,
+   "evidence_zero_products": 14,
+   "brands": 5,
+   "modules": {
+    "generic": 17,
+    "multi_or_prenatal": 4
+   }
+  }
+ }
+]

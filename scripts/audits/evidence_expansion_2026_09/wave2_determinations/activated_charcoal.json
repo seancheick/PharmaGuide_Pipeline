@@ -1,0 +1,11 @@
+{
+ "canonical_id": "activated_charcoal",
+ "class": "B",
+ "action": "reclassify_handoff",
+ "direction": "not_applicable",
+ "sources": [
+  "19194372"
+ ],
+ "label_median_mg": 560,
+ "note": "Screening called this curate; central reading says otherwise. The single source is a meta-analysis of 64 controlled studies showing activated charcoal REDUCES DRUG EXPOSURE by 88% when given immediately and still significantly at 4 hours. That is decontamination pharmacology and a drug-interaction signal, not efficacy for the detox use these 19 products are sold for. Routed to the interaction owner."
+}
