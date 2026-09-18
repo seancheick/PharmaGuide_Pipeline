@@ -346,6 +346,13 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     if joint_cap_applied:
         total = joint_cap
 
+    listed_ids = {
+        _entry_id(entry)
+        for entry in _safe_list(_safe_dict(product.get("evidence_data")).get("clinical_matches"))
+        if isinstance(entry, dict)
+    } | {_entry_id(entry) for entry in recovered_matches} | {_entry_id(entry) for entry in matches}
+    evidence_result_state = _evidence_result_state(product, total, listed_ids, matches)
+
     components = {
         "clinical_evidence_pipeline": round(pipeline_total, 4),
         "depth_bonus": round(depth_bonus, 4),
@@ -386,9 +393,36 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 _entry_id(entry)
                 for entry in recovered_matches
             ],
+            "evidence_result_state": evidence_result_state,
             "flags": flags,
         },
     }
+
+
+def _evidence_result_state(
+    product: Dict[str, Any],
+    total: float,
+    listed_ids: set[str],
+    accepted: List[Dict[str, Any]],
+) -> str:
+    """Why Evidence landed where it did, from the matches that were scored.
+
+    State names follow probiotic_evidence where the meaning is the same. A
+    missing review record is a coverage gap, never proof of weak evidence."""
+    if total > 0:
+        return "evaluated_applicable"
+    if not get_active_ingredients(product):
+        return "no_assessable_actives"
+    if not listed_ids:
+        return "clinical_review_not_covered"
+    if not accepted:
+        return "applicability_unestablished"
+    directions = [_norm_text(entry.get("effect_direction")) for entry in accepted]
+    if "negative" in directions:
+        return "evaluated_unfavorable"
+    if directions and all(direction == "null" for direction in directions):
+        return "evaluated_null"
+    return "no_qualifying_human_evidence"
 
 
 def resolved_clinical_matches(

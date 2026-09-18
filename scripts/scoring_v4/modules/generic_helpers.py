@@ -144,6 +144,22 @@ def is_scorable(ingredient: Dict[str, Any]) -> bool:
     return has_usable_individual_dose(ingredient)
 
 
+def restates_label_row(row: Dict[str, Any], rows: List[Dict[str, Any]]) -> bool:
+    """True for product-level evidence read from a label row already in ``rows``.
+
+    That evidence owns an amount (for example DHA printed on an Omega-3 row);
+    it is not a second ingredient, so row-counting rubrics must skip it."""
+    if not isinstance(row, dict) or row.get("scoring_input_kind") != "product_level_evidence":
+        return False
+    refs = {row.get("raw_source_path"), *_safe_list(row.get("linked_rows"))} - {None, ""}
+    return any(
+        isinstance(other, dict)
+        and other.get("scoring_input_kind") != "product_level_evidence"
+        and other.get("raw_source_path") in refs
+        for other in rows
+    )
+
+
 def scorable_ingredients(
     product: Dict[str, Any],
     *,
@@ -183,6 +199,8 @@ def scorable_ingredients(
         if ing.get("is_parent_total"):
             continue
         if ing.get("is_compound_duplicate"):
+            continue
+        if restates_label_row(ing, rows):
             continue
         if require_dose and not has_usable_individual_dose(ing):
             continue

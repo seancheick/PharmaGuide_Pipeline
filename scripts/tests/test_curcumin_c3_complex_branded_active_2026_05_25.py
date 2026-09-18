@@ -358,3 +358,30 @@ def test_normalized_317006_curcumin_row_is_score_eligible(normalizer):
         f"Curcumin C3 Complex must resolve via ingredient_quality_map. "
         f"Got: {curcumin_row.get('canonical_source_db')!r}"
     )
+
+
+@pytest.mark.parametrize("name", [
+    "Omega-3 EPA & DHA",
+    "EPA (Eicosapentaenoic Acid) and DHA (Docosahexaenoic Acid)",
+    "Eicosapentaenoic Acid (EPA) and Docosahexaenoic Acid (DHA)",
+])
+def test_spelled_out_epa_dha_child_is_not_a_blend_total(normalizer, name):
+    """Nature Made Fish Oil 1000 mg (DSLD 294083, 82715, 180107) and Fish Oil 1200 mg
+    + Vitamin D (179661) print the combined EPA+DHA mass with the chemical names
+    spelled out. That row states a disclosed dose, so it is not a blend header."""
+    ing = _row(name, qty_mg=500, category="blend", ingredient_group="Blend (Combination)")
+    ing.update({"isNestedIngredient": True, "parentBlend": "Total Omega-3 Fatty Acids"})
+
+    assert normalizer._is_dsld_active_blend_total_row(ing) is False
+
+
+@pytest.mark.parametrize("name", [
+    "Omega-3 Fatty Acids",
+    "Omega Fatty Acid Blend",
+    "EPA, DHA and ALA",
+])
+def test_rows_that_do_not_state_both_epa_and_dha_alone_stay_blend_totals(normalizer, name):
+    ing = _row(name, qty_mg=500, category="blend", ingredient_group="Blend (Combination)")
+    ing.update({"isNestedIngredient": True, "parentBlend": "Fish Oil concentrate"})
+
+    assert normalizer._is_dsld_active_blend_total_row(ing) is True

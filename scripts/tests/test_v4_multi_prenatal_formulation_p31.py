@@ -289,3 +289,24 @@ def test_multi_prenatal_formulation_does_not_import_v3_scorer() -> None:
 
     assert "import score_supplements" not in source
     assert "from score_supplements" not in source
+
+
+def test_omega_evidence_row_does_not_count_its_label_row_twice(monkeypatch) -> None:
+    """Ritual Essential for Women (DSLD 278454): the Omega-3 label row and the
+    DHA-amount evidence read from that same row are one ingredient for form
+    quality, not two."""
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    label_row = _ingredient("fish_oil", name="Omega-3 Fatty Acids", bio_score=8.0, quantity=330)
+    label_row["raw_source_path"] = "ingredientRows[7]"
+    evidence_row = {
+        "name": "Omega-3 Fatty Acids", "canonical_id": "dha", "mapped": True,
+        "quantity": 330.0, "unit": "mg", "bio_score": None,
+        "scoring_input_kind": "product_level_evidence",
+        "raw_source_path": "ingredientRows[7]", "linked_rows": ["ingredientRows[7]"],
+    }
+    rows = [_ingredient("vitamin_d", bio_score=12.0), label_row, evidence_row]
+    monkeypatch.setattr(formulation, "_active_ingredients", lambda product: rows)
+
+    panel, avg, _ = formulation._score_panel_form_quality(_product())
+    assert avg == 10.0  # (12 + 8) / 2; the evidence row adds no second vote

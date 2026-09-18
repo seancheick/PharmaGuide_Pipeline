@@ -47,7 +47,7 @@ EXPECTED_DIMENSION_CAPS = {
     "formulation": 25,
     "dose": 25,
     "evidence": 20,
-    "transparency": 15,
+    "transparency": 13,
 }
 
 
@@ -1071,7 +1071,7 @@ def test_omega_rubric_config_present_and_well_formed() -> None:
     # Phase 4: trust moved out of the core denominator to verification_bonus,
     # so the core dimension caps now sum to 85 (the trust SCORING section
     # remains in the rubric and is consumed by the verification bonus).
-    assert sum(rubric["dimension_caps"].values()) == 85
+    assert sum(rubric["dimension_caps"].values()) == 83  # transparency 15 -> 13, oxidation retired
 
 
 def test_omega_rubric_form_tier_table_locked() -> None:
@@ -1079,12 +1079,13 @@ def test_omega_rubric_form_tier_table_locked() -> None:
     rubric = json.loads((SCRIPTS_ROOT / "data" / "omega_rubric.json").read_text())
     form_tier = rubric["formulation"]["form_tier"]
 
-    # Locked weights per scientific bioavailability tiering.
+    # Locked weights per scientific bioavailability tiering; spread compressed
+    # 2026-09-18 so an undisclosed form is neutral rather than worst-case.
     assert form_tier["tg"] == 8     # natural triglyceride: top tier
     assert form_tier["rtg"] == 8    # re-esterified triglyceride: premium concentrate
     assert form_tier["pl"] == 7     # phospholipid (krill)
-    assert form_tier["ee"] == 4     # ethyl ester
-    assert form_tier["undefined"] == 2
+    assert form_tier["ee"] == 6     # ethyl ester: the commodity baseline (NIH ODS: all forms raise EPA/DHA)
+    assert form_tier["undefined"] == 6  # not established, not known-inferior
 
 
 def test_omega_rubric_dose_bands_match_configured_thresholds() -> None:

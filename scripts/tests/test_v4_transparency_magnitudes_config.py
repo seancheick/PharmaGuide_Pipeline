@@ -46,7 +46,7 @@ ORIGINAL = {
         "dimension_cap": 15.0, "cap_strain_identities": 8.0,
         "cap_per_strain_cfu": 7.0, "cap_aggregate_cfu_disclosure_proxy": 4.0,
     },
-    "omega": {"cap_transparency": 15.0},
+    "omega": {"cap_transparency": 13.0},  # oxidation retired 2026-09-18
 }
 
 
@@ -66,4 +66,4 @@ def test_runtime_constants_read_from_config_no_drift():
     assert multi_prenatal_transparency.CAP_PANEL_INDIVIDUAL_DOSE_DISCLOSURE == 7.0
     assert multi_prenatal_transparency.ADJUNCT_BLEND_PANEL_DISCLOSURE_THRESHOLD == 0.9
     assert probiotic_transparency.CAP_STRAIN_IDENTITIES == 8.0
-    assert omega_transparency.CAP_TRANSPARENCY == 15.0
+    assert omega_transparency.CAP_TRANSPARENCY == 13.0

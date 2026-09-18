@@ -66,7 +66,7 @@ def test_returns_normalized_payload_shape() -> None:
     payload = score_transparency(_omega_product())
     for key in ("score", "max", "components", "penalties", "metadata"):
         assert key in payload
-    assert payload["max"] == 15.0
+    assert payload["max"] == 13.0
     assert payload["metadata"]["phase"] == "P1.6.5_omega_transparency"
 
 
@@ -373,7 +373,7 @@ def test_b6_marketing_penalty_applied() -> None:
 # --- Score ceiling + clamp ----------------------------------------------
 
 
-def test_max_transparency_reaches_15() -> None:
+def test_max_transparency_reaches_the_cap() -> None:
     """A premium product with full disclosure + B3 max + oxidation +
     no penalties hits the 15 cap."""
     from scoring_v4.modules.omega_transparency import score_transparency
@@ -388,14 +388,14 @@ def test_max_transparency_reaches_15() -> None:
         totox=5.0,
     )
     payload = score_transparency(product)
-    assert payload["score"] == 15.0
+    assert payload["score"] == 13.0  # cap lowered 2026-09-18 with the oxidation retirement
     assert payload["metadata"]["cap_applied"] is True
 
 
 def test_cap_constant() -> None:
     from scoring_v4.modules.omega_transparency import score_transparency, CAP_TRANSPARENCY
 
-    assert CAP_TRANSPARENCY == 15.0
+    assert CAP_TRANSPARENCY == 13.0
 
 
 # --- Real-catalog canary integration -----------------------------------
@@ -521,8 +521,28 @@ def test_transparency_weights_match_rubric_config() -> None:
     assert t["epa_or_dha_disclosed"] == 5
     assert t["form_disclosed"] == 3
     assert t["source_disclosed"] == 3
-    assert t["oxidation_disclosed"]["score"] == 2
+    assert t["oxidation_disclosed"]["score"] == 0  # retired 2026-09-18; Verification owns it
+    assert rubric["dimension_caps"]["transparency"] == 13
     assert t["b3_claim_compliance"]["cap"] == 4
     assert "b2_allergen" in t["penalties_inherited"]
     assert "b5_opacity_class_aware" in t["penalties_inherited"]
     assert "b6_marketing" in t["penalties_inherited"]
+
+
+def test_a_label_is_not_marked_down_for_an_unreachable_oxidation_signal() -> None:
+    """No omega label in the catalogue discloses TOTOX/peroxide values, so the
+    pillar normalizes against what a label can disclose: EPA/DHA amounts, the
+    molecular form, the source and claim compliance."""
+    from scoring_v4.modules.omega_transparency import CAP_TRANSPARENCY, score_transparency
+
+    payload = score_transparency(_omega_product(
+        name="Triglyceride Fish Oil EPA 500 DHA 250",
+        epa=500, dha=250,
+    ))
+
+    assert CAP_TRANSPARENCY == 13.0
+    assert "oxidation_disclosed" not in payload["components"]
+    # EPA/DHA amounts 5 + molecular form 3 + source 3; the remaining 2 of the cap
+    # is claim compliance, which this label does not carry.
+    assert payload["score"] == 11.0
+    assert payload["max"] == 13.0

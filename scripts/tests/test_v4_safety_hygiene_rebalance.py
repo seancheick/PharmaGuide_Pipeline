@@ -97,3 +97,27 @@ def test_recalled_signal_zeros_hygiene_hard_failure():
     assert out["score"] == 0.0
     assert out["metadata"]["hard_cleanliness_failure"] is True
     assert "recalled_match_present" in out["failed_components"]
+
+
+def test_hard_failure_records_its_drivers_most_severe_first():
+    p = _clean_product(contaminant_data={
+        "banned_substances": {"substances": [
+            {"name": "Carob color", "status": "watchlist", "match_type": "exact"},
+            {"name": "Ephedra", "status": "banned", "match_type": "exact"},
+        ]},
+        "harmful_additives": {"additives": []}})
+    drivers = score_safety_hygiene_base(p).to_dict()["metadata"]["drivers"]
+    assert drivers == [
+        {"status": "banned", "name": "Ephedra"},
+        {"status": "watchlist", "name": "Carob color"},
+    ]
+
+
+def test_driver_name_never_exposes_a_registry_id():
+    p = _clean_product(contaminant_data={
+        "banned_substances": {"substances": [
+            {"banned_id": "BANNED_ADD_X", "status": "watchlist", "match_type": "exact"},
+        ]},
+        "harmful_additives": {"additives": []}})
+    drivers = score_safety_hygiene_base(p).to_dict()["metadata"]["drivers"]
+    assert drivers == [{"status": "watchlist", "name": None}]

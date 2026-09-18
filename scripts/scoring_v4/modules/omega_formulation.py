@@ -4,13 +4,15 @@ Scores omega/fish-oil formulation quality against the 25-point rubric in
 SCORING_V4_PROPOSAL §9 + scripts/data/omega_rubric.json.
 
 Components:
-    form_tier            — molecular form (TG 8 / rTG 8 / PL 7 / EE 4 /
-                           undefined 2). Requires EXPLICIT label disclosure.
-    source_disclosed     — marine source named (fish / krill / algae /
-                           cod liver / specific species). +4.
-    premium_form_a2_carry — only awarded when form_tier != undefined.
-                           Carries v3's A2 premium-delivery credit forward
-                           when EPA/DHA + molecular form are both labeled. +5.
+    form_tier            — molecular form (TG 8 / rTG 8 / PL 7 / EE 6 /
+                           undefined 6). An undisclosed form is "not
+                           established", not "known inferior", so it sits at the
+                           commodity baseline; Transparency is where a label
+                           loses points for not saying.
+    source_disclosed     — RETIRED 2026-09-18 (0 points). Naming the marine
+                           source is a disclosure fact; Transparency scores it.
+    premium_form_a2_carry — RETIRED 2026-09-18 (0 points). It paid a second
+                           time for the molecular form form_tier already scores.
     epa_dha_concentration — EPA+DHA / parent omega oil mass when both are
                            disclosed. +0..4.
     sustainability_cert  — Friend of the Sea or MSC verified by rules_db
@@ -20,14 +22,14 @@ Components:
                            metadata (sustainability_cert_program), not a
                            formulation-quality signal.
 
-Maximum reachable score with current sub-components: 8 + 4 + 5 + 4 = 21/25.
+Maximum reachable score with current sub-components: 8 + 4 = 12/25.
 The 2-point headroom is intentional and reserved for future lot-level purity
 signals. Per Sean's 'do not invent fields' rule, concentration credit requires
 label-disclosed parent omega oil mass and EPA/DHA mass.
 
 Per §13 architecture lock, this module does not import from
-`score_supplements.py` (v3). v3's A2 premium-form logic is independently
-reimplemented here in policy terms (form disclosed → +5 carryforward).
+`score_supplements.py` (v3). v3's A2 premium-form carry was retired here on
+2026-09-18: it re-paid for the molecular form that form_tier already scores.
 
 Conservative discipline: form is credited ONLY when the label or
 ingredient panel explicitly says "triglyceride", "ethyl ester",
@@ -426,8 +428,6 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     rubric = _load_rubric()
     form_cfg = rubric["formulation"]
     form_tier_table = form_cfg["form_tier"]
-    source_pts = float(form_cfg["source_disclosed"]["score"])
-    premium_pts = float(form_cfg["premium_form_a2_carry"]["score"])
     sustainability_pts = float(form_cfg["sustainability_cert"]["score"])
     concentration_cfg = _safe_dict(form_cfg.get("epa_dha_concentration"))
 
@@ -445,17 +445,10 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     if form_detected != "undefined" or has_omega:
         components["form_tier"] = form_score
 
-    if _source_disclosed(product):
-        components["source_disclosed"] = source_pts
-
-    # Premium-form A2 carryforward: only when the molecular form is
-    # explicitly labeled (form_detected != "undefined"). This is the
-    # transparency-rewarding component — labeling EPA/DHA WITH the
-    # molecular form lets the scorer credit bioavailability tier,
-    # which the consumer can compare on shelf.
-    if form_detected != "undefined":
-        components["premium_form_a2_carry"] = premium_pts
-
+    # Source disclosure and the premium-form carry were retired 2026-09-18.
+    # Naming the marine source is a disclosure fact that Transparency scores,
+    # and the carry paid a second time for the molecular form the tier above
+    # already scores. Detection stays for the metadata that explains the label.
     concentration = _score_epa_dha_concentration(product, concentration_cfg)
     if concentration["score"] > 0:
         components["epa_dha_concentration"] = concentration["score"]
@@ -478,14 +471,15 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "pre_penalty_score": round(pre_penalty_score, 4),
         "cap_applied": raw_score > CAP_FORMULATION,
         "form_detected": form_detected,
-        "source_disclosed": "source_disclosed" in components,
+        "source_disclosed": _source_disclosed(product),
         "epa_dha_concentration": concentration,
         "sustainability_cert_program": sustainability_match,
-        "max_reachable_in_p161": 21.0,
+        "max_reachable_in_p161": 12.0,
         "_max_reachable_note": (
-            "Current sub-components sum to 21/25 maximum (sustainability "
-            "certification is an attribute worth 0 points). Do not interpret "
-            "a 21/25 score as a cap-applied event."
+            "Current sub-components sum to 12/25 maximum: molecular form 8 + EPA/DHA "
+            "concentration 4. Source disclosure and the premium-form carry were retired "
+            "2026-09-18 (Transparency owns disclosure); sustainability certification is an "
+            "attribute worth 0 points. Do not interpret a 12/25 score as a cap-applied event."
         ),
     }
     metadata.update(shared_penalties["metadata"])

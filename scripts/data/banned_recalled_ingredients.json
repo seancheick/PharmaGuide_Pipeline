@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-13",
+    "last_updated": "2026-09-17",
     "total_entries": 169,
     "data_source_metadata": {
       "sources": [
@@ -7318,7 +7318,15 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "mercury free",
+          "mercury-free",
+          "free of mercury",
+          "no mercury",
+          "tested for mercury",
+          "mercury tested",
+          "mercury screened"
+        ]
       },
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "critical",
@@ -7393,7 +7401,7 @@
       "entity_type": "contaminant",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
+        "last_reviewed_at": "2026-09-17",
         "next_review_due": "2026-07-07",
         "reviewed_by": "codex_alias_precision_pass",
         "change_log": [
@@ -7406,6 +7414,11 @@
             "date": "2026-02-16",
             "change": "Alias precision hardening for supplement label matching (reduced ambiguous aliases; added hydrogenated coconut reverse-label variants)",
             "by": "codex_alias_precision_pass"
+          },
+          {
+            "date": "2026-09-17",
+            "change": "Added negative match terms for mercury-absence wording. The ingredient name 'PureSeaOmega3 Mercury Free Tuna Oil' matched the 'mercury' alias, which put a CAUTION verdict and Safety 0 on Garden of Life Prenatal Multi + DHA (242666) and Advanced Omega (297656). An absence claim is not a contaminant.",
+            "by": "scoring_audit_2026_09_17"
           }
         ]
       },
@@ -16960,10 +16973,8 @@
     },
     {
       "id": "BANNED_ADD_CAROB_COLOR",
-      "standard_name": "Carob Color (E153 / Vegetable Carbon)",
+      "standard_name": "Vegetable Carbon (E153)",
       "aliases": [
-        "carob color",
-        "carob colour",
         "vegetable carbon",
         "e153",
         "carbon black",
@@ -16974,7 +16985,7 @@
         "charcoal colour",
         "food carbon black"
       ],
-      "reason": "Vegetable carbon (E153) is permitted as a food colour in the EU, but the US FDA has not approved any form of carbon black as a food-colouring additive. FDA's inventories of color additives for food (21 CFR Parts 73, 74, 82) do not list E153, and regulatory and scientific reviews explicitly note that 'the USFDA has not approved the use of any type of carbon black for colouring food.' As a result, there is no approved pathway for using E153 as a colour in US foods or dietary supplements — equivalent in enforcement posture to Orange B, which is restricted to sausage casings only and effectively non-lawful as a supplement ingredient.",
+      "reason": "Vegetable carbon (E153) is a black color made by carbonizing vegetable material such as wood, cellulose residues, peat, and coconut and other shells. It is permitted as a food color in the EU, but it has never been authorized in the US for use in food, drugs or cosmetics, and carbon black was delisted in 1976. There is no approved pathway for using it as a color in US foods or dietary supplements. Carob color, the brown softgel-shell color taken from the carob bean, is a different ingredient and is not E153.",
       "status": "watchlist",
       "class_tags": [
         "high_risk_ingredients",
@@ -17040,6 +17051,16 @@
             "not_us_approved"
           ],
           "evidence_summary": "E153 / vegetable carbon black does not appear in any FDA certified or exempt color additive list for food or supplement use."
+        },
+        {
+          "type": "regulation",
+          "title": "International Association of Color Manufacturers — Vegetable Carbon (INS 153 / E 153) color profile",
+          "evidence_grade": "R",
+          "url": "https://iacmcolor.org/color-profile/vegetable-carbon/",
+          "supports_claims": [
+            "not_us_approved"
+          ],
+          "evidence_summary": "Vegetable carbon is produced by carbonizing wood, cellulose residues, peat and coconut and other shells; it has never been authorized for use in food, drugs or cosmetics in the US, and carbon black was delisted in 1976."
         }
       ],
       "source_category": "high_risk_ingredients",
@@ -17050,7 +17071,7 @@
       "match_mode": "active",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-08",
+        "last_reviewed_at": "2026-09-17",
         "next_review_due": "2026-09-01",
         "reviewed_by": "audit_march_2026",
         "change_log": [
@@ -17063,6 +17084,11 @@
             "date": "2026-03-08",
             "change": "Updated reason with precise regulatory language: 'USFDA has not approved the use of any type of carbon black for colouring food.' Aligned framing with Orange B precedent (non-lawful as supplement ingredient).",
             "by": "audit_march_2026_corrections"
+          },
+          {
+            "date": "2026-09-17",
+            "change": "Removed aliases 'carob color' and 'carob colour' and renamed the entry to Vegetable Carbon (E153). Carob color is a brown color taken from the carob bean (InnovixLabs knowledge base); E153 is carbonized wood, cellulose, peat or nut shells (IACM). The lexical match flagged ordinary carob-colored softgels as E153.",
+            "by": "scoring_audit_2026_09_17"
           }
         ]
       },

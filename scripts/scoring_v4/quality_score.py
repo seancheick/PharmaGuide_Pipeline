@@ -267,6 +267,43 @@ def _probiotic_transparency_reason(dim: Dict[str, Any], fallback: str) -> str:
     return fallback
 
 
+# Omega Transparency items in rubric order; a missing component was not disclosed.
+# Only what the pillar still SCORES belongs here. Oxidation testing was retired
+# from Transparency on 2026-09-18 (omega_rubric oxidation_disclosed.score = 0):
+# naming it kept telling every omega label that oxidation testing was missing
+# from a pillar that no longer charges for it, and made the "all disclosed"
+# sentence unreachable, since a retired component can never be credited.
+_OMEGA_DISCLOSURE_ITEMS = (
+    ("epa_or_dha_disclosed", "EPA/DHA amounts"),
+    ("source_disclosed", "the marine or algal source"),
+    ("form_disclosed", "the molecular form"),
+)
+
+
+def _join_items(items: List[str]) -> str:
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def _omega_transparency_reason(dim: Dict[str, Any], fallback: str) -> str:
+    """Name the disclosures the omega Transparency score credited and withheld."""
+    components = dim.get("components") if isinstance(dim, dict) else None
+    if not isinstance(components, dict):
+        return fallback
+    shown = [label for key, label in _OMEGA_DISCLOSURE_ITEMS if _num(components.get(key)) > 0]
+    missing = [label for key, label in _OMEGA_DISCLOSURE_ITEMS if _num(components.get(key)) <= 0]
+    if not missing:
+        reason = "EPA/DHA amounts, the molecular form and the source are all disclosed."
+    elif not shown:
+        reason = f"{_join_items(missing)[0].upper()}{_join_items(missing)[1:]} are not disclosed."
+    else:
+        head = _join_items(shown)
+        reason = (f"{head[0].upper()}{head[1:]} {'is' if len(shown) == 1 else 'are'} disclosed; "
+                  f"{_join_items(missing)} {'is' if len(missing) == 1 else 'are'} not.")
+    if _num((dim.get("penalties") or {}).get("B5_proprietary_blend_opacity")) < 0:
+        reason += " A proprietary blend hides individual amounts."
+    return reason
+
+
 # Generic dispatcher for any pillar that routes through the plain linear builders
 # (only ``transparency`` does today). Keeps a jargon-free fallback so a future
 # reconfigured pillar can never leak internal copy to consumers.
@@ -357,12 +394,21 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
     if name == "transparency":
         metadata = dim.get("metadata") or {}
         count = _num(metadata.get("panel_active_count"))
+        # Same ledger as the score: a blend-opacity deduction means amounts are hidden.
+        blends_hide = _num((dim.get("penalties") or {}).get("B5_proprietary_blend_opacity")) < 0
         if count > 0:
-            if (
+            panel_full = (
                 _num(metadata.get("panel_named_count"), -1) == count
                 and _num(metadata.get("panel_dose_count"), -1) == count
-            ):
+            )
+            if panel_full and blends_hide:
+                reason = ("Amounts outside the proprietary blends are disclosed, but the blends "
+                          "hide their individual ingredient amounts.")
+            elif panel_full:
                 reason = "Active ingredient identities and amounts are fully disclosed."
+            elif blends_hide:
+                reason = ("Not all active ingredient identities or individual amounts are disclosed, "
+                          "and proprietary blends hide their individual ingredient amounts.")
             else:
                 reason = "Not all active ingredient identities or individual amounts are disclosed."
         elif (
@@ -464,14 +510,46 @@ def _build_clean_label_flags(enriched_hits: List[Dict[str, Any]]) -> List[Dict[s
     return flags
 
 
+_ADDITIVE_PENALTY_KEY = "B1_harmful_additives"
+
+
+def _low_severity_additive_magnitude(module_bd: Dict[str, Any]) -> float:
+    """Points the formulation penalty took for additives with no safety finding.
+
+    An entry PharmaGuide's own additive data describes as GRAS and "tracked
+    purely as a non-nutritive excipient quality signal" (silicon dioxide,
+    magnesium stearate, microcrystalline cellulose, stearic acid …) is a
+    formulation-quality signal, not a clinical safety concern.
+    """
+    formulation = ((module_bd.get("dimensions") or {}).get("formulation") or {})
+    details = (formulation.get("metadata") or {}).get("inactive_penalty_details") or []
+    low = sum(
+        abs(_num(detail.get("penalty_applied")))
+        for detail in details
+        if isinstance(detail, dict) and str(detail.get("penalty_tier") or "").lower() == "low"
+    )
+    # The ledger is uncapped and lists every matched excipient, while the charge
+    # it explains is clamped at b1_harmful_additive_cap. Give back no more than
+    # was taken, or the excess comes out of the sweetener penalty standing beside
+    # it in the same mirror group — and a sugary product quietly stops losing
+    # Safety points.
+    charged = abs(_num((formulation.get("penalties") or {}).get(_ADDITIVE_PENALTY_KEY)))
+    return min(low, charged)
+
+
 def _formulation_additive_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> float:
     """Small public Safety Hygiene deduction for additive/sweetener concerns.
 
     The underlying B1 formulation penalties remain the main scoring signal. This
     separate, capped deduction prevents the public Safety Hygiene pillar from
     claiming 10/10 when the product carries additive or glycemic-sweetener flags.
+
+    2026-09-18: low-severity entries are excluded. Their own reviewed records
+    state no meaningful safety concern, so they keep their formulation-quality
+    penalty and no longer read as a clinical safety finding.
     """
     raw = mirrored_penalty_magnitude(module_bd, FORMULA_QUALITY_MIRROR)
+    raw = max(0.0, raw - _low_severity_additive_magnitude(module_bd))
     sub = cfg.get("safety_hygiene_subscale") or {}
     cap = _num(sub.get("additive_or_sweetener_max_penalty"), 4.0)
     return round(min(raw, cap), 1) if raw > 0 else 0.0
@@ -496,6 +574,32 @@ def _dose_safety_state_counts(module_bd: Dict[str, Any]) -> Dict[str, Any]:
     evaluation = metadata.get("B7_safety_evaluation") or {}
     counts = evaluation.get("state_counts")
     return dict(counts) if isinstance(counts, dict) else {}
+
+
+_SAFETY_STATUS_COPY = {
+    "banned": ("a banned ingredient", "banned ingredients"),
+    "recalled": ("a recalled ingredient", "recalled ingredients"),
+    "high_risk": ("a high-risk ingredient", "high-risk ingredients"),
+    "watchlist": ("a watchlisted ingredient", "watchlisted ingredients"),
+}
+
+
+def _safety_base_cause(base: Dict[str, Any]) -> Optional[str]:
+    """Name what zeroed the safety base, from the drivers the base recorded."""
+    metadata = base.get("metadata") or {}
+    if metadata.get("not_evaluable_reason"):
+        return None
+    drivers = [d for d in metadata.get("drivers") or [] if isinstance(d, dict)]
+    if not drivers:
+        return "a banned, recalled, or watchlisted ingredient"
+    phrases = []
+    for status, (one, many) in _SAFETY_STATUS_COPY.items():
+        names = [str(d["name"]) for d in drivers if d.get("status") == status and d.get("name")]
+        if names:
+            phrases.append(f"{many if len(names) > 1 else one} ({', '.join(names)})")
+        elif any(d.get("status") == status for d in drivers):
+            phrases.append(one)
+    return " and ".join(phrases) or "a banned, recalled, or watchlisted ingredient"
 
 
 def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
@@ -527,6 +631,10 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     )
     val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen - additive_pen - over_ul_pen)), 1)
     deductions = []
+    # The base failure removes the most points, so its cause always leads.
+    base_cause = _safety_base_cause(base) if bmax > 0 and bscore <= 0 else None
+    if base_cause:
+        deductions.append(f"it contains {base_cause}")
     if safety_pen > 0:
         deductions.append("the maker had a serious product recall")
     if cl_pen > 0:
@@ -540,8 +648,6 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."
-    elif bscore <= 0:
-        reason = "Contains a banned, recalled, or watchlisted ingredient."
     else:
         reason = "No banned, recalled, or watchlisted ingredients."
     components = {"clean_base": clean, "class_i_recall_penalty": safety_pen}
@@ -594,6 +700,20 @@ def _archetype(module: Optional[str], module_bd: Dict[str, Any]) -> str:
     return "generic_single_molecule"
 
 
+def _unrated_form_neutral_ratio() -> float:
+    """The share of the pillar an unrated ingredient form keeps.
+
+    One owner: the multi/prenatal panel's own neutral floor for a row whose form
+    is not rated. Reused here so "we have not rated this" means the same thing
+    everywhere instead of 0 in one module and partial credit in another."""
+    from scoring_v4.modules.multi_prenatal_formulation import (
+        BIO_SCORE_MAX, PANEL_FORM_NEUTRAL_FLOOR)
+    return float(PANEL_FORM_NEUTRAL_FLOOR) / float(BIO_SCORE_MAX)
+
+
+_UNRATED_FORM_NEUTRAL_RATIO = _unrated_form_neutral_ratio()
+
+
 def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
                         cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Category-aware purpose-fit formulation. Normalize to the archetype's ACHIEVABLE
@@ -618,6 +738,11 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
         and not meta.get("collagen_profile_applied")
     ):
         reason = "Ingredient-form quality is not rated in PharmaGuide's current data."
+        # An unrated form is unknown, not poor. The multi panel already treats an
+        # unrated row this way (panel_form_neutral_floor / bio_score_max), so the
+        # pillar uses that same neutral rather than scoring missing curation as 0.
+        neutral = round(float(weight) * _UNRATED_FORM_NEUTRAL_RATIO, 1)
+        val = max(val, neutral)
     if (meta.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
         reason = "The reviewed commercial formula matches the reported strain composition, total AFU potency and prebiotic."
     if archetype == "omega":
@@ -633,6 +758,24 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
             "reference": ref,
         },
     }
+
+
+_EVIDENCE_ZERO_REASON = {
+    "clinical_review_not_covered": (
+        "PharmaGuide's clinical evidence review does not yet cover the ingredients on this "
+        "label. This is a gap in our review, not a finding of weak evidence."
+    ),
+    "applicability_unestablished": (
+        "Recorded research does not match this label's ingredient form, dose or delivery, "
+        "so it earns no evidence credit here."
+    ),
+    "evaluated_unfavorable": "Reviewed human research did not show benefit for these ingredients.",
+    "evaluated_null": "Reviewed human research did not show a clear benefit for these ingredients.",
+    "no_qualifying_human_evidence": (
+        "The research on record is not human clinical evidence of benefit for these ingredients."
+    ),
+    "no_assessable_actives": "No active ingredient on this label could be assessed for clinical evidence.",
+}
 
 
 def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
@@ -692,6 +835,18 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
                 reason = "Named strains have reviewed research; a matching studied dose is not established for this label."
         else:
             reason = "Our reviewed evidence does not establish probiotic benefit for this formula and dose; this is not a product-quality finding."
+        if (
+            metadata.get("evidence_result_state") in {
+                "human_clinical_evidence_unestablished", "native_research_review_incomplete"}
+            and assessed and all((row.get("cfu_per_day") or 0) <= 0 for row in assessed)
+        ):
+            # Two separate limits: the review, and a label with no per-strain amounts.
+            reason += (" Individual strain amounts are also not disclosed, so no strain can be "
+                       "matched to a studied dose.")
+    if val == 0 and archetype != "probiotic":
+        state = metadata.get("evidence_result_state") or (
+            metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
+        reason = _EVIDENCE_ZERO_REASON.get(state, reason)
     return {
         "score": val,
         "max": weight,
@@ -920,6 +1075,11 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
         transparency_dim = dims.get("transparency") or {}
         pillars["transparency"]["reason"] = _probiotic_transparency_reason(
             transparency_dim,
+            pillars["transparency"]["reason"],
+        )
+    if module == "omega" and "transparency" in pillars:
+        pillars["transparency"]["reason"] = _omega_transparency_reason(
+            dims.get("transparency") or {},
             pillars["transparency"]["reason"],
         )
     return pillars
