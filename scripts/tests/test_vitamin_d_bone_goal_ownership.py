@@ -128,3 +128,63 @@ def test_goal_matches_never_reads_the_clinical_evidence_registry():
 
     assert "backed_clinical_studies" not in body
     assert "health_goals_supported" not in body
+
+
+# ── 4. behavioural ownership: the registry cannot reach goal derivation ───────
+#
+# The source-inspection test above is an architecture tripwire, not a guarantee.
+# A refactor could rename its way past the literals, or introduce registry
+# dependence indirectly without any of them appearing. These two drive the real
+# function and compare real output, from both directions the registry could
+# arrive: baked into the product blob, and read live through the owner.
+
+D3_CARD_WITH_BONE = {
+    "id": "INGR_VITAMIN_D3",
+    "health_goals_supported": ["Immune Support", "Healthy Aging/Longevity", BONE_GOAL],
+    "key_endpoints": ["bone health ↑", "immunity ↑"],
+}
+D3_CARD_WITHOUT_BONE = {
+    "id": "INGR_VITAMIN_D3",
+    "health_goals_supported": ["Immune Support", "Healthy Aging/Longevity"],
+    "key_endpoints": ["immunity ↑"],
+}
+
+
+def _product_with_card(card):
+    product = _product([_cluster_hit(meets_minimum=True)])
+    product["evidence_data"] = {"clinical_matches": [card]}
+    return product
+
+
+def test_bone_fields_on_the_embedded_evidence_card_do_not_change_goal_matches():
+    """The enriched blob carries a copy of the clinical record. Removing the
+    bone claim from that copy must not move a single shipped goal."""
+    with_bone = b.compute_goal_matches(_product_with_card(D3_CARD_WITH_BONE))
+    without_bone = b.compute_goal_matches(_product_with_card(D3_CARD_WITHOUT_BONE))
+
+    assert with_bone == without_bone
+    # And the goal is genuinely there to lose - otherwise this passes vacuously.
+    assert any("bone" in g.lower() for g in without_bone["goal_matches"])
+
+
+def test_mutating_the_live_registry_record_does_not_change_goal_matches(monkeypatch):
+    """Same claim from the other direction: swap the record the canonical owner
+    hands out. If goal derivation ever grows an indirect read of the evidence
+    registry, this fails even though no literal string appears in its source."""
+    import clinical_applicability
+
+    bone_record = dict(_record("INGR_VITAMIN_D3"))
+    bone_record["health_goals_supported"] = [*bone_record["health_goals_supported"], BONE_GOAL]
+    bone_record["key_endpoints"] = ["bone health ↑", *bone_record["key_endpoints"]]
+
+    product = _product([_cluster_hit(meets_minimum=True)])
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries",
+                        lambda: {"INGR_VITAMIN_D3": bone_record})
+    with_bone = b.compute_goal_matches(json.loads(json.dumps(product)))
+
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries",
+                        lambda: {"INGR_VITAMIN_D3": _record("INGR_VITAMIN_D3")})
+    without_bone = b.compute_goal_matches(json.loads(json.dumps(product)))
+
+    assert with_bone == without_bone
+    assert any("bone" in g.lower() for g in without_bone["goal_matches"])
