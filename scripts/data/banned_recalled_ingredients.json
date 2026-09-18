@@ -19459,7 +19459,7 @@
       ],
       "cui": null,
       "reason": "FDA laboratory analysis confirmed undeclared sildenafil and tadalafil — prescription ED drugs that can cause dangerous blood-pressure drops with nitrate medications.",
-      "status": "banned",
+      "status": "recalled",
       "ban_context": "adulterant_in_supplements",
       "class_tags": [
         "illegal_spiking_agents",
@@ -19494,6 +19494,20 @@
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
           "last_verified_date": "2026-05-30"
+        },
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-09-15",
+          "source": {
+            "type": "fda_recall",
+            "citation": "A&P Creations LLC Issues Nationwide Recall of X10 Natural Enhancement Supplement Due to Undeclared Sildenafil and Tadalafil. Company announcement 2026-09-14; FDA publish date 2026-09-15.",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
         }
       ],
       "references_structured": [
@@ -19507,13 +19521,24 @@
             "regulatory_action"
           ],
           "evidence_summary": "FDA laboratory analysis confirmed X10 Natural Enhancement Supplement contains sildenafil, tadalafil not listed on the product label."
+        },
+        {
+          "type": "fda_recall",
+          "title": "A&P Creations LLC Issues Nationwide Recall of X10 Natural Enhancement Supplement Due to Undeclared Sildenafil and Tadalafil",
+          "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ap-creations-llc-issues-nationwide-recall-x10-natural-enhancement-supplement-due-undeclared",
+          "evidence_grade": "R",
+          "date": "2026-09-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "A&P Creations LLC recalled X10 Natural Enhancement Supplement to the consumer level nationwide because it was found to contain undeclared sildenafil and tadalafil."
         }
       ],
       "source_category": "illegal_spiking_agents",
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-05-30",
+        "last_reviewed_at": "2026-09-18",
         "next_review_due": "2026-11-30",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
@@ -19521,19 +19546,33 @@
             "date": "2026-05-30",
             "change": "Added from FDA advisory 2026-05-29 — X10 Natural Enhancement Supplement contains undeclared sildenafil, tadalafil",
             "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Added the 2026-09-15 A&P Creations LLC nationwide recall beside the existing 2026-05-29 public notification; status banned -> recalled",
+            "by": "pharmaguide_clinical_team"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Corrected recall_scope.lots: the X10 recall is lot-scoped (3 lots), not whole-product. The recalls index row carries no lot column; the lots are only on the recall detail page.",
+            "by": "pharmaguide_clinical_team"
           }
         ]
       },
       "supersedes_ids": null,
-      "regulatory_date": "2026-05-29",
-      "regulatory_date_label": "FDA advisory publication date",
+      "regulatory_date": "2026-09-15",
+      "regulatory_date_label": "FDA recall publication date (2026-09-15); FDA public-notification date was 2026-05-29",
       "recall_scope": {
         "brand": "X10 Natural Enhancement Supplement",
         "formulations": null,
-        "lots": null,
-        "effective_from": "2026-05-29",
+        "lots": [
+          "F090824LN16 (exp 08/2026)",
+          "F170325LN19 (exp 03/2027)",
+          "F300326LN28 (exp 03/2028)"
+        ],
+        "effective_from": "2026-09-15",
         "effective_to": null,
-        "note": "Sold on naturefuel.us"
+        "note": "Consumer-level nationwide recall of three lots by A&P Creations LLC (Clermont, FL). Liquid in a red and gold box of 7 lightning-bolt sachets, 15 mL each (105 mL total), UPC 7708075247094; original Spanish-language package labels it “Bebida energizante”. Sold on naturefuel.us."
       }
     },
     {
@@ -20449,7 +20488,7 @@
       ],
       "cui": null,
       "reason": "FDA laboratory analysis confirmed undeclared sildenafil and tadalafil — prescription ED drugs that can cause dangerous blood-pressure drops with nitrate medications.",
-      "status": "banned",
+      "status": "recalled",
       "ban_context": "adulterant_in_supplements",
       "class_tags": [
         "illegal_spiking_agents",
@@ -20484,6 +20523,20 @@
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
           "last_verified_date": "2026-09-18"
+        },
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-09-15",
+          "source": {
+            "type": "fda_recall",
+            "citation": "A&P Creations LLC Issues Nationwide Recall of biQ-FEL Due to Undeclared Sildenafil and Tadalafil. Company announcement 2026-09-14; FDA publish date 2026-09-15.",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
         }
       ],
       "references_structured": [
@@ -20497,6 +20550,17 @@
             "regulatory_action"
           ],
           "evidence_summary": "FDA laboratory analysis confirmed biQ-FEL contains sildenafil and tadalafil not listed on the product label."
+        },
+        {
+          "type": "fda_recall",
+          "title": "A&P Creations LLC Issues Nationwide Recall of biQ-FEL Due to Undeclared Sildenafil and Tadalafil",
+          "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ap-creations-llc-issues-nationwide-recall-biq-fel-due-undeclared-sildenafil-and-tadalafil",
+          "evidence_grade": "R",
+          "date": "2026-09-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "A&P Creations LLC recalled biQ-FEL 500 mL supplement bottle to the consumer level nationwide because it was found to contain undeclared sildenafil and tadalafil."
         }
       ],
       "source_category": "illegal_spiking_agents",
@@ -20511,19 +20575,27 @@
             "date": "2026-09-18",
             "change": "Added from FDA Medication Health Fraud notification 2026-05-27 — biQ-FEL contains undeclared sildenafil, tadalafil. Notification page fetched and date read live; missed by the weekly sync because health-fraud notifications are not an openFDA enforcement source.",
             "by": "pharmaguide_clinical_team"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "Added the 2026-09-15 A&P Creations LLC nationwide recall beside the existing 2026-05-27 public notification; status banned -> recalled",
+            "by": "pharmaguide_clinical_team"
           }
         ]
       },
       "supersedes_ids": null,
-      "regulatory_date": "2026-05-27",
-      "regulatory_date_label": "FDA advisory publication date",
+      "regulatory_date": "2026-09-15",
+      "regulatory_date_label": "FDA recall publication date (2026-09-15); FDA public-notification date was 2026-05-27",
       "recall_scope": {
         "brand": "biQ-FEL",
         "formulations": null,
-        "lots": null,
-        "effective_from": "2026-05-27",
+        "lots": [
+          "biQ-f001-06-25 (exp 05/06/27)",
+          "biQ-003-01-26 (exp 01/01/28, UPC 7709799120663)"
+        ],
+        "effective_from": "2026-09-15",
         "effective_to": null,
-        "note": "Promoted for sexual enhancement; sold on walmart.com and biqfelusa.com"
+        "note": "Consumer-level nationwide recall of certain lots by A&P Creations LLC (Clermont, FL), which distributed but did not manufacture the product. Label carries Spanish-language text. Originally promoted for sexual enhancement on walmart.com and biqfelusa.com."
       }
     },
     {
