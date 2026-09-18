@@ -118,7 +118,37 @@ The probe file was removed after the run.
 | `main` / `origin/main` | — | convergence target |
 | `claude/evidence-expansion` | INTEGRATED | evidence-expansion work; see the commit list in the convergence commit |
 | `converge/main-20260918` | INTEGRATED | a concurrent session's convergence of four sessions; its inventory was re-verified here rather than trusted |
-| `recovery/stash-0..3` | PRESERVED | kept until converged main is proven healthy |
+| `recovery/stash-0` | PRESERVED | generated audit artifact (timestamp diff only); no source work |
+| `recovery/stash-1` | SUPERSEDED | main is a strict superset — it also carries X10's three recalled lots, which the stash lacks |
+| `recovery/stash-2` | SUPERSEDED | BCAA implementation is on main; its two extra registry records were deliberately retired (changelog 5.3.5, 5.3.13) |
+| `recovery/stash-3` | SUPERSEDED | its tests assert pre-label-hierarchy behaviour main intentionally replaced, including the retired drop-blocked-row-on-shared-UPC expectation |
+
+All four refs are **retained** regardless of verdict, until the converged main is
+proven healthy by a real pipeline run. SUPERSEDED here means "nothing in it needs
+to be applied", not "safe to delete".
+
+## What the test counts do and do not prove
+
+A clean source worktree carries no product corpus (`scripts/products`) and no
+canary baselines (`reports/baseline_pre_e1_2_2`), so the catalog-backed
+invariant tests `pytest.skip()` there. The converged tree reported:
+
+    15672 passed, 191 skipped, 0 failed
+
+That is **source integrity**, not release integrity. It says the registries,
+scorers, gates and tests agree with each other; it says nothing about the
+catalog, because the tests that compare a rebuild against its baseline never
+ran. A skipped canary is not a passing canary.
+
+The skips are legitimate for `fast` in a clean worktree. They are not legitimate
+on the release path, so `scripts/test.sh release` now runs
+`release_preflight_corpus_check` and **fails hard (exit 2)** when the corpus or
+any canary baseline is absent, rather than proceeding to a green run built on
+silent skips. A deliberate corpus-less release run must set
+`PG_ALLOW_MISSING_CORPUS=1`, which announces itself.
+
+Before any rebuild or release decision, run the release tier from the canonical
+corpus environment and confirm the canaries executed rather than skipped.
 
 ## Worktrees
 

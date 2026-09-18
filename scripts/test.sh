@@ -147,6 +147,65 @@ release_preflight_candidate_check() {
     --strict-release
 }
 
+release_preflight_corpus_check() {
+  # A clean source worktree has no scripts/products and no canary baselines,
+  # so the catalog-backed canaries pytest.skip() there. That is correct for
+  # `fast` — it proves SOURCE integrity and nothing about the catalog.
+  #
+  # On the release path a silent skip is the wrong answer: it reports green
+  # while the tests that compare a rebuild against its baseline never ran.
+  # Convergence to f0e514fc surfaced exactly this — 191 skips read as a pass.
+  # Here the corpus is REQUIRED, so its absence is a hard failure.
+  #
+  # Escape hatch for a deliberately corpus-less run: PG_ALLOW_MISSING_CORPUS=1.
+  if [[ "${PG_ALLOW_MISSING_CORPUS:-0}" == "1" ]]; then
+    echo "test.sh release: corpus check bypassed via PG_ALLOW_MISSING_CORPUS=1" >&2
+    return 0
+  fi
+
+  # BASELINE_DIR in test_e1_2_2_preflight_invariant.py is <repo>/reports, NOT
+  # <repo>/scripts/reports — getting this wrong hard-fails the canonical
+  # environment, which is worse than the silent skip it replaces.
+  local products_dir="$REPO_ROOT/scripts/products"
+  local baseline_dir="$REPO_ROOT/reports/baseline_pre_e1_2_2"
+  local missing=()
+
+  [[ -d "$products_dir" ]] || missing+=("scripts/products (enriched/scored product corpus)")
+  [[ -d "$baseline_dir" ]] || missing+=("scripts/reports/baseline_pre_e1_2_2 (canary baselines)")
+
+  if ((${#missing[@]} == 0)); then
+    # The directories exist; require the canary baselines the invariant tests
+    # read, so a half-populated corpus cannot pass either.
+    local ids=(35491 306237 246324 1002 19067 1036 176872 266975 19055)
+    local absent=()
+    for id in "${ids[@]}"; do
+      [[ -f "$baseline_dir/$id.json" ]] || absent+=("$id")
+    done
+    if ((${#absent[@]} > 0)); then
+      missing+=("canary baselines: ${absent[*]}")
+    fi
+  fi
+
+  if ((${#missing[@]} > 0)); then
+    echo "" >&2
+    echo "=======================================================================" >&2
+    echo "scripts/test.sh release: REQUIRED PRODUCT CORPUS IS MISSING" >&2
+    echo "=======================================================================" >&2
+    for m in "${missing[@]}"; do
+      echo "  - $m" >&2
+    done
+    echo "" >&2
+    echo "  Release gates must run against the canonical corpus. Without it the" >&2
+    echo "  catalog-backed canaries SKIP, and a skipped canary is not a passing canary." >&2
+    echo "  Such a run proves source integrity only." >&2
+    echo "" >&2
+    echo "  Run the release tier from the canonical corpus environment, or" >&2
+    echo "  regenerate baselines with scripts/reports/canary_rebuild.py." >&2
+    echo "=======================================================================" >&2
+    return 2
+  fi
+}
+
 release_preflight_staleness_check() {
   # Wave 6.Z release hardening: emit BIG actionable messages when the
   # pipeline chain is stale. The downstream audits (FRESHNESS_PRODUCTS_NEWER_
@@ -360,6 +419,7 @@ case "$PROFILE" in
     # BEFORE pytest so a stale Flutter bundle never sneaks through with
     # only a technical-finding-code warning. Skip via SKIP_STALENESS_CHECK=1.
     release_artifact_dirs
+    release_preflight_corpus_check
     REPO_ROOT="$REPO_ROOT" FLUTTER_REPO="$FLUTTER_REPO" \
       release_preflight_staleness_check
     split_user_pytest_args "$@"
