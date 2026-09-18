@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-08-07",
+    "last_updated": "2026-09-18",
     "total_entries": 117,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -173,7 +173,7 @@
         "DOI: 10.1016/j.fct.2020.111375 - Lack of potential carcinogenicity for acesulfame potassium",
         "WHO Guideline: Use of non-sugar sweeteners (2023)"
       ],
-      "last_updated": "2026-07-04",
+      "last_updated": "2026-09-18",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -249,9 +249,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-05-16",
+        "last_reviewed_at": "2026-09-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "next_review_due": "2027-03-18",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -312,11 +312,16 @@
             "date": "2026-07-04",
             "change": "Replaced wrong-topic detergent-study DOI with content-verified Ace-K review DOI 10.1016/j.fct.2020.111375.",
             "reason": "citation_integrity_cleanup"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "severity_level moderate -> low",
+            "reason": "Authoritative ADI maintained and genotoxicity negative; presence of an approved sweetener is not a clinical safety defect."
           }
         ]
       },
       "confidence": "medium",
-      "severity_level": "moderate",
+      "severity_level": "low",
       "dose_thresholds": [
         {
           "value": 15,
@@ -367,6 +372,9 @@
       "safety_summary_one_liner": "Artificial sweetener with possible gut and glucose effects.",
       "functional_roles": [
         "sweetener_artificial"
+      ],
+      "audit_trail": [
+        "2026-09-18: Severity re-tiered moderate->low. EFSA's 2025 re-evaluation (EFSA Journal 2025;23:e9317) raised the ADI from 9 to 15 mg/kg/day, aligning with FDA and JECFA, and records genotoxicity as negative with EU status approved. The entry's own notes already concluded 'generally safe at typical supplement doses', and the gut-microbiome and glucose signals are limited and high-intake. 'low' still carries a 0.5-point formulation penalty, which is the right weight for a formulation/preference disclosure. Verified via scripts/api_audit/verify_efsa.py --search acesulfame."
       ]
     },
     {
@@ -1137,7 +1145,7 @@
         "DOI: 10.2903/j.efsa.2013.3496 - EFSA safety assessment of aspartame",
         "IARC Monographs Volume 134 (2024) - Aspartame carcinogenicity evaluation"
       ],
-      "last_updated": "2026-02-26",
+      "last_updated": "2026-09-18",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -1219,9 +1227,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-05-16",
+        "last_reviewed_at": "2026-09-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "next_review_due": "2027-03-18",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -1267,11 +1275,16 @@
             "date": "2026-03-24",
             "change": "Added dose_thresholds: FDA ADI 50 mg/kg/day, EFSA ADI 40 mg/kg/day, JECFA ADI 40 mg/kg/day. Fixed IARC structured reference: added URL, published_date (2024-04-29), upgraded evidence_grade to A.",
             "reason": "deep_audit_batch_1"
+          },
+          {
+            "date": "2026-09-18",
+            "change": "severity_level high -> moderate",
+            "reason": "Authoritative ADI maintained and genotoxicity negative; presence of an approved sweetener is not a clinical safety defect."
           }
         ]
       },
       "confidence": "high",
-      "severity_level": "high",
+      "severity_level": "moderate",
       "dose_thresholds": [
         {
           "value": 50,
@@ -1327,6 +1340,9 @@
       "safety_summary_one_liner": "Artificial sweetener with a PKU label requirement.",
       "functional_roles": [
         "sweetener_artificial"
+      ],
+      "audit_trail": [
+        "2026-09-18: Severity re-tiered high->moderate. 'high' scores 3.0 B1 penalty points against a 4.0 'critical' ceiling, which asserts near-maximal clinical harm from mere presence. EFSA (Journal 2013;11(12):3496) and JECFA both maintain an ADI of 40 mg/kg/day and both record genotoxicity as negative; FDA's ADI is 50 mg/kg/day (21 CFR 172.804). IARC Group 2B is a hazard classification, not a risk assessment at supplement exposure, and JECFA reaffirmed the ADI in the same 2023 joint assessment. The one absolute constraint is PKU, which is population-specific and is already carried in population_warnings — a global severity tier is the wrong instrument for it. Verified via scripts/api_audit/verify_efsa.py --search aspartame."
       ]
     },
     {
@@ -4216,7 +4232,7 @@
           },
           {
             "date": "2026-07-04",
-            "change": "Severity moderate->low for caloric-sugar consistency (HFCS/cane sugar/dextrose are all low). Audit confirmed no toxicological basis \u2014 the 2026-03-01 high->moderate note already flagged it a sugar filler, not a toxicant.",
+            "change": "Severity moderate->low for caloric-sugar consistency (HFCS/cane sugar/dextrose are all low). Audit confirmed no toxicological basis — the 2026-03-01 high->moderate note already flagged it a sugar filler, not a toxicant.",
             "reason": "sugar_filler_severity_consistency",
             "by": "harmful_additives_sugar_consistency"
           },
