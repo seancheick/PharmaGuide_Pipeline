@@ -15,7 +15,8 @@ The efficacy query deliberately avoids positive-outcome words, and it does not
 require the Humans MeSH tag (new records are not yet indexed); it only drops
 records indexed as animal-only. Human status is decided later from several signals.
 
-Resumable: identities whose candidate file already exists are skipped.
+Resumable: identities whose candidate file already exists are skipped. The committed
+search log is chosen with --log so each wave keeps its own.
 
     python3 scripts/audits/evidence_expansion_2026_09/discover_literature.py \
         --partition <partition.json> --candidates-dir <scratch dir>
@@ -126,9 +127,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--partition", required=True, type=Path)
     parser.add_argument("--candidates-dir", required=True, type=Path)
+    parser.add_argument("--log", default="wave1_search_log.json",
+                        help="committed search log, relative to this audit directory")
     args = parser.parse_args()
     args.candidates_dir.mkdir(parents=True, exist_ok=True)
-    log_path = OUT / "wave1_search_log.json"
+    log_path = OUT / args.log
     search_log = json.loads(log_path.read_text()) if log_path.exists() else {"identities": []}
     logged = {item["canonical_id"] for item in search_log["identities"]}
     # No disk cache: the shared cache rewrites one file per request, and a PMID's
