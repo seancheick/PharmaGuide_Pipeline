@@ -265,14 +265,25 @@ def _load_canaries(ids):
 # from an evidence-credit recalc — verify it holds at the next full-corpus rebuild.
 # Scoring 4.3 row eligibility removes redundant zero-dose EPA/DHA projections;
 # 288740 therefore earns the already-existing 1-point full-disclosure credit.
+# Re-pinned 2026-09-18 from the first full corpus scored by the converged tree
+# (origin/main 3cfbeef0). These are RAW omega-module rubric scores out of 100, and
+# they moved for four reviewed reasons, all measured before re-pinning:
+#   - premium-form carry retired; source disclosure left Formulation for Transparency
+#   - the bare EPA+DHA >= 1,000 mg/day Evidence bonus retired
+#   - oxidation retired from Transparency, cap 15 -> 13, so the caps now sum 83 not 85
+#   - Model C dose interpolation (the only one that pushes UP)
+# Garden of Life 273630 decomposes to formulation 12/25, dose 16.64/25, evidence 10/20,
+# transparency 9/13. Its PUBLIC six-pillar score is 82.0 (Very good) - the raw module
+# scale is where the removals bite hardest. No scoring change was made to satisfy an
+# old snapshot; the old ranges were pre-batch and are superseded by the locked policy.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research", 84.9, 85.9),
-    ("326270", "Sports Research", 84.9, 85.9),
-    ("288740", "Nordic Naturals", 63.6, 64.6),
+    ("327776", "Sports Research", 63.9, 64.9),
+    ("326270", "Sports Research", 63.9, 64.9),
+    ("288740", "Nordic Naturals", 56.1, 57.1),
     # Sep-08 canonical-form ordering restores the verified exact-SKU NSF match;
     # the approved audit already carries its verification15 (not brand-only2).
-    ("273630", "Garden of Life", 84.0, 85.0),
-    ("239592", "CVS Health", 49.4, 50.4),
+    ("273630", "Garden of Life", 63.6, 64.6),
+    ("239592", "CVS Health", 32.9, 33.9),
     ("182968", "Pure Encapsulations",  52.0, 59.0),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):
