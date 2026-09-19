@@ -61,7 +61,17 @@ SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/scripts" && pwd)"
 REPO_ROOT="$(cd "$SCRIPTS_DIR/.." && pwd)"
 STAGES="clean,enrich,score"  # Default: full pipeline
 TARGET_DATASETS=""  # Empty = all datasets
-PYTHON="${PYTHON:-python3}"  # Use python3 by default
+# Every other pipeline entry point (rebuild_dashboard_snapshot.sh,
+# release_full.sh, test.sh, rebuild_interaction_db.sh, run_fda_sync.sh) selects
+# its interpreter through this one shared helper, which prefers PG_PYTHON / the
+# repo .venv / pyenv and HARD-FAILS below Python 3.13. This script was the only
+# one defaulting to a bare `python3` and checking nothing but `command -v`, so
+# on a host where `python3` is the macOS 3.9 it would run the entire
+# Clean/Enrich/Score on 3.9 while every downstream script correctly used 3.13.
+# One selector, one runtime. An explicit PYTHON=... still wins, as documented
+# in the usage header above.
+source "$REPO_ROOT/scripts/python_env.sh"
+PYTHON="${PYTHON:-$PG_PYTHON}"
 
 # Release-stage flags (passed through to release_full.sh)
 SKIP_RELEASE_FLAG=0          # 1 = skip full release entirely (snapshot still runs)

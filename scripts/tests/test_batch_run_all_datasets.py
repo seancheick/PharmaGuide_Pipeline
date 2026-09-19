@@ -6,6 +6,23 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "batch_run_all_datasets.sh"
+PYTHON_ENV_PATH = REPO_ROOT / "scripts" / "python_env.sh"
+
+
+def _install_python_env(tmp_path):
+    """Mirror the shared interpreter selector into the fake repo.
+
+    batch_run_all_datasets.sh sources scripts/python_env.sh, the same helper
+    every other pipeline entry point uses to pin Python 3.13. These tests run
+    the script against a minimal fake scripts/ tree, so that tree has to carry
+    the dependency too - otherwise the run dies on a missing source before it
+    reaches anything the test is actually asserting about.
+    """
+    scripts_dir = tmp_path / "scripts"
+    scripts_dir.mkdir(parents=True, exist_ok=True)
+    (scripts_dir / "python_env.sh").write_text(
+        PYTHON_ENV_PATH.read_text(encoding="utf-8"), encoding="utf-8"
+    )
 
 
 def test_batch_runner_defaults_to_local_non_icloud_dataset_root(tmp_path):
@@ -27,6 +44,8 @@ def test_batch_runner_defaults_to_local_non_icloud_dataset_root(tmp_path):
         "sys.exit(3)\n",
         encoding="utf-8",
     )
+
+    _install_python_env(tmp_path)
 
     copied_script = tmp_path / "batch_run_all_datasets.sh"
     copied_script.write_text(SCRIPT_PATH.read_text(encoding="utf-8"), encoding="utf-8")
@@ -63,6 +82,8 @@ def test_batch_runner_reports_local_dataset_hydration_in_progress(tmp_path):
     (hydrating_root / "1.json").write_text("{}", encoding="utf-8")
     (tmp_path / "scripts").mkdir()
 
+    _install_python_env(tmp_path)
+
     copied_script = tmp_path / "batch_run_all_datasets.sh"
     copied_script.write_text(SCRIPT_PATH.read_text(encoding="utf-8"), encoding="utf-8")
     copied_script.chmod(copied_script.stat().st_mode | stat.S_IXUSR)
@@ -96,6 +117,8 @@ def test_batch_runner_propagates_run_pipeline_failures(tmp_path):
         "sys.exit(3)\n",
         encoding="utf-8",
     )
+
+    _install_python_env(tmp_path)
 
     copied_script = tmp_path / "batch_run_all_datasets.sh"
     copied_script.write_text(
@@ -145,6 +168,8 @@ def test_batch_runner_propagates_snapshot_failure_and_skips_release(tmp_path):
     snapshot.chmod(snapshot.stat().st_mode | stat.S_IXUSR)
     release.chmod(release.stat().st_mode | stat.S_IXUSR)
 
+    _install_python_env(tmp_path)
+
     copied_script = tmp_path / "batch_run_all_datasets.sh"
     copied_script.write_text(SCRIPT_PATH.read_text(encoding="utf-8"), encoding="utf-8")
     copied_script.chmod(copied_script.stat().st_mode | stat.S_IXUSR)
@@ -189,6 +214,8 @@ def test_full_batch_refreshes_stale_product_submissions_before_snapshot(tmp_path
     snapshot = scripts_dir / "rebuild_dashboard_snapshot.sh"
     snapshot.write_text("#!/bin/bash\necho snapshot-ok\n", encoding="utf-8")
     snapshot.chmod(snapshot.stat().st_mode | stat.S_IXUSR)
+
+    _install_python_env(tmp_path)
 
     copied_script = tmp_path / "batch_run_all_datasets.sh"
     copied_script.write_text(SCRIPT_PATH.read_text(encoding="utf-8"), encoding="utf-8")
