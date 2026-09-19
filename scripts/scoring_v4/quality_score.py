@@ -760,17 +760,69 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     }
 
 
+#: What a zero MEANS, keyed by the canonical state generic_evidence and
+#: probiotic_evidence already emit. This is not a second state machine - it is
+#: the public meaning of the one that exists, and it lives beside the copy map
+#: that is already keyed the same way.
+#:
+#: The invariant it enforces: a user-visible 0/20 must be a REVIEWED conclusion.
+#: It may never mean "PharmaGuide has not done this review yet". Those were
+#: indistinguishable in the public payload, so 3,995 products were reading as
+#: "no clinical evidence" when the scorer had in fact recorded "not looked at".
+EVIDENCE_REVIEWED_ZERO_STATES = frozenset({
+    "evaluated_null",
+    "evaluated_unfavorable",
+    "no_qualifying_human_evidence",
+})
+EVIDENCE_COVERAGE_GAP_STATES = frozenset({
+    "clinical_review_not_covered",
+    "native_research_review_incomplete",
+    "human_clinical_evidence_unestablished",
+})
+EVIDENCE_APPLICABILITY_STATES = frozenset({
+    "applicability_unestablished",
+    "research_present_applicability_unestablished",
+})
+EVIDENCE_NOT_APPLICABLE_STATES = frozenset({"no_assessable_actives"})
+
+
+def evidence_display_state(state: Optional[str], score: float) -> str:
+    """The one place that decides how an Evidence result may be PRESENTED.
+
+    Returns exactly one of:
+      assessed                    - a reviewed result, numeric or a reviewed zero
+      not_yet_reviewed            - a coverage gap; must NOT render as 0/20
+      applicability_unestablished - reviewed, but not applicable to this label
+      not_applicable              - nothing on this label to assess
+
+    A nonzero score is always `assessed`: whatever the state says, credit was
+    earned from reviewed evidence.
+    """
+    if score > 0:
+        return "assessed"
+    if state in EVIDENCE_COVERAGE_GAP_STATES:
+        return "not_yet_reviewed"
+    if state in EVIDENCE_APPLICABILITY_STATES:
+        return "applicability_unestablished"
+    if state in EVIDENCE_NOT_APPLICABLE_STATES:
+        return "not_applicable"
+    return "assessed"
+
+
 _EVIDENCE_ZERO_REASON = {
     "clinical_review_not_covered": (
-        "PharmaGuide's clinical evidence review does not yet cover the ingredients on this "
-        "label. This is a gap in our review, not a finding of weak evidence."
+        "Clinical evidence review pending. We haven't completed our evidence review for the "
+        "ingredients on this label yet. This does not mean they lack clinical evidence."
     ),
     "applicability_unestablished": (
-        "Recorded research does not match this label's ingredient form, dose or delivery, "
-        "so it earns no evidence credit here."
+        "We reviewed the evidence for these ingredients, but it does not match this label's "
+        "form, dose or delivery, so it cannot be applied to this product."
     ),
     "evaluated_unfavorable": "Reviewed human research did not show benefit for these ingredients.",
-    "evaluated_null": "Reviewed human research did not show a clear benefit for these ingredients.",
+    "evaluated_null": (
+        "We reviewed the human research and it did not establish a clear benefit for these "
+        "ingredients."
+    ),
     "no_qualifying_human_evidence": (
         "The research on record is not human clinical evidence of benefit for these ingredients."
     ),
@@ -852,10 +904,18 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         state = metadata.get("evidence_result_state") or (
             metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
         reason = _EVIDENCE_ZERO_REASON.get(state, reason)
+
+    # Carry the canonical state and its public display meaning onto the pillar so
+    # the export and the UI branch on what the SCORER decided, instead of
+    # re-deriving it from a number that cannot tell the two kinds of zero apart.
+    result_state = metadata.get("evidence_result_state") or (
+        metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
     return {
         "score": val,
         "max": weight,
         "reason": reason,
+        "evidence_result_state": result_state,
+        "display_state": evidence_display_state(result_state, val),
         "components": {"raw_evidence": score, "archetype": archetype, "reference": ref},
     }
 
