@@ -41,6 +41,12 @@ def snapshot(products_root: Path, out_path: Path) -> int:
                 result = score_product_v4(json.loads(json.dumps(enriched)))
                 pillars = result.get("quality_pillars_v4") or {}
                 evidence = pillars.get("evidence") or {}
+                safety = pillars.get("safety_hygiene") or {}
+                module_bd = (result.get("v4_breakdown") or {}).get("module") or {}
+                formulation_bd = ((module_bd.get("dimensions") or {})
+                                  .get("formulation") or {})
+                sugar = (formulation_bd.get("metadata") or {}).get("dietary_sugar") or {}
+                form_pen = formulation_bd.get("penalties") or {}
                 sink.write(json.dumps({
                     "dsld_id": str(enriched.get("dsld_id")),
                     "brand_dir": Path(brand_path).parents[1].name,
@@ -49,6 +55,25 @@ def snapshot(products_root: Path, out_path: Path) -> int:
                     "evidence_reason": evidence.get("reason"),
                     "total": result.get("quality_score_v4_100"),
                     "tier": result.get("quality_tier"),
+                    # Every public pillar, so a diff can prove that a change
+                    # confined to one owner did not move any other pillar.
+                    "pillars": {name: (block or {}).get("score")
+                                for name, block in pillars.items()},
+                    # The dietary-sugar owner's own determination, so a sugar
+                    # A/B reports branch transitions rather than inferring them.
+                    "sugar_penalty": sugar.get("penalty"),
+                    "sugar_reason": sugar.get("reason"),
+                    "sugar_level": sugar.get("level"),
+                    "canonical_finds_no_sugar": sugar.get("canonical_finds_no_sugar"),
+                    "contains_sugar": sugar.get("contains_sugar"),
+                    "has_added_sugar": sugar.get("has_added_sugar"),
+                    "n_high_glycemic": len(sugar.get("high_glycemic_sweeteners") or []),
+                    "n_sugar_alcohols": len(sugar.get("sugar_alcohols") or []),
+                    "n_syrup_sources": len(sugar.get("syrup_sources") or []),
+                    "b1_dietary_sugar": form_pen.get("B1_dietary_sugar"),
+                    "b1_harmful_additives": form_pen.get("B1_harmful_additives"),
+                    "safety_reason": safety.get("reason"),
+                    "safety_components": safety.get("components") or {},
                 }) + "\n")
                 written += 1
             if written and written % 2000 < 50:
