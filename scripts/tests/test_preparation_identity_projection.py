@@ -396,7 +396,11 @@ def _safety_identity_product(label: str, quantity: float, unit: str) -> dict:
 
 
 @pytest.mark.parametrize("label,quantity,unit,safety_source,safety_id", [
-    ("Nickel", 5.0, "mcg", "harmful_additives", "ADD_NICKEL"),
+    # Nickel held this slot until it gained a verified IQM canonical identity
+    # (2026-09-19 ultratrace-mineral repair); the guard it illustrates is
+    # unchanged. Antimony is the current contaminant-class ingredient with no
+    # canonical primary identity anywhere.
+    ("Antimony", 5.0, "mcg", "harmful_additives", "ADD_ANTIMONY"),
     # A high-risk active with no scoring identity anywhere. Vinpocetine held
     # this slot until it gained a verified IQM entry (2026-09-11); the guard
     # it illustrates is unchanged.
@@ -499,7 +503,7 @@ def test_safety_recognition_preserves_a_validated_primary_without_form_credit(
 def test_classification_keeps_a_safety_only_conflict_in_the_required_role(
     enricher: SupplementEnricherV3,
 ) -> None:
-    source = _safety_identity_product("Nickel", 5.0, "mcg")
+    source = _safety_identity_product("Antimony", 5.0, "mcg")
     product, issues = enricher.enrich_product(source)
     assert product.get("enrichment_status") != "validation_failed", issues
     quality = product["ingredient_quality_data"]["ingredients"][0]
@@ -513,14 +517,14 @@ def test_classification_keeps_a_safety_only_conflict_in_the_required_role(
     assert quality["identity_disposition"] == "identity_conflict"
     assert quality["role_classification"] == "active_unmapped"
     assert quality["canonical_id"] is None
-    assert quality["safety_identity_id"] == "ADD_NICKEL"
+    assert quality["safety_identity_id"] == "ADD_ANTIMONY"
     assert quality["bio_score"] is quality["score"] is None
     scoring = get_scoring_ingredients(product)
     assert scoring.mapped_count == scoring.unmapped_count == 1
     assert scoring.mapped_coverage == 0.5
 
 
-@pytest.mark.parametrize("label", ["Nickel", "5a-Hydroxy Laxogenin"])
+@pytest.mark.parametrize("label", ["Antimony", "5a-Hydroxy Laxogenin"])
 @pytest.mark.parametrize("exclusion", ["inactive", "excipient"])
 def test_safety_recognition_does_not_make_an_excluded_source_required(
     enricher: SupplementEnricherV3, label: str, exclusion: str,

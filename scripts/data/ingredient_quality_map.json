@@ -38,9 +38,9 @@
       }
     },
     "statistics": {
-      "total_parents": 632,
-      "total_forms": 1424,
-      "total_form_aliases": 12117,
+      "total_parents": 634,
+      "total_forms": 1426,
+      "total_form_aliases": 12121,
       "parents_with_parent_aliases": 120,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0

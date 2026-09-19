@@ -236,15 +236,18 @@ class TestDepletionDataQuality:
         assert found, "PPI → Magnesium depletion must be present"
 
     def test_high_value_expansion_rows_exist(self, depletions):
+        # canonical_id values re-baselined 2026-09-19: legacy ids migrated to
+        # the IQM canonical vocabulary (vitamin_b6 -> vitamin_b6_pyridoxine,
+        # folate -> vitamin_b9_folate, vitamin_b12 -> vitamin_b12_cobalamin).
         expected = {
-            ("6038", "vitamin_b6", "depletion"),
-            ("6851", "folate", "functional_antagonism"),
+            ("6038", "vitamin_b6_pyridoxine", "depletion"),
+            ("6851", "vitamin_b9_folate", "functional_antagonism"),
             ("37925", "vitamin_a", "depletion"),
             ("37925", "vitamin_d", "depletion"),
             ("37925", "vitamin_e", "depletion"),
             ("37925", "vitamin_k", "depletion"),
-            ("9524", "folate", "depletion"),
-            ("2683", "vitamin_b12", "depletion"),
+            ("9524", "vitamin_b9_folate", "depletion"),
+            ("2683", "vitamin_b12_cobalamin", "depletion"),
             ("2447", "vitamin_a", "depletion"),
             ("2447", "vitamin_d", "depletion"),
             ("2447", "vitamin_e", "depletion"),

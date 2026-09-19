@@ -5,11 +5,39 @@
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "last_updated": "2026-08-07",
-    "total_entries": 50,
+    "total_entries": 54,
     "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches \u2014 the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
-    "reviewed_at": "2026-08-07"
+    "reviewed_at": "2026-09-19"
   },
   "allowed_overlaps": [
+    {
+      "term_normalized": "nickel",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-19: Ultratrace essential trace mineral on real Supplement Facts panels (DSLD: 378 products) now carries a canonical IQM identity (Phase 1a); ADD_NICKEL contaminant recognition is deliberately retained so the safety signal survives on inactive/contaminant contexts. Deliberate dual-recognition, reviewed."
+    },
+    {
+      "term_normalized": "ni",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-19: Chemical symbol for nickel, mirrored deliberately between the canonical IQM mineral aliases and the ADD_NICKEL contaminant entry (dual-recognition, same rationale as \"nickel\")."
+    },
+    {
+      "term_normalized": "tin",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-19: Ultratrace essential trace mineral on real Supplement Facts panels (DSLD: 205 products) now carries a canonical IQM identity (Phase 1a); ADD_TIN contaminant recognition is deliberately retained so the safety signal survives on inactive/contaminant contexts. Deliberate dual-recognition, reviewed."
+    },
+    {
+      "term_normalized": "sn",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-19: Chemical symbol for tin, mirrored deliberately between the canonical IQM mineral aliases and the ADD_TIN contaminant entry (dual-recognition, same rationale as \"tin\")."
+    },
     {
       "term_normalized": "blue vitriol",
       "db_pairs": [

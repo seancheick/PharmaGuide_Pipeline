@@ -281,13 +281,22 @@ def test_real_source_content_hash_is_pinned():
     # entry is byte-identical to its canonical source record. The Clinical
     # Team still owes a re-confirmation of this narrowed value; it is recorded
     # as an open sign-off item rather than treated as approved.
+    #
+    # Repinned 2026-09-19 for a VOCABULARY reason, not a content one: 23
+    # records' depleted_nutrient.canonical_id values migrated from legacy ids
+    # to the IQM canonical vocabulary (vitamin_b12 -> vitamin_b12_cobalamin,
+    # folate -> vitamin_b9_folate, coenzyme_q10 -> coq10, vitamin_b6 ->
+    # vitamin_b6_pyridoxine, thiamin -> vitamin_b1_thiamine, biotin ->
+    # vitamin_b7_biotin). No clinical field changed — wording, dispositions,
+    # and sources are untouched; the B1 ledger fingerprints were re-baselined
+    # by the same migration.
     PRE_EXPORT_GATE_PIN = (
         "sha256:365502ccbdc944c78a07ac2af45b05f58a0bef0635fa4456215045a718fc218e"
     )
     assert PRE_EXPORT_GATE_PIN  # kept for provenance; see the note above
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:f85e11b5937602ae4ef0b9aad5c1eb812401050418749437aa6927763ecb8a14"
+        == "sha256:52417b894d54297d352e599c4f1e7d2ea456be0eaa723017f7e4d00fa0ac4b67"
     )
 
 
