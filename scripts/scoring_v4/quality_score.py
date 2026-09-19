@@ -829,6 +829,23 @@ _EVIDENCE_ZERO_REASON = {
     "no_assessable_actives": "No active ingredient on this label could be assessed for clinical evidence.",
 }
 
+#: Not every state carries its own sentence. One that does not must still never
+#: fall through to the numeric band copy, which reads "Limited human evidence
+#: for these ingredients." - a REVIEWED finding of weakness, and precisely the
+#: claim a coverage gap or an applicability gap does not support. So a state
+#: without its own copy borrows the canonical sentence for its DISPLAY class,
+#: keyed off evidence_display_state rather than a second table.
+#:
+#: Latent today: no product in the corpus reaches a non-probiotic zero in one of
+#: these states, so this changes no shipped explanation. It exists so the state
+#: sets and the copy map cannot drift apart later without the contract test
+#: noticing.
+_EVIDENCE_ZERO_CLASS_FALLBACK = {
+    "not_yet_reviewed": "clinical_review_not_covered",
+    "applicability_unestablished": "applicability_unestablished",
+    "not_applicable": "no_assessable_actives",
+}
+
 
 def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
                      cfg: Dict[str, Any]) -> Dict[str, Any]:
@@ -903,7 +920,14 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     if val == 0 and archetype != "probiotic":
         state = metadata.get("evidence_result_state") or (
             metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
-        reason = _EVIDENCE_ZERO_REASON.get(state, reason)
+        zero_copy = _EVIDENCE_ZERO_REASON.get(state)
+        if zero_copy is None:
+            zero_copy = _EVIDENCE_ZERO_REASON.get(
+                _EVIDENCE_ZERO_CLASS_FALLBACK.get(
+                    evidence_display_state(state, val)
+                )
+            )
+        reason = zero_copy or reason
 
     # Carry the canonical state and its public display meaning onto the pillar so
     # the export and the UI branch on what the SCORER decided, instead of

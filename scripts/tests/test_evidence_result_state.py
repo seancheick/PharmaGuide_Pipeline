@@ -44,15 +44,15 @@ def test_zero_without_review_coverage_never_says_limited_evidence():
     reason = _zero_reason("clinical_review_not_covered")
     assert "limited" not in reason.lower()
     assert reason == (
-        "PharmaGuide's clinical evidence review does not yet cover the ingredients on this "
-        "label. This is a gap in our review, not a finding of weak evidence."
+        "Clinical evidence review pending. We haven't completed our evidence review for the "
+        "ingredients on this label yet. This does not mean they lack clinical evidence."
     )
 
 
 def test_zero_state_copy_is_specific():
     assert _zero_reason("applicability_unestablished") == (
-        "Recorded research does not match this label's ingredient form, dose or delivery, "
-        "so it earns no evidence credit here."
+        "We reviewed the evidence for these ingredients, but it does not match this label's "
+        "form, dose or delivery, so it cannot be applied to this product."
     )
     assert _zero_reason("evaluated_unfavorable") == (
         "Reviewed human research did not show benefit for these ingredients."
@@ -66,7 +66,7 @@ def test_nested_multi_state_is_read_through_generic_metadata():
     dim = {"score": 0.0, "metadata": {"generic_evidence_metadata": {
         "evidence_result_state": "clinical_review_not_covered"}}}
     reason = _pillar_evidence(dim, 20, "prenatal_multi", _config())["reason"]
-    assert reason.startswith("PharmaGuide's clinical evidence review does not yet cover")
+    assert reason.startswith("Clinical evidence review pending.")
 
 
 def test_review_gap_and_undisclosed_strain_dose_are_both_named():
@@ -97,3 +97,37 @@ def test_dosed_strain_review_gap_does_not_mention_dose():
                              name="Lactobacillus acidophilus NCFM", dose=1e9)
     reason = _pillar_evidence(probiotic_evidence(product), 20, "probiotic", _config())["reason"]
     assert "not disclosed" not in reason
+
+
+def test_every_zero_state_has_copy_that_is_not_the_numeric_band():
+    """The state sets and the copy map must not drift apart.
+
+    A zero state that falls through to the band copy would tell the user
+    "Limited human evidence for these ingredients." - a reviewed finding of
+    weakness. For a coverage gap or an applicability gap that sentence is false,
+    and it is the exact defect the display-state work exists to prevent.
+    """
+    from scoring_v4.quality_score import (
+        EVIDENCE_APPLICABILITY_STATES,
+        EVIDENCE_COVERAGE_GAP_STATES,
+        EVIDENCE_NOT_APPLICABLE_STATES,
+        EVIDENCE_REVIEWED_ZERO_STATES,
+    )
+
+    from scoring_v4.quality_score import _reason_evidence
+
+    band = _reason_evidence("low")
+    every_state = (EVIDENCE_REVIEWED_ZERO_STATES | EVIDENCE_COVERAGE_GAP_STATES
+                   | EVIDENCE_APPLICABILITY_STATES | EVIDENCE_NOT_APPLICABLE_STATES)
+    assert every_state, "state sets are empty - the contract has moved"
+    for state in sorted(every_state):
+        assert _zero_reason(state) != band, state
+
+
+def test_a_coverage_gap_zero_never_reads_as_a_reviewed_weakness():
+    from scoring_v4.quality_score import EVIDENCE_COVERAGE_GAP_STATES
+
+    for state in sorted(EVIDENCE_COVERAGE_GAP_STATES):
+        reason = _zero_reason(state).lower()
+        assert "limited" not in reason, state
+        assert "did not show" not in reason, state
