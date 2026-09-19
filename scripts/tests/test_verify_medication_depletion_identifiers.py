@@ -87,3 +87,57 @@ def test_name_matches_tolerates_descriptive_suffix():
     assert vd._name_matches("furosemide", "Furosemide (Lasix)")
     assert vd._name_matches("metformin", "Metformin (type 2 diabetes medication)")
     assert not vd._name_matches("metronidazole", "Furosemide (Lasix)")
+
+
+# --- depleted_nutrient.canonical_id enforcement (2026-09-19) -----------------
+# The nutrient side of the reference was never gated: legacy ids like
+# `vitamin_b12` / `folate` / `coenzyme_q10` do not resolve in the IQM canonical
+# vocabulary (`vitamin_b12_cobalamin` / `vitamin_b9_folate` / `coq10`), so a
+# displayed entry could silently carry an unresolvable nutrient reference.
+
+NUTRIENT_IDS = {"vitamin_b12_cobalamin", "vitamin_b9_folate", "coq10"}
+
+
+def _dep_with_nutrient(eid, canonical_id, status=None):
+    e = {
+        "id": eid,
+        "drug_ref": {"type": "class", "id": "class:proton_pump_inhibitors"},
+        "depleted_nutrient": {"standard_name": "Vitamin B12", "canonical_id": canonical_id},
+    }
+    if status:
+        e["citation_review_status"] = status
+    return e
+
+
+def test_legacy_canonical_id_flagged():
+    deps = [_dep_with_nutrient("E", "vitamin_b12")]
+    problems, tracked, _ = vd.audit(deps, CLASS_IDS, name_fn=lambda rx: "x", nutrient_ids=NUTRIENT_IDS)
+    assert any("vitamin_b12" in p and "not in" in p for p in problems)
+    assert not tracked
+
+
+def test_resolved_canonical_id_passes():
+    deps = [_dep_with_nutrient("E", "vitamin_b12_cobalamin")]
+    problems, _, _ = vd.audit(deps, CLASS_IDS, name_fn=lambda rx: "x", nutrient_ids=NUTRIENT_IDS)
+    assert not problems
+
+
+def test_missing_canonical_id_flagged_on_displayed_entry():
+    e = {"id": "E", "drug_ref": {"type": "class", "id": "class:proton_pump_inhibitors"},
+         "depleted_nutrient": {"standard_name": "Something"}}
+    problems, _, _ = vd.audit([e], CLASS_IDS, name_fn=lambda rx: "x", nutrient_ids=NUTRIENT_IDS)
+    assert any("canonical_id" in p for p in problems)
+
+
+def test_suppressed_entry_canonical_id_tracked_not_enforced():
+    # Uniform invariant: app-hidden entries are tracked, never gated.
+    deps = [_dep_with_nutrient("E", "vitamin_b12", status="needs_revision")]
+    problems, tracked, _ = vd.audit(deps, CLASS_IDS, name_fn=lambda rx: "x", nutrient_ids=NUTRIENT_IDS)
+    assert not problems and len(tracked) == 1
+
+
+def test_nutrient_check_skipped_when_vocabulary_not_provided():
+    # Existing callers (and tests) that omit nutrient_ids behave as before.
+    deps = [_dep_with_nutrient("E", "vitamin_b12")]
+    problems, _, _ = vd.audit(deps, CLASS_IDS, name_fn=lambda rx: "x")
+    assert not problems
