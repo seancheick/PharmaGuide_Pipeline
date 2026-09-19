@@ -521,7 +521,6 @@ def _parse_approved_at(value: object) -> tuple[str, str]:
     return text, parsed.date().isoformat()
 
 
-
 def _catalog_relation(export_row: dict[str, Any]) -> tuple[str, str] | None:
     """Which catalog record this approval decided about, and how.
 
@@ -551,6 +550,7 @@ def _catalog_relation(export_row: dict[str, Any]) -> tuple[str, str] | None:
 def _edition_of(export_row: dict[str, Any]) -> str | None:
     relation = _catalog_relation(export_row)
     return relation[1] if relation and relation[0] == "edition_of_dsld_id" else None
+
 
 def build_manual_label(export_row: object) -> dict[str, Any]:
     """Validate one service export and build its pipeline-owned label."""
