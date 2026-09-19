@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
     "last_updated": "2026-09-18",
-    "total_entries": 171,
+    "total_entries": 176,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -20800,6 +20800,435 @@
         "effective_from": "2026-09-04",
         "effective_to": null,
         "note": "Promoted and sold for weight loss on various websites; identified in international mail shipments"
+      }
+    },
+    {
+      "id": "SPIKE_AMINOTADALAFIL",
+      "standard_name": "Aminotadalafil",
+      "aliases": [
+        "aminotadalafil",
+        "amino tadalafil",
+        "amino-tadalafil",
+        "rr-atdf",
+        "designer tadalafil analog aminotadalafil"
+      ],
+      "reason": "Aminotadalafil is a synthetic analog of tadalafil that delivers PDE5-inhibitor activity equivalent to the prescription drug while evading routine screening. Its presence in supplements is always undeclared. The same cardiovascular risk applies as with tadalafil — life-threatening hypotension when combined with nitrates such as nitroglycerin. FDA treats aminotadalafil as an undeclared pharmaceutical adulterant. No human safety or efficacy data exists for this analog.",
+      "status": "banned",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "drug_erectile_dysfunction"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-15",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: DEEP may be harmful due to hidden ingredient — 2026-09-15. FDA laboratory analysis identified amino tadalafil.",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: DEEP may be harmful due to hidden ingredient",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/deep-may-be-harmful-due-hidden-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-09-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed DEEP contains amino tadalafil not listed on the product label; FDA describes it as similar to tadalafil, the active ingredient in Cialis."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "contaminant",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-15 (DEEP). UNII FY501QO030 content-verified live against GSRS; name AMINOTADALAFIL, substanceClass chemical.",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "regulatory_date": "2026-09-15",
+      "regulatory_date_label": "FDA advisory publication date",
+      "match_mode": "active",
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept for this undeclared PDE-5 analogue; null CUI is intentional, matching the other designer-analog entries.",
+      "external_ids": {
+        "unii": "FY501QO030"
+      },
+      "ban_context": "adulterant_in_supplements",
+      "safety_warning": "A designer tadalafil analog found undeclared in sexual-enhancement supplements. Risk of dangerous blood-pressure drops with nitrate heart medicines. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Designer ED drug hidden in supplements — stop using and talk to your doctor."
+    },
+    {
+      "id": "RECALLED_LUZE_FIT_INTENSITY",
+      "standard_name": "LUZE Fit Intensity",
+      "aliases": [
+        "luze fit intensity",
+        "luze fit",
+        "luze"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sibutramine — a controlled substance withdrawn from the market for safety reasons. It can sharply raise blood pressure and heart rate, which is dangerous for anyone with heart disease, heart failure, irregular heartbeat or a history of stroke, and it can interact with other medicines in life-threatening ways. Sold for weight loss, so buyers have no reason to expect a withdrawn stimulant.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "supplement_weight_loss"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with an undeclared prescription drug.",
+      "safety_warning": "Hidden in this weight-loss supplement is sibutramine, a drug pulled from the market for raising blood pressure and heart rate. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains a withdrawn prescription drug — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-15",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: LUZE Fit Intensity may be harmful due to hidden ingredient — 2026-09-15",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: LUZE Fit Intensity may be harmful due to hidden ingredient",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/luze-fit-intensity-may-be-harmful-due-hidden-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-09-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed LUZE Fit Intensity, sold for weight loss, contains sibutramine not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-15. Notification page fetched and its date and adulterant read live.",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-15",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "LUZE Fit Intensity",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-09-15",
+        "effective_to": null,
+        "note": "Promoted and sold for weight loss on various websites including shop.app, and possibly in some retail stores"
+      }
+    },
+    {
+      "id": "RECALLED_BEAUTY_911",
+      "standard_name": "Beauty 911",
+      "aliases": [
+        "beauty 911",
+        "beauty911"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sibutramine — a controlled substance withdrawn from the market for safety reasons. It can sharply raise blood pressure and heart rate, which is dangerous for anyone with heart disease, heart failure, irregular heartbeat or a history of stroke, and it can interact with other medicines in life-threatening ways. Sold for weight loss, so buyers have no reason to expect a withdrawn stimulant.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "supplement_weight_loss"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with an undeclared prescription drug.",
+      "safety_warning": "Hidden in this weight-loss supplement is sibutramine, a drug pulled from the market for raising blood pressure and heart rate. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains a withdrawn prescription drug — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-15",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: Beauty 911 may be harmful due to hidden ingredient — 2026-09-15",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Beauty 911 may be harmful due to hidden ingredient",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/beauty-911-may-be-harmful-due-hidden-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-09-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed Beauty 911, sold for weight loss, contains sibutramine not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-15. Notification page fetched and its date and adulterant read live.",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-15",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "Beauty 911",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-09-15",
+        "effective_to": null,
+        "note": "Promoted and sold for weight loss on various websites including shop.app, and possibly in some retail stores"
+      }
+    },
+    {
+      "id": "RECALLED_DEEP",
+      "standard_name": "DEEP",
+      "aliases": [
+        "deep sexual enhancement",
+        "deep supplement",
+        "deep male enhancement"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared amino tadalafil, a designer analog of tadalafil (the active ingredient in Cialis) that evades routine screening. It can interact with nitrates found in heart medicines such as nitroglycerin and drop blood pressure to dangerous levels, which is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with an undeclared prescription drug.",
+      "safety_warning": "Hidden in this supplement is amino tadalafil, a designer ED drug, risking dangerous blood-pressure drops with nitrate heart medicines. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains a hidden designer ED drug — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-15",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: DEEP may be harmful due to hidden ingredient — 2026-09-15",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: DEEP may be harmful due to hidden ingredient",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/deep-may-be-harmful-due-hidden-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-09-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed DEEP contains amino tadalafil not listed on the product label; FDA describes it as similar to tadalafil, the active ingredient in Cialis."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-15. Notification page fetched and its date and adulterant read live.",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-15",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "DEEP",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-09-15",
+        "effective_to": null,
+        "note": "Promoted for sexual enhancement on various websites and in some retail stores. Adulterant tracked as SPIKE_AMINOTADALAFIL (UNII FY501QO030)"
+      }
+    },
+    {
+      "id": "RECALLED_MAXMAN_COFFEE",
+      "standard_name": "MAXMAN Coffee",
+      "aliases": [
+        "maxman coffee",
+        "maxman",
+        "max man coffee"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sildenafil and tadalafil — the prescription ED drugs in Viagra and Cialis. Both can interact with nitrates found in heart medicines such as nitroglycerin and drop blood pressure to dangerous levels. Sold as a coffee, so it may be consumed casually and repeatedly without any expectation of a prescription drug.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with an undeclared prescription drug.",
+      "safety_warning": "Hidden in this supplement product are prescription ED drugs (sildenafil, tadalafil), risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains hidden prescription drugs — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-02",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: MAXMAN Coffee may be harmful due to hidden drug ingredients — 2026-09-02",
+            "accessed_date": "2026-09-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-18"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: MAXMAN Coffee may be harmful due to hidden drug ingredients",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/maxman-coffee-may-be-harmful-due-hidden-drug-ingredients",
+          "evidence_grade": "R",
+          "date": "2026-09-02",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed MAXMAN Coffee contains sildenafil and tadalafil not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-18",
+        "next_review_due": "2027-03-18",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "change_log": [
+          {
+            "date": "2026-09-18",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-02. Notification page fetched and its date and adulterant read live.",
+            "by": "pharmaguide_clinical_team"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-02",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "MAXMAN Coffee",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-09-02",
+        "effective_to": null,
+        "note": "Promoted for sexual enhancement on various websites and possibly in some retail stores"
       }
     }
   ]
