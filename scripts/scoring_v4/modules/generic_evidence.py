@@ -30,6 +30,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
     daily_serving_multiplier,
     get_active_ingredients,
+    has_usable_individual_dose,
     is_scorable,
 )
 from scoring_v4.modules.botanical_profile import _mass_mg
@@ -400,6 +401,103 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     }
 
 
+def _is_nutrition_fact_declaration(row: Dict[str, Any]) -> bool:
+    """Return whether a row is classified by canonical label/row-role owner as a Nutrition Facts declaration.
+
+    A Nutrition Facts declaration describes nutritional quantity (calories, carbs,
+    total fat, dietary fiber, protein, sodium, sugars, etc.) rather than serving
+    as an independent efficacy-bearing active ingredient identity.
+
+    Guardrail: this predicate depends on canonical provenance and semantic row-role,
+    NEVER on hardcoded nutrient name string matching.
+    """
+    if not isinstance(row, dict):
+        return False
+
+    # 1. Canonical cleaner / enricher skip & score exclusion reasons
+    for key in (
+        "score_exclusion_reason",
+        "skip_reason",
+        "identity_decision_reason",
+        "fallback_reason",
+    ):
+        val = str(row.get(key) or "").strip().lower()
+        if val == "excluded_nutrition_fact":
+            return True
+
+    # 2. Canonical cleaner row role
+    role = str(row.get("cleaner_row_role") or "").strip().lower()
+    if role in {"nutrition_rollup", "nutrition_fact"}:
+        return True
+
+    # 3. Explicit panel / section / display provenance
+    for key in ("panel_type", "display_type", "source_section"):
+        val = str(row.get(key) or "").strip().lower()
+        if val in {"nutrition_fact", "nutrition_facts"}:
+            return True
+
+    if str(row.get("canonical_source_db") or "").strip().lower() == "cleaner_nutrition_fact":
+        return True
+
+    # 4. Check nested raw_taxonomy metadata if present
+    tax = row.get("raw_taxonomy")
+    if isinstance(tax, dict):
+        for key in ("panel_type", "display_type", "source_section"):
+            val = str(tax.get(key) or "").strip().lower()
+            if val in {"nutrition_fact", "nutrition_facts"}:
+                return True
+        if str(tax.get("cleaner_row_role") or "").strip().lower() in {"nutrition_rollup", "nutrition_fact"}:
+            return True
+
+    return False
+
+
+def _assessable_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Return ingredients eligible to be assessed for clinical evidence.
+
+    Drops parent totals / blend headers / compound duplicates / structural rows,
+    as well as Nutrition Facts nutrient declarations (which describe nutritional
+    quantity rather than an independent efficacy-bearing ingredient identity).
+    Retains identifiable child actives even if individual dose is unavailable.
+    Returns empty list (triggering 'no_assessable_actives') only when no genuine
+    evidence-bearing active identities remain.
+    """
+    if not isinstance(product, dict):
+        return []
+
+    # Check ingredient_quality_data.ingredients first (the canonical cleaner mirror
+    # containing all active rows, including undosed child rows of blends),
+    # falling back to get_active_ingredients(product).
+    iqd = product.get("ingredient_quality_data")
+    if isinstance(iqd, dict) and isinstance(iqd.get("ingredients"), list):
+        candidate_rows = [r for r in iqd["ingredients"] if isinstance(r, dict)]
+    else:
+        candidate_rows = [r for r in get_active_ingredients(product) if isinstance(r, dict)]
+
+    assessable = []
+    for row in candidate_rows:
+        # 1. Drop structural / header / compound duplicate rows
+        if row.get("is_proprietary_blend") or row.get("is_parent_total") or row.get("is_compound_duplicate"):
+            continue
+        role = _norm_text(row.get("cleaner_row_role"))
+        if role in {"blend_header_total", "parent_total", "compound_duplicate", "inactive_non_scorable"}:
+            continue
+        if _norm_text(row.get("source_section")) == "inactive":
+            continue
+
+        # 2. Drop Nutrition Facts nutrient declarations (provenance-driven rule)
+        if _is_nutrition_fact_declaration(row):
+            continue
+
+        # 3. Retain genuine identifiable active identities
+        # (named child actives, scorable actives, etc.)
+        name = row.get("canonical_id") or row.get("standard_name") or row.get("name")
+        if name and _norm_text(name):
+            assessable.append(row)
+
+    return assessable
+
+
 def _evidence_result_state(
     product: Dict[str, Any],
     total: float,
@@ -412,7 +510,7 @@ def _evidence_result_state(
     missing review record is a coverage gap, never proof of weak evidence."""
     if total > 0:
         return "evaluated_applicable"
-    if not get_active_ingredients(product):
+    if not _assessable_active_ingredients(product):
         return "no_assessable_actives"
     if not listed_ids:
         return "clinical_review_not_covered"
@@ -584,6 +682,8 @@ def _recover_verified_primary_ingredient_matches(
     for row in get_active_ingredients(product):
         if not isinstance(row, dict):
             continue
+        if _is_nutrition_fact_declaration(row):
+            continue
         if _norm_text(row.get("evidence_type")) == "blend_anchor_mass":
             # Blend totals are product-level/aggregate evidence. They may recover
             # verified product-level branded studies above, but they must not
@@ -676,6 +776,8 @@ def has_verified_ingredient_human_evidence_for_row(
     cleaner parent (for example L-Arginine) cannot lend credit to an excluded
     declared compound (for example AAKG).
     """
+    if _is_nutrition_fact_declaration(row):
+        return False
     row_keys = _row_identity_keys(row)
     if not row_keys:
         return False
@@ -1021,11 +1123,44 @@ def _identity_matches(value: Any, target: str) -> bool:
     return target == "collagen" and "collagen" in key
 
 
-def _competing_active_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Actives that compete for mass dominance: the shared scoring contract
-    removes a structural total whose source lineage proves it is the physical
-    source of a quantified label active (its own child or parent row)."""
-    return primary_mass_competitor_rows(product, get_active_ingredients(product))
+def _competing_active_rows(
+    product: Dict[str, Any],
+    rows: Optional[List[Dict[str, Any]]] = None,
+) -> List[Dict[str, Any]]:
+    """Actives that compete for mass dominance.
+
+    Must exclude:
+    - blend headers (is_proprietary_blend, cleaner_row_role == "blend_header_total")
+    - parent totals (is_parent_total, cleaner_row_role == "parent_total")
+    - compound duplicates (is_compound_duplicate)
+    - undosed children where mass is not known
+    A blend total must never compete against an individually dosed active for primary-mass dominance.
+    Also removes lineage-owned product_level_evidence totals via primary_mass_competitor_rows.
+    """
+    if rows is None:
+        rows = get_active_ingredients(product)
+    raw_competitors = primary_mass_competitor_rows(product, rows)
+    competing = []
+    for row in raw_competitors:
+        if not isinstance(row, dict):
+            continue
+        if row.get("is_proprietary_blend"):
+            continue
+        if row.get("is_parent_total"):
+            continue
+        if row.get("is_compound_duplicate"):
+            continue
+        if _is_nutrition_fact_declaration(row):
+            continue
+        role = _norm_text(row.get("cleaner_row_role"))
+        if role in {"blend_header_total", "parent_total", "compound_duplicate"}:
+            continue
+        # Stricter dose/scoring eligibility: undosed children where mass is not known do not compete
+        mass = _evidence_matching_mass_mg(row) or 0.0
+        if mass <= 0.0 and not has_usable_individual_dose(row):
+            continue
+        competing.append(row)
+    return competing
 
 
 def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float]:
@@ -1038,9 +1173,11 @@ def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float
     rows = get_active_ingredients(product)
     # Projected rows are rebuilt on every contract call, so the competitor
     # set must be derived from this same row list.
-    competitors = {id(row) for row in primary_mass_competitor_rows(product, rows)}
+    competitors = {id(row) for row in _competing_active_rows(product, rows)}
     for row in rows:
         if not isinstance(row, dict):
+            continue
+        if _is_nutrition_fact_declaration(row):
             continue
         mass = _evidence_matching_mass_mg(row) or 0.0
         if mass <= 0:

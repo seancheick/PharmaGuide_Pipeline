@@ -141,6 +141,8 @@ def is_scorable(ingredient: Dict[str, Any]) -> bool:
         # bare row carries the score-bearing dose; counting both would
         # break single-ingredient detection and the premium-single floors.
         return False
+    if str(ingredient.get("cleaner_row_role") or "").strip().lower() == "blend_header_total":
+        return False
     return has_usable_individual_dose(ingredient)
 
 

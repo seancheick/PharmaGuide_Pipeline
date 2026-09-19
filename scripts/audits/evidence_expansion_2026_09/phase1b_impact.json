@@ -1,0 +1,441 @@
+{
+  "total_products": 15459,
+  "total_nutrition_facts_rows_excluded": 2358,
+  "products_with_nutrition_facts": 1666,
+  "state_transitions": {
+    "clinical_review_not_covered -> no_assessable_actives": 70
+  },
+  "products_transitioning_to_no_assessable_count": 70,
+  "products_transitioning_to_no_assessable_samples": [
+    {
+      "dsld_id": "252564",
+      "product_name": "Konjac Root Extract",
+      "excluded_rows": [
+        "Konjac root extract"
+      ]
+    },
+    {
+      "dsld_id": "252842",
+      "product_name": "Sodium Citrate",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "252847",
+      "product_name": "Sodium BHB",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "252849",
+      "product_name": "Sodium D-Aspartate",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254473",
+      "product_name": "Sodium Citrate",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254474",
+      "product_name": "Sodium Citrate",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254475",
+      "product_name": "Sodium Citrate",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254479",
+      "product_name": "Sodium BHB",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254480",
+      "product_name": "Sodium BHB",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254481",
+      "product_name": "Sodium BHB",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254485",
+      "product_name": "Sodium D-Aspartate",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254486",
+      "product_name": "Sodium D-Aspartate",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "254487",
+      "product_name": "Sodium D-Aspartate",
+      "excluded_rows": [
+        "Sodium"
+      ]
+    },
+    {
+      "dsld_id": "255061",
+      "product_name": "Konjac Root Extract",
+      "excluded_rows": [
+        "Konjac root extract"
+      ]
+    },
+    {
+      "dsld_id": "255062",
+      "product_name": "Konjac Root Extract",
+      "excluded_rows": [
+        "Konjac root extract"
+      ]
+    }
+  ],
+  "products_retaining_source_actives_count": 1595,
+  "products_retaining_source_actives_samples": [
+    {
+      "dsld_id": "178352",
+      "product_name": "Beta-Immune Booster Zesty Orange",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "NHA_YEAST_FERMENTATE_DRIED"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "178355",
+      "product_name": "Beta-Immune Booster Very Berry",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "NHA_YEAST_FERMENTATE_DRIED"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180206",
+      "product_name": "Beta-Immune Booster Zesty Orange",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "NHA_YEAST_FERMENTATE_DRIED"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180213",
+      "product_name": "Airborne Citrus",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180214",
+      "product_name": "Airborne Berry",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180345",
+      "product_name": "Airborne Zesty Orange",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "NHA_YEAST_FERMENTATE_DRIED"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180346",
+      "product_name": "Airborne Lemon-Lime",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea",
+        "l_lysine",
+        "l_glutamine"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180349",
+      "product_name": "Airborne Very Berry",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea",
+        "l_lysine",
+        "l_glutamine"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180456",
+      "product_name": "Airborne Very Berry",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea",
+        "l_lysine",
+        "l_glutamine"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180457",
+      "product_name": "Airborne Very Berry",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea",
+        "l_lysine",
+        "l_glutamine"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "180581",
+      "product_name": "Airborne Original Lemon Lime",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea",
+        "l_lysine",
+        "l_glutamine"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "202152",
+      "product_name": "Airborne Original Zesty Orange",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "vitamin_b2_riboflavin",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea",
+        "l_lysine",
+        "l_glutamine"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "202156",
+      "product_name": "Airborne Original Zesty Orange",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "vitamin_b2_riboflavin",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea",
+        "l_lysine",
+        "l_glutamine"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "202226",
+      "product_name": "Airborne More Than Just Vitamin C Zesty Orange",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "NHA_YEAST_FERMENTATE_DRIED"
+      ],
+      "state_after": "evaluated_applicable"
+    },
+    {
+      "dsld_id": "212968",
+      "product_name": "Airborne Original Very Berry",
+      "retained_actives": [
+        "vitamin_a",
+        "vitamin_c",
+        "vitamin_e",
+        "magnesium",
+        "zinc",
+        "selenium",
+        "manganese",
+        "potassium",
+        "japanese_honeysuckle",
+        "forsythia_suspensa",
+        "schizonepeta",
+        "ginger",
+        "vitex",
+        "isatis",
+        "echinacea",
+        "l_lysine",
+        "l_glutamine"
+      ],
+      "state_after": "evaluated_applicable"
+    }
+  ],
+  "evidence_score_movers_count": 0,
+  "evidence_score_movers": [],
+  "tier_movers_count": 0,
+  "tier_movers": [],
+  "backlog_reduction": 70,
+  "unrelated_movers_count": 0
+}
