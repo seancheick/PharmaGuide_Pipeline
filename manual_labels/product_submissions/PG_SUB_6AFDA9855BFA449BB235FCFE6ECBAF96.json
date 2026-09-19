@@ -1,0 +1,148 @@
+{
+  "id": "PG_SUB_6AFDA9855BFA449BB235FCFE6ECBAF96",
+  "brandName": "Pure Encapsulations",
+  "fullName": "Vitamin D3 & K2",
+  "ingredientRows": [
+    {
+      "forms": [
+        {
+          "name": "Cholecalciferol"
+        }
+      ],
+      "ingredientGroup": "Vitamin D",
+      "name": "Vitamin D",
+      "nestedRows": [],
+      "notes": "(D3); 4,000 IU; Daily Value 500%",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 100,
+          "servingSizeOrder": 1,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Menaquinone-7"
+        }
+      ],
+      "ingredientGroup": "Vitamin K",
+      "name": "Vitamin K2",
+      "nestedRows": [],
+      "notes": "Daily Value not established",
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 100,
+          "servingSizeOrder": 1,
+          "unit": "mcg"
+        }
+      ]
+    }
+  ],
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "vegetarian capsule (cellulose, water)"
+      },
+      {
+        "name": "hypoallergenic plant fiber (cellulose)"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "name": "Capsule"
+  },
+  "productType": {
+    "name": "Dietary Supplement"
+  },
+  "servingSizes": [
+    {
+      "inSFB": true,
+      "maxDailyServings": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "Capsule(s)"
+    }
+  ],
+  "servingsPerContainer": 60,
+  "statements": [
+    {
+      "notes": "Dietary Supplement",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "Supports bone and vascular health*",
+      "type": "Formulation re: Other"
+    },
+    {
+      "notes": "Gluten-free, Non-GMO & Hypoallergenic",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "STORE IN A COOL, DRY PLACE.",
+      "type": "Storage"
+    },
+    {
+      "notes": "Recommendations: As a dietary supplement, take 1 capsule daily, with a meal or as directed by a health professional.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Warning: Vitamin K may be contraindicated with Coumadin (Warfarin). If you are pregnant or lactating, have any health condition or are taking any medication, particularly blood-thinning medication, consult your health professional before use.",
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications"
+    },
+    {
+      "notes": "It is recommended that individuals taking more than 50 mcg (2,000 IU) vitamin D per day have their blood levels monitored.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Keep out of the reach of children.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "Use only if safety seal is intact.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Contents may not fill package in order to accommodate required labeling. Please rely on stated quantity.",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Certified Gluten-Free by the Gluten-Free Certification Organization, www.gluten.org",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "Scan to learn about our hypoallergenic supplements",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "*This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    }
+  ],
+  "upcSku": "0766298026039",
+  "src": "local/manual_labels/product_submissions/PG_SUB_6AFDA9855BFA449BB235FCFE6ECBAF96",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "6afda985-5bfa-449b-b235-fcfe6ecbaf96",
+    "label_verified_at": "2026-09-18",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "6afda985-5bfa-449b-b235-fcfe6ecbaf96",
+    "source_date": "2026-09-18",
+    "source_updated_date": "2026-09-18",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:6afda985-5bfa-449b-b235-fcfe6ecbaf96",
+    "reviewed_at": "2026-09-18T17:52:31.558945+00:00"
+  }
+}

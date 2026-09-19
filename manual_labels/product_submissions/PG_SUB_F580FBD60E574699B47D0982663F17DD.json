@@ -1,0 +1,143 @@
+{
+  "id": "PG_SUB_F580FBD60E574699B47D0982663F17DD",
+  "brandName": "Trader Joe's",
+  "fullName": "Omega-3 Fatty Acids",
+  "ingredientRows": [
+    {
+      "forms": [],
+      "ingredientGroup": "Omega-3 Concentrate",
+      "name": "Omega-3 Concentrate (from anchovy fish oil)",
+      "nestedRows": [
+        {
+          "forms": [],
+          "ingredientGroup": "EPA",
+          "name": "Eicosapentaenoic Acid (EPA) Ethyl Esters",
+          "nestedRows": [],
+          "notes": "Daily Value (DV) not established.",
+          "order": 1,
+          "quantity": [
+            {
+              "quantity": 400,
+              "unit": "mg"
+            }
+          ]
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "DHA",
+          "name": "Docosahexaenoic Acid (DHA) Ethyl Esters",
+          "nestedRows": [],
+          "notes": "Daily Value (DV) not established.",
+          "order": 2,
+          "quantity": [
+            {
+              "quantity": 200,
+              "unit": "mg"
+            }
+          ]
+        }
+      ],
+      "notes": "Daily Value (DV) not established.",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 1200,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "nutritionalInfo": {
+    "calories": {
+      "amount": 10,
+      "unit": "kcal"
+    },
+    "totalFat": {
+      "amount": 1,
+      "unit": "g"
+    }
+  },
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Softgel capsule (gelatin [bovine], glycerin, water)"
+      },
+      {
+        "name": "rosemary leaf extract (to preserve)"
+      },
+      {
+        "name": "ascorbyl palmitate (to preserve)"
+      },
+      {
+        "name": "mixed tocopherols (to preserve)"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "name": "Softgel(s)"
+  },
+  "productType": {
+    "name": "Dietary Supplement"
+  },
+  "servingSizes": [
+    {
+      "inSFB": true,
+      "maxQuantity": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "Softgel(s)"
+    }
+  ],
+  "servingsPerContainer": 90,
+  "statements": [
+    {
+      "notes": "Take one softgel daily with food.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "People with medical concerns should check with their physician before using this or any dietary supplement. Store at room temperature. Do not refrigerate. Keep out of reach of children.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Contains Anchovy.",
+      "type": "Precautions re: Allergies"
+    },
+    {
+      "notes": "Gluten Free.",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    },
+    {
+      "notes": "Molecularly distilled to remove contaminants such as PCBs, mercury and other heavy metals; deodorized to reduce the fishy aftertaste and odor associated with omega-3 softgels.",
+      "type": "Formulation re: Other"
+    },
+    {
+      "notes": "Distributed & Sold Exclusively By: Trader Joe's, 800 S. Shamrock, Monrovia, CA 91016. Exp. Date/Lot #: 03/2029 59599-D6. SKU#83736.",
+      "type": "Other"
+    }
+  ],
+  "upcSku": "00837361",
+  "src": "local/manual_labels/product_submissions/PG_SUB_F580FBD60E574699B47D0982663F17DD",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "f580fbd6-0e57-4699-b47d-0982663f17dd",
+    "label_verified_at": "2026-09-18",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "f580fbd6-0e57-4699-b47d-0982663f17dd",
+    "source_date": "2026-09-18",
+    "source_updated_date": "2026-09-18",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:f580fbd6-0e57-4699-b47d-0982663f17dd",
+    "reviewed_at": "2026-09-18T17:52:03.312796+00:00"
+  }
+}

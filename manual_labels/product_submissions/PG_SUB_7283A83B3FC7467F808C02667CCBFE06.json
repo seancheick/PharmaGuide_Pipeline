@@ -1,0 +1,623 @@
+{
+  "id": "PG_SUB_7283A83B3FC7467F808C02667CCBFE06",
+  "brandName": "One A Day",
+  "fullName": "Prenatal Advanced",
+  "ingredientRows": [
+    {
+      "forms": [
+        {
+          "name": "Beta-Carotene",
+          "percent": 50
+        },
+        {
+          "name": "Retinyl Palmitate"
+        }
+      ],
+      "ingredientGroup": "Vitamin A",
+      "name": "Vitamin A",
+      "nestedRows": [],
+      "notes": "50% as beta-carotene; Daily Value 50%",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 650,
+          "servingSizeOrder": 1,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Calcium Ascorbate"
+        }
+      ],
+      "ingredientGroup": "Vitamin C",
+      "name": "Vitamin C",
+      "nestedRows": [],
+      "notes": "Daily Value 71%",
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 85,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Cholecalciferol"
+        }
+      ],
+      "ingredientGroup": "Vitamin D",
+      "name": "Vitamin D",
+      "nestedRows": [],
+      "notes": "600 IU; Daily Value 100%",
+      "order": 3,
+      "quantity": [
+        {
+          "quantity": 15,
+          "servingSizeOrder": 1,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "d-Alpha-Tocopherol"
+        }
+      ],
+      "ingredientGroup": "Vitamin E",
+      "name": "Vitamin E",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 4,
+      "quantity": [
+        {
+          "quantity": 19,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Thiamine Mononitrate"
+        }
+      ],
+      "ingredientGroup": "Thiamin (B1)",
+      "name": "Thiamin (B1)",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 5,
+      "quantity": [
+        {
+          "quantity": 1.4,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Riboflavin (B2)",
+      "name": "Riboflavin (B2)",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 6,
+      "quantity": [
+        {
+          "quantity": 1.6,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Niacinamide"
+        }
+      ],
+      "ingredientGroup": "Niacin",
+      "name": "Niacin",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 7,
+      "quantity": [
+        {
+          "quantity": 18,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Pyridoxine Hydrochloride"
+        }
+      ],
+      "ingredientGroup": "Vitamin B6",
+      "name": "Vitamin B6",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 8,
+      "quantity": [
+        {
+          "quantity": 2,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "folic acid"
+        }
+      ],
+      "ingredientGroup": "Folate",
+      "name": "Folate",
+      "nestedRows": [],
+      "notes": "800 mcg folic acid; Daily Value 222%",
+      "order": 9,
+      "quantity": [
+        {
+          "quantity": 1330,
+          "servingSizeOrder": 1,
+          "unit": "mcg DFE"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Cyanocobalamin"
+        }
+      ],
+      "ingredientGroup": "Vitamin B12",
+      "name": "Vitamin B12",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 10,
+      "quantity": [
+        {
+          "quantity": 2.8,
+          "servingSizeOrder": 1,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Biotin",
+      "name": "Biotin",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 11,
+      "quantity": [
+        {
+          "quantity": 35,
+          "servingSizeOrder": 1,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "D-Calcium Pantothenate"
+        }
+      ],
+      "ingredientGroup": "Pantothenic Acid",
+      "name": "Pantothenic Acid",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 12,
+      "quantity": [
+        {
+          "quantity": 7,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Calcium Carbonate"
+        }
+      ],
+      "ingredientGroup": "Calcium",
+      "name": "Calcium",
+      "nestedRows": [],
+      "notes": "Daily Value 12%",
+      "order": 13,
+      "quantity": [
+        {
+          "quantity": 150,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Carbonyl Iron"
+        }
+      ],
+      "ingredientGroup": "Iron",
+      "name": "Iron",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 14,
+      "quantity": [
+        {
+          "quantity": 27,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Potassium Iodide"
+        }
+      ],
+      "ingredientGroup": "Iodine",
+      "name": "Iodine",
+      "nestedRows": [],
+      "notes": "Daily Value 52%",
+      "order": 15,
+      "quantity": [
+        {
+          "quantity": 150,
+          "servingSizeOrder": 1,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Magnesium Oxide"
+        }
+      ],
+      "ingredientGroup": "Magnesium",
+      "name": "Magnesium",
+      "nestedRows": [],
+      "notes": "Daily Value 10%",
+      "order": 16,
+      "quantity": [
+        {
+          "quantity": 40,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Zinc Oxide"
+        }
+      ],
+      "ingredientGroup": "Zinc",
+      "name": "Zinc",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 17,
+      "quantity": [
+        {
+          "quantity": 13,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Cupric Oxide"
+        }
+      ],
+      "ingredientGroup": "Copper",
+      "name": "Copper",
+      "nestedRows": [],
+      "notes": "Daily Value 100%",
+      "order": 18,
+      "quantity": [
+        {
+          "quantity": 1.3,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Omega-3 Fatty Acids (from fish oil)",
+      "name": "Omega-3 Fatty Acids (from fish oil)",
+      "nestedRows": [
+        {
+          "forms": [],
+          "ingredientGroup": "DHA (docosahexaenoic acid)",
+          "name": "DHA (docosahexaenoic acid)",
+          "nestedRows": [],
+          "order": 1,
+          "quantity": [
+            {
+              "quantity": 200,
+              "servingSizeOrder": 1,
+              "unit": "mg"
+            }
+          ]
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "EPA (eicosapentaenoic acid)",
+          "name": "EPA (eicosapentaenoic acid)",
+          "nestedRows": [],
+          "order": 2,
+          "quantity": [
+            {
+              "quantity": 35,
+              "servingSizeOrder": 1,
+              "unit": "mg"
+            }
+          ]
+        }
+      ],
+      "notes": "Daily Value not established.",
+      "order": 19,
+      "quantity": [
+        {
+          "quantity": 235,
+          "servingSizeOrder": 1,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Choline Bitartrate"
+        }
+      ],
+      "ingredientGroup": "Choline",
+      "name": "Choline",
+      "nestedRows": [],
+      "notes": "Tablet panel; Daily Value 20%",
+      "order": 20,
+      "quantity": [
+        {
+          "quantity": 110,
+          "servingSizeOrder": 2,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "nutritionalInfo": {
+    "calories": {
+      "amount": 5,
+      "unit": "kcal"
+    },
+    "cholesterol": {
+      "amount": 5,
+      "unit": "mg"
+    },
+    "totalFat": {
+      "amount": 0.5,
+      "unit": "g"
+    }
+  },
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Omega-3 Fish Oil"
+      },
+      {
+        "name": "Calcium Carbonate"
+      },
+      {
+        "name": "Gelatin"
+      },
+      {
+        "name": "Glycerin"
+      },
+      {
+        "name": "Calcium Ascorbate"
+      },
+      {
+        "name": "Yellow Beeswax"
+      },
+      {
+        "name": "Magnesium Oxide"
+      },
+      {
+        "name": "Less than 2% of:",
+        "forms": [
+          {
+            "name": "Beta-Carotene"
+          },
+          {
+            "name": "Biotin"
+          },
+          {
+            "name": "Carbonyl Iron"
+          },
+          {
+            "name": "Color (Annatto Extract [seed])"
+          },
+          {
+            "name": "Cupric Oxide"
+          },
+          {
+            "name": "Cyanocobalamin"
+          },
+          {
+            "name": "d-Alpha-Tocopherol"
+          },
+          {
+            "name": "D-Calcium Pantothenate"
+          },
+          {
+            "name": "Folic Acid"
+          },
+          {
+            "name": "Niacinamide"
+          },
+          {
+            "name": "Potassium Iodide"
+          },
+          {
+            "name": "Purified Water"
+          },
+          {
+            "name": "Pyridoxine Hydrochloride"
+          },
+          {
+            "name": "Retinyl Palmitate"
+          },
+          {
+            "name": "Riboflavin"
+          },
+          {
+            "name": "Soy Lecithin"
+          },
+          {
+            "name": "Thiamine Mononitrate"
+          },
+          {
+            "name": "Vitamin D3 (Cholecalciferol)"
+          },
+          {
+            "name": "Zinc Oxide"
+          },
+          {
+            "name": "Choline Bitartrate"
+          },
+          {
+            "name": "Dicalcium Phosphate"
+          },
+          {
+            "name": "Microcrystalline Cellulose"
+          },
+          {
+            "name": "Food Starch-Modified"
+          },
+          {
+            "name": "Acacia"
+          }
+        ]
+      },
+      {
+        "name": "Less than 2% of:",
+        "forms": [
+          {
+            "name": "Carnauba Wax"
+          },
+          {
+            "name": "Hydroxypropyl Methylcellulose"
+          },
+          {
+            "name": "Inulin"
+          },
+          {
+            "name": "Magnesium Stearate"
+          },
+          {
+            "name": "Medium Chain Triglycerides"
+          }
+        ]
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "name": "Multiple Forms"
+  },
+  "productType": {
+    "name": "Dietary Supplement"
+  },
+  "servingSizes": [
+    {
+      "inSFB": true,
+      "maxQuantity": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "Softgel(s)"
+    },
+    {
+      "inSFB": true,
+      "maxQuantity": 1,
+      "minQuantity": 1,
+      "notes": "Taken together with one softgel; not an alternative serving.",
+      "order": 2,
+      "unit": "Tablet(s)"
+    }
+  ],
+  "servingsPerContainer": 60,
+  "statements": [
+    {
+      "notes": "Contains: Fish (anchovy, sardine, tuna) and Soy.",
+      "type": "Precautions re: Allergies"
+    },
+    {
+      "notes": "Daily Values for Pregnant and Lactating Women. Percent Daily Values are based on a 2,000 calorie diet. Ingredient list includes active nutrient sources; it must not be interpreted as an all-inactive list. Less than 2% of ingredients from Beta-Carotene through Zinc Oxide.",
+      "type": "Other"
+    },
+    {
+      "notes": "Adults, take one softgel and one tablet daily with food.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Accidental overdose of iron-containing products is a leading cause of fatal poisoning in children under 6. Keep this product out of reach of children. In case of accidental overdose, call a doctor or poison control center immediately.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "SEE LEFT SIDE PANEL FOR ADDITIONAL WARNINGS",
+      "type": "Other"
+    },
+    {
+      "notes": "DO NOT EXCEED RECOMMENDED INTAKE. KEEP OUT OF REACH OF CHILDREN CHILD RESISTANT CAP. IF PREGNANT, BREAST-FEEDING, TAKING MEDICATION, OR HAVE ANY MEDICAL CONDITION ASK A HEALTH PROFESSIONAL BEFORE USE. DUE TO THE USE OF COLORS DERIVED FROM NATURAL SOURCES, SOME DARK SPOTS MAY APPEAR ON THE SOFTGEL OVER TIME. THIS DOES NOT IMPACT PRODUCT QUALITY OR SAFETY. FOR ADULT USE ONLY, NOT FOR CHILDREN. DO NOT USE IF PRINTED SAFETY SEAL BEARING BAYER HEALTHCARE UNDER CAP IS TORN OR MISSING.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Tablet Ingredients: Choline Bitartrate, Dicalcium Phosphate, Microcrystalline Cellulose, Food Starch-Modified, Acacia; Less than 2% of: Carnauba Wax, Hydroxypropyl Methylcellulose, Inulin, Magnesium Stearate, Medium Chain Triglycerides.",
+      "type": "Other"
+    },
+    {
+      "notes": "Key nutrients to support healthy fetal growth and development, with 4 brain-building ingredients.*",
+      "type": "Formulation re: Other"
+    }
+  ],
+  "upcSku": "016500586586",
+  "src": "local/manual_labels/product_submissions/PG_SUB_7283A83B3FC7467F808C02667CCBFE06",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "7283a83b-3fc7-467f-808c-02667ccbfe06",
+    "label_verified_at": "2026-09-18",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "7283a83b-3fc7-467f-808c-02667ccbfe06",
+    "source_date": "2026-09-18",
+    "source_updated_date": "2026-09-18",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:7283a83b-3fc7-467f-808c-02667ccbfe06",
+    "reviewed_at": "2026-09-18T17:29:02.892476+00:00"
+  }
+}
