@@ -202,6 +202,33 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
         if "syrup" in _norm_text(source)
     ]
 
+    # The canonical sugar determination, from the enricher that owns it. When it
+    # establishes the product carries no dietary sugar at all, this scorer may
+    # not manufacture one from a sweetener CLASSIFICATION alone.
+    #
+    # 2026-09-19: maltodextrin is listed under sweeteners.high_glycemic because
+    # its glycemic index really is ~85-105. That is true and useful, but as a
+    # sub-2% capsule carrier it is not dietary sugar, and the sugar owner had
+    # already said so: level "sugar_free", contains_sugar false, sugar_sources
+    # empty. The branch below fired anyway, so 1,146 products classified
+    # SUGAR-FREE took a dietary-sugar penalty - and because B1_dietary_sugar
+    # mirrors into Safety (penalty_registry FORMULA_QUALITY_MIRROR) while the
+    # low-severity additive clamp does not apply to it, 1,101 of them were also
+    # told "Safety concern: additive or sweetener concerns" on no other basis.
+    #
+    # Maltodextrin keeps its own treatment: the additive owner already scores it
+    # as ADD_MALTODEXTRIN, category filler, severity_level low, 0.5 - and that
+    # penalty IS low-severity, so it correctly clamps out of Safety. One label
+    # occurrence, one owner. This guard is deliberately written against the sugar
+    # determination rather than the ingredient name, so any future carrier
+    # classified the same way is covered without another patch.
+    canonical_finds_no_sugar = (
+        level in {"sugar_free", "none"}
+        and not sugar.get("contains_sugar")
+        and not sugar.get("has_added_sugar")
+        and not sugar_sources
+    )
+
     penalty = 0.0
     reason = None
     if level == "high":
@@ -210,7 +237,7 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
     elif level == "moderate":
         penalty = DIETARY_SUGAR_MODERATE_PENALTY
         reason = "moderate_sugar_grams"
-    elif high_glycemic or syrup_sources:
+    elif (high_glycemic or syrup_sources) and not canonical_finds_no_sugar:
         # Real added sugar / high-glycemic — check FIRST so alcohol+syrup stays here.
         penalty = DIETARY_SUGAR_HIGH_GLYCEMIC_OR_SYRUP_PENALTY
         reason = "high_glycemic_or_syrup"
@@ -229,6 +256,7 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "penalty": penalty,
         "reason": reason,
+        "canonical_finds_no_sugar": canonical_finds_no_sugar,
         "level": level,
         "contains_sugar": bool(sugar.get("contains_sugar")),
         "has_added_sugar": bool(sugar.get("has_added_sugar")),
