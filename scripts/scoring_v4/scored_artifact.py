@@ -97,11 +97,42 @@ def _product_safety_status(
     return "not_assessed"
 
 
+#: Public Evidence display states that mean PharmaGuide has NOT performed the
+#: review, as opposed to having performed it and reached a conclusion. The
+#: display-state vocabulary is owned by quality_score.evidence_display_state;
+#: this reads it rather than re-deriving completion from result-state strings.
+#:
+#: "applicability_unestablished" is deliberately absent: records WERE found and
+#: reviewed, and failing to establish applicability to this label is itself a
+#: completed product-level conclusion.
+UNASSESSED_EVIDENCE_DISPLAY_STATES = frozenset({"not_yet_reviewed"})
+
+
 def _quality_assessment_status(
     quality_score_status: str,
     dose_safety: Dict[str, Any],
+    pillars: Dict[str, Any] | None = None,
 ) -> str:
-    """Report whether the independent quality assessment completed."""
+    """Report whether the assessment the rubric REQUIRES actually completed.
+
+    This answers a different question from ``quality_score_status``, and the two
+    must not be collapsed:
+
+      quality_score_status       did the engine produce a usable number?
+      quality_assessment_status  did PharmaGuide finish the assessment?
+
+    Both facts are real and independent. The engine can compute 54 out of 100
+    while the Evidence pillar contributing 0 of those points was never reviewed
+    at all - 4,117 products in the 2026.09.19 catalog are exactly that. Those
+    products are honestly ``scored`` AND honestly ``partial``; the number exists,
+    the judgement does not. Collapsing them cost 3,661 products a published tier
+    that the assessed pillars could not support, because the true total lay
+    anywhere in a 20-point band straddling a tier boundary.
+
+    A pillar carrying 0 because it was never assessed is not the same as a
+    pillar carrying 0 because the review concluded zero. Only the first makes
+    the assessment incomplete.
+    """
     state_counts = _safe_dict(dose_safety.get("state_counts"))
     unresolved = state_counts.get("material_but_unresolved", 0)
     if (
@@ -110,9 +141,25 @@ def _quality_assessment_status(
         and unresolved > 0
     ):
         return "partial"
+    # A required rubric dimension that was never reviewed leaves the assessment
+    # incomplete no matter how strong the other five are. A weak five-pillar
+    # profile does not make the sixth pillar assessed.
+    evidence = _safe_dict(_safe_dict(pillars).get("evidence"))
+    if evidence.get("display_state") in UNASSESSED_EVIDENCE_DISPLAY_STATES:
+        return "partial"
     if quality_score_status in {"scored", "suppressed_safety"}:
         return "complete"
     if quality_score_status == "not_scored":
+        # Audited 2026-09-19 over the 255 not_scored artifacts:
+        #   243 blocked_by_completeness_gate  - incomplete product data, so the
+        #       assessment genuinely could not be completed. partial is correct.
+        #     3 safety_policy_review_required - awaiting human review. correct.
+        #     9 intentional_non_scoreable_product - deliberately out of scope.
+        #       Neither incomplete nor failed; the vocabulary has no
+        #       "not_applicable", and inventing a fourth value to carry nine
+        #       products would be worse than this documented imprecision. These
+        #       never reach the catalog: the export gate quarantines every
+        #       not_scored product.
         return "partial"
     return "failed"
 
@@ -180,7 +227,9 @@ def assemble_scored_artifact(
         safety_gate,
         was_assessed=safety_was_assessed,
     )
-    quality_assessment_status = _quality_assessment_status(status, dose_safety)
+    quality_assessment_status = _quality_assessment_status(
+        status, dose_safety, v4.get("quality_pillars_v4")
+    )
     quality_score = v4.get("quality_score_v4_100")
     verdict = _public_verdict(v4, mapped_coverage)
     safety_verdict = str(safety_gate.get("verdict") or "SAFE").upper()

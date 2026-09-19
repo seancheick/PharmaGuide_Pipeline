@@ -40,7 +40,9 @@ from audit_source_of_truth_contract import check_v4_pillar_contract
 
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 SHARE_INDEX_DIRNAME = "share_index"
-SHARE_INDEX_SCHEMA_VERSION = 2
+#: v3 adds the "assessment_incomplete" catalogDisposition. A v2 reader that
+#: does not know the value must treat it as non-scored, never as scored.
+SHARE_INDEX_SCHEMA_VERSION = 3
 SHARE_INDEX_SHARD_PREFIX_LENGTH = 2
 SHARE_INDEX_SHARDS = tuple(f"{value:02x}" for value in range(256))
 
@@ -76,18 +78,35 @@ SHARE_HIGHLIGHT_COLUMNS = (
 
 
 def _share_disposition(row):
+    """Classify a row for the public share projection.
+
+    Three facts, three questions, and they are NOT the same question:
+
+      product_safety_status      is the product unsafe to use?
+      quality_score_status       did the engine produce a usable number?
+      quality_assessment_status  did PharmaGuide finish the assessment?
+
+    A product can be honestly ``scored`` and honestly ``partial``: the engine
+    computed a total while one required rubric dimension was never reviewed.
+    Folding that into "not_scored" told the public two false things at once -
+    that we have no analysis (we have five assessed pillars) and that the gap is
+    a data problem (it is a review we have not performed). It is its own
+    disposition.
+
+    ``assessment_incomplete`` is shareable and discoverable, carries its
+    highlights, and - exactly like ``not_scored`` - publishes NO quality score
+    and NO tier. An unfinished assessment may not advertise a verdict.
+    """
     safety = (row["product_safety_status"] or "").strip().lower()
     if safety in {"blocked", "unsafe"}:
         return "blocked"
 
     assessment = (row["quality_assessment_status"] or "").strip().lower()
     score_status = (row["quality_score_status"] or "").strip().lower()
-    if (
-        assessment != "complete"
-        or score_status != "scored"
-        or row["quality_score_v4_100"] is None
-    ):
+    if score_status != "scored" or row["quality_score_v4_100"] is None:
         return "not_scored"
+    if assessment != "complete":
+        return "assessment_incomplete"
     return "scored"
 
 

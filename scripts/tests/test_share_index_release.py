@@ -120,7 +120,7 @@ def test_share_index_is_canonical_and_preserves_blocked_disposition(tmp_path):
     def entry(dsld_id):
         shard = hashlib.sha256(dsld_id.encode()).hexdigest()[:2]
         payload = json.loads((out_dir / f"{shard}.json").read_text())
-        assert payload["schemaVersion"] == 2
+        assert payload["schemaVersion"] == 3
         assert payload["shardPrefixLength"] == 2
         assert payload["catalogVersion"] == "2026.08.13.204005"
         return payload["products"][dsld_id]
@@ -129,7 +129,7 @@ def test_share_index_is_canonical_and_preserves_blocked_disposition(tmp_path):
         f"{shard:02x}.json" for shard in range(256)
     ]
     payload = json.loads(next(out_dir.glob("*.json")).read_text())
-    assert payload["schemaVersion"] == 2
+    assert payload["schemaVersion"] == 3
     assert payload["shardPrefixLength"] == 2
     assert payload["catalogVersion"] == "2026.08.13.204005"
 
@@ -155,7 +155,11 @@ def test_share_index_is_canonical_and_preserves_blocked_disposition(tmp_path):
     assert blocked["confidence"] is None
     assert blocked["highlights"] == []
 
+    # scored + partial. It has a number (88) and five assessed pillars, so it
+    # is NOT "not_scored" - claiming that told users we had no analysis at all.
+    # It is still forbidden from publishing a score or tier: an unfinished
+    # assessment may not advertise a verdict.
     partial = entry("1003")
-    assert partial["catalogDisposition"] == "not_scored"
+    assert partial["catalogDisposition"] == "assessment_incomplete"
     assert partial["qualityScore"] is None
     assert partial["qualityTier"] is None
