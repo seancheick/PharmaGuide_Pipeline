@@ -744,6 +744,10 @@
     {
       "date": "2026-09-18",
       "change": "Added three omega canaries before the omega rubric batch: undisclosed form + mid dose, disclosed TG + high dose, and a carrier-oil-mass-only label whose EPA+DHA stays withheld. They pin omega semantics, not any brand's score."
+    },
+    {
+      "date": "2026-09-19",
+      "change": "Re-baselined 239741 (Spring Valley Korean Panax Ginseng, 56.4 -> 61.0) and 270256 (Nutricost Beta-Alanine, 74.1 -> 78.7) after the dietary-sugar ownership fix (fa534692). Both are sugar-free labels that were paying a high_glycemic_or_syrup penalty for maltodextrin while their own sugar owner reported level sugar_free, contains_sugar false and no sugar sources. Reviewed drift, not regression: a whole-corpus two-process A/B moved 1,057 products, all upward, with zero unrelated movers and no change to the 1,757 products that genuinely carry sugar or syrup. These two were the only pinned canaries in that population; the other 31 are unchanged. Values re-derived by running clean,enrich,score for both brands with --strict-release-gates, then freeze_contract_snapshots.py - not hand-entered."
     }
   ]
 }
