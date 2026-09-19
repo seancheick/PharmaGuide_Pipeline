@@ -96,6 +96,7 @@ scripts/dist.preRC_*/
 # Local dev tooling caches (Continue.dev, Playwright MCP)
 .continue/
 .playwright-mcp/
+.freebuff/
 
 # Regenerated audit reports — rewritten with a fresh timestamp on every run, so
 # tracking them churns the tree on each audit. The dated snapshot reports beside
