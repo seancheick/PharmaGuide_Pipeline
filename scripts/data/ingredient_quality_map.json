@@ -61,7 +61,7 @@
       "vitamins": 25
     },
     "schema_version": "5.5.4",
-    "last_updated": "2026-09-11",
+    "last_updated": "2026-09-19",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1762,7 +1762,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 632,
+    "total_entries": 634,
     "total_ingredients": 1416,
     "data_quality": {
       "review_status": "stub"
@@ -1789,7 +1789,7 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
-    "notes": "| identity_bioactivity_split: source-botanical aliases relocated to canonical homes (Phase 2). | identity_bioactivity_split Phase 8: source-only kelp/marigold/citrus aliases relocated.",
+    "notes": "identity_bioactivity_split: source-botanical aliases relocated to canonical homes (Phase 2). | identity_bioactivity_split Phase 8: source-only kelp/marigold/citrus aliases relocated. | nickel_tin_ultratrace_minerals_2026_09_19: added live-verified Nickel and Tin canonical mineral identities (strontium no-RDA precedent) so Supplement Facts ultratrace rows resolve canonically instead of falling through to harmful-additives-only recognition.",
     "scoring_contract_note": "Clinician/operator rule updated 2026-06-06: bio_score stays honest to the relevant form-quality axis. Systemic actives use absorption/bioavailability; local/matrix actives use delivery-to-site/form-quality confidence. score remains the natural-bonus-inclusive total score, capped at 18."
   },
   "vitamin_a": {
@@ -14389,7 +14389,9 @@
         "score": 5,
         "absorption": null,
         "notes": "Inositol declared from inositol hexanicotinate (also named inositol niacinate or nicotinate). This is an ester source preparation, not a declaration of free myo-inositol or the chiro stereoisomer. Preserve the labeled inositol amount; do not infer liberated inositol or niacin quantities. The score is a conservative unassessed allowance, not a measured absorption estimate or efficacy claim.",
-        "aliases": ["inositol from inositol hexanicotinate"],
+        "aliases": [
+          "inositol from inositol hexanicotinate"
+        ],
         "source_form_aliases": [
           "inositol niacinate",
           "inositol nicotinate",
@@ -73843,6 +73845,124 @@
       "unii": "543512OBTC",
       "cas": "42971-09-5",
       "pubchem_cid": 443955
+    },
+    "aliases": []
+  },
+  "nickel": {
+    "standard_name": "Nickel",
+    "category": "minerals",
+    "cui": "C0028013",
+    "rxcui": 1311629,
+    "forms": {
+      "nickel (unspecified)": {
+        "bio_score": 7.0,
+        "natural": false,
+        "score": 7.0,
+        "absorption": "moderate",
+        "absorption_structured": {
+          "quality": "moderate",
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6
+        },
+        "consumer_note": "This listing identifies nickel without naming its compound or salt. Nickel appears on some multivitamin labels as an ultratrace mineral; no daily requirement has been established.",
+        "consumer_note_review": {
+          "by": "Quarantine remediation 2026-09-19 (canonical identity only; no efficacy claim authored)",
+          "date": "2026-09-19"
+        },
+        "notes": "Ultratrace element recognized by DSLD as a mineral label surface (378 products). No Nutrient Recommendations RDA or UL is established, so dose adequacy is not assessed and the row does not carry pillar weight. A primary identity is required so the row resolves canonically instead of falling through to contaminant-only recognition.",
+        "dosage_importance": 0.5,
+        "aliases": [
+          "Nickel",
+          "Ni"
+        ]
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "exact",
+      "exclusions": []
+    },
+    "category_enum": "minerals",
+    "data_quality": {
+      "review_status": "validated",
+      "completeness": 0.7,
+      "last_reviewed_at": "2026-09-19",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "unii": "7OV03QG267"
+    },
+    "gsrs": {
+      "substance_name": "Nickel",
+      "substance_class": "chemical",
+      "cfr_sections": [
+        "21 CFR 184.1537"
+      ],
+      "dsld_count": 378,
+      "dsld_info_raw": "Dietary Supplement Label Database|Mineral|Nickel | 93 (Number of products:378)",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": []
+  },
+  "tin": {
+    "standard_name": "Tin",
+    "category": "minerals",
+    "cui": "C0040238",
+    "rxcui": 10603,
+    "forms": {
+      "tin (unspecified)": {
+        "bio_score": 7.0,
+        "natural": false,
+        "score": 7.0,
+        "absorption": "moderate",
+        "absorption_structured": {
+          "quality": "moderate",
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6
+        },
+        "consumer_note": "This listing identifies tin without naming its compound or salt. Tin appears on some multivitamin labels as an ultratrace mineral; no daily requirement has been established.",
+        "consumer_note_review": {
+          "by": "Quarantine remediation 2026-09-19 (canonical identity only; no efficacy claim authored)",
+          "date": "2026-09-19"
+        },
+        "notes": "Ultratrace element recognized by DSLD as an element label surface (205 products). No Nutrient Recommendations RDA or UL is established, so dose adequacy is not assessed and the row does not carry pillar weight. A primary identity is required so the row resolves canonically instead of falling through to contaminant-only recognition.",
+        "dosage_importance": 0.5,
+        "aliases": [
+          "Tin",
+          "Sn"
+        ]
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "exact",
+      "exclusions": []
+    },
+    "category_enum": "minerals",
+    "data_quality": {
+      "review_status": "validated",
+      "completeness": 0.7,
+      "last_reviewed_at": "2026-09-19",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "unii": "387GMG9FH5"
+    },
+    "gsrs": {
+      "substance_name": "TIN",
+      "substance_class": "chemical",
+      "cfr_sections": [],
+      "dsld_count": 205,
+      "dsld_info_raw": "Dietary Supplement Label Database|Element|Tin | 620 (Number of products:205)",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
     },
     "aliases": []
   }

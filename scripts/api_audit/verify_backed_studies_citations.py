@@ -43,6 +43,9 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO = SCRIPT_DIR.parent.parent
+sys.path.insert(0, str(REPO / "scripts"))
+
+from identity_integrity import build_canonical_identity_registry  # noqa: E402
 sys.path.insert(0, str(SCRIPT_DIR))
 
 _env = REPO / ".env"
@@ -106,8 +109,91 @@ def _acknowledged_ghosts() -> dict:
     return out
 
 
+_CANONICAL_DB_FILES = (
+    "ingredient_quality_map",
+    "other_ingredients",
+    "botanical_ingredients",
+    "standardized_botanicals",
+)
+
+
+def _canonical_registry():
+    """Build the canonical identity registry from the real reference files.
+
+    Returns None when a file is missing so ad-hoc unit tests can inject their
+    own registry instead; the gate itself runs from the repo's own data.
+    """
+    try:
+        iqm = json.loads(
+            (REPO / "scripts" / "data" / "ingredient_quality_map.json").read_text()
+        )
+        databases = {"ingredient_quality_map": iqm}
+        for name in _CANONICAL_DB_FILES[1:]:
+            databases[name] = json.loads(
+                (REPO / "scripts" / "data" / f"{name}.json").read_text()
+            )
+    except (OSError, json.JSONDecodeError):
+        return None
+    return build_canonical_identity_registry(databases)
+
+
+def _canonical_topic_expansion(entry: dict, registry) -> set[str]:
+    """Deterministic topic words from the canonical identity graph.
+
+    Resolves the entry's ingredient through the canonical registry, then walks
+    the resolved canonical entry's aliases, form aliases, and one-hop
+    ``relationships`` targets (active_in / contains) collecting their alias
+    vocabulary. Everything consumed already exists in the reference data.
+    """
+    if registry is None:
+        return set()
+    iqm = json.loads(
+        (REPO / "scripts" / "data" / "ingredient_quality_map.json").read_text()
+    )
+
+    def _entry_vocab(canonical_id: str) -> set[str]:
+        e = iqm.get(canonical_id)
+        if not isinstance(e, dict):
+            return set()
+        texts = [e.get("standard_name"), " ".join(e.get("aliases") or [])]
+        for form in (e.get("forms") or {}).values():
+            if isinstance(form, dict):
+                texts.append(" ".join(form.get("aliases") or []))
+        return words(*texts)
+
+    out: set[str] = set()
+    for candidate in (entry.get("standard_name"), *(entry.get("aliases") or [])):
+        if not candidate:
+            continue
+        resolved = registry.resolve_preferred(candidate)
+        if not resolved:
+            continue
+        canonical_id = resolved[0]
+        out |= _entry_vocab(canonical_id)
+        # one-hop relationship targets (active_in / contains), same vocabulary
+        for rel in (iqm.get(canonical_id) or {}).get("relationships") or []:
+            if not isinstance(rel, dict):
+                continue
+            if rel.get("type") in {"active_in", "contains"}:
+                target = str(rel.get("target_id") or "")
+                if target:
+                    out |= _entry_vocab(target)
+    return out
+
+
 def collect_claims(entries: list[dict]) -> dict[tuple[str, str], dict]:
-    """Return one independent audit claim per PMID and ingredient entry."""
+    """Return one independent audit claim per PMID and ingredient entry.
+
+    Topic words come from the entry's own fields PLUS the canonical identity
+    graph: the entry's ingredient resolves through the canonical identity
+    registry (IQM + botanical/other-ingredient owners), and the resolved
+    canonical entry's standard name, aliases, and form aliases extend the
+    topic set. This is deterministic offline resolution through existing
+    canonical data — no LLM, no local synonym map — so binomial/common-name
+    pairs (Glycyrrhiza glabra ↔ licorice) and active-of-source pairs
+    (curcumin ↔ turmeric) stop false-positive ghost suspects at the source.
+    """
+    registry = _canonical_registry()
     claims: dict[tuple[str, str], dict] = {}
     for entry in entries:
         entry_id = str(entry.get("id") or "?")
@@ -118,6 +204,7 @@ def collect_claims(entries: list[dict]) -> dict[tuple[str, str], dict]:
             " ".join(str(k) for k in (entry.get("key_endpoints") or [])),
             " ".join(entry.get("health_goals_supported") or []),
         )
+        topic_words |= _canonical_topic_expansion(entry, registry)
         for reference in entry.get("references_structured") or []:
             pmid = str(reference.get("pmid") or "").strip()
             if not pmid.isdigit():

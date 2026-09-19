@@ -82,19 +82,31 @@
       "evidence_level": "product-human",
       "evidence_scope": "formula_specific",
       "study_type": "rct_single",
-      "published_studies": ["RCT"],
+      "published_studies": [
+        "RCT"
+      ],
       "published_studies_count": 3,
       "total_enrollment": 350,
       "score_contribution": "tier_2",
       "effect_direction": "positive_weak",
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "One six-week symptom-endpoint RCT supports this complete formula for adult bloating, gas and abdominal discomfort. Attrition (350 baseline; 219 at week six), sponsor involvement and lack of independent symptom-endpoint replication limit certainty. Two related small mechanistic publications under a shared protocol do not establish additional clinical benefits or independent symptom replication.",
-      "key_endpoints": ["Self-reported bloating, gas and abdominal discomfort", "Digestive quality of life"],
-      "endpoint_relevance_tags": ["digestive"],
-      "health_goals_supported": ["Digestive Health"],
+      "key_endpoints": [
+        "Self-reported bloating, gas and abdominal discomfort",
+        "Digestive quality of life"
+      ],
+      "endpoint_relevance_tags": [
+        "digestive"
+      ],
+      "health_goals_supported": [
+        "Digestive Health"
+      ],
       "notes": "Evidence is for the whole 24-strain plus pomegranate formulation, not individual strains, skin, heart health or micronutrient synthesis. 350 is the baseline sample of the symptom trial, not a sum across studies. No CFU conversion is known or used. PMID 40944126 and 41750436 share protocol NCT04171466; both report 32 randomized, with 27 and 21 completing respectively. The registration reports 46 actual participants across four arms; unique cohort overlap is unresolved, so counts are not summed. Their microbiome/metabolite and barrier outcomes are not independent symptom replication or demonstrated prevention of antibiotic-associated diarrhea. Trial reports establish the named formula, strain list and total potency, not the commercial label's per-blend or individual-strain quantities. Commercial per-blend allocations remain label-identity constraints only.",
       "last_updated": "2026-09-03",
-      "applicability": {"scope": "formula_context_only", "reason": "Requires complete formula_contract verification; name matching cannot award credit."},
+      "applicability": {
+        "scope": "formula_context_only",
+        "reason": "Requires complete formula_contract verification; name matching cannot award credit."
+      },
       "formula_contract": {
         "brand": "Seed",
         "product_name": "DS-01 Daily Synbiotic",
@@ -103,47 +115,167 @@
         "daily_servings": 1,
         "daily_afu": 53600000000,
         "blend_composition": [
-          {"strain_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "daily_afu": 37000000000},
-          {"strain_indices": [16, 17], "daily_afu": 8050000000},
-          {"strain_indices": [18, 19, 20, 21], "daily_afu": 3300000000},
-          {"strain_indices": [22, 23], "daily_afu": 5250000000}
+          {
+            "strain_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "daily_afu": 37000000000
+          },
+          {
+            "strain_indices": [
+              16,
+              17
+            ],
+            "daily_afu": 8050000000
+          },
+          {
+            "strain_indices": [
+              18,
+              19,
+              20,
+              21
+            ],
+            "daily_afu": 3300000000
+          },
+          {
+            "strain_indices": [
+              22,
+              23
+            ],
+            "daily_afu": 5250000000
+          }
         ],
         "prebiotic_canonical_id": "pomegranate",
         "prebiotic_brand_token": "MAPP",
         "prebiotic_mass_mg": 400,
         "prebiotic_identity": "Indian pomegranate fruit MAPP, greater than 40% polyphenolic bioactives",
         "strain_names": [
-          ["B. longum SD-BB536-JP", "Bifidobacterium longum SD-BB536-JP"],
-          ["B. breve SD-BR3-IT", "Bifidobacterium breve SD-BR3-IT"],
-          ["L. plantarum SD-LP1-IT", "Lactiplantibacillus plantarum SD-LP1-IT"],
-          ["L. rhamnosus SD-LR6-IT", "Lacticaseibacillus rhamnosus SD-LR6-IT"],
-          ["L. rhamnosus HRVD113-US", "Lacticaseibacillus rhamnosus HRVD113-US"],
-          ["B. infantis SD-M63-JP", "Bifidobacterium infantis SD-M63-JP"],
-          ["B. lactis SD-BS5-IT", "Bifidobacterium lactis SD-BS5-IT"],
-          ["B. lactis HRVD524-US", "Bifidobacterium lactis HRVD524-US"],
-          ["L. crispatus SD-LCR01-IT", "Lactobacillus crispatus SD-LCR01-IT"],
-          ["L. casei HRVD300-US", "Lacticaseibacillus casei HRVD300-US"],
-          ["B. breve HRVD521-US", "Bifidobacterium breve HRVD521-US"],
-          ["B. longum HRVD90b-US", "Bifidobacterium longum HRVD90b-US"],
-          ["B. lactis SD-150-BE", "Bifidobacterium lactis SD150-BE", "Bifidobacterium lactis SD-150-BE"],
-          ["L. fermentum SD-LF8-IT", "Limosilactobacillus fermentum SD-LF8-IT"],
-          ["L. rhamnosus SD-GG-BE", "Lacticaseibacillus rhamnosus SD-GG-BE"],
-          ["L. reuteri SD-RD830-FR", "Limosilactobacillus reuteri RD830-FR", "Limosilactobacillus reuteri SD-RD830-FR"],
-          ["B. adolescentis SD-BA5-IT", "Bifidobacterium adolescentis SD-BA5-IT"],
-          ["L. reuteri SD-LRE2-IT", "Limosilactobacillus reuteri SD-LRE2-IT"],
-          ["L. salivarius SD-LS1-IT", "Ligilactobacillus salivarius SD-LS1-IT"],
-          ["B. lactis SD-CECT8145-SP", "Bifidobacterium lactis SD-CECT8145-SP"],
-          ["B. longum SD-CECT7347-SP", "Bifidobacterium longum SD-CECT7347-SP"],
-          ["L. casei SD-CECT9104-SP", "Lacticaseibacillus casei SD-CECT9104-SP"],
-          ["L. plantarum SD-LPLDL-UK", "Lactiplantibacillus plantarum SD-LPLDL-UK"],
-          ["B. lactis SD-MB2409-IT", "Bifidobacterium lactis SD-MB2409-IT"]
+          [
+            "B. longum SD-BB536-JP",
+            "Bifidobacterium longum SD-BB536-JP"
+          ],
+          [
+            "B. breve SD-BR3-IT",
+            "Bifidobacterium breve SD-BR3-IT"
+          ],
+          [
+            "L. plantarum SD-LP1-IT",
+            "Lactiplantibacillus plantarum SD-LP1-IT"
+          ],
+          [
+            "L. rhamnosus SD-LR6-IT",
+            "Lacticaseibacillus rhamnosus SD-LR6-IT"
+          ],
+          [
+            "L. rhamnosus HRVD113-US",
+            "Lacticaseibacillus rhamnosus HRVD113-US"
+          ],
+          [
+            "B. infantis SD-M63-JP",
+            "Bifidobacterium infantis SD-M63-JP"
+          ],
+          [
+            "B. lactis SD-BS5-IT",
+            "Bifidobacterium lactis SD-BS5-IT"
+          ],
+          [
+            "B. lactis HRVD524-US",
+            "Bifidobacterium lactis HRVD524-US"
+          ],
+          [
+            "L. crispatus SD-LCR01-IT",
+            "Lactobacillus crispatus SD-LCR01-IT"
+          ],
+          [
+            "L. casei HRVD300-US",
+            "Lacticaseibacillus casei HRVD300-US"
+          ],
+          [
+            "B. breve HRVD521-US",
+            "Bifidobacterium breve HRVD521-US"
+          ],
+          [
+            "B. longum HRVD90b-US",
+            "Bifidobacterium longum HRVD90b-US"
+          ],
+          [
+            "B. lactis SD-150-BE",
+            "Bifidobacterium lactis SD150-BE",
+            "Bifidobacterium lactis SD-150-BE"
+          ],
+          [
+            "L. fermentum SD-LF8-IT",
+            "Limosilactobacillus fermentum SD-LF8-IT"
+          ],
+          [
+            "L. rhamnosus SD-GG-BE",
+            "Lacticaseibacillus rhamnosus SD-GG-BE"
+          ],
+          [
+            "L. reuteri SD-RD830-FR",
+            "Limosilactobacillus reuteri RD830-FR",
+            "Limosilactobacillus reuteri SD-RD830-FR"
+          ],
+          [
+            "B. adolescentis SD-BA5-IT",
+            "Bifidobacterium adolescentis SD-BA5-IT"
+          ],
+          [
+            "L. reuteri SD-LRE2-IT",
+            "Limosilactobacillus reuteri SD-LRE2-IT"
+          ],
+          [
+            "L. salivarius SD-LS1-IT",
+            "Ligilactobacillus salivarius SD-LS1-IT"
+          ],
+          [
+            "B. lactis SD-CECT8145-SP",
+            "Bifidobacterium lactis SD-CECT8145-SP"
+          ],
+          [
+            "B. longum SD-CECT7347-SP",
+            "Bifidobacterium longum SD-CECT7347-SP"
+          ],
+          [
+            "L. casei SD-CECT9104-SP",
+            "Lacticaseibacillus casei SD-CECT9104-SP"
+          ],
+          [
+            "L. plantarum SD-LPLDL-UK",
+            "Lactiplantibacillus plantarum SD-LPLDL-UK"
+          ],
+          [
+            "B. lactis SD-MB2409-IT",
+            "Bifidobacterium lactis SD-MB2409-IT"
+          ]
         ],
         "identity_source_url": "https://seed.com/approach",
         "dose_source_url": "https://help.seed.com/en-US/articles/ds-01-daily-synbiotic-295557",
         "delivery_basis": "Exact named product with complete matching composition; ViaCap documented in trial and manufacturer product reference, not inferred from capsule form alone.",
-        "supported_outcomes": ["digestive"],
+        "supported_outcomes": [
+          "digestive"
+        ],
         "studied_population": "Adults with self-reported bloating, gas or abdominal discomfort; not pregnancy, pediatric or disease-treatment evidence.",
-        "source_pmids": ["41599868", "40944126", "41750436"],
+        "source_pmids": [
+          "41599868",
+          "40944126",
+          "41750436"
+        ],
         "reviewed_at": "2026-09-03"
       },
       "references_structured": [
@@ -152,21 +284,27 @@
           "title": "A Randomized, Placebo-Controlled Trial Evaluating Multi-Species Synbiotic Supplementation for Bloating, Gas, and Abdominal Discomfort.",
           "year": 2026,
           "url": "https://pubmed.ncbi.nlm.nih.gov/41599868/",
-          "supports_claims": ["Complete DS-01 formula: 53.6 billion AFU plus 400 mg pomegranate daily; six-week adult digestive symptom and quality-of-life outcomes."]
+          "supports_claims": [
+            "Complete DS-01 formula: 53.6 billion AFU plus 400 mg pomegranate daily; six-week adult digestive symptom and quality-of-life outcomes."
+          ]
         },
         {
           "pmid": "40944126",
           "title": "Multi-Species Synbiotic Supplementation Enhances Gut Microbial Diversity, Increases Urolithin A and Butyrate Production, and Reduces Inflammation in Healthy Adults: A Randomized, Placebo-Controlled Trial.",
           "year": 2025,
           "url": "https://pubmed.ncbi.nlm.nih.gov/40944126/",
-          "supports_claims": ["Same complete formula and native AFU dose; small 91-day mechanistic study, not independent proof of individual-strain or disease-treatment efficacy."]
+          "supports_claims": [
+            "Same complete formula and native AFU dose; small 91-day mechanistic study, not independent proof of individual-strain or disease-treatment efficacy."
+          ]
         },
         {
           "pmid": "41750436",
           "title": "Multi-Species Synbiotic Supplementation After Antibiotics Promotes Recovery of Microbial Diversity and Function, and Increases Gut Barrier Integrity: A Randomized, Placebo-Controlled Trial.",
           "year": 2026,
           "url": "https://pubmed.ncbi.nlm.nih.gov/41750436/",
-          "supports_claims": ["Related 91-day antibiotic-challenge proof-of-mechanism study of DS-01 at 53.6 billion AFU plus 400 mg pomegranate daily; microbiome, metabolites and barrier function, not demonstrated prevention of antibiotic-associated diarrhea."],
+          "supports_claims": [
+            "Related 91-day antibiotic-challenge proof-of-mechanism study of DS-01 at 53.6 billion AFU plus 400 mg pomegranate daily; microbiome, metabolites and barrier function, not demonstrated prevention of antibiotic-associated diarrhea."
+          ],
           "study_role": "related_mechanistic",
           "trial_registration": "NCT04171466",
           "randomized": 32,
@@ -330,11 +468,20 @@
       "standard_name": "KSM-66",
       "applicability": {
         "scope": "ingredient",
-        "required_form_terms": ["ksm-66", "ksm66"],
-        "supported_outcomes": ["stress_mood", "sleep"],
+        "required_form_terms": [
+          "ksm-66",
+          "ksm66"
+        ],
+        "supported_outcomes": [
+          "stress_mood",
+          "sleep"
+        ],
         "studied_population": "Adults with elevated perceived stress, studied for eight weeks or 60 days",
         "reviewed_at": "2026-09-03",
-        "source_pmids": ["23439798", "32021735"]
+        "source_pmids": [
+          "23439798",
+          "32021735"
+        ]
       },
       "min_clinical_dose": 250,
       "max_studied_clinical_dose": 600,
@@ -825,7 +972,8 @@
       "standard_name": "Super Bio-Curcumin (BCM-95)",
       "aliases": [
         "super bio-curcumin",
-        "life extension bcm-95"
+        "life extension bcm-95",
+        "BCM-95"
       ],
       "category": "anti_inflammatory",
       "evidence_level": "branded-rct",
@@ -7229,15 +7377,27 @@
       "standard_name": "Zinc acetate/gluconate lozenges",
       "applicability": {
         "scope": "ingredient",
-        "required_form_terms": ["zinc acetate", "zinc gluconate"],
-        "dosage_forms": ["lozenge", "lozenges"],
+        "required_form_terms": [
+          "zinc acetate",
+          "zinc gluconate"
+        ],
+        "dosage_forms": [
+          "lozenge",
+          "lozenges"
+        ],
         "minimum_daily_dose": 80,
         "maximum_daily_dose": 207,
         "dose_unit": "mg",
         "studied_population": "Adults with an acute common cold; early short-term treatment, not prevention",
-        "supported_outcomes": ["common_cold_duration"],
+        "supported_outcomes": [
+          "common_cold_duration"
+        ],
         "reviewed_at": "2026-09-03",
-        "source_pmids": ["25888289", "27378206", "28515951"]
+        "source_pmids": [
+          "25888289",
+          "27378206",
+          "28515951"
+        ]
       },
       "aliases": [
         "zinc"
@@ -7253,7 +7413,9 @@
       "key_endpoints": [
         "Shorter common-cold duration with studied acetate/gluconate lozenges"
       ],
-      "health_goals_supported": ["Immune Support"],
+      "health_goals_supported": [
+        "Immune Support"
+      ],
       "notes": "This record concerns early, short-term treatment of acute common colds in adults using zinc acetate or gluconate lozenges; it does not establish prevention or efficacy of other zinc forms or swallowed capsules. The 80-207 mg/day applicability bounds are a conservative envelope of observed trial doses, not an intake recommendation. Safety and upper-limit assessment remains separate.",
       "notable_studies": "PMID 25888289 assessed acetate lozenges at 80-92 mg/day and discussed initiation within 24 hours for less than two weeks. PMID 27378206 pooled 199 participants from three acetate-lozenge trials. PMID 28515951 pooled seven acetate/gluconate-lozenge trials with 575 participants; observed dose groups were 80-92 and 192-207 mg/day. These overlapping reviews must not be summed as independent participant cohorts.",
       "study_type": "systematic_review_meta",
@@ -9883,18 +10045,34 @@
       "key_endpoints": [
         "Recurrent symptomatic, culture-verified urinary tract infections"
       ],
-      "health_goals_supported": ["Urinary Tract Health"],
+      "health_goals_supported": [
+        "Urinary Tract Health"
+      ],
       "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain, so this entry carries no dose policy and no universal total-mass threshold is justified. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the November 2023 Cochrane update (which supersedes the April 2023 version); participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-09-07",
       "applicability": {
         "scope": "ingredient",
         "require_source_label_form": true,
-        "required_form_terms": ["cranberry", "vaccinium macrocarpon"],
-        "excluded_form_terms": ["seed", "leaf", "leaves", "root", "essential oil"],
-        "supported_outcomes": ["recurrent_uti_prevention"],
+        "required_form_terms": [
+          "cranberry",
+          "vaccinium macrocarpon"
+        ],
+        "excluded_form_terms": [
+          "seed",
+          "leaf",
+          "leaves",
+          "root",
+          "essential oil"
+        ],
+        "supported_outcomes": [
+          "recurrent_uti_prevention"
+        ],
         "studied_population": "Selected UTI-susceptible populations, including women with recurrent UTIs, children and people following urinary interventions; not a treatment claim or evidence of benefit for pregnancy, institutionalized elderly people or incomplete bladder emptying.",
-        "source_pmids": ["37947276", "34473789"]
+        "source_pmids": [
+          "37947276",
+          "34473789"
+        ]
       },
       "notable_studies": "The Cochrane review, updated November 2023 (PMID 37947276, fifth update; 50 RCTs, 8857 randomised participants), found in moderate-certainty evidence that cranberry products reduce the risk of symptomatic, culture-verified UTIs (RR 0.70) — in women with recurrent UTIs, in children and in people susceptible after an intervention — with little or no benefit in institutionalised elderly people, pregnant women or people with neuromuscular bladder dysfunction; one trial compared tablets with liquid and two compared PAC doses, so equivalence of preparations and PAC doses stays uncertain. It supersedes the April 2023 version (PMID 37068952). A 2021 systematic review/meta-analysis with trial-sequential analysis (PMID 34473789) also supported cranberry use as an adjunct preventive strategy in susceptible groups.",
       "references_structured": [
@@ -10006,11 +10184,23 @@
       ],
       "applicability": {
         "scope": "ingredient",
-        "excluded_canonical_ids": ["ceylon_cinnamon"],
-        "excluded_form_terms": ["ceylon", "cinnamomum verum", "cinnamomum zeylanicum", "true cinnamon"],
-        "supported_outcomes": ["fasting_glucose", "lipid_profile"],
+        "excluded_canonical_ids": [
+          "ceylon_cinnamon"
+        ],
+        "excluded_form_terms": [
+          "ceylon",
+          "cinnamomum verum",
+          "cinnamomum zeylanicum",
+          "true cinnamon"
+        ],
+        "supported_outcomes": [
+          "fasting_glucose",
+          "lipid_profile"
+        ],
         "reviewed_at": "2026-09-05",
-        "source_pmids": ["24019277"],
+        "source_pmids": [
+          "24019277"
+        ],
         "reason": "The registry family and its aliases are Cassia/Cinnulin cinnamon preparations. The cited 2013 meta-analysis of 10 type 2 diabetes trials reports no Ceylon-specific subgroup, so Ceylon cinnamon (Cinnamomum verum) is excluded rather than assumed equivalent; its aliases exist only so the exclusion is recorded as a reviewed rejection. The scope is an exclusion, not a source-word requirement, so a misspelled but correctly mapped generic cinnamon label keeps its family evidence. This scope check does not establish an effective dose, an HbA1c benefit, or ineffectiveness of Ceylon cinnamon."
       },
       "category": "metabolic_blood_sugar",
@@ -12862,11 +13052,36 @@
       "applicability": {
         "scope": "ingredient",
         "require_source_label_form": true,
-        "required_form_terms": ["boswellia serrata resin extract", "boswellia serrata gum resin extract", "boswellia serrata extract", "boswellia extract", "gum extract", "standardized extract", "aflapin", "apresflex", "apres flex", "boswellin", "5 loxin", "casperome", "frankincense phytosome"],
-        "excluded_form_terms": ["essential oil", "resin powder", "leaf", "leaves"],
-        "supported_outcomes": ["osteoarthritis_pain_stiffness_function"],
+        "required_form_terms": [
+          "boswellia serrata resin extract",
+          "boswellia serrata gum resin extract",
+          "boswellia serrata extract",
+          "boswellia extract",
+          "gum extract",
+          "standardized extract",
+          "aflapin",
+          "apresflex",
+          "apres flex",
+          "boswellin",
+          "5 loxin",
+          "casperome",
+          "frankincense phytosome"
+        ],
+        "excluded_form_terms": [
+          "essential oil",
+          "resin powder",
+          "leaf",
+          "leaves"
+        ],
+        "supported_outcomes": [
+          "osteoarthritis_pain_stiffness_function"
+        ],
         "studied_population": "People with osteoarthritis, principally knee OA; not generalized stress, immune or longevity evidence. Named standardized extract trials do not establish equivalence to every generic resin extract.",
-        "source_pmids": ["32680575", "39092235", "35512759"]
+        "source_pmids": [
+          "32680575",
+          "39092235",
+          "35512759"
+        ]
       },
       "notable_studies": "A meta-analysis of seven randomized trials found significant improvements in WOMAC pain, stiffness, and function in osteoarthritis (PMID 32680575). More recent placebo-controlled trials with standardized extracts also reported relatively rapid symptomatic improvement, including the 2024 Boswellin Super study (PMID 39092235) and the earlier Aflapin trial (PMID 35512759).",
       "references_structured": [
@@ -16770,7 +16985,11 @@
         "scope": "formula_context_only",
         "reason": "AREDS/AREDS2 combination evidence in selected AMD populations does not establish independent efficacy of a vitamin A or beta-carotene ingredient. Nutritional adequacy remains a separate DRI-authority assessment.",
         "reviewed_at": "2026-09-03",
-        "source_pmids": ["23644932", "35653117", "37702300"]
+        "source_pmids": [
+          "23644932",
+          "35653117",
+          "37702300"
+        ]
       },
       "aliases": [
         "vitamin a",
