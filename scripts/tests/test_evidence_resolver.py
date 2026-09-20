@@ -431,4 +431,27 @@ def test_material_context_preserves_specific_disclosure():
     assert res_pumpkin_oil.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
 
 
+def test_absence_of_qualifying_studies_cannot_emit_reviewed_null():
+    """Semantic regression test: absence of qualifying studies cannot emit reviewed_null_unfavorable.
 
+    - reviewed_null_unfavorable: requires qualifying human studies with null/negative findings.
+    - no_qualifying_human_evidence: reproducible search found 0 qualifying human trials.
+    """
+    # 1. Real records with zero qualifying studies must emit NO_QUALIFYING_HUMAN_EVIDENCE
+    for cid in ["juniper", "l_norvaline", "eyebright", "damiana", "muira_puama"]:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value, (
+            f"{cid} must emit no_qualifying_human_evidence, got {res.disposition}"
+        )
+        assert res.disposition != EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+        assert res.applicability_status == "no_qualifying_trials_found"
+        assert res.points_eligible is False
+
+    # 2. Genuine reviewed null cases with qualifying human studies must emit REVIEWED_NULL_UNFAVORABLE
+    for cid in ["garcinia_cambogia", "tribulus", "evening_primrose_oil", "dong_quai"]:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value, (
+            f"{cid} must emit reviewed_null_unfavorable, got {res.disposition}"
+        )
+        assert res.applicability_status == "reviewed_null_evidence"
+        assert res.points_eligible is False
