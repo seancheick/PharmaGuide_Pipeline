@@ -241,8 +241,17 @@
      "correction_evidence": "sibling record 201405 is the same Male Multiple panel and transcribes it as `Folate 1333 mcg DFE` + nested `Folic Acid 800 mcg`; other siblings carry only `Folic Acid 800 mcg`. So the declared-total row is a Folate total that this record mis-named, and the 800 mcg child is a breakdown inside it.",
      "correction": "rename the declared-total row from `Folic Acid` to `Folate` and keep 800 mcg as its nested folic-acid breakdown",      "confidence": "high (sibling 201405 of the same panel)",
       "final_state": "source_verified_correction",
-      "applied": false,
-      "why_not_applied": "The declared-total row (1333 mcg DFE) and its own nested form row (800 mcg) carry the identical raw text `Folic Acid`, so a rename keyed on that text applies to both and would manufacture a second parent row - making the double count it was meant to remove worse. The printed structure is confirmed (sibling 201405 transcribes the same panel as `Folate 1333 mcg DFE`), so this is a correction-mechanism limit, not an open source question. Verified on the frozen replay: 201420 is absent from the changed set. Owner: dose-safety/folate."
+      "applied": true,
+      "why_not_a_row_rewrite": "The declared-total row (1333 mcg DFE) and its own nested form row (800 mcg) carry the identical raw text `Folic Acid`, so a rename keyed on that text applies to both and would manufacture a second parent row - making the double count it was meant to remove worse. The printed structure is confirmed (sibling 201405 transcribes the same panel as `Folate 1333 mcg DFE`), so the source question was never open; only the row-wise mechanism could not scope it. Owner: dose-safety/folate.",
+      "implementation": "Implemented structurally in the single folate dose-safety contract (`scoring_v4/dose_safety.py::is_folate_parent_total_duplicate_flag`) rather than as a data correction: the declared total is now identified from structure instead of a parent-name vocabulary - the enricher anchors the declared nutrient row to a Daily Value (`ul_exposure_basis = daily_value_confirmed_nutrient_amount`), and failing that structural anchor the declared-total (DFE) basis is the evidence, with the largest amount owning the total. Zero rows were modified.",
+      "implementation_evidence": {
+        "correction_layer": "engine (dose-safety folate contract), data_rows_changed: 0",
+        "before": "folate flagged confirmed_over_threshold, penalized, pct_ul 161.55 (1333 + 1360 mcg DFE summed); score 66.3",
+        "after": "folate classified not_applicable (folate_parent_total_plus_form_breakdown_duplicate); declared total 1333 mcg DFE = 79.96% UL charged once; score 68.1, matching the identical sibling record 201405",
+        "safety": "verdict unchanged (CAUTION) - the independent niacin 171.4% UL exceedance is preserved",
+        "regression_test": "scripts/tests/test_folate_dose_basis_reconciliation.py::test_mis_named_declared_total_is_recognised_by_its_daily_value_anchor",
+        "measured_on": "frozen-corpus A/B replay of the 2026-09-20 closure (base 5fb0d0f1)"
+      }
      },
     {
      "dsld_id": "246430",
@@ -276,6 +285,24 @@
   }
  },
  "counts": {
+  "count_basis": "Canonical basis is `count_items` (one row per product-and-issue, section-level notes excluded) and it is the basis every published total uses; see COUNT_BASIS_20260920.md. `count_rows_including_section_verdicts` is this ledger's own wider tally, which additionally counts the three section-level verdicts (vitamin_e_note, the vitamin-A form verdict, the folate structural verdict). Neither basis is optional: they differ by those three section verdicts, not by any product state.",
+  "count_items": {
+   "source_verified_correction": 11,
+   "source_record_correct_no_change": 6,
+   "source_insufficient_keep_withheld": 3,
+   "intentional_non_scoreable": 3,
+   "total_items": 23,
+   "distinct_products_with_a_correction_receipt": 10,
+   "corrections_applied": 10,
+   "derived_by": "count_reconciliation_20260920.py --check"
+  },
+  "count_rows_including_section_verdicts": {
+   "source_verified_correction": 11,
+   "source_record_correct_no_change": 9,
+   "source_insufficient_keep_withheld": 3,
+   "intentional_non_scoreable": 3,
+   "total_rows": 26
+  },
   "distinct_records_examined": 18,
   "row_level_dispositions": 26,
   "by_final_state": {

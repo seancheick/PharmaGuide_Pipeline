@@ -13,7 +13,10 @@ pharmacist receives only clinical/policy decisions.
 | `PHARMACIST_PACKET_PHASE3_SOURCE_RESOLVED_20260920.md` | The source-resolution draft packet, retained as history. Its §4 (provitamin-A UL) is no longer a pharmacist decision. |
 | `LANE_PROOF_20260920.json` | `receipt -> correction layer -> cleaned lane row` for every product, produced by `../prove_source_corrections_20260920.py`. |
 | `COUNT_BASIS_20260920.md` | **How this phase is counted.** Three published summaries used three different denominators; this fixes the definitions (receipt items / distinct products / measured replay) and the authoritative totals. |
-| `count_reconciliation_20260920.py` | Derives every count from the receipts ledger and cross-checks the applied set against the frozen replay. `--check` asserts the published totals. Pinned by `scripts/tests/test_phase3_source_count_basis_20260920.py`. |
+| `count_reconciliation_20260920.py` | Derives every count from the receipts ledger and cross-checks the applied set against **both** frozen replays (the source-correction A/B and the `201420` closure A/B). `--check` asserts the published totals. Pinned by `scripts/tests/test_phase3_source_count_basis_20260920.py`. |
+| `../FOLATE_201420_CLOSURE_20260920.md` | **The last Phase-3 engineering item, closed.** Root cause, the structural fix, before/after for the record, the test matrix, and the full-corpus blast radius. |
+| `../FOLATE_201420_SCORED_REPLAY_5fb0d0f1_to_closure_20260920.json` | Scored A/B evidence for the closure: 15,412 records, exactly one changed id. |
+| `../FOLATE_201420_ROWLEVEL_REPLAY_5fb0d0f1_to_closure_20260920.json` | Cleaner-side A/B evidence: 15,414 records, **0 representation changes**, input fingerprint verified. |
 
 ## Applied corrections (2026-09-20)
 
@@ -27,7 +30,7 @@ Phase-3 source-verified corrections` commit.
 | 228823, 243799, 243808, 243812, 243815 | Vitamin A form -> printed `Natural Beta-Carotene` | RC-5 |
 | 269360 | Serrapeptase `0 NP` -> printed `40,000 SPU` | RC-5 |
 | 243808, 246430 | Declared DFE total not charged again for its own form breakdown; sibling rows of one printed form collapse instead of summing | `scripts/scoring_v4/dose_safety.py` folate parent-total contract |
-| 201420 | **Not corrected.** The declared-total row and its nested form row share the identical raw text `Folic Acid`, so the per-row mechanism cannot scope a rename to the total alone. Reported, not silently dropped. | — |
+| 201420 | **Closed without a row rewrite.** The declared-total row and its nested form row share the identical raw text `Folic Acid`, so the per-row mechanism cannot scope a rename to the total alone; the contract now identifies the declared total from structure (Daily-Value-anchored row, else the declared-total DFE basis). 0 data rows changed; folate charged once (1333 mcg DFE = 79.96 %UL), niacin exceedance and `CAUTION` verdict preserved. See `../FOLATE_201420_CLOSURE_20260920.md`. | `scripts/scoring_v4/dose_safety.py` folate parent-total contract |
 | 231334, 231335, 263865 | **Deliberately withheld.** Printed denomination not separable at audit grade. | — |
 | 254396, 254413 | `intentional_non_scoreable` (`professional_formulation_material`) | already produced by `assessment_readiness.evaluate_catalog_disposition` — no change needed |
 | 12300 | Deterministically withheld (`no_score_eligible_active_rows`); the label discloses no component dose | already produced — no change needed |

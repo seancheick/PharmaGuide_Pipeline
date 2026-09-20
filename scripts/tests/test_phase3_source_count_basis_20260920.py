@@ -26,6 +26,12 @@ RECEIPTS = SOURCE_DIR / "SOURCE_RESOLUTION_RECEIPTS_20260920.json"
 ROWLEVEL_REPLAY = (
     AUDIT_DIR / "SOURCE_CORRECTION_ROWLEVEL_REPLAY_c9e9d6ba_to_candidate_20260920.json"
 )
+# The closure replay that resolves 201420 through the folate dose-safety
+# contract (it is a structural fix, so it is not a row correction and cannot
+# appear in the source-correction replay above).
+FOLATE_REPLAY = (
+    AUDIT_DIR / "FOLATE_201420_SCORED_REPLAY_5fb0d0f1_to_closure_20260920.json"
+)
 COUNT_SCRIPT = SOURCE_DIR / "count_reconciliation_20260920.py"
 COUNT_BASIS = SOURCE_DIR / "COUNT_BASIS_20260920.md"
 
@@ -114,28 +120,51 @@ def _not_applied(receipts: dict) -> set:
     return found
 
 
-def test_one_correction_receipt_is_reported_not_applied():
-    """201420 is the single exception, and the ledger says so mechanically."""
+def test_every_correction_receipt_is_applied_and_measured():
+    """No receipt may claim a correction that the pipeline does not perform.
+
+    The applied set is measured across both replays: the nine source-correction
+    rewrites, plus 201420, which the closure closed structurally in the folate
+    dose-safety contract rather than by rewriting its rows.
+    """
     receipts = _load(RECEIPTS)
     corrected = {pid for _s, pid, st in _items(receipts)
                  if st == "source_verified_correction"}
     assert len(corrected) == 10
 
-    changed = {str(i) for i in _load(ROWLEVEL_REPLAY)["changed_ids"]}
-    assert len(changed) == 9
+    assert _not_applied(receipts) == set(), (
+        "every correction receipt must now be implemented; an unapplied one has "
+        "to state its own reason and be reconciled here deliberately"
+    )
 
-    # The applied set is measured, and the exception is the ledger's own flag -
-    # not an assumption that every receipt was implemented.
-    flagged = _not_applied(receipts)
-    assert flagged == {"201420"}
-    assert corrected - flagged == changed
+    row_changed = {str(i) for i in _load(ROWLEVEL_REPLAY)["changed_ids"]}
+    assert len(row_changed) == 9
+    folate_changed = {str(i) for i in _load(FOLATE_REPLAY)["changed_ids"]}
+    assert folate_changed == {"201420"}, (
+        "the closure replay must contain exactly the product whose folate "
+        "declared-total reconciliation it verifies"
+    )
+    assert corrected == row_changed | folate_changed
 
+
+def test_201420_is_closed_structurally_not_by_rewriting_its_rows():
+    """The declared total and its own breakdown share one raw text, so a
+    text-keyed rename would rename both. The receipt must record the structural
+    implementation and must still name the rejected row rewrite."""
     entry = next(
         body for body in _load(RECEIPTS)["items"]["D_folate_residuals"]["products"]
         if body.get("dsld_id") == "201420"
     )
-    assert entry["applied"] is False
-    assert entry.get("why_not_applied"), "an unapplied correction must say why"
+    assert entry["applied"] is True
+    assert entry.get("why_not_a_row_rewrite"), (
+        "the rejected row rewrite must stay on the record"
+    )
+    evidence = entry["implementation_evidence"]
+    assert evidence["correction_layer"].startswith("engine")
+    assert "data_rows_changed: 0" in evidence["correction_layer"]
+    assert "is_folate_parent_total_duplicate_flag" in entry["implementation"]
+    # The correction must be pinned by the contract's own regression test.
+    assert "test_folate_dose_basis_reconciliation.py" in evidence["regression_test"]
 
 
 def test_count_basis_script_agrees_with_the_ledger():

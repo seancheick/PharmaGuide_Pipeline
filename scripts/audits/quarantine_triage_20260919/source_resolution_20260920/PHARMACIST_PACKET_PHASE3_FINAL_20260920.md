@@ -1,7 +1,7 @@
 # PharmaGuide — pharmacist review packet (Phase-3 engineering closed, source corrections applied)
 
 Date: 2026-09-20 · For: licensed pharmacist release authority
-Landed as: **`de260e3c`** on `origin/main` — the Phase-3 source-resolution runtime tip. Later documentation-only commits (including this packet's own revision) do not change that runtime tip.
+Landed as: **`ebba804e`** on `origin/main` — the Phase-3 closure runtime tip (the folate declared-total contract change that closed the last engineering item). Documentation-only commits after it, including this packet's own revisions, do not change that runtime tip.
 Supersedes: `PHARMACIST_PACKET_PHASE3_SOURCE_RESOLVED_20260920.md` (source-resolution draft)
 
 **Scope: three policy decisions and one release signature.** Every source/data
@@ -18,9 +18,9 @@ research.
 | Domain | Status |
 |---|---|
 | Source verification | **COMPLETE** |
-| Source corrections | **APPLIED** — 9 product corrections applied and replay-verified, plus one structural folate parent-total contract change. 10 products carry a correction receipt; the tenth (`201420`) is reported and **not** applied (see §4). |
+| Source corrections | **APPLIED** — all 10 products carrying a correction receipt are implemented and replay-verified: 9 source rewrites plus the structural folate declared-total closure of `201420` (§"Resolved" below; zero data rows changed for it). |
 | Engineering validation | **COMPLETE** (fast tier 0 failed; static source-of-truth audit 0 findings) |
-| Frozen-corpus replay | **COMPLETE** (15,414 records per arm, 0 crashes, every delta classified) |
+| Frozen-corpus replay | **COMPLETE** — source-correction A/B (15,414 row-level / 15,412 scored records per arm, 9 changed) and the closure A/B (`15,414` row-level with **0 representation changes**, `15,412` scored with a single changed id, `201420`); 0 crashes, every delta classified |
 | EDTA product policy | **PHARMACIST DECISION** |
 | Botanical standardization-marker policy | **PHARMACIST DECISION** |
 | Discrete-enzyme formulation policy | **PHARMACIST DECISION** |
@@ -39,7 +39,7 @@ Products with an undefined disposition: **0**
 | 12300 Fem-Mend proprietary blend | The label declares only a 860 mg blend total with zero component doses. Withheld on source insufficiency — no dose may be invented. |
 | Vitamin-A form on Bulk 1340 (228823, 243799, 243808, 243812, 243815) | The printed vitamin/mineral blend names `Natural beta-Carotene` as the only vitamin A source. Form provenance is **recorded**; the row is not defaulted to retinol. |
 | Vitamin-A UL applicability for provitamin A | **Not a clinical judgement.** NIH ODS states the Vitamin A UL applies to preformed vitamin A only, and beta-carotene and other provitamin-A carotenoids have no established UL. PharmaGuide already implements this (`beta_carotene_no_established_ul`; `ul_applies: false` on the supplemental beta-carotene conversion rule), and regression coverage pins it. |
-| Folate source duplication (243808, 246430, 201420) | Source structure established (two printed preparation-basis columns; parent DFE total with its own included form breakdown). The parent-total contract was completed so a declared DFE total is not charged again for the breakdown it includes, and sibling rows that are one printed form split across serving bases collapse instead of summing. `243808` and `246430` are reconciled by that contract and confirmed on the frozen replay. `201420` is **not** reconciled: its declared-total row is mis-named `Folic Acid`, byte-identical to its own child row, so a row-wise rename cannot be scoped without renaming the child too. It stays with the dose-safety/folate owner as a pre-existing residual. **Not a question for you.** |
+| Folate source duplication (243808, 246430, 201420) | Source structure established (two printed preparation-basis columns; parent DFE total with its own included form breakdown). The parent-total contract was completed so a declared DFE total is not charged again for the breakdown it includes, and sibling rows that are one printed form split across serving bases collapse instead of summing. `243808` and `246430` are reconciled by that contract. `201420` is **closed**: its declared-total row is mis-named `Folic Acid`, byte-identical to its own child row, so it could not be fixed by a rename — the contract now identifies the declared total **structurally** (the row anchored to a Daily Value, else the declared-total DFE basis) instead of from a parent-name vocabulary. `201420`'s folate exposure is charged once (1333 mcg DFE = 79.96% UL, unpenalized), its independent niacin exceedance and `CAUTION` verdict are **preserved**, and the record now agrees exactly with sibling `201405`. Zero data rows changed. See `FOLATE_201420_CLOSURE_20260920.md`. **Not a question for you.** |
 | Serrapeptase 269360 | The printed Supplement Facts panel declares `Serrapeptase Enzyme 40,000 SPU` with its own SPU footnote; the amount is restored from the panel, never from the product name. |
 | DSLD nesting / label-version questions | Resolved against sibling label records and the archived label images; no open item remains. |
 
@@ -115,10 +115,10 @@ treatment you want (for example an explicit "not individually rated" presentatio
 Sign or withhold according to PharmaGuide's release governance, using the closed Phase-3
 engineering record:
 
-- static source-of-truth audit: **0 findings** (`scoring-static`, re-run at `de260e3c`)
-- fast tier at the landed tip: **15,868 passed / 0 failed / 198 skipped** (clean detached
-  worktree at the landed commit; `FAST_TIER_CLOSURE_20260920.md` is the earlier
-  closure-phase record)
+- static source-of-truth audit: **0 findings** (`scoring-static`, re-run at `ebba804e`)
+- fast tier at the closure tip: **15,897 passed / 0 failed / 196 skipped** (clean detached
+  worktree at `ebba804e`, after the closure's own regression tests were added;
+  `FAST_TIER_CLOSURE_20260920.md` is the earlier closure-phase record)
 - frozen corpus replay: **15,414 row-level / 15,412 scored records per arm, 0 crashes**, every
   changed product mapped to a reviewer-signed source correction — 0 score changes,
   9 conclusion changes, 8 quarantine exits, 0 new quarantine entries, 2 Safety changes,
@@ -126,28 +126,28 @@ engineering record:
 - source resolution, receipt-ledger basis (defined in `COUNT_BASIS_20260920.md`):
   **11 correction items, 6 records confirmed correct, 3 explicitly withheld,
   3 intentional non-scoreable** — 23 receipt items, **0 unresolved source/data questions**
-- of the 10 products carrying a correction receipt, **9 are applied and replay-verified**
-  and **1 (`201420`) is reported and not applied** (reason above). That is an engineering
-  follow-up against a pre-existing defect, **not** a decision for you.
+- of the 10 products carrying a correction receipt, **all 10 are applied and
+  replay-verified** — including `201420`, closed structurally with **0 data rows changed**
+  and a measured blast radius of exactly one product (`FOLATE_201420_CLOSURE_20260920.md`)
+- closure A/B on the full frozen corpus (base `5fb0d0f1`): 15,414 row-level records with
+  **0 representation changes**, 15,412 scored records with **one** changed id, 0 crashes,
+  0 quarantine movements, 0 changes outside the intended family
 
-**Outstanding after your decisions:** the three decisions above and this signature, plus one
-engineering follow-up that is **not** yours to decide — `201420`, a pre-existing folate
-double-count whose printed rename the per-row correction mechanism cannot scope (owner:
-dose-safety/folate; its receipt records `applied: false` with the reason). No source/data
-question remains open.
+**Outstanding after your decisions:** the three decisions above and this signature, and
+nothing else on the engineering side. **No source/data question and no engineering
+follow-up remain open.**
 
 ---
 
 ## Reviewer complete? A quick check
 
 - Did anything in this packet ask you to look up a label, a unit, a dose or a DSLD id? **No.**
-- Does any item below remain marked TBD, stale or `needs_info`? **No.** One receipt is named
-  as **not applied** (`201420`, §4) — it is a pre-existing folate residual with an assigned
-  engineering owner, not an open question and not a decision for you.
+- Does any item below remain marked TBD, stale or `needs_info`? **No.** All ten correction
+  receipts are implemented and replay-verified, including `201420`, which is closed — no
+  engineering follow-up remains open.
 - **You may approve with specified products held.** Approval does not require every product to
   score. `231334` / `231335` / `263865` have no authorable printed denomination and stay
-  explicitly withheld; `201420` stays a documented residual. The release can be signed with
-  those held.
+  explicitly withheld. The release can be signed with those held.
 - Is the provitamin-A UL question on your list? **No** — it is a deterministic rule
   application with an NIH citation, already implemented and test-pinned.
 
@@ -165,10 +165,9 @@ definitions and the enumeration behind every number here are in
 | Basis | Corrections | Confirmed correct | Withheld | Non-scoreable | Total |
 |---|---:|---:|---:|---:|---:|
 | Receipt items (ledger) | **11** | **6** | **3** | **3** | **23** |
-| Distinct products | **10** (9 applied + 1 not applied) | 6 | 3 | 3 | — |
-| Measured on the frozen replay | 9 products changed | — | — | — | — |
+| Distinct products | **10** (all 10 applied) | 6 | 3 | 3 | — |
+| Measured on the frozen replays | 9 changed in the source-correction A/B + `201420` in the closure A/B = **10** | — | — | — | — |
 
 The item and product totals differ only because `243808` carries two separate receipts — a
 vitamin-A form correction (§C) and a folate structural correction (§D). No unexplained
-discrepancy remains, and the one receipt that is **not** applied (`201420`) is named rather
-than folded into a favourable total.
+discrepancy remains, and no receipt is left reported-but-unapplied.

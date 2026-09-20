@@ -38,6 +38,26 @@ CONCLUSION_FIELDS = (
 )
 BOOKKEEPING_FIELDS = {"scored_date", "_config_fingerprint", "run_id"}
 
+# Run-provenance stamps written on every run, at every nesting level
+# (``scoring_metadata.scored_date``). Comparing them reports one phantom
+# "change" per product — 15,411 of them — which buries the real delta and would
+# make "changed ids" meaningless. They are masked before any comparison; the
+# before/after detail kept for a reported change is still the raw record.
+PROVENANCE_KEYS = ("scored_date",)
+
+
+def strip_provenance(value):
+    """Return ``value`` with run-provenance keys removed, recursively."""
+    if isinstance(value, dict):
+        return {
+            key: strip_provenance(item)
+            for key, item in value.items()
+            if key not in PROVENANCE_KEYS
+        }
+    if isinstance(value, list):
+        return [strip_provenance(item) for item in value]
+    return value
+
 
 def load(path: Path) -> dict:
     out = {}
@@ -184,10 +204,12 @@ def main() -> int:
         right_score, _ = score_of(right)
         name = right.get("product_name") or left.get("product_name")
 
+        left_cmp, right_cmp = strip_provenance(left), strip_provenance(right)
         changed_fields = {
             key
-            for key in set(left) | set(right)
-            if key not in BOOKKEEPING_FIELDS and left.get(key) != right.get(key)
+            for key in set(left_cmp) | set(right_cmp)
+            if key not in BOOKKEEPING_FIELDS
+            and left_cmp.get(key) != right_cmp.get(key)
         }
         conclusion_fields = sorted(changed_fields & set(CONCLUSION_FIELDS))
 
@@ -270,6 +292,24 @@ def main() -> int:
             report["bookkeeping_only_changes"].append(
                 {"dsld_id": dsld_id, "fields": sorted(changed_fields)}
             )
+
+    # Every id whose artifact moved, for the count-basis cross-check: "applied"
+    # must mean "measured in a replay", never "written down".
+    report["changed_ids"] = sorted(
+        {
+            str(entry["dsld_id"])
+            for bucket in (
+                report["score_changes"],
+                report["conclusion_changes"],
+                report["quarantine_exits"],
+                report["quarantine_entries"],
+                report["safety_changes"],
+                report["bookkeeping_only_changes"],
+            )
+            for entry in bucket
+        },
+        key=lambda value: int(value) if value.isdigit() else value,
+    )
 
     report["score_changes"].sort(key=lambda item: abs(item["delta"]), reverse=True)
     report["largest_score_deltas"] = report["score_changes"][:25]

@@ -1,0 +1,364 @@
+{
+ "after_arm": "closure candidate (folate declared-total contract fix)",
+ "before_arm": "origin/main 5fb0d0f1 (base arm, pristine scripts tree)",
+ "bookkeeping_only_changes": [],
+ "changed_ids": [
+  "201420"
+ ],
+ "conclusion_changes": [
+  {
+   "dsld_id": "201420",
+   "fields": [
+    "display_100",
+    "quality_score_v4_100",
+    "raw_score_v4_100"
+   ],
+   "name": "Male Multiple"
+  }
+ ],
+ "crash_like_after": [],
+ "crash_like_before": [],
+ "largest_score_deltas": [
+  {
+   "after": 68.1,
+   "before": 66.3,
+   "component_deltas": {
+    "raw_score_100": {
+     "after": 56.9,
+     "before": 55.9,
+     "delta": 1.0
+    },
+    "score_100": {
+     "after": 56.9,
+     "before": 55.9,
+     "delta": 1.0
+    }
+   },
+   "conclusion_fields": [
+    "display_100",
+    "quality_score_v4_100",
+    "raw_score_v4_100"
+   ],
+   "delta": 1.8,
+   "dsld_id": "201420",
+   "name": "Male Multiple",
+   "readiness_after": {
+    "blocking_reason": null,
+    "disposition": "score_candidate",
+    "not_scorable_reason": null,
+    "score_unavailable_reason": null,
+    "scoring_status": "scored"
+   },
+   "readiness_before": {
+    "blocking_reason": null,
+    "disposition": "score_candidate",
+    "not_scorable_reason": null,
+    "score_unavailable_reason": null,
+    "scoring_status": "scored"
+   },
+   "score_field": "quality_score_v4_100"
+  }
+ ],
+ "only_in_after": [],
+ "only_in_before": [],
+ "outside_expected_families": [],
+ "quarantine_entries": [],
+ "quarantine_exits": [],
+ "records_after": 15412,
+ "records_before": 15412,
+ "records_compared": 15412,
+ "safety_changes": [
+  {
+   "after": {
+    "clean_label_hits": [
+     {
+      "consumer_note": "Contains titanium dioxide (E171), which is not permitted as a food additive in the EU.",
+      "eu_status": "banned_food_additive",
+      "jurisdiction": "EU",
+      "jurisdiction_status": "banned_food_additive",
+      "matched_rule_id": "BANNED_ADD_TITANIUM_DIOXIDE",
+      "name": "Titanium Dioxide (E171)",
+      "penalty_base": 2.0,
+      "policy_basis": "Commission Regulation (EU) 2022/63 removed titanium dioxide (E171) from the EU list of permitted food additives.",
+      "policy_id": "CL_TITANIUM_DIOXIDE_E171",
+      "regulation_citation": "Commission Regulation (EU) 2022/63",
+      "regulation_url": "https://eur-lex.europa.eu/eli/reg/2022/63/oj/eng",
+      "role": "inactive",
+      "standard_name": "Titanium Dioxide",
+      "status": "watchlist",
+      "tier": "elevated"
+     }
+    ],
+    "decision": null,
+    "dose_safety": {
+     "conversion_failures": 0,
+     "flags": [
+      {
+       "canonical_id": "vitamin_b9_folate",
+       "nutrient": "Vitamin B9 (Folate)",
+       "pct_ul": 161.54769046190762,
+       "penalized": false,
+       "reason": "folate_parent_total_plus_form_breakdown_duplicate",
+       "state": "not_applicable"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Niacin",
+       "pct_ul": 171.42857142857142,
+       "penalized": true,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Magnesium",
+       "pct_ul": 114.28571428571428,
+       "penalized": false,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Zinc",
+       "pct_ul": 125.0,
+       "penalized": false,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      }
+     ],
+     "state_counts": {
+      "confirmed_over_threshold": 3,
+      "not_applicable": 1
+     }
+    },
+    "gate_blocking_reason": null,
+    "gate_decision": null,
+    "gate_matched_substance": null,
+    "gate_quarantine_reason": null,
+    "gate_quarantine_required": false,
+    "gate_signals": [
+     "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY",
+     "DOSE_OVER_UL_CAUTION"
+    ],
+    "gate_verdict": "CAUTION",
+    "review_records": [],
+    "signal_reason": "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY",
+    "status": "caution",
+    "verdict": "CAUTION"
+   },
+   "before": {
+    "clean_label_hits": [
+     {
+      "consumer_note": "Contains titanium dioxide (E171), which is not permitted as a food additive in the EU.",
+      "eu_status": "banned_food_additive",
+      "jurisdiction": "EU",
+      "jurisdiction_status": "banned_food_additive",
+      "matched_rule_id": "BANNED_ADD_TITANIUM_DIOXIDE",
+      "name": "Titanium Dioxide (E171)",
+      "penalty_base": 2.0,
+      "policy_basis": "Commission Regulation (EU) 2022/63 removed titanium dioxide (E171) from the EU list of permitted food additives.",
+      "policy_id": "CL_TITANIUM_DIOXIDE_E171",
+      "regulation_citation": "Commission Regulation (EU) 2022/63",
+      "regulation_url": "https://eur-lex.europa.eu/eli/reg/2022/63/oj/eng",
+      "role": "inactive",
+      "standard_name": "Titanium Dioxide",
+      "status": "watchlist",
+      "tier": "elevated"
+     }
+    ],
+    "decision": null,
+    "dose_safety": {
+     "conversion_failures": 0,
+     "flags": [
+      {
+       "canonical_id": "vitamin_b9_folate",
+       "nutrient": "Vitamin B9 (Folate)",
+       "pct_ul": 161.54769046190762,
+       "penalized": true,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Niacin",
+       "pct_ul": 171.42857142857142,
+       "penalized": true,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Magnesium",
+       "pct_ul": 114.28571428571428,
+       "penalized": false,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Zinc",
+       "pct_ul": 125.0,
+       "penalized": false,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      }
+     ],
+     "state_counts": {
+      "confirmed_over_threshold": 4
+     }
+    },
+    "gate_blocking_reason": null,
+    "gate_decision": null,
+    "gate_matched_substance": null,
+    "gate_quarantine_reason": null,
+    "gate_quarantine_required": false,
+    "gate_signals": [
+     "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY",
+     "DOSE_OVER_UL_CAUTION"
+    ],
+    "gate_verdict": "CAUTION",
+    "review_records": [],
+    "signal_reason": "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY",
+    "status": "caution",
+    "verdict": "CAUTION"
+   },
+   "dsld_id": "201420",
+   "gate_diff": [
+    {
+     "after": [
+      {
+       "canonical_id": "vitamin_b9_folate",
+       "nutrient": "Vitamin B9 (Folate)",
+       "pct_ul": 161.54769046190762,
+       "penalized": false,
+       "reason": "folate_parent_total_plus_form_breakdown_duplicate",
+       "state": "not_applicable"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Niacin",
+       "pct_ul": 171.42857142857142,
+       "penalized": true,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Magnesium",
+       "pct_ul": 114.28571428571428,
+       "penalized": false,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Zinc",
+       "pct_ul": 125.0,
+       "penalized": false,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      }
+     ],
+     "before": [
+      {
+       "canonical_id": "vitamin_b9_folate",
+       "nutrient": "Vitamin B9 (Folate)",
+       "pct_ul": 161.54769046190762,
+       "penalized": true,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Niacin",
+       "pct_ul": 171.42857142857142,
+       "penalized": true,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Magnesium",
+       "pct_ul": 114.28571428571428,
+       "penalized": false,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      },
+      {
+       "canonical_id": null,
+       "nutrient": "Zinc",
+       "pct_ul": 125.0,
+       "penalized": false,
+       "reason": null,
+       "state": "confirmed_over_threshold"
+      }
+     ],
+     "path": "/dose_safety/flags"
+    },
+    {
+     "after": 3,
+     "before": 4,
+     "path": "/dose_safety/state_counts/confirmed_over_threshold"
+    },
+    {
+     "after": 1,
+     "before": null,
+     "path": "/dose_safety/state_counts/not_applicable"
+    }
+   ],
+   "name": "Male Multiple"
+  }
+ ],
+ "score_changes": [
+  {
+   "after": 68.1,
+   "before": 66.3,
+   "component_deltas": {
+    "raw_score_100": {
+     "after": 56.9,
+     "before": 55.9,
+     "delta": 1.0
+    },
+    "score_100": {
+     "after": 56.9,
+     "before": 55.9,
+     "delta": 1.0
+    }
+   },
+   "conclusion_fields": [
+    "display_100",
+    "quality_score_v4_100",
+    "raw_score_v4_100"
+   ],
+   "delta": 1.8,
+   "dsld_id": "201420",
+   "name": "Male Multiple",
+   "readiness_after": {
+    "blocking_reason": null,
+    "disposition": "score_candidate",
+    "not_scorable_reason": null,
+    "score_unavailable_reason": null,
+    "scoring_status": "scored"
+   },
+   "readiness_before": {
+    "blocking_reason": null,
+    "disposition": "score_candidate",
+    "not_scorable_reason": null,
+    "score_unavailable_reason": null,
+    "scoring_status": "scored"
+   },
+   "score_field": "quality_score_v4_100"
+  }
+ ],
+ "summary": {
+  "bookkeeping_only_changes": 0,
+  "conclusion_changes": 1,
+  "max_abs_delta": 1.8,
+  "outside_expected_families": 0,
+  "quarantine_entries": 0,
+  "quarantine_exits": 0,
+  "records_compared": 15412,
+  "safety_changes": 1,
+  "score_changes": 1
+ }
+}
