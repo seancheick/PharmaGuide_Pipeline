@@ -348,3 +348,87 @@ def test_food_matrix_not_efficacy_relevant():
         assert res.applicability_status == "food_powder_or_flavor_matrix"
 
 
+def test_unverified_literature_membership_cannot_complete_evidence(monkeypatch):
+    """Generated record membership in literature registry alone CANNOT complete Evidence.
+
+    If a record exists but lacks authoritative live verification, it MUST stay
+    LITERATURE_RESOLUTION_REQUIRED.
+    """
+    unverified_fake_entry = {
+        "canonical_id": "unverified_experimental_active",
+        "material_form": "experimental extract",
+        "search_query": "unverified query",
+        "search_date": "2026-09-20",
+        "databases_searched": ["PubMed"],
+        "records_screened": 10,
+        "qualifying_human_studies": [
+            {"pmid": "99999999", "title": "Unverified paper"}
+        ],
+        "effect_direction": "positive_strong",
+        "studied_dose_exposure": {"values": [100], "unit": "mg"},
+        "applicability_decision": "Applicability established.",
+        "verification_result": "verification_pending",  # NOT authoritative_pubmed_verified
+        "verification_provenance": {"all_pmids_verified": False}
+    }
+
+    # Patch literature evidence loader to include unverified record
+    real_lit_loader = er._load_literature_evidence
+    def fake_loader():
+        d = dict(real_lit_loader())
+        d["unverified_experimental_active"] = unverified_fake_entry
+        return d
+
+    monkeypatch.setattr(er, "_load_literature_evidence", fake_loader)
+
+    res = er.resolve_evidence_for_canonical("unverified_experimental_active", dose_value=100.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert res.points_eligible is False
+    assert "literature_verification_pending" in res.blocking_reasons
+
+
+def test_material_context_preserves_specific_disclosure():
+    """Context-aware material specificity: standardized extract overrides broad food blocking."""
+    # 1. Crude broccoli vegetable powder blocked from sulforaphane extract trials
+    res_crude_broccoli = er.resolve_evidence_for_row({
+        "canonical_id": "broccoli",
+        "name": "Broccoli Powder",
+        "raw_source_text": "Broccoli (Brassica oleracea) whole vegetable powder",
+        "amount": 500,
+        "unit": "mg",
+    })
+    assert res_crude_broccoli.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res_crude_broccoli.applicability_status == "crude_whole_food_powder_blocked"
+
+    # 2. Standardized broccoli sprout extract with sulforaphane matches clinical extract
+    res_std_broccoli = er.resolve_evidence_for_row({
+        "canonical_id": "broccoli",
+        "name": "Broccoli Sprout Extract",
+        "raw_source_text": "Broccoli Sprout Extract (standardized to sulforaphane)",
+        "amount": 500,
+        "unit": "mg",
+    })
+    assert res_std_broccoli.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+
+    # 3. Crude pumpkin seed powder blocked from purified seed oil trials
+    res_crude_pumpkin = er.resolve_evidence_for_row({
+        "canonical_id": "pumpkin",
+        "name": "Pumpkin Seed Powder",
+        "raw_source_text": "Pumpkin Seed whole powder",
+        "amount": 1000,
+        "unit": "mg",
+    })
+    assert res_crude_pumpkin.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res_crude_pumpkin.applicability_status == "crude_whole_food_powder_blocked"
+
+    # 4. Purified pumpkin seed oil matches clinical trials
+    res_pumpkin_oil = er.resolve_evidence_for_row({
+        "canonical_id": "pumpkin",
+        "name": "Pumpkin Seed Oil",
+        "raw_source_text": "Cucurbita pepo seed oil",
+        "amount": 1000,
+        "unit": "mg",
+    })
+    assert res_pumpkin_oil.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+
+
+

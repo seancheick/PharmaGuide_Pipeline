@@ -672,10 +672,32 @@ def resolve_evidence_for_row(
             owner_facts=owner_facts,
         )
 
-    # 7b. Check Phase 4 Literature Evidence Registry
+    # 7b. Check Verified Clinical Evidence Registry (Phase 4 Provenance Fact Registry)
+    # The canonical clinical-evidence capability remains ONE owner: backed_clinical_studies.
+    # Mere membership in literature_evidence_records.json CANNOT complete evidence without
+    # deterministic verification provenance.
     lit_idx = _load_literature_evidence()
     lit_entry = lit_idx.get(canonical) or lit_idx.get(norm_name)
     if lit_entry:
+        prov = lit_entry.get("verification_provenance", {})
+        is_verified = (
+            lit_entry.get("verification_result") == "authoritative_pubmed_verified"
+            and prov.get("all_pmids_verified", False) is True
+            and not prov.get("retractions_found", False)
+        )
+        if not is_verified:
+            # Unverified or generated record membership alone MUST NOT complete Evidence
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=["identity_iqm"] if iqm_entry else [],
+                disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                points_eligible=False,
+                applicability_status="unverified_literature_record",
+                reason_code="unverified_generated_record_cannot_complete_evidence",
+                blocking_reasons=["literature_verification_pending"],
+            )
+
         matched_owners.append("backed_clinical_studies")
         owner_facts["literature_evidence"] = {
             "search_date": lit_entry.get("search_date"),
@@ -702,39 +724,82 @@ def resolve_evidence_for_row(
                 owner_facts=owner_facts,
             )
 
-        # Check if reviewed food powder / flavor matrix not acting as active therapeutic
-        if lit_entry.get("effect_direction") == "not_efficacy_relevant":
-            return EvidenceResolution(
-                canonical_id=canonical,
-                ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
-                points_eligible=False,
-                applicability_status="food_powder_or_flavor_matrix",
-                reason_code="literature_reviewed_food_matrix_not_efficacy_relevant",
-                owner_facts=owner_facts,
-            )
+        # Context-aware material specificity for broad food / carrier identities
+        raw_text = _norm(row_dict.get("raw_source_text") or name)
+        form_text = _norm(matched_form or "")
+        combined_text = f"{raw_text} {form_text}".strip()
 
-        # Check applicability decision
-        app_dec = str(lit_entry.get("applicability_decision") or "").lower()
-        if (
-            lit_entry.get("effect_direction") == "applicability_unestablished"
-            or "applicability unestablished" in app_dec
-            or "prohibited" in app_dec
-            or "blocked" in app_dec
-        ):
-            blocking_reasons.append("literature_applicability_unestablished")
-            return EvidenceResolution(
-                canonical_id=canonical,
-                ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False,
-                applicability_status="applicability_unestablished",
-                reason_code="literature_applicability_unestablished",
-                owner_facts=owner_facts,
-                blocking_reasons=blocking_reasons,
-            )
+        material_form_matched = False
+        if canonical == "broccoli":
+            if any(k in combined_text for k in ("sprout", "sulforaphane", "glucoraphanin")):
+                material_form_matched = True
+            else:
+                blocking_reasons.append("literature_applicability_unestablished")
+                return EvidenceResolution(
+                    canonical_id=canonical,
+                    ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False,
+                    applicability_status="crude_whole_food_powder_blocked",
+                    reason_code="crude_vegetable_powder_cannot_inherit_purified_extract_trials",
+                    owner_facts=owner_facts,
+                    blocking_reasons=blocking_reasons,
+                )
+
+        if canonical == "pumpkin":
+            if any(k in combined_text for k in ("oil", "seed oil", "lipid")):
+                material_form_matched = True
+            else:
+                blocking_reasons.append("literature_applicability_unestablished")
+                return EvidenceResolution(
+                    canonical_id=canonical,
+                    ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False,
+                    applicability_status="crude_whole_food_powder_blocked",
+                    reason_code="crude_seed_powder_cannot_inherit_purified_oil_trials",
+                    owner_facts=owner_facts,
+                    blocking_reasons=blocking_reasons,
+                )
+
+        if canonical in {"orange", "brewers_yeast"}:
+            if any(k in combined_text for k in ("extract", "standardized", "bioflavonoid", "hesperidin", "glucan", "polysaccharide")):
+                material_form_matched = True
+            else:
+                return EvidenceResolution(
+                    canonical_id=canonical,
+                    ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
+                    points_eligible=False,
+                    applicability_status="food_powder_or_flavor_matrix",
+                    reason_code="whole_food_matrix_not_efficacy_relevant",
+                    owner_facts=owner_facts,
+                )
+
+        # Check general applicability decision (only if not already explicitly qualified by material disclosure)
+        if not material_form_matched:
+            app_dec = str(lit_entry.get("applicability_decision") or "").lower()
+            if (
+                lit_entry.get("effect_direction") == "applicability_unestablished"
+                or "applicability unestablished" in app_dec
+                or "prohibited" in app_dec
+                or "blocked" in app_dec
+            ):
+                blocking_reasons.append("literature_applicability_unestablished")
+                return EvidenceResolution(
+                    canonical_id=canonical,
+                    ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False,
+                    applicability_status="applicability_unestablished",
+                    reason_code="literature_applicability_unestablished",
+                    owner_facts=owner_facts,
+                    blocking_reasons=blocking_reasons,
+                )
 
         # Check dose applicability against studied exposure
         dose_val = _as_float(row_dict.get("amount") or row_dict.get("dose_value"))
