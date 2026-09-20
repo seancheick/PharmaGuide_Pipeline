@@ -341,6 +341,10 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
         # the FDA reproductive-risk CAUTION (legal conclusion still tentative).
         # Prior approval confirmed by the project owner on 2026-09-11.
         ("vinpocetine", "NOOTROPIC_VINPOCETINE"),
+        # Standardization markers (clinical sign-off 2026-09-19): resolve
+        # extract constituents canonically while preserving safety watchlist/caution.
+        ("withaferin_a", "WATCH_WITHAFERIN_A"),
+        ("miroestrol", "RISK_MIROESTROL"),
     }
     assert ("citrus_bioflavonoids", "RISK_BITTER_ORANGE") not in observed_parent_ids
     assert all(status in {"high_risk", "watchlist"} for _, _, status, _ in overlaps)
