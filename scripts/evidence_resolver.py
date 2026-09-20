@@ -689,7 +689,7 @@ def resolve_evidence_for_row(
             "verification_result": lit_entry.get("verification_result"),
         }
 
-        # Check if reviewed null / unfavorable (e.g. Garcinia cambogia weight loss)
+        # Check if reviewed null / unfavorable (e.g. Garcinia cambogia weight loss, Tribulus)
         if lit_entry.get("effect_direction") == "null":
             return EvidenceResolution(
                 canonical_id=canonical,
@@ -702,9 +702,27 @@ def resolve_evidence_for_row(
                 owner_facts=owner_facts,
             )
 
+        # Check if reviewed food powder / flavor matrix not acting as active therapeutic
+        if lit_entry.get("effect_direction") == "not_efficacy_relevant":
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
+                points_eligible=False,
+                applicability_status="food_powder_or_flavor_matrix",
+                reason_code="literature_reviewed_food_matrix_not_efficacy_relevant",
+                owner_facts=owner_facts,
+            )
+
         # Check applicability decision
         app_dec = str(lit_entry.get("applicability_decision") or "").lower()
-        if "applicability unestablished" in app_dec or "prohibited" in app_dec:
+        if (
+            lit_entry.get("effect_direction") == "applicability_unestablished"
+            or "applicability unestablished" in app_dec
+            or "prohibited" in app_dec
+            or "blocked" in app_dec
+        ):
             blocking_reasons.append("literature_applicability_unestablished")
             return EvidenceResolution(
                 canonical_id=canonical,
