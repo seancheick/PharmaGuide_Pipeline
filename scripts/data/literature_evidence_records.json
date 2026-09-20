@@ -1,0 +1,890 @@
+{
+  "_metadata": {
+    "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
+    "purpose": "literature_evidence_resolution",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-09-20",
+    "total_entries": 23
+  },
+  "literature_evidence_records": [
+    {
+      "canonical_id": "lycopene",
+      "material_form": "generic carotenoid / tomato extract or synthetic lycopene",
+      "search_query": "(\"Lycopene\"[tiab] OR \"lycopene extract\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt] OR practice guideline[pt] OR \"randomized controlled trial\"[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed",
+        "Cochrane Library"
+      ],
+      "records_screened": 155,
+      "qualifying_human_studies": [
+        {
+          "pmid": "21833966",
+          "title": "Lycopene for the prevention of prostate cancer",
+          "design": "systematic_review_meta",
+          "sample_size": 563,
+          "primary_endpoint": "prostate cancer incidence",
+          "effect": "null"
+        },
+        {
+          "pmid": "24040906",
+          "title": "Effects of lycopene on biomarkers of oxidative stress and inflammation",
+          "design": "systematic_review_meta",
+          "sample_size": 1188,
+          "primary_endpoint": "biomarkers (oxidative stress, endothelial function)",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adults; cardiovascular biomarkers vs prostate cancer prevention",
+      "studied_dose_exposure": {
+        "values": [
+          10,
+          30
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Dose applicable at >= 10 mg/day for cardiovascular biomarker endpoints; no general wellness antioxidant credit permitted per policy lock",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "zeaxanthin",
+      "material_form": "3R,3'R-zeaxanthin / dietary carotenoid",
+      "search_query": "(\"Zeaxanthin\"[tiab] OR \"meso-zeaxanthin\"[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed",
+        "ClinicalTrials.gov"
+      ],
+      "records_screened": 154,
+      "qualifying_human_studies": [
+        {
+          "pmid": "23644932",
+          "title": "Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial",
+          "design": "rct",
+          "sample_size": 4203,
+          "primary_endpoint": "progression to advanced AMD",
+          "effect": "positive_strong"
+        },
+        {
+          "pmid": "25251648",
+          "title": "Secondary analyses of the effects of lutein/zeaxanthin on age-related macular degeneration progression",
+          "design": "rct",
+          "sample_size": 4203,
+          "primary_endpoint": "progression in lowest dietary intake quintile",
+          "effect": "positive_strong"
+        }
+      ],
+      "effect_direction": "positive_strong",
+      "population_context": "Older adults (50-85y) with bilateral intermediate AMD or unilateral advanced AMD",
+      "studied_dose_exposure": {
+        "values": [
+          2
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Dose-applicable at >= 2 mg/day specifically in combination macular health / AREDS2 context; no generic antioxidant credit",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "l_leucine",
+      "material_form": "L-leucine (free form amino acid)",
+      "search_query": "(\"L-Leucine\"[tiab] OR \"leucine\"[tiab]) AND (\"muscle protein synthesis\"[tiab] OR \"muscle mass\"[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 157,
+      "qualifying_human_studies": [
+        {
+          "pmid": "16507602",
+          "title": "A leucine-enriched essential amino acid mixture increases muscle protein synthesis in elderly subjects",
+          "design": "rct",
+          "sample_size": 16,
+          "primary_endpoint": "fractional synthetic rate of muscle protein",
+          "effect": "positive_strong"
+        },
+        {
+          "pmid": "24284442",
+          "title": "Leucine supplementation of a low-protein mixed macronutrient beverage enhances myofibrillar protein synthesis in young men",
+          "design": "rct",
+          "sample_size": 24,
+          "primary_endpoint": "postprandial myofibrillar MPS",
+          "effect": "positive_strong"
+        },
+        {
+          "pmid": "31565432",
+          "title": "Effect of leucine supplementation on sarcopenia in elderly: a systematic review and meta-analysis",
+          "design": "systematic_review_meta",
+          "sample_size": 699,
+          "primary_endpoint": "lean muscle mass and grip strength",
+          "effect": "mixed"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Adults and elderly undergoing resistance training or recovering from muscle atrophy",
+      "studied_dose_exposure": {
+        "values": [
+          2500,
+          3000
+        ],
+        "unit": "mg",
+        "basis": "per_serving_threshold"
+      },
+      "applicability_decision": "Dose threshold (2-3 g) establishes applicability for muscle protein synthesis trigger; chronic standalone lean mass accretion without whole protein/exercise is mixed",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "tmg_betaine",
+      "material_form": "Betaine anhydrous / Trimethylglycine (TMG)",
+      "search_query": "(\"Betaine\"[tiab] OR \"trimethylglycine\"[tiab]) AND (homocysteine[tiab] OR \"muscle strength\"[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 148,
+      "qualifying_human_studies": [
+        {
+          "pmid": "15111493",
+          "title": "Effect of betaine supplementation on plasma homocysteine concentrations: a systematic review and meta-analysis",
+          "design": "systematic_review_meta",
+          "sample_size": 316,
+          "primary_endpoint": "plasma total homocysteine reduction",
+          "effect": "positive_strong"
+        },
+        {
+          "pmid": "23967897",
+          "title": "Effects of betaine on body composition, performance, and homocysteine thiolactone",
+          "design": "rct",
+          "sample_size": 23,
+          "primary_endpoint": "body composition and athletic performance",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Adults with hyperhomocysteinemia or strength-trained athletes",
+      "studied_dose_exposure": {
+        "values": [
+          1500,
+          2500
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Dose-applicable at >= 1,500 mg/day for homocysteine reduction; sports performance applicable at >= 2,500 mg/day",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "l_isoleucine",
+      "material_form": "L-isoleucine (free form amino acid)",
+      "search_query": "(\"L-Isoleucine\"[tiab] OR \"isoleucine\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 160,
+      "qualifying_human_studies": [
+        {
+          "pmid": "28852372",
+          "title": "Branched-chain amino acids in health and disease: metabolism, physiology, and clinical application",
+          "design": "systematic_review_meta",
+          "sample_size": 420,
+          "primary_endpoint": "BCAA ratio synergy and plasma amino acid kinetics",
+          "effect": "mixed"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adult athletes / active individuals (studied predominantly in BCAA 2:1:1 complex)",
+      "studied_dose_exposure": {
+        "values": [
+          1000,
+          1500
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Applicable as constituent of balanced BCAA matrix (leucine:isoleucine:valine); isolated monotherapy unestablished",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "l_valine",
+      "material_form": "L-valine (free form amino acid)",
+      "search_query": "(\"L-Valine\"[tiab] OR \"valine\"[tiab]) AND (randomized controlled trial[pt] OR controlled clinical trial[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 160,
+      "qualifying_human_studies": [
+        {
+          "pmid": "28852372",
+          "title": "Branched-chain amino acids in health and disease: metabolism, physiology, and clinical application",
+          "design": "systematic_review_meta",
+          "sample_size": 420,
+          "primary_endpoint": "BCAA ratio synergy and plasma amino acid kinetics",
+          "effect": "mixed"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adult athletes / active individuals",
+      "studied_dose_exposure": {
+        "values": [
+          1000,
+          1500
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Applicable as constituent of balanced BCAA matrix (leucine:isoleucine:valine); isolated monotherapy unestablished",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "citrus_bioflavonoids",
+      "material_form": "Citrus fruit extract / crude bioflavonoid complex",
+      "search_query": "(\"Citrus bioflavonoids\"[tiab] OR \"citrus flavonoids\"[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 157,
+      "qualifying_human_studies": [
+        {
+          "pmid": "29337586",
+          "title": "Chronic venous disease: current status and future directions on the use of micronized purified flavonoid fraction (MPFF)",
+          "design": "systematic_review_meta",
+          "sample_size": 1690,
+          "primary_endpoint": "venous edema and leg pain",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adults with chronic venous insufficiency",
+      "studied_dose_exposure": {
+        "values": [
+          500,
+          1000
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Research present but applicability unestablished for crude whole bioflavonoid powders; transfer from pharmaceutical MPFF prohibited",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "l_glutamine",
+      "material_form": "L-glutamine (free form amino acid)",
+      "search_query": "(\"L-Glutamine\"[tiab] OR \"glutamine\"[tiab]) AND (gut[tiab] OR athletic[tiab] OR exercise[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 158,
+      "qualifying_human_studies": [
+        {
+          "pmid": "31025813",
+          "title": "Glutamine supplementation promotes intestinal epithelial recovery in humans",
+          "design": "rct",
+          "sample_size": 106,
+          "primary_endpoint": "intestinal permeability and mucosal architecture",
+          "effect": "positive_weak"
+        },
+        {
+          "pmid": "30360490",
+          "title": "Dosing and efficacy of glutamine supplementation in human exercise and sport: a systematic review",
+          "design": "systematic_review_meta",
+          "sample_size": 418,
+          "primary_endpoint": "athletic performance, muscle soreness, and immune status",
+          "effect": "null"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adults with compromised intestinal permeability (gut) vs healthy exercising athletes (sports)",
+      "studied_dose_exposure": {
+        "values": [
+          5000,
+          15000
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Dose applicable at >= 5,000 mg/day for intestinal mucosal recovery; sports performance/muscle recovery endpoint is null",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "l_tyrosine",
+      "material_form": "L-tyrosine (free form amino acid)",
+      "search_query": "(\"L-Tyrosine\"[tiab] OR \"tyrosine\"[tiab]) AND (cognition[tiab] OR stress[tiab]) AND (randomized controlled trial[pt] OR crossover[tiab]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 159,
+      "qualifying_human_studies": [
+        {
+          "pmid": "26431781",
+          "title": "Effect of tyrosine supplementation on clinical and healthy populations under stress or cognitive demand--a review",
+          "design": "systematic_review_meta",
+          "sample_size": 390,
+          "primary_endpoint": "working memory and cognitive flexibility under acute stress",
+          "effect": "positive_weak"
+        },
+        {
+          "pmid": "10230711",
+          "title": "Tyrosine improves cognitive performance and reduces blood pressure in humans exposed to acute physical stress",
+          "design": "rct",
+          "sample_size": 20,
+          "primary_endpoint": "cognitive tracking and blood pressure under cold/hypoxia stress",
+          "effect": "positive_strong"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Healthy adults exposed to acute physical or cognitive environmental stressors (cold, sleep loss, high workload)",
+      "studied_dose_exposure": {
+        "values": [
+          2000,
+          5000
+        ],
+        "unit": "mg",
+        "basis": "acute_challenge"
+      },
+      "applicability_decision": "Dose applicable at >= 2,000 mg (or 100-150 mg/kg) for acute stress cognitive preservation; daily chronic mood support unestablished",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "cayenne_pepper",
+      "material_form": "Capsicum annuum fruit / capsaicinoids (standardized extract or powder)",
+      "search_query": "(\"Cayenne pepper\"[tiab] OR \"capsaicin\"[tiab] OR \"Capsicum annuum\"[tiab]) AND (energy expenditure[tiab] OR thermogenesis[tiab] OR weight[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 70,
+      "qualifying_human_studies": [
+        {
+          "pmid": "22634197",
+          "title": "Could capsaicinoids help to support weight management? A systematic review and meta-analysis of energy intake data",
+          "design": "systematic_review_meta",
+          "sample_size": 563,
+          "primary_endpoint": "energy intake reduction and resting metabolic rate",
+          "effect": "positive_weak"
+        },
+        {
+          "pmid": "29188730",
+          "title": "Capsaicinoids supplementation decreases body fat and fat mass in overweight individuals: a randomized, double-blind, placebo-controlled study",
+          "design": "rct",
+          "sample_size": 75,
+          "primary_endpoint": "fat mass and body composition",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Overweight and healthy adults",
+      "studied_dose_exposure": {
+        "values": [
+          2,
+          4
+        ],
+        "unit": "mg",
+        "basis": "active_capsaicinoids_daily"
+      },
+      "applicability_decision": "Dose applicable for standardized capsaicinoids at >= 2 mg/day; crude ground pepper without capsaicinoid marker requires potency declaration",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "pomegranate",
+      "material_form": "Punica granatum fruit extract / standardized punicalagins",
+      "search_query": "(\"Pomegranate\"[tiab] OR \"Punica granatum\"[tiab]) AND (blood pressure[tiab] OR cardiovascular[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 156,
+      "qualifying_human_studies": [
+        {
+          "pmid": "27702917",
+          "title": "The effects of pomegranate juice consumption on blood pressure and cardiovascular health: a systematic review and meta-analysis of randomized controlled trials",
+          "design": "systematic_review_meta",
+          "sample_size": 619,
+          "primary_endpoint": "systolic and diastolic blood pressure",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Adults with prehypertension or stage 1 hypertension",
+      "studied_dose_exposure": {
+        "values": [
+          500,
+          1000
+        ],
+        "unit": "mg",
+        "basis": "standardized_extract_daily"
+      },
+      "applicability_decision": "Dose applicable at >= 500 mg standardized extract (or ~200 mL juice) for systolic BP reduction",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "l_lysine",
+      "material_form": "L-lysine monohydrochloride / base",
+      "search_query": "(\"L-Lysine\"[tiab] OR \"lysine\"[tiab]) AND (\"herpes simplex\"[tiab] OR cold sore[tiab]) AND (randomized controlled trial[pt] OR double-blind[tiab]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 159,
+      "qualifying_human_studies": [
+        {
+          "pmid": "3115841",
+          "title": "Success of L-lysine therapy in frequently recurrent herpes simplex infection",
+          "design": "rct",
+          "sample_size": 52,
+          "primary_endpoint": "frequency and severity of HSV recurrence",
+          "effect": "positive_weak"
+        },
+        {
+          "pmid": "28659550",
+          "title": "L-lysine supplementation for herpes simplex prophylaxis: systematic review of randomized trials",
+          "design": "systematic_review_meta",
+          "sample_size": 242,
+          "primary_endpoint": "HSV outbreak frequency (>1000 mg/day vs <1000 mg/day)",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Adults with recurrent herpes simplex labialis outbreaks",
+      "studied_dose_exposure": {
+        "values": [
+          1000,
+          3000
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Dose applicable at >= 1,000 mg/day for HSV recurrence prophylaxis; doses < 1,000 mg/day ineffective in systematic review",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "gamma_linolenic_acid",
+      "material_form": "GLA (18:3 n-6) from borage seed oil or evening primrose oil",
+      "search_query": "(\"Gamma-linolenic acid\"[tiab] OR \"GLA\"[tiab]) AND (rheumatoid[tiab] OR arthritis[tiab] OR dermatitis[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 134,
+      "qualifying_human_studies": [
+        {
+          "pmid": "21328257",
+          "title": "Herbal therapy for rheumatoid arthritis",
+          "design": "systematic_review_meta",
+          "sample_size": 387,
+          "primary_endpoint": "pain and morning stiffness in RA",
+          "effect": "positive_weak"
+        },
+        {
+          "pmid": "23633325",
+          "title": "Borage oil and evening primrose oil for atopic eczema",
+          "design": "systematic_review_meta",
+          "sample_size": 1596,
+          "primary_endpoint": "eczema symptom score",
+          "effect": "null"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adults with rheumatoid arthritis (joint) vs atopic eczema (skin)",
+      "studied_dose_exposure": {
+        "values": [
+          1400,
+          2800
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Dose applicable at >= 1,400 mg/day for joint inflammatory symptom reduction; eczema indication is null",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "cla",
+      "material_form": "Conjugated linoleic acid (c9,t11 and t10,c12 50:50 isomer mixture)",
+      "search_query": "(\"Conjugated linoleic acid\"[tiab] OR \"CLA\"[tiab]) AND (body composition[tiab] OR fat mass[tiab] OR weight[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 158,
+      "qualifying_human_studies": [
+        {
+          "pmid": "17490960",
+          "title": "Efficacy of conjugated linoleic acid for reducing fat mass: a meta-analysis in humans",
+          "design": "systematic_review_meta",
+          "sample_size": 1057,
+          "primary_endpoint": "fat mass loss (mean -0.09 kg/week)",
+          "effect": "positive_weak"
+        },
+        {
+          "pmid": "22492364",
+          "title": "Effects of conjugated linoleic acid on body composition and cardiovascular risk markers: an updated systematic review",
+          "design": "systematic_review_meta",
+          "sample_size": 1260,
+          "primary_endpoint": "fat mass vs lipid and insulin resistance biomarkers",
+          "effect": "mixed"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Overweight and obese adults undergoing body composition modification",
+      "studied_dose_exposure": {
+        "values": [
+          3000,
+          4000
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Dose applicable at >= 3,000 mg/day for modest fat mass reduction; marked as mixed due to adverse insulin sensitivity signals",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "glutathione",
+      "material_form": "L-glutathione (reduced form, GSH)",
+      "search_query": "(\"Glutathione\"[tiab] OR \"GSH\"[tiab]) AND oral AND (randomized controlled trial[pt] OR controlled clinical trial[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 150,
+      "qualifying_human_studies": [
+        {
+          "pmid": "24791752",
+          "title": "Randomized controlled trial of oral glutathione supplementation on body stores of glutathione",
+          "design": "rct",
+          "sample_size": 54,
+          "primary_endpoint": "blood and buccal mucosal cellular glutathione concentrations",
+          "effect": "positive_strong"
+        },
+        {
+          "pmid": "21671761",
+          "title": "A randomized controlled trial of oral glutathione supplementation in healthy adults",
+          "design": "rct",
+          "sample_size": 40,
+          "primary_endpoint": "erythrocyte glutathione and markers of oxidative stress",
+          "effect": "null"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Healthy adults",
+      "studied_dose_exposure": {
+        "values": [
+          250,
+          1000
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Oral absorption confirmed in Setria branded RCT; generic oral bioavailability across non-stabilized powders remains mixed",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "blueberry",
+      "material_form": "Vaccinium corymbosum / angustifolium (freeze-dried powder or anthocyanin extract)",
+      "search_query": "(\"Blueberry\"[tiab] OR \"Vaccinium\"[tiab]) AND (cognition[tiab] OR cognitive[tiab] OR vascular[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 135,
+      "qualifying_human_studies": [
+        {
+          "pmid": "31423871",
+          "title": "Clinical trials of blueberry supplementation on cognitive function in older adults: a systematic review",
+          "design": "systematic_review_meta",
+          "sample_size": 482,
+          "primary_endpoint": "executive function, memory consolidation, and cerebral blood flow",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Older adults with mild cognitive impairment or age-related subjective cognitive decline",
+      "studied_dose_exposure": {
+        "values": [
+          24000
+        ],
+        "unit": "mg",
+        "basis": "freeze_dried_whole_powder_daily"
+      },
+      "applicability_decision": "Dose applicable for freeze-dried whole powder at >= 20-25 g/day (or equivalent standardized anthocyanin extract at >= 500 mg/day)",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "flaxseed",
+      "material_form": "Linum usitatissimum ground whole seed",
+      "search_query": "(\"Flaxseed\"[tiab] OR \"linseed\"[tiab]) AND (blood pressure[tiab] OR cholesterol[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 158,
+      "qualifying_human_studies": [
+        {
+          "pmid": "24126178",
+          "title": "Potent antihypertensive action of dietary flaxseed in hypertensive patients",
+          "design": "rct",
+          "sample_size": 110,
+          "primary_endpoint": "systolic and diastolic blood pressure reduction",
+          "effect": "positive_strong"
+        },
+        {
+          "pmid": "25740909",
+          "title": "Effect of flaxseed supplementation on blood pressure: a systematic review, and meta-analysis of controlled clinical trials",
+          "design": "systematic_review_meta",
+          "sample_size": 1004,
+          "primary_endpoint": "systolic and diastolic BP in hypertensive subjects",
+          "effect": "positive_strong"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Hypertensive and dyslipidemic adults",
+      "studied_dose_exposure": {
+        "values": [
+          30000
+        ],
+        "unit": "mg",
+        "basis": "ground_seed_daily"
+      },
+      "applicability_decision": "Dose applicable for whole ground seed at >= 30 g/day; oil preparation routes to alpha-linolenic acid / omega-3",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "lignans",
+      "material_form": "Flaxseed lignan extract (Secoisolariciresinol diglucoside, SDG)",
+      "search_query": "(\"Lignans\"[tiab] OR \"secoisolariciresinol\"[tiab]) AND (glycemic[tiab] OR cholesterol[tiab] OR glucose[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 84,
+      "qualifying_human_studies": [
+        {
+          "pmid": "18198305",
+          "title": "Efficacy of flaxseed lignan in patients with type 2 diabetes mellitus",
+          "design": "rct",
+          "sample_size": 73,
+          "primary_endpoint": "HbA1c and fasting blood glucose",
+          "effect": "positive_weak"
+        },
+        {
+          "pmid": "22895604",
+          "title": "Effects of dietary flaxseed lignan on lipid profiles and glucose metabolism: a meta-analysis",
+          "design": "systematic_review_meta",
+          "sample_size": 395,
+          "primary_endpoint": "fasting glucose and lipid parameters",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Adults with type 2 diabetes or metabolic syndrome",
+      "studied_dose_exposure": {
+        "values": [
+          360,
+          600
+        ],
+        "unit": "mg",
+        "basis": "sdg_extract_daily"
+      },
+      "applicability_decision": "Dose applicable at >= 360 mg/day standardized SDG extract",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "cryptoxanthin",
+      "material_form": "Beta-cryptoxanthin (dietary carotenoid / Citrus unshiu extract)",
+      "search_query": "(\"Beta-cryptoxanthin\"[tiab] OR \"cryptoxanthin\"[tiab]) AND (bone[tiab] OR metabolic[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 81,
+      "qualifying_human_studies": [
+        {
+          "pmid": "22440176",
+          "title": "Effect of continuous intake of beta-cryptoxanthin on bone metabolism in postmenopausal women",
+          "design": "rct",
+          "sample_size": 90,
+          "primary_endpoint": "serum bone resorption markers (NTx)",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Postmenopausal women (studied as Satsuma mandarin concentrated extract)",
+      "studied_dose_exposure": {
+        "values": [
+          3,
+          6
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Applicable only to standardized Citrus unshiu extract providing >= 3 mg beta-cryptoxanthin; generic whole fruit powder is applicability unestablished",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "garcinia_cambogia",
+      "material_form": "Garcinia cambogia fruit extract standardized to Hydroxycitric acid (HCA 50-60%)",
+      "search_query": "(\"Garcinia cambogia\"[tiab] OR \"hydroxycitric acid\"[tiab]) AND (weight[tiab] OR fat[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 67,
+      "qualifying_human_studies": [
+        {
+          "pmid": "9820262",
+          "title": "Garcinia cambogia (hydroxycitric acid) as a potential antiobesity agent: a randomized controlled trial",
+          "design": "rct",
+          "sample_size": 135,
+          "primary_endpoint": "body weight loss and fat mass reduction over 12 weeks",
+          "effect": "null"
+        },
+        {
+          "pmid": "22530711",
+          "title": "The use of Garcinia extract (hydroxycitric acid) as a weight loss supplement: a systematic review and meta-analysis of randomised clinical trials",
+          "design": "systematic_review_meta",
+          "sample_size": 706,
+          "primary_endpoint": "body weight loss compared to placebo",
+          "effect": "null"
+        }
+      ],
+      "effect_direction": "null",
+      "population_context": "Overweight and obese adults seeking weight reduction",
+      "studied_dose_exposure": {
+        "values": [
+          1500,
+          2800
+        ],
+        "unit": "mg",
+        "basis": "hca_daily"
+      },
+      "applicability_decision": "Reviewed null/unfavorable. Landmark double-blind placebo-controlled trial and meta-analysis demonstrate no statistically significant or clinically meaningful weight loss over placebo",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "green_coffee_bean",
+      "material_form": "Coffea arabica unroasted seed extract standardized to chlorogenic acid (CGA 45-50%)",
+      "search_query": "(\"Green coffee bean\"[tiab] OR \"green coffee extract\"[tiab]) AND (weight[tiab] OR \"blood pressure\"[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 40,
+      "qualifying_human_studies": [
+        {
+          "pmid": "21187181",
+          "title": "The use of green coffee extract as a weight loss supplement: a systematic review and meta-analysis of randomised clinical trials",
+          "design": "systematic_review_meta",
+          "sample_size": 142,
+          "primary_endpoint": "body weight reduction",
+          "effect": "mixed"
+        },
+        {
+          "pmid": "16825685",
+          "title": "The blood pressure-lowering effect and safety of chlorogenic acid from green coffee bean extract in essential hypertension",
+          "design": "rct",
+          "sample_size": 117,
+          "primary_endpoint": "systolic and diastolic blood pressure reduction",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adults with mild hypertension or overweight",
+      "studied_dose_exposure": {
+        "values": [
+          400,
+          800
+        ],
+        "unit": "mg",
+        "basis": "cga_extract_daily"
+      },
+      "applicability_decision": "Modest blood pressure reduction at >= 400 mg/day (yielding >= 140 mg CGA); weight loss claims compromised by high risk of bias and retracted literature",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "mct_oil",
+      "material_form": "Medium-chain triglycerides (C8 caprylic acid, C10 capric acid)",
+      "search_query": "(\"Medium-chain triglycerides\"[tiab] OR \"MCT oil\"[tiab]) AND (ketosis[tiab] OR cognition[tiab] OR weight[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-18",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 89,
+      "qualifying_human_studies": [
+        {
+          "pmid": "26960443",
+          "title": "Acute metabolic and cognitive effects of medium-chain triglycerides in humans",
+          "design": "rct",
+          "sample_size": 28,
+          "primary_endpoint": "blood beta-hydroxybutyrate and acute working memory",
+          "effect": "positive_weak"
+        },
+        {
+          "pmid": "25636220",
+          "title": "Effects of medium-chain triglycerides on weight loss and body composition: a meta-analysis of randomized controlled trials",
+          "design": "systematic_review_meta",
+          "sample_size": 749,
+          "primary_endpoint": "body weight and waist circumference reduction",
+          "effect": "positive_weak"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "population_context": "Adults seeking acute ketosis, satiety, or mild fat mass management",
+      "studied_dose_exposure": {
+        "values": [
+          10000,
+          20000
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Dose applicable at >= 10 g/day for metabolic ketosis; low-dose capsules (< 2 g) do not reach studied exposure",
+      "verification_result": "verified_human_trial"
+    },
+    {
+      "canonical_id": "linoleic_acid",
+      "material_form": "Linoleic acid (18:2 n-6 essential polyunsaturated fatty acid)",
+      "search_query": "(\"Linoleic acid\"[tiab] OR \"omega-6\"[tiab]) AND (cardiovascular[tiab] OR cholesterol[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-09-17",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 160,
+      "qualifying_human_studies": [
+        {
+          "pmid": "23386360",
+          "title": "Use of dietary linoleic acid for secondary prevention of coronary heart disease and death: evaluation of recovered data from the Sydney Diet Heart Study",
+          "design": "rct",
+          "sample_size": 458,
+          "primary_endpoint": "all-cause and cardiovascular mortality",
+          "effect": "null"
+        },
+        {
+          "pmid": "27071971",
+          "title": "Re-evaluation of the traditional diet-heart hypothesis: analysis of recovered data from Minnesota Coronary Experiment (1968-73)",
+          "design": "rct",
+          "sample_size": 9423,
+          "primary_endpoint": "serum cholesterol vs mortality",
+          "effect": "null"
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adults; dietary replacement studies",
+      "studied_dose_exposure": {
+        "values": [
+          12000,
+          17000
+        ],
+        "unit": "mg",
+        "basis": "dietary_reference_intake"
+      },
+      "applicability_decision": "Essential dietary nutrient under DRI (adequate intake established by authority); clinical trials of supplemental linoleic acid for cardiovascular disease prevention are null",
+      "verification_result": "verified_human_trial"
+    }
+  ]
+}

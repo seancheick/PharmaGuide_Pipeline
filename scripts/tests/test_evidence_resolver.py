@@ -204,3 +204,92 @@ def test_product_evidence_composition():
     assert prod_res.is_assessment_complete is True
     assert prod_res.overall_disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
     assert prod_res.owner_contributions.get("nutrition_authority") == 2
+
+
+# ============================================================================
+# Phase 4 Literature Resolution & False-Transfer Canaries
+# ============================================================================
+
+def test_carotenoid_policy_zeaxanthin_areds2():
+    """Zeaxanthin requires indication-specific clinical evidence (AREDS2), not generic antioxidant credit."""
+    # Zeaxanthin at 2 mg (studied AREDS2 dose) resolves to reviewed clinical evidence
+    res = er.resolve_evidence_for_canonical("zeaxanthin", dose_value=2.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert "backed_clinical_studies" in res.matched_owners
+    assert res.points_eligible is False  # Shadow mode: resolver does not award points directly
+
+    # Zeaxanthin at sub-clinical dose (e.g. 0.5 mg) fails dose applicability
+    res_sub = er.resolve_evidence_for_canonical("zeaxanthin", dose_value=0.5, dose_unit="mg")
+    assert res_sub.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert "dose_below_clinical_trial_minimum" in res_sub.blocking_reasons
+
+
+def test_carotenoid_policy_lycopene():
+    """Lycopene requires indication-specific human evidence (CVD/prostate), not generic antioxidant authority."""
+    # Lycopene at >= 10 mg matches studied clinical range
+    res = er.resolve_evidence_for_canonical("lycopene", dose_value=15.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert "backed_clinical_studies" in res.matched_owners
+    assert res.points_eligible is False
+
+    # Lycopene at 1 mg is sub-clinical
+    res_sub = er.resolve_evidence_for_canonical("lycopene", dose_value=1.0, dose_unit="mg")
+    assert res_sub.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+
+
+def test_bcaa_sports_amino_dose_applicability_not_points():
+    """BCAAs/sports amino acids: threshold is applicability fact, NOT points creation."""
+    # L-Leucine at 3000 mg (>= 2500 mg MPS threshold) matches clinical dose applicability
+    res_high = er.resolve_evidence_for_canonical("l_leucine", dose_value=3000.0, dose_unit="mg")
+    assert res_high.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_high.points_eligible is False  # Does NOT award points; existing scorer decides
+
+    # L-Leucine below 2500 mg (e.g. 500 mg) is applicability unestablished (sub-clinical)
+    res_low = er.resolve_evidence_for_canonical("l_leucine", dose_value=500.0, dose_unit="mg")
+    assert res_low.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res_low.applicability_status == "sub_clinical_dose"
+
+
+def test_silica_provenance_context_handling():
+    """Silica role is decided by row provenance and label context, never name alone."""
+    # 1. Inactive/excipient context -> not_efficacy_relevant
+    res_excipient = er.resolve_evidence_for_canonical("silica", is_excipient=True)
+    assert res_excipient.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
+    assert "safety_boundaries" in res_excipient.matched_owners
+
+    res_inactive_role = er.resolve_evidence_for_canonical("silica", cleaner_row_role="inactive_excipient")
+    assert res_inactive_role.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
+
+    # 2. Explicitly declared active with dose -> trace mineral nutrition authority
+    res_active = er.resolve_evidence_for_canonical("silica", cleaner_row_role="active_scorable", dose_value=10.0, dose_unit="mg")
+    assert res_active.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+    assert "nutrition_authority" in res_active.matched_owners
+    assert res_active.points_eligible is False
+
+    # 3. Ambiguous (no role or amount) -> unresolved (identity_insufficient)
+    res_ambiguous = er.resolve_evidence_for_canonical("silica")
+    assert res_ambiguous.disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+    assert "silica_provenance_ambiguous" in res_ambiguous.blocking_reasons
+
+
+def test_garcinia_cambogia_null_unfavorable():
+    """Garcinia cambogia weight loss trials are reviewed null/unfavorable."""
+    res = er.resolve_evidence_for_canonical("garcinia_cambogia")
+    assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+    assert res.applicability_status == "reviewed_null_evidence"
+    assert res.points_eligible is False
+
+
+def test_false_transfer_canary_citrus_bioflavonoids():
+    """Crude citrus bioflavonoids must NOT transfer pharma MPFF (Daflon) clinical evidence."""
+    res = er.resolve_evidence_for_canonical("citrus_bioflavonoids", dose_value=500.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert "literature_applicability_unestablished" in res.blocking_reasons
+
+
+def test_false_transfer_canary_cryptoxanthin():
+    """Beta-cryptoxanthin observational carotenoid data cannot transfer to single-ingredient RCT efficacy."""
+    res = er.resolve_evidence_for_canonical("cryptoxanthin", dose_value=1.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert "literature_applicability_unestablished" in res.blocking_reasons
+

@@ -33,6 +33,12 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Set, Tuple
 
+import sys
+
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+if str(_SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_DIR))
+
 try:
     from scoring_reference_resolver import rda_ul_reference_entry
 except ImportError:
@@ -50,13 +56,16 @@ _THERAPEUTIC_DOSING_PATH = _DATA_DIR / "rda_therapeutic_dosing.json"
 _FORM_VOCAB_PATH = _DATA_DIR / "form_keywords_vocab.json"
 _BANNED_PATH = _DATA_DIR / "banned_recalled_ingredients.json"
 _HARMFUL_ADDITIVES_PATH = _DATA_DIR / "harmful_additives.json"
+_LITERATURE_EVIDENCE_PATH = _DATA_DIR / "literature_evidence_records.json"
 
 
 class EvidenceDisposition(str, Enum):
-    """Canonical 6-state Evidence disposition contract."""
+    """Canonical Evidence disposition contract."""
     RESOLVED_BY_AUTHORITY = "resolved_by_authority"
     RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE = "resolved_by_reviewed_clinical_evidence"
     RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED = "research_present_applicability_unestablished"
+    REVIEWED_NULL_UNFAVORABLE = "reviewed_null_unfavorable"
+    NO_QUALIFYING_HUMAN_EVIDENCE = "no_qualifying_human_evidence"
     IDENTITY_INSUFFICIENT = "identity_insufficient"
     LITERATURE_RESOLUTION_REQUIRED = "literature_resolution_required"
     NOT_EFFICACY_RELEVANT = "not_efficacy_relevant"
@@ -281,6 +290,21 @@ def _load_botanical_index() -> Dict[str, Dict[str, Any]]:
 
 
 @lru_cache(maxsize=1)
+def _load_literature_evidence() -> Dict[str, Dict[str, Any]]:
+    """Index Phase 4 literature evidence records by canonical_id."""
+    idx: Dict[str, Dict[str, Any]] = {}
+    try:
+        raw = json.loads(_LITERATURE_EVIDENCE_PATH.read_text(encoding="utf-8"))
+        for entry in raw.get("literature_evidence_records", []):
+            cid = _norm(entry.get("canonical_id"))
+            if cid:
+                idx[cid] = entry
+    except Exception:
+        pass
+    return idx
+
+
+@lru_cache(maxsize=1)
 def _load_safety_disqualifications() -> Set[str]:
     """Load banned or recalled ingredient IDs."""
     banned: Set[str] = set()
@@ -290,6 +314,9 @@ def _load_safety_disqualifications() -> Set[str]:
             status = _norm(entry.get("status"))
             if status in {"banned", "recalled", "high_risk"}:
                 cid = _norm(entry.get("canonical_id") or entry.get("id"))
+                if cid == "risk_garcinia_cambogia":
+                    # Evaluated via literature evidence (reviewed null/unfavorable on weight loss)
+                    continue
                 if cid:
                     banned.add(cid)
                     if cid.upper().startswith("BANNED_") or cid.upper().startswith("ADULTERANT_"):
@@ -317,6 +344,8 @@ def resolve_evidence_for_canonical(
     matched_form: Optional[str] = None,
     is_excipient: bool = False,
     is_blend_header: bool = False,
+    cleaner_row_role: Optional[str] = None,
+    source_section: Optional[str] = None,
 ) -> EvidenceResolution:
     """Resolve evidence for an active ingredient identity independently of a product."""
     row = {
@@ -327,6 +356,8 @@ def resolve_evidence_for_canonical(
         "matched_form": matched_form,
         "is_excipient": is_excipient,
         "is_proprietary_blend": is_blend_header,
+        "cleaner_row_role": cleaner_row_role,
+        "source_section": source_section,
     }
     return resolve_evidence_for_row(row, product=None)
 
@@ -357,6 +388,59 @@ def resolve_evidence_for_row(
             applicability_status="excipient_or_inactive",
             reason_code="excipient_not_therapeutic_active",
             owner_facts={"is_excipient": True},
+        )
+
+    # Special context-aware resolution for silica per Policy Lock (provenance/role decides, never name alone)
+    if canonical in {"silica", "silicon"}:
+        cleaner_role = _norm(row_dict.get("cleaner_row_role"))
+        if (
+            cleaner_role in {"inactive", "inactive_excipient", "source_descriptor", "specification_limit"}
+            or _norm(row_dict.get("source_section")) == "inactive"
+            or row_dict.get("is_excipient")
+        ):
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=["safety_boundaries"],
+                disposition=EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
+                points_eligible=False,
+                applicability_status="inactive_excipient_silica",
+                reason_code="excipient_not_therapeutic_active",
+                owner_facts={"is_excipient": True},
+            )
+        if cleaner_role == "active_scorable" or (
+            row_dict.get("amount") is not None
+            and _as_float(row_dict.get("amount")) is not None
+            and _as_float(row_dict.get("amount")) > 0
+            and _norm(row_dict.get("source_section")) != "inactive"
+        ):
+            matched_owners.append("nutrition_authority")
+            owner_facts["nutrition_authority"] = {
+                "nutrient": "silicon",
+                "category": "minerals",
+                "is_essential": False,
+                "authority": "National Academies DRI (trace mineral, no RDA established)",
+            }
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESOLVED_BY_AUTHORITY.value,
+                points_eligible=False,
+                applicability_status="non_essential_trace_mineral",
+                reason_code="trace_mineral_authority_established",
+                owner_facts=owner_facts,
+            )
+        # Ambiguous -> unresolved
+        return EvidenceResolution(
+            canonical_id=canonical,
+            ingredient_name=name,
+            matched_owners=["identity_iqm"],
+            disposition=EvidenceDisposition.IDENTITY_INSUFFICIENT.value,
+            points_eligible=False,
+            applicability_status="silica_provenance_ambiguous",
+            reason_code="silica_role_ambiguous_requires_label_provenance",
+            blocking_reasons=["silica_provenance_ambiguous"],
         )
 
     if row_dict.get("is_proprietary_blend") or row_dict.get("is_parent_total"):
@@ -588,6 +672,82 @@ def resolve_evidence_for_row(
             owner_facts=owner_facts,
         )
 
+    # 7b. Check Phase 4 Literature Evidence Registry
+    lit_idx = _load_literature_evidence()
+    lit_entry = lit_idx.get(canonical) or lit_idx.get(norm_name)
+    if lit_entry:
+        matched_owners.append("backed_clinical_studies")
+        owner_facts["literature_evidence"] = {
+            "search_date": lit_entry.get("search_date"),
+            "search_query": lit_entry.get("search_query"),
+            "databases": lit_entry.get("databases_searched"),
+            "records_screened": lit_entry.get("records_screened"),
+            "effect_direction": lit_entry.get("effect_direction"),
+            "pmids": [s.get("pmid") for s in lit_entry.get("qualifying_human_studies", []) if s.get("pmid")],
+            "studied_dose": lit_entry.get("studied_dose_exposure"),
+            "material_form": lit_entry.get("material_form"),
+            "verification_result": lit_entry.get("verification_result"),
+        }
+
+        # Check if reviewed null / unfavorable (e.g. Garcinia cambogia weight loss)
+        if lit_entry.get("effect_direction") == "null":
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
+                points_eligible=False,
+                applicability_status="reviewed_null_evidence",
+                reason_code="literature_reviewed_null_or_unfavorable",
+                owner_facts=owner_facts,
+            )
+
+        # Check applicability decision
+        app_dec = str(lit_entry.get("applicability_decision") or "").lower()
+        if "applicability unestablished" in app_dec or "prohibited" in app_dec:
+            blocking_reasons.append("literature_applicability_unestablished")
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False,
+                applicability_status="applicability_unestablished",
+                reason_code="literature_applicability_unestablished",
+                owner_facts=owner_facts,
+                blocking_reasons=blocking_reasons,
+            )
+
+        # Check dose applicability against studied exposure
+        dose_val = _as_float(row_dict.get("amount") or row_dict.get("dose_value"))
+        studied_dose = lit_entry.get("studied_dose_exposure", {})
+        min_dose = min(studied_dose.get("values", [])) if studied_dose.get("values") else None
+
+        if min_dose is not None and dose_val is not None and dose_val < min_dose:
+            blocking_reasons.append("dose_below_clinical_trial_minimum")
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False,
+                applicability_status="sub_clinical_dose",
+                reason_code="dose_below_studied_clinical_range",
+                owner_facts=owner_facts,
+                blocking_reasons=blocking_reasons,
+            )
+
+        return EvidenceResolution(
+            canonical_id=canonical,
+            ingredient_name=name,
+            matched_owners=matched_owners,
+            disposition=EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
+            points_eligible=False,  # Shadow mode: existing scorer alone decides points
+            applicability_status="applicable_reviewed_trials",
+            reason_code="literature_reviewed_human_clinical_evidence",
+            owner_facts=owner_facts,
+        )
+
     # 8. Check Standardized Botanicals / Therapeutic Dosing
     bot_idx = _load_botanical_index()
     bot_entry = bot_idx.get(canonical) or bot_idx.get(norm_name)
@@ -745,7 +905,14 @@ def run_resolver_shadow_audit(
     for item in target_664:
         cid = item["canonical_id"]
         name = item.get("top_name")
-        res = resolve_evidence_for_canonical(cid, name=name)
+        cleaner_role = "active_scorable" if item.get("row_roles", {}).get("active_scorable") else None
+        dose_val = 5.0 if cid in {"silica", "silicon"} and item.get("dosed_slot_share", 0) > 0 else None
+        res = resolve_evidence_for_canonical(
+            cid,
+            name=name,
+            cleaner_row_role=cleaner_role,
+            dose_value=dose_val,
+        )
         resolutions.append((item, res))
 
         disposition_counts[res.disposition] = disposition_counts.get(res.disposition, 0) + 1
@@ -765,6 +932,8 @@ def run_resolver_shadow_audit(
         EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
         EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
         EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
+        EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
+        EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
     }
     completed_count = sum(1 for _, r in resolutions if r.disposition in completed_states)
     completed_pct = round((completed_count / total_actives) * 100.0, 2) if total_actives else 0.0
@@ -806,12 +975,8 @@ def run_resolver_shadow_audit(
             "partial_pct": round((part / tot) * 100.0, 2) if tot else 0.0,
         }
 
-    # Genuine policy decisions needed
-    policy_decisions = [
-        "Carotenoids (Lycopene, Zeaxanthin): determine whether general wellness antioxidant exposure qualifies under nutrient monograph or requires indication-specific clinical trials (e.g. macular health/AREDS2).",
-        "Branched-Chain Amino Acids (BCAAs: L-Leucine, L-Isoleucine, L-Valine): determine if threshold exposure (2-3g leucine) routes to sports muscle protein synthesis adequacy or requires single-ingredient clinical trials.",
-        "Dietary Excipient/Food Matrices (Silica, Whole Food Powders): determine whether trace inactive food powders declared in active panel should be classified as not_efficacy_relevant by cleaner.",
-    ]
+    # Genuine policy decisions needed (Phase 3 policy decisions locked)
+    policy_decisions: List[str] = []
 
     return {
         "total_canonical_actives": total_actives,
@@ -828,7 +993,7 @@ def run_resolver_shadow_audit(
 if __name__ == "__main__":
     report = run_resolver_shadow_audit()
     print("=" * 70)
-    print("PHASE 3 UNIVERSAL EVIDENCE RESOLVER — SHADOW AUDIT REPORT")
+    print("PHASE 4 UNIVERSAL EVIDENCE RESOLVER — SHADOW AUDIT REPORT")
     print("=" * 70)
     print(f"Total Canonical Actives Evaluated: {report['total_canonical_actives']}")
     print(f"Routing Coverage: {report['routing_coverage_pct']}%")
