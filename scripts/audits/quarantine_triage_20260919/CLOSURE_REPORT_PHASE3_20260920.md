@@ -5,7 +5,9 @@ Role: lead engineering closer (Phase-3 remediation + evidence/scoring integratio
 Scope: close the engineering phase end-to-end and land it on `main`.
 
 Baseline at session start: `origin/main` = `ad577f49` (unchanged all session).
-`main` moved twice during the session, both times by the integration owner — see §A.
+`main` advanced **three** times during the session, every time by the integration owner's
+parallel session, and the closure branch was rebased onto each new tip and revalidated —
+see §A and §A.1.
 
 ---
 
@@ -14,11 +16,11 @@ Baseline at session start: `origin/main` = `ad577f49` (unchanged all session).
 | Item | Value |
 |---|---|
 | Starting `main` / `origin/main` | `ad577f49` |
-| `main` observed mid-session | `6f2bdc80` (fast-forward of the integration lineage) |
-| `main` at closure | `236a9dc1` |
-| Evidence-seam commits (all already on `main`) | `a8213c63` (canonical assessable-evidence contract + probiotic ownership), `6f2bdc80` (probiotic A/B report), `236a9dc1` (universal evidence resolver + shadow coverage) |
-| Closure candidate | `closure/phase3-final-20260920` = `main` + this session's closure commit |
-| Conflicts / reconciliations | **None.** The closure branch was rebased onto `main` twice as `main` advanced; the closure commit touches only tests and audit docs, so both rebases were clean and the exact-tree equality below held at each step. |
+| `main` advances observed mid-session | `6f2bdc80` → `236a9dc1` → `4e5f4bda` (all by the integration owner's concurrent session) |
+| `main` at closure | **`4e5f4bda`** |
+| Evidence-seam commits (all already on `main`) | `a8213c63` (canonical assessable-evidence contract + probiotic ownership), `6f2bdc80` (probiotic A/B report), `236a9dc1` (universal evidence resolver + shadow coverage), `4e5f4bda` (canonical-nutrient authority routing; removes the local whitelist) |
+| Closure candidate | `closure/phase3-final-20260920` tip **`a6086870`** = `main` (`4e5f4bda`) + this session's two test/docs commits |
+| Conflicts / reconciliations | **None.** The closure branch was rebased onto `main` three times as `main` advanced; both closure commits touch only tests and audit docs, so every rebase was clean and the exact-manifest equality below held at each step. |
 
 ### Why "the seam" was already on main
 
@@ -39,14 +41,49 @@ Committed-blob manifest over `scripts/*.py` + `scripts/scoring_v4/*.py` + `scrip
 | Ref | Files | Manifest |
 |---|---:|---|
 | `095d27a1` (replay "before") | 266 | `833eebcaf075a1bc…` |
-| `6f2bdc80` | 266 | `8434f879d07503ec…` |
-| `main` (`236a9dc1`) | 267 | `f6aed1aee2ea1c48…` |
-| closure tip | 267 | `f6aed1aee2ea1c48…` ← **identical to main** |
+| `4e5f4bda` (= `main`) | 267 | `e9b86701a41483ea…` |
+| **closure tip `a6086870`** | 267 | **`e9b86701a41483ea…`** ← **identical to `main`** |
 
 This is the guarantee that the replay below describes the code that ships: the closure
-commit is documentation + tests only, so the arm's pipeline and `main`'s pipeline are the
-same 267 blobs. (`main` differs from `6f2bdc80` by exactly one added file,
+commits are documentation + tests only, so the validated pipeline and `main`'s pipeline are
+the same 267 blobs. (`main` gained one file relative to `095d27a1`,
 `scripts/evidence_resolver.py`, which nothing in the pipeline imports.)
+
+### A.1 Reconciling a target that moved three times
+
+`main` was under active development by a parallel session for the whole closure. Each move
+was handled the same way — **rebase onto the new tip, then re-derive the evidence at the new
+tip** — rather than assuming a clean cherry-pick implies semantic compatibility:
+
+| Move | What landed | Pipeline-affecting? | Action |
+|---|---|---|---|
+| `ad577f49` → `6f2bdc80` | the evidence seam (canonical assessable-evidence contract, probiotic ownership) + its A/B report | yes | rebased; re-verified tree equivalence with my own cherry-pick of the same content |
+| `6f2bdc80` → `236a9dc1` | universal evidence resolver + shadow coverage (one new module, `scripts/evidence_resolver.py`) | no — nothing in the pipeline imports it | rebased; manifest confirmed unchanged except the added file |
+| `236a9dc1` → `4e5f4bda` | canonical-nutrient authority routing: `rda_optimal_uls.json` aliases added, local whitelist removed from `evidence_resolver.py`, `scoring_reference_resolver.py` exposes `rda_ul_reference_entry` | **yes** — `rda_optimal_uls.json` is read by `scoring_v4/modules/generic_dose.py`, so UL resolution can move scores | rebased **and re-ran the full validation at the new tip** |
+
+The third move is the one that mattered, so it was proven rather than assumed. Two
+comparisons were run against freshly built arms:
+
+- **`236a9dc1` → `4e5f4bda` + closure, scored level, all 15,412 records:**
+  `score_changes: 0`, `conclusion_changes: 0`, `quarantine_exits: 0`,
+  `quarantine_entries: 0`, `safety_changes: 0`, `outside_expected_families: 0`,
+  `max_abs_delta: 0`. `4e5f4bda` is a **behaviour-preserving refactor** on this corpus —
+  exactly what replacing a private whitelist with the canonical owner should be.
+- **Representation level, same two arms:** all 15,414 signature records are semantically
+  **identical** (0 differing records, 0 differing fields). The two signature files differ
+  only in *line order*, because the audit tool writes them from a parallel worker pool;
+  comparisons are keyed by product id, so this cannot affect a result. (Worth recording as
+  a tool caveat: the signature JSONL is order-nondeterministic and must never be compared
+  by file hash.)
+
+Because `4e5f4bda` is a no-op at both levels, the mandated `095d27a1` → final-tip replay
+gives **the same numbers as the closure increment**, and the arm rebuilt at the final tip is
+the arm the report's results describe:
+
+| Comparison | Records | Score changes | Conclusions | Exits | New quarantine | Safety | Outside families | Max \|Δ\| |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `095d27a1` → **final tip** (mandated) | 15,412 | **28** | **29** | 0 | **1** | 0 | **0** | 12.2 |
+| `236a9dc1` → final tip (`4e5f4bda` increment) | 15,412 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ### Remote
 
@@ -69,17 +106,19 @@ same 267 blobs. (`main` differs from `6f2bdc80` by exactly one added file,
 
 ### Full fast tier
 
-Run on the final closure candidate in a clean dedicated worktree at the closure tip
-(`scripts/test.sh fast`; counts and sanitised skip census preserved as
-`FAST_TIER_CLOSURE_20260920.md` alongside this report):
+Run on the **final** closure candidate (`a6086870`, rebased onto `main` = `4e5f4bda`) in a
+clean dedicated worktree (`scripts/test.sh fast`; counts and sanitised skip census preserved
+as `FAST_TIER_CLOSURE_20260920.md` alongside this report). This is the second run of the
+tier this session: the first was at `236a9dc1`, and it was repeated after `4e5f4bda` landed
+rather than assumed to still hold.
 
 ```
-15825 passed, 196 skipped in 352.95s (0:05:52)
+15827 passed, 196 skipped in 449.19s (0:07:29)
 ```
 
 | | Count |
 |---|---:|
-| passed | **15,825** |
+| passed | **15,827** |
 | **failed** | **0** |
 | skipped | 196 |
 | collection errors | **0** |
@@ -98,6 +137,10 @@ at `095d27a1` the fast tier was `1 failed / 15,826 passed / 152 skipped` with fa
 (`a8213c63`): `scoring_v4/modules/generic_evidence.py` no longer reaches for the forbidden
 `iqd.get("ingredients")` fallback — it delegates to the canonical contract. Nothing was
 allowlisted.
+
+(`4e5f4bda` contributes 2 of the 15,827 — it added two regression tests to
+`test_evidence_resolver.py`; the remaining 15,825 match the `236a9dc1` run exactly, so the
+`4e5f4bda` move introduced no test regression either.)
 
 **2. The 7 new hard failures in `test_cross_module_probiotic_evidence.py` are fixed
 properly.** That test file (added with the evidence seam) loaded
@@ -130,9 +173,13 @@ and fails conservatively rather than silently falling back to raw rows.
 
 ## C. Final same-input A/B replay
 
-**Before** = `095d27a1` (the validated Phase-3 integration). **After** = the closure tip.
-Identical frozen raw corpus for both arms (15,414 raw records), driven through the
-production entry points by `drive_pipeline_ab.py`.
+**Before** = `095d27a1` (the validated Phase-3 integration). **After** = the **final closure
+tip** on `main`'s tip `4e5f4bda` — the arm was rebuilt at the final tip after `main`
+moved, not reused from the earlier `236a9dc1` run (§A.1). Identical frozen raw corpus for
+both arms (15,414 raw records, same input fingerprint), driven through the production entry
+points by `drive_pipeline_ab.py`, then compared by BOTH harnesses:
+`compare_scored_arms.py` (scores, conclusions, quarantine, Safety — the release-relevant
+level) and `full_corpus_replay.py --compare` (row-level representation).
 
 ### Scored level (`compare_scored_arms.py`)
 
@@ -148,6 +195,16 @@ production entry points by `drive_pipeline_ab.py`.
 | 8 | Safety-gate changes | **0** |
 | 9 | Score-bearing outside-family changes | **0** |
 | 10 | Largest score deltas | `63666` / `213833` / `327990` / `246207` each **−12.2**; then `182908` / `184300` **+5.3**; `18480` **+3.3**; all others ≤ ±2.4 |
+
+These are the **final-tip** numbers (`095d27a1` → `4e5f4bda` + closure). They are identical
+to the `236a9dc1`-tip run because `4e5f4bda` is a proven no-op on this corpus at both the
+scored and representation levels (§A.1) — the two independent comparisons agree exactly, so
+the conclusions in §C.1–§C.3 apply unchanged to the shipped tip.
+
+Artifacts: `/tmp/final_scored_BD.json` (scored, mandated comparison), `/tmp/final_scored_CD.json`
+(`4e5f4bda` increment, all zeros), `/tmp/final_rowlevel_BD.json` (row-level, mandated
+comparison). Durable copies of the decisive numbers are in
+`CLOSURE_ROWLEVEL_REPLAY_20260920.json`.
 
 ### Representation level (`full_corpus_replay.py --compare`)
 
@@ -435,7 +492,16 @@ as fixtures, not an opportunistic edit. Existing owners:
 clean, the closure validation passed, and every remaining item is an authority decision or a
 separately-owned, fully-characterised change.
 
-**Main updated and verified:** **YES** — see §A/§H.
+**Main updated and verified:** **YES** — `origin/main` fast-forwarded from `ad577f49` to the
+closure tip and verified equal to local `main`. The validated pipeline SHA is `4e5f4bda`
+(see §A for the manifest proof that the closure commits change zero pipeline files, and §A.1
+for the replay re-run at that tip). Verification:
+
+```bash
+git fetch origin && git log --oneline -3 origin/main   # tip = closure docs commit
+git diff --stat origin/main main                        # empty
+git status --short                                      # empty
+```
 
 **Phase-3 engineering closed:** **YES**
 
