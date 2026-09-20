@@ -509,3 +509,31 @@ def test_phase4_batch4_standardized_clinical_canaries():
             f"{cid} must emit resolved_by_reviewed_clinical_evidence, got {res.disposition}"
         )
         assert res.points_eligible is False  # Shadow mode invariant
+
+
+def test_phase4_semantic_applicability_canaries():
+    """Semantic applicability canaries: verify interventions match credited identity."""
+    # 1. Colostrinin polypeptide cannot transfer to standalone L-proline (0 qualifying trials)
+    res_proline = er.resolve_evidence_for_canonical("l_proline")
+    assert res_proline.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert res_proline.applicability_status == "no_qualifying_trials_found"
+
+    # 2. Material / drug / combination mismatches must stay applicability_unestablished
+    canary_unestablished = [
+        "strontium",         # Strontium ranelate != supplement strontium citrate
+        "black_tea_leaf",    # Theaflavin-enriched green tea extract != black tea leaf
+        "mucuna_pruriens",   # 30 g seed powder in Parkinson's != 250 mg extract
+        "dmae",              # DMAE + vitamin/mineral combo != standalone DMAE
+        "beta_glucan",       # Yeast beta-1,3/1,6-glucan requires material match
+        "goji_berry",        # Liquid juice != dry powder
+        "hops",              # Valerian-hops fixed combination != standalone hops
+        "l_cysteine",        # Glutathione/resveratrol precursor combo != standalone L-cysteine
+        "alpha_amylase",     # Multi-enzyme complex (DigeZyme) != standalone alpha-amylase
+    ]
+    for cid in canary_unestablished:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value, (
+            f"{cid} must emit applicability_unestablished, got {res.disposition}"
+        )
+        assert res.points_eligible is False
+
