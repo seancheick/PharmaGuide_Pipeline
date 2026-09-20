@@ -3633,13 +3633,13 @@
       ],
       "records_screened": 15,
       "qualifying_human_studies": [],
-      "effect_direction": "null",
+      "effect_direction": "no_qualifying_human_evidence",
       "population_context": "adults",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Lacks reproducible randomized human monotherapy evidence for aphrodisiac or testosterone modulation; reviewed null.",
+      "applicability_decision": "Reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -4739,13 +4739,13 @@
       ],
       "records_screened": 12,
       "qualifying_human_studies": [],
-      "effect_direction": "null",
+      "effect_direction": "no_qualifying_human_evidence",
       "population_context": "adults",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Lacks reproducible standalone human RCT evidence for erectile or libido support; reviewed null.",
+      "applicability_decision": "Reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5443,13 +5443,13 @@
       ],
       "records_screened": 12,
       "qualifying_human_studies": [],
-      "effect_direction": "null",
+      "effect_direction": "no_qualifying_human_evidence",
       "population_context": "adults",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Lacks qualifying randomized human clinical trials; traditional diuretic folklore without clinical proof; reviewed null/unestablished.",
+      "applicability_decision": "Reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5664,13 +5664,13 @@
       ],
       "records_screened": 10,
       "qualifying_human_studies": [],
-      "effect_direction": "null",
+      "effect_direction": "no_qualifying_human_evidence",
       "population_context": "athletes",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Lacks qualifying published human clinical trials demonstrating arginase inhibition or vasodilation; reviewed null/unestablished.",
+      "applicability_decision": "Reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5786,13 +5786,13 @@
       ],
       "records_screened": 12,
       "qualifying_human_studies": [],
-      "effect_direction": "null",
+      "effect_direction": "no_qualifying_human_evidence",
       "population_context": "adults",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Lacks qualifying double-blind randomized human clinical trials for oral eye health efficacy; reviewed null/unestablished.",
+      "applicability_decision": "Reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",

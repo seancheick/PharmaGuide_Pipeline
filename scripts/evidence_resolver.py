@@ -711,8 +711,21 @@ def resolve_evidence_for_row(
             "verification_result": lit_entry.get("verification_result"),
         }
 
-        # Check if reviewed null / unfavorable (e.g. Garcinia cambogia weight loss, Tribulus)
-        if lit_entry.get("effect_direction") == "null":
+        # Check if reviewed null / unfavorable vs no qualifying human evidence
+        if lit_entry.get("effect_direction") in {"null", "no_qualifying_human_evidence"}:
+            studies = lit_entry.get("qualifying_human_studies", [])
+            if not studies:
+                # Absence of qualifying human studies cannot emit reviewed_null_unfavorable
+                return EvidenceResolution(
+                    canonical_id=canonical,
+                    ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
+                    points_eligible=False,
+                    applicability_status="no_qualifying_trials_found",
+                    reason_code="reproducible_search_found_no_qualifying_human_studies",
+                    owner_facts=owner_facts,
+                )
             return EvidenceResolution(
                 canonical_id=canonical,
                 ingredient_name=name,
