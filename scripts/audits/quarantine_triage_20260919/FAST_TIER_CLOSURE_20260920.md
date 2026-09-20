@@ -7,12 +7,17 @@ present (i.e. a fresh-clone equivalent), peer sessions' uncommitted work absent.
 ## Result
 
 ```
-15825 passed, 196 skipped in 352.95s (0:05:52)
+15835 passed, 196 skipped in 428.55s (0:07:08)
 ```
+
+Run at the **final** closure tip `0eec550e` (on `main` = `78ad21fd`). The tier was executed
+three times this session — at `236a9dc1`, at `4e5f4bda`, and at the final tip — because
+`main` was under active development by a parallel session, and re-running at each new tip is
+what surfaced the defect in `78ad21fd` (see *Defect found and repaired at the final tip*).
 
 | | Count |
 |---|---:|
-| passed | 15,825 |
+| passed | **15,835** |
 | **failed** | **0** |
 | skipped | 196 |
 | errors | 0 |
@@ -28,7 +33,31 @@ No failure, error or collection-error lines appear anywhere in the run.
 | Phase-3 candidate `77cbb38c` | 2 failed / 15,786 passed / 191 skipped | `{static_audit, overlap_guard}` |
 | candidate + `7ebf6c46` | 1 failed / 15,787 passed / 191 skipped | `{static_audit}` |
 | integration `095d27a1` (clean worktree) | 1 failed / 15,826 passed / 152 skipped | `{static_audit, probiotic×7}` |
-| **closure tip (this run)** | **0 failed / 15,825 passed / 196 skipped** | **`{}` — empty** |
+| `236a9dc1` tip (closure worktree) | 0 failed / 15,825 passed / 196 skipped | `{}` — empty |
+| `4e5f4bda` tip (`a6086870`) | 0 failed / 15,827 passed / 196 skipped | `{}` — empty |
+| `78ad21fd` tip before repair (`899cba40`) | **1 failed** / 15,834 passed / 196 skipped | `{schema_version_contract}` |
+| **final tip `0eec550e`** | **0 failed / 15,835 passed / 196 skipped** | **`{}` — empty** |
+
+### Defect found and repaired at the final tip
+
+`78ad21fd` added `scripts/data/literature_evidence_records.json` declaring
+`schema_version: "1.0.0"`. `scripts/reference_data_schema.py` documents that version 1 owns
+vocabularies and small control artifacts while **every other top-level reference database
+stays in the version 5 enrichment namespace**, and `validate_reference_schema_version`
+enforces it, so:
+
+```
+test_pipeline_integrity.py::TestDatabaseSchemaIntegrity::test_schema_version_contract
+  1 schema_version mismatch(es):
+  literature_evidence_records.json: schema_version='1.0.0' belongs to namespace 1, expected 5.x
+```
+
+Repaired in `0eec550e` by declaring `5.0.0` (a brand-new file declares the namespace base).
+Metadata only — `total_entries` (23) already matched the record count and no record content
+changed. Confirmed by re-running the affected contracts (`test_pipeline_integrity` schema
+class, `test_data_file_metadata_contract`, `test_reference_data_contract`,
+`test_evidence_resolver`): **116 passed / 17 skipped**, and `preflight.py` reports
+`CRITICAL CHECKS PASSED`.
 
 The two outstanding failure classes are both closed:
 
@@ -112,6 +141,10 @@ touched were re-verified in the shared checkout, where the locally-built corpus 
 
 ## Scope note
 
-This run was executed **after** the closure commit, at the same 267-file
-pipeline/JSON manifest as `main` (`f6aed1aee2ea1c48…`). The closure commit itself changes
-only tests and audit documentation, so the tier above describes the shipped code exactly.
+This run was executed **at the final closure tip itself** (`0eec550e`), not at an earlier
+state, so the result describes the shipped tree exactly. Relative to `main` (`78ad21fd`) the
+closure branch adds three documentation/test commits — which change no pipeline file — plus
+the `literature_evidence_records.json` metadata repair described above. That repaired file is
+read only by `evidence_resolver.py`, which has **zero importers** and zero references in
+`clean_dsld_data.py`, `enrich_supplements_v3.py` and `score_products_v4.py`, so it cannot
+affect the clean/enrich/score path the 15,412-product replay exercised.

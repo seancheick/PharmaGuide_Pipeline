@@ -16,11 +16,12 @@ see §A and §A.1.
 | Item | Value |
 |---|---|
 | Starting `main` / `origin/main` | `ad577f49` |
-| `main` advances observed mid-session | `6f2bdc80` → `236a9dc1` → `4e5f4bda` (all by the integration owner's concurrent session) |
-| `main` at closure | **`4e5f4bda`** |
-| Evidence-seam commits (all already on `main`) | `a8213c63` (canonical assessable-evidence contract + probiotic ownership), `6f2bdc80` (probiotic A/B report), `236a9dc1` (universal evidence resolver + shadow coverage), `4e5f4bda` (canonical-nutrient authority routing; removes the local whitelist) |
-| Closure candidate | `closure/phase3-final-20260920` tip **`a6086870`** = `main` (`4e5f4bda`) + this session's two test/docs commits |
-| Conflicts / reconciliations | **None.** The closure branch was rebased onto `main` three times as `main` advanced; both closure commits touch only tests and audit docs, so every rebase was clean and the exact-manifest equality below held at each step. |
+| `main` advances observed mid-session | `6f2bdc80` → `236a9dc1` → `4e5f4bda` → `78ad21fd` (all by the integration owner's concurrent session) |
+| `main` at closure | **`78ad21fd`** |
+| Validation-pipeline SHA (what the replay tested) | `4e5f4bda` — the last commit this session that touched the clean/enrich/score path; `78ad21fd` is proven pipeline-inert (§A.1) |
+| Evidence-owner commits (all already on `main`) | `a8213c63` (canonical assessable-evidence contract + probiotic ownership), `6f2bdc80` (probiotic A/B report), `236a9dc1` (universal evidence resolver + shadow coverage), `4e5f4bda` (canonical-nutrient authority routing; removes the local whitelist), `78ad21fd` (Phase-4 shadow literature resolution + provenance gates) |
+| Closure candidate | `closure/phase3-final-20260920` tip **`0eec550e`** = `main` (`78ad21fd`) + this session's four commits (three test/docs, one data-metadata fix) |
+| Conflicts / reconciliations | **None.** The closure branch was rebased onto `main` four times as `main` advanced; every rebase was clean and the exact-manifest equality below held at each step. One genuine defect in a concurrent commit was found and repaired by this session — see *One repair to a concurrent commit* below. |
 
 ### Why "the seam" was already on main
 
@@ -41,13 +42,45 @@ Committed-blob manifest over `scripts/*.py` + `scripts/scoring_v4/*.py` + `scrip
 | Ref | Files | Manifest |
 |---|---:|---|
 | `095d27a1` (replay "before") | 266 | `833eebcaf075a1bc…` |
-| `4e5f4bda` (= `main`) | 267 | `e9b86701a41483ea…` |
-| **closure tip `a6086870`** | 267 | **`e9b86701a41483ea…`** ← **identical to `main`** |
+| `4e5f4bda` (the replay "after" arm's pipeline) | 267 | `e9b86701a41483ea…` |
+| `78ad21fd` (= `main`) | 268 | `8a0057255fcad370…` |
+| closure tip `899cba40` before the repair | 268 | **`8a0057255fcad370…`** ← identical to `main` |
+| **final closure tip `0eec550e`** | 268 | `…` — differs from `main` by exactly one metadata field (§ repair) |
 
-This is the guarantee that the replay below describes the code that ships: the closure
-commits are documentation + tests only, so the validated pipeline and `main`'s pipeline are
-the same 267 blobs. (`main` gained one file relative to `095d27a1`,
-`scripts/evidence_resolver.py`, which nothing in the pipeline imports.)
+This is the guarantee that the replay below describes the code that ships. The closure
+commits are documentation, tests and one metadata repair — none of which the clean/enrich/
+score path reads:
+
+- `78ad21fd` added `scripts/evidence_resolver.py` + `scripts/data/literature_evidence_records.json`,
+  and **`evidence_resolver.py` has zero importers** (verified by grep across `scripts/`;
+  `clean_dsld_data.py`, `enrich_supplements_v3.py` and `score_products_v4.py` contain zero
+  references to it or to the new JSON). It is shadow-mode work, and its own commit message
+  claims "zero score changes in shadow mode" — which the import graph confirms rather than
+taking on trust.
+
+### One repair to a concurrent commit
+
+`78ad21fd` shipped a genuine repo-contract violation, caught by re-running the tier at the
+final tip instead of assuming it still held:
+
+```
+test_pipeline_integrity.py::TestDatabaseSchemaIntegrity::test_schema_version_contract
+  1 schema_version mismatch(es):
+  literature_evidence_records.json: schema_version='1.0.0' belongs to namespace 1, expected 5.x
+```
+
+`scripts/reference_data_schema.py` states the rule in its own docstring — version 1 owns
+vocabularies/small control artifacts, version 6 owns interaction/certification contracts,
+and **every other top-level reference database stays in the version 5 enrichment
+namespace**; `validate_reference_schema_version` enforces it and `preflight.py` uses the
+same validator. The new file declared `1.0.0`.
+
+Repaired in `0eec550e` by declaring `5.0.0` — a brand-new file has no prior revision
+history, so it declares the namespace base. Metadata only: `total_entries` (23) already
+matched the actual record count, and no record content changed. The file is read solely by
+`evidence_resolver.py`, so the repair cannot alter scoring. This is the only change this
+session made to a file another session authored, and it is flagged here so the evidence
+owner can see it.
 
 ### A.1 Reconciling a target that moved three times
 
@@ -60,11 +93,12 @@ tip** — rather than assuming a clean cherry-pick implies semantic compatibilit
 | `ad577f49` → `6f2bdc80` | the evidence seam (canonical assessable-evidence contract, probiotic ownership) + its A/B report | yes | rebased; re-verified tree equivalence with my own cherry-pick of the same content |
 | `6f2bdc80` → `236a9dc1` | universal evidence resolver + shadow coverage (one new module, `scripts/evidence_resolver.py`) | no — nothing in the pipeline imports it | rebased; manifest confirmed unchanged except the added file |
 | `236a9dc1` → `4e5f4bda` | canonical-nutrient authority routing: `rda_optimal_uls.json` aliases added, local whitelist removed from `evidence_resolver.py`, `scoring_reference_resolver.py` exposes `rda_ul_reference_entry` | **yes** — `rda_optimal_uls.json` is read by `scoring_v4/modules/generic_dose.py`, so UL resolution can move scores | rebased **and re-ran the full validation at the new tip** |
+| `4e5f4bda` → `78ad21fd` | Phase-4 shadow literature resolution + provenance gates (`evidence_resolver.py`, new `literature_evidence_records.json`) | **no** — `evidence_resolver.py` has zero importers and the pipeline entry points contain zero references to it or its JSON | rebased; re-ran the tier at the new tip, which **found the schema-version defect it introduced** and repaired it (§ repair) |
 
-The third move is the one that mattered, so it was proven rather than assumed. Two
-comparisons were run against freshly built arms:
+The `4e5f4bda` move is the one that could move scores, so it was proven rather than
+assumed. Two comparisons were run against freshly built arms:
 
-- **`236a9dc1` → `4e5f4bda` + closure, scored level, all 15,412 records:**
+- **`236a9dc1` → `4e5f4bda`, scored level, all 15,412 records:**
   `score_changes: 0`, `conclusion_changes: 0`, `quarantine_exits: 0`,
   `quarantine_entries: 0`, `safety_changes: 0`, `outside_expected_families: 0`,
   `max_abs_delta: 0`. `4e5f4bda` is a **behaviour-preserving refactor** on this corpus —
@@ -82,8 +116,13 @@ the arm the report's results describe:
 
 | Comparison | Records | Score changes | Conclusions | Exits | New quarantine | Safety | Outside families | Max \|Δ\| |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| `095d27a1` → **final tip** (mandated) | 15,412 | **28** | **29** | 0 | **1** | 0 | **0** | 12.2 |
+| `095d27a1` → final tip (mandated) | 15,412 | **28** | **29** | 0 | **1** | 0 | **0** | 12.2 |
 | `236a9dc1` → final tip (`4e5f4bda` increment) | 15,412 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+`78ad21fd` was **not** replayed, deliberately: its two pipeline-adjacent files are provably
+unreachable from the clean/enrich/score path (grep-verified above), so a `4e5f4bda` →
+`78ad21fd` arm would be a 15,412-record comparison of identical behaviour. What it *did*
+require — and got — was a tier re-run, which is what surfaced its schema-version defect.
 
 ### Remote
 
@@ -106,19 +145,20 @@ the arm the report's results describe:
 
 ### Full fast tier
 
-Run on the **final** closure candidate (`a6086870`, rebased onto `main` = `4e5f4bda`) in a
-clean dedicated worktree (`scripts/test.sh fast`; counts and sanitised skip census preserved
-as `FAST_TIER_CLOSURE_20260920.md` alongside this report). This is the second run of the
-tier this session: the first was at `236a9dc1`, and it was repeated after `4e5f4bda` landed
-rather than assumed to still hold.
+Run on the **final** closure tip (`0eec550e`, rebased onto `main` = `78ad21fd`) in a clean
+dedicated worktree (`scripts/test.sh fast`; counts and sanitised skip census preserved as
+`FAST_TIER_CLOSURE_20260920.md` alongside this report). The tier was run three times this
+session — at `236a9dc1`, at `4e5f4bda`, and at the final tip — because re-running it at each
+new `main` is what caught the concurrent commit's schema-version defect instead of assuming
+the previous result still held.
 
 ```
-15827 passed, 196 skipped in 449.19s (0:07:29)
+15835 passed, 196 skipped in 428.55s (0:07:08)
 ```
 
 | | Count |
 |---|---:|
-| passed | **15,827** |
+| passed | **15,835** |
 | **failed** | **0** |
 | skipped | 196 |
 | collection errors | **0** |
@@ -138,9 +178,11 @@ at `095d27a1` the fast tier was `1 failed / 15,826 passed / 152 skipped` with fa
 `iqd.get("ingredients")` fallback — it delegates to the canonical contract. Nothing was
 allowlisted.
 
-(`4e5f4bda` contributes 2 of the 15,827 — it added two regression tests to
-`test_evidence_resolver.py`; the remaining 15,825 match the `236a9dc1` run exactly, so the
-`4e5f4bda` move introduced no test regression either.)
+Test-count reconciliation across the three runs: `15,825` at `236a9dc1`; `+2` from
+`4e5f4bda`'s two `test_evidence_resolver.py` regressions; `+8` collected from `78ad21fd`
+(`7` passing, `1` failing) ; and the repair of that one failure turns the final tally into
+`15,835 passed / 0 failed`. Passed count rose by exactly the number of tests added, and the
+skip count never moved from 196.
 
 **2. The 7 new hard failures in `test_cross_module_probiotic_evidence.py` are fixed
 properly.** That test file (added with the evidence seam) loaded
@@ -236,33 +278,83 @@ Artifact: `CLOSURE_ROWLEVEL_REPLAY_20260920.json` (full per-product detail).
 
 ### C.1 The 28 score changes are the intended closure of unsupported evidence transfer
 
+**One upstream cause, three pillar-level mechanisms.** Every one of the 28 changes is a
+consequence of the same upstream change — discrete enzyme identities (`protease`, `lactase`,
+`papain`, …) replacing the single collapsed `digestive_enzymes` identity — but *which pillar*
+it shows up in differs, and getting that wrong would misreport the product-level facts. Each
+product below was classified by comparing its six pillar scores (`dose`, `evidence`,
+`formulation`, `safety_hygiene`, `transparency`, `verification`) in both arms. Because
+`quality_score_v4_100` is exactly the sum of earned pillar points (verified: for `182908`,
+`12.8 + 0 + 12.0 + 10 + 6.0 + 10.0 = 50.8`), the pillar deltas reconcile to the total
+exactly on every row.
+
+**Mechanism A — unearned evidence credit withdrawn (23 of 28).**
 `INGR_DIGESTIVE_ENZYMES` in `backed_clinical_studies.json` previously listed
 `pancreatic enzymes`, `lipase`, `protease`, `amylase` **as aliases of the multi-enzyme
-complex entry**. That let a standalone `Protease 10 mg` row inherit human evidence for a
-five-enzyme fungal formulation — unsupported evidence transfer. The seam narrows the
-aliases to `digestive enzyme complex`, `multi-enzyme blend`, `fungal multi-enzyme complex`
-and states the limitation explicitly in the entry's own notes ("Does not transfer to
-standalone protease, lipase, amylase, cellulase, or animal pancreatin").
+complex entry**, which let a standalone `Protease 10 mg` row inherit human evidence for a
+five-enzyme fungal formulation. The seam narrows the aliases to `digestive enzyme complex`,
+`multi-enzyme blend`, `fungal multi-enzyme complex` and states the limit in the entry's own
+notes. Single-product probe of `63666`: the Evidence pillar moves from
+`raw_evidence 11.0 / evaluated_applicable / score 12.2` to `raw_evidence 0.0 /
+not_yet_reviewed / clinical_review_not_covered / score 0` — 11 points of inherited credit
+withdrawn. **This direction is conservative: it removes credit.**
 
-Consequence: standalone-enzyme rows lose unearned evidence credit. Every affected product
-is in the digestive/systemic enzyme family:
+**Mechanism B — a formulation penalty stops applying (12 of 28, overlapping A).**
+The collapsed aggregate identity carried the verdict *"Uses basic or low-cost ingredient
+forms."* (6.7/20). The discrete enzyme identities have **no** form-quality rating in the
+current data, so the pillar reports the neutral state *"Ingredient-form quality is not rated
+in PharmaGuide's current data."* (12.0/20 for `182908`). This is a **gain**, and it is the sole
+reason `182908` / `184300` (+5.3) and `18480` (+3.3) move upward while their rubric raw score
+falls (35.2 → 30.2). It is not an evidence gain and not a Safety change.
 
-| DSLD | Product | Brand | Δ |
-|---|---|---|---:|
-| 63666, 213833, 327990, 246207 | Lactase Enzyme Formula / Dairy Defense / Lactase Enzyme | Nature's Way | −12.2 each |
-| 182908, 184300 | Gluten/Dairy Digest | Pure Encapsulations | +5.3 each |
-| 18480 | BioCore Recovery Enzymes | GNC Pro Performance | +3.3 |
-| 2505, 332937, 28720, 28733, 29499, 327997, 293872, 29295, 49563, 43649, 43650, 1840, 1841, 42260, 82372, 31999, 28479, 277020 | enzyme/blend products | Life Extension, Nature's Way, Garden of Life, Pure Encapsulations, Nature's Bounty, MegaFood, GNC, CVS | −0.5 … −2.4 |
-| 29143 | B-Complex With B-12 (contains a standalone `Protease 10 mg`) | Nature's Bounty | −1.4 |
-| 18382 | Milk Thistle Sport (contains `CereCalase` enzyme blend) | GNC | +0.4 |
-| 267299 | Gluten-Free Support (contains `Gluten Enzyme Blend` + 2 probiotics) | Garden of Life | +0.1 |
+**Mechanism C — a transparency deduction changes (1 product).** `82372` Beanaid:
+transparency 15.0/15 → 13.5/15 (−1.5) with the reason string unchanged ("Fully transparent
+label — every amount is disclosed"); the readiness record shows its enzyme assessment moving
+from `digestive_enzymes` (2 × `not_applicable`) to `alpha_galactosidase`. Same upstream
+cause, third pillar.
 
-The four −12.2 products share one mechanism, confirmed by single-product probe:
-`quality_pillars_v4.evidence` moves from `raw_evidence: 11.0 / evaluated_applicable`
-to `raw_evidence: 0.0 / display_state: not_yet_reviewed / evidence_result_state:
-clinical_review_not_coupled` — the previously-inherited 11 points are withdrawn.
-**This is conservative: it removes credit, and no score moved upward for an unsupported
-reason.** No Safety field changed on any of the 29.
+| DSLD | Product | before → after | Δ | evidence Δ | formulation Δ | mechanism |
+|---|---|---|---:|---:|---:|---|
+| `63666` | Lactase Enzyme Formula | 72.7 → 60.5 | −12.2 | −12.2 | 0.0 | A |
+| `213833` | Dairy Defense | 72.7 → 60.5 | −12.2 | −12.2 | 0.0 | A |
+| `246207` | Lactase Enzyme Formula | 72.7 → 60.5 | −12.2 | −12.2 | 0.0 | A |
+| `327990` | Lactase Enzyme | 72.7 → 60.5 | −12.2 | −12.2 | 0.0 | A |
+| `182908` | Gluten/Dairy Digest | 45.5 → 50.8 | +5.3 | 0.0 | +5.3 | B |
+| `184300` | Gluten/Dairy Digest | 45.5 → 50.8 | +5.3 | 0.0 | +5.3 | B |
+| `18480` | BioCore Recovery Enzymes | 55.8 → 59.1 | +3.3 | 0.0 | +3.3 | B |
+| `2505` | Enhanced Super Digestive Enzymes With Probiotics | 58.6 → 56.2 | −2.4 | −2.4 | 0.0 | A |
+| `28720` | Omega-Zyme Digestive Enzyme Blend | 49.4 → 47.2 | −2.2 | −2.2 | 0.0 | A |
+| `28733` | Omega-Zyme Digestive Enzyme Blend | 45.9 → 43.7 | −2.2 | −2.2 | 0.0 | A |
+| `29499` | Wobenzym N | 69.6 → 67.4 | −2.2 | −2.2 | 0.0 | A |
+| `327997` | Mega-Zyme Pancreatic & Systemic Enzymes | 54.2 → 52.0 | −2.2 | −2.2 | 0.0 | A |
+| `332937` | Mega-Zyme Pancreatic & Systemic Enzymes | 54.2 → 52.0 | −2.2 | −2.2 | 0.0 | A |
+| `293872` | A.I. Enzymes | 73.1 → 71.3 | −1.8 | −1.8 | 0.0 | A |
+| `29295` | Intensive Strength Digest 13 | 63.8 → 62.1 | −1.7 | −2.2 | +0.5 | A+B |
+| `49563` | Enzyme 13 | 63.8 → 62.1 | −1.7 | −2.2 | +0.5 | A+B |
+| `1840` | Multi-Enzyme Formula | 56.0 → 54.4 | −1.6 | −2.2 | +0.6 | A+B |
+| `1841` | Multi-Enzyme Formula | 56.0 → 54.4 | −1.6 | −2.2 | +0.6 | A+B |
+| `43649` | MegaZymes | 72.8 → 71.2 | −1.6 | −1.6 | 0.0 | A |
+| `43650` | MegaZymes | 72.8 → 71.2 | −1.6 | −1.6 | 0.0 | A |
+| `31999` | Digestive Enzymes | 54.1 → 52.6 | −1.5 | −2.2 | +0.7 | A+B |
+| `42260` | Super Digestive Enzymes | 57.1 → 55.6 | −1.5 | −2.2 | +0.7 | A+B |
+| `82372` | Beanaid | 57.1 → 55.6 | −1.5 | 0.0 | 0.0 | **C** (transparency −1.5) |
+| `29143` | B-Complex With B-12 | 71.8 → 70.4 | −1.4 | −1.4 | 0.0 | A |
+| `28479` | Acid Defense | 58.0 → 57.0 | −1.0 | −1.6 | +0.6 | A+B |
+| `277020` | Super Papaya Enzyme Mint Flavored 45 mg | 52.4 → 51.9 | −0.5 | −2.2 | +1.7 | A+B |
+| `18382` | Milk Thistle Sport | 72.5 → 72.9 | +0.4 | 0.0 | +0.4 | B |
+| `267299` | Gluten-Free Support | 67.4 → 67.5 | +0.1 | 0.0 | +0.1 | B |
+
+All 28 are **expected** given the identity change, all sit inside the enzyme family, and no
+Safety field changed on any of the 29. Every tier assignment was preserved. Nothing was
+fabricated, no dose changed, and the two products that gained the most gained from a
+*withdrawn penalty* rather than from new credit.
+
+**Open follow-up for the formulation owner (not a blocker):** PharmaGuide previously attached
+a "basic or low-cost form" verdict to the aggregate enzyme identity. After specialization no
+form verdict attaches to the discrete enzyme identities, so the penalty silently disappears
+for 12 products (max +5.3). Whether discrete enzyme identities should carry a form verdict,
+or whether *unrated* is the intended state, is a formulation-model question — it is recorded
+here rather than resolved unilaterally, because changing it would move scores again.
 
 ### C.2 The 3 non-enzyme-named products are enzyme-bearing
 
@@ -272,14 +364,18 @@ The scored harness independently reports `outside_expected_families: 0`.
 
 ### C.3 New quarantine entry `269360` — root cause and verdict
 
-| | Before (`095d27a1`) | After (closure) |
+| | Before (`095d27a1`) | After (final tip) |
 |---|---|---|
 | `scoring_status` | scored | **not_scored** |
-| `quality_score_v4_100` | 50.4 | `null` |
+| `not_scorable_reason` | `null` | **`incomplete_product_data`** |
+| `score_unavailable_reason` | `null` | **`blocked_by_completeness_gate`** |
+| `quality_score_v4_100` / `raw_score_v4_100` | 50.4 / 32.3 | `null` / `null` |
+| `quality_tier` / `verdict` / `display_100` | Poor / `POOR` / `50/100` | `null` / `NOT_SCORED` / `N/A` |
 | `unmapped_actives_total` | 0 | **1** |
 | route reason | `taxonomy:fiber_digestive` | `taxonomy:general_supplement` |
 | identity readiness | `complete` (`mapped_count` 2, coverage 1.0, `mapped_scoring_actives`) | `incomplete` (`mapped_count` 1, coverage 0.5, `scoring_identity_incomplete`) |
-| dose readiness | 2 material actives, all assessed | 1 material active, all assessed |
+| dose readiness | 2 of 2 material actives assessed | 1 of 1 material active assessed |
+| Safety fields | — | **unchanged** (all Safety fields byte-identical) |
 
 **Mechanism.** The label declares `Serrapeptase Enzyme = 0 NP` with the form
 `Serratia sp.` — there is **no declared enzyme activity amount anywhere on the record**;
@@ -450,10 +546,17 @@ as fixtures, not an opportunistic edit. Existing owners:
 |---|---|
 | `INTEGRATION_REPORT_PHASE3_20260920.md` row 8 | Corrected: the bare `0` is replaced by **`0 score-bearing / 55 representation-only`**, with a new *"Levels of outside expected families"* subsection naming both harness levels and why they differ |
 | `INTEGRATION_REPORT_PHASE3_20260920.md` §G | "New false clears" and "Unexpected cross-family changes" rows now name the level explicitly |
-| `/tmp/audit_base_int.json` (stale pre-final row-level audit) | Marked **SUPERSEDED** in-repo with the two keying artifacts that explained its counters, and a pointer to the authoritative results |
+| `/tmp/audit_base_int.json` (stale pre-final row-level audit) | Marked **SUPERSEDED** inside the committed `INTEGRATION_REPORT_PHASE3_20260920.md`, together with its raw counters *quoted inline* and the two keying artifacts that explain them — so the note stands on its own after the `/tmp` scratch data is deleted. It predates the final arms and its `lost_dose_owner` / `lost_safety_rows` / `de_eligibilized_without_provenance` numbers must not be cited |
 | `full_corpus_replay.py` | Classifier extended with `identity_refinement_no_behavioral_delta`; the tool now names a 471-product identity refactor instead of reporting it as "outside expected families". No pipeline file touched |
 | `CLOSURE_ROWLEVEL_REPLAY_20260920.json` | **New** — durable row-level replay detail (15,414 signatures compared, per-product deltas) |
 | `phase3_closure_dispositions_20260920.json` | **New** — durable per-product closure ledger with owners and evidence |
+| `CLOSURE_SCORED_REPLAY_095d27a1_to_final_20260920.json` | **New** — the mandated scored-level comparison output (full detail, 15,412 records) |
+| `CLOSURE_SCORED_REPLAY_236a9dc1_to_final_20260920.json` | **New** — the `4e5f4bda` increment (all zeros), proving it behaviour-preserving |
+| `CLOSURE_REPORT_PHASE3_20260920.md` / `FAST_TIER_CLOSURE_20260920.md` | **New** — this report and the tier evidence |
+
+All of the above are committed, contain no machine-specific paths (the two scored artifacts
+were checked for absolute-path leaks: zero found), and are sufficient to explain every
+number in this report without an ephemeral worktree.
 
 ---
 
@@ -477,12 +580,14 @@ as fixtures, not an opportunistic edit. Existing owners:
 | Known data loss | **NO** | representation replay: role histogram identical 472/472, nutrition unchanged 472/472, `actives`/`eligible`/`dosed_eligible` identical 472/472; the 5 count deltas are display rows *gaining* entries (omissions fall); 0 records only-in-either arm |
 | Fabricated doses | **NO** | no unit conversion, no %DV back-calculation, no inferred amount anywhere in this session; every quantity in the closing documentation is read from a source row |
 | Lost Safety signals | **NO** | scored replay `safety_changes: 0`; all 29 changed products carry identical Safety fields; the five marker products carry identical Safety gates, signals and verdicts |
-| New false clears | **NO** | 0 quarantine exits in the closure increment |
+| New false clears | **NO** | 0 quarantine exits; the single *new* quarantine (`269360`) closes a prior false clear rather than creating one — it was previously scored while its only active had no declared amount anywhere on the record |
 | New false quarantines | **NO** | 1 new quarantine (`269360`) root-caused as *correct* — it closes a prior false clear (no declared amount anywhere on the record, unmapped-for-scoring identity) |
-| Unexplained score changes | **NO** | all 28 attributed to one mechanism: closure of unsupported multi-enzyme-complex → discrete-enzyme evidence transfer |
+| Unexplained score changes | **NO** | all 28 classified per product by pillar comparison into three mechanisms from **one** upstream cause (discrete enzyme identities replacing the collapsed `digestive_enzymes` identity): evidence credit withdrawn (23), aggregate-identity formulation penalty withdrawn (12, overlapping), one transparency deduction shift (`82372`). Pillar deltas reconcile to each total exactly |
 | Unexpected score-bearing cross-family effects | **NO** | `outside_expected_families: 0` at the scored level; at the representation level 471/472 are a named no-behavioural-delta identity refinement |
 | Static audit findings | **0** |
-| Test failures | **0** — full fast tier `15,825 passed / 0 failed / 196 skipped` in 352.95 s; 0 errors; 0 collection errors |
+| Test failures | **0** — full fast tier at the final tip: `15,835 passed / 0 failed / 196 skipped` in 428.55 s; 0 errors; 0 collection errors |
+| New failures introduced by concurrent `main` commits | **one, found and repaired** — `78ad21fd`'s `literature_evidence_records.json` declared `schema_version 1.0.0` against the repo's version-5 data namespace, failing `TestDatabaseSchemaIntegrity::test_schema_version_contract`; repaired in `0eec550e` (metadata only). Not suppressed or allowlisted |
+| Unresolved regressions | **NO** | final failure set is empty; the static audit is clean; both replay harnesses agree |
 
 ---
 
@@ -493,9 +598,16 @@ clean, the closure validation passed, and every remaining item is an authority d
 separately-owned, fully-characterised change.
 
 **Main updated and verified:** **YES** — `origin/main` fast-forwarded from `ad577f49` to the
-closure tip and verified equal to local `main`. The validated pipeline SHA is `4e5f4bda`
-(see §A for the manifest proof that the closure commits change zero pipeline files, and §A.1
-for the replay re-run at that tip). Verification:
+closure tip and verified equal to local `main`. Structure of the landed history:
+
+- validation pipeline SHA `4e5f4bda` (the last commit touching the clean/enrich/score path);
+- `78ad21fd` on top (pipeline-inert, verified by import graph);
+- this session's four commits: `f87750b2` (hermetic probiotic tests + marker-scope coverage +
+  level-named family count), `2c382f2f` (closure report + replay evidence), `899cba40`
+  (rebase/evidence update), `0eec550e` (data-metadata repair).
+
+See §A for the manifest proof that the documentation commits change zero pipeline files, and
+§A.1 for the replay re-run at the validated tip. Verification:
 
 ```bash
 git fetch origin && git log --oneline -3 origin/main   # tip = closure docs commit
