@@ -711,8 +711,8 @@ def resolve_evidence_for_row(
             "verification_result": lit_entry.get("verification_result"),
         }
 
-        # Check if reviewed null / unfavorable vs no qualifying human evidence
-        if lit_entry.get("effect_direction") in {"null", "no_qualifying_human_evidence"}:
+        # 7. Check if literature evidence established reviewed null/unfavorable or no studies
+        if lit_entry.get("effect_direction") in {"null", "negative", "reviewed_null_unfavorable", "no_qualifying_human_evidence"}:
             studies = lit_entry.get("qualifying_human_studies", [])
             if not studies:
                 # Absence of qualifying human studies cannot emit reviewed_null_unfavorable
