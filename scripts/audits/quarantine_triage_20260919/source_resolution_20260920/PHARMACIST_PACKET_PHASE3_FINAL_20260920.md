@@ -116,9 +116,11 @@ Sign or withhold according to PharmaGuide's release governance, using the closed
 engineering record:
 
 - static source-of-truth audit: **0 findings** (`scoring-static`, re-run at `ebba804e`)
-- fast tier at the closure tip: **15,897 passed / 0 failed / 196 skipped** (clean detached
-  worktree at `ebba804e`, after the closure's own regression tests were added;
-  `FAST_TIER_CLOSURE_20260920.md` is the earlier closure-phase record)
+- fast tier at the closure tip: **15,895 passed / 0 failed / 198 skipped** (clean detached
+  worktree at `7aaebb3e`, after the closure's own regression tests were added;
+  `FAST_TIER_CLOSURE_20260920.md` is the earlier closure-phase record). Two tests skip there
+  that run in a working checkout, because their corpus baselines are absent from a clean
+  worktree; both runs report **0 failures**.
 - frozen corpus replay: **15,414 row-level / 15,412 scored records per arm, 0 crashes**, every
   changed product mapped to a reviewer-signed source correction — 0 score changes,
   9 conclusion changes, 8 quarantine exits, 0 new quarantine entries, 2 Safety changes,
