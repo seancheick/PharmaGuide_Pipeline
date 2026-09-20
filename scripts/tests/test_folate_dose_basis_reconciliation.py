@@ -195,6 +195,100 @@ def test_declared_total_named_folic_acid_still_reconciles_with_its_form():
     ])) is True
 
 
+# ── the declared total is not always named as one (2026-09-20) ───────────
+#
+# The contract used to require a parent-name vocabulary, so a declared total
+# DSLD transcribed under its own form's name was invisible: both it and its
+# disclosed breakdown were charged as separate exposures. 201420 (Solgar Male
+# Multiple) is the live case — the declared 1333 mcg DFE row and its nested
+# 800 mcg breakdown both read `Folic Acid`, where sibling record 201405 of the
+# same printed panel reads `Folate 1333 mcg DFE`. The fix keeps the data
+# untouched and identifies the total from structure instead: the enricher
+# anchors the declared nutrient row to a Daily Value, and failing that the
+# declared-total (DFE) basis itself is the evidence.
+
+DAILY_VALUE_ANCHORED = "daily_value_confirmed_nutrient_amount"
+FORM_COMPONENT_ROW = "canonical_parent_substance_amount"
+
+
+def test_mis_named_declared_total_is_recognised_by_its_daily_value_anchor():
+    """The real 201420 contributing-row payload, as the pipeline emitted it."""
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {
+            "ingredient": "Folic Acid",
+            "amount": 1333.0,
+            "unit": "mcg DFE",
+            "pct_ul_individual": 79.96,
+            "ul_exposure_basis": DAILY_VALUE_ANCHORED,
+            "ul_gate_eligible": True,
+        },
+        {
+            "ingredient": "Folic Acid",
+            "amount": 1360.0,
+            "unit": "mcg DFE",
+            "pct_ul_individual": 81.58,
+            "ul_exposure_basis": FORM_COMPONENT_ROW,
+            "ul_gate_eligible": True,
+        },
+    ])) is True
+
+
+def test_mis_named_declared_total_is_recognised_without_structural_fields():
+    """Older artifacts carry no exposure basis. The declared-total basis is then
+    the evidence, provided the repeated rows name one identity."""
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folic Acid", "amount": 1333.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 1360.0, "unit": "mcg DFE"},
+    ])) is True
+
+
+def test_two_daily_value_anchored_folate_rows_are_not_collapsed():
+    """Two rows the enricher anchored to a Daily Value are two declarations.
+    Neither can be singled out as the total, so neither is discounted."""
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {
+            "ingredient": "Folic Acid",
+            "amount": 1700.0,
+            "unit": "mcg DFE",
+            "ul_exposure_basis": DAILY_VALUE_ANCHORED,
+        },
+        {
+            "ingredient": "L-5-MTHF",
+            "amount": 400.0,
+            "unit": "mcg DFE",
+            "ul_exposure_basis": DAILY_VALUE_ANCHORED,
+        },
+    ])) is False
+
+
+def test_differently_named_dfe_rows_without_a_named_total_are_not_collapsed():
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folic Acid", "amount": 1700.0, "unit": "mcg DFE"},
+        {"ingredient": "L-5-MTHF", "amount": 400.0, "unit": "mcg DFE"},
+    ])) is False
+
+
+def test_repeated_declaration_of_one_form_is_collapsed_to_its_maximum():
+    """Two printed preparation columns are alternatives, not addends. Declared
+    total 1450 with 900 and 800 declared for one form is one exposure at 900;
+    summing them (1700) is what breaches the total."""
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folic Acid", "amount": 1450.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 900.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 800.0, "unit": "mcg DFE"},
+    ])) is True
+
+
+def test_two_different_forms_beside_a_total_are_never_collapsed_as_one():
+    """A differently named row is not a repeated declaration of the total, so
+    it cannot be recognised from structure alone."""
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folic Acid", "amount": 1450.0, "unit": "mcg DFE"},
+        {"ingredient": "L-5-MTHF", "amount": 900.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 800.0, "unit": "mcg DFE"},
+    ])) is False
+
+
 # ── guards on the new allowances ─────────────────────────────────────────
 
 

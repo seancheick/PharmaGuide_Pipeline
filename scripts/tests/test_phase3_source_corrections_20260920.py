@@ -49,15 +49,18 @@ E2_WITHHELD_NO_CORRECTION = ("231334", "231335", "263865")
 # source as Natural beta-Carotene.
 BULK_1340_VITAMIN_A_FORM = ("228823", "243799", "243808", "243812", "243815")
 
-# Source-resolved, but NOT authorable through the sanctioned per-row-text
-# mechanism: in 201420 the declared-total row (1333 mcg DFE) and its own nested
-# form row (800 mcg) both carry the identical raw text 'Folic Acid', so a rename
-# keyed on that text applies to both and would manufacture a second row under a
-# parent name — making the double count it was meant to remove worse. The
-# printed structure is confirmed (sibling 201405 transcribes the same panel as
-# 'Folate 1333 mcg DFE'), so this is a mechanism limit, not an open source
-# question.
-MECHANISM_LIMITED_NO_CORRECTION = ("201420",)
+# Source-resolved and CLOSED, but deliberately NOT authorable through the
+# sanctioned per-row-text mechanism: in 201420 the declared-total row (1333 mcg
+# DFE) and its own nested form row (800 mcg) both carry the identical raw text
+# 'Folic Acid', so a rename keyed on that text applies to both and would
+# manufacture a second row under a parent name — making the double count it was
+# meant to remove worse. The printed structure is confirmed (sibling 201405
+# transcribes the same panel as 'Folate 1333 mcg DFE'), so this is a mechanism
+# limit, not an open source question. It is resolved structurally instead, by
+# the folate dose-safety contract — see
+# scripts/tests/test_folate_dose_basis_reconciliation.py and the receipt's
+# `implementation` field.
+ENGINE_RECONCILED_NO_ROW_REWRITE = ("201420",)
 
 
 @pytest.fixture(scope="module")
@@ -77,14 +80,50 @@ def test_expected_corrections_are_present(corrections):
     assert len(expected) == 9
 
 
-@pytest.mark.parametrize("dsld_id", MECHANISM_LIMITED_NO_CORRECTION)
+@pytest.mark.parametrize("dsld_id", ENGINE_RECONCILED_NO_ROW_REWRITE)
 def test_rows_the_mechanism_cannot_scope_are_not_rewritten(corrections, dsld_id):
     """A correction must never be authored when the review cannot scope it to
-    the exact row it was reviewed against."""
+    the exact row it was reviewed against — and closing the product by engine
+    fix must not quietly reintroduce the row rewrite."""
     assert dsld_id not in corrections, (
         f"{dsld_id}: the declared-total row and its nested form row share the "
         f"same raw_ingredient_text, so a rename cannot be scoped to the total "
         f"alone. Authoring it would rename the form row too."
+    )
+
+
+@pytest.mark.parametrize("dsld_id", ENGINE_RECONCILED_NO_ROW_REWRITE)
+def test_engine_fix_actually_reconciles_the_flagged_shape(dsld_id):
+    """The product is only closed if the contract recognises its real flagged
+    shape: two rows named 'Folic Acid', the declared one Daily-Value anchored."""
+    sys.path.insert(0, os.path.join(_ROOT, "scripts"))
+    from scoring_v4.dose_safety import is_folate_parent_total_duplicate_flag
+
+    assert is_folate_parent_total_duplicate_flag({
+        "nutrient": "Vitamin B9 (Folate)",
+        "canonical_id": "vitamin_b9_folate",
+        "aggregation": "canonical_sum",
+        "pct_ul": 161.55,
+        "ul_gate_eligible": True,
+        "contributing_rows": [
+            {
+                "ingredient": "Folic Acid",
+                "amount": 1333.0,
+                "unit": "mcg DFE",
+                "ul_exposure_basis": "daily_value_confirmed_nutrient_amount",
+                "ul_gate_eligible": True,
+            },
+            {
+                "ingredient": "Folic Acid",
+                "amount": 1360.0,
+                "unit": "mcg DFE",
+                "ul_exposure_basis": "canonical_parent_substance_amount",
+                "ul_gate_eligible": True,
+            },
+        ],
+    }) is True, (
+        f"{dsld_id}: the mis-named declared total is no longer recognised, so "
+        f"the product's folate exposure is being charged twice again"
     )
 
 

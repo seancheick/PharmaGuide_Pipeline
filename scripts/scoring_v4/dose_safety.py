@@ -57,6 +57,16 @@ _FOLATE_RECONCILE_REL_TOLERANCE = 0.10
 
 _FOLATE_CANONICALS = {"vitamin_b9_folate", "folate"}
 _FOLATE_PARENT_NAMES = {"folate", "vitamin b9 folate", "vitamin b9"}
+
+# A row the enricher anchored to a Daily Value is the label's declared nutrient
+# declaration — the total an over-limit comparison is scoped to — whatever DSLD
+# called it. The name vocabulary above cannot cover that: record 201420
+# transcribes Solgar Male Multiple's declared Folate total as "Folic Acid", the
+# same text as its own nested 800 mcg breakdown, so the declared total can only
+# be identified structurally. The row that carries the %DV is it.
+_FOLATE_DECLARED_TOTAL_EXPOSURE_BASES = {
+    "daily_value_confirmed_nutrient_amount",
+}
 _FOLATE_FORM_TOKENS = (
     "folic acid",
     "mthf",
@@ -234,6 +244,15 @@ def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
     the aggregate and its children describe ONE exposure. Charging it twice is a
     double count, not a stricter reading.
 
+    The declared total is identified by structure, not by name alone: labels and
+    DSLD both transcribe it inconsistently (record 201420 names the declared
+    Folate total ``Folic Acid``, exactly like the breakdown nested under it), so
+    a parent-name vocabulary cannot be the only evidence. The row the enricher
+    anchored to a Daily Value is the declaration; failing that, the
+    declared-total (DFE) basis is. A shape that cannot be singled out — two
+    Daily-Value-anchored rows, or several differently named DFE rows — is left
+    unreconciled, because summing is the conservative answer there.
+
     Deliberately scoped to the folate parent/form pattern. Widening it to every
     nutrient changes behaviour for exposures nobody has reviewed, so it is a
     separate, validated change.
@@ -252,9 +271,9 @@ def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
     if len(rows) < 2:
         return False
 
-    parent_amount: Optional[float] = None
-    parent_basis: Optional[str] = None
-    form_rows: List[Tuple[str, str, float]] = []
+    # Parse every contributing row before choosing the declared total: which row
+    # owns the total is decided across the whole set, not row by row.
+    parsed: List[Tuple[str, str, float, bool, bool]] = []
     for row in rows:
         name = _norm_text(row.get("ingredient"))
         amount = _as_float(row.get("amount"), None)
@@ -265,15 +284,69 @@ def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
             # A stated unit we cannot interpret. Reconciling against it would be
             # a guess, and a guess must never suppress an over-limit warning.
             return False
-        normalized = amount * multiplier
-        if name in _FOLATE_PARENT_NAMES or name == nutrient:
-            if parent_amount is None or normalized > parent_amount:
-                parent_amount = normalized
-                parent_basis = basis
-        elif any(token in name for token in _FOLATE_FORM_TOKENS):
-            form_rows.append((name, basis, normalized))
+        parsed.append((
+            name,
+            basis,
+            amount * multiplier,
+            _norm_text(row.get("ul_exposure_basis"))
+            in _FOLATE_DECLARED_TOTAL_EXPOSURE_BASES,
+            name in _FOLATE_PARENT_NAMES or name == nutrient,
+        ))
+    if len(parsed) < 2:
+        return False
 
-    if parent_amount is None or not form_rows:
+    # The declared total is identified by the strongest evidence available, in
+    # this order, and only when that evidence is unambiguous:
+    #
+    #   1. the label names the row as the nutrient total;
+    #   2. exactly one row is anchored to a Daily Value — so it *is* the
+    #      nutrient declaration, however DSLD transcribed its name;
+    #   3. the rows stated in the declared-total (DFE) basis all carry one name,
+    #      so they are one printed row emitted several times (the same
+    #      serving-variant shape 243808 already relies on).
+    #
+    # A shape this contract cannot single out — two Daily-Value-anchored rows,
+    # or several differently named DFE rows — is left unreconciled. Summing
+    # them is conservative, and declining is the only honest answer.
+    def _is_daily_value_total(row: Tuple[str, str, float, bool, bool]) -> bool:
+        return row[3]
+
+    named_totals = [
+        index for index, row in enumerate(parsed) if row[4]
+    ]
+    daily_value_totals = [
+        index for index, row in enumerate(parsed) if _is_daily_value_total(row)
+    ]
+    declared_basis_totals = [
+        index
+        for index, row in enumerate(parsed)
+        if row[1] == _FOLATE_BASIS_DFE
+    ]
+
+    parent_index: Optional[int] = None
+    if named_totals:
+        # A declared total contains the components it discloses, so when a label
+        # names more than one row as the total the largest owns it.
+        parent_index = max(named_totals, key=lambda index: parsed[index][2])
+    elif len(daily_value_totals) == 1:
+        parent_index = daily_value_totals[0]
+    elif declared_basis_totals:
+        names = {parsed[index][0] for index in declared_basis_totals}
+        if len(names) == 1:
+            parent_index = max(
+                declared_basis_totals, key=lambda index: parsed[index][2]
+            )
+    if parent_index is None:
+        return False
+
+    _parent_name, parent_basis, parent_amount = parsed[parent_index][:3]
+    form_rows: List[Tuple[str, str, float]] = [
+        (name, basis, normalized)
+        for index, (name, basis, normalized, _dv, _parent_name) in enumerate(parsed)
+        if index != parent_index
+        and any(token in name for token in _FOLATE_FORM_TOKENS)
+    ]
+    if not form_rows:
         return False
     # One exposure can only be recognised within a single dose basis.
     if len({parent_basis, *(basis for _name, basis, _amount in form_rows)}) > 1:
