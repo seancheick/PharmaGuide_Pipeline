@@ -155,7 +155,18 @@ def test_explicit_eaa_total_is_preserved_as_a_nonscorable_dose_owner():
     assert owner["score_exclusion_reason"] == "blend_header_total"
 
 
-def test_active_omega_rollup_compound_forms_split_to_epa_and_dha():
+def test_active_omega_rollup_compound_forms_keeps_dosed_total_as_owner():
+    # 2026-09-19 re-baseline (clinical-signoff engineering fixes). This test
+    # previously required the dose-less "Total DHA, EPA" forms to be SPLIT
+    # into standalone DHA/EPA actives. Splitting orphaned dose-less children
+    # under dosed totals — the exact defect that quarantined GNC 75188 and
+    # 243713 ("Total Omega-3 Fatty Acids 300 mg" dropped; qty=0.0 DHA/EPA
+    # shipped). The corrected contract keeps the dosed total as the single
+    # EPA+DHA owner (scoring_input_contract._printed_epa_dha_owner already
+    # assigns ownership downstream); composition remainders
+    # ("Other Omega-3 Fatty Acids") describe the total and are suppressed as
+    # standalone identities. Independently DOSED EPA/DHA children still
+    # expand (asserted in test_explicitly_dosed_epa_dha_children_survive).
     raw = {
         "id": "fixture-omega-compound-forms",
         "fullName": "High Potency EPA & DHA",
@@ -176,16 +187,88 @@ def test_active_omega_rollup_compound_forms_split_to_epa_and_dha():
         },
     }
 
+    # The corrected contract asserts the dosed total survives as the scoring
+    # owner with its full mass, and that the dose-less form disclosures do
+    # not become standalone actives.
     cleaned = _clean(raw)
 
+    actives = cleaned.get("activeIngredients") or []
+    owners = [
+        row
+        for row in actives
+        if "omega" in str(row.get("name") or "").lower()
+        and row.get("score_eligible_by_cleaner") is True
+    ]
+    assert len(owners) == 1
+    owner = owners[0]
+    assert owner.get("quantity") is not None and str(owner.get("unit") or "").lower() in {
+        "mg",
+        "milligram",
+    }, "dosed omega total must retain its mass"
+
     names = _active_names(cleaned)
-    canonicals = _active_canonicals(cleaned)
-    assert "dha" in names or "dha" in canonicals
-    assert "epa" in names or "epa" in canonicals
     assert "other omega-3 fatty acids" not in names
+    # The dose-less "Total DHA, EPA" disclosure must not be promoted as its
+    # own active alongside the dosed total (the old split behavior).
+    standalone_form_rows = [
+        str(row.get("name") or "").lower()
+        for row in actives
+        if str(row.get("name") or "").lower() in {"dha", "epa", "total dha, epa"}
+    ]
+    assert not standalone_form_rows, standalone_form_rows
 
 
-def test_other_fatty_acids_is_a_composition_rollup_not_an_active():
+def test_explicitly_dosed_epa_dha_children_survive():
+    """2026-09-19 regression guard required by the Phase-3 clinical review.
+
+    Negative control for the omega-owner fix: a dosed omega total whose
+    EPA/DHA children carry their OWN printed amounts must still expand the
+    children as independently scoreable actives — the aggregate-owner rule
+    applies only to dose-less molecular-form disclosures, never to genuinely
+    quantified children.
+    """
+    raw = {
+        "id": "fixture-dosed-epa-dha-children",
+        "fullName": "Clinical Omega Complex",
+        "ingredientRows": [
+            {
+                "name": "Omega-3 Fatty Acids",
+                "ingredientGroup": "Omega-3 Fatty Acid",
+                "category": "fatty-acid",
+                "quantity": [{"quantity": 1000, "unit": "mg"}],
+                "nestedRows": [
+                    {
+                        "name": "Eicosapentaenoic Acid (EPA)",
+                        "ingredientGroup": "Omega-3 Fatty Acid",
+                        "category": "fatty-acid",
+                        "quantity": [{"quantity": 360, "unit": "mg"}],
+                    },
+                    {
+                        "name": "Docosahexaenoic Acid (DHA)",
+                        "ingredientGroup": "Omega-3 Fatty Acid",
+                        "category": "fatty-acid",
+                        "quantity": [{"quantity": 240, "unit": "mg"}],
+                    },
+                ],
+            }
+        ],
+        "otheringredients": {"ingredients": [{"name": "Gelatin"}]},
+    }
+
+    cleaned = _clean(raw)
+
+    actives = cleaned.get("activeIngredients") or []
+    names = _active_names(cleaned)
+    # Independently dosed EPA and DHA children must survive as actives.
+    assert any("eicosapentaenoic" in n or n == "epa" for n in names), names
+    assert any("docosahexaenoic" in n or n == "dha" for n in names), names
+    epa_rows = [
+        row
+        for row in actives
+        if "eicosapentaenoic" in str(row.get("name") or "").lower()
+    ]
+    assert epa_rows, "EPA child must remain a scored active"
+    assert any(row.get("score_eligible_by_cleaner") is True for row in epa_rows)
     raw = {
         "id": "fixture-other-fatty-acids-rollup",
         "fullName": "Organic Flaxseed Oil",

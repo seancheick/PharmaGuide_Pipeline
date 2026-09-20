@@ -38,10 +38,10 @@
       }
     },
     "statistics": {
-      "total_parents": 634,
-      "total_forms": 1426,
-      "total_form_aliases": 12121,
-      "parents_with_parent_aliases": 120,
+      "total_parents": 636,
+      "total_forms": 1428,
+      "total_form_aliases": 12125,
+      "parents_with_parent_aliases": 122,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -1762,7 +1762,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 634,
+    "total_entries": 636,
     "total_ingredients": 1416,
     "data_quality": {
       "review_status": "stub"
@@ -24452,6 +24452,74 @@
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
   },
+  "withaferin_a": {
+    "standard_name": "Withaferin A",
+    "category": "herbs",
+    "cui": "C0078503",
+    "forms": {
+      "withaferin a (unspecified)": {
+        "bio_score": 3.0,
+        "natural": true,
+        "score": 6.0,
+        "absorption": "low",
+        "absorption_structured": {
+          "quality": "low",
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4
+        },
+        "consumer_note": "Withaferin A is a normal ashwagandha compound, but cytotoxic in concentrated, high-withanolide extracts — a dose-dependent risk. Talk to your doctor about high-potency ashwagandha.",
+        "consumer_note_review": {
+          "by": "Quarantine remediation 2026-09-19 (clinical sign-off review packet); consumer caution text inherited from WATCH_WITHAFERIN_A",
+          "date": "2026-09-19"
+        },
+        "notes": "Standardization marker of ashwagandha (Withania somnifera) extract standardized to withaferin A content (Life Extension Longevity A.I.: 12 mg at 3% of extract). A phase-I oncology study (72-216 mg/day) reported no grade 3/4 toxicities but mild liver-enzyme elevations in 5/13 patients and poor oral bioavailability; long-term healthy-consumer safety at 12 mg is not established. This identity resolves the marker row under its botanical extract provenance instead of quarantining the product; the dose-dependent WATCH_WITHAFERIN_A safety signal is retained by the safety layer.",
+        "dosage_importance": 0.4,
+        "aliases": [
+          "Withaferin A",
+          "withaferin-a"
+        ]
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "exact",
+      "exclusions": []
+    },
+    "category_enum": "herbs",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept exists for this standardization constituent; identified via UNII/CAS instead.",
+    "data_quality": {
+      "review_status": "validated",
+      "completeness": 0.6,
+      "last_reviewed_at": "2026-09-19",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "unii": "L6DO3QW4K5",
+      "cas": "5119-48-2",
+      "pubchem_cid": 265237
+    },
+    "gsrs": {
+      "substance_name": "Withaferin A",
+      "substance_class": "withanolide",
+      "cfr_sections": [],
+      "dsld_count": 1,
+      "dsld_info_raw": "Withanolide constituent standardizing ashwagandha extract (DSLD 232718); watchlist dose-dependent safety class",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": [
+      "Withaferin A",
+      "withaferin-a"
+    ],
+    "description": "Steroidal-lactone withanolide and normal low-level constituent of ashwagandha; used as a standardization marker for high-withanolide extracts.",
+    "dosage_importance": 0.4,
+    "source": "quarantine_remediation_2026_09_19_clinical_signoff",
+    "priority": 1
+  },
   "rice_protein": {
     "standard_name": "Rice Protein",
     "category": "proteins",
@@ -36470,6 +36538,71 @@
     },
     "external_ids": {},
     "aliases": []
+  },
+  "miroestrol": {
+    "standard_name": "Miroestrol",
+    "category": "herbs",
+    "cui": "C0056493",
+    "forms": {
+      "miroestrol (unspecified)": {
+        "bio_score": 3.0,
+        "natural": true,
+        "score": 6.0,
+        "absorption": "low",
+        "absorption_structured": {
+          "quality": "low",
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4
+        },
+        "consumer_note": "Miroestrol is an estrogenic constituent used to standardize Pueraria mirifica (kwao krua) extracts. It is measured as a standardization marker, not as a standalone nutrient.",
+        "consumer_note_review": {
+          "by": "Quarantine remediation 2026-09-19 (clinical sign-off review packet)",
+          "date": "2026-09-19"
+        },
+        "notes": "Standardization marker of standardized Pueraria mirifica root extract (Solgar PM Phytogen: 16 mcg miroestrol per 80 mg extract). Long-term human safety data are insufficient; this entry exists so the marker row resolves canonically under its dosed extract parent instead of quarantining the product as an unresolved standalone identity. No efficacy claim is authored. Product-level estrogenic/endocrine caution is handled by the product safety layer.",
+        "dosage_importance": 0.3,
+        "aliases": [
+          "Miroestrol",
+          "deoxymiroestrol marker"
+        ]
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "exact",
+      "exclusions": []
+    },
+    "category_enum": "herbs",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept exists for this standardization constituent; identified via UNII/PubChem instead.",
+    "data_quality": {
+      "review_status": "validated",
+      "completeness": 0.6,
+      "last_reviewed_at": "2026-09-19",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "pubchem_cid": 5318042
+    },
+    "gsrs": {
+      "substance_name": "Miroestrol",
+      "substance_class": "phytochemical",
+      "cfr_sections": [],
+      "dsld_count": 1,
+      "dsld_info_raw": "Standardization constituent of Pueraria mirifica extract (DSLD 216948); no standalone DSLD ingredient row",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": [
+      "Miroestrol"
+    ],
+    "description": "Estrogenic coumestan constituent of Pueraria mirifica, used as a standardization marker for kwao krua root extracts.",
+    "dosage_importance": 0.3,
+    "source": "quarantine_remediation_2026_09_19_clinical_signoff",
+    "priority": 1
   },
   "isothiocyanates": {
     "standard_name": "Isothiocyanates",

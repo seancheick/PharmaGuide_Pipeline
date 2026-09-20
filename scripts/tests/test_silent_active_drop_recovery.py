@@ -110,10 +110,15 @@ def test_cleaner_keeps_peg_creatine_system_as_active() -> None:
 # ---------------------------------------------------------------------------
 
 def test_nutrition_fact_with_real_bioactive_forms_extracts_children() -> None:
-    """A `Total Omega-3 Fatty Acids` row with `forms=[DHA, EPA]` must
-    yield DHA + EPA as active rows even though the parent is itself
-    dropped as a nutrition-fact rollup. Fixes the Fish Oil cluster
-    (dsld_ids 1056, 11587, 33527, 75188, 75291, 243713)."""
+    """2026-09-20 re-baseline (Phase-3 clinical sign-off remediation): a
+    dosed `Total Omega-3 Fatty Acids 300 mg` row whose forms are ONLY
+    zero-dose DHA/EPA constituents is an omega AGGREGATE OWNER and must
+    SURVIVE with its dose (scoring_input_contract._printed_epa_dha_owner
+    contract). The earlier contract — parent dropped as a nutrition-fact
+    rollup, DHA/EPA rescued as dose-less standalone actives — is what
+    orphaned the GNC fish-oil cluster (dsld_ids 1056, 11587, 33527, 75188,
+    75291, 243713) and drove their `no dose/no eligible row` quarantines.
+    The omega dose now lives on the surviving parent row."""
     from enhanced_normalizer import EnhancedDSLDNormalizer
     n = EnhancedDSLDNormalizer()
     raw_product = {
@@ -149,13 +154,25 @@ def test_nutrition_fact_with_real_bioactive_forms_extracts_children() -> None:
     cleaned = n.normalize_product(raw_product)
     actives = cleaned.get("activeIngredients") or []
     active_names = {a["name"] for a in actives}
-    assert "Docosahexaenoic Acid" in active_names, (
-        f"DHA was lost when parent 'Total Omega-3 Fatty Acids' was dropped. "
-        f"Got active names: {active_names}. Fix B should extract forms[] "
-        f"children before returning None on nutrition-fact rows."
+    # Re-baselined 2026-09-20: the dosed aggregate owner survives; DHA/EPA
+    # stay zero-dose attributes of it (no orphaned standalone identities).
+    omega_owner = [a for a in actives if "omega-3" in str(a.get("name", "")).lower()]
+    assert omega_owner, (
+        f"Dosed omega aggregate owner was lost. Got active names: "
+        f"{active_names}. The 300 mg Total Omega-3 row must survive the "
+        f"nutrition-fact rollup skip when its forms are only DHA/EPA "
+        f"constituents."
     )
-    assert "Eicosapentaenoic Acid" in active_names, (
-        f"EPA was lost when parent was dropped. Got: {active_names}"
+    assert any(a.get("quantity") == 300 for a in omega_owner), (
+        f"Omega owner lost its dose: {[(a.get('name'), a.get('quantity')) for a in omega_owner]}"
+    )
+    assert "Docosahexaenoic Acid" not in active_names, (
+        f"DHA promoted as standalone active again — this recreates the "
+        f"dose-less orphan that quarantined the GNC fish-oil cluster. "
+        f"Got: {active_names}"
+    )
+    assert "Eicosapentaenoic Acid" not in active_names, (
+        f"EPA promoted as standalone active again. Got: {active_names}"
     )
 
 
@@ -234,13 +251,13 @@ def test_nutrition_fact_molecular_form_attributes_stay_on_dosed_omega_owner() ->
 
 
 def test_nutrition_fact_with_summary_forms_still_filters_correctly() -> None:
-    """A `Total Omega-3 Fatty Acids` row whose forms contain ONLY
-    summary children (e.g., 'Other Omega-3 Fatty Acids') must still
-    leak nothing — the extracted child must itself be filtered by the
-    nutrition-fact gate.
-
-    Guards against the Fix B path turning into a back-door for label-
-    rollup leakage."""
+    """2026-09-20 re-baseline (Phase-3 clinical sign-off remediation): a
+    `Total Omega-3 Fatty Acids 100 mg` row whose forms contain ONLY summary
+    children ('Other Omega-3 Fatty Acids') keeps the row as the dosed omega
+    AGGREGATE OWNER — a composition remainder is still an attribute of the
+    total (scoring_input_contract: 'any other printed form means the amount
+    is not only EPA/DHA'). The summary child itself must never leak through
+    as a standalone active; that anti-leak intent is unchanged."""
     from enhanced_normalizer import EnhancedDSLDNormalizer
     n = EnhancedDSLDNormalizer()
     raw_product = {
@@ -266,13 +283,18 @@ def test_nutrition_fact_with_summary_forms_still_filters_correctly() -> None:
     }
     cleaned = n.normalize_product(raw_product)
     actives = cleaned.get("activeIngredients") or []
-    rollup_names = {"total omega-3 fatty acids", "other omega-3 fatty acids"}
-    for a in actives:
-        assert a["name"].lower() not in rollup_names, (
-            f"Rollup-name {a['name']!r} leaked through Fix B's forms[] "
-            f"extraction path. The extracted child must re-run through "
-            f"the nutrition-fact classifier."
-        )
+    active_names = {str(a.get("name") or "").lower() for a in actives}
+    # Re-baselined 2026-09-20: the summary child must STILL never leak as a
+    # standalone active; the dosed owner survives and carries the dose.
+    assert "other omega-3 fatty acids" not in active_names, (
+        f"Summary/rollup child leaked through as a standalone active. "
+        f"Got: {active_names}"
+    )
+    owner = [a for a in actives if "omega-3" in str(a.get("name", "")).lower()]
+    assert owner and any(a.get("quantity") == 100 for a in owner), (
+        f"Dosed omega owner lost or dose-less: "
+        f"{[(a.get('name'), a.get('quantity')) for a in actives]}"
+    )
 
 
 def test_nutrition_fact_with_no_forms_still_returns_none() -> None:

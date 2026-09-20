@@ -2,9 +2,9 @@
   "_metadata": {
     "description": "Controlled vocabulary for ingredient FORM KEYWORDS extracted from raw label text. Single source of truth for the cleaner (extracts forms from ingredient names), the scorer (gates premium-form bonuses), and the enricher (matches probiotic delivery / postbiotic patterns). Replaces 3-5 hardcoded duplicate keyword lists previously scattered across enhanced_normalizer.py, score_supplements.py, enrich_supplements_v3.py, constants.py, and ingredient_quality_map.json aliases.",
     "schema_version": "1.0.0",
-    "total_entries": 17,
-    "last_updated": "2026-07-13",
-    "total_categories": 17,
+    "total_entries": 18,
+    "last_updated": "2026-09-19",
+    "total_categories": 18,
     "status": "ACTIVE — v1.5.0 form vocabulary refactor",
     "purpose": "Extraction patterns + canonical names for every form keyword the pipeline recognizes. Each consumer loads this once at import time, compiles regexes, and reads canonical names. Drift across consumers is no longer possible — they all read this file.",
     "consumed_by": [
@@ -58,6 +58,28 @@
         {
           "canonical": "ethyl ester",
           "patterns": ["\\bethyl\\s+esters?\\b", "\\bee\\b"]
+        }
+      ]
+    },
+    "omega3_constituent_forms": {
+      "description": "Omega-3 molecular CONSTITUENTS (EPA, DHA, DPA, ALA) disclosed as zero-dose forms children under a dosed omega total. 2026-09-19 clinical-signoff fix: _is_dosed_omega_aggregate_owner reads this category (with omega3_molecular_forms) so a dosed 'Total Omega-3 Fatty Acids 300 mg' parent whose forms are DHA/EPA survives the nutrition-fact rollup skip — the parent owns the EPA+DHA amount (scoring_input_contract._printed_epa_dha_owner contract). Constituents are attributes of the total, not deliverable formats; the total's mass is NOT transferable to any single constituent.",
+      "scoring_relevance": "omega_owner_predicate (cleaner structural guard only — no scoring bonus reads this category)",
+      "forms": [
+        {
+          "canonical": "EPA",
+          "patterns": ["\\beicosapentaenoic\\s+acid\\b", "\\bepa\\b", "\\bc20:5n-3\\b"]
+        },
+        {
+          "canonical": "DHA",
+          "patterns": ["\\bdocosahexaenoic\\s+acid\\b", "\\bdha\\b", "\\bc22:6n-3\\b"]
+        },
+        {
+          "canonical": "DPA",
+          "patterns": ["\\bdocosapentaenoic\\s+acid\\b", "\\bdpa\\b", "\\bc22:5n-3\\b"]
+        },
+        {
+          "canonical": "ALA",
+          "patterns": ["\\balpha-linolenic\\s+acid\\b", "\\bala\\b", "\\bc18:3n-3\\b"]
         }
       ]
     },

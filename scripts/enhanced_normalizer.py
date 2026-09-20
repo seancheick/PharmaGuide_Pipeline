@@ -7787,6 +7787,72 @@ class EnhancedDSLDNormalizer:
                     variant["dose_data_quality"] = dose_data_quality
 
         unit_norm_for_contract = str(unit or "").strip().lower()
+        # 2026-09-19 clinical-signoff fix (Life Extension Ginkgo 328464):
+        # ppm/ppb are contaminant/specification units — an extract's
+        # "Ginkgolic Acid <1 ppm" is a quality limit inside the extract
+        # specification (EMA refined-extract spec: max 5 ppm), never a
+        # discrete ingredient dose. 2026-09-19 team review constraint: the
+        # unit alone MUST NOT determine row role — Colloidal Silver 20 PPM
+        # (241744) legitimately uses ppm to describe the marketed material.
+        # A ppm/ppb ACTIVE row is a specification limit only when supported
+        # by structural context: (a) nested under a standardized/extract
+        # parent (the archived 328464 row carries parentBlend "Ginkgo biloba
+        # Leaf Extract"), (b) a recognized contaminant/specification
+        # constituent (ginkgolic acid is the ginkgo allergen governed by the
+        # EMA spec), or (c) an explicit comparison/limit text on the label.
+        # Trace-constituent doses in mcg/mg are NOT affected (miroestrol 16
+        # mcg, B12 500 mcg score on their own identities).
+        _spec_parent_name = str(ing.get("parentBlend") or "").strip().lower()
+        _spec_nested_under_extract = bool(ing.get("isNestedIngredient")) and (
+            "extract" in _spec_parent_name or "standardized" in _spec_parent_name
+        )
+        _spec_identity_text = " ".join(
+            str(value or "")
+            for value in (name, raw_name, ing.get("raw_source_text"))
+        ).lower()
+        _spec_contaminant_vocab = "ginkgolic" in _spec_identity_text
+        _spec_limit_text = bool(
+            re.search(
+                r"<\s*\d|≤\s*\d|\bless than\b|\bmaximum\b|\bnot more than\b",
+                _spec_identity_text,
+            )
+        )
+        _is_specification_limit_row = (
+            is_active
+            and unit_norm_for_contract in {"ppm", "ppb", "parts per million", "parts per billion"}
+            and quantity is not None
+            and isinstance(quantity, (int, float))
+            and quantity > 0
+            and (
+                _spec_nested_under_extract
+                or _spec_contaminant_vocab
+                or _spec_limit_text
+            )
+        )
+        # 2026-09-19 clinical-signoff fix (PM Phytogen 216948, Longevity A.I.
+        # 232718): a trace-quantity (mcg/mg) constituent nested under a dosed
+        # standardized botanical extract is that extract's standardization
+        # marker. DSLD models this with nestedRows under the dosed parent
+        # (Miroestrol 16 mcg / Isoflavonoids 16 mcg under "standardized
+        # Pueraria mirifica root extract 80 mg"); promoting the marker as a
+        # standalone active orphaned it from its parent identity and
+        # quarantined the whole product. The parent keeps the dose-bearing
+        # identity; the marker stays provenance-tagged to it.
+        _marker_parent_name = str(ing.get("parentBlend") or "").strip()
+        _marker_parent_dosed = bool(_marker_parent_name) and isinstance(
+            ing.get("parentBlendMass"), (int, float)
+        )
+        _is_standardization_marker_row = (
+            is_active
+            and bool(ing.get("isNestedIngredient"))
+            and _marker_parent_dosed
+            and bool(_marker_parent_name)
+            and self._parent_is_standardized_botanical_extract(_marker_parent_name)
+            and unit_norm_for_contract in {"mcg", "ug", "microgram", "micrograms", "mg", "milligram", "milligrams"}
+            and quantity is not None
+            and isinstance(quantity, (int, float))
+            and quantity > 0
+        )
         enzyme_activity_unit = unit_norm_for_contract in {
             "spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu"
         }
@@ -7824,11 +7890,52 @@ class EnhancedDSLDNormalizer:
             score_eligible_by_cleaner = False
             score_exclusion_reason = "source_descriptor"
             dose_class = "source_material_mass"
+        elif _is_specification_limit_row:
+            cleaner_row_role = "specification_limit"
+            score_eligible_by_cleaner = False
+            score_exclusion_reason = "specification_limit_contaminant"
+            dose_class = "specification_limit"
+        elif _is_standardization_marker_row:
+            # 2026-09-19 clinical-signoff fix (PM Phytogen 216948): a trace
+            # constituent nested under a dosed standardized extract is a
+            # standardization MARKER of that extract, not an independent
+            # active. The extract parent keeps the dose-bearing identity; the
+            # marker carries the label's quantitative disclosure (kept in
+            # exact_dose_text) without entering the required-primary
+            # denominator — so it can never trigger
+            # safety_recognition_without_primary_identity on the product.
+            cleaner_row_role = "standardization_marker"
+            score_eligible_by_cleaner = False
+            score_exclusion_reason = "standardization_marker_of_dosed_parent"
+            dose_class = "standardization_marker"
         elif is_structural_active_blend_total:
             cleaner_row_role = "blend_header_total"
             score_eligible_by_cleaner = False
             score_exclusion_reason = "blend_header_total"
             dose_class = "blend_total_weight"
+        elif (
+            is_active
+            and daily_value is not None
+            and isinstance(daily_value, (int, float))
+            and daily_value > 0
+            and (
+                quantity is None
+                or not isinstance(quantity, (int, float))
+                or quantity <= 0
+            )
+        ):
+            # 2026-09-19 clinical-signoff fix (Gummie Multi 13041, team
+            # instruction #6): a row with a populated %DV but zero/absent
+            # amount is an incomplete SOURCE/TRANSCRIPTION representation.
+            # The %DV proves a nutrient claim exists, but back-calculating a
+            # dose from %DV would fabricate data. The row stays in the label
+            # record as dose-less with its %DV; a reviewed label correction
+            # (product_label_corrections.json) is the only sanctioned way a
+            # dose ever appears on this row.
+            cleaner_row_role = "daily_value_no_amount"
+            score_eligible_by_cleaner = False
+            score_exclusion_reason = "daily_value_without_disclosed_amount"
+            dose_class = "zero_or_np"
         elif nested_without_individual_dose:
             cleaner_row_role = (
                 "composition_leaf"
@@ -8937,12 +9044,47 @@ class EnhancedDSLDNormalizer:
 
         from form_vocab import extract_forms as _vocab_extract_forms
 
+        if _vocab_extract_forms(
+            str(form.get("name") or ""),
+            categories=["omega3_molecular_forms"],
+        ):
+            return True
+        # 2026-09-19 clinical-signoff fix (GNC 75188/243713): zero-dose EPA/DHA
+        # molecular constituents under a dosed omega total are attributes of
+        # that total — the same contract as deliverable formats above. The
+        # scoring_input_contract already treats "Total Omega-3 300 mg" with
+        # only-EPA/DHA forms as the EPA+DHA owner
+        # (_printed_epa_dha_owner), so dropping the parent here orphaned the
+        # dose and shipped qty=0.0 constituents.
+        if _vocab_extract_forms(
+            str(form.get("name") or ""),
+            categories=["omega3_constituent_forms"],
+        ):
+            return True
+        # Composition remainders ("Other Omega-3 Fatty Acids") partition the
+        # same total mass; they describe the total like the constituents do,
+        # so the dosed parent stays the single owner rather than the row
+        # dying and the forms being expanded into dose-less actives.
         return bool(
-            _vocab_extract_forms(
-                str(form.get("name") or ""),
-                categories=["omega3_molecular_forms"],
-            )
+            re.search(r"\bother\s+omega\s*-?\s*3\b", str(form.get("name") or ""), re.IGNORECASE)
         )
+
+    def _parent_is_standardized_botanical_extract(self, parent_name: str) -> bool:
+        """True when a parent row name is a dosed standardized botanical extract.
+
+        2026-09-19 clinical-signoff fix: recognizes "standardized <botanical>
+        ... extract" naming ("standardized Pueraria mirifica root extract")
+        plus the "<botanical> extract standardized to N% <constituent>"
+        inversion. Trace constituents nested under such a parent are
+        standardization markers, not independent actives.
+        """
+        text = str(parent_name or "").strip().lower()
+        if not text or "extract" not in text:
+            return False
+        if "standardized" in text or "standardised" in text or "std." in text:
+            return True
+        # Inverted form: "Ashwagandha extract (std. to 3% Withaferin A)"
+        return bool(re.search(r"std\.?\s+to\b|standardized\s+to\b", text))
 
     def _is_dosed_omega_aggregate_owner(
         self,
@@ -10313,12 +10455,24 @@ class EnhancedDSLDNormalizer:
                     score_included
                     and ing.get("cleaner_row_role") == "blend_header_total"
                 )
+                # 2026-09-19 clinical-signoff fix: specification-limit rows
+                # (ppm/ppb contaminant limits, e.g. Ginkgolic Acid <1 ppm
+                # inside a Ginkgo extract spec) stay in the label ledger with
+                # their exact dose text but are never "scored" display rows.
+                is_specification_limit = bool(
+                    score_included
+                    and ing.get("cleaner_row_role") == "specification_limit"
+                )
                 row_score_included = bool(
-                    score_included and not is_structural_blend_header
+                    score_included
+                    and not is_structural_blend_header
+                    and not is_specification_limit
                 )
                 row_display_type = (
                     "structural_container"
                     if is_structural_blend_header
+                    else "specification_limit"
+                    if is_specification_limit
                     else "mapped_ingredient"
                     if score_included
                     else "inactive_ingredient"
