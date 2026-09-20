@@ -16,8 +16,11 @@ three named defect classes (review packet, 2026-09-19):
 2. Specification-child parsing — "<1 ppm ginkgolic acid must never become a
    separately dosed active." Ginkgolic acid on extract labels (EMA Ginkgo
    spec: max 5 ppm) is a contaminant limit inside the extract specification,
-   not an ingredient dose. A ppm/ppb-quantity active row is always a
-   specification limit.
+   not an ingredient dose. Row role is decided by STRUCTURAL context and never
+   by unit alone: a ppm/ppb-quantity active row is a specification limit only
+   when it is nested under a standardized/extract parent, names a known
+   contaminant, or carries explicit comparison/limit text. Legitimate top-level
+   ppm material (Colloidal Silver 20 PPM) stays an ordinary scoreable active.
 
 3. Standardization-marker modeling — "Pueraria mirifica -> miroestrol and
    ashwagandha extract -> withaferin A should preserve the botanical/extract

@@ -40,8 +40,24 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def _load_enriched_product(brand_dir: str, target_id: str) -> dict | None:
+    """Load one enriched product from the locally-built corpus.
+
+    ``scripts/products/`` is gitignored build output, so a clean checkout (a
+    fresh worktree or CI) holds no corpus at all. When a brand's enriched
+    directory is absent the behavior under test simply cannot be observed in
+    this environment, so the test skips — matching the repo convention already
+    used by ``test_red_yeast_rice_alias_coverage`` and
+    ``test_v4_banned_form_evidence_gate`` ("enriched corpus not present").
+
+    When the directory *is* present but the requested product is missing, the
+    caller's assertion still fires: that is a real catalog regression and must
+    never be silently skipped.
+    """
     path = ROOT / "scripts/products" / brand_dir / "enriched"
-    for f in path.glob("*.json"):
+    files = sorted(path.glob("*.json"))
+    if not files:
+        pytest.skip(f"enriched corpus not present ({brand_dir})")
+    for f in files:
         try:
             d = json.load(open(f))
         except Exception:

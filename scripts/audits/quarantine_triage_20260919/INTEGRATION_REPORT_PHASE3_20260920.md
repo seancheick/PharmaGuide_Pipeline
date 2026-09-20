@@ -87,12 +87,39 @@ for attribution.
 | 5 | Quarantine exits | **6** — all attributable, all in contract families A/B/C |
 | 6 | New quarantine entries | **0** |
 | 7 | Safety-gate changes | **0** |
-| 8 | Changes outside expected families | **0** |
+| 8 | Changes outside expected families | **0 score-bearing**; **55 representation-only** (see *Levels of "outside expected families"* below) |
 | 9 | Largest score deltas | `294897` **+24.9**; next `40603` **+2.7**; all others ≤ ±2.6 |
 
 `bookkeeping_only_changes` = **15,391** — every one a single-field inert metadata annotation
 `forms: [] → ["ALA"]` (verified score-inert: the forms field does not feed the scorer; a targeted
 scored A/B on affected products differs only in `scored_date`).
+
+### Levels of "outside expected families"
+
+Row 8 reports a **count, not a verdict**, and the two harness levels give different numbers for a
+good reason. Reporting only one of them made the audit trail look self-contradictory, so both levels
+are named explicitly:
+
+| Level | Harness | Count | Meaning |
+|---|---|---:|---|
+| **Score-bearing** | `compare_scored_arms.py` | **0** | No product outside contract families A/B/C changed score, tier, score status, quarantine state or any Safety field. This is the release-relevant number. |
+| **Representation-only** | `full_corpus_replay.py --compare` | **55** | Products whose *cleaned representation* differs outside the named families, all of them the single inert annotation `forms: [] → ["ALA"]` on flax / hemp / cold-pressed oil rows. One `changed` op each; none appears in the 15 score deltas or the 6 exits; no Safety or quarantine effect. |
+
+**Verdict unchanged: no unexpected cross-family effect.** The 55 are a superset-by-annotation of the
+same inert change already booked as `bookkeeping_only_changes`; they were promoted into the
+"outside family" bucket only because the row-level family classifier keys on the affected row's
+ingredient family, not on whether the change is score-bearing. Any future re-run should read row 8
+as `score-bearing / representation-only`, never as a single number.
+
+> **Superseded artifact.** `/tmp/audit_base_int.json` (produced 2026-09-20 00:47 by
+> `audit_cleaner_deltas.py` for the base-vs-integrated arms) is **SUPERSEDED**. It predates the final
+> replay arms and reported alarming raw counters (`outside_family` 55, `lost_dose_owner` 13,
+> `lost_safety_rows` 3, `de_eligibilized_without_provenance` 345, `eligibility_changes` 115) that
+> were traced to two keying artifacts: (a) the row key includes the canonical id, so an intended
+> identity remap reads as a lost row, and (b) the intended `daily_value_no_amount` / marker /
+> specification re-roles read as unexplained de-eligibilisation. It must not be cited as evidence.
+> The authoritative replay results are §C above (base vs `095d27a1`) and
+> `CLOSURE_REPORT_PHASE3_20260920.md` (the evidence-seam increment, `095d27a1` → closure tip).
 
 ### Representation changes — exact reconciliation (corpus-wide row roles)
 
@@ -333,9 +360,9 @@ finding. No waiver has been recorded by an owner.
 | Known data loss | **NO** | `raw_actives_count` 189,639 → 189,639 (Δ 0); 58 display rows removed, offset by +62 ledger omissions with source paths |
 | Fabricated doses | **NO** | no synthesized/equal-split/inferred amounts; parent quantities never transferred downward |
 | Lost Safety signals | **NO** | 0 Safety-gate changes; `232718` CAUTION + `B0_WATCHLIST_SUBSTANCE` identical before/after |
-| New false clears | **NO** | 6 exits, each mapped to a named contract family A/B/C; 0 outside expected families |
+| New false clears | **NO** | 6 exits, each mapped to a named contract family A/B/C; 0 score-bearing outside expected families (55 representation-only, inert `forms` annotation only) |
 | New false quarantines | **NO** | 0 new quarantine entries |
-| Unexpected cross-family changes | **NO** | `outside_expected_families` = 0 |
+| Unexpected cross-family changes | **NO** | score-bearing `outside_expected_families` = **0**; representation-only = 55 (single inert `forms: [] → ["ALA"]` annotation; no score, Safety or quarantine effect) |
 | New unresolved regressions | **NO** | failure set identical to base; pass delta +20 |
 
 ---

@@ -1,0 +1,214 @@
+{
+  "artifact": "phase3_closure_dispositions_20260920",
+  "generated_by": "lead engineering closure session",
+  "date": "2026-09-20",
+  "baseline": {
+    "main_at_session_start": "ad577f49",
+    "validated_phase3_integration": "095d27a1",
+    "accepted_remediation_commits": ["77cbb38c", "7ebf6c46"],
+    "evidence_seam_commits": ["31200ee8", "f1410ee3"]
+  },
+  "method_notes": [
+    "Frozen source records were read directly from $HOME/Downloads/PharmaGuide_Datasets/staging/brands (15,414 raw DSLD records).",
+    "Live-vs-frozen classification used scripts/audits/quarantine_triage_20260919/compare_snapshot_live.py against api.ods.od.nih.gov/dsld/v9/label/{id}.",
+    "Per-product pipeline behaviour was read from the same-input A/B arms (scored_records.jsonl) and, where a row-level mechanism had to be pinned, from single-product clean+enrich probes of the frozen record.",
+    "No dose, unit or form was invented anywhere in this artifact."
+  ],
+
+  "resolved_this_session": [
+    {
+      "dsld_id": "12300",
+      "product": "Fem-Mend Synergistic Blend",
+      "brand": "Nature's Way",
+      "was": "needs_info",
+      "now": "intentional_non_scoreable",
+      "owner": "none (by design)",
+      "source_verified": true,
+      "live_vs_frozen": "unchanged_since_snapshot",
+      "evidence": "Frozen record declares 'Proprietary Blend 860 mg' with zero nested rows; the eight botanicals are carried only as zero-dose 'forms' attributes of the blend header (Blessed Thistle, Cayenne Pepper, Cramp Bark, Ginger, Goldenseal, Pomegranate, Red Raspberry, Uva Ursi). No component dose exists on the label, so no component can be scored and none may be inferred.",
+      "pipeline_state": "not_scored / blocked_by_completeness_gate / incomplete_product_data",
+      "note": "The gate is behaving correctly. Completing the block would require inventing per-herb doses."
+    },
+    {
+      "dsld_id": "254396",
+      "product": "Vitamin B12 (Cyanocobalamin)",
+      "brand": "BulkSupplements.com",
+      "was": "needs_info",
+      "now": "intentional_non_scoreable",
+      "owner": "none (by design)",
+      "source_verified": true,
+      "live_vs_frozen": "unchanged_since_snapshot",
+      "evidence": "Frozen record declares a single row 'Vitamin B12' with quantity 0 NP and a serving size of '1 Not Present' (no serving unit, no maxDailyServings). This is bulk material sold by weight, not a dosed tablet.",
+      "pipeline_state": "not_scored / blocked_by_completeness_gate / no_scoreable_active_dose",
+      "note": "Matches the already-approved E1 disposition for 252767 / 252769 / 254394 / 254404 / 254415 (dose-less bulk B12). The clinical reviewer's finding that these are genuinely dose-less bulk powders is confirmed on the record itself, not inferred from neighbouring SKUs."
+    },
+    {
+      "dsld_id": "254413",
+      "product": "Vitamin B12 (Methylcobalamin)",
+      "brand": "BulkSupplements.com",
+      "was": "needs_info",
+      "now": "intentional_non_scoreable",
+      "owner": "none (by design)",
+      "source_verified": true,
+      "live_vs_frozen": "unchanged_since_snapshot",
+      "evidence": "Identical shape to 254396: 'Vitamin B12' 0 NP, serving size '1 Not Present', no maxDailyServings.",
+      "pipeline_state": "not_scored / blocked_by_completeness_gate / no_scoreable_active_dose"
+    },
+    {
+      "dsld_id": "75291",
+      "product": "Fish Oil Lemon",
+      "was": "needs_info",
+      "now": "fixed_mechanically after direct source verification",
+      "owner": "none",
+      "live_vs_frozen": "unchanged_since_snapshot",
+      "note": "Already ratified by the integration owner (§I.1 of INTEGRATION_REPORT_PHASE3_20260920.md). Re-verified unchanged this session; not reopened."
+    }
+  ],
+
+  "remaining_external": [
+    {
+      "item": "E2 unit-corruption cases",
+      "ids": ["223563", "223572", "231334", "231335", "263865", "328644"],
+      "classification": "source_unit_defect_upstream_persistent",
+      "owner": "source/clinical (printed label required)",
+      "live_vs_frozen": "unchanged_since_snapshot for all six",
+      "engineering_conclusion": "All six are unit-string defects in the published DSLD record. No refresh resolves them: the live record is byte-identical on the compared fields. Engineering cannot establish the printed unit without the label image, and PharmaGuide's contract forbids plausibility-based unit repair, so no correction receipt may be authored yet.",
+      "per_product_evidence": [
+        {
+          "dsld_id": "223563",
+          "declared": "Vitamin A = 900 mg RAE [60%DV]; Vitamin D3 = 100 mg [660%DV]",
+          "reasoning": "900 mg RAE would be 900,000 mcg RAE. The value 900 is consistent with a 1500 mcg RAE reference (900 / 0.60), so the numeric value is corroborated by the record's own %DV and only the unit glyph is wrong. The Vitamin D3 row is NOT corroborated: 100 mcg against a 20 mcg DV is 500%, not the declared 660% (132 mcg would be). Value and unit are both uncertain there.",
+          "safe_correction": "none (value ambiguity on the Vitamin D3 row)"
+        },
+        {
+          "dsld_id": "223572",
+          "declared": "Vitamin A = 900 mg RAE [60%DV]; Vitamin D3 = 50 mg [330%DV]",
+          "reasoning": "Same family as 223563 (exactly 2x the Vitamin D3 amount). Vitamin A unit is wrong; Vitamin D3 value is again uncorroborated.",
+          "safe_correction": "none"
+        },
+        {
+          "dsld_id": "231334",
+          "declared": "Vitamin A = 6000 mcg DFE [667%DV]; Vitamin E = 134 mcg [893%DV]",
+          "reasoning": "Vitamin A: 6000 / 6.67 = 900 mcg RAE, exactly the published Vitamin A RAE DV for adults, so value and %DV agree and only the DENOMINATION is wrong (DFE is a folate unit, not a Vitamin A unit). Vitamin E: 134 / 8.93 = 15.0 mg, exactly the published Vitamin E DV of 15 mg, so the value and %DV agree and the unit should be mg, not mcg.",
+          "cross_record_corroboration": "Sibling record 263865 (same Solgar Formula VM-2000 formula) declares the same Vitamin E value 134 with the unit 'mg' at the same 893%DV, which independently establishes the correct unit for the family.",
+          "safe_correction": "candidate only (unit mcg, Vitamin E unit mg) pending printed-label confirmation; %DV-derivation plus a sibling record is strong but is not the printed source"
+        },
+        {
+          "dsld_id": "231335",
+          "declared": "Vitamin A = 6000 mcg DFE [667%DV]; Vitamin E = 134 mcg [893%DV]",
+          "reasoning": "Identical to 231334.",
+          "safe_correction": "candidate only, as above"
+        },
+        {
+          "dsld_id": "263865",
+          "declared": "Vitamin A = 6000 mcg DFE [667%DV]; Vitamin E = 134 mg [893%DV]",
+          "reasoning": "Vitamin E is ALREADY correct here (mg), which is the corroboration used for 231334/231335. Only the Vitamin A denomination (mcg DFE instead of mcg RAE) remains wrong.",
+          "safe_correction": "candidate only (denomination mcg RAE) pending printed-label confirmation"
+        },
+        {
+          "dsld_id": "328644",
+          "declared": "Vitamin A = 1300 mg RAE [100%DV]",
+          "reasoning": "1300 mcg RAE is exactly the pregnancy/lactation Vitamin A DV (100%DV) and the product is a prenatal; 1300 mg RAE would be 1.3 g. The value is corroborated by the record's own %DV.",
+          "safe_correction": "candidate only (mcg RAE) pending printed-label confirmation"
+        }
+      ],
+      "why_not_corrected": [
+        "Team instruction #13: correction receipts require the printed source to establish the unit unambiguously.",
+        "No heuristic mg<->mcg conversion is permitted, even where physiology makes the intent obvious.",
+        "At least one case (223563/223572 Vitamin D3) has an uncorroborated VALUE, so a unit-only receipt would still be wrong.",
+        "Existing regression coverage already pins the prohibition: test_clinical_signoff_engineering_fixes_20260919::TestNoFabricatedDoses::test_corrupted_unit_never_auto_converted."
+      ]
+    },
+    {
+      "item": "Vitamin-A form/completeness gap (Bulk 1340)",
+      "ids": ["228823", "243799", "243808", "243812", "243815"],
+      "classification": "unresolved_form_provenance (NOT data loss)",
+      "owner": "source/clinical (printed label form declaration)",
+      "root_cause_pinned": true,
+      "evidence": "Single-product probe of frozen record 228823 through the closure cleaner+enricher on the closure code. The Vitamin A row is fully retained and assessed: cleaner_row_role 'active_scorable', score_eligible_by_cleaner true, canonical_id 'vitamin_a', quantity 3000.0 mcg, dose_class 'therapeutic_mass'. Its typed dose assessment reads: conversion_rule_id 'vitamin_a_unknown', conversion_status 'converted', normalized_value 3000.0 normalized_unit 'mcg', ul_assessment_status 'unresolved_form', ul_value null, ul_unit 'mcg RAE', pct_ul null, reason_code 'unknown_vitamin_form', readiness 'incomplete'.",
+      "failure_path": "The label declares Vitamin A with no form (no 'Form: as ...' note, so retinol vs beta-carotene is undetermined). Without a form the engine cannot select the retinol-RAE upper limit, so it refuses to make a UL claim and marks the dose assessment incomplete. That single incomplete assessment is what lands 'ingredientRows[5]' in assessment_readiness.dose.incomplete_source_row_refs (27 of 28 material rows assessed) and blocks the product on the completeness gate.",
+      "engineering_conclusion": "Correctly conservative, not a defect. The quantity, unit and %DV are all preserved and mutually consistent (3000 mcg vs 334%DV and 3417 mcg vs 380%DV both resolve against a 900 mcg RAE reference). No amount is discarded and no form is invented. The only missing input is the label's own form declaration, which engineering cannot supply.",
+      "recommended_correction": "Reviewed form-provenance determination for the Vitamin A row from the printed label/manufacturer source. Do NOT relax the form requirement and do NOT default to retinol.",
+      "products_affected_readiness": "all five Bulk 1340 SKUs carry incomplete_source_row_refs ['ingredientRows[5]'] (= the Vitamin A row)",
+      "independent_findings_also_present": "228823 / 243799 / 243808 / 243812 carry a genuine dose-safety UL exceedance (niacin and/or magnesium) that is untouched by the Vitamin-A question; 243815 is DOSE_OVER_UL_CAUTION. Fixing Vitamin A must not clear them."
+    },
+    {
+      "item": "Folate parent-total/form-breakdown double count (3 residual shapes)",
+      "ids": ["201420", "243808", "246430"],
+      "classification": "pre_existing_known_behavior",
+      "owner": "dose-safety / folate de-duplication owner",
+      "pre_existing_proof": "Folate flags are byte-identical at base 124982a0 and at 095d27a1 for all three: pct_ul 161.55/257.29/140.79, penalized True/True/False, state confirmed_over_threshold. The remediation neither introduced nor changed them.",
+      "blast_radius": "Corpus-wide there are 58 folate dose-safety flags. 55 are correctly reconciled as parent-total + form-breakdown duplicates (state not_applicable, reason folate_parent_total_plus_form_breakdown_duplicate). Only 3 are unreconciled.",
+      "the_three_shapes": [
+        {
+          "dsld_id": "201420",
+          "product": "Male Multiple (Solgar)",
+          "source_shape": "Folic Acid 1333 mcg DFE [333%DV] with one nested child Folic Acid 800 mcg",
+          "why_unreconciled": "The declared total row is named 'Folic Acid', which is not in _FOLATE_PARENT_NAMES ({folate, vitamin b9 folate, vitamin b9}), so the recognizer treats both rows as forms and sums them (161.5%).",
+          "other_genuine_ul_findings": ["Niacin 171.4%", "Magnesium 114.3%", "Zinc 125.0%"],
+          "material_impact": "low - the product is independently over-UL on three other nutrients and remains CAUTION either way"
+        },
+        {
+          "dsld_id": "246430",
+          "product": "PreNatal Nutrients (Pure Encapsulations)",
+          "source_shape": "Folate 1667 mcg DFE [417%DV] with one nested child Folic Acid 400 mcg",
+          "why_unreconciled": "1667 = 1000 mcg L-5-MTHF (1000 mcg DFE) + 400 mcg folic acid x1.7 (680 mcg DFE); the nested child is a partial breakdown already inside the declared total, but the recognizer requires the form rows to FULLY account for the parent (|parent - form_sum| within tolerance), which a subset cannot satisfy. Engine sums 1667 + 680 = 2347 -> 140.8%.",
+          "other_genuine_ul_findings": [],
+          "material_impact": "highest of the three - the folate flag is the product's ONLY dose-safety finding, on an otherwise 85.9-scoring prenatal, so this is a false-positive over-limit state. It is NOT penalized (penalized=false) and the product is not quarantined, but it does set safety_verdict CAUTION."
+        },
+        {
+          "dsld_id": "243808",
+          "product": "Bulk 1340 Strawberries & Cream (GNC)",
+          "source_shape": "Folate 725/667 mcg DFE with TWO sibling children Folic Acid 435 mcg and Folic Acid 400 mcg",
+          "why_unreconciled": "The two sibling children are the same declared form split across serving-size variants (DSLD emits one row per variant here, whereas sibling products emit one row carrying both variants). Both are converted (x1.7 x2 servings = 1479 and 1360) and SUMMED to 2839 against a parent of 1450, giving 4289 mcg DFE total -> 257.3%, penalized critical.",
+          "other_genuine_ul_findings": ["Niacin 285.7%", "Magnesium 125.7%"],
+          "material_impact": "low - independently over-UL on niacin and magnesium, so the product remains correctly quarantined/gated regardless"
+        }
+      ],
+      "recommended_fix_shape": "Complete the existing parent-total + form-breakdown contract rather than widen it to other nutrients: (a) recognise a declared-total row by exposure basis / DFE unit rather than by a parent-name vocabulary that omits 'Folic Acid'; (b) treat a nested form row of the same canonical nutrient as part of the declared total even when it is a SUBSET of it; (c) collapse sibling form rows that carry the same form name and basis to one exposure instead of summing them. Each sub-change flips a Safety outcome for a named product, so it belongs in one reviewed, tested change with these three as its fixtures.",
+      "why_not_fixed_in_this_closure": [
+        "It is pre-existing behaviour, not a regression of this remediation (identical at base), so it is outside the remediation's regression responsibility in the same way the static-audit finding is.",
+        "It is a change to Safety semantics in the module whose own docstring states that widening the rule 'is a separate, validated change'.",
+        "Three structurally different signatures require three separate justifications; two of them sit within 0.05 percentage points of the existing reconciliation tolerance (228823 passes at 26/1334 = 1.95% against a ~2% limit), so an opportunistic edit risks silently changing which products trip a UL gate.",
+        "No product's disposition is masked either way: 201420 and 243808 are independently and genuinely over-UL, and 246430's flag is informational (not penalized) with the product still scored."
+      ],
+      "existing_coverage": "scripts/tests/test_folate_dose_basis_reconciliation.py and scripts/tests/test_dose_safety_shared_contract.py own this contract; the follow-up must extend them."
+    },
+    {
+      "item": "Standalone orally marketed EDTA x16",
+      "ids": ["252358", "252426", "253331", "253335", "253336", "253339", "253350", "253357", "311259", "311260", "311261", "311262", "312449", "312450", "312451", "312452"],
+      "classification": "safety_policy_disposition",
+      "owner": "Safety policy / licensed pharmacist",
+      "note": "Unchanged from the integration report. Engineering has established the source/identity representation (standalone orally marketed products with explicit directions such as 500 mg EDTA disodium daily; calcium disodium and disodium edetate remain distinct identities). The BLOCKED/hidden policy call is external and is not engineering's to make. No engineering work remains."
+    },
+    {
+      "item": "Pre-existing static source-of-truth finding",
+      "id": "V4_IQD_INGREDIENTS_FALLBACK",
+      "classification": "resolved_by_evidence_seam",
+      "resolved_by": "31200ee8 (canonical assessable-evidence contract in scoring_input_contract.get_assessable_evidence_ingredients)",
+      "verification": "scripts/audit_source_of_truth_contract.py scoring-static now prints 'OK: scoring-static source-of-truth audit passed' on the closure tip, and the raw finding count is 0. The forbidden iqd.get(\"ingredients\") read no longer exists in scoring_v4/modules/generic_evidence.py.",
+      "note": "The replacement is deterministic and conservative: generic_evidence now consumes the canonical contract, which owns all structural exclusions and resolves identities from the IQM rather than silently falling back to raw rows."
+    }
+  ],
+
+  "standardization_marker_review": {
+    "rule": "enhanced_normalizer._is_standardization_marker_row (+ _parent_is_standardized_botanical_extract): a nested row with a positive mcg/mg quantity whose parent name is a standardized botanical extract AND whose parent has a declared mass is a standardization MARKER of that parent, not an independent active.",
+    "verdict": "structurally correct and retained; no narrowing required",
+    "why_structural": "The predicate keys on nesting + a dosed parent + parent-naming semantics + a declared constituent quantity. It contains no product-ID or nutrient allowlist, and there is an explicit negative control (a nested constituent under a non-standardized extract stays scoreable).",
+    "products": [
+      {"dsld_id": "216948", "product": "PM Phytogen Complex", "phase3_target": true, "constituents": ["Miroestrol 16 mcg", "Isoflavonoids 16 mcg"], "parent": "standardized Pueraria mirifica root extract 80 mg", "score_a_b": [null, 49.6], "status_a_b": ["not_scored/blocked_by_completeness_gate", "scored"], "safety_a_b": ["CAUTION / B0_HIGH_RISK_SUBSTANCE", "CAUTION / B0_HIGH_RISK_SUBSTANCE"]},
+      {"dsld_id": "232718", "product": "Longevity A.I.", "phase3_target": true, "constituents": ["Withaferin A 12 mg"], "parent": "Ashwagandha extract (std. to 3% withaferin A)", "score_a_b": [null, 46.2], "status_a_b": ["not_scored/blocked_by_completeness_gate", "scored"], "safety_a_b": ["CAUTION / B0_WATCHLIST_SUBSTANCE", "CAUTION / B0_WATCHLIST_SUBSTANCE"]},
+      {"dsld_id": "216776", "product": "Herbal Complex", "phase3_target": false, "constituents": ["Triterpene Glycosides 0.5 mg (0.5%)", "Alkaloids 3 mg (3%)", "Polyphenols 15 mg (15%)", "Echinacosides 4 mg (4%)", "Glycyrrhizin 1 mg (<1%)", "Polyphenols 30 mg (30%)", "Oleuropein 6 mg (6%)"], "parent": "six 'standardized <botanical> extract' parents at 100 mg each", "score_a_b": [72.1, 74.0], "safety_a_b": ["SAFE", "SAFE"]},
+      {"dsld_id": "44423", "product": "Deglycyrrhized Licorice Root Extract", "phase3_target": false, "constituents": ["Glycyrrhizin 3 mg (<1%)"], "parent": "standardized Deglycyrrhized Licorice extract 250 mg", "score_a_b": [66.5, 68.4], "safety_a_b": ["SAFE", "SAFE"]},
+      {"dsld_id": "77254", "product": "Male Multiple", "phase3_target": false, "constituents": ["Ginsenosides 2.5 mg (10%)", "Ginsenosides 2 mg (8%)"], "parent": "standardized American Ginseng extract 25 mg + standardized Korean Ginseng extract 25 mg", "score_a_b": [68.2, 68.4], "safety_a_b": ["CAUTION / B0_WATCHLIST_EXCIPIENT_WARNING_ONLY", "CAUTION / B0_WATCHLIST_EXCIPIENT_WARNING_ONLY"]}
+    ],
+    "conclusion": "Every affected constituent is a percentage disclosure of a dosed standardized extract on the same label (the parent's % note matches the child amount exactly: 3% of 100 mg = 3 mg, 6% of 100 mg = 6 mg, etc.). De-eligibilising the constituent while the parent keeps the dose is consistent with the scoring model and with the structural treatment already accepted for omega constituents. Safety is unaffected in all five products: every Safety field, signal and verdict is byte-identical between arms. The three non-target products move by +1.9 / +1.9 / +0.2 points, all tier-preserving.",
+    "regression_added": "scripts/tests/test_standardization_marker_generalization.py (5 tests) pins the non-target cases, the preserved disclosure quantities, the parent-keeps-the-dose property, and the non-standardized-extract negative control."
+  },
+
+  "omission_reason_debt": {
+    "status": "recorded technical debt, not a Phase-3 blocker",
+    "detail": "omission_reason is a closed enum (nutrition_fact_not_applicable, decorative_or_header_text, duplicate_source_line, empty_source_text, unsupported_source_structure). Omega child rows subordinate to a dosed parent reuse duplicate_source_line because no enum value names 'subordinate to dosed parent / constituent without independent dose'.",
+    "action_taken": "left unchanged; broadening this contract is explicitly out of scope for the closure"
+  }
+}
