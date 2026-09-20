@@ -1,6 +1,7 @@
 # PharmaGuide — pharmacist review packet (Phase-3 engineering closed, source corrections applied)
 
 Date: 2026-09-20 · For: licensed pharmacist release authority
+Landed as: **`de260e3c`** on `origin/main` (Phase-3 source resolution)
 Supersedes: `PHARMACIST_PACKET_PHASE3_SOURCE_RESOLVED_20260920.md` (source-resolution draft)
 
 **Scope: three policy decisions and one release signature.** Every source/data
@@ -17,7 +18,7 @@ research.
 | Domain | Status |
 |---|---|
 | Source verification | **COMPLETE** |
-| Source corrections | **APPLIED** (10 corrections across 10 products) |
+| Source corrections | **APPLIED** — 9 product corrections applied and replay-verified, plus one structural folate parent-total contract change. 10 products carry a correction receipt; the tenth (`201420`) is reported and **not** applied (see §4). |
 | Engineering validation | **COMPLETE** (fast tier 0 failed; static source-of-truth audit 0 findings) |
 | Frozen-corpus replay | **COMPLETE** (15,414 records per arm, 0 crashes, every delta classified) |
 | EDTA product policy | **PHARMACIST DECISION** |
@@ -38,7 +39,7 @@ Products with an undefined disposition: **0**
 | 12300 Fem-Mend proprietary blend | The label declares only a 860 mg blend total with zero component doses. Withheld on source insufficiency — no dose may be invented. |
 | Vitamin-A form on Bulk 1340 (228823, 243799, 243808, 243812, 243815) | The printed vitamin/mineral blend names `Natural beta-Carotene` as the only vitamin A source. Form provenance is **recorded**; the row is not defaulted to retinol. |
 | Vitamin-A UL applicability for provitamin A | **Not a clinical judgement.** NIH ODS states the Vitamin A UL applies to preformed vitamin A only, and beta-carotene and other provitamin-A carotenoids have no established UL. PharmaGuide already implements this (`beta_carotene_no_established_ul`; `ul_applies: false` on the supplemental beta-carotene conversion rule), and regression coverage pins it. |
-| Folate source duplication (243808, 246430, 201420) | Source structure established (two printed preparation-basis columns; parent DFE total with its own included form breakdown). The parent-total contract was completed so a declared DFE total is not charged again for the breakdown it includes, and sibling rows that are one printed form split across serving bases collapse instead of summing. |
+| Folate source duplication (243808, 246430, 201420) | Source structure established (two printed preparation-basis columns; parent DFE total with its own included form breakdown). The parent-total contract was completed so a declared DFE total is not charged again for the breakdown it includes, and sibling rows that are one printed form split across serving bases collapse instead of summing. `243808` and `246430` are reconciled by that contract and confirmed on the frozen replay. `201420` is **not** reconciled: its declared-total row is mis-named `Folic Acid`, byte-identical to its own child row, so a row-wise rename cannot be scoped without renaming the child too. It stays with the dose-safety/folate owner as a pre-existing residual. **Not a question for you.** |
 | Serrapeptase 269360 | The printed Supplement Facts panel declares `Serrapeptase Enzyme 40,000 SPU` with its own SPU footnote; the amount is restored from the panel, never from the product name. |
 | DSLD nesting / label-version questions | Resolved against sibling label records and the archived label images; no open item remains. |
 
@@ -99,8 +100,9 @@ discrete enzyme identities inherited the evidence credit of a collapsed multi-en
 `digestive_enzymes` identity — unsupported evidence transfer. Consequences, measured on the
 frozen 15,412-record replay: 28 score changes, all within the discrete-enzyme /
 probiotic-evidence family and all traced to that single removal; 0 Safety-field changes;
-0 quarantine exits; 1 new quarantine (`269360` Serrapeptase — now source-resolved above, its
-printed panel declares 40,000 SPU). Discrete enzyme identities now sit in a neutral/unrated
+0 quarantine exits; 1 new quarantine (`269360` Serrapeptase — its printed panel declares
+40,000 SPU, which the source-resolution phase has now restored; the product's residual
+quarantine is an **identity-scoring** condition, not a missing dose). Discrete enzyme identities now sit in a neutral/unrated
 Formulation state because no per-enzyme evidence applies.
 
 **Decision:** accept neutral/unrated for discrete enzyme identities, or define the rating
@@ -113,13 +115,20 @@ treatment you want (for example an explicit "not individually rated" presentatio
 Sign or withhold according to PharmaGuide's release governance, using the closed Phase-3
 engineering record:
 
-- static source-of-truth audit: **0 findings**
-- fast tier at the final candidate: see `FAST_TIER_PHASE3_SOURCE_20260920.md`
-- frozen corpus replay: **15,414 records per arm, 0 crashes**, every changed product mapped
-  to a reviewer-signed source correction
-- source resolution: **10 corrections applied, 9 records confirmed correct, 3 explicitly
-  withheld, 3 intentional non-scoreable, 1 not authorable through the per-row mechanism —
-  0 unresolved source/data items**
+- static source-of-truth audit: **0 findings** (`scoring-static`, re-run at `de260e3c`)
+- fast tier at the landed tip: **15,868 passed / 0 failed / 198 skipped** (clean detached
+  worktree at the landed commit; `FAST_TIER_CLOSURE_20260920.md` is the earlier
+  closure-phase record)
+- frozen corpus replay: **15,414 row-level / 15,412 scored records per arm, 0 crashes**, every
+  changed product mapped to a reviewer-signed source correction — 0 score changes,
+  9 conclusion changes, 8 quarantine exits, 0 new quarantine entries, 2 Safety changes,
+  **0 changes outside the intended family**
+- source resolution, receipt-ledger basis (defined in `COUNT_BASIS_20260920.md`):
+  **11 correction items, 6 records confirmed correct, 3 explicitly withheld,
+  3 intentional non-scoreable** — 23 receipt items, **0 unresolved source/data questions**
+- of the 10 products carrying a correction receipt, **9 are applied and replay-verified**
+  and **1 (`201420`) is reported and not applied** (reason above). That is an engineering
+  follow-up against a pre-existing defect, **not** a decision for you.
 
 **Outstanding after your decisions:** nothing engineering-resolvable. The only items that
 remain are the three decisions above and this signature.
@@ -129,7 +138,34 @@ remain are the three decisions above and this signature.
 ## Reviewer complete? A quick check
 
 - Did anything in this packet ask you to look up a label, a unit, a dose or a DSLD id? **No.**
-- Does any item below remain marked TBD, stale, `needs_info`, "investigate later" or
-  "correction not applied"? **No.**
+- Does any item below remain marked TBD, stale or `needs_info`? **No.** One receipt is named
+  as **not applied** (`201420`, §4) — it is a pre-existing folate residual with an assigned
+  engineering owner, not an open question and not a decision for you.
+- **You may approve with specified products held.** Approval does not require every product to
+  score. `231334` / `231335` / `263865` have no authorable printed denomination and stay
+  explicitly withheld; `201420` stays a documented residual. The release can be signed with
+  those held.
 - Is the provitamin-A UL question on your list? **No** — it is a deterministic rule
   application with an NIH citation, already implemented and test-pinned.
+
+---
+
+## Reconciliation of the counts in this packet
+
+The three records that summarise this phase previously carried different totals because the
+denominators were never stated: a receipt *item* (one row per product-and-issue), a
+corrected *product*, and a *measured replay delta* are three different things. The canonical
+definitions and the enumeration behind every number here are in
+`COUNT_BASIS_20260920.md`; verified by
+`python3 scripts/audits/quarantine_triage_20260919/source_resolution_20260920/count_reconciliation_20260920.py`.
+
+| Basis | Corrections | Confirmed correct | Withheld | Non-scoreable | Total |
+|---|---:|---:|---:|---:|---:|
+| Receipt items (ledger) | **11** | **6** | **3** | **3** | **23** |
+| Distinct products | **10** (9 applied + 1 not applied) | 6 | 3 | 3 | — |
+| Measured on the frozen replay | 9 products changed | — | — | — | — |
+
+The item and product totals differ only because `243808` carries two separate receipts — a
+vitamin-A form correction (§C) and a folate structural correction (§D). No unexplained
+discrepancy remains, and the one receipt that is **not** applied (`201420`) is named rather
+than folded into a favourable total.

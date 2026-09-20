@@ -12,6 +12,8 @@ pharmacist receives only clinical/policy decisions.
 | `PHARMACIST_PACKET_PHASE3_FINAL_20260920.md` | **The packet to send.** Three policy decisions plus release signature, no source research. Supersedes the source-resolution draft. |
 | `PHARMACIST_PACKET_PHASE3_SOURCE_RESOLVED_20260920.md` | The source-resolution draft packet, retained as history. Its §4 (provitamin-A UL) is no longer a pharmacist decision. |
 | `LANE_PROOF_20260920.json` | `receipt -> correction layer -> cleaned lane row` for every product, produced by `../prove_source_corrections_20260920.py`. |
+| `COUNT_BASIS_20260920.md` | **How this phase is counted.** Three published summaries used three different denominators; this fixes the definitions (receipt items / distinct products / measured replay) and the authoritative totals. |
+| `count_reconciliation_20260920.py` | Derives every count from the receipts ledger and cross-checks the applied set against the frozen replay. `--check` asserts the published totals. Pinned by `scripts/tests/test_phase3_source_count_basis_20260920.py`. |
 
 ## Applied corrections (2026-09-20)
 

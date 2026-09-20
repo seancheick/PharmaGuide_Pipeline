@@ -33,7 +33,7 @@ Column meanings:
 | 228823, 243799, 243808, 243812, 243815 | Vitamin-A form/completeness gap | Vit A row with **no form** → `unknown_vitamin_form`, `unresolved_form`, one incomplete source row, product gated | identical (no form upstream either) | label's OTHER INGREDIENTS vitamin/mineral blend names **`Natural beta-Carotene`** as the vitamin A source; row %DV 334 %/380 % resolves on the ~900 mcg RAE basis | `source_verified_correction` — record the form as natural beta-carotene (provitamin A) with the label citation; never default to retinol | No for the data question; the **UL/applicability policy** for provitamin A goes in the pharmacist packet |
 | 228823, 243799, 243812, 243815 | Bulk 1340 folate | Folate parent + folic-acid child, values paired by serving basis | identical | two printed columns (`360 g in Water` / `360 g in 2% Milk`): `667 mcg DFE (400 mcg Folic Acid)` ‖ `725 mcg DFE (435 mcg Folic Acid)` | `source_record_correct_no_change` — representation already pairs by basis | No |
 | 243808 | Bulk 1340 folate (duplication) | Folate `[(725),(667)]` **plus two separate sibling child rows** `Folic Acid 435` and `Folic Acid 400` | identical | two printed columns, one folic-acid child each | `source_verified_correction` — collapse the two sibling child rows into one form row carrying both basis values (435 milk / 400 water); **14 sibling label records of the same panel already represent it that way** | No |
-| 201420 | folate residual (name) | declared-total row **named `Folic Acid`** 1333 mcg DFE + nested `Folic Acid` 800 mcg | identical | scan not legible for this row | `source_verified_correction` — rename the declared-total row to `Folate`, keep 800 mcg as its nested breakdown (**sibling 201405 of the same panel transcribes it exactly so**) | No |
+| 201420 | folate residual (name) | declared-total row **named `Folic Acid`** 1333 mcg DFE + nested `Folic Acid` 800 mcg | identical | scan not legible for this row | `source_verified_correction` — rename the declared-total row to `Folate`, keep 800 mcg as its nested breakdown (**sibling 201405 of the same panel transcribes it exactly so**) — **REPORTED, NOT APPLIED**: the declared-total row and its child share the identical raw text `Folic Acid`, so the row-wise mechanism cannot scope the rename to the total alone. Retained by the dose-safety/folate owner as a pre-existing residual. | No |
 | 246430 | folate residual (subset) | `Folate 1667 mcg DFE` + nested `Folic Acid 400 mcg` | identical | scan partial/unreadable | `source_record_correct_no_change` — 1667 = 1000 mcg L-5-MTHF + 400×1.7 (680) DFE, so the child is inside the parent total; siblings appear both with and without the child | No |
 | 269360 | Serrapeptase quarantine | `Serrapeptase Enzyme` **0 NP** (form Serratia sp.) | identical | **archived scan reads `Serrapeptase Enzyme 40,000 SPU**` with the label's own footnote `**SPU - serratiopeptidase activity units`**; manufacturer panel states the same | `source_verified_correction` — record the declared 40,000 SPU activity from the panel (the DSLD record already carries the SPU footnote as a statement, and sibling label 25222 is transcribed with `40000 Unit(s)`) | No |
 | EDTA ×16 | Safety/representation | identity + evidence representation complete; products are standalone orally marketed EDTA | identical | manufacturer (BulkSupplements) label states oral daily directions (500 mg EDTA disodium / 500 mg calcium disodium EDTA) | `representation_correct_no_change` — calcium disodium and disodium must stay distinct identities | **Policy only** (hidden/BLOCKED vs scored) |
@@ -44,13 +44,26 @@ Column meanings:
 
 ## Counts
 
-| Final data disposition | Rows |
+Counted on the **receipt-item basis** defined in `COUNT_BASIS_20260920.md` (one item per
+product-and-issue, as recorded in the receipts ledger) and asserted by
+`count_reconciliation_20260920.py --check`. This table previously said 9 for
+"confirmed correct", which also swept in rows below that are not source receipts
+(EDTA ×16, the two GHOST-SUSPECT PMIDs, the 49 suppressed depletion rows, the
+`omission_reason` enum debt, the static-audit row).
+
+| Final data disposition | Receipt items |
 |---|---:|
 | `source_verified_correction` | **11** |
-| `source_record_correct_no_change` | **9** |
+| `source_record_correct_no_change` | **6** |
 | `source_insufficient_keep_withheld` | **3** |
 | `intentional_non_scoreable` | **3** |
+| **Receipt items, total** | **23** |
 | **Source/data items remaining unresolved** | **0** |
+
+Distinct products with a correction receipt: **10** — of which **9 are applied and
+verified on the frozen replay**, and **`201420` is reported but not applied** (its
+declared-total row is byte-identical to its own child row, so the per-row rename
+cannot be scoped). Basis 2 and 3 of `COUNT_BASIS_20260920.md` carry the detail.
 
 ## Non-source items that remain (and are *not* source questions)
 
@@ -58,5 +71,6 @@ Column meanings:
 2. **EDTA ×16** — Safety policy disposition.
 3. **Standardization-marker clinical policy** — the five-product rule (216948, 232718, 216776, 44423, 77254).
 4. **Discrete-enzyme formulation policy** — neutral/unrated Formulation state after removal of unsupported multi-enzyme evidence transfer.
-5. **Provitamin-A UL applicability** — whether a beta-carotene RAE amount is evaluated against the retinol upper limit.
-6. **Licensed-pharmacist release sign-off.**
+5. ~~**Provitamin-A UL applicability**~~ — **closed as a deterministic rule, not a decision**: NIH ODS states the Vitamin A UL applies to preformed vitamin A only, and beta-carotene and other provitamin-A carotenoids have no established UL. PharmaGuide implements this (`beta_carotene_no_established_ul`; `ul_applies: false` on the supplemental beta-carotene conversion rule) with regression coverage. It does not belong on the pharmacist's list, and the final pharmacist packet does not carry it.
+6. **`201420` folate double-count** — one product, pre-existing, reported and not applied; owner: dose-safety/folate. Engineering follow-up, not a pharmacist decision.
+7. **Licensed-pharmacist release sign-off.**

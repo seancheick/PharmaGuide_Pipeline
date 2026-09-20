@@ -239,10 +239,11 @@
      "frozen_shape": "parent row NAMED `Folic Acid` at 1333 mcg DFE + nested `Folic Acid` 800 mcg (3 tablets)",
      "printed_label": "the archived scan for this record does not contain the folate row legibly (the panel is a multi-panel photograph); no glyph read is claimed",
      "correction_evidence": "sibling record 201405 is the same Male Multiple panel and transcribes it as `Folate 1333 mcg DFE` + nested `Folic Acid 800 mcg`; other siblings carry only `Folic Acid 800 mcg`. So the declared-total row is a Folate total that this record mis-named, and the 800 mcg child is a breakdown inside it.",
-     "correction": "rename the declared-total row from `Folic Acid` to `Folate` and keep 800 mcg as its nested folic-acid breakdown",
-     "confidence": "high (sibling 201405 of the same panel)",
-     "final_state": "source_verified_correction"
-    },
+     "correction": "rename the declared-total row from `Folic Acid` to `Folate` and keep 800 mcg as its nested folic-acid breakdown",      "confidence": "high (sibling 201405 of the same panel)",
+      "final_state": "source_verified_correction",
+      "applied": false,
+      "why_not_applied": "The declared-total row (1333 mcg DFE) and its own nested form row (800 mcg) carry the identical raw text `Folic Acid`, so a rename keyed on that text applies to both and would manufacture a second parent row - making the double count it was meant to remove worse. The printed structure is confirmed (sibling 201405 transcribes the same panel as `Folate 1333 mcg DFE`), so this is a correction-mechanism limit, not an open source question. Verified on the frozen replay: 201420 is absent from the changed set. Owner: dose-safety/folate."
+     },
     {
      "dsld_id": "246430",
      "product": "Pure Encapsulations PreNatal Nutrients",
