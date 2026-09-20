@@ -750,6 +750,22 @@ def resolve_evidence_for_row(
                 owner_facts=owner_facts,
             )
 
+        # Check if identity/material is unresolved (identity debt, analytical markers, excipient descriptors)
+        if lit_entry.get("effect_direction") in {"identity_material_unresolved", "identity_insufficient"}:
+            blocking_reasons.append("identity_material_unresolved")
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.IDENTITY_INSUFFICIENT.value,
+                points_eligible=False,
+                applicability_status="identity_material_unresolved",
+                reason_code="identity_material_unresolved",
+                owner_facts=owner_facts,
+                blocking_reasons=blocking_reasons,
+            )
+
+
         # Context-aware material specificity for broad food / carrier identities
         raw_text = _norm(row_dict.get("raw_source_text") or name)
         form_text = _norm(matched_form or "")
