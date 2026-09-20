@@ -130,8 +130,11 @@ engineering record:
   and **1 (`201420`) is reported and not applied** (reason above). That is an engineering
   follow-up against a pre-existing defect, **not** a decision for you.
 
-**Outstanding after your decisions:** nothing engineering-resolvable. The only items that
-remain are the three decisions above and this signature.
+**Outstanding after your decisions:** the three decisions above and this signature, plus one
+engineering follow-up that is **not** yours to decide — `201420`, a pre-existing folate
+double-count whose printed rename the per-row correction mechanism cannot scope (owner:
+dose-safety/folate; its receipt records `applied: false` with the reason). No source/data
+question remains open.
 
 ---
 
