@@ -438,6 +438,19 @@ def _diff_rows(before: list, after: list) -> list:
     return changes
 
 
+_BEHAVIORAL_COUNT_FIELDS = ("actives", "eligible", "dosed_eligible")
+
+
+def _behavioral_counts_unchanged(before: dict, after: dict) -> bool:
+    """True when every behaviour-carrying row count is identical.
+
+    ``display`` and ``ledger_omissions`` are deliberately excluded: an identity
+    refinement can split one collapsed ledger entry into several, which moves
+    those two while nothing about scoring, eligibility or dosing changes.
+    """
+    return all(before.get(field) == after.get(field) for field in _BEHAVIORAL_COUNT_FIELDS)
+
+
 def classify(changes: list, before: dict, after: dict) -> list:
     """Bucket a product's row deltas into the expected defect families."""
     reasons = set()
@@ -467,6 +480,27 @@ def classify(changes: list, before: dict, after: dict) -> list:
         after_cid = str((change.get("after") or {}).get("cid") or "")
         if before_cid != after_cid and ({before_cid, after_cid} & MARKER_IDENTITIES):
             reasons.add("standardization_marker")
+    # Canonical-identity refinement with no behavioural delta. The
+    # digestive-enzyme identity repair gives discrete enzymes their own canonical
+    # ids instead of collapsing them onto the generic ``digestive_enzymes``
+    # identity, so the display ledger's identities move while the active rows,
+    # the role histogram, the eligible / dosed-eligible counts and the nutrition
+    # signature all stay identical. That is a naming refinement, not an
+    # unexpected cross-family effect, and it is named here rather than left in
+    # the catch-all bucket (which is how a 471-product identity refactor was
+    # first reported as "outside expected families").
+    #
+    # ``display_types`` is deliberately NOT part of the guard: when one collapsed
+    # ``digestive_enzymes`` ledger entry splits into per-enzyme entries the
+    # display-type histogram changes by construction. The behaviour-carrying
+    # counts above are what decide whether anything real moved.
+    if (
+        not reasons
+        and before.get("roles") == after.get("roles")
+        and before.get("nutrition") == after.get("nutrition")
+        and _behavioral_counts_unchanged(before.get("counts") or {}, after.get("counts") or {})
+    ):
+        reasons.add("identity_refinement_no_behavioral_delta")
     if not reasons:
         reasons.add("outside_expected_families")
     return sorted(reasons)
