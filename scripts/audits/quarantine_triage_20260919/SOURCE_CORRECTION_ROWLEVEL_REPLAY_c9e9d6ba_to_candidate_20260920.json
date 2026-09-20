@@ -1,0 +1,1049 @@
+{
+ "changed": [
+  {
+   "brand": "Nutricost",
+   "counts_after": {
+    "actives": 25,
+    "display": 30,
+    "dosed_eligible": 25,
+    "eligible": 25,
+    "inactives": 5,
+    "ledger_omissions": 19,
+    "raw_actives": 44,
+    "raw_inactives": 5,
+    "source_rows": 49
+   },
+   "counts_before": {
+    "actives": 25,
+    "display": 30,
+    "dosed_eligible": 25,
+    "eligible": 25,
+    "inactives": 5,
+    "ledger_omissions": 19,
+    "raw_actives": 44,
+    "raw_inactives": 5,
+    "source_rows": 49
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 5,
+    "mapped_ingredient": 25
+   },
+   "display_types_before": {
+    "inactive_ingredient": 5,
+    "mapped_ingredient": 25
+   },
+   "id": "223563",
+   "inactive_changes": [],
+   "name": "Postnatal Multivitamin",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 25
+   },
+   "roles_before": {
+    "active_scorable": 25
+   },
+   "row_changes": [
+    {
+     "after": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 60.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[0]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 900.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg RAE"
+     },
+     "op": "added"
+    },
+    {
+     "before": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 60.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[0]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 900.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mg RAE"
+     },
+     "op": "removed"
+    }
+   ]
+  },
+  {
+   "brand": "Nutricost",
+   "counts_after": {
+    "actives": 23,
+    "display": 28,
+    "dosed_eligible": 23,
+    "eligible": 23,
+    "inactives": 5,
+    "ledger_omissions": 20,
+    "raw_actives": 43,
+    "raw_inactives": 5,
+    "source_rows": 48
+   },
+   "counts_before": {
+    "actives": 23,
+    "display": 28,
+    "dosed_eligible": 23,
+    "eligible": 23,
+    "inactives": 5,
+    "ledger_omissions": 20,
+    "raw_actives": 43,
+    "raw_inactives": 5,
+    "source_rows": 48
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 5,
+    "mapped_ingredient": 23
+   },
+   "display_types_before": {
+    "inactive_ingredient": 5,
+    "mapped_ingredient": 23
+   },
+   "id": "223572",
+   "inactive_changes": [],
+   "name": "Prenatal Multivitamin",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 23
+   },
+   "roles_before": {
+    "active_scorable": 23
+   },
+   "row_changes": [
+    {
+     "after": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 60.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[0]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 900.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg RAE"
+     },
+     "op": "added"
+    },
+    {
+     "before": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 60.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[0]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 900.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mg RAE"
+     },
+     "op": "removed"
+    }
+   ]
+  },
+  {
+   "brand": "GNC Pro Performance",
+   "counts_after": {
+    "actives": 41,
+    "display": 57,
+    "dosed_eligible": 36,
+    "eligible": 36,
+    "inactives": 9,
+    "ledger_omissions": 75,
+    "raw_actives": 96,
+    "raw_inactives": 9,
+    "source_rows": 132
+   },
+   "counts_before": {
+    "actives": 41,
+    "display": 57,
+    "dosed_eligible": 36,
+    "eligible": 36,
+    "inactives": 9,
+    "ledger_omissions": 75,
+    "raw_actives": 95,
+    "raw_inactives": 9,
+    "source_rows": 132
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 9,
+    "mapped_ingredient": 36,
+    "nutrition_fact": 7,
+    "structural_container": 5
+   },
+   "display_types_before": {
+    "inactive_ingredient": 9,
+    "mapped_ingredient": 36,
+    "nutrition_fact": 7,
+    "structural_container": 5
+   },
+   "id": "228823",
+   "inactive_changes": [],
+   "name": "Bulk 1340 Double Chocolate",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 36,
+    "blend_header_total": 5
+   },
+   "roles_before": {
+    "active_scorable": 36,
+    "blend_header_total": 5
+   },
+   "row_changes": [
+    {
+     "after": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 334.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Natural Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3000.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "before": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 334.0,
+      "elig": true,
+      "excl": null,
+      "forms": [],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3000.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "delta": {
+      "forms": {
+       "after": [
+        "Natural Beta-Carotene"
+       ],
+       "before": []
+      }
+     },
+     "op": "changed"
+    }
+   ]
+  },
+  {
+   "brand": "GNC Pro Performance",
+   "counts_after": {
+    "actives": 39,
+    "display": 55,
+    "dosed_eligible": 36,
+    "eligible": 36,
+    "inactives": 9,
+    "ledger_omissions": 65,
+    "raw_actives": 81,
+    "raw_inactives": 9,
+    "source_rows": 120
+   },
+   "counts_before": {
+    "actives": 39,
+    "display": 55,
+    "dosed_eligible": 36,
+    "eligible": 36,
+    "inactives": 9,
+    "ledger_omissions": 65,
+    "raw_actives": 80,
+    "raw_inactives": 9,
+    "source_rows": 120
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 9,
+    "mapped_ingredient": 36,
+    "nutrition_fact": 7,
+    "structural_container": 3
+   },
+   "display_types_before": {
+    "inactive_ingredient": 9,
+    "mapped_ingredient": 36,
+    "nutrition_fact": 7,
+    "structural_container": 3
+   },
+   "id": "243799",
+   "inactive_changes": [],
+   "name": "Bulk 1340 Vanilla Ice Cream",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 36,
+    "blend_header_total": 3
+   },
+   "roles_before": {
+    "active_scorable": 36,
+    "blend_header_total": 3
+   },
+   "row_changes": [
+    {
+     "after": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 334.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Natural Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3000.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "before": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 334.0,
+      "elig": true,
+      "excl": null,
+      "forms": [],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3000.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "delta": {
+      "forms": {
+       "after": [
+        "Natural Beta-Carotene"
+       ],
+       "before": []
+      }
+     },
+     "op": "changed"
+    }
+   ]
+  },
+  {
+   "brand": "GNC Pro Performance",
+   "counts_after": {
+    "actives": 71,
+    "display": 90,
+    "dosed_eligible": 37,
+    "eligible": 37,
+    "inactives": 12,
+    "ledger_omissions": 35,
+    "raw_actives": 83,
+    "raw_inactives": 12,
+    "source_rows": 125
+   },
+   "counts_before": {
+    "actives": 71,
+    "display": 90,
+    "dosed_eligible": 37,
+    "eligible": 37,
+    "inactives": 12,
+    "ledger_omissions": 35,
+    "raw_actives": 82,
+    "raw_inactives": 12,
+    "source_rows": 125
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 12,
+    "mapped_ingredient": 68,
+    "nutrition_fact": 7,
+    "structural_container": 3
+   },
+   "display_types_before": {
+    "inactive_ingredient": 12,
+    "mapped_ingredient": 68,
+    "nutrition_fact": 7,
+    "structural_container": 3
+   },
+   "id": "243808",
+   "inactive_changes": [],
+   "name": "Bulk 1340 Strawberries & Cream",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 37,
+    "blend_header_total": 3,
+    "nested_display_only": 31
+   },
+   "roles_before": {
+    "active_scorable": 37,
+    "blend_header_total": 3,
+    "nested_display_only": 31
+   },
+   "row_changes": [
+    {
+     "after": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 334.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Natural Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3000.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "before": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 334.0,
+      "elig": true,
+      "excl": null,
+      "forms": [],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3000.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "delta": {
+      "forms": {
+       "after": [
+        "Natural Beta-Carotene"
+       ],
+       "before": []
+      }
+     },
+     "op": "changed"
+    }
+   ]
+  },
+  {
+   "brand": "GNC Pro Performance",
+   "counts_after": {
+    "actives": 77,
+    "display": 93,
+    "dosed_eligible": 36,
+    "eligible": 36,
+    "inactives": 8,
+    "ledger_omissions": 32,
+    "raw_actives": 89,
+    "raw_inactives": 8,
+    "source_rows": 125
+   },
+   "counts_before": {
+    "actives": 77,
+    "display": 93,
+    "dosed_eligible": 36,
+    "eligible": 36,
+    "inactives": 8,
+    "ledger_omissions": 32,
+    "raw_actives": 88,
+    "raw_inactives": 8,
+    "source_rows": 125
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 8,
+    "mapped_ingredient": 74,
+    "nutrition_fact": 8,
+    "structural_container": 3
+   },
+   "display_types_before": {
+    "inactive_ingredient": 8,
+    "mapped_ingredient": 74,
+    "nutrition_fact": 8,
+    "structural_container": 3
+   },
+   "id": "243812",
+   "inactive_changes": [],
+   "name": "Bulk 1340 Double Chocolate",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 36,
+    "blend_header_total": 3,
+    "nested_display_only": 38
+   },
+   "roles_before": {
+    "active_scorable": 36,
+    "blend_header_total": 3,
+    "nested_display_only": 38
+   },
+   "row_changes": [
+    {
+     "after": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 380.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Natural Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3417.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "before": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 380.0,
+      "elig": true,
+      "excl": null,
+      "forms": [],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3417.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "delta": {
+      "forms": {
+       "after": [
+        "Natural Beta-Carotene"
+       ],
+       "before": []
+      }
+     },
+     "op": "changed"
+    }
+   ]
+  },
+  {
+   "brand": "GNC Pro Performance",
+   "counts_after": {
+    "actives": 72,
+    "display": 89,
+    "dosed_eligible": 36,
+    "eligible": 36,
+    "inactives": 9,
+    "ledger_omissions": 34,
+    "raw_actives": 84,
+    "raw_inactives": 9,
+    "source_rows": 123
+   },
+   "counts_before": {
+    "actives": 72,
+    "display": 89,
+    "dosed_eligible": 36,
+    "eligible": 36,
+    "inactives": 9,
+    "ledger_omissions": 34,
+    "raw_actives": 83,
+    "raw_inactives": 9,
+    "source_rows": 123
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 9,
+    "mapped_ingredient": 69,
+    "nutrition_fact": 8,
+    "structural_container": 3
+   },
+   "display_types_before": {
+    "inactive_ingredient": 9,
+    "mapped_ingredient": 69,
+    "nutrition_fact": 8,
+    "structural_container": 3
+   },
+   "id": "243815",
+   "inactive_changes": [],
+   "name": "Bulk 1340 Vanilla Ice Cream",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 36,
+    "blend_header_total": 3,
+    "nested_display_only": 33
+   },
+   "roles_before": {
+    "active_scorable": 36,
+    "blend_header_total": 3,
+    "nested_display_only": 33
+   },
+   "row_changes": [
+    {
+     "after": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 380.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Natural Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3417.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "before": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 380.0,
+      "elig": true,
+      "excl": null,
+      "forms": [],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[5]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 3417.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg"
+     },
+     "delta": {
+      "forms": {
+       "after": [
+        "Natural Beta-Carotene"
+       ],
+       "before": []
+      }
+     },
+     "op": "changed"
+    }
+   ]
+  },
+  {
+   "brand": "Doctor's Best",
+   "counts_after": {
+    "actives": 2,
+    "display": 9,
+    "dosed_eligible": 2,
+    "eligible": 2,
+    "inactives": 6,
+    "ledger_omissions": 6,
+    "raw_actives": 5,
+    "raw_inactives": 2,
+    "source_rows": 15
+   },
+   "counts_before": {
+    "actives": 2,
+    "display": 9,
+    "dosed_eligible": 1,
+    "eligible": 2,
+    "inactives": 6,
+    "ledger_omissions": 6,
+    "raw_actives": 5,
+    "raw_inactives": 2,
+    "source_rows": 15
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 6,
+    "mapped_ingredient": 2,
+    "structural_container": 1
+   },
+   "display_types_before": {
+    "inactive_ingredient": 6,
+    "mapped_ingredient": 2,
+    "structural_container": 1
+   },
+   "id": "269360",
+   "inactive_changes": [],
+   "name": "Serrapeptase 40,000 SPU",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 2
+   },
+   "roles_before": {
+    "active_scorable": 2
+   },
+   "row_changes": [
+    {
+     "before": {
+      "cid": "digestive_enzymes",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": null,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Serratia sp."
+      ],
+      "mapped": true,
+      "match": null,
+      "name": "Serrapeptase Enzyme",
+      "nested": false,
+      "norm": "serrapeptase_enzyme",
+      "path": "ingredientRows[1]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 0.0,
+      "raw": "Serrapeptase Enzyme",
+      "role": "active_scorable",
+      "u": "NP"
+     },
+     "op": "removed"
+    },
+    {
+     "after": {
+      "cid": "digestive_enzymes",
+      "display": null,
+      "dose_class": "enzyme_activity",
+      "dv": null,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Serratia sp."
+      ],
+      "mapped": true,
+      "match": null,
+      "name": "Serrapeptase Enzyme",
+      "nested": false,
+      "norm": "serrapeptase_enzyme",
+      "path": "ingredientRows[1]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 40000.0,
+      "raw": "Serrapeptase Enzyme",
+      "role": "active_scorable",
+      "u": "SPU"
+     },
+     "op": "added"
+    }
+   ]
+  },
+  {
+   "brand": "Life Extension",
+   "counts_after": {
+    "actives": 27,
+    "display": 35,
+    "dosed_eligible": 27,
+    "eligible": 27,
+    "inactives": 8,
+    "ledger_omissions": 34,
+    "raw_actives": 61,
+    "raw_inactives": 8,
+    "source_rows": 69
+   },
+   "counts_before": {
+    "actives": 27,
+    "display": 35,
+    "dosed_eligible": 27,
+    "eligible": 27,
+    "inactives": 8,
+    "ledger_omissions": 34,
+    "raw_actives": 61,
+    "raw_inactives": 8,
+    "source_rows": 69
+   },
+   "display_changed": false,
+   "display_changes": [],
+   "display_types_after": {
+    "inactive_ingredient": 8,
+    "mapped_ingredient": 27
+   },
+   "display_types_before": {
+    "inactive_ingredient": 8,
+    "mapped_ingredient": 27
+   },
+   "id": "328644",
+   "inactive_changes": [],
+   "name": "Prenatal Advantage",
+   "nutrition_changed": false,
+   "reasons": [
+    "phase3_source_correction"
+   ],
+   "roles_after": {
+    "active_scorable": 27
+   },
+   "roles_before": {
+    "active_scorable": 27
+   },
+   "row_changes": [
+    {
+     "after": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 100.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[0]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 1300.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mcg RAE"
+     },
+     "op": "added"
+    },
+    {
+     "before": {
+      "cid": "vitamin_a",
+      "display": null,
+      "dose_class": "therapeutic_mass",
+      "dv": 100.0,
+      "elig": true,
+      "excl": null,
+      "forms": [
+       "Beta-Carotene"
+      ],
+      "mapped": true,
+      "match": "unii_exact_match",
+      "name": "Vitamin A",
+      "nested": false,
+      "norm": "vitamin_a",
+      "path": "ingredientRows[0]",
+      "pb": null,
+      "pbm": null,
+      "pbu": null,
+      "pctdv": null,
+      "q": 1300.0,
+      "raw": "Vitamin A",
+      "role": "active_scorable",
+      "u": "mg RAE"
+     },
+     "op": "removed"
+    }
+   ]
+  }
+ ],
+ "changed_ids": [
+  "223563",
+  "223572",
+  "228823",
+  "243799",
+  "243808",
+  "243812",
+  "243815",
+  "269360",
+  "328644"
+ ],
+ "crash_ids_after": [],
+ "crash_ids_before": [],
+ "crashes_after": 0,
+ "crashes_before": 0,
+ "families": {
+  "phase3_source_correction": [
+   "223563",
+   "223572",
+   "228823",
+   "243799",
+   "243808",
+   "243812",
+   "243815",
+   "269360",
+   "328644"
+  ]
+ },
+ "family_counts": {
+  "phase3_source_correction": 9
+ },
+ "fingerprint_verified": true,
+ "input_fingerprint_mismatches": [],
+ "only_in_after": [],
+ "only_in_base": [],
+ "records_changed": 9,
+ "records_compared": 15414,
+ "records_unchanged": 15405
+}
