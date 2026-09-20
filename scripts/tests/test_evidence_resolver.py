@@ -293,3 +293,58 @@ def test_false_transfer_canary_cryptoxanthin():
     assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
     assert "literature_applicability_unestablished" in res.blocking_reasons
 
+
+# Phase 4 Batch 2 Canaries
+
+def test_false_transfer_canary_polyphenols_broad_umbrella():
+    """Generic polyphenols cannot inherit trials on specific flavanols/anthocyanins/resveratrol."""
+    res = er.resolve_evidence_for_canonical("polyphenols", dose_value=500.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert "literature_applicability_unestablished" in res.blocking_reasons
+
+
+def test_false_transfer_canary_pumpkin_food_vs_extract():
+    """Crude pumpkin whole food powder cannot inherit purified seed oil BPH trials."""
+    res = er.resolve_evidence_for_canonical("pumpkin", dose_value=500.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert "literature_applicability_unestablished" in res.blocking_reasons
+
+
+def test_false_transfer_canary_broccoli_food_vs_extract():
+    """Crude broccoli vegetable powder cannot inherit standardized sulforaphane sprout extract trials."""
+    res = er.resolve_evidence_for_canonical("broccoli", dose_value=500.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert "literature_applicability_unestablished" in res.blocking_reasons
+
+
+def test_tribulus_null_unfavorable():
+    """Tribulus androgen/strength trials are reviewed null/unfavorable."""
+    res = er.resolve_evidence_for_canonical("tribulus")
+    assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+    assert res.applicability_status == "reviewed_null_evidence"
+    assert res.points_eligible is False
+
+
+def test_evening_primrose_oil_null_unfavorable():
+    """Evening primrose oil eczema trials (Cochrane review) are reviewed null/unfavorable."""
+    res = er.resolve_evidence_for_canonical("evening_primrose_oil")
+    assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+    assert res.applicability_status == "reviewed_null_evidence"
+    assert res.points_eligible is False
+
+
+def test_pygeum_reviewed_clinical_evidence():
+    """Pygeum africanum extract for BPH is supported by Cochrane review at >= 100 mg."""
+    res = er.resolve_evidence_for_canonical("pygeum", dose_value=100.0, dose_unit="mg")
+    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert "backed_clinical_studies" in res.matched_owners
+
+
+def test_food_matrix_not_efficacy_relevant():
+    """Whole fruit powder / culinary matrix ingredients are not efficacy relevant."""
+    for cid in ("orange", "brewers_yeast"):
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
+        assert res.applicability_status == "food_powder_or_flavor_matrix"
+
+
