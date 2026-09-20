@@ -737,6 +737,19 @@ def resolve_evidence_for_row(
                 owner_facts=owner_facts,
             )
 
+        # Check if food matrix / excipient is not efficacy relevant
+        if lit_entry.get("effect_direction") == "not_efficacy_relevant":
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
+                points_eligible=False,
+                applicability_status="food_powder_or_flavor_matrix",
+                reason_code="whole_food_matrix_not_efficacy_relevant",
+                owner_facts=owner_facts,
+            )
+
         # Context-aware material specificity for broad food / carrier identities
         raw_text = _norm(row_dict.get("raw_source_text") or name)
         form_text = _norm(matched_form or "")
