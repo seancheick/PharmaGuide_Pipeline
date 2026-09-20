@@ -1,7 +1,7 @@
 # PharmaGuide — pharmacist review packet (Phase-3 engineering closed, source corrections applied)
 
 Date: 2026-09-20 · For: licensed pharmacist release authority
-Landed as: **`de260e3c`** on `origin/main` (Phase-3 source resolution)
+Landed as: **`de260e3c`** on `origin/main` — the Phase-3 source-resolution runtime tip. Later documentation-only commits (including this packet's own revision) do not change that runtime tip.
 Supersedes: `PHARMACIST_PACKET_PHASE3_SOURCE_RESOLVED_20260920.md` (source-resolution draft)
 
 **Scope: three policy decisions and one release signature.** Every source/data
