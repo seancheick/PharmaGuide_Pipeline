@@ -1,0 +1,295 @@
+{
+ "artifact": "Phase-3 source-resolution receipts",
+ "generated_by": "source-resolution phase (2026-09-20), on top of the closed engineering tip of origin/main",
+ "date": "2026-09-20",
+ "scope": "Every Phase-3 item previously tagged needs_info / source / stale / corrupt / unknown / incomplete / label / upstream / correction / form was re-examined against the live NIH DSLD API, the archived DSLD label image (the scan matching this product/version), DSLD sibling label records, and the frozen PharmaGuide record. Nothing in the pipeline was changed. No plausibility-based unit conversion was performed anywhere.",
+ "source_hierarchy_used": [
+  "1. live NIH DSLD v9: GET https://api.ods.od.nih.gov/dsld/v9/label/{id}  (saved under source_resolution_20260920/live/, retrieval index in live_source_index_20260920.json)",
+  "2. archived DSLD label image (scanned PDF, no text layer): https://api.ods.od.nih.gov/dsld/s3/pdf/{id}.pdf  (rendered+OCR'd; text + PDF sha256 + source URL recorded in labels/label_ocr_manifest_20260920.json)",
+  "3. DSLD sibling label records (independent transcriptions of the same printed panel, via labelRelationships) - the decisive in-DSLD cross-check",
+  "4. manufacturer label page where the archived scan was not readable",
+  "5. frozen PharmaGuide record under $HOME/Downloads/PharmaGuide_Datasets/staging/brands"
+ ],
+ "tooling": {
+  "fetch_live_source_20260920.py": "fetches live DSLD + dumps live vs frozen row trees with quantities, units, forms and serving bases",
+  "read_label_pdf_20260920.py": "downloads + OCRs the archived label image, recording source URL, PDF sha256, DPI and OCR char count per label",
+  "label_row_ocr_20260920.py": "row-level (Supplement Facts band) OCR at 6x with an alphanumeric whitelist for unit glyphs",
+  "compare_label_siblings_20260920.py": "fetches every sibling label version and builds a (field, quantity, unit) frequency index"
+ },
+ "allowed_final_states": [
+  "source_verified_correction",
+  "source_record_correct_no_change",
+  "source_insufficient_keep_withheld"
+ ],
+ "items": {
+  "A_e2_unit_defects": {
+   "classification": "source_unit_defect",
+   "finding_summary": "All six records carry a vitamin-A unit string that exists on NO other vitamin-A row in the 15,414-record frozen corpus: `mg RAE` occurs on exactly 3 rows (223563, 223572, 328644) and `mcg DFE` on exactly 3 rows (231334, 231335, 263865). The vocabulary actually in use for vitamin A is `mcg RAE` (299 rows), `mcg` (889), `IU` (830), `mg` (16). The six rows under review are the entire population of the anomaly, so this is a bounded transcription defect class, not a pipeline behaviour.",
+   "corpus_census": {
+    "records_scanned": 15414,
+    "vitamin_a_units": {"mcg": 889, "IU": 830, "mcg RAE": 299, "NP": 79, "mg": 16, "%": 10, "Not Present": 7, "mcg DFE": 3, "mg RAE": 3, "U": 1, "UI": 1},
+    "vitamin_e_units": {"mg": 1246, "IU": 913, "NP": 21, "mcg": 10, "mg AT": 2, "UI": 1},
+    "folate_units": {"mcg": 1847, "mcg DFE": 1234, "NP": 19, "mg": 18, "mg DFE": 12, "mcg RAE": 1},
+    "census_script": "inline pass over $HOME/Downloads/PharmaGuide_Datasets/staging/brands/*/*.json"
+   },
+   "products": [
+    {
+     "dsld_id": "328644",
+     "product": "Life Extension Prenatal Advantage",
+     "row": "Vitamin A",
+     "frozen_value_unit": "1300 mg RAE per 4 softgels",
+     "live_structured_value_unit": "1300 mg RAE per 4 softgels",
+     "printed_label": "not legible at audit grade in the archived scan for the vitamin-A row, but the row's own %DV is 100%",
+     "sibling_label_crosscheck": "both sibling label versions of the identical Prenatal Advantage panel transcribe Vitamin A as `1300 mcg RAE` at the same 100 %DV (sibling_unit_index: vitamin a|1300|mcg RAE x2)",
+     "printed_label_value_unit": "1300 mcg RAE",
+     "correction": "unit only: mg RAE -> mcg RAE; quantity 1300 unchanged",
+     "confidence": "high",
+     "reason": "1300 mcg RAE is the published pregnancy/lactation Vitamin A Daily Value and equals the row's own 100 %DV; `mg RAE` is not a vitamin-A unit in the corpus; two independent sibling transcriptions of the same panel use mcg RAE.",
+     "final_state": "source_verified_correction"
+    },
+    {
+     "dsld_id": "223563",
+     "product": "Nutricost Postnatal Multivitamin",
+     "row": "Vitamin A (as Beta-Carotene)",
+     "frozen_value_unit": "900 mg RAE per 2 tablets",
+     "live_structured_value_unit": "900 mg RAE per 2 tablets (unchanged upstream)",
+     "printed_label": "read from the archived scan: quantity 900, 3-glyph mcg-class unit box (53-54 px at 600 dpi, versus 39 px for a 2-glyph `mg` on the same page), row %DV 60%",
+     "sibling_label_crosscheck": "no sibling label records exist for this product (siblings=0)",
+     "printed_label_value_unit": "900 mcg RAE",
+     "correction": "unit only: mg RAE -> mcg RAE; quantity 900 unchanged",
+     "confidence": "high for the unit, medium for the exact RAE spelling",
+     "reason": "The row's own printed %DV is 60%, which resolves to 900 mcg under the label's own 1500 mcg RAE reference - a mcg-class quantity, not 900 mg (=900,000 mcg). `mg RAE` occurs on no other vitamin-A row in the corpus.",
+     "final_state": "source_verified_correction"
+    },
+    {
+     "dsld_id": "223572",
+     "product": "Nutricost Prenatal Multivitamin",
+     "row": "Vitamin A (as Beta-Carotene)",
+     "frozen_value_unit": "900 mg RAE per 2 tablets",
+     "live_structured_value_unit": "900 mg RAE per 2 tablets (unchanged upstream)",
+     "printed_label": "same panel and same glyph evidence as 223563 (sister record, same 900 quantity, same row %DV 60%)",
+     "sibling_label_crosscheck": "none available (siblings=0)",
+     "printed_label_value_unit": "900 mcg RAE",
+     "correction": "unit only: mg RAE -> mcg RAE; quantity 900 unchanged",
+     "confidence": "high for the unit, medium for the exact RAE spelling",
+     "reason": "Identical to 223563.",
+     "final_state": "source_verified_correction"
+    },
+    {
+     "dsld_id": "231334",
+     "product": "Solgar Formula VM-2000 (90 tablets, 2020 record)",
+     "row": "Vitamin A (as 100% beta-carotene)",
+     "frozen_value_unit": "6000 mcg DFE per 2 tablets",
+     "live_structured_value_unit": "6000 mcg DFE per 2 tablets (unchanged upstream)",
+     "printed_label": "archived scan row reads `6,000 <3-glyph mcg-class unit> DFE ... 667%`; a glyph whitelist containing both `R` and `D` returns `DFE` (the first glyph is rejected when only R/A/E/D are allowed), i.e. the printed denomination is `DFE`-shaped, not `RAE`",
+     "sibling_label_crosscheck": "15 sibling versions of the same VM-2000 panel: vitamin A as `20000 IU` x9 (pre-2016 labels), `6000 mcg` x1, `6000 mcg DFE` x4. No sibling uses `mg` or `RAE`.",
+     "printed_label_value_unit": "6000 mcg <DFE-shaped> (printed panel)",
+     "correction": "none",
+     "confidence": "printed denomination is DFE-shaped but the scan resolution cannot separate D/F/E from R/A/E to audit grade",
+     "reason": "The record reproduces the archived printed label. The quantity (6000) and the row's own %DV (667%) are mutually consistent and preserved, and the 667% resolves against PharmaGuide's 900 mcg RAE reference - so the dose-bearing quantity is intact. The denomination glyph cannot be resolved to audit grade, and nothing clinically depends on it because the engine makes no UL claim for this row (it lands in the existing conservative vitamin_a_unknown / unresolved_form path). No correction is authored because the printed source is not unambiguous.",
+     "final_state": "source_insufficient_keep_withheld"
+    },
+    {
+     "dsld_id": "231335",
+     "product": "Solgar Formula VM-2000 (180 tablets, 2020 record)",
+     "row": "Vitamin A (as 100% beta-carotene)",
+     "frozen_value_unit": "6000 mcg DFE per 2 tablets",
+     "live_structured_value_unit": "6000 mcg DFE per 2 tablets (unchanged upstream)",
+     "printed_label": "identical panel to 231334; same glyph evidence, 667%",
+     "sibling_label_crosscheck": "14 sibling versions: `20000 IU` x9, `6000 mcg` x1, `6000 mcg DFE` x3",
+     "printed_label_value_unit": "6000 mcg <DFE-shaped>",
+     "correction": "none",
+     "confidence": "as 231334",
+     "reason": "Identical to 231334.",
+     "final_state": "source_insufficient_keep_withheld"
+    },
+    {
+     "dsld_id": "263865",
+     "product": "Solgar Formula VM-2000 (180 tablets, 2022 record)",
+     "row": "Vitamin A (as 100% beta-carotene)",
+     "frozen_value_unit": "6000 mcg DFE per 2 tablets",
+     "live_structured_value_unit": "6000 mcg DFE per 2 tablets (unchanged upstream)",
+     "printed_label": "same VM-2000 panel design; row reads `6,000 <3-glyph mcg-class unit> DFE ..... 667%`",
+     "sibling_label_crosscheck": "2 siblings only; this record is the newest version of the panel",
+     "printed_label_value_unit": "6000 mcg <DFE-shaped>",
+     "correction": "none",
+     "confidence": "as 231334",
+     "reason": "Identical to 231334.",
+     "final_state": "source_insufficient_keep_withheld"
+    }
+   ],
+   "vitamin_e_note": {
+    "rows": ["231334", "231335", "263865"],
+    "finding": "The archived Solgar scan prints a 3-glyph `mcg`-class unit box (54 px) on the Vitamin E row, and 231334/231335's records also carry `mcg` - i.e. the record reproduces the label. The row's own %DV (893%) resolves to 134 mg against the 15 mg Vitamin E reference, and the pre-2016 sibling labels print `200 IU` (=134 mg), so the quantity is a milligram quantity on a label that typed a microgram unit. 263865's record carries `mg` (the physically consistent unit).",
+    "action": "no correction authored for any of the three: the records reproduce the archived label as far as the scan can establish, no quantity is lost, and PharmaGuide's contract forbids plausibility-based unit rewriting. 263865 already holds the milligram reading.",
+    "final_state": "source_record_correct_no_change"
+   },
+   "why_no_heuristic_conversion": [
+    "Team rule: a correction receipt requires the printed source to establish the unit unambiguously.",
+    "Existing regression coverage pins the prohibition: test_clinical_signoff_engineering_fixes_20260919::TestNoFabricatedDoses::test_corrupted_unit_never_auto_converted"
+   ]
+  },
+  "B_needs_info": {
+   "products": [
+    {
+     "dsld_id": "12300",
+     "product": "Nature's Way Fem-Mend Synergistic Blend",
+     "was": "needs_info",
+     "live_structured": "Proprietary Blend 860 mg with zero nested component rows; the eight botanicals are carried only as zero-dose form attributes of the blend header",
+     "printed_label": "archived scan confirms a single line `Proprietary Blend 860 mg` with no component doses (read from 12300.ocr.txt)",
+     "frozen_vs_live": "unchanged_since_snapshot",
+     "correction": "none",
+     "reason": "No component dose exists on the label. Completing the block would require inventing per-herb doses.",
+     "final_state": "intentional_non_scoreable",
+     "pipeline_state": "not_scored / blocked_by_completeness_gate / incomplete_product_data"
+    },
+    {
+     "dsld_id": "254396",
+     "product": "BulkSupplements.com Vitamin B12 (Cyanocobalamin)",
+     "was": "needs_info",
+     "live_structured": "single row `Vitamin B12` quantity 0 NP; serving size `1 Not Present`; no maxDailyServings",
+     "printed_label": "archived scan shows a bulk powder tub (100 grams) with NO Supplement Facts panel and the statement `This product is completely pure and should be used with extreme caution. Not intended for individual use and should be used by qualified professionals only.`",
+     "frozen_vs_live": "unchanged_since_snapshot",
+     "correction": "none",
+     "reason": "The printed label itself carries no consumer serving dose. This is bulk raw material sold by weight. Confirms the clinical reviewer's finding on the record and on the printed label, not by inference from neighbouring SKUs.",
+     "final_state": "intentional_non_scoreable",
+     "pipeline_state": "not_scored / blocked_by_completeness_gate / no_scoreable_active_dose"
+    },
+    {
+     "dsld_id": "254413",
+     "product": "BulkSupplements.com Vitamin B12 (Methylcobalamin)",
+     "was": "needs_info",
+     "live_structured": "identical shape to 254396: `Vitamin B12` 0 NP, serving size `1 Not Present`",
+     "printed_label": "archived scan shows a bulk powder tub (50 grams), no Supplement Facts panel, same professionals-only statement",
+     "frozen_vs_live": "unchanged_since_snapshot",
+     "correction": "none",
+     "reason": "Identical to 254396.",
+     "final_state": "intentional_non_scoreable",
+     "pipeline_state": "not_scored / blocked_by_completeness_gate / no_scoreable_active_dose"
+    },
+    {
+     "dsld_id": "75291",
+     "product": "GNC Fish Oil Lemon",
+     "was": "needs_info (already ratified: needs_info -> fixed_mechanically after direct source verification)",
+     "printed_label": "archived scan row reads `Total Omega-3 Fatty Acids (including EPA/DHA) 300 mg`; DHA/EPA appear only as constituents with no independent amount",
+     "frozen_vs_live": "unchanged_since_snapshot",
+     "correction": "none",
+     "reason": "Re-verified on its own record and its own printed label. The ratified disposition stands and is not reopened.",
+     "final_state": "source_record_correct_no_change"
+    }
+   ]
+  },
+  "C_vitamin_a_form_gap": {
+   "classification": "unresolved_form_provenance",
+   "products": ["228823", "243799", "243808", "243812", "243815"],
+   "root_cause": "The frozen record carries a Vitamin A row with no form, so the engine cannot pick the retinol-RAE upper limit and marks the dose assessment incomplete (`conversion_rule_id vitamin_a_unknown`, `ul_assessment_status unresolved_form`, `reason_code unknown_vitamin_form`), which lands one source row in `assessment_readiness.dose.incomplete_source_row_refs` and blocks the product on the completeness gate. No amount is discarded and no form is invented.",
+   "source_finding": "The archived Bulk 1340 printed label declares the form. Its OTHER INGREDIENTS vitamin-and-mineral blend lists every nutrient's specific source: `Calcium Phosphate, Potassium Phosphate, Magnesium Aspartate, Ascorbic Acid, Niacinamide, d-Alpha Tocopheryl Acetate, Biotin, Zinc Citrate, d-Calcium Pantothenate, Natural beta-Carotene, L-Selenomethionine, Ferrous Fumarate, Chromium Amino Acid Chelate, Manganese Sulfate, Thiamin Mononitrate, Pyridoxine HCl, Folic Acid, Molybdenum Amino Acid Chelate, Riboflavin, Potassium Iodide, Cholecalciferol, Copper Oxide, Cyanocobalamin`. Vitamin A is supplied as `Natural beta-Carotene` - the only vitamin A source in the formula.",
+   "corroboration": "The Vitamin A row's own %DV (334% for 3000 mcg in water, 380% for 3417 mcg in milk) resolves against a ~900 mcg reference, i.e. the amounts are expressed on the RAE basis, consistent with a provitamin-A source.",
+   "live_structured": "the live record still carries no form on the Vitamin A row (unchanged upstream)",
+   "correction": "record the Vitamin A source/form as `natural beta-carotene` (provitamin A) with the printed-label citation; do not default to retinol",
+   "confidence": "high",
+   "final_state": "source_verified_correction",
+   "escalation": "The data/provenance question is closed. The remaining decision is a policy one: whether a provitamin-A RAE amount should be evaluated against PharmaGuide's retinol upper limit at all, and whether the beta-carotene/smoker caution should surface. That is in the pharmacist packet (section 4), not a source question."
+  },
+  "D_folate_residuals": {
+   "classification": "label_two_column_structure",
+   "source_finding": "The Bulk 1340 printed Supplement Facts panel has TWO value columns - `4 Heaping Scoops (360 g) in Water` and `4 Heaping Scoops (360 g) in 2% Milk`. The folate row prints `667 mcg DFE 167%` in column 1 and `725 mcg DFE 181%` in column 2, each with its own folic-acid child (`400 mcg` water / `435 mcg` milk). The DFE total is the parent; the folic acid is a form breakdown already inside that total; the two columns are alternative preparation bases, not addends.",
+   "products": [
+    {
+     "dsld_id": "228823",
+     "product": "Bulk 1340 Double Chocolate",
+     "frozen_shape": "Folate [(667 water),(725 milk) mcg DFE] + one child row Folic Acid [(400 water),(435 milk) mcg]",
+     "verdict": "representation is correct (values paired by serving basis)",
+     "final_state": "source_record_correct_no_change"
+    },
+    {
+     "dsld_id": "243799",
+     "product": "Bulk 1340 Vanilla Ice Cream",
+     "frozen_shape": "Folate [(667),(725) mcg DFE] + child Folic Acid (400) mcg",
+     "verdict": "representation is correct",
+     "final_state": "source_record_correct_no_change"
+    },
+    {
+     "dsld_id": "243812",
+     "product": "Bulk 1340 Double Chocolate (12 lb)",
+     "frozen_shape": "Folate [(725) mcg DFE] + child Folic Acid (435) mcg",
+     "verdict": "representation is correct (this version prints one column pair in the record)",
+     "final_state": "source_record_correct_no_change"
+    },
+    {
+     "dsld_id": "243815",
+     "product": "Bulk 1340 Vanilla Ice Cream (12 lb)",
+     "frozen_shape": "Folate [(725) mcg DFE] + child Folic Acid (435) mcg",
+     "verdict": "representation is correct",
+     "final_state": "source_record_correct_no_change"
+    },
+    {
+     "dsld_id": "243808",
+     "product": "Bulk 1340 Strawberries & Cream",
+     "frozen_shape": "Folate [(725),(667) mcg DFE] PLUS two SEPARATE sibling child rows `Folic Acid 435 mcg` and `Folic Acid 400 mcg`",
+     "verdict": "GENUINE representation defect: the two preparation-basis columns were split into two independent child rows, so a consumer of the representation can add 435+400 instead of pairing 435-with-milk and 400-with-water.",
+     "correction_evidence": "14 sibling label records of the same panel all keep a single child row carrying both values: `Folate[(725),(667)] + Folic Acid[(435),(400)]`. 243808 is the only record in the entire corpus that splits them.",
+     "correction": "collapse the two sibling `Folic Acid` child rows into one form row carrying both serving-basis values (435 milk / 400 water), pairing each to the matching parent Folate value",
+     "confidence": "high (in-DSLD consensus of 14 sibling transcriptions)",
+     "final_state": "source_verified_correction"
+    },
+    {
+     "dsld_id": "201420",
+     "product": "Solgar Male Multiple",
+     "frozen_shape": "parent row NAMED `Folic Acid` at 1333 mcg DFE + nested `Folic Acid` 800 mcg (3 tablets)",
+     "printed_label": "the archived scan for this record does not contain the folate row legibly (the panel is a multi-panel photograph); no glyph read is claimed",
+     "correction_evidence": "sibling record 201405 is the same Male Multiple panel and transcribes it as `Folate 1333 mcg DFE` + nested `Folic Acid 800 mcg`; other siblings carry only `Folic Acid 800 mcg`. So the declared-total row is a Folate total that this record mis-named, and the 800 mcg child is a breakdown inside it.",
+     "correction": "rename the declared-total row from `Folic Acid` to `Folate` and keep 800 mcg as its nested folic-acid breakdown",
+     "confidence": "high (sibling 201405 of the same panel)",
+     "final_state": "source_verified_correction"
+    },
+    {
+     "dsld_id": "246430",
+     "product": "Pure Encapsulations PreNatal Nutrients",
+     "frozen_shape": "Folate 1667 mcg DFE (2 capsules) + nested Folic Acid 400 mcg",
+     "printed_label": "the archived scan for this record is a partial/poor photograph; no glyph read is claimed",
+     "correction_evidence": "siblings of the same panel appear both ways - `Folate 1667 mcg DFE` alone (278390, 286502) and `Folate 1667 mcg DFE + Folic Acid 400 mcg` (186344, 246431, 188796) - and two older versions declare `Folate 1000 mcg`. The arithmetic is consistent: 1000 mcg L-5-MTHF + 400 mcg folic acid x1.7 (680 DFE) = 1680 ~ 1667 mcg DFE, so the 400 mcg child is already inside the 1667 mcg DFE total.",
+     "correct_non_double_counted_exposure": "1667 mcg DFE per 2 capsules is the exposure; the 400 mcg folic acid is a subset and must not be added to it",
+     "correction": "none to the record (both transcriptions exist in DSLD and the row is a faithful parent+subset shape)",
+     "confidence": "high",
+     "final_state": "source_record_correct_no_change"
+    }
+   ],
+   "engineering_consequence": "The representations are now sourced. The remaining work is one reviewed dose-safety reconciliation change (owner: dose-safety/folate), specified exactly, not a source question: (a) recognise the declared-total row by exposure basis / DFE unit rather than by a parent-name vocabulary that omits the name `Folic Acid`; (b) treat a nested form row of the same canonical nutrient as part of the declared total even when it is a subset; (c) never sum quantities that belong to different serving bases - pair them by basis and take the maximum labelled basis for exposure. Fixtures for the change: 201420, 243808, 246430 (all three currently unreconciled), with 228823 (passes at 1.95% against the existing ~2% tolerance) as the guard. Owners already exist: test_folate_dose_basis_reconciliation.py, test_dose_safety_shared_contract.py."
+  },
+  "E_serrapeptase_269360": {
+   "dsld_id": "269360",
+   "product": "Doctor's Best Serrapeptase 40,000 SPU",
+   "frozen_value_unit": "Serrapeptase Enzyme = 0 NP per 1 veggie capsule (form: Serratia sp.)",
+   "live_structured_value_unit": "Serrapeptase Enzyme = 0 NP (unchanged upstream)",
+   "printed_label": "the archived DSLD label image for 269360 reads `Serrapeptase Enzyme   40,000 SPU**  (dagger)` with the label's own footnote `**SPU - serratiopeptidase activity units`. Independently confirmed on the manufacturer's Supplement Facts panel: `Serrapeptase Enzyme (from Serratia sp.) 40,000 SPU**` / `**SPU - serratiopeptidase activity units` / `dagger Daily Value not established`.",
+   "in_dslD_corroboration": [
+    "the DSLD record for 269360 itself already carries the label footnote as a statement: `Formulation re: Other :: SPU - serratiopeptidase activity units`",
+    "sibling label 25222 (same product family) is transcribed with `Serrapeptase = 40000 Unit(s)` and the statement `40,000 SERRATIO UNITS PER VEGGIE CAP` - DSLD can and does capture the amount for this family"
+   ],
+   "verdict": "The printed Supplement Facts panel DOES declare 40,000 SPU. The structured record missed it (stored 0 NP) - a source/extraction defect, not an insufficiency.",
+   "correction": "record the declared serrapeptase activity as 40,000 SPU per capsule with the printed-label citation; the amount must come from the label, never from the product name (the product name happens to state it, but the panel states it independently)",
+   "confidence": "high",
+   "final_state": "source_verified_correction",
+   "note": "This closes the one new quarantine introduced by the Phase-3 remediation: 269360 was previously scored while its only active had no declared amount; with the printed amount recorded it becomes a normal scored product."
+  }
+ },
+ "counts": {
+  "distinct_records_examined": 18,
+  "row_level_dispositions": 26,
+  "by_final_state": {
+   "source_verified_correction": 11,
+   "source_record_correct_no_change": 9,
+   "source_insufficient_keep_withheld": 3,
+   "intentional_non_scoreable": 3
+  },
+  "breakdown": {
+   "A_e2": {"source_verified_correction": 3, "source_insufficient_keep_withheld": 3, "source_record_correct_no_change": 3},
+   "B_needs_info": {"intentional_non_scoreable": 3, "source_record_correct_no_change": 1},
+   "C_vitamin_a_form": {"source_verified_correction": 5},
+   "D_folate": {"source_verified_correction": 2, "source_record_correct_no_change": 5},
+   "E_serrapeptase": {"source_verified_correction": 1}
+  },
+  "still_needs_pharmacist_for_a_SOURCE_question": 0
+ }
+}

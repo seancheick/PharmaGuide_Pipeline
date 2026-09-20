@@ -254,8 +254,7 @@ def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
 
     parent_amount: Optional[float] = None
     parent_basis: Optional[str] = None
-    form_amounts: List[float] = []
-    form_bases: List[str] = []
+    form_rows: List[Tuple[str, str, float]] = []
     for row in rows:
         name = _norm_text(row.get("ingredient"))
         amount = _as_float(row.get("amount"), None)
@@ -272,22 +271,47 @@ def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
                 parent_amount = normalized
                 parent_basis = basis
         elif any(token in name for token in _FOLATE_FORM_TOKENS):
-            form_amounts.append(normalized)
-            form_bases.append(basis)
+            form_rows.append((name, basis, normalized))
 
-    if parent_amount is None or not form_amounts:
+    if parent_amount is None or not form_rows:
         return False
     # One exposure can only be recognised within a single dose basis.
-    if len({parent_basis, *form_bases}) > 1:
+    if len({parent_basis, *(basis for _name, basis, _amount in form_rows)}) > 1:
         return False
-    form_sum = sum(form_amounts)
+
+    # A label prints ONE row per disclosed form. DSLD can emit that single
+    # printed row more than once when it carries several serving-size variants
+    # (GNC Bulk 1340 243808 does exactly this), which would otherwise charge the
+    # same form twice. Collapse repeated declarations of the same form within
+    # the declared-total basis before comparing magnitudes.
+    dfe_form_totals: Dict[str, float] = {}
+    mass_form_total = 0.0
+    for name, basis, normalized in form_rows:
+        if basis == _FOLATE_BASIS_DFE:
+            dfe_form_totals[name] = max(dfe_form_totals.get(name, 0.0), normalized)
+        else:
+            mass_form_total += normalized
+    form_sum = sum(dfe_form_totals.values()) + mass_form_total
     if form_sum <= 0:
         return False
+
     tolerance = max(
         _FOLATE_RECONCILE_ABS_TOLERANCE,
         parent_amount * _FOLATE_RECONCILE_REL_TOLERANCE,
     )
-    return abs(parent_amount - form_sum) <= tolerance
+    if abs(parent_amount - form_sum) <= tolerance:
+        return True
+
+    # A declared DFE total may itemise only PART of itself, in which case the
+    # disclosed form is a component of that total rather than a second
+    # exposure (Pure Encapsulations 246430 declares 1667 mcg DFE and discloses
+    # the 400 mcg of folic acid already inside it). Only a declared-total (DFE)
+    # basis supports that reading: a mass-basis panel itemises form masses,
+    # where a small child beside a large parent is not evidence of inclusion.
+    return (
+        parent_basis == _FOLATE_BASIS_DFE
+        and form_sum <= parent_amount + tolerance
+    )
 
 
 def _resolve_pct_ul(flag: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:

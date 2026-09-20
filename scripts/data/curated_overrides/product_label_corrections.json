@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-08-24",
-    "total_entries": 41,
+    "last_updated": "2026-09-20",
+    "total_entries": 50,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -905,6 +905,230 @@
       "review_date": "2026-08-19",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_text_correction"
+    },
+    "223563": {
+      "brand": "Nutricost",
+      "product_name": "Postnatal Multivitamin",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "raw_quantity_unit": "mg RAE",
+      "corrected_quantity_unit": "mcg RAE",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD JSON API reports the prenatal/postnatal Vitamin A as 900 mg RAE. 'mg RAE' is not a vitamin-A unit anywhere in the frozen 15,414-record corpus (which uses mcg RAE on 299 rows, mcg on 889, IU on 830, mg on 16); these three rows are the entire population of the anomaly. The row's own printed %DV is 60%, which resolves to 900 mcg against the label's own 1500 mcg RAE reference, i.e. a microgram-class quantity rather than 900 mg (=900,000 mcg). The archived DSLD label image for this record prints a three-glyph microgram-class unit box measuring 53-54 px at 600 dpi, where a two-glyph 'mg' measures 39 px on the same page (calibrated against that page's own mg and mcg rows). This product-scoped correction repairs the source transcription unit; the quantity 900 and the nutrient identity are unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/223563",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/223563.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "223572": {
+      "brand": "Nutricost",
+      "product_name": "Prenatal Multivitamin",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "raw_quantity_unit": "mg RAE",
+      "corrected_quantity_unit": "mcg RAE",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "Sister record of 223563: the same 900 quantity, the same mis-transcribed 'mg RAE' unit, and the same printed row %DV of 60% (which resolves to a microgram-class quantity against the label's own 1500 mcg RAE reference). The archived DSLD label image prints a three-glyph microgram-class unit box (53-54 px at 600 dpi) versus 39 px for a two-glyph 'mg' on the same page. Neither record has sibling label versions in DSLD (siblings=0), so the printed scan plus the row's own %DV are the corroborating sources. This product-scoped correction repairs the unit only; the quantity and nutrient identity are unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/223572",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/223572.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "328644": {
+      "brand": "Life Extension",
+      "product_name": "Prenatal Advantage",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "raw_quantity_unit": "mg RAE",
+      "corrected_quantity_unit": "mcg RAE",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD JSON API reports the prenatal Vitamin A as 1300 mg RAE. Solving this one needs no OCR: both sibling label versions of the identical Prenatal Advantage panel transcribe the same row as '1300 mcg RAE' at the same 100 %DV, an in-DSLD cross-check between independent transcriptions of the same printed panel. 1300 mcg RAE is the published pregnancy/lactation Vitamin A Daily Value, which is exactly what a 100 %DV row must state. 'mg RAE' occurs on no other vitamin-A row in the corpus. This product-scoped correction repairs the unit only; the quantity 1300 and the nutrient identity are unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/328644",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/328644.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "228823": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Bulk 1340 Double Chocolate",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "name": "Natural Beta-Carotene",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "uniiCode": "01YAE03M7J"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "The frozen structured Vitamin A row carries no form, so form detection routes to vitamin_a_unknown (factor 1.0), the dose assessment reports ul_assessment_status unresolved_form with reason_code unknown_vitamin_form, and one source row is left incomplete, which gates the product on the completeness gate. The archived Bulk 1340 printed label resolves the form: its OTHER INGREDIENTS vitamin-and-mineral blend names the source of every nutrient (Calcium Phosphate, Potassium Phosphate, Magnesium Aspartate, Ascorbic Acid, Niacinamide, d-Alpha Tocopheryl Acetate, Biotin, Zinc Citrate, d-Calcium Pantothenate, Natural beta-Carotene, L-Selenomethionine, Ferrous Fumarate, Chromium Amino Acid Chelate, Manganese Sulfate, Thiamin Mononitrate, Pyridoxine HCl, Folic Acid, Molybdenum Amino Acid Chelate, Riboflavin, Potassium Iodide, Cholecalciferol, Copper Oxide, Cyanocobalamin), and vitamin A is supplied as Natural beta-Carotene, the only vitamin A source in the formula. The row's own printed %DV (334% on the water basis, 380% on the milk basis) resolves on the RAE basis, which is consistent with a provitamin-A source. Restoring the printed form does NOT default the row to retinol and does not alter the declared amount; the retinol-based preformed-Vitamin-A upper limit correctly does not apply to a beta-carotene source (NIH ODS: the Vitamin A UL applies to preformed vitamin A only, and beta-carotene and other provitamin-A carotenoids have no established UL).",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/228823",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/228823.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_provenance_correction"
+    },
+    "243799": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Bulk 1340 Vanilla Ice Cream",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "name": "Natural Beta-Carotene",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "uniiCode": "01YAE03M7J"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "Same Bulk 1340 panel family and same printed vitamin-and-mineral blend as 228823, where vitamin A is sourced as Natural beta-Carotene (the only vitamin A source listed). The frozen row carries no form, which routes form detection to vitamin_a_unknown and leaves an incomplete source row on the completeness gate. Restoring the printed provitamin-A form does not default the row to retinol, does not change the declared amount, and correctly leaves the preformed-Vitamin-A (retinol) upper limit inapplicable.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/243799",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/243799.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_provenance_correction"
+    },
+    "243808": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Bulk 1340 Strawberries & Cream",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "name": "Natural Beta-Carotene",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "uniiCode": "01YAE03M7J"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "Same Bulk 1340 panel family; the printed vitamin-and-mineral blend sources vitamin A as Natural beta-Carotene, the only vitamin A source listed. The frozen row carries no form, routing form detection to vitamin_a_unknown and leaving an incomplete source row on the completeness gate. This is the Vitamin A half of this product's remediation; its separate folate representation defect is reconciled in the dose-safety folate parent-total contract, not by a source-row rewrite. Restoring the printed provitamin-A form does not default the row to retinol and correctly leaves the preformed-Vitamin-A (retinol) upper limit inapplicable.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/243808",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/243808.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_provenance_correction"
+    },
+    "243812": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Bulk 1340 Double Chocolate",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "name": "Natural Beta-Carotene",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "uniiCode": "01YAE03M7J"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "Same Bulk 1340 panel family (12 lb double-chocolate version) and same printed vitamin-and-mineral blend as 228823, where vitamin A is sourced as Natural beta-Carotene. The frozen row carries no form, which routes form detection to vitamin_a_unknown and leaves an incomplete source row on the completeness gate. Restoring the printed provitamin-A form does not default the row to retinol, does not change the declared amount, and correctly leaves the preformed-Vitamin-A (retinol) upper limit inapplicable.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/243812",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/243812.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_provenance_correction"
+    },
+    "243815": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Bulk 1340 Vanilla Ice Cream",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "name": "Natural Beta-Carotene",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "uniiCode": "01YAE03M7J"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "Same Bulk 1340 panel family (12 lb vanilla version) and same printed vitamin-and-mineral blend as 243799, where vitamin A is sourced as Natural beta-Carotene. The frozen row carries no form, which routes form detection to vitamin_a_unknown and leaves an incomplete source row on the completeness gate. Restoring the printed provitamin-A form does not default the row to retinol, does not change the declared amount, and correctly leaves the preformed-Vitamin-A (retinol) upper limit inapplicable.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/243815",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/243815.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_provenance_correction"
+    },
+    "269360": {
+      "brand": "Doctor's Best",
+      "product_name": "Serrapeptase 40,000 SPU",
+      "raw_ingredient_text": "Serrapeptase Enzyme",
+      "corrected_ingredient_text": "Serrapeptase Enzyme",
+      "raw_quantity_value": 0,
+      "raw_quantity_unit": "NP",
+      "corrected_quantity_value": 40000,
+      "corrected_quantity_unit": "SPU",
+      "correction_fields": [
+        "quantity.value",
+        "quantity.unit"
+      ],
+      "evidence": "The structured DSLD row for this product's only active reports Serrapeptase Enzyme at 0 NP, so the product was scored with a declared identity that had no declared amount. The archived DSLD label image for 269360 prints 'Serrapeptase Enzyme   40,000 SPU**' together with the label's own footnote '**SPU - serratiopeptidase activity units'; the DSLD record already carries that footnote as a statement ('Formulation re: Other :: SPU - serratiopeptidase activity units'), and sibling label 25222 in the same product family is transcribed by DSLD as 'Serrapeptase = 40000 Unit(s)' with the statement '40,000 SERRATIO UNITS PER VEGGIE CAP'. The manufacturer's Supplement Facts panel independently prints 'Serrapeptase Enzyme (from Serratia sp.) 40,000 SPU**' with the same SPU footnote. The declared activity therefore exists on the printed Supplement Facts panel and the structured record missed it; the amount is taken from that panel and never from the product name.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/269360",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/269360.pdf",
+        "https://www.doctorsbest.com/products/doctor-s-best-serrapeptase-90-veggie-caps-4467"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-09-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_and_activity_dose_correction"
     }
   }
 }
