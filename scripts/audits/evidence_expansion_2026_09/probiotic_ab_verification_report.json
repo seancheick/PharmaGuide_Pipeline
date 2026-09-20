@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-20T02:27:53Z",
+  "timestamp": "2026-09-20T12:51:32Z",
   "probiotic_products_audited": 884,
   "evidence_score_movers_count": 0,
   "evidence_score_movers": [],
@@ -10,8 +10,9 @@
   "control_sample_movers_count": 0,
   "state_transitions": {
     "applicability_unestablished -> research_present_applicability_unestablished": 62,
-    "clinical_review_not_covered -> research_present_applicability_unestablished": 12,
-    "clinical_review_not_covered -> native_research_review_incomplete": 11
+    "clinical_review_not_covered -> research_present_applicability_unestablished": 11,
+    "clinical_review_not_covered -> native_research_review_incomplete": 11,
+    "clinical_review_not_covered -> applicability_unestablished": 1
   },
   "status_transitions": {
     "complete -> partial": 136
@@ -206,7 +207,7 @@
       "module": "generic",
       "identity_category": "species_only_no_strain_literature",
       "old_ev_state": "clinical_review_not_covered",
-      "new_ev_state": "research_present_applicability_unestablished",
+      "new_ev_state": "applicability_unestablished",
       "old_status": "complete",
       "new_status": "complete",
       "old_ev_score": 0.0,
@@ -382,7 +383,7 @@
       "probiotic_component_meta": null
     }
   },
-  "strain_stubs_122_total": 0,
-  "strain_stubs_122_still_partial": 0,
-  "strain_stubs_122_still_incomplete": 0
+  "strain_stubs_122_total": 122,
+  "strain_stubs_122_still_partial": 122,
+  "strain_stubs_122_still_incomplete": 122
 }
