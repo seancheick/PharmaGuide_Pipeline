@@ -33,6 +33,11 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Set, Tuple
 
+try:
+    from scoring_reference_resolver import rda_ul_reference_entry
+except ImportError:
+    from scripts.scoring_reference_resolver import rda_ul_reference_entry
+
 _DATA_DIR = Path(__file__).resolve().parent / "data"
 
 _IQM_PATH = _DATA_DIR / "ingredient_quality_map.json"
@@ -217,46 +222,6 @@ def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Opt
     return False
 
 
-_CANONICAL_NUTRIENT_BRIDGE: Dict[str, str] = {
-    "vitamin_b1_thiamine": "thiamin",
-    "vitamin_b2_riboflavin": "riboflavin",
-    "vitamin_b3_niacin": "niacin",
-    "vitamin_b5_pantothenic": "pantothenic_acid",
-    "vitamin_b6_pyridoxine": "vitamin_b6",
-    "vitamin_b7_biotin": "biotin",
-    "vitamin_b9_folate": "folate",
-    "vitamin_b12_cobalamin": "vitamin_b12",
-    "vitamin_k1": "vitamin_k",
-    "vitamin_k2": "vitamin_k",
-    "vitamin_d3": "vitamin_d",
-    "vitamin_d2": "vitamin_d",
-}
-
-
-@lru_cache(maxsize=1)
-def _load_nutrition_authority() -> Dict[str, Dict[str, Any]]:
-    """Index essential nutrients from rda_optimal_uls.json."""
-    try:
-        raw = json.loads(_RDA_UL_PATH.read_text(encoding="utf-8"))
-        index = {}
-        for item in raw.get("nutrient_recommendations", []):
-            if not isinstance(item, dict):
-                continue
-            cid = _norm(item.get("id") or item.get("canonical_id") or item.get("nutrient"))
-            if cid:
-                index[cid] = item
-            name = _norm(item.get("standard_name") or item.get("name") or item.get("nutrient"))
-            if name:
-                index[name] = item
-            for alias in item.get("aliases", []):
-                index[_norm(alias)] = item
-        # Bridge IQM specific vitamin canonical keys to nutrition recommendations
-        for iqm_key, rda_key in _CANONICAL_NUTRIENT_BRIDGE.items():
-            if rda_key in index and iqm_key not in index:
-                index[iqm_key] = index[rda_key]
-        return index
-    except Exception:
-        return {}
 
 
 @lru_cache(maxsize=1)
@@ -517,12 +482,11 @@ def resolve_evidence_for_row(
             )
 
     # 6. Check Nutrition Authority (DRI/RDA/AI benchmarks for essential nutrients)
-    nutr_index = _load_nutrition_authority()
-    nutr_entry = nutr_index.get(canonical) or nutr_index.get(norm_name)
+    nutr_entry = rda_ul_reference_entry(canonical_id=canonical, name=name)
     if nutr_entry and is_essential_dietary_nutrient(canonical, name, iqm_entry):
         matched_owners.append("nutrition_authority")
         owner_facts["nutrition_authority"] = {
-            "nutrient": nutr_entry.get("nutrient") or nutr_entry.get("name"),
+            "nutrient": nutr_entry.get("id") or nutr_entry.get("standard_name"),
             "category": nutr_entry.get("category"),
             "is_essential": True,
             "rda_ai": nutr_entry.get("rda_or_ai"),

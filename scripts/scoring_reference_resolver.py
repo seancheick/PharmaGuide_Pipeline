@@ -167,6 +167,16 @@ def _lookup(index: Dict[str, Dict[str, Any]], keys: List[str]) -> Tuple[Optional
     return None, None
 
 
+def rda_ul_reference_entry(
+    canonical_id: Any = None,
+    name: Any = None,
+    aliases: Any = None,
+) -> Optional[Dict[str, Any]]:
+    """Return the exact RDA/UL nutrition authority entry for an ingredient via canonical keys/aliases."""
+    entry, _ = _lookup(_rda_ul_index(), _identity_keys(canonical_id, name, aliases))
+    return entry
+
+
 @lru_cache(maxsize=1)
 def _botanical_identity_index() -> frozenset:
     """Normalized id/standard_name/alias set of genuine botanicals

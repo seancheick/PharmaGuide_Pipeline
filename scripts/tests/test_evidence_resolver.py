@@ -68,6 +68,34 @@ def test_essential_nutrient_resolved_by_authority():
         assert res.applicability_status == "established_essential_nutrient"
 
 
+def test_canonical_iqm_vitamins_resolve_via_nutrition_authority():
+    """IQM canonical IDs for vitamins resolve to nutrition_authority via rda_optimal_uls.json aliases."""
+    for iqm_canon in (
+        "vitamin_b1_thiamine",
+        "vitamin_b2_riboflavin",
+        "vitamin_b3_niacin",
+        "vitamin_b5_pantothenic",
+        "vitamin_b6_pyridoxine",
+        "vitamin_b7_biotin",
+        "vitamin_b9_folate",
+        "vitamin_b12_cobalamin",
+        "vitamin_d3",
+        "vitamin_k1",
+    ):
+        res = er.resolve_evidence_for_canonical(iqm_canon, dose_value=10.0, dose_unit="mg")
+        assert res.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value, f"{iqm_canon} did not resolve to authority"
+        assert "nutrition_authority" in res.matched_owners
+        assert res.points_eligible is False
+
+
+def test_no_local_nutrient_whitelist_in_resolver():
+    """Universal resolver must NOT own a private nutrient alias translation table."""
+    import inspect
+    source = inspect.getsource(er)
+    assert "_CANONICAL_NUTRIENT_BRIDGE" not in source
+    assert "vitamin_b6_pyridoxine" not in source
+
+
 def test_reviewed_clinical_study_resolution():
     """Clinically-studied botanical/amino acid with qualifying trials resolves to RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE."""
     res = er.resolve_evidence_for_canonical("ashwagandha", dose_value=600.0, dose_unit="mg")
