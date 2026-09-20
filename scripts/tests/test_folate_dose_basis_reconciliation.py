@@ -142,3 +142,84 @@ def test_non_folate_nutrient_is_not_collapsed():
         {"ingredient": "Vitamin A", "amount": 1700.0, "unit": "mcg"},
         {"ingredient": "Retinyl Palmitate", "amount": 1700.0, "unit": "mcg"},
     ], nutrient="Vitamin A", canonical="vitamin_a")) is False
+
+
+# ── 2026-09-20 source-resolution fixtures ────────────────────────────────
+#
+# Three Phase-3 products were carrying a folate flag that double-counted one
+# printed exposure. Each shape below is the contributing-row set the enriched
+# contract actually produced for that product.
+
+
+def test_partial_form_breakdown_inside_a_declared_dfe_total_is_one_exposure():
+    """246430 Pure Encapsulations PreNatal Nutrients.
+
+    The label declares 1667 mcg DFE and separately discloses the 400 mcg of
+    folic acid that is already inside that total (1000 mcg L-5-MTHF at 1:1 plus
+    400 mcg folic acid x 1.7 = 1680). Charging the disclosed component again
+    produced a false over-limit state; the child is a subset of the total.
+    """
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folate", "amount": 1667.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 680.0, "unit": "mcg DFE"},
+    ])) is True
+
+
+def test_sibling_form_rows_for_one_printed_row_are_one_exposure():
+    """243808 GNC Bulk 1340 Strawberries & Cream.
+
+    The label prints ONE folate row with two preparation-basis columns and one
+    folic-acid row with the matching pair, but this record emitted the single
+    printed folic-acid row as two sibling rows (435 and 400 mcg). Summing them
+    charged the same form twice; they carry the same name and basis, so they
+    collapse to the maximum declared value before reconciling.
+    """
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folate", "amount": 1450.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 1479.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 1360.0, "unit": "mcg DFE"},
+    ])) is True
+
+
+def test_declared_total_named_folic_acid_still_reconciles_with_its_form():
+    """201420 Solgar Male Multiple, after the reviewed row-identity correction.
+
+    The declared-total row was mis-named 'Folic Acid' at a DFE amount; sibling
+    record 201405 transcribes the same printed panel as 'Folate 1333 mcg DFE'.
+    With the parent recognised and the 800 mcg form converted on the DFE basis
+    the two describe one exposure.
+    """
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folate", "amount": 1333.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 1360.0, "unit": "mcg DFE"},
+    ])) is True
+
+
+# ── guards on the new allowances ─────────────────────────────────────────
+
+
+def test_a_large_form_beside_a_small_declared_total_is_not_collapsed():
+    """The subset reading must not survive the form exceeding the total."""
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folate", "amount": 400.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 1700.0, "unit": "mcg DFE"},
+    ])) is False
+
+
+def test_distinct_forms_sharing_a_basis_are_never_collapsed():
+    """Collapsing is scoped to repeated declarations of the SAME form. Two
+    different disclosed forms are still two disclosures and must reconcile."""
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folate", "amount": 400.0, "unit": "mcg DFE"},
+        {"ingredient": "L-5-MTHF", "amount": 300.0, "unit": "mcg DFE"},
+        {"ingredient": "Folic Acid", "amount": 300.0, "unit": "mcg DFE"},
+    ])) is False
+
+
+def test_a_mass_basis_panel_never_gets_the_declared_total_subset_reading():
+    """A mass-basis panel itemises form masses, where a small child beside a
+    large parent is not evidence that the child is inside the parent."""
+    assert is_folate_parent_total_duplicate_flag(_flag([
+        {"ingredient": "Folate", "amount": 400.0, "unit": "mcg"},
+        {"ingredient": "Folic Acid", "amount": 100.0, "unit": "mcg"},
+    ])) is False

@@ -206,6 +206,24 @@
     "regression_added": "scripts/tests/test_standardization_marker_generalization.py (5 tests) pins the non-target cases, the preserved disclosure quantities, the parent-keeps-the-dose property, and the non-standardized-extract negative control."
   },
 
+  "source_resolution_20260920": {
+    "artifact": "source_resolution_20260920/SOURCE_RESOLUTION_RECEIPTS_20260920.json",
+    "reconciliation": "source_resolution_20260920/SOURCE_RECONCILIATION_20260920.md",
+    "pharmacist_packet": "source_resolution_20260920/PHARMACIST_PACKET_PHASE3_SOURCE_RESOLVED_20260920.md",
+    "status": "Every row in remaining_external tagged as a SOURCE question is now closed. Live DSLD, the archived DSLD label image (the scan matching this product/version), DSLD sibling label records and manufacturer panels were used. No pipeline file, product lane or frozen corpus record was modified.",
+    "row_level_dispositions": {
+      "source_verified_correction": 11,
+      "source_record_correct_no_change": 9,
+      "source_insufficient_keep_withheld": 3,
+      "intentional_non_scoreable": 3
+    },
+    "supersedes": {
+      "E2 unit-corruption cases": "328644 / 223563 / 223572 -> source_verified_correction (mcg RAE), established by the row's own %DV plus the sibling transcriptions (328644: both siblings read 1300 mcg RAE). 231334 / 231335 / 263865 -> source_insufficient_keep_withheld: the record reproduces the printed panel, the denomination glyph is not separable to audit grade, and no UL claim depends on it.",
+      "Vitamin-A form/completeness gap": "source_verified_correction - the printed OTHER INGREDIENTS blend names Natural beta-Carotene as the vitamin A source; record the form with provenance (never default to retinol). Only the provitamin-A UL applicability policy remains, and it is in the pharmacist packet.",
+      "Folate parent+form double count": "source-established: the Bulk 1340 panel has two printed value columns (360 g in Water / 360 g in 2% Milk). 243808 is the only record that splits one folic-acid form row into two; 14 sibling records of the same panel keep them paired. 201420's declared-total row is named Folic Acid where sibling 201405 names it Folate. 246430's 400 mcg folic acid is inside its 1667 mcg DFE total. One reviewed dose-safety change remains (owner: dose-safety/folate).",
+      "Serrapeptase 269360": "source_verified_correction - the archived label image and the manufacturer panel both declare Serrapeptase Enzyme 40,000 SPU; the structured record stored 0 NP. Sibling label 25222 is transcribed with 40000 Unit(s) and the record already carries the label's SPU footnote as a statement."
+    }
+  },
   "omission_reason_debt": {
     "status": "recorded technical debt, not a Phase-3 blocker",
     "detail": "omission_reason is a closed enum (nutrition_fact_not_applicable, decorative_or_header_text, duplicate_source_line, empty_source_text, unsupported_source_structure). Omega child rows subordinate to a dosed parent reuse duplicate_source_line because no enum value names 'subordinate to dosed parent / constituent without independent dose'.",

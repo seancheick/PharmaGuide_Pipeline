@@ -1,0 +1,335 @@
+{
+ "src": "01-raw/2024-03-22/data/label_151.json",
+ "id": 12300,
+ "nhanesId": "1-000-9186-00",
+ "bundleName": "",
+ "fullName": "Fem-Mend Synergistic Blend",
+ "brandName": "Nature's Way",
+ "brandIpSymbol": "\u00ae",
+ "upcSku": "0 33674 00060 1",
+ "productVersionCode": "R/0",
+ "pdf": "",
+ "thumbnail": "",
+ "servingsPerContainer": "50",
+ "hasOuterCarton": false,
+ "percentDvFootnote": "Percent Daily Values are based on a 2,000 calorie diet.",
+ "labelRelationships": [
+  {
+   "type": "Image difference, same product",
+   "labelId": 85523
+  }
+ ],
+ "contacts": [
+  {
+   "contactId": 3048,
+   "text": "(C)2010",
+   "types": [
+    "Manufacturer"
+   ],
+   "contactDetails": {
+    "src": "01-raw/2025-09-25/data/contact_1.json",
+    "id": 3048,
+    "name": "R/0 Nature's Way Products, Inc.",
+    "streetAddress": "",
+    "city": "Springville",
+    "state": "Utah",
+    "country": "USA",
+    "zipCode": "84663",
+    "phoneNumber": "",
+    "email": "",
+    "webAddress": ""
+   }
+  },
+  {
+   "contactId": 3049,
+   "text": "Questions? Call",
+   "types": [
+    "Other"
+   ],
+   "contactDetails": {
+    "src": "01-raw/2025-09-25/data/contact_1.json",
+    "id": 3049,
+    "name": "",
+    "streetAddress": "",
+    "city": "",
+    "state": "",
+    "country": "",
+    "zipCode": "",
+    "phoneNumber": "1-800-962-8873",
+    "email": "",
+    "webAddress": "naturesway.com"
+   }
+  }
+ ],
+ "netContents": [
+  {
+   "order": 1,
+   "quantity": 100,
+   "unit": "Capsule(s)",
+   "display": "100 Capsule(s)"
+  },
+  {
+   "order": 2,
+   "quantity": 430,
+   "unit": "mg",
+   "display": "430 mg"
+  }
+ ],
+ "physicalState": {
+  "langualCode": "E0159",
+  "langualCodeDescription": "Capsule"
+ },
+ "servingSizes": [
+  {
+   "order": 1,
+   "minQuantity": 2,
+   "maxQuantity": 2,
+   "minDailyServings": 2,
+   "maxDailyServings": 2,
+   "unit": "Capsule(s)",
+   "inSFB": true
+  }
+ ],
+ "targetGroups": [
+  "Adult Female (18 - 50 Years)"
+ ],
+ "productType": {
+  "langualCode": "A1306",
+  "langualCodeDescription": "Botanical"
+ },
+ "statements": [
+  {
+   "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+   "notes": "Health & longevity through the healing power of nature - that's what it means to Trust the Leaf.(R)"
+  },
+  {
+   "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+   "notes": "Caution: If you are pregnant or have gallstones, acidic urine, kidney disorders or digestive concerns consult a physician before using this product."
+  },
+  {
+   "type": "General Statements: All Other Content",
+   "notes": "Questions? Call 1-800-9NATURE or visit naturesway.com. Fem-Mend(R) is carefully tested and produced to certified quality standards."
+  },
+  {
+   "type": "General Statements: All Other Content",
+   "notes": "SATISFACTION GUARANTEED."
+  },
+  {
+   "type": "Precautions re: All Other",
+   "notes": "Freshness & safety sealed with printed outer shrinkwrap and printed inner seal. Do not use if either seal is broken or missing."
+  },
+  {
+   "type": "Precautions re: Children",
+   "notes": "Keep out of reach of children."
+  },
+  {
+   "type": "General Statements: All Other Content",
+   "notes": "PREMIUM FORMULA"
+  },
+  {
+   "type": "Formula re: Type",
+   "notes": "WOMEN'S HEALTH"
+  },
+  {
+   "type": "General Statements: All Other Content",
+   "notes": "Certified 430 mg"
+  },
+  {
+   "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+   "notes": "Fem-Mend(R) is a specially balanced, proprietary blend of traditional herbs for women's health."
+  },
+  {
+   "type": "Suggested/Recommended/Usage/Directions",
+   "notes": "Recommendation: Take 2 capsules twice daily, preferably with food."
+  },
+  {
+   "type": "FDA Statement of Identity",
+   "notes": "DIETARY SUPPLEMENT"
+  },
+  {
+   "type": "Seals/Symbols",
+   "notes": "Nature's Way(R)"
+  }
+ ],
+ "claims": [
+  {
+   "langualCode": "P0115",
+   "langualCodeDescription": "All Other"
+  }
+ ],
+ "events": [
+  {
+   "date": "2012-08-24",
+   "type": "Date entered into DSLD"
+  }
+ ],
+ "userGroups": [
+  {
+   "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+   "langualCode": "P0250",
+   "langualCodeDescription": "Adults and Children 4 years and above"
+  }
+ ],
+ "ingredientRows": [
+  {
+   "order": 1,
+   "ingredientId": 283702,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 1,
+     "unit": "g",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "<",
+       "percent": 1,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Capsule(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Total Carbohydrates",
+   "category": "sugar",
+   "ingredientGroup": "Carbohydrate",
+   "uniiCode": "0",
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 2,
+   "ingredientId": 48521,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 860,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value not established"
+      }
+     ],
+     "servingSizeUnit": "Capsule(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Proprietary Blend",
+   "category": "blend",
+   "ingredientGroup": "Proprietary Blend (Herb/Botanical)",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 48522,
+     "prefix": null,
+     "percent": null,
+     "name": "Blessed Thistle",
+     "category": "botanical",
+     "ingredientGroup": "Blessed Thistle",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 50424,
+     "prefix": null,
+     "percent": null,
+     "name": "Cayenne Pepper",
+     "category": "botanical",
+     "ingredientGroup": "Capsicum",
+     "uniiCode": null
+    },
+    {
+     "order": 3,
+     "ingredientId": 43031,
+     "prefix": null,
+     "percent": null,
+     "name": "Cramp Bark",
+     "category": "botanical",
+     "ingredientGroup": "Cramp Bark",
+     "uniiCode": null
+    },
+    {
+     "order": 4,
+     "ingredientId": 16015,
+     "prefix": null,
+     "percent": null,
+     "name": "Ginger",
+     "category": "botanical",
+     "ingredientGroup": "Ginger ",
+     "uniiCode": null
+    },
+    {
+     "order": 5,
+     "ingredientId": 25929,
+     "prefix": null,
+     "percent": null,
+     "name": "Goldenseal",
+     "category": "botanical",
+     "ingredientGroup": "Goldenseal",
+     "uniiCode": null
+    },
+    {
+     "order": 6,
+     "ingredientId": 48441,
+     "prefix": null,
+     "percent": null,
+     "name": "Pomegranate",
+     "category": "botanical",
+     "ingredientGroup": "Pomegranate",
+     "uniiCode": null
+    },
+    {
+     "order": 7,
+     "ingredientId": 18663,
+     "prefix": null,
+     "percent": null,
+     "name": "Red Raspberry",
+     "category": "botanical",
+     "ingredientGroup": "Red Raspberry",
+     "uniiCode": null
+    },
+    {
+     "order": 8,
+     "ingredientId": 17736,
+     "prefix": null,
+     "percent": null,
+     "name": "Uva Ursi",
+     "category": "botanical",
+     "ingredientGroup": "Uva Ursi",
+     "uniiCode": null
+    }
+   ]
+  }
+ ],
+ "otheringredients": {
+  "text": null,
+  "ingredients": [
+   {
+    "order": 1,
+    "ingredientId": 27345,
+    "name": "Gelatin",
+    "category": "protein",
+    "ingredientGroup": "Gelatin",
+    "uniiCode": null,
+    "alternateNames": [],
+    "forms": []
+   }
+  ]
+ },
+ "offMarket": 0,
+ "entryDate": "2012-08-24"
+}

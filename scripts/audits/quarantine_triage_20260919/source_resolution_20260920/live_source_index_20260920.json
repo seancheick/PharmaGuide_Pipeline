@@ -1,0 +1,730 @@
+{
+ "223563": {
+  "dsld_id": "223563",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Postnatal Multivitamin",
+  "brandName": "Nutricost",
+  "src": "01-raw/2025-09-25/data/label_339.json",
+  "entryDate": "2020-06-24",
+  "offMarket": 0,
+  "productVersionCode": "401839",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 60,
+    "unit": "Tablet(s)",
+    "display": "60 Tablet(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 2,
+    "maxQuantity": 2,
+    "minDailyServings": 1,
+    "maxDailyServings": 1,
+    "unit": "Tablet(s)",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "30",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/223563.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Nutricost/223563.json"
+ },
+ "223572": {
+  "dsld_id": "223572",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Prenatal Multivitamin",
+  "brandName": "Nutricost",
+  "src": "01-raw/2025-09-25/data/label_348.json",
+  "entryDate": "2020-06-24",
+  "offMarket": 0,
+  "productVersionCode": "401838",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 60,
+    "unit": "Tablet(s)",
+    "display": "60 Tablet(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 2,
+    "maxQuantity": 2,
+    "minDailyServings": 1,
+    "maxDailyServings": 1,
+    "unit": "Tablet(s)",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "30",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/223572.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Nutricost/223572.json"
+ },
+ "231334": {
+  "dsld_id": "231334",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Formula VM-2000",
+  "brandName": "Solgar",
+  "src": "01-raw/2025-09-25/data/label_167.json",
+  "entryDate": "2020-07-23",
+  "offMarket": 0,
+  "productVersionCode": "Prod 59202 SOLGB78131 01A 14-59202X3S",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 90,
+    "unit": "Tablet(s)",
+    "display": "90 Tablet(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 2,
+    "maxQuantity": 2,
+    "minDailyServings": 1,
+    "maxDailyServings": 1,
+    "unit": "Tablet(s)",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "45",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/231334.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Solgar/231334.json"
+ },
+ "231335": {
+  "dsld_id": "231335",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Formula VM-2000",
+  "brandName": "Solgar",
+  "src": "01-raw/2025-09-25/data/label_168.json",
+  "entryDate": "2020-07-23",
+  "offMarket": 0,
+  "productVersionCode": "Prod 59203 14-59203X3S SOLGB78131 01A",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 180,
+    "unit": "Tablet(s)",
+    "display": "180 Tablet(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 2,
+    "maxQuantity": 2,
+    "minDailyServings": 1,
+    "maxDailyServings": 1,
+    "unit": "Tablet(s)",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "90",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/231335.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Solgar/231335.json"
+ },
+ "263865": {
+  "dsld_id": "263865",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Formula VM-2000",
+  "brandName": "Solgar",
+  "src": "01-raw/2025-09-25/data/label_168.json",
+  "entryDate": "2022-06-16",
+  "offMarket": 0,
+  "productVersionCode": "SOLGB78131 04C 14-01189X3S Prod 1189",
+  "pdf": "263865_document.pdf",
+  "thumbnail": "263865_thumbnail.jpg",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 180,
+    "unit": "Tablet(s)",
+    "display": "180 Tablet(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 2,
+    "maxQuantity": 2,
+    "minDailyServings": 1,
+    "maxDailyServings": 1,
+    "unit": "Tablet(s)",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "90",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/263865.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Solgar/263865.json"
+ },
+ "328644": {
+  "dsld_id": "328644",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Prenatal Advantage",
+  "brandName": "Life Extension",
+  "src": "01-raw/2025-09-25/data/label_347.json",
+  "entryDate": "2025-05-21",
+  "offMarket": 0,
+  "productVersionCode": "L02319D",
+  "pdf": "328644_document.pdf",
+  "thumbnail": "328644_thumbnail.jpg",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 120,
+    "unit": "Easy-to-Swallow Softgel(s)",
+    "display": "120 Easy-to-Swallow Softgel(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 1,
+    "maxQuantity": 1,
+    "minDailyServings": 4,
+    "maxDailyServings": 4,
+    "unit": "Softgel(s)",
+    "notes": "",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "30",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/328644.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Life_Extension/328644.json"
+ },
+ "12300": {
+  "dsld_id": "12300",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Fem-Mend Synergistic Blend",
+  "brandName": "Nature's Way",
+  "src": "01-raw/2024-03-22/data/label_151.json",
+  "entryDate": "2012-08-24",
+  "offMarket": 0,
+  "productVersionCode": "R/0",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 100,
+    "unit": "Capsule(s)",
+    "display": "100 Capsule(s)"
+   },
+   {
+    "order": 2,
+    "quantity": 430,
+    "unit": "mg",
+    "display": "430 mg"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 2,
+    "maxQuantity": 2,
+    "minDailyServings": 2,
+    "maxDailyServings": 2,
+    "unit": "Capsule(s)",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "50",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/12300.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Natures_Way/12300.json"
+ },
+ "254396": {
+  "dsld_id": "254396",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Vitamin B12 (Cyanocobalamin)",
+  "brandName": "BulkSupplements.com",
+  "src": "01-raw/2025-03-25/data/label_300.json",
+  "entryDate": "2021-10-22",
+  "offMarket": 0,
+  "productVersionCode": "001",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 3.5,
+    "unit": "Ounce(s)",
+    "display": "3.5 Ounce(s)"
+   },
+   {
+    "order": 2,
+    "quantity": 100,
+    "unit": "Gram(s)",
+    "display": "100 Gram(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 1,
+    "maxQuantity": 1,
+    "minDailyServings": 1,
+    "maxDailyServings": null,
+    "unit": "Not Present",
+    "notes": "",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": null,
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/254396.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/BulkSupplements/254396.json"
+ },
+ "254413": {
+  "dsld_id": "254413",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Vitamin B12 (Methylcobalamin)",
+  "brandName": "BulkSupplements.com",
+  "src": "01-raw/2025-02-23/data/label_450.json",
+  "entryDate": "2021-10-22",
+  "offMarket": 0,
+  "productVersionCode": "002",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 50,
+    "unit": "Gram(s)",
+    "display": "50 Gram(s)"
+   },
+   {
+    "order": 2,
+    "quantity": 1.76,
+    "unit": "Oz(s)",
+    "display": "1.76 Oz(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 1,
+    "maxQuantity": 1,
+    "minDailyServings": 1,
+    "maxDailyServings": null,
+    "unit": "Not Present",
+    "notes": "",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": null,
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/254413.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/BulkSupplements/254413.json"
+ },
+ "75291": {
+  "dsld_id": "75291",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Fish Oil Lemon",
+  "brandName": "GNC",
+  "src": "01-raw/2024-12-21/data/label_192.json",
+  "entryDate": "2017-06-23",
+  "offMarket": 0,
+  "productVersionCode": "CODE 888622 GRG",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 90,
+    "unit": "Softgel(s)",
+    "display": "90 Softgel(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 1,
+    "maxQuantity": 1,
+    "minDailyServings": 1,
+    "maxDailyServings": 3,
+    "unit": "Softgel Capsule(s)",
+    "notes": "",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": null,
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/75291.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/GNC/75291.json"
+ },
+ "228823": {
+  "dsld_id": "228823",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Bulk 1340 Double Chocolate",
+  "brandName": "GNC Pro Performance",
+  "src": "01-raw/2025-09-25/data/label_71.json",
+  "entryDate": "2020-08-23",
+  "offMarket": 0,
+  "productVersionCode": "CODE 414778 BVG",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 7.14,
+    "unit": "lb(s)",
+    "display": "7.14 lb(s)"
+   },
+   {
+    "order": 2,
+    "quantity": 114.24,
+    "unit": "oz.",
+    "display": "114.24 oz."
+   },
+   {
+    "order": 3,
+    "quantity": 3240,
+    "unit": "Gram(s)",
+    "display": "3240 Gram(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 360,
+    "maxQuantity": 360,
+    "minDailyServings": 1,
+    "maxDailyServings": 2,
+    "unit": "Gram(s)",
+    "notes": "4 heaping scoops",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "9",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/228823.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/GNC/228823.json"
+ },
+ "243799": {
+  "dsld_id": "243799",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Bulk 1340 Vanilla Ice Cream",
+  "brandName": "GNC Pro Performance",
+  "src": "01-raw/2025-09-25/data/label_71.json",
+  "entryDate": "2021-02-25",
+  "offMarket": 0,
+  "productVersionCode": "CODE 414779 BVG",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 7.14,
+    "unit": "Pound(s)",
+    "display": "7.14 Pound(s)"
+   },
+   {
+    "order": 2,
+    "quantity": 114.24,
+    "unit": "Ounce(s)",
+    "display": "114.24 Ounce(s)"
+   },
+   {
+    "order": 3,
+    "quantity": 3240,
+    "unit": "Gram(s)",
+    "display": "3240 Gram(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 360,
+    "maxQuantity": 360,
+    "minDailyServings": 1,
+    "maxDailyServings": 2,
+    "unit": "Gram(s)",
+    "notes": "4 heaping scoops",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "9",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/243799.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/GNC/243799.json"
+ },
+ "243808": {
+  "dsld_id": "243808",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Bulk 1340 Strawberries & Cream",
+  "brandName": "GNC Pro Performance",
+  "src": "01-raw/2025-09-25/data/label_71.json",
+  "entryDate": "2021-02-25",
+  "offMarket": 0,
+  "productVersionCode": "CODE 414780 BVG",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 7.14,
+    "unit": "Pound(s)",
+    "display": "7.14 Pound(s)"
+   },
+   {
+    "order": 2,
+    "quantity": 114.24,
+    "unit": "Ounce(s)",
+    "display": "114.24 Ounce(s)"
+   },
+   {
+    "order": 3,
+    "quantity": 3240,
+    "unit": "Gram(s)",
+    "display": "3240 Gram(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 360,
+    "maxQuantity": 360,
+    "minDailyServings": 1,
+    "maxDailyServings": 2,
+    "unit": "Gram(s)",
+    "notes": "4 heaping scoops",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "9",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/243808.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/GNC/243808.json"
+ },
+ "243812": {
+  "dsld_id": "243812",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Bulk 1340 Double Chocolate",
+  "brandName": "GNC Pro Performance",
+  "src": "01-raw/2025-09-25/data/label_71.json",
+  "entryDate": "2021-02-25",
+  "offMarket": 0,
+  "productVersionCode": "CODE 414803 BUG",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 12,
+    "unit": "Pound(s)",
+    "display": "12 Pound(s)"
+   },
+   {
+    "order": 2,
+    "quantity": 192,
+    "unit": "Ounce(s)",
+    "display": "192 Ounce(s)"
+   },
+   {
+    "order": 3,
+    "quantity": 5443,
+    "unit": "Gram(s)",
+    "display": "5443 Gram(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 360,
+    "maxQuantity": 360,
+    "minDailyServings": 1,
+    "maxDailyServings": 2,
+    "unit": "Gram(s)",
+    "notes": "2 heaping scoops",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "15",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/243812.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/GNC/243812.json"
+ },
+ "243815": {
+  "dsld_id": "243815",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Bulk 1340 Vanilla Ice Cream",
+  "brandName": "GNC Pro Performance",
+  "src": "01-raw/2025-09-25/data/label_71.json",
+  "entryDate": "2021-03-25",
+  "offMarket": 0,
+  "productVersionCode": "CODE 414804 BUG",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 12,
+    "unit": "Pound(s)",
+    "display": "12 Pound(s)"
+   },
+   {
+    "order": 2,
+    "quantity": 192,
+    "unit": "Ounce(s)",
+    "display": "192 Ounce(s)"
+   },
+   {
+    "order": 3,
+    "quantity": 5443,
+    "unit": "Gram(s)",
+    "display": "5443 Gram(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 360,
+    "maxQuantity": 360,
+    "minDailyServings": null,
+    "maxDailyServings": null,
+    "unit": "Gram(s)",
+    "notes": "2 Heaping Scoops in water",
+    "inSFB": true
+   },
+   {
+    "order": 2,
+    "minQuantity": 360,
+    "maxQuantity": 360,
+    "minDailyServings": null,
+    "maxDailyServings": null,
+    "unit": "Gram(s)",
+    "notes": "2 Heaping Scoops in 2% milk"
+   }
+  ],
+  "servingsPerContainer": "15",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/243815.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/GNC/243815.json"
+ },
+ "201420": {
+  "dsld_id": "201420",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Male Multiple",
+  "brandName": "Solgar",
+  "src": "01-raw/2025-09-25/data/label_255.json",
+  "entryDate": "2019-04-25",
+  "offMarket": 0,
+  "productVersionCode": "SOLGB78154 04D",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 60,
+    "unit": "Tablet(s)",
+    "display": "60 Tablet(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 3,
+    "maxQuantity": 3,
+    "minDailyServings": 1,
+    "maxDailyServings": 1,
+    "unit": "Tablet(s)",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "20",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/201420.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Solgar/201420.json"
+ },
+ "246430": {
+  "dsld_id": "246430",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "PreNatal Nutrients",
+  "brandName": "Pure Encapsulations",
+  "src": "01-raw/2025-09-25/data/label_348.json",
+  "entryDate": "2021-03-25",
+  "offMarket": 0,
+  "productVersionCode": "code: PRN1 v4",
+  "pdf": "",
+  "thumbnail": "",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 120,
+    "unit": "Capsule(s)",
+    "display": "120 Capsule(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 2,
+    "maxQuantity": 2,
+    "minDailyServings": 1,
+    "maxDailyServings": 1,
+    "unit": "Capsule(s)",
+    "notes": "",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "60",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/246430.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Pure_Encapsulations/246430.json"
+ },
+ "269360": {
+  "dsld_id": "269360",
+  "retrieved_at_utc": "2026-09-20T16:18:35Z",
+  "fetch": "ok",
+  "fullName": "Serrapeptase 40,000 SPU",
+  "brandName": "Doctor's Best",
+  "src": "01-raw/2025-09-25/data/label_377.json",
+  "entryDate": "2022-07-21",
+  "offMarket": 0,
+  "productVersionCode": "YDRB190-3",
+  "pdf": "269360_document.pdf",
+  "thumbnail": "269360_thumbnail.jpg",
+  "netContents": [
+   {
+    "order": 1,
+    "quantity": 270,
+    "unit": "Veggie Cap(s)",
+    "display": "270 Veggie Cap(s)"
+   }
+  ],
+  "servingSizes": [
+   {
+    "order": 1,
+    "minQuantity": 1,
+    "maxQuantity": 1,
+    "minDailyServings": 1,
+    "maxDailyServings": 1,
+    "unit": "Veggie Capsule(s)",
+    "notes": "",
+    "inSFB": true
+   }
+  ],
+  "servingsPerContainer": "270",
+  "saved_to": "<repo>/scripts/audits/quarantine_triage_20260919/source_resolution_20260920/live/269360.json",
+  "frozen_record": "$HOME/Downloads/PharmaGuide_Datasets/staging/brands/Doctors_Best/269360.json"
+ }
+}

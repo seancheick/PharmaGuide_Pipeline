@@ -61,6 +61,24 @@ def _normalizer():
 # change pipeline behaviour.
 MARKER_IDENTITIES = {"withaferin_a", "miroestrol"}
 
+# Products carrying a Phase-3 source-resolution correction (2026-09-20). Their
+# row deltas are a named family, not an unexplained cross-family effect: each id
+# below has a reviewer-signed receipt in
+# source_resolution_20260920/SOURCE_RESOLUTION_RECEIPTS_20260920.json. Bucketing
+# by id keeps the classifier honest about WHY these moved (a printed-source
+# correction) instead of guessing from the row shape.
+SOURCE_CORRECTION_IDS = {
+    "223563",  # Vitamin A unit mg RAE -> mcg RAE
+    "223572",  # Vitamin A unit mg RAE -> mcg RAE
+    "328644",  # Vitamin A unit mg RAE -> mcg RAE
+    "228823",  # Bulk 1340 Vitamin A form -> printed provitamin-A source
+    "243799",
+    "243808",
+    "243812",
+    "243815",
+    "269360",  # Serrapeptase activity restored from the printed panel (0 NP -> 40,000 SPU)
+}
+
 
 def _load_arm(scripts_dir: str):
     """Import the arm's enhanced_normalizer with its own sibling modules."""
@@ -451,9 +469,11 @@ def _behavioral_counts_unchanged(before: dict, after: dict) -> bool:
     return all(before.get(field) == after.get(field) for field in _BEHAVIORAL_COUNT_FIELDS)
 
 
-def classify(changes: list, before: dict, after: dict) -> list:
+def classify(dsld_id: str, changes: list, before: dict, after: dict) -> list:
     """Bucket a product's row deltas into the expected defect families."""
     reasons = set()
+    if str(dsld_id) in SOURCE_CORRECTION_IDS:
+        reasons.add("phase3_source_correction")
     for change in changes:
         row = change.get("after") or change.get("before") or {}
         name = str(row.get("name") or "").lower()
@@ -550,7 +570,7 @@ def compare(args) -> int:
             left.get("inactives") or [], right.get("inactives") or []
         )
         display_changes = _diff_rows(left.get("display") or [], right.get("display") or [])
-        reasons = classify(row_changes, left, right)
+        reasons = classify(dsld_id, row_changes, left, right)
         changed.append(
             {
                 "id": dsld_id,

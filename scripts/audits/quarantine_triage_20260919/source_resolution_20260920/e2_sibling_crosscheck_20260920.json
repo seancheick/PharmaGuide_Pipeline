@@ -1,0 +1,317 @@
+{
+ "223563": {
+  "brand": "Nutricost",
+  "dsld_id": "223563",
+  "fullName": "Postnatal Multivitamin",
+  "own_rows": {
+   "vitamin a": [
+    {
+     "depth": 0,
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 900,
+     "unit": "mg RAE"
+    }
+   ],
+   "vitamin d3": [
+    {
+     "depth": 0,
+     "forms": [],
+     "per": "2Tablet(s)",
+     "quantity": 100,
+     "unit": "mg"
+    }
+   ],
+   "vitamin e": [
+    {
+     "depth": 0,
+     "forms": [],
+     "per": "2Tablet(s)",
+     "quantity": 15,
+     "unit": "mg"
+    }
+   ]
+  },
+  "retrieved_at_utc": "2026-09-20T16:28:14Z",
+  "sibling_count": 0,
+  "sibling_unit_index": {},
+  "siblings": []
+ },
+ "223572": {
+  "brand": "Nutricost",
+  "dsld_id": "223572",
+  "fullName": "Prenatal Multivitamin",
+  "own_rows": {
+   "vitamin a": [
+    {
+     "depth": 0,
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 900,
+     "unit": "mg RAE"
+    }
+   ],
+   "vitamin d3": [
+    {
+     "depth": 0,
+     "forms": [],
+     "per": "2Tablet(s)",
+     "quantity": 50,
+     "unit": "mg"
+    }
+   ],
+   "vitamin e": [
+    {
+     "depth": 0,
+     "forms": [],
+     "per": "2Tablet(s)",
+     "quantity": 15,
+     "unit": "mg"
+    }
+   ]
+  },
+  "retrieved_at_utc": "2026-09-20T16:28:14Z",
+  "sibling_count": 0,
+  "sibling_unit_index": {},
+  "siblings": []
+ },
+ "231334": {
+  "brand": "Solgar",
+  "dsld_id": "231334",
+  "fullName": "Formula VM-2000",
+  "own_rows": {
+   "vitamin a": [
+    {
+     "depth": 0,
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 6000,
+     "unit": "mcg DFE"
+    }
+   ],
+   "vitamin d": [
+    {
+     "depth": 0,
+     "forms": [
+      "Ergocalciferol"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 10,
+     "unit": "mcg"
+    }
+   ],
+   "vitamin e": [
+    {
+     "depth": 0,
+     "forms": [
+      "D-Alpha-Tocopheryl Succinate"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 134,
+     "unit": "mcg"
+    }
+   ]
+  },
+  "retrieved_at_utc": "2026-09-20T16:28:21Z",
+  "sibling_count": 15,
+  "sibling_unit_index": {
+   "vitamin a|20000|IU": 9,
+   "vitamin a|6000|mcg": 1,
+   "vitamin a|6000|mcg DFE": 4,
+   "vitamin d|10|mcg": 5,
+   "vitamin d|400|IU": 9,
+   "vitamin e|134|mcg": 4,
+   "vitamin e|134|mg": 1,
+   "vitamin e|200|IU": 9
+  },
+  "siblings": [
+   "44123",
+   "44146",
+   "81972",
+   "218151",
+   "44147",
+   "79618",
+   "218167",
+   "79618",
+   "218167",
+   "98458",
+   "44150",
+   "79623",
+   "231335",
+   "228317",
+   "44147"
+  ]
+ },
+ "231335": {
+  "brand": "Solgar",
+  "dsld_id": "231335",
+  "fullName": "Formula VM-2000",
+  "own_rows": {
+   "vitamin a": [
+    {
+     "depth": 0,
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 6000,
+     "unit": "mcg DFE"
+    }
+   ],
+   "vitamin d": [
+    {
+     "depth": 0,
+     "forms": [
+      "Ergocalciferol"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 10,
+     "unit": "mcg"
+    }
+   ],
+   "vitamin e": [
+    {
+     "depth": 0,
+     "forms": [
+      "D-Alpha-Tocopheryl Succinate"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 134,
+     "unit": "mcg"
+    }
+   ]
+  },
+  "retrieved_at_utc": "2026-09-20T16:28:21Z",
+  "sibling_count": 14,
+  "sibling_unit_index": {
+   "vitamin a|20000|IU": 9,
+   "vitamin a|6000|mcg": 1,
+   "vitamin a|6000|mcg DFE": 3,
+   "vitamin d|10|mcg": 4,
+   "vitamin d|400|IU": 9,
+   "vitamin e|134|mcg": 3,
+   "vitamin e|134|mg": 1,
+   "vitamin e|200|IU": 9
+  },
+  "siblings": [
+   "44123",
+   "44146",
+   "81972",
+   "218151",
+   "44147",
+   "79618",
+   "218167",
+   "231334",
+   "44150",
+   "79623",
+   "79623",
+   "98458",
+   "228317",
+   "44150"
+  ]
+ },
+ "263865": {
+  "brand": "Solgar",
+  "dsld_id": "263865",
+  "fullName": "Formula VM-2000",
+  "own_rows": {
+   "vitamin a": [
+    {
+     "depth": 0,
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 6000,
+     "unit": "mcg DFE"
+    }
+   ],
+   "vitamin d": [
+    {
+     "depth": 0,
+     "forms": [
+      "Ergocalciferol"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 10,
+     "unit": "mcg"
+    }
+   ],
+   "vitamin e": [
+    {
+     "depth": 0,
+     "forms": [
+      "D-Alpha-Tocopheryl Succinate"
+     ],
+     "per": "2Tablet(s)",
+     "quantity": 134,
+     "unit": "mg"
+    }
+   ]
+  },
+  "retrieved_at_utc": "2026-09-20T16:28:22Z",
+  "sibling_count": 2,
+  "sibling_unit_index": {},
+  "siblings": [
+   "79279",
+   "44266"
+  ]
+ },
+ "328644": {
+  "brand": "Life Extension",
+  "dsld_id": "328644",
+  "fullName": "Prenatal Advantage",
+  "own_rows": {
+   "vitamin a": [
+    {
+     "depth": 0,
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "per": "4Softgel(s)",
+     "quantity": 1300,
+     "unit": "mg RAE"
+    }
+   ],
+   "vitamin d3": [
+    {
+     "depth": 0,
+     "forms": [
+      "Cholecalciferol"
+     ],
+     "per": "4Softgel(s)",
+     "quantity": 25,
+     "unit": "mcg"
+    }
+   ],
+   "vitamin e": [
+    {
+     "depth": 0,
+     "forms": [
+      "D-Alpha-Tocopheryl Succinate"
+     ],
+     "per": "4Softgel(s)",
+     "quantity": 15,
+     "unit": "mg"
+    }
+   ]
+  },
+  "retrieved_at_utc": "2026-09-20T16:28:23Z",
+  "sibling_count": 2,
+  "sibling_unit_index": {
+   "vitamin a|1300|mcg RAE": 2,
+   "vitamin d3|25|mcg": 2,
+   "vitamin e|15|mg": 2
+  },
+  "siblings": [
+   "232894",
+   "232504"
+  ]
+ }
+}

@@ -526,7 +526,7 @@ class TestNoFabricatedDoses:
             _row("Vitamin D3", 100, "mg", category="vitamin",
                  ingredientGroup="Vitamin D"),
         ]
-        product = _make_dsld_product(328644, "Prenatal Advantage", rows)
+        product = _make_dsld_product(999328644, "Prenatal Advantage", rows)
         cleaned = normalizer.normalize_product(product)
         actives = cleaned.get("activeIngredients") or []
         by_name = {str(r.get("name", "")).lower(): r for r in actives}

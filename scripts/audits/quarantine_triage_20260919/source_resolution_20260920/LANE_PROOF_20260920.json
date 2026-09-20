@@ -1,0 +1,1736 @@
+{
+ "artifact": "Phase-3 source-correction lane proof",
+ "generated_by": "prove_source_corrections_20260920.py",
+ "what_this_shows": "receipt -> correction layer -> cleaned lane row. Raw = the frozen source row; cleaned = the row the normalizer produced after RC-5/disposition application.",
+ "products": {
+  "223563": {
+   "brand": "Nutricost",
+   "product": "Postnatal Multivitamin",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 900,
+       "unit": "mg RAE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 60,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 900,
+       "unit": "mcg RAE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 60,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 900.0,
+     "unit": "mcg RAE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "223572": {
+   "brand": "Nutricost",
+   "product": "Prenatal Multivitamin",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 900,
+       "unit": "mg RAE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Pregnant and Lactating",
+         "operator": "=",
+         "percent": 60,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 900,
+       "unit": "mcg RAE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Pregnant and Lactating",
+         "operator": "=",
+         "percent": 60,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 900.0,
+     "unit": "mcg RAE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "328644": {
+   "brand": "Life Extension",
+   "product": "Prenatal Advantage",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 4,
+       "operator": "=",
+       "quantity": 1300,
+       "unit": "mg RAE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Pregnant and Lactating",
+         "operator": "=",
+         "percent": 100,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Softgel(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 4,
+       "operator": "=",
+       "quantity": 1300,
+       "unit": "mcg RAE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Pregnant and Lactating",
+         "operator": "=",
+         "percent": 100,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Softgel(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 1300.0,
+     "unit": "mcg RAE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "231334": {
+   "brand": "Solgar",
+   "product": "Formula VM-2000",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 6000,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 667,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 6000,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 667,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 6000.0,
+     "unit": "mcg DFE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "231335": {
+   "brand": "Solgar",
+   "product": "Formula VM-2000",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 6000,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 667,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 6000,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 667,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 6000.0,
+     "unit": "mcg DFE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "263865": {
+   "brand": "Solgar",
+   "product": "Formula VM-2000",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 6000,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 667,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 6000,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 667,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 6000.0,
+     "unit": "mcg DFE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "228823": {
+   "brand": "GNC Pro Performance",
+   "product": "Bulk 1340 Double Chocolate",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Natural Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 3000.0,
+     "unit": "mcg",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Natural Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "243799": {
+   "brand": "GNC Pro Performance",
+   "product": "Bulk 1340 Vanilla Ice Cream",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Natural Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 3000.0,
+     "unit": "mcg",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Natural Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "243808": {
+   "brand": "GNC Pro Performance",
+   "product": "Bulk 1340 Strawberries & Cream",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    },
+    {
+     "depth": 0,
+     "name": "Folate",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 725,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 181,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 667,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 167,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Natural Beta-Carotene"
+     ]
+    },
+    {
+     "depth": 0,
+     "name": "Folate",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 725,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 181,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 667,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 167,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 3000.0,
+     "unit": "mcg",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Natural Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    },
+    {
+     "name": "Folate",
+     "quantity": 725.0,
+     "unit": "mcg DFE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_b9_folate",
+     "forms": [],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "243812": {
+   "brand": "GNC Pro Performance",
+   "product": "Bulk 1340 Double Chocolate",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 360,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Natural Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 3417.0,
+     "unit": "mcg",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Natural Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "243815": {
+   "brand": "GNC Pro Performance",
+   "product": "Bulk 1340 Vanilla Ice Cream",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": null,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": null,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin A",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": null,
+       "operator": "=",
+       "quantity": 3417,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 380,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      },
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": null,
+       "operator": "=",
+       "quantity": 3000,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 334,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Gram(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Natural Beta-Carotene"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin A",
+     "quantity": 3417.0,
+     "unit": "mcg",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_a",
+     "forms": [
+      "Natural Beta-Carotene"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "201420": {
+   "brand": "Solgar",
+   "product": "Male Multiple",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Folic Acid",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 3,
+       "operator": "=",
+       "quantity": 1333,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 333,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    },
+    {
+     "depth": 1,
+     "name": "Folic Acid",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 3,
+       "operator": "=",
+       "quantity": 800,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Folic Acid",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 3,
+       "operator": "=",
+       "quantity": 1333,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 333,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    },
+    {
+     "depth": 1,
+     "name": "Folic Acid",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 3,
+       "operator": "=",
+       "quantity": 800,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Folic Acid",
+     "quantity": 1333.0,
+     "unit": "mcg DFE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_b9_folate",
+     "forms": [
+      "folic acid"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    },
+    {
+     "name": "Folic Acid",
+     "quantity": 800.0,
+     "unit": "mcg",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_b9_folate",
+     "forms": [
+      "folic acid"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "246430": {
+   "brand": "Pure Encapsulations",
+   "product": "PreNatal Nutrients",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Folate",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 1667,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 417,
+         "footnote": null
+        },
+        {
+         "name": "Pregnant and Lactating",
+         "operator": "=",
+         "percent": 278,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Folic Acid",
+      "Metafolin"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Folate",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 1667,
+       "unit": "mcg DFE",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "=",
+         "percent": 417,
+         "footnote": null
+        },
+        {
+         "name": "Pregnant and Lactating",
+         "operator": "=",
+         "percent": 278,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Folic Acid",
+      "Metafolin"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Folate",
+     "quantity": 1667.0,
+     "unit": "mcg DFE",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_b9_folate",
+     "forms": [
+      "Folic Acid",
+      "Metafolin"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "269360": {
+   "brand": "Doctor's Best",
+   "product": "Serrapeptase 40,000 SPU",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Serrapeptase Enzyme",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 1,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": null,
+         "percent": null,
+         "footnote": "Daily Value not established"
+        }
+       ],
+       "servingSizeUnit": "Veggie Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Serratia sp."
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Serrapeptase Enzyme",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 1,
+       "operator": "=",
+       "quantity": 40000,
+       "unit": "SPU",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": null,
+         "percent": null,
+         "footnote": "Daily Value not established"
+        }
+       ],
+       "servingSizeUnit": "Veggie Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Serratia sp."
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Serrapeptase Enzyme",
+     "quantity": 40000.0,
+     "unit": "SPU",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "digestive_enzymes",
+     "forms": [
+      "Serratia sp."
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "12300": {
+   "brand": "Nature's Way",
+   "product": "Fem-Mend Synergistic Blend",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Total Carbohydrates",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 1,
+       "unit": "g",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "<",
+         "percent": 1,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    },
+    {
+     "depth": 0,
+     "name": "Proprietary Blend",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 860,
+       "unit": "mg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": null,
+         "percent": null,
+         "footnote": "Daily Value not established"
+        }
+       ],
+       "servingSizeUnit": "Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Blessed Thistle",
+      "Cayenne Pepper",
+      "Cramp Bark",
+      "Ginger",
+      "Goldenseal",
+      "Pomegranate",
+      "Red Raspberry",
+      "Uva Ursi"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Total Carbohydrates",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 1,
+       "unit": "g",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": "<",
+         "percent": 1,
+         "footnote": null
+        }
+       ],
+       "servingSizeUnit": "Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": []
+    },
+    {
+     "depth": 0,
+     "name": "Proprietary Blend",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 860,
+       "unit": "mg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": null,
+         "percent": null,
+         "footnote": "Daily Value not established"
+        }
+       ],
+       "servingSizeUnit": "Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Blessed Thistle",
+      "Cayenne Pepper",
+      "Cramp Bark",
+      "Ginger",
+      "Goldenseal",
+      "Pomegranate",
+      "Red Raspberry",
+      "Uva Ursi"
+     ]
+    }
+   ],
+   "cleaned_rows": []
+  },
+  "254396": {
+   "brand": "BulkSupplements.com",
+   "product": "Vitamin B12 (Cyanocobalamin)",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin B12",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 0,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Not Present"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Cyanocobalamin"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin B12",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 0,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Not Present"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Cyanocobalamin"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin B12",
+     "quantity": 0.0,
+     "unit": "NP",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_b12_cobalamin",
+     "forms": [
+      "Cyanocobalamin"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "254413": {
+   "brand": "BulkSupplements.com",
+   "product": "Vitamin B12 (Methylcobalamin)",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin B12",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 0,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Not Present"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Methylcobalamin"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Vitamin B12",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 0,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Not Present"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Methylcobalamin"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Vitamin B12",
+     "quantity": 0.0,
+     "unit": "NP",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "vitamin_b12_cobalamin",
+     "forms": [
+      "Methylcobalamin"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  },
+  "75291": {
+   "brand": "GNC",
+   "product": "Fish Oil Lemon",
+   "raw_rows": [
+    {
+     "depth": 0,
+     "name": "Total Omega-3 Fatty Acids",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 1,
+       "operator": "=",
+       "quantity": 300,
+       "unit": "mg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": null,
+         "percent": null,
+         "footnote": "Daily Value not established"
+        }
+       ],
+       "servingSizeUnit": "Softgel Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Docosahexaenoic Acid",
+      "Eicosapentaenoic Acid"
+     ]
+    }
+   ],
+   "after_correction_layer_rows": [
+    {
+     "depth": 0,
+     "name": "Total Omega-3 Fatty Acids",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 1,
+       "operator": "=",
+       "quantity": 300,
+       "unit": "mg",
+       "dailyValueTargetGroup": [
+        {
+         "name": "Adults and children 4 or more years of age",
+         "operator": null,
+         "percent": null,
+         "footnote": "Daily Value not established"
+        }
+       ],
+       "servingSizeUnit": "Softgel Capsule(s)"
+      }
+     ],
+     "unit": null,
+     "forms": [
+      "Docosahexaenoic Acid",
+      "Eicosapentaenoic Acid"
+     ]
+    }
+   ],
+   "cleaned_rows": [
+    {
+     "name": "Total Omega-3 Fatty Acids",
+     "quantity": 300.0,
+     "unit": "mg",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "canonical_id": "omega_3",
+     "forms": [
+      "Docosahexaenoic Acid",
+      "Eicosapentaenoic Acid"
+     ],
+     "pre_correction_name": null,
+     "pre_correction_quantity_unit": null,
+     "pre_correction_quantity_value": null,
+     "pre_correction_forms": null
+    }
+   ]
+  }
+ }
+}

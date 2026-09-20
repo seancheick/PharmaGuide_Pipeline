@@ -453,6 +453,22 @@ parent, including the two independent Polyphenols disclosures (15 mg and 30 mg),
 
 ## E. Remaining problems
 
+> **SUPERSEDED IN PART (2026-09-20) — see
+> `source_resolution_20260920/SOURCE_RESOLUTION_RECEIPTS_20260920.json` and
+> `SOURCE_RECONCILIATION_20260920.md`.** A follow-on source-resolution phase went back to
+> live NIH DSLD, the archived DSLD label images (the scans matching each product/version),
+> DSLD sibling label records and manufacturer panels, and closed the *source* rows below.
+> E2 ×6: `328644`/`223563`/`223572` are now `source_verified_correction` (vitamin-A unit
+> `mcg RAE`), while `231334`/`231335`/`263865` are `source_insufficient_keep_withheld`
+> (the record reproduces the printed panel and no UL claim depends on the denomination).
+> Vitamin-A form gap: the printed OTHER INGREDIENTS blend names `Natural beta-Carotene`,
+> so the form is source-established. Folate residuals: the Bulk 1340 panel has two printed
+> value columns (water / 2% milk) and `243808` is the only record that splits one folic-acid
+> form row into two. `269360` Serrapeptase: the panel declares `40,000 SPU`. No row below is
+> a source question any more; only the dose-safety reconciliation change, the EDTA policy,
+> the standardization-marker policy, the discrete-enzyme formulation policy, the
+> provitamin-A UL applicability question and the pharmacist sign-off remain.
+
 **Engineering work is complete on all of these.** What remains is authority, not code.
 
 | Item | Status | Owner |

@@ -1,0 +1,2662 @@
+{
+ "src": "01-raw/2025-09-25/data/label_167.json",
+ "id": 231334,
+ "nhanesId": "",
+ "bundleName": "",
+ "fullName": "Formula VM-2000",
+ "brandName": "Solgar",
+ "brandIpSymbol": "\u00ae",
+ "upcSku": "0 33984 59202 5",
+ "productVersionCode": "Prod 59202 SOLGB78131 01A 14-59202X3S",
+ "pdf": "",
+ "thumbnail": "",
+ "servingsPerContainer": "45",
+ "hasOuterCarton": false,
+ "percentDvFootnote": "Not Present",
+ "labelRelationships": [
+  {
+   "type": "Package size difference, same product",
+   "labelId": 44123
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 44146
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 81972
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 218151
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 44147
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 79618
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 218167
+  },
+  {
+   "type": "Image difference, same product",
+   "labelId": 79618
+  },
+  {
+   "type": "Image difference, same product",
+   "labelId": 218167
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 98458
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 44150
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 79623
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 231335
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 228317
+  },
+  {
+   "type": "Image difference, same product",
+   "labelId": 44147
+  }
+ ],
+ "contacts": [
+  {
+   "contactId": 8875,
+   "text": "Carefully Manufactured by",
+   "types": [
+    "Manufacturer"
+   ],
+   "contactDetails": {
+    "src": "01-raw/2025-09-25/data/contact_3.json",
+    "id": 8875,
+    "name": "Solgar, Inc.",
+    "streetAddress": "500 Willow Tree Road",
+    "city": "Leonia",
+    "state": "NJ",
+    "country": "U.S.A.",
+    "zipCode": "07605",
+    "phoneNumber": "1-877-765-4274",
+    "email": "www.solgar.com",
+    "webAddress": ""
+   }
+  }
+ ],
+ "netContents": [
+  {
+   "order": 1,
+   "quantity": 90,
+   "unit": "Tablet(s)",
+   "display": "90 Tablet(s)"
+  }
+ ],
+ "physicalState": {
+  "langualCode": "E0155",
+  "langualCodeDescription": "Tablet or Pill"
+ },
+ "servingSizes": [
+  {
+   "order": 1,
+   "minQuantity": 2,
+   "maxQuantity": 2,
+   "minDailyServings": 1,
+   "maxDailyServings": 1,
+   "unit": "Tablet(s)",
+   "inSFB": true
+  }
+ ],
+ "targetGroups": [
+  "Vegan",
+  "Vegetarian",
+  "Adult (18 - 50 Years)",
+  "Kosher",
+  "Women (not pregnant or lactating)",
+  "Dairy Free",
+  "Sugar Free"
+ ],
+ "productType": {
+  "langualCode": "A1325",
+  "langualCodeDescription": "Other Combinations"
+ },
+ "statements": [
+  {
+   "type": "Formulation re: Does NOT Contain",
+   "notes": "Free of: Wheat, Dairy, Yeast, Sugar, Sodium and Artificial Flavor."
+  },
+  {
+   "type": "Suggested/Recommended/Usage/Directions",
+   "notes": "Suggested use: As a dietary supplement for adults, take two (2) tablets daily, preferably with a meal or as directed by a healthcare practitioner."
+  },
+  {
+   "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+   "notes": "Not intended for use by pregnant or nursing women. If you are taking any medications, have any medical condition, planning any medical or surgical procedure, or are planning to undergo any clinical lab testing, consult your doctor before use. Some supplements may interact with certain medications and/or interfere with certain lab tests."
+  },
+  {
+   "type": "Precautions re: Allergies",
+   "notes": "Avoid this product if you are allergic to sunflowers or daisy-flowers."
+  },
+  {
+   "type": "Precautions re: All Other",
+   "notes": "Discontinue use and consult your healthcare practitioner if any adverse reactions occur."
+  },
+  {
+   "type": "Precautions re: Children",
+   "notes": "Not intended for use by persons under the age of 18."
+  },
+  {
+   "type": "Storage",
+   "notes": "Store at room temperature."
+  },
+  {
+   "type": "Precautions re: All Other",
+   "notes": "Do not use if outer bottle seal is missing or damaged."
+  },
+  {
+   "type": "Precautions re: Children",
+   "notes": "Warning: Accidental overdose of iron-containing products is a leading cause of fatal poisoning in children children under six. Keep this product out of reach of children. In case of accidental overdose, call a doctor or Poison Control immediately."
+  },
+  {
+   "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+   "notes": "Albion is a registered trademark of Albion Laboratories."
+  },
+  {
+   "type": "Formula re: Contains",
+   "notes": "Some iron supplements cause gastrointestinal irritation and constipating effects. This unique form of chelated iron (iron bisglycinate) is formulated for for enhanced absorption and is gentle on your system.\n"
+  },
+  {
+   "type": "Formula re: Contains",
+   "notes": "Note: L-Tryptophan is naturally occurring."
+  },
+  {
+   "type": "Formula re: Kosher",
+   "notes": "Solgar's KOF-K certification #K-1250"
+  },
+  {
+   "type": "Precautions re: All Other",
+   "notes": "Warning: This product contains a chemical known to the State of California to cause birth defects or other reproductive harm."
+  },
+  {
+   "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+   "notes": "Copyright 2019 Solgar, Inc."
+  },
+  {
+   "type": "Formula re: Contains",
+   "notes": "Rich in antioxidant vitamins C & E"
+  },
+  {
+   "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+   "notes": "Solgar\nSince 1947"
+  },
+  {
+   "type": "Formula re: Contains",
+   "notes": "Multinutrient formula"
+  },
+  {
+   "type": "FDA Statement of Identity",
+   "notes": "Dietary Supplement"
+  },
+  {
+   "type": "Formulation re: Vegetarian/Vegan",
+   "notes": "Suitable for Vegans"
+  },
+  {
+   "type": "Formulation re: Does NOT Contain",
+   "notes": "Wheat & dairy free"
+  },
+  {
+   "type": "Seals/Symbols",
+   "notes": "K Parve (Kosher)"
+  },
+  {
+   "type": "Precautions re: Allergies",
+   "notes": "Contains soy ingredients."
+  }
+ ],
+ "claims": [
+  {
+   "langualCode": "P0065",
+   "langualCodeDescription": "Nutrient "
+  },
+  {
+   "langualCode": "P0115",
+   "langualCodeDescription": "All Other"
+  },
+  {
+   "langualCode": "P0265",
+   "langualCodeDescription": "Structure/Function"
+  }
+ ],
+ "events": [
+  {
+   "date": "2020-07-23",
+   "type": "Date entered into DSLD"
+  }
+ ],
+ "userGroups": [
+  {
+   "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+   "langualCode": "P0250",
+   "langualCodeDescription": "Adults and Children 4 years and above"
+  }
+ ],
+ "ingredientRows": [
+  {
+   "order": 1,
+   "ingredientId": 281209,
+   "description": "",
+   "notes": "Vitamin A (Form: as 100% Beta-Carotene) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 6000,
+     "unit": "mcg DFE",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 667,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Vitamin A",
+   "category": "vitamin",
+   "ingredientGroup": "Vitamin A",
+   "uniiCode": "81G40H8B0T",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 280109,
+     "prefix": null,
+     "percent": null,
+     "name": "Beta-Carotene",
+     "category": "vitamin",
+     "ingredientGroup": "Vitamin A",
+     "uniiCode": "01YAE03M7J"
+    }
+   ]
+  },
+  {
+   "order": 2,
+   "ingredientId": 279323,
+   "description": null,
+   "notes": "Vitamin C (Form: as Calcium Ascorbate) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 300,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 333,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Vitamin C",
+   "category": "vitamin",
+   "ingredientGroup": "Vitamin C",
+   "uniiCode": "PQ6CK8PD0R",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 278826,
+     "prefix": null,
+     "percent": null,
+     "name": "Calcium Ascorbate",
+     "category": "mineral",
+     "ingredientGroup": "Calcium",
+     "uniiCode": "183E4W213W"
+    }
+   ]
+  },
+  {
+   "order": 3,
+   "ingredientId": 281609,
+   "description": null,
+   "notes": "Vitamin D (Form: as Ergocalciferol) Note: 400 IU ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 10,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 50,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Vitamin D",
+   "category": "vitamin",
+   "ingredientGroup": "Vitamin D",
+   "uniiCode": "VS041H42XC",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 280175,
+     "prefix": null,
+     "percent": null,
+     "name": "Ergocalciferol",
+     "category": "vitamin",
+     "ingredientGroup": "Vitamin D",
+     "uniiCode": "VS041H42XC"
+    }
+   ]
+  },
+  {
+   "order": 4,
+   "ingredientId": 280735,
+   "description": null,
+   "notes": "Vitamin E (Form: as D-Alpha-Tocopheryl Succinate) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 134,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 893,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Vitamin E",
+   "category": "vitamin",
+   "ingredientGroup": "Vitamin E",
+   "uniiCode": "H4N855PNZ1",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 280573,
+     "prefix": null,
+     "percent": null,
+     "name": "D-Alpha-Tocopheryl Succinate",
+     "category": "vitamin",
+     "ingredientGroup": "Vitamin E",
+     "uniiCode": "LU4B53JYVE"
+    }
+   ]
+  },
+  {
+   "order": 5,
+   "ingredientId": 281558,
+   "description": null,
+   "notes": "Thiamin (Form: as Thiamin Mononitrate) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 100,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 8333,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Thiamine",
+   "category": "vitamin",
+   "ingredientGroup": "Thiamin",
+   "uniiCode": "X66NSO3N35",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 278857,
+     "prefix": null,
+     "percent": null,
+     "name": "Thiamine Mononitrate",
+     "category": "vitamin",
+     "ingredientGroup": "Thiamin",
+     "uniiCode": "8K0I04919X"
+    }
+   ]
+  },
+  {
+   "order": 6,
+   "ingredientId": 279465,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 100,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 7692,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Riboflavin",
+   "category": "vitamin",
+   "ingredientGroup": "Riboflavin",
+   "uniiCode": "TLM2976OFR",
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 7,
+   "ingredientId": 280747,
+   "description": "",
+   "notes": "Niacin (Form: as Niacinamide, Niacin) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 100,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 625,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Niacin",
+   "category": "vitamin",
+   "ingredientGroup": "Niacin",
+   "uniiCode": "2679MF687A",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 280392,
+     "prefix": null,
+     "percent": null,
+     "name": "Niacin",
+     "category": "vitamin",
+     "ingredientGroup": "Niacin",
+     "uniiCode": "2679MF687A"
+    },
+    {
+     "order": 2,
+     "ingredientId": 280445,
+     "prefix": null,
+     "percent": null,
+     "name": "Niacinamide",
+     "category": "vitamin",
+     "ingredientGroup": "Niacin",
+     "uniiCode": "25X51I8RD4"
+    }
+   ]
+  },
+  {
+   "order": 8,
+   "ingredientId": 280455,
+   "description": null,
+   "notes": "Vitamin B6 (Form: as Pyridoxine HCl) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 90,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 5294,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Vitamin B6",
+   "category": "vitamin",
+   "ingredientGroup": "Vitamin B6",
+   "uniiCode": "KV2JZ1BI6Z",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 280215,
+     "prefix": null,
+     "percent": null,
+     "name": "Pyridoxine Hydrochloride",
+     "category": "vitamin",
+     "ingredientGroup": "Vitamin B6",
+     "uniiCode": "68Y4CF58BV"
+    }
+   ]
+  },
+  {
+   "order": 9,
+   "ingredientId": 278757,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 666,
+     "unit": "mcg DFE",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 167,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [
+    {
+     "order": 10,
+     "ingredientId": 279040,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 400,
+       "unit": "mcg",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Folic Acid",
+     "category": "vitamin",
+     "ingredientGroup": "Folate",
+     "uniiCode": "935E97BOY8",
+     "alternateNames": [],
+     "forms": []
+    }
+   ],
+   "name": "Folate",
+   "category": "vitamin",
+   "ingredientGroup": "Folate",
+   "uniiCode": "935E97BOY8",
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 11,
+   "ingredientId": 280190,
+   "description": "",
+   "notes": "",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 100,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 4167,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Vitamin B12",
+   "category": "vitamin",
+   "ingredientGroup": "Vitamin B12",
+   "uniiCode": "8406EY2OQA",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 280191,
+     "prefix": null,
+     "percent": null,
+     "name": "Cobalamin",
+     "category": "vitamin",
+     "ingredientGroup": "Vitamin B12",
+     "uniiCode": "8406EY2OQA"
+    }
+   ]
+  },
+  {
+   "order": 12,
+   "ingredientId": 280218,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 100,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 333,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Biotin",
+   "category": "vitamin",
+   "ingredientGroup": "Biotin",
+   "uniiCode": "6SO6U10H04",
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 13,
+   "ingredientId": 280871,
+   "description": null,
+   "notes": "Pantothenic Acid (Form: as D-Calcium Panthothenate) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 100,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 2000,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Pantothenic Acid",
+   "category": "vitamin",
+   "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+   "uniiCode": "19F5HK2737",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 293281,
+     "prefix": null,
+     "percent": null,
+     "name": "D-Calcium Pantothenate",
+     "category": "mineral",
+     "ingredientGroup": "Calcium",
+     "uniiCode": "568ET80C3D"
+    }
+   ]
+  },
+  {
+   "order": 14,
+   "ingredientId": 279424,
+   "description": null,
+   "notes": "Choline (Form: as Choline Bitartrate) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 41,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 7,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Choline",
+   "category": "vitamin",
+   "ingredientGroup": "Choline",
+   "uniiCode": "N91BDP6H0X",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 279423,
+     "prefix": null,
+     "percent": null,
+     "name": "Choline Bitartrate",
+     "category": "vitamin",
+     "ingredientGroup": "Choline",
+     "uniiCode": "6K2W7T9V6Y"
+    }
+   ]
+  },
+  {
+   "order": 15,
+   "ingredientId": 243397,
+   "description": null,
+   "notes": "Calcium (Form: as Calcium Ascorbate, Calcium Glycinate Amino Acid Chelate Note: Albion, D-Calcium Pantothenate, Dicalcium Phosphate, Calcium Carbonate) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 65,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 5,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Calcium",
+   "category": "mineral",
+   "ingredientGroup": "Calcium",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 4902,
+     "prefix": "as",
+     "percent": null,
+     "name": "Calcium Ascorbate",
+     "category": "vitamin",
+     "ingredientGroup": "Calcium Ascorbate",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 292621,
+     "prefix": null,
+     "percent": null,
+     "name": "Calcium Carbonate",
+     "category": "mineral",
+     "ingredientGroup": "Calcium",
+     "uniiCode": "H0G9379FGK"
+    },
+    {
+     "order": 3,
+     "ingredientId": 280490,
+     "prefix": null,
+     "percent": null,
+     "name": "Calcium D-Pantothenate",
+     "category": "mineral",
+     "ingredientGroup": "Calcium",
+     "uniiCode": "568ET80C3D"
+    },
+    {
+     "order": 4,
+     "ingredientId": 242406,
+     "prefix": null,
+     "percent": null,
+     "name": "Calcium Glycinate Amino Acid Chelate",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Calcium",
+     "uniiCode": null
+    },
+    {
+     "order": 5,
+     "ingredientId": 18961,
+     "prefix": null,
+     "percent": null,
+     "name": "Dicalcium Phosphate",
+     "category": "mineral",
+     "ingredientGroup": "Calcium",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 16,
+   "ingredientId": 256573,
+   "description": "",
+   "notes": "Iron (Form: as Ferrous Sulfate, Iron Bisglycinate Note: Albion) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 10,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 56,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Iron",
+   "category": "mineral",
+   "ingredientGroup": "Iron",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 3710,
+     "prefix": "as",
+     "percent": null,
+     "name": "Ferrous Sulfate",
+     "category": "mineral",
+     "ingredientGroup": "Iron",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 244015,
+     "prefix": null,
+     "percent": null,
+     "name": "Iron Bisglycinate",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Iron",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 17,
+   "ingredientId": 109090,
+   "description": null,
+   "notes": "Iodine (Form: as Potassium Iodide) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 150,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 100,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Iodine",
+   "category": "mineral",
+   "ingredientGroup": "Iodine",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 4110,
+     "prefix": "as",
+     "percent": null,
+     "name": "Potassium Iodide",
+     "category": "mineral",
+     "ingredientGroup": "Iodine",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 18,
+   "ingredientId": 243401,
+   "description": null,
+   "notes": "Magnesium (Form: as Magnesium Oxide, Magnesium Glycinate Amino Acid Chelate Note: Albion) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 30,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 7,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Magnesium",
+   "category": "mineral",
+   "ingredientGroup": "Magnesium",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 242594,
+     "prefix": null,
+     "percent": null,
+     "name": "Magnesium Glycinate Amino Acid Chelate",
+     "category": "mineral",
+     "ingredientGroup": "Magnesium",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 4046,
+     "prefix": "as",
+     "percent": null,
+     "name": "Magnesium Oxide",
+     "category": "mineral",
+     "ingredientGroup": "Magnesium",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 19,
+   "ingredientId": 243403,
+   "description": null,
+   "notes": "Zinc (Form: as Zinc Oxide, Zinc Glycinate Amino Acid Chelate Note: Albion) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 15,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 136,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Zinc",
+   "category": "mineral",
+   "ingredientGroup": "Zinc",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 242596,
+     "prefix": null,
+     "percent": null,
+     "name": "Zinc Glycinate Amino Acid Chelate",
+     "category": "mineral",
+     "ingredientGroup": "Zinc",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 292523,
+     "prefix": "as",
+     "percent": null,
+     "name": "Zinc Oxide",
+     "category": "mineral",
+     "ingredientGroup": "Zinc",
+     "uniiCode": "SOI2LOH54Z"
+    }
+   ]
+  },
+  {
+   "order": 20,
+   "ingredientId": 293393,
+   "description": null,
+   "notes": "Selenium (Form: as L-Selenomethionine) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 25,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 45,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Selenium",
+   "category": "mineral",
+   "ingredientGroup": "Selenium",
+   "uniiCode": "H6241UJ22B",
+   "alternateNames": [
+    "Se"
+   ],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 286929,
+     "prefix": null,
+     "percent": null,
+     "name": "L-Selenomethionine",
+     "category": "amino acid",
+     "ingredientGroup": "Selenomethionine",
+     "uniiCode": "964MRK2PEL"
+    }
+   ]
+  },
+  {
+   "order": 21,
+   "ingredientId": 243406,
+   "description": null,
+   "notes": "Copper (Form: as Copper Gluconate, Copper Glycinate Amino Acid Chelate Note: Albion) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 1.5,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 167,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Copper",
+   "category": "mineral",
+   "ingredientGroup": "Copper",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 68745,
+     "prefix": "as",
+     "percent": null,
+     "name": "Copper Gluconate",
+     "category": "mineral",
+     "ingredientGroup": "TBD",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 242598,
+     "prefix": null,
+     "percent": null,
+     "name": "Copper Glycinate Amino Acid Chelate",
+     "category": "amino acid",
+     "ingredientGroup": "Copper",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 22,
+   "ingredientId": 243408,
+   "description": null,
+   "notes": "Manganese (Form: as Manganese Gluconate, Manganese Glycinate Amino Acid Chelate Note: Albion) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 2,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 87,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Manganese",
+   "category": "mineral",
+   "ingredientGroup": "Manganese",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 4051,
+     "prefix": "as",
+     "percent": null,
+     "name": "Manganese Gluconate",
+     "category": "mineral",
+     "ingredientGroup": "Manganese",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 242600,
+     "prefix": null,
+     "percent": null,
+     "name": "Manganese Glycinate Amino Acid Chelate",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Manganese",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 23,
+   "ingredientId": 243411,
+   "description": null,
+   "notes": "Chromium (Form: as Chromium Picolinate, Chromium Nicotinate Glycinate Chelate Note: Albion) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 25,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 71,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Chromium",
+   "category": "mineral",
+   "ingredientGroup": "Chromium",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 233859,
+     "prefix": null,
+     "percent": null,
+     "name": "Chromium Nicotinate Glycinate Chelate",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Chromium",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 3907,
+     "prefix": "as",
+     "percent": null,
+     "name": "Chromium Picolinate",
+     "category": "mineral",
+     "ingredientGroup": "Chomium picolinate",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 24,
+   "ingredientId": 243365,
+   "description": null,
+   "notes": "Molybdenum (Form: as Molybdenum Glycinate Amino Acid Chelate Note: Albion) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 50,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "=",
+       "percent": 111,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Molybdenum",
+   "category": "mineral",
+   "ingredientGroup": "Molybdenum",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 243366,
+     "prefix": "as",
+     "percent": null,
+     "name": "Molybdenum Glycinate Amino Acid Chelate",
+     "category": "amino acid",
+     "ingredientGroup": "Molybdenum",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 25,
+   "ingredientId": 243412,
+   "description": null,
+   "notes": "Potassium (Form: as Potassium Chloride, Potassium Amino Acid Chelate Note: Albion) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 10,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": "<",
+       "percent": 1,
+       "footnote": null
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Potassium",
+   "category": "mineral",
+   "ingredientGroup": "Potassium",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 243368,
+     "prefix": null,
+     "percent": null,
+     "name": "Potassium Amino Acid Chelate",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Potassium",
+     "uniiCode": null
+    },
+    {
+     "order": 2,
+     "ingredientId": 19119,
+     "prefix": "as",
+     "percent": null,
+     "name": "Potassium Chloride",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Potassium Chloride",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 26,
+   "ingredientId": 3722,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 100,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Inositol",
+   "category": "non-nutrient/non-botanical",
+   "ingredientGroup": "Inositol",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 27,
+   "ingredientId": 16272,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 25,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Citrus Bioflavonoid Complex",
+   "category": "non-nutrient/non-botanical",
+   "ingredientGroup": "Flavonoid (mixture)",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 28,
+   "ingredientId": 6612,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 25,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Betaine HCl",
+   "category": "non-nutrient/non-botanical",
+   "ingredientGroup": "Betaine Hydrochloride",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 29,
+   "ingredientId": 280470,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 20,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Pyridoxal 5-Phosphate",
+   "category": "vitamin",
+   "ingredientGroup": "Vitamin B6",
+   "uniiCode": "F06SGE49M6",
+   "alternateNames": [
+    "P-5-P"
+   ],
+   "forms": []
+  },
+  {
+   "order": 30,
+   "ingredientId": 10413,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 20,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Soy Lecithin",
+   "category": "fat",
+   "ingredientGroup": "lecithin",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 31,
+   "ingredientId": 16870,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 5,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "L-Glutathione",
+   "category": "non-nutrient/non-botanical",
+   "ingredientGroup": "Gluthathione",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 32,
+   "ingredientId": 205675,
+   "description": null,
+   "notes": "Boron (Form: as Boron Amino Acid Complex) ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 1,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Boron",
+   "category": "mineral",
+   "ingredientGroup": "Boron",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 38899,
+     "prefix": "as",
+     "percent": null,
+     "name": "Boron Amino Acid Complex",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Boron",
+     "uniiCode": null
+    }
+   ]
+  },
+  {
+   "order": 33,
+   "ingredientId": 90191,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 229,
+     "unit": "mcg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [
+    {
+     "order": 34,
+     "ingredientId": 25439,
+     "description": "",
+     "notes": "",
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Alpha-Carotene",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Alpha-carotene",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 35,
+     "ingredientId": 280109,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Beta-Carotene",
+     "category": "vitamin",
+     "ingredientGroup": "Vitamin A",
+     "uniiCode": "01YAE03M7J",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 36,
+     "ingredientId": 10868,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Lutein",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Lutein",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 37,
+     "ingredientId": 17638,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Zeaxanthin",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Zeaxanthin",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 38,
+     "ingredientId": 3927,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Cryptoxanthin",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Cryptoxanthin",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    }
+   ],
+   "name": "Carotenoid Mix",
+   "category": "non-nutrient/non-botanical",
+   "ingredientGroup": "carotenoids",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 39,
+   "ingredientId": 125807,
+   "description": null,
+   "notes": null,
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 260,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [
+    {
+     "order": 40,
+     "ingredientId": 96627,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Alfalfa",
+     "category": "botanical",
+     "ingredientGroup": "Alfalfa",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 41,
+     "ingredientId": 26010,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Rose Hips",
+     "category": "botanical",
+     "ingredientGroup": "Dog Rose",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 42,
+     "ingredientId": 16272,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Citrus Bioflavonoid Complex",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Flavonoid (mixture)",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 43,
+     "ingredientId": 3784,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Rutin",
+     "category": "non-nutrient/non-botanical",
+     "ingredientGroup": "Rutin",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 44,
+     "ingredientId": 57332,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Dong Quai",
+     "category": "botanical",
+     "ingredientGroup": "Dong Quai",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 45,
+     "ingredientId": 107887,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Eleuthero",
+     "category": "botanical",
+     "ingredientGroup": "Eleuthero",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 46,
+     "ingredientId": 4549,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Oat Fiber",
+     "category": "fiber",
+     "ingredientGroup": "Oat Fiber",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 47,
+     "ingredientId": 43400,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Suma",
+     "category": "botanical",
+     "ingredientGroup": "Suma",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 48,
+     "ingredientId": 35257,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Watercress",
+     "category": "botanical",
+     "ingredientGroup": "Watercress",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 49,
+     "ingredientId": 84208,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Echinacea purpurea",
+     "category": "botanical",
+     "ingredientGroup": "Echinacea purpurea",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 50,
+     "ingredientId": 96629,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Parsley",
+     "category": "botanical",
+     "ingredientGroup": "Parsley",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 51,
+     "ingredientId": 177282,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Spirulina",
+     "category": "botanical",
+     "ingredientGroup": "Blue-Green Algae",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 52,
+     "ingredientId": 4328,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Hesperidin Complex",
+     "category": "blend",
+     "ingredientGroup": "Blend (non-nutrient/non-botanical)",
+     "uniiCode": null,
+     "alternateNames": [],
+     "forms": []
+    }
+   ],
+   "name": "Whole Food/Herbal Blend Complex",
+   "category": "blend",
+   "ingredientGroup": "Blend (Combination)",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": []
+  },
+  {
+   "order": 53,
+   "ingredientId": 125809,
+   "description": null,
+   "notes": "Soy Protein isolate Note: providing: ",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 2,
+     "operator": "=",
+     "quantity": 200,
+     "unit": "mg",
+     "dailyValueTargetGroup": [
+      {
+       "name": "Adults and children 4 or more years of age",
+       "operator": null,
+       "percent": null,
+       "footnote": "Daily Value (DV) Not Established"
+      }
+     ],
+     "servingSizeUnit": "Tablet(s)"
+    }
+   ],
+   "nestedRows": [
+    {
+     "order": 54,
+     "ingredientId": 286131,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Glutamic Acid",
+     "category": "amino acid",
+     "ingredientGroup": "Glutamic Acid",
+     "uniiCode": "3KX376GY7L",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 55,
+     "ingredientId": 285907,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Aspartic Acid",
+     "category": "amino acid",
+     "ingredientGroup": "Aspartic Acid",
+     "uniiCode": "30KYC7MIAI",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 56,
+     "ingredientId": 285976,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Leucine",
+     "category": "amino acid",
+     "ingredientGroup": "Leucine",
+     "uniiCode": "GMW67QNF9C",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 57,
+     "ingredientId": 285879,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Arginine",
+     "category": "amino acid",
+     "ingredientGroup": "Arginine",
+     "uniiCode": "94ZLA3W45F",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 58,
+     "ingredientId": 286781,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Lysine",
+     "category": "amino acid",
+     "ingredientGroup": "Lysine",
+     "uniiCode": "K3Z4F929H6",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 59,
+     "ingredientId": 286891,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Phenylalanine",
+     "category": "amino acid",
+     "ingredientGroup": "Phenylalanine",
+     "uniiCode": "47E5O17Y3R",
+     "alternateNames": [
+      "LPA"
+     ],
+     "forms": []
+    },
+    {
+     "order": 60,
+     "ingredientId": 287014,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Serine",
+     "category": "amino acid",
+     "ingredientGroup": "Serine",
+     "uniiCode": "452VLY9402",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 61,
+     "ingredientId": 286922,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Proline",
+     "category": "amino acid",
+     "ingredientGroup": "Proline",
+     "uniiCode": "9DLQ4CIU6V",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 62,
+     "ingredientId": 285981,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Valine",
+     "category": "amino acid",
+     "ingredientGroup": "Valine",
+     "uniiCode": "HG18B9YRS7",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 63,
+     "ingredientId": 285980,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Isoleucine",
+     "category": "amino acid",
+     "ingredientGroup": "Isoleucine",
+     "uniiCode": "04Y7590D77",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 64,
+     "ingredientId": 285829,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Alanine",
+     "category": "amino acid",
+     "ingredientGroup": "Alanine",
+     "uniiCode": "OF5P57N2ZX",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 65,
+     "ingredientId": 286072,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "Glycine",
+     "category": "amino acid",
+     "ingredientGroup": "Glycine",
+     "uniiCode": "TE7660XO1C",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 66,
+     "ingredientId": 287016,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Threonine",
+     "category": "amino acid",
+     "ingredientGroup": "THREONINE",
+     "uniiCode": "2ZD004190S",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 67,
+     "ingredientId": 287027,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Tyrosine",
+     "category": "amino acid",
+     "ingredientGroup": "Tyrosine",
+     "uniiCode": "42HK56048U",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 68,
+     "ingredientId": 286361,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Histidine",
+     "category": "amino acid",
+     "ingredientGroup": "Histidine",
+     "uniiCode": "4QD397987E",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 69,
+     "ingredientId": 287021,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Tryptophan",
+     "category": "amino acid",
+     "ingredientGroup": "Tryptophan",
+     "uniiCode": "8DUH1N11BX",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 70,
+     "ingredientId": 286037,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Cysteine",
+     "category": "amino acid",
+     "ingredientGroup": "Cysteine",
+     "uniiCode": "K848JZ4886",
+     "alternateNames": [],
+     "forms": []
+    },
+    {
+     "order": 71,
+     "ingredientId": 286813,
+     "description": null,
+     "notes": null,
+     "quantity": [
+      {
+       "servingSizeOrder": 1,
+       "servingSizeQuantity": 2,
+       "operator": "=",
+       "quantity": 0,
+       "unit": "NP",
+       "dailyValueTargetGroup": [],
+       "servingSizeUnit": "Tablet(s)"
+      }
+     ],
+     "nestedRows": [],
+     "name": "L-Methionine",
+     "category": "amino acid",
+     "ingredientGroup": "METHIONINE",
+     "uniiCode": "AE28F7PNPL",
+     "alternateNames": [],
+     "forms": []
+    }
+   ],
+   "name": "Soy Protein isolate",
+   "category": "protein",
+   "ingredientGroup": "Soy Protein",
+   "uniiCode": null,
+   "alternateNames": [],
+   "forms": []
+  }
+ ],
+ "otheringredients": {
+  "text": null,
+  "ingredients": [
+   {
+    "order": 1,
+    "ingredientId": 30788,
+    "name": "Microcrystalline Cellulose",
+    "category": "other",
+    "ingredientGroup": "Cellulose",
+    "uniiCode": null,
+    "alternateNames": [],
+    "forms": []
+   },
+   {
+    "order": 2,
+    "ingredientId": 3810,
+    "name": "Vegetable Cellulose",
+    "category": "fiber",
+    "ingredientGroup": "Cellulose",
+    "uniiCode": null,
+    "alternateNames": [],
+    "forms": []
+   },
+   {
+    "order": 3,
+    "ingredientId": 285558,
+    "name": "Stearic Acid",
+    "category": "fatty acid",
+    "ingredientGroup": "Stearic Acid",
+    "uniiCode": "4ELV7Z65AP",
+    "alternateNames": [
+     "C18:0"
+    ],
+    "forms": []
+   },
+   {
+    "order": 4,
+    "ingredientId": 293311,
+    "name": "Silica",
+    "category": "mineral",
+    "ingredientGroup": "Silicon",
+    "uniiCode": "ETJ7Z6XBU4",
+    "alternateNames": [],
+    "forms": []
+   },
+   {
+    "order": 5,
+    "ingredientId": 3813,
+    "name": "Vegetable Magnesium Stearate",
+    "category": "other",
+    "ingredientGroup": "Magnesium stearate",
+    "uniiCode": null,
+    "alternateNames": [],
+    "forms": []
+   },
+   {
+    "order": 6,
+    "ingredientId": 3812,
+    "name": "Vegetable Glycerin",
+    "category": "other",
+    "ingredientGroup": "Glycerol",
+    "uniiCode": null,
+    "alternateNames": [],
+    "forms": []
+   },
+   {
+    "order": 7,
+    "ingredientId": 3740,
+    "name": "Mannitol",
+    "category": "non-nutrient/non-botanical",
+    "ingredientGroup": "Mannitol",
+    "uniiCode": null,
+    "alternateNames": [],
+    "forms": []
+   },
+   {
+    "order": 8,
+    "ingredientId": 282516,
+    "name": "Maltodextrin",
+    "category": "complex carbohydrate",
+    "ingredientGroup": "Maltodextrin",
+    "uniiCode": "7CVR7L4A2D",
+    "alternateNames": [],
+    "forms": []
+   }
+  ]
+ },
+ "offMarket": 0,
+ "entryDate": "2020-07-23"
+}

@@ -1,0 +1,305 @@
+{
+ "223563": {
+  "dsld_id": "223563",
+  "label_pdf": "<scratch>/labels/223563.pdf",
+  "retrieved_at_utc": "2026-09-20T16:27:23Z",
+  "panel": {
+   "Vitamin A": null,
+   "Vitamin D3": null
+  },
+  "live_structured": {
+   "vitamin a": [
+    {
+     "quantity": 900,
+     "unit": "mg RAE",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin d3": [
+    {
+     "quantity": 100,
+     "unit": "mg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin e": [
+    {
+     "quantity": 15,
+     "unit": "mg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ]
+  },
+  "frozen_structured": {}
+ },
+ "223572": {
+  "dsld_id": "223572",
+  "label_pdf": "<scratch>/labels/223572.pdf",
+  "retrieved_at_utc": "2026-09-20T16:27:24Z",
+  "panel": {
+   "Vitamin A": null,
+   "Vitamin D3": null
+  },
+  "live_structured": {
+   "vitamin a": [
+    {
+     "quantity": 900,
+     "unit": "mg RAE",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin d3": [
+    {
+     "quantity": 50,
+     "unit": "mg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin e": [
+    {
+     "quantity": 15,
+     "unit": "mg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ]
+  },
+  "frozen_structured": {}
+ },
+ "231334": {
+  "dsld_id": "231334",
+  "label_pdf": "<scratch>/labels/231334.pdf",
+  "retrieved_at_utc": "2026-09-20T16:27:26Z",
+  "panel": {
+   "Vitamin A": {
+    "tokens": "Vitamin A ......+++++6,000 Meg DFE ......667% | WOM ..sessesssssessseecesseeseee lO MG sevssee-06% | Citrus Bioflavondid .......-25 MQ sess\u201d",
+    "printed_quantity_token": "......+++++6,000",
+    "printed_quantity": 6000,
+    "unit_glyph": {
+     "token": "Meg",
+     "width": 54,
+     "whitelist_mcg": "Mcg",
+     "whitelist_mg": "Mg",
+     "glyph_count_estimate": 3,
+     "printed_unit": "mcg"
+    }
+   },
+   "Vitamin E": {
+    "tokens": "Vitamin E 134 mog 893% a glycinate (as inc amino oxide. acid \u00b0 chelatet ony\n5\t1\t1\t1\t14\t27\t3664\t570\t68\t28\t77.744858\t136%\n5\t1\t1\t1\t14\t28\t3753\t546\t19\t56\t96.061409\t|\n5\t1\t1\t1\t14\t29\t3793\t558\t39\t34\t94.673843\t(as\n5\t1\t1\t1\t14\t30\t38",
+    "printed_quantity_token": "134",
+    "printed_quantity": 134,
+    "unit_glyph": {
+     "token": "mog",
+     "width": 54,
+     "whitelist_mcg": "Mcg",
+     "whitelist_mg": "Mg",
+     "glyph_count_estimate": 3,
+     "printed_unit": "mcg"
+    }
+   },
+   "Vitamin C": null
+  },
+  "live_structured": {
+   "vitamin a": [
+    {
+     "quantity": 6000,
+     "unit": "mcg DFE",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin d": [
+    {
+     "quantity": 10,
+     "unit": "mcg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin e": [
+    {
+     "quantity": 134,
+     "unit": "mcg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ]
+  },
+  "frozen_structured": {}
+ },
+ "231335": {
+  "dsld_id": "231335",
+  "label_pdf": "<scratch>/labels/231335.pdf",
+  "retrieved_at_utc": "2026-09-20T16:27:30Z",
+  "panel": {
+   "Vitamin A": {
+    "tokens": "Vitamin A ......-.-6,000 meg DFE ......667% WOM veoscssssssssssssssessseieed MQ csseeen..56% Citrus Bioflavonid .........25 MQ ceecsccceesen\u201d",
+    "printed_quantity_token": "......-.-6,000",
+    "printed_quantity": 6000,
+    "unit_glyph": {
+     "token": "meg",
+     "width": 54,
+     "whitelist_mcg": "Mcg",
+     "whitelist_mg": "Mg",
+     "glyph_count_estimate": 3,
+     "printed_unit": "mcg"
+    }
+   },
+   "Vitamin E": null,
+   "Vitamin D": null
+  },
+  "live_structured": {
+   "vitamin a": [
+    {
+     "quantity": 6000,
+     "unit": "mcg DFE",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin d": [
+    {
+     "quantity": 10,
+     "unit": "mcg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin e": [
+    {
+     "quantity": 134,
+     "unit": "mcg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ]
+  },
+  "frozen_structured": {}
+ },
+ "263865": {
+  "dsld_id": "263865",
+  "label_pdf": "<scratch>/labels/263865.pdf",
+  "retrieved_at_utc": "2026-09-20T16:27:33Z",
+  "panel": {
+   "Vitamin A": null,
+   "Vitamin E": null,
+   "Vitamin C": null,
+   "Vitamin D": {
+    "tokens": "Vitamin D ........s+00410 meg (400 IU) ..50% | Magnesium ......sccccsseose-30 MQ 7% pe LOGIN ....soseseenseeeee20 MQ sesssseensssee\u201d",
+    "printed_quantity_token": "........s+00410",
+    "printed_quantity": 410,
+    "unit_glyph": {
+     "token": "meg",
+     "width": 54,
+     "whitelist_mcg": "Mcg",
+     "whitelist_mg": "Mg",
+     "glyph_count_estimate": 3,
+     "printed_unit": "mcg"
+    }
+   }
+  },
+  "live_structured": {
+   "vitamin a": [
+    {
+     "quantity": 6000,
+     "unit": "mcg DFE",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin d": [
+    {
+     "quantity": 10,
+     "unit": "mcg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin e": [
+    {
+     "quantity": 134,
+     "unit": "mg",
+     "operator": "=",
+     "per_serving": "2Tablet(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ]
+  },
+  "frozen_structured": {}
+ },
+ "328644": {
+  "dsld_id": "328644",
+  "label_pdf": "<scratch>/labels/328644.pdf",
+  "retrieved_at_utc": "2026-09-20T16:27:37Z",
+  "panel": {
+   "Vitamin A": null
+  },
+  "live_structured": {
+   "vitamin a": [
+    {
+     "quantity": 1300,
+     "unit": "mg RAE",
+     "operator": "=",
+     "per_serving": "4Softgel(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin d3": [
+    {
+     "quantity": 25,
+     "unit": "mcg",
+     "operator": "=",
+     "per_serving": "4Softgel(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ],
+   "vitamin e": [
+    {
+     "quantity": 15,
+     "unit": "mg",
+     "operator": "=",
+     "per_serving": "4Softgel(s)",
+     "depth": 0,
+     "parent": null
+    }
+   ]
+  },
+  "frozen_structured": {}
+ }
+}

@@ -1,0 +1,268 @@
+{
+ "src": "01-raw/2025-02-23/data/label_450.json",
+ "id": 254413,
+ "nhanesId": "",
+ "bundleName": "",
+ "fullName": "Vitamin B12 (Methylcobalamin)",
+ "brandName": "BulkSupplements.com",
+ "brandIpSymbol": "\u00ae",
+ "upcSku": "X0001FYWVWV",
+ "productVersionCode": "002",
+ "pdf": "",
+ "thumbnail": "",
+ "servingsPerContainer": null,
+ "hasOuterCarton": false,
+ "percentDvFootnote": "Not Present",
+ "labelRelationships": [
+  {
+   "type": "Image difference, same product",
+   "labelId": 254700
+  },
+  {
+   "type": "Image difference, same product",
+   "labelId": 294338
+  },
+  {
+   "type": "Image difference, same product",
+   "labelId": 311772
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 252769
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 254404
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 254700
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 294337
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 311771
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 294338
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 311772
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 254705
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 254415
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 311773
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 254707
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 294336
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 311774
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 254708
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 294335
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 311775
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 252800
+  },
+  {
+   "type": "Package size difference, same product",
+   "labelId": 294339
+  }
+ ],
+ "contacts": [
+  {
+   "contactId": 23008,
+   "text": "Distributed exclusively by",
+   "types": [
+    "Distributor"
+   ],
+   "contactDetails": {
+    "src": "01-raw/2025-09-25/data/contact_4.json",
+    "id": 23008,
+    "name": "BulkSupplements.com",
+    "streetAddress": "7511 Eastgate Rd",
+    "city": "Henderson",
+    "state": "NV",
+    "country": "US",
+    "zipCode": "89011",
+    "phoneNumber": "",
+    "email": "",
+    "webAddress": "bulksupplements.com"
+   }
+  }
+ ],
+ "netContents": [
+  {
+   "order": 1,
+   "quantity": 50,
+   "unit": "Gram(s)",
+   "display": "50 Gram(s)"
+  },
+  {
+   "order": 2,
+   "quantity": 1.76,
+   "unit": "Oz(s)",
+   "display": "1.76 Oz(s)"
+  }
+ ],
+ "physicalState": {
+  "langualCode": "E0162",
+  "langualCodeDescription": "Powder"
+ },
+ "servingSizes": [
+  {
+   "order": 1,
+   "minQuantity": 1,
+   "maxQuantity": 1,
+   "minDailyServings": 1,
+   "maxDailyServings": null,
+   "unit": "Not Present",
+   "notes": "",
+   "inSFB": true
+  }
+ ],
+ "targetGroups": [
+  "Adult (18 - 50 Years)"
+ ],
+ "productType": {
+  "langualCode": "A1302",
+  "langualCodeDescription": "Vitamin"
+ },
+ "statements": [
+  {
+   "type": "General Statements: All Other Content",
+   "notes": "Clean & pure bulk supplements"
+  },
+  {
+   "type": "Precautions re: All Other",
+   "notes": "Warning: This product is not intended to diagnose, treat, cure, or prevent any disease."
+  },
+  {
+   "type": "Precautions re: All Other",
+   "notes": "Always consult a physician before taking any dietary supplement."
+  },
+  {
+   "type": "Precautions re: Children",
+   "notes": "Keep out of reach of children."
+  },
+  {
+   "type": "Precautions re: All Other",
+   "notes": "This product is completely pure and should be used with extreme caution.\nNot intended for individual use and should be used by qualified professionals only."
+  },
+  {
+   "type": "Storage",
+   "notes": "Store in a dry, cool, dark place."
+  },
+  {
+   "type": "General Statements: All Other Content",
+   "notes": "New - Bulksupplements Methyl B12 (Methylcobalamin) Pure Powder (50 grams)"
+  }
+ ],
+ "claims": [
+  {
+   "langualCode": "P0115",
+   "langualCodeDescription": "All Other"
+  },
+  {
+   "langualCode": "P0265",
+   "langualCodeDescription": "Structure/Function"
+  }
+ ],
+ "events": [
+  {
+   "date": "2021-10-22",
+   "type": "Date entered into DSLD"
+  }
+ ],
+ "userGroups": [
+  {
+   "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+   "langualCode": "P0250",
+   "langualCodeDescription": "Adults and Children 4 years and above"
+  }
+ ],
+ "ingredientRows": [
+  {
+   "order": 1,
+   "ingredientId": 281388,
+   "description": null,
+   "notes": "",
+   "quantity": [
+    {
+     "servingSizeOrder": 1,
+     "servingSizeQuantity": 0,
+     "operator": "=",
+     "quantity": 0,
+     "unit": "NP",
+     "dailyValueTargetGroup": [],
+     "servingSizeUnit": "Not Present"
+    }
+   ],
+   "nestedRows": [],
+   "name": "Vitamin B12",
+   "category": "vitamin",
+   "ingredientGroup": "Vitamin B12",
+   "uniiCode": "8406EY2OQA",
+   "alternateNames": [],
+   "forms": [
+    {
+     "order": 1,
+     "ingredientId": 280220,
+     "prefix": null,
+     "percent": null,
+     "name": "Methylcobalamin",
+     "category": "vitamin",
+     "ingredientGroup": "Vitamin B12",
+     "uniiCode": "BR1SN1JS2W"
+    }
+   ]
+  }
+ ],
+ "otheringredients": {
+  "text": null,
+  "ingredients": [
+   {
+    "order": 1,
+    "ingredientId": 25620,
+    "name": "None",
+    "category": "other",
+    "ingredientGroup": "None",
+    "uniiCode": null,
+    "alternateNames": [],
+    "forms": []
+   }
+  ]
+ },
+ "offMarket": 0,
+ "entryDate": "2021-10-22"
+}
