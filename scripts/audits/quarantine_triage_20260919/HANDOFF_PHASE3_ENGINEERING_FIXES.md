@@ -1,7 +1,11 @@
 # Phase-3 Clinical Sign-off — Engineering Fix Handoff
 
-**Date:** 2026-09-20 · **Branch:** `remediation/quarantine-clearing-20260919` · **Head:** `77cbb38c`
+**Date:** 2026-09-20 · **Branch:** `remediation/quarantine-clearing-20260919` · **Head:** `7ebf6c46`
 **Production:** untouched (no rebuild, no merge to main, no lane output modified)
+
+> **Status: `77cbb38c` is an INTEGRATION CANDIDATE, not a release approval** (team review 2026-09-20).
+> Companion commit `7ebf6c46` (4 lines) completes its contract — see Verification Addendum §9.
+> No feature scope was added after the team's handoff/verification-mode direction.
 
 ---
 
@@ -89,3 +93,95 @@ Secondary block: completeness gate on `ingredientRows[5]` = **Vitamin A 3000 mcg
 | Bulk 1340 folate triplication / stale Vitamin-A row | Data refresh (upstream re-issue) — rebuild will inherit |
 | Bulk 1340 niacin/magnesium UL | Safety-policy working as intended (label max-servings exposure) |
 | E2 units | Data refresh via reviewed receipts (pending) |
+
+---
+
+## 9. Verification Addendum (2026-09-20, handoff/verification mode)
+
+Per team instruction #9/#10: `77cbb38c` reclassified from "release-ready" to
+**integration candidate**; broad suite rerun from a clean detached worktree at
+exactly the candidate commit, plus one completing fix.
+
+### Commits
+
+| SHA | Role |
+|---|---|
+| `124982a0` | base (the candidate's parent) |
+| `77cbb38c` | **the integration candidate** (10 files, +1573/−42) |
+| `c68cb7eb` | handoff doc (this file, v1) |
+| `7ebf6c46` | completing fix: overlap-guard pin extension (1 file, +4) |
+
+### Broad-suite results (clean detached worktrees, zero peer contamination)
+
+| Commit | Result | Verdict on each failure |
+|---|---|---|
+| `124982a0` (base, targeted pair) | 1 failed / 1 passed | static-audit failure **pre-existing at base** |
+| `77cbb38c` (candidate, `test.sh fast`) | **2 failed, 15,786 passed, 191 skipped** (5m50s) | see classification below |
+| `7ebf6c46` (candidate + completing fix, `test.sh fast`) | **1 failed, 15,787 passed, 191 skipped** (5m35s) | only the pre-existing base failure remains |
+
+Failure classification (verbatim test IDs, per instruction #10):
+
+1. `test_scoring_source_of_truth_audit.py::test_static_audit_current_v4_modules_have_no_forbidden_fallbacks`
+   — **PRE-EXISTING at base `124982a0`** (verified by running the pair at base in a
+   clean worktree). Verbatim finding: `Finding(code='V4_IQD_INGREDIENTS_FALLBACK',
+   message='scripts/scoring_v4/modules/generic_evidence.py:472 reads forbidden
+   scoring fallback field')`. Owned by the peer/integrator queue
+   (`generic_evidence.py` also carries the peer's uncommitted edits).
+   NOT introduced by this branch; not suppressed — recorded verbatim.
+2. `test_cross_db_overlap_guard.py::test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classification`
+   — **INTRODUCED by `77cbb38c`** (pin passed at base), root cause: the two new
+   IQM marker identities legitimately carry `WATCH_WITHAFERIN_A` /
+   `RISK_MIROESTROL` dual classifications, and the test pins the exact overlap
+   set. Completed by `7ebf6c46`: the pin gains the two owner-decisioned entries
+   (same documented pattern as vinpocetine 2026-09-11 and DHEA). The uncommitted
+   4-line extension was already present in the shared worktree when this
+   addendum was written; it was committed verbatim, not rewritten.
+
+No `introduced-by-7ebf6c46` failures; no infrastructure failures.
+
+### Peer-session isolation confirmation (instruction #9)
+
+`git show 77cbb38c --name-only` ∩ peer-dirty files = **∅**. Verified explicitly:
+no `enrich_supplements_v3.py`, `scoring_v4/modules/*`, `studied_formulas.py`,
+`supplement_taxonomy.py`, `backed_clinical_studies.json`, or
+`evidence_expansion_2026_09/*` content is in the candidate. The candidate was
+never amended after creation. Shared worktree still holds the peer's 27 dirty
+files, untouched.
+
+### Bulk 1340 — label-version provenance guard (team caution, accepted)
+
+The UL computations use **archived frozen-label values only** (220 mg Mg, 50 mg
+niacin per serving). The current GNC page (190 mg Mg, same 1–2 servings/day
+direction) confirms the max-serving exposure *semantics* but must never
+overwrite per-DSLD-ID archived values. Every safety receipt must carry
+`product ID + label version/date + source`. Current-vs-archived formula drift
+(220→190 mg magnesium) is itself evidence for instruction #8's provenance model.
+
+### Full-corpus replay: REQUIRED POST-CHERRY-PICK GATE (instruction #11)
+
+The 10-record live-DSLD shadow A/B is an honest bounded result, **not** a
+substitute for the 15k replay — the raw corpus is not present on this machine
+(`raw_data/` absent; no local frozen ingest found). Required on an environment
+holding the frozen corpus, before any production publish:
+
+- total products replayed; crashes
+- cleaned-representation changes; score changes
+- quarantine exits; quarantine entries
+- Safety-gate changes (every one)
+- products changed OUTSIDE the expected families (75188/243713, 216948,
+  232718, 328464, 13041 + ppm/ppb-nested rows)
+- largest numerical score deltas
+- before/after Phase-3 disposition per product
+
+Harness: `shadow_replay_ab.py` (A/B on any ID list) + `compare_bulk1340_live.py`
+(live-vs-snapshot classifier; generalize for the instruction #8 stale-source
+report across all Phase-3 products).
+
+### Cherry-pick recommendation (strictly on these results)
+
+**Recommend `77cbb38c` + `7ebf6c46` together for cherry-pick** (integration
+candidate pair), conditional on: (a) the frozen-corpus full replay gate above,
+(b) integrator coordination with the peer session's in-flight enzyme work —
+the pre-existing `V4_IQD_INGREDIENTS_FALLBACK` static-audit failure must be
+resolved or explicitly accepted by its owner before release, since it predates
+this branch. No merge, publish, or rebuild has been performed.
