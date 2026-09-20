@@ -455,3 +455,57 @@ def test_absence_of_qualifying_studies_cannot_emit_reviewed_null():
         )
         assert res.applicability_status == "reviewed_null_evidence"
         assert res.points_eligible is False
+
+
+def test_phase4_batch4_null_unfavorable_canaries():
+    """Batch 4 reviewed-null cases with qualifying human trials showing null outcomes."""
+    for cid in ["hoodia_gordonii", "OI_SHARK_CARTILAGE"]:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value, (
+            f"{cid} must emit reviewed_null_unfavorable, got {res.disposition}"
+        )
+        assert res.applicability_status == "reviewed_null_evidence"
+        assert res.points_eligible is False
+
+
+def test_phase4_batch4_no_qualifying_evidence_canaries():
+    """Batch 4 reproducible searches finding 0 qualifying human trials must emit NO_QUALIFYING_HUMAN_EVIDENCE."""
+    zero_study_cids = [
+        "sarsaparilla", "catuaba", "corn_silk", "motherwort_herb",
+        "raspberry_ketones", "cnidium", "organ_extracts", "black_radish", "plantain"
+    ]
+    for cid in zero_study_cids:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value, (
+            f"{cid} must emit no_qualifying_human_evidence, got {res.disposition}"
+        )
+        assert res.applicability_status == "no_qualifying_trials_found"
+        assert res.points_eligible is False
+
+
+def test_phase4_batch4_food_matrix_and_umbrella_guards():
+    """Batch 4 food matrix and broad umbrella guards."""
+    # Whole culinary matrices are not efficacy scorable
+    for cid in ["NHA_COCONUT_DERIVATIVES", "tomato", "cucumber", "lemon", "kombu"]:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value, (
+            f"{cid} must emit not_efficacy_relevant, got {res.disposition}"
+        )
+
+    # Crude powders lacking standardization stay applicability unestablished
+    for cid in ["papaya", "papaya_fruit_powder", "alfalfa_leaf", "wheatgrass_powder", "fiber"]:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value, (
+            f"{cid} must emit applicability_unestablished, got {res.disposition}"
+        )
+
+
+def test_phase4_batch4_standardized_clinical_canaries():
+    """Batch 4 standardized clinical botanicals and nutrients."""
+    clinical_cids = ["peppermint", "cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed", "boswellia_serrata_resin"]
+    for cid in clinical_cids:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value, (
+            f"{cid} must emit resolved_by_reviewed_clinical_evidence, got {res.disposition}"
+        )
+        assert res.points_eligible is False  # Shadow mode invariant
