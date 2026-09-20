@@ -2696,7 +2696,7 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults with mild sleep disturbance",
       "studied_dose_exposure": {
         "values": [
@@ -2704,14 +2704,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Sleep latency/quality adjunct benefit supported at >= 120 mg extract in combination formula.",
+      "applicability_decision": "Valerian-hops fixed combination trials cannot establish standalone hops sedative efficacy.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "fixed_combination_cannot_establish_standalone_efficacy"
     },
     {
       "canonical_id": "orange",
@@ -3482,7 +3483,7 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "applicability_unestablished",
       "population_context": "healthy adults and older adults",
       "studied_dose_exposure": {
         "values": [
@@ -3490,14 +3491,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Glutathione precursor adequacy supported at >= 500 mg/day.",
+      "applicability_decision": "Multi-precursor combination trials do not isolate standalone L-cysteine clinical efficacy.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "combination_precursor_cannot_establish_standalone_efficacy"
     },
     {
       "canonical_id": "globe_artichoke",
@@ -4121,7 +4123,7 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "applicability_unestablished",
       "population_context": "patients with Parkinsonian motor deficits",
       "studied_dose_exposure": {
         "values": [
@@ -4130,14 +4132,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Natural L-DOPA neuro-motor support supported at >= 250 mg standardized extract.",
+      "applicability_decision": "Acute 15-30 g whole seed powder Parkinson's trials (1,000 mg L-DOPA) do not transfer to low-dose dietary supplement extracts without demonstration of clinical equivalence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "high_dose_powder_cannot_transfer_to_low_dose_extract"
     },
     {
       "canonical_id": "oat_straw",
@@ -4321,29 +4324,8 @@
         "PubMed"
       ],
       "records_screened": 12,
-      "qualifying_human_studies": [
-        {
-          "pmid": "18430998",
-          "title": "Colostrinin: an oxidative stress modulator for prevention and treatment of age-related disorders.",
-          "study_type": "clinical_trial",
-          "sample_size": 105,
-          "dose": "100 mcg",
-          "duration": "16 weeks",
-          "outcome": "modest stabilization of cognitive status in early AD",
-          "effect_direction": "positive_weak",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Colostrinin: an oxidative stress modulator for prevention and treatment of age-related disorders.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/18430998/",
-            "verified_at": "2026-09-20T17:12:50.424051+00:00",
-            "abstract_evidence_quote": "Studies on cultured cells showed that CLN modulates intracellular levels of reactive oxygen species (ROS), via regulation of glutathione metabolism, activity of antioxidant enzymes and mitochondria function."
-          }
-        }
-      ],
-      "effect_direction": "positive_weak",
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
       "population_context": "adults requiring connective tissue collagen precursors",
       "studied_dose_exposure": {
         "values": [
@@ -4351,14 +4333,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Collagen structural precursor amino acid supported at >= 500 mg/day.",
+      "applicability_decision": "Reproducible literature search identified no qualifying clinical efficacy trials for standalone oral L-proline supplementation (Colostrinin proline-rich polypeptide is not L-proline).",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "no_qualifying_trials_found"
     },
     {
       "canonical_id": "red_clover",
@@ -4711,7 +4694,7 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults under immune or exercise stress",
       "studied_dose_exposure": {
         "values": [
@@ -4720,14 +4703,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Innate immune defense and mucosal resilience supported at >= 250 mg standardized beta-1,3/1,6-glucan.",
+      "applicability_decision": "Baker's yeast beta-1,3/1,6-glucan evidence requires specific yeast insoluble glucan material disclosure; does not transfer to generic or oat/cereal beta-glucan.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "yeast_beta_glucan_requires_material_specificity"
     },
     {
       "canonical_id": "muira_puama",
@@ -4833,7 +4817,7 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults with mild to moderate hypercholesterolemia",
       "studied_dose_exposure": {
         "values": [
@@ -4841,14 +4825,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Lipid profile moderation established at >= 375 mg standardized theaflavins.",
+      "applicability_decision": "Theaflavin-enriched green tea extract trials do not transfer to crude black tea leaf powder without extraction and standardization equivalence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "green_tea_extract_cannot_transfer_to_black_tea"
     },
     {
       "canonical_id": "siberian_ginseng",
@@ -4979,7 +4964,7 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults experiencing emotional fatigue or mild attentional lapses",
       "studied_dose_exposure": {
         "values": [
@@ -4987,14 +4972,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Cognitive and mood alertness support supported at >= 100 mg DMAE.",
+      "applicability_decision": "Combination drug trials containing DMAE with vitamins and minerals do not establish standalone DMAE efficacy.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "combination_drug_cannot_establish_standalone_efficacy"
     },
     {
       "canonical_id": "goji_berry",
@@ -5027,7 +5013,7 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "applicability_unestablished",
       "population_context": "healthy adults",
       "studied_dose_exposure": {
         "values": [
@@ -5036,14 +5022,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "General vitality and antioxidant support supported at >= 500 mg standardized dry fruit extract equivalent.",
+      "applicability_decision": "Liquid standardized Lycium barbarum juice (120 mL/day) trials do not transfer to generic dry fruit powder without bioequivalence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "liquid_juice_cannot_transfer_to_dry_powder"
     },
     {
       "canonical_id": "atp",
@@ -5221,7 +5208,7 @@
           }
         }
       ],
-      "effect_direction": "positive_strong",
+      "effect_direction": "applicability_unestablished",
       "population_context": "postmenopausal women with osteopenia or osteoporosis",
       "studied_dose_exposure": {
         "values": [
@@ -5230,14 +5217,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Bone mineral density support established at >= 340-680 mg elemental strontium equivalent.",
+      "applicability_decision": "Strontium ranelate prescription trials do not transfer to over-the-counter strontium dietary supplement salts (citrate/carbonate); clinical fracture reduction for supplement forms is unproven.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "prescription_ranelate_cannot_transfer_to_supplement_salts"
     },
     {
       "canonical_id": "keratin",
@@ -8245,7 +8233,7 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults with functional digestive complaints",
       "studied_dose_exposure": {
         "values": [
@@ -8253,14 +8241,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Dietary starch carbohydrate hydrolysis and postprandial digestive comfort supported for active alpha-amylase preparations.",
+      "applicability_decision": "Multi-enzyme complex trials do not isolate standalone alpha-amylase clinical efficacy.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-20T17:12:50.424051+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "multi_enzyme_complex_cannot_establish_standalone_efficacy"
     },
     {
       "canonical_id": "l_aspartic_acid",
