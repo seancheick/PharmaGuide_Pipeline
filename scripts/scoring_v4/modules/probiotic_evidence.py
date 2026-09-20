@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Set
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from scoring_v4.modules.generic_evidence import resolved_clinical_matches
 from studied_formulas import (assess_probiotic_evidence,
+                             assess_probiotic_component_disposition,
                              independent_clinical_strains, strain_assessments_for_match)
 
 
@@ -156,7 +157,8 @@ def score_evidence(product: Any) -> Dict[str, Any]:
              for row in assessment["strain_assessments"]):
         evidence_state = "native_research_review_incomplete"
     else:
-        evidence_state = "applicability_unestablished"
+        component_disp = assess_probiotic_component_disposition(product)
+        evidence_state = component_disp.get("disposition_state") or "applicability_unestablished"
 
     return {
         "score": round(score, 4),

@@ -1,0 +1,1004 @@
+{
+  "docs/archive/2026-05/audits/TEST_SUITE_CONSOLIDATION_PLAN.md": [
+    {
+      "line": 181,
+      "content": "('digestive_enzymes',    'plant-based enzyme complex',        ['local action']),"
+    }
+  ],
+  "docs/archive/2026-05/handoffs/flutter_handoff_enhanced_2.md": [
+    {
+      "line": 864,
+      "content": "**Root cause.** For goals with multiple required_clusters (DIGESTIVE has 3: gut_barrier, probiotic_and_gut_health, digestive_enzymes), the score formula summed required weights: `score_required = matched_required_weight / SUM(required_weights)`. A pure probiotic product hitting one required cluster scored only 1.0 / 2.9 = 0.34 \u2014 below the 0.5 threshold."
+    }
+  ],
+  "scripts/audits/canonical_crossing_audit/REPORT.md": [
+    {
+      "line": 93,
+      "content": "| `digestive_enzymes` | `papaya` | 43 | 6.0 | **REVIEW** | Papain (enzyme) routed to papaya fruit. Depends on label. |"
+    },
+    {
+      "line": 227,
+      "content": "| `alpha_amylase` | `digestive_enzymes` | 2 | 10.0 | **UNCATEGORIZED** | _(needs review)_ |"
+    },
+    {
+      "line": 533,
+      "content": "### `digestive_enzymes` \u2192 `papaya` \u2014 43 hits \u2014 **REVIEW**"
+    }
+  ],
+  "scripts/audits/canonical_crossing_audit/patterns.json": [
+    {
+      "line": 890,
+      "content": "\"top_canonical\": \"digestive_enzymes\","
+    },
+    {
+      "line": 10369,
+      "content": "\"resolved_canonical\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/audits/evidence_expansion_2026_09/BLOCKER_ROUTING.md": [
+    {
+      "line": 48,
+      "content": "| `digestive_enzymes` | 67 |"
+    }
+  ],
+  "scripts/audits/evidence_expansion_2026_09/COVERAGE.md": [
+    {
+      "line": 92,
+      "content": "| `digestive_enzymes` | 80 | legacy record, review state not established | record exists \u2014 check identity/form/dose |"
+    }
+  ],
+  "scripts/audits/evidence_expansion_2026_09/QUEUE.md": [
+    {
+      "line": 84,
+      "content": "| 66 | `digestive_enzymes` | Digestive Enzymes | enzymes | 245 | 81 | 23 | 11.71 | 9 | 29 | legacy_review_state_not_established | INGR_DIGESTIVE_ENZYMES | 1.0 | 0.0 | \u2014 | 43.5 | 223.4 |"
+    }
+  ],
+  "scripts/audits/evidence_expansion_2026_09/blocker_routing.json": [
+    {
+      "line": 95,
+      "content": "\"digestive_enzymes\": 67,"
+    }
+  ],
+  "scripts/audits/evidence_expansion_2026_09/inventory.json": [
+    {
+      "line": 2818,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/audits/evidence_expansion_2026_09/legacy_backfill_queue.json": [
+    {
+      "line": 1339,
+      "content": "\"digestive_enzymes\""
+    }
+  ],
+  "scripts/audits/evidence_expansion_2026_09/queue.json": [
+    {
+      "line": 3295,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/audits/evidence_expansion_2026_09/zero_evidence_taxonomy.json": [
+    {
+      "line": 47603,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 47741,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 47931,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 48260,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 48437,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 48537,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 49467,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 50026,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 50104,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 50123,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 50142,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 50161,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 50256,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 50729,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 51090,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 51396,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 51560,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 52267,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 52333,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 54484,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 54543,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 55729,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 55750,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 55774,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 55832,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 55990,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 56034,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 56076,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 56242,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 56499,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 56641,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 56671,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 56902,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57032,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57288,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57349,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57384,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57423,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57492,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57564,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57656,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57693,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 57761,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 58610,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 59864,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 59886,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 60187,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 60210,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 61690,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 61728,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 62249,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 62271,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 64077,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 64509,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 64979,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 65887,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 66292,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 67509,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 68435,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 70564,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 71003,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 73016,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 73045,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 73074,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 73232,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 73387,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 73409,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 73772,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 73982,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 74002,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 74023,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 74534,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 74555,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 74576,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 75116,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 77219,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 78803,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 78976,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 79111,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 79695,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/audits/form_evidence_20260813/adjudication_report.json": [
+    {
+      "line": 1197,
+      "content": "\"key\": \"digestive_enzymes::enteric-coated enzymes\","
+    }
+  ],
+  "scripts/audits/form_evidence_20260813/clinical_review_queue.csv": [
+    {
+      "line": 143,
+      "content": "digestive_enzymes,enteric-coated enzymes,12,11,-1,Excellent,Good,0,local_delivery_recheck,delivery_to_site,architectural_axis_candidate_not_adjudicated,,,NONE,category_error (local action; activity-units metric),\"No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract.\",Does delivery-to-site evidence support the form tier without requiring systemic absorption?,,,,not_clinically_approved"
+    }
+  ],
+  "scripts/audits/form_evidence_20260813/migration_manifest.json": [
+    {
+      "line": 4612,
+      "content": "\"ingredient_key\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/audits/form_evidence_20260813/score_reconciliation_manifest.json": [
+    {
+      "line": 3021,
+      "content": "\"ingredient_key\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/audits/unmapped_triage/REMAINING_UNMAPPED_TEAM_GUIDE.md": [
+    {
+      "line": 267,
+      "content": "| 1 | Zingibain | ginger protease enzyme \u2014 alias to digestive_enzymes or ginger | Verify |"
+    }
+  ],
+  "scripts/audits/unmapped_triage/UNMAPPED_TRIAGE_2026-05-01.md": [
+    {
+      "line": 262,
+      "content": "4\u00d7 Semi-Alkaline Protease                       \u2192 enzyme; map to digestive_enzymes parent or new IQM"
+    },
+    {
+      "line": 305,
+      "content": "2\u00d7 Neut. Bacterial Protease                     \u2192 digestive enzyme \u2192 alias to digestive_enzymes"
+    }
+  ],
+  "scripts/audits/v4_zero_evidence_grouped_audit.md": [
+    {
+      "line": 34,
+      "content": "| digestive_enzymes | 13 | generic:13 | 0:13 | 76837 Dairy Digestant<br>76837 Dairy Digestant<br>25222 Best Serrapeptase<br>76839 Papaya Enzyme<br>214210 Papaya Enzyme |"
+    }
+  ],
+  "scripts/build_final_db.py": [
+    {
+      "line": 9724,
+      "content": "# digestive_enzymes), a single-purpose probiotic that covers"
+    }
+  ],
+  "scripts/config/scoring_config.json": [
+    {
+      "line": 146,
+      "content": "\"_eligibility\": \"ingredients_scorable empty + Track A.1 did NOT fire + at least one blend_header row with real dose, canonical_id non-empty, NOT BLEND_/PII_ prefixed, NOT in {digestive_enzymes, prebiotics, probiotics, whey_protein, collagen}, canonical_source_db in {ingredient_quality_map, botanical_ingredients}.\","
+    },
+    {
+      "line": 148,
+      "content": "\"_class_level_excluded\": \"Class-level canonicals (digestive_enzymes, prebiotics, probiotics, whey_protein, collagen) are explicitly denylisted because each needs dedicated scoring logic (enzyme activity / CFU / fiber / sports protein modules). They are a separate future A.2b slice.\","
+    }
+  ],
+  "scripts/data/caers_adverse_event_signals.json": [
+    {
+      "line": 2180,
+      "content": "\"digestive_enzymes\": {"
+    },
+    {
+      "line": 2181,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/data/canary_products.json": [
+    {
+      "line": 499,
+      "content": "\"subclass\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/data/ingredient_quality_map.json": [
+    {
+      "line": 28358,
+      "content": "\"digestive_enzymes\": {"
+    }
+  ],
+  "scripts/data/iqm_excellent_evidence_backlog.json": [
+    {
+      "line": 95,
+      "content": "\"digestive_enzymes::enteric-coated enzymes\","
+    },
+    {
+      "line": 341,
+      "content": "\"digestive_enzymes::enteric-coated enzymes\","
+    }
+  ],
+  "scripts/data/synergy_cluster.json": [
+    {
+      "line": 1626,
+      "content": "\"id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 1664,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 1943,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 2105,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 2557,
+      "content": "\"digestive_enzymes\""
+    },
+    {
+      "line": 2675,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 3063,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 3230,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/data/user_goals_to_clusters.json": [
+    {
+      "line": 84,
+      "content": "\"digestive_enzymes\": 0.9,"
+    },
+    {
+      "line": 94,
+      "content": "\"digestive_enzymes\""
+    }
+  ],
+  "scripts/enhanced_normalizer.py": [
+    {
+      "line": 5931,
+      "content": "``canonical_id=\"digestive_enzymes\"`` to opaque enzyme blend headers"
+    },
+    {
+      "line": 5952,
+      "content": "G4  v1 maps only to ``digestive_enzymes`` cid +"
+    },
+    {
+      "line": 6030,
+      "content": "# G4 \u2014 assign digestive_enzymes ONLY (v1 narrow). Headers whose"
+    },
+    {
+      "line": 6036,
+      "content": "h[\"canonical_id\"] = \"digestive_enzymes\""
+    },
+    {
+      "line": 6187,
+      "content": "# cid=digestive_enzymes. The existing A.2b anchor path then"
+    }
+  ],
+  "scripts/enrich_supplements_v3.py": [
+    {
+      "line": 202,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/scoring_input_contract.py": [
+    {
+      "line": 1905,
+      "content": "canonical_id=canonical or \"digestive_enzymes\","
+    },
+    {
+      "line": 1907,
+      "content": "scoring_parent_id=canonical or \"digestive_enzymes\","
+    },
+    {
+      "line": 1993,
+      "content": "canonical_id=canonical or \"digestive_enzymes\","
+    },
+    {
+      "line": 1995,
+      "content": "scoring_parent_id=canonical or \"digestive_enzymes\","
+    },
+    {
+      "line": 3155,
+      "content": "\"digestive_enzymes\": \"enzyme\","
+    }
+  ],
+  "scripts/scoring_v4/modules/botanical_profile.py": [
+    {
+      "line": 65,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/scoring_v4/route_features.py": [
+    {
+      "line": 117,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/supplement_taxonomy.py": [
+    {
+      "line": 255,
+      "content": "\"digestive_enzymes\", \"pepsin\","
+    },
+    {
+      "line": 340,
+      "content": "\"digestive_enzymes\": \"digestive_enzymes\","
+    },
+    {
+      "line": 1790,
+      "content": "\"natto-serra\": \"digestive_enzymes\","
+    },
+    {
+      "line": 1792,
+      "content": "\"enzyme\": \"digestive_enzymes\","
+    },
+    {
+      "line": 1793,
+      "content": "\"enzymes\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_assessment_readiness.py": [
+    {
+      "line": 526,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 541,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_b24_mito_neuro_integrity.py": [
+    {
+      "line": 95,
+      "content": "# framework mismatch: digestive_enzymes (2)"
+    },
+    {
+      "line": 96,
+      "content": "('digestive_enzymes', 'oxidized enzymes',                                  'oxidation-deactivated'),"
+    },
+    {
+      "line": 97,
+      "content": "('digestive_enzymes', 'digestive enzymes (unspecified)',                   'framework-mismatch'),"
+    },
+    {
+      "line": 277,
+      "content": "'alpha_ketoglutarate', 'spirulina', 'digestive_enzymes'):"
+    },
+    {
+      "line": 320,
+      "content": "('digestive_enzymes', 'digestive enzymes (unspecified)'),"
+    }
+  ],
+  "scripts/tests/test_b34_bulk_finalization_integrity.py": [
+    {
+      "line": 11,
+      "content": "\u2022 Framework-mismatch flags (digestive_enzymes, probiotics, spirulina)"
+    },
+    {
+      "line": 104,
+      "content": "('digestive_enzymes', 'digestive enzymes (unspecified)'),"
+    }
+  ],
+  "scripts/tests/test_b35_dr_pham_signoff_integrity.py": [
+    {
+      "line": 175,
+      "content": "def test_e3_digestive_enzymes_category_error(iqm):"
+    },
+    {
+      "line": 177,
+      "content": "forms = iqm['digestive_enzymes']['forms']"
+    },
+    {
+      "line": 185,
+      "content": "f'digestive_enzymes::{fname} value={v} should be null per Dr Pham E3 '"
+    }
+  ],
+  "scripts/tests/test_blend_header_expansion.py": [
+    {
+      "line": 128,
+      "content": "BLEND_ENZYME (proprietary_blends canonical) OR ``digestive_enzymes``"
+    },
+    {
+      "line": 138,
+      "content": "(\"Aminogen\",               {\"BLEND_ENZYME\", \"digestive_enzymes\"}),"
+    },
+    {
+      "line": 139,
+      "content": "(\"Enzyme Mix\",             {\"BLEND_ENZYME\", \"digestive_enzymes\"}),"
+    },
+    {
+      "line": 140,
+      "content": "(\"Enzyme Blend\",           {\"BLEND_ENZYME\", \"digestive_enzymes\"}),"
+    },
+    {
+      "line": 141,
+      "content": "(\"Enzyme Activity Blend\",  {\"BLEND_ENZYME\", \"digestive_enzymes\"}),"
+    },
+    {
+      "line": 142,
+      "content": "(\"Digestive Aid Blend\",    {\"BLEND_ENZYME\", \"digestive_enzymes\"}),"
+    }
+  ],
+  "scripts/tests/test_capsule_unmapped_resolution.py": [
+    {
+      "line": 238,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_cleaner_first_contract_canary.py": [
+    {
+      "line": 363,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 441,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 495,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 528,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 541,
+      "content": "\"source_row_ref\": \"label:digestive_enzymes:transglucosidase:450000:tg\","
+    },
+    {
+      "line": 545,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_cleaner_identity_preservation.py": [
+    {
+      "line": 238,
+      "content": "\"rhaponticin\", \"apple_polyphenols\", \"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_d27_gap_closures.py": [
+    {
+      "line": 209,
+      "content": "(\"Serrapeptase Enzyme\",                      \"ingredient_quality_map\", \"digestive_enzymes\"),"
+    },
+    {
+      "line": 210,
+      "content": "(\"Serrapeptidase\",                           \"ingredient_quality_map\", \"digestive_enzymes\"),"
+    }
+  ],
+  "scripts/tests/test_dose_assessment_contract.py": [
+    {
+      "line": 149,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_evidence_primary_source_ownership.py": [
+    {
+      "line": 522,
+      "content": "raw_source_text=\"Pancreatin\", quantity=300.0, canonical_id=\"digestive_enzymes\")"
+    },
+    {
+      "line": 525,
+      "content": "quantity=56000.0, unit=\"USP\", canonical_id=\"digestive_enzymes\")"
+    },
+    {
+      "line": 533,
+      "content": "pancreatin, canonical_id=\"digestive_enzymes\", clean_identity_id=\"digestive_enzymes\","
+    },
+    {
+      "line": 534,
+      "content": "scoring_parent_id=\"digestive_enzymes\", evidence_canonical_id=\"digestive_enzymes\")],"
+    }
+  ],
+  "scripts/tests/test_existing_iqm_identity_recovery.py": [
+    {
+      "line": 686,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 955,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_identity_integrity.py": [
+    {
+      "line": 107,
+      "content": "\"digestive_enzymes\": {"
+    }
+  ],
+  "scripts/tests/test_ingredient_quality_map_schema.py": [
+    {
+      "line": 154,
+      "content": "'bovine pancreas',  # digestive_enzymes + organ_extracts (shared animal source material)"
+    }
+  ],
+  "scripts/tests/test_iqm_form_evidence_contract.py": [
+    {
+      "line": 625,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_iqm_pepsin_entry.py": [
+    {
+      "line": 41,
+      "content": "\"\"\"Pepsin must be a top-level IQM entry (not just under digestive_enzymes blend).\"\"\""
+    }
+  ],
+  "scripts/tests/test_iqm_unmapped_alias_batch_2026_06.py": [
+    {
+      "line": 137,
+      "content": "assert direct_match.get(\"canonical_id\") == \"digestive_enzymes\""
+    },
+    {
+      "line": 154,
+      "content": "assert source_match.get(\"canonical_id\") == \"digestive_enzymes\""
+    }
+  ],
+  "scripts/tests/test_routing_feature_shadow.py": [
+    {
+      "line": 179,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_row_ledger.py": [
+    {
+      "line": 321,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 335,
+      "content": "assert ledger[1][\"canonical_id\"] == \"digestive_enzymes\""
+    }
+  ],
+  "scripts/tests/test_scoring_classification_v1.py": [
+    {
+      "line": 426,
+      "content": "_row(\"digestive_enzymes\", \"Bromelain\", 200, \"mg\"),"
+    },
+    {
+      "line": 738,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_scoring_evidence_contract_v1.py": [
+    {
+      "line": 41,
+      "content": "`protein` and `digestive_enzymes` name how much the product declares, not"
+    },
+    {
+      "line": 136,
+      "content": "_assert_module_aggregate_evidence(out, \"digestive_enzymes\")"
+    },
+    {
+      "line": 151,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_scoring_input_contract.py": [
+    {
+      "line": 1525,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 1548,
+      "content": "assert row[\"canonical_id\"] == \"digestive_enzymes\""
+    }
+  ],
+  "scripts/tests/test_supplement_taxonomy.py": [
+    {
+      "line": 1156,
+      "content": "def test_digestive_enzymes_are_digestive(self):"
+    },
+    {
+      "line": 1313,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 1388,
+      "content": "{\"name\": \"Bromelain\", \"canonical_id\": \"digestive_enzymes\", \"category\": \"enzymes\", \"quantity\": 400, \"unit\": \"mg\"},"
+    }
+  ],
+  "scripts/tests/test_ul_gate_eligibility.py": [
+    {
+      "line": 1570,
+      "content": "(\"digestive_enzymes\", \"Protease\", \"HUT\"),"
+    }
+  ],
+  "scripts/tests/test_v4_botanical_route_role_aware.py": [
+    {
+      "line": 144,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 252,
+      "content": "_row(\"digestive_enzymes\", \"Protease\", 20, \"mg\"),"
+    },
+    {
+      "line": 253,
+      "content": "_row(\"digestive_enzymes\", \"Digestive Enzyme\", 20, \"mg\"),"
+    },
+    {
+      "line": 254,
+      "content": "_row(\"digestive_enzymes\", \"Lipase\", 20, \"mg\"),"
+    },
+    {
+      "line": 258,
+      "content": "assert roles[\"digestive_enzymes\"] in PRIMARY_ROLES"
+    }
+  ],
+  "scripts/tests/test_v4_completeness_gate.py": [
+    {
+      "line": 421,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_v4_generic_dose_p132a.py": [
+    {
+      "line": 459,
+      "content": "canonical_id=\"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_v4_route_intent_unification.py": [
+    {
+      "line": 203,
+      "content": "[_row(\"digestive_enzymes\", 249, \"mg\", category=\"enzymes\")],"
+    },
+    {
+      "line": 227,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 703,
+      "content": "_row(\"digestive_enzymes\", 10, \"mg\", category=\"enzymes\"),"
+    },
+    {
+      "line": 741,
+      "content": "\"digestive_enzymes\","
+    },
+    {
+      "line": 773,
+      "content": "\"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_v4_router_probiotic_evidence_fallback.py": [
+    {
+      "line": 336,
+      "content": "{\"canonical_id\": \"digestive_enzymes\", \"name\": \"Digestive Enzymes\", \"quantity\": 250, \"unit\": \"mg\", \"category\": \"enzymes\"},"
+    },
+    {
+      "line": 383,
+      "content": "\"canonical_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 384,
+      "content": "\"clean_identity_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 385,
+      "content": "\"scoring_parent_id\": \"digestive_enzymes\","
+    },
+    {
+      "line": 386,
+      "content": "\"evidence_canonical_id\": \"digestive_enzymes\","
+    }
+  ],
+  "scripts/tests/test_v4_router_probiotic_zero_qty_panel.py": [
+    {
+      "line": 91,
+      "content": "rows = [_row(n, \"digestive_enzymes\", 0) for n in (\"Amylase\", \"Lipase\", \"Protease\")]"
+    },
+    {
+      "line": 92,
+      "content": "rows += [_row(\"Enzyme Blend\", \"digestive_enzymes\", 75)]"
+    },
+    {
+      "line": 141,
+      "content": "rows = [_row(n, \"digestive_enzymes\", 0) for n in (\"Amylase\", \"Lipase\", \"Cellulase\", \"Bromelain\")]"
+    },
+    {
+      "line": 142,
+      "content": "rows += [_row(\"Enzyme Blend\", \"digestive_enzymes\", 90)]"
+    },
+    {
+      "line": 147,
+      "content": "def _digestive_enzymes_dominant():"
+    },
+    {
+      "line": 148,
+      "content": "rows = [_row(f\"Enzyme {i}\", \"digestive_enzymes\", 50) for i in range(13)]"
+    },
+    {
+      "line": 182,
+      "content": "def test_digestive_enzymes_with_probiotics_hero_precedes_stays_non_probiotic():"
+    },
+    {
+      "line": 187,
+      "content": "assert _route(_digestive_enzymes_dominant()) != \"probiotic\""
+    }
+  ]
+}

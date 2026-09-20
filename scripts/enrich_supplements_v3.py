@@ -197,11 +197,20 @@ _NON_UL_ACTIVITY_UNITS = {
 }
 _ACTIVITY_UNIT_CANONICALS = {
     "alpha_amylase",
+    "alpha_galactosidase",
+    "amylase",
     "blend_general",
     "bromelain",
+    "cellulase",
     "digestive_enzymes",
+    "lactase",
+    "lipase",
     "lysozyme",
     "nattokinase",
+    "pancreatin",
+    "papain",
+    "protease",
+    "serrapeptase",
     "superoxide dismutase",
     "superoxide_dismutase",
 }

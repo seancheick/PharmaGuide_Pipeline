@@ -22,7 +22,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from collagen_taxonomy import PEPTIDES_I_III, classify_collagen_subtype_strict
 from clinical_applicability import filter_clinical_matches
-from scoring_input_contract import primary_mass_competitor_rows
+from scoring_input_contract import (
+    primary_mass_competitor_rows,
+    get_assessable_evidence_ingredients,
+    is_nutrition_fact_declaration as _contract_is_nutrition_fact,
+)
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -345,7 +349,11 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         for entry in _safe_list(_safe_dict(product.get("evidence_data")).get("clinical_matches"))
         if isinstance(entry, dict)
     } | {_entry_id(entry) for entry in recovered_matches} | {_entry_id(entry) for entry in matches}
-    evidence_result_state = _evidence_result_state(product, total, listed_ids, matches)
+    from studied_formulas import assess_probiotic_component_disposition
+    probiotic_component_evidence = assess_probiotic_component_disposition(product)
+    evidence_result_state = _evidence_result_state(
+        product, total, listed_ids, matches, probiotic_disposition=probiotic_component_evidence
+    )
 
     components = {
         "clinical_evidence_pipeline": round(pipeline_total, 4),
@@ -395,6 +403,11 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 _entry_id(entry)
                 for entry in recovered_matches
             ],
+            "probiotic_component_evidence": (
+                probiotic_component_evidence
+                if (probiotic_component_evidence and probiotic_component_evidence.get("has_probiotic_component"))
+                else None
+            ),
             "evidence_result_state": evidence_result_state,
             "flags": flags,
         },
@@ -402,100 +415,18 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
 
 
 def _is_nutrition_fact_declaration(row: Dict[str, Any]) -> bool:
-    """Return whether a row is classified by canonical label/row-role owner as a Nutrition Facts declaration.
-
-    A Nutrition Facts declaration describes nutritional quantity (calories, carbs,
-    total fat, dietary fiber, protein, sodium, sugars, etc.) rather than serving
-    as an independent efficacy-bearing active ingredient identity.
-
-    Guardrail: this predicate depends on canonical provenance and semantic row-role,
-    NEVER on hardcoded nutrient name string matching.
-    """
-    if not isinstance(row, dict):
-        return False
-
-    # 1. Canonical cleaner / enricher skip & score exclusion reasons
-    for key in (
-        "score_exclusion_reason",
-        "skip_reason",
-        "identity_decision_reason",
-        "fallback_reason",
-    ):
-        val = str(row.get(key) or "").strip().lower()
-        if val == "excluded_nutrition_fact":
-            return True
-
-    # 2. Canonical cleaner row role
-    role = str(row.get("cleaner_row_role") or "").strip().lower()
-    if role in {"nutrition_rollup", "nutrition_fact"}:
-        return True
-
-    # 3. Explicit panel / section / display provenance
-    for key in ("panel_type", "display_type", "source_section"):
-        val = str(row.get(key) or "").strip().lower()
-        if val in {"nutrition_fact", "nutrition_facts"}:
-            return True
-
-    if str(row.get("canonical_source_db") or "").strip().lower() == "cleaner_nutrition_fact":
-        return True
-
-    # 4. Check nested raw_taxonomy metadata if present
-    tax = row.get("raw_taxonomy")
-    if isinstance(tax, dict):
-        for key in ("panel_type", "display_type", "source_section"):
-            val = str(tax.get(key) or "").strip().lower()
-            if val in {"nutrition_fact", "nutrition_facts"}:
-                return True
-        if str(tax.get("cleaner_row_role") or "").strip().lower() in {"nutrition_rollup", "nutrition_fact"}:
-            return True
-
-    return False
+    """Return whether a row is classified by canonical label/row-role owner as a Nutrition Facts declaration."""
+    return _contract_is_nutrition_fact(row)
 
 
 def _assessable_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Return ingredients eligible to be assessed for clinical evidence.
 
-    Drops parent totals / blend headers / compound duplicates / structural rows,
-    as well as Nutrition Facts nutrient declarations (which describe nutritional
-    quantity rather than an independent efficacy-bearing ingredient identity).
-    Retains identifiable child actives even if individual dose is unavailable.
-    Returns empty list (triggering 'no_assessable_actives') only when no genuine
-    evidence-bearing active identities remain.
+    Consumes the canonical contract from scoring_input_contract.get_assessable_evidence_ingredients.
     """
     if not isinstance(product, dict):
         return []
-
-    # Check ingredient_quality_data.ingredients first (the canonical cleaner mirror
-    # containing all active rows, including undosed child rows of blends),
-    # falling back to get_active_ingredients(product).
-    iqd = product.get("ingredient_quality_data")
-    if isinstance(iqd, dict) and isinstance(iqd.get("ingredients"), list):
-        candidate_rows = [r for r in iqd["ingredients"] if isinstance(r, dict)]
-    else:
-        candidate_rows = [r for r in get_active_ingredients(product) if isinstance(r, dict)]
-
-    assessable = []
-    for row in candidate_rows:
-        # 1. Drop structural / header / compound duplicate rows
-        if row.get("is_proprietary_blend") or row.get("is_parent_total") or row.get("is_compound_duplicate"):
-            continue
-        role = _norm_text(row.get("cleaner_row_role"))
-        if role in {"blend_header_total", "parent_total", "compound_duplicate", "inactive_non_scorable"}:
-            continue
-        if _norm_text(row.get("source_section")) == "inactive":
-            continue
-
-        # 2. Drop Nutrition Facts nutrient declarations (provenance-driven rule)
-        if _is_nutrition_fact_declaration(row):
-            continue
-
-        # 3. Retain genuine identifiable active identities
-        # (named child actives, scorable actives, etc.)
-        name = row.get("canonical_id") or row.get("standard_name") or row.get("name")
-        if name and _norm_text(name):
-            assessable.append(row)
-
-    return assessable
+    return get_assessable_evidence_ingredients(product)
 
 
 def _evidence_result_state(
@@ -503,6 +434,7 @@ def _evidence_result_state(
     total: float,
     listed_ids: set[str],
     accepted: List[Dict[str, Any]],
+    probiotic_disposition: Optional[Dict[str, Any]] = None,
 ) -> str:
     """Why Evidence landed where it did, from the matches that were scored.
 
@@ -513,8 +445,14 @@ def _evidence_result_state(
     if not _assessable_active_ingredients(product):
         return "no_assessable_actives"
     if not listed_ids:
+        if probiotic_disposition and probiotic_disposition.get("has_probiotic_component"):
+            return str(probiotic_disposition.get("disposition_state") or "clinical_review_not_covered")
         return "clinical_review_not_covered"
     if not accepted:
+        if probiotic_disposition and probiotic_disposition.get("has_probiotic_component"):
+            prob_state = probiotic_disposition.get("disposition_state")
+            if prob_state in {"native_research_review_incomplete", "research_present_applicability_unestablished"}:
+                return prob_state
         return "applicability_unestablished"
     directions = [_norm_text(entry.get("effect_direction")) for entry in accepted]
     if "negative" in directions:

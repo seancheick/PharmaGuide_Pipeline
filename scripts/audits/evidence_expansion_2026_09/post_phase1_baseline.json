@@ -1,0 +1,225 @@
+{
+  "total_products": 15459,
+  "evidence_states": {
+    "no_assessable_actives": 150,
+    "evaluated_applicable": 10414,
+    "clinical_review_not_covered": 4639,
+    "no_qualifying_human_evidence": 222,
+    "evaluated_null": 34
+  },
+  "pending_product_count": 4639,
+  "unique_pending_canonical_ids": 691,
+  "umbrella_pending_counts": {
+    "choline": 34,
+    "citrus_bioflavonoids": 29,
+    "l_carnitine": 27,
+    "fruits": 47,
+    "collagen": 22,
+    "prebiotics": 108,
+    "digestive_enzymes": 731,
+    "ginseng": 34
+  },
+  "digestive_enzyme_products_count": 851,
+  "top_pending_ids": [
+    [
+      "digestive_enzymes",
+      731
+    ],
+    [
+      "lactobacillus_acidophilus",
+      327
+    ],
+    [
+      "bifidobacterium_lactis",
+      262
+    ],
+    [
+      "lactobacillus_rhamnosus",
+      218
+    ],
+    [
+      "bifidobacterium_longum",
+      197
+    ],
+    [
+      "lactobacillus_plantarum",
+      165
+    ],
+    [
+      "bifidobacterium_bifidum",
+      142
+    ],
+    [
+      "iron",
+      135
+    ],
+    [
+      "prebiotics",
+      108
+    ],
+    [
+      "lactobacillus_casei",
+      100
+    ],
+    [
+      "zinc",
+      97
+    ],
+    [
+      "bifidobacterium_breve",
+      93
+    ],
+    [
+      "lactobacillus_paracasei",
+      93
+    ],
+    [
+      "pomegranate",
+      89
+    ],
+    [
+      "calcium",
+      74
+    ],
+    [
+      "fiber",
+      72
+    ],
+    [
+      "lactobacillus_bulgaricus",
+      70
+    ],
+    [
+      "blueberry",
+      69
+    ],
+    [
+      "l_glutamine",
+      69
+    ],
+    [
+      "lactobacillus_gasseri",
+      69
+    ],
+    [
+      "l_lysine",
+      68
+    ],
+    [
+      "lactobacillus_brevis",
+      61
+    ],
+    [
+      "lactococcus_lactis",
+      60
+    ],
+    [
+      "lactobacillus_salivarius",
+      60
+    ],
+    [
+      "cla",
+      58
+    ],
+    [
+      "vitamin_d",
+      57
+    ],
+    [
+      "maca",
+      56
+    ],
+    [
+      "potassium",
+      56
+    ],
+    [
+      "vitamin_a",
+      55
+    ],
+    [
+      "ginkgo",
+      55
+    ],
+    [
+      "methionine",
+      52
+    ],
+    [
+      "mct_oil",
+      52
+    ],
+    [
+      "streptococcus_thermophilus",
+      52
+    ],
+    [
+      "l_carnosine",
+      51
+    ],
+    [
+      "bacillus_subtilis",
+      50
+    ],
+    [
+      "bromelain",
+      48
+    ],
+    [
+      "l_phenylalanine",
+      47
+    ],
+    [
+      "fruits",
+      47
+    ],
+    [
+      "l_tyrosine",
+      47
+    ],
+    [
+      "acai_berry",
+      45
+    ],
+    [
+      "lactobacillus_reuteri",
+      44
+    ],
+    [
+      "broccoli",
+      43
+    ],
+    [
+      "natural raspberry powder",
+      42
+    ],
+    [
+      "l_leucine",
+      42
+    ],
+    [
+      "nha_chili_pepper",
+      42
+    ],
+    [
+      "garcinia_cambogia",
+      41
+    ],
+    [
+      "nattokinase",
+      40
+    ],
+    [
+      "strawberry",
+      40
+    ],
+    [
+      "bacillus_coagulans",
+      40
+    ],
+    [
+      "l_tryptophan",
+      36
+    ]
+  ]
+}

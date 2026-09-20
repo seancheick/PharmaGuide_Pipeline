@@ -1,0 +1,144 @@
+{
+  "total_probiotic_products_audited": 884,
+  "classification": {
+    "species_only_products": 306,
+    "exact_strain_products": 418,
+    "mixed_species_and_strain_products": 160
+  },
+  "by_module": {
+    "probiotic": 553,
+    "fiber_digestive": 54,
+    "generic": 134,
+    "multi_or_prenatal": 114,
+    "sports": 25,
+    "b_complex": 4
+  },
+  "quality_assessment_status": {
+    "complete": 884
+  },
+  "evidence_result_states": {
+    "research_present_applicability_unestablished": 344,
+    "applicability_unestablished": 64,
+    "native_research_review_incomplete": 122,
+    "evaluated_applicable": 306,
+    "clinical_review_not_covered": 26,
+    "evaluated_null": 14,
+    "unknown": 6,
+    "no_qualifying_human_evidence": 2
+  },
+  "cfu_disclosure": {
+    "aggregate_cfu_disclosed": 758,
+    "per_strain_cfu_disclosed": 2,
+    "no_cfu_disclosed": 126
+  },
+  "studied_formula_matches": 0,
+  "research_applicability_breakdown": {
+    "exact_strain_present_in_registry": 578,
+    "research_exists_at_strain_level_but_label_is_species_only": 249,
+    "species_without_known_strain_research": 57
+  },
+  "top_species_with_strain_research_on_species_only_labels": [
+    [
+      "lactobacillus_acidophilus",
+      1023
+    ],
+    [
+      "lactobacillus_rhamnosus",
+      664
+    ],
+    [
+      "lactobacillus_plantarum",
+      560
+    ],
+    [
+      "bifidobacterium_lactis",
+      536
+    ],
+    [
+      "bifidobacterium_longum",
+      522
+    ],
+    [
+      "bifidobacterium_bifidum",
+      447
+    ],
+    [
+      "lactobacillus_casei",
+      301
+    ],
+    [
+      "bifidobacterium_animalis",
+      297
+    ],
+    [
+      "bacillus_subtilis",
+      274
+    ],
+    [
+      "lactobacillus_paracasei",
+      264
+    ],
+    [
+      "bifidobacterium_breve",
+      241
+    ],
+    [
+      "lactobacillus_bulgaricus",
+      231
+    ],
+    [
+      "lactobacillus_salivarius",
+      206
+    ],
+    [
+      "lactobacillus_gasseri",
+      201
+    ],
+    [
+      "bacillus_coagulans",
+      183
+    ]
+  ],
+  "top_declared_exact_strains": [
+    [
+      "STRAIN_ACIDOPHILUS_LA14",
+      136
+    ],
+    [
+      "STRAIN_LGG",
+      125
+    ],
+    [
+      "STRAIN_LACTIS_BL04",
+      125
+    ],
+    [
+      "STRAIN_PLANTARUM_LP115",
+      96
+    ],
+    [
+      "STRAIN_SUBTILIS_DE111",
+      83
+    ],
+    [
+      "STRAIN_ACIDOPHILUS_NCFM",
+      78
+    ],
+    [
+      "STRAIN_RHAMNOSUS_LR32",
+      62
+    ],
+    [
+      "STRAIN_CASEI_LC11",
+      58
+    ],
+    [
+      "STRAIN_PARACASEI_LPC37",
+      55
+    ],
+    [
+      "STRAIN_BIFIDUM_CUL20",
+      53
+    ]
+  ]
+}

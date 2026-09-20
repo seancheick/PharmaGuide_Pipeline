@@ -708,6 +708,149 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
                 "context_ids": context_ids}}
 
 
+@lru_cache(maxsize=1)
+def species_with_clinical_strain_evidence() -> frozenset[str]:
+    """Return the set of probiotic species represented by clinical strains in the registry."""
+    from probiotic_measurements import _label_designation_tokens
+    registry = _clinical_strain_registry()
+    species_set = set()
+    for entry in registry.values():
+        std = entry.get("standard_name") or ""
+        tokens, _ = _label_designation_tokens(std)
+        if len(tokens) >= 2:
+            species_set.add(f"{tokens[0].lower()}_{tokens[1].lower()}")
+    return frozenset(species_set)
+
+
+def assess_probiotic_component_disposition(product: Mapping) -> dict:
+    """Return the canonical Evidence disposition for a product's probiotic component.
+
+    Consumes the single canonical probiotic Evidence owner (studied_formulas /
+    probiotic_evidence). Cross-module routes (generic, fiber_digestive, sports,
+    multi_or_prenatal) call this seam rather than reimplementing species/strain
+    or registry logic.
+    """
+    if not isinstance(product, Mapping):
+        return {"has_probiotic_component": False}
+
+    pdata = product.get("probiotic_data") or product.get("probiotic_detail") or {}
+    iqd = product.get("ingredient_quality_data") or {}
+    from probiotic_measurements import is_probiotic_source_identity, _label_designation_tokens
+    prob_rows = [i for i in iqd.get("ingredients", []) if is_probiotic_source_identity(i)]
+
+    if not prob_rows and not (pdata.get("is_probiotic_product") and (pdata.get("strains") or pdata.get("probiotic_blends"))):
+        return {"has_probiotic_component": False}
+
+    assessment = assess_probiotic_evidence(dict(product))
+    formula = assessment.get("formula_assessment") or {}
+    strains = assessment.get("strain_assessments") or []
+    native_review = assessment.get("native_context_review") or {}
+
+    if formula.get("status") == "assessed_studied_formula":
+        return {
+            "has_probiotic_component": True,
+            "disposition_state": "evaluated_applicable",
+            "reason": "assessed_studied_formula",
+            "evidence_score": 0.0,
+            "exact_strains": [s.get("strain") for s in strains if s.get("strain")],
+            "assessment": assessment,
+        }
+
+    # Check exact strain assessments
+    has_stub = any(s.get("status") == "strain_identity_or_review_unresolved" for s in strains)
+    has_pending = native_review.get("status") == "pending_clinical_review"
+    if has_stub or has_pending:
+        return {
+            "has_probiotic_component": True,
+            "disposition_state": "native_research_review_incomplete",
+            "reason": "strain_identity_or_review_unresolved",
+            "evidence_score": 0.0,
+            "exact_strains": [s.get("strain") for s in strains if s.get("strain")],
+            "assessment": assessment,
+        }
+
+    applicable_strains = [s for s in strains if s.get("dose_applicable")]
+    if applicable_strains:
+        return {
+            "has_probiotic_component": True,
+            "disposition_state": "evaluated_applicable",
+            "reason": "strain_dose_applicable",
+            "evidence_score": 0.0,
+            "exact_strains": [s.get("strain") for s in strains if s.get("strain")],
+            "assessment": assessment,
+        }
+
+    if strains:
+        # Exact strains present, but dose/applicability unestablished
+        return {
+            "has_probiotic_component": True,
+            "disposition_state": "research_present_applicability_unestablished",
+            "reason": "strain_dose_unestablished",
+            "evidence_score": 0.0,
+            "exact_strains": [s.get("strain") for s in strains if s.get("strain")],
+            "assessment": assessment,
+        }
+
+    # Species-only or genus-only: check declared species against registry species.
+    # Only count species that the label explicitly discloses (i.e. the strain text
+    # appears in the blend's strains[] list). DSLD can expand a genus ingredient row
+    # (e.g. "Lactobacillus unspecified") into species sub-forms internally; those
+    # taxonomy-derived expansions appear in strain_identity_resolution but are NOT
+    # printed on the label and must not be treated as disclosed species identity.
+    species_with_research = species_with_clinical_strain_evidence()
+    declared_species = set()
+    for b in pdata.get("probiotic_blends", []):
+        # Build a normalized set of what was explicitly listed as strains on the label.
+        label_strain_texts = {
+            str(s).strip().lower()
+            for s in b.get("strains", [])
+            if isinstance(s, str) and s.strip()
+        }
+        for res in b.get("strain_identity_resolution", []):
+            st = str(res.get("strain") or "").strip().lower()
+            # Only count this species if its text was an explicitly declared strain.
+            # If the species text is NOT in the label's strain list, it was derived
+            # from DSLD taxonomy expansion, not from label disclosure.
+            if st not in label_strain_texts:
+                continue
+            tokens, _ = _label_designation_tokens(st)
+            if len(tokens) >= 2:
+                g, sp = tokens[0], tokens[1]
+                if g.startswith("l.") or g == "l":
+                    g = "lactobacillus"
+                elif g.startswith("b.") or g == "b":
+                    g = "bifidobacterium"
+                elif g.startswith("s.") or g == "s":
+                    g = "streptococcus"
+                declared_species.add(f"{g}_{sp}")
+    for r in prob_rows:
+        cid = str(r.get("canonical_id") or "").lower()
+        if "_" in cid:
+            declared_species.add(cid)
+
+    has_lit = any(sp in species_with_research for sp in declared_species)
+    if has_lit:
+        return {
+            "has_probiotic_component": True,
+            "disposition_state": "research_present_applicability_unestablished",
+            "reason": "species_only_with_strain_literature",
+            "evidence_score": 0.0,
+            "exact_strains": [],
+            "species": sorted(declared_species),
+            "assessment": assessment,
+        }
+    else:
+        return {
+            "has_probiotic_component": True,
+            "disposition_state": "applicability_unestablished",
+            "reason": "species_or_genus_without_strain_literature",
+            "evidence_score": 0.0,
+            "exact_strains": [],
+            "species": sorted(declared_species),
+            "assessment": assessment,
+        }
+
+
 NATIVE_CONTEXT_REVIEW_STATUSES = frozenset({
     "source_verified_pending_clinical_review",  # authored, PMIDs verified, no approval
     "clinician_approved",                        # the only status that can score

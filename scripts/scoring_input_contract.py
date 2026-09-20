@@ -2933,6 +2933,141 @@ def get_source_score_eligible_active_rows(
     return list(source_rows.values())
 
 
+def is_nutrition_fact_declaration(row: Mapping[str, Any]) -> bool:
+    """Return whether a row is classified by canonical label/row-role owner as a Nutrition Facts declaration.
+
+    A Nutrition Facts declaration describes nutritional quantity (calories, carbs,
+    total fat, dietary fiber, protein, sodium, sugars, etc.) rather than serving
+    as an independent efficacy-bearing active ingredient identity.
+
+    Guardrail: this predicate depends on canonical provenance and semantic row-role,
+    NEVER on hardcoded nutrient name string matching.
+    """
+    if not isinstance(row, Mapping):
+        return False
+
+    # 1. Canonical cleaner / enricher skip & score exclusion reasons
+    for key in (
+        "score_exclusion_reason",
+        "skip_reason",
+        "identity_decision_reason",
+        "fallback_reason",
+    ):
+        val = str(row.get(key) or "").strip().lower()
+        if val == "excluded_nutrition_fact":
+            return True
+
+    # 2. Canonical cleaner row role
+    role = str(row.get("cleaner_row_role") or "").strip().lower()
+    if role in {"nutrition_rollup", "nutrition_fact"}:
+        return True
+
+    # 3. Explicit panel / section / display provenance
+    for key in ("panel_type", "display_type", "source_section"):
+        val = str(row.get(key) or "").strip().lower()
+        if val in {"nutrition_fact", "nutrition_facts"}:
+            return True
+
+    if str(row.get("canonical_source_db") or "").strip().lower() == "cleaner_nutrition_fact":
+        return True
+
+    # 4. Check nested raw_taxonomy metadata if present
+    tax = row.get("raw_taxonomy")
+    if isinstance(tax, Mapping):
+        for key in ("panel_type", "display_type", "source_section"):
+            val = str(tax.get(key) or "").strip().lower()
+            if val in {"nutrition_fact", "nutrition_facts"}:
+                return True
+        if str(tax.get("cleaner_row_role") or "").strip().lower() in {"nutrition_rollup", "nutrition_fact"}:
+            return True
+
+    return False
+
+
+def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    """Return ingredient rows eligible for clinical evidence assessment.
+
+    Canonical contract for Evidence-bearing rows across all scoring modules
+    (generic, fiber_digestive, sports, etc.).
+
+    Reads from the canonical cleaner mirror (``ingredient_quality_data.ingredients``)
+    which contains ALL active rows, including undosed child rows of blends that
+    ``get_active_ingredients`` (strict, dose-bearing only) misses.
+
+    Contract rules:
+    - Active section only (drops ``source_section == 'inactive'``, excipients, and
+      ``cleaner_row_role == 'inactive_non_scorable'``)
+    - Excludes structural parent totals, blend headers, and compound duplicates
+      (``is_proprietary_blend``, ``is_parent_total``, ``is_compound_duplicate``,
+       roles ``blend_header_total``, ``parent_total``, ``compound_duplicate``)
+    - Excludes Nutrition Facts nutrient declarations via ``is_nutrition_fact_declaration``
+    - Includes scoreable active rows (``cleaner_row_role == 'active_scorable'``,
+      or unclassified rows in score-ready fixtures when not structurally excluded)
+    - Includes disclosed ``nested_display_only`` child actives with a resolved canonical
+      identity (non-empty ``canonical_id`` not in unmapped tokens)
+    - Preserves source provenance without inferring dose or fabricating IDs
+    - Gracefully falls back to ``get_scoring_ingredients`` when the mirror is absent
+      (pre-enrichment test fixtures that only supply ``ingredients_scorable``)
+    """
+    data = dict(product) if isinstance(product, Mapping) else {}
+    quality = _safe_dict(data.get("ingredient_quality_data"))
+    rows = quality.get("ingredients")
+    if not isinstance(rows, list):
+        # Pre-enrichment fixture fallback: mirror not present, use scored rows.
+        return list(get_scoring_ingredients(data, strict=True).rows)
+
+    result = []
+    for row in rows:
+        if not isinstance(row, Mapping):
+            continue
+
+        # 1. Active section only: drop inactives and excipients
+        if _norm(row.get("source_section")) == "inactive":
+            continue
+        if row.get("is_excipient") is True:
+            continue
+        role = _norm(row.get("cleaner_row_role"))
+        if role == "inactive_non_scorable":
+            continue
+
+        # 2. Drop structural / blend header / parent total / compound duplicate rows
+        if row.get("is_proprietary_blend") or row.get("is_parent_total") or row.get("is_compound_duplicate"):
+            continue
+        if role in {"blend_header_total", "parent_total", "compound_duplicate"}:
+            continue
+
+        # 3. Drop Nutrition Facts declarations
+        if is_nutrition_fact_declaration(row):
+            continue
+
+        # 4. Require genuine identifiable active identity
+        canonical = str(row.get("canonical_id") or "").strip()
+        name = str(row.get("name") or row.get("standard_name") or "").strip()
+        if not canonical and not name:
+            continue
+
+        # 5. Role-specific qualification:
+        # Nested child actives under a blend parent must have a resolved canonical identity
+        if role == "nested_display_only":
+            if canonical and canonical.lower() not in {"unmapped", "none", "unknown", "blend_general"}:
+                result.append(dict(row))
+            continue
+
+        # Active unmapped rows with no quality map match are excluded
+        if _norm(row.get("role_classification")) == "active_unmapped" and not canonical:
+            continue
+        if _norm(row.get("identity_decision_reason")) in {
+            "unresolved_identity_no_quality_map_match",
+            "unresolved_identity_form_unmapped",
+        } and not canonical:
+            continue
+
+        # active_scorable and unclassified fixture rows
+        result.append(dict(row))
+
+    return result
+
+
 def scoring_row_key(row: Dict[str, Any], index: int) -> str:
     """Stable row identity for population union/deduplication."""
     for key in ("raw_source_path", "row_id", "ingredientId", "source_label_key"):

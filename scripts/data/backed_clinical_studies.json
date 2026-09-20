@@ -10276,10 +10276,9 @@
       "id": "INGR_DIGESTIVE_ENZYMES",
       "standard_name": "Digestive Enzyme Complex",
       "aliases": [
-        "pancreatic enzymes",
-        "lipase",
-        "protease",
-        "amylase"
+        "digestive enzyme complex",
+        "multi-enzyme blend",
+        "fungal multi-enzyme complex"
       ],
       "category": "digestive_gut",
       "evidence_level": "ingredient-human",
@@ -10296,10 +10295,10 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Human evidence for digestive enzymes is strong in exocrine pancreatic insufficiency, but evidence for broad over-the-counter digestive support in otherwise healthy adults remains limited and product-specific.",
+      "notes": "Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated an unbranded five-enzyme fungal fermentation formulation (amylase, protease, cellulase, lactase, lipase; 200 mg BID). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin.",
       "study_type": "rct_single",
       "last_updated": "2026-03-07",
-      "notable_studies": "Pancreatic-enzyme replacement evidence is well established in pancreatic insufficiency. Over-the-counter multi-enzyme blends have much less robust support; one placebo-controlled dyspepsia trial is indexed as PMID 37976892, but no broad general-population meta-analysis exists.",
+      "notable_studies": "One placebo-controlled dyspepsia trial (PMID 37976892) evaluated an unbranded five-enzyme fungal formulation in functional dyspepsia. Applicability requires matching multi-enzyme fungal formulation facts; standalone discrete enzymes do not inherit this evidence.",
       "references_structured": [
         {
           "type": "pubmed",

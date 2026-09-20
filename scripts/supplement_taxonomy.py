@@ -254,6 +254,8 @@ _ELECTROLYTE_IDS = frozenset({"sodium", "potassium", "magnesium", "calcium", "ch
 _ENZYME_CANONICAL_IDS = frozenset({
     "digestive_enzymes", "pepsin",
     "protease", "amylase", "lipase", "bromelain", "papain",
+    "lactase", "alpha_galactosidase", "pancreatin", "cellulase",
+    "lactase", "alpha_galactosidase", "pancreatin", "cellulase",
 })
 _SYSTEMIC_ENZYME_CANONICAL_IDS = frozenset({
     "nattokinase", "serrapeptase", "lumbrokinase",
@@ -1787,7 +1789,7 @@ def _infer_secondary_type(
         enzyme_name_map = {
             "serrapeptase": "serrapeptase",
             "nattokinase": "nattokinase",
-            "natto-serra": "digestive_enzymes",
+            "natto-serra": "serrapeptase",
             "pepsin": "pepsin",
             "enzyme": "digestive_enzymes",
             "enzymes": "digestive_enzymes",

@@ -683,7 +683,7 @@ def test_coherent_exact_unii_identity_beats_broader_structured_group(
                     ],
                 },
             ),
-            "digestive_enzymes",
+            "protease",
         ),
     ],
 )

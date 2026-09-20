@@ -1,0 +1,38 @@
+{
+  "audit_duration_seconds": 105.17,
+  "total_enzyme_products_audited": 851,
+  "total_enzyme_rows_audited": 3905,
+  "products_relinked_by_child_identity": {
+    "alpha_galactosidase": 107,
+    "amylase": 227,
+    "protease": 897,
+    "papain": 240,
+    "cellulase": 994,
+    "lipase": 288,
+    "lactase": 274,
+    "serrapeptase": 10,
+    "pancreatin": 20
+  },
+  "remaining_digestive_enzymes_parent_rows": 193,
+  "evidence_state_transitions": {
+    "before": {
+      "evaluated_applicable": 740,
+      "no_qualifying_human_evidence": 4,
+      "clinical_review_not_covered": 103,
+      "no_assessable_actives": 4
+    },
+    "after": {
+      "evaluated_applicable": 740,
+      "no_qualifying_human_evidence": 4,
+      "clinical_review_not_covered": 103,
+      "no_assessable_actives": 4
+    }
+  },
+  "products_gaining_evidence_from_existing_records_count": 0,
+  "products_gaining_evidence": [],
+  "evidence_score_movers_count": 0,
+  "tier_movers_count": 0,
+  "orphan_references_count": 0,
+  "unrelated_movers_count": 0,
+  "invented_dose_activity_equivalence_count": 0
+}
