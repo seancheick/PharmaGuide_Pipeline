@@ -601,4 +601,117 @@ def test_phase4_batch5_standardized_clinical_botanicals():
             pass
 
 
+def test_phase4_final_sweep_reviewed_null_unfavorable():
+    """Final sweep reviewed-null and safety contraindications."""
+    null_cids = ["artemisinin", "PII_ARTEMISININ", "aloe_ferox", "kavalactones"]
+    for cid in null_cids:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value, (
+            f"{cid} must emit reviewed_null_unfavorable, got {res.disposition}"
+        )
+        assert res.applicability_status == "reviewed_null_evidence"
+        assert res.points_eligible is False
+
+
+def test_phase4_final_sweep_identity_debt_handling():
+    """Identity debt: analytical markers, excipients, and broad classes must emit identity_insufficient."""
+    identity_debt_cids = [
+        "polysaccharides",
+        "NHA_ROSAVINS_MARKER",
+        "NHA_SALIDROSIDES_MARKER",
+        "PII_ELEMENTAL_SULFUR",
+        "NHA_FLAVONE_GLYCOSIDES_MARKER",
+        "PII_BRAND_COMPLEX_DESCRIPTOR",
+        "PII_MEDIUM_CHAIN_FATTY_ACIDS",
+        "PII_FATTY_ACID_PROFILE_COMPONENT",
+        "NHA_BERGAMOT_POLYPHENOLIC_FLAVONES_MARKER",
+        "NHA_CONJUGATED_BILE_ACID",
+        "NHA_HEDERACOSIDE_C_MARKER",
+        "NHA_MCT_PERCENT_COMPOSITION_DESCRIPTOR",
+        "NHA_MICROCRYSTALLINE_CELLULOSE",
+        "NHA_TOTAL_BILE_ACIDS",
+        "PII_CYCLODEXTRIN",
+        "PII_GELATIN_CAPSULE",
+        "PII_OIL_VEHICLE",
+        "saponins",
+    ]
+    for cid in identity_debt_cids:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value, (
+            f"{cid} must emit identity_insufficient, got {res.disposition}"
+        )
+        assert res.reason_code == "identity_material_unresolved"
+        assert "identity_material_unresolved" in res.blocking_reasons
+        assert res.points_eligible is False
+
+
+def test_phase4_final_sweep_zero_study_actives():
+    """Final sweep reproducible searches with zero qualifying human trials."""
+    zero_study_cids = [
+        "fadogia_agrestis", "suma", "belleric_myrobalan", "french_melon",
+        "glycitein", "myrrh_resin", "pau_darco", "indian_tinospora",
+        "neem", "shatavari", "sophora_japonica", "theacrine", "evodiamine",
+        "gamma_butyrobetaine_ethyl_ester", "paeoniflorin", "OI_ACETYL_L_CARNITINE_TAURINATE",
+        "black_walnut", "french_oak", "kawaratake", "polypodium_vulgare",
+        "pu_erh_tea_leaf", "rhubarb", "chinese_rhubarb", "rye_pollen",
+        "wakame", "wood_betony", "blessed_thistle", "enokitake",
+        "himematsutake", "hydrangea_root", "royal_sun_blazei", "thyme",
+        "prickly_pear", "catnip_leaf", "chebulic_myrobalan", "cynanchum_wilfordii",
+        "d_phenylalanine", "garcinia_indica", "hyssop", "icariin",
+        "korean_pine", "mimosa_pudica", "paeonia_lactiflora", "phlomoides_umbrosa",
+        "purple_corn_extract", "purple_tea", "white_oak"
+    ]
+    for cid in zero_study_cids:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value, (
+            f"{cid} must emit no_qualifying_human_evidence, got {res.disposition}"
+        )
+        assert res.applicability_status == "no_qualifying_trials_found"
+        assert res.points_eligible is False
+
+
+def test_phase4_final_sweep_crude_and_unestablished_materials():
+    """Final sweep crude materials and applicability unestablished."""
+    unestablished_cids = [
+        "chaga_mushroom_powder", "angelica_gigas", "dihydromyricetin", "butyric_acid",
+        "aescin", "lemon_bioflavonoids", "octacosanol", "theaflavins",
+        "ursolic_acid", "corosolic_acid", "PII_KOMBUCHA_POWDER"
+    ]
+    for cid in unestablished_cids:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value, (
+            f"{cid} must emit applicability_unestablished, got {res.disposition}"
+        )
+        assert res.points_eligible is False
+
+
+def test_phase4_final_sweep_culinary_food_matrices():
+    """Final sweep culinary food matrices and dietary excipients."""
+    culinary_cids = [
+        "OI_WHEAT_BRAN", "avocado_oil", "prune", "cod_liver_oil",
+        "citric_acid", "NHA_SOYNATTO_FERMENTED_SOYFOOD", "NHA_L_ARABINOSE"
+    ]
+    for cid in culinary_cids:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value, (
+            f"{cid} must emit not_efficacy_relevant, got {res.disposition}"
+        )
+        assert res.points_eligible is False
+
+
+def test_phase4_final_sweep_standardized_clinical_botanicals():
+    """Final sweep standardized clinical bioactives with live NCBI-verified studies."""
+    clinical_cids = [
+        "nad", "siberian_rhubarb", "african_geranium", "lumbrokinase",
+        "fucoidan", "maqui_berry", "diamine_oxidase", "capsaicin"
+    ]
+    for cid in clinical_cids:
+        res = er.resolve_evidence_for_canonical(cid)
+        assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value, (
+            f"{cid} must emit resolved_by_reviewed_clinical_evidence, got {res.disposition}"
+        )
+        assert res.points_eligible is False  # Shadow mode invariant
+
+
+
 
