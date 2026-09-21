@@ -14,7 +14,16 @@ def _state(product):
 
 
 def test_active_without_any_reviewed_record_is_not_covered():
-    assert _state(_product(matches=[])) == "clinical_review_not_covered"
+    unreviewed_prod = _product(
+        ingredients=[{"canonical_id": "unreviewed_herb", "name": "Unreviewed Herb", "cleaner_row_role": "active_scorable"}],
+        matches=[],
+    )
+    assert _state(unreviewed_prod) == "clinical_review_not_covered"
+
+
+def test_essential_nutrient_without_clinical_rct_is_authority_supported():
+    """Essential minerals with established DRI authority resolve to evaluated_authority."""
+    assert _state(_product(matches=[])) == "evaluated_authority"
 
 
 def test_records_rejected_by_applicability_are_not_called_uncovered():

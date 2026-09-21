@@ -438,28 +438,65 @@ def _evidence_result_state(
 ) -> str:
     """Why Evidence landed where it did, from the matches that were scored.
 
-    State names follow probiotic_evidence where the meaning is the same. A
-    missing review record is a coverage gap, never proof of weak evidence."""
+    Canonical Phase 5 contract: consumes resolve_product_evidence to determine
+    whether all assessable evidence-bearing ingredients have reached terminal
+    evaluated dispositions. Points are an output of assessment, never proof
+    that assessment occurred.
+    """
+    prod_res = None
+    try:
+        from evidence_resolver import resolve_product_evidence, EvidenceDisposition
+        prod_res = resolve_product_evidence(product)
+    except Exception:
+        prod_res = None
+
     if total > 0:
         return "evaluated_applicable"
     if not _assessable_active_ingredients(product):
         return "no_assessable_actives"
-    if not listed_ids:
-        if probiotic_disposition and probiotic_disposition.get("has_probiotic_component"):
-            return str(probiotic_disposition.get("disposition_state") or "clinical_review_not_covered")
+
+    # Probiotic disposition takes precedence for probiotic products
+    if probiotic_disposition and probiotic_disposition.get("has_probiotic_component"):
+        prob_state = probiotic_disposition.get("disposition_state")
+        if prob_state:
+            return str(prob_state)
+
+    # Incomplete assessment: active ingredient is unresolved
+    if prod_res is not None and not prod_res.is_assessment_complete:
+        if prod_res.overall_disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value:
+            return "identity_material_unresolved"
         return "clinical_review_not_covered"
-    if not accepted:
-        if probiotic_disposition and probiotic_disposition.get("has_probiotic_component"):
-            prob_state = probiotic_disposition.get("disposition_state")
-            if prob_state in {"native_research_review_incomplete", "research_present_applicability_unestablished"}:
-                return prob_state
+
+    # Evaluated matches on record take precedence when present
+    if accepted:
+        directions = [_norm_text(entry.get("effect_direction")) for entry in accepted]
+        if "negative" in directions:
+            return "evaluated_unfavorable"
+        if directions and all(direction == "null" for direction in directions):
+            return "evaluated_null"
+        return "no_qualifying_human_evidence"
+
+    if listed_ids:
         return "applicability_unestablished"
-    directions = [_norm_text(entry.get("effect_direction")) for entry in accepted]
-    if "negative" in directions:
-        return "evaluated_unfavorable"
-    if directions and all(direction == "null" for direction in directions):
-        return "evaluated_null"
-    return "no_qualifying_human_evidence"
+
+    # No listed clinical matches on record: consult universal evidence resolver
+    if prod_res is not None and prod_res.is_assessment_complete:
+        disp = prod_res.overall_disposition
+        if disp == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
+            return "evaluated_authority"
+        if disp == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value:
+            return "evaluated_null"
+        if disp == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value:
+            return "no_qualifying_human_evidence"
+        if disp in {
+            EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+            EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
+        }:
+            return "applicability_unestablished"
+        if disp == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
+            return "no_assessable_actives"
+
+    return "clinical_review_not_covered"
 
 
 def resolved_clinical_matches(
