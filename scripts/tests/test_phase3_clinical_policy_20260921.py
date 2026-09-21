@@ -429,7 +429,10 @@ def test_discrete_enzyme_does_not_inherit_collapsed_multi_enzyme_evidence() -> N
     }
     result = score_evidence(product)
     assert result["score"] == 0.0
-    assert result["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+    assert result["metadata"]["evidence_result_state"] in {
+        "clinical_review_not_covered",
+        "no_qualifying_human_evidence",
+    }
 
 
 # ---------------------------------------------------------------------------

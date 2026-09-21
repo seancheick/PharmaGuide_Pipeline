@@ -2984,6 +2984,8 @@ def is_nutrition_fact_declaration(row: Mapping[str, Any]) -> bool:
     return False
 
 
+_PHASE5_ENABLED: bool = True
+
 # Phase 5: Deterministic non-efficacy active identities (analytical markers,
 # excipient vehicles, formulation carriers, and profile descriptors) owned by
 # other_ingredients.json or cleaner rules. These are excluded upstream from
@@ -3080,10 +3082,11 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
         name = str(row.get("name") or row.get("standard_name") or "").strip()
         if not canonical and not name:
             continue
-        if canonical.lower() in DETERMINISTIC_NON_EFFICACY_CANONICALS:
-            continue
-        if canonical.lower().endswith("_source_descriptor") or canonical.lower().endswith("_marker"):
-            continue
+        if _PHASE5_ENABLED:
+            if canonical.lower() in DETERMINISTIC_NON_EFFICACY_CANONICALS:
+                continue
+            if canonical.lower().endswith("_source_descriptor") or canonical.lower().endswith("_marker"):
+                continue
 
         # 5. Role-specific qualification:
         # Nested child actives under a blend parent must have a resolved canonical identity

@@ -799,6 +799,9 @@ EVIDENCE_ASSESSED_STATES = frozenset({
 })
 
 
+_PHASE5_ENABLED: bool = True
+
+
 def evidence_display_state(state: Optional[str], score: float = 0.0) -> str:
     """The one place that decides how an Evidence result may be PRESENTED.
 
@@ -812,6 +815,8 @@ def evidence_display_state(state: Optional[str], score: float = 0.0) -> str:
     Evidence disposition, never inferred from a positive score alone. Points
     are an output of assessment, not proof that assessment occurred.
     """
+    if not _PHASE5_ENABLED and score > 0:
+        return "assessed"
     if state in EVIDENCE_COVERAGE_GAP_STATES:
         return "not_yet_reviewed"
     if state in EVIDENCE_APPLICABILITY_STATES:

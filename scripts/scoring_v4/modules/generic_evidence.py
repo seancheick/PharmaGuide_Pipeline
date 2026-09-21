@@ -429,6 +429,9 @@ def _assessable_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, An
     return get_assessable_evidence_ingredients(product)
 
 
+_PHASE5_ENABLED: bool = True
+
+
 def _evidence_result_state(
     product: Dict[str, Any],
     total: float,
@@ -444,11 +447,12 @@ def _evidence_result_state(
     that assessment occurred.
     """
     prod_res = None
-    try:
-        from evidence_resolver import resolve_product_evidence, EvidenceDisposition
-        prod_res = resolve_product_evidence(product)
-    except Exception:
-        prod_res = None
+    if _PHASE5_ENABLED:
+        try:
+            from evidence_resolver import resolve_product_evidence, EvidenceDisposition
+            prod_res = resolve_product_evidence(product)
+        except Exception:
+            prod_res = None
 
     if total > 0:
         return "evaluated_applicable"
