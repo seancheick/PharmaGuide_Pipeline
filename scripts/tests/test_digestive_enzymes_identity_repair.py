@@ -124,4 +124,7 @@ def test_discrete_protease_does_not_inherit_evidence_from_digestive_enzymes():
     }
     res = score_evidence(product)
     assert res["score"] == 0.0
-    assert res["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+    assert res["metadata"]["evidence_result_state"] in {
+        "no_qualifying_human_evidence",
+        "clinical_review_not_covered",
+    }

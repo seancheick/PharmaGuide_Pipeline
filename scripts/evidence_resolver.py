@@ -284,11 +284,18 @@ def _load_botanical_index() -> Dict[str, Dict[str, Any]]:
             cid = _norm(entry.get("canonical_id") or entry.get("id"))
             if cid:
                 idx[cid] = entry
+                idx[cid.replace("_", " ")] = entry
+                idx[cid.replace(" ", "_")] = entry
             sname = _norm(entry.get("standard_name") or entry.get("name"))
             if sname:
                 idx[sname] = entry
+                idx[sname.replace("_", " ")] = entry
+                idx[sname.replace(" ", "_")] = entry
             for alias in entry.get("aliases", []):
-                idx[_norm(alias)] = entry
+                norm_a = _norm(alias)
+                idx[norm_a] = entry
+                idx[norm_a.replace("_", " ")] = entry
+                idx[norm_a.replace(" ", "_")] = entry
     except Exception:
         pass
     return idx
@@ -324,7 +331,7 @@ def _load_safety_disqualifications() -> Set[str]:
                     continue
                 if cid:
                     banned.add(cid)
-                    if cid.upper().startswith("BANNED_") or cid.upper().startswith("ADULTERANT_"):
+                    if cid.upper().startswith("BANNED_") or cid.upper().startswith("ADULTERANT_") or cid.upper().startswith("ADD_"):
                         banned.add(_norm(cid.split("_", 1)[1]))
                 sname = _norm(entry.get("standard_name"))
                 if sname:
@@ -871,8 +878,13 @@ def resolve_evidence_for_row(
 
         # Check dose applicability against studied exposure
         dose_val = _as_float(row_dict.get("amount") or row_dict.get("dose_value"))
-        studied_dose = lit_entry.get("studied_dose_exposure", {})
-        min_dose = min(studied_dose.get("values", [])) if studied_dose.get("values") else None
+        studied_dose = lit_entry.get("studied_dose_exposure")
+        if isinstance(studied_dose, dict):
+            min_dose = min(studied_dose.get("values", [])) if studied_dose.get("values") else None
+        elif isinstance(studied_dose, list) and studied_dose:
+            min_dose = min(studied_dose)
+        else:
+            min_dose = None
 
         if dose_val is None and product is not None:
             return EvidenceResolution(
@@ -1054,54 +1066,22 @@ def _as_float(val: Any) -> Optional[float]:
 def run_resolver_shadow_audit(
     queue_path: Optional[Path] = None,
     catalog_summary_path: Optional[Path] = None,
+    production_actives_path: Optional[Path] = None,
 ) -> Dict[str, Any]:
-    """Execute shadow resolution across the canonical unresolved queue and catalog.
+    """Execute shadow resolution across the production assessable active universe and historical queue.
 
     Evaluates:
-    - 664 canonical unresolved active ingredients
+    - Real production assessable active universe (durable denominator)
     - Deterministic routing coverage
     - Completed disposition coverage
+    - Historical 664 queue metrics
     - Products still partial
     - Top unresolved identity blockers
     - Genuine policy decisions needed
     """
+    prod_file = production_actives_path or (_DATA_DIR / "production_assessable_actives.json")
     queue_file = queue_path or (_DATA_DIR.parent / "audits" / "evidence_expansion_2026_09" / "queue.json").resolve()
-    if not queue_file.exists():
-        raise FileNotFoundError(f"Queue file not found: {queue_file}")
 
-    q_data = json.loads(queue_file.read_text(encoding="utf-8")).get("queue", [])
-    target_664 = [x for x in q_data if x.get("gap_rank", 9999) <= 664]
-
-    resolutions = []
-    disposition_counts: Dict[str, int] = {}
-    matched_owners_count: Dict[str, int] = {}
-    blockers_count: Dict[str, int] = {}
-
-    for item in target_664:
-        cid = item["canonical_id"]
-        name = item.get("top_name")
-        cleaner_role = "active_scorable" if item.get("row_roles", {}).get("active_scorable") else None
-        dose_val = 5.0 if cid in {"silica", "silicon"} and item.get("dosed_slot_share", 0) > 0 else None
-        res = resolve_evidence_for_canonical(
-            cid,
-            name=name,
-            cleaner_row_role=cleaner_role,
-            dose_value=dose_val,
-        )
-        resolutions.append((item, res))
-
-        disposition_counts[res.disposition] = disposition_counts.get(res.disposition, 0) + 1
-        for o in res.matched_owners:
-            matched_owners_count[o] = matched_owners_count.get(o, 0) + 1
-        for b in res.blocking_reasons:
-            blockers_count[b] = blockers_count.get(b, 0) + 1
-
-    total_actives = len(target_664)
-    # Routing coverage: percentage of actives routed to an established owner / disposition
-    routed_count = sum(1 for _, r in resolutions if r.matched_owners and r.disposition != EvidenceDisposition.IDENTITY_INSUFFICIENT.value)
-    routing_coverage_pct = round((routed_count / total_actives) * 100.0, 2) if total_actives else 0.0
-
-    # Completed disposition: percentage of actives that have a definitive evaluated state
     completed_states = {
         EvidenceDisposition.RESOLVED_BY_AUTHORITY.value,
         EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
@@ -1110,20 +1090,86 @@ def run_resolver_shadow_audit(
         EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
         EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
     }
-    completed_count = sum(1 for _, r in resolutions if r.disposition in completed_states)
-    completed_pct = round((completed_count / total_actives) * 100.0, 2) if total_actives else 0.0
 
-    # Top blockers sorted by product reach
-    literature_required = [x for x in resolutions if x[1].disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value]
-    literature_required.sort(key=lambda x: -x[0].get("products", 0))
+    # 1. Primary evaluation: Real Production Assessable Active Universe
+    actives_data = []
+    if prod_file.exists():
+        try:
+            raw_prod = json.loads(prod_file.read_text(encoding="utf-8"))
+            actives_data = raw_prod.get("assessable_actives", [])
+        except Exception:
+            pass
+
+    prod_resolutions = []
+    prod_disp_counts: Dict[str, int] = {}
+    prod_owners_count: Dict[str, int] = {}
+    prod_blockers_count: Dict[str, int] = {}
+
+    if actives_data:
+        for item in actives_data:
+            cid = item["canonical_id"]
+            name = item.get("standard_name") or (item.get("common_names") and item["common_names"][0]) or cid
+            res = resolve_evidence_for_canonical(
+                cid,
+                name=name,
+                cleaner_row_role="active_scorable",
+            )
+            prod_resolutions.append((item, res))
+            prod_disp_counts[res.disposition] = prod_disp_counts.get(res.disposition, 0) + 1
+            for o in res.matched_owners:
+                prod_owners_count[o] = prod_owners_count.get(o, 0) + 1
+            for b in res.blocking_reasons:
+                prod_blockers_count[b] = prod_blockers_count.get(b, 0) + 1
+
+        total_prod_actives = len(actives_data)
+        routed_prod_count = sum(1 for _, r in prod_resolutions if r.matched_owners and r.disposition != EvidenceDisposition.IDENTITY_INSUFFICIENT.value)
+        prod_routing_coverage_pct = round((routed_prod_count / total_prod_actives) * 100.0, 2) if total_prod_actives else 0.0
+        completed_prod_count = sum(1 for _, r in prod_resolutions if r.disposition in completed_states)
+        prod_completed_pct = round((completed_prod_count / total_prod_actives) * 100.0, 2) if total_prod_actives else 0.0
+    else:
+        total_prod_actives = 0
+        prod_routing_coverage_pct = 0.0
+        prod_completed_pct = 0.0
+
+    # 2. Historical 664 queue evaluation
+    historical_metrics: Dict[str, Any] = {}
+    if queue_file.exists():
+        try:
+            q_data = json.loads(queue_file.read_text(encoding="utf-8")).get("queue", [])
+            target_664 = [x for x in q_data if x.get("gap_rank", 9999) <= 664]
+            h_res = []
+            h_disp: Dict[str, int] = {}
+            for item in target_664:
+                cid = item["canonical_id"]
+                name = item.get("top_name")
+                cleaner_role = "active_scorable" if item.get("row_roles", {}).get("active_scorable") else None
+                dose_val = 5.0 if cid in {"silica", "silicon"} and item.get("dosed_slot_share", 0) > 0 else None
+                r = resolve_evidence_for_canonical(cid, name=name, cleaner_row_role=cleaner_role, dose_value=dose_val)
+                h_res.append(r)
+                h_disp[r.disposition] = h_disp.get(r.disposition, 0) + 1
+            h_total = len(target_664)
+            h_routed = sum(1 for r in h_res if r.matched_owners and r.disposition != EvidenceDisposition.IDENTITY_INSUFFICIENT.value)
+            h_completed = sum(1 for r in h_res if r.disposition in completed_states)
+            historical_metrics = {
+                "total_canonical_actives": h_total,
+                "routing_coverage_pct": round((h_routed / h_total) * 100.0, 2) if h_total else 0.0,
+                "completed_disposition_pct": round((h_completed / h_total) * 100.0, 2) if h_total else 0.0,
+                "disposition_breakdown": h_disp,
+            }
+        except Exception:
+            pass
+
+    # Top blockers from production universe if available
+    eval_resolutions = prod_resolutions if prod_resolutions else []
+    literature_required = [x for x in eval_resolutions if x[1].disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value]
+    literature_required.sort(key=lambda x: -x[0].get("product_count", x[0].get("products", 0)))
 
     top_blockers = [
         {
             "canonical_id": x[0]["canonical_id"],
-            "name": x[0].get("top_name", ""),
-            "category": x[0].get("category", ""),
-            "products_affected": x[0].get("products", 0),
-            "slots_affected": x[0].get("slots", 0),
+            "name": x[0].get("standard_name") or x[0].get("top_name", ""),
+            "products_affected": x[0].get("product_count", x[0].get("products", 0)),
+            "slots_affected": x[0].get("row_count", x[0].get("slots", 0)),
         }
         for x in literature_required[:20]
     ]
@@ -1150,41 +1196,53 @@ def run_resolver_shadow_audit(
             "partial_pct": round((part / tot) * 100.0, 2) if tot else 0.0,
         }
 
-    # Genuine policy decisions needed (Phase 3 policy decisions locked)
-    policy_decisions: List[str] = []
+    final_total = total_prod_actives if total_prod_actives else historical_metrics.get("total_canonical_actives", 0)
+    final_routing = prod_routing_coverage_pct if total_prod_actives else historical_metrics.get("routing_coverage_pct", 0.0)
+    final_completed = prod_completed_pct if total_prod_actives else historical_metrics.get("completed_disposition_pct", 0.0)
+    final_disp = prod_disp_counts if total_prod_actives else historical_metrics.get("disposition_breakdown", {})
+    final_owners = prod_owners_count
 
     return {
-        "total_canonical_actives": total_actives,
-        "routing_coverage_pct": routing_coverage_pct,
-        "completed_disposition_pct": completed_pct,
-        "disposition_breakdown": disposition_counts,
-        "matched_owner_breakdown": matched_owners_count,
+        "total_canonical_actives": final_total,
+        "routing_coverage_pct": final_routing,
+        "completed_disposition_pct": final_completed,
+        "disposition_breakdown": final_disp,
+        "matched_owner_breakdown": final_owners,
         "top_blockers": top_blockers,
         "catalog_stats": catalog_stats,
-        "policy_decisions_needed": policy_decisions,
+        "historical_664_metrics": historical_metrics,
+        "policy_decisions_needed": [],
     }
 
 
 if __name__ == "__main__":
     report = run_resolver_shadow_audit()
     print("=" * 70)
-    print("PHASE 4 UNIVERSAL EVIDENCE RESOLVER — SHADOW AUDIT REPORT")
+    print("UNIVERSAL EVIDENCE RESOLVER — SHADOW AUDIT REPORT")
     print("=" * 70)
     print(f"Total Canonical Actives Evaluated: {report['total_canonical_actives']}")
     print(f"Routing Coverage: {report['routing_coverage_pct']}%")
     print(f"Completed Disposition Coverage: {report['completed_disposition_pct']}%")
     print("\nDisposition Breakdown:")
     for disp, cnt in sorted(report["disposition_breakdown"].items(), key=lambda x: -x[1]):
-        pct = (cnt / report["total_canonical_actives"]) * 100.0
+        pct = (cnt / report["total_canonical_actives"]) * 100.0 if report["total_canonical_actives"] else 0.0
         print(f"  {disp:<45} {cnt:>4} ({pct:.1f}%)")
 
     print("\nMatched Owners Breakdown:")
     for owner, cnt in sorted(report["matched_owner_breakdown"].items(), key=lambda x: -x[1]):
         print(f"  {owner:<30} {cnt:>4}")
 
-    print("\nTop 15 Identity Blockers by Product Reach (Phase 4 Targets):")
-    for b in report["top_blockers"][:15]:
-        print(f"  {b['canonical_id']:<25} | {b['products_affected']:>4} prods | {b['slots_affected']:>4} slots | {b['category']:<15} | {b['name']}")
+    if report["historical_664_metrics"]:
+        h = report["historical_664_metrics"]
+        print(f"\nHistorical 664 Queue Context:")
+        print(f"  Total: {h['total_canonical_actives']}")
+        print(f"  Routing Coverage: {h['routing_coverage_pct']}%")
+        print(f"  Completed Disposition Coverage: {h['completed_disposition_pct']}%")
+
+    if report["top_blockers"]:
+        print("\nTop Blockers by Product Reach:")
+        for b in report["top_blockers"][:15]:
+            print(f"  {b['canonical_id']:<25} | {b['products_affected']:>4} prods | {b['slots_affected']:>4} slots | {b['name']}")
 
     cs = report["catalog_stats"]
     if cs["total"] > 0:
@@ -1192,7 +1250,4 @@ if __name__ == "__main__":
         print(f"  Complete Assessments: {cs['complete']} ({100.0 - cs['partial_pct']:.1f}%)")
         print(f"  Products Still Partial: {cs['partial']} ({cs['partial_pct']}%)")
 
-    print("\nGenuine Policy Decisions Needed:")
-    for idx, dec in enumerate(report["policy_decisions_needed"], 1):
-        print(f"  {idx}. {dec}")
 
