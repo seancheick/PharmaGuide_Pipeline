@@ -549,9 +549,20 @@ def test_safety_recognition_does_not_make_an_excluded_source_required(
     assert evaluate_assessment_readiness(product, module="generic")["identity"]["readiness"] == "complete"
 
 
-@pytest.mark.parametrize("label", ["Mannitol", "EDTA Disodium", "Calcium Disodium EDTA"])
+# (label, expected recognition_source, expected safety_identity_id).
+# Mannitol is recognized only as a harmful additive. The two EDTA salts gained a
+# banned_recalled policy identity on 2026-09-21 (standalone oral EDTA -> BLOCKED,
+# reason NON_ROUTINE_CHELATOR), and banned_recalled outranks harmful_additives in
+# the safety lookup -- so the RECOGNITION SOURCE moved while the guard this test
+# illustrates is unchanged (the row still carries no canonical identity and must
+# not widen the required primary denominator).
+@pytest.mark.parametrize(("label", "expected_source"), [
+    ("Mannitol", "harmful_additives"),
+    ("EDTA Disodium", "banned_recalled_ingredients"),
+    ("Calcium Disodium EDTA", "banned_recalled_ingredients"),
+])
 def test_recognized_excipient_does_not_widen_the_required_primary_denominator(
-    enricher: SupplementEnricherV3, label: str,
+    enricher: SupplementEnricherV3, label: str, expected_source: str,
 ) -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
@@ -561,7 +572,7 @@ def test_recognized_excipient_does_not_widen_the_required_primary_denominator(
     quality = product["ingredient_quality_data"]["ingredients"][0]
     assert quality["is_excipient"] is True
     assert quality["canonical_id"] is None
-    assert quality["recognition_source"] == "harmful_additives"
+    assert quality["recognition_source"] == expected_source
     assert quality["safety_identity_id"] == quality["recognized_entry_id"]
     scoring = get_scoring_ingredients(product)
     assert scoring.mapped_count == 1

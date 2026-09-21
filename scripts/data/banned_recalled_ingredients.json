@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-18",
-    "total_entries": 176,
+    "last_updated": "2026-09-21",
+    "total_entries": 178,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -21230,6 +21230,212 @@
         "effective_to": null,
         "note": "Promoted for sexual enhancement on various websites and possibly in some retail stores"
       }
+    },
+    {
+      "id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+      "standard_name": "Edetate Disodium",
+      "aliases": [
+        "EDTA Disodium",
+        "Disodium EDTA",
+        "Disodium Edetate",
+        "Edetate Disodium Anhydrous",
+        "Edetate Sodium",
+        "Sodium Edetate"
+      ],
+      "reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+      "status": "banned",
+      "class_tags": [
+        "non_routine_use_policy",
+        "metal_chelator",
+        "clinician_review_required"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "calcium disodium"
+        ]
+      },
+      "legal_status_enum": "not_lawful_as_supplement",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-21",
+      "hard_verdict_roles": [
+        "active"
+      ],
+      "role_scope_out_of_scope": "not_applicable",
+      "verdict_reason_code": "NON_ROUTINE_CHELATOR",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "not_lawful",
+          "effective_date": "2016-02-02",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA: no chelation product has ever been approved for over-the-counter use; FDA-approved chelation products require a prescription and clinical supervision.",
+            "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+            "accessed_date": "2026-09-21"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-21"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "Questions and Answers on Unapproved Chelation Products",
+          "evidence_grade": "R",
+          "date": "2016-02-02",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+          "supports_claims": [
+            "regulatory_status",
+            "policy_basis"
+          ],
+          "evidence_summary": "FDA has never approved any chelation product for over-the-counter use for any health condition; all FDA-approved chelation products require a prescription."
+        },
+        {
+          "type": "fda_advisory",
+          "title": "FDA warns consumers about potential health risks from using Thorne Research's Captomer products",
+          "evidence_grade": "R",
+          "date": "2015-11-30",
+          "url": "https://www.fda.gov/drugs/drug-safety-and-availability/fda-warns-consumers-about-potential-health-risks-using-thorne-researchs-captomer-products",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA advises consumers to avoid all products offered over the counter for chelation and states there are no FDA-approved OTC chelation products."
+        }
+      ],
+      "source_category": "non_routine_use_policy",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-21",
+        "next_review_due": "2027-03-21",
+        "reviewed_by": "PharmaGuide Clinical Team - Dr. Pham",
+        "change_log": [
+          {
+            "date": "2026-09-21",
+            "change": "Authored for the Phase-3 clinical decision: standalone oral EDTA is BLOCKED with a visible Safety card and no quality score (NON_ROUTINE_CHELATOR); declared-active role only, so excipient occurrences are unaffected.",
+            "by": "PharmaGuide Clinical Team - Dr. Pham"
+          }
+        ]
+      },
+      "regulatory_date": "2016-02-02",
+      "regulatory_date_label": "FDA chelation-products advisory",
+      "match_mode": "active",
+      "cui": null,
+      "external_ids": {},
+      "ban_context": "substance",
+      "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+      "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement.",
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No UMLS concept resolved for this chelating-salt name via the registry's own verifier. Identity is authored from the DSLD ingredient name; no identifier is invented."
+    },
+    {
+      "id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+      "standard_name": "Edetate Calcium Disodium",
+      "aliases": [
+        "Calcium Disodium EDTA",
+        "Calcium Disodium Edetate",
+        "Edetate Calcium Disodium Anhydrous",
+        "Calcium EDTA"
+      ],
+      "reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+      "status": "banned",
+      "class_tags": [
+        "non_routine_use_policy",
+        "metal_chelator",
+        "clinician_review_required"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "not_lawful_as_supplement",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-21",
+      "hard_verdict_roles": [
+        "active"
+      ],
+      "role_scope_out_of_scope": "not_applicable",
+      "verdict_reason_code": "NON_ROUTINE_CHELATOR",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "not_lawful",
+          "effective_date": "2016-02-02",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA: no chelation product has ever been approved for over-the-counter use; FDA-approved chelation products require a prescription and clinical supervision.",
+            "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+            "accessed_date": "2026-09-21"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-21"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "Questions and Answers on Unapproved Chelation Products",
+          "evidence_grade": "R",
+          "date": "2016-02-02",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+          "supports_claims": [
+            "regulatory_status",
+            "policy_basis"
+          ],
+          "evidence_summary": "FDA has never approved any chelation product for over-the-counter use for any health condition; all FDA-approved chelation products require a prescription."
+        },
+        {
+          "type": "fda_advisory",
+          "title": "FDA warns consumers about potential health risks from using Thorne Research's Captomer products",
+          "evidence_grade": "R",
+          "date": "2015-11-30",
+          "url": "https://www.fda.gov/drugs/drug-safety-and-availability/fda-warns-consumers-about-potential-health-risks-using-thorne-researchs-captomer-products",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA advises consumers to avoid all products offered over the counter for chelation and states there are no FDA-approved OTC chelation products."
+        }
+      ],
+      "source_category": "non_routine_use_policy",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-21",
+        "next_review_due": "2027-03-21",
+        "reviewed_by": "PharmaGuide Clinical Team - Dr. Pham",
+        "change_log": [
+          {
+            "date": "2026-09-21",
+            "change": "Authored for the Phase-3 clinical decision: standalone oral EDTA is BLOCKED with a visible Safety card and no quality score (NON_ROUTINE_CHELATOR); declared-active role only, so excipient occurrences are unaffected.",
+            "by": "PharmaGuide Clinical Team - Dr. Pham"
+          }
+        ]
+      },
+      "regulatory_date": "2016-02-02",
+      "regulatory_date_label": "FDA chelation-products advisory",
+      "match_mode": "active",
+      "cui": null,
+      "external_ids": {},
+      "ban_context": "substance",
+      "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+      "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement.",
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No UMLS concept resolved for this chelating-salt name via the registry's own verifier. Identity is authored from the DSLD ingredient name; no identifier is invented."
     }
   ]
 }

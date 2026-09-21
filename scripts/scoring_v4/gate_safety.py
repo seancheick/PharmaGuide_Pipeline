@@ -518,6 +518,15 @@ def _decision_for_signal(
         or signal.entry_id
         or "unknown"
     )
+    # An entry may name its own machine reason code. The registry's default
+    # codes describe the policy TIER (``banned_ingredient`` /
+    # ``recalled_ingredient``); a rule whose consumer meaning is narrower than
+    # the tier -- a non-routine-use policy block rather than a toxicity
+    # finding -- declares its own code here so the exported ``blocking_reason``
+    # states the policy instead of the tier.
+    declared_reason = str(entry.get("verdict_reason_code") or "").strip()
+    if declared_reason:
+        reason_code = declared_reason
     return SafetyDecision(
         verdict=verdict,
         winning_rule=safety_rule_id_or_unresolved(
@@ -1203,6 +1212,25 @@ def evaluate_safety_gate(
 
         if entry and not _signal_has_required_form_evidence(product, signal, entry):
             _append_signal(result, "B0_STALE_POLICY_SIGNAL_IGNORED")
+            continue
+
+        if (
+            entry
+            and _norm(entry.get("role_scope_out_of_scope")) == "not_applicable"
+            and signal.subject_role
+            and not _policy_role_is_supported(entry, signal)
+        ):
+            # This rule is authored for specific label roles -- for example a
+            # substance that is non-routine as a DECLARED ACTIVE but an
+            # ordinary formulation excipient elsewhere. The same substance
+            # appearing in another role is out of scope, not an unresolved
+            # policy question: recording a review requirement for it would
+            # quarantine a product this rule was never written to cover.
+            #
+            # Nothing is appended here on purpose. "Out of scope" must leave
+            # the product payload byte-identical to a product whose label never
+            # named the substance at all -- an audit marker would leak into
+            # ``safety_signal_reason`` on products the rule does not govern.
             continue
 
         if (

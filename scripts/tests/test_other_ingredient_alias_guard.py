@@ -38,8 +38,13 @@ def test_silica_overlap_records_the_current_identity_review():
         if row["term_normalized"] == "silica"
     )
 
-    assert metadata["last_updated"] == "2026-08-07"
-    assert metadata["reviewed_at"] == "2026-08-07"
+    # The date pins are the file's review stamp, deliberately exact so any edit
+    # to the ledger must carry a fresh review. Advanced 2026-08-07 -> 2026-09-21
+    # by the Phase-3 clinical-policy review, which added the five role-scoped
+    # EDTA `banned:harmful` entries. The silica identity review itself is
+    # unchanged, and is still asserted byte-for-byte below.
+    assert metadata["last_updated"] == "2026-09-21"
+    assert metadata["reviewed_at"] == "2026-09-21"
     assert "PubChem CID 24261" in silica["reason"]
     assert "VYPSYNLAJGMNEJ-UHFFFAOYSA-N" in silica["reason"]
 

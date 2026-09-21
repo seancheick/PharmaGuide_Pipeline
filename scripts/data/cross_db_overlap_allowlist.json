@@ -4,10 +4,10 @@
     "schema_version": "5.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-08-07",
-    "total_entries": 54,
+    "last_updated": "2026-09-21",
+    "total_entries": 59,
     "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches \u2014 the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
-    "reviewed_at": "2026-08-07"
+    "reviewed_at": "2026-09-21"
   },
   "allowed_overlaps": [
     {
@@ -389,6 +389,41 @@
         "banned:harmful"
       ],
       "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "disodium edta",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "2026-09-21: DELIBERATE ROLE-SCOPED dual-recognition. banned_recalled carries the approved Phase-3 standalone-oral-EDTA policy (verdict BLOCKED, reason NON_ROUTINE_CHELATOR) authored for the DECLARED-ACTIVE label role only (match_mode=active + role_scope_out_of_scope=not_applicable). harmful_additives ADD_DISODIUM_EDTA keeps describing the excipient/preservative context. The two lanes answer different questions about different roles on the same term, which is why both must exist; the whole-corpus replay shows the only affected products are the 16 standalone oral EDTA products (0 changes elsewhere)."
+    },
+    {
+      "term_normalized": "edta disodium",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "2026-09-21: word-order variant of 'disodium edta'. Deliberate role-scoped dual-recognition with harmful_additives ADD_DISODIUM_EDTA -- banned_recalled owns the declared-ACTIVE policy verdict, harmful_additives keeps the excipient classification. The word-order variant is a real label form (see test_safety_recognition_aliases.py)."
+    },
+    {
+      "term_normalized": "calcium disodium edta",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "2026-09-21: DELIBERATE ROLE-SCOPED dual-recognition, and deliberately SEPARATE from disodium edetate -- the clinical decision requires the two chelating salts to remain distinct identities. banned_recalled owns the declared-ACTIVE policy verdict (BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE); harmful_additives ADD_CALCIUM_DISODIUM_EDTA keeps the excipient classification."
+    },
+    {
+      "term_normalized": "edetate calcium disodium",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "2026-09-21: USP-style variant of 'calcium disodium edta'. Same deliberate role-scoped dual-recognition: banned_recalled owns the declared-ACTIVE non-routine-chelator policy, harmful_additives keeps the excipient classification."
+    },
+    {
+      "term_normalized": "calcium edta",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "2026-09-21: short form of 'calcium disodium edta'. Same deliberate role-scoped dual-recognition with harmful_additives ADD_CALCIUM_DISODIUM_EDTA. The bare token 'EDTA' is intentionally NOT an alias of either policy identity, so no generic EDTA term appears here."
     }
   ]
 }
