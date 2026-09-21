@@ -89,7 +89,8 @@ def test_proprietary_blend_with_children_ignores_header_and_assesses_children():
     }
     product = _product(ingredients=[blend_header, ashwagandha, rhodiola], matches=[])
     result = score_evidence(product)
-    assert result["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+    assert result["score"] == 0.0
+    assert result["metadata"]["evidence_result_state"] == "applicability_unestablished"
 
 
 def test_proprietary_blend_with_child_evidence_earns_credit():
@@ -237,9 +238,10 @@ def test_proprietary_blend_ashwagandha_rhodiola_canary():
     _, max_mass = _active_mass_index(product_bare)
     assert max_mass == 0.0  # no dose invented
 
-    # 3. State without matches is clinical_review_not_covered (NOT no_assessable_actives)
+    # 3. State without matches is applicability_unestablished (terminal, no unearned credit)
     res_no_match = score_evidence(product_bare)
-    assert res_no_match["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+    assert res_no_match["score"] == 0.0
+    assert res_no_match["metadata"]["evidence_result_state"] == "applicability_unestablished"
 
     # 4. When match requires dose, dose applicability remains unresolved
     match_with_dose_req = _match(

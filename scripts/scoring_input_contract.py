@@ -2984,6 +2984,31 @@ def is_nutrition_fact_declaration(row: Mapping[str, Any]) -> bool:
     return False
 
 
+# Phase 5: Deterministic non-efficacy active identities (analytical markers,
+# excipient vehicles, formulation carriers, and profile descriptors) owned by
+# other_ingredients.json or cleaner rules. These are excluded upstream from
+# clinical evidence assessment so they cannot falsely gate or block evidence.
+DETERMINISTIC_NON_EFFICACY_CANONICALS = frozenset({
+    # Analytical standardization markers
+    "nha_rosavins_marker",
+    "nha_salidrosides_marker",
+    "nha_flavone_glycosides_marker",
+    "nha_bergamot_polyphenolic_flavones_marker",
+    "nha_hederacoside_c_marker",
+    # Excipients / tableting / capsule delivery vehicles
+    "nha_microcrystalline_cellulose",
+    "pii_gelatin_capsule",
+    "pii_cyclodextrin",
+    "pii_oil_vehicle",
+    "pii_elemental_sulfur",
+    # Formulation & profile descriptors
+    "pii_brand_complex_descriptor",
+    "pii_medium_chain_fatty_acids",
+    "pii_fatty_acid_profile_component",
+    "nha_mct_percent_composition_descriptor",
+})
+
+
 def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
     """Return ingredient rows eligible for clinical evidence assessment.
 
@@ -2997,6 +3022,9 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
     Contract rules:
     - Active section only (drops ``source_section == 'inactive'``, excipients, and
       ``cleaner_row_role == 'inactive_non_scorable'``)
+    - Excludes non-efficacy cleaner roles (``standardization_marker``,
+      ``specification_limit``, ``source_descriptor``, ``daily_value_no_amount``, ``inactive``)
+    - Excludes deterministic non-efficacy identities (markers, excipient vehicles, descriptors)
     - Excludes structural parent totals, blend headers, and compound duplicates
       (``is_proprietary_blend``, ``is_parent_total``, ``is_compound_duplicate``,
        roles ``blend_header_total``, ``parent_total``, ``compound_duplicate``)
@@ -3027,7 +3055,14 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
         if row.get("is_excipient") is True:
             continue
         role = _norm(row.get("cleaner_row_role"))
-        if role == "inactive_non_scorable":
+        if role in {
+            "inactive_non_scorable",
+            "standardization_marker",
+            "specification_limit",
+            "source_descriptor",
+            "daily_value_no_amount",
+            "inactive",
+        }:
             continue
 
         # 2. Drop structural / blend header / parent total / compound duplicate rows
@@ -3044,6 +3079,10 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
         canonical = str(row.get("canonical_id") or "").strip()
         name = str(row.get("name") or row.get("standard_name") or "").strip()
         if not canonical and not name:
+            continue
+        if canonical.lower() in DETERMINISTIC_NON_EFFICACY_CANONICALS:
+            continue
+        if canonical.lower().endswith("_source_descriptor") or canonical.lower().endswith("_marker"):
             continue
 
         # 5. Role-specific qualification:

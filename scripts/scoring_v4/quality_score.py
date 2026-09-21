@@ -778,15 +778,28 @@ EVIDENCE_COVERAGE_GAP_STATES = frozenset({
     "clinical_review_not_covered",
     "native_research_review_incomplete",
     "human_clinical_evidence_unestablished",
+    "identity_material_unresolved",
+    "literature_resolution_required",
 })
 EVIDENCE_APPLICABILITY_STATES = frozenset({
     "applicability_unestablished",
     "research_present_applicability_unestablished",
 })
-EVIDENCE_NOT_APPLICABLE_STATES = frozenset({"no_assessable_actives"})
+EVIDENCE_NOT_APPLICABLE_STATES = frozenset({
+    "no_assessable_actives",
+    "not_efficacy_relevant",
+})
+EVIDENCE_ASSESSED_STATES = frozenset({
+    "evaluated_applicable",
+    "evaluated_authority",
+    "authority_supported",
+    "evaluated_null",
+    "evaluated_unfavorable",
+    "no_qualifying_human_evidence",
+})
 
 
-def evidence_display_state(state: Optional[str], score: float) -> str:
+def evidence_display_state(state: Optional[str], score: float = 0.0) -> str:
     """The one place that decides how an Evidence result may be PRESENTED.
 
     Returns exactly one of:
@@ -795,24 +808,28 @@ def evidence_display_state(state: Optional[str], score: float) -> str:
       applicability_unestablished - reviewed, but not applicable to this label
       not_applicable              - nothing on this label to assess
 
-    A nonzero score is always `assessed`: whatever the state says, credit was
-    earned from reviewed evidence.
+    Phase 5 doctrine: Assessment state is derived strictly from the canonical
+    Evidence disposition, never inferred from a positive score alone. Points
+    are an output of assessment, not proof that assessment occurred.
     """
-    if score > 0:
-        return "assessed"
     if state in EVIDENCE_COVERAGE_GAP_STATES:
         return "not_yet_reviewed"
     if state in EVIDENCE_APPLICABILITY_STATES:
         return "applicability_unestablished"
     if state in EVIDENCE_NOT_APPLICABLE_STATES:
         return "not_applicable"
-    return "assessed"
+    if state in EVIDENCE_ASSESSED_STATES:
+        return "assessed"
+    return "assessed" if state else "not_yet_reviewed"
 
 
 _EVIDENCE_ZERO_REASON = {
     "clinical_review_not_covered": (
         "Clinical evidence review pending. We haven't completed our evidence review for the "
         "ingredients on this label yet. This does not mean they lack clinical evidence."
+    ),
+    "identity_material_unresolved": (
+        "Active ingredient identity or material form requires further scientific clarification before evidence can be assessed."
     ),
     "applicability_unestablished": (
         "We reviewed the evidence for these ingredients, but it does not match this label's "
@@ -822,6 +839,9 @@ _EVIDENCE_ZERO_REASON = {
     "evaluated_null": (
         "We reviewed the human research and it did not establish a clear benefit for these "
         "ingredients."
+    ),
+    "evaluated_authority": (
+        "Established nutritional authority recognizes the physiological necessity of these essential nutrients."
     ),
     "no_qualifying_human_evidence": (
         "The research on record is not human clinical evidence of benefit for these ingredients."

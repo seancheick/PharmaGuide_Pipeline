@@ -88,13 +88,19 @@ def test_no_assessable_actives_is_not_applicable_rather_than_a_failure():
     assert evidence_display_state("no_assessable_actives", 0.0) == "not_applicable"
 
 
-# ── 5. earned credit is always an assessment ─────────────────────────────────
+# ── 5. assessment state governs display, not score points ────────────────────
 
-def test_a_nonzero_score_is_always_assessed():
-    """Credit can only come from reviewed evidence, so whatever the state says,
-    a product that earned points has been assessed."""
-    for state in list(_EVIDENCE_ZERO_REASON) + ["evaluated_applicable", None]:
-        assert evidence_display_state(state, 12.5) == "assessed"
+def test_assessment_state_governs_display_not_score():
+    """Phase 5 doctrine: Assessment state must come from the canonical Evidence
+    disposition, never inferred from a positive score. A coverage gap must never
+    render as assessed simply because score > 0."""
+    for gap in ["clinical_review_not_covered", "identity_material_unresolved", "literature_resolution_required"]:
+        assert evidence_display_state(gap, 12.5) == "not_yet_reviewed"
+        assert evidence_display_state(gap, 0.0) == "not_yet_reviewed"
+    assert evidence_display_state("evaluated_applicable", 12.5) == "assessed"
+    assert evidence_display_state("evaluated_applicable", 0.0) == "assessed"
+    assert evidence_display_state("evaluated_authority", 0.0) == "assessed"
+    assert evidence_display_state("no_qualifying_human_evidence", 0.0) == "assessed"
 
 
 def test_the_pillar_still_reports_the_raw_zero_for_scoring():

@@ -260,12 +260,17 @@ def _backed_studies_index() -> Dict[str, List[Dict[str, Any]]]:
             val = _canonical_text(study.get(field_name))
             if val:
                 keys.add(val)
+                keys.add(val.replace(" ", "_"))
+                keys.add(val.replace("_", " "))
         for alias in study.get("aliases", []) or []:
             val = _canonical_text(alias)
             if val:
                 keys.add(val)
+                keys.add(val.replace(" ", "_"))
+                keys.add(val.replace("_", " "))
         for k in keys:
-            idx.setdefault(k, []).append(study)
+            if k:
+                idx.setdefault(k, []).append(study)
     return idx
 
 
@@ -378,7 +383,12 @@ def resolve_evidence_for_row(
     blocking_reasons: List[str] = []
 
     # 1. Check structural & excipient exclusion -> NOT_EFFICACY_RELEVANT
-    if row_dict.get("is_excipient") or _norm(row_dict.get("source_section")) == "inactive":
+    cleaner_role = _norm(row_dict.get("cleaner_row_role"))
+    if (
+        row_dict.get("is_excipient")
+        or _norm(row_dict.get("source_section")) == "inactive"
+        or cleaner_role in {"inactive", "inactive_non_scorable", "standardization_marker", "specification_limit", "source_descriptor", "daily_value_no_amount"}
+    ):
         return EvidenceResolution(
             canonical_id=canonical,
             ingredient_name=name,
@@ -387,7 +397,7 @@ def resolve_evidence_for_row(
             points_eligible=False,
             applicability_status="excipient_or_inactive",
             reason_code="excipient_not_therapeutic_active",
-            owner_facts={"is_excipient": True},
+            owner_facts={"is_excipient": True, "cleaner_row_role": cleaner_role},
         )
 
     # Special context-aware resolution for silica per Policy Lock (provenance/role decides, never name alone)
@@ -591,10 +601,13 @@ def resolve_evidence_for_row(
 
     # 7. Check Backed Clinical Studies (Human RCT / Meta-analyses)
     studies_idx = _backed_studies_index()
+    iqm_std_name = _canonical_text(iqm_entry.get("standard_name")) if iqm_entry else ""
     matching_studies = (
         studies_idx.get(canonical, [])
+        + studies_idx.get(canonical.replace("_", " "), [])
         + studies_idx.get(norm_name, [])
         + studies_idx.get(f"ingr_{canonical}", [])
+        + (studies_idx.get(iqm_std_name, []) if iqm_std_name else [])
     )
     # Deduplicate studies by ID
     seen_ids = set()
@@ -644,6 +657,19 @@ def resolve_evidence_for_row(
                 reason_code="clinical_form_mismatch",
                 owner_facts=owner_facts,
                 blocking_reasons=blocking_reasons,
+            )
+
+        if dose_val is None and product is not None:
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False,
+                applicability_status="dose_undisclosed",
+                reason_code="constituent_dose_undisclosed_applicability_unestablished",
+                owner_facts=owner_facts,
+                blocking_reasons=[],
             )
 
         if is_sub_clinical:
@@ -848,6 +874,19 @@ def resolve_evidence_for_row(
         studied_dose = lit_entry.get("studied_dose_exposure", {})
         min_dose = min(studied_dose.get("values", [])) if studied_dose.get("values") else None
 
+        if dose_val is None and product is not None:
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False,
+                applicability_status="dose_undisclosed",
+                reason_code="constituent_dose_undisclosed_applicability_unestablished",
+                owner_facts=owner_facts,
+                blocking_reasons=[],
+            )
+
         if min_dose is not None and dose_val is not None and dose_val < min_dose:
             blocking_reasons.append("dose_below_clinical_trial_minimum")
             return EvidenceResolution(
@@ -952,29 +991,40 @@ def resolve_product_evidence(product: Mapping[str, Any]) -> ProductEvidenceResol
     dispositions = [r.disposition for r in resolutions]
     all_blockers = [b for r in resolutions for b in r.blocking_reasons]
 
-    # An assessment is complete if:
-    # 1. Any active is resolved by authority or clinical evidence, OR
-    # 2. All actives have definite evaluated dispositions (not requiring review)
-    has_resolved = any(
-        d in {EvidenceDisposition.RESOLVED_BY_AUTHORITY.value, EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value}
-        for d in dispositions
-    )
-    has_literature_required = any(d == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value for d in dispositions)
-    has_applicability_unestablished = any(d == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value for d in dispositions)
+    # Phase 5 Strict Completeness Contract:
+    # A product is marked complete ONLY if ALL assessable evidence-bearing actives
+    # have reached terminal evaluated dispositions. Having "some" or "most" ingredients
+    # resolved does NOT grant product completeness if an assessable active remains
+    # unresolved (identity_insufficient or literature_resolution_required).
     has_identity_insufficient = any(d == EvidenceDisposition.IDENTITY_INSUFFICIENT.value for d in dispositions)
+    has_literature_required = any(d == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value for d in dispositions)
+    has_clinical = any(d == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value for d in dispositions)
+    has_authority = any(d == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value for d in dispositions)
+    has_applicability_unestablished = any(d == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value for d in dispositions)
+    has_reviewed_null_unfavorable = any(d == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value for d in dispositions)
+    has_no_qualifying = any(d == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value for d in dispositions)
 
-    if has_resolved:
-        overall = EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value if any(d == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value for d in dispositions) else EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
-        complete = True
-    elif has_identity_insufficient:
+    if has_identity_insufficient:
         overall = EvidenceDisposition.IDENTITY_INSUFFICIENT.value
         complete = False
-    elif has_applicability_unestablished:
-        overall = EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-        complete = True  # Reviewed, applicability unestablished
     elif has_literature_required:
         overall = EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
-        complete = False  # Coverage gap
+        complete = False
+    elif has_clinical:
+        overall = EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+        complete = True
+    elif has_authority:
+        overall = EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+        complete = True
+    elif has_applicability_unestablished:
+        overall = EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+        complete = True
+    elif has_reviewed_null_unfavorable:
+        overall = EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+        complete = True
+    elif has_no_qualifying:
+        overall = EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+        complete = True
     else:
         overall = EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
         complete = True
