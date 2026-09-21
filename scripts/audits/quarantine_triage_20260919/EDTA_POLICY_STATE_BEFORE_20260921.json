@@ -1,0 +1,498 @@
+[
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "EDTA Disodium",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "EDTA Disodium",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "252358",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "EDTA Disodium",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "Calcium Disodium EDTA",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "Calcium Disodium EDTA",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "252426",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "Calcium Disodium EDTA",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "Calcium Disodium EDTA",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "Calcium Disodium EDTA",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "253331",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "Calcium Disodium EDTA",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "Calcium Disodium EDTA",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "Calcium Disodium EDTA",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "253335",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "Calcium Disodium EDTA",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "Calcium Disodium EDTA",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "Calcium Disodium EDTA",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "253336",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "Calcium Disodium EDTA",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "EDTA Disodium",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "EDTA Disodium",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "253339",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "EDTA Disodium",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "EDTA Disodium",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "EDTA Disodium",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "253350",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "EDTA Disodium",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "EDTA Disodium",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "EDTA Disodium",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "253357",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "EDTA Disodium",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "Calcium Disodium EDTA",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "Calcium Disodium EDTA",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "311259",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "Calcium Disodium EDTA",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "Calcium Disodium EDTA",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "Calcium Disodium EDTA",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "311260",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "Calcium Disodium EDTA",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "Calcium Disodium EDTA",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "Calcium Disodium EDTA",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "311261",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "Calcium Disodium EDTA",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "Calcium Disodium EDTA",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "Calcium Disodium EDTA",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "311262",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "Calcium Disodium EDTA",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "EDTA Disodium",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "EDTA Disodium",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "312449",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "EDTA Disodium",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "EDTA Disodium",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "EDTA Disodium",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "312450",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "EDTA Disodium",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "EDTA Disodium",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "EDTA Disodium",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "312451",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "EDTA Disodium",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ },
+ {
+  "blocking_reason": null,
+  "cleaned_actives": [
+   {
+    "canonical_id": null,
+    "name": "EDTA Disodium",
+    "quantity": 500.0,
+    "role": null,
+    "standard_name": "EDTA Disodium",
+    "unit": "mg"
+   }
+  ],
+  "dsld_id": "312452",
+  "ingredient_group": [
+   "EDTA"
+  ],
+  "not_scorable_reason": null,
+  "product": "EDTA Disodium",
+  "safety": {
+   "matched_substance": null,
+   "quarantine_reason": null,
+   "quarantine_required": false,
+   "review_records": [],
+   "signals": [],
+   "verdict": null
+  },
+  "score": null,
+  "score_unavailable_reason": "blocked_by_completeness_gate",
+  "scoring_status": null,
+  "v4_verdict": "NOT_SCORED"
+ }
+]

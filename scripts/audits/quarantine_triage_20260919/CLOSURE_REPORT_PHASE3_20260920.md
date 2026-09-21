@@ -453,6 +453,18 @@ parent, including the two independent Polyphenols disclosures (15 mg and 30 mg),
 
 ## E. Remaining problems
 
+> **SUPERSEDED IN PART (2026-09-21) — the policy questions below are DECIDED.**
+> Dr. Pham / PharmaGuide Clinical Team approved the standalone-oral-EDTA policy
+> (`BLOCKED_SAFETY_CARD_NO_SCORE`), the botanical standardization-constituent model
+> (`CONTAINED_CONSTITUENT_MODEL_APPROVED`), the discrete-enzyme Formulation treatment
+> (`NOT_INDIVIDUALLY_RATED_APPROVED`) and the beta-carotene UL basis
+> (`PREFORMED_VITAMIN_A_ONLY`), and signed the Phase-3 release as
+> **APPROVED WITH SPECIFIED PRODUCTS HELD**. All four are implemented and
+> regression-pinned. The durable record is `PHASE3_CLINICAL_POLICY_20260921.md`;
+> the packet `source_resolution_20260920/PHARMACIST_PACKET_PHASE3_FINAL_20260920.md`
+> is now the archived clinical decision record rather than a decision request.
+> The EDTA row in the table below no longer carries a pending disposition.
+>
 > **SUPERSEDED IN PART (2026-09-20) — see
 > `source_resolution_20260920/SOURCE_RESOLUTION_RECEIPTS_20260920.json` and
 > `SOURCE_RECONCILIATION_20260920.md`.** A follow-on source-resolution phase went back to

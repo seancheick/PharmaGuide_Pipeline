@@ -1,0 +1,17 @@
+{
+ "changed": [],
+ "changed_ids": [],
+ "crash_ids_after": [],
+ "crash_ids_before": [],
+ "crashes_after": 0,
+ "crashes_before": 0,
+ "families": {},
+ "family_counts": {},
+ "fingerprint_verified": true,
+ "input_fingerprint_mismatches": [],
+ "only_in_after": [],
+ "only_in_base": [],
+ "records_changed": 0,
+ "records_compared": 15414,
+ "records_unchanged": 15414
+}

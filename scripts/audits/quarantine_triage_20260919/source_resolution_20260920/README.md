@@ -9,7 +9,10 @@ pharmacist receives only clinical/policy decisions.
 |---|---|
 | `SOURCE_RESOLUTION_RECEIPTS_20260920.json` | The authoritative per-product receipts: frozen vs live vs printed for every flagged row, with the correction, the confidence and the final state. |
 | `SOURCE_RECONCILIATION_20260920.md` | The reconciliation table — every item previously tagged `needs_info` / `source` / `stale` / `corrupt` / `unknown` / `incomplete` / `label` / `upstream` / `correction` / `form`, and its final data disposition. |
-| `PHARMACIST_PACKET_PHASE3_FINAL_20260920.md` | **The packet to send.** Three policy decisions plus release signature, no source research. Supersedes the source-resolution draft. |
+| `PHARMACIST_PACKET_PHASE3_FINAL_20260920.md` | **Now the archived clinical DECISION record, not a request.** The three policies are decided by Dr. Pham / PharmaGuide Clinical Team and implemented; the packet states each decided policy, its implementation and its measured effect. No question boxes remain. Supersedes the source-resolution draft. |
+| `../PHASE3_CLINICAL_POLICY_20260921.md` | **The durable policy ledger.** The four approved clinical policies, their binding invariants, the clinical authority, and the recorded terminology decision / technical-debt item. Pinned by `scripts/tests/test_phase3_clinical_policy_20260921.py`. |
+| `../EDTA_POLICY_SHIPPING_PROOF_20260921.json` | Per-product proof that the 16 standalone oral EDTA products reach the approved state and that the 8 excipient-EDTA negative controls are byte-identical. Produced by `../prove_edta_policy_shipping.py` (real export gate + Safety-card seams). |
+| `../EDTA_POLICY_STATE_BEFORE_20260921.json` | Measured pre-change state of the same 24 products, for the before/after table. |
 | `PHARMACIST_PACKET_PHASE3_SOURCE_RESOLVED_20260920.md` | The source-resolution draft packet, retained as history. Its §4 (provitamin-A UL) is no longer a pharmacist decision. |
 | `LANE_PROOF_20260920.json` | `receipt -> correction layer -> cleaned lane row` for every product, produced by `../prove_source_corrections_20260920.py`. |
 | `COUNT_BASIS_20260920.md` | **How this phase is counted.** Three published summaries used three different denominators; this fixes the definitions (receipt items / distinct products / measured replay) and the authoritative totals. |

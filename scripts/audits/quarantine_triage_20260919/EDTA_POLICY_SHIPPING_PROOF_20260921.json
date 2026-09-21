@@ -1,0 +1,578 @@
+[
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "252358",
+  "edta_rows": {
+   "EDTA Disodium": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "EDTA Disodium",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "252426",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "Calcium Disodium EDTA",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "253331",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "Calcium Disodium EDTA",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "253335",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "Calcium Disodium EDTA",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "253336",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "Calcium Disodium EDTA",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "253339",
+  "edta_rows": {
+   "EDTA Disodium": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "EDTA Disodium",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "253350",
+  "edta_rows": {
+   "EDTA Disodium": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "EDTA Disodium",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "253357",
+  "edta_rows": {
+   "EDTA Disodium": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "EDTA Disodium",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "311259",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "Calcium Disodium EDTA",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "311260",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "Calcium Disodium EDTA",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "311261",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "Calcium Disodium EDTA",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "311262",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate calcium disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "Calcium Disodium EDTA",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "312449",
+  "edta_rows": {
+   "EDTA Disodium": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "EDTA Disodium",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "312450",
+  "edta_rows": {
+   "EDTA Disodium": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "EDTA Disodium",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "312451",
+  "edta_rows": {
+   "EDTA Disodium": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "EDTA Disodium",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": "NON_ROUTINE_CHELATOR",
+  "display_100": "N/A",
+  "dsld_id": "312452",
+  "edta_rows": {
+   "EDTA Disodium": {
+    "is_banned": true,
+    "is_safety_concern": true,
+    "matched_rule_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "matched_source": "banned_recalled",
+    "safety_reason": "Edetate disodium is a metal-chelating agent. FDA has never approved any chelation product for over-the-counter use for any health condition, and medically used chelation agents require prescription supervision. A standalone product sold to be swallowed as a chelator is therefore not an ordinary dietary supplement and receives no PharmaGuide quality score. This is a non-routine-use policy determination: it is not a finding that the labelled oral dose is proven acutely toxic, and the disodium and calcium disodium forms are distinct identities with different clinical uses.",
+    "safety_warning": "Chelating agent (EDTA). FDA has not approved any over-the-counter chelation treatment; medically used chelation agents require clinical supervision. EDTA forms differ in their risks.",
+    "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement."
+   }
+  },
+  "export_gate_issues": [],
+  "group": "edta",
+  "product": "EDTA Disodium",
+  "product_safety_status": "blocked",
+  "quality_score_status": "suppressed_safety",
+  "quality_score_v4_100": null,
+  "safety_verdict": "BLOCKED",
+  "ships": true,
+  "verdict": "BLOCKED"
+ },
+ {
+  "blocking_reason": null,
+  "display_100": "60/100",
+  "dsld_id": "19178",
+  "edta_rows": {
+   "Disodium EDTA": {
+    "is_banned": false,
+    "is_safety_concern": false,
+    "matched_rule_id": null,
+    "matched_source": null,
+    "safety_reason": null
+   }
+  },
+  "export_gate_issues": [],
+  "group": "control",
+  "product": "Centrum Liquid",
+  "product_safety_status": "no_known_catalog_concern",
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 60.4,
+  "safety_verdict": "SAFE",
+  "ships": true,
+  "verdict": "SAFE"
+ },
+ {
+  "blocking_reason": null,
+  "display_100": "62/100",
+  "dsld_id": "200816",
+  "edta_rows": {
+   "Disodium EDTA": {
+    "is_banned": false,
+    "is_safety_concern": false,
+    "matched_rule_id": null,
+    "matched_source": null,
+    "safety_reason": null
+   }
+  },
+  "export_gate_issues": [],
+  "group": "control",
+  "product": "Centrum Liquid Adults Orange Tangerine",
+  "product_safety_status": "no_known_catalog_concern",
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 62.0,
+  "safety_verdict": "SAFE",
+  "ships": true,
+  "verdict": "SAFE"
+ },
+ {
+  "blocking_reason": null,
+  "display_100": "61/100",
+  "dsld_id": "239860",
+  "edta_rows": {
+   "EDTA": {
+    "is_banned": false,
+    "is_safety_concern": false,
+    "matched_rule_id": null,
+    "matched_source": null,
+    "safety_reason": null
+   }
+  },
+  "export_gate_issues": [],
+  "group": "control",
+  "product": "Children's Chewable Complete Multivitamin",
+  "product_safety_status": "no_known_catalog_concern",
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 60.7,
+  "safety_verdict": "SAFE",
+  "ships": true,
+  "verdict": "SAFE"
+ },
+ {
+  "blocking_reason": null,
+  "display_100": "61/100",
+  "dsld_id": "239862",
+  "edta_rows": {
+   "EDTA": {
+    "is_banned": false,
+    "is_safety_concern": false,
+    "matched_rule_id": null,
+    "matched_source": null,
+    "safety_reason": null
+   }
+  },
+  "export_gate_issues": [],
+  "group": "control",
+  "product": "Children's Complete Multivitamin",
+  "product_safety_status": "no_known_catalog_concern",
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 60.7,
+  "safety_verdict": "SAFE",
+  "ships": true,
+  "verdict": "SAFE"
+ },
+ {
+  "blocking_reason": null,
+  "display_100": "63/100",
+  "dsld_id": "256963",
+  "edta_rows": {
+   "Disodium EDTA": {
+    "is_banned": false,
+    "is_safety_concern": false,
+    "matched_rule_id": null,
+    "matched_source": null,
+    "safety_reason": null
+   }
+  },
+  "export_gate_issues": [],
+  "group": "control",
+  "product": "Centrum Liquid Adults Citrus Flavor",
+  "product_safety_status": "no_known_catalog_concern",
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 62.8,
+  "safety_verdict": "SAFE",
+  "ships": true,
+  "verdict": "SAFE"
+ },
+ {
+  "blocking_reason": null,
+  "display_100": "67/100",
+  "dsld_id": "259473",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": false,
+    "is_safety_concern": false,
+    "matched_rule_id": null,
+    "matched_source": null,
+    "safety_reason": null
+   }
+  },
+  "export_gate_issues": [],
+  "group": "control",
+  "product": "Multi Vitamin+ Citrus Flavored",
+  "product_safety_status": "no_known_catalog_concern",
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 66.8,
+  "safety_verdict": "SAFE",
+  "ships": true,
+  "verdict": "SAFE"
+ },
+ {
+  "blocking_reason": null,
+  "display_100": "70/100",
+  "dsld_id": "327891",
+  "edta_rows": {
+   "Calcium Disodium EDTA": {
+    "is_banned": false,
+    "is_safety_concern": false,
+    "matched_rule_id": null,
+    "matched_source": null,
+    "safety_reason": null
+   }
+  },
+  "export_gate_issues": [],
+  "group": "control",
+  "product": "Calcium & Vitamin D3 Citrus Flavored",
+  "product_safety_status": "no_known_catalog_concern",
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 69.8,
+  "safety_verdict": "SAFE",
+  "ships": true,
+  "verdict": "SAFE"
+ },
+ {
+  "blocking_reason": null,
+  "display_100": "66/100",
+  "dsld_id": "333921",
+  "edta_rows": {},
+  "export_gate_issues": [],
+  "group": "control",
+  "product": "Liquid Iron 18 mg Zero Sugar Berry Flavored",
+  "product_safety_status": "no_known_catalog_concern",
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 65.8,
+  "safety_verdict": "SAFE",
+  "ships": true,
+  "verdict": "SAFE"
+ }
+]
