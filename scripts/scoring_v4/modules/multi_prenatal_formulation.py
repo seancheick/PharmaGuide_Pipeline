@@ -26,7 +26,6 @@ from scoring_v4.modules.generic_helpers import (
     is_scorable,
     restates_label_row,
     _as_float,
-    _safe_list,
 )
 from scoring_v4.modules.generic_formulation import (
     apply_formulation_presence_floor,

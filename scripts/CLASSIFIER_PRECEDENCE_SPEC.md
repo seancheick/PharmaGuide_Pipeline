@@ -416,8 +416,9 @@ row order remains invariant; the schema-3 full-corpus ledger is reviewed; and
 every primary/score/safety delta is attributable to a named reason-code bucket.
 
 Each rule lands as its own RED-first slice with its positive **and** near-miss
-fixtures, measured on the corpus via
-`scripts/audits/supptype_drift_preview.py compare --score`.
+fixtures, measured on the corpus via the temporary drift-preview harness
+(`scripts/audits/supptype_drift_preview.py`, retired after cutover acceptance
+on 2026-09-21; full pipeline runs are now the measurement).
 
 ---
 

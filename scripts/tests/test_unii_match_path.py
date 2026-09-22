@@ -398,13 +398,3 @@ def test_new_match_method_values_used_by_cleaner():
     src = (SCRIPTS_DIR / "enhanced_normalizer.py").read_text(encoding="utf-8")
     for method in REQUIRED_MATCH_METHODS:
         assert method in src, f"match_method {method!r} not emitted by cleaner"
-
-
-def test_new_match_method_values_documented_in_plan():
-    """Source-level guarantee: triage doc / plan reference the 3 new method values."""
-    plan = (REPO_ROOT.parent / ".claude/plans/goofy-foraging-neumann.md")
-    if not plan.exists():
-        pytest.skip("plan file not in repo (may exist only in user's plan store)")
-    text = plan.read_text(encoding="utf-8")
-    for method in REQUIRED_MATCH_METHODS:
-        assert method in text, f"match_method {method!r} not documented in plan"

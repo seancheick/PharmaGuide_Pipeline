@@ -116,13 +116,12 @@ def test_score_sports_returns_shared_breakdown_shape_with_sports_dose() -> None:
     assert "public_quality_cap" not in breakdown["metadata"]
 
 
-def test_score_sports_stamps_preworkout_subtype_and_public_cap() -> None:
+def test_score_sports_stamps_preworkout_subtype_without_a_public_cap() -> None:
     result = score_sports(_preworkout_product())
     breakdown = result.to_breakdown()
 
     assert breakdown["metadata"]["sports_subtype"] == "pre_workout"
-    assert breakdown["metadata"]["public_quality_cap"]["id"] == "sports_pre_workout"
-    assert breakdown["metadata"]["public_quality_cap"]["cap"] == 88.0
+    assert "public_quality_cap" not in breakdown["metadata"]
 
 
 def test_score_sports_requests_primary_evidence_floor(monkeypatch) -> None:

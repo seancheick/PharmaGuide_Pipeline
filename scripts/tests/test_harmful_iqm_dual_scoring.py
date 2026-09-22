@@ -237,7 +237,6 @@ class TestScoringPipelineEndToEnd:
             "dsld_id": 99999,
             "product_name": f"Test Product ({ing_name})",
             "fullName": f"Test Product ({ing_name})",
-            "productName": f"Test Product ({ing_name})",
             "brandName": "TestBrand",
             "activeIngredients": [
                 {

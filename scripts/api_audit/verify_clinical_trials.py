@@ -209,15 +209,6 @@ class ClinicalTrialsClient:
             return None
         return data
 
-    def search_studies(self, query: str, *, max_results: int = 5) -> list[dict]:
-        """Search for studies by keyword. Returns list of study objects."""
-        from urllib.parse import quote
-        encoded = quote(query, safe="")
-        url = f"{BASE_URL}/studies?query.term={encoded}&pageSize={max_results}"
-        data = self._get(url)
-        if data is None:
-            return []
-        return data.get("studies", [])
 
 
 # ---------------------------------------------------------------------------

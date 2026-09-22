@@ -857,12 +857,7 @@ def validate_build_output(build_dir, manifest):
     # V4 six-pillar contract on the checksum-verified DB. Defense-in-depth for the
     # 2026-06-14 stale-DB incident: blocks a sync of a dist built before the
     # pillar-projection commit even if it never went through the rebuild gate.
-    # Reviewed category caps remain explicit detail-blob adjustments, so this
-    # caller must provide the same reconciliation surface as the export gate.
-    pillar_findings = check_v4_pillar_contract(
-        db_path,
-        detail_blobs_dir=os.path.join(build_dir, "detail_blobs"),
-    )
+    pillar_findings = check_v4_pillar_contract(db_path)
     if pillar_findings:
         raise ValueError(
             "Build output violates the V4 pillar contract; refusing to sync: "
@@ -1290,7 +1285,7 @@ def sync(
 
     # Upload product images (non-blocking — image failures don't abort sync)
     print("\nUploading product images...")
-    image_result = upload_product_images(
+    upload_product_images(
         client=client,
         build_dir=build_dir,
         upload_fn=upload_file,

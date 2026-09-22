@@ -18,7 +18,6 @@ Source: FDA OpenFDA bulk download → /other/unii
 """
 
 import json
-import os
 import sys
 import urllib.request
 import zipfile

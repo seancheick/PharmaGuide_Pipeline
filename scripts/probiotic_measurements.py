@@ -73,7 +73,6 @@ def _has_mass_dose(ingredient: Mapping) -> bool:
     unit = canonicalize_mass_unit(
         ingredient.get("unit_normalized")
         or ingredient.get("unit")
-        or ingredient.get("quantityUnit")
         or ingredient.get("dose_unit")
     )
     return unit in {"g", "mg", "mcg"}
@@ -103,7 +102,7 @@ def _resolved_nonprobiotic_reference_identity(ingredient: Mapping) -> bool:
     """
     from scoring_reference_resolver import iqm_reference_entry
 
-    canonical_id = ingredient.get("canonical_id") or ingredient.get("iqm_parent_key")
+    canonical_id = ingredient.get("canonical_id")
     if canonical_id and str(ingredient.get("canonical_source_db") or "").strip().lower() == "other_ingredients":
         return True
     entry = iqm_reference_entry(canonical_id)
@@ -160,7 +159,7 @@ def is_probiotic_support_source(ingredient: Mapping) -> bool:
     from prebiotic_catalog import match_prebiotic, normalize_prebiotic_text
 
     canonical = normalize_prebiotic_text(
-        ingredient.get("canonical_id") or ingredient.get("iqm_parent_key")
+        ingredient.get("canonical_id")
     )
     if canonical == "fiber":
         return True
@@ -239,7 +238,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     )
 
     product = product if isinstance(product, Mapping) else {}
-    pdata = product.get("probiotic_data") or product.get("probiotic_detail") or {}
+    pdata = product.get("probiotic_data") or {}
     pdata = pdata if isinstance(pdata, Mapping) else {}
     registry = _clinical_strain_registry()
     owned = label_owned_strain_identities(product)
@@ -491,7 +490,7 @@ def collect_afu_measurements(product: Mapping) -> list[dict]:
 
 def pending_afu_measurements(product: Mapping) -> list[dict]:
     """Consume the enrichment-owned measurement contract, including blob alias."""
-    pdata = product.get("probiotic_data") or product.get("probiotic_detail") or {}
+    pdata = product.get("probiotic_data") or {}
     if not isinstance(pdata, Mapping):
         return []
     rows = pdata.get("afu_measurements")
@@ -558,6 +557,16 @@ def clinical_review_provenance_valid(context) -> bool:
     # Permit ordinary host clock skew, but never let a future-dated record
     # pre-authorize clinical scoring work that has not happened yet.
     return parsed <= datetime.now(parsed.tzinfo) + timedelta(minutes=5)
+
+
+# A context's review is finished once a clinician approves it or its source is
+# rejected. An approved context that does not apply to a label is a finished
+# conclusion about that label, not pending work.
+CONTEXT_REVIEW_FINISHED_STATUSES = frozenset({"clinician_approved", "rejected_source"})
+
+
+def context_review_finished(context) -> bool:
+    return isinstance(context, Mapping) and context.get("review_status") in CONTEXT_REVIEW_FINISHED_STATUSES
 
 
 def context_accepted_for_scoring(context) -> bool:

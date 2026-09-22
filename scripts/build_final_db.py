@@ -77,9 +77,11 @@ from identity.safety import (
     normalize_safety_source,
     safety_flag_matches_status,
     safety_jurisdiction_projection,
+    safety_rule_out_of_role_scope,
     top_safety_flag as _canonical_top_safety_flag,
 )
 from identity.interaction import (
+    interaction_subject_ids,
     interaction_tags_from_text,
     normalize_catalog_interaction_tag,
     normalize_interaction_canonical_id,
@@ -105,7 +107,7 @@ from scoring_v4.modules.fiber_digestive_helpers import (
 )
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
 from scoring_v4.quality_score import shipped_whole_score
-from scoring_v4.scored_artifact import SCORING_ENGINE_VERSION
+from score_supplements_v4 import SCORING_ENGINE_VERSION
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -917,7 +919,6 @@ def build_supplement_type_audit(enriched: Dict, scored: Optional[Dict] = None) -
         "compatibility_mirror_matches_taxonomy": (
             not mirror_type or mirror_type == safe_str(taxonomy.get("primary_type"))
         ),
-        "scored_type": safe_str((scored or {}).get("supp_type")),
         "export_type": resolve_export_supplement_type(enriched, scored),
         "primary_type": safe_str(taxonomy.get("primary_type")),
         "secondary_type": taxonomy.get("secondary_type"),
@@ -1160,8 +1161,11 @@ def _resolver_status_in(
                     and safety_flag_matches_status(flag, target_statuses)
                 ):
                     return True
+            role = "inactive" if src_key == "inactiveIngredients" else "active"
             for t in terms:
                 entry = index.get(t)
+                if entry and safety_rule_out_of_role_scope(entry, role):
+                    continue
                 if entry and safety_flag_matches_status(entry, target_statuses):
                     if entry.get("requires_explicit_form_evidence"):
                         evidence_values = [
@@ -1775,16 +1779,6 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         for field in missing:
             issues.append(f"missing ingredient_quality_data.ingredients[{idx}].{field}")
 
-    active_ingredients = [
-        ing for ing in safe_list(enriched.get("activeIngredients"))
-        if isinstance(ing, dict)
-    ]
-    has_active_identity = any(
-        safe_str(ing.get("canonical_id") or ing.get("parent_key"))
-        for ing in ingredients
-        if isinstance(ing, dict)
-    ) or any(safe_str(ing.get("canonical_id")) for ing in active_ingredients)
-
     if scored.get("score_basis") != "v4_six_pillar":
         issues.append(
             "review_queue: scored artifact is not v4-native "
@@ -1793,13 +1787,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     if "scoring_metadata" not in scored:
         issues.append("missing scored.scoring_metadata")
     scoring_diag = safe_dict(scored.get("iqd_contract_diagnostics"))
-    scoring_meta = safe_dict(scored.get("scoring_metadata"))
-    if not scoring_diag:
-        scoring_diag = safe_dict(scoring_meta.get("iqd_contract_diagnostics"))
-    strict_scoring_contract = safe_dict(
-        scored.get("strict_scoring_contract")
-        or scoring_meta.get("strict_scoring_contract")
-    )
+    strict_scoring_contract = safe_dict(scored.get("strict_scoring_contract"))
     if not strict_scoring_contract:
         issues.append("missing scored.strict_scoring_contract")
     elif strict_scoring_contract.get("passed") is not True and not (
@@ -1818,7 +1806,6 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     source = (
         scored.get("scoring_ingredients_source")
         or scoring_diag.get("scoring_ingredients_source")
-        or scoring_meta.get("scoring_ingredients_source")
     )
     if source == "ingredient_quality_data.ingredients":
         issues.append(
@@ -1841,14 +1828,14 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     #   suppressed_safety → BLOCKED/UNSAFE, null score is legitimate (score_optional below);
     #   not_scored        → verdict is NOT_SCORED, quarantined by the block below.
     # The verdict-keyed checks still apply to the v4-native Stage-3 artifact.
-    v4_status = scored.get("_v4_quality_status")
+    v4_status = scored.get("quality_score_status")
     if v4_status not in {"scored", "suppressed_safety", "not_scored"}:
         issues.append(
             "review_queue: missing or invalid v4 quality_score_status on "
             "Stage-3 artifact."
         )
     if v4_status == "scored":
-        q = scored.get("_v4_quality_score_100")
+        q = scored.get("quality_score_v4_100")
         try:
             q_ok = q is not None and math.isfinite(float(q))
         except (TypeError, ValueError):
@@ -1866,7 +1853,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
             "verification",
             "safety_hygiene",
         )
-        pillars = safe_dict(scored.get("_v4_pillars"))
+        pillars = safe_dict(scored.get("quality_pillars_v4"))
         pillar_scores: List[float] = []
         for pillar_key in pillar_keys:
             value = safe_dict(pillars.get(pillar_key)).get("score")
@@ -1886,35 +1873,12 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
             pillar_scores.append(number)
         if q_ok and len(pillar_scores) == len(pillar_keys):
             pillar_total = sum(pillar_scores)
-            cap = safe_dict(scored.get("_v4_quality_score_cap"))
-            adjustment = 0.0
-            if cap:
-                try:
-                    before = float(cap.get("score_before_cap"))
-                    after = float(cap.get("score_after_cap"))
-                    adjustment = float(cap.get("adjustment"))
-                    cap_valid = (
-                        cap.get("applied") is True
-                        and cap.get("presentation") == "explicit_adjustment"
-                        and all(math.isfinite(value) for value in (
-                            before, after, adjustment
-                        ))
-                        and abs(before - pillar_total) <= 0.011
-                        and abs(after - float(q)) <= 0.011
-                        and abs((before + adjustment) - after) <= 0.011
-                        and adjustment <= 0.0
-                    )
-                except (TypeError, ValueError):
-                    cap_valid = False
-                if not cap_valid:
-                    issues.append(
-                        "review_queue: quality_score_cap_v4 explicit adjustment "
-                        "is malformed or does not reconcile."
-                    )
-            if abs((pillar_total + adjustment) - float(q)) > 0.011:
+            # The public score is the literal six-pillar sum; nothing may
+            # adjust it after the pillars are added.
+            if abs(pillar_total - float(q)) > 0.011:
                 issues.append(
-                    "review_queue: six v4 pillars plus explicit adjustments do "
-                    "not reconcile to quality_score_v4_100."
+                    "review_queue: six v4 pillars do not sum to "
+                    "quality_score_v4_100."
                 )
 
         # The 2.4 scorer exports one canonical readiness result. Keep legacy
@@ -1925,7 +1889,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         # script.
         readiness_value = scored.get("assessment_readiness")
         if not isinstance(readiness_value, dict):
-            readiness_value = scored.get("_v4_assessment_readiness")
+            readiness_value = scored.get("assessment_readiness")
         if (
             isinstance(readiness_value, dict)
             and readiness_value.get("enforcement_mode") == "enforced"
@@ -1950,7 +1914,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     if v4_status == "suppressed_safety":
         readiness_value = scored.get("assessment_readiness")
         if not isinstance(readiness_value, dict):
-            readiness_value = scored.get("_v4_assessment_readiness")
+            readiness_value = scored.get("assessment_readiness")
         if (
             isinstance(readiness_value, dict)
             and readiness_value.get("enforcement_mode") == "enforced"
@@ -1984,12 +1948,12 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     if verdict == "NOT_SCORED":
         unavailable_reason = safe_str(
             scored.get("score_unavailable_reason")
-            or scored.get("_v4_score_unavailable_reason")
+            or scored.get("score_unavailable_reason")
             or scored.get("not_scorable_reason")
         ).strip() or "unspecified"
         readiness_value = scored.get("assessment_readiness")
         if not isinstance(readiness_value, dict):
-            readiness_value = scored.get("_v4_assessment_readiness")
+            readiness_value = scored.get("assessment_readiness")
         incomplete_dimensions: List[str] = []
         if isinstance(readiness_value, dict):
             for dimension_value in safe_list(
@@ -2246,47 +2210,6 @@ def resolve_harmful_reference(hit: Optional[Dict]) -> Dict:
         hit.get("ingredient"),
         hit.get("matched_alias"),
     ):
-        if term in index:
-            return index[term]
-    return {}
-
-
-OTHER_INGREDIENTS_INDEX: Optional[Dict[str, Dict]] = None
-
-
-def load_other_ingredients_index() -> Dict[str, Dict]:
-    global OTHER_INGREDIENTS_INDEX
-    if OTHER_INGREDIENTS_INDEX is not None:
-        return OTHER_INGREDIENTS_INDEX
-
-    path = Path(__file__).parent / "data" / "other_ingredients.json"
-    index: Dict[str, Dict] = {}
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        entries = safe_list(safe_dict(data).get("other_ingredients"))
-        for entry in entries:
-            if not isinstance(entry, dict):
-                continue
-            standard_term = normalize_text(entry.get("standard_name"))
-            if standard_term:
-                index[standard_term] = entry
-        for entry in entries:
-            if not isinstance(entry, dict):
-                continue
-            for alias in safe_list(entry.get("aliases")):
-                alias_term = normalize_text(alias)
-                if alias_term and alias_term not in index:
-                    index[alias_term] = entry
-    except Exception as exc:
-        logger.warning("Failed to load other_ingredients reference data: %s", exc)
-    OTHER_INGREDIENTS_INDEX = index
-    return OTHER_INGREDIENTS_INDEX
-
-
-def resolve_other_ingredient_reference(name: str, standard_name: str = "") -> Dict:
-    index = load_other_ingredients_index()
-    for term in iter_match_terms(standard_name, name):
         if term in index:
             return index[term]
     return {}
@@ -3001,10 +2924,11 @@ def build_decision_highlights(
     verdict = safe_str(scored.get("verdict")).upper()
     # V4 cutover: the shipped /100 score (overlay sets score_100_equivalent
     # from quality_score_v4_100); 75/100 mirrors the retired V3 score_80>=60.
-    score_100 = safe_float(scored.get("score_100_equivalent"), 0) or 0
+    # Thresholds read the whole number the app shows, not the one-decimal total.
+    score_100 = shipped_whole_score(safe_float(scored.get("score_100_equivalent"), 0) or 0)
     # Evidence copy reads the v4 evidence pillar (/20), not the retired v3
     # section_scores.C — keeps the user-facing string aligned with the shipped score.
-    v4_evidence = safe_float(safe_dict(safe_dict(scored.get("_v4_pillars")).get("evidence")).get("score"), 0)
+    v4_evidence = safe_float(safe_dict(safe_dict(scored.get("quality_pillars_v4")).get("evidence")).get("score"), 0)
 
     if safe_bool(enriched.get("is_trusted_manufacturer")) and safe_bool(enriched.get("has_full_disclosure")):
         positive = "Trusted manufacturer with full label disclosure."
@@ -3469,9 +3393,8 @@ def _warning_only_identity_labels(
 ) -> Dict[str, str]:
     """Contain safety-only identity gaps without authorizing a public score."""
     if not (
-        scored.get("_v4_quality_status") == "suppressed_safety"
+        scored.get("quality_score_status") == "suppressed_safety"
         and safe_str(scored.get("verdict")).upper() in {"BLOCKED", "UNSAFE"}
-        and scored.get("_v4_quality_score_100") is None
         and scored.get("quality_score_v4_100") is None
         and scored.get("score_100_equivalent") is None
         and scored.get("display_100") == "N/A"
@@ -3704,8 +3627,11 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
 
     severity = safe_str(w.get("severity")).casefold()
     display_mode = safe_str(w.get("display_mode_default")).casefold()
+    # One hazard, one card: the rule is the subject. Keying on the label
+    # spelling first showed 287 duplicate cards on 270 products
+    # ("Yohimbe" + "Yohimbe bark extract" under RISK_YOHIMBE).
     subject = safe_str(
-        w.get("ingredient_name") or w.get("matched_rule_id")
+        w.get("matched_rule_id") or w.get("ingredient_name")
     ).casefold()
     if subject and (
         display_mode == "critical"
@@ -3730,7 +3656,7 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
         _norm(w.get("canonical_id") or w.get("type")),
         _norm(w.get("condition_id") or w.get("condition_ids")),
         _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
-        _norm(w.get("source_rule") or w.get("source")),
+        _norm(w.get("source")),
         _norm(w.get("matched_rule_id") or w.get("ingredient_name")),
     )
 
@@ -3861,7 +3787,6 @@ def _compute_display_badge(ingredient: Dict[str, Any]) -> str:
     is_blend_member = bool(
         ingredient.get("isNestedIngredient")
         or ingredient.get("proprietaryBlend")
-        or ingredient.get("is_in_proprietary_blend")
     )
 
     # Rule 1 — blend member without individual dose → not_disclosed.
@@ -4201,7 +4126,6 @@ def _compute_display_dose_label(
     is_blend_member = bool(
         ingredient.get("isNestedIngredient")
         or ingredient.get("proprietaryBlend")
-        or ingredient.get("is_in_proprietary_blend")
     )
 
     has_real_unit = unit_lower not in _NP_SENTINELS
@@ -4245,7 +4169,6 @@ def _compute_dose_status(ingredient: Dict[str, Any]) -> str:
     is_blend_member = bool(
         ingredient.get("isNestedIngredient")
         or ingredient.get("proprietaryBlend")
-        or ingredient.get("is_in_proprietary_blend")
     )
     if is_blend_member:
         return "not_disclosed_blend"
@@ -5418,14 +5341,6 @@ def iter_json_products(directories: List[str]):
             except (json.JSONDecodeError, OSError) as e:
                 logger.error("Failed to load %s: %s", fpath, e)
 
-def index_by_id(products: List[Dict], id_field: str = "dsld_id") -> Dict[str, Dict]:
-    """Index a list of product dicts by dsld_id."""
-    index = {}
-    for p in products:
-        pid = str(p.get(id_field, ""))
-        if pid:
-            index[pid] = p
-    return index
 
 
 def initialize_stage_table(conn: sqlite3.Connection, table_name: str) -> None:
@@ -5732,19 +5647,6 @@ def blob_has_critical_recalled_warning(detail_blob: Optional[Dict]) -> bool:
     return blob_has_critical_safety_warning(detail_blob, "recalled_ingredient")
 
 
-def blob_has_safety_blocking_warning(detail_blob: Optional[Dict]) -> bool:
-    if not isinstance(detail_blob, dict):
-        return False
-    blocking_types = {"banned_substance", "recalled_ingredient", "high_risk_ingredient"}
-    for list_key in ("warnings", "warnings_profile_gated"):
-        for warning in safe_list(detail_blob.get(list_key)):
-            if not isinstance(warning, dict):
-                continue
-            if safe_str(warning.get("type")) in blocking_types:
-                return True
-    return False
-
-
 # Hard-safety types that disqualify a base SAFE verdict.
 #
 # Two tiers govern this contract:
@@ -5782,39 +5684,6 @@ _HARD_SAFETY_SEVERITIES = frozenset({
     "contraindicated",
     "avoid",
 })
-
-
-def profile_gated_hard_safety_signal(
-    detail_blob: Optional[Dict],
-) -> Optional[str]:
-    """Return the first hard-safety warning type that disqualifies SAFE.
-
-    Scans BOTH warnings[] and warnings_profile_gated[] (the per-user-condition
-    list and the general list — a hard-safety signal in either disqualifies the
-    base SAFE verdict). See _HARD_SAFETY_TYPES_ALWAYS_DISQUALIFY and
-    _HARD_SAFETY_TYPES_SEVERITY_GATED for the tier rules.
-    """
-    if not isinstance(detail_blob, dict):
-        return None
-    for list_key in ("warnings", "warnings_profile_gated"):
-        for warning in safe_list(detail_blob.get(list_key)):
-            if not isinstance(warning, dict):
-                continue
-            warning_type = safe_str(warning.get("type"))
-            if (
-                warning_type == "watchlist_substance"
-                and safe_str(warning.get("ingredient_role")).lower() == "inactive"
-                and safe_str(warning.get("inactive_policy")).lower() == "excipient_acceptable"
-                and safe_str(warning.get("display_mode_default")).lower() == "informational"
-            ):
-                continue
-            if warning_type in _HARD_SAFETY_TYPES_ALWAYS_DISQUALIFY:
-                return warning_type
-            if warning_type in _HARD_SAFETY_TYPES_SEVERITY_GATED:
-                severity = safe_str(warning.get("severity")).lower()
-                if severity in _HARD_SAFETY_SEVERITIES:
-                    return warning_type
-    return None
 
 
 def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
@@ -6660,8 +6529,8 @@ def build_detail_blob(
     """Build the per-product detail blob for caching/Supabase."""
     brand_identity = resolve_catalog_brand(enriched)
     non_gmo_audit = derive_non_gmo_audit(enriched)
-    omega3_audit = derive_omega3_audit(enriched, scored)
-    proprietary_blend_audit = derive_proprietary_blend_audit(enriched, scored)
+    omega3_audit = derive_omega3_audit(enriched)
+    proprietary_blend_audit = derive_proprietary_blend_audit(enriched)
     supplement_type_audit = build_supplement_type_audit(enriched, scored)
 
     # Active ingredients
@@ -7111,6 +6980,7 @@ def build_detail_blob(
                 additional_terms=[
                     term for term in form_terms if term in surviving_set
                 ],
+                role="inactive",
             )
 
         # Label fidelity contract (2026-06-15): inactive_ingredients[] is
@@ -7246,6 +7116,26 @@ def build_detail_blob(
         enriched,
         display_ingredients,
     )
+    # One owner of what the label says: the canonical label ledger. The
+    # identity step's display name can be a DSLD group name ("Couch Grass" on a
+    # wheatgrass row) or drop the brand ("Capsimax Capsicum fruit extract" ->
+    # "Capsicum"); the scoring projection shows the ledger's text for the same
+    # source row. Identity audit fields (source_label_name, disposition,
+    # rationale) keep recording how identity was decided.
+    ledger_label_names = {
+        safe_str(row.get("raw_source_path")): safe_str(row.get("label_display_name"))
+        for row in display_ingredients
+        if isinstance(row, dict) and row.get("raw_source_path") and row.get("label_display_name")
+    }
+    for row in ingredients:
+        # The identity owner's reversible display cleanup, so display_label
+        # still begins with the label identity it presents.
+        ledger_name = normalize_label_display(ledger_label_names.get(safe_str(row.get("raw_source_path"))))
+        if ledger_name and ledger_name != safe_str(row.get("label_display_name")):
+            row["label_display_name"] = ledger_name
+            row["display_label"] = _strip_trademark_markers(
+                _compute_display_label(row, {"label_display_name": ledger_name})
+            )
     label_ledger_omissions = _final_label_ledger_omissions(
         enriched,
         display_ingredients,
@@ -7375,6 +7265,9 @@ def build_detail_blob(
             "title": f"{title_prefix}: {name}",
             "detail": safe_str(reference.get("reason") or flag.get("evidence_text")),
             "source": "banned_recalled_ingredients",
+            # Same ban entry as the substance-match card above, so the same
+            # context: one hazard, one card after dedup.
+            "ban_context": safe_str(reference.get("ban_context") or flag.get("ban_context")) or None,
             "matched_rule_id": rule_id or None,
             "ingredient_name": name,
             "safety_warning": reference.get("safety_warning") or flag.get("safety_warning"),
@@ -7764,63 +7657,6 @@ def build_detail_blob(
     _validate_warning_has_authored_copy(warnings, dsld_id_for_validation)
     _validate_warning_has_authored_copy(warnings_profile_gated, dsld_id_for_validation)
 
-    # Section breakdown — rename to descriptive, preserve all sub-scores
-    breakdown_raw = safe_dict(scored.get("breakdown"))
-    a_raw = safe_dict(breakdown_raw.get("A"))
-    section_breakdown = {
-        "ingredient_quality": {
-            "score": safe_float(a_raw.get("score"), 0),
-            "max": safe_float(a_raw.get("max"), 25),
-            "sub": {k: v for k, v in a_raw.items()
-                    if k not in ("score", "max")},
-        },
-        "safety_purity": {
-            "score": safe_float(safe_dict(breakdown_raw.get("B")).get("score"), 0),
-            "max": safe_float(safe_dict(breakdown_raw.get("B")).get("max"), 30),
-            "sub": {k: v for k, v in safe_dict(breakdown_raw.get("B")).items()
-                    if k not in ("score", "max", "raw")},
-        },
-        "evidence_research": {
-            "score": safe_float(safe_dict(breakdown_raw.get("C")).get("score"), 0),
-            "max": safe_float(safe_dict(breakdown_raw.get("C")).get("max"), 20),
-            "matched_entries": safe_dict(breakdown_raw.get("C")).get("matched_entries"),
-            "ingredient_points": safe_dict(breakdown_raw.get("C")).get("ingredient_points"),
-        },
-        "brand_trust": {
-            "score": safe_float(safe_dict(breakdown_raw.get("D")).get("score"), 0),
-            "max": safe_float(safe_dict(breakdown_raw.get("D")).get("max"), 5),
-            "sub": {k: v for k, v in safe_dict(breakdown_raw.get("D")).items()
-                    if k not in ("score", "max")},
-        },
-        "violation_penalty": safe_float(breakdown_raw.get("violation_penalty"), 0),
-    }
-
-    # Sprint 2026-05-01 — omega3 dose adequacy detail block.
-    # Surfaces the EPA+DHA bonus alongside the new transparency fields
-    # (`bonus_missed_due_to_opacity`, `bonus_missed_reason`) so Flutter can
-    # show "EPA/DHA breakdown not disclosed" copy when the bonus is 0
-    # because the omega-3 ingredient is buried in an opaque proprietary
-    # blend. Score impact remains zero — informational only.
-    e_raw = safe_dict(breakdown_raw.get("E"))
-    omega3_detail = {
-        "score": safe_float(e_raw.get("score"), 0),
-        "max": safe_float(e_raw.get("max"), 0),
-        "applicable": bool(e_raw.get("applicable", False)),
-        "dose_band": safe_str(e_raw.get("dose_band")),
-        "per_day_mid_mg": e_raw.get("per_day_mid_mg"),
-        "per_day_min_mg": e_raw.get("per_day_min_mg"),
-        "per_day_max_mg": e_raw.get("per_day_max_mg"),
-        "epa_mg_per_unit": e_raw.get("epa_mg_per_unit"),
-        "dha_mg_per_unit": e_raw.get("dha_mg_per_unit"),
-        "prescription_dose": bool(e_raw.get("prescription_dose", False)),
-        # Transparency flag — true when omega-3 bonus is 0 because the
-        # ingredient is buried in an opaque proprietary blend.
-        "bonus_missed_due_to_opacity": bool(
-            e_raw.get("bonus_missed_due_to_opacity", False)
-        ),
-        "bonus_missed_reason": safe_str(e_raw.get("bonus_missed_reason")),
-    }
-
     cd = safe_dict(enriched.get("certification_data"))
     serving = safe_dict(enriched.get("serving_basis"))
     evidence_data = safe_dict(enriched.get("evidence_data"))
@@ -7878,11 +7714,6 @@ def build_detail_blob(
         # Apps that have implemented on-device profile filtering can read
         # `warnings` and apply their own filter instead.
         "warnings_profile_gated": warnings_profile_gated,
-        "section_breakdown": section_breakdown,
-        # Sprint 2026-05-01 — omega-3 dose adequacy + transparency block.
-        # Includes bonus_missed_due_to_opacity / bonus_missed_reason for
-        # products with EPA/DHA hidden in opaque proprietary blends.
-        "omega3_detail": omega3_detail,
         "compliance_detail": safe_dict(enriched.get("compliance_data")),
         "certification_detail": _certification_detail(enriched, cd),
         "proprietary_blend_detail": {
@@ -7954,7 +7785,6 @@ def build_detail_blob(
                     continue
                 canon = safe_str(
                     row.get("canonical_id")
-                    or row.get("ingredient_canonical")
                     or row.get("normalized_key")
                 )
                 marked = dict(row)
@@ -8089,7 +7919,7 @@ def build_detail_blob(
             matched = safe_list(sc.get("matched_ingredients"))
             matched_names = [m.get("ingredient", "") for m in matched if isinstance(m, dict)]
             v4_low_dose = {
-                safe_str(item.get("canonical_id") or item.get("ingredient_canonical"))
+                safe_str(item.get("canonical_id"))
                 for item in matched
                 if isinstance(item, dict)
             } & v4_sub_clinical_canonicals(scored)
@@ -8173,21 +8003,14 @@ def build_detail_blob(
         ),
         "absorption_enhancers": safe_list(absorption_data.get("enhancers")),
         "is_certified_organic": json_bool(enriched.get("is_certified_organic")),
-        "organic_verification": safe_str(
-            formulation_data.get("organic", {}).get("verification_status")
-            if isinstance(formulation_data.get("organic"), dict) else ""
-        ),
         "standardized_botanicals": safe_list(formulation_data.get("standardized_botanicals")),
         "synergy_cluster_qualified": json_bool(enriched.get("synergy_cluster_qualified")),
         "claim_non_gmo_verified": bool(non_gmo_audit.get("project_verified")),
         "claim_non_gmo_present": bool(non_gmo_audit.get("claim_present")),
     }
 
-    # Score reasons — Tradeoffs bonus/penalty lists. v4 cutover: these are now
-    # sourced from the v4 contract + enriched safety data via
-    # derive_v4_tradeoffs (no v3 section-score dependency). a_sub is retained
-    # only for the diagnostic gate_audit.probiotic_eligibility emitted below.
-    a_sub = section_breakdown.get("ingredient_quality", {}).get("sub", {})
+    # Score reasons — Tradeoffs bonus/penalty lists, sourced from the v4
+    # contract + enriched safety data via derive_v4_tradeoffs.
     bonuses, penalties = derive_v4_tradeoffs(scored, enriched)
 
     # v1.3.2: Nutrition detail — all five macros for the Flutter transparency panel
@@ -8230,15 +8053,11 @@ def build_detail_blob(
 
     blob["score_bonuses"] = bonuses
     blob["score_penalties"] = penalties
+    # The four diagnostic audits ship once, as top-level *_audit keys.
     blob["audit"] = {
-        "non_gmo": non_gmo_audit,
-        "omega3": omega3_audit,
-        "proprietary_blend": proprietary_blend_audit,
-        "supplement_type": supplement_type_audit,
         "gate_audit": {
             "blocking_reason": derive_blocking_reason(enriched, scored),
             "verdict": safe_str(scored.get("verdict")),
-            "probiotic_eligibility": safe_dict(a_sub.get("probiotic_breakdown")).get("eligibility"),
         },
     }
 
@@ -8365,37 +8184,36 @@ def build_detail_blob(
     # the six pillars (with reasons), clean-label flags, gate breakdowns, and a
     # provenance/explanation trail ("why did this score X?"). The internal raw
     # score deliberately does not cross the public export boundary.
-    if scored.get("_v4_quality_status") is not None:
+    if scored.get("quality_score_status") is not None:
         blob["product_safety_status"] = scored.get("product_safety_status")
         blob["quality_assessment_status"] = scored.get("quality_assessment_status")
-        pillars = scored.get("_v4_pillars")
+        pillars = scored.get("quality_pillars_v4")
         blob["quality_pillars_v4"] = pillars
         blob["certification_detail"]["gmp"] = _certification_gmp_detail(
             blob["certification_detail"].get("gmp"), pillars, enriched
         )
-        blob["quality_score_cap_v4"] = scored.get("_v4_quality_score_cap")
         blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")
         blob["v4_safety_gate"] = scored.get("_v4_safety_gate")
-        blob["v4_dose_safety"] = scored.get("_v4_dose_safety")
+        blob["v4_dose_safety"] = scored.get("dose_safety_evaluation")
         blob["v4_completeness_gate"] = scored.get("_v4_completeness_gate")
         blob["v4_confidence_detail"] = scored.get("_v4_confidence_detail")
         blob["v4_score_provenance"] = {
             "score_model_version": scored.get("_score_model_version"),
-            "quality_score_status": scored.get("_v4_quality_status"),
+            "quality_score_status": scored.get("quality_score_status"),
             "product_safety_status": scored.get("product_safety_status"),
             "quality_assessment_status": scored.get("quality_assessment_status"),
-            "quality_tier": scored.get("_v4_quality_tier"),
+            "quality_tier": scored.get("quality_tier"),
             "quality_score_version": scored.get("_v4_quality_version"),
-            "scoring_engine_version": scored.get("_v4_scoring_engine_version"),
-            "classification_schema_version": scored.get("_v4_classification_schema_version"),
+            "scoring_engine_version": safe_dict(scored.get("_v4_provenance")).get("scoring_engine_version"),
+            "classification_schema_version": safe_dict(scored.get("_v4_provenance")).get("classification_schema_version"),
             "module": scored.get("_v4_module"),
-            "confidence": scored.get("_v4_confidence"),
-            "score_unavailable_reason": scored.get("_v4_score_unavailable_reason"),
-            "route_decision": scored.get("_v4_route_decision"),
+            "confidence": scored.get("quality_score_confidence"),
+            "score_unavailable_reason": scored.get("score_unavailable_reason"),
+            "route_decision": scored.get("route_decision"),
             "route_confidence": scored.get("route_confidence"),
             "config_fingerprint": scored.get("_v4_config_fingerprint"),
-            "suppressed_reason": scored.get("_v4_suppressed_reason"),
-            "safety_signal_reason": scored.get("_v4_safety_signal_reason"),
+            "suppressed_reason": scored.get("quality_score_suppressed_reason"),
+            "safety_signal_reason": scored.get("safety_signal_reason"),
         }
         blob["v4_score_explanation"] = _build_v4_score_explanation(pillars)
 
@@ -8572,10 +8390,13 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     product_name = safe_str(enriched.get("product_name"))
     brand_name = safe_str(enriched.get("brand_name") or enriched.get("brandName"))
     score_100 = safe_float(scored.get("score_100_equivalent"))
+    # Share copy shows the same whole number the app shows (round half up), so a
+    # 74.6 reads 75/100 everywhere instead of a truncated 74/100 here.
+    if score_100 is not None:
+        score_100 = shipped_whole_score(score_100)
     grade = safe_str(scored.get("grade"))
-    verdict = safe_str(scored.get("verdict")).upper()
     # V4 cutover: evidence copy reads the v4 evidence pillar (/20), not v3 section C.
-    v4_evidence = safe_float(safe_dict(safe_dict(scored.get("_v4_pillars")).get("evidence")).get("score"), 0)
+    v4_evidence = safe_float(safe_dict(safe_dict(scored.get("quality_pillars_v4")).get("evidence")).get("score"), 0)
 
     # Title with score emoji
     score_emoji = ""
@@ -8587,7 +8408,7 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
 
     share_title = f"{brand_name} {product_name}"
     if score_100:
-        share_title += f" - {int(score_100)}/100 {score_emoji}"
+        share_title += f" - {score_100}/100 {score_emoji}"
 
     # Limit title length for social platforms
     if len(share_title) > 200:
@@ -8671,7 +8492,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
     ingredients = safe_list(iqd.get("ingredients"))
 
-    omega3_audit = derive_omega3_audit(enriched, scored)
+    omega3_audit = derive_omega3_audit(enriched)
 
     # Extract ingredient names and canonical ids. `key_ingredient_tags` is a
     # safety carrier used by Flutter interaction lookup, so it must include all
@@ -8688,20 +8509,19 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
         canonical_id = normalize_interaction_tag(value)
         if not canonical_id:
             return
-        ingredient_names.add(canonical_id)
-        if canonical_id not in seen_key_tags:
-            seen_key_tags.add(canonical_id)
-            key_tags.append(canonical_id)
+        # The app joins curated interactions on these tags, so a vitamer also
+        # carries its family (vitamin K2 -> vitamin_k for the warfarin rule).
+        for subject_id in interaction_subject_ids(canonical_id):
+            ingredient_names.add(subject_id)
+            if subject_id not in seen_key_tags:
+                seen_key_tags.add(subject_id)
+                key_tags.append(subject_id)
 
     def add_interaction_tags_from_text(*values: Any) -> None:
         for canonical_id in interaction_tags_from_text(*values):
             add_interaction_tag(canonical_id)
 
-    add_interaction_tags_from_text(
-        enriched.get("product_name"),
-        enriched.get("label_text"),
-        enriched.get("search_text"),
-    )
+    add_interaction_tags_from_text(enriched.get("product_name"))
 
     for ing in ingredients:
         if not isinstance(ing, dict):
@@ -8778,18 +8598,6 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
         secondary_categories.append("adaptogen")
     if ingredient_names & nootropics:
         secondary_categories.append("nootropic")
-
-    # Check synergy clusters for more categories
-    synergy_detail = safe_dict(enriched.get("synergy_detail"))
-    clusters_matched = safe_list(synergy_detail.get("clusters_matched"))
-    for cluster in clusters_matched:
-        cluster_str = safe_str(cluster).lower()
-        if "inflammation" in cluster_str or "joint" in cluster_str:
-            secondary_categories.append("anti-inflammatory")
-        if "cardiovascular" in cluster_str or "heart" in cluster_str:
-            secondary_categories.append("heart-health")
-        if "immune" in cluster_str:
-            secondary_categories.append("immune-support")
 
     # Boolean flags
     contains_omega3 = omega3_audit["contains_omega3"]
@@ -9622,8 +9430,8 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
                 continue
             ids.add(cid)
 
-    # Fallback path: synergy_detail.clusters_matched (flat list) OR
-    #                synergy_detail.clusters[*].id (detail-blob shape)
+    # Second input shape: a detail blob (audit tooling re-derives goals from
+    # shipped blobs). synergy_detail never exists on an enriched product.
     synergy_detail = safe_dict(enriched.get("synergy_detail"))
     for cluster in safe_list(synergy_detail.get("clusters_matched")):
         cid = safe_str(cluster)
@@ -9640,6 +9448,7 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
             ):
                 continue
             ids.add(cid)
+
 
     if _probiotic_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
         ids.add(PROBIOTIC_GOAL_CLUSTER_ID)
@@ -10344,26 +10153,20 @@ def build_core_row(
         enriched, scored, detail_blob
     )
 
-    score_100_raw = safe_float(effective_scored.get("_v4_quality_score_100"))
-    if (
-        score_100_raw is None
-        and not safe_str(effective_scored.get("_v4_quality_status"))
-    ):
-        score_100_raw = safe_float(effective_scored.get("score_100_equivalent"))
+    score_100_raw = safe_float(effective_scored.get("quality_score_v4_100"))
     # One rounding rule, shared with the scorer's tier choice.
     score_100 = (
         shipped_whole_score(score_100_raw)
         if score_100_raw is not None
         else None
     )
-    ss = safe_dict(effective_scored.get("section_scores"))
-    v4_pillars = safe_dict(effective_scored.get("_v4_pillars"))
+    v4_pillars = safe_dict(effective_scored.get("quality_pillars_v4"))
 
     top_warnings = build_top_warnings(enriched, detail_blob)
 
     safety_signal_reason = (
         safe_str(effective_scored.get("safety_signal_reason"))
-        or safe_str(effective_scored.get("_v4_safety_signal_reason"))
+        or safe_str(effective_scored.get("safety_signal_reason"))
         or None
     )
     blocking = safe_str(effective_scored.get("blocking_reason")) or None
@@ -10471,38 +10274,34 @@ def build_core_row(
         safe_float(effective_scored.get("mapped_coverage")),
         # V4 scoring contract — populated by the Stage-3 artifact assembler.
         score_100,
-        safe_str(effective_scored.get("_v4_quality_status")) or None,
+        safe_str(effective_scored.get("quality_score_status")) or None,
         safe_str(effective_scored.get("product_safety_status")) or None,
         safe_str(effective_scored.get("quality_assessment_status")) or None,
-        safe_str(effective_scored.get("_v4_quality_tier")) or None,
-        safe_str(effective_scored.get("_v4_suppressed_reason")) or None,
+        safe_str(effective_scored.get("quality_tier")) or None,
+        safe_str(effective_scored.get("quality_score_suppressed_reason")) or None,
         safe_str(effective_scored.get("_v4_module")) or None,
         safe_str(effective_scored.get("quality_score_confidence")) or None,
         safe_str(effective_scored.get("score_unavailable_reason")) or None,
         safe_str(effective_scored.get("route_confidence")) or None,
         # Schema-2.4 compatibility alias.
-        safe_str(effective_scored.get("_v4_confidence")) or None,
+        safe_str(effective_scored.get("quality_score_confidence")) or None,
         safe_str(effective_scored.get("_score_model_version")) or None,
         safe_str(effective_scored.get("_v4_quality_version")) or None,
-        safe_str(effective_scored.get("_v4_scoring_engine_version")) or None,
-        safe_str(effective_scored.get("_v4_classification_schema_version")) or None,
+        safe_str(safe_dict(effective_scored.get("_v4_provenance")).get("scoring_engine_version")) or None,
+        safe_str(safe_dict(effective_scored.get("_v4_provenance")).get("classification_schema_version")) or None,
         safe_str(effective_scored.get("_v4_config_fingerprint")) or None,
-        # V4 six-pillar component scores (from _v4_pillars; NULL when not scored).
+        # V4 six-pillar component scores (from quality_pillars_v4; NULL when not scored).
         safe_float(safe_dict(v4_pillars.get("formulation")).get("score")),
         safe_float(safe_dict(v4_pillars.get("dose")).get("score")),
         safe_float(safe_dict(v4_pillars.get("evidence")).get("score")),
         safe_float(safe_dict(v4_pillars.get("transparency")).get("score")),
         safe_float(safe_dict(v4_pillars.get("verification")).get("score")),
         safe_float(safe_dict(v4_pillars.get("safety_hygiene")).get("score")),
-        # Section scores
-        safe_float(safe_dict(ss.get("A_ingredient_quality")).get("score")),
-        safe_float(safe_dict(ss.get("A_ingredient_quality")).get("max")),
-        safe_float(safe_dict(ss.get("B_safety_purity")).get("score")),
-        safe_float(safe_dict(ss.get("B_safety_purity")).get("max")),
-        safe_float(safe_dict(ss.get("C_evidence_research")).get("score")),
-        safe_float(safe_dict(ss.get("C_evidence_research")).get("max")),
-        safe_float(safe_dict(ss.get("D_brand_trust")).get("score")),
-        safe_float(safe_dict(ss.get("D_brand_trust")).get("max")),
+        # score_ingredient_quality .. score_brand_trust_max: retired v3 section
+        # columns kept only because the published 2.5.0 SQLite schema declares
+        # them (schema 3 drops them). The v4 scorer has no sections, so they are
+        # honestly NULL; nothing reads them.
+        None, None, None, None, None, None, None, None,
         # Percentile — rank/top_pct/cohort are emitted NULL here and BACKFILLED
         # after the insert loop by compute_v4_category_percentiles(), which ranks
         # the actually-shipped quality_score_v4_100 within each percentile_category
@@ -10772,42 +10571,6 @@ def write_audit_report(
 
 
 # ─── Image Thumbnail Backfill ───
-
-
-def backfill_image_thumbnails(db_path: str, image_dir: str) -> dict:
-    """Populate image_thumbnail_url for products with extracted WebP thumbnails.
-
-    Called after extract_product_images.py produces the product_images/ directory.
-    Safe to call multiple times (idempotent UPDATE).
-
-    Returns dict with updated and missing counts.
-    """
-    index_path = os.path.join(image_dir, "product_image_index.json")
-    if not os.path.exists(index_path):
-        logger.info("No product_image_index.json found at %s — skipping thumbnail backfill", image_dir)
-        return {"updated": 0, "missing": 0}
-
-    with open(index_path, "r", encoding="utf-8") as f:
-        index = json.load(f)
-
-    conn = sqlite3.connect(db_path)
-    try:
-        updated = 0
-        for dsld_id, entry in index.items():
-            webp_file = os.path.join(image_dir, entry["filename"])
-            if os.path.exists(webp_file):
-                conn.execute(
-                    "UPDATE products_core SET image_thumbnail_url = ? WHERE dsld_id = ?",
-                    (f"product-images/{dsld_id}.webp", str(dsld_id)),
-                )
-                updated += 1
-        conn.commit()
-    finally:
-        conn.close()
-
-    missing = len(index) - updated
-    logger.info("Thumbnail backfill: %d updated, %d missing files", updated, missing)
-    return {"updated": updated, "missing": missing}
 
 
 # ─── Main Builder ───

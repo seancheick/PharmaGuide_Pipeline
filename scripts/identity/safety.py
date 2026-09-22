@@ -4,7 +4,6 @@ from dataclasses import asdict, dataclass, field
 import re
 from typing import Any, Dict, Iterable, List, Optional
 
-from .resolve import IdentityResult
 
 
 @dataclass(frozen=True)
@@ -135,6 +134,33 @@ def _normalize_safety_enum(value: Any) -> str:
     normalized = re.sub(r"[^a-z0-9]+", "_", normalized)
     normalized = re.sub(r"_+", "_", normalized).strip("_")
     return normalized
+
+
+def safety_rule_governs_role(entry: Dict[str, Any], role: Any) -> bool:
+    """True when a rule's ``hard_verdict_roles`` (if authored) include ``role``."""
+    roles = {
+        _normalize_safety_enum(value)
+        for value in (entry.get("hard_verdict_roles") or [])
+        if _normalize_safety_enum(value)
+    }
+    return not roles or _normalize_safety_enum(role) in roles
+
+
+def safety_rule_out_of_role_scope(entry: Dict[str, Any], role: Any) -> bool:
+    """True when a rule explicitly does not govern this label role at all.
+
+    Some rules are authored for one role only -- EDTA is a non-routine chelator
+    as a declared active but an ordinary excipient elsewhere. Only an entry that
+    also declares ``role_scope_out_of_scope: "not_applicable"`` releases the
+    other roles; a role-limited rule without it stays in force (fail closed),
+    and an unknown role is never treated as out of scope.
+    """
+    return (
+        _normalize_safety_enum(entry.get("role_scope_out_of_scope")) == "not_applicable"
+        and bool(_normalize_safety_enum(role))
+        and _normalize_safety_enum(role) != "unknown"
+        and not safety_rule_governs_role(entry, role)
+    )
 
 
 def has_explicit_form_evidence(texts: Iterable[Any], patterns: Iterable[str]) -> Optional[str]:
@@ -655,89 +681,5 @@ def safety_flag_from_harmful_additive(
     )
 
 
-def build_safety_exact_index(entries: Iterable[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
-    """Build a strict safety lookup that preserves qualified variants.
-
-    Values are lists because multiple safety rules can intentionally share a
-    label variant. This index is for candidate discovery only; evidence gates
-    and negative-match policy still run in the classifier/caller.
-    """
-    index: Dict[str, List[Dict[str, Any]]] = {}
-    for entry in entries or []:
-        if not isinstance(entry, dict):
-            continue
-        variants = [entry.get("standard_name")] + list(entry.get("aliases") or [])
-        for variant in variants:
-            key = safety_normalize_text(variant)
-            if not key:
-                continue
-            index.setdefault(key, []).append(entry)
-    return index
 
 
-def classify_safety(
-    identity: IdentityResult,
-    raw_source_text: Optional[str],
-    name: Optional[str],
-    forms: List[Dict[str, Any]],
-    label_text: Optional[str],
-    ingredient_role: Optional[str],
-    *,
-    banned_recalled_entries: Optional[List[Dict[str, Any]]] = None,
-) -> List[SafetyFlag]:
-    """Classify safety without mutating identity fields.
-
-    This first implementation supports explicit-form evidence rules used by
-    banned/recalled entries. Legacy build paths still project older safety
-    fields, but this gives them a canonical flag shape to converge on.
-    """
-    del ingredient_role  # Reserved for source-specific policy refinements.
-
-    evidence_texts: List[Any] = [raw_source_text, name]
-    for form in forms or []:
-        if isinstance(form, dict):
-            evidence_texts.extend([form.get("name"), form.get("prefix")])
-        elif form:
-            evidence_texts.append(form)
-    evidence_texts.append(label_text)
-
-    flags: List[SafetyFlag] = []
-    identity_norm = safety_normalize_text(identity.canonical_name)
-    evidence_norms = [safety_normalize_text(v) for v in evidence_texts if safety_normalize_text(v)]
-
-    for entry in banned_recalled_entries or []:
-        if not isinstance(entry, dict):
-            continue
-        status = _normalize_safety_enum(entry.get("status"))
-        if not status:
-            continue
-
-        patterns = entry.get("form_evidence_patterns") or []
-        if entry.get("requires_explicit_form_evidence"):
-            evidence = has_explicit_form_evidence(evidence_texts, patterns)
-            if not evidence:
-                continue
-            matched_variant = evidence
-            match_type = "explicit_form_evidence"
-        else:
-            variants = [entry.get("standard_name")] + list(entry.get("aliases") or [])
-            matched_variant = ""
-            for variant in variants:
-                variant_norm = safety_normalize_text(variant)
-                if not variant_norm:
-                    continue
-                if variant_norm == identity_norm or variant_norm in evidence_norms:
-                    matched_variant = str(variant)
-                    break
-            if not matched_variant:
-                continue
-            match_type = "exact"
-
-        flags.append(safety_flag_from_banned_match(
-            entry,
-            match_type=match_type,
-            matched_variant=matched_variant,
-            evidence_text=matched_variant,
-        ))
-
-    return flags

@@ -64,8 +64,8 @@ MATERIALITY_PRESENCE_OVERRIDE = {
     # Glycyrrhizin + corticosteroid -> additive hypokalemia -> arrhythmia;
     # pseudohyperaldosteronism is idiosyncratic at modest intakes, no safe floor.
     "DSI_CORTICO_LICORICE",
-    # Class-level "Diuretics" cannot know the subclass at fire time; with a
-    # potassium-sparing diuretic, added potassium -> hyperkalemia (cardiac arrest).
+    # Potassium-sparing diuretic + added potassium -> hyperkalemia (cardiac
+    # arrest). Scoped to class:potassium_sparing_diuretics since 2026-09-21.
     "DSI_DIURETICS_POTASSIUM",
 }
 

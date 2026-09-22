@@ -411,9 +411,7 @@ def evaluate_evidence_assessment(
         source_value = row.get("quantity", row.get("dose_value"))
         source_unit = row.get("unit") or row.get("dose_unit")
         if dose_class == "enzyme_activity":
-            activity_value = row.get(
-                "activity_quantity", row.get("activity_value")
-            )
+            activity_value = row.get("activity_quantity")
             activity_unit = row.get("activity_unit")
             if activity_value not in (None, "") and activity_unit:
                 source_value = activity_value
@@ -1025,7 +1023,7 @@ def _dose_readiness(
     probiotic_total_cfu = 0.0
     if module == "probiotic":
         probiotic = _safe_dict(
-            product.get("probiotic_data") or product.get("probiotic_detail")
+            product.get("probiotic_data")
         )
         probiotic_total_cfu = declared_total_cfu(probiotic)
 
@@ -1180,7 +1178,7 @@ def _dose_readiness(
 
     if not is_fresh_contract and module == "probiotic":
         probiotic = _safe_dict(
-            product.get("probiotic_data") or product.get("probiotic_detail")
+            product.get("probiotic_data")
         )
         if declared_total_cfu(probiotic) > 0:
             return {

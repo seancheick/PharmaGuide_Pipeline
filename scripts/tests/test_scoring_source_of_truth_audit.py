@@ -51,7 +51,6 @@ def _scored(**overrides) -> dict:
         "score_80": 50.0,
         "score_100_equivalent": 62.5,
         "mapped_coverage": 1.0,
-        "scoring_status": "scored",
         "quality_score_status": "scored",
         "score_basis": "bioactives_scored",
         "_v4_completeness_gate": {
@@ -59,7 +58,6 @@ def _scored(**overrides) -> dict:
             "verdict": None,
         },
         "assessment_readiness": assessment_readiness,
-        "_v4_assessment_readiness": assessment_readiness,
         "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
         "scoring_fallbacks_used": [],
         "strict_scoring_contract": {"passed": True, "findings": []},
@@ -165,7 +163,6 @@ def test_scoring_audit_requires_typed_readiness_for_scored_product(tmp_path: Pat
     path = tmp_path / "scored.json"
     product = _scored()
     product.pop("assessment_readiness")
-    product.pop("_v4_assessment_readiness")
     _write(path, product)
 
     codes = {finding.code for finding in audit_scoring(_args(path))}

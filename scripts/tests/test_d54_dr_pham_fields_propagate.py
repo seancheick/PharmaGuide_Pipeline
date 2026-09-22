@@ -40,7 +40,9 @@ from pathlib import Path
 
 import pytest
 
-BLOB_DIR = Path("/tmp/pharmaguide_release_build/detail_blobs")
+from release_artifact_paths import final_build_dir
+
+BLOB_DIR = final_build_dir() / "detail_blobs"
 
 # Required-field sets per warning type. The values are `Sequence[str]`
 # where each inner set is an OR-group — at least one name in each group
@@ -75,6 +77,11 @@ REQUIRED_BY_TYPE = {
 }
 
 
+def _spread(paths, n):
+    """n files evenly spaced across the catalog (not the first n by name)."""
+    return paths[:: max(1, len(paths) // n)] if paths else paths
+
+
 @pytest.fixture(scope="module")
 def warnings_by_type():
     if not BLOB_DIR.is_dir() or not any(BLOB_DIR.glob("*.json")):
@@ -82,7 +89,7 @@ def warnings_by_type():
             f"No detail blobs under {BLOB_DIR} — run build_final_db.py first."
         )
     by_type = defaultdict(list)
-    for p in sorted(BLOB_DIR.glob("*.json"))[:1000]:
+    for p in _spread(sorted((BLOB_DIR).glob("*.json")), 1000):
         try:
             blob = json.loads(p.read_text())
         except json.JSONDecodeError:

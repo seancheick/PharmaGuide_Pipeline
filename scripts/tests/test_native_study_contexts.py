@@ -92,14 +92,6 @@ def test_spore_counts_never_match_a_cfu_label_dose(registry):
     assert result["clinical_applicability"] == "not_established"
 
 
-def test_unknown_and_different_populations_are_distinct(registry):
-    p = strain_product(dose=1e9)
-    p["target_population"] = "infant"
-    assert assessment(p)["study_contexts"][0]["population_comparison"] == "different_label_population"
-    p.pop("target_population")
-    assert assessment(p)["study_contexts"][0]["population_comparison"] == "label_population_unknown"
-
-
 def test_combination_and_species_context_cannot_become_individual_efficacy(registry):
     c = registry["STRAIN_LGG"]["study_contexts"][0]
     c.update(identity_scope="combination", components=["STRAIN_LGG", "STRAIN_LACTIS_BI07"])
@@ -290,7 +282,8 @@ def test_lpc37_sources_join_without_new_approval_or_interpolated_dose():
         "study_daily_dose_unresolved", "combination_not_individual_dose"}
     assert all(c["clinical_applicability"] == "not_established" for c in result["study_contexts"])
     evidence = score_evidence(product)
-    assert evidence["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "pending_clinical_review"
+    # Its contexts are clinician-approved: a finished review, not pending work.
+    assert evidence["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
     assert evidence["metadata"]["evidence_result_state"] == "evaluated_null"
 
 
@@ -310,11 +303,19 @@ def test_native_indication_copy_uses_current_registry_not_old_artifact(stale_fie
     assert product == before
 
 
-def test_source_verified_pending_research_is_not_called_no_human_evidence():
+def _with_contexts_pending(monkeypatch, cid):
+    rows = deepcopy(studied_formulas._clinical_strain_registry())
+    for context in rows[cid].get("study_contexts") or []:
+        context["review_status"] = "source_verified_pending_clinical_review"
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: rows)
+
+
+def test_source_verified_pending_research_is_not_called_no_human_evidence(monkeypatch):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from scoring_v4.confidence import _evidence_confidence
 
     p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM", name="Lactobacillus acidophilus NCFM", dose=1e9)
+    _with_contexts_pending(monkeypatch, "STRAIN_ACIDOPHILUS_NCFM")
     evidence = score_evidence(p)
     assert evidence["score"] == 0  # No new approval or numeric credit.
     assert evidence["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
@@ -324,27 +325,85 @@ def test_source_verified_pending_research_is_not_called_no_human_evidence():
     assert reasons == ["evidence_review_incomplete"]
 
 
+def test_clinician_approved_research_is_a_finished_review_even_without_credit():
+    """NCFM has 10 clinician-approved human contexts; none applies to this label.
+
+    Until 2026-09-21 any recorded context read as 'pending_clinical_review', so a
+    finished review kept products incomplete. The conclusion is terminal and earns
+    nothing new: approval records review provenance, it grants no points.
+    """
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    for dose in (None, 1e9):
+        p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM",
+                           name="Lactobacillus acidophilus NCFM", dose=dose)
+        review = studied_formulas.assess_probiotic_evidence(p)["native_context_review"]
+        evidence = score_evidence(p)
+        assert review["status"] == "clinically_reviewed" and review["pending_context_ids"] == []
+        assert evidence["score"] == 0
+        assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
+
+
+def test_a_context_awaiting_adjudication_is_still_pending():
+    p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_LA5", name="Lactobacillus acidophilus LA-5", dose=1e9)
+    review = studied_formulas.assess_probiotic_evidence(p)["native_context_review"]
+    assert review["status"] == "pending_clinical_review"
+    assert review["pending_context_ids"]
+
+
+def test_an_uncurated_strain_stub_stays_incomplete():
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_LA14", name="Lactobacillus acidophilus La-14", dose=1e9)
+    assert score_evidence(p)["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
+
+
+def test_unaccepted_strain_review_is_not_reported_as_a_dose_gap(registry):
+    """An unaccepted identity review outranks a missing dose: it is unfinished work."""
+    registry["STRAIN_LGG"]["cfu_thresholds"]["review_status"] = "pending_review"
+    registry["STRAIN_LGG"]["cfu_thresholds"]["dr_pham_signoff"] = False
+    p = strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=None)
+    assert assessment(p)["status"] == "strain_identity_or_review_unresolved"
+
+
+def test_undisclosed_cfu_with_accepted_human_research_is_terminal_contextual_credit():
+    """The accepted-research case is already terminal; dose only limits applicability."""
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    p = strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=None)
+    evidence = score_evidence(p)
+    assert evidence["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+    assert evidence["components"]["dose_applicability"] == 0
+
+
 @pytest.mark.parametrize("cid,name", [
     ("STRAIN_LGG", "Lactobacillus rhamnosus GG"),
     ("STRAIN_LACTIS_HN019", "Bifidobacterium lactis HN019"),
     ("STRAIN_SACCHAROMYCES", "Saccharomyces boulardii"),
 ])
-def test_pending_review_is_independent_of_existing_positive_or_null_credit(cid, name):
+def test_pending_review_is_independent_of_existing_positive_or_null_credit(monkeypatch, cid, name):
+    """Approving or un-approving a context changes review state, never credit.
+
+    HN019's curated direction is null, which has earned nothing since the
+    2026-09-18 owner decision; the other strains score. Either way the review
+    state of the contexts must not be what decides it.
+    """
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from scoring_v4.confidence import _evidence_confidence
+
     p = strain_product(clinical_id=cid, name=name, dose=1e9)
-    evidence = score_evidence(p)
-    # What this test pins is that a PENDING review neither grants nor removes credit.
-    # HN019's own curated direction is null, which has earned nothing since the
-    # 2026-09-18 owner decision; the other strains still score. Either way the pending
-    # review must not be what decides it.
-    assert evidence["score"] == (0.0 if cid == "STRAIN_LACTIS_HN019" else pytest.approx(evidence["score"]))
-    assert evidence["score"] > 0 or cid == "STRAIN_LACTIS_HN019"
-    assert evidence["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "pending_clinical_review"
-    assert _evidence_confidence(p, {"dimensions": {"evidence": evidence}},
+    reviewed = score_evidence(p)
+    assert reviewed["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
+    assert reviewed["score"] > 0 or cid == "STRAIN_LACTIS_HN019"
+
+    _with_contexts_pending(monkeypatch, cid)
+    pending = score_evidence(p)
+    assert pending["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "pending_clinical_review"
+    assert pending["score"] == reviewed["score"]
+    assert _evidence_confidence(p, {"dimensions": {"evidence": pending}},
         evidence_assessment={"readiness": "complete"}) == ("moderate", ["evidence_review_incomplete"])
     if cid == "STRAIN_LACTIS_HN019":
-        assert evidence["metadata"]["evidence_result_state"] == "evaluated_null"
+        assert reviewed["metadata"]["evidence_result_state"] == "evaluated_null"
 
 
 def test_research_summary_includes_new_sources_without_lending_them_approval():

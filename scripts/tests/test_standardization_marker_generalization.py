@@ -243,3 +243,115 @@ class TestMaleMultipleGinsenosides:
         assert all(r.get("score_eligible_by_cleaner") is not False for r in eleuthero), (
             "a plain extract must not be treated as a marker parent"
         )
+
+
+class TestAnalyticalFractionMarkers:
+    """Test analytical fractions (polysaccharides, saponins, isoflavones, bile acids) under dosed extracts/concentrates."""
+
+    def test_noni_extract_polysaccharides(self, normalizer):
+        rows = [
+            _row(
+                "certified organic Noni fruit extract",
+                20000,
+                "mg",
+                category="herb",
+                ingredientGroup="Noni",
+                nestedRows=[
+                    _row("Polysaccharides", 10000, "mg", category="plant", ingredientGroup="Polysaccharides"),
+                ],
+            )
+        ]
+        cleaned = normalizer.normalize_product(
+            _make_dsld_product(2255, "Super Noni", rows)
+        )
+        polys = _rows_named(cleaned, ["Polysaccharides"])
+        assert len(polys) == 1
+        assert polys[0].get("cleaner_row_role") == "standardization_marker"
+        assert polys[0].get("score_eligible_by_cleaner") is False
+        assert polys[0].get("quantity") == 10000
+
+    def test_soy_concentrate_isoflavones_and_saponins(self, normalizer):
+        rows = [
+            _row(
+                "Soy Germ Isoflavones Concentrate",
+                750,
+                "mg",
+                category="herb",
+                ingredientGroup="Soy",
+                nestedRows=[
+                    _row("Isoflavones", 22.5, "mg", category="plant", ingredientGroup="Isoflavones"),
+                    _row("Saponins", 22.5, "mg", category="plant", ingredientGroup="Saponins"),
+                ],
+            )
+        ]
+        cleaned = normalizer.normalize_product(
+            _make_dsld_product(4147, "Soy Isoflavones", rows)
+        )
+        isoflavones = _rows_named(cleaned, ["Isoflavones"])
+        saponins = _rows_named(cleaned, ["Saponins"])
+        assert len(isoflavones) == 1 and isoflavones[0].get("cleaner_row_role") == "standardization_marker"
+        assert len(saponins) == 1 and saponins[0].get("cleaner_row_role") == "standardization_marker"
+        assert isoflavones[0].get("score_eligible_by_cleaner") is False
+        assert saponins[0].get("score_eligible_by_cleaner") is False
+
+
+
+class TestAnalyticalFractionCanaries:
+    """The fraction vocabulary names chemical classes; structure decides the role.
+
+    A constituent is a marker only when it is nested under a dosed parent
+    extract/concentrate and is physically part of it. The same class sold on
+    its own, an unrelated nested nutrient, a plain blend child and a child
+    heavier than its parent all stay assessable.
+    """
+
+    @staticmethod
+    def _role(normalizer, rows, name, dsld_id=990001):
+        cleaned = normalizer.normalize_product(_make_dsld_product(dsld_id, "Canary", rows))
+        found = _rows_named(cleaned, [name])
+        assert len(found) == 1, found
+        return found[0].get("cleaner_row_role")
+
+    @pytest.mark.parametrize("name", ["Polysaccharides", "Soy Isoflavones", "Saponins"])
+    def test_same_class_sold_as_a_standalone_active_stays_active(self, normalizer, name):
+        rows = [_row(name, 500, "mg", category="plant", ingredientGroup=name)]
+        assert self._role(normalizer, rows, name) == "active_scorable"
+
+    def test_unrelated_nested_nutrient_is_not_a_marker(self, normalizer):
+        rows = [_row("Acerola Cherry Extract", 250, "mg", category="herb", ingredientGroup="Acerola",
+                     nestedRows=[_row("Vitamin C", 60, "mg", category="vitamin", ingredientGroup="Vitamin C")])]
+        assert self._role(normalizer, rows, "Vitamin C") != "standardization_marker"
+
+    def test_blend_child_is_not_automatically_a_marker(self, normalizer):
+        rows = [_row("Proprietary Mushroom Blend", 1000, "mg", category="blend", ingredientGroup="Blend",
+                     nestedRows=[_row("Polysaccharides", 300, "mg", category="plant",
+                                      ingredientGroup="Polysaccharides")])]
+        assert self._role(normalizer, rows, "Polysaccharides") != "standardization_marker"
+
+    def test_child_heavier_than_its_parent_is_not_a_constituent(self, normalizer):
+        # 294036-shaped label: a 1.2 mg extract cannot contain 12 mg of anything.
+        rows = [_row("Cranberry Fruit Extract", 1.2, "mg", category="herb", ingredientGroup="Cranberry",
+                     nestedRows=[_row("Proanthocyanidins", 12, "mg", category="plant",
+                                      ingredientGroup="Proanthocyanidins")])]
+        assert self._role(normalizer, rows, "Proanthocyanidins") != "standardization_marker"
+
+    def test_gram_scale_parent_still_contains_its_marker(self, normalizer):
+        # The mass bound compares in one unit: 1 g of extract holds 950 mg.
+        rows = [_row("Reishi Mushroom Extract", 1, "Gram(s)", category="herb", ingredientGroup="Reishi",
+                     nestedRows=[_row("Polysaccharides", 950, "mg", category="plant",
+                                      ingredientGroup="Polysaccharides")])]
+        assert self._role(normalizer, rows, "Polysaccharides") == "standardization_marker"
+
+    def test_named_dose_basis_constituent_under_a_plain_extract_stays_active(self, normalizer):
+        # Phase-3 (2026-09-19) rule: only an explicitly standardized parent
+        # turns a named constituent such as curcuminoids into a marker.
+        rows = [_row("Turmeric Rhizome Extract", 1, "Gram(s)", category="herb", ingredientGroup="Turmeric",
+                     nestedRows=[_row("Curcuminoids", 950, "mg", category="plant",
+                                      ingredientGroup="Curcuminoids")])]
+        assert self._role(normalizer, rows, "Curcuminoids") == "active_scorable"
+
+    def test_nested_extract_is_a_material_not_a_marker(self, normalizer):
+        rows = [_row("Antioxidant Extract Complex", 500, "mg", category="herb", ingredientGroup="Blend",
+                     nestedRows=[_row("Green Tea Catechins Extract", 200, "mg", category="herb",
+                                      ingredientGroup="Green Tea")])]
+        assert self._role(normalizer, rows, "Green Tea Catechins Extract") != "standardization_marker"

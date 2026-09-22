@@ -450,7 +450,7 @@ def _identity_confidence(
             level = _min_level(level, "moderate")
             drivers.append("ingredient_identity_confidence_below_95_percent")
 
-    if _norm(product.get("form_factor_source")) == "inferred" or _norm(product.get("form_source")) == "inferred":
+    if _norm(product.get("form_source")) == "inferred":
         level = _min_level(level, "moderate")
         drivers.append("form_factor_inferred")
 

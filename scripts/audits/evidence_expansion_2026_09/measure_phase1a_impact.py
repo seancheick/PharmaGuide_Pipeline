@@ -15,10 +15,8 @@ from __future__ import annotations
 import glob
 import json
 import sys
-from collections import Counter, defaultdict
-from copy import deepcopy
+from collections import Counter
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -27,76 +25,9 @@ from scoring_input_contract import primary_mass_competitor_rows
 from scoring_v4.modules.generic_evidence import (
     _assessable_active_ingredients,
     _competing_active_rows,
-    _active_mass_index,
     score_evidence,
 )
-from scoring_v4.modules.generic_helpers import (
-    get_active_ingredients,
-    is_scorable,
-    _norm_text,
-)
-
-
-def score_evidence_baseline(product: Dict[str, Any]) -> Dict[str, Any]:
-    """Simulate pre-Phase-1a score_evidence behavior.
-
-    Pre-Phase 1a:
-    1. Assessability checked `if not get_active_ingredients(product): return "no_assessable_actives"`
-    2. Competitors in _active_mass_index were derived directly from
-       `primary_mass_competitor_rows(product, rows)` without blend header / parent total exclusion.
-    """
-    # Temporarily evaluate baseline state
-    raw_actives = get_active_ingredients(product)
-    
-    # Run standard score_evidence
-    res = score_evidence(product)
-    
-    # If standard score_evidence used _assessable_active_ingredients, reconstruct baseline state:
-    # Before Phase 1a:
-    # If raw_actives was empty, state was "no_assessable_actives"
-    # If raw_actives was non-empty, state followed clinical matches
-    metadata = dict(res.get("metadata") or {})
-    current_state = metadata.get("evidence_result_state")
-    
-    baseline_state = current_state
-    if not raw_actives:
-        baseline_state = "no_assessable_actives"
-    elif current_state == "no_assessable_actives" and raw_actives:
-        # Before, having raw_actives meant it didn't return no_assessable_actives
-        matches = (product.get("evidence_data") or {}).get("clinical_matches") or []
-        baseline_state = "clinical_review_not_covered" if not matches else "applicability_unestablished"
-    
-    # Now check if mass competition differed:
-    # Baseline competitors included blend headers with quantity if present in get_active_ingredients
-    baseline_competitors = primary_mass_competitor_rows(product, raw_actives)
-    current_competitors = _competing_active_rows(product, raw_actives)
-    
-    # If competitors differ in max_mass, baseline score might differ
-    baseline_max_mass = 0.0
-    for r in raw_actives:
-        m = r.get("quantity") or 0.0
-        if id(r) in {id(c) for c in baseline_competitors}:
-            try:
-                baseline_max_mass = max(baseline_max_mass, float(m))
-            except (ValueError, TypeError):
-                pass
-
-    current_max_mass = 0.0
-    for r in raw_actives:
-        m = r.get("quantity") or 0.0
-        if id(r) in {id(c) for c in current_competitors}:
-            try:
-                current_max_mass = max(current_max_mass, float(m))
-            except (ValueError, TypeError):
-                pass
-                
-    return {
-        "score": res["score"],
-        "state": baseline_state,
-        "metadata": metadata,
-        "baseline_max_mass": baseline_max_mass,
-        "current_max_mass": current_max_mass,
-    }
+from scoring_v4.modules.generic_helpers import get_active_ingredients
 
 
 def tier_for_score(score: float) -> str:

@@ -405,7 +405,6 @@ def categorize(entry: dict, vocab: set):
 
 if __name__ == "__main__":
     # CLI: print per-category disposition over current other_ingredients.json
-    import sys
     vocab = load_vocab_ids()
     DATA_PATH = SCRIPTS_DIR / "data" / "other_ingredients.json"
     with open(DATA_PATH) as f:

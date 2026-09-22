@@ -39,6 +39,8 @@ from pathlib import Path
 
 import pytest
 
+from release_artifact_paths import catalog_dist_dir, final_build_dir
+
 
 # ---------------------------------------------------------------------------
 # Phase-landed toggles — flip to True as each task ships.
@@ -96,10 +98,7 @@ AUTHORED_COPY_FIELDS = (
 
 
 def _find_blob_dir() -> Path | None:
-    candidates = [
-        Path("/tmp/pharmaguide_release_build/detail_blobs"),
-        Path("/tmp/pharmaguide_build/detail_blobs"),
-    ]
+    candidates = [final_build_dir() / "detail_blobs", catalog_dist_dir() / "detail_blobs"]
     for c in candidates:
         if c.is_dir() and any(c.glob("*.json")):
             return c
@@ -111,13 +110,35 @@ def sample_blobs():
     blob_dir = _find_blob_dir()
     if blob_dir is None:
         pytest.skip(
-            "No build artifact found under /tmp/pharmaguide_release_build — "
+            "No build artifact found under scripts/final_db_output or scripts/dist — "
             "run build_final_db.py first to exercise this contract test."
         )
-    sample_paths = sorted(blob_dir.glob("*.json"))[:200]
+    all_paths = sorted(blob_dir.glob("*.json"))
+    # evenly spaced across the catalog, not the first files by name
+    sample_paths = all_paths[:: max(1, len(all_paths) // 1000)]
     if not sample_paths:
         pytest.skip("No detail blobs to sample.")
     return [json.loads(p.read_text()) for p in sample_paths]
+
+
+@pytest.fixture(scope="module")
+def core_rows():
+    """decision_highlights and has_banned_substance are core-DB columns, not
+    blob keys; reading them from blobs made two invariants skip forever."""
+    import sqlite3
+    for build in (final_build_dir(), catalog_dist_dir()):
+        db = build / "pharmaguide_core.db"
+        if db.exists():
+            conn = sqlite3.connect(db)
+            conn.row_factory = sqlite3.Row
+            try:
+                rows = [dict(r) for r in conn.execute(
+                    "SELECT dsld_id, decision_highlights, has_banned_substance FROM products_core"
+                )]
+            finally:
+                conn.close()
+            return build, rows
+    pytest.skip("No core DB found under scripts/final_db_output or scripts/dist")
 
 
 def _iter_warnings(blob: dict):
@@ -145,7 +166,7 @@ def _as_string_list(value) -> list[str]:
 # Invariant 1 — no_danger_in_positives (E1.1.1)
 # ---------------------------------------------------------------------------
 
-def test_no_danger_in_positives(sample_blobs) -> None:
+def test_no_danger_in_positives(core_rows) -> None:
     """``decision_highlights.positive[]`` is the user-visible "reasons to
     feel good about this product" hero string. It cannot carry danger-
     valence copy like "Not lawful as a US dietary supplement" or "Some
@@ -155,23 +176,16 @@ def test_no_danger_in_positives(sample_blobs) -> None:
 
     Fix in: E1.1.1 (decision_highlights re-classification + danger bucket).
     """
-    has_danger_bucket = any(
-        isinstance(b.get("decision_highlights"), dict)
-        and "danger" in b["decision_highlights"]
-        for b in sample_blobs
-    )
-    if not has_danger_bucket:
-        pytest.skip("waiting on E1.1.1 — decision_highlights.danger bucket not yet emitted")
-
+    _build, rows = core_rows
+    assert rows, "core DB has no products"
     violations = []
-    for blob in sample_blobs:
-        dh = blob.get("decision_highlights")
-        if not isinstance(dh, dict):
-            continue
+    for row in rows:
+        dh = json.loads(row["decision_highlights"] or "{}")
+        assert isinstance(dh, dict) and "danger" in dh, f"[{row['dsld_id']}] decision_highlights has no danger bucket"
         for s in _as_string_list(dh.get("positive")):
             m = DANGER_DENY_LIST.search(s)
             if m:
-                violations.append((blob.get("dsld_id"), m.group(0), s[:120]))
+                violations.append((row["dsld_id"], m.group(0), s[:120]))
 
     assert not violations, (
         f"E1.0.2 #1: {len(violations)} decision_highlights.positive strings "
@@ -254,25 +268,9 @@ def test_no_raw_enum_leaks(sample_blobs) -> None:
 # Invariant 4 — banned_substance_has_preflight_copy (E1.1.4)
 # ---------------------------------------------------------------------------
 
-def _banned_preflight_fields_present(blob: dict) -> bool:
-    """E1.1.4 wires Dr Pham's banned-substance authored copy into the
-    detail blob. Exact carrier shape is finalized in E1.1.4; we detect
-    presence by any of: top-level banned_substance_detail, or any
-    ingredient where ``is_banned`` is truthy and either
-    ``safety_warning_one_liner`` or ``safety_warning`` is populated."""
-    if blob.get("banned_substance_detail"):
-        return True
-    for ing in blob.get("ingredients") or []:
-        if not isinstance(ing, dict):
-            continue
-        if ing.get("is_banned") and (
-            ing.get("safety_warning_one_liner") or ing.get("safety_warning")
-        ):
-            return True
-    return False
 
 
-def test_banned_substance_has_preflight_copy(sample_blobs) -> None:
+def test_banned_substance_has_preflight_copy(core_rows) -> None:
     """Stack-add preflight on banned-substance products (CBD, ephedra,
     DMAA, kratom, higenamine) must render Dr Pham's authored red-banner
     copy. When ``has_banned_substance == 1``, both
@@ -284,14 +282,15 @@ def test_banned_substance_has_preflight_copy(sample_blobs) -> None:
     Fix in: E1.1.4 (wire existing Dr Pham fields through enricher →
     build → blob; no new columns required per 2026-04-21 scope reduction).
     """
-    if not any(_banned_preflight_fields_present(b) for b in sample_blobs):
-        pytest.skip("waiting on E1.1.4 — banned-substance preflight copy not yet propagated to blob")
+    # has_banned_substance is a core-DB column; the blob never carried it, so
+    # this invariant used to skip or loop over nothing.
+    build, rows = core_rows
+    banned_ids = [row["dsld_id"] for row in rows if row["has_banned_substance"]]
+    assert banned_ids, "no banned-substance products in the build to check"
 
     violations = []
-    for blob in sample_blobs:
-        has_banned = bool(blob.get("has_banned_substance"))
-        if not has_banned:
-            continue
+    for dsld_id in banned_ids:
+        blob = json.loads((build / "detail_blobs" / f"{dsld_id}.json").read_text())
 
         # Prefer top-level banned_substance_detail if present; else scan
         # ingredient-level banned markers.
@@ -400,3 +399,33 @@ def test_no_duplicate_warnings(sample_blobs) -> None:
             for did, src, d in violations[:5]
         )
     )
+
+
+def test_one_critical_card_per_rule(sample_blobs) -> None:
+    """One hazard, one card: a critical warning's identity is its rule (plus
+    condition / drug class / ban context), whatever label spelling or
+    producer surfaced it. Keying on the spelling showed "Yohimbe" and
+    "Yohimbe bark extract" as two RISK_YOHIMBE cards on 270 products."""
+    violations = []
+    for blob in sample_blobs:
+        for key in ("warnings", "warnings_profile_gated"):
+            seen: dict[tuple, int] = {}
+            for w in blob.get(key) or []:
+                if not isinstance(w, dict) or not w.get("matched_rule_id"):
+                    continue
+                severity = str(w.get("severity") or "").lower()
+                if w.get("display_mode_default") != "critical" and severity not in {
+                    "contraindicated", "avoid", "critical", "blocked"
+                }:
+                    continue
+                k = (
+                    w["matched_rule_id"],
+                    tuple(sorted(w.get("condition_ids") or [])),
+                    tuple(sorted(w.get("drug_class_ids") or [])),
+                    str(w.get("ban_context") or ""),
+                )
+                seen[k] = seen.get(k, 0) + 1
+            dups = {k: n for k, n in seen.items() if n > 1}
+            if dups:
+                violations.append((blob.get("dsld_id"), key, dups))
+    assert not violations, f"{len(violations)} duplicate critical cards; first: {violations[:3]}"

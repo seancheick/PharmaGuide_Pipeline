@@ -222,27 +222,6 @@ def signature(path_str: str) -> dict:
     return _assemble(dsld_id, path.name, fingerprint, raw, cleaned)
 
 
-def signature_from_stored(path_str: str) -> dict:
-    """Signature for a record already stored in the frozen corpus.
-
-    A stored ``cleaned_batch_*.json`` entry carries the cleaner's own output
-    fields, so the same signature can be built without re-running any cleaner.
-    This is what lets the frozen production corpus be the ``before`` arm.
-    """
-    path = Path(path_str)
-    try:
-        cleaned = json.loads(path.read_bytes())
-    except Exception as exc:
-        return {
-            "id": path.stem,
-            "file": path.name,
-            "sha1": None,
-            "load_error": f"{type(exc).__name__}: {exc}",
-        }
-    dsld_id = str(cleaned.get("id") or path.stem)
-    return _assemble(dsld_id, path.name, None, cleaned, cleaned)
-
-
 def _assemble(dsld_id: str, file_name: str, fingerprint, raw: dict, cleaned: dict) -> dict:
     actives = [
         _row_signature(row, active=True)

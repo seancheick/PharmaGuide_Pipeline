@@ -7,15 +7,12 @@ import re
 import json
 import hashlib
 import logging
-import string
 import os
 import functools
 from typing import Dict, List, Tuple, Optional, Any, Set, Union
 from datetime import date, datetime, timezone
 from pathlib import Path
 from collections import Counter
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import threading
 
 # Import fuzzy matching with a 3-tier fallback chain.
 # rapidfuzz is preferred: C++ accelerated, MIT-licensed, ~50-100x faster than
@@ -41,7 +38,7 @@ except ImportError:
 from constants import (
     INGREDIENT_QUALITY_MAP,
     HARMFUL_ADDITIVES,
-    OTHER_INGREDIENTS,  # Merged: non_harmful + passive_inactive
+    OTHER_INGREDIENTS,
     ALLERGENS,
     TOP_MANUFACTURERS,
     PROPRIETARY_BLENDS,
@@ -52,19 +49,14 @@ from constants import (
     BOTANICAL_INGREDIENTS,
     ABSORPTION_ENHANCERS,
     ENHANCED_DELIVERY,
-    INGREDIENT_CLASSIFICATION,  # Hierarchical classification (source/summary/component)
-    COLOR_INDICATORS,  # Natural vs artificial color classification
+    INGREDIENT_CLASSIFICATION,
+    COLOR_INDICATORS,
     FUZZY_MATCHING_THRESHOLDS,
     ENHANCED_EXCLUSION_PATTERNS,
     DSLD_IMAGE_URL_TEMPLATE,
     CERTIFICATION_PATTERNS,
     ALLERGEN_FREE_PATTERNS,
-    UNSUBSTANTIATED_CLAIM_PATTERNS,
-    NATURAL_SOURCE_PATTERNS,
-    STANDARDIZATION_PATTERNS,
     PROPRIETARY_BLEND_INDICATORS,
-    DELIVERY_ENHANCEMENT_PATTERNS,
-    CLINICAL_EVIDENCE_PATTERNS,
     DEFAULT_SERVING_SIZE,
     DEFAULT_DAILY_SERVINGS,
     BRANDED_INGREDIENT_TOKENS,
@@ -86,7 +78,6 @@ from identity_integrity import build_canonical_identity_registry
 
 # Import the UnmappedIngredientTracker
 import sys
-import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from unmapped_ingredient_tracker import UnmappedIngredientTracker
 from functional_grouping_handler import FunctionalGroupingHandler
@@ -1533,179 +1524,6 @@ class EnhancedDSLDNormalizer:
 
         logger.info("Cleared all thread-safe LRU caches")
 
-    def validate_database_integrity(self) -> Dict[str, any]:
-        """
-        Comprehensive database integrity validation
-        Returns detailed report of any issues found
-        """
-        integrity_report = {
-            "timestamp": datetime.now().isoformat(),
-            "status": "validating",
-            "errors": [],
-            "warnings": [],
-            "statistics": {}
-        }
-
-        logger.info("🔍 Starting comprehensive database integrity validation...")
-
-        try:
-            # 1. Validate database cross-references
-            self._validate_cross_references(integrity_report)
-
-            # 2. Check for orphaned data
-            self._check_orphaned_data(integrity_report)
-
-            # 3. Validate required fields
-            self._validate_required_fields(integrity_report)
-
-            # 4. Check for data consistency
-            self._validate_data_consistency(integrity_report)
-
-            # 5. Generate summary statistics
-            self._generate_integrity_statistics(integrity_report)
-
-            # Determine overall status
-            if integrity_report["errors"]:
-                integrity_report["status"] = "failed"
-                logger.error(f"❌ Database integrity validation FAILED with {len(integrity_report['errors'])} errors")
-            elif integrity_report["warnings"]:
-                integrity_report["status"] = "passed_with_warnings"
-                logger.warning(f"⚠️ Database integrity validation PASSED with {len(integrity_report['warnings'])} warnings")
-            else:
-                integrity_report["status"] = "passed"
-                logger.info("✅ Database integrity validation PASSED - all checks successful")
-
-        except Exception as e:
-            integrity_report["status"] = "error"
-            integrity_report["errors"].append(f"Validation process failed: {str(e)}")
-            logger.error(f"💥 Database integrity validation crashed: {e}")
-
-        return integrity_report
-
-    def _validate_cross_references(self, report: Dict):
-        """Validate cross-references between databases"""
-        logger.info("🔗 Validating database cross-references...")
-
-        # Check if all ingredients in quality map have safety data
-        quality_ingredients = set(self.ingredient_alias_lookup.keys())
-        allergen_ingredients = set(self.allergen_lookup.keys())
-        harmful_ingredients = set(self.harmful_lookup.keys())
-        other_ingredients_set = set(self.other_ingredients_lookup.keys())
-
-        # Find ingredients with no safety classification
-        no_safety_data = quality_ingredients - (allergen_ingredients | harmful_ingredients | other_ingredients_set)
-
-        if no_safety_data:
-            if len(no_safety_data) > 50:  # If too many, this might be expected
-                report["warnings"].append(f"{len(no_safety_data)} ingredients in quality database lack safety classification")
-            else:
-                for ingredient in list(no_safety_data)[:10]:  # Show first 10
-                    report["warnings"].append(f"Ingredient '{ingredient}' has no safety classification")
-
-    def _check_orphaned_data(self, report: Dict):
-        """Check for orphaned data entries"""
-        logger.info("🔍 Checking for orphaned data...")
-
-        # Check for safety entries not in quality database
-        quality_ingredients = set(self.ingredient_alias_lookup.keys())
-
-        # Find orphaned allergen entries
-        orphaned_allergens = set(self.allergen_lookup.keys()) - quality_ingredients
-        if orphaned_allergens:
-            report["warnings"].append(f"{len(orphaned_allergens)} allergen entries not found in quality database")
-
-        # Find orphaned harmful entries
-        orphaned_harmful = set(self.harmful_lookup.keys()) - quality_ingredients
-        if orphaned_harmful:
-            report["warnings"].append(f"{len(orphaned_harmful)} harmful additive entries not found in quality database")
-
-    def _validate_required_fields(self, report: Dict):
-        """Validate that all database entries have required fields"""
-        logger.info("📋 Validating required fields...")
-
-        # Check quality database entries
-        for ingredient_name, standard_name in self.ingredient_alias_lookup.items():
-            if not standard_name or not standard_name.strip():
-                report["errors"].append(f"Quality ingredient '{ingredient_name}' missing standard_name")
-
-        # Check allergen database entries
-        for allergen_key, allergen_data in self.allergen_lookup.items():
-            if not allergen_data.get("standard_name"):
-                report["errors"].append(f"Allergen '{allergen_key}' missing standard_name")
-            if not allergen_data.get("severity_level"):
-                report["warnings"].append(f"Allergen '{allergen_key}' missing severity_level")
-
-        # Check harmful additive entries
-        for harmful_key, harmful_data in self.harmful_lookup.items():
-            if not harmful_data.get("category"):
-                report["errors"].append(f"Harmful additive '{harmful_key}' missing category")
-
-    def _validate_data_consistency(self, report: Dict):
-        """Validate data consistency across databases"""
-        logger.info("🔄 Validating data consistency...")
-
-        # Check for duplicate standard names in quality database
-        standard_names = {}
-        for alias, standard_name in self.ingredient_alias_lookup.items():
-            if standard_name in standard_names:
-                standard_names[standard_name].append(alias)
-            else:
-                standard_names[standard_name] = [alias]
-
-        # Report standard names with many aliases (might be okay, but worth checking)
-        for standard_name, aliases in standard_names.items():
-            if len(aliases) > 20:  # Threshold for review
-                report["warnings"].append(f"Standard name '{standard_name}' has {len(aliases)} aliases - verify correctness")
-
-    def _generate_integrity_statistics(self, report: Dict):
-        """Generate comprehensive statistics"""
-        report["statistics"] = {
-            "quality_database": len(self.ingredient_alias_lookup),
-            "allergen_database": len(self.allergen_lookup),
-            "harmful_database": len(self.harmful_lookup),
-            "other_ingredients_database": len(self.other_ingredients_lookup),
-            "botanical_database": len(getattr(self, 'botanical_lookup', {})),
-            "total_errors": len(report["errors"]),
-            "total_warnings": len(report["warnings"])
-        }
-
-    def get_cache_stats(self) -> Dict[str, any]:
-        """Get performance statistics for thread-safe caching system"""
-        cache_info = {}
-
-        # Get cache info from @lru_cache decorated methods
-        cache_methods = [
-            ('ingredient_mapping', '_enhanced_ingredient_mapping_cached'),
-            ('allergen_check', '_enhanced_allergen_check_cached'),
-            ('harmful_check', '_enhanced_harmful_check_cached'),
-            ('non_harmful_check', '_enhanced_non_harmful_check_cached'),
-            ('fuzzy_matching', 'matcher._safe_fuzzy_match_cached'),
-            ('text_preprocessing', 'matcher.preprocess_text')
-        ]
-
-        for name, method_path in cache_methods:
-            try:
-                if '.' in method_path:
-                    obj, method_name = method_path.split('.', 1)
-                    method = getattr(getattr(self, obj), method_name)
-                else:
-                    method = getattr(self, method_path)
-
-                if hasattr(method, 'cache_info'):
-                    info = method.cache_info()
-                    cache_info[name] = {
-                        "hits": info.hits,
-                        "misses": info.misses,
-                        "current_size": info.currsize,
-                        "max_size": info.maxsize
-                    }
-            except AttributeError:
-                cache_info[name] = {"status": "not_cached"}
-
-        return {
-            "cache_performance": cache_info,
-            "processing_stats": self._cache_stats.copy()
-        }
 
     def _build_fast_lookups_impl(self):
         """Build optimized fast lookup indices"""
@@ -1724,53 +1542,6 @@ class EnhancedDSLDNormalizer:
         self._safety_unii_to_payload_lookup: Dict[str, Dict[str, Any]] = {}
         self._unii_to_payload_lookup: Dict[str, Dict[str, Any]] = {}
 
-        def add_unii_payload(unii_raw, payload: Dict[str, Any], entry_id_for_log: str = "") -> None:
-            unii = _normalize_unii(unii_raw)
-            if not unii:
-                return
-            incoming_priority = payload.get("priority", 999)
-            existing = self._unii_to_payload_lookup.get(unii)
-            if existing is None:
-                self._unii_to_payload_lookup[unii] = payload
-                return
-            existing_priority = existing.get("priority", 999)
-            if existing_priority < incoming_priority:
-                # Higher-priority tier already wins; cross-tier collision is
-                # expected and benign. Log at debug for audit visibility.
-                logger.debug(
-                    "UNII collision (cross-tier): %s already mapped to %r "
-                    "(tier %d); skipping incoming tier-%d %r",
-                    unii, existing.get("standard_name", "?"),
-                    existing_priority, incoming_priority, entry_id_for_log,
-                )
-                return
-            if incoming_priority < existing_priority:
-                self._unii_to_payload_lookup[unii] = payload
-                logger.debug(
-                    "UNII collision (cross-tier): %s previously mapped to tier-%d %r; "
-                    "promoting to higher-priority tier-%d %r",
-                    unii, existing_priority, existing.get("standard_name", "?"),
-                    incoming_priority, entry_id_for_log,
-                )
-                return
-            # SAME tier, different entries — likely data-quality bug. Warn.
-            if existing is not payload:
-                same_identity_variant = _is_same_unii_identity_variant(
-                    existing.get("standard_name", "?"),
-                    entry_id_for_log,
-                )
-                log = logger.debug if same_identity_variant else logger.warning
-                log(
-                    "UNII same-tier conflict: %s mapped to BOTH %r and %r (tier %d) — "
-                    "%s",
-                    unii, existing.get("standard_name", "?"),
-                    entry_id_for_log, incoming_priority,
-                    (
-                        "same identity variant; first-write wins."
-                        if same_identity_variant
-                        else "first-write wins. Likely data-quality bug; review with audit."
-                    ),
-                )
 
         def add_group_exact(key: str, payload: Dict[str, Any]) -> None:
             normalized = norm_module.normalize_text(key)
@@ -4495,75 +4266,6 @@ class EnhancedDSLDNormalizer:
 
         return result
     
-    def _check_banned_recalled(self, name: str) -> bool:
-        """Check if ingredient exists in banned/recalled ingredients database"""
-        processed_name = self.matcher.preprocess_text(name)
-        processed_compact = re.sub(r"[^a-z0-9]+", "", processed_name)
-
-        # Get ALL arrays from the banned/recalled database dynamically
-        arrays_to_check = []
-        for key, value in self.banned_recalled.items():
-            if isinstance(value, list) and len(value) > 0:
-                # Check if items in the list have the expected structure for banned substances
-                if any(isinstance(item, dict) and 'standard_name' in item for item in value):
-                    arrays_to_check.append(key)
-
-        # Check all arrays in the database for exact matches first
-        for array_name in arrays_to_check:
-            items = self.banned_recalled.get(array_name, [])
-
-            for item in items:
-                # Check standard_name - exact match
-                standard_name = self.matcher.preprocess_text(item.get("standard_name", ""))
-                if standard_name and processed_name == standard_name:
-                    return True
-
-                # Check aliases - exact match
-                for alias in item.get("aliases", []) or []:
-                    processed_alias = self.matcher.preprocess_text(alias)
-                    if processed_name == processed_alias:
-                        return True
-
-        # Check for conservative substring/compact-token matches across the current
-        # unified banned DB. This catches label shorthands like "Delta-8" while
-        # avoiding broad fuzzy matching.
-        for array_name in arrays_to_check:
-            items = self.banned_recalled.get(array_name, [])
-            for item in items:
-                standard_name = self.matcher.preprocess_text(item.get("standard_name", ""))
-                standard_compact = re.sub(r"[^a-z0-9]+", "", standard_name)
-                if standard_name and len(standard_compact) >= 6:
-                    if (
-                        standard_name in processed_name or
-                        processed_name in standard_name or
-                        (processed_compact and processed_compact in standard_compact)
-                    ):
-                        logger.warning(f"Substring banned match: '{name}' contains banned substance '{item.get('standard_name', '')}'")
-                        return True
-
-                for alias in item.get("aliases", []) or []:
-                    processed_alias = self.matcher.preprocess_text(alias)
-                    alias_compact = re.sub(r"[^a-z0-9]+", "", processed_alias)
-                    if processed_alias and len(alias_compact) >= 6:
-                        if (
-                            processed_alias in processed_name or
-                            processed_name in processed_alias or
-                            (processed_compact and processed_compact in alias_compact)
-                        ):
-                            logger.warning(f"Substring banned match: '{name}' contains banned substance '{alias}'")
-                            return True
-        
-        # NOTE: Fuzzy matching for banned substances is INTENTIONALLY DISABLED for safety.
-        # The "banned" category is NOT in safe_fuzzy_categories, so fuzzy_match() returns (None, 0).
-        # Banned substance detection relies on EXACT matching only (above).
-        # This is the correct behavior - fuzzy matching for safety-critical categories is too risky.
-        #
-        # If fuzzy matching for banned substances is ever needed, it would require:
-        # 1. Adding "banned" to safe_fuzzy_categories (NOT recommended)
-        # 2. Using threshold >= 90 (0-100 scale, NOT 0-1)
-        # 3. Extensive testing to prevent false positives
-        
-        return False
     
     def _priority_based_classification(self, name: str, forms: List[str] = None) -> Dict[str, Any]:
         """
@@ -5788,17 +5490,6 @@ class EnhancedDSLDNormalizer:
             rewrite(ingredient_row)
         return ingredient_rows
 
-    def _load_context_canonical_overrides(self) -> Dict[str, Dict[str, Any]]:
-        """Public accessor for the reviewer-signed per-product canonical_id
-        overrides loaded from product_context_canonical_overrides.json at
-        init time. Returns the cached dict (str(dsld_id) → override entry).
-
-        Used by tests and by audit tooling to introspect overrides without
-        re-reading the file. Mutation of the returned dict is NOT supported —
-        callers must treat it as read-only. Spec:
-        reports/not_scored_triage/cleaner_side_context_routing_spec.md
-        """
-        return self._context_canonical_overrides_by_dsld_id
 
     def _apply_context_canonical_override(
         self,
@@ -6416,7 +6107,6 @@ class EnhancedDSLDNormalizer:
                     contains_text = contains_match.group(1).strip()
 
                     # Only add "Contains:" warnings for actual allergens, not marketing fluff
-                    is_real_allergen_warning = False
 
                     # Check for FDA major allergens ("milk thistle" is a botanical, not dairy)
                     if re.search(r"\b(milk(?!\s+thistle)|dairy|whey|casein)\b", contains_text, re.I):
@@ -6427,49 +6117,41 @@ class EnhancedDSLDNormalizer:
                             all_warnings.append("Contains: Milk (trace amounts from fermentation)")
                         else:
                             all_warnings.append("Contains: Milk")
-                        is_real_allergen_warning = True
 
                     if re.search(r"\b(soy|soybean)\b", contains_text, re.I):
                         if "soy" not in all_allergens:
                             all_allergens.append("soy")
                         all_warnings.append("Contains: Soy")
-                        is_real_allergen_warning = True
 
                     if re.search(r"\b(shellfish|crustacean|shrimp|crab|lobster)\b", contains_text, re.I):
                         if "shellfish" not in all_allergens:
                             all_allergens.append("shellfish")
                         all_warnings.append("Contains: Shellfish")
-                        is_real_allergen_warning = True
 
                     if re.search(r"\b(tree nuts?|almond|walnut|cashew|pecan)\b", contains_text, re.I):
                         if "tree nuts" not in all_allergens:
                             all_allergens.append("tree nuts")
                         all_warnings.append("Contains: Tree Nuts")
-                        is_real_allergen_warning = True
 
                     if re.search(r"\b(peanut|groundnut)\b", contains_text, re.I):
                         if "peanuts" not in all_allergens:
                             all_allergens.append("peanuts")
                         all_warnings.append("Contains: Peanuts")
-                        is_real_allergen_warning = True
 
                     if re.search(r"\b(fish|salmon|tuna|cod)\b", contains_text, re.I):
                         if "fish" not in all_allergens:
                             all_allergens.append("fish")
                         all_warnings.append("Contains: Fish")
-                        is_real_allergen_warning = True
 
                     if re.search(r"\b(wheat|gluten)\b", contains_text, re.I):
                         if "wheat" not in all_allergens:
                             all_allergens.append("wheat")
                         all_warnings.append("Contains: Wheat")
-                        is_real_allergen_warning = True
 
                     if re.search(r"\begg\b", contains_text, re.I):
                         if "eggs" not in all_allergens:
                             all_allergens.append("eggs")
                         all_warnings.append("Contains: Eggs")
-                        is_real_allergen_warning = True
 
                     # Skip marketing fluff like "natural ingredients", "nutrients that clinical research", etc.
                     # These are NOT warnings, just marketing claims
@@ -6978,6 +6660,12 @@ class EnhancedDSLDNormalizer:
         r"^\s*[a-z][a-z\-]+\s+"
         r"(salt|hydrochloride|hcl|sulfate|acetate|citrate|chloride|phosphate|bisulfite)\s*$"
     )
+    # An undosed nested row that names only a flavonoid subclass ("Flavones"
+    # under "Citrus Bioflavonoid Complex") describes the parent's composition;
+    # it has no identity or dose of its own to assess.
+    _COMPOSITION_CLASS_LEAF_RE = re.compile(
+        r"^\s*(flavones|flavonols|flavanols|flavanones|flavonones|flavonoids)\s*$"
+    )
 
     @classmethod
     def _is_chemical_decomposition_leaf(cls, nested_ing: Dict) -> bool:
@@ -7032,6 +6720,8 @@ class EnhancedDSLDNormalizer:
             if has_own_dose:
                 return False
             if cls._COUNTER_ION_LEAF_RE.match(name):
+                return True
+            if cls._COMPOSITION_CLASS_LEAF_RE.match(name):
                 return True
 
         return False
@@ -7415,9 +7105,6 @@ class EnhancedDSLDNormalizer:
         non_harmful_info = classification["non_harmful_info"]
         banned_info = classification["banned_info"]
         passive_info = classification["passive_info"]
-
-        # Extract features from notes
-        extracted_features = self._extract_ingredient_features(notes)
 
         # Process quantity - handle both nested and flat formats
         quantity_data = ing.get("quantity", [])
@@ -7846,12 +7533,18 @@ class EnhancedDSLDNormalizer:
             is_active
             and bool(ing.get("isNestedIngredient"))
             and _marker_parent_dosed
-            and bool(_marker_parent_name)
-            and self._parent_is_standardized_botanical_extract(_marker_parent_name)
+            and (
+                self._parent_is_standardized_botanical_extract(_marker_parent_name)
+                or self._is_analytical_fraction_marker(_marker_parent_name, name)
+            )
             and unit_norm_for_contract in {"mcg", "ug", "microgram", "micrograms", "mg", "milligram", "milligrams"}
             and quantity is not None
             and isinstance(quantity, (int, float))
             and quantity > 0
+            and self._marker_fits_inside_parent(
+                quantity, unit_norm_for_contract,
+                ing.get("parentBlendMass"), ing.get("parentBlendUnit"),
+            )
         )
         enzyme_activity_unit = unit_norm_for_contract in {
             "spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu"
@@ -8152,138 +7845,6 @@ class EnhancedDSLDNormalizer:
 
         return self._process_ingredients_sequential(expanded_ingredients)
 
-    def _process_ingredients_parallel(self, ingredients: List[Dict]) -> List[Dict]:
-        """Process ingredients using parallel execution with functional grouping support"""
-        # First, expand any functional groupings (must be done sequentially to preserve order)
-        # Also handle label headers here to ensure forms get properly extracted
-        expanded_ingredients = []
-        for ing in ingredients:
-            name = ing.get("name", "")
-
-            if self._is_structural_form_container(name, is_active=False):
-                forms = ing.get("forms", []) or []
-                self._queue_display_ingredient(
-                    raw_source_text=name,
-                    source_section="inactiveIngredients",
-                    display_type="structural_container",
-                    score_included=False,
-                    children=[form.get("name", "") for form in forms if isinstance(form, dict) and form.get("name")],
-                )
-                expanded_ingredients.extend(
-                    self._expand_header_forms_for_processing(ing, source_path="inactiveIngredients")
-                )
-                continue
-
-            # LABEL HEADER SYMMETRY: Check for headers like "Less than 2% of:" BEFORE other processing
-            # Drop header row, extract forms[] as child ingredients
-            if self._is_label_header(name):
-                expanded_ingredients.extend(self._expand_header_forms_for_processing(ing, source_path="inactiveIngredients"))
-                # Skip the header itself - do not emit as ingredient
-                continue
-
-            # TRANSPARENCY SCORING: Check for functional grouping
-            grouping_data = self.grouping_handler.process_ingredient_for_cleaning(name)
-
-            if grouping_data['type'] == 'functional_group_with_details':
-                # Expand into multiple ingredients with functional context
-                for specific_ing in grouping_data['ingredients']:
-                    expanded_ingredients.append({
-                        **ing,  # Copy order and other fields
-                        "name": specific_ing,
-                        "_functional_context": grouping_data['functional_type'],
-                        "_functional_prefix": grouping_data['prefix'],
-                        "_transparency": "good"
-                    })
-            elif grouping_data['type'] in ['functional_group_vague', 'vague_declaration']:
-                # Keep as-is but add transparency flags
-                expanded_ingredients.append({
-                    **ing,
-                    "_transparency": "poor",
-                    "_vague_disclosure": True,
-                    "_vague_flags": grouping_data.get('vague_flags', [])
-                })
-            else:
-                # Regular ingredient
-                expanded_ingredients.append({
-                    **ing,
-                    "_transparency": "standard"
-                })
-
-        # Now process expanded ingredients in parallel
-        processed = []
-        # THREAD-SAFETY FIX: Collect unmapped info from workers, merge after parallel execution
-        collected_unmapped = []
-
-        with ThreadPoolExecutor(max_workers=self._max_workers) as executor:
-            # Submit all ingredient processing tasks
-            future_to_ingredient = {
-                executor.submit(self._process_ingredient_for_other_parallel, ing): ing
-                for ing in expanded_ingredients
-            }
-
-            # Collect results as they complete
-            for future in as_completed(future_to_ingredient):
-                try:
-                    result = future.result()
-                    # Result is now (ingredient_data, unmapped_info) tuple
-                    if result is not None:
-                        ingredient_data, unmapped_info = result
-                        if ingredient_data is not None:
-                            processed.append(ingredient_data)
-                        if unmapped_info is not None:
-                            collected_unmapped.append(unmapped_info)
-                except Exception as e:
-                    ingredient = future_to_ingredient[future]
-                    ing_name = ingredient.get("name", "")
-                    logger.error(f"Error processing ingredient '{ing_name}': {e}")
-                    
-                    # Ensure unmapped info is still recorded for failures if not nutrition fact
-                    if not self._is_nutrition_fact(ing_name):
-                        collected_unmapped.append({
-                            "name": ing_name,
-                            "processed_name": self.matcher.preprocess_text(ing_name),
-                            "forms": [],
-                            "is_active": False  # Conservative assumption for failures
-                        })
-
-                    # Add a basic result for failed processing (CLEANING ONLY - NO ENRICHMENT)
-                    processed.append({
-                        "order": ingredient.get("order", 0),
-                        "ingredientId": ingredient.get("ingredientId"),
-                        "uniiCode": ingredient.get("uniiCode"),
-                        # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
-                        "raw_source_text": ing_name,
-                        "raw_source_path": "inactiveIngredients",
-                        "normalized_key": norm_module.make_normalized_key(ing_name),
-                        "name": ing_name,
-                        "standardName": ing_name,
-                        "ingredientGroup": ingredient.get("ingredientGroup"),
-                        "forms": [],
-                        "alternateNames": [],
-                        "mapped": False
-                    })
-
-        # THREAD-SAFETY FIX: Merge unmapped info in single-threaded context
-        for unmapped in collected_unmapped:
-            name = unmapped["name"]
-            self.unmapped_ingredients[name] += 1
-            self.unmapped_details[name] = self._build_unmapped_detail(
-                name,
-                unmapped["forms"],
-                unmapped["is_active"],
-            )
-
-        # Sort by original order (with safe comparison)
-        def safe_order_key(x):
-            order = x.get("order", 0)
-            # Ensure order is always a number
-            try:
-                return float(order) if order is not None else 0.0
-            except (ValueError, TypeError):
-                return 0.0
-
-        processed.sort(key=safe_order_key)
-        return processed
 
     def _process_ingredient_for_other_parallel(self, ingredient_data: Dict[str, Any]) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
         """
@@ -9086,6 +8647,60 @@ class EnhancedDSLDNormalizer:
         # Inverted form: "Ashwagandha extract (std. to 3% Withaferin A)"
         return bool(re.search(r"std\.?\s+to\b|standardized\s+to\b", text))
 
+    _MASS_UNIT_TO_MG = {
+        "g": 1000.0, "gram": 1000.0, "grams": 1000.0, "gram(s)": 1000.0,
+        "mg": 1.0, "milligram": 1.0, "milligrams": 1.0,
+        "mcg": 0.001, "ug": 0.001, "microgram": 0.001, "micrograms": 0.001,
+    }
+
+    @classmethod
+    def _marker_fits_inside_parent(
+        cls, quantity: Any, unit: Any, parent_quantity: Any, parent_unit: Any,
+    ) -> bool:
+        """A constituent cannot weigh more than the parent it is part of.
+
+        Fails closed: when either mass is not a comparable g/mg/mcg amount the
+        row is not treated as a marker and keeps its own assessable identity.
+        """
+        child_factor = cls._MASS_UNIT_TO_MG.get(str(unit or "").strip().lower())
+        parent_factor = cls._MASS_UNIT_TO_MG.get(str(parent_unit or "").strip().lower())
+        if child_factor is None or parent_factor is None:
+            return False
+        try:
+            child_mg = float(quantity) * child_factor
+            parent_mg = float(parent_quantity) * parent_factor
+        except (TypeError, ValueError):
+            return False
+        return 0 < child_mg <= parent_mg * (1 + 1e-9)
+
+    def _is_analytical_fraction_marker(self, parent_name: str, ingredient_name: str) -> bool:
+        """True for an analytical-fraction total nested under a dosed extract/concentrate.
+
+        Covers the assay classes that have no standalone dose identity of their
+        own -- polysaccharides, saponins, isoflavones, bile-acid fractions and
+        total alkaloids --
+        and are reported as the measured share of the parent material. The
+        label must name the class itself; a specific compound that is a clinical
+        dose basis (silymarin, EGCG, curcuminoids, withanolides, ...) keeps
+        ordinary active handling under a plain extract and becomes a marker only
+        under an explicitly standardized parent (the 2026-09-19 Phase-3 rule).
+        """
+        p_text = str(parent_name or "").strip().lower()
+        if not ("extract" in p_text or "concentrate" in p_text):
+            return False
+        label_text = str(ingredient_name or "").strip().lower()
+        # A nested extract/concentrate is a material in its own right, never
+        # an analytical fraction of its parent.
+        if "extract" in label_text or "concentrate" in label_text:
+            return False
+        # The whole label must name the assay class ("Isoflavones", "Total
+        # Alkaloids"); a named compound such as "Yohimbine Alkaloids" is a dose
+        # basis and keeps its own assessable identity.
+        return bool(re.fullmatch(
+            r"(?:total\s+)?(?:polysaccharides?|saponins?|isoflavones?|bile\s+acids?|alkaloids?)",
+            label_text,
+        ))
+
     def _is_dosed_omega_aggregate_owner(
         self,
         ingredient: Dict[str, Any],
@@ -9652,19 +9267,6 @@ class EnhancedDSLDNormalizer:
                         dv = self._safe_float(first_dv_group.get("percent", 0))
                         daily_value_target_group = self._daily_value_target_group_from_dv_group(first_dv_group)
 
-                    # Extract serving context from dailyValueTargetGroup if available
-                    context = None
-                    serving_size_qty = None
-                    serving_size_unit = None
-                    if dv_groups and isinstance(dv_groups, list) and len(dv_groups) > 0:
-                        dv_group = dv_groups[0]
-                        serving_size_qty = dv_group.get("servingSizeQuantity")
-                        serving_size_unit = dv_group.get("servingSizeUnitOfMeasure")
-                        # Try to extract target group context
-                        target_group = dv_group.get("targetGroup", "")
-                        if target_group:
-                            context = target_group
-
                     variant = {
                         "quantity": qty,
                         "unit": u,
@@ -9681,12 +9283,6 @@ class EnhancedDSLDNormalizer:
                         variant["daily_value"] = dv
                     if daily_value_target_group:
                         variant["daily_value_target_group"] = daily_value_target_group
-                    if serving_size_qty:
-                        variant["serving_size_quantity"] = serving_size_qty
-                    if serving_size_unit:
-                        variant["serving_size_unit"] = serving_size_unit
-                    if context:
-                        variant["context"] = context
 
                     quantity_variants.append(variant)
                 else:
@@ -9782,53 +9378,6 @@ class EnhancedDSLDNormalizer:
         # Fallback for unexpected types
         logger.warning(f"Unexpected quantity format: {type(quantities)} - {quantities}")
         return 0.0, "unspecified", None, []
-    def _extract_ingredient_features(self, notes: str) -> Dict[str, Any]:
-        """Extract features from ingredient notes"""
-        features = {
-            "phrases": [],
-            "standardized": False,
-            "standardization_percent": None,
-            "natural_source": None
-        }
-        
-        if not notes:
-            return features
-        
-        # Extract standardization
-        for pattern in STANDARDIZATION_PATTERNS:
-            match = re.search(pattern, notes, re.IGNORECASE)
-            if match:
-                features["standardized"] = True
-                try:
-                    features["standardization_percent"] = self._safe_float(match.group(1)) if len(match.groups()) >= 1 else 0.0
-                    features["phrases"].append(match.group(0))
-                except IndexError:
-                    features["standardization_percent"] = 0.0
-                    features["phrases"].append(match.group(0) if match else "")
-                break
-        
-        # Extract natural source
-        for pattern in NATURAL_SOURCE_PATTERNS:
-            match = re.search(pattern, notes, re.IGNORECASE)
-            if match:
-                try:
-                    features["natural_source"] = match.group(0)
-                    features["phrases"].append(match.group(0))
-                except IndexError:
-                    features["natural_source"] = ""
-                break
-        
-        # Check for proprietary blend
-        for indicator in PROPRIETARY_BLEND_INDICATORS:
-            if indicator.lower() in notes.lower():
-                features["phrases"].append(indicator)
-        
-        # Check for delivery enhancement
-        for pattern in DELIVERY_ENHANCEMENT_PATTERNS:
-            if re.search(pattern, notes, re.IGNORECASE):
-                features["phrases"].append(pattern)
-        
-        return features
     
     def _process_statements(self, statements: List[Dict]) -> List[Dict]:
         """
@@ -11295,35 +10844,6 @@ class EnhancedDSLDNormalizer:
             }
         }
 
-    def get_enhanced_unmapped_summary(self) -> Dict[str, Any]:
-        """Get detailed summary of unmapped ingredients with context"""
-        unmapped_with_details = []
-
-        for name, count in self.unmapped_ingredients.most_common():
-            details = self.unmapped_details.get(name, {})
-            unmapped_with_details.append({
-                "name": name,
-                "occurrences": count,
-                "processedName": details.get("processed_name", ""),
-                "forms": details.get("forms", []),
-                "variationsTried": details.get("variations_tried", []),
-                "isActive": details.get("is_active", False),  # Include active/inactive status
-                "suggestedMapping": {
-                    "needsReview": True,
-                    "category": "unknown",
-                    "confidence": "low"
-                }
-            })
-
-        return {
-            "unmapped": unmapped_with_details,
-            "stats": {
-                "totalUnmapped": len(self.unmapped_ingredients),
-                "totalOccurrences": sum(self.unmapped_ingredients.values()),
-                "enhancedProcessing": True,
-                "fuzzyMatchingEnabled": FUZZY_AVAILABLE
-            }
-        }
 
     def _build_unmapped_detail(
         self,
@@ -11634,10 +11154,6 @@ class EnhancedDSLDNormalizer:
         # a panel-scale unit.
         # Only panel-explicit units (DSLD convention). Bare "g", "mg", "mcg",
         # "iu" are normal supplement units and must NOT appear here.
-        _NUTRITION_PANEL_UNITS = {
-            "calories", "calorie", "kcal", "cal",
-            "gram", "grams", "gram(s)",
-        }
         _NUTRITION_FACTS_CATEGORIES = {
             "calorie", "calories",
             "carbohydrate", "complex carbohydrate", "total carbohydrate", "total carbohydrates",
@@ -11985,7 +11501,6 @@ class EnhancedDSLDNormalizer:
         if not (strong_blend_signal or weak_blend_signal):
             return False
         quantity, unit = self._extract_primary_mass_unit(ing)
-        normalized_name = norm_module.normalize_text(ing.get("name", ""))
         is_disclosed_epa_dha_child = bool(
             ing.get("isNestedIngredient")
             and quantity is not None
@@ -12329,25 +11844,4 @@ class EnhancedDSLDNormalizer:
             # Missing blend total OR no sub-ingredient amounts at all
             return "none"
 
-    def _extract_nutritional_amount(self, ingredient: Dict) -> Optional[Dict]:
-        """Extract amount information from ingredient for nutritional warnings"""
-        # First check the quantity field
-        quantity = ingredient.get("quantity", [])
-        if quantity and isinstance(quantity, list) and len(quantity) > 0:
-            q = quantity[0]
-            if isinstance(q, dict):
-                amount = q.get("quantity", q.get("amount"))
-                unit = q.get("unit", "").lower()
-                if amount is not None and amount > 0:
-                    return {"amount": amount, "unit": unit}
-
-        # Then check forms
-        forms = ingredient.get("forms", [])
-        for form in forms:
-            amount = form.get("quantity", form.get("amount"))
-            unit = form.get("unit", "").lower()
-            if amount is not None and amount > 0:
-                return {"amount": amount, "unit": unit}
-        
-        return None
     

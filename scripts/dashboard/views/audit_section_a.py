@@ -12,11 +12,8 @@ from collections import defaultdict
 
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 
-from scripts.dashboard.components.data_dictionary import field_help
-from scripts.dashboard.components.data_table import data_table
 from scripts.dashboard.components.metric_cards import metric_row
 from scripts.dashboard.data_loader import filter_product_catalog
 

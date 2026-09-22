@@ -29,8 +29,8 @@ from test_build_final_db import make_scored, make_enriched, row_as_dict
 def test_v3_basis_percentile_rank_is_suppressed():
     enriched = make_enriched()
     scored = make_scored(verdict="SAFE")  # carries category_percentile rank=90, top=10
-    scored["_v4_quality_score_100"] = 72.0
-    scored["_v4_quality_status"] = "scored"
+    scored["quality_score_v4_100"] = 72.0
+    scored["quality_score_status"] = "scored"
 
     row = row_as_dict(build_core_row(enriched, scored, "2026-07-05T00:00:00Z"))
 

@@ -8,7 +8,6 @@ ledger covers exactly the reference entries whose notes say 'No official DRI'.
 from __future__ import annotations
 
 import json
-import re
 import time
 import sys
 import urllib.parse

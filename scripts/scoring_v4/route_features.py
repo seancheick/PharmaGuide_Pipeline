@@ -694,7 +694,7 @@ def extract_route_features(
 
     return {
         "feature_schema_version": ROUTE_FEATURE_SCHEMA_VERSION,
-        "dsld_id": str(product.get("dsld_id") or product.get("dsldId") or product.get("id") or ""),
+        "dsld_id": str(product.get("dsld_id") or product.get("id") or ""),
         "product_name": str(product.get("product_name") or product.get("fullName") or product.get("name") or ""),
         "brand_name": str(product.get("brand_name") or product.get("brandName") or ""),
         "primary_type": primary_type or None,

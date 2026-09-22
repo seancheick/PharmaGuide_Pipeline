@@ -25,10 +25,16 @@ Usage:
 
 import logging
 import re
-from typing import Dict, List, Any, Optional, Set
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 
-from constants import DISPLAY_LEDGER_SOURCE_SECTIONS
+from constants import (
+    CLEANER_NON_SCORABLE_ROLES,
+    CLEANER_SCORABLE_ROLES,
+    DISPLAY_LEDGER_SOURCE_SECTIONS,
+    IQD_DOSE_EVIDENCE_CLASSES,
+)
+from identity_integrity import IDENTITY_DISPOSITIONS
 from scoring_input_contract import SCORING_ROUTE_MODULES
 
 logger = logging.getLogger(__name__)
@@ -175,13 +181,7 @@ class EnrichmentContractValidator:
         "needs_review",
     })
 
-    DISPLAY_LEDGER_IDENTITY_STATES = frozenset({
-        "clean",
-        "repaired",
-        "taxonomy_only",
-        "identity_conflict",
-        "missing_display_label",
-    })
+    DISPLAY_LEDGER_IDENTITY_STATES = frozenset(IDENTITY_DISPOSITIONS)
 
     DISPLAY_LEDGER_ACTIVE_SECTIONS = frozenset({"active", "activeIngredients"})
 
@@ -245,29 +245,10 @@ class EnrichmentContractValidator:
         "unknown",
     })
 
-    CLEANER_NON_SCORABLE_ROLES = frozenset({
-        "blend_header_total",
-        "nested_display_only",
-        "composition_leaf",
-        "source_descriptor",
-        "nutrition_rollup",
-        "excipient",
-        "inactive",
-        "label_header",
-        "review_required",
-    })
+    CLEANER_NON_SCORABLE_ROLES = CLEANER_NON_SCORABLE_ROLES
+    CLEANER_SCORABLE_ROLES = CLEANER_SCORABLE_ROLES
 
-    CLEANER_SCORABLE_ROLES = frozenset({
-        "active_scorable",
-        "active_misfiled_in_inactive",
-    })
-
-    VALID_IQD_DOSE_CLASSES = frozenset({
-        "therapeutic_mass",
-        "enzyme_activity",
-        "probiotic_cfu",
-        "percent_dv_only",
-    })
+    VALID_IQD_DOSE_CLASSES = IQD_DOSE_EVIDENCE_CLASSES
 
     VALID_SCORING_CLASSIFICATION_ROUTES = SCORING_ROUTE_MODULES
 
@@ -384,27 +365,6 @@ class EnrichmentContractValidator:
                 results[product_id] = violations
         return results
 
-    def get_summary(self, violations: List[ContractViolation]) -> Dict[str, Any]:
-        """
-        Generate a summary of violations by rule.
-        """
-        summary = {
-            "total_violations": len(violations),
-            "errors": sum(1 for v in violations if v.severity == "error"),
-            "warnings": sum(1 for v in violations if v.severity == "warning"),
-            "by_rule": {}
-        }
-
-        for v in violations:
-            if v.rule not in summary["by_rule"]:
-                summary["by_rule"][v.rule] = {
-                    "rule_name": v.rule_name,
-                    "count": 0,
-                    "severity": v.severity
-                }
-            summary["by_rule"][v.rule]["count"] += 1
-
-        return summary
 
     # =========================================================================
     # RULE A: Sugar Consistency
@@ -508,9 +468,7 @@ class EnrichmentContractValidator:
         for allergen_id, records in allergen_presence.items():
             if len(records) > 1:
                 presence_types = [r.get("presence_type", "unknown") for r in records]
-                priorities = [self.ALLERGEN_PRESENCE_PRIORITY.get(pt, 0) for pt in presence_types]
 
-                max_priority = max(priorities)
                 has_contains = "contains" in presence_types
 
                 # If "contains" is present, there should be only one record
@@ -578,12 +536,6 @@ class EnrichmentContractValidator:
         contaminant_data = product.get("contaminant_data", {})
         harmful_additives = contaminant_data.get("harmful_additives", {})
         flagged_additives = harmful_additives.get("additives", []) or []
-
-        # Build set of flagged artificial color IDs
-        flagged_artificial_colors = {
-            a.get("additive_id") for a in flagged_additives
-            if a.get("additive_id") in self.ARTIFICIAL_COLOR_IDS
-        }
 
         # Build map of ingredients by name
         ingredient_map = {
@@ -930,7 +882,6 @@ class EnrichmentContractValidator:
         # Get all ingredients (active + inactive)
         active_ingredients = product.get("activeIngredients", []) or []
         inactive_ingredients = product.get("inactiveIngredients", []) or []
-        all_ingredients = active_ingredients + inactive_ingredients
 
         # F.1 & F.2: Check provenance fields on ingredients
         for i, ing in enumerate(active_ingredients):
@@ -1369,7 +1320,6 @@ class EnrichmentContractValidator:
             or row.get("recognized_non_scorable")
             or reason in {
                 "form_unmapped_fallback",
-                "proprietary_blend_member",
                 "source_descriptor_child_row",
                 "recognized_non_scorable",
                 "no_dose_evidence",
@@ -3079,17 +3029,6 @@ class EnrichmentContractValidator:
     # Utility Methods
     # =========================================================================
 
-    def log_violations(self, violations: List[ContractViolation], level: str = "warning"):
-        """Log violations using the logger"""
-        for v in violations:
-            log_level = logging.ERROR if v.severity == "error" else logging.WARNING
-            if level == "error":
-                log_level = logging.ERROR
-
-            logger.log(
-                log_level,
-                f"[{v.rule}] {v.rule_name} - Product {v.product_id}: {v.message}"
-            )
 
     def to_dict(self, violation: ContractViolation) -> Dict:
         """Convert a violation to a dictionary for JSON serialization"""
@@ -3107,15 +3046,6 @@ class EnrichmentContractValidator:
 
 
 # Convenience function for quick validation
-def validate_enriched_product(product: Dict) -> List[Dict]:
-    """
-    Convenience function to validate an enriched product.
-
-    Returns list of violation dictionaries.
-    """
-    validator = EnrichmentContractValidator()
-    violations = validator.validate(product)
-    return [validator.to_dict(v) for v in violations]
 
 
 def validate_enriched_payload(payload: Any) -> tuple[List[ContractViolation], int]:

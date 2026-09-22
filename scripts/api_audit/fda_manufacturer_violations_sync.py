@@ -225,11 +225,6 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def is_supplement_record(record: dict) -> bool:
-    relevant, _, _ = classify_record(record)
-    return relevant
-
-
 def _has_strong_supplement_signal(record: dict) -> bool:
     """Require a concrete supplement/product signal for RSS-only additions.
 

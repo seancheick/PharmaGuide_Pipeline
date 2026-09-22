@@ -91,11 +91,6 @@ INTENTIONAL_EXCEPTIONS: dict[str, str] = {
         "would be meaningless and forced bumps per sync. Intentionally "
         "carries no total_entries; the cache file's freshness is tracked "
         "by _metadata.last_updated instead.",
-    "percentile_categories.json":
-        "Mixed-shape config (categories dict of 9 + classification_rules "
-        "dict of 4 — both top-level). The 9 categories are the meaningful "
-        "entry count; classification_rules are static config the scorer "
-        "reads alongside. Pinned by test_percentile_categories_contract.py.",
 }
 
 

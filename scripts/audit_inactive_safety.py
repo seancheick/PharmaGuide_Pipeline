@@ -39,13 +39,13 @@ import collections
 import json
 import sys
 from pathlib import Path
-from typing import Any
 
 ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from inactive_ingredient_resolver import InactiveIngredientResolver, _normalize  # noqa
+from identity.safety import safety_rule_out_of_role_scope
 
 
 # Notes-only strings: tokens that appear in editorial text of source
@@ -89,9 +89,14 @@ def check_banned_in_inactives_have_safety_signal(
     rule, verify the blob carries the right safety signal. Returns
     (violations, total_banned_inactives_seen)."""
     # Build the same banned-name set the resolver uses.
+    # A rule whose authored role scope excludes inactives (e.g. oral EDTA is a
+    # banned standalone chelator but an ordinary excipient) is not a banned
+    # inactive: the shared safety owner decides that, as in Stage 3 and export.
     banned_names: set[str] = set()
     banned_status_by_name: dict[str, str] = {}
     for e in resolver.iter_banned_recalled_entries_for_audit():
+        if safety_rule_out_of_role_scope(e, "inactive"):
+            continue
         for n in [e.get("standard_name")] + (e.get("aliases") or []):
             if not isinstance(n, str):
                 continue

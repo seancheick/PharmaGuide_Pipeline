@@ -84,7 +84,6 @@ def _canned_v4(
         "quality_score_v4_100": score,
         "quality_score_status": status,
         "quality_score_suppressed_reason": None,
-        "quality_score_cap_v4": None,
         "quality_score_version": "4-test",
         "quality_tier": "Very good" if score is not None else None,
         "quality_pillars_v4": {
@@ -140,14 +139,13 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
     assert artifact["quality_assessment_status"] == "complete"
     assert artifact["assessment_readiness"]["is_live_ready"] is True
-    assert artifact["_v4_assessment_readiness"] == artifact["assessment_readiness"]
     assert artifact["quality_pillars_v4"]
     assert artifact["mapped_coverage"] == 1.0
     assert "mapped_coverage_applicable" not in artifact
     assert "mapped_coverage_applicable" not in artifact["scoring_metadata"]
     assert "mapped_coverage_applicable" not in artifact["iqd_contract_diagnostics"]
     assert artifact["strict_scoring_contract"]["passed"] is True
-    assert artifact["scoring_metadata"]["score_basis"] == "v4_six_pillar"
+    assert artifact["score_basis"] == "v4_six_pillar"
     assert artifact["supplement_taxonomy"]["primary_type"] == "single_mineral"
     assert artifact["category_percentile"] == {
         "category_key": "single_mineral",
@@ -182,7 +180,6 @@ def test_scored_artifact_exports_the_canonical_route_decision() -> None:
     expected = product["product_scoring_classification"]["route_decision"]
     assert artifact["route_decision"] == expected
     assert artifact["route_confidence"] == "high"
-    assert artifact["_v4_route_decision"] == expected
 
 
 def test_unresolved_dose_safety_exports_typed_summary_and_partial_assessment() -> None:
@@ -207,7 +204,6 @@ def test_unresolved_dose_safety_exports_typed_summary_and_partial_assessment() -
     assert artifact["product_safety_status"] == "caution"
     assert artifact["quality_assessment_status"] == "partial"
     assert artifact["dose_safety_evaluation"] == v4["v4_breakdown"]["dose_safety"]
-    assert artifact["_v4_dose_safety"] == v4["v4_breakdown"]["dose_safety"]
 
 
 def test_primary_safety_reason_comes_from_winning_decision_not_signal_order() -> None:
@@ -475,33 +471,6 @@ def test_quality_assessment_status_is_independent_of_score_band(
     assert artifact["quality_assessment_status"] == expected
 
 
-def test_hard_block_suppresses_every_public_score_surface(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setattr(scored_artifact, "score_product_v4", lambda _product: _canned_v4())
-    original = scored_artifact.build_scored_artifact(_product())
-
-    blocked = scored_artifact.suppress_scored_artifact_for_hard_block(
-        original, reason="banned_substance"
-    )
-
-    assert blocked is not original
-    assert original["quality_score_v4_100"] == 82.0
-    assert blocked["verdict"] == "BLOCKED"
-    assert blocked["safety_verdict"] == "BLOCKED"
-    assert blocked["quality_score_v4_100"] is None
-    assert blocked["quality_score_status"] == "suppressed_safety"
-    assert blocked["product_safety_status"] == "blocked"
-    assert blocked["quality_assessment_status"] == "complete"
-    assert blocked["score_100_equivalent"] is None
-    assert blocked["display_100"] == "N/A"
-    assert blocked["_v4_quality_score_100"] is None
-    assert blocked["_v4_quality_status"] == "suppressed_safety"
-    assert blocked["scoring_metadata"]["scoring_status"] == "suppressed_safety"
-    assert blocked["_v4_safety_gate"]["verdict"] == "BLOCKED"
-    assert blocked["_v4_pillars"] == original["_v4_pillars"]
-
-
 def test_scoped_contract_reuse_is_output_equivalent_to_uncached_assembly() -> None:
     product = _product()
     uncached = scored_artifact.assemble_scored_artifact(
@@ -515,3 +484,23 @@ def test_scoped_contract_reuse_is_output_equivalent_to_uncached_assembly() -> No
     uncached["scoring_metadata"].pop("scored_date", None)
     scoped["scoring_metadata"].pop("scored_date", None)
     assert scoped == uncached
+
+
+def test_artifact_states_each_fact_once():
+    """Locked 2026-09-21: no internal mirror duplicates a canonical field.
+
+    The _v4_* overlay and scoring_status/scoring_metadata copies were one fact
+    under several names; readers now use the canonical field. External DB/app
+    aliases (score_100_equivalent, grade, display_100) stay one-way derived.
+    """
+    artifact = scored_artifact.build_scored_artifact(_product())
+    for mirror in (
+        "scoring_status", "_v4_quality_score_100", "_v4_quality_status", "_v4_quality_tier",
+        "_v4_suppressed_reason", "_v4_raw_score_100", "_v4_confidence",
+        "_v4_score_unavailable_reason", "_v4_route_decision", "_v4_pillars", "_v4_dose_safety",
+        "_v4_safety_signal_reason", "_v4_safety_decision", "_v4_safety_review_records",
+        "_v4_assessment_readiness", "_v4_scoring_engine_version",
+        "_v4_classification_schema_version", "_v4_quality_score_cap",
+    ):
+        assert mirror not in artifact, mirror
+    assert set(artifact["scoring_metadata"]) == {"scoring_version", "scored_date"}

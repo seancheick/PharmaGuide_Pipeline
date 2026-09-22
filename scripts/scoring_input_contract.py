@@ -20,6 +20,12 @@ from typing import Any, Callable, Dict, List, Mapping, Optional
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
 # the scorer and only reads data files lazily.
+from constants import (
+    CLEANER_NON_EFFICACY_ROLES,
+    CLEANER_NON_SCORABLE_ROLES,
+    CLEANER_SCORABLE_ROLES,
+    IQD_DOSE_EVIDENCE_CLASSES,
+)
 from scoring_reference_resolver import (
     has_therapeutic_reference,
     iqm_reference_index,
@@ -140,12 +146,7 @@ PRODUCT_EVIDENCE_REQUIRED_PRESENT_FIELDS = {
     "clean_identity_id",
 }
 
-VALID_DOSE_CLASSES = {
-    "therapeutic_mass",
-    "enzyme_activity",
-    "probiotic_cfu",
-    "percent_dv_only",
-}
+VALID_DOSE_CLASSES = IQD_DOSE_EVIDENCE_CLASSES
 
 VALID_NON_MASS_DOSE_CLASSES = {"enzyme_activity", "probiotic_cfu"}
 
@@ -263,18 +264,8 @@ _BOTANICAL_BLEND_GENERIC_KEYS = {
     "proprietary_blend",
 }
 
-EXCLUDED_CLEANER_ROLES = {
-    "blend_header_total",
-    "nested_display_only",
-    "composition_leaf",
-    "source_descriptor",
-    "nutrition_rollup",
-    "excipient",
-    "inactive",
-    "label_header",
-}
-
-VALID_ACTIVE_ROLES = {"active_scorable", "active_misfiled_in_inactive"}
+EXCLUDED_CLEANER_ROLES = CLEANER_NON_SCORABLE_ROLES
+VALID_ACTIVE_ROLES = CLEANER_SCORABLE_ROLES
 
 
 def _safe_dict(value: Any) -> Dict[str, Any]:
@@ -365,12 +356,6 @@ def _positive_daily_value(row: Dict[str, Any]) -> Optional[float]:
     for variant in _safe_list(raw_taxonomy.get("quantityVariants")):
         if not isinstance(variant, dict):
             continue
-        for target in _safe_list(variant.get("dailyValueTargetGroup")):
-            if not isinstance(target, dict):
-                continue
-            value = _as_float(target.get("percent"), None)
-            if value is not None and value > 0:
-                return value
         value = _as_float(variant.get("daily_value"), None)
         if value is not None and value > 0:
             return value
@@ -437,9 +422,7 @@ def _row_source_text(row: Dict[str, Any]) -> str:
     pieces = [
         row.get("name"),
         row.get("raw_source_text"),
-        row.get("display_label"),
         row.get("normalized_key"),
-        row.get("parent_key"),
         row.get("matched_candidate"),
     ]
     return " ".join(str(piece or "") for piece in pieces).strip()
@@ -615,7 +598,7 @@ def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[s
         fallback.append((float(quality), str(form_name), form))
         aliases = [form_name] + [
             str(alias)
-            for alias in _safe_list(form.get("aliases") or form.get("form_aliases"))
+            for alias in _safe_list(form.get("aliases"))
             if alias
         ]
         for alias in aliases:
@@ -1160,7 +1143,7 @@ def _derive_declared_nutrition_protein_evidence(
 
 def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:
     unit = _norm(row.get("activity_unit") or row.get("unit"))
-    value = _as_float(row.get("activity_value"), None)
+    value = _as_float(row.get("activity_quantity"), None)
     if unit in _ENZYME_UNITS and value and value > 0:
         return value, unit.upper()
     match = _ENZYME_ACTIVITY_RE.search(_row_text(row))
@@ -1171,45 +1154,6 @@ def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Opti
     if unit_text == "DPP-IV":
         unit_text = "DPPIV"
     return parsed, unit_text
-
-
-def _has_omega_identity_text(row: Dict[str, Any]) -> bool:
-    canonical = _slug(row.get("canonical_id"))
-    if canonical in _OMEGA_EVIDENCE_CANONICALS or canonical in {"epa", "dha", "epa_dha"}:
-        return True
-    text = _row_identity_text(row).lower()
-    return any(
-        term in text
-        for term in (
-            "eicosapentaenoic",
-            "docosahexaenoic",
-            "fish oil",
-            "omega-3",
-            "omega 3",
-            "omega3",
-            "epa",
-            "dha",
-        )
-    )
-
-
-def _recoverable_nested_identity(row: Dict[str, Any]) -> bool:
-    """True when a display-only nested row carries identity v4 can score.
-
-    This is a compatibility bridge for stale enriched artifacts where the
-    cleaner retained a child active under a blend/header but enrichment excluded
-    it from `ingredients_scorable`. It does not parse labels or product names,
-    and it does not invent dose; it only preserves an already-resolved child
-    identity so modules can score it with the appropriate disclosure penalty.
-    """
-    canonical, _ = _anchor_identity(row)
-    if not canonical:
-        return False
-    return (
-        is_probiotic_source_identity(row)
-        or _has_omega_identity_text(row)
-        or _is_botanical_or_standardized_anchor(row)
-    )
 
 
 def _has_non_probiotic_strict_active(product: Dict[str, Any]) -> bool:
@@ -2318,13 +2262,7 @@ def _product_scoring_evidence_rows(
     *,
     strict: bool,
 ) -> tuple[List[Dict[str, Any]], List[RejectedScoringRow], List[str]]:
-    evidence = product.get("product_scoring_evidence")
-    if isinstance(evidence, dict):
-        native_evidence_rows = _safe_list(evidence.get("items") or evidence.get("evidence"))
-        if not native_evidence_rows and evidence:
-            native_evidence_rows = [evidence]
-    else:
-        native_evidence_rows = _safe_list(evidence)
+    native_evidence_rows = _safe_list(product.get("product_scoring_evidence"))
     native_evidence_rows = [deepcopy(item) for item in native_evidence_rows if isinstance(item, dict)]
     for item in native_evidence_rows:
         source_scope = _norm(item.get("evidence_scope"))
@@ -2684,71 +2622,6 @@ def _build_scoring_ingredients(
         product,
         strict=strict,
     )
-    product_evidence_linked_paths = {
-        str(path)
-        for evidence_row in product_evidence_rows
-        for path in _safe_list(evidence_row.get("linked_rows"))
-        if str(path)
-    }
-    skipped_candidates = []
-    legacy_skipped_recovery = not bool(
-        str(product.get("assessment_readiness_contract_version") or "").strip()
-    )
-    for row in _safe_list(iqd.get("ingredients_skipped")):
-        if not isinstance(row, dict):
-            continue
-        if not legacy_skipped_recovery and row.get("scoring_recovery_allowed") is not True:
-            continue
-        anchor_canonical, _ = _anchor_identity(row)
-        if not anchor_canonical:
-            continue
-        # Design contract: an unresolved identity (conflict / missing display)
-        # cannot be recovered into scoring — it must not drive scoring, evidence,
-        # interactions, or routing. The strict _evaluate_row guard is the
-        # backstop; skipping recovery here keeps a doomed row from ever claiming
-        # scoreable_identity. Rows with no stamped disposition stay recoverable.
-        disposition = row.get("identity_disposition")
-        if disposition is not None and not is_identity_scoreable(disposition):
-            continue
-        path = str(row.get("raw_source_path") or "")
-        if path and path in product_evidence_linked_paths:
-            continue
-        role = _norm(row.get("cleaner_row_role"))
-        classification = _norm(row.get("role_classification"))
-        if (
-            row.get("score_eligible_by_cleaner") is True
-            and role == "active_scorable"
-            and classification in {"active_scorable", "recognized_non_scorable", "inactive_non_scorable"}
-        ):
-            skipped_candidates.append(row)
-            continue
-        if role == "nested_display_only" and _recoverable_nested_identity(row):
-            skipped_candidates.append(row)
-    if skipped_candidates:
-        seen_paths = {str(row.get("raw_source_path") or "") for row in candidates}
-        for row in skipped_candidates:
-            path = str(row.get("raw_source_path") or "")
-            if path and path in seen_paths:
-                continue
-            recovered = dict(row)
-            recovered["cleaner_row_role"] = "active_scorable"
-            recovered["role_classification"] = "active_scorable"
-            recovered["score_eligible_by_cleaner"] = True
-            # Recovery restores the cleaner's own identity verdict; it cannot
-            # upgrade a minted label-taxonomy anchor into a mapped identity.
-            verified = bool(_verified_anchor_canonical(row))
-            recovered["identity_kind"] = _identity_kind(row)
-            recovered["mapped"] = verified
-            recovered["mapped_identity"] = verified
-            recovered["scoreable_identity"] = True
-            recovered["is_blend_header"] = False
-            recovered["blend_total_weight_only"] = False
-            recovered["is_proprietary_blend"] = False
-            recovered["scoring_input_kind"] = "recovered_active_identity"
-            recovered["scoring_input_recovery_reason"] = "mapped_active_identity_without_disclosed_dose"
-            candidates.append(recovered)
-            if path:
-                seen_paths.add(path)
     if product_evidence_rows:
         candidates.extend(product_evidence_rows)
         source = f"{SCORING_SOURCE}+{PRODUCT_EVIDENCE_SOURCE}"
@@ -2765,6 +2638,7 @@ def _build_scoring_ingredients(
                 fallback_reason="ingredients_scorable_empty_used_legacy_iqd_ingredients",
                 source=LEGACY_IQD_SOURCE,
             ))
+
     rows: List[Dict[str, Any]] = []
     row_findings: List[str] = []
     for index, row in enumerate(candidates):
@@ -2984,8 +2858,6 @@ def is_nutrition_fact_declaration(row: Mapping[str, Any]) -> bool:
     return False
 
 
-_PHASE5_ENABLED: bool = True
-
 # Phase 5: Deterministic non-efficacy active identities (analytical markers,
 # excipient vehicles, formulation carriers, and profile descriptors) owned by
 # other_ingredients.json or cleaner rules. These are excluded upstream from
@@ -3023,7 +2895,7 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
 
     Contract rules:
     - Active section only (drops ``source_section == 'inactive'``, excipients, and
-      ``cleaner_row_role == 'inactive_non_scorable'``)
+      inactive Cleaner roles)
     - Excludes non-efficacy cleaner roles (``standardization_marker``,
       ``specification_limit``, ``source_descriptor``, ``daily_value_no_amount``, ``inactive``)
     - Excludes deterministic non-efficacy identities (markers, excipient vehicles, descriptors)
@@ -3057,14 +2929,10 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
         if row.get("is_excipient") is True:
             continue
         role = _norm(row.get("cleaner_row_role"))
-        if role in {
-            "inactive_non_scorable",
-            "standardization_marker",
-            "specification_limit",
-            "source_descriptor",
-            "daily_value_no_amount",
-            "inactive",
-        }:
+        # role_classification is NOT consulted here: the enricher also stamps
+        # "inactive_non_scorable" on undosed named blend children in the active
+        # panel, and Evidence must still review those named children.
+        if role in CLEANER_NON_EFFICACY_ROLES:
             continue
 
         # 2. Drop structural / blend header / parent total / compound duplicate rows
@@ -3082,11 +2950,12 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
         name = str(row.get("name") or row.get("standard_name") or "").strip()
         if not canonical and not name:
             continue
-        if _PHASE5_ENABLED:
-            if canonical.lower() in DETERMINISTIC_NON_EFFICACY_CANONICALS:
-                continue
-            if canonical.lower().endswith("_source_descriptor") or canonical.lower().endswith("_marker"):
-                continue
+        if canonical.lower() in DETERMINISTIC_NON_EFFICACY_CANONICALS:
+            continue
+        # The identity owner names descriptor identities *_DESCRIPTOR
+        # (colors, source, brand-complex and delivery descriptors).
+        if canonical.lower().endswith("_descriptor") or canonical.lower().endswith("_marker"):
+            continue
 
         # 5. Role-specific qualification:
         # Nested child actives under a blend parent must have a resolved canonical identity
@@ -3632,10 +3501,6 @@ def _route_raw_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
                 rows.extend(row for row in value if isinstance(row, dict))
     elif isinstance(ingredient_quality_data, list):
         rows.extend(row for row in ingredient_quality_data if isinstance(row, dict))
-
-    active_ingredients = (product or {}).get("active_ingredients")
-    if isinstance(active_ingredients, list):
-        rows.extend(row for row in active_ingredients if isinstance(row, dict))
     return rows
 
 
@@ -3703,20 +3568,6 @@ def _route_product_label_text(product: Dict[str, Any]) -> str:
 
 def _route_has_positive_quantity(row: Dict[str, Any]) -> bool:
     return _positive_quantity(row) is not None
-
-
-def _route_positive_number(value: Any) -> bool:
-    try:
-        return value is not None and float(value) > 0
-    except (TypeError, ValueError):
-        return False
-
-
-def _route_number(value: Any) -> float:
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return 0.0
 
 
 def _route_positive_canonicals(product: Dict[str, Any]) -> set[str]:

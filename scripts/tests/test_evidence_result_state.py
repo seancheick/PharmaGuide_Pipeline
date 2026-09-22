@@ -78,24 +78,39 @@ def test_nested_multi_state_is_read_through_generic_metadata():
     assert reason.startswith("Clinical evidence review pending.")
 
 
+_UNDISCLOSED = ("Individual strain amounts are also not disclosed, so no strain can be "
+                "matched to a studied dose.")
+
+
 def test_review_gap_and_undisclosed_strain_dose_are_both_named():
-    # Garden of Life Once Daily Ultra 90 Billion (DSLD 173776): NCFM research awaits
-    # review AND the label gives no per-strain CFU. Both limits are real: review
-    # can add research credit, the missing amounts block dose matching.
+    # An uncurated strain stub (La-14) on a label with no per-strain CFU: the
+    # review is genuinely unfinished AND the missing amounts block dose matching.
+    from scoring_v4.modules.probiotic_evidence import score_evidence as probiotic_evidence
+    from test_probiotic_applicability_rubric import strain_product
+
+    product = strain_product(clinical_id="STRAIN_ACIDOPHILUS_LA14",
+                             name="Lactobacillus acidophilus La-14", dose=None)
+    evidence = probiotic_evidence(product)
+    assert evidence["score"] == 0
+    assert evidence["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
+    reason = _pillar_evidence(evidence, 20, "probiotic", _config())["reason"]
+    assert reason.endswith(_UNDISCLOSED)
+    assert "review is incomplete" in reason
+
+
+def test_finished_review_still_names_undisclosed_strain_amounts():
+    # NCFM's contexts are clinician-approved (a finished review); the label still
+    # gives no per-strain CFU, and that separate limit must stay visible.
     from scoring_v4.modules.probiotic_evidence import score_evidence as probiotic_evidence
     from test_probiotic_applicability_rubric import strain_product
 
     product = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM",
                              name="Lactobacillus acidophilus NCFM", dose=None)
     evidence = probiotic_evidence(product)
-    assert evidence["score"] == 0
-    assert evidence["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
+    assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
     reason = _pillar_evidence(evidence, 20, "probiotic", _config())["reason"]
-    assert reason.endswith(
-        "Individual strain amounts are also not disclosed, so no strain can be matched to a "
-        "studied dose."
-    )
-    assert "review is incomplete" in reason
+    assert reason.endswith(_UNDISCLOSED)
+    assert "review is incomplete" not in reason
 
 
 def test_dosed_strain_review_gap_does_not_mention_dose():

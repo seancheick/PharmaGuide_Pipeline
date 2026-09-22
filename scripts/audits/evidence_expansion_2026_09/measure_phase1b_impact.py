@@ -19,9 +19,9 @@ import glob
 import json
 import sys
 import time
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
@@ -29,10 +29,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from scoring_v4.modules.generic_evidence import (
     _assessable_active_ingredients,
-    _competing_active_rows,
     _is_nutrition_fact_declaration,
-    _evidence_result_state,
-    resolved_clinical_matches,
     score_evidence,
 )
 from scoring_v4.modules.generic_helpers import (

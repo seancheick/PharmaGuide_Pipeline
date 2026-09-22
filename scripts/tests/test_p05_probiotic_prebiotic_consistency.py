@@ -274,15 +274,11 @@ def test_suppressed_probiotic_blend_header_keeps_aggregate_cell_count(enricher) 
 
 def test_distinct_infantis_strain_codes_do_not_cross_match(enricher) -> None:
     """M-63 must never inherit the unrelated 35624 clinical evidence."""
-    assert enricher._strain_match(
-        "Bifidobacterium longum infantis M-63",
-        "Bifidobacterium infantis 35624",
-        [
-            "B. infantis 35624",
-            "Bifidobacterium longum 35624",
-            "B. longum subsp. infantis 35624",
-        ],
-    ) is False
+    from studied_formulas import _clinical_strain_registry, clinical_strain_identity_matches
+
+    reference = _clinical_strain_registry()["STRAIN_INFANTIS_35624"]
+    assert clinical_strain_identity_matches("Bifidobacterium longum infantis M-63", reference) is False
+    assert clinical_strain_identity_matches("Bifidobacterium infantis 35624", reference) is True
 
     product = _probiotic_product(
         extra_active=[

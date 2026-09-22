@@ -195,7 +195,7 @@ class TestAllergenDetectionEndToEnd:
         """Product stating 'Contains no milk' should NOT detect milk allergen."""
         product = {
             'dsld_id': '99999',
-            'productName': 'Test Vitamin',
+            'fullName': 'Test Vitamin',
             'labelStatement': 'Contains no milk, egg, or soy.',
             'activeIngredients': [
                 {'name': 'Vitamin C', 'quantity': '100', 'unit': 'mg'}
@@ -220,7 +220,7 @@ class TestAllergenDetectionEndToEnd:
         """Product with 'soy lecithin' ingredient SHOULD detect soy allergen."""
         product = {
             'dsld_id': '99998',
-            'productName': 'Test Vitamin with Soy',
+            'fullName': 'Test Vitamin with Soy',
             'labelStatement': '',
             'activeIngredients': [
                 {'name': 'Vitamin C', 'quantity': '100', 'unit': 'mg'}
@@ -246,7 +246,7 @@ class TestAllergenDetectionEndToEnd:
         """Product with both negation ('no milk') and positive ('soy lecithin') detection."""
         product = {
             'dsld_id': '99997',
-            'productName': 'Complex Test',
+            'fullName': 'Complex Test',
             'labelStatement': 'Contains no milk. May contain traces of tree nuts.',
             'activeIngredients': [
                 {'name': 'Vitamin C', 'quantity': '100', 'unit': 'mg'}

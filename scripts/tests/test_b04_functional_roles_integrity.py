@@ -122,7 +122,7 @@ SPOT_CHECK = {
     "Kaolin":                      ["filler"],
     "Phosphoric Acid":             ["ph_regulator"],                # via acidity_regulator
     "Sodium Acid Sulfate":         ["ph_regulator"],                # via acidity_regulator
-    "Hypromellose Capsule":        ["coating", "gelling_agent"],    # via capsule_material
+    "Hydroxypropyl Methylcellulose": ["coating", "gelling_agent"],  # capsule shell (PII_HPMC)
 }
 
 # Some clinician-tagged entries (e.g., MCT Oil, Polysorbate 80, Stearic Acid) live
@@ -135,8 +135,7 @@ SPOT_CHECK = {
 def test_clinician_spot_check_other_ingredients(by_id, name, expected):
     """Each clinician-spot-check entry must match expected roles."""
     matches = [e for e in by_id.values() if e.get("standard_name") == name]
-    if not matches:
-        pytest.skip(f"{name!r} not in other_ingredients.json (may live elsewhere)")
+    assert matches, f"{name!r} not in other_ingredients.json — update the spot check to the current entry name"
     actual = matches[0].get("functional_roles", [])
     assert actual == expected, (
         f"{name!r}: expected {expected!r}, got {actual!r}. "

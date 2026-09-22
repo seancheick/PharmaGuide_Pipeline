@@ -45,7 +45,7 @@ def _base_enriched() -> dict:
 
 def _base_scored(evidence: float = 0.0, score_100: float = 50.0, verdict: str = "SAFE") -> dict:
     return {
-        "_v4_pillars": {"evidence": {"score": evidence, "max": 20}},
+        "quality_pillars_v4": {"evidence": {"score": evidence, "max": 20}},
         "score_100_equivalent": score_100,
         "verdict": verdict,
     }

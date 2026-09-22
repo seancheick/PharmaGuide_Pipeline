@@ -356,7 +356,6 @@ def build_label_record_contract(
 
     source_type = _optional_scalar(enriched.get("source_type"), field="source_type")
     normalized_source_type = source_type.casefold() if source_type else None
-    is_external_manual = normalized_source_type == "external_manual"
     dsld_id = _optional_scalar(enriched.get("dsld_id"), field="dsld_id")
     is_dsld_catalog_source = bool(
         dsld_id

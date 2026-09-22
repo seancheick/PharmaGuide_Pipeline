@@ -276,13 +276,8 @@ def test_outer_blend_header_treated_as_blend_total(normalizer, pid):
     rows = []
     _walk_rows(normalized, rows)
 
-    if not _has_codex_contract(rows):
-        pytest.xfail(
-            "Cleaner contract fields cleaner_row_role / "
-            "score_eligible_by_cleaner / dose_class not yet emitted by "
-            "the normalizer. Activates automatically once Codex's WIP "
-            "(uncommitted in main worktree as of 2026-05-22) lands."
-        )
+    # The cleaner row-role contract is mandatory; a missing field is a regression.
+    assert _has_codex_contract(rows), "cleaner row-role contract fields missing"
 
     # Find the outer blend header row in the output
     outer = None
@@ -342,13 +337,8 @@ def test_inner_chondroitin_complex_not_silently_inflated(normalizer, pid):
     rows = []
     _walk_rows(normalized, rows)
 
-    if not _has_codex_contract(rows):
-        pytest.xfail(
-            "Cleaner contract fields cleaner_row_role / "
-            "score_eligible_by_cleaner not yet emitted by the "
-            "normalizer. This test depends on the new contract to "
-            "express the safety boundary."
-        )
+    # The cleaner row-role contract is mandatory; a missing field is a regression.
+    assert _has_codex_contract(rows), "cleaner row-role contract fields missing"
 
     inner = _find_chondroitin_complex_row(rows)
     if inner is None:

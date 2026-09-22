@@ -103,7 +103,6 @@ def test_vinpocetine_is_scored_and_keeps_its_safety_identity():
         "dsld_id": 99999,
         "product_name": "Vinpocetine 20 mg",
         "fullName": "Vinpocetine 20 mg",
-        "productName": "Vinpocetine 20 mg",
         "brandName": "TestBrand",
         "activeIngredients": [
             {

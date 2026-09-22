@@ -53,7 +53,9 @@ from identity.safety import (
     normalize_safety_signals,
     safety_normalize_text,
     safety_jurisdiction_projection,
+    safety_rule_governs_role,
     safety_rule_id_or_unresolved,
+    safety_rule_out_of_role_scope,
     safety_severity_for_status,
 )
 from rda_ul_calculator import get_actionable_ul_review_signals
@@ -335,12 +337,7 @@ def _explicit_us_jurisdictions(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _policy_role_is_supported(entry: Dict[str, Any], signal: SafetySignal) -> bool:
-    roles = {
-        _norm(value)
-        for value in _safe_list(entry.get("hard_verdict_roles"))
-        if _norm(value)
-    }
-    return not roles or signal.subject_role in roles
+    return safety_rule_governs_role(entry, signal.subject_role)
 
 
 def _hard_policy_missing_requirements(
@@ -691,6 +688,7 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
                     raw_name=raw_name,
                     standard_name=standard_name,
                     additional_terms=extra_terms,
+                    role=role,
                 )
             except Exception:
                 continue
@@ -947,9 +945,9 @@ def _has_undisclosed_stimulant_blend(product: Dict[str, Any]) -> bool:
     for blend in _safe_list(product.get("proprietary_blends")):
         if not isinstance(blend, dict):
             continue
-        if _norm(blend.get("disclosure_level") or blend.get("disclosure")) not in ("none", "partial"):
+        if _norm(blend.get("disclosure_level")) not in ("none", "partial"):
             continue
-        name = _norm(blend.get("name") or blend.get("raw_name"))
+        name = _norm(blend.get("name"))
         kids = _blend_children_text(blend)
         if any(token in name for token in _STRONG_STIM_BLEND_NAMES):
             return True
@@ -1214,12 +1212,7 @@ def evaluate_safety_gate(
             _append_signal(result, "B0_STALE_POLICY_SIGNAL_IGNORED")
             continue
 
-        if (
-            entry
-            and _norm(entry.get("role_scope_out_of_scope")) == "not_applicable"
-            and signal.subject_role
-            and not _policy_role_is_supported(entry, signal)
-        ):
+        if entry and safety_rule_out_of_role_scope(entry, signal.subject_role):
             # This rule is authored for specific label roles -- for example a
             # substance that is non-routine as a DECLARED ACTIVE but an
             # ordinary formulation excipient elsewhere. The same substance

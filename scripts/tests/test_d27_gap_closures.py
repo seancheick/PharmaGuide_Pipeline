@@ -47,21 +47,6 @@ def normalizer() -> EnhancedDSLDNormalizer:
 # ---------------------------------------------------------------------------
 
 
-class TestProprietaryBlendsRecognizedNonScorable:
-    """When a row's canonical_source_db is proprietary_blends, the enricher
-    must route it through the recognized_non_scorable path (not unmapped)."""
-
-    def test_enricher_source_has_proprietary_blends_policy(self) -> None:
-        source = Path("scripts/enrich_supplements_v3.py").read_text()
-        # Match the D2.7.1 fix signature — canonical_src check + explicit tag.
-        assert "canonical_source_db" in source and "'proprietary_blends'" in source, (
-            "D2.7.1 fix missing: enricher must check canonical_source_db == "
-            "'proprietary_blends' before treating a row as unmapped."
-        )
-        assert "proprietary_blend_member" in source, (
-            "D2.7.1 fix must tag routed rows with recognition_reason="
-            "'proprietary_blend_member' for gate exclusion."
-        )
 
 
 # ---------------------------------------------------------------------------
@@ -206,8 +191,13 @@ class TestD34FormAliases:
 
 class TestDoctorsBestGapClosures:
     @pytest.mark.parametrize("raw,expected_source,expected_id_contains", [
-        ("Serrapeptase Enzyme",                      "ingredient_quality_map", "digestive_enzymes"),
-        ("Serrapeptidase",                           "ingredient_quality_map", "digestive_enzymes"),
+        ("Serrapeptase Enzyme",                      "ingredient_quality_map", "serrapeptase"),
+        ("Serrapeptidase",                           "ingredient_quality_map", "serrapeptase"),
+        # Discrete enzymes keep their own identity (never the multi-enzyme parent).
+        ("Serratia Enzyme",                          "ingredient_quality_map", "serrapeptase"),
+        ("BioCore DPP-IV",                           "ingredient_quality_map", "protease"),
+        ("DPP-IV",                                   "ingredient_quality_map", "protease"),
+        ("Dipeptidyl Peptidase IV",                  "ingredient_quality_map", "protease"),
         ("Glycolipids",                              "other_ingredients",      "NHA_GLYCOLIPIDS"),
         ("Glycolipid",                               "other_ingredients",      "NHA_GLYCOLIPIDS"),
         ("Lutein 2020 Marigold flower extract",      "ingredient_quality_map", "lutein"),

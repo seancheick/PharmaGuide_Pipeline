@@ -176,7 +176,7 @@ def test_scored_product_with_migration_inference_is_quarantined():
 
 def test_safety_suppressed_product_with_unresolved_dose_is_quarantined():
     scored = make_scored("BLOCKED")
-    scored["_v4_quality_status"] = "suppressed_safety"
+    scored["quality_score_status"] = "suppressed_safety"
     scored["quality_score_status"] = "suppressed_safety"
     scored["assessment_readiness"] = {
         "enforcement_mode": "enforced",

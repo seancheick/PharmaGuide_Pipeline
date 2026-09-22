@@ -105,44 +105,12 @@ def test_v3_blocked_release_products_remain_v4_blocked() -> None:
             failures.append((
                 dsld_id,
                 product.get("brandName") or product.get("brand_name"),
-                product.get("productName") or product.get("product_name") or product.get("fullName"),
+                product.get("product_name") or product.get("fullName"),
                 verdict,
                 out.get("raw_score_v4_100"),
             ))
 
     assert failures == []
-
-
-def test_excipient_acceptable_watchlist_warning_does_not_disqualify_safe() -> None:
-    from build_final_db import profile_gated_hard_safety_signal
-
-    blob = {
-        "warnings": [{
-            "type": "watchlist_substance",
-            "severity": "moderate",
-            "ingredient_role": "inactive",
-            "inactive_policy": "excipient_acceptable",
-            "display_mode_default": "informational",
-        }]
-    }
-
-    assert profile_gated_hard_safety_signal(blob) is None
-
-
-def test_active_watchlist_warning_still_disqualifies_safe() -> None:
-    from build_final_db import profile_gated_hard_safety_signal
-
-    blob = {
-        "warnings": [{
-            "type": "watchlist_substance",
-            "severity": "moderate",
-            "ingredient_role": "active",
-            "inactive_policy": "penalize_anyway",
-            "display_mode_default": "informational",
-        }]
-    }
-
-    assert profile_gated_hard_safety_signal(blob) == "watchlist_substance"
 
 
 # --------------------------------------------------------------------------- #

@@ -96,31 +96,81 @@ INACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
 }
 
 
-# Top-level blob keys promised in §Detail Blob Contract.
+# Top-level blob keys. This is the one declaration of the detail-blob top-level
+# contract (census of the full catalog, 2026-09-21): the D5.3 test and this
+# gate read it, and a blob key that is not declared here fails the gate.
+#   required=True  -> always present and non-null
+#   required=False -> "nullable" (always emitted, may be null) or "conditional" (absent unless it applies)
 BLOB_TOP_LEVEL: dict[str, dict[str, Any]] = {
-    "dsld_id":                  {"required": True},
-    "blob_version":             {"required": True},
-    "ingredients":              {"required": True},
-    "inactive_ingredients":     {"required": True},
-    "warnings":                 {"required": True},
-    "section_breakdown":        {"required": True},
-    "compliance_detail":        {"required": True},
-    "certification_detail":     {"required": True},
-    "proprietary_blend_detail": {"required": False, "note": "only when product has blends"},
-    "dietary_sensitivity_detail":{"required": True},
-    "formulation_detail":       {"required": True},
-    "serving_info":             {"required": True},
-    "manufacturer_detail":      {"required": True},
-    "probiotic_detail":         {"required": False, "note": "probiotic products only"},
-    "synergy_detail":           {"required": False},
-    "interaction_summary":      {"required": True},
-    "evidence_data":            {"required": True},
-    "rda_ul_data":              {"required": True},
-    "nutrition_detail":         {"required": True, "note": "v1.3.2: always present"},
-    "unmapped_actives":         {"required": True, "note": "v1.3.2: always present"},
-    "raw_actives_count":        {"required": True, "note": "E1.2.5 reconciliation snapshot"},
-    "raw_inactives_count":      {"required": True, "note": "E1.0.1 invariant #7 gate"},
-    "ingredients_dropped_reasons": {"required": True, "note": "E1.2.5 reconciliation enum"},
+    "dsld_id": {"required": True},
+    "blob_version": {"required": True},
+    "product_name": {"required": True},
+    "brand_name": {"required": True},
+    "brand_name_raw": {"required": True},
+    "brand_family": {"required": True},
+    "primary_type": {"required": True},
+    "classification_confidence": {"required": True},
+    "classification_reasons": {"required": True},
+    "product_role": {"required": True},
+    "product_role_evidence": {"required": True},
+    "completeness_claim_mismatch": {"required": True},
+    "ingredients": {"required": True},
+    "display_ingredients": {"required": True},
+    "inactive_ingredients": {"required": True},
+    "label_record": {"required": True},
+    "label_source_rows": {"required": True},
+    "label_ledger_audit": {"required": True},
+    "label_ledger_omissions": {"required": True},
+    "row_ledger": {"required": True},
+    "row_ledger_summary": {"required": True},
+    "warnings": {"required": True},
+    "warnings_profile_gated": {"required": True},
+    "allergens": {"required": True},
+    "gluten_free_validated": {"required": True},
+    "compliance_detail": {"required": True},
+    "certification_detail": {"required": True},
+    "proprietary_blend_detail": {"required": True},
+    "proprietary_blend": {"required": True},
+    "dietary_sensitivity_detail": {"required": True},
+    "formulation_detail": {"required": True},
+    "serving_info": {"required": True},
+    "manufacturer_detail": {"required": True},
+    "evidence_data": {"required": True},
+    "rda_ul_data": {"required": True},
+    "nutrition_detail": {"required": True},
+    "unmapped_actives": {"required": True},
+    "unverified_ingredient": {"required": True},
+    "score_bonuses": {"required": True},
+    "score_penalties": {"required": True},
+    "raw_actives_count": {"required": True},
+    "raw_inactives_count": {"required": True},
+    "ingredients_dropped_reasons": {"required": True},
+    "non_gmo_audit": {"required": True},
+    "omega3_audit": {"required": True},
+    "proprietary_blend_audit": {"required": True},
+    "supplement_type_audit": {"required": True},
+    "audit": {"required": True},
+    "product_safety_status": {"required": True},
+    "quality_assessment_status": {"required": True},
+    "v4_safety_gate": {"required": True},
+    "v4_dose_safety": {"required": True},
+    "v4_completeness_gate": {"required": True},
+    "v4_score_provenance": {"required": True},
+    "product_line": {"required": False, "presence": "nullable", "note": "null when the label names no product line"},
+    "secondary_type": {"required": False, "presence": "nullable", "note": "null when the taxonomy assigns none"},
+    "banned_substance_detail": {"required": False, "presence": "nullable", "note": "null unless a banned/recalled substance is present"},
+    "product_status_detail": {"required": False, "presence": "nullable", "note": "null for active products; set for discontinued/off-market"},
+    "product_status": {"required": False, "presence": "nullable", "note": "2.4 alias of product_status_detail for older app builds (schema 3 removes it)"},
+    "quality_pillars_v4": {"required": False, "presence": "nullable", "note": "null when the score is safety-suppressed"},
+    "clean_label_flags_v4": {"required": False, "presence": "nullable", "note": "null when no clean-label flag applies"},
+    "v4_confidence_detail": {"required": False, "presence": "nullable", "note": "null when the score is safety-suppressed"},
+    "v4_score_explanation": {"required": False, "presence": "nullable", "note": "null when the score is safety-suppressed"},
+    "interaction_summary": {"required": False, "presence": "conditional", "note": "only when an interaction rule matches"},
+    "synergy_detail": {"required": False, "presence": "conditional", "note": "only when a synergy cluster matches"},
+    "adult_multi_coverage": {"required": False, "presence": "conditional", "note": "adult multivitamin products only"},
+    "prenatal_coverage": {"required": False, "presence": "conditional", "note": "prenatal-anchor products only"},
+    "probiotic_detail": {"required": False, "presence": "conditional", "note": "probiotic products only"},
+    "ingredient_quality_data": {"required": False, "presence": "conditional", "note": "only when an absorption enhancer was demoted"},
 }
 
 
@@ -246,6 +296,7 @@ def _summarize(report: dict[str, Any]) -> dict[str, Any]:
         "inactive_RED_required": [],
         "inactive_RED_optional_zero_emit": [],
         "top_level_RED": [],
+        "top_level_undeclared": sorted(report["blob_top_level_undeclared"]),
         "v1_5_0_fields_absent": [],
     }
     for layer_key, summary_key_req, summary_key_opt in [
@@ -302,6 +353,7 @@ def main() -> int:
         "active_ingredient_contract": _audit_ingredient_contract(blobs, "ingredients", ACTIVE_CONTRACT),
         "inactive_ingredient_contract": _audit_ingredient_contract(blobs, "inactive_ingredients", INACTIVE_CONTRACT),
         "blob_top_level": _audit_top_level(blobs),
+        "blob_top_level_undeclared": sorted({key for blob in blobs for key in blob} - set(BLOB_TOP_LEVEL)),
     }
     report["summary"] = _summarize(report)
 
@@ -318,8 +370,12 @@ def main() -> int:
     print(f"inactive fields RED (req):    {len(s['inactive_RED_required'])} {s['inactive_RED_required']}")
     print(f"inactive fields RED (opt):    {len(s['inactive_RED_optional_zero_emit'])} {s['inactive_RED_optional_zero_emit']}")
     print(f"top-level fields RED:         {len(s['top_level_RED'])} {s['top_level_RED']}")
+    print(f"top-level keys undeclared:    {len(s['top_level_undeclared'])} {s['top_level_undeclared']}")
     print(f"v1.5.0 fields <50% emitted:   {len(s['v1_5_0_fields_absent'])} {s['v1_5_0_fields_absent']}")
-    return 1 if (s["active_RED_required"] or s["inactive_RED_required"] or s["top_level_RED"]) else 0
+    return 1 if (
+        s["active_RED_required"] or s["inactive_RED_required"]
+        or s["top_level_RED"] or s["top_level_undeclared"]
+    ) else 0
 
 
 if __name__ == "__main__":

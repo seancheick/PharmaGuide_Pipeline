@@ -14,7 +14,7 @@ import math
 from datetime import datetime, timezone
 from typing import Any, Dict
 
-from score_supplements_v4 import SCORING_ENGINE_VERSION, score_product_v4
+from score_supplements_v4 import score_product_v4
 from scoring_input_contract import get_scoring_ingredients, scoring_input_scope
 from supplement_taxonomy import percentile_label_for
 
@@ -271,7 +271,6 @@ def assemble_scored_artifact(
         "evaluation_stage": "scored_v4",
         "output_schema_version": SCORED_ARTIFACT_SCHEMA_VERSION,
         "score_basis": "v4_six_pillar",
-        "scoring_status": status,
         "not_scorable_reason": (
             (
                 completeness_gate.get("reason")
@@ -323,57 +322,23 @@ def assemble_scored_artifact(
         "score_100_equivalent": quality_score,
         "display_100": _display_score(quality_score, status),
         "grade": v4.get("quality_tier"),
+        # Provenance only: every other fact lives once at the top level.
         "scoring_metadata": {
             "scoring_version": provenance.get("scoring_engine_version"),
-            "output_schema_version": SCORED_ARTIFACT_SCHEMA_VERSION,
             "scored_date": scored_at,
-            "scoring_status": status,
-            "product_safety_status": product_safety_status,
-            "quality_assessment_status": quality_assessment_status,
-            "assessment_readiness_complete": bool(
-                assessment_readiness.get("is_live_ready")
-            ),
-            "quality_score_confidence": score_confidence,
-            "score_unavailable_reason": score_unavailable_reason,
-            "score_basis": "v4_six_pillar",
-            "scoring_ingredients_source": scoring_input.source,
-            "strict_scoring_contract": strict_contract,
-            "mapped_coverage": round(mapped_coverage, 4),
-            "unmapped_actives_total": scoring_input.unmapped_count,
-            "verdict": verdict,
-            "blocking_reason": blocking_reason,
         },
         "_score_model_version": "v4",
-        "_v4_quality_score_100": quality_score,
-        "_v4_quality_status": status,
-        "_v4_quality_tier": v4.get("quality_tier"),
-        "_v4_quality_score_cap": v4.get("quality_score_cap_v4"),
-        "_v4_suppressed_reason": v4.get("quality_score_suppressed_reason"),
-        "_v4_raw_score_100": v4.get("raw_score_v4_100"),
         "_v4_module": v4.get("v4_module"),
         "_v4_module_breakdown": module_breakdown,
         "_v4_inactive_penalty_details": _inactive_penalty_details(
             module_breakdown
         ),
-        "_v4_confidence": score_confidence,
-        "_v4_score_unavailable_reason": score_unavailable_reason,
-        "_v4_route_decision": route_decision or None,
         "_v4_confidence_detail": breakdown.get("confidence"),
         "_v4_quality_version": v4.get("quality_score_version"),
-        "_v4_pillars": v4.get("quality_pillars_v4"),
         "_v4_clean_label_flags": v4.get("clean_label_flags_v4"),
         "_v4_safety_gate": safety_gate,
-        "_v4_dose_safety": dose_safety,
-        "_v4_safety_signal_reason": decision_reason or (
-            safety_signals[0] if safety_signals else None
-        ),
-        "_v4_safety_decision": safety_decision or None,
-        "_v4_safety_review_records": safety_review_records,
         "_v4_completeness_gate": completeness_gate,
-        "_v4_assessment_readiness": assessment_readiness,
         "_v4_provenance": provenance,
-        "_v4_scoring_engine_version": provenance.get("scoring_engine_version"),
-        "_v4_classification_schema_version": provenance.get("classification_schema_version"),
         "_v4_config_fingerprint": config_fingerprint,
     }
     return artifact
@@ -398,70 +363,3 @@ def build_scored_artifact(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         )
 
 
-def suppress_scored_artifact_for_hard_block(
-    artifact: Dict[str, Any], reason: str
-) -> Dict[str, Any]:
-    """Return a hard-blocked copy of a v4 Stage-3 artifact.
-
-    Final export has a small set of broader regulatory checks than the scoring
-    modules. When one fires, every public and reserved score surface must agree
-    that the score is safety-suppressed. Raw score and pillar diagnostics remain
-    available as an audit trail; they are never consumer-ranking fields.
-    """
-    if not isinstance(artifact, dict):
-        raise TypeError("scored artifact must be an object")
-
-    blocked = dict(artifact)
-    blocked.update({
-        "verdict": "BLOCKED",
-        "safety_verdict": "BLOCKED",
-        "quality_score_v4_100": None,
-        "quality_score_status": "suppressed_safety",
-        "quality_score_confidence": None,
-        "score_unavailable_reason": "blocked_by_safety_gate",
-        "product_safety_status": "blocked",
-        "quality_assessment_status": "complete",
-        "quality_tier": None,
-        "quality_score_suppressed_reason": (
-            blocked.get("quality_score_suppressed_reason") or reason
-        ),
-        "score_100_equivalent": None,
-        "display_100": "N/A",
-        "grade": None,
-        "scoring_status": "suppressed_safety",
-        "blocking_reason": blocked.get("blocking_reason") or reason,
-        "safety_signal_reason": blocked.get("safety_signal_reason") or reason,
-        "_v4_quality_score_100": None,
-        "_v4_quality_status": "suppressed_safety",
-        "_v4_confidence": None,
-        "_v4_score_unavailable_reason": "blocked_by_safety_gate",
-        "_v4_quality_tier": None,
-        "_v4_suppressed_reason": blocked.get("_v4_suppressed_reason") or reason,
-        "_v4_safety_signal_reason": (
-            blocked.get("_v4_safety_signal_reason") or reason
-        ),
-    })
-
-    metadata = dict(_safe_dict(blocked.get("scoring_metadata")))
-    metadata.update({
-        "scoring_status": "suppressed_safety",
-        "product_safety_status": "blocked",
-        "quality_assessment_status": "complete",
-        "quality_score_confidence": None,
-        "score_unavailable_reason": "blocked_by_safety_gate",
-        "verdict": "BLOCKED",
-        "blocking_reason": blocked["blocking_reason"],
-    })
-    blocked["scoring_metadata"] = metadata
-
-    safety_gate = dict(_safe_dict(blocked.get("_v4_safety_gate")))
-    signals = list(safety_gate.get("safety_signals") or [])
-    if reason not in signals:
-        signals.append(reason)
-    safety_gate.update({
-        "verdict": "BLOCKED",
-        "blocking_reason": safety_gate.get("blocking_reason") or reason,
-        "safety_signals": signals,
-    })
-    blocked["_v4_safety_gate"] = safety_gate
-    return blocked

@@ -97,21 +97,25 @@ class TestCrossModuleProbioticRowRoleAudit:
 class TestCrossModuleExactStrainDisposition:
     """Verify that exact-strain products in generic/sports/fiber modules delegate to canonical probiotic owner."""
 
-    def test_garden_of_life_md_protein_de111_stub_is_native_review_incomplete(self):
-        """Garden of Life MD Protein with DE111 (273676) routes through sports and has unreviewed strain stub DE111."""
+    def test_garden_of_life_md_protein_de111_finished_review_is_terminal(self):
+        """Garden of Life MD Protein with DE111 (273676) routes through sports.
+
+        DE111's identity is accepted and all 7 study contexts are clinician-approved
+        (2026-09-14): a finished review that does not apply to this label.
+        """
         p = _load_enriched_product("output_Garden_of_life_enriched", "273676")
         assert p is not None, "DSLD 273676 must exist"
         disp = assess_probiotic_component_disposition(p)
         assert disp["has_probiotic_component"] is True
-        assert disp["disposition_state"] == "native_research_review_incomplete"
+        assert disp["disposition_state"] == "research_present_applicability_unestablished"
         assert disp["evidence_score"] == 0.0
 
         # When evaluated by generic_evidence
         ev = score_generic_evidence(p, apply_primary_floor=True)
         assert ev["score"] == 0.0
-        assert ev["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
+        assert ev["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
         assert ev["metadata"]["probiotic_component_evidence"] is not None
-        assert ev["metadata"]["probiotic_component_evidence"]["disposition_state"] == "native_research_review_incomplete"
+        assert ev["metadata"]["probiotic_component_evidence"]["disposition_state"] == "research_present_applicability_unestablished"
 
     def test_life_extension_digestive_enzymes_with_mtcc5856(self):
         """Life Extension Digestive Enzymes with MTCC 5856 (232295) routes through fiber_digestive."""
@@ -119,15 +123,15 @@ class TestCrossModuleExactStrainDisposition:
         assert p is not None, "DSLD 232295 must exist"
         disp = assess_probiotic_component_disposition(p)
         assert disp["has_probiotic_component"] is True
-        # MTCC 5856 has pending study contexts in registry
-        assert disp["disposition_state"] == "native_research_review_incomplete"
+        # MTCC 5856: identity accepted, every study context clinician-approved.
+        assert disp["disposition_state"] == "research_present_applicability_unestablished"
         assert disp["evidence_score"] == 0.0
 
         # Evaluated through fiber_digestive
         res = score_fiber_digestive(p)
         ev = res.dimensions["evidence"]
         assert ev.score == 0.0
-        assert ev.metadata["evidence_result_state"] == "native_research_review_incomplete"
+        assert ev.metadata["evidence_result_state"] == "research_present_applicability_unestablished"
 
 
 class TestCrossModuleSpeciesOnlyDisposition:

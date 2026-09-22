@@ -11,14 +11,13 @@ Deterministic verification gate for Phase 4 literature records:
 """
 from __future__ import annotations
 
-import argparse
 import datetime
 import json
 import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, Set
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO = SCRIPT_DIR.parent.parent

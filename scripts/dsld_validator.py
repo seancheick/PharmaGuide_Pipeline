@@ -57,9 +57,6 @@ class DSLDValidator:
             missing_important = self._check_fields(product_data, self.important_fields)
             missing_fields.extend(missing_important)
             
-            # Check optional fields
-            missing_optional = self._check_fields(product_data, self.optional_fields)
-            
             # Calculate completeness score (only count critical + important fields)
             critical_important_fields = len(self.critical_fields) + len(self.important_fields)
             missing_critical_important = len(missing_critical) + len(missing_important)

@@ -34,8 +34,8 @@ def test_an_unreviewed_active_is_not_presented_as_zero_evidence():
 
 
 def test_an_incomplete_strain_review_is_also_a_coverage_gap():
-    assert evidence_display_state("native_research_review_incomplete", 0.0) == "not_yet_reviewed"
-    assert evidence_display_state("human_clinical_evidence_unestablished", 0.0) == "not_yet_reviewed"
+    assert evidence_display_state("native_research_review_incomplete") == "not_yet_reviewed"
+    assert evidence_display_state("human_clinical_evidence_unestablished") == "not_yet_reviewed"
 
 
 # ── 2/3. reviewed zeros stay zeros, and stay distinguishable ──────────────────
@@ -66,7 +66,7 @@ def test_every_zero_state_with_copy_has_a_display_meaning():
     """Guard against a new state being added to the copy map and silently
     defaulting to 'assessed' - which would reintroduce the original bug."""
     for state in _EVIDENCE_ZERO_REASON:
-        display = evidence_display_state(state, 0.0)
+        display = evidence_display_state(state)
         assert display in {"assessed", "not_yet_reviewed",
                            "applicability_unestablished", "not_applicable"}
         if state in EVIDENCE_COVERAGE_GAP_STATES:
@@ -85,7 +85,7 @@ def test_applicability_unresolved_is_neither_unreviewed_nor_a_verdict():
 
 
 def test_no_assessable_actives_is_not_applicable_rather_than_a_failure():
-    assert evidence_display_state("no_assessable_actives", 0.0) == "not_applicable"
+    assert evidence_display_state("no_assessable_actives") == "not_applicable"
 
 
 # ── 5. assessment state governs display, not score points ────────────────────
@@ -95,12 +95,10 @@ def test_assessment_state_governs_display_not_score():
     disposition, never inferred from a positive score. A coverage gap must never
     render as assessed simply because score > 0."""
     for gap in ["clinical_review_not_covered", "identity_material_unresolved", "literature_resolution_required"]:
-        assert evidence_display_state(gap, 12.5) == "not_yet_reviewed"
-        assert evidence_display_state(gap, 0.0) == "not_yet_reviewed"
-    assert evidence_display_state("evaluated_applicable", 12.5) == "assessed"
-    assert evidence_display_state("evaluated_applicable", 0.0) == "assessed"
-    assert evidence_display_state("evaluated_authority", 0.0) == "assessed"
-    assert evidence_display_state("no_qualifying_human_evidence", 0.0) == "assessed"
+        assert evidence_display_state(gap) == "not_yet_reviewed"
+    assert evidence_display_state("evaluated_applicable") == "assessed"
+    assert evidence_display_state("evaluated_authority") == "assessed"
+    assert evidence_display_state("no_qualifying_human_evidence") == "assessed"
 
 
 def test_the_pillar_still_reports_the_raw_zero_for_scoring():

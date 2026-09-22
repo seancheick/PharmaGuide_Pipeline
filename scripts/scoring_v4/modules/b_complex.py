@@ -247,23 +247,6 @@ def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
     return scores
 
 
-def _b7_dose_safety(product: Dict[str, Any]) -> float:
-    """Dose-safety deduction, via the shared evaluator.
-
-    A B-complex declaring folate as a total plus its own form breakdown used to
-    be charged twice here, because the de-duplication rule lived privately in
-    the multivitamin module.
-    """
-    return _round(
-        resolve_dose_safety(
-            product,
-            threshold=B7_UL_PCT_THRESHOLD,
-            per_flag_penalty=B7_PER_FLAG_PENALTY,
-            cap=B7_CAP,
-        ).penalty
-    )
-
-
 def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     coverage = _coverage_scores(product)
     core_scores = {key: value for key, value in coverage.items() if key in B_CORE}

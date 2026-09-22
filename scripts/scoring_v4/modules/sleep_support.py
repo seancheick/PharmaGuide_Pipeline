@@ -29,15 +29,6 @@ def is_sleep_support_product(product: Dict[str, Any]) -> bool:
     return primary_type_of(product) == "sleep_support"
 
 
-def has_sleep_active(product: Dict[str, Any], canonicals: Iterable[str]) -> bool:
-    canonical_set = {_norm_text(c) for c in canonicals}
-    for row in get_active_ingredients(product):
-        if _row_matches(row, canonical_set):
-            return True
-    return False
-
-
-
 def score_sleep_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """Return a sleep-specific dose score payload, or None when not applicable.
 

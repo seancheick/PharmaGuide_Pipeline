@@ -22,7 +22,7 @@ from __future__ import annotations
 import json
 import sys
 import time
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -31,7 +31,7 @@ sys.path.insert(0, str(ROOT))
 
 from enrich_supplements_v3 import SupplementEnricherV3
 from scoring_v4.modules.generic_evidence import score_evidence
-from scoring_v4.modules.generic_helpers import _norm_text, get_active_ingredients
+from scoring_v4.modules.generic_helpers import _norm_text
 
 def run_post_implementation_audit():
     t0 = time.time()

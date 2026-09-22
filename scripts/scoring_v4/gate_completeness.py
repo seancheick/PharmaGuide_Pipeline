@@ -84,8 +84,6 @@ def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 def _has_active_identity(ingredient: Dict[str, Any]) -> bool:
     return bool(
         ingredient.get("canonical_id")
-        or ingredient.get("matched_id")
-        or ingredient.get("ingredient_id")
         or ingredient.get("mapped") is True
     )
 
@@ -130,12 +128,6 @@ def _daily_value_percent(ingredient: Dict[str, Any]) -> Optional[float]:
         value = _as_float(variant.get("daily_value"), None)
         if value is not None and value > 0:
             return value
-        for target in _safe_list(variant.get("dailyValueTargetGroup")):
-            if not isinstance(target, dict):
-                continue
-            value = _as_float(target.get("percent"), None)
-            if value is not None and value > 0:
-                return value
     return None
 
 
@@ -165,7 +157,7 @@ def _has_enzyme_activity_evidence(ingredient: Dict[str, Any]) -> bool:
         return False
     return bool(
         _norm(ingredient.get("activity_unit"))
-        or _as_float(ingredient.get("activity_value"), None)
+        or _as_float(ingredient.get("activity_quantity"), None)
         or _norm(ingredient.get("unit")) in _ENZYME_ACTIVITY_UNITS
     )
 

@@ -55,7 +55,6 @@ def _build(name: str, actives: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {
         "dsld_id": 317006,
         "product_name": name,
-        "productName": name,
         "fullName": name,
         "brandName": "Sports Research",
         "activeIngredients": actives,

@@ -11,7 +11,7 @@ import re
 from functools import lru_cache
 from pathlib import Path
 import json
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, Tuple
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]

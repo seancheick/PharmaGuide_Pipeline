@@ -229,10 +229,7 @@ def _parse_processing_summary_text(text: str | None) -> dict:
     if not text:
         return {}
 
-    generated_at = None
     match = re.search(r"Generated:\s+([0-9:\-\s]+)", text)
-    if match:
-        generated_at = format_dashboard_datetime(match.group(1).strip().replace(" ", "T") + "+00:00")
 
     time_match = re.search(r"Processing Time:\s+([0-9.]+)\s+minutes", text)
     processing_time = round(float(time_match.group(1)) * 60, 2) if time_match else None

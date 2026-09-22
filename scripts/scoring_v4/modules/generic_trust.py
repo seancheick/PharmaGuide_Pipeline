@@ -20,7 +20,6 @@ from pathlib import Path
 from typing import Any, Dict
 
 from scoring_v4.modules.generic_helpers import (
-    _as_float,
     _norm_text,
     _safe_dict,
     _safe_list,

@@ -47,7 +47,7 @@ def _scored_product(dsld_id: str) -> dict:
     return {
         "dsld_id": dsld_id,
         "quality_score_status": "scored",
-        "_v4_pillars": {"evidence": {"score": 0.0}},
+        "quality_pillars_v4": {"evidence": {"score": 0.0}},
         "_v4_module": "fiber_digestive",
         "_v4_module_breakdown": {
             "dimensions": {

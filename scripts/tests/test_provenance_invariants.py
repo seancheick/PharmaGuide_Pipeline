@@ -27,7 +27,7 @@ class TestProvenanceFieldsPresence:
         """Active ingredients must have all provenance fields."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [
                 {
                     "ingredientId": 1,
@@ -74,7 +74,7 @@ class TestProvenanceFieldsPresence:
         """Inactive ingredients must have all provenance fields."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [],
             "otherIngredients": {
                 "ingredients": [
@@ -120,7 +120,7 @@ class TestNormalizedKeyStability:
         """normalized_key must match make_normalized_key() output."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [
                 {
                     "ingredientId": 1,
@@ -152,13 +152,13 @@ class TestNormalizedKeyStability:
         products = [
             {
                 "dsld_id": 1,
-                "productName": "Product A",
+                "fullName": "Product A",
                 "ingredientRows": [{"ingredientId": 1, "name": "Vitamin D3", "order": 1, "nestedRows": []}],
                 "otherIngredients": {"ingredients": [], "raw": ""}
             },
             {
                 "dsld_id": 2,
-                "productName": "Product B",
+                "fullName": "Product B",
                 "ingredientRows": [{"ingredientId": 2, "name": "Vitamin D3", "order": 1, "nestedRows": []}],
                 "otherIngredients": {"ingredients": [], "raw": ""}
             }
@@ -186,7 +186,7 @@ class TestRawSourceTextImmutability:
         """raw_source_text must be exactly the original name, not normalized."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [
                 {
                     "ingredientId": 1,
@@ -211,7 +211,7 @@ class TestRawSourceTextImmutability:
         """raw_source_text should preserve case from the input name."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [
                 {
                     "ingredientId": 1,
@@ -242,7 +242,7 @@ class TestRawSourcePath:
         """Ingredients from ingredientRows should carry exact raw row path."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [
                 {
                     "ingredientId": 1,
@@ -265,7 +265,7 @@ class TestRawSourcePath:
         """Ingredients from otherIngredients should carry exact raw row path."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [],
             "otherIngredients": {
                 "ingredients": [{"name": "Cellulose"}],
@@ -292,7 +292,7 @@ class TestNestedIngredientsProvenance:
         """Nested ingredients should also have all provenance fields."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [
                 {
                     "ingredientId": 1,
@@ -354,7 +354,7 @@ class TestProvenanceGoldenFixtures:
         """Verify specific ingredient names produce expected keys."""
         product = {
             "dsld_id": 12345,
-            "productName": "Test Product",
+            "fullName": "Test Product",
             "ingredientRows": [
                 {
                     "ingredientId": 1,

@@ -267,11 +267,6 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _penalty_dietary_sugar(product: Dict[str, Any]) -> float:
-    """Returns a NON-NEGATIVE magnitude — caller subtracts."""
-    return float(_dietary_sugar_penalty_detail(product).get("penalty") or 0.0)
-
-
 def _penalty_b0_moderate_watchlist(product: Dict[str, Any]) -> float:
     """Moderate/high-risk/watchlist safety signals that are not
     short-circuit verdicts. Only exact/alias matches score here; fuzzy
@@ -284,7 +279,7 @@ def _penalty_b0_moderate_watchlist(product: Dict[str, Any]) -> float:
         if not isinstance(substance, dict):
             continue
         match_type = _normalize_match_type(
-            substance.get("match_type") or substance.get("match_method") or substance.get("match_basis")
+            substance.get("match_type") or substance.get("match_method")
         )
         if match_type not in {"exact", "alias"}:
             continue
@@ -383,11 +378,6 @@ def _b1_harmful_additive_penalty_detail(product: Dict[str, Any]) -> Dict[str, An
         "penalty": total,
         "inactive_penalty_details": inactive_details,
     }
-
-
-def _penalty_b1_harmful_additives(product: Dict[str, Any]) -> float:
-    """Named harmful-additive penalty magnitude used by every v4 module."""
-    return float(_b1_harmful_additive_penalty_detail(product)["penalty"])
 
 
 def shared_formulation_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:

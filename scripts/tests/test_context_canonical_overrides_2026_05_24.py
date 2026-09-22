@@ -268,27 +268,14 @@ def test_review_scope_recognized_value(overrides_doc):
 # ---------------------------------------------------------------------------
 
 
-def test_enhanced_normalizer_exposes_context_override_loader():
-    """The cleaner must load the override file via a public-ish method
-    name (_load_context_canonical_overrides) so the contract is greppable."""
-    from scripts import enhanced_normalizer  # type: ignore
+def test_enhanced_normalizer_loads_the_context_override_file():
+    """The cleaner loads product_context_canonical_overrides.json at startup,
+    keyed by DSLD id, so the applier has real entries to act on."""
+    from scripts.enhanced_normalizer import EnhancedDSLDNormalizer  # type: ignore
 
-    # Find any function named _load_context_canonical_overrides on the
-    # EnhancedNormalizer class or as a module-level function.
-    candidates = []
-    for attr in dir(enhanced_normalizer):
-        if "context" in attr.lower() and "override" in attr.lower():
-            candidates.append(attr)
-    # The class itself may carry the method
-    cls = getattr(enhanced_normalizer, "EnhancedDSLDNormalizer", None)
-    if cls is not None:
-        for attr in dir(cls):
-            if "context" in attr.lower() and "override" in attr.lower():
-                candidates.append(f"EnhancedNormalizer.{attr}")
-    assert candidates, (
-        "enhanced_normalizer.py must expose a loader for the context override file "
-        "(name pattern: *context*override*). See spec section 'Loader + applier design'."
-    )
+    overrides = EnhancedDSLDNormalizer()._context_canonical_overrides_by_dsld_id
+    assert overrides, "context override file loaded no entries"
+    assert all(isinstance(key, str) for key in overrides)
 
 
 def test_apply_context_override_stamps_row_fields_when_all_conditions_match():

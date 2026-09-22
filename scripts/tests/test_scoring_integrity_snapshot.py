@@ -26,7 +26,6 @@ def _scored_row(
     return {
         "dsld_id": dsld_id,
         "_v4_module": module,
-        "_v4_quality_score_100": score,
         "quality_score_v4_100": score,
         "quality_score_status": "scored",
         "quality_tier": "Good",
@@ -34,8 +33,8 @@ def _scored_row(
         "safety_verdict": verdict,
         "mapped_coverage": 1.0,
         "blocking_reason": None,
-        "_v4_confidence": "high",
-        "_v4_pillars": {
+        "quality_score_confidence": "high",
+        "quality_pillars_v4": {
             "formulation": 12.0,
             "dose": 13.0,
             "evidence": 10.0,

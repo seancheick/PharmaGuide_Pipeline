@@ -79,7 +79,6 @@ class TestDBIntegrity:
             "ingredient_weights.json",
             "manufacture_deduction_expl.json",
             "user_goals_to_clusters.json",
-            "percentile_categories.json",
             "clinical_risk_taxonomy.json",
             "ingredient_interaction_rules.json",
         ]

@@ -376,21 +376,6 @@ def _select_window_component(
     return no_reference_credit if no_rda_reference else window_credit
 
 
-def _penalty_b7_dose_safety(product: Dict[str, Any]) -> float:
-    """Returns a NON-NEGATIVE magnitude — caller subtracts.
-
-    Policy lives in ``scoring_v4.dose_safety``, which every dose scorer shares so
-    one enriched contract cannot mean three different things. Magnitudes stay
-    module-owned and config-driven.
-    """
-    return resolve_dose_safety(
-        product or {},
-        threshold=B7_UL_PCT_THRESHOLD,
-        per_flag_penalty=B7_PER_FLAG_PENALTY,
-        cap=B7_CAP,
-    ).penalty
-
-
 # --- Public entry point --------------------------------------------------
 
 

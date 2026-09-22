@@ -18,14 +18,12 @@ Usage:
     result = normalizer.normalize_product_dosages(product)
 """
 
-import json
 import re
 import logging
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
-from unit_converter import UnitConverter, ConversionResult
+from unit_converter import UnitConverter
 
 logger = logging.getLogger(__name__)
 

@@ -54,16 +54,11 @@ except ImportError:
 sys.path.insert(0, str(Path(__file__).parent))
 
 from constants import (
+    IQD_DOSE_EVIDENCE_CLASSES,
     DATA_DIR,
-    CERTIFICATION_PATTERNS,
     ALLERGEN_FREE_PATTERNS,
-    STANDARDIZATION_PATTERNS,
-    VALIDATION_THRESHOLDS,
     LOG_FORMAT,
     LOG_DATE_FORMAT,
-    CERT_CLAIM_RULES,
-    UNIT_CONVERSIONS_DB,
-    # Scorable ingredient classification constants
     NON_THERAPEUTIC_PARENT_DENYLIST,
     ADDITIVE_TYPES_SKIP_SCORING,
     BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE,
@@ -71,7 +66,6 @@ from constants import (
     BLEND_HEADER_PATTERNS_LOW_CONFIDENCE,
     EXCIPIENT_NEVER_PROMOTE,
     POTENCY_MARKERS_HIGH_SIGNAL,
-    POTENCY_MARKERS_LOW_SIGNAL,
     PSEUDO_UNITS_INVALID,
     ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION,
     SERVING_UNIT_NORMALIZATION_MAP,
@@ -97,7 +91,7 @@ from run_artifacts import ensure_run_id, report_run_directory
 from dose_assessment import build_dose_assessment
 from assessment_readiness import ASSESSMENT_READINESS_SCHEMA_VERSION
 from supplement_type_utils import mark_compound_duplicate_rows
-from supplement_taxonomy import classify_supplement, percentile_label_for
+from supplement_taxonomy import classify_supplement
 from form_factor_normalizer import canonicalize_form_factor
 from probiotic_measurements import collect_afu_measurements
 from inactive_ingredient_resolver import (
@@ -135,9 +129,9 @@ import form_vocab as _form_vocab  # noqa: E402
 
 # Import scoring hardening modules
 from unit_converter import UnitConverter, ConversionResult
-from dosage_normalizer import DosageNormalizer, DosageNormalizationResult
-from proprietary_blend_detector import ProprietaryBlendDetector, BlendAnalysisResult
-from rda_ul_calculator import RDAULCalculator, NutrientAdequacyResult, ul_exceedance_sentence
+from dosage_normalizer import DosageNormalizer
+from proprietary_blend_detector import ProprietaryBlendDetector
+from rda_ul_calculator import RDAULCalculator, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
@@ -162,6 +156,7 @@ from match_ledger import (
     METHOD_UNII_FORM_EXACT,
     METHOD_ALTERNATE_NAME,
 )
+from identity.interaction import interaction_subject_ids
 from identity.safety import (
     has_explicit_form_evidence,
     negative_match_terms_veto,
@@ -1098,7 +1093,7 @@ class SupplementEnricherV3:
             self.rda_calculator = RDAULCalculator()
             self.logger.info("RDAULCalculator initialized")
 
-        except (RuntimeError, ValueError, KeyError) as e:
+        except (RuntimeError, ValueError, KeyError):
             # Critical failures: missing/corrupt reference data or config.
             # RuntimeError = DB file missing, ValueError = empty/invalid data,
             # KeyError = malformed config. All indicate the pipeline cannot
@@ -1283,8 +1278,8 @@ class SupplementEnricherV3:
             "raw_source_text": row.get("raw_source_text") or name,
             "raw_source_path": row.get("raw_source_path"),
             "canonical_id": row.get("canonical_id") or row.get("parent_key"),
-            "quantity": row.get("quantity", row.get("dosage")),
-            "unit": row.get("unit", row.get("dosage_unit")),
+            "quantity": row.get("quantity"),
+            "unit": row.get("unit"),
             "forms": row.get("forms") or [],
             "matched_form": row.get("matched_form"),
             "dose_data_quality": row.get("dose_data_quality"),
@@ -1397,7 +1392,6 @@ class SupplementEnricherV3:
                 "cert_claim_rules": "data/cert_claim_rules.json",
                 # Tiered matching: other_ingredients for recognized-but-non-scorable
                 "other_ingredients": "data/other_ingredients.json",
-                "percentile_categories": "data/percentile_categories.json",
                 "clinical_risk_taxonomy": "data/clinical_risk_taxonomy.json",
                 "ingredient_interaction_rules": "data/ingredient_interaction_rules.json",
                 # Cluster-matching alias map (canonical → variants). Used by
@@ -1540,7 +1534,6 @@ class SupplementEnricherV3:
             "rda_optimal_uls", "clinically_relevant_strains", "enhanced_delivery",
             "cert_claim_rules",  # Required for evidence-based claims detection
             "banned_match_allowlist",
-            "percentile_categories",
             "clinical_risk_taxonomy",
             "ingredient_interaction_rules",
         ]
@@ -1618,7 +1611,7 @@ class SupplementEnricherV3:
         # Track other versioned databases
         versioned_dbs = [
             'harmful_additives', 'allergens', 'ingredient_quality_map', 'banned_match_allowlist',
-            'percentile_categories', 'clinical_risk_taxonomy', 'ingredient_interaction_rules'
+            'clinical_risk_taxonomy', 'ingredient_interaction_rules'
         ]
         for db_name in versioned_dbs:
             db = self.databases.get(db_name, {})
@@ -3273,108 +3266,6 @@ class SupplementEnricherV3:
 
         return None
 
-    def _strain_match(self, strain_name: str, target_name: str, aliases: List[str]) -> bool:
-        """
-        Match probiotic strain names with support for:
-        - Genus abbreviations (L. reuteri = Lactobacillus reuteri)
-        - Genus name changes (Limosilactobacillus reuteri = Lactobacillus reuteri)
-        - Strain IDs (ATCC PTA 5289, DSM 17938)
-        """
-        if not strain_name or not target_name:
-            return False
-
-        # First try exact match
-        if self._exact_match(strain_name, target_name, aliases):
-            return True
-
-        # Normalize for comparison
-        strain_norm = self._normalize_text(strain_name)
-
-        # Map of genus name variations (old/new nomenclature)
-        genus_mappings = {
-            'limosilactobacillus': ['lactobacillus', 'l'],
-            'lactobacillus': ['limosilactobacillus', 'l'],
-            'lacticaseibacillus': ['lactobacillus', 'l'],
-            'lactiplantibacillus': ['lactobacillus', 'l'],
-            'bifidobacterium': ['b'],
-            'streptococcus': ['s'],
-            'bacillus': ['b'],
-            'saccharomyces': ['s'],
-        }
-
-        # Extract strain IDs structurally rather than maintaining a partial
-        # allowlist. Missing one code (for example M-63 or bare 35624) makes two
-        # different strains look species-only and can grant the wrong clinical
-        # evidence. Bounds deliberately exclude one/two-digit dose and CFU text.
-        strain_id_pattern = re.compile(
-            r'('
-            r'atcc\s*(?:pta\s*)?\d+|dsm\s*\d+|mtcc\s*\d+|'
-            r'sd-[a-z0-9]+(?:-[a-z0-9]+){1,3}|'
-            r'\b[a-z][a-z.]*-?\d+[a-z]?(?::\d+)?\b|'
-            r'\b\d{3,6}[a-z]?(?::\d+)?\b|'
-            r'ncfm|\blgg\b|\bgg\b|\bprodentis\b|\bshirota\b|\bnissle\b'
-            r')',
-            re.IGNORECASE,
-        )
-        strain_ids = strain_id_pattern.findall(strain_norm)
-
-        # Extract species name (second word, e.g., "reuteri", "rhamnosus")
-        words = strain_norm.split()
-        species = words[1] if len(words) > 1 else None
-        canonical_target_norm = self._normalize_text(target_name)
-        canonical_target_words = canonical_target_norm.split()
-        canonical_target_species = canonical_target_words[1] if len(canonical_target_words) > 1 else None
-
-        # Check all aliases with genus normalization
-        all_targets = [target_name] + aliases
-        for target in all_targets:
-            target_norm = self._normalize_text(target)
-            target_words = target_norm.split()
-            target_species = target_words[1] if len(target_words) > 1 else None
-            target_ids = strain_id_pattern.findall(target_norm)
-
-            if strain_ids and target_ids:
-                strain_ids_norm = {re.sub(r'[^a-z0-9]+', '', sid.lower()) for sid in strain_ids}
-                target_ids_norm = {re.sub(r'[^a-z0-9]+', '', tid.lower()) for tid in target_ids}
-                if strain_ids_norm & target_ids_norm:
-                    if not species:
-                        return True
-                    if species == target_species or species == canonical_target_species:
-                        return True
-
-            # If species match, check genus compatibility
-            if species and target_species and species == target_species:
-                # Check if strain IDs match (if present in both)
-                if strain_ids and target_ids:
-                    # Normalize IDs for comparison
-                    strain_ids_norm = {re.sub(r'[^a-z0-9]+', '', sid.lower()) for sid in strain_ids}
-                    target_ids_norm = {re.sub(r'[^a-z0-9]+', '', tid.lower()) for tid in target_ids}
-                    if strain_ids_norm & target_ids_norm:  # If any ID matches
-                        return True
-                elif not strain_ids and not target_ids:
-                    # No strain IDs in either - match on genus/species
-                    strain_genus = words[0] if words else ''
-                    target_genus = target_words[0] if target_words else ''
-
-                    # Direct genus match or abbreviated match
-                    if strain_genus == target_genus:
-                        return True
-                    # Check if abbreviated (e.g., "l" matches "lactobacillus")
-                    if target_genus in genus_mappings.get(strain_genus, []):
-                        return True
-                    if strain_genus in genus_mappings.get(target_genus, []):
-                        return True
-
-            # Check for substring match with strain ID
-            if strain_ids:
-                for sid in strain_ids:
-                    sid_norm = re.sub(r'[^a-z0-9]+', '', sid.lower())
-                    if sid_norm in re.sub(r'[^a-z0-9]+', '', target_norm):
-                        # Also verify species matches
-                        if species and species in target_norm:
-                            return True
-
-        return False
 
     def _get_safe_text_field(self, product: Dict, field: str) -> str:
         """Safely extract text from field that may be string or dict."""
@@ -4966,46 +4857,6 @@ class SupplementEnricherV3:
                 if match_result.get('bio_score', 0) > 12:
                     premium_form_count += 1
             else:
-                # D2.7.1 (medical-grade): when the cleaner resolved this row to
-                # proprietary_blends.json (Velositol, MyoTor, Tesnor, Metabolaid,
-                # etc. — branded matrices with no individual-component evidence),
-                # treat it as RECOGNIZED-BUT-NOT-SCORABLE rather than unmapped.
-                # The blend-transparency penalty (B5) still tracks it; but it
-                # no longer blocks the coverage gate on products that happen to
-                # contain one exotic branded blend alongside otherwise-scorable
-                # vitamins/minerals. Matches the existing policy for
-                # oils/fibers/excipients in other_ingredients.
-                _canonical_src = ingredient.get('canonical_source_db')
-                _canonical_id = ingredient.get('canonical_id')
-                if _canonical_src == 'proprietary_blends' and _canonical_id:
-                    quality_entry['recognized_non_scorable'] = True
-                    quality_entry['recognition_source'] = 'proprietary_blends'
-                    quality_entry['recognition_reason'] = 'proprietary_blend_member'
-                    quality_entry['recognition_type'] = 'blend_class'
-                    quality_entry['matched_entry_id'] = _canonical_id
-                    quality_entry['matched_entry_name'] = std_name or ing_name
-                    quality_entry['mapped'] = True
-                    quality_entry['mapped_identity'] = True
-                    quality_entry['scoreable_identity'] = False
-                    quality_entry['role_classification'] = 'recognized_non_scorable'
-                    quality_entry['identity_confidence'] = 1.0
-                    quality_entry['identity_decision_reason'] = 'proprietary_blend_member'
-                    self._tag_fallback_decision(quality_entry, 'clinical_fail_safe', 'proprietary_blend_member')
-                    self._restamp_recognized_non_scorable_identity(
-                        quality_entry,
-                        ingredient,
-                        match_result,
-                        quality_map,
-                    )
-                    recognized_non_scorable_count += 1
-                    self._route_non_scorable_iqd_row(
-                        quality_entry,
-                        ingredients_skipped,
-                        ingredients_recognized_non_scorable,
-                        skip_reason=SKIP_REASON_RECOGNIZED_NON_SCORABLE,
-                    )
-                    all_quality_data.append(quality_entry)
-                    continue
 
                 # D2.10 (medical-grade): source-descriptor child rows. DSLD
                 # sometimes emits a separate row whose ingredientName starts
@@ -5375,7 +5226,6 @@ class SupplementEnricherV3:
         # Records seen = what entered pass 1 classification (active ingredients)
         total_records_seen = len(active_ingredients)
         total_skipped = len(ingredients_skipped)
-        total_promoted = len(promoted_from_inactive)
 
         # Scorable from pass 1 = active-source rows that remain in the strict
         # scorable contract. Promoted inactive rows and recognized transparency
@@ -5805,12 +5655,7 @@ class SupplementEnricherV3:
         except ValueError:
             return None, None
 
-    _IQD_DOSE_EVIDENCE_CLASSES = frozenset({
-        "therapeutic_mass",
-        "enzyme_activity",
-        "probiotic_cfu",
-        "percent_dv_only",
-    })
+    _IQD_DOSE_EVIDENCE_CLASSES = IQD_DOSE_EVIDENCE_CLASSES
     _CLEANER_CONTRACT_FIELDS = frozenset({
         "source_section",
         "raw_source_path",
@@ -5853,8 +5698,6 @@ class SupplementEnricherV3:
             try:
                 return float(str(
                     row.get("percent_daily_value")
-                    or row.get("daily_value_percent")
-                    or row.get("percent_dv")
                     or 0
                 ).replace(",", "")) > 0
             except (TypeError, ValueError):
@@ -6063,7 +5906,7 @@ class SupplementEnricherV3:
         """Compute blend-related flags for ingredient-level signals."""
         nested = ingredient.get('nestedIngredients') or []
         is_proprietary_blend = bool(
-            ingredient.get('proprietaryBlend', False) or ingredient.get('isProprietaryBlend', False)
+            ingredient.get('proprietaryBlend', False)
         )
         is_blend_header = skip_reason in (
             SKIP_REASON_BLEND_HEADER_NO_DOSE,
@@ -6300,7 +6143,6 @@ class SupplementEnricherV3:
             and nested_pre
             and (
                 ingredient.get('proprietaryBlend', False)
-                or ingredient.get('isProprietaryBlend', False)
             )
         ):
             # Round 2 fix (2026-04-30): a "proprietary blend" by FDA/DSLD
@@ -6423,7 +6265,7 @@ class SupplementEnricherV3:
         # with proprietary flags and blend-like group tags, which should not enter A1/mapping gate.
         is_non_nested = not bool(ingredient.get('isNestedIngredient', False))
         has_proprietary_flag = bool(
-            ingredient.get('proprietaryBlend', False) or ingredient.get('isProprietaryBlend', False)
+            ingredient.get('proprietaryBlend', False)
         )
         group_signals_blend = any(
             token in ingredient_group for token in ('blend', 'proprietary')
@@ -6457,7 +6299,6 @@ class SupplementEnricherV3:
         # Restrict to true blend-header signals: 'summary' and 'blend_header'.
         is_structural_blend = (
             ingredient.get('proprietaryBlend', False)
-            or ingredient.get('isProprietaryBlend', False)
             or ('blend' in ingredient_group)
         )
         hierarchy_type_raw = ingredient.get('hierarchyType', '')
@@ -6913,7 +6754,6 @@ class SupplementEnricherV3:
             if not isinstance(entry, dict):
                 continue
             entry_name = self._normalize_text(entry.get('standard_name', ''))
-            entry_aliases = [self._normalize_text(a) for a in entry.get('aliases', [])]
             entry_variants = set(_variants(entry.get('standard_name', '')))
             for alias in entry.get('aliases', []):
                 entry_variants.update(_variants(alias))
@@ -9084,8 +8924,6 @@ class SupplementEnricherV3:
                         'form_source': 'label_extraction',
                     }
 
-        ing_exact = self._normalize_exact_text(ing_name)
-        std_exact = self._normalize_exact_text(std_name)
         ing_norm = self._normalize_text(ing_name)
         std_norm = self._normalize_text(std_name)
 
@@ -9186,7 +9024,6 @@ class SupplementEnricherV3:
                     break
 
         # If base name is different from full name, include it in matching candidates
-        base_exact = self._normalize_exact_text(base_name) if base_name else None
         base_norm = self._normalize_text(base_name) if base_name else None
 
         # Compound-form override for known cross-parent aliases when context is absent.
@@ -10359,7 +10196,6 @@ class SupplementEnricherV3:
                         std_name,
                         notes,
                         ingredient.get("raw_source_text", "") or "",
-                        ingredient.get("rawName", "") or "",
                     ]).strip()
                     alias_terms = bot_aliases if isinstance(bot_aliases, list) else []
                     context_terms = [ing_name, std_name, bot_name] + alias_terms[:12]
@@ -10760,7 +10596,6 @@ class SupplementEnricherV3:
         name = (
             product.get('product_name')
             or product.get('fullName')
-            or product.get('productName')
             or ''
         ).strip()
         if not name:
@@ -11365,7 +11200,6 @@ class SupplementEnricherV3:
         for ing_idx, ingredient in enumerate(scan_ingredients):
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
-            ing_name_lower = ing_name.lower()
             # Source section tag set by _evaluate_safety_data wrapper (active vs inactive).
             # Untagged ingredients default to 'active' so legacy callers preserve behavior.
             ing_source_section = ingredient.get('_source_section', 'active')
@@ -11811,7 +11645,6 @@ class SupplementEnricherV3:
                 is_explicit_natural or
                 (matched_natural_indicator and not is_explicit_artificial and not matched_artificial_indicator)
             )
-            is_artificial_color = is_explicit_artificial or (matched_artificial_indicator and not is_explicit_natural)
 
             for additive in harmful_list:
                 additive_name = additive.get('standard_name', '')
@@ -11947,7 +11780,7 @@ class SupplementEnricherV3:
         Returns: List of {allergen_id, presence_type, evidence_text, matched_text}
         """
         allergen_db = self.databases.get('allergens', {})
-        allergen_list = allergen_db.get('allergens', allergen_db.get('common_allergens', []))
+        allergen_list = allergen_db.get('allergens', [])
 
         found = []
 
@@ -12129,9 +11962,7 @@ class SupplementEnricherV3:
         - If same allergen from multiple sources, highest precedence wins
         """
         allergen_db = self.databases.get('allergens', {})
-        allergen_list = allergen_db.get('allergens', allergen_db.get('common_allergens', []))
-
-        all_text = self._get_all_product_text_lower(product)
+        allergen_list = allergen_db.get('allergens', [])
 
         # Collect allergens from all sources
         all_found = []
@@ -13203,8 +13034,7 @@ class SupplementEnricherV3:
 
         brand = product.get("brandName", "") or ""
         product_name = (
-            product.get("productName")
-            or product.get("fullName")
+            product.get("fullName")
             or ""
         )
 
@@ -13234,8 +13064,6 @@ class SupplementEnricherV3:
         product_dsld_id = (
             product.get("dsld_id")
             or product.get("id")
-            or product.get("dsldId")
-            or product.get("productId")
         )
         # Registry identity may need the actual dosage form or a printed
         # net-contents material qualifier. Keep these separate from the title
@@ -13638,7 +13466,6 @@ class SupplementEnricherV3:
                     continue
                 if not (
                     candidate.get("proprietaryBlend", False)
-                    or candidate.get("isProprietaryBlend", False)
                 ):
                     continue
                 parent_headers[self._normalize_exclusion_text(candidate_name)] = {
@@ -13657,8 +13484,7 @@ class SupplementEnricherV3:
                 ).strip()
                 structurally_nested = is_nested or bool(parent_source_path)
                 is_blend = (
-                    ingredient.get('proprietaryBlend', False) or
-                    ingredient.get('isProprietaryBlend', False)
+                    ingredient.get('proprietaryBlend', False)
                 )
                 # The cleaner assigns blend ownership to the parent header.
                 # Flattened display-only members deliberately remain
@@ -15833,11 +15659,10 @@ class SupplementEnricherV3:
 
         # Build text to search: product name, delivery form, harvestMethod, notes, label text
         product_name = product.get('product_name', product.get('fullName', '')).lower()
-        delivery_form = product.get('deliveryForm', '').lower()
         label_text = self._get_safe_text_field(product, 'labelText').lower()
 
         # Combine all text sources for checking
-        texts_to_check = [product_name, delivery_form, label_text]
+        texts_to_check = [product_name, label_text]
         texts_to_check.extend(text.lower() for text in _net_contents_texts(product))
 
         # Also check harvestMethod and notes from probiotic ingredients
@@ -16286,7 +16111,7 @@ class SupplementEnricherV3:
                     continue
                 source_path = str(row.get("raw_source_path") or "").strip()
                 activity_value = _number(
-                    row.get("activity_quantity", row.get("activity_value"))
+                    row.get("activity_quantity")
                 )
                 activity_unit = str(row.get("activity_unit") or "").strip()
                 if not source_path or activity_value is None or not activity_unit:
@@ -16693,9 +16518,11 @@ class SupplementEnricherV3:
         """Project the canonical taxonomy's percentile cohort onto the artifact.
 
         NOT a decider. `classify_supplement` owns product class; this only
-        restates its `percentile_category` plus the compatibility fields older
-        consumers read. Every value here is derived from the taxonomy — never
-        from a product name, ingredient list, or form factor.
+        restates its `percentile_category`, derived from the taxonomy — never
+        from a product name, ingredient list, or form factor. The label is
+        derived where it ships (scored artifact, `percentile_label_for`); the
+        label/source/confidence/signals copies this used to add had no reader
+        once the V3 scorer retired.
 
         This replaced an independent inference engine that scored name tokens
         and ingredients against data/percentile_categories.json. That config
@@ -16713,27 +16540,8 @@ class SupplementEnricherV3:
         taxonomy = taxonomy if isinstance(taxonomy, dict) else {}
         category = str(taxonomy.get("percentile_category") or "").strip()
 
-        if not category:
-            # Truthful zero rather than an invented cohort (plan TRAP 3).
-            return {
-                "percentile_category": None,
-                "percentile_category_label": None,
-                "percentile_category_source": "taxonomy_unavailable",
-                "percentile_category_confidence": 0.0,
-                "percentile_category_signals": ["no_taxonomy_percentile_category"],
-            }
-
-        reasons = taxonomy.get("classification_reasons")
-        return {
-            "percentile_category": category,
-            "percentile_category_label": percentile_label_for(category),
-            "percentile_category_source": "taxonomy_v2",
-            "percentile_category_confidence": taxonomy.get("classification_confidence"),
-            "percentile_category_signals": (
-                [str(item) for item in reasons if item is not None]
-                if isinstance(reasons, list) else []
-            ),
-        }
+        # Truthful None rather than an invented cohort (plan TRAP 3).
+        return {"percentile_category": category or None}
 
 
     # =========================================================================
@@ -16881,7 +16689,7 @@ class SupplementEnricherV3:
             return None
 
         canonical_basis_unit = self._normalize_serving_unit_label(basis_unit)
-        net_contents = product.get('netContents') or product.get('net_contents') or []
+        net_contents = product.get('netContents') or []
         if isinstance(net_contents, dict):
             net_contents = [net_contents]
         if not isinstance(net_contents, list):
@@ -16974,7 +16782,6 @@ class SupplementEnricherV3:
                 )
                 # Handle various field names for unit
                 basis_unit = (
-                    primary_serving.get('servingSizeUnitOfMeasure') or
                     primary_serving.get('unit') or
                     ''
                 )
@@ -16986,14 +16793,10 @@ class SupplementEnricherV3:
 
                 # Extract daily servings if provided by DSLD
                 min_servings_per_day = (
-                    primary_serving.get('minDailyServings') or
-                    primary_serving.get('minServingsPerDay') or
-                    primary_serving.get('min_daily_servings')
+                    primary_serving.get('minDailyServings')
                 )
                 max_servings_per_day = (
-                    primary_serving.get('maxDailyServings') or
-                    primary_serving.get('maxServingsPerDay') or
-                    primary_serving.get('max_daily_servings')
+                    primary_serving.get('maxDailyServings')
                 )
                 if min_servings_per_day is not None or max_servings_per_day is not None:
                     servings_per_day_source = "servingSizes"
@@ -18654,7 +18457,20 @@ class SupplementEnricherV3:
             if not subject:
                 continue
 
-            matched_rules = rule_index.get((subject["db"], subject["canonical_id"]), [])
+            # A vitamer also answers to rules authored on its family (vitamin
+            # K1/K2 -> vitamin K); each rule's own form_scope still decides.
+            matched_rules = []
+            seen_rule_ids: set = set()
+            subject_ids = (
+                interaction_subject_ids(subject["canonical_id"])
+                if subject["db"] == "ingredient_quality_map"
+                else [subject["canonical_id"]]
+            )
+            for subject_id in subject_ids:
+                for candidate in rule_index.get((subject["db"], subject_id), []):
+                    if id(candidate) not in seen_rule_ids:
+                        seen_rule_ids.add(id(candidate))
+                        matched_rules.append(candidate)
             if not matched_rules:
                 continue
 
@@ -22530,45 +22346,6 @@ class SupplementEnricherV3:
             self._quality_parent_context_index_cache[cache_key] = index
         return index.get(context_norm)
 
-    def get_unmapped_forms_report(self) -> Dict:
-        """
-        Generate report of all unmapped forms for database expansion.
-
-        Returns:
-            Dict with unmapped forms sorted by frequency and base name associations.
-        """
-        report = {
-            'total_unique_unmapped_forms': len(self.unmapped_forms_tracker),
-            'total_unmapped_occurrences': sum(
-                e['count'] for e in self.unmapped_forms_tracker.values()
-            ),
-            'forms_by_frequency': [],
-            'forms_by_base_name': {}
-        }
-
-        # Sort by frequency (most common first)
-        sorted_forms = sorted(
-            self.unmapped_forms_tracker.items(),
-            key=lambda x: x[1]['count'],
-            reverse=True
-        )
-
-        for key, entry in sorted_forms:
-            base_names_list = list(entry['base_names'])
-            report['forms_by_frequency'].append({
-                'raw_form': entry['raw_text'],
-                'count': entry['count'],
-                'base_names': base_names_list,
-                'example_labels': entry['example_labels']
-            })
-
-            # Group by base name for easier database expansion
-            for base_name in base_names_list:
-                if base_name not in report['forms_by_base_name']:
-                    report['forms_by_base_name'][base_name] = []
-                report['forms_by_base_name'][base_name].append(entry['raw_text'])
-
-        return report
 
     def _build_match_ledger(self, product: Dict, enriched: Dict) -> Dict:
         """
@@ -22740,7 +22517,7 @@ class SupplementEnricherV3:
                 or additive.get("matched_name")
                 or ""
             )
-            canonical_id = additive.get("additive_id") or additive.get("db_id")
+            canonical_id = additive.get("additive_id")
             normalized_key = additive.get("normalized_key") or norm_module.make_normalized_key(raw_text)
 
             method_raw = self._normalize_text(additive.get("match_method", ""))
@@ -22781,19 +22558,21 @@ class SupplementEnricherV3:
         # =====================================================================
         # ALLERGENS DOMAIN (from compliance_data)
         # =====================================================================
-        compliance_data = enriched.get("compliance_data", {})
-        for allergen in compliance_data.get("allergens_detected", []):
-            raw_text = allergen.get("source_ingredient") or allergen.get("allergen_name", "")
-            allergen_type = allergen.get("allergen_type", "")
+        # The allergen owner's hits (`allergen_hits`); compliance_data never
+        # carried an `allergens_detected` list, so this domain was always empty.
+        for allergen in enriched.get("allergen_hits") or []:
+            if not isinstance(allergen, dict):
+                continue
+            raw_text = allergen.get("matched_text") or allergen.get("allergen_name", "")
             normalized_key = norm_module.make_normalized_key(raw_text)
 
             ledger.record_match(
                 domain=DOMAIN_ALLERGENS,
                 raw_source_text=raw_text,
                 raw_source_path=allergen.get("presence_type", "ingredient_derived"),
-                canonical_id=allergen_type.lower().replace(" ", "_"),
+                canonical_id=allergen.get("allergen_id") or "",
                 match_method=METHOD_EXACT,
-                matched_to_name=allergen_type,
+                matched_to_name=allergen.get("allergen_name", ""),
                 confidence=1.0,
                 normalized_key=normalized_key,
             )
@@ -22875,7 +22654,8 @@ class SupplementEnricherV3:
         # DELIVERY SYSTEMS DOMAIN
         # =====================================================================
         delivery_data = enriched.get("delivery_data", {})
-        for system in delivery_data.get("matched_systems", []):
+        # delivery_data lists its matches under `systems` (never `matched_systems`).
+        for system in delivery_data.get("systems") or []:
             raw_text = system.get("name", "")
             canonical_id = system.get("canonical_id") or raw_text.lower().replace(" ", "_")
             normalized_key = norm_module.make_normalized_key(raw_text)

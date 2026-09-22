@@ -346,23 +346,6 @@ def _tier(score: float) -> str:
     return bands[-1]["name"]
 
 
-def _public_quality_cap(module_bd: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    cap = ((module_bd.get("metadata") or {}).get("public_quality_cap") or {})
-    if not isinstance(cap, dict):
-        return None
-    cap_value = _num(cap.get("cap"), None)
-    if cap_value is None or cap_value <= 0 or cap_value > 100:
-        return None
-    cap_id = str(cap.get("id") or "").strip()
-    if not cap_id:
-        return None
-    return {
-        "id": cap_id,
-        "cap": round(cap_value, 1),
-        "reason": cap.get("reason"),
-    }
-
-
 def _manuf_violation_split(module_bd: Dict[str, Any]) -> Dict[str, float]:
     """PR3: route a maker's violation deduction into ONE pillar by type.
 
@@ -799,10 +782,7 @@ EVIDENCE_ASSESSED_STATES = frozenset({
 })
 
 
-_PHASE5_ENABLED: bool = True
-
-
-def evidence_display_state(state: Optional[str], score: float = 0.0) -> str:
+def evidence_display_state(state: Optional[str]) -> str:
     """The one place that decides how an Evidence result may be PRESENTED.
 
     Returns exactly one of:
@@ -812,11 +792,9 @@ def evidence_display_state(state: Optional[str], score: float = 0.0) -> str:
       not_applicable              - nothing on this label to assess
 
     Phase 5 doctrine: Assessment state is derived strictly from the canonical
-    Evidence disposition, never inferred from a positive score alone. Points
-    are an output of assessment, not proof that assessment occurred.
+    Evidence disposition and never sees the points. Points are an output of
+    assessment, not proof that assessment occurred.
     """
-    if not _PHASE5_ENABLED and score > 0:
-        return "assessed"
     if state in EVIDENCE_COVERAGE_GAP_STATES:
         return "not_yet_reviewed"
     if state in EVIDENCE_APPLICABILITY_STATES:
@@ -825,7 +803,8 @@ def evidence_display_state(state: Optional[str], score: float = 0.0) -> str:
         return "not_applicable"
     if state in EVIDENCE_ASSESSED_STATES:
         return "assessed"
-    return "assessed" if state else "not_yet_reviewed"
+    # An undeclared state is never presented as a finished review.
+    return "not_yet_reviewed"
 
 
 _EVIDENCE_ZERO_REASON = {
@@ -907,8 +886,10 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
             reason = "The cited human trial did not show benefit for its primary outcome; other outcomes and studies require separate assessment."
         elif metadata.get("evidence_result_state") == "human_clinical_evidence_unestablished":
             reason = "Our review of human clinical evidence is incomplete; the recorded nonclinical or unresolved sources do not establish benefit. This is not a product-quality finding."
-        elif metadata.get("evidence_result_state") == "native_research_review_incomplete":
+        elif metadata.get("evidence_result_state") == "native_research_review_incomplete" and val <= 0:
             reason = "Our strain-specific human clinical review is incomplete; no conclusion about benefit or product quality follows from this review gap."
+        elif metadata.get("evidence_result_state") in {"identity_material_unresolved", "clinical_review_not_covered"} and val <= 0:
+            reason = _EVIDENCE_ZERO_REASON[metadata["evidence_result_state"]]
         # Credit ownership is decided by the probiotic Evidence module
         # (metadata.credit_owner) and outranks strain applicability copy.
         elif val > 0 and metadata.get("credit_owner") == "companion":
@@ -936,10 +917,12 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
             reason = "Our reviewed evidence does not establish probiotic benefit for this formula and dose; this is not a product-quality finding."
         if (
             metadata.get("evidence_result_state") in {
-                "human_clinical_evidence_unestablished", "native_research_review_incomplete"}
+                "human_clinical_evidence_unestablished", "native_research_review_incomplete",
+                "applicability_unestablished"}
             and assessed and all((row.get("cfu_per_day") or 0) <= 0 for row in assessed)
         ):
-            # Two separate limits: the review, and a label with no per-strain amounts.
+            # A separate limit whatever the review state: the label gives no
+            # per-strain amounts, so nothing can be matched to a studied dose.
             reason += (" Individual strain amounts are also not disclosed, so no strain can be "
                        "matched to a studied dose.")
     if val == 0 and archetype != "probiotic":
@@ -949,7 +932,7 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         if zero_copy is None:
             zero_copy = _EVIDENCE_ZERO_REASON.get(
                 _EVIDENCE_ZERO_CLASS_FALLBACK.get(
-                    evidence_display_state(state, val)
+                    evidence_display_state(state)
                 )
             )
         reason = zero_copy or reason
@@ -959,12 +942,17 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     # re-deriving it from a number that cannot tell the two kinds of zero apart.
     result_state = metadata.get("evidence_result_state") or (
         metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
+    if val > 0 and evidence_display_state(result_state) == "not_yet_reviewed":
+        # Credit already earned cannot finish the assessment while other
+        # research on the label is still under review.
+        reason = ("Some research on this label earned credit, but our review of the rest "
+                  "is still open, so this assessment is not finished.")
     return {
         "score": val,
         "max": weight,
         "reason": reason,
         "evidence_result_state": result_state,
-        "display_state": evidence_display_state(result_state, val),
+        "display_state": evidence_display_state(result_state),
         "components": {"raw_evidence": score, "archetype": archetype, "reference": ref},
     }
 
@@ -1214,7 +1202,6 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     # Public-contract aliases / provenance (always emitted)
     result["raw_score_v4_100"] = raw
     result["quality_score_version"] = cfg["_metadata"]["version"]
-    result["quality_score_cap_v4"] = None
     # Clean-label additive flags (titanium dioxide / E171). Emit the consumer
     # "inform" flag for every status, including BLOCKED/UNSAFE suppressed rows;
     # the numeric penalty only applies on the scored path below.
@@ -1242,19 +1229,10 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
         return result
 
     pillars = _build_pillars(module_bd, cfg, module, clean_label_penalty=cl_penalty)
+    # The public total is the literal sum of the six published pillars. No
+    # post-sum cap, clamp or category adjustment may change it; a category
+    # concern belongs in its owning pillar or the safety gate.
     total = max(0.0, min(100.0, round(sum(p["score"] for p in pillars.values()), 1)))
-    cap = _public_quality_cap(module_bd)
-    if cap is not None and total > cap["cap"]:
-        score_before_cap = total
-        total = cap["cap"]
-        result["quality_score_cap_v4"] = {
-            **cap,
-            "applied": True,
-            "score_before_cap": score_before_cap,
-            "score_after_cap": total,
-            "adjustment": round(total - score_before_cap, 1),
-            "presentation": "explicit_adjustment",
-        }
 
     # Attach optional, versioned explanation facts sourced from the module
     # breakdown metadata. Pure adapter over already-computed pillars: it never

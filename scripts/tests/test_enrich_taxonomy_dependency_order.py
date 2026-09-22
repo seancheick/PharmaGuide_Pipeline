@@ -53,7 +53,6 @@ def _build(name: str, actives: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {
         "dsld_id": 970101,
         "product_name": name,
-        "productName": name,
         "fullName": name,
         "brandName": "TestBrand",
         "activeIngredients": actives,
@@ -206,14 +205,15 @@ def test_probiotic_np_exemption_gate_still_fires(enricher):
 
 
 def test_percentile_fields_are_still_emitted(enricher, product):
-    """The move must not drop the compatibility surface."""
+    """The move must keep the cohort; the four V3-era copies beside it had no
+    reader and are retired (the label ships from the scored artifact)."""
     enriched, _ = enricher.enrich_product(product)
 
-    for key in (
-        "percentile_category",
+    assert "percentile_category" in enriched, "percentile_category disappeared from the enriched artifact"
+    for retired in (
         "percentile_category_label",
         "percentile_category_source",
         "percentile_category_confidence",
         "percentile_category_signals",
     ):
-        assert key in enriched, f"{key} disappeared from the enriched artifact"
+        assert retired not in enriched

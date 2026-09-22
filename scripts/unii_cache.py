@@ -16,7 +16,6 @@ Usage:
 
 import json
 import logging
-import os
 import re
 import urllib.request
 import urllib.parse
@@ -186,19 +185,6 @@ class UniiCache:
         # 2. Cache lookup
         return self.lookup(form_name)
 
-    def resolve_all_form_uniis(self, entry: dict) -> dict[str, Optional[str]]:
-        """Resolve UNIIs for all forms in an IQM entry.
-
-        Returns {form_name: unii_or_none} for every form.
-        Useful for enrichment matching — when a product ingredient name
-        matches a form, we can confirm identity via UNII.
-        """
-        result = {}
-        forms = entry.get("forms", {})
-        if isinstance(forms, dict):
-            for fname, fdata in forms.items():
-                result[fname] = self.lookup_for_iqm_form(fname, fdata)
-        return result
 
     def _gsrs_search(self, name: str) -> Optional[str]:
         """Search GSRS API for a UNII by substance name."""

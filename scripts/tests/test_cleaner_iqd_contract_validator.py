@@ -326,3 +326,43 @@ def test_fallback_iqd_decisions_require_field_level_diagnostics():
     rules = {v.rule for v in _f_rules(product)}
 
     assert "F.14" in rules
+
+
+def test_every_cleaner_role_literal_is_in_the_one_shared_vocabulary():
+    """The Cleaner must not start emitting a role its consumers cannot read.
+
+    Four hand-kept role lists once drifted: a role the Cleaner emitted was
+    missing from the Stage-2.4 copy and failed 9 brands. Every consumer now
+    imports the constants.py vocabulary; this pins the producer to it too.
+    """
+    import re
+    from pathlib import Path
+
+    import audit_source_of_truth_contract
+    import scoring_input_contract
+    from constants import CLEANER_NON_SCORABLE_ROLES, CLEANER_SCORABLE_ROLES
+
+    source = (Path(__file__).resolve().parents[1] / "enhanced_normalizer.py").read_text()
+    assigned = set(re.findall(r'cleaner_row_role"?\]?\s*[:=]\s*"([a-z_]+)"', source))
+    assigned |= set(re.findall(r'"(composition_leaf|nested_display_only)"\s*\n?\s*(?:if|else)', source))
+    assert {"active_scorable", "standardization_marker", "blend_header_total"} <= assigned
+    assert assigned <= CLEANER_SCORABLE_ROLES | CLEANER_NON_SCORABLE_ROLES
+
+    assert EnrichmentContractValidator.CLEANER_NON_SCORABLE_ROLES is CLEANER_NON_SCORABLE_ROLES
+    assert EnrichmentContractValidator.CLEANER_SCORABLE_ROLES is CLEANER_SCORABLE_ROLES
+    assert scoring_input_contract.EXCLUDED_CLEANER_ROLES is CLEANER_NON_SCORABLE_ROLES
+    assert scoring_input_contract.VALID_ACTIVE_ROLES is CLEANER_SCORABLE_ROLES
+    assert audit_source_of_truth_contract.SCORABLE_BLOCKED_ROLES is CLEANER_NON_SCORABLE_ROLES
+    assert not CLEANER_SCORABLE_ROLES & CLEANER_NON_SCORABLE_ROLES
+
+
+def test_dose_class_and_identity_state_vocabularies_have_one_owner():
+    import enrich_supplements_v3
+    import scoring_input_contract
+    from constants import IQD_DOSE_EVIDENCE_CLASSES
+    from identity_integrity import IDENTITY_DISPOSITIONS
+
+    assert EnrichmentContractValidator.VALID_IQD_DOSE_CLASSES is IQD_DOSE_EVIDENCE_CLASSES
+    assert scoring_input_contract.VALID_DOSE_CLASSES is IQD_DOSE_EVIDENCE_CLASSES
+    assert enrich_supplements_v3.SupplementEnricherV3._IQD_DOSE_EVIDENCE_CLASSES is IQD_DOSE_EVIDENCE_CLASSES
+    assert EnrichmentContractValidator.DISPLAY_LEDGER_IDENTITY_STATES == frozenset(IDENTITY_DISPOSITIONS)

@@ -59,7 +59,6 @@ import argparse
 import collections
 import glob
 import json
-import statistics
 import sys
 import threading
 from pathlib import Path

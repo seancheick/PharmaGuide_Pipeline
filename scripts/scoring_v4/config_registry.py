@@ -45,10 +45,6 @@ _PROVENANCE_CONFIGS: Dict[str, Path] = {
 _FINGERPRINT_HISTORY_PATH = SCORING_CONFIG_DIR / "config_fingerprint_history.json"
 
 
-def registered_rubrics() -> Tuple[str, ...]:
-    return tuple(sorted(_RUBRICS))
-
-
 def _rubric_path(name: str) -> Path:
     try:
         return DATA_DIR / _RUBRICS[name]

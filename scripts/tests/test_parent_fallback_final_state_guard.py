@@ -25,10 +25,8 @@ upgrade the match to a real form via any subsequent path.
 
 from __future__ import annotations
 
-import json
 import os
 import sys
-from pathlib import Path
 
 import pytest
 
@@ -38,27 +36,23 @@ sys.path.insert(
 
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
 
-SCRIPTS_DIR = Path(__file__).resolve().parents[1]
-BATCH_PATH = (
-    SCRIPTS_DIR
-    / "products"
-    / "output_Pure_Encapsulations"
-    / "cleaned"
-    / "cleaned_batch_2.json"
-)
-
-
 def _load_curly_devils_claw_product(product_id: str) -> dict:
-    """Load the exact Pure Encapsulations curly-apostrophe Devil's Claw product."""
-    if not BATCH_PATH.exists():
-        pytest.skip(f"Fixture batch not available at {BATCH_PATH}")
-    with open(BATCH_PATH) as f:
-        data = json.load(f)
-    products = data if isinstance(data, list) else [data]
-    for p in products:
-        if str(p.get("id")) == product_id:
-            return p
-    pytest.skip(f"Product {product_id} not found in {BATCH_PATH}")
+    """The Pure Encapsulations Devil's Claw label shape (curly apostrophe in
+    the name, harpagosides as the standardization form), cleaned by the real
+    Cleaner. The two catalog products (185102, 185106) left the dataset, which
+    made this guard skip; a self-contained label keeps it running."""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from tests.test_clinical_signoff_engineering_fixes_20260919 import _make_dsld_product, _row
+
+    rows = [_row(
+        "Devil\u2019s Claw root extract", 500, "mg", category="botanical",
+        ingredientGroup="Devil's Claw",
+        forms=[{"name": "Harpagosides", "ingredientGroup": "Harpagoside",
+                "category": "non-nutrient/non-botanical"}],
+    )]
+    raw = _make_dsld_product(int(product_id), "Devil's Claw", rows)
+    raw["physicalState"] = {"langualCode": "E0159", "langualCodeDescription": "Capsule"}
+    return EnhancedDSLDNormalizer().normalize_product(raw)
 
 
 @pytest.fixture(scope="module")

@@ -6,7 +6,7 @@ If the pipeline stops emitting any of these keys, the Flutter UI breaks
 silently (empty sections, missing safety cards, profile-gated warnings
 disappearing).
 
-The contract is sampled from a live ``/tmp/pharmaguide_release_build``
+The contract is sampled from the current ``scripts/final_db_output``
 build. When running locally without a build, the test is skipped with a
 clear marker so CI on a clean environment doesn't fail spuriously.
 
@@ -18,7 +18,6 @@ Required keys audited here (mapped to consumer features):
 | ``inactive_ingredients`` | Excipient density card |
 | ``warnings`` | InteractionWarningsList (always shown) |
 | ``warnings_profile_gated`` | InteractionWarningsList (profile-filtered) |
-| ``section_breakdown`` | ScoreBreakdownCard |
 | ``score_bonuses`` | Pros list |
 | ``score_penalties`` | Cons list |
 | ``interaction_summary`` | InteractionWarnings (condition/drug banners) |
@@ -43,57 +42,52 @@ the presence check.
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 
 import pytest
 
+from release_artifact_paths import catalog_dist_dir, final_build_dir
 
-# MANDATORY top-level keys — must be present on every single product,
-# regardless of its ingredients. If any is missing, Flutter crashes or
-# renders a blank section.
-REQUIRED_TOP_LEVEL_KEYS = {
-    "ingredients",
-    "inactive_ingredients",
-    "warnings",
-    "warnings_profile_gated",
-    "section_breakdown",
-    "score_bonuses",
-    "score_penalties",
-    "nutrition_detail",
-    "unmapped_actives",
-    "proprietary_blend_detail",
-    "certification_detail",
-    "evidence_data",
-    "formulation_detail",
-    "manufacturer_detail",
-    "serving_info",
-    "rda_ul_data",
-}
 
-# OPTIONAL top-level keys — only emitted by the enricher when the
-# underlying feature applies (e.g. probiotic_detail only on products
-# that contain a recognized probiotic strain; synergy_detail only on
-# products with a matched synergy cluster). Tested separately so a
-# simple supplement without probiotic/synergy doesn't fail the
-# mandatory-contract scan.
-OPTIONAL_TOP_LEVEL_KEYS = {
-    "probiotic_detail",
-    "synergy_detail",
-    "interaction_summary",  # absent when no interaction rules match
-    "omega3_audit",
-    "non_gmo_audit",
-    "supplement_type_audit",
-    "proprietary_blend_audit",
-    "audit",
-}
+# The one declaration of the top-level contract lives in the strict snapshot
+# gate (audit_contract_sync.BLOB_TOP_LEVEL). This test used to carry its own
+# third copy, which had drifted (interaction_summary optional here, required
+# there; section_breakdown required long after it only carried zeros).
+from audit_contract_sync import BLOB_TOP_LEVEL
+
+REQUIRED_TOP_LEVEL_KEYS = {k for k, spec in BLOB_TOP_LEVEL.items() if spec.get("required")}
+NULLABLE_TOP_LEVEL_KEYS = {k for k, spec in BLOB_TOP_LEVEL.items() if spec.get("presence") == "nullable"}
+OPTIONAL_TOP_LEVEL_KEYS = {k for k, spec in BLOB_TOP_LEVEL.items() if spec.get("presence") == "conditional"}
+
+
+def test_every_declared_key_has_one_presence_class() -> None:
+    assert REQUIRED_TOP_LEVEL_KEYS | NULLABLE_TOP_LEVEL_KEYS | OPTIONAL_TOP_LEVEL_KEYS == set(BLOB_TOP_LEVEL)
+    assert not (REQUIRED_TOP_LEVEL_KEYS & NULLABLE_TOP_LEVEL_KEYS)
+    assert not (REQUIRED_TOP_LEVEL_KEYS & OPTIONAL_TOP_LEVEL_KEYS)
+    for retired in ("section_breakdown", "omega3_detail", "quality_score_cap_v4"):
+        assert retired not in BLOB_TOP_LEVEL
+
+
+def test_an_undeclared_top_level_key_fails_the_gate(tmp_path) -> None:
+    import subprocess
+    import sys
+
+    blobs = tmp_path / "detail_blobs"
+    blobs.mkdir()
+    blob = {key: [] for key in REQUIRED_TOP_LEVEL_KEYS}
+    blob["some_new_unreviewed_block"] = {}
+    (blobs / "1.json").write_text(json.dumps(blob))
+    script = Path(__file__).resolve().parents[1] / "audit_contract_sync.py"
+    result = subprocess.run(
+        [sys.executable, str(script), "--build-dir", str(tmp_path), "--out", str(tmp_path / "r.json")],
+        capture_output=True, text=True,
+    )
+    assert result.returncode == 1
+    assert "some_new_unreviewed_block" in result.stdout
 
 
 def _find_blob_dir() -> Path | None:
-    candidates = [
-        Path("/tmp/pharmaguide_release_build/detail_blobs"),
-        Path("/tmp/pharmaguide_build/detail_blobs"),
-    ]
+    candidates = [final_build_dir() / "detail_blobs", catalog_dist_dir() / "detail_blobs"]
     for c in candidates:
         if c.is_dir() and any(c.glob("*.json")):
             return c
@@ -105,13 +99,20 @@ def sample_blobs():
     blob_dir = _find_blob_dir()
     if blob_dir is None:
         pytest.skip(
-            "No build artifact found under /tmp/pharmaguide_release_build — "
+            "No build artifact found under scripts/final_db_output or scripts/dist — "
             "run build_final_db.py first to exercise this contract test."
         )
-    sample_paths = sorted(blob_dir.glob("*.json"))[:100]
+    all_paths = sorted(blob_dir.glob("*.json"))
+    # evenly spaced across the catalog, not the first files by name
+    sample_paths = all_paths[:: max(1, len(all_paths) // 1000)]
     if not sample_paths:
         pytest.skip("No detail blobs to sample.")
     return [json.loads(p.read_text()) for p in sample_paths]
+
+
+def test_every_blob_key_is_declared(sample_blobs) -> None:
+    undeclared = {key for blob in sample_blobs for key in blob} - set(BLOB_TOP_LEVEL)
+    assert not undeclared, f"undeclared detail-blob keys: {sorted(undeclared)}"
 
 
 def test_every_blob_has_required_top_level_keys(sample_blobs) -> None:

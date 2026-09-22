@@ -53,16 +53,6 @@ def _safe_str(value: Any, default: str = "") -> str:
     return str(value).strip()
 
 
-def _as_float(value: Any, default: float | None = None) -> float | None:
-    if value is None:
-        return default
-    try:
-        result = float(value)
-    except (TypeError, ValueError):
-        return default
-    return result
-
-
 def _norm_text(value: Any) -> str:
     text = _safe_str(value).lower()
     return re.sub(r"\s+", " ", text)
@@ -127,10 +117,7 @@ def derive_non_gmo_audit(product: dict[str, Any]) -> dict[str, Any]:
         elif signal_type == "generic_claim":
             generic_signals.append(signal)
 
-    project_verified = bool(
-        product.get("claim_non_gmo_project_verified")
-        or verified_signals
-    )
+    project_verified = bool(verified_signals)
     claim_present = project_verified or bool(generic_signals)
 
     if project_verified:
@@ -173,10 +160,7 @@ def _is_omega3_ingredient(ingredient: dict[str, Any]) -> bool:
     return False
 
 
-def derive_omega3_audit(
-    product: dict[str, Any],
-    scored: dict[str, Any] | None = None,
-) -> dict[str, Any]:
+def derive_omega3_audit(product: dict[str, Any]) -> dict[str, Any]:
     matched_ingredients: list[dict[str, Any]] = []
     seen_keys: set[tuple[str, str]] = set()
 
@@ -196,52 +180,19 @@ def derive_omega3_audit(
             }
         )
 
-    breakdown = _safe_dict(_safe_dict(_safe_dict(scored).get("breakdown")).get("A")).get("omega3_breakdown")
-    if not isinstance(breakdown, dict):
-        breakdown = {}
-
-    contains_omega3 = bool(matched_ingredients or breakdown.get("applicable"))
-    bonus_score = _as_float(
-        breakdown.get("omega3_dose_bonus", breakdown.get("score")),
-        0.0,
-    ) or 0.0
-
-    if bonus_score > 0:
-        reason = "omega3_bonus_awarded"
-    elif breakdown.get("applicable"):
-        reason = "omega3_present_below_bonus_threshold"
-    elif contains_omega3:
-        reason = "omega3_ingredients_detected"
-    else:
-        reason = "no_omega3_signal"
-
+    # Omega-3 dose credit is owned by the v4 omega modules and ships in
+    # quality_pillars_v4; this audit only records what the label carries.
     return {
-        "contains_omega3": contains_omega3,
-        "reason": reason,
+        "contains_omega3": bool(matched_ingredients),
+        "reason": "omega3_ingredients_detected" if matched_ingredients else "no_omega3_signal",
         "matched_ingredients": matched_ingredients,
-        "bonus_score": round(bonus_score, 2),
-        "applicable_for_dose_bonus": bool(breakdown.get("applicable")),
-        "dose_band": _safe_str(breakdown.get("dose_band")),
-        "per_day_mid_mg": _as_float(breakdown.get("per_day_mid_mg")),
-        "per_day_min_mg": _as_float(breakdown.get("per_day_min_mg")),
-        "per_day_max_mg": _as_float(breakdown.get("per_day_max_mg")),
-        "epa_mg_per_unit": _as_float(breakdown.get("epa_mg_per_unit")),
-        "dha_mg_per_unit": _as_float(breakdown.get("dha_mg_per_unit")),
-        "epa_dha_mg_per_unit": _as_float(breakdown.get("epa_dha_mg_per_unit")),
     }
 
 
-def derive_proprietary_blend_audit(
-    product: dict[str, Any],
-    scored: dict[str, Any] | None = None,
-) -> dict[str, Any]:
+def derive_proprietary_blend_audit(product: dict[str, Any]) -> dict[str, Any]:
+    # The blend disclosure penalty is owned by the v4 transparency pillar.
     proprietary_data = _safe_dict(product.get("proprietary_data"))
-    section_b = _safe_dict(_safe_dict(_safe_dict(scored).get("breakdown")).get("B"))
-    evidence = _safe_list(section_b.get("B5_blend_evidence"))
-    penalty = _as_float(section_b.get("B5_penalty"), 0.0) or 0.0
     return {
         "has_proprietary_blends": bool(proprietary_data.get("has_proprietary_blends")),
         "blend_count": len(_safe_list(proprietary_data.get("blends"))),
-        "penalty_score": round(penalty, 2),
-        "evidence": evidence,
     }

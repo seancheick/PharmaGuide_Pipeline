@@ -35,7 +35,6 @@ Test invariants this suite locks in:
 
 from __future__ import annotations
 
-import json
 import re
 import sys
 from pathlib import Path
@@ -188,37 +187,3 @@ def test_unbranded_simple_nutrient_unchanged() -> None:
     assert "citrate" in label.lower()
     # Must NOT smash everything into one mess
     assert "(as" not in label.lower()  # we don't want the "(as X)" parenthetical
-
-
-def test_blob_canary_1181_meets_invariants() -> None:
-    """Walk the targeted-rebuild canary blob (if present) and confirm the
-    Capsimax ingredient passes all 4 fidelity checks at the BLOB level."""
-    candidates = [
-        Path("/tmp/pharmaguide_release_build_canonical_id/detail_blobs/1181.json"),
-        Path("/tmp/pharmaguide_release_build_v3/detail_blobs/1181.json"),
-        Path("/tmp/pharmaguide_release_build/detail_blobs/1181.json"),
-    ]
-    blob_path = next((p for p in candidates if p.exists()), None)
-    if blob_path is None:
-        pytest.skip("DSLD 1181 blob not present in any build dir — run targeted rebuild first")
-    blob = json.loads(blob_path.read_text())
-
-    cap = None
-    for ing in blob.get("ingredients") or []:
-        if "capsimax" in (ing.get("name") or "").lower():
-            cap = ing
-            break
-        if "capsicum" in (ing.get("raw_source_text") or "").lower():
-            cap = ing
-            break
-    if cap is None:
-        pytest.skip("Capsimax ingredient not found in 1181 blob")
-
-    display = cap.get("display_label") or ""
-    assert "capsimax" in display.lower(), f"brand missing: {display!r}"
-    assert "capsicum" in display.lower(), f"species missing: {display!r}"
-    assert "fruit" in display.lower(), f"plant part missing: {display!r}"
-    # Trademark markers must not survive
-    assert not re.search(r"\(\s*TM\s*\)|\(\s*R\s*\)|™|®", display, re.IGNORECASE), (
-        f"trademark marker survived: {display!r}"
-    )

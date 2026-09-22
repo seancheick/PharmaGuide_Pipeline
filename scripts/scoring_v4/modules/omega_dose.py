@@ -110,21 +110,8 @@ def _load_rubric() -> Dict[str, Any]:
     return load_rubric("omega")  # Phase 0: shared registry (validated + fingerprinted)
 
 
-def _safe_dict(value: Any) -> Dict[str, Any]:
-    return value if isinstance(value, dict) else {}
-
-
 def _safe_list(value: Any) -> List[Any]:
     return value if isinstance(value, list) else []
-
-
-def _as_float(value: Any, default: float = 0.0) -> float:
-    try:
-        if value is None:
-            return default
-        return float(value)
-    except (TypeError, ValueError):
-        return default
 
 
 def _normalize_unit(unit: Any) -> str:
@@ -242,14 +229,6 @@ def _sum_epa_dha_per_serving(product: Dict[str, Any]) -> Tuple[float, float, flo
             dha_total += mg
         elif canon == "epa_dha":
             combined_total += mg
-    if epa_total <= 0 and dha_total <= 0 and combined_total <= 0:
-        source_text = _product_source_text(product)
-        if _NON_EPA_DHA_SOURCE_RE.search(source_text) and not _EPA_DHA_SOURCE_RE.search(source_text):
-            return 0.0, 0.0, 0.0
-        detail = _safe_dict(product.get("omega3_detail"))
-        epa_total = _as_float(detail.get("epa_mg_per_unit"), 0.0)
-        dha_total = _as_float(detail.get("dha_mg_per_unit"), 0.0)
-        combined_total = _as_float(detail.get("epa_dha_mg_per_unit"), 0.0)
     return epa_total, dha_total, combined_total
 
 

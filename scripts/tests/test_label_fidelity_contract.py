@@ -100,8 +100,7 @@ def _find_blob_dir() -> Path | None:
         candidates.append(Path(candidate_root) / "dist" / "detail_blobs")
     candidates.extend([
         REPO_ROOT / "scripts" / "dist" / "detail_blobs",
-        Path("/tmp/pharmaguide_release_build/detail_blobs"),
-        Path("/tmp/pharmaguide_build/detail_blobs"),
+        REPO_ROOT / "scripts" / "final_db_output" / "detail_blobs",
     ])
     for c in candidates:
         if c.is_dir() and any(c.glob("*.json")):
@@ -117,10 +116,14 @@ def sample_blobs():
             "No manifest-owned or fallback build artifact found — run the "
             "snapshot rebuild first to exercise this contract test."
         )
-    sample_paths = sorted(blob_dir.glob("*.json"))[:200]
-    if not sample_paths:
+    all_paths = sorted(blob_dir.glob("*.json"))
+    if not all_paths:
         pytest.skip("No detail blobs to sample.")
-    return [json.loads(p.read_text()) for p in sample_paths]
+    # An evenly spaced sample across the whole catalog. The first 200 files by
+    # name are almost all one id range, which is how 94 Capsimax rows losing
+    # their brand went unseen.
+    step = max(1, len(all_paths) // 1000)
+    return [json.loads(p.read_text()) for p in all_paths[::step]]
 
 
 def _any_ingredient_has_field(sample_blobs, field: str) -> bool:
@@ -291,6 +294,12 @@ def test_branded_identity_preserved(sample_blobs) -> None:
     misrepresents what the user bought.
 
     Fix in: E1.2.2 (pre-computed display fields — branded-token carry-through).
+
+    The label-native export shows the label's own name line and, beside it,
+    the authored form line (``label_display_form`` / ``display_form_label``,
+    rendered by the app when ``form_status == "known"``). "Magnesium" with the
+    form line "as TRAACS Magnesium Bis-Glycinate Chelate" keeps the brand in
+    front of the user, so the check reads both rendered lines.
     """
     if not _any_ingredient_has_field(sample_blobs, "display_label"):
         pytest.skip("waiting on E1.2.2 — display_label not yet emitted")
@@ -305,7 +314,11 @@ def test_branded_identity_preserved(sample_blobs) -> None:
                 " ".join(n or "" for n in (ing.get("notes") or []) if isinstance(n, str)),
             ]
             raw_blob = " ".join(raw_sources)
-            display = ing.get("display_label") or ""
+            form_line = (
+                ing.get("label_display_form") or ing.get("display_form_label") or ""
+                if ing.get("form_status") == "known" else ""
+            )
+            display = f"{ing.get('display_label') or ''} {form_line}"
             for token in BRANDED_TOKENS:
                 if token.lower() in raw_blob.lower() and token.lower() not in display.lower():
                     violations.append((blob.get("dsld_id"), token, ing.get("name"), display))
@@ -525,3 +538,68 @@ def test_inactive_ingredients_complete(sample_blobs) -> None:
         f"blob_inactives == 0. First 5:\n"
         + "\n".join(f"  [{did}] raw={rn}" for did, rn in violations[:5])
     )
+
+
+def test_projection_label_text_comes_from_the_label_ledger(sample_blobs) -> None:
+    """One owner of what the label says: the canonical label ledger. The
+    scoring projection row for the same source path must carry the ledger's
+    label text (the identity step once shipped "Couch Grass" for a wheatgrass
+    row and "Capsicum" for "Capsimax Capsicum fruit extract")."""
+    from identity_integrity import normalize_label_display
+
+    violations = []
+    for blob in sample_blobs:
+        ledger = {
+            row.get("raw_source_path"): normalize_label_display(row.get("label_display_name"))
+            for row in blob.get("display_ingredients") or []
+            if isinstance(row, dict) and row.get("raw_source_path") and row.get("label_display_name")
+        }
+        for ing in blob.get("ingredients") or []:
+            expected = ledger.get(ing.get("raw_source_path"))
+            if expected and ing.get("label_display_name") != expected:
+                violations.append((blob.get("dsld_id"), ing.get("label_display_name"), expected))
+    assert not violations, f"{len(violations)} projection rows disagree with the ledger; first: {violations[:5]}"
+
+
+# Moved from test_capsimax_display_label_fidelity.py: the unit cases stay there
+# (fast tier); the shipped-blob check belongs with the artifact contract.
+# Current catalog products labelled with Capsimax (1181, the original canary,
+# left the dataset and the test skipped from then on).
+CAPSIMAX_CANARIES = ("176168", "213223", "213305")
+
+
+@pytest.mark.parametrize("dsld_id", CAPSIMAX_CANARIES)
+def test_blob_capsimax_display_label_invariants(dsld_id: str) -> None:
+    """Brand kept, species / plant part kept when the label states them, no
+    trademark marks — checked on the shipped blob."""
+    from identity_integrity import normalize_label_display
+
+    blob_dir = _find_blob_dir()
+    if blob_dir is None:
+        pytest.skip("no build directory available")
+    path = blob_dir / f"{dsld_id}.json"
+    assert path.exists(), f"canary {dsld_id} is not in the current build; pick a present Capsimax product"
+    blob = json.loads(path.read_text())
+    # Projection rows present display_label; label-ledger rows present
+    # label_display_name (they never carry a display_label).
+    caps = [
+        (ing, "display_label") for ing in blob.get("ingredients") or []
+        if "capsimax" in str(ing.get("name") or ing.get("raw_source_text") or "").lower()
+    ] + [
+        (row, "label_display_name") for row in blob.get("display_ingredients") or []
+        if "capsimax" in str(row.get("raw_source_text") or "").lower()
+    ]
+    assert caps, f"{dsld_id}: no Capsimax ingredient in the blob"
+    for cap, field in caps:
+        # The ledger keeps the label's own marks; only the shipped display_label
+        # must be free of them.
+        text = str(cap.get(field) or "")
+        display = (normalize_label_display(text) if field == "label_display_name" else text).lower()
+        raw = str(cap.get("raw_source_text") or cap.get("name") or "").lower()
+        assert "capsimax" in display, f"brand missing: {display!r}"
+        for token in ("capsicum", "fruit"):
+            if token in raw:
+                assert token in display, f"{token!r} on the label but not in {display!r}"
+        assert not re.search(r"\(\s*TM\s*\)|\(\s*R\s*\)|™|®", display, re.IGNORECASE), (
+            f"trademark marker survived: {display!r}"
+        )

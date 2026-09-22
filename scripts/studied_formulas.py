@@ -20,6 +20,7 @@ from serving_frequency import resolve_daily_serving_range
 from probiotic_measurements import (
     strain_cfu_tier, clinical_strain_research_scope, normalized_cfu_count,
     effective_strain_evidence, identity_review_accepted, context_accepted_for_scoring,
+    context_review_finished,
     classify_dose_applicability, dose_applicability_credit, DOSE_MEASUREMENT_UNITS,
     clinical_review_provenance_valid, effective_clinical_dose_basis,
 )
@@ -697,15 +698,23 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
             [float(c.get("dose_applicability_credit") or 0.0) for c in result["study_contexts"]
              if c.get("clinical_applicability") == "established"], default=0.0)
         results.append(result)
-    context_ids = sorted({context["context_id"] for row in results
-        for context in row["study_contexts"]
+    recorded = [context for row in results for context in row["study_contexts"]
         if context.get("status") == "source_context_recorded"
         and context.get("dose_comparison") not in {
-            "identity_owner_unresolved", "organism_preparation_mismatch"}})
+            "identity_owner_unresolved", "organism_preparation_mismatch"}]
+    context_ids = sorted({context["context_id"] for context in recorded})
+    # Pending means a recorded context still awaits clinical review. Before
+    # 2026-09-21 any recorded context read as pending, so products whose
+    # strains' research was fully clinician-approved stayed "incomplete".
+    pending_ids = sorted({context["context_id"] for context in recorded
+                          if not context_review_finished(context)})
+    status = ("pending_clinical_review" if pending_ids
+              else "clinically_reviewed" if context_ids else "not_curated")
     return {"formula_assessment": formula, "strain_assessments": results,
             "native_context_review": {
-                "status": "pending_clinical_review" if context_ids else "not_curated",
-                "context_ids": context_ids}}
+                "status": status,
+                "context_ids": context_ids,
+                "pending_context_ids": pending_ids}}
 
 
 @lru_cache(maxsize=1)
@@ -1027,12 +1036,6 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             # The same classifier that awards credit decides the wording, so a
             # float-rounded label amount cannot read "outside" while scoring EXACT.
             comparison = classify_dose_applicability(amount, dose)[1]
-        population = _key(product.get("target_population"))
-        study_population = context["population"]["age_group"]
-        population_comparison = (
-            "label_population_unknown" if not population or study_population in {"unknown", "mixed"}
-            else "same_broad_age_group" if population == _key(study_population)
-            else "different_label_population")
         form = _key(product.get("form_factor_canonical") or product.get("form_factor"))
         delivery_comparison = (
             "delivery_unknown" if not form or not dose["dosage_forms"]
@@ -1050,7 +1053,6 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             "dose_applicability_class": applicability_class,
             "dose_applicability_credit": credit,
             "source_row_ref": row.get("source_row_ref"),
-            "population_comparison": population_comparison,
             "delivery_comparison": delivery_comparison,
             "clinical_applicability": applicability,
             "applicability_reason": reason})

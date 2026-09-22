@@ -236,10 +236,10 @@ exported_quality_score_v4_100 = floor(stage3_quality_score_v4_100 + 0.5)
 ```
 
 Category adapters map module evidence to an achievable, purpose-fit pillar
-scale. A reviewed public quality cap leaves the analytical pillars unchanged
-and emits `quality_score_cap_v4` as an explicit negative adjustment with the
-before-cap score, after-cap score, and rationale. Caps never raise a score.
-Stage 3 retains one decimal for auditability and tier derivation; final export
+scale. The public score is the literal six-pillar sum: no post-sum cap, clamp
+or category adjustment may change it (locked 2026-09-21; the former sports
+caps and `quality_score_cap_v4` were removed). A category concern is expressed
+by the pillar or safety gate that owns it. Stage 3 retains one decimal for auditability and tier derivation; final export
 ships the canonical public score as a half-up whole number and keeps the
 decimal analytical value out of the public database.
 

@@ -41,6 +41,8 @@ from pathlib import Path
 
 import pytest
 
+from release_artifact_paths import catalog_dist_dir, final_build_dir
+
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -53,6 +55,11 @@ if str(ROOT / "scripts") not in sys.path:
 # ---------------------------------------------------------------------------
 
 REQUIRED_KEYS_ON_ACTIVE = ("canonical_id", "delivers_markers")
+
+
+def _spread(paths, n):
+    """n files evenly spaced across the catalog (not the first n by name)."""
+    return paths[:: max(1, len(paths) // n)] if paths else paths
 
 
 def _is_marker_payload(item: object) -> bool:
@@ -100,31 +107,30 @@ def test_blob_builder_emits_canonical_id_and_delivers_markers() -> None:
 # Canary blob assertions
 # ---------------------------------------------------------------------------
 
-# Targeted rebuild output dir (build only GNC + Doctors_Best).
-# Falls back to the regular /tmp/pharmaguide_release_build path so this
-# test works against any fresh build with these canaries present.
-_BUILD_CANDIDATES = (
-    Path("/tmp/pharmaguide_release_build_canonical_id"),
-    Path("/tmp/pharmaguide_release_build_v3"),
-    Path("/tmp/pharmaguide_release_build"),
-)
+# The current working build, then the promoted release bundle.
+_BUILD_CANDIDATES = (final_build_dir(), catalog_dist_dir())
 
 # Canary blobs: (dsld_id, brand, expected_ingredient_substring,
 #                expected_canonical_id, expects_markers_nonempty)
 CANARY_BLOBS = [
-    ("1007",   "GNC",          "vitamin a",   "vitamin_a", False),
+    ("1060",   "GNC",          "vitamin a",   "vitamin_a", False),
     ("278548", "Doctors_Best", "turmeric",    "turmeric",  True),
     ("24439",  "Doctors_Best", "camu camu",   "camu_camu", True),
-    ("24448",  "Doctors_Best", "turmeric",    "turmeric",  True),
 ]
 
 
-def _find_canary_blob(dsld_id: str) -> dict | None:
-    for base in _BUILD_CANDIDATES:
+def _find_canary_blob(dsld_id: str) -> dict:
+    """No build -> skip. A build without the canary -> fail loudly: a canary
+    that left the dataset must be replaced, not silently skipped (1007 and
+    24448 did exactly that)."""
+    builds = [base for base in _BUILD_CANDIDATES if (base / "detail_blobs").is_dir()]
+    if not builds:
+        pytest.skip("no build directory available")
+    for base in builds:
         p = base / "detail_blobs" / f"{dsld_id}.json"
         if p.exists():
             return json.loads(p.read_text())
-    return None
+    pytest.fail(f"canary {dsld_id} is not in the current build; pick a present product")
 
 
 def _find_ingredient(
@@ -159,11 +165,6 @@ def test_canary_active_carries_canonical_id(
     expects_markers: bool,
 ) -> None:
     blob = _find_canary_blob(dsld_id)
-    if blob is None:
-        pytest.skip(
-            f"Canary blob {dsld_id} ({brand}) not present in any of "
-            f"{[str(b) for b in _BUILD_CANDIDATES]} — run targeted rebuild first."
-        )
     ing = _find_ingredient(blob, ing_substr)
     assert ing is not None, (
         f"{dsld_id}: ingredient containing {ing_substr!r} not found in blob"
@@ -184,8 +185,6 @@ def test_canary_active_carries_delivers_markers_field(
     expects_markers: bool,
 ) -> None:
     blob = _find_canary_blob(dsld_id)
-    if blob is None:
-        pytest.skip(f"Canary blob {dsld_id} not present — run targeted rebuild first.")
     ing = _find_ingredient(blob, ing_substr, require_markers=expects_markers)
     assert ing is not None
     # The field must ALWAYS be a list (possibly empty) — never null/missing.
@@ -218,7 +217,7 @@ def test_canonical_id_emit_rate_at_least_90_percent_on_mapped() -> None:
     if base is None:
         pytest.skip("no build directory available — run targeted rebuild first")
 
-    sample = sorted((base / "detail_blobs").glob("*.json"))[:200]
+    sample = _spread(sorted((base / "detail_blobs").glob("*.json")), 200)
     mapped_total = 0
     mapped_with_cid = 0
     for p in sample:

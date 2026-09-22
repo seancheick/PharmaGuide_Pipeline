@@ -20,7 +20,7 @@ import math
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
@@ -1309,49 +1309,6 @@ def check_overlap_allowlist(findings: List[Finding], data: Dict[str, Any], file:
             findings.append(Finding("error", file, f"[{i}].db_pairs", "type_mismatch", "list", _type_name(pairs)))
 
 
-def check_percentile_categories(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
-    categories = data.get("categories")
-    if not isinstance(categories, dict):
-        findings.append(Finding("error", file, "categories", "missing_or_non_object", "dict", _type_name(categories)))
-        return
-
-    rules = data.get("classification_rules")
-    if not isinstance(rules, dict):
-        findings.append(Finding("error", file, "classification_rules", "missing_or_non_object", "dict", _type_name(rules)))
-    else:
-        for key in ("confidence_threshold", "margin_threshold", "score_normalizer"):
-            value = rules.get(key)
-            if not isinstance(value, (int, float)):
-                findings.append(Finding("error", file, f"classification_rules.{key}", "type_mismatch", "number", _type_name(value)))
-
-    fallback_count = 0
-    for category_id, category in categories.items():
-        if not isinstance(category, dict):
-            findings.append(Finding("error", file, f"categories.{category_id}", "entry_not_object", "dict", _type_name(category)))
-            continue
-        label = category.get("label")
-        if not isinstance(label, str) or not label.strip():
-            findings.append(Finding("error", file, f"categories.{category_id}.label", "missing_or_wrong_type", "str", _type_name(label)))
-        priority = category.get("priority")
-        if not isinstance(priority, int):
-            findings.append(Finding("error", file, f"categories.{category_id}.priority", "type_mismatch", "int", _type_name(priority)))
-        if category.get("is_fallback"):
-            fallback_count += 1
-            continue
-        min_score = category.get("min_evidence_score")
-        if not isinstance(min_score, (int, float)):
-            findings.append(Finding("error", file, f"categories.{category_id}.min_evidence_score", "type_mismatch", "number", _type_name(min_score)))
-        required = category.get("required")
-        if required is not None and not isinstance(required, dict):
-            findings.append(Finding("error", file, f"categories.{category_id}.required", "type_mismatch", "dict|null", _type_name(required)))
-        evidence = category.get("evidence")
-        if evidence is not None and not isinstance(evidence, dict):
-            findings.append(Finding("error", file, f"categories.{category_id}.evidence", "type_mismatch", "dict|null", _type_name(evidence)))
-
-    if fallback_count != 1:
-        findings.append(Finding("error", file, "categories", "invalid_fallback_count", "exactly 1 fallback category", str(fallback_count)))
-
-
 def check_clinical_risk_taxonomy(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
     if not isinstance(data, dict):
         findings.append(Finding("error", file, "$", "non_object_root", "dict", _type_name(data)))
@@ -1682,7 +1639,6 @@ def run_checks() -> List[Finding]:
         "ingredient_weights.json": check_ingredient_weights,
         "manufacture_deduction_expl.json": check_manufacture_deduction_expl,
         "user_goals_to_clusters.json": check_user_goals_to_clusters,
-        "percentile_categories.json": check_percentile_categories,
         "clinical_risk_taxonomy.json": check_clinical_risk_taxonomy,
         "ingredient_interaction_rules.json": check_ingredient_interaction_rules,
     }

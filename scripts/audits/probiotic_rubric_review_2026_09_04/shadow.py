@@ -87,9 +87,6 @@ def shadow_scores(record, variant):
     pillars["transparency"] = quality._pillar_from_dim(
         "transparency", dims["transparency"], cfg["pillars"]["transparency"]["weight"], "transparency")["score"]
     total = max(0, min(100, round(sum(pillars.values()), 1)))
-    cap = quality._public_quality_cap(module)
-    if cap:
-        total = min(total, cap["cap"])
     return {**state, "score": total, "pillars": pillars}
 
 

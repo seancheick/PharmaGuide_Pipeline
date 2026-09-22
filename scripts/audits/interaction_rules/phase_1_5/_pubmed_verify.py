@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Fetch + print abstract for a small set of candidate PMIDs."""
-import os, sys, time, urllib.request, urllib.parse, urllib.error
+import os, time, urllib.request, urllib.parse, urllib.error
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 

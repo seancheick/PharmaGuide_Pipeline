@@ -11,7 +11,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import math
 import re
 import sqlite3
 import subprocess
@@ -20,6 +19,7 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
+from constants import CLEANER_NON_SCORABLE_ROLES
 from assessment_readiness import (
     ENFORCED_READINESS_DIMENSIONS,
     has_canonical_enforced_dimensions,
@@ -112,15 +112,7 @@ REQUIRED_CONCEPTS = {
     "display_ingredient_contract",
 }
 
-SCORABLE_BLOCKED_ROLES = {
-    "blend_header_total",
-    "nested_display_only",
-    "composition_leaf",
-    "source_descriptor",
-    "excipient",
-    "inactive",
-    "label_header",
-}
+SCORABLE_BLOCKED_ROLES = CLEANER_NON_SCORABLE_ROLES
 
 ACTIVITY_UNITS = {"SPU", "HUT", "FCC", "SU", "DU", "ALU", "FIP", "SAPU", "CU", "FU"}
 VALID_NON_MASS_DOSE_CLASSES = {"enzyme_activity", "probiotic_cfu"}
@@ -163,7 +155,6 @@ REQUIRED_CLEANER_ROW_FIELDS = {
 }
 FALLBACK_DECISION_REASONS = {
     "recognized_non_scorable",
-    "proprietary_blend_member",
     "source_descriptor_child_row",
     "form_unmapped_fallback",
     "parent_form_fallback",
@@ -645,10 +636,6 @@ def audit_enrichment(args: argparse.Namespace) -> list[Finding]:
                 findings.append(Finding("ENRICHMENT_TAXONOMY_USED_IQD_FALLBACK", f"{pid}: taxonomy consumed IQD ingredients fallback", str(file_path)))
 
             scoring_diag = product.get("iqd_contract_diagnostics")
-            if not isinstance(scoring_diag, dict):
-                scoring_meta = product.get("scoring_metadata")
-                if isinstance(scoring_meta, dict):
-                    scoring_diag = scoring_meta.get("iqd_contract_diagnostics")
             if isinstance(scoring_diag, dict) and scoring_diag.get("iqd_ingredients_fallback_used") is True:
                 findings.append(Finding("ENRICHMENT_SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed IQD ingredients fallback", str(file_path)))
 
@@ -705,11 +692,6 @@ def _scoring_diag(product: dict[str, Any]) -> dict[str, Any]:
     diag = product.get("iqd_contract_diagnostics")
     if isinstance(diag, dict):
         return diag
-    meta = product.get("scoring_metadata")
-    if isinstance(meta, dict):
-        diag = meta.get("iqd_contract_diagnostics")
-        if isinstance(diag, dict):
-            return diag
     return {}
 
 
@@ -747,7 +729,6 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
             source = (
                 product.get("scoring_ingredients_source")
                 or diag.get("scoring_ingredients_source")
-                or _safe_dict(product.get("scoring_metadata")).get("scoring_ingredients_source")
             )
             if source not in allowed_sources and verdict not in {"BLOCKED", "UNSAFE"}:
                 findings.append(Finding("SCORING_SOURCE_FORBIDDEN", f"{pid}: scoring source {source!r} is not strict scorable input", str(file_path)))
@@ -763,9 +744,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 if not fallback.get("fallback_class") or not fallback.get("fallback_reason"):
                     findings.append(Finding("SCORING_FALLBACK_DIAGNOSTICS_MISSING", f"{pid}: scoring fallback lacks class/reason", str(file_path)))
 
-            strict_contract = product.get("strict_scoring_contract")
-            if not isinstance(strict_contract, dict):
-                strict_contract = _safe_dict(_safe_dict(product.get("scoring_metadata")).get("strict_scoring_contract"))
+            strict_contract = _safe_dict(product.get("strict_scoring_contract"))
             if not strict_contract:
                 findings.append(Finding("SCORING_STRICT_CONTRACT_MISSING", f"{pid}: missing strict_scoring_contract diagnostics", str(file_path)))
             elif strict_contract.get("passed") is not True:
@@ -785,11 +764,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                     str(file_path),
                 ))
 
-            quality_status = str(
-                product.get("quality_score_status")
-                or product.get("scoring_status")
-                or ""
-            ).lower()
+            quality_status = str(product.get("quality_score_status") or "").lower()
             safety_suppressed = (
                 quality_status == "suppressed_safety"
                 or verdict in {"BLOCKED", "UNSAFE"}
@@ -839,7 +814,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                     ))
                 readiness = product.get("assessment_readiness")
                 if not isinstance(readiness, dict):
-                    readiness = product.get("_v4_assessment_readiness")
+                    readiness = product.get("assessment_readiness")
                 if not isinstance(readiness, dict):
                     findings.append(Finding(
                         "SCORING_ASSESSMENT_READINESS_MISSING",
@@ -904,7 +879,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
             elif safety_suppressed:
                 readiness = product.get("assessment_readiness")
                 if not isinstance(readiness, dict):
-                    readiness = product.get("_v4_assessment_readiness")
+                    readiness = product.get("assessment_readiness")
                 if not isinstance(readiness, dict):
                     findings.append(Finding(
                         "SCORING_ASSESSMENT_READINESS_MISSING",
@@ -1390,65 +1365,9 @@ V4_PILLAR_MAXES = {
 }
 
 
-def _cap_adjusted_public_total(
-    detail_blobs_dir: Path | None,
-    dsld_id: object,
-    pillar_total: float,
-) -> int | None:
-    """Return the half-up capped total when the public cap contract is valid."""
-    if detail_blobs_dir is None:
-        return None
-    detail_path = detail_blobs_dir / f"{dsld_id}.json"
-    try:
-        detail = load_json(detail_path)
-    except (OSError, UnicodeError, json.JSONDecodeError):
-        return None
-    cap = detail.get("quality_score_cap_v4")
-    if not isinstance(cap, dict):
-        return None
-    numeric_fields = (
-        "cap",
-        "score_before_cap",
-        "score_after_cap",
-        "adjustment",
-    )
-    values: dict[str, float] = {}
-    for field in numeric_fields:
-        value = cap.get(field)
-        if isinstance(value, bool) or not isinstance(value, (int, float)):
-            return None
-        values[field] = float(value)
-    if not all(math.isfinite(value) for value in values.values()):
-        return None
-    before = values["score_before_cap"]
-    after = values["score_after_cap"]
-    adjustment = values["adjustment"]
-    if (
-        cap.get("applied") is not True
-        or cap.get("presentation") != "explicit_adjustment"
-        or not isinstance(cap.get("id"), str)
-        or not cap["id"].strip()
-        or not isinstance(cap.get("reason"), str)
-        or not cap["reason"].strip()
-        or abs(before - pillar_total) > 0.011
-        or abs((before + adjustment) - after) > 0.011
-        or abs(values["cap"] - after) > 0.011
-        or adjustment > 0.0
-    ):
-        return None
-    return int(after + 0.5)
-
-
-def check_v4_pillar_contract(
-    db_path: str | Path,
-    *,
-    detail_blobs_dir: str | Path | None = None,
-) -> list[Finding]:
+def check_v4_pillar_contract(db_path: str | Path) -> list[Finding]:
     """Assert products_core honors the V4 six-pillar contract; one Finding per breach."""
     findings: list[Finding] = []
-    resolved_detail_dir = (
-        Path(detail_blobs_dir) if detail_blobs_dir is not None else None
-    )
     pillar_cols = list(V4_PILLAR_MAXES)
     try:
         with sqlite3.connect(str(db_path)) as conn:
@@ -1503,20 +1422,14 @@ def check_v4_pillar_contract(
                 pillar_total = sum(pillars.values())
                 expected_total = int(pillar_total + 0.5)
                 if int(total) != expected_total:
-                    capped_total = _cap_adjusted_public_total(
-                        resolved_detail_dir,
-                        dsld_id,
-                        pillar_total,
-                    )
-                    if int(total) != capped_total:
-                        findings.append(Finding(
-                            "EXPORT_V4_PILLAR_RECON_MISMATCH",
-                            f"sum(pillars)={round(pillar_total, 3)} rounds "
-                            f"half-up to {expected_total}, with no valid "
-                            "explicit cap adjustment reconciling "
-                            f"quality_score_v4_100={total}",
-                            ref,
-                        ))
+                    findings.append(Finding(
+                        "EXPORT_V4_PILLAR_RECON_MISMATCH",
+                        f"sum(pillars)={round(pillar_total, 3)} rounds "
+                        f"half-up to {expected_total}, but "
+                        f"quality_score_v4_100={total}; the public score must "
+                        "be the literal six-pillar sum",
+                        ref,
+                    ))
         else:  # suppressed / not v4-scored — pillars must be NULL
             populated = [c for c, v in pillars.items() if v is not None]
             if populated:
@@ -1566,10 +1479,7 @@ def audit_export(args: argparse.Namespace) -> list[Finding]:
                 findings.append(Finding("EXPORT_MANIFEST_CONTRACT_FIELD", f"stamped export manifest missing {key}", str(manifest_path)))
 
     # V4 six-pillar contract on the actual shipped DB (schema + per-row).
-    findings.extend(check_v4_pillar_contract(
-        db_path,
-        detail_blobs_dir=dist_dir / "detail_blobs",
-    ))
+    findings.extend(check_v4_pillar_contract(db_path))
     return findings
 
 
@@ -1868,11 +1778,6 @@ def product_map_from_files(files: list[Path]) -> dict[str, dict[str, Any]]:
         except Exception:
             continue
     return products
-
-
-def iqd_count(product: dict[str, Any], key: str) -> int:
-    rows = find_iqd(product).get(key)
-    return len(rows) if isinstance(rows, list) else 0
 
 
 def mapped_coverage_value(product: dict[str, Any]) -> float | None:

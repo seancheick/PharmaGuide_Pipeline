@@ -37,7 +37,6 @@ def _registry_with_override(override: dict) -> CertRegistry:
 def _product() -> dict:
     return {
         "brandName": "Example Brand",
-        "productName": "Example Magnesium",
         "fullName": "Example Brand Example Magnesium",
     }
 
@@ -315,7 +314,7 @@ def test_enricher_passes_dsld_id_to_cert_resolver_for_member_specific_overrides(
         product={
             "id": "12154",
             "brandName": "Nature Made",
-            "productName": "Vitamin D3 2000 IU",
+            "fullName": "Vitamin D3 2000 IU",
         },
         third_party_programs={
             "programs": [{"name": "USP Verified", "source": "rules_db"}],
@@ -330,7 +329,7 @@ def test_enricher_passes_dsld_id_to_cert_resolver_for_member_specific_overrides(
         product={
             "id": "274365",
             "brandName": "Nature Made",
-            "productName": "Vitamin D3 2000 IU",
+            "fullName": "Vitamin D3 2000 IU",
         },
         third_party_programs={
             "programs": [{"name": "USP Verified", "source": "rules_db"}],

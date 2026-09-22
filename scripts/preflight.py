@@ -24,7 +24,7 @@ import sys
 import argparse
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple
 
 from reference_data_schema import validate_reference_schema_version
 

@@ -117,14 +117,6 @@ def is_empty(value) -> bool:
     return value in (None, "", "no_data")
 
 
-def set_if_diff(pl: dict, key: str, new_value):
-    """Set pl[key]=new_value only if it actually differs. Returns True on change."""
-    if pl.get(key) != new_value:
-        pl[key] = new_value
-        return True
-    return False
-
-
 def classify(rule_obj) -> str:
     """Return 'A' (low-risk default monitor), 'B' (banned default contraindicated), or 'C' (no_data)."""
     sref = rule_obj.get("subject_ref", {})

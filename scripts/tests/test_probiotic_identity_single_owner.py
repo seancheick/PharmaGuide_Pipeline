@@ -197,7 +197,7 @@ def test_every_canonical_prebiotic_identity_is_a_probiotic_support_source():
 
 @pytest.mark.parametrize("row,expected", [
     ({"name": "NutraFlora scFOS", "canonical_id": "prebiotics"}, True),
-    ({"name": "Fiber", "iqm_parent_key": "fiber"}, True),
+    ({"name": "Fiber", "canonical_id": "fiber"}, True),
     ({"name": "Galacto-oligosaccharide"}, True),
     ({"name": "Dietary  Fiber"}, True),
     ({"name": "Vitamin C", "canonical_id": "vitamin_c"}, False),

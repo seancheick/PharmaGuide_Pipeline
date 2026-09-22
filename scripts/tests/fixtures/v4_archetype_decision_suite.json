@@ -5,7 +5,7 @@
     "production_entry_point": "scoring_v4.scored_artifact.build_scored_artifact",
     "scoring_formulas_embedded": false,
     "external_identifiers": "none; FIXTURE_* and SYNTHETIC_* values are synthetic case labels, not clinical references",
-  "review_status": "reviewed archetype decision set; expectations re-locked 2026-09-18 after locking the direction_ceiling primary-mass floor policy. Only immune_support__ideal moved, and only its raw evidence dimension (11.9 -> 11.8881): that case is positive_weak, so the ceiling stopped the floor lifting it to 14 x 0.85 and the pipeline's own 11.8881 now stands. Pillars, total 88.8 and tier Very good are unchanged. Prior re-lock was 2026-09-15 after quality_score 1.8.0 formulation-neutrality canaries and frozen packet."
+  "review_status": "reviewed archetype decision set; expectations re-locked 2026-09-18 after locking the direction_ceiling primary-mass floor policy. Only immune_support__ideal moved, and only its raw evidence dimension (11.9 -> 11.8881): that case is positive_weak, so the ceiling stopped the floor lifting it to 14 x 0.85 and the pipeline's own 11.8881 now stands. Pillars, total 88.8 and tier Very good are unchanged. Prior re-lock was 2026-09-15 after quality_score 1.8.0 formulation-neutrality canaries and frozen packet. Re-locked 2026-09-21 when the post-sum sports caps were removed (public total = literal six-pillar sum): sports_pre_workout__ideal 88.0 -> 93.4 (Excellent) and sports_bcaa_eaa__ideal 78.0 -> 88.9 (Very good); every pillar value is unchanged, only the cap that overrode their sum is gone."
   },
   "fixtures": [
     {
@@ -1463,8 +1463,8 @@
         "archetype": "sports_pre_workout",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 88.0,
-        "quality_tier": "Very good",
+        "quality_score_v4_100": 93.4,
+        "quality_tier": "Excellent",
         "v4_confidence": "high",
         "normalization_references": {
           "formulation": 15.0,
@@ -1627,8 +1627,8 @@
         "archetype": "sports_bcaa_eaa",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 78.0,
-        "quality_tier": "Good",
+        "quality_score_v4_100": 88.9,
+        "quality_tier": "Very good",
         "v4_confidence": "high",
         "normalization_references": {
           "formulation": 15.0,

@@ -76,6 +76,7 @@ from identity.safety import (
     negative_match_terms_veto,
     safety_flag_from_banned_match,
     safety_flag_from_harmful_additive,
+    safety_rule_out_of_role_scope,
     safety_status_priority,
 )
 from normalization import make_normalized_key
@@ -625,6 +626,7 @@ class InactiveIngredientResolver:
         raw_name: str,
         standard_name: Optional[str] = None,
         additional_terms: Optional[Iterable[str]] = None,
+        role: Optional[str] = None,
     ) -> InactiveResolution:
         """Resolve a single inactive ingredient. Never raises, never
         returns None.
@@ -635,6 +637,10 @@ class InactiveIngredientResolver:
             (e.g. from earlier stages).
           additional_terms: optional extra match terms (aliases the
             cleaner may have surfaced).
+          role: the row's label role ('active' / 'inactive') when the caller
+            knows it. A banned_recalled rule authored out of scope for that
+            role is not a candidate, so the row resolves exactly as if the
+            rule did not exist. Omitted = unknown role = every rule applies.
 
         Returns:
           InactiveResolution — see class docstring.
@@ -644,6 +650,9 @@ class InactiveIngredientResolver:
         def finish(result: InactiveResolution) -> InactiveResolution:
             return self._with_clean_label_policy(result, terms)
 
+        def governs(entry: dict) -> bool:
+            return not safety_rule_out_of_role_scope(entry, role)
+
         # 1. banned_recalled (highest authority). Evaluate every label term
         # before returning so a generic high-risk identity cannot shadow a
         # more specific banned form carried in forms[] / additional_terms.
@@ -652,12 +661,16 @@ class InactiveIngredientResolver:
         for t in terms:
             entry = self._banned_index.get(t)
             entry_id = str((entry or {}).get("id") or "")
-            if entry and entry_id not in seen_banned:
+            if entry and governs(entry) and entry_id not in seen_banned:
                 banned_candidates.append((entry, t))
                 seen_banned.add(entry_id)
         for entry in self._banned_entries:
             entry_id = str(entry.get("id") or "")
-            if entry_id in seen_banned or not entry.get("requires_explicit_form_evidence"):
+            if (
+                entry_id in seen_banned
+                or not entry.get("requires_explicit_form_evidence")
+                or not governs(entry)
+            ):
                 continue
             evidence = has_explicit_form_evidence(
                 terms,
@@ -703,7 +716,7 @@ class InactiveIngredientResolver:
             if not key:
                 continue
             entry = self._banned_key_index.get(key)
-            if entry and not negative_match_terms_veto(
+            if entry and governs(entry) and not negative_match_terms_veto(
                 [t],
                 (entry.get("match_rules") or {}).get("negative_match_terms", []),
             ) and (
@@ -723,7 +736,7 @@ class InactiveIngredientResolver:
         # shape only when *every* component is an exact safety-database term;
         # partial matches such as ``BHA/cellulose`` remain unmatched. This is
         # deliberately not a general token splitter or fuzzy fallback.
-        composite = self._resolve_safety_composite(raw_name, terms)
+        composite = self._resolve_safety_composite(raw_name, terms, role)
         if composite is not None:
             return finish(composite)
 
@@ -814,6 +827,7 @@ class InactiveIngredientResolver:
         self,
         raw_name: str,
         terms: Iterable[str],
+        role: Optional[str] = None,
     ) -> Optional[InactiveResolution]:
         """Resolve slash-joined exact safety terms to the strongest finding."""
         for term in terms:
@@ -826,6 +840,8 @@ class InactiveIngredientResolver:
             candidates: list[InactiveResolution] = []
             for part in parts:
                 banned = self._banned_index.get(part)
+                if banned is not None and safety_rule_out_of_role_scope(banned, role):
+                    banned = None
                 harmful = self._harmful_index.get(part)
                 if banned is not None:
                     candidates.append(self._from_banned(raw_name, banned))
@@ -887,14 +903,8 @@ class InactiveIngredientResolver:
     def iter_banned_recalled_entries_for_audit(self) -> Iterator[dict]:
         yield from self._banned_entries
 
-    def iter_harmful_additives_entries_for_audit(self) -> Iterator[dict]:
-        yield from self._harmful_entries
 
-    def iter_other_ingredients_entries_for_audit(self) -> Iterator[dict]:
-        yield from self._other_entries
 
-    def iter_clean_label_policy_entries_for_audit(self) -> Iterator[dict]:
-        yield from self._clean_label_entries
 
     # ----- Builders for the four resolution branches -----
 

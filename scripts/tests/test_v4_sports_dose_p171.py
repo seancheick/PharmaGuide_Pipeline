@@ -16,7 +16,6 @@ from scoring_v4.modules.sports_helpers import (
     group_eaa,
     pre_workout_goal_cluster_ids,
     primary_sports_identity,
-    sports_public_quality_cap,
     sports_identity_rows,
     sports_rows,
     sports_subtype,
@@ -151,14 +150,24 @@ def test_primary_identity_prefers_creatine_single() -> None:
     assert primary_sports_identity(product) == "creatine"
 
 
-def test_sports_subtype_keeps_clean_creatine_uncapped() -> None:
+def test_sports_subtype_detects_creatine() -> None:
     product = _product(_row("creatine_monohydrate", 5, "Gram(s)"), name="Creatine Monohydrate")
 
     assert sports_subtype(product) == "creatine"
-    assert sports_public_quality_cap(product) is None
 
 
-def test_sports_subtype_detects_transparent_preworkout_with_public_cap() -> None:
+def test_no_sports_category_can_cap_the_public_score() -> None:
+    """The public score is the literal six-pillar sum (locked 2026-09-21).
+
+    Sports subtypes remain an informational annotation; opacity, stimulant risk
+    and evidence breadth are already owned by Transparency, Safety and Evidence.
+    """
+    import scoring_v4.modules.sports_helpers as helpers
+
+    assert not hasattr(helpers, "sports_public_quality_cap")
+
+
+def test_sports_subtype_detects_transparent_preworkout() -> None:
     product = _product(
         _row("beta-alanine", 3200, "mg"),
         _row("l_citrulline", 6000, "mg", name="Citrulline Malate"),
@@ -168,15 +177,10 @@ def test_sports_subtype_detects_transparent_preworkout_with_public_cap() -> None
         primary_type="pre_workout",
     )
 
-    cap = sports_public_quality_cap(product)
-
     assert sports_subtype(product) == "pre_workout"
-    assert cap is not None
-    assert cap["id"] == "sports_pre_workout"
-    assert cap["cap"] == pytest.approx(88.0)
 
 
-def test_opaque_stimulant_preworkout_gets_lower_public_cap() -> None:
+def test_opaque_stimulant_preworkout_is_classified_as_stimulant() -> None:
     product = {
         "fullName": "MegaPump Pre-Workout",
         "product_name": "MegaPump Pre-Workout",
@@ -186,12 +190,7 @@ def test_opaque_stimulant_preworkout_gets_lower_public_cap() -> None:
         "proprietary_blends": [{"name": "Stimulant Blend", "disclosure_level": "none"}],
     }
 
-    cap = sports_public_quality_cap(product)
-
     assert sports_subtype(product) == "stimulant_fat_burner"
-    assert cap is not None
-    assert cap["id"] == "sports_opaque_stimulant"
-    assert cap["cap"] == pytest.approx(65.0)
 
 
 def test_preworkout_goal_clusters_require_dosed_anchors_for_supported_goals() -> None:

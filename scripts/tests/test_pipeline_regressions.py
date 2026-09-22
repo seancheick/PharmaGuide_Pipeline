@@ -2216,47 +2216,11 @@ class TestBannedIngredientDetection:
     def normalizer(self):
         return EnhancedDSLDNormalizer()
 
-    def test_banned_ephedra_exact_match(self, normalizer):
-        """Test that Ephedra (a known banned ingredient) is detected via exact match"""
-        # Ephedra is in permanently_banned with standard_name "Ephedra"
-        result = normalizer._check_banned_recalled("Ephedra")
-        assert result is True, "Ephedra should be detected as banned"
 
-    def test_banned_ephedra_alias_match(self, normalizer):
-        """Test that Ephedra aliases are detected"""
-        # "ma huang" is an alias for Ephedra
-        result = normalizer._check_banned_recalled("Ma Huang")
-        assert result is True, "Ma Huang (Ephedra alias) should be detected as banned"
 
-    def test_banned_dmaa_detection(self, normalizer):
-        """Test that DMAA is detected as banned"""
-        result = normalizer._check_banned_recalled("DMAA")
-        assert result is True, "DMAA should be detected as banned"
 
-        # Check alias
-        result = normalizer._check_banned_recalled("1,3-dimethylamylamine")
-        assert result is True, "1,3-dimethylamylamine (DMAA alias) should be detected"
 
-    def test_safe_ingredient_not_banned(self, normalizer):
-        """Test that safe ingredients are not flagged as banned"""
-        result = normalizer._check_banned_recalled("Vitamin C")
-        assert result is False, "Vitamin C should NOT be flagged as banned"
 
-        result = normalizer._check_banned_recalled("Fish Oil")
-        assert result is False, "Fish Oil should NOT be flagged as banned"
-
-    def test_banned_detection_case_insensitive(self, normalizer):
-        """Test that banned detection works regardless of case"""
-        # Should detect regardless of case (via preprocessed text comparison)
-        result = normalizer._check_banned_recalled("ephedra")
-        assert result is True, "ephedra (lowercase) should be detected"
-
-        result = normalizer._check_banned_recalled("EPHEDRA")
-        assert result is True, "EPHEDRA (uppercase) should be detected"
-
-    def test_banned_delta8_shorthand_detected(self, normalizer):
-        """Unified banned DB lookup should still catch shorthand delta-8 labels."""
-        assert normalizer._check_banned_recalled("Delta-8") is True
 
     def test_priority_classification_preserves_banned_bucket_severity(self, normalizer):
         """Banned DB severity should not be collapsed to critical for non-fail buckets."""
@@ -2387,12 +2351,6 @@ class TestEndToEndProductNormalization:
         assert active["mapped"] is False
         assert active["proprietaryBlend"] is False
 
-    def test_extract_nutritional_amount_reads_dsld_quantity_key(self, normalizer):
-        """Nutritional amount helper must read DSLD quantity objects, not stale amount-only schema."""
-        result = normalizer._extract_nutritional_amount(
-            {"quantity": [{"quantity": 5, "unit": "mg"}]}
-        )
-        assert result == {"amount": 5, "unit": "mg"}
 
 
 class TestBug1TierCCaseInsensitive:

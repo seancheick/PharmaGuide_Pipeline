@@ -843,7 +843,6 @@ def _compute_blob_analytics(
         dsld_id = str(blob.get("dsld_id") or blob_path.stem)
         product_meta = lookup.get(dsld_id, {"dsld_id": dsld_id})
         ingredients = blob.get("ingredients") or []
-        inactive_ingredients = blob.get("inactive_ingredients") or []
         warnings = blob.get("warnings") or []
         manufacturer_detail = blob.get("manufacturer_detail") or {}
         evidence_data = blob.get("evidence_data") or {}

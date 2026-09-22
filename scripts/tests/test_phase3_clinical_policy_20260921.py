@@ -363,6 +363,62 @@ def test_role_scope_declaration_does_not_weaken_unsettled_policy_quarantine() ->
 
 
 # ---------------------------------------------------------------------------
+# EDTA role scope is one rule for every safety reader, not just Stage 3.
+# Excipient EDTA in liquid multis (Centrum Liquid, Nature's Way citrus) once
+# passed Stage 3 as SAFE while the export's resolver re-raised it as banned,
+# failing the strict build and flagging has_banned_substance on a SAFE product.
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize(
+    "label, excipient_rule",
+    [
+        ("Disodium EDTA", "ADD_DISODIUM_EDTA"),
+        ("Calcium Disodium EDTA", "ADD_CALCIUM_DISODIUM_EDTA"),
+    ],
+)
+def test_resolver_honors_the_policy_role_scope(label: str, excipient_rule: str) -> None:
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    resolver = InactiveIngredientResolver()
+
+    excipient = resolver.resolve(label, role="inactive")
+    assert excipient.matched_source == "harmful_additives"
+    assert excipient.matched_rule_id == excipient_rule
+    assert not excipient.is_banned
+
+    declared_active = resolver.resolve(label, role="active")
+    assert declared_active.is_banned
+    assert declared_active.matched_rule_id in EDTA_POLICY_RULES
+
+    # An unknown role is not evidence of an excipient: fail closed.
+    assert resolver.resolve(label).is_banned
+
+
+def test_role_scope_never_releases_a_rule_without_the_declaration() -> None:
+    """CBD is authored active-only but NOT out-of-scope elsewhere: stay banned."""
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    assert InactiveIngredientResolver().resolve("Cannabidiol", role="inactive").is_banned
+
+
+@pytest.mark.parametrize("label", ["Disodium EDTA", "Calcium Disodium EDTA"])
+def test_export_agrees_with_stage3_on_excipient_edta(label: str) -> None:
+    import build_final_db
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = _product(inactive=[{"name": label, "standardName": label, "forms": []}])
+    assert evaluate_safety_gate(product).verdict not in {"BLOCKED", "UNSAFE"}
+    assert build_final_db.has_banned_substance(product) is False
+
+
+@pytest.mark.parametrize("label", ["Disodium EDTA", "Calcium Disodium EDTA"])
+def test_declared_active_edta_is_still_a_banned_export_signal(label: str) -> None:
+    import build_final_db
+
+    assert build_final_db.has_banned_substance(_product([_active_row(label)])) is True
+
+
+# ---------------------------------------------------------------------------
 # 3. Discrete-enzyme formulation: NOT_INDIVIDUALLY_RATED
 # ---------------------------------------------------------------------------
 

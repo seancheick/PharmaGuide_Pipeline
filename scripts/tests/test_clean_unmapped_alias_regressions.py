@@ -2505,15 +2505,6 @@ def test_batch41_vacha_calamus_routes_to_banned(normalizer, label_text):
     )
 
 
-def test_batch41_vacha_check_banned_recalled_returns_true(normalizer):
-    """_check_banned_recalled must confirm Vacha/Acorus calamus is in the
-    banned DB so the enrichment stage also flags it correctly."""
-    assert normalizer._check_banned_recalled("Vacha") is True
-    assert normalizer._check_banned_recalled("vacha") is True
-    assert normalizer._check_banned_recalled("Acorus calamus") is True
-    assert normalizer._check_banned_recalled("Sweet Flag") is True
-
-
 @pytest.mark.parametrize(
     "name",
     [
@@ -2527,7 +2518,6 @@ def test_batch43_softgels_7keto_variants_route_to_banned(normalizer, name):
 
     assert mapped is True
     assert "7-keto" in str(standard_name).lower()
-    assert normalizer._check_banned_recalled(name) is True
 
 
 @pytest.mark.parametrize(

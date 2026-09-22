@@ -291,19 +291,14 @@ def _ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def _row_is_blend_header(row: Dict[str, Any]) -> bool:
     if (
-        row.get("is_in_proprietary_blend")
-        or row.get("is_proprietary_blend")
+        row.get("is_proprietary_blend")
         or row.get("is_blend_header")
-        or row.get("is_blend")
         or row.get("is_parent_total")
     ):
         return True
     if row.get("scoring_input_kind") == "product_level_evidence":
         return True
     if _norm(row.get("evidence_type")) in {"blend_anchor_mass", "conservative_blend_anchor_mass"}:
-        return True
-    role = _norm(row.get("role") or row.get("cleaner_role") or row.get("scoring_input_kind"))
-    if role in {"blend_header_total", "nested_display_only", "composition_leaf"}:
         return True
     text = " ".join(
         str(row.get(key) or "")

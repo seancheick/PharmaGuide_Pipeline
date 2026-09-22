@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from collections import defaultdict
 
 ROOT = Path(__file__).resolve().parents[3]
 IQM_PATH = ROOT / "scripts/data/ingredient_quality_map.json"

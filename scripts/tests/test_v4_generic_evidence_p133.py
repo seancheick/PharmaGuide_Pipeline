@@ -345,7 +345,7 @@ def test_supra_clinical_dose_records_flag_without_penalty() -> None:
     payload = score_evidence(
         _product(
             ingredients=[_ingredient(quantity=1200, unit="mg")],
-            matches=[_match(min_clinical_dose=100, max_clinical_dose=300, dose_unit="mg")],
+            matches=[_match(min_clinical_dose=100, max_studied_clinical_dose=300, dose_unit="mg")],
         )
     )
 

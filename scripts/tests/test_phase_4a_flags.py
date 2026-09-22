@@ -88,11 +88,11 @@ def test_resolver_surfaces_label_descriptor_flag(entries):
 
     # Synthesize a minimal enriched product where this descriptor appears
     # in inactiveIngredients
-    from build_final_db import resolve_other_ingredient_reference
+    from inactive_ingredient_resolver import InactiveIngredientResolver
 
-    other_ref = resolve_other_ingredient_reference(sample_name, "")
-    assert other_ref.get("is_label_descriptor") is True, (
-        f"resolve_other_ingredient_reference didn't surface "
+    resolution = InactiveIngredientResolver().resolve(raw_name=sample_name)
+    assert resolution.is_label_descriptor is True, (
+        f"InactiveIngredientResolver didn't surface "
         f"is_label_descriptor flag for {sample_name!r}"
     )
 
@@ -104,8 +104,8 @@ def test_resolver_surfaces_active_only_flag(entries):
     sample = active_entries[0]
     sample_name = sample.get("standard_name") or (sample.get("aliases") or [""])[0]
 
-    from build_final_db import resolve_other_ingredient_reference
-    other_ref = resolve_other_ingredient_reference(sample_name, "")
-    assert other_ref.get("is_active_only") is True, (
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+    resolution = InactiveIngredientResolver().resolve(raw_name=sample_name)
+    assert resolution.is_active_only is True, (
         f"is_active_only flag not surfaced for {sample_name!r}"
     )

@@ -30,7 +30,7 @@ import re
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple
 
 from normalization import (
     FOLATE_FORM_FOLIC_ACID,

@@ -9,7 +9,7 @@ imports.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, List, Optional
 
 from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.generic_helpers import (
@@ -452,27 +452,6 @@ def _score_prenatal_complement_support(scores: Dict[str, float]) -> float:
         return 0.0
     avg = sum(scores.values()) / len(PRENATAL_COMPLEMENT_ANCHORS)
     return _round(_clamp(0.0, CAP_PRENATAL_COMPLEMENT_SUPPORT, avg * CAP_PRENATAL_COMPLEMENT_SUPPORT))
-
-
-def _b7_dose_safety(product: Dict[str, Any]) -> tuple[float, List[Dict[str, Any]]]:
-    """Dose-safety deduction plus the exposures de-duplicated out of it.
-
-    Policy lives in ``scoring_v4.dose_safety`` — including the folate
-    parent-total/form-breakdown rule that used to live here privately, which is
-    why a B-complex carrying the identical declaration was charged twice.
-    """
-    result = resolve_dose_safety(
-        product,
-        threshold=B7_UL_PCT_THRESHOLD,
-        per_flag_penalty=B7_PER_FLAG_PENALTY,
-        cap=B7_CAP,
-    )
-    return _round(result.penalty), result.ignored_flags
-
-
-def _penalty_b7_dose_safety(product: Dict[str, Any]) -> float:
-    penalty, _ = _b7_dose_safety(product)
-    return penalty
 
 
 def score_dose(product: Any) -> Dict[str, Any]:

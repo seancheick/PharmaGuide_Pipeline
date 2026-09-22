@@ -569,26 +569,6 @@ class TestValidatorUtilities:
     def validator(self):
         return EnrichmentContractValidator()
 
-    def test_get_summary(self, validator):
-        """Test summary generation"""
-        product = {
-            "id": "test_summary",
-            "dietary_sensitivity_data": {
-                "sugar": {
-                    "amount_g": 4,
-                    "contains_sugar": False,  # A.1a violation
-                    "level": "sugar_free"  # A.1b violation
-                }
-            }
-        }
-
-        violations = validator.validate(product)
-        summary = validator.get_summary(violations)
-
-        assert summary["total_violations"] >= 2
-        assert summary["errors"] >= 2
-        assert "A.1a" in summary["by_rule"]
-        assert "A.1b" in summary["by_rule"]
 
     def test_validate_batch(self, validator):
         """Test batch validation"""

@@ -30,24 +30,14 @@ from pathlib import Path
 
 import pytest
 
+from release_artifact_paths import catalog_dist_dir, final_build_dir
+
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / "scripts"
 
-_BUILD_CANDIDATES = (
-    # Prefer the canonical current build (scripts/dist via symlink) so the
-    # gate runs against the latest pipeline output. Older scratch dirs in
-    # /tmp/pharmaguide_release_build_* are kept as fall-backs in case the
-    # canonical link is missing in a CI runner without recent pipeline run.
-    Path("/tmp/pharmaguide_release_build"),
-    SCRIPTS / "dist",
-    SCRIPTS / "final_db_output",
-    Path("/tmp/pharmaguide_release_build_v6"),
-    Path("/tmp/pharmaguide_release_build_v5"),
-    Path("/tmp/pharmaguide_release_build_v4"),
-    Path("/tmp/pharmaguide_release_build_v3"),
-    Path("/tmp/pharmaguide_release_build_canonical_id"),
-    Path("/tmp/pharmaguide_release_build_inactives"),
-)
+# The promoted release bundle, then the working build. Scratch /tmp builds are
+# never read: they carried stale blobs from earlier sprints.
+_BUILD_CANDIDATES = (catalog_dist_dir(), final_build_dir())
 
 
 def _first_available_build() -> Path | None:

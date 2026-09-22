@@ -93,63 +93,17 @@ def test_fractional_public_total_flags():
     )
 
 
-def test_explicit_detail_blob_cap_adjustment_reconciles_public_total(tmp_path):
+def test_a_public_total_below_the_pillar_sum_is_a_mismatch_even_with_a_cap_blob(tmp_path):
+    """Locked 2026-09-21: the published total is the literal six-pillar sum.
+
+    A detail-blob cap once let 85 reconcile against pillars summing to 90.8;
+    no adjustment surface may reconcile a total that the pillars do not produce.
+    """
     db = _make_db([
         _scored("1", 85, 20.0, 20.0, 18.8, 15.0, 7.0, 10.0),
     ])
-    details = tmp_path / "detail_blobs"
-    details.mkdir()
-    (details / "1.json").write_text(
-        json.dumps(
-            {
-                "quality_score_cap_v4": {
-                    "id": "reviewed_cap",
-                    "cap": 85.0,
-                    "reason": "Reviewed category ceiling.",
-                    "applied": True,
-                    "score_before_cap": 90.8,
-                    "score_after_cap": 85.0,
-                    "adjustment": -5.8,
-                    "presentation": "explicit_adjustment",
-                }
-            }
-        ),
-        encoding="utf-8",
-    )
 
-    assert check_v4_pillar_contract(
-        db,
-        detail_blobs_dir=details,
-    ) == []
-
-
-def test_nonfinite_explicit_cap_flags_instead_of_crashing(tmp_path):
-    db = _make_db([
-        _scored("1", 85, 20.0, 20.0, 18.8, 15.0, 7.0, 10.0),
-    ])
-    details = tmp_path / "detail_blobs"
-    details.mkdir()
-    (details / "1.json").write_text(
-        json.dumps(
-            {
-                "quality_score_cap_v4": {
-                    "id": "reviewed_cap",
-                    "cap": 85.0,
-                    "reason": "Reviewed category ceiling.",
-                    "applied": True,
-                    "score_before_cap": 90.8,
-                    "score_after_cap": float("nan"),
-                    "adjustment": float("nan"),
-                    "presentation": "explicit_adjustment",
-                }
-            }
-        ),
-        encoding="utf-8",
-    )
-
-    assert "EXPORT_V4_PILLAR_RECON_MISMATCH" in _codes(
-        check_v4_pillar_contract(db, detail_blobs_dir=details)
-    )
+    assert "EXPORT_V4_PILLAR_RECON_MISMATCH" in _codes(check_v4_pillar_contract(db))
 
 
 def test_missing_pillar_columns_flags():

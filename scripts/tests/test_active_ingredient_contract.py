@@ -202,7 +202,7 @@ def test_dose_status_disclosed_when_quantity_and_unit_present():
 
 def test_dose_status_not_disclosed_blend_for_blend_member_without_dose():
     assert _compute_dose_status({
-        "quantity": 0, "unit": "NP", "is_in_proprietary_blend": True,
+        "quantity": 0, "unit": "NP", "proprietaryBlend": True,
     }) == "not_disclosed_blend"
     assert _compute_dose_status({
         "quantity": None, "unit": "", "isNestedIngredient": True,

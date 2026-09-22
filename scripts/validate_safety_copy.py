@@ -780,10 +780,6 @@ def validate_depletion_entry(
     """Apply v5.2 layperson-copy contract to a single depletion entry."""
     res = ValidationResult()
     dep_id = str(entry.get("id") or "")
-    drug_ref = entry.get("drug_ref") or {}
-    drug_name = str(drug_ref.get("display_name") or "")
-    nutrient = entry.get("depleted_nutrient") or {}
-    nutrient_name = str(nutrient.get("standard_name") or "")
 
     ah = entry.get("alert_headline")
     ab = entry.get("alert_body")

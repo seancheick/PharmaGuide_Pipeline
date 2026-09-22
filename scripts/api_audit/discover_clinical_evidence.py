@@ -108,16 +108,15 @@ REQUIREMENTS
 
 import argparse
 import json
-import re
 import sys
 import time
-from collections import Counter, defaultdict
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 
 # Python 3.9 compat (UTC added in 3.11)
 UTC = timezone.utc
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 import requests
 
@@ -127,7 +126,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 import env_loader  # noqa: F401
-from api_audit.pubmed_client import PubMedClient, parse_pubmed_article_xml
+from api_audit.pubmed_client import PubMedClient
 
 # ---------------------------------------------------------------------------
 # Config

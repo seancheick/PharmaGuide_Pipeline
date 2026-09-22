@@ -94,7 +94,6 @@ Every database file MUST include a `_metadata` object as its first key:
 | `interaction_rules` | ingredient_interaction_rules.json | Enrichment, Export |
 | `drug_class_definitions` | drug_classes.json | Enrichment, Export |
 | `cross_db_overlap_guard` | cross_db_overlap_allowlist.json | Enrichment |
-| `percentile_categories` | percentile_categories.json | Scoring |
 | `unii_lookup_cache` | fda_unii_cache.json | Enrichment |
 | `migration_audit` | migration_report.json | Internal |
 
@@ -671,10 +670,11 @@ Primary key: `other_ingredients` (array)
 
 ---
 
-### 24. percentile_categories.json
-**Purpose:** `percentile_categories`
+### 24. percentile_categories.json — RETIRED 2026-09-21
 
-Defines product category assignments for percentile ranking. Used by the scorer to group products into cohorts for relative scoring.
+Removed. The percentile cohort is the canonical taxonomy's `percentile_category`
+(`supplement_taxonomy.classify_supplement`); this file's rules and labels had no
+production reader after the supp-type consolidation.
 
 ---
 

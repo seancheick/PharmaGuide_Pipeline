@@ -36,7 +36,6 @@ from build_final_db import (
     mark_staged_product_matched,
     project_export_scored_artifact,
     remote_blob_storage_path,
-    resolve_other_ingredient_reference,
     resolve_export_supplement_type,
     stage_products_by_id,
     validate_export_contract,
@@ -52,7 +51,6 @@ def test_profile_gated_warning_does_not_rewrite_scorer_owned_statuses():
         "quality_assessment_status": "complete",
         "blocking_reason": None,
         "safety_signal_reason": None,
-        "_v4_safety_signal_reason": None,
         "_v4_safety_gate": {
             "verdict": "SAFE",
             "blocking_reason": None,
@@ -82,7 +80,7 @@ def test_profile_gated_warning_does_not_rewrite_scorer_owned_statuses():
     assert projected["quality_assessment_status"] == "complete"
     assert projected["blocking_reason"] is None
     assert projected["safety_signal_reason"] is None
-    assert projected["_v4_safety_signal_reason"] is None
+    assert projected["safety_signal_reason"] is None
     assert projected["_v4_safety_gate"] == {
         "verdict": "SAFE",
         "blocking_reason": None,
@@ -107,8 +105,6 @@ def test_profile_warning_does_not_rewrite_not_scored_safety_status():
         "quality_assessment_status": "incomplete",
         "blocking_reason": None,
         "safety_signal_reason": None,
-        "_v4_quality_status": "not_scored",
-        "_v4_safety_signal_reason": None,
         "_v4_safety_gate": {
             "verdict": "SAFE",
             "blocking_reason": None,
@@ -161,28 +157,19 @@ def test_core_db_does_not_duplicate_app_owned_clinical_profile_taxonomy():
     assert "clinical_risk_taxonomy" not in REFERENCE_FILES
 
 
-def test_export_contract_reconciles_explicit_category_cap_adjustment() -> None:
-    scored = {
+def _scored_with_pillar_sum(total: float) -> dict:
+    return {
         "verdict": "SAFE",
         "mapped_coverage": 1.0,
-        "_v4_quality_status": "scored",
-        "_v4_quality_score_100": 85.0,
-        "_v4_pillars": {
+        "quality_score_status": "scored",
+        "quality_score_v4_100": total,
+        "quality_pillars_v4": {
             "formulation": {"score": 20.0},
             "dose": {"score": 20.0},
             "evidence": {"score": 18.0},
             "transparency": {"score": 14.0},
             "verification": {"score": 13.0},
             "safety_hygiene": {"score": 10.0},
-        },
-        "_v4_quality_score_cap": {
-            "id": "sports_opaque_stimulant",
-            "cap": 85.0,
-            "applied": True,
-            "score_before_cap": 95.0,
-            "score_after_cap": 85.0,
-            "adjustment": -10.0,
-            "presentation": "explicit_adjustment",
         },
         "strict_scoring_contract": {"passed": True},
         "iqd_contract_diagnostics": {
@@ -191,42 +178,29 @@ def test_export_contract_reconciles_explicit_category_cap_adjustment() -> None:
         },
     }
 
-    issues = validate_export_contract({}, scored)
 
-    assert not any("pillars" in issue or "explicit adjustment" in issue for issue in issues)
+def test_export_contract_accepts_the_literal_six_pillar_sum() -> None:
+    issues = validate_export_contract({}, _scored_with_pillar_sum(95.0))
+
+    assert not any("pillars" in issue for issue in issues)
 
 
-def test_export_contract_rejects_malformed_category_cap_adjustment() -> None:
-    scored = {
-        "verdict": "SAFE",
-        "mapped_coverage": 1.0,
-        "_v4_quality_status": "scored",
-        "_v4_quality_score_100": 85.0,
-        "_v4_pillars": {
-            "formulation": {"score": 20.0},
-            "dose": {"score": 20.0},
-            "evidence": {"score": 18.0},
-            "transparency": {"score": 14.0},
-            "verification": {"score": 13.0},
-            "safety_hygiene": {"score": 10.0},
-        },
-        "_v4_quality_score_cap": {
-            "applied": True,
-            "score_before_cap": 94.0,
-            "score_after_cap": 85.0,
-            "adjustment": -9.0,
-            "presentation": "explicit_adjustment",
-        },
-        "strict_scoring_contract": {"passed": True},
-        "iqd_contract_diagnostics": {
-            "strict_scoring_contract": {"passed": True},
-            "scoring_fallbacks_used": [],
-        },
+def test_export_contract_rejects_any_post_sum_adjustment() -> None:
+    """Locked 2026-09-21: no category cap may reconcile a total below the pillars."""
+    scored = _scored_with_pillar_sum(85.0)
+    scored["_v4_quality_score_cap"] = {
+        "id": "sports_opaque_stimulant",
+        "cap": 85.0,
+        "applied": True,
+        "score_before_cap": 95.0,
+        "score_after_cap": 85.0,
+        "adjustment": -10.0,
+        "presentation": "explicit_adjustment",
     }
 
     issues = validate_export_contract({}, scored)
 
-    assert any("explicit adjustment" in issue for issue in issues)
+    assert any("do not sum to quality_score_v4_100" in issue for issue in issues)
 
 
 def test_allergen_summary_reads_enricher_allergen_name_contract():
@@ -642,7 +616,7 @@ def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
 
     mid = generate_share_metadata(
         enriched,
-        {**base_scored, "_v4_pillars": {"evidence": {"score": 12.0, "max": 20}}},
+        {**base_scored, "quality_pillars_v4": {"evidence": {"score": 12.0, "max": 20}}},
     )
     assert "Clinically-backed ingredients" in mid["share_highlights"]
     assert "clinical evidence" not in mid["share_description"]
@@ -650,7 +624,7 @@ def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
 
     high = generate_share_metadata(
         enriched,
-        {**base_scored, "_v4_pillars": {"evidence": {"score": 15.0, "max": 20}}},
+        {**base_scored, "quality_pillars_v4": {"evidence": {"score": 15.0, "max": 20}}},
     )
     assert "with clinical evidence" in high["share_description"]
     assert "with clinically-backed" not in high["share_description"]
@@ -702,15 +676,6 @@ def test_export_uses_taxonomy_over_stale_compatibility_values():
     assert row["contains_probiotics"] == 1
 
 
-def test_other_ingredient_reference_prefers_standard_name_over_generic_alias():
-    ref = resolve_other_ingredient_reference("Hypromellose", "Hydroxypropyl Methylcellulose")
-
-    assert ref["standard_name"] == "Hydroxypropyl Methylcellulose"
-    # Phase 4c canonicalized capsule_shell → coating (functional_roles carries
-    # the prebiotic_fiber/capsule-material nuance; category is the lean enum).
-    assert ref["category"] == "coating"
-
-
 def test_non_gmo_project_verified_flows_to_core_row_and_blob_audit():
     enriched = make_enriched()
     enriched["labelText"] = {
@@ -752,7 +717,6 @@ def test_non_gmo_project_rules_db_evidence_flows_to_core_row_and_blob_audit():
         }
     }
     scored = make_scored()
-    scored["breakdown"]["A"]["A5d"] = 0.5
 
     row = row_as_dict(build_core_row(enriched, scored, "2026-04-10T12:00:00Z"))
     blob = build_detail_blob(enriched, scored)
@@ -812,13 +776,6 @@ def test_omega3_export_flags_follow_canonical_epa_dha_signals():
         "category_breakdown": {"fatty_acid": 2},
     }
     scored = make_scored()
-    scored["breakdown"]["A"]["omega3_dose_bonus"] = 1.5
-    scored["breakdown"]["A"]["omega3_breakdown"] = {
-        "applicable": True,
-        "omega3_dose_bonus": 1.5,
-        "dose_band": "aha_cvd",
-        "per_day_mid_mg": 1000.0,
-    }
 
     row = row_as_dict(build_core_row(enriched, scored, "2026-04-10T12:00:00Z"))
     blob = build_detail_blob(enriched, scored)
@@ -826,10 +783,24 @@ def test_omega3_export_flags_follow_canonical_epa_dha_signals():
     assert row["primary_category"] == "omega_3"
     assert row["contains_omega3"] == 1
     assert blob["omega3_audit"]["contains_omega3"] is True
-    assert blob["omega3_audit"]["bonus_score"] == 1.5
-    # v4 cutover: the standalone "omega3" tradeoff chip is retired (no discrete
-    # v4 component). Omega-3 dose quality is preserved in omega3_audit /
-    # omega3_detail and reflected in the dose pillar score.
+    assert blob["omega3_audit"]["reason"] == "omega3_ingredients_detected"
+
+
+def test_blob_carries_no_v3_score_husks():
+    """The v4 scorer emits no v3 ``breakdown``; blob fields read from it used
+    to ship 0/25, 0/30, 0/20, 0/5 and a zero omega-3 bonus for every product.
+    Omega-3 dose credit and the blend penalty live in quality_pillars_v4."""
+    scored = make_scored()
+    scored["breakdown"] = {"A": {"score": 20, "omega3_breakdown": {"applicable": True, "omega3_dose_bonus": 1.5}},
+                           "B": {"score": 25, "B5_penalty": 3, "B5_blend_evidence": ["x"]}}
+    blob = build_detail_blob(make_enriched(), scored)
+
+    assert "section_breakdown" not in blob
+    assert "omega3_detail" not in blob
+    assert set(blob["omega3_audit"]) == {"contains_omega3", "reason", "matched_ingredients"}
+    assert set(blob["proprietary_blend_audit"]) == {"has_proprietary_blends", "blend_count"}
+    assert set(blob["audit"]) == {"gate_audit"}
+    assert set(blob["audit"]["gate_audit"]) == {"blocking_reason", "verdict"}
 
 
 def make_enriched():
@@ -1107,16 +1078,13 @@ def make_scored(verdict="SAFE"):
         "quality_score_suppressed_reason": blocking_reason,
         "quality_pillars_v4": pillars,
         "_score_model_version": "v4",
-        "_v4_quality_score_100": None if hard else 75.0,
-        "_v4_quality_status": "suppressed_safety" if hard else "scored",
-        "_v4_quality_tier": "Good",
-        "_v4_raw_score_100": 75.0,
+        "quality_tier": "Good",
+        "raw_score_v4_100": 75.0,
         "_v4_module": "generic",
-        "_v4_confidence": "high",
+        "quality_score_confidence": "high",
         "_v4_quality_version": "test",
         "_v4_scoring_engine_version": "4.1.0",
         "_v4_classification_schema_version": "1.2.0",
-        "_v4_pillars": pillars,
         "_v4_safety_gate": {
             "verdict": verdict,
             "blocking_reason": blocking_reason,
@@ -1148,13 +1116,6 @@ def make_scored(verdict="SAFE"):
             "passed": True,
             "findings": [],
             "zero_scorable_reason": None,
-        },
-        "breakdown": {
-            "A": {"score": 20.0, "max": 25.0, "A1": 5.0},
-            "B": {"score": 18.0, "max": 30.0, "B0": 0.0},
-            "C": {"score": 15.0, "max": 20.0, "matched_entries": 1},
-            "D": {"score": 4.0, "max": 5.0, "D1": 1.0},
-            "violation_penalty": 0.0,
         },
     }
 
@@ -3799,7 +3760,6 @@ def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Very goo
             },
             "module": {"dimensions": {"formulation": {"score": 18}}},
         },
-        "raw_score_v4_100": quality_100,
         "quality_score_v4_100": quality_100,
         "quality_pillars_v4": pillars if status == "scored" else None,
         "quality_tier": tier,
@@ -3977,15 +3937,6 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     # Distinct UPCs so the three are not collapsed by UPC dedup.
     e1["upcSku"] = "111111111111"; e2["upcSku"] = "222222222222"; e3["upcSku"] = "333333333333"
     scored_live = _canned_v4(status="scored", quality_100=88.5, verdict="SAFE", tier="Very good")
-    scored_live["quality_score_cap_v4"] = {
-        "id": "sports_opaque_stimulant",
-        "cap": 88.5,
-        "applied": True,
-        "score_before_cap": 88.5,
-        "score_after_cap": 88.5,
-        "adjustment": 0.0,
-        "presentation": "explicit_adjustment",
-    }
     s1 = _artifact_from_canned("999", scored_live)
     s2 = _artifact_from_canned(
         "888",
@@ -4057,7 +4008,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         )
         assert blob["v4_confidence_detail"]["band"] == "high"
         assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
-        assert blob["quality_score_cap_v4"]["id"] == "sports_opaque_stimulant"
+        assert "quality_score_cap_v4" not in blob
         assert "v4_score_explanation" in blob
         assert "raw_score_v4_100" not in blob
 
@@ -6834,3 +6785,15 @@ def test_probiotic_blend_total_cfu_reaches_the_blend_row():
     assert "display_total_label" not in out[1]
     # no count recovered -> untouched
     assert "display_total_label" not in annotate_probiotic_blend_totals(blends, {})[0]
+
+
+def test_share_title_shows_the_shipped_whole_score_not_a_truncation():
+    """74.6 ships as 75 (round half up); the share title must not say 74/100."""
+    from build_final_db import generate_share_metadata
+
+    meta = generate_share_metadata(
+        {"product_name": "Test Multi", "brand_name": "Brand"},
+        {"score_100_equivalent": 74.6, "verdict": "SAFE"},
+    )
+    assert " - 75/100 " in meta["share_title"]
+    assert "✓" in meta["share_title"]  # the >=75 band is judged on the shipped 75

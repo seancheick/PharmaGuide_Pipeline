@@ -57,10 +57,10 @@ def _prod(sev):
 
 
 def test_penalty_function_uses_new_magnitudes():
-    assert gf._penalty_b1_harmful_additives(_prod("low")) == 0.5
-    assert gf._penalty_b1_harmful_additives(_prod("moderate")) == 2.0
-    assert gf._penalty_b1_harmful_additives(_prod("high")) == 3.0
-    assert gf._penalty_b1_harmful_additives(_prod("critical")) == 4.0
+    assert gf._b1_harmful_additive_penalty_detail(_prod("low"))["penalty"] == 0.5
+    assert gf._b1_harmful_additive_penalty_detail(_prod("moderate"))["penalty"] == 2.0
+    assert gf._b1_harmful_additive_penalty_detail(_prod("high"))["penalty"] == 3.0
+    assert gf._b1_harmful_additive_penalty_detail(_prod("critical"))["penalty"] == 4.0
 
 
 def test_moderate_additive_drops_safety_hygiene_below_10():

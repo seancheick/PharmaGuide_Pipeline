@@ -21,7 +21,6 @@ Source: FDA OpenFDA bulk download → /drug/label
 """
 
 import json
-import os
 import re
 import sys
 from collections import defaultdict

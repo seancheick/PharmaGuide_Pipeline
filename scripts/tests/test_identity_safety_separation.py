@@ -334,8 +334,8 @@ def test_negative_match_veto_has_one_production_owner():
     assert not hasattr(inactive_ingredient_resolver, "_negative_terms_veto")
 
 
-def test_safety_precedence_and_strict_index_are_shared():
-    from identity.safety import build_safety_exact_index, top_safety_flag
+def test_safety_precedence_is_shared():
+    from identity.safety import top_safety_flag
 
     flags = [
         {"entry_id": "WATCH", "status": "watchlist"},
@@ -343,17 +343,6 @@ def test_safety_precedence_and_strict_index_are_shared():
         {"entry_id": "HIGH", "status": "high_risk"},
     ]
     assert top_safety_flag(flags)["entry_id"] == "BAN"
-
-    index = build_safety_exact_index([
-        {
-            "id": "HM_CHROMIUM_HEXAVALENT",
-            "standard_name": "Chromium (VI) — Hexavalent Chromium",
-            "aliases": ["chromium(6+)", "chromium"],
-        }
-    ])
-    assert "chromium(6+)" in index
-    assert "chromium" in index
-    assert "chromium(6+)" != "chromium"
 
 
 def test_standardname_safety_audit_rejects_standardname_only_safety_evidence(tmp_path):

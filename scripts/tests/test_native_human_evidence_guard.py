@@ -27,9 +27,11 @@ def test_nonhuman_native_reference_does_not_earn_human_clinical_credit(clinical_
     assert metadata["generic_evidence_score"] == 0
     assert result["score"] == 0
     assert metadata["native_clinical_strain_evidence_rows"] == []
-    # The historical anchor is nonhuman, but newly verified human contexts
-    # exist and await clinical review; zero credit is not absence of research.
-    assert metadata["evidence_result_state"] == "native_research_review_incomplete"
+    # The historical anchor is nonhuman. Its human contexts are clinician-approved
+    # and none applies to this label: a finished review that earns nothing new,
+    # not an absence of research and not an unfinished one.
+    assert metadata["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
+    assert metadata["evidence_result_state"] == "applicability_unestablished"
     uncredited = metadata["uncredited_native_strain_evidence_rows"]
     assert len(uncredited) == 1
     assert uncredited[0]["clinical_id"] == clinical_id
@@ -113,8 +115,11 @@ def test_nonhuman_zero_is_not_presented_as_evidence_of_no_benefit():
     result = score_evidence(strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM",
                                           name="Lactobacillus acidophilus NCFM"))
     reason = _pillar_evidence(result, 20, "probiotic", config())["reason"]
-    assert "human clinical" in reason
-    assert "incomplete" in reason
+    # A finished review that earns nothing must still never read as "no benefit".
+    assert "does not establish" in reason
+    assert "not a product-quality finding" in reason
+    for overclaim in ("no benefit", "no clinical evidence", "ineffective", "does not work"):
+        assert overclaim not in reason.lower()
 
 
 @pytest.mark.parametrize("clinical_id,name", [

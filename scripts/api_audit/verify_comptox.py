@@ -227,13 +227,6 @@ class CompToxClient:
             return data[0]
         return data if isinstance(data, dict) else None
 
-    def get_chemical_details(self, dtxsid: str) -> dict | None:
-        """Get full chemical details by DTXSID."""
-        url = f"{BASE_URL}/chemical/detail/search/by-dtxsid/{dtxsid}"
-        data = self._get(url)
-        if not data or (isinstance(data, dict) and data.get("_not_found")):
-            return None
-        return data
 
     # -- Hazard API ----------------------------------------------------------
 
@@ -264,14 +257,6 @@ class CompToxClient:
             return []
         return data if isinstance(data, list) else []
 
-    def get_skin_eye(self, dtxsid: str) -> list[dict]:
-        """Get skin/eye hazard data."""
-        url = f"{BASE_URL}/hazard/search/by-dtxsid/{dtxsid}"
-        params = {"type": "skin-eye"}
-        data = self._get(url, params=params)
-        if not data or (isinstance(data, dict) and data.get("_not_found")):
-            return []
-        return data if isinstance(data, list) else []
 
 
 # ---------------------------------------------------------------------------

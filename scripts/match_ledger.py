@@ -607,12 +607,6 @@ class MatchLedgerBuilder:
             else:
                 scorable_coverage = 0.0  # Edge case: negative (shouldn't happen)
 
-            # Legacy coverage (for backward compat) - same as old formula
-            legacy_coverage = 0.0
-            if counts["total"] > 0:
-                covered = counts["matched"] + counts["skipped"]
-                legacy_coverage = round((covered / counts["total"]) * 100, 2)
-
             domains[domain] = {
                 "total_raw": counts["total"],
                 "matched": counts["matched"],

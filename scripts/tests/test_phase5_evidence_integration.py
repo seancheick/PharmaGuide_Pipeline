@@ -48,30 +48,54 @@ def _wrap_product(rows: list[dict], name: str = "Test Product", dsld_id: str = "
 # ============================================================================
 
 def test_legacy_score_inference_removed():
-    """A positive score MUST NOT convert a coverage gap into an assessed state."""
+    """No path can turn points into 'assessed': the display decision cannot see
+    the score, and the A/B-only switches that re-enabled the old inference are
+    gone from every module that carried one."""
+    import inspect
+
+    import scoring_input_contract
+    import scoring_v4.modules.generic_evidence as generic_evidence
+    import scoring_v4.quality_score as quality_score
+
+    assert list(inspect.signature(evidence_display_state).parameters) == ["state"]
+    for module in (quality_score, generic_evidence, scoring_input_contract):
+        assert not hasattr(module, "_PHASE5_ENABLED"), module.__name__
     for gap_state in EVIDENCE_COVERAGE_GAP_STATES:
-        # With positive score, it must still return not_yet_reviewed
-        assert evidence_display_state(gap_state, score=15.0) == "not_yet_reviewed", (
-            f"Coverage gap state {gap_state} with score=15.0 must return not_yet_reviewed"
-        )
-        assert evidence_display_state(gap_state, score=0.0) == "not_yet_reviewed"
+        assert evidence_display_state(gap_state) == "not_yet_reviewed"
+
+
+def test_undeclared_state_is_never_presented_as_assessed():
+    assert evidence_display_state("some_future_state") == "not_yet_reviewed"
+    assert evidence_display_state(None) == "not_yet_reviewed"
+
+
+def test_resolver_failure_is_loud_not_a_silent_complete(monkeypatch):
+    """A resolver exception used to be swallowed, after which points alone
+    marked the product complete."""
+    import evidence_resolver
+    from scoring_v4.modules.generic_evidence import _evidence_result_state
+
+    def boom(product):
+        raise RuntimeError("resolver down")
+
+    monkeypatch.setattr(evidence_resolver, "resolve_product_evidence", boom)
+    product = _wrap_product([
+        {"canonical_id": "vitamin_c", "name": "Vitamin C", "amount": 500, "unit": "mg", "cleaner_row_role": "active_scorable"},
+    ])
+    with pytest.raises(RuntimeError):
+        _evidence_result_state(product, 10.0, set(), [])
 
 
 def test_display_state_strictly_derived_from_state():
-    """Every canonical state maps to its exact display state regardless of score."""
-    # Assessed states -> assessed
+    """Every canonical state maps to its exact display state."""
     for state in EVIDENCE_ASSESSED_STATES:
-        assert evidence_display_state(state, score=0.0) == "assessed"
-        assert evidence_display_state(state, score=12.5) == "assessed"
-
-    # Applicability states -> applicability_unestablished
+        assert evidence_display_state(state) == "assessed"
     for state in EVIDENCE_APPLICABILITY_STATES:
-        assert evidence_display_state(state, score=0.0) == "applicability_unestablished"
-        assert evidence_display_state(state, score=5.0) == "applicability_unestablished"
+        assert evidence_display_state(state) == "applicability_unestablished"
 
     # Not applicable states -> not_applicable
     for state in EVIDENCE_NOT_APPLICABLE_STATES:
-        assert evidence_display_state(state, score=0.0) == "not_applicable"
+        assert evidence_display_state(state) == "not_applicable"
 
 
 # ============================================================================
@@ -106,7 +130,7 @@ def test_strict_product_completeness_partial_if_any_unresolved():
     # Scorer result state must also reflect incomplete assessment
     ev = score_evidence(prod)
     assert ev["metadata"]["evidence_result_state"] == "identity_material_unresolved"
-    display = evidence_display_state(ev["metadata"]["evidence_result_state"], ev["score"])
+    display = evidence_display_state(ev["metadata"]["evidence_result_state"])
     assert display == "not_yet_reviewed"
 
 
@@ -182,7 +206,7 @@ def test_no_qualifying_human_evidence_semantics():
     ev = score_evidence(prod)
     assert ev["score"] == 0.0
     assert ev["metadata"]["evidence_result_state"] == "no_qualifying_human_evidence"
-    display = evidence_display_state(ev["metadata"]["evidence_result_state"], ev["score"])
+    display = evidence_display_state(ev["metadata"]["evidence_result_state"])
     assert display == "assessed"
 
 
@@ -205,7 +229,7 @@ def test_applicability_unestablished_semantics():
     ev = score_evidence(prod)
     assert ev["score"] == 0.0
     assert ev["metadata"]["evidence_result_state"] == "applicability_unestablished"
-    display = evidence_display_state(ev["metadata"]["evidence_result_state"], ev["score"])
+    display = evidence_display_state(ev["metadata"]["evidence_result_state"])
     assert display == "applicability_unestablished"
 
 
@@ -268,7 +292,7 @@ def test_fixture_a_blend_header_named_children_no_doses():
     ev = score_evidence(prod)
     assert ev["score"] == 0.0
     assert ev["metadata"]["evidence_result_state"] == "applicability_unestablished"
-    display = evidence_display_state(ev["metadata"]["evidence_result_state"], ev["score"])
+    display = evidence_display_state(ev["metadata"]["evidence_result_state"])
     assert display == "applicability_unestablished"
 
 
@@ -300,7 +324,7 @@ def test_fixture_b_blend_with_unidentified_unnamed_components():
 
     ev = score_evidence(prod)
     assert ev["metadata"]["evidence_result_state"] in {"identity_material_unresolved", "clinical_review_not_covered"}
-    display = evidence_display_state(ev["metadata"]["evidence_result_state"], ev["score"])
+    display = evidence_display_state(ev["metadata"]["evidence_result_state"])
     assert display == "not_yet_reviewed"
 
 
@@ -435,5 +459,25 @@ def test_fixture_e_named_child_with_disclosed_subclinical_dose():
     ev = score_evidence(prod)
     assert ev["score"] == 0.0
     assert ev["metadata"]["evidence_result_state"] == "applicability_unestablished"
-    display = evidence_display_state(ev["metadata"]["evidence_result_state"], ev["score"])
+    display = evidence_display_state(ev["metadata"]["evidence_result_state"])
     assert display == "applicability_unestablished"
+
+
+def test_points_never_prove_the_assessment_finished():
+    """Earned points on one active cannot complete a product with another active
+    still non-terminal (33 catalog products read 'complete' this way)."""
+    from scoring_v4.modules.generic_evidence import _evidence_result_state
+
+    incomplete = _wrap_product([
+        {"canonical_id": "vitamin_c", "name": "Vitamin C", "amount": 500, "unit": "mg", "cleaner_row_role": "active_scorable"},
+        {"canonical_id": "polysaccharides", "name": "Polysaccharides", "amount": 100, "unit": "mg", "cleaner_row_role": "active_scorable"},
+    ])
+    state = _evidence_result_state(incomplete, 10.0, set(), [])
+    assert state == "identity_material_unresolved"
+    assert evidence_display_state(state) == "not_yet_reviewed"
+
+    complete = _wrap_product([
+        {"canonical_id": "vitamin_c", "name": "Vitamin C", "amount": 500, "unit": "mg", "cleaner_row_role": "active_scorable"},
+        {"canonical_id": "zinc", "name": "Zinc", "amount": 15, "unit": "mg", "cleaner_row_role": "active_scorable"},
+    ])
+    assert _evidence_result_state(complete, 10.0, set(), []) == "evaluated_applicable"

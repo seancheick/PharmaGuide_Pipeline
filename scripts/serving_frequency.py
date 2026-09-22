@@ -111,8 +111,8 @@ def _facts_panel_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float, fl
     )
     serving_unit = _canonical_dosage_form(serving.get("unit"))
     daily_range = _ordered_pair(
-        serving.get("minDailyServings") or serving.get("min_daily_servings"),
-        serving.get("maxDailyServings") or serving.get("max_daily_servings"),
+        serving.get("minDailyServings"),
+        serving.get("maxDailyServings"),
     )
     if serving_quantity is None or not serving_unit or daily_range is None:
         return None
@@ -137,11 +137,9 @@ def _facts_panel_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float, fl
                         continue
                     basis = _positive_float(
                         variant.get("serving_size_quantity")
-                        or variant.get("servingSizeQuantity")
                     )
                     basis_unit = _canonical_dosage_form(
                         variant.get("serving_size_unit")
-                        or variant.get("servingSizeUnit")
                     )
                     if basis is not None and basis_unit == serving_unit:
                         facts_bases.add(basis)
@@ -280,8 +278,8 @@ def _label_declared_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float,
     if entry is None:
         return None
     return _ordered_pair(
-        entry.get("minDailyServings") or entry.get("min_daily_servings"),
-        entry.get("maxDailyServings") or entry.get("max_daily_servings"),
+        entry.get("minDailyServings"),
+        entry.get("maxDailyServings"),
     )
 
 

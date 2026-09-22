@@ -90,11 +90,11 @@ def test_inactive_blend_descriptor_sequential_path_is_not_unmapped():
     assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
 
 
-def test_parallel_inactive_blend_container_is_not_unmapped():
+def test_inactive_blend_container_is_not_unmapped():
     normalizer = EnhancedDSLDNormalizer()
     snapshot = normalizer.get_unmapped_snapshot()
 
-    rows = normalizer._process_ingredients_parallel(
+    rows = normalizer._process_ingredients_sequential(
         [
             {
                 "name": "Fat Blend",
@@ -118,11 +118,11 @@ def test_parallel_inactive_blend_container_is_not_unmapped():
     assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
 
 
-def test_parallel_inactive_source_container_suppressed_but_food_source_is_recognized_for_tracker():
+def test_inactive_source_container_suppressed_but_food_source_is_recognized_for_tracker():
     normalizer = EnhancedDSLDNormalizer()
     snapshot = normalizer.get_unmapped_snapshot()
 
-    rows = normalizer._process_ingredients_parallel(
+    rows = normalizer._process_ingredients_sequential(
         [
             {
                 "name": "Creamer",
@@ -167,11 +167,11 @@ def test_parallel_inactive_source_container_suppressed_but_food_source_is_recogn
     ] == "Milk"
 
 
-def test_parallel_inactive_food_piece_container_is_not_unmapped():
+def test_inactive_food_piece_container_is_not_unmapped():
     normalizer = EnhancedDSLDNormalizer()
     snapshot = normalizer.get_unmapped_snapshot()
 
-    rows = normalizer._process_ingredients_parallel(
+    rows = normalizer._process_ingredients_sequential(
         [
             {
                 "name": "Cookie Bits",

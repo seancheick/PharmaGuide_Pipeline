@@ -11,7 +11,8 @@ import re
 from typing import Any, Dict, List, Set
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
-from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+from scoring_v4.modules.generic_evidence import evidence_completeness_gap, resolved_clinical_matches
+from probiotic_measurements import context_review_finished
 from studied_formulas import (assess_probiotic_evidence,
                              assess_probiotic_component_disposition,
                              independent_clinical_strains, strain_assessments_for_match)
@@ -138,8 +139,23 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     raw_score = sum(components.values())
     score = max(0.0, min(CAP_EVIDENCE, raw_score))
     credited_directions = [r.get("effect_direction") for r in native_evidence["rows"]]
-    if score == 0 and (any(_norm_text(m.get("effect_direction")) == "negative" for m in accepted)
-                       or "negative" in credited_directions):
+    # Any assessable active still open (an unreviewed strain, a context awaiting
+    # clinician review, an unresolved companion) leaves the assessment unfinished,
+    # whatever another strain's reviewed research already earned.
+    completeness_gap = evidence_completeness_gap(product)
+    # The strain review facts come from this product's own assessment, so they
+    # hold even when a label's strains carry no separate ingredient row. A
+    # studied whole formula owns its evidence; its members need no review.
+    strain_review_open = formula["status"] != "assessed_studied_formula" and (
+        assessment["native_context_review"]["status"] == "pending_clinical_review"
+        or any(row["status"] == "strain_identity_or_review_unresolved"
+               for row in assessment["strain_assessments"]))
+    if completeness_gap:
+        evidence_state = completeness_gap
+    elif strain_review_open:
+        evidence_state = "native_research_review_incomplete"
+    elif score == 0 and (any(_norm_text(m.get("effect_direction")) == "negative" for m in accepted)
+                         or "negative" in credited_directions):
         evidence_state = "evaluated_unfavorable"
     elif generic_score == 0 and credited_directions and all(d == "null" for d in credited_directions):
         evidence_state = "evaluated_null"
@@ -147,15 +163,12 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         evidence_state = "evaluated_applicable"
     elif score > 0:
         evidence_state = "research_present_applicability_unestablished"
-    elif assessment["native_context_review"]["status"] == "pending_clinical_review":
-        # Newly verified human research is pending clinical review, not absent.
-        # It receives no new points until its applicability policy is approved.
-        evidence_state = "native_research_review_incomplete"
-    elif native_evidence["uncredited_rows"]:
+    elif any(not _human_research_reviewed(row, assessment)
+             for row in native_evidence["uncredited_rows"]):
+        # Only a strain whose human research has not been clinically reviewed
+        # is a coverage gap. Clinician-approved contexts that earn nothing for
+        # this label are a finished conclusion (handled below).
         evidence_state = "human_clinical_evidence_unestablished"
-    elif any(row["status"] == "strain_identity_or_review_unresolved"
-             for row in assessment["strain_assessments"]):
-        evidence_state = "native_research_review_incomplete"
     else:
         component_disp = assess_probiotic_component_disposition(product)
         evidence_state = component_disp.get("disposition_state") or "applicability_unestablished"
@@ -190,6 +203,18 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             "relevance_reason": relevance["reason"],
         },
     }
+
+
+def _human_research_reviewed(uncredited_row: Dict[str, Any], assessment: Dict[str, Any]) -> bool:
+    """True when the strain has recorded study contexts and every one is reviewed."""
+    contexts = [
+        context
+        for strain in assessment["strain_assessments"]
+        if strain.get("clinical_id") == uncredited_row.get("clinical_id")
+        for context in strain.get("study_contexts") or []
+        if context.get("status") == "source_context_recorded"
+    ]
+    return bool(contexts) and all(context_review_finished(c) for c in contexts)
 
 
 def _score_native_clinical_strain_evidence(

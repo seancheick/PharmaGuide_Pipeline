@@ -48,7 +48,7 @@ def test_inactive_section_rows_excluded():
     rows = [
         {"cleaner_row_role": "active_scorable", "name": "Silicon Dioxide", "source_section": "inactive"},
         {"cleaner_row_role": "active_scorable", "name": "Magnesium Stearate", "is_excipient": True, "source_section": "active"},
-        {"cleaner_row_role": "inactive_non_scorable", "name": "Gelatin", "source_section": "active"},
+        {"cleaner_row_role": "inactive", "name": "Gelatin", "source_section": "active"},
     ]
     result = get_assessable_evidence_ingredients(_wrap(rows))
     assert result == []
@@ -160,3 +160,14 @@ def test_provenance_preserved_and_quantity_not_fabricated():
     assert out["canonical_id"] == "lactobacillus_acidophilus"
     assert out["quantity"] == 0.0
     assert out["unit"] == "NP"
+
+
+def test_named_blend_child_is_retained_despite_its_inactive_non_scorable_classification():
+    """The enricher classifies undosed named blend children inactive_non_scorable.
+
+    That label is about scoring, not efficacy: the Phase-5 contract keeps a named
+    child (Bacillus subtilis in an enzyme blend) in the Evidence universe.
+    """
+    rows = [{"cleaner_row_role": "nested_display_only", "role_classification": "inactive_non_scorable",
+             "canonical_id": "bacillus_subtilis", "name": "Bacillus subtilis", "source_section": "active"}]
+    assert [r["canonical_id"] for r in get_assessable_evidence_ingredients(_wrap(rows))] == ["bacillus_subtilis"]

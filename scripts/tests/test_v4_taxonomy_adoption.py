@@ -53,7 +53,7 @@ from sp2_adoption_audit import enumerate_sp2_legacy_reads, hits_grouped_by_file
 #                sports overlay)
 EXPECTED_HITS_PER_FILE = {
     # Storage/audit/export-column references only. Decision readers are zero.
-    "scripts/build_final_db.py": 10,
+    "scripts/build_final_db.py": 9,
 }
 
 

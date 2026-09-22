@@ -167,10 +167,6 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _score_b2_allergen_penalty(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
-    return _score_b2_false_allergen_claim_penalty(product)
-
-
 def _score_b2_false_allergen_claim_penalty(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
     allergens = _safe_list(
         _safe_dict(_safe_dict(product.get("contaminant_data")).get("allergens")).get(

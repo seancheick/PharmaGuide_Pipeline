@@ -10,7 +10,7 @@ Dedup key (tuple, fully normalized):
      canonical_id or type,
      condition_id(s) as sorted tuple,
      drug_class_id(s) as sorted tuple,
-     source_rule or source)
+     source)
 
 Completeness ordering (for picking which dupe to keep):
     1. has both alert_headline AND alert_body (richest form)
@@ -53,7 +53,7 @@ def test_exact_duplicate_collapses_to_one() -> None:
         "severity": "avoid",
         "canonical_id": "cbd_pregnancy",
         "condition_id": "pregnancy",
-        "source_rule": "interaction_rules",
+        "source": "interaction_rules",
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "FDA advises against CBD use.",
     }
@@ -66,11 +66,11 @@ def test_none_vs_empty_string_treated_equal_in_key() -> None:
     """Normalization contract: ``None``, ``""``, and missing key must
     hash to the same dedup-key slot."""
     a = {"type": "x", "severity": "moderate", "canonical_id": "k1",
-         "condition_id": None, "source_rule": "r"}
+         "condition_id": None, "source": "r"}
     b = {"type": "x", "severity": "moderate", "canonical_id": "k1",
-         "condition_id": "", "source_rule": "r"}
+         "condition_id": "", "source": "r"}
     c = {"type": "x", "severity": "moderate", "canonical_id": "k1",
-         "source_rule": "r"}   # key absent entirely
+         "source": "r"}   # key absent entirely
     out = _dedup_warnings([a, b, c])
     assert len(out) == 1
 
@@ -79,9 +79,9 @@ def test_condition_id_scalar_vs_list_same_value_dedupe() -> None:
     """condition_id may be scalar pre-E1.4.1, list post-E1.4.1. Same
     logical condition must collapse across shapes."""
     a = {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_id": "pregnancy", "source_rule": "r"}
+         "condition_id": "pregnancy", "source": "r"}
     b = {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_ids": ["pregnancy"], "source_rule": "r"}
+         "condition_ids": ["pregnancy"], "source": "r"}
     out = _dedup_warnings([a, b])
     assert len(out) == 1
 
@@ -92,29 +92,29 @@ def test_condition_id_scalar_vs_list_same_value_dedupe() -> None:
 
 def test_different_condition_id_not_merged() -> None:
     a = {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_id": "pregnancy", "source_rule": "r"}
+         "condition_id": "pregnancy", "source": "r"}
     b = {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_id": "liver_disease", "source_rule": "r"}
+         "condition_id": "liver_disease", "source": "r"}
     out = _dedup_warnings([a, b])
     assert len(out) == 2
 
 
 def test_different_severity_not_merged() -> None:
     a = {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_id": "pregnancy", "source_rule": "r"}
+         "condition_id": "pregnancy", "source": "r"}
     b = {"type": "i", "severity": "contraindicated", "canonical_id": "k",
-         "condition_id": "pregnancy", "source_rule": "r"}
+         "condition_id": "pregnancy", "source": "r"}
     out = _dedup_warnings([a, b])
     assert len(out) == 2
 
 
-def test_different_source_rule_not_merged() -> None:
-    """Dev's edge case: same canonical_id, different source_rule (FDA
+def test_different_source_not_merged() -> None:
+    """Dev's edge case: same canonical_id, different source (FDA
     vs interaction engine) — these are NOT duplicates, keep both."""
     a = {"type": "ban", "severity": "critical", "canonical_id": "dmaa",
-         "source_rule": "fda_recall_list"}
+         "source": "fda_recall_list"}
     b = {"type": "ban", "severity": "critical", "canonical_id": "dmaa",
-         "source_rule": "interaction_rules"}
+         "source": "interaction_rules"}
     out = _dedup_warnings([a, b])
     assert len(out) == 2
 
@@ -126,13 +126,13 @@ def test_different_source_rule_not_merged() -> None:
 def test_keeps_entry_with_alert_headline_and_body_over_bare_one() -> None:
     rich = {
         "type": "i", "severity": "avoid", "canonical_id": "k",
-        "condition_id": "pregnancy", "source_rule": "r",
+        "condition_id": "pregnancy", "source": "r",
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "FDA advises...",
     }
     bare = {
         "type": "i", "severity": "avoid", "canonical_id": "k",
-        "condition_id": "pregnancy", "source_rule": "r",
+        "condition_id": "pregnancy", "source": "r",
         "alert_headline": "Not recommended during pregnancy",
     }
     out = _dedup_warnings([bare, rich])
@@ -169,13 +169,13 @@ def test_falls_back_to_safety_warning_when_no_alert_fields() -> None:
     """Banned/recalled entries use safety_warning rather than alert_*."""
     authored = {
         "type": "banned_substance", "severity": "critical",
-        "canonical_id": "DMAA", "source_rule": "banned_recalled_ingredients",
+        "canonical_id": "DMAA", "source": "banned_recalled_ingredients",
         "safety_warning": "FDA-banned stimulant with cardiovascular risk.",
         "safety_warning_one_liner": "FDA-banned. Avoid.",
     }
     stub = {
         "type": "banned_substance", "severity": "critical",
-        "canonical_id": "DMAA", "source_rule": "banned_recalled_ingredients",
+        "canonical_id": "DMAA", "source": "banned_recalled_ingredients",
     }
     out = _dedup_warnings([stub, authored])
     assert len(out) == 1
@@ -198,7 +198,7 @@ def test_dedup_never_increases_count() -> None:
 
 def test_dedup_preserves_severity_on_kept_entry() -> None:
     w = {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_id": "pregnancy", "source_rule": "r",
+         "condition_id": "pregnancy", "source": "r",
          "alert_headline": "h"}
     out = _dedup_warnings([w, dict(w)])
     assert out[0]["severity"] == "avoid"
@@ -206,7 +206,7 @@ def test_dedup_preserves_severity_on_kept_entry() -> None:
 
 def test_dedup_preserves_condition_id_on_kept_entry() -> None:
     w = {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_id": "pregnancy", "source_rule": "r",
+         "condition_id": "pregnancy", "source": "r",
          "alert_headline": "h"}
     out = _dedup_warnings([w, dict(w)])
     assert out[0].get("condition_id") == "pregnancy"
@@ -224,10 +224,10 @@ def test_dedup_is_idempotent() -> None:
     """dedup(dedup(xs)) == dedup(xs)."""
     wlist = [
         {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_id": "pregnancy", "source_rule": "r",
+         "condition_id": "pregnancy", "source": "r",
          "alert_headline": "h"},
         {"type": "i", "severity": "avoid", "canonical_id": "k",
-         "condition_id": "pregnancy", "source_rule": "r",
+         "condition_id": "pregnancy", "source": "r",
          "alert_headline": "h"},
     ]
     once = _dedup_warnings(wlist)

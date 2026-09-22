@@ -9,7 +9,7 @@ import re
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -183,59 +183,3 @@ class FunctionalGroupingHandler:
             'transparency': 'standard'
         }
 
-    def score_transparency_for_enrichment(self, ingredient_data: Dict) -> Dict:
-        """
-        Calculate transparency score for enrichment
-        Returns: {'score': float, 'flags': list, 'bonuses': list}
-        """
-
-        result = {
-            'transparency_score': 0,
-            'flags': [],
-            'bonuses': [],
-            'penalties': []
-        }
-
-        ingredient_type = ingredient_data.get('type', 'regular')
-
-        if ingredient_type == 'functional_group_with_details':
-            # Good transparency - specific disclosure
-            config = ingredient_data.get('config', {})
-            score = config.get('transparency_score_with_details', 8)
-            result['transparency_score'] = score
-            result['bonuses'].append({
-                'type': 'specific_functional_disclosure',
-                'bonus': 1.0,
-                'reason': f"Specific {ingredient_data['functional_type']} sources disclosed"
-            })
-
-        elif ingredient_type == 'functional_group_vague':
-            # Poor transparency - vague declaration
-            config = ingredient_data.get('config', {})
-            score = config.get('transparency_score_without_details', 2)
-            penalty = config.get('penalty_without_details', -1.5)
-
-            result['transparency_score'] = score
-            result['penalties'].append({
-                'type': 'vague_functional_disclosure',
-                'penalty': penalty,
-                'reason': f"Generic {ingredient_data['functional_type']} declaration without specifics"
-            })
-
-            result['flags'].append({
-                'severity': 'moderate',
-                'flag': f"vague_{ingredient_data['functional_type']}_disclosure",
-                'message': f"Uses vague declaration without listing specific ingredients"
-            })
-
-        elif ingredient_type == 'vague_declaration':
-            # Standalone vague term
-            for vague_flag in ingredient_data.get('vague_flags', []):
-                result['flags'].append(vague_flag)
-                result['penalties'].append({
-                    'type': vague_flag['flag'],
-                    'penalty': vague_flag['penalty'],
-                    'reason': vague_flag['message']
-                })
-
-        return result

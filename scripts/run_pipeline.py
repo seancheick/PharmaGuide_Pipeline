@@ -30,7 +30,6 @@ Author: PharmaGuide Team
 Version: 1.0.0
 """
 
-import os
 import sys
 import json
 import logging

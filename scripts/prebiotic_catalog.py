@@ -146,7 +146,7 @@ def prebiotic_summary(rows) -> tuple[bool, str, float | None]:
         children = row.get("nestedIngredients") or []
         if match.present:
             # The enclosing blend is not a quantified individual ingredient.
-            container = bool(children or row.get("is_blend_header") or row.get("is_blend"))
+            container = bool(children or row.get("is_blend_header"))
             if re.search(r"\bblend\b", name, re.I) and normalize_prebiotic_text(name) not in GENERIC_PREBIOTIC_LABELS:
                 container = True
             grams = None if container else row_quantity_g(row)

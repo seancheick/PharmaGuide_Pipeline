@@ -4,10 +4,10 @@
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
     "last_updated": "2026-09-21",
-    "total_entries": 741,
+    "total_entries": 739,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 207,
-    "verified_records_count": 741
+    "verified_records_count": 739
   },
   "literature_evidence_records": [
     {
@@ -15536,29 +15536,6 @@
       "verification_result": "authoritative_pubmed_verified"
     },
     {
-      "canonical_id": "NHA_CONJUGATED_BILE_ACID",
-      "material_form": "Descriptor: NHA CONJUGATED BILE ACID",
-      "search_query": "NHA_CONJUGATED_BILE_ACID analytical identity marker descriptor",
-      "search_date": "2026-09-20",
-      "databases_searched": [
-        "PubMed"
-      ],
-      "records_screened": 5,
-      "qualifying_human_studies": [],
-      "effect_direction": "identity_material_unresolved",
-      "population_context": "identity / material descriptor lacking single active chemical entity",
-      "studied_dose_exposure": {},
-      "applicability_decision": "Analytical bile acid fraction specification.",
-      "applicability_status": "identity_material_unresolved",
-      "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
-        "retractions_found": false
-      },
-      "verification_result": "authoritative_pubmed_verified"
-    },
-    {
       "canonical_id": "NHA_HEDERACOSIDE_C_MARKER",
       "material_form": "Descriptor: NHA HEDERACOSIDE C MARKER",
       "search_query": "NHA_HEDERACOSIDE_C_MARKER analytical identity marker descriptor",
@@ -15641,29 +15618,6 @@
       "population_context": "identity / material descriptor lacking single active chemical entity",
       "studied_dose_exposure": {},
       "applicability_decision": "Microcrystalline cellulose tableting excipient/binder.",
-      "applicability_status": "identity_material_unresolved",
-      "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
-        "retractions_found": false
-      },
-      "verification_result": "authoritative_pubmed_verified"
-    },
-    {
-      "canonical_id": "NHA_TOTAL_BILE_ACIDS",
-      "material_form": "Descriptor: NHA TOTAL BILE ACIDS",
-      "search_query": "NHA_TOTAL_BILE_ACIDS analytical identity marker descriptor",
-      "search_date": "2026-09-20",
-      "databases_searched": [
-        "PubMed"
-      ],
-      "records_screened": 5,
-      "qualifying_human_studies": [],
-      "effect_direction": "identity_material_unresolved",
-      "population_context": "identity / material descriptor lacking single active chemical entity",
-      "studied_dose_exposure": {},
-      "applicability_decision": "Analytical total bile acids specification.",
       "applicability_status": "identity_material_unresolved",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",

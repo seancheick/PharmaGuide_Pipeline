@@ -164,14 +164,11 @@ def _production_export(enriched: dict, scored: dict) -> tuple[dict, dict]:
 def _expected_export_score_100(effective_scored: dict):
     """The score the export actually writes: half-up rounded to a whole number.
 
-    build_final_db reads ``_v4_quality_score_100`` (falling back to
-    ``score_100_equivalent`` only when there is no v4 status) and stores
+    build_final_db reads ``quality_score_v4_100`` and stores
     ``int(floor(x + 0.5))``. Comparing the INTEGER column against the source
     FLOAT fails for every product whose score is not already whole.
     """
-    raw = effective_scored.get("_v4_quality_score_100")
-    if raw is None and not str(effective_scored.get("_v4_quality_status") or ""):
-        raw = effective_scored.get("score_100_equivalent")
+    raw = effective_scored.get("quality_score_v4_100")
     if raw is None:
         return None
     return int(math.floor(float(raw) + 0.5))

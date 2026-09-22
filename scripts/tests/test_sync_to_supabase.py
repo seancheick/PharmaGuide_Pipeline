@@ -348,7 +348,7 @@ def test_validate_build_output_accepts_matching_manifest():
         assert os.path.basename(stats["db_path"]) == "pharmaguide_core.db"
 
 
-def test_validate_build_output_reconciles_explicit_cap_from_detail_blob():
+def test_validate_build_output_refuses_a_cap_adjusted_public_total():
     """The upload preflight must validate reviewed score caps through the same
     detail-blob adjustment contract as the release export gate."""
     from sync_to_supabase import load_local_manifest, validate_build_output
@@ -406,8 +406,10 @@ def test_validate_build_output_reconciles_explicit_cap_from_detail_blob():
                 "sha256:" + hashlib.sha256(f.read()).hexdigest()
             )
 
-        stats = validate_build_output(tmp, manifest)
-        assert stats["blob_count"] == 3
+        # Locked 2026-09-21: a total below the six-pillar sum never syncs, even
+        # when a detail blob carries a category-cap record.
+        with pytest.raises(ValueError, match="V4 pillar contract"):
+            validate_build_output(tmp, manifest)
 
 
 def test_validate_build_output_rejects_pillar_contract_violation():

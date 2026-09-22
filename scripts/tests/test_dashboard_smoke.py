@@ -473,3 +473,16 @@ def test_label_trust_dashboard_counts_every_closed_state(dashboard_app, tmp_path
     assert set(metrics["identity_states"]) == set(identity_states)
     assert metrics["integrity_failures"] == 2
     assert metrics["identity_failure_products"] == 1
+
+
+def test_safety_copy_depletion_summary_reads_the_real_file_key(dashboard_app):
+    """The depletion file's list lives under ``depletions``; reading any other
+    key silently reported 0 entries on the safety-copy dashboard."""
+    import importlib
+
+    safety_copy = importlib.import_module("scripts.dashboard.views.safety_copy")
+    data = json.loads(
+        (Path(__file__).resolve().parents[1] / "data" / "medication_depletions.json").read_text()
+    )
+    summary = safety_copy._depletions_summary(data)
+    assert summary["total"] == data["_metadata"]["total_entries"] > 0

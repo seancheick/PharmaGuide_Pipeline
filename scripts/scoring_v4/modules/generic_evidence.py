@@ -275,12 +275,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 if canonical:
                     sub_clinical_canonicals.add(canonical)
 
-        max_studied_dose = _as_float(
-            entry.get("max_studied_clinical_dose")
-            or entry.get("max_clinical_dose")
-            or entry.get("max_studied_dose"),
-            None,
-        )
+        max_studied_dose = _as_float(entry.get("max_studied_clinical_dose"), None)
         if (
             converted_dose is not None
             and max_studied_dose is not None
@@ -429,7 +424,21 @@ def _assessable_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, An
     return get_assessable_evidence_ingredients(product)
 
 
-_PHASE5_ENABLED: bool = True
+def evidence_completeness_gap(product: Dict[str, Any], prod_res: Any = None) -> Optional[str]:
+    """The coverage-gap state when any assessable active is still non-terminal.
+
+    Points are an output of assessment, never proof it finished. Every Evidence
+    module asks this before it may report a conclusion; None means complete.
+    """
+    from evidence_resolver import resolve_product_evidence, EvidenceDisposition
+    prod_res = prod_res or resolve_product_evidence(product)
+    if prod_res.is_assessment_complete:
+        return None
+    if prod_res.overall_disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value:
+        return "identity_material_unresolved"
+    if "probiotic_strain_review_incomplete" in prod_res.unresolved_blockers:
+        return "native_research_review_incomplete"
+    return "clinical_review_not_covered"
 
 
 def _evidence_result_state(
@@ -446,30 +455,29 @@ def _evidence_result_state(
     evaluated dispositions. Points are an output of assessment, never proof
     that assessment occurred.
     """
-    prod_res = None
-    if _PHASE5_ENABLED:
-        try:
-            from evidence_resolver import resolve_product_evidence, EvidenceDisposition
-            prod_res = resolve_product_evidence(product)
-        except Exception:
-            prod_res = None
+    # No fallback: a resolver failure must fail loudly, never silently let
+    # points stand in for a finished assessment.
+    from evidence_resolver import resolve_product_evidence, EvidenceDisposition
+    prod_res = resolve_product_evidence(product)
+    gap = evidence_completeness_gap(product, prod_res)
 
     if total > 0:
-        return "evaluated_applicable"
+        # A product with any assessable active still non-terminal is incomplete
+        # even when another active's reviewed evidence already earned points.
+        return gap or "evaluated_applicable"
     if not _assessable_active_ingredients(product):
         return "no_assessable_actives"
+
+    # Incomplete assessment: an assessable active is still open. Checked before
+    # any conclusion, the probiotic one included.
+    if gap:
+        return gap
 
     # Probiotic disposition takes precedence for probiotic products
     if probiotic_disposition and probiotic_disposition.get("has_probiotic_component"):
         prob_state = probiotic_disposition.get("disposition_state")
         if prob_state:
             return str(prob_state)
-
-    # Incomplete assessment: active ingredient is unresolved
-    if prod_res is not None and not prod_res.is_assessment_complete:
-        if prod_res.overall_disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value:
-            return "identity_material_unresolved"
-        return "clinical_review_not_covered"
 
     # Evaluated matches on record take precedence when present
     if accepted:
@@ -483,22 +491,21 @@ def _evidence_result_state(
     if listed_ids:
         return "applicability_unestablished"
 
-    # No listed clinical matches on record: consult universal evidence resolver
-    if prod_res is not None and prod_res.is_assessment_complete:
-        disp = prod_res.overall_disposition
-        if disp == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
-            return "evaluated_authority"
-        if disp == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value:
-            return "evaluated_null"
-        if disp == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value:
-            return "no_qualifying_human_evidence"
-        if disp in {
-            EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-            EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
-        }:
-            return "applicability_unestablished"
-        if disp == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
-            return "no_assessable_actives"
+    # No listed clinical matches on record: the (complete) resolver decides.
+    disp = prod_res.overall_disposition
+    if disp == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
+        return "evaluated_authority"
+    if disp == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value:
+        return "evaluated_null"
+    if disp == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value:
+        return "no_qualifying_human_evidence"
+    if disp in {
+        EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+        EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
+    }:
+        return "applicability_unestablished"
+    if disp == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
+        return "no_assessable_actives"
 
     return "clinical_review_not_covered"
 
@@ -743,32 +750,6 @@ def _verified_ingredient_human_evidence_entries() -> Tuple[Dict[str, Any], ...]:
     return tuple(out)
 
 
-def has_verified_ingredient_human_evidence_for_row(
-    row: Dict[str, Any],
-    product: Dict[str, Any] | None = None,
-) -> bool:
-    """Return whether a row has an applicable verified human-evidence entry.
-
-    This is the shared identity decision for non-evidence scoring features
-    that depend on the existence of ingredient-human evidence. It deliberately
-    applies the same compound/form exclusions as evidence recovery so a broad
-    cleaner parent (for example L-Arginine) cannot lend credit to an excluded
-    declared compound (for example AAKG).
-    """
-    if _is_nutrition_fact_declaration(row):
-        return False
-    row_keys = _row_identity_keys(row)
-    if not row_keys:
-        return False
-    context = product if isinstance(product, dict) else {}
-    for entry in _verified_ingredient_human_evidence_entries():
-        if _entry_excludes_recovery_context(entry, row, context):
-            continue
-        if row_keys & _entry_identity_keys(entry):
-            return True
-    return False
-
-
 def _is_verified_product_level_entry(entry: Dict[str, Any]) -> bool:
     if _norm_text(entry.get("study_type")) == "reference":
         return False
@@ -800,7 +781,6 @@ def _is_verified_ingredient_human_entry(entry: Dict[str, Any]) -> bool:
 def _row_identity_text(product: Dict[str, Any], row: Dict[str, Any]) -> str:
     values = [
         product.get("product_name"),
-        product.get("full_name"),
         product.get("name"),
         row.get("name"),
         row.get("standard_name"),

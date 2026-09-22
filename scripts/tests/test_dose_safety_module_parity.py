@@ -22,18 +22,27 @@ import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from scoring_v4.modules.b_complex import _b7_dose_safety as b_complex_b7
+from scoring_v4.dose_safety import evaluate_dose_safety
 from scoring_v4.modules.b_complex import _score_dose as score_b_complex_dose
-from scoring_v4.modules.generic_dose import _penalty_b7_dose_safety as generic_b7
 from scoring_v4.modules.generic_dose import score_dose as score_generic_dose
-from scoring_v4.modules.multi_prenatal_dose import _penalty_b7_dose_safety as multi_b7
 from scoring_v4.modules.multi_prenatal_dose import score_dose as score_multi_dose
+from scoring_v4.quality_score_config import block as _cfg_block
 
-SCORERS = [
-    pytest.param(generic_b7, id="generic"),
-    pytest.param(multi_b7, id="multi_or_prenatal"),
-    pytest.param(b_complex_b7, id="b_complex"),
-]
+_POLICY = _cfg_block("dose_safety_policy", "ul_pct_threshold")
+
+
+def _live_b7(product):
+    # Production evaluates B7 once (score_supplements_v4) and applies it to
+    # every module; per-module B7 wrappers no longer exist to disagree.
+    return evaluate_dose_safety(
+        product,
+        threshold=float(_POLICY["ul_pct_threshold"]),
+        per_flag_penalty=float(_POLICY["per_flag_penalty"]),
+        cap=float(_POLICY["cap"]),
+    ).penalty
+
+
+SCORERS = [pytest.param(_live_b7, id="shared_b7")]
 
 
 def _prod(flags):
@@ -87,16 +96,6 @@ def test_unparseable_magnitude_never_deducts(scorer):
     """A magnitude that cannot be parsed is an engineering defect. It must be
     surfaced rather than converted into a silent dose deduction."""
     assert scorer(_prod([{"nutrient": "Vitamin A", "pct_ul": "n/a"}])) == 0
-
-
-def test_identical_product_scores_identically_across_all_three_modules():
-    product = _prod([
-        _FOLATE_PARENT_PLUS_FORMS,
-        {"nutrient": "Vitamin A", "pct_ul": 210.0, "ul_gate_eligible": True},
-        {"nutrient": "Zinc"},
-    ])
-    results = {scorer.values[0](product) for scorer in SCORERS}
-    assert len(results) == 1, f"modules disagree on one contract: {results}"
 
 
 @pytest.mark.parametrize(

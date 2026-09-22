@@ -68,10 +68,7 @@ def test_percentile_category_is_the_taxonomy_value_verbatim(enricher):
     enriched = {"supplement_taxonomy": _taxonomy("herbal_botanical")}
     out = enricher._decorate_percentile_category(enriched)
 
-    assert out["percentile_category"] == "herbal_botanical"
-    assert out["percentile_category_source"] == "taxonomy_v2"
-    assert out["percentile_category_confidence"] == 0.85
-    assert out["percentile_category_signals"] == ["a reason"]
+    assert out == {"percentile_category": "herbal_botanical"}
 
 
 def test_categories_the_old_config_could_not_express_now_survive(enricher):
@@ -117,11 +114,11 @@ def test_product_name_cannot_override_the_taxonomy(enricher):
     )
 
 
-def test_label_matches_the_shipped_derivation(enricher):
-    """The label must equal what score_supplements/build_final_db already ship
+def test_label_matches_the_shipped_derivation():
+    """The label ships from the scored artifact through `percentile_label_for`
     (`re.sub(r'[_-]+',' ',cat).strip().title()`), not the curated plural labels
     in percentile_categories.json ('General Supplements', 'Fish Oil & Omega-3s')
-    which have never reached the catalog."""
+    which never reached the catalog."""
     cases = {
         "herbal_botanical": "Herbal Botanical",
         "general_supplement": "General Supplement",
@@ -130,10 +127,6 @@ def test_label_matches_the_shipped_derivation(enricher):
         "beauty_hair_skin_nails": "Beauty Hair Skin Nails",
     }
     for category, expected in cases.items():
-        out = enricher._decorate_percentile_category(
-            {"supplement_taxonomy": _taxonomy(category)}
-        )
-        assert out["percentile_category_label"] == expected
         assert percentile_label_for(category) == expected
 
 
@@ -142,10 +135,7 @@ def test_missing_taxonomy_is_reason_coded_not_fabricated(enricher):
     decorator must not invent a cohort."""
     out = enricher._decorate_percentile_category({})
 
-    assert out["percentile_category"] is None
-    assert out["percentile_category_confidence"] == 0.0
-    assert out["percentile_category_source"] == "taxonomy_unavailable"
-    assert out["percentile_category_signals"], "reasons must never be empty"
+    assert out == {"percentile_category": None}
 
 
 # ---------------------------------------------------------------------------
@@ -202,7 +192,6 @@ def _build(name: str, actives: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {
         "dsld_id": 970202,
         "product_name": name,
-        "productName": name,
         "fullName": name,
         "brandName": "TestBrand",
         "activeIngredients": actives,
@@ -258,7 +247,6 @@ def test_enriched_artifact_agrees_with_its_own_taxonomy(enricher):
     product = {
         "dsld_id": 970201,
         "product_name": "Test Ashwagandha Extract",
-        "productName": "Test Ashwagandha Extract",
         "fullName": "Test Ashwagandha Extract",
         "brandName": "TestBrand",
         "activeIngredients": [
@@ -270,5 +258,6 @@ def test_enriched_artifact_agrees_with_its_own_taxonomy(enricher):
 
     tax_category = enriched["supplement_taxonomy"]["percentile_category"]
     assert enriched["percentile_category"] == tax_category
-    assert enriched["percentile_category_label"] == percentile_label_for(tax_category)
-    assert enriched["percentile_category_source"] == "taxonomy_v2"
+    for retired in ("percentile_category_label", "percentile_category_source",
+                    "percentile_category_confidence", "percentile_category_signals"):
+        assert retired not in enriched

@@ -297,29 +297,6 @@ def sports_subtype(product: Dict[str, Any]) -> str:
     return primary or "sports_other"
 
 
-def sports_public_quality_cap(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    subtype = sports_subtype(product)
-    if subtype == "stimulant_fat_burner":
-        return {
-            "id": "sports_opaque_stimulant",
-            "cap": 65.0,
-            "reason": "Opaque stimulant or fat-burner sports formulas should not rank with transparent sports staples.",
-        }
-    if subtype == "pre_workout":
-        return {
-            "id": "sports_pre_workout",
-            "cap": 88.0,
-            "reason": "Transparent pre-workout stacks are useful but should not score like focused creatine/protein products.",
-        }
-    if subtype == "bcaa_eaa":
-        return {
-            "id": "sports_bcaa_eaa",
-            "cap": 78.0,
-            "reason": "BCAA/EAA products have narrower evidence than complete protein or creatine staples.",
-        }
-    return None
-
-
 def pre_workout_goal_cluster_ids(product: Dict[str, Any], *, enforce_dose_gate: bool) -> Set[str]:
     """Direct goal clusters for a true pre-workout.
 

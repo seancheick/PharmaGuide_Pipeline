@@ -39,6 +39,8 @@ _SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
+from constants import CLEANER_NON_EFFICACY_ROLES
+
 try:
     from scoring_reference_resolver import rda_ul_reference_entry
 except ImportError:
@@ -187,13 +189,10 @@ def _canonical_text(val: Any) -> str:
 
 @lru_cache(maxsize=1)
 def _load_iqm() -> Dict[str, Any]:
-    try:
-        raw = json.loads(_IQM_PATH.read_text(encoding="utf-8"))
-        if not isinstance(raw, dict):
-            return {}
-        return {k: v for k, v in raw.items() if k != "_metadata" and isinstance(v, dict)}
-    except Exception:
-        return {}
+    # Required reference data: an unreadable file fails loudly instead of
+    # silently resolving every active as if the identity owner were empty.
+    raw = json.loads(_IQM_PATH.read_text(encoding="utf-8"))
+    return {k: v for k, v in raw.items() if k != "_metadata" and isinstance(v, dict)}
 
 
 @lru_cache(maxsize=1)
@@ -236,12 +235,9 @@ def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Opt
 @lru_cache(maxsize=1)
 def _load_backed_studies() -> Tuple[Dict[str, Any], ...]:
     """Load human clinical studies from backed_clinical_studies.json."""
-    try:
-        raw = json.loads(_BACKED_CLINICAL_STUDIES_PATH.read_text(encoding="utf-8"))
-        entries = raw.get("backed_clinical_studies", [])
-        return tuple(e for e in entries if isinstance(e, dict))
-    except Exception:
-        return tuple()
+    raw = json.loads(_BACKED_CLINICAL_STUDIES_PATH.read_text(encoding="utf-8"))
+    entries = raw.get("backed_clinical_studies", [])
+    return tuple(e for e in entries if isinstance(e, dict))
 
 
 @lru_cache(maxsize=1)
@@ -278,26 +274,23 @@ def _backed_studies_index() -> Dict[str, List[Dict[str, Any]]]:
 def _load_botanical_index() -> Dict[str, Dict[str, Any]]:
     """Index therapeutic dosing botanicals and active markers."""
     idx: Dict[str, Dict[str, Any]] = {}
-    try:
-        raw = json.loads(_THERAPEUTIC_DOSING_PATH.read_text(encoding="utf-8"))
-        for entry in raw.get("therapeutic_dosing", []):
-            cid = _norm(entry.get("canonical_id") or entry.get("id"))
-            if cid:
-                idx[cid] = entry
-                idx[cid.replace("_", " ")] = entry
-                idx[cid.replace(" ", "_")] = entry
-            sname = _norm(entry.get("standard_name") or entry.get("name"))
-            if sname:
-                idx[sname] = entry
-                idx[sname.replace("_", " ")] = entry
-                idx[sname.replace(" ", "_")] = entry
-            for alias in entry.get("aliases", []):
-                norm_a = _norm(alias)
-                idx[norm_a] = entry
-                idx[norm_a.replace("_", " ")] = entry
-                idx[norm_a.replace(" ", "_")] = entry
-    except Exception:
-        pass
+    raw = json.loads(_THERAPEUTIC_DOSING_PATH.read_text(encoding="utf-8"))
+    for entry in raw.get("therapeutic_dosing", []):
+        cid = _norm(entry.get("canonical_id") or entry.get("id"))
+        if cid:
+            idx[cid] = entry
+            idx[cid.replace("_", " ")] = entry
+            idx[cid.replace(" ", "_")] = entry
+        sname = _norm(entry.get("standard_name") or entry.get("name"))
+        if sname:
+            idx[sname] = entry
+            idx[sname.replace("_", " ")] = entry
+            idx[sname.replace(" ", "_")] = entry
+        for alias in entry.get("aliases", []):
+            norm_a = _norm(alias)
+            idx[norm_a] = entry
+            idx[norm_a.replace("_", " ")] = entry
+            idx[norm_a.replace(" ", "_")] = entry
     return idx
 
 
@@ -305,14 +298,11 @@ def _load_botanical_index() -> Dict[str, Dict[str, Any]]:
 def _load_literature_evidence() -> Dict[str, Dict[str, Any]]:
     """Index Phase 4 literature evidence records by canonical_id."""
     idx: Dict[str, Dict[str, Any]] = {}
-    try:
-        raw = json.loads(_LITERATURE_EVIDENCE_PATH.read_text(encoding="utf-8"))
-        for entry in raw.get("literature_evidence_records", []):
-            cid = _norm(entry.get("canonical_id"))
-            if cid:
-                idx[cid] = entry
-    except Exception:
-        pass
+    raw = json.loads(_LITERATURE_EVIDENCE_PATH.read_text(encoding="utf-8"))
+    for entry in raw.get("literature_evidence_records", []):
+        cid = _norm(entry.get("canonical_id"))
+        if cid:
+            idx[cid] = entry
     return idx
 
 
@@ -320,26 +310,23 @@ def _load_literature_evidence() -> Dict[str, Dict[str, Any]]:
 def _load_safety_disqualifications() -> Set[str]:
     """Load banned or recalled ingredient IDs."""
     banned: Set[str] = set()
-    try:
-        raw = json.loads(_BANNED_PATH.read_text(encoding="utf-8"))
-        for entry in raw.get("ingredients", []):
-            status = _norm(entry.get("status"))
-            if status in {"banned", "recalled", "high_risk"}:
-                cid = _norm(entry.get("canonical_id") or entry.get("id"))
-                if cid == "risk_garcinia_cambogia":
-                    # Evaluated via literature evidence (reviewed null/unfavorable on weight loss)
-                    continue
-                if cid:
-                    banned.add(cid)
-                    if cid.upper().startswith("BANNED_") or cid.upper().startswith("ADULTERANT_") or cid.upper().startswith("ADD_"):
-                        banned.add(_norm(cid.split("_", 1)[1]))
-                sname = _norm(entry.get("standard_name"))
-                if sname:
-                    banned.add(sname)
-                for a in entry.get("aliases", []):
-                    banned.add(_norm(a))
-    except Exception:
-        pass
+    raw = json.loads(_BANNED_PATH.read_text(encoding="utf-8"))
+    for entry in raw.get("ingredients", []):
+        status = _norm(entry.get("status"))
+        if status in {"banned", "recalled", "high_risk"}:
+            cid = _norm(entry.get("canonical_id") or entry.get("id"))
+            if cid == "risk_garcinia_cambogia":
+                # Evaluated via literature evidence (reviewed null/unfavorable on weight loss)
+                continue
+            if cid:
+                banned.add(cid)
+                if cid.upper().startswith("BANNED_") or cid.upper().startswith("ADULTERANT_") or cid.upper().startswith("ADD_"):
+                    banned.add(_norm(cid.split("_", 1)[1]))
+            sname = _norm(entry.get("standard_name"))
+            if sname:
+                banned.add(sname)
+            for a in entry.get("aliases", []):
+                banned.add(_norm(a))
     return banned
 
 
@@ -394,7 +381,7 @@ def resolve_evidence_for_row(
     if (
         row_dict.get("is_excipient")
         or _norm(row_dict.get("source_section")) == "inactive"
-        or cleaner_role in {"inactive", "inactive_non_scorable", "standardization_marker", "specification_limit", "source_descriptor", "daily_value_no_amount"}
+        or cleaner_role in CLEANER_NON_EFFICACY_ROLES
     ):
         return EvidenceResolution(
             canonical_id=canonical,
@@ -425,7 +412,14 @@ def resolve_evidence_for_row(
                 reason_code="excipient_not_therapeutic_active",
                 owner_facts={"is_excipient": True},
             )
-        if cleaner_role == "active_scorable" or (
+        # Provenance, not name: an active-panel row is an active silica
+        # source. A named, undosed blend child ("organic Bamboo extract" under
+        # "Silica 10.5 mg") is that active's source material, never a flow agent.
+        active_panel_child = (
+            cleaner_role == "nested_display_only"
+            and _norm(row_dict.get("source_section")) == "active"
+        )
+        if cleaner_role == "active_scorable" or active_panel_child or (
             row_dict.get("amount") is not None
             and _as_float(row_dict.get("amount")) is not None
             and _as_float(row_dict.get("amount")) > 0
@@ -540,12 +534,8 @@ def resolve_evidence_for_row(
 
     # 5. Check Probiotic Strain Registry
     # Check if probiotic identity
-    is_prob = False
-    try:
-        from probiotic_measurements import is_probiotic_source_identity
-        is_prob = is_probiotic_source_identity(row_dict)
-    except Exception:
-        is_prob = canonical in {"probiotics", "probiotic_unspecified"} or "lactobacillus" in canonical or "bifidobacterium" in canonical
+    from probiotic_measurements import is_probiotic_source_identity
+    is_prob = is_probiotic_source_identity(row_dict)
 
     if is_prob:
         matched_owners.append("probiotic_strain_registry")
@@ -569,7 +559,23 @@ def resolve_evidence_for_row(
                 reason_code="probiotic_exact_strain_verified",
                 owner_facts=owner_facts,
             )
-        elif state in {"research_present_applicability_unestablished", "applicability_unestablished", "native_research_review_incomplete"}:
+        elif state == "native_research_review_incomplete":
+            # An identified strain whose identity or clinical review is still
+            # open (registry stub, sign-off pending, or a context awaiting
+            # clinician review) is not a conclusion. Another strain's points
+            # cannot close it.
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                points_eligible=False,
+                applicability_status=state,
+                reason_code="probiotic_strain_review_incomplete",
+                owner_facts=owner_facts,
+                blocking_reasons=["probiotic_strain_review_incomplete"],
+            )
+        elif state in {"research_present_applicability_unestablished", "applicability_unestablished"}:
             return EvidenceResolution(
                 canonical_id=canonical,
                 ingredient_name=name,
@@ -590,7 +596,6 @@ def resolve_evidence_for_row(
             "nutrient": nutr_entry.get("id") or nutr_entry.get("standard_name"),
             "category": nutr_entry.get("category"),
             "is_essential": True,
-            "rda_ai": nutr_entry.get("rda_or_ai"),
             "ul": nutr_entry.get("ul"),
             "unit": nutr_entry.get("unit"),
         }
@@ -931,8 +936,6 @@ def resolve_evidence_for_row(
         matched_owners.append("standardized_botanicals")
         owner_facts["standardized_botanicals"] = {
             "standard_name": bot_entry.get("standard_name"),
-            "clinical_min_mg": bot_entry.get("min_clinical_mg"),
-            "clinical_max_mg": bot_entry.get("max_clinical_mg"),
             "is_standardized": bot_entry.get("is_standardized", False),
         }
         # Botanical has therapeutic range but lacks approved human clinical study in DB
@@ -1061,193 +1064,3 @@ def _as_float(val: Any) -> Optional[float]:
         return f if (f == f and f != float("inf") and f != float("-inf")) else None
     except (TypeError, ValueError):
         return None
-
-
-def run_resolver_shadow_audit(
-    queue_path: Optional[Path] = None,
-    catalog_summary_path: Optional[Path] = None,
-    production_actives_path: Optional[Path] = None,
-) -> Dict[str, Any]:
-    """Execute shadow resolution across the production assessable active universe and historical queue.
-
-    Evaluates:
-    - Real production assessable active universe (durable denominator)
-    - Deterministic routing coverage
-    - Completed disposition coverage
-    - Historical 664 queue metrics
-    - Products still partial
-    - Top unresolved identity blockers
-    - Genuine policy decisions needed
-    """
-    prod_file = production_actives_path or (_DATA_DIR / "production_assessable_actives.json")
-    queue_file = queue_path or (_DATA_DIR.parent / "audits" / "evidence_expansion_2026_09" / "queue.json").resolve()
-
-    completed_states = {
-        EvidenceDisposition.RESOLVED_BY_AUTHORITY.value,
-        EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
-        EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-        EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
-        EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
-        EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
-    }
-
-    # 1. Primary evaluation: Real Production Assessable Active Universe
-    actives_data = []
-    if prod_file.exists():
-        try:
-            raw_prod = json.loads(prod_file.read_text(encoding="utf-8"))
-            actives_data = raw_prod.get("assessable_actives", [])
-        except Exception:
-            pass
-
-    prod_resolutions = []
-    prod_disp_counts: Dict[str, int] = {}
-    prod_owners_count: Dict[str, int] = {}
-    prod_blockers_count: Dict[str, int] = {}
-
-    if actives_data:
-        for item in actives_data:
-            cid = item["canonical_id"]
-            name = item.get("standard_name") or (item.get("common_names") and item["common_names"][0]) or cid
-            res = resolve_evidence_for_canonical(
-                cid,
-                name=name,
-                cleaner_row_role="active_scorable",
-            )
-            prod_resolutions.append((item, res))
-            prod_disp_counts[res.disposition] = prod_disp_counts.get(res.disposition, 0) + 1
-            for o in res.matched_owners:
-                prod_owners_count[o] = prod_owners_count.get(o, 0) + 1
-            for b in res.blocking_reasons:
-                prod_blockers_count[b] = prod_blockers_count.get(b, 0) + 1
-
-        total_prod_actives = len(actives_data)
-        routed_prod_count = sum(1 for _, r in prod_resolutions if r.matched_owners and r.disposition != EvidenceDisposition.IDENTITY_INSUFFICIENT.value)
-        prod_routing_coverage_pct = round((routed_prod_count / total_prod_actives) * 100.0, 2) if total_prod_actives else 0.0
-        completed_prod_count = sum(1 for _, r in prod_resolutions if r.disposition in completed_states)
-        prod_completed_pct = round((completed_prod_count / total_prod_actives) * 100.0, 2) if total_prod_actives else 0.0
-    else:
-        total_prod_actives = 0
-        prod_routing_coverage_pct = 0.0
-        prod_completed_pct = 0.0
-
-    # 2. Historical 664 queue evaluation
-    historical_metrics: Dict[str, Any] = {}
-    if queue_file.exists():
-        try:
-            q_data = json.loads(queue_file.read_text(encoding="utf-8")).get("queue", [])
-            target_664 = [x for x in q_data if x.get("gap_rank", 9999) <= 664]
-            h_res = []
-            h_disp: Dict[str, int] = {}
-            for item in target_664:
-                cid = item["canonical_id"]
-                name = item.get("top_name")
-                cleaner_role = "active_scorable" if item.get("row_roles", {}).get("active_scorable") else None
-                dose_val = 5.0 if cid in {"silica", "silicon"} and item.get("dosed_slot_share", 0) > 0 else None
-                r = resolve_evidence_for_canonical(cid, name=name, cleaner_row_role=cleaner_role, dose_value=dose_val)
-                h_res.append(r)
-                h_disp[r.disposition] = h_disp.get(r.disposition, 0) + 1
-            h_total = len(target_664)
-            h_routed = sum(1 for r in h_res if r.matched_owners and r.disposition != EvidenceDisposition.IDENTITY_INSUFFICIENT.value)
-            h_completed = sum(1 for r in h_res if r.disposition in completed_states)
-            historical_metrics = {
-                "total_canonical_actives": h_total,
-                "routing_coverage_pct": round((h_routed / h_total) * 100.0, 2) if h_total else 0.0,
-                "completed_disposition_pct": round((h_completed / h_total) * 100.0, 2) if h_total else 0.0,
-                "disposition_breakdown": h_disp,
-            }
-        except Exception:
-            pass
-
-    # Top blockers from production universe if available
-    eval_resolutions = prod_resolutions if prod_resolutions else []
-    literature_required = [x for x in eval_resolutions if x[1].disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value]
-    literature_required.sort(key=lambda x: -x[0].get("product_count", x[0].get("products", 0)))
-
-    top_blockers = [
-        {
-            "canonical_id": x[0]["canonical_id"],
-            "name": x[0].get("standard_name") or x[0].get("top_name", ""),
-            "products_affected": x[0].get("product_count", x[0].get("products", 0)),
-            "slots_affected": x[0].get("row_count", x[0].get("slots", 0)),
-        }
-        for x in literature_required[:20]
-    ]
-
-    # Catalog partial evaluation (from full corpus replay snapshot if present)
-    cat_summary = catalog_summary_path or Path("/tmp/full_corpus_integrated.jsonl")
-    catalog_stats = {"total": 0, "complete": 0, "partial": 0, "partial_pct": 0.0}
-    if cat_summary.exists():
-        tot = 0
-        comp = 0
-        part = 0
-        with open(cat_summary, "r", encoding="utf-8") as f:
-            for line in f:
-                tot += 1
-                rec = json.loads(line)
-                if rec.get("assessment_status") == "partial":
-                    part += 1
-                else:
-                    comp += 1
-        catalog_stats = {
-            "total": tot,
-            "complete": comp,
-            "partial": part,
-            "partial_pct": round((part / tot) * 100.0, 2) if tot else 0.0,
-        }
-
-    final_total = total_prod_actives if total_prod_actives else historical_metrics.get("total_canonical_actives", 0)
-    final_routing = prod_routing_coverage_pct if total_prod_actives else historical_metrics.get("routing_coverage_pct", 0.0)
-    final_completed = prod_completed_pct if total_prod_actives else historical_metrics.get("completed_disposition_pct", 0.0)
-    final_disp = prod_disp_counts if total_prod_actives else historical_metrics.get("disposition_breakdown", {})
-    final_owners = prod_owners_count
-
-    return {
-        "total_canonical_actives": final_total,
-        "routing_coverage_pct": final_routing,
-        "completed_disposition_pct": final_completed,
-        "disposition_breakdown": final_disp,
-        "matched_owner_breakdown": final_owners,
-        "top_blockers": top_blockers,
-        "catalog_stats": catalog_stats,
-        "historical_664_metrics": historical_metrics,
-        "policy_decisions_needed": [],
-    }
-
-
-if __name__ == "__main__":
-    report = run_resolver_shadow_audit()
-    print("=" * 70)
-    print("UNIVERSAL EVIDENCE RESOLVER — SHADOW AUDIT REPORT")
-    print("=" * 70)
-    print(f"Total Canonical Actives Evaluated: {report['total_canonical_actives']}")
-    print(f"Routing Coverage: {report['routing_coverage_pct']}%")
-    print(f"Completed Disposition Coverage: {report['completed_disposition_pct']}%")
-    print("\nDisposition Breakdown:")
-    for disp, cnt in sorted(report["disposition_breakdown"].items(), key=lambda x: -x[1]):
-        pct = (cnt / report["total_canonical_actives"]) * 100.0 if report["total_canonical_actives"] else 0.0
-        print(f"  {disp:<45} {cnt:>4} ({pct:.1f}%)")
-
-    print("\nMatched Owners Breakdown:")
-    for owner, cnt in sorted(report["matched_owner_breakdown"].items(), key=lambda x: -x[1]):
-        print(f"  {owner:<30} {cnt:>4}")
-
-    if report["historical_664_metrics"]:
-        h = report["historical_664_metrics"]
-        print(f"\nHistorical 664 Queue Context:")
-        print(f"  Total: {h['total_canonical_actives']}")
-        print(f"  Routing Coverage: {h['routing_coverage_pct']}%")
-        print(f"  Completed Disposition Coverage: {h['completed_disposition_pct']}%")
-
-    if report["top_blockers"]:
-        print("\nTop Blockers by Product Reach:")
-        for b in report["top_blockers"][:15]:
-            print(f"  {b['canonical_id']:<25} | {b['products_affected']:>4} prods | {b['slots_affected']:>4} slots | {b['name']}")
-
-    cs = report["catalog_stats"]
-    if cs["total"] > 0:
-        print(f"\nCatalog Products Evaluated: {cs['total']}")
-        print(f"  Complete Assessments: {cs['complete']} ({100.0 - cs['partial_pct']:.1f}%)")
-        print(f"  Products Still Partial: {cs['partial']} ({cs['partial_pct']}%)")
-
-

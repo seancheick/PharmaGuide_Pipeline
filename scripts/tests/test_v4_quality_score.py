@@ -636,58 +636,32 @@ def test_uncapped_product_can_reach_a_true_100() -> None:
 
     assert out["quality_score_v4_100"] == 100.0
     assert out["quality_tier"] == "Exceptional"
-    assert out["quality_score_cap_v4"] is None
+    assert "quality_score_cap_v4" not in out
 
 
-def test_public_quality_cap_limits_score_without_changing_raw() -> None:
-    from scoring_v4.quality_score import assemble_quality_score
+@pytest.mark.parametrize("module,subtype", [("generic", None), ("sports", "pre_workout")])
+def test_a_module_declared_cap_can_never_change_the_public_score(module, subtype) -> None:
+    """Locked 2026-09-21: quality_score_v4_100 is the literal six-pillar sum.
 
-    bd = _module_bd(form=24, dose=21, evidence=18, verification=8, manuf_trust=5, hygiene=4)
-    bd["metadata"] = {
-        "public_quality_cap": {
-            "id": "example_module_cap",
-            "cap": 85.0,
-            "reason": "A module-emitted public cap is applied as an explicit adjustment.",
-        }
-    }
-
-    out = assemble_quality_score(_shadow(raw=88.5, module="generic", bd=bd))
-
-    assert out["raw_score_v4_100"] == 88.5
-    assert out["quality_score_v4_100"] == 85.0
-    assert out["quality_score_cap_v4"]["id"] == "example_module_cap"
-    assert out["quality_score_cap_v4"]["score_before_cap"] > 85.0
-    assert out["quality_score_cap_v4"]["adjustment"] < 0
-    assert out["quality_score_cap_v4"]["presentation"] == "explicit_adjustment"
-    assert round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1) == (
-        out["quality_score_cap_v4"]["score_before_cap"]
-    )
-
-
-def test_sports_preworkout_public_cap_limits_score_below_creatine_ceiling() -> None:
+    A post-sum category cap made the published total disagree with the pillars
+    the app draws under it. Even if a module still declares one, the assembler
+    must ignore it and emit no adjustment field.
+    """
     from scoring_v4.quality_score import assemble_quality_score
 
     bd = _module_bd(form=30, dose=25, evidence=20, verification=8, manuf_trust=5, hygiene=4)
     bd["metadata"] = {
-        "sports_subtype": "pre_workout",
-        "public_quality_cap": {
-            "id": "sports_pre_workout",
-            "cap": 88.0,
-            "reason": "Transparent pre-workout stacks should not score like focused creatine/protein products.",
-        },
+        "public_quality_cap": {"id": "legacy_cap", "cap": 50.0, "reason": "must be ignored"},
     }
+    if subtype:
+        bd["metadata"]["sports_subtype"] = subtype
 
-    out = assemble_quality_score(_shadow(raw=94.0, module="sports", bd=bd))
+    out = assemble_quality_score(_shadow(raw=94.0, module=module, bd=bd))
 
-    assert out["quality_score_v4_100"] == 88.0
-    assert out["raw_score_v4_100"] == 94.0
-    assert out["quality_score_cap_v4"]["id"] == "sports_pre_workout"
-    assert out["quality_score_cap_v4"]["adjustment"] == (
-        88.0 - out["quality_score_cap_v4"]["score_before_cap"]
-    )
-    assert round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1) == (
-        out["quality_score_cap_v4"]["score_before_cap"]
-    )
+    pillar_sum = round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1)
+    assert out["quality_score_v4_100"] == max(0.0, min(100.0, pillar_sum))
+    assert out["quality_score_v4_100"] > 50.0
+    assert "quality_score_cap_v4" not in out
 
 
 # ---- PR2 verification pillar (saturate-subset + fail-open neutral) ----------

@@ -195,10 +195,7 @@ def _base_scored(**overrides):
         "quality_assessment_status": "complete",
         "quality_pillars_v4": pillars,
         "_score_model_version": "v4",
-        "_v4_quality_score_100": 62.5,
-        "_v4_quality_status": "scored",
-        "_v4_quality_tier": "Fair",
-        "_v4_pillars": pillars,
+        "quality_tier": "Fair",
         "badges": [],
         "flags": [],
         "section_scores": {
@@ -244,8 +241,6 @@ def _base_scored(**overrides):
             "quality_score_v4_100": None,
             "quality_score_status": "suppressed_safety",
             "product_safety_status": verdict.lower(),
-            "_v4_quality_score_100": None,
-            "_v4_quality_status": "suppressed_safety",
         }
         for key, value in derived.items():
             if key not in overrides:
@@ -508,7 +503,7 @@ class TestExportContractValidator:
 
     def test_missing_v4_pillars_flagged(self):
         s = _base_scored()
-        del s["_v4_pillars"]
+        del s["quality_pillars_v4"]
         issues = validate_export_contract(_base_enriched(), s)
         assert any("quality_pillars_v4" in i for i in issues)
 
@@ -748,24 +743,12 @@ class TestDetailBlobContract:
         blob = build_detail_blob(_base_enriched(), _base_scored())
         required = {
             "dsld_id", "blob_version", "ingredients", "inactive_ingredients",
-            "warnings", "section_breakdown", "compliance_detail",
+            "warnings", "compliance_detail",
             "certification_detail", "proprietary_blend_detail",
             "dietary_sensitivity_detail", "serving_info", "manufacturer_detail",
         }
         missing = required - set(blob.keys())
         assert not missing, f"Missing top-level blob keys: {missing}"
-
-    def test_section_breakdown_uses_descriptive_names(self):
-        blob = build_detail_blob(_base_enriched(), _base_scored())
-        sb = blob["section_breakdown"]
-        assert "ingredient_quality" in sb
-        assert "safety_purity" in sb
-        assert "evidence_research" in sb
-        assert "brand_trust" in sb
-        assert "violation_penalty" in sb
-        # Must NOT have internal scorer labels
-        assert "A" not in sb
-        assert "B" not in sb
 
     def test_structured_allergens_are_not_duplicated_into_generic_warnings(self):
         e = _base_enriched()
@@ -1576,7 +1559,7 @@ def test_warning_only_product_builds_a_label_without_faking_mapping_coverage():
 def test_warning_only_label_cannot_excuse_another_unresolved_row(mutation):
     enriched, scored = _safety_only_label_product()
     if mutation == "scored":
-        scored["_v4_quality_score_100"] = 75
+        scored["quality_score_v4_100"] = 75
     elif mutation == "wrong_label":
         enriched["label_source_rows"][0]["raw_source_text"] = "Magnesium"
     else:
@@ -1608,7 +1591,7 @@ def test_safety_exception_cannot_hide_a_second_conflict_at_the_same_path():
     assert _gate_issues(enriched, scored)
 
 
-@pytest.mark.parametrize("field", ["_v4_quality_score_100", "quality_score_v4_100", "score_100_equivalent"])
+@pytest.mark.parametrize("field", ["quality_score_v4_100", "score_100_equivalent"])
 def test_warning_only_exception_requires_null_scores(field):
     enriched, scored = _safety_only_product(**{field: 75})
     assert _gate_issues(enriched, scored)

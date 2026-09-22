@@ -33,6 +33,7 @@ from supplement_type_utils import (
     _safe_list,
     _ingredient_name,
 )
+from constants import CLEANER_NON_SCORABLE_ROLES
 from scoring_v4.route_features import B_COMPLEX_DISQUALIFY_CANONICALS
 from scoring_input_contract import (
     CLASSIFICATION_INPUT_CONTRACT,
@@ -368,8 +369,8 @@ def _has_enzyme_activity_dose(row: dict[str, Any]) -> bool:
     if _normalize_text(row.get("dose_class")) == "enzyme_activity":
         return True
 
-    unit = _normalize_text(row.get("activity_unit") or row.get("quantityUnit") or row.get("unit", ""))
-    qty = row.get("activity_quantity", row.get("quantity", row.get("amount", row.get("qty"))))
+    unit = _normalize_text(row.get("activity_unit") or row.get("unit", ""))
+    qty = row.get("activity_quantity", row.get("quantity", row.get("amount")))
     if unit in _ENZYME_ACTIVITY_UNITS:
         try:
             return float(str(qty).replace(",", "")) > 0
@@ -398,8 +399,8 @@ def _is_non_quantified(row: dict[str, Any]) -> bool:
     if _has_enzyme_activity_dose(row):
         return False
 
-    qty = row.get("quantity", row.get("amount", row.get("qty")))
-    unit = _normalize_text(row.get("quantityUnit", row.get("unit", "")))
+    qty = row.get("quantity", row.get("amount"))
+    unit = _normalize_text(row.get("unit", ""))
 
     # Zero quantity
     if qty is not None:
@@ -474,8 +475,8 @@ def _has_non_probiotic_eligible_active(product: dict[str, Any]) -> bool:
             if not (cid == "fiber" and fiber_primary_with_accessory_probiotics):
                 continue
         cid = _normalize_text(row.get("canonical_id"))
-        qty = row.get("quantity", row.get("amount", row.get("qty")))
-        unit = _normalize_text(row.get("unit", row.get("quantityUnit", "")))
+        qty = row.get("quantity", row.get("amount"))
+        unit = _normalize_text(row.get("unit", ""))
         has_positive_dose = False
         try:
             has_positive_dose = float(str(qty).replace(",", "")) > 0 and unit not in _NP_UNITS
@@ -653,11 +654,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 _row_evidence(row, category, ROW_ROLE_EXCLUDED_CLEANER_INELIGIBLE))
             continue
         cleaner_role = _normalize_text(row.get("cleaner_row_role"))
-        if cleaner_role in {
-            "blend_header_total", "nested_display_only", "composition_leaf",
-            "source_descriptor", "nutrition_rollup", "excipient", "inactive",
-            "label_header",
-        }:
+        if cleaner_role in CLEANER_NON_SCORABLE_ROLES:
             row_evidence.append(
                 _row_evidence(row, category, ROW_ROLE_EXCLUDED_STRUCTURAL))
             continue
@@ -1973,7 +1970,7 @@ def _classification_canonical_id(row: dict[str, Any]) -> str:
     """
     if "_classification_canonical_id" in row:
         return _normalize_text(row.get("_classification_canonical_id"))
-    return _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
+    return _normalize_text(row.get("canonical_id") or "")
 
 
 def _row_evidence(row: dict[str, Any], category: str, role: str) -> dict[str, Any]:
@@ -2014,7 +2011,7 @@ def percentile_label_for(percentile_category: Any) -> str:
     scored artifact and the export cannot disagree about what a cohort is
     called.
 
-    Deliberately NOT the curated labels in data/percentile_categories.json
+    Deliberately NOT the retired curated labels (data/percentile_categories.json, removed 2026-09-21)
     ("General Supplements", "Fish Oil & Omega-3s"): those belong to the retired
     9-category inference config and have never reached the catalog. Reviving
     them here would put a different label in the artifact than the one users

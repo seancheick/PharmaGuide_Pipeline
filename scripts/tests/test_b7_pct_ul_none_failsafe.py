@@ -12,7 +12,21 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from scoring_v4.modules.generic_dose import _penalty_b7_dose_safety
+from scoring_v4.dose_safety import evaluate_dose_safety
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_POLICY = _cfg_block("dose_safety_policy", "ul_pct_threshold")
+
+
+def _penalty_b7_dose_safety(product):
+    """The one production B7 evaluation (score_supplements_v4 applies it to
+    every module through apply_universal_dose_safety)."""
+    return evaluate_dose_safety(
+        product,
+        threshold=float(_POLICY["ul_pct_threshold"]),
+        per_flag_penalty=float(_POLICY["per_flag_penalty"]),
+        cap=float(_POLICY["cap"]),
+    ).penalty
 
 
 def _prod(flags):

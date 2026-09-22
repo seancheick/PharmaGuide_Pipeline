@@ -38,7 +38,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.release_artifact_paths import catalog_dist_dir
+from scripts.release_artifact_paths import catalog_dist_dir, final_build_dir
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -53,12 +53,13 @@ _BUILD_CANDIDATES = (
     # rebuild_dashboard_snapshot.sh + release_full.sh). Prefer it so the
     # audit reflects what's actually shipping. The /tmp/* paths below are
     # historical sandbox dirs that may carry stale data from prior runs.
-    ROOT / "scripts" / "dist",
-    Path("/tmp/pharmaguide_release_build_inactives"),
-    Path("/tmp/pharmaguide_release_build_canonical_id"),
-    Path("/tmp/pharmaguide_release_build_v3"),
-    Path("/tmp/pharmaguide_release_build"),
+    final_build_dir(),
 )
+
+
+def _spread(paths, n):
+    """n files evenly spaced across the catalog (not the first n by name)."""
+    return paths[:: max(1, len(paths) // n)] if paths else paths
 
 
 def _find_build_dir() -> Path | None:
@@ -212,7 +213,7 @@ def test_no_banned_active_ships_with_severity_status_na() -> None:
                     banned_index[t] = e
 
     violations = []
-    for p in sorted((base / "detail_blobs").glob("*.json"))[:300]:
+    for p in _spread(sorted((base / "detail_blobs").glob("*.json")), 300):
         try:
             b = json.loads(p.read_text())
         except Exception:

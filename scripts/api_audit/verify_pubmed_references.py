@@ -12,7 +12,7 @@ from typing import Any
 try:
     from .pubmed_client import PubMedClient, parse_pubmed_article_xml
 except ImportError:
-    from pubmed_client import PubMedClient, parse_pubmed_article_xml
+    from pubmed_client import PubMedClient
 
 try:
     from .normalize_clinical_pubmed import fetch_articles_for_pmids

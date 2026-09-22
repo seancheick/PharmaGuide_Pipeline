@@ -54,7 +54,7 @@ def _banned_recalled_summary(d):
 
 
 def _depletions_summary(d):
-    entries = d.get("medication_depletions") or []
+    entries = d.get("depletions") or []
     total = len(entries)
     fields = ("alert_headline", "alert_body", "acknowledgement_note",
               "monitoring_tip_short", "food_sources_short")

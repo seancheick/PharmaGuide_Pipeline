@@ -39,10 +39,10 @@ def test_export_banned_via_blob_warning_rejects_inconsistent_v4_score() -> None:
 
     # Post-overlay, pre-suppress state: v4 produced a finite score/status.
     scored = make_scored(verdict="SAFE")
-    scored["_v4_quality_score_100"] = 72.0
-    scored["_v4_quality_status"] = "scored"
-    scored["_v4_quality_tier"] = "Good"
-    scored["_v4_raw_score_100"] = 72.0
+    scored["quality_score_v4_100"] = 72.0
+    scored["quality_score_status"] = "scored"
+    scored["quality_tier"] = "Good"
+    scored["raw_score_v4_100"] = 72.0
 
     # Detail blob carrying a critical banned-substance warning (e.g. a
     # resolver-detected inactive ban like titanium dioxide) — the broader
@@ -63,8 +63,8 @@ def test_non_banned_product_keeps_its_v4_score() -> None:
     assert has_banned_substance(enriched) is False
 
     scored = make_scored(verdict="SAFE")
-    scored["_v4_quality_score_100"] = 72.0
-    scored["_v4_quality_status"] = "scored"
+    scored["quality_score_v4_100"] = 72.0
+    scored["quality_score_status"] = "scored"
 
     row = row_as_dict(build_core_row(enriched, scored, "2026-07-05T00:00:00Z"))
 

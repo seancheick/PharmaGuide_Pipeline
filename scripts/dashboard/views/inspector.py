@@ -2,16 +2,10 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 import json
-from pathlib import Path
 from scripts.dashboard.components import _safe_columns, _safe_tabs
 from scripts.dashboard.components.data_table import data_table, arrow_safe
 from scripts.dashboard.components.product_header import product_header
-from scripts.dashboard.components.score_breakdown import (
-    score_breakdown,
-    score_breakdown_v4,
-    V4_PILLARS,
-)
-from scripts.dashboard.components.score_trace import score_trace
+from scripts.dashboard.components.score_breakdown import score_breakdown_v4, V4_PILLARS
 
 
 def _render_v4_pillars(product_row, blob):
@@ -290,15 +284,14 @@ def render_drill_down(dsld_id, data):
             else:
                 st.info(f"{header}\n\n{summary}")
 
-    # 7. Score Trace
+    # 7. Audit Evidence
     with st.expander("🧭 Audit Evidence"):
         if blob:
-            audit = blob.get("audit", {})
             col_left, col_right = _safe_columns(2)
             with col_left:
                 st.write("**Supplement Type Audit**")
-                if audit.get("supplement_type"):
-                    st.dataframe(pd.DataFrame([audit["supplement_type"]]), width="stretch", hide_index=True)
+                if blob.get("supplement_type_audit"):
+                    st.dataframe(pd.DataFrame([blob["supplement_type_audit"]]), width="stretch", hide_index=True)
                 st.write("**Non-GMO Audit**")
                 if blob.get("non_gmo_audit"):
                     st.dataframe(pd.DataFrame([blob["non_gmo_audit"]]), width="stretch", hide_index=True)
@@ -311,16 +304,6 @@ def render_drill_down(dsld_id, data):
                     st.dataframe(pd.DataFrame([blob["proprietary_blend_audit"]]), width="stretch", hide_index=True)
         else:
             st.caption("Audit evidence unavailable without detail blob.")
-
-    with st.expander("🔍 Detailed Score Trace"):
-        if blob:
-            score_trace(
-                section_breakdown=blob.get("section_breakdown", {}),
-                bonuses=blob.get("score_bonuses", []),
-                penalties=blob.get("score_penalties", [])
-            )
-        else:
-            st.caption("Trace unavailable without detail blob.")
 
     # 8. Source Paths & Raw JSON
     with st.expander("🛠️ Debug Information"):

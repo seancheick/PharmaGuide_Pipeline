@@ -43,7 +43,7 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 # --------------------------------------------------------------------------- #
 # Constants
@@ -204,24 +204,6 @@ def build_cui_to_rxcui_index(
                 matches.add(name_to_rxcui[key])
         if len(matches) == 1:
             out[cui] = next(iter(matches))
-    return out
-
-
-def build_rxcui_to_cui_crosswalk(iqm: dict[str, Any]) -> dict[str, str]:
-    """Crosswalk ``rxcui → cui`` from IQM for supp.ai curated auto-enrichment.
-
-    Used only by ``enrich_curated_with_suppai``. The supp.ai corpus keys
-    everything by CUI, so to match a curated row (which stores an RxCUI for
-    drugs) we need to map rxcui → cui first.
-    """
-    out: dict[str, str] = {}
-    for canonical_id, entry in iqm.items():
-        if canonical_id.startswith("_") or not isinstance(entry, dict):
-            continue
-        rx = entry.get("rxcui")
-        cui = entry.get("cui")
-        if isinstance(rx, str) and rx and isinstance(cui, str) and cui:
-            out.setdefault(rx, cui)
     return out
 
 

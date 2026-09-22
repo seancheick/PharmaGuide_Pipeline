@@ -58,7 +58,6 @@ def _build(name, actives):
     return {
         "dsld_id": 99999,
         "product_name": name,
-        "productName": name,
         "fullName": name,
         "activeIngredients": actives,
         "inactiveIngredients": [],

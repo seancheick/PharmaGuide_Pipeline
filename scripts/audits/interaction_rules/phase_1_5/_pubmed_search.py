@@ -3,7 +3,7 @@
 
 Uses PUBMED_API_KEY (10 req/s vs 3) loaded from .env at repo root.
 """
-import json, os, sys, time, urllib.request, urllib.parse, re
+import json, os, sys, time, urllib.request, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 

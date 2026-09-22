@@ -88,16 +88,6 @@ def metadata() -> dict:
     return dict(_METADATA)
 
 
-def category_ids() -> Tuple[str, ...]:
-    return tuple(_BY_ID.keys())
-
-
-def canonicals_in(category_id: str) -> Tuple[str, ...]:
-    """Return the ordered tuple of canonical form names in a category."""
-    cat = _BY_ID.get(category_id)
-    return tuple(f.canonical for f in cat.forms) if cat else ()
-
-
 # Cleaner surface ---------------------------------------------------------
 
 def extract_forms(text: str, categories: Optional[Iterable[str]] = None) -> List[str]:

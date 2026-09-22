@@ -86,7 +86,6 @@ def _render_summary(data):
     total = len(data["products"])
     avg = sum(data["scores"]) / total if total else 0
     banned = sum(1 for p in data["products"] if p["has_banned"])
-    recalled = sum(1 for p in data["products"] if p["has_recalled"])
     harmful = sum(1 for p in data["products"] if p["has_harmful"])
     allergens = sum(1 for p in data["products"] if p["has_allergens"])
     blocked = sum(1 for p in data["products"] if p["verdict"] in ("BLOCKED", "UNSAFE"))

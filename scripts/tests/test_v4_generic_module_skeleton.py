@@ -230,7 +230,7 @@ def test_single_astaxanthin_and_coq10_have_no_hidden_public_cap(name, canonical_
 
     assert "public_quality_cap" not in score_generic(product).metadata
     out = score_product_v4(product)
-    assert out["quality_score_cap_v4"] is None
+    assert "quality_score_cap_v4" not in out
     if out["quality_score_v4_100"] is not None:
         pillar_sum = round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1)
         assert out["quality_score_v4_100"] == max(0.0, min(100.0, pillar_sum))

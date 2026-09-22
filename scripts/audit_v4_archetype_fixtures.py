@@ -183,7 +183,7 @@ def _score_projection(artifact: Mapping[str, Any]) -> dict[str, Any]:
         "product_safety_status": artifact.get("product_safety_status"),
         "quality_score_v4_100": artifact.get("quality_score_v4_100"),
         "quality_tier": artifact.get("quality_tier"),
-        "v4_confidence": artifact.get("_v4_confidence"),
+        "v4_confidence": artifact.get("quality_score_confidence"),
         "normalization_references": normalization_references,
         "pillars": {
             name: value.get("score")

@@ -136,15 +136,6 @@ def list_version_directory(client, db_version):
     return paths
 
 
-def delete_storage_path(client, path):
-    """Delete a single object from storage.  Returns (success, error_message)."""
-    try:
-        client.storage.from_(BUCKET).remove([path])
-        return True, None
-    except Exception as exc:
-        return False, str(exc)
-
-
 def delete_version_directory(client, db_version, dry_run):
     """Delete every object under v{db_version}/ — recursively, with proof.
 

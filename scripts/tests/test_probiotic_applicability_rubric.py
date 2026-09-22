@@ -14,7 +14,7 @@ def strain_product(*, dose=None, clinical_id="STRAIN_LGG", name="Lactobacillus r
     return {"product_name": "Daily Probiotic", "form_factor_canonical": "capsule",
             "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 1,
                               "servings_per_day_source": "label"},
-            "target_population": "adult", "activeIngredients": [row],
+            "activeIngredients": [row],
             "probiotic_data": {"probiotic_blends": [{"strains": [name],
                 "raw_source_path": row["raw_source_path"], "cfu_data": {
                     "has_cfu": dose is not None,
@@ -105,7 +105,25 @@ def test_species_research_is_not_presented_as_exact_strain_evidence(monkeypatch)
     assert row["dose_applicable"] is False
     assert evidence["metadata"]["native_clinical_strain_evidence_rows"][0]["evidence_scope"] == "species_general"
     cfg = {"evidence_subscale": {"archetype_reference": {"probiotic": 20}, "default_reference": 20}}
+    # Its contexts await clinician review, so the assessment is open whatever
+    # the species research earned: the copy says so and claims no strain evidence.
+    assert evidence["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
     copy = _pillar_evidence(evidence, 20, "probiotic", cfg)["reason"]
+    assert "still open" in copy
+    assert "Named strains" not in copy
+
+
+def test_finished_species_research_copy_names_its_scope():
+    from scoring_v4.quality_score import _pillar_evidence
+
+    dim = {"score": 3.0, "metadata": {
+        "evidence_result_state": "research_present_applicability_unestablished",
+        "credit_owner": "strain",
+        "evidence_assessment": {"strain_assessments": [{"research_accepted": True, "cfu_per_day": 5e9}]},
+        "native_clinical_strain_evidence_rows": [{"evidence_scope": "species_general"}],
+    }}
+    cfg = {"evidence_subscale": {"archetype_reference": {"probiotic": 20}, "default_reference": 20}}
+    copy = _pillar_evidence(dim, 20, "probiotic", cfg)["reason"]
     assert "species-level" in copy
     assert "exact studied strain" in copy
     assert "Named strains" not in copy
@@ -165,7 +183,6 @@ def reviewed_dose(monkeypatch):
 @pytest.mark.parametrize("change,expected", [
     (None, "strain_dose_reference_unreviewed"), ("low", "strain_dose_reference_unreviewed"),
     ("high", "strain_dose_reference_unreviewed"), ("form", "strain_dose_reference_unreviewed"),
-    ("population", "strain_dose_reference_unreviewed"), ("missing_population", "strain_dose_reference_unreviewed"),
     ("unknown", "strain_dose_unknown"),
 ])
 def test_legacy_single_range_never_proves_native_applicability(reviewed_dose, change, expected):
@@ -174,8 +191,6 @@ def test_legacy_single_range_never_proves_native_applicability(reviewed_dose, ch
         if change == key:
             p["probiotic_data"]["probiotic_blends"][0]["cfu_data"]["cfu_count"] = value
     if change == "form": p["form_factor_canonical"] = "yogurt"
-    if change == "population": p["target_population"] = "infant"
-    if change == "missing_population": p.pop("target_population")
     assert studied_formulas.assess_probiotic_evidence(p)["strain_assessments"][0]["status"] == expected
 
 

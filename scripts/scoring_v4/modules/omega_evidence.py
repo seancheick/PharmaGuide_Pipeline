@@ -91,10 +91,6 @@ def _compute_per_day_components(product: Dict[str, Any]) -> Dict[str, float]:
     }
 
 
-def _compute_per_day_epa_dha(product: Dict[str, Any]) -> float:
-    return _compute_per_day_components(product)["total"]
-
-
 def _prenatal_dha_indication_relevant(product: Dict[str, Any], dha_per_day: float) -> bool:
     name_text = " ".join(
         str(product.get(key) or "")

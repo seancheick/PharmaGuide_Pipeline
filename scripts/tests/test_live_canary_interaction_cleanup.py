@@ -31,6 +31,7 @@ def test_disease_or_nutrient_associations_do_not_ship_as_interactions():
     rejected = {
         "DSI_ACEI_IRON",
         "DSI_ANTICONV_VITD",
+        "DSI_BETABLOCK_MELATONIN",
         "DSI_CORTICO_CALCIUM_VITD",
         "DSI_DM_VITD",
         "DSI_DM_MAGNESIUM",
@@ -172,3 +173,24 @@ def test_chromium_copy_explains_the_authored_screening_threshold():
     assert "not a proven toxicity cutoff" in management
     assert "do not change" in management
     assert management.startswith("chromium may lower blood glucose")
+
+
+def test_depletion_facts_have_one_owner_and_safety_warnings_stay():
+    """A chronic medication->nutrient depletion belongs to the depletion corpus.
+
+    The interaction layer keeps only a distinct supplement-safety fact about the
+    same pair: potassium-sparing diuretic + added potassium -> hyperkalemia.
+    """
+    rule = BY_ID["DSI_DIURETICS_POTASSIUM"]
+    assert rule["agent1_id"] == "class:potassium_sparing_diuretics"
+    assert rule["materiality"] == "presence" and rule["direction"] == "harmful"
+    text = (rule["mechanism"] + " " + rule["management"]).lower()
+    assert "hyperkalemia" in text
+    for depletion_prose in ("deplete", "beneficial", "loop", "thiazide", "often prescribed"):
+        assert depletion_prose not in text
+
+    depletions = json.loads(
+        (DATA.parents[1] / "medication_depletions.json").read_text()
+    )["depletions"]
+    owned = {row["id"] for row in depletions}
+    assert {"DEP_DIURETICS_POTASSIUM", "DEP_BETABLOCKERS_MELATONIN"} <= owned

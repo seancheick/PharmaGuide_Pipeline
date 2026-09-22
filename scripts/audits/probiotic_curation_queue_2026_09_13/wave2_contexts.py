@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from studied_formulas import valid_native_study_context  # noqa: E402
-from apply_batch1_disposition import DISPOSITION, _write_path  # noqa: E402
+from apply_batch1_disposition import DISPOSITION
 
 REG = ROOT / "scripts/data/clinically_relevant_strains.json"
 

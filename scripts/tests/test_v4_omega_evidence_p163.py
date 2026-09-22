@@ -228,7 +228,10 @@ def test_disclosed_epa_dha_class_floor_not_awarded_below_efsa_zone() -> None:
     assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is False
 
 
-def test_final_blob_omega3_detail_can_drive_evidence_floor() -> None:
+def test_omega3_detail_is_not_a_scoring_input() -> None:
+    """EPA/DHA comes from the label rows only. ``omega3_detail`` was a retired
+    v3 blob block (never on an enriched product, always empty in the blob), so
+    it must not be able to create EPA/DHA credit."""
     from scoring_v4.modules.omega_evidence import score_evidence
 
     product = {
@@ -246,9 +249,8 @@ def test_final_blob_omega3_detail_can_drive_evidence_floor() -> None:
 
     payload = score_evidence(product)
 
-    assert payload["metadata"]["per_day_epa_dha_mg"] == 1000.0
-    assert payload["components"]["clinical_evidence"] == 10.0
-    assert "indication_relevance" not in payload["components"]
+    assert not payload["metadata"].get("per_day_epa_dha_mg")
+    assert not payload["components"].get("clinical_evidence")
 
 
 # --- Score ceiling ------------------------------------------------------

@@ -71,7 +71,7 @@ sys.path.insert(0, str(_THIS_DIR))
 sys.path.insert(0, str(_THIS_DIR.parent))
 from dataset_paths import brand_dataset_root  # noqa: E402
 
-from audit_unii_data_quality import (  # noqa: E402
+from audit_unii_data_quality import (
     REFERENCE_FILES,
     _normalize_unii,
     _extract_entry_unii,
@@ -80,8 +80,6 @@ from audit_unii_data_quality import (  # noqa: E402
     load_exoneration_allowlist,
     build_unii_to_fda_names,
     find_same_unii_different_names,
-    _load_iqm_entries,
-    _load_list_entries,
 )
 
 

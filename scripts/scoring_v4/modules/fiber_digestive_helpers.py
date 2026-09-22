@@ -162,10 +162,10 @@ def nutrition_fiber_grams(product: Dict[str, Any]) -> Optional[float]:
 
 
 def dose_grams(row: Dict[str, Any]) -> Optional[float]:
-    value = _as_float(row.get("quantity") or row.get("normalized_amount") or row.get("dosage"), None)
+    value = _as_float(row.get("quantity") or row.get("normalized_amount"), None)
     if value is None or value <= 0:
         return None
-    unit = _norm_text(row.get("unit_normalized") or row.get("unit") or row.get("normalized_unit") or row.get("dosage_unit"))
+    unit = _norm_text(row.get("unit_normalized") or row.get("unit") or row.get("normalized_unit"))
     compact = unit.replace(" ", "")
     if compact in {"g", "gram", "grams", "gram(s)"}:
         return value

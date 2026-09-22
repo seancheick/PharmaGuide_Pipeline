@@ -44,6 +44,29 @@ INTERACTION_TEXT_TAG_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 )
 
 
+# Interaction subject family: an identity that answers to every interaction
+# authored on its family as well as its own. Vitamin K1 and K2 are vitamers of
+# vitamin K, and every vitamin K interaction (warfarin antagonism) is authored
+# on `vitamin_k`; the 2026-07-28 identity split left them matching nothing.
+# This is narrower than the IQM display group on purpose: beta-carotene rolls
+# up to vitamin A for display but is a provitamin, not a vitamer, and must not
+# inherit preformed-retinol interactions. Members must match the IQM
+# `nutrient_group_id` (pinned by test_vitamin_k_interaction_subject.py).
+INTERACTION_SUBJECT_FAMILY: dict[str, str] = {
+    "vitamin_k1": "vitamin_k",
+    "vitamin_k2": "vitamin_k",
+}
+
+
+def interaction_subject_ids(canonical_id: Any) -> list[str]:
+    """Every interaction subject an identity answers to: itself, then its family."""
+    canonical = str(canonical_id or "").strip()
+    if not canonical:
+        return []
+    family = INTERACTION_SUBJECT_FAMILY.get(canonical)
+    return [canonical, family] if family and family != canonical else [canonical]
+
+
 def normalize_interaction_canonical_id(value: Any) -> str | None:
     """Return the catalog-facing canonical used for interaction lookup."""
     if value is None:

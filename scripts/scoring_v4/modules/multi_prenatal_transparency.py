@@ -282,7 +282,7 @@ def _has_daily_value(row: Dict[str, Any]) -> bool:
 
 
 def _has_direct_panel_nutrient_identity(row: Dict[str, Any]) -> bool:
-    canonical = _canon_key(row.get("canonical_id") or row.get("parent_key") or row.get("mapped_parent"))
+    canonical = _canon_key(row.get("canonical_id"))
     if canonical.startswith("vitamin_") or canonical in PANEL_MINERAL_CANONICALS:
         return True
     text = _row_display_text(row)
@@ -303,7 +303,7 @@ def _looks_like_adjunct_source_row(row: Dict[str, Any]) -> bool:
         return False
     if PANEL_NUTRIENT_PATTERN.search(text):
         return False
-    dose_status = _norm_text(row.get("dose_status") or row.get("disclosure_status"))
+    dose_status = _norm_text(row.get("dose_status"))
     lacks_dose = not has_usable_individual_dose(row)
     if (dose_status in {"not_disclosed_blend", "hidden_blend", "not_disclosed"} or lacks_dose) and (
         ADJUNCT_SOURCE_PATTERN.search(text) or BLEND_CONTAINER_PATTERN.search(text)

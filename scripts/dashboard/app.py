@@ -13,12 +13,7 @@ from scripts.dashboard.config import get_config
 from scripts.dashboard.data_loader import filter_product_catalog, load_dashboard_data
 from scripts.dashboard.app_shell import build_initial_shell_state
 from scripts.dashboard.components import inject_dashboard_theme, render_command_center, render_page_frame
-from scripts.dashboard.navigation import (
-    DEFAULT_VIEW,
-    SECTION_BY_VIEW,
-    VIEW_SLUGS,
-    VIEWS_BY_SECTION,
-)
+from scripts.dashboard.navigation import DEFAULT_VIEW, VIEW_SLUGS
 from scripts.dashboard.page_meta import get_page_meta
 from scripts.dashboard.time_format import format_dashboard_datetime
 from scripts.dashboard.views import (

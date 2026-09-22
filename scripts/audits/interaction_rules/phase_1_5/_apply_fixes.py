@@ -4,7 +4,7 @@
 Each fix is surgical and content-verified per CLINICAL_REVIEW.md + abstract verification pass.
 Run pytest after this to confirm no regressions.
 """
-import json, os, sys
+import json, os
 
 RULES_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'ingredient_interaction_rules.json')
 RULES_PATH = os.path.abspath(RULES_PATH)

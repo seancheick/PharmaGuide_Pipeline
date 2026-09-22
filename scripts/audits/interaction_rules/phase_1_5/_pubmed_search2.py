@@ -30,7 +30,6 @@ def search(t,n=8): return json.loads(G('https://eutils.ncbi.nlm.nih.gov/entrez/e
 def summary(ids):
     if not ids: return {}
     return json.loads(G('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi',dict(db='pubmed',id=','.join(ids),retmode='json'))).get('result',{})
-def absx(pmid): return G('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi',dict(db='pubmed',id=str(pmid),rettype='abstract',retmode='text')).decode('utf-8','replace').strip()
 
 QUERIES = [
   ('SAMe_serotonin',         'SAMe AND serotonin syndrome AND case'),

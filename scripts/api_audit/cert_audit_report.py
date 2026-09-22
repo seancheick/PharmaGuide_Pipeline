@@ -72,45 +72,6 @@ CANARY = [
 ]
 
 
-def _load_claimed_certs(blob: dict) -> list[str]:
-    """Pull claimed_cert_programs from a v3 detail blob.
-
-    v3 stores this under certification_detail / third_party_programs in
-    different blob versions. Tries multiple shapes."""
-    out: list[str] = []
-    cd = blob.get("certification_detail") or {}
-    # Current contract: every label claim lives in claimed_programs;
-    # third_party_programs is the verified-only legacy list.
-    for p in cd.get("claimed_programs") or []:
-        name = p.get("name") if isinstance(p, dict) else p
-        if name:
-            out.append(str(name))
-    tp = cd.get("third_party_programs") or {}
-    programs = tp.get("programs") if isinstance(tp, dict) else None
-    if isinstance(programs, list):
-        for p in programs:
-            if isinstance(p, dict):
-                name = p.get("name") or p.get("program")
-            else:
-                name = p
-            if name:
-                out.append(str(name))
-    # Some v3 blobs project directly
-    direct = blob.get("named_cert_programs") or []
-    if isinstance(direct, list):
-        for p in direct:
-            if p:
-                out.append(str(p))
-    # Dedup preserving order
-    seen: set[str] = set()
-    uniq = []
-    for p in out:
-        if p not in seen:
-            seen.add(p)
-            uniq.append(p)
-    return uniq
-
-
 def _current_b4a(row: dict) -> float:
     """v3 currently emits the B4 sum into score_brand_trust? Actually B4 lives
     inside score_safety_purity. We don't have a per-B4a column — surface the

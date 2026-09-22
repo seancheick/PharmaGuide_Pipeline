@@ -42,6 +42,8 @@ from pathlib import Path
 
 import pytest
 
+from release_artifact_paths import catalog_dist_dir, final_build_dir
+
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -62,11 +64,12 @@ if str(ROOT / "scripts") not in sys.path:
 # Blob-level canary
 # ---------------------------------------------------------------------------
 
-_BUILD_CANDIDATES = (
-    Path("/tmp/pharmaguide_release_build_canonical_id"),
-    Path("/tmp/pharmaguide_release_build_v3"),
-    Path("/tmp/pharmaguide_release_build"),
-)
+_BUILD_CANDIDATES = (final_build_dir(), catalog_dist_dir())
+
+
+def _spread(paths, n):
+    """n files evenly spaced across the catalog (not the first n by name)."""
+    return paths[:: max(1, len(paths) // n)] if paths else paths
 
 
 def test_addressable_inactives_get_role_label() -> None:
@@ -86,7 +89,7 @@ def test_addressable_inactives_get_role_label() -> None:
     addressable = 0
     labeled = 0
     misses: list[tuple[str, str, list]] = []
-    for p in sorted((base / "detail_blobs").glob("*.json"))[:400]:
+    for p in _spread(sorted((base / "detail_blobs").glob("*.json")), 400):
         try:
             b = json.loads(p.read_text())
         except Exception:
@@ -139,7 +142,7 @@ def test_inactive_role_label_coverage_above_85_percent() -> None:
 
     total = 0
     present = 0
-    for p in sorted((base / "detail_blobs").glob("*.json"))[:400]:
+    for p in _spread(sorted((base / "detail_blobs").glob("*.json")), 400):
         try:
             b = json.loads(p.read_text())
         except Exception:

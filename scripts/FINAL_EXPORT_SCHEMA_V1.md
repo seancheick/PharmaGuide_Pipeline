@@ -25,9 +25,9 @@ Assumptions:
 
 - `quality_score_v4_100` is the canonical shipped quality score; `score_100_equivalent`
   and `score_display_100_equivalent` are /100 compatibility mirrors.
-- `quality_pillars_v4` is the canonical score-detail surface for Flutter. Legacy
-  `section_breakdown` fields may still exist in detail blobs for audit/history but
-  must not be treated as the production score model.
+- `quality_pillars_v4` is the canonical score-detail surface for Flutter. The v3
+  `section_breakdown` / `omega3_detail` blocks were removed on 2026-09-21 (they
+  read a v3 `breakdown` the v4 scorer never emits and shipped zeros).
 - `key_ingredient_tags` is safe for Flutter product-row parsing: mapped actives use
   canonical IDs, and unmapped active rows fall back to cleaner `normalized_key` so
   product cards/search/stack intelligence are not empty while waiting for detail blobs.
@@ -108,13 +108,15 @@ CREATE TABLE products_core (
     classification_schema_version   TEXT,
     v4_config_fingerprint           TEXT,
 
-    score_ingredient_quality      REAL,    -- max 25
+    -- V3 section columns: always NULL in 2.5.0 (deprecated compatibility, not a
+    -- live scoring field; V4 pillars live in the blob). Schema 3 drops them.
+    score_ingredient_quality      REAL,
     score_ingredient_quality_max  REAL,
-    score_safety_purity           REAL,    -- max 30
+    score_safety_purity           REAL,
     score_safety_purity_max       REAL,
-    score_evidence_research       REAL,    -- max 20
+    score_evidence_research       REAL,
     score_evidence_research_max   REAL,
-    score_brand_trust             REAL,    -- max 5
+    score_brand_trust             REAL,
     score_brand_trust_max         REAL,
 
     percentile_rank               REAL,
@@ -149,7 +151,7 @@ CREATE TABLE products_core (
     has_full_disclosure           INTEGER DEFAULT 0,
 
     cert_programs                 TEXT,    -- JSON array of registry-verified programs (2.5.0+); claims are in the blob
-    badges                        TEXT,    -- JSON array
+    badges                        TEXT,    -- JSON array; always [] (deprecated: the app no longer renders badges)
     top_warnings                  TEXT,    -- JSON array, max 5
     flags                         TEXT,    -- JSON array
 
@@ -249,10 +251,7 @@ CREATE INDEX idx_products_core_contains_nootropics ON products_core(contains_noo
 | `verdict`                      | `scored.verdict`                                          | SAFE/CAUTION/POOR/UNSAFE/BLOCKED/NOT_SCORED                                             |
 | `safety_verdict`               | `scored.safety_verdict`                                   | Backward-compat                                                                         |
 | `mapped_coverage`              | `scored.mapped_coverage`                                  | 0.0-1.0                                                                                 |
-| `score_ingredient_quality`     | `scored.section_scores.A_ingredient_quality.score`        | max 25                                                                                  |
-| `score_safety_purity`          | `scored.section_scores.B_safety_purity.score`             | max 30                                                                                  |
-| `score_evidence_research`      | `scored.section_scores.C_evidence_research.score`         | max 20                                                                                  |
-| `score_brand_trust`            | `scored.section_scores.D_brand_trust.score`               | max 5                                                                                   |
+| `score_ingredient_quality`, `score_safety_purity`, `score_evidence_research`, `score_brand_trust` (+ `_max`) | none — always NULL | V3 sections retired; deprecated compatibility, schema 3 drops them |
 | `has_banned_substance`         | `contaminant_data.banned_substances.substances`           | exact/alias match with `status == "banned"` only                                        |
 | `has_recalled_ingredient`      | Same source, `status == "recalled"`                       | Ingredient recalled, NOT product                                                        |
 | `blocking_reason`              | Derived from exact/alias contaminant matches + verdict    | Legacy safety explanation; new consumers should prefer `safety_signal_reason` for scored CAUTION |
@@ -427,13 +426,7 @@ compatibility/audit fallback. The payload is cached on-device in
   "warnings": [...],
   "score_bonuses": [...],
   "score_penalties": [...],
-  "section_breakdown": {
-    "ingredient_quality": {"score", "max", "sub": {..., "probiotic_breakdown": {...}, "omega3_breakdown": {...}}},
-    "safety_purity": {"score", "max", "sub": {..., "B5_blend_evidence": [...], "B7_penalty", "B7_dose_safety_evidence": [...]}},
-    "evidence_research": {"score", "max", "matched_entries", "ingredient_points": {...}},
-    "brand_trust": {"score", "max", "sub": {...}},
-    "violation_penalty": 0.0
-  },
+  "quality_pillars_v4": {"formulation": {"score", "max", "reason", "components"}, "dose": {...}, "evidence": {..., "evidence_result_state", "display_state"}, "transparency": {...}, "verification": {...}, "safety_hygiene": {...}},
   "compliance_detail": {...},
   "certification_detail": {"claimed_programs": [{"name", "program"}], "verified_programs": [{"name", "program", "record_id", "scope", "source_url", "snapshot_date", "recency_status"}], "third_party_programs": {"programs": [{"name", "verified": true, "source": "registry", "record_id"}]}, "gmp": {...}, "purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
   "proprietary_blend_detail": {...},
@@ -544,7 +537,7 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
       "verified_on": "2026-08-13"
     }]
   },
-  "_score_note": "v3.6.0+: `score` is a deprecated alias of `bio_score` (no natural-source bonus). Pre-v3.6.0 blobs had `score = bio_score + 3*natural` (range 0-18). New consumers should read `bio_score` directly (range 0-15, pure form quality). Sourcing signal lives in section_breakdown.ingredient_quality.sub.A5e.",
+  "_score_note": "v3.6.0+: `score` is a deprecated alias of `bio_score` (no natural-source bonus). Pre-v3.6.0 blobs had `score = bio_score + 3*natural` (range 0-18). New consumers should read `bio_score` directly (range 0-15, pure form quality). Sourcing is not scored in v4.",
   "notes": "The most common preformed Vitamin A in supplements...",
   "mapped": true,
   "safety_hits": [...],
@@ -847,9 +840,9 @@ ambiguity.
 - `warnings` include banned/recalled/high-risk/watchlist ingredient hits, allergens, harmful
   additives, interaction warnings, drug interaction warnings, dietary warnings, and product
   status warnings. Each warning type carries specific provenance fields (see examples above).
-- `dose_threshold_evaluation` is the raw interaction-rule evaluation payload emitted by the
-  pipeline. The app should treat it as structured diagnostic data, not as a fixed
-  `{threshold_mcg, actual_mcg}` shape.
+- `dose_threshold_evaluation` is always `null` in shipped blobs: the compact `dose_decision`
+  replaced the raw evaluation payload (the examples above show the pre-compaction shape). The
+  key stays for 2.5.0 compatibility; the app reads `dose_decision` first.
 - `score_bonuses` lists every positive scoring factor. Each entry has:
   `{id, label, score, detail?}`. The `id` is a section sub-score key (e.g. `"A2"`, `"A3"`,
   `"B4a"`, `"probiotic"`). `detail` is optional and present only on A3 (delivery tier name).
@@ -870,12 +863,9 @@ ambiguity.
   qualification, and non-GMO verification.
 - `probiotic_detail` is present only for probiotic products. Includes strain composition,
   CFU data, clinical strain matches with evidence levels, prebiotic pairing, and survivability
-  coating. The `probiotic_breakdown` in `section_breakdown.ingredient_quality.sub` carries
-  the scoring sub-components (CFU, diversity, clinical strains, prebiotic, survivability).
-- `omega3_breakdown` lives in `section_breakdown.ingredient_quality.sub` when the product
-  has explicit EPA/DHA label amounts. This is the app-facing export for omega-3 dose context;
-  the pipeline's legacy `E_dose_adequacy` compatibility output is not a separate final-export
-  section.
+  coating. Probiotic scoring detail lives in the `quality_pillars_v4` components.
+- Omega-3 (EPA/DHA) dose context lives in the `dose` and `evidence` pillars of
+  `quality_pillars_v4`; there is no separate omega-3 blob section.
 - `synergy_detail` is present when synergy clusters were matched. Includes cluster names,
   matched ingredients with their doses and minimum effective dose thresholds, and
   qualification status.

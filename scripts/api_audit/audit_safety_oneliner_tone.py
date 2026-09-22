@@ -45,7 +45,7 @@ import csv
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Dict, Optional
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_INPUT = ROOT / "scripts" / "data" / "banned_recalled_ingredients.json"

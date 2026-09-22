@@ -23,7 +23,7 @@ from __future__ import annotations
 import json
 import sys
 import time
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -31,7 +31,6 @@ sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT))
 
 from scoring_v4.scored_artifact import build_scored_artifact
-from studied_formulas import assess_probiotic_component_disposition
 
 
 def run_verification():

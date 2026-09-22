@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 645,
       "total_forms": 1437,
-      "total_form_aliases": 12130,
+      "total_form_aliases": 12135,
       "parents_with_parent_aliases": 131,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -61,7 +61,7 @@
       "vitamins": 25
     },
     "schema_version": "5.5.4",
-    "last_updated": "2026-09-20",
+    "last_updated": "2026-09-21",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -11508,6 +11508,7 @@
           "citruis bioflavonoids",
           "citruis bioflavonoids complex",
           "citrus bioflavonoid complex",
+          "citrus bioflavonoid",
           "citrus bioflavonoids supplement",
           "citrus bioflavonoids complex supplement",
           "bioflavonoid complex supplement",
@@ -28510,7 +28511,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, serrapeptase, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally \u2014 systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency. Dr Pham E3 sign-off: CATEGORY ERROR. 0.40 \u2192 null.",
+        "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally \u2014 systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency. Dr Pham E3 sign-off: CATEGORY ERROR. 0.40 \u2192 null.",
         "aliases": [
           "Aminogen",
           "Aminopeptidase",
@@ -28523,11 +28524,6 @@
           "Protease S",
           "acid protease 3",
           "acid protease 6",
-          "dipeptidyl peptidase",
-          "dipeptidyl peptidase-iv",
-          "dpp-4",
-          "dpp-iv",
-          "dpp4",
           "endopeptidase",
           "endopeptidase, exopeptidase",
           "exopeptidase",
@@ -28540,9 +28536,6 @@
           "plant proteases",
           "protease complex",
           "proteolytic enzyme blend",
-          "serrapeptase enzyme",
-          "serrapeptidase",
-          "serratia enzyme",
           "specific enzymes supplement",
           "targeted digestive enzymes supplement",
           "targeted enzyme formula",
@@ -28557,6 +28550,7 @@
         },
         "audit_trail": [
           "D3.6 (2026-04-20): added serrapeptase enzyme variants (Doctor's Best label).",
+          "D3.8 (2026-09-21): moved the serrapeptase variants to the serrapeptase parent and the DPP-IV (dipeptidyl peptidase IV) aliases, including BioCore DPP-IV, to the protease parent. Discrete enzymes keep their own identity and never inherit multi-enzyme digestive evidence.",
           "D3.7 (2026-09-20): added transglucosidase as label-normalization alias under specific enzymes form. Added to satisfy test contract (test_transglucosidase_routes_to_specific_digestive_enzyme). Transglucosidase (fungal glucosyltransferase, EC 2.4.1.-) is classified as a digestive enzyme supplement; no new CUI/UNII claimed."
         ]
       },
@@ -28642,7 +28636,6 @@
           "digestive enzymes",
           "dairy digestive enymes",
           "beta glucanase",
-          "biocore dpp-iv",
           "cerecalase",
           "astrazyme",
           "glutalytic",
@@ -28653,9 +28646,6 @@
           "physioprotease",
           "prolyl endopeptidase",
           "n-zimes",
-          "dpp iv protease",
-          "dpp-iv protease",
-          "dipeptidyl peptidase iv",
           "semi-alkaline protease",
           "semi alkaline protease",
           "alkaline protease",
@@ -36284,6 +36274,7 @@
           "short-chain inulin supplement",
           "agave inulin supplement",
           "chicory inulin",
+          "chicory fiber",
           "Orafti",
           "Beneo inulin",
           "organic inulin"
@@ -50606,6 +50597,8 @@
           "EPA/DHA - Fish Oil Concentrate",
           "EPA and DHA",
           "EPA & DHA",
+          "Omega-3 EPA & DHA",
+          "Omega-3 EPA and DHA",
           "DHA/EPA",
           "EPA/DHA",
           "purified fish oil concentrate"
@@ -74234,7 +74227,17 @@
           "chymotrypsin supplement",
           "prohydrolase",
           "prohydrolase enzyme blend",
-          "tolerase g"
+          "tolerase g",
+          "biocore dpp-iv",
+          "biocore dpp iv",
+          "dipeptidyl peptidase",
+          "dipeptidyl peptidase-iv",
+          "dipeptidyl peptidase iv",
+          "dpp-4",
+          "dpp-iv",
+          "dpp4",
+          "dpp iv protease",
+          "dpp-iv protease"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -74267,7 +74270,9 @@
     "aliases": [
       "protease",
       "proteases",
-      "protease enzyme"
+      "protease enzyme",
+      "biocore dpp-iv",
+      "biocore dpp iv"
     ]
   },
   "lipase": {
@@ -74542,7 +74547,10 @@
           "serratiopeptidase",
           "serratia peptidase",
           "serrapeptase supplement",
-          "serrazimes"
+          "serrazimes",
+          "serrapeptase enzyme",
+          "serrapeptidase",
+          "serratia enzyme"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -74577,7 +74585,10 @@
     "aliases": [
       "serrapeptase",
       "serratiopeptidase",
-      "serratia peptidase"
+      "serratia peptidase",
+      "serrapeptase enzyme",
+      "serrapeptidase",
+      "serratia enzyme"
     ]
   }
 }

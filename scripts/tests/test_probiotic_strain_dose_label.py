@@ -23,7 +23,7 @@ from build_final_db import _compute_display_dose_label, build_detail_blob
 def test_blend_member_default_wording():
     """Non-probiotic blend member keeps the generic copy."""
     label = _compute_display_dose_label(
-        {"quantity": 0, "unit": "NP", "is_in_proprietary_blend": True},
+        {"quantity": 0, "unit": "NP", "proprietaryBlend": True},
     )
     assert label == "Amount not disclosed"
 
@@ -31,7 +31,7 @@ def test_blend_member_default_wording():
 def test_blend_member_probiotic_wording():
     """Probiotic blend member gets the per-strain copy."""
     label = _compute_display_dose_label(
-        {"quantity": 0, "unit": "NP", "is_in_proprietary_blend": True},
+        {"quantity": 0, "unit": "NP", "proprietaryBlend": True},
         is_probiotic_strain=True,
     )
     assert label == "Per-strain dose not listed"
@@ -41,7 +41,7 @@ def test_disclosed_dose_unaffected_by_probiotic_flag():
     """When a strain HAS an individual dose, render it verbatim — the
     probiotic flag must not override Class 1."""
     label = _compute_display_dose_label(
-        {"quantity": 5_000_000_000, "unit": "CFU", "is_in_proprietary_blend": True},
+        {"quantity": 5_000_000_000, "unit": "CFU", "proprietaryBlend": True},
         is_probiotic_strain=True,
     )
     assert label == "5 billion CFU"
@@ -105,7 +105,7 @@ def _enriched_with_probiotic_blend():
                 "forms": [],
                 "quantity": 0,
                 "unit": "NP",
-                "is_in_proprietary_blend": True,
+                "proprietaryBlend": True,
             },
             # Sanity row: a non-probiotic blend member should keep the
             # generic wording even in a probiotic product.
@@ -117,7 +117,7 @@ def _enriched_with_probiotic_blend():
                 "forms": [],
                 "quantity": 0,
                 "unit": "NP",
-                "is_in_proprietary_blend": True,
+                "proprietaryBlend": True,
             },
         ],
         "ingredient_quality_data": {"ingredients": []},

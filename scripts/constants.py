@@ -59,6 +59,51 @@ DISPLAY_LEDGER_SOURCE_SECTIONS = frozenset({
     DISPLAY_LEDGER_SOURCE_PRODUCT_NAME,
 })
 
+# Cleaner row-role vocabulary -- the ONE owner. The Cleaner writes
+# ``cleaner_row_role``; the Stage-2.4 validator, the scoring input contract,
+# taxonomy and the source-of-truth audit import these instead of keeping
+# copies. Four hand-kept copies drifted and a role the Cleaner had started
+# emitting failed Stage 2.4 on 9 brands. Values of other fields
+# (``role_classification`` such as inactive_non_scorable, the boolean
+# ``review_required``) do not belong here.
+CLEANER_SCORABLE_ROLES = frozenset({
+    "active_scorable",
+    "active_misfiled_in_inactive",
+})
+CLEANER_NON_SCORABLE_ROLES = frozenset({
+    "blend_header_total",
+    "nested_display_only",
+    "composition_leaf",
+    "source_descriptor",
+    "specification_limit",
+    "standardization_marker",
+    "daily_value_no_amount",
+    "inactive",
+    # Structural names still read from ``score_exclusion_reason``.
+    "excipient",
+    "label_header",
+    "nutrition_rollup",
+})
+# The subset of Cleaner roles that can never carry efficacy evidence. Blend
+# headers and undosed named blend children are NOT here: Evidence reviews a
+# disclosed named child even when its dose is not.
+# The dose classes that are dose evidence on an IQD row (one owner; the
+# enricher, Stage-2.4 validator and scoring input contract import it).
+IQD_DOSE_EVIDENCE_CLASSES = frozenset({
+    "therapeutic_mass",
+    "enzyme_activity",
+    "probiotic_cfu",
+    "percent_dv_only",
+})
+CLEANER_NON_EFFICACY_ROLES = frozenset({
+    "inactive",
+    "standardization_marker",
+    "specification_limit",
+    "source_descriptor",
+    "daily_value_no_amount",
+    "composition_leaf",
+})
+
 # Ingredient names that typically serve as wrappers/carriers for actual actives
 # Used to unwrap forms[] when the parent is just a source material
 SOURCE_WRAPPER_NAMES = {

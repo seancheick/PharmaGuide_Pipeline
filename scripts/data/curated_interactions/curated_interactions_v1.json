@@ -1,8 +1,8 @@
 {
   "_metadata": {
-    "schema_version": "1.2.4",
-    "last_updated": "2026-09-11",
-    "total_entries": 94,
+    "schema_version": "1.2.5",
+    "last_updated": "2026-09-21",
+    "total_entries": 93,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -25,7 +25,8 @@
       "2026-07-28: Reclassified DSI_WAR_VITK from Major to Moderate so the app presents the sourced consistency/clinician-review action instead of the categorical Not recommended verdict. The interaction remains harmful, presence-triggered, established, and never dose-suppressed.",
       "2026-07-29: Retired 12 unsupported, duplicated, or mis-layered consumer rules. Chronic medication-nutrient monitoring now remains solely in the pharmacist-reviewed depletion corpus; neutral benefit hypotheses no longer ship as safety interactions; and the broad high-dose vitamin E/anticoagulant rule was removed rather than implying a safe cutoff. Narrowed calcium/fluoroquinolone to ciprofloxacin RxCUI 2551 because moxifloxacin labeling reports no significant calcium effect; retained the class-wide zinc interaction without a universal timing interval because product labels differ. Also narrowed melatonin to fluvoxamine RxCUI 42355, corrected MAOI washout copy, and made zinc/copper dose-dependent at its explicitly disclosed 25 mg/day review floor.",
       "2026-08-08: Corrected the vitamin E/warfarin and chromium/diabetes-medication guidance. Vitamin E copy now limits the bleeding-risk statement to large supplemental doses and preserves the uncertain clinically significant amount. Chromium is reclassified from Moderate to Minor/background monitoring, and its 200 mcg/day screening threshold is explicitly documented as inferred from studied dose ranges rather than a guideline cutoff.",
-      "2026-09-11: Corrected DSI_ANTICOAG_VINPOCETINE evidence to preclinical/low confidence after reviewing PMID 28930203 and original human study PMID 2272713. Retained the Moderate precautionary warning, clarified management wording, and recorded project-owner confirmation of prior approval."
+      "2026-09-11: Corrected DSI_ANTICOAG_VINPOCETINE evidence to preclinical/low confidence after reviewing PMID 28930203 and original human study PMID 2272713. Retained the Moderate precautionary warning, clarified management wording, and recorded project-owner confirmation of prior approval.",
+      "2026-09-21: One owner per fact. DSI_DIURETICS_POTASSIUM mixed a chronic depletion fact (loop/thiazide diuretics lower potassium) with the supplement-safety fact; it now carries only the hyperkalemia warning and is scoped to class:potassium_sparing_diuretics (amiloride, canrenone, eplerenone, finerenone, spironolactone, triamterene), re-checked against the NIH ODS potassium fact sheet (Interactions with Medications). The loop/thiazide depletion fact belongs to DEP_DIURETICS_POTASSIUM in the depletion corpus. Retired DSI_BETABLOCK_MELATONIN: a neutral physiology/benefit statement, not a supplement-safety interaction; the beta-blocker/melatonin relationship is owned by DEP_BETABLOCKERS_MELATONIN."
     ]
   },
   "interactions": [
@@ -1033,14 +1034,14 @@
     {
       "id": "DSI_DIURETICS_POTASSIUM",
       "type": "Med-Sup",
-      "agent1_name": "Diuretics (class)",
-      "agent1_id": "class:diuretics",
+      "agent1_name": "Potassium-sparing diuretics (class)",
+      "agent1_id": "class:potassium_sparing_diuretics",
       "agent2_name": "Potassium",
       "agent2_id": "C0032821",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Loop diuretics (furosemide) and thiazides deplete potassium, making supplementation beneficial. Potassium-sparing diuretics (spironolactone, amiloride) retain potassium; adding supplements risks hyperkalemia. Effect depends on diuretic type.",
-      "management": "If on loop or thiazide diuretics: potassium supplementation is often prescribed — take as directed. If on potassium-sparing diuretics: avoid potassium supplements without physician guidance. Know your diuretic type.",
+      "mechanism": "Potassium-sparing diuretics (spironolactone, amiloride) retain potassium; adding supplements risks hyperkalemia.",
+      "management": "Avoid potassium supplements without physician guidance while taking a potassium-sparing diuretic.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
       ],
@@ -3261,43 +3262,6 @@
         "source": "https://pubmed.ncbi.nlm.nih.gov/22531131/",
         "rationale": "Pair mgmt: curcumin >500 mg/day with anticoagulants; culinary turmeric safe."
       }
-    },
-    {
-      "id": "DSI_BETABLOCK_MELATONIN",
-      "display_layer": "background",
-      "background_rationale": "Minor sleep-related signal with limited actionability; background information only.",
-      "type": "Med-Sup",
-      "agent1_name": "Beta blockers (class)",
-      "agent1_id": "class:beta_blockers",
-      "agent2_name": "Melatonin",
-      "agent2_id": "C0025219",
-      "severity": "Minor",
-      "interaction_effect_type": "Neutral",
-      "mechanism": "Beta blockers (especially propranolol, atenolol) suppress endogenous melatonin secretion by blocking sympathetic signaling to the pineal gland. This can impair sleep quality in patients on beta blockers. Melatonin supplementation may restore normal sleep.",
-      "management": "Melatonin supplementation (0.5–3 mg at bedtime) may be helpful for sleep disturbances in patients on beta blockers. Generally safe. Inform prescriber.",
-      "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/10877005/"
-      ],
-      "source_pmids": [
-        "10877005"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "melatonin",
-      "direction": "neutral",
-      "materiality": "presence"
     },
     {
       "id": "DSI_HIV_SJW",

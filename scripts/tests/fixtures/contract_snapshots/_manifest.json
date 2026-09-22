@@ -7,7 +7,6 @@
       "dsld_id",
       "product_name",
       "brand_name",
-      "score_80",
       "score_100_equivalent",
       "quality_score_v4_100",
       "quality_score_status",
@@ -15,14 +14,10 @@
       "verdict",
       "safety_verdict",
       "badges",
-      "section_scores",
-      "breakdown",
       "flags",
-      "supp_type",
       "unmapped_actives_total",
       "unmapped_actives_excluding_banned_exact_alias",
       "mapped_coverage",
-      "scoring_status",
       "score_basis",
       "evaluation_stage",
       "output_schema_version"
@@ -208,6 +203,60 @@
     }
   ],
   "changelog": [
+    {
+      "date": "2026-09-21",
+      "action": "refrozen_after_artifact_field_consolidation",
+      "products": [
+        182730,
+        12012,
+        288344,
+        245156,
+        183275,
+        278454,
+        270831,
+        180417,
+        18141,
+        239600,
+        204571,
+        223084,
+        270256,
+        306381,
+        239741,
+        241353,
+        269278,
+        274498,
+        293924,
+        293943,
+        294077,
+        298070,
+        298102,
+        306237,
+        321405,
+        321969,
+        323080,
+        327416,
+        336337,
+        337853,
+        74716,
+        288742,
+        12043
+      ],
+      "sprints_covered": [
+        "2026-09-21 closure: one fact, one field (decision C); v3 whitelist names retired"
+      ],
+      "notes": "Every fixture's only drift was scoring_status REMOVED: the scored artifact no longer repeats quality_score_status as scoring_status (it was the same literal). frozen_fields also dropped score_80, section_scores, breakdown and supp_type, which no v4 artifact emits. Reviewed on a fresh full 37-brand regeneration (0 score, pillar, status, verdict or tier movers vs the previous full run); refrozen with freeze_contract_snapshots.py."
+    },
+    {
+      "date": "2026-09-21",
+      "action": "refrozen_stale_fixture_to_committed_phase3_identity",
+      "products": [
+        12012
+      ],
+      "sprints_covered": [
+        "Phase 3 mainstream multi phosphorus and mineral identity coverage"
+      ],
+      "notes": "12012 (CVS Spectravite Advanced Formula): the frozen fixture predated committed Phase-3 identity work. Raw -> clean -> enrich -> score gives 65.7 on both the committed d70fd740 code and the closure tree (mapped coverage 0.9355 -> 1.0, not_scored -> scored), so the fixture was stale, not the code. Refrozen with freeze_contract_snapshots.py from a fresh pipeline run."
+    },
     {
       "date": "2026-09-08",
       "action": "refrozen_reviewed_september_identity_evidence_and_certification_corrections",

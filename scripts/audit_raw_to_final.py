@@ -42,7 +42,7 @@ import sqlite3
 import sys
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Mapping
 
 
 # ---------------------------------------------------------------------------

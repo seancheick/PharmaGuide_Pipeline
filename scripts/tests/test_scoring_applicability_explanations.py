@@ -43,6 +43,7 @@ def test_primary_ingredient_floor_is_not_whole_formula_efficacy_claim():
     formula was trialled."""
     from scoring_v4.quality_score import _config
     pillar = _pillar_evidence({"score": 18, "metadata": {
+        "evidence_result_state": "evaluated_applicable",  # every real artifact declares it
         "primary_evidence_floor": 18, "primary_evidence_floor_canonical": "ksm 66",
         "primary_evidence_floor_decisive": True,
     }}, 20, "generic_botanical_branded", _config())

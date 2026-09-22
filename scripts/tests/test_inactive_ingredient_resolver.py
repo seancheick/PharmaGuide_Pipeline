@@ -459,13 +459,3 @@ def test_resolver_precedence_banned_beats_harmful_and_other(resolver) -> None:
 # Audit hooks the resolver must expose
 # ---------------------------------------------------------------------------
 
-def test_resolver_exposes_audit_iterators(resolver) -> None:
-    """The audit script needs to enumerate the resolver's indices to
-    cross-check: every banned_recalled entry should be reachable, every
-    harmful_additives entry, etc. Surface this as a small public API."""
-    banned = list(resolver.iter_banned_recalled_entries_for_audit())
-    harmful = list(resolver.iter_harmful_additives_entries_for_audit())
-    other = list(resolver.iter_other_ingredients_entries_for_audit())
-    assert len(banned) > 100, f"banned_recalled too small: {len(banned)} entries"
-    assert len(harmful) > 100, f"harmful_additives too small: {len(harmful)} entries"
-    assert len(other) > 600, f"other_ingredients too small: {len(other)} entries"

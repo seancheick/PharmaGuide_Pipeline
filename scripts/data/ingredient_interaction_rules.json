@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.2.4",
-    "last_updated": "2026-07-27",
+    "last_updated": "2026-09-21",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
@@ -128,7 +128,8 @@
       "strong"
     ],
     "migration_notes": [
-      "2026-05-26: Added profile-gated fluoroquinolone mineral timing rules for calcium, iron, magnesium, and zinc; active antibiotic context only."
+      "2026-05-26: Added profile-gated fluoroquinolone mineral timing rules for calcium, iron, magnesium, and zinc; active antibiotic context only.",
+      "2026-09-21: RULE_IQM_VITAMIN_K_MK7_FORM_ONLY form_scope named 'menaquinone_7_mk7', a key no IQM form carries, so the rule never fired; it now names the vitamin_k2 MK-7 forms. Vitamin K1/K2 rows reach both vitamin K rules through the interaction subject family (identity/interaction.py) after the 2026-07-28 K1/K2/K3 identity split. Clinical content unchanged."
     ]
   },
   "interaction_rules": [
@@ -8995,7 +8996,9 @@
         "canonical_id": "vitamin_k"
       },
       "form_scope": [
-        "menaquinone_7_mk7"
+        "menaquinone-7 (MK-7)",
+        "menaquinone-7 all-trans",
+        "vitamin K2 from natto"
       ],
       "condition_rules": [],
       "drug_class_rules": [

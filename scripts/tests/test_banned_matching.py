@@ -127,6 +127,34 @@ def test_new_high_risk_banned_substances_match(enricher, variant, expected_id):
     assert expected_id in banned_ids
 
 
+@pytest.mark.parametrize(
+    "label,expected_id",
+    [
+        ("Ephedra", "BANNED_EPHEDRA"),
+        ("Ma Huang", "BANNED_EPHEDRA"),
+        ("ephedra", "BANNED_EPHEDRA"),
+        ("EPHEDRA", "BANNED_EPHEDRA"),
+        ("DMAA", "BANNED_DMAA"),
+        ("1,3-dimethylamylamine", "BANNED_DMAA"),
+        ("Vacha", "BANNED_CALAMUS_ACORUS_CALAMUS"),
+        ("Acorus calamus", "BANNED_CALAMUS_ACORUS_CALAMUS"),
+        ("Sweet Flag", "BANNED_CALAMUS_ACORUS_CALAMUS"),
+        ("7-Keto-DHEA", "BANNED_7_KETO_DHEA"),
+        ("7-Keto-Dehydroepiandrosterone Acetate", "BANNED_7_KETO_DHEA"),
+        ("7-Keto(R) - Dehydroepiandrosterone Acetate", "BANNED_7_KETO_DHEA"),
+    ],
+)
+def test_live_banned_owner_catches_names_aliases_and_case(enricher, label, expected_id):
+    """Ported from the retired Cleaner-side detector: the enricher is the one
+    banned/recalled owner, so every one of these must land here."""
+    assert expected_id in _banned_ids(enricher, label)
+
+
+@pytest.mark.parametrize("label", ["Vitamin C", "Fish Oil"])
+def test_live_banned_owner_leaves_ordinary_actives_alone(enricher, label):
+    assert _banned_ids(enricher, label) == set()
+
+
 @pytest.mark.parametrize("variant", ["Delta-8", "delta-8", "Delta 8"])
 def test_delta8_punctuation_variants_match(enricher, variant):
     banned_ids = _banned_ids(enricher, variant)
