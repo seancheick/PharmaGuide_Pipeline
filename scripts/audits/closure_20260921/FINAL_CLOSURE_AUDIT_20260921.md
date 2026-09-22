@@ -8,11 +8,28 @@ the command or test that proves it is named beside it.
 
 ## 0. Run results
 
-**Status: round-3 probiotic replay complete (1,308 labels, below); the final full production run
-(37 brands, 15,414 labels, then the submission lane) is pending on `b5d6d859`.** Every
-code change below lands before it; the release sequence (37 brands → submission lane → reconcile → snapshot →
-strict gates → release tier → `release_full.sh` → post-release checks) runs on
-the final code and fills this section. Nothing here is claimed from tests alone.
+**Status: RELEASED.** Catalog `2026.09.22.201915` is ACTIVE on Supabase (15,310 products, 15,310 detail
+blobs, 0 upload errors) and bundled in the app at `6322b91`, with interaction DB `1.0.12` (132 rules).
+The full production run, every gate and the post-release verification are measured below; nothing here is
+claimed from tests alone.
+
+Final run (2026-09-22, 37 brands then the submission lane, on the closure code):
+
+| Claim | Proof |
+|---|---|
+| The run completed | 37 of 37 brands attempted and processed, exit 0 in 47 min; the 9 approved submissions ran through Clean → Enrich → Score with `--strict-release-gates`, exit 0. 0 clean / enrich / validation / coverage / score failures, 0 skipped brands |
+| Counts reconcile | 15,423 raw (15,414 brand labels + 9 submissions) − 2 DSLD records with no ingredient rows (250356, 312659, both in `incomplete/`) = 15,421 cleaned = enriched = scored = 15,310 shipped + 111 export-gate quarantines. No id in two lanes; no `PG_SUB` id outside the submission lane; the two June `RITUAL_*` test labels appear in no output |
+| No stale artifact | Every brand's enrich and score `.stage_manifest.json` is from this run, owns exactly the files on disk, and carries the current reference-data fingerprint (`pipeline_freshness check-enrichment-manifest` per lane). One engine, config and classification version across all 38 lanes |
+| Score/state invariants | 0 violations over every scored product: `quality_score_v4_100` equals the sum of its six published pillars; `quality_tier` is a function of the shipped whole number; no BLOCKED/UNSAFE safety verdict disagrees with the public verdict; no POOR verdict outside the lowest tier |
+| Assessment completeness | 15,313 complete / 108 partial. Every complete product re-checked against the independent resolver (`evidence_resolver.resolve_product_evidence`): 0 with an open assessable active. 107 of the partials are `not_scored` and quarantined; the one shipped partial is 307560 (§6b source limitation). 0 shipped probiotic partials |
+| Every mover explained | 507 score-layer movers vs the last build, **0 unexplained**: 257 rounds 1–2 (D1–D9), 245 round 3 (Dr Pham + Codex), 5 the blend-total member fix. The submission lane's single mover is HN001 (8.0 → 5.1, her medium/secondary-outcome decision) |
+| Export layer explained | core: score 359, assessment 117, tier 90, verdict 74, route 11, confidence 1 (259484, blend fix), tags 24 (round-2 identity work, score-neutral), top_warnings 37; blobs: evidence state 250, warnings 307, gated 302, strain lines 447. Added warnings are the restored non-IQM interaction rules (264 CBD rows on 35 products + 16 phytocannabinoid) and 20 EPA/DHA rows on the 5 blend-fix labels; removed warnings are 59 duplicate ban cards (CBD 35, chelator 16, sulbutiamine 8) |
+| Canary pins re-frozen | 30 pins through `regen_canary_pins.py` (24 stale against owner calibrations that shipped before the last build — `45685529`, `e26c9b98`, `55dc2f46` — and 6 from this round's probiotic changes), each new value equal to this run's own artifact. §2 #48–#51 record the four dead canaries, the unreachable threshold and the trait pin |
+| Tests | fast 16,231 passed / 0 failed; slow 2,288 passed / 0 failed / 0 skipped (was 7 skips, all dead canaries); release tier 121 passed / 0 failed |
+| Gates | Every gate `release_full.sh` invokes was run and green before the release: 7 live identifier gates (RxNorm, PubMed ×3, UMLS + FDA), cleaner / enrichment / clinical-drift contracts, evidence reachability, interaction parity, artifact freshness, export contract, Flutter reference-data parity, scoring snapshot, Flutter import preflight, DB integrity |
+| Release | `release_full.sh` exit 0 in 2,834 s. One transient broken pipe on the first attempt's 64 MB upload (nothing published; remote stayed on the previous version); the rerun uploaded 15,310 blobs with 0 errors and promoted `2026.09.22.201915` to ACTIVE |
+| Post-release (released artifacts) | Bundled core DB sha256 matches its manifest; 15,310 products; 15,240 scored rows with 0 score ≠ shipped-whole-sum and 0 tier mismatches; verdicts 11,857 SAFE / 1,327 CAUTION / 2,056 POOR / 70 BLOCKED; 9 `PG_SUB` rows and 0 test labels. Clinically: Bi-07 (37 rows) and BB-12 (16) ship `clinician_verified` (holds released), LA-5 (12) ships with no support level (zero component credit), no withdrawn citation appears on any shipped strain row, the replacements do (SNZ 34119240, GBI-30 33110439, M18 23449874), and 246324 ships all 8 restored CBD interaction warnings |
+| Registry unchanged through the run | `clinically_relevant_strains.json` sha256 `31ba1ed1…` before and after; `scripts/data` clean in git |
 
 Pre-run evidence already on real artifacts (C1 = the last full 37-brand run):
 
@@ -135,7 +152,7 @@ points possible, sign-off, disposition) and fails on any mismatch. Table and dis
 | 47 | `studied_formulas` / `probiotic_evidence` read `indication_secondary`, which no entry has (the data field is `secondary_indications`): a read that could never be true, shipped as a null field | Dead read removed | no reader or fixture remains |
 | 48 | **Four canary products had left the catalog** (GNC 1072, Nutricost 223318, Pure Encapsulations 182968, false-positive 184571). A canary the loader cannot find is skipped, so 11 slow-tier tests and their pins had gone unchecked | Re-pointed to the same brands' current SKUs, every value recomputed through the scorer; a low-band canary added; `test_every_canary_is_in_the_catalog` fails when a canary leaves the catalog | slow tier: 11 skips → 0 in those files |
 | 49 | `test_canary_spring_valley_probiotic_50b_scoreable_at_p26` could never assert: its loop sat after `continue` inside the `except` handler, and the products root was one machine's absolute path | Loop restored, root resolved from the repo | the canary now scores 178346 |
-| 50 | The omega canary coverage test required a canary at 20+/25 Formulation, which no product can reach since `45685529` moved disclosure to Transparency (the module declares `max_reachable_in_p161` 12.0; catalog max across 716 omega products is 12.0) | The bands derive from the module's own declared ceiling | `test_canary_set_covers_score_ranges` |
+| 50 | The omega canary coverage test required a canary at 20+/25 Formulation, which no product can reach since `45685529` moved disclosure to Transparency (the module declares `max_reachable_in_p161` 12.0; catalog max across 716 omega products is 12.0) | The bands derive from the module's own declared ceiling. No shipped score is affected: the public assembler already scales the native 12-point reference onto the 20-point pillar (326270 scores 12.0 natively and ships 20.0/20), so this was a stale test threshold, not a scoring defect | `test_canary_set_covers_score_ranges` |
 | 51 | Canary 76803's dose trait pinned the pre-`2026-09-16` reading (CFU guarantee not disclosed, ×0.85 → 3.4) although its label reads "Guaranteed potency through expiration date" | `regen_canary_pins.py` extended to regenerate trait pins; the guarantee state is now pinned explicitly per canary | slow tier; label text quoted in the pin |
 
 ## 3. Canonical owner matrix
@@ -318,6 +335,28 @@ sheet (https://claude.ai/artifact/3Bhz3oj3qgLBsYZz3iwiof) and closed by her the 
 |---|---|---|
 | Bi-07 and BB-12 clinician sign-offs, suspended 2026-09-04 after citation-identity mismatches ("replacements require clinician review") | Each strain has approved exact-strain human contexts (engineering-owner approval, 09-14). The code rule `identity_review_accepted` keeps a suspended sign-off under the clinician gate: an engineering approval is not its clinician replacement. 37 products (Bi-07) + 16 (BB-12) | (a) keep the hold until Dr Pham reviews (today); (b) let the approved contexts replace the suspended summaries, as D1 did for agent-authored summaries |
 | Two LA-5 combination contexts held `adjudication_required` on 09-14 | 30439760 needs LC-01 registered; 39102225's third component is an unnamed B. infantis that no identity can register. Combination contexts never credit a strain; approval only finishes the review. 16 products share this with BB-12, 2 are held by it alone | (a) keep holding; (b) approve both as combination records with `component_registration_status: unregistered_components_present` |
+
+**Closed A / A / A, and shipped in `2026.09.22.201915`.** Dr Pham reviewed both holds and chose option A on
+each line of the sheet; the decisions were applied only after every PMID she cited was content-verified against
+its live PubMed record:
+
+* **Bi-07 — released.** Signed off; the suspended summary was retired so its contexts own the evidence. Its
+  single-strain record (36149331) is an acute lactose-challenge crossover: the primary outcome is a breath-hydrogen
+  surrogate, GI symptoms are null and nausea is negative, so the derived direction is `unresolved` and it earns
+  **0 efficacy points**. 21436726 stays NCFM + Bi-07 combination evidence. 37 products complete.
+* **BB-12 — released.** Signed off; human evidence reviewed as mixed/limited, not strongly positive. 26382580 is a
+  valid single-strain RCT whose primary endpoints are null; 39271904 is preterm-infant biomarker evidence that is
+  not generalised. 16 products complete.
+* **LA-5 + BB-12 combinations — accepted.** 30439760 and 39102225 are recorded literally, each with its
+  `UNREGISTERED:` third component and `component_registration_status: unregistered_components_present`. **Component
+  credit is zero**: LA-5 ships on 12 products with no support level at all.
+* **Withdrawals and replacements mapped**, and verified absent/present in the released blobs (§0 post-release).
+* **CU1 copy corrected** and pinned: primary endpoint null; the respiratory finding is post hoc in the n = 44
+  subset; 27825987 is safety characterisation.
+* **Provenance preserved, not overwritten**: each entry keeps its prior clinician status, the suspension date, her
+  adjudication and its date, and the review-packet reference (`PHAM_REVIEW_20260922.json`).
+
+The result: shipped probiotic partials 55 → 0, and no probiotic partial ships at all.
 
 ## 8. Field census (every layer, real corpus)
 
