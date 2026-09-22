@@ -327,10 +327,16 @@ Primary keys: `clinically_relevant_strains` (array), `prebiotics` (object)
 | `id` | string | YES | Unique ID (e.g., `STRAIN_LGG`) |
 | `standard_name` | string | YES | Full strain name with designation |
 | `aliases` | string[] | YES | Alternative names, ATCC numbers |
-| `evidence_level` | string | YES | `high`, `moderate`, `low`, `unreviewed`; unreviewed sources cannot carry approved benefit claims |
-| `key_benefits` | string[] | YES | Clinical benefit areas |
-| `notable_studies` | string | NO | Key research citations |
-| `study_contexts` | object[] | NO | Source-verified, pending-clinical-review outcome contexts; not efficacy approvals |
+| `evidence_level` | string | YES | `high`, `moderate`, `low` = the effective evidence strength (strong/medium/weak, `probiotic_measurements.effective_strain_evidence`); `none` = a concluded review found no qualifying evidence; `unreviewed` = no approval and no benefit claims. `db_integrity_sanity_check` fails on disagreement |
+| `key_benefits` | string[] | YES | Clinical benefit areas (internal; not exported) |
+| `notable_studies` | string | NO | Key research citations (internal; not exported) |
+| `study_contexts` | object[] | NO | Source-verified outcome contexts; `review_status` records approval, and approval never implies efficacy (the outcomes' direction decides credit) |
+
+`cfu_thresholds.indication_primary` is the text the app prints beside a strain
+("`<support>` support · `<indication>`"). The enricher prints no indication for a
+strain without qualifying reviewed evidence, and adds the result when the
+reviewed direction is not positive; `clinical_support_level` is empty unless the
+direction is positive (mixed evidence is `weak` at most).
 
 Each context has a unique `context_id`, `source_pmids`, `identity_scope`, explicit
 native `components`, population, purpose, condition, dose, outcomes, trial-family

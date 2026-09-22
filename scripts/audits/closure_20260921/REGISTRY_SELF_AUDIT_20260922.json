@@ -1,0 +1,864 @@
+{
+  "audit": "Registry self-audit against Dr Pham's 2026-09-22 packet (reviewer item 9-10); the DATA was audited, not the appliers",
+  "tool": "scripts/audits/closure_20260921/pham_registry_reconcile_20260922.py (exit 1 on any mismatch)",
+  "result": "Every packet decision held: sign-offs, directions, strengths, 0 points for her nulls and withdrawals, replacements present, withdrawn citations absent from scoring, combination records literal with zero component credit, CU1 wording, Bi-07/BB-12 released",
+  "reconciliation_table": [
+    {
+      "id": "STRAIN_LACTIS_BI07",
+      "name": "Bifidobacterium lactis Bi-07",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "1a A: sign off; single-strain = acute lactose-challenge surrogate 36149331; 21436726 combination only",
+      "old": [],
+      "final": [
+        "36149331"
+      ],
+      "single": 1,
+      "combination": 1,
+      "primary_kinds": {
+        "primary:surrogate": 1,
+        "secondary:patient_important": 2
+      },
+      "direction": "unresolved",
+      "strength": "weak",
+      "eligible": 2,
+      "points": 0.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": null,
+      "indication": "lactose digestion in acute lactose challenges (breath-hydrogen surrogate improved; GI symptoms not improved)"
+    },
+    {
+      "id": "STRAIN_LACTIS_BB12",
+      "name": "Bifidobacterium lactis BB-12",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "1b A: sign off; human evidence reviewed, mixed/limited",
+      "old": [],
+      "final": [
+        "26382580",
+        "31797399",
+        "34550055",
+        "39271904"
+      ],
+      "single": 4,
+      "combination": 3,
+      "primary_kinds": {
+        "primary:patient_important": 4,
+        "post_hoc:patient_important": 1,
+        "unresolved:surrogate": 1,
+        "unresolved:patient_important": 1,
+        "secondary:patient_important": 4,
+        "secondary:surrogate": 2
+      },
+      "direction": "mixed",
+      "strength": "strong",
+      "eligible": 6,
+      "points": 4.8,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "weak",
+      "indication": "infant colic in breastfed infants; adult stool-frequency primary endpoint not met"
+    },
+    {
+      "id": "STRAIN_ACIDOPHILUS_LA5",
+      "name": "Lactobacillus acidophilus LA-5",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "withdraw single-strain; 1c A: 30439760 + 39102225 literal combinations",
+      "old": [
+        "34405373"
+      ],
+      "final": [],
+      "single": 0,
+      "combination": 8,
+      "primary_kinds": {},
+      "direction": null,
+      "strength": null,
+      "eligible": 8,
+      "points": 0.0,
+      "signoff": false,
+      "disposition": "literature_reviewed_no_qualifying_evidence/no_qualifying_human_evidence",
+      "support": null,
+      "indication": "gut health and diarrhea"
+    },
+    {
+      "id": "STRAIN_LGG",
+      "name": "Lactobacillus rhamnosus GG",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "confirm; medium (moderate QoE)",
+      "old": [],
+      "final": [
+        "26756877"
+      ],
+      "single": 10,
+      "combination": 0,
+      "primary_kinds": {
+        "guideline:patient_important": 1,
+        "primary:patient_important": 10,
+        "secondary:patient_important": 16,
+        "post_hoc:patient_important": 1,
+        "unresolved:evidence_ranking": 1,
+        "unresolved:patient_important": 1,
+        "secondary:surrogate": 2
+      },
+      "direction": "positive_strong",
+      "strength": "medium",
+      "eligible": 9,
+      "points": 6.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "moderate",
+      "indication": "prevention of antibiotic-associated diarrhea"
+    },
+    {
+      "id": "STRAIN_SACCHAROMYCES",
+      "name": "Saccharomyces boulardii",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "confirm; medium (moderate QoE)",
+      "old": [],
+      "final": [
+        "26756877"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "positive_strong",
+      "strength": "medium",
+      "eligible": 5,
+      "points": 6.0,
+      "signoff": true,
+      "disposition": "clinician_verified/scope_unresolved",
+      "support": "moderate",
+      "indication": "prevention of antibiotic-associated diarrhea"
+    },
+    {
+      "id": "STRAIN_CASEI_SHIROTA",
+      "name": "Lactobacillus casei Shirota",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "confirm; null, no efficacy credit",
+      "old": [],
+      "final": [
+        "14631461",
+        "23432408",
+        "36372047"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "null",
+      "strength": "medium",
+      "eligible": 0,
+      "points": 0.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": null,
+      "indication": "bowel regularity and gut transit"
+    },
+    {
+      "id": "STRAIN_COAGULANS_MTCC5856",
+      "name": "Bacillus coagulans MTCC 5856",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "confirm",
+      "old": [],
+      "final": [
+        "37686889"
+      ],
+      "single": 6,
+      "combination": 0,
+      "primary_kinds": {
+        "primary:patient_important": 13,
+        "unresolved:surrogate": 2,
+        "unresolved:patient_important": 1,
+        "unresolved:evidence_ranking": 2
+      },
+      "direction": "positive_weak",
+      "strength": "medium",
+      "eligible": 5,
+      "points": 5.1,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "moderate",
+      "indication": "irritable bowel symptom relief"
+    },
+    {
+      "id": "STRAIN_REUTERI_DSM17938",
+      "name": "Lactobacillus reuteri DSM 17938",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "confirm",
+      "old": [],
+      "final": [
+        "29390535"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "positive_strong",
+      "strength": "strong",
+      "eligible": 0,
+      "points": 8.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "high",
+      "indication": "reduction of infant colic crying time"
+    },
+    {
+      "id": "STRAIN_K12",
+      "name": "Streptococcus salivarius K12",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "confirm",
+      "old": [],
+      "final": [
+        "38215354"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "positive_strong",
+      "strength": "strong",
+      "eligible": 0,
+      "points": 8.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "high",
+      "indication": "oral mucositis during head and neck radiotherapy (oral health)"
+    },
+    {
+      "id": "STRAIN_LACTIS_HN019",
+      "name": "Bifidobacterium lactis HN019",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "confirm; null, no efficacy credit",
+      "old": [],
+      "final": [
+        "39356506"
+      ],
+      "single": 5,
+      "combination": 2,
+      "primary_kinds": {
+        "primary:patient_important": 2,
+        "primary:surrogate": 3,
+        "secondary:patient_important": 1,
+        "post_hoc:patient_important": 2,
+        "secondary:surrogate": 1
+      },
+      "direction": "null",
+      "strength": "strong",
+      "eligible": 7,
+      "points": 0.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": null,
+      "indication": "functional constipation (primary bowel-movement endpoint not improved in the cited trials)"
+    },
+    {
+      "id": "STRAIN_PLANTARUM_299V",
+      "name": "Lactobacillus plantarum 299v",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "confirm; medium (n = 40)",
+      "old": [],
+      "final": [
+        "11711768"
+      ],
+      "single": 9,
+      "combination": 0,
+      "primary_kinds": {
+        "unresolved:patient_important": 14,
+        "unresolved:surrogate": 12,
+        "primary:surrogate": 1
+      },
+      "direction": "positive_strong",
+      "strength": "medium",
+      "eligible": 9,
+      "points": 6.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "moderate",
+      "indication": "relief of irritable bowel syndrome symptoms"
+    },
+    {
+      "id": "STRAIN_INFANTIS_35624",
+      "name": "Bifidobacterium infantis 35624",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "confirm; null, no efficacy credit",
+      "old": [],
+      "final": [
+        "28166427"
+      ],
+      "single": 1,
+      "combination": 0,
+      "primary_kinds": {
+        "primary:patient_important": 2
+      },
+      "direction": "null",
+      "strength": "strong",
+      "eligible": 1,
+      "points": 0.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": null,
+      "indication": "irritable bowel syndrome symptoms (pooled single-strain trials did not improve pain, bloating or bowel habit)"
+    },
+    {
+      "id": "STRAIN_LONGUM_BB536",
+      "name": "Bifidobacterium longum BB536",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "confirm",
+      "old": [],
+      "final": [
+        "23192454"
+      ],
+      "single": 4,
+      "combination": 1,
+      "primary_kinds": {
+        "primary:surrogate": 2,
+        "primary:patient_important": 2,
+        "post_hoc:patient_important": 1,
+        "post_hoc:surrogate": 1,
+        "secondary:surrogate": 1,
+        "secondary:patient_important": 1
+      },
+      "direction": "unresolved",
+      "strength": "medium",
+      "eligible": 5,
+      "points": 0.0,
+      "signoff": true,
+      "disposition": "clinician_verified/scope_unresolved",
+      "support": null,
+      "indication": "gut health and immune function"
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_HN001",
+      "name": "Lactobacillus rhamnosus HN001",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "confirm; medium (mood outcome secondary)",
+      "old": [],
+      "final": [
+        "28943228"
+      ],
+      "single": 3,
+      "combination": 3,
+      "primary_kinds": {
+        "primary:surrogate": 1,
+        "secondary:patient_important": 6,
+        "primary:patient_important": 3,
+        "post_hoc:patient_important": 1
+      },
+      "direction": "positive_weak",
+      "strength": "medium",
+      "eligible": 5,
+      "points": 5.1,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "moderate",
+      "indication": "postpartum depression and anxiety symptoms after maternal supplementation"
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_SP1",
+      "name": "Lactobacillus rhamnosus SP1",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "confirm",
+      "old": [],
+      "final": [
+        "27596801",
+        "30963591"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "positive_weak",
+      "strength": "medium",
+      "eligible": 0,
+      "points": 5.1,
+      "signoff": true,
+      "disposition": "clinician_verified/scope_unresolved",
+      "support": "moderate",
+      "indication": "adult acne (skin health) and denture stomatitis (oral health)"
+    },
+    {
+      "id": "STRAIN_COAGULANS_SNZ1969",
+      "name": "Bacillus coagulans SNZ 1969",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "replace 36372047 -> 34119240",
+      "old": [
+        "36372047"
+      ],
+      "final": [
+        "34119240"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "positive_weak",
+      "strength": "medium",
+      "eligible": 0,
+      "points": 5.1,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "moderate",
+      "indication": "gut health and digestive support"
+    },
+    {
+      "id": "STRAIN_M18",
+      "name": "Streptococcus salivarius M18",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "replace 32250565 (in vitro) -> 23449874 (+37764667)",
+      "old": [
+        "32250565"
+      ],
+      "final": [
+        "23449874",
+        "37764667"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "positive_weak",
+      "strength": "medium",
+      "eligible": 0,
+      "points": 5.1,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "moderate",
+      "indication": "dental plaque and caries risk reduction"
+    },
+    {
+      "id": "STRAIN_COAGULANS_GBI30",
+      "name": "Bacillus coagulans GBI-30, 6086",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "replace 29196920 (narrative review) -> 33110439",
+      "old": [
+        "29196920"
+      ],
+      "final": [
+        "33110439"
+      ],
+      "single": 3,
+      "combination": 0,
+      "primary_kinds": {
+        "unresolved:patient_important": 4,
+        "primary:surrogate": 2,
+        "post_hoc:surrogate": 1
+      },
+      "direction": "unresolved",
+      "strength": "medium",
+      "eligible": 1,
+      "points": 0.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": null,
+      "indication": "functional gastrointestinal symptoms"
+    },
+    {
+      "id": "STRAIN_REUTERI_ATCC6475",
+      "name": "Lactobacillus reuteri ATCC 6475",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "replace 36261538 (responder secondary) -> 29926979",
+      "old": [
+        "36261538"
+      ],
+      "final": [
+        "29926979",
+        "38865129"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "mixed",
+      "strength": "medium",
+      "eligible": 0,
+      "points": 3.6,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": "weak",
+      "indication": "bone density support"
+    },
+    {
+      "id": "STRAIN_CRISPATUS_CTV05",
+      "name": "Lactobacillus crispatus CTV-05",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "replace 35659905 -> 32402161 (35659905 supportive only)",
+      "old": [
+        "35659905"
+      ],
+      "final": [
+        "32402161",
+        "35659905"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "unresolved",
+      "strength": "strong",
+      "eligible": 0,
+      "points": 0.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": null,
+      "indication": "recurrent bacterial vaginosis prevention"
+    },
+    {
+      "id": "STRAIN_PLANTARUM_HEAL9",
+      "name": "Lactobacillus plantarum HEAL9",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "withdraw 31734734 as single-strain (HEAL9 + 8700:2)",
+      "old": [
+        "31734734"
+      ],
+      "final": [
+        "37571403"
+      ],
+      "single": 1,
+      "combination": 1,
+      "primary_kinds": {
+        "unresolved:patient_important": 3
+      },
+      "direction": "unresolved",
+      "strength": "weak",
+      "eligible": 2,
+      "points": 0.0,
+      "signoff": false,
+      "disposition": "clinician_context_approved/exact_strain",
+      "support": null,
+      "indication": "cognitive test performance in moderately stressed adults (one exploratory trial; perceived stress and cortisol not improved)"
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_GR1",
+      "name": "Lactobacillus rhamnosus GR-1",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "withdraw 12628548 as single-strain (GR-1 + RC-14)",
+      "old": [
+        "12628548"
+      ],
+      "final": [],
+      "single": 0,
+      "combination": 6,
+      "primary_kinds": {},
+      "direction": null,
+      "strength": null,
+      "eligible": 6,
+      "points": 0.0,
+      "signoff": false,
+      "disposition": "literature_reviewed_no_qualifying_evidence/no_qualifying_human_evidence",
+      "support": null,
+      "indication": "urogenital health and bacterial vaginosis"
+    },
+    {
+      "id": "STRAIN_FERMENTUM_RC14",
+      "name": "Lactobacillus reuteri RC-14",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "withdraw 12628548 as single-strain (GR-1 + RC-14)",
+      "old": [
+        "12628548"
+      ],
+      "final": [],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": null,
+      "strength": null,
+      "eligible": 0,
+      "points": 0.0,
+      "signoff": false,
+      "disposition": "literature_reviewed_no_qualifying_evidence/no_qualifying_human_evidence",
+      "support": null,
+      "indication": "urogenital health and bacterial vaginosis (with GR-1)"
+    },
+    {
+      "id": "STRAIN_HELVETICUS_R0052",
+      "name": "Lactobacillus helveticus R0052",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "withdraw 20974015 as single-strain (R0052 + R0175)",
+      "old": [
+        "20974015"
+      ],
+      "final": [],
+      "single": 0,
+      "combination": 4,
+      "primary_kinds": {},
+      "direction": null,
+      "strength": null,
+      "eligible": 3,
+      "points": 0.0,
+      "signoff": false,
+      "disposition": "literature_reviewed_no_qualifying_evidence/no_qualifying_human_evidence",
+      "support": null,
+      "indication": "mood and anxiety support (psychobiotic, with B. longum R0175)"
+    },
+    {
+      "id": "STRAIN_LONGUM_R0175",
+      "name": "Bifidobacterium longum R0175",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "withdraw 20974015 as single-strain (R0052 + R0175)",
+      "old": [
+        "20974015"
+      ],
+      "final": [],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": null,
+      "strength": null,
+      "eligible": 0,
+      "points": 0.0,
+      "signoff": false,
+      "disposition": "literature_reviewed_no_qualifying_evidence/no_qualifying_human_evidence",
+      "support": null,
+      "indication": "mood and anxiety support (psychobiotic)"
+    },
+    {
+      "id": "STRAIN_SUBTILIS_CU1",
+      "name": "Bacillus subtilis CU1",
+      "ctx_review": [
+        "clinician_approved"
+      ],
+      "decision": "section 3: proceed; primary null, respiratory finding post hoc n = 44; 27825987 safety data",
+      "old": [],
+      "final": [
+        "26640504",
+        "27825987"
+      ],
+      "single": 1,
+      "combination": 0,
+      "primary_kinds": {
+        "primary:patient_important": 1,
+        "secondary:surrogate": 2,
+        "post_hoc:patient_important": 1
+      },
+      "direction": "null",
+      "strength": "weak",
+      "eligible": 1,
+      "points": 0.0,
+      "signoff": false,
+      "disposition": "clinician_context_approved/exact_strain",
+      "support": null,
+      "indication": null
+    },
+    {
+      "id": "STRAIN_NISSLE_1917",
+      "name": "Escherichia coli Nissle 1917",
+      "ctx_review": [
+        "-"
+      ],
+      "decision": "15479682 active-comparator equivalence, medium, no superiority credit",
+      "old": [
+        "35701435"
+      ],
+      "final": [
+        "15479682",
+        "9354192"
+      ],
+      "single": 0,
+      "combination": 0,
+      "primary_kinds": {},
+      "direction": "unresolved",
+      "strength": "medium",
+      "eligible": 0,
+      "points": 0.0,
+      "signoff": true,
+      "disposition": "clinician_verified/exact_strain",
+      "support": null,
+      "indication": "ulcerative colitis remission maintenance (equivalent to mesalazine in its main trial; no placebo comparison)"
+    }
+  ],
+  "data_changes": {
+    "evidence_level": {
+      "STRAIN_REUTERI_PRODENTIS": {
+        "old": "high",
+        "new": "moderate"
+      },
+      "STRAIN_COAGULANS_MTCC5856": {
+        "old": "high",
+        "new": "moderate"
+      },
+      "STRAIN_COAGULANS_IS2": {
+        "old": "high",
+        "new": "moderate"
+      },
+      "STRAIN_ACIDOPHILUS_NCFM": {
+        "old": "high",
+        "new": "low"
+      },
+      "STRAIN_LACTIS_BB12": {
+        "old": "low",
+        "new": "high"
+      },
+      "STRAIN_LONGUM_BB536": {
+        "old": "high",
+        "new": "moderate"
+      },
+      "STRAIN_SUBTILIS_DE111": {
+        "old": "moderate",
+        "new": "low"
+      },
+      "STRAIN_CASEI_431": {
+        "old": "high",
+        "new": "low"
+      },
+      "STRAIN_LACTIS_BL04": {
+        "old": "high",
+        "new": "moderate"
+      },
+      "STRAIN_GASSERI_SBT2055": {
+        "old": "high",
+        "new": "moderate"
+      },
+      "STRAIN_GASSERI_BNR17": {
+        "old": "high",
+        "new": "moderate"
+      },
+      "STRAIN_ACIDOPHILUS_DDS1": {
+        "old": "high",
+        "new": "low"
+      },
+      "STRAIN_PARACASEI_LPC37": {
+        "old": "high",
+        "new": "moderate"
+      },
+      "STRAIN_LACTIS_UABla12": {
+        "old": "moderate",
+        "new": "low"
+      }
+    },
+    "alias_case_duplicates_dropped": {
+      "STRAIN_K12": "Blis K12 Streptococcus salivarius",
+      "STRAIN_PLANTARUM_LP01": "Lp-01",
+      "STRAIN_PLANTARUM_LP115": "L. plantarum LP-115",
+      "STRAIN_RHAMNOSUS_LR32": "L. rhamnosus LR-32",
+      "STRAIN_INFANTIS_BI26": "Bifidobacterium infantis BI-26",
+      "STRAIN_PLANTARUM_UALP05": "L. plantarum UALp-05"
+    },
+    "indication_primary": {
+      "STRAIN_LACTIS_BI07": {
+        "old": "immune support and respiratory health",
+        "new": "lactose digestion in acute lactose challenges (breath-hydrogen surrogate improved; GI symptoms not improved)"
+      },
+      "STRAIN_LACTIS_BB12": {
+        "old": "immune support and gut health",
+        "new": "infant colic in breastfed infants; adult stool-frequency primary endpoint not met"
+      },
+      "STRAIN_PLANTARUM_HEAL9": {
+        "old": "immune support and cold prevention",
+        "new": "cognitive test performance in moderately stressed adults (one exploratory trial; perceived stress and cortisol not improved)"
+      },
+      "STRAIN_INFANTIS_35624": {
+        "old": "irritable bowel syndrome symptom relief",
+        "new": "irritable bowel syndrome symptoms (pooled single-strain trials did not improve pain, bloating or bowel habit)"
+      },
+      "STRAIN_NISSLE_1917": {
+        "old": "ulcerative colitis remission maintenance",
+        "new": "ulcerative colitis remission maintenance (equivalent to mesalazine in its main trial; no placebo comparison)"
+      }
+    },
+    "study_design": {
+      "STRAIN_LACTIS_BI07/bi07_lactose_challenges_36149331": "crossover_rct",
+      "STRAIN_LACTIS_BB12/bb12_low_stool_frequency_26382580": "rct"
+    }
+  },
+  "defects_found_and_fixed": [
+    {
+      "defect": "The strain card printed '<level> support' from evidence strength alone: HN019 and 35624 (null) read 'High support', BB-12 (mixed/limited) would read 'High support'",
+      "owner_fix": "enrich_supplements_v3._derive_clinical_support_level follows direction: positive keeps the strength level, mixed is weak at most, null/negative/unresolved/missing is empty",
+      "proof": "shipped blob 205138 before; tests/test_registry_self_audit_20260922.py"
+    },
+    {
+      "defect": "Indication text named a benefit the reviewed evidence does not show (35624 'symptom relief' on null trials; no-qualifying strains kept an indication)",
+      "owner_fix": "enrich_supplements_v3._probiotic_indication_copy: no indication without qualifying reviewed evidence; a non-positive direction states its result unless the curated text does",
+      "proof": "test_every_strain_card_line_agrees_with_its_direction"
+    },
+    {
+      "defect": "assessment_readiness read a reviewed null strain as evaluated_supported via the direction-blind registry evidence_level",
+      "owner_fix": "the enricher's clinical_support_level owns the readiness token when present",
+      "proof": "test_a_reviewed_strain_without_supportive_evidence_is_evaluated_not_supported"
+    },
+    {
+      "defect": "evidence_level had drifted from the effective evidence strength on 14 identities (a stored copy of an owned fact)",
+      "owner_fix": "data corrected; db_integrity_sanity_check fails evidence_level_disagrees_with_owner",
+      "proof": "14 findings on the pre-fix registry, 0 after; test_evidence_level_is_the_effective_strength"
+    },
+    {
+      "defect": "Interaction rules whose subject is a banned, botanical, additive or other-ingredient entry never fired: the profile scanned scorable rows only, and such rows are never scorable (CBD lost its 4 condition + 4 drug-class interactions; yohimbe, ephedra, red yeast rice, pennyroyal, schisandra, hordenine ... silent)",
+      "owner_fix": "enrich_supplements_v3._collect_interaction_profile also scans label rows whose subject is a non-IQM entry; the 2026-06-24 blend-child policy for IQM rows is unchanged",
+      "proof": "canary 246324 regains its CBD warnings; test_vitafusion_cbd_preserves_pregnancy_condition; interaction tests 285 pass"
+    },
+    {
+      "defect": "The same banned/high-risk hazard shipped as two cards: the resolver card lacked the ban_context its own reference carries, so the dedup key split",
+      "owner_fix": "build_final_db resolver warning carries reference ban_context",
+      "proof": "canaries 246324, 312711, 2219, 306181, 63921: one card per rule"
+    },
+    {
+      "defect": "Seven fast-tier test files read canary blobs frozen on 2026-04-22; their producer was deleted with the v3 scorer (21148621) and test.sh pointed at the missing script",
+      "owner_fix": "scripts/reports/canary_rebuild.py restored on the v4 scorer; canaries rebuilt from current code; tests retargeted to current owners with the reason, the v3 section_breakdown lock retired (contradicts test_blob_carries_no_v3_score_husks)",
+      "proof": "canary tests run against 2026-09-22 builds"
+    },
+    {
+      "defect": "studied_formulas / probiotic_evidence read cfu_thresholds.indication_secondary, which no entry has (the data field is secondary_indications): a read that could never be true, shipped as a null field",
+      "owner_fix": "dead read removed",
+      "proof": "grep: no reader or fixture"
+    }
+  ],
+  "reviewed_no_change": [
+    {
+      "item": "PMID 33763399 in a combination record and the CNCM I-745 single-strain record",
+      "reason": "three-arm trial (PubMed abstract): I-745 alone vs a mixture of unnamed S. boulardii + NCFM, Lpc-37, Bl-04, Bi-07"
+    },
+    {
+      "item": "HEAL9 has an approved single-strain record (37571403) although Dr Pham withdrew 31734734",
+      "reason": "her withdrawal concerned the combination citation; the Codex audit found a single-strain RCT (unresolved direction, 0 points); listed for her countersignature"
+    },
+    {
+      "item": "Registry fields with no runtime reader",
+      "reason": "audit trail (previous/withdrawn citations, downgrade records, validation provenance); kept as history by instruction"
+    },
+    {
+      "item": "IQM rows that are inactive or undosed blend children raise no interaction alert",
+      "reason": "the 2026-06-24 policy (test_recognized_blend_children_do_not_emit_interaction_alerts); unchanged"
+    }
+  ]
+}

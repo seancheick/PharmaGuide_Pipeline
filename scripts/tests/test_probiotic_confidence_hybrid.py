@@ -236,7 +236,8 @@ def test_canary_19067_probiotic_confidence_fields() -> None:
             plantarum = ing
             break
     assert plantarum is not None
-    assert plantarum.get("cfu_confidence") == "high"
+    # Dr Pham 2026-09-22: 299v is medium (n = 40) and positive -> moderate.
+    assert plantarum.get("cfu_confidence") == "moderate"
     assert plantarum.get("dose_basis") == "industry_standard"
     assert plantarum.get("ui_copy_hint") == "studied_range"
 

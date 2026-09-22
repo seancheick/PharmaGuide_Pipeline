@@ -311,10 +311,14 @@ def _probiotic_native_evidence_state(product: Mapping[str, Any], row: Mapping[st
         ]
     if not strains:
         return None
+    # The enricher's clinical_support_level follows the evidence direction; an
+    # empty value is reviewed evidence that supports no claim (null, unresolved)
+    # and must not fall back to the direction-blind registry evidence_level.
     tokens = {
+        _norm(row.get("clinical_support_level")) or "not_supportive"
+        if "clinical_support_level" in row else
         _norm(
-            row.get("clinical_support_level")
-            or row.get("evidence_level")
+            row.get("evidence_level")
             or row.get("evidence_strength")
             or row.get("support_level")
         )

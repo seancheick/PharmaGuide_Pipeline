@@ -110,6 +110,7 @@ def _clinical_entry(
                 "additional_pmids": ["87654321", "12345678"],
                 "evidence_strength": "medium",
                 "clinical_support_level": "moderate",
+                "effect_direction": "positive_strong",
                 "clinical_validation": {
                     "q1_strain_explicit": strain_explicit,
                     "q3_human_clinical": human_clinical,
@@ -329,8 +330,8 @@ def test_m63_resolves_to_its_own_reviewed_identity_and_evidence(enricher) -> Non
     assert len(clinical_rows) == 1
     assert clinical_rows[0]["clinical_id"] == "STRAIN_INFANTIS_M63"
     # Owned by its study contexts since closure D1: two placebo RCTs with no
-    # primary patient-important outcome derive weak support.
-    assert clinical_rows[0]["clinical_support_level"] == "weak"
+    # primary patient-important outcome are unresolved, so they support no claim.
+    assert clinical_rows[0]["clinical_support_level"] is None
     assert clinical_rows[0]["cfu_per_day"] == 1_000_000_000
     assert clinical_rows[0]["adequacy_tier"] == "adequate"
 

@@ -15,8 +15,8 @@ dev's "step 1: wire scoring only" guidance.
 Canary target (sprint §E1.3.2 DoD):
   DSLD 19067 Nature Made Digestive Health Probiotic — single-strain
   L. plantarum 299v at 10 billion CFU → adequacy_tier = "good",
-  clinical_support_level = "high" (from evidence_strength="strong"
-  fallback), badge wakes to "well_dosed".
+  clinical_support_level = "moderate" (Dr Pham 2026-09-22: medium, positive),
+  badge wakes to "well_dosed".
 """
 
 from __future__ import annotations
@@ -110,6 +110,7 @@ def test_explicit_clinical_support_level_wins() -> None:
             "evidence": {
                 "clinical_support_level": "moderate",
                 "evidence_strength": "strong",
+                "effect_direction": "positive_strong",
             }
         }
     }
@@ -124,32 +125,37 @@ def test_explicit_clinical_support_level_wins() -> None:
 def test_falls_back_to_evidence_strength_mapping(evidence_strength: str, expected: str) -> None:
     entry = {
         "cfu_thresholds": {
-            "evidence": {"evidence_strength": evidence_strength}
+            "evidence": {"evidence_strength": evidence_strength, "effect_direction": "positive_strong"}
         }
     }
     assert _derive_clinical_support_level(entry) == expected
 
 
-def test_l_plantarum_299v_derives_high_from_strong_fallback() -> None:
-    """Canary: Dr Pham's L. plantarum 299v entry has evidence_strength
-    ``"strong"`` but no explicit clinical_support_level. Fallback maps
-    strong → high → full tier points."""
+def test_strong_positive_evidence_derives_high_support() -> None:
     entry = {
         "cfu_thresholds": {
-            "evidence": {"evidence_strength": "strong"},
+            "evidence": {"evidence_strength": "strong", "effect_direction": "positive_strong"},
         }
     }
     assert _derive_clinical_support_level(entry) == "high"
 
 
-def test_unknown_or_missing_evidence_returns_weak() -> None:
-    """Conservative default — anything we can't positively classify is
-    treated as weak so the downstream cap protects against overclaim."""
-    assert _derive_clinical_support_level({}) == "weak"
-    assert _derive_clinical_support_level({"cfu_thresholds": {}}) == "weak"
-    assert _derive_clinical_support_level({"cfu_thresholds": {"evidence": {}}}) == "weak"
+@pytest.mark.parametrize("direction,expected", [
+    ("mixed", "weak"), ("null", None), ("negative", None), ("unresolved", None),
+])
+def test_support_follows_the_evidence_direction(direction: str, expected) -> None:
+    """The app prints "<level> support": a null or surrogate-only result supports nothing."""
+    entry = {"cfu_thresholds": {"evidence": {"evidence_strength": "strong", "effect_direction": direction}}}
+    assert _derive_clinical_support_level(entry) == expected
+
+
+def test_unknown_or_missing_evidence_claims_no_support() -> None:
+    """A missing direction is unresolved, never positive (Dr Pham, 2026-09-22)."""
+    assert _derive_clinical_support_level({}) is None
+    assert _derive_clinical_support_level({"cfu_thresholds": {}}) is None
+    assert _derive_clinical_support_level({"cfu_thresholds": {"evidence": {}}}) is None
     assert _derive_clinical_support_level(
-        {"cfu_thresholds": {"evidence": {"evidence_strength": "wibble"}}}
+        {"cfu_thresholds": {"evidence": {"evidence_strength": "wibble", "effect_direction": "positive_weak"}}}
     ) == "weak"
 
 
@@ -175,8 +181,9 @@ def test_canary_19067_probiotic_ingredient_carries_adequacy_tier() -> None:
         f"19067 L. plantarum 299v at 10B CFU should map to 'good' tier; got "
         f"{plantarum.get('adequacy_tier')!r}"
     )
-    assert plantarum.get("clinical_support_level") == "high", (
-        f"19067 strain should derive high support from evidence_strength='strong'; got "
+    # Dr Pham 2026-09-22: 299v is medium (n = 40) and positive -> moderate support.
+    assert plantarum.get("clinical_support_level") == "moderate", (
+        f"19067 strain should derive moderate support from medium positive evidence; got "
         f"{plantarum.get('clinical_support_level')!r}"
     )
     # Badge auto-activates

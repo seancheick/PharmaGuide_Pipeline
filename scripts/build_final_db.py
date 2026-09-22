@@ -7600,6 +7600,9 @@ def build_detail_blob(
                 "ingredient_name": safe_str(ing.get("name") or name),
                 "ingredient_role": role,  # 'active' | 'inactive' — for Flutter routing
                 "matched_rule_id": rule_id or None,
+                # Same entry as the substance card for this rule, so both share
+                # one dedup key: one hazard, one card.
+                "ban_context": safe_str(reference.get("ban_context")) or None,
                 "source": "inactive_ingredient_resolver",
                 "display_mode_default": dm_default,
                 "clinical_risk": safe_str(ing.get("harmful_severity")) or None,

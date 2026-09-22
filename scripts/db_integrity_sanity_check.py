@@ -1041,6 +1041,17 @@ def check_clinically_relevant_strains(findings: List[Finding], data: Dict[str, A
                     "error", file, f"[{i}].evidence_level", "unreviewed_evidence_claim",
                     "unapproved source with no benefit claims", "approval or benefits present",
                 ))
+        # evidence_level is the registry copy of the effective evidence strength;
+        # it drifted on 14 identities as evidence was re-reviewed (2026-09-22).
+        from probiotic_measurements import effective_strain_evidence, strain_literature_review_concluded
+        strength = (effective_strain_evidence(e) or {}).get("evidence_strength")
+        expected = ("none" if strain_literature_review_concluded(e)
+                    else {"strong": "high", "medium": "moderate", "weak": "low"}.get(strength))
+        if expected and e.get("evidence_level") != expected:
+            findings.append(Finding(
+                "error", file, f"[{i}].evidence_level", "evidence_level_disagrees_with_owner",
+                expected, e.get("evidence_level"),
+            ))
 
 
 def check_proprietary_blends(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

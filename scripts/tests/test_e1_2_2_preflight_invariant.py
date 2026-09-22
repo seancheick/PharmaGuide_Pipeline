@@ -15,6 +15,12 @@ a pre-existing field, this invariant raises a clear assertion failure
 that points to the exact dsld_id + field.
 
 Runs against the 7 canary baseline blobs + their fresh rebuilds.
+
+The baseline rolls forward (see below). Last rolled forward 2026-09-22 from
+``scripts/reports/canary_rebuild.py`` on the v4 code: the April baseline had not
+moved since E1.2.2, and five months of intended changes (v4 fields, label
+ledger, warning dedup) were each classified before the roll. After an intended
+blob change, rebuild the canaries and copy them into ``baseline_pre_e1_2_2/``.
 """
 
 from __future__ import annotations

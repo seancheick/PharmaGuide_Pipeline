@@ -991,6 +991,31 @@ def test_probiotic_native_clinical_strain_requires_label_owner_for_material_asse
         assert result["is_live_ready"] is True
 
 
+def test_a_reviewed_strain_without_supportive_evidence_is_evaluated_not_supported() -> None:
+    """HN019's reviewed trials are null: the enricher gives it no support level,
+    and its registry evidence_level ("high") must not stand in for one."""
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Bifidobacterium lactis HN019", "bifidobacterium_lactis", quantity=10, unit="billion CFU")
+    product = _product(row, title="Daily Probiotic")
+    product["activeIngredients"] = [row]
+    product["supplement_taxonomy"] = {"primary_type": "probiotic"}
+    product["probiotic_data"] = {
+        "is_probiotic_product": True,
+        "total_billion_count": 10,
+        "total_strain_count": 1,
+        "clinical_strains": [{
+            "clinical_id": "STRAIN_LACTIS_HN019",
+            "strain": "Bifidobacterium lactis HN019",
+            "clinical_support_level": None,
+            "evidence_level": "high",
+        }],
+    }
+    result = evaluate_assessment_readiness(product, module="probiotic")
+
+    assert result["evidence"]["ingredient_assessments"][0]["state"] == "evaluated_limited_or_negative"
+
+
 def test_completeness_gate_does_not_block_on_shadow_evidence() -> None:
     from assessment_readiness import evaluate_assessment_readiness
     from scoring_v4.gate_completeness import evaluate_completeness_gate

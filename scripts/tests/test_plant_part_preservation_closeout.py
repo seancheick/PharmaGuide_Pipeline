@@ -63,7 +63,9 @@ def test_ksm66_ashwagandha_display_label_locked() -> None:
     base + plant part + form."""
     b = _load("306237")
     ing = _find_ingredient(b, "ksm-66")
-    assert ing.get("display_label") == "KSM-66 Ashwagandha Root Extract"
+    # Label-native text owns the display (47d70a39, 641fe823): the literal label
+    # name, with the form when the name lacks its plant part.
+    assert ing.get("display_label") == "KSM-66 (Ashwagandha Root Extract)"
 
 
 def test_ksm66_standardization_locked() -> None:
@@ -75,7 +77,7 @@ def test_ksm66_standardization_locked() -> None:
 def test_bioperine_display_label_locked() -> None:
     b = _load("306237")
     ing = _find_ingredient(b, "bioperine")
-    assert ing.get("display_label") == "BioPerine Black Pepper Fruit Extract"
+    assert ing.get("display_label") == "Bioperine (Black Pepper Fruit Extract)"  # the label's own spelling
 
 
 def test_bioperine_standardization_locked() -> None:
@@ -183,32 +185,5 @@ def test_simple_enzyme_has_no_standardization() -> None:
         )
 
 
-# ---------------------------------------------------------------------------
-# Section A "zero change" lock — this sprint task CANNOT change scores
-# ---------------------------------------------------------------------------
-
-# Section A values as of post-E1.3.4 (locked here so any regression in
-# E1.3.5 that accidentally touches score math is caught immediately).
-_POST_E1_3_4_SECTION_A = {
-    "35491":  2.50,
-    "306237": 18.08,
-    "246324":  0.00,
-    "1002":   14.00,
-    "19067":  20.00,
-    "1036":   19.50,
-    "176872": 15.25,
-    "266975":  7.00,
-    "19055":   1.00,
-}
-
-
-@pytest.mark.parametrize("did,expected", list(_POST_E1_3_4_SECTION_A.items()))
-def test_section_a_unchanged_by_plant_part_closeout(did: str, expected: float) -> None:
-    """Dev hard stop: E1.3.5 must produce zero score change across
-    every canary."""
-    b = _load(did)
-    actual = b["section_breakdown"]["ingredient_quality"]["score"]
-    assert actual == pytest.approx(expected, abs=0.01), (
-        f"[{did}] Section A shifted: expected {expected}, got {actual}. "
-        f"E1.3.5 is test-only — any score change is a bug."
-    )
+# The v3 Section A score lock was retired on 2026-09-22: blobs carry no v3
+# section_breakdown (test_build_final_db::test_blob_carries_no_v3_score_husks).

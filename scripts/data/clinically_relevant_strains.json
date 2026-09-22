@@ -17,7 +17,8 @@
     "identity_batch_note_2026_09_14": "Evidence-bound identity batch (scripts/audits/probiotic_registry_expansion_2026_09_14): 34 identities added, 11 duplicate SD-deposit stubs merged into their named strains, 7 alias sets added, Lab4 NCIMB deposits corrected. Every change cites PubMed/Europe PMC evidence; no sign-off, context, evidence or dose tier changed. Follow-up: 3 identities added (STRAIN_BREVE_BBR8, STRAIN_PARACASEI_LPC00, STRAIN_PLANTARUM_14D).",
     "literature_review_note_2026_09_22": "Closure D1: 89 identities reviewed to a terminal state (15 with single-strain controlled trials recorded as study contexts; the rest no qualifying human evidence, with reasons). Bi-07 and BB-12 were left to the clinician gate (restored by Dr Pham the same day; see clinical_review_note_2026_09_22). Agent-authored summaries for BS01, LP01, M-63 and the four DS-01 members were retired into study contexts or FORMULA_SEED_DS01. Approvals are a delegated research review, not a clinician sign-off. Basis: scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json.",
     "clinical_review_note_2026_09_22": "Dr Pham's clinical review of the 2026-09-22 sign-off sheet: Bi-07 and BB-12 sign-offs restored (reviewed, not broadly effective); the two held LA-5 + BB-12 trials approved as literal combination records with their unregistered third strain; 12 sign-offs confirmed (LGG, S. boulardii, 299v and HN001 recorded as medium; Shirota and 35624 null), 5 citations replaced with direct human trials (SNZ 1969, M18, GBI-30 6086, ATCC PTA 6475, CTV-05), 6 withdrawn as single-strain evidence (HEAL9, GR-1, RC-14, R0052, R0175, LA-5); the 18 closure-D1 records countersigned (CU1 wording corrected); Nissle 1917 recorded as human active-comparator equivalence evidence (no superiority credit until the scorer can weight it). Every strain evidence summary now states an explicit effect_direction (a missing one scores nothing), and six mislabelled source types were corrected from the live records. Every cited PMID content-verified live. Basis: scripts/audits/closure_20260921/PHAM_REVIEW_20260922.json.",
-    "codex_audit_response_note_2026_09_22": "Codex's 2026-09-22 registry audit (26 findings) reproduced against live PubMed/Europe PMC and applied: HEAL9 and LAFTI L10 reviews reopened with single-strain trials; 9 exact-strain contexts added (BB-12 infant colic x2, 1714 x2, 35624, LGG acute gastroenteritis, 299v, Lafti L10, UABla-12 arm); DRACMA's LGG results removed from CRL431 + BB-12; Prodentis single-strain aliases removed; ATCC PTA 6475 now mixed (2024 null trial); CTV-05 vaginal evidence gives oral labels no credit; M-16V no longer carries NEC or a combination trial; indications and benefits bound to their records; co-formulated BC30 contexts made ineligible; transit is a surrogate; resistant maltodextrin separated from resistant starch. A second review's ten corrections: IS-2 arithmetic and note, DSM 17938's gastroenteritis citation (31739457), SP1 acne pilot, 8700:2 and ME-3 human biomarker trials, 1714 claims, Prodentis fail-closed, CNCM I-745 split from the S. boulardii species node, Enterogermina kept formula-level, M-16V anchored to its strain-specific review. MIMBb75 not added (no label in the catalog). Delegated research review, not a clinician sign-off. Basis: scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json."
+    "codex_audit_response_note_2026_09_22": "Codex's 2026-09-22 registry audit (26 findings) reproduced against live PubMed/Europe PMC and applied: HEAL9 and LAFTI L10 reviews reopened with single-strain trials; 9 exact-strain contexts added (BB-12 infant colic x2, 1714 x2, 35624, LGG acute gastroenteritis, 299v, Lafti L10, UABla-12 arm); DRACMA's LGG results removed from CRL431 + BB-12; Prodentis single-strain aliases removed; ATCC PTA 6475 now mixed (2024 null trial); CTV-05 vaginal evidence gives oral labels no credit; M-16V no longer carries NEC or a combination trial; indications and benefits bound to their records; co-formulated BC30 contexts made ineligible; transit is a surrogate; resistant maltodextrin separated from resistant starch. A second review's ten corrections: IS-2 arithmetic and note, DSM 17938's gastroenteritis citation (31739457), SP1 acne pilot, 8700:2 and ME-3 human biomarker trials, 1714 claims, Prodentis fail-closed, CNCM I-745 split from the S. boulardii species node, Enterogermina kept formula-level, M-16V anchored to its strain-specific review. MIMBb75 not added (no label in the catalog). Delegated research review, not a clinician sign-off. Basis: scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json.",
+    "registry_self_audit_note_2026_09_22": "Registry self-audit against Dr Pham's 2026-09-22 packet: every packet decision held. Corrected stale copies of owned facts: evidence_level now equals the effective evidence strength on 14 identities; 6 case-duplicate aliases dropped; indication_primary of Bi-07, BB-12, HEAL9, 35624 and Nissle 1917 bound to their own reviewed evidence; study_design recorded on the Bi-07 and BB-12 records from their verified abstracts. Basis: scripts/audits/closure_20260921/REGISTRY_SELF_AUDIT_20260922.json."
   },
   "clinically_relevant_strains": [
     {
@@ -948,7 +949,7 @@
         "BioGaia Prodentis",
         "Limosilactobacillus reuteri Prodentis"
       ],
-      "evidence_level": "high",
+      "evidence_level": "moderate",
       "key_benefits": [
         "oral health",
         "periodontal health",
@@ -1041,7 +1042,6 @@
         "K12",
         "BLIS K12 Streptococcus salivarius",
         "BLIS K12 Streptococcus salivarius K12",
-        "Blis K12 Streptococcus salivarius",
         "Streptococcus salivarius BLIS K-12",
         "S. salivarius BLIS K-12",
         "S. salivarius BLIS K12",
@@ -1483,7 +1483,7 @@
         "Bacillus coagulans Lactospore",
         "Lactospore Bacillus coagulans MTCC5856"
       ],
-      "evidence_level": "high",
+      "evidence_level": "moderate",
       "key_benefits": [
         "digestive health",
         "IBS relief",
@@ -2025,7 +2025,7 @@
         "Unique IS-2(TM) Bacillus coagulans",
         "Unique IS-2"
       ],
-      "evidence_level": "high",
+      "evidence_level": "moderate",
       "key_benefits": [
         "digestive health",
         "constipation relief",
@@ -3640,7 +3640,8 @@
             "countersigned_at": "2026-09-22T15:34:45Z",
             "countersign_note": "Single-strain credit is the lactose-digestion surrogate only; note the nausea signal."
           },
-          "scoring_eligible": true
+          "scoring_eligible": true,
+          "study_design": "crossover_rct"
         }
       ],
       "aliases": [
@@ -3656,7 +3657,7 @@
       "key_benefits": [],
       "notable_studies": "Dr Pham review 2026-09-22: two randomized crossover lactose-challenge trials of Bi-07 alone improved breath hydrogen (primary surrogate) without GI-symptom benefit, with more nausea in one trial; an NCFM + Bi-07 bloating trial is combination evidence (primary outcomes negative, bloating secondary).",
       "cfu_thresholds": {
-        "indication_primary": "immune support and respiratory health",
+        "indication_primary": "lactose digestion in acute lactose challenges (breath-hydrogen surrogate improved; GI symptoms not improved)",
         "tiers_cfu_per_day": {
           "low": {
             "upper_exclusive": 1000000000
@@ -4447,7 +4448,7 @@
       "key_benefits": [],
       "notable_studies": "Review 2026-09-22: one exploratory single-strain RCT (129 moderately stressed adults, 12 weeks) improved four cognitive tests vs placebo; stress, cortisol, mood and sleep did not differ. The HEAL9 + 8700:2 cold trial is combination evidence.",
       "cfu_thresholds": {
-        "indication_primary": "immune support and cold prevention",
+        "indication_primary": "cognitive test performance in moderately stressed adults (one exploratory trial; perceived stress and cortisol not improved)",
         "tiers_cfu_per_day": {
           "low": {
             "upper_exclusive": 1000000000
@@ -4829,7 +4830,7 @@
       ],
       "notable_studies": "Dr Pham review 2026-09-22: in the 2017 meta-analysis the three single-strain 35624 IBS trials did not improve abdominal pain, bloating or bowel-habit satisfaction.",
       "cfu_thresholds": {
-        "indication_primary": "irritable bowel syndrome symptom relief",
+        "indication_primary": "irritable bowel syndrome symptoms (pooled single-strain trials did not improve pain, bloating or bowel habit)",
         "tiers_cfu_per_day": {
           "low": {
             "upper_exclusive": 1000000000
@@ -6115,7 +6116,7 @@
         "L. acidophilus SD-5221",
         "SD-5221"
       ],
-      "evidence_level": "high",
+      "evidence_level": "low",
       "key_benefits": [
         "digestive health",
         "immune support",
@@ -7288,7 +7289,8 @@
             "countersigned_at": "2026-09-22T15:34:45Z",
             "countersign_note": "Primary endpoints not met; favourable findings are secondary or post hoc."
           },
-          "scoring_eligible": true
+          "scoring_eligible": true,
+          "study_design": "rct"
         },
         {
           "context_id": "bb12_preterm_inflammation_feeding_39271904",
@@ -7754,11 +7756,11 @@
         "Bifidobacterium animalis lactis BB-12",
         "Bifidobacterium animalis subsp. lactis BB-12"
       ],
-      "evidence_level": "low",
+      "evidence_level": "high",
       "key_benefits": [],
       "notable_studies": "Dr Pham review 2026-09-22: human evidence reviewed, mixed/limited. A 1,248-adult RCT (1B or 10B CFU/day for 4 weeks) did not meet its original defecation-frequency responder endpoint or improve global GI well-being; a tightened responder definition and mean defecation frequency were favourable. A 71-infant preterm trial of BB-12 alone reported lower inflammatory markers and less feeding intolerance.",
       "cfu_thresholds": {
-        "indication_primary": "immune support and gut health",
+        "indication_primary": "infant colic in breastfed infants; adult stool-frequency primary endpoint not met",
         "tiers_cfu_per_day": {
           "low": {
             "upper_exclusive": 1000000000
@@ -7790,7 +7792,7 @@
         "B. longum BB536",
         "BB536"
       ],
-      "evidence_level": "high",
+      "evidence_level": "moderate",
       "key_benefits": [
         "immune support",
         "gut health"
@@ -8223,7 +8225,7 @@
         "Bacillus subtilis DE111",
         "B. subtilis DE-111"
       ],
-      "evidence_level": "moderate",
+      "evidence_level": "low",
       "key_benefits": [
         "digestive health",
         "immune support",
@@ -11024,7 +11026,7 @@
         "L. paracasei 431",
         "L. paracasei, L. CASEI 431"
       ],
-      "evidence_level": "high",
+      "evidence_level": "low",
       "key_benefits": [
         "immune support",
         "respiratory health"
@@ -11549,7 +11551,7 @@
         "B. lactis SD-5219",
         "SD-5219"
       ],
-      "evidence_level": "high",
+      "evidence_level": "moderate",
       "key_benefits": [
         "immune support",
         "respiratory health",
@@ -11614,7 +11616,7 @@
         "SBT2055",
         "Lactobacillus gasseri LG2055"
       ],
-      "evidence_level": "high",
+      "evidence_level": "moderate",
       "key_benefits": [
         "visceral fat reduction",
         "weight management",
@@ -11702,7 +11704,7 @@
         "BNR17",
         "Lactobacillus gasseri BNR-17"
       ],
-      "evidence_level": "high",
+      "evidence_level": "moderate",
       "key_benefits": [
         "visceral fat reduction",
         "weight management",
@@ -12581,7 +12583,7 @@
         "DDS1",
         "Lactobacillus acidophilus DDS1"
       ],
-      "evidence_level": "high",
+      "evidence_level": "low",
       "key_benefits": [
         "digestive health",
         "immune support",
@@ -13441,7 +13443,7 @@
         "Lacticaseibacillus paracasei Lpc-37",
         "Lactobacillus paracasei strain Lpc-37"
       ],
-      "evidence_level": "high",
+      "evidence_level": "moderate",
       "key_benefits": [],
       "notable_studies": "Two single-strain stress-response RCTs had null primary outcomes. Sisu reported secondary/subgroup perceived-stress signals; the larger ChillEx trial had no multiplicity-robust secondary efficacy. These studies do not establish generic immune or digestive benefit.",
       "evidence_review": {
@@ -13596,7 +13598,7 @@
       ],
       "notable_studies": "Two double-blind double-dummy RCTs (327 and 120 patients) found relapse prevention in ulcerative colitis equivalent to mesalazine. (Ardeypharm)",
       "cfu_thresholds": {
-        "indication_primary": "ulcerative colitis remission maintenance",
+        "indication_primary": "ulcerative colitis remission maintenance (equivalent to mesalazine in its main trial; no placebo comparison)",
         "tiers_cfu_per_day": {
           "low": {
             "upper_exclusive": 1000000000
@@ -13717,7 +13719,7 @@
         "Bifidobacterium animalis UABla-12",
         "Bifidobacterium animalis lactis UABla-12"
       ],
-      "evidence_level": "moderate",
+      "evidence_level": "low",
       "key_benefits": [
         "digestive health",
         "immune support",
@@ -13863,7 +13865,6 @@
         "Lactiplantibacillus plantarum Lp-01",
         "LP01",
         "LP-01",
-        "Lp-01",
         "LMG P-21021"
       ],
       "evidence_level": "none",
@@ -14614,7 +14615,6 @@
         "Lp-115",
         "Lactiplantibacillus plantarum Lp-115",
         "Lactobacillus plantarum LP-115",
-        "L. plantarum LP-115",
         "Lactobacillus plantarum SD-5209",
         "L. plantarum SD-5209",
         "SD-5209"
@@ -14738,7 +14738,6 @@
         "Lr-32",
         "Lacticaseibacillus rhamnosus Lr-32",
         "Lactobacillus rhamnosus LR-32",
-        "L. rhamnosus LR-32",
         "Lactobacillus rhamnosus SD-5217",
         "L. rhamnosus SD-5217",
         "SD-5217"
@@ -15241,7 +15240,6 @@
         "B. infantis Bi-26",
         "Bi-26",
         "Bifidobacterium longum infantis BI-26",
-        "Bifidobacterium infantis BI-26",
         "Bifidobacterium longum subsp. infantis BI-26",
         "Bifidobacterium longum subsp. infantis SD-6720",
         "Bifidobacterium infantis SD-6720",
@@ -16963,7 +16961,6 @@
       "standard_name": "Lactobacillus plantarum UALp-05",
       "aliases": [
         "L. plantarum UALP-05",
-        "L. plantarum UALp-05",
         "UALp-05"
       ],
       "evidence_level": "none",

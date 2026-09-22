@@ -607,42 +607,68 @@ def _normalize_parent_blend_mg(mass, unit) -> Optional[float]:
 
 
 def _derive_clinical_support_level(strain_entry) -> Optional[str]:
-    """Resolve ``clinical_support_level`` with a fallback chain:
+    """How far a strain's reviewed human evidence supports an efficacy claim.
+
+    The app renders this as "<level> support", so it follows the evidence
+    direction as well as its strength. For a positive direction the level is:
 
       1. explicit ``cfu_thresholds.evidence.clinical_support_level``
       2. mapped from ``cfu_thresholds.evidence.evidence_strength``
          (strong→high, medium→moderate, weak→weak)
-      3. conservative default ``"weak"`` (protects against overclaim)
+      3. ``"weak"`` for an unrecognized strength
 
-    Explicitly unreviewed evidence returns None: a review gap is not weak
-    evidence, and neither is a finished review that found none
-    (``evidence_level: none``). Otherwise returns ``"high" | "moderate" | "weak"``.
+    Mixed evidence is ``"weak"`` at most. Null, negative, unresolved or missing
+    directions support no claim and return None, as do unreviewed evidence and
+    a finished review that found none (``evidence_level: none``).
     """
     if not isinstance(strain_entry, dict):
-        return "weak"
+        return None
     from probiotic_measurements import effective_strain_evidence
     thresholds = strain_entry.get("cfu_thresholds") or {}
     evidence = effective_strain_evidence(strain_entry) or {}
     if not isinstance(evidence, dict):
-        return "weak"
+        return None
     if evidence.get("type") != "study_contexts_derived" and (
             strain_entry.get("evidence_level") in ("unreviewed", "none")
             or evidence.get("evidence_strength") == "unreviewed"):
         return None
+    direction = str(evidence.get("effect_direction") or "").strip().lower().replace(" ", "_")
+    if direction not in ("positive_strong", "positive_weak", "mixed"):
+        return None
 
+    level = "weak"
     explicit = evidence.get("clinical_support_level") or thresholds.get("clinical_support_level")
-    if isinstance(explicit, str):
-        lower = explicit.strip().lower()
-        if lower in ("high", "moderate", "weak"):
-            return lower
-
     strength = evidence.get("evidence_strength")
-    if isinstance(strength, str):
-        mapped = _EVIDENCE_STRENGTH_TO_SUPPORT_LEVEL.get(strength.strip().lower())
-        if mapped:
-            return mapped
+    if isinstance(explicit, str) and explicit.strip().lower() in ("high", "moderate", "weak"):
+        level = explicit.strip().lower()
+    elif isinstance(strength, str):
+        level = _EVIDENCE_STRENGTH_TO_SUPPORT_LEVEL.get(strength.strip().lower(), "weak")
+    return "weak" if direction == "mixed" else level
 
-    return "weak"
+
+# The card prints the indication beside the support level, so it must not read
+# as a benefit the reviewed evidence did not show.
+_PROBIOTIC_RESULT_QUALIFIERS = {
+    "mixed": "mixed results",
+    "null": "no benefit shown on the primary outcome",
+    "negative": "no benefit shown on the primary outcome",
+}
+_PROBIOTIC_RESULT_STATED = re.compile(
+    r"\bnot (?:met|improved|demonstrated|established|shown)\b|\bdid not\b|\bno benefit\b|\bmixed\b|\bequivalen",
+    re.I,
+)
+
+
+def _probiotic_indication_copy(indication, review_status: str, evidence: Dict[str, Any]) -> str:
+    """Indication text for one strain row: none without qualifying reviewed
+    evidence, and a stated result when the reviewed direction is not positive."""
+    text = str(indication or "").strip()
+    if not text or review_status in ("pending_review", "literature_reviewed_no_qualifying_evidence"):
+        return ""
+    direction = str(evidence.get("effect_direction") or "").strip().lower().replace(" ", "_")
+    if direction in ("positive_strong", "positive_weak") or _PROBIOTIC_RESULT_STATED.search(text):
+        return text
+    return f"{text} ({_PROBIOTIC_RESULT_QUALIFIERS.get(direction, 'benefit not established')})"
 
 
 def _probiotic_research_presentation(
@@ -726,7 +752,8 @@ def _probiotic_research_presentation(
         "review_status": review_status,
         "identity_confidence": identity_confidence(entry),
         "human_evidence": human_evidence,
-        "indication_primary": str(thresholds.get("indication_primary") or "").strip(),
+        "indication_primary": _probiotic_indication_copy(
+            thresholds.get("indication_primary"), review_status, evidence),
         "source_urls": source_urls,
         "source_count": len(source_urls),
     }
@@ -18388,7 +18415,17 @@ class SupplementEnricherV3:
             raw_skipped = []
         if isinstance(scorable, list):
             ingredients = [row for row in scorable if isinstance(row, dict)]
-            skipped = []
+            # A rule written on a banned, botanical, additive or other-ingredient
+            # entry can only match a row that is not scorable, so scanning
+            # scorable rows alone silenced every such rule (CBD, yohimbe, red
+            # yeast rice, pennyroyal ...). Non-scorable rows of scored
+            # ingredients (blend children, inactives) stay out.
+            scanned = {id(row) for row in ingredients}
+            skipped = [
+                row for row in raw_ingredients + raw_skipped
+                if isinstance(row, dict) and id(row) not in scanned
+                and (self._derive_interaction_subject_ref(row) or {}).get("db") not in (None, "ingredient_quality_map")
+            ]
         else:
             ingredients = [row for row in raw_ingredients if isinstance(row, dict)]
             skipped = [row for row in raw_skipped if isinstance(row, dict)]

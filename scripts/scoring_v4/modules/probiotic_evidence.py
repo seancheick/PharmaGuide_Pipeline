@@ -402,11 +402,7 @@ def _strain_indication_categories(assessment: Dict[str, Any]) -> Set[str]:
     for strain in assessment["strain_assessments"]:
         if not strain["research_accepted"]:
             continue
-        text_parts = [
-            strain.get("indication_primary"),
-            strain.get("indication_secondary"),
-        ]
-        categories.update(_categories_from_text(" ".join(str(x or "") for x in text_parts)))
+        categories.update(_categories_from_text(str(strain.get("indication_primary") or "")))
     formula = assessment["formula_assessment"]
     if formula["status"] == "assessed_studied_formula":
         categories.update(formula["supported_outcomes"])
