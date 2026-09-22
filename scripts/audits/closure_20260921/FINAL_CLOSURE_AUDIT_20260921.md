@@ -1,14 +1,16 @@
 # Final closure audit — Evidence / scoring / depletion / pipeline (2026-09-21)
 
-Scope: Phase 0 → current HEAD (`d70fd740` + this closure), the Gemini WIP left dirty
+Scope: Phase 0 → the final closure commit **`b5d6d859`** (base `d70fd740`; closure commits `2d071d2b`
+round 1, `2d7d4ea8` round 2, `b5d6d859` round 3; later commits touch this report only), the Gemini WIP left dirty
 on top of it, the Buff/peer Phase-3 lineage, archive tags and unreachable commits
 (forensic evidence only). Every claim below was reproduced on real artifacts;
 the command or test that proves it is named beside it.
 
 ## 0. Run results
 
-**Status: final-code corpus run PENDING (round-2 code).** Every code change below lands before
-it; the release sequence (37 brands → submission lane → reconcile → snapshot →
+**Status: round-3 probiotic replay complete (1,308 labels, below); the final full production run
+(37 brands, 15,414 labels, then the submission lane) is pending on `b5d6d859`.** Every
+code change below lands before it; the release sequence (37 brands → submission lane → reconcile → snapshot →
 strict gates → release tier → `release_full.sh` → post-release checks) runs on
 the final code and fills this section. Nothing here is claimed from tests alone.
 
@@ -36,15 +38,21 @@ round-2 code for all 15,414 brand labels (0 errors), compared with the C1 scored
 | Tests | fast tier 16,126 passed; slow tier 51 → 31, the remainder corpus-dependent (§3b, D9) |
 
 Round 3 (2026-09-22, Dr Pham's review, the Codex audit and the second review; §2 #37–#41). Same-input replay of
-the 1,308 raw labels that name a probiotic organism, raw → clean → enrich → score, committed code (HEAD `2d7d4ea8`)
-vs the round-3 working tree:
+the 1,308 raw labels that name a probiotic organism, raw → clean → enrich → score. Base: round-2 commit
+`2d7d4ea8`; compared: the round-3 tree, whose pipeline code and data were committed unchanged as the final closure
+commit `b5d6d859` (the replay started 11:39:57 after the last code/data edit at 11:38:55; only the review packet's text
+changed after it):
 
 | Claim | Proof |
 |---|---|
 | Shipped probiotic partials 55 → 0 | 55 partial → complete (F1 closed); the one remaining partial (78355) is `not_scored` in every run and quarantined, never shipped |
 | Every score mover is attributed | 225 movers, all down, Evidence pillar only; each traced to a strain-row change, 0 unexplained: LGG 102, S. boulardii 16, 299v 10 (strong → medium); HN001 15, IS-2 18, MTCC 5856 9, M18 3, SNZ 1969 3 (positive result secondary, within-group or a ranking: 0.85); BB536 31 and M-16V 10 (surrogate-only / combination: 0); LA-5 6, RC-14 4, GBI-30 1 (withdrawn or surrogate); Bl-04, NCFM, BB-12, La-14 rows surface when the strongest row drops (BB-12 4.8 from its infant-colic RCTs) |
-| No safety change | 0 status, route or safety-verdict movers; 34 SAFE → POOR are the quality-tier verdict of products that fall into the Poor tier (8 Good → Needs improvement) |
+| No safety change | Safety verdict changes = 0: no product enters or leaves CAUTION, UNSAFE or BLOCKED, and 0 `quality_score_status` or route movers. The public `verdict` field also carries the quality verdict POOR, set only when `quality_tier` is the lowest tier (`scoring_v4/quality_score.py`, `v4_verdict`). 34 products move `verdict` SAFE → POOR, exactly the 34 whose `quality_tier` moves Needs improvement → Poor; 8 more move `quality_tier` Good → Needs improvement with `verdict` SAFE unchanged |
 | Label-bounded scope | ATCC PTA 6475, CTV-05, HEAL9, 1714, 8700:2, CNCM I-745, B. clausii, Prodentis and MIMBb75 appear on no catalog label, so their corrections move no product; the replay confirms it |
+| Identity change 131 → 132 | New identity `STRAIN_BOULARDII_CNCM_I745`: the six CNCM I-745 study records moved off the species node `STRAIN_SACCHAROMYCES`, with the I-745 and Florastor aliases, so an unidentified *S. boulardii* label no longer inherits strain-specific evidence. Schema/identity change, 0 catalog products moved (no label names I-745 or Florastor). Registry after: 132 identities, 157 study records, 34 strain summaries (`test_cncm_i745_evidence_is_not_inherited_by_an_unidentified_boulardii_label`) |
+| Nissle 1917 provenance | 15479682 recorded as human active-comparator equivalence evidence (medium, direction `unresolved`, no superiority credit). Verified against the PubMed abstract: design, 327 adults, 12 months, per-protocol relapse 36.4% vs 33.9%, equivalence p = 0.003. Tagged `reviewer_cited_not_independently_verified` in `PHAM_REVIEW_20260922.json`: the 20% margin, the one-sided CI bounds and the ITT rates (full text PMC1774300 not open access). The registry text states only the verified figures |
+| Clinical registry frozen for the final run | `scripts/data/clinically_relevant_strains.json` at `b5d6d859`: git blob `98083a87390ae968bf3d20bbe755ff49350bf773`, sha256 `0260ecd4c0d8a5820a34ea9cab0b7d86561d80c4c720370c13d995bcdc87c8a7`. No evidence change until release; re-checked after the run. After release, a probiotic correction reopens this only if it is a P0/P1 correctness defect |
+| Non-blocking follow-ups (Dr Pham) | (1) Countersign the 12 new study records. They score today under the 2026-09-14 owner convention: `review_status: clinician_approved` is the only scoring status, and `clinical_review.reviewer` names the actual approver, here "not a clinician sign-off". Of the 157 approved study records, 123 (approved 2026-09-14) and these 12 name the engineering owner as reviewer. The 18 D1 records also name the owner and carry Dr Pham's `countersigned_by`; the other 4 name her as reviewer. Each was checked against its live PubMed record; a countersignature replaces the reviewer string. (2) Confirm the M-16V anchor swap to 28796951 (null), the CTV-05 oral-route exclusion, ATCC PTA 6475 `mixed` and L. casei 431's strength after its source-type correction. M-16V (10 labels) and 431 (5 Solgar labels) are `null`, so they earn 0 credit whatever the strength; CTV-05 and ATCC PTA 6475 name no catalog label. (3) Set a scoring weight for active-comparator equivalence; Nissle earns none until then. None blocks this release (`CODEX_AUDIT_RESPONSE_20260922.json` `countersign_for_dr_pham`) |
 | Tests | fast tier 16,212 passed, 0 failed; registry integrity 0 findings |
 
 
