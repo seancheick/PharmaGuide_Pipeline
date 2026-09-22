@@ -1,6 +1,6 @@
 {
-  "interaction_db_version": "1.0.11",
-  "build_time_utc": "2026-07-30T16:32:44Z",
-  "purpose": "Tracked default version for interaction DB builds invoked by the full release workflow.",
-  "updated_at": "2026-07-30"
+  "interaction_db_version": "1.0.12",
+  "build_time_utc": "2026-09-22T20:34:52Z",
+  "purpose": "Tracked default version for interaction DB builds invoked by the full release workflow. Bump whenever the curated rule set changes: 1.0.12 retires DSI_BETABLOCK_MELATONIN (a physiology statement, not a safety interaction) and DSI_DIURETICS_POTASSIUM (a duplicate owner of the potassium-sparing diuretic pair), leaving 132 interactions.",
+  "updated_at": "2026-09-22"
 }

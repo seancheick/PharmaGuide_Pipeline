@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-09-21",
-    "total_entries": 93,
+    "total_entries": 92,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -11,7 +11,10 @@
       "DailyMed (dailymed.nlm.nih.gov)",
       "PubMed (pubmed.ncbi.nlm.nih.gov)"
     ],
-    "notes": "Every Major and Contraindicated entry has at least 1 authoritative source URL. Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor) normalized by verify_interactions.py. When type is Med-Sup, agent1 is the drug and agent2 is the supplement. Drug classes use class:id format; specific drugs use RXCUI. Supplement agents use UMLS CUI where confident.",
+    "notes": [
+      "Every Major and Contraindicated entry has at least 1 authoritative source URL. Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor) normalized by verify_interactions.py. When type is Med-Sup, agent1 is the drug and agent2 is the supplement. Drug classes use class:id format; specific drugs use RXCUI. Supplement agents use UMLS CUI where confident.",
+      "2026-09-22: Retired DSI_DIURETICS_POTASSIUM. Scoping it to class:potassium_sparing_diuretics on 2026-09-21 made it a second owner of the pair already held by DSI_POTASSIUM_SPARING_DIURETICS_POTASSIUM (batch_critical_2026_05, Major, DailyMed spironolactone labeling), which the interaction build rejects as a duplicate pair_key. The surviving rule carries the same direction/materiality and stronger management text; the loop/thiazide depletion fact stays with DEP_DIURETICS_POTASSIUM."
+    ],
     "migration_notes": [
       "2026-05-27T15:05:47Z: Fixed agent2_canonical_id misassignment on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY (phosphatidylserine -> genistein; soy isoflavones are pharmacologically distinct from phosphatidylserine). Added PMID 16571087 (Messina & Redmond, Thyroid 2006) to DSI_LEVOTHYROXINE_SOY source_pmids — content-verified via PubMed esummary API. Candidate PMID 15448175 rejected as ghost reference (real but off-topic: plant plasma membrane radicals).",
       "2026-05-27T15:08:14Z: Fixed agent2_id on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY. Source had C0301704 (UMLS-verified = phosphatidylserine) but agent2_name was \"Soy isoflavones\" — a CUI hallucination from the original Wave 8 ingestion. Reassigned to C0061202 (UMLS-verified = genistein, the predominant soy isoflavone and existing IQM canonical). verify_interactions.py CUI->canonical_id index will now resolve correctly without override.",
@@ -1028,38 +1031,6 @@
       "alert_style": "food_advisory_note",
       "note_body": "Grapefruit slows down how your body processes some blood pressure medicines (felodipine, nifedipine, amlodipine), so more of the drug ends up in your bloodstream. This can cause dizziness, flushing, or low blood pressure.",
       "practical_guidance": "Skip grapefruit and grapefruit juice while on these medicines. The effect can last 1–3 days, so timing the dose around grapefruit doesn't really help.",
-      "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
-      "id": "DSI_DIURETICS_POTASSIUM",
-      "type": "Med-Sup",
-      "agent1_name": "Potassium-sparing diuretics (class)",
-      "agent1_id": "class:potassium_sparing_diuretics",
-      "agent2_name": "Potassium",
-      "agent2_id": "C0032821",
-      "severity": "Moderate",
-      "interaction_effect_type": "Additive",
-      "mechanism": "Potassium-sparing diuretics (spironolactone, amiloride) retain potassium; adding supplements risks hyperkalemia.",
-      "management": "Avoid potassium supplements without physician guidance while taking a potassium-sparing diuretic.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": false
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "medium",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "potassium",
       "direction": "harmful",
       "materiality": "presence"
     },

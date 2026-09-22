@@ -34,8 +34,10 @@ BY_ID = {e["id"]: e for e in PAIRS}
 
 
 def test_every_pair_classified_with_valid_enums():
-    # 133 since 2026-09-21: DSI_BETABLOCK_MELATONIN retired to the depletion owner.
-    assert len(PAIRS) == 133, f"expected 133 reviewed pairs, found {len(PAIRS)}"
+    # 133 since 2026-09-21 (DSI_BETABLOCK_MELATONIN retired to the depletion
+    # owner); 132 since 2026-09-22 (DSI_DIURETICS_POTASSIUM retired: a second
+    # owner of the potassium-sparing diuretic pair).
+    assert len(PAIRS) == 132, f"expected 132 reviewed pairs, found {len(PAIRS)}"
     assert len(BY_ID) == len(PAIRS), "pairwise interaction ids must be unique"
     bad = []
     for e in PAIRS:
@@ -96,7 +98,7 @@ def test_narrow_ti_and_electrolyte_hazards_are_presence():
     """Adversarial-review carve-outs: Moderate/Additive pairs that are narrow-
     therapeutic-index (warfarin INR) or electrolyte/arrhythmia hazards must be
     presence (never dose-suppressed), not the default dose_dependent."""
-    for rid in ("DSI_WAR_VITE", "DSI_CORTICO_LICORICE", "DSI_DIURETICS_POTASSIUM"):
+    for rid in ("DSI_WAR_VITE", "DSI_CORTICO_LICORICE", "DSI_POTASSIUM_SPARING_DIURETICS_POTASSIUM"):
         assert BY_ID[rid].get("materiality") == "presence", \
             f"{rid} must be presence (never dose-suppressed), got {BY_ID[rid].get('materiality')}"
 

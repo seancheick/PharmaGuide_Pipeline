@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 
@@ -46,8 +47,10 @@ def test_interaction_rebuild_default_comes_from_tracked_release_config() -> None
     source = INTERACTION_SCRIPT.read_text()
     release_source = SCRIPT.read_text()
 
-    assert config["interaction_db_version"] == "1.0.11"
-    assert config["build_time_utc"] == "2026-07-30T16:32:44Z"
+    # The contract is that the rebuild reads the tracked config, not that the
+    # version never moves: a curated rule change must be able to bump it.
+    assert re.fullmatch(r"\d+\.\d+\.\d+", config["interaction_db_version"])
+    assert re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", config["build_time_utc"])
     assert 'INTERACTION_VERSION_CONFIG="$SCRIPT_DIR/config/interaction_db_release.json"' in source
     assert "interaction_db_version" in source
     assert "build_time_utc" in source

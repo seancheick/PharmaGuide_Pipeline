@@ -9,7 +9,14 @@ DATA = (
     / "curated_interactions_v1.json"
 )
 PAYLOAD = json.loads(DATA.read_text())
-BY_ID = {row["id"]: row for row in PAYLOAD["interactions"]}
+# A fact's owner can live in any curated file, so look across the set: the
+# potassium-sparing hyperkalemia rule moved to batch_critical_2026_05 when the
+# duplicate in v1 was retired (2026-09-22).
+BY_ID = {
+    row["id"]: row
+    for name in ("curated_interactions_v1.json", "med_med_pairs_v1.json", "batch_critical_2026_05.json")
+    for row in json.loads((DATA.parent / name).read_text())["interactions"]
+}
 
 
 def test_latest_interaction_copy_edit_is_recorded_in_metadata():
@@ -181,7 +188,7 @@ def test_depletion_facts_have_one_owner_and_safety_warnings_stay():
     The interaction layer keeps only a distinct supplement-safety fact about the
     same pair: potassium-sparing diuretic + added potassium -> hyperkalemia.
     """
-    rule = BY_ID["DSI_DIURETICS_POTASSIUM"]
+    rule = BY_ID["DSI_POTASSIUM_SPARING_DIURETICS_POTASSIUM"]
     assert rule["agent1_id"] == "class:potassium_sparing_diuretics"
     assert rule["materiality"] == "presence" and rule["direction"] == "harmful"
     text = (rule["mechanism"] + " " + rule["management"]).lower()
