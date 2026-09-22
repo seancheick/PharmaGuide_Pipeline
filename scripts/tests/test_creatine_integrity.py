@@ -358,3 +358,53 @@ def test_unspecified_form_aliases_unchanged_by_peg_work(iqm):
         f"(unspecified) form has PEG-creatine aliases leaked back: {peg_leaks}. "
         f"PEG-creatine has its own dedicated form."
     )
+
+
+@pytest.fixture(scope='module')
+def creatine_enricher():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    return SupplementEnricherV3()
+
+
+def test_creatine_anhydrous_is_not_a_monohydrate_alias(iqm):
+    aliases = iqm['creatine_monohydrate']['forms']['creatine monohydrate']['aliases']
+    assert 'creatine anhydrous' not in {alias.lower() for alias in aliases}
+
+
+def test_creatine_anhydrous_does_not_inherit_monohydrate_form(creatine_enricher):
+    match = creatine_enricher._match_quality_map(
+        'creatine anhydrous', 'creatine anhydrous',
+        creatine_enricher.databases['ingredient_quality_map'],
+    )
+    assert match is None
+
+
+@pytest.mark.parametrize('label,expected_form,expected_score', [
+    ('creatine monohydrate', 'creatine monohydrate', 14),
+    ('creatine hydrochloride', 'creatine hydrochloride', 11),
+])
+def test_explicit_creatine_form_identity_preserved(
+    creatine_enricher, label, expected_form, expected_score,
+):
+    match = creatine_enricher._match_quality_map(
+        label, label, creatine_enricher.databases['ingredient_quality_map'],
+    )
+    assert match is not None
+    assert match['canonical_id'] == 'creatine_monohydrate'
+    assert match['standard_name'] == 'Creatine'
+    assert match['form_id'] == expected_form
+    assert match['form_name'] == expected_form
+    assert match['score'] == expected_score
+    assert match['bio_score'] == expected_score
+    assert match['fallback_form_selected'] is False
+
+
+def test_cleaner_preserves_unmapped_creatine_anhydrous_label():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    name, mapped, _ = normalizer._enhanced_ingredient_mapping('creatine anhydrous')
+    assert name == 'creatine anhydrous'
+    assert mapped is False
+    assert normalizer._fast_ingredient_lookup('creatine anhydrous')['mapped'] is False

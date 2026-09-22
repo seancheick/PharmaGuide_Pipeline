@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 652,
       "total_forms": 1444,
-      "total_form_aliases": 12143,
+      "total_form_aliases": 12142,
       "parents_with_parent_aliases": 138,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,7 +60,7 @@
       "proteins": 16,
       "vitamins": 25
     },
-    "schema_version": "5.5.6",
+    "schema_version": "5.5.7",
     "last_updated": "2026-09-22",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -1735,6 +1735,15 @@
           "Restored three aliases the 2026-09-20 enzyme reconciliation (a8213c63) dropped entirely: 'digezyme' (the IQM's own penta-enzyme complex) to digestive_enzymes, bare 'glucanase' to unspecified digestive enzymes, 'protease, fungal' to protease.",
           "Form scores unchanged (13); new parents carry no consumer note."
         ]
+      },
+      "5.5.7": {
+        "date": "2026-09-22",
+        "audit": "creatine_hydration_identity_alias",
+        "changes": [
+          "Removed the creatine anhydrous alias from the named creatine monohydrate form after GSRS verification of monohydrate and PubChem verification of both identities; anhydrous creatine must not inherit monohydrate form evidence.",
+          "No form scores, identifiers, or clinical claims changed."
+        ],
+        "regression_tests": "scripts/tests/test_creatine_integrity.py"
       }
     },
     "category_enum": [
@@ -11722,7 +11731,6 @@
           "creatine powder",
           "micronized creatine",
           "Creapure Creatine Monohydrate",
-          "creatine anhydrous",
           "micronized creatine monohydrate",
           "creatine monohydrate supplement",
           "creatine supplement",
