@@ -1,0 +1,866 @@
+{
+  "reviewer": "Dr Pham (clinical review 2026-09-22), relayed by Sean B",
+  "request": "https://claude.ai/artifact/3Bhz3oj3qgLBsYZz3iwiof",
+  "verification": "Every PMID fetched live from PubMed (efetch XML) on 2026-09-22; title, publication type and each claim below checked against the abstract, or the open-access full text where named.",
+  "decisions": {
+    "1a_bi07": "A - sign off; single-strain credit is the acute lactose-digestion surrogate (36149331) only; 21436726 stays combination evidence",
+    "1b_bb12": "A - sign off; human evidence reviewed, mixed/limited",
+    "1c_la5_bb12_combinations": "A - approve 30439760 and 39102225 as literal combination records with an unregistered third strain; zero component credit",
+    "confirm": [
+      "LGG",
+      "S. boulardii",
+      "L. casei Shirota",
+      "MTCC 5856",
+      "DSM 17938",
+      "K12",
+      "HN019",
+      "299v",
+      "35624",
+      "BB536",
+      "HN001",
+      "SP1"
+    ],
+    "strength_adjustments": {
+      "LGG": "medium (moderate QoE)",
+      "S. boulardii": "medium (moderate QoE)",
+      "299v": "medium (n = 40)",
+      "HN001": "medium (mood outcome secondary)"
+    },
+    "null_no_efficacy_credit": [
+      "L. casei Shirota",
+      "HN019",
+      "35624"
+    ],
+    "replace_citation": {
+      "SNZ 1969": "36372047 -> 34119240",
+      "M18": "32250565 -> 23449874 (+37764667)",
+      "GBI-30, 6086": "29196920 -> 33110439",
+      "ATCC PTA 6475": "36261538 -> 29926979",
+      "CTV-05": "35659905 -> 32402161 (35659905 supportive)"
+    },
+    "withdraw_as_single_strain": [
+      "HEAL9",
+      "GR-1",
+      "RC-14",
+      "R0052",
+      "R0175",
+      "LA-5"
+    ],
+    "section3": "Proceed; correct CU1 wording (primary null; respiratory finding post hoc n = 44; 27825987 is safety data)",
+    "nissle_1917": "Record 15479682 as affirmative human active-comparator equivalence evidence for UC maintenance, medium strength, not null; no ordinary placebo-superiority credit until the scorer can weight active-comparator evidence",
+    "direction_invariant": "A missing direction is unresolved, never positive: every strain evidence summary states effect_direction from its verified cited record, and the probiotic scorer gives a missing direction no credit",
+    "atcc_pta_6475_benefits": "Keep bone health only; testosterone, immune and skin effects are animal-model findings"
+  },
+  "pmids": {
+    "11711768": {
+      "title": "A controlled, double-blind, randomized study on the efficacy of Lactobacillus plantarum 299V in patients with irritable bowel syndrome.",
+      "journal": "Eur J Gastroenterol Hepatol",
+      "year": "2001",
+      "publication_types": [
+        "Clinical Trial",
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "299v vs placebo, 40 patients (20 per arm), 4 weeks",
+        "Abdominal pain resolved in all 299v patients vs 11 placebo"
+      ],
+      "claims_failed": []
+    },
+    "12628548": {
+      "title": "Oral use of Lactobacillus rhamnosus GR-1 and L. fermentum RC-14 significantly alters vaginal flora: randomized, placebo-controlled trial in 64 healthy women.",
+      "journal": "FEMS Immunol Med Microbiol",
+      "year": "2003",
+      "publication_types": [
+        "Clinical Trial",
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "GR-1 + RC-14 together vs placebo, 64 healthy women, 60 days",
+        "BV microflora restored in 37% vs 13% (P = 0.02)"
+      ],
+      "claims_failed": []
+    },
+    "14631461": {
+      "title": "Probiotic beverage containing Lactobacillus casei Shirota improves gastrointestinal symptoms in patients with chronic constipation.",
+      "journal": "Can J Gastroenterol",
+      "year": "2003",
+      "publication_types": [
+        "Clinical Trial",
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "L. casei Shirota beverage vs placebo, n = 70, 4 weeks",
+        "Constipation severity and stool consistency improved"
+      ],
+      "claims_failed": []
+    },
+    "20974015": {
+      "title": "Assessment of psychotropic-like properties of a probiotic formulation (Lactobacillus helveticus R0052 and Bifidobacterium longum R0175) in rats and human subjects.",
+      "journal": "Br J Nutr",
+      "year": "2011",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "R0052 + R0175 formulation vs placebo in humans (and rats)"
+      ],
+      "claims_failed": []
+    },
+    "21436726": {
+      "title": "Probiotic bacteria Lactobacillus acidophilus NCFM and Bifidobacterium lactis Bi-07 versus placebo for the symptoms of bloating in patients with functional bowel disorders: a double-blind study.",
+      "journal": "J Clin Gastroenterol",
+      "year": "2011",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, N.I.H., Extramural",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "NCFM + Bi-07 combination, 2 x 10^11 CFU/d, 8 weeks, 60 patients",
+        "Primary endpoints global GI relief and treatment satisfaction; bloating reported as improved"
+      ],
+      "claims_failed": []
+    },
+    "23192454": {
+      "title": "Clinical effects of probiotic Bifidobacterium longum BB536 on immune function and intestinal microbiota in elderly patients receiving enteral tube feeding.",
+      "journal": "JPEN J Parenter Enteral Nutr",
+      "year": "2013",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "BB536 vs placebo, 45 elderly tube-fed patients, 12 weeks",
+        "Faecal bifidobacteria increased; HI titres not affected"
+      ],
+      "claims_failed": []
+    },
+    "23432408": {
+      "title": "Effects of a probiotic fermented milk on functional constipation: a randomized, double-blind, placebo-controlled study.",
+      "journal": "J Gastroenterol Hepatol",
+      "year": "2013",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "L. casei Shirota fermented milk vs placebo, 4 weeks",
+        "Primary outcomes not better than control at alpha = 5%"
+      ],
+      "claims_failed": []
+    },
+    "23449874": {
+      "title": "Influence of the probiotic Streptococcus salivarius strain M18 on indices of dental health in children: a randomized double-blind, placebo-controlled trial.",
+      "journal": "J Med Microbiol",
+      "year": "2013",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "M18 alone vs placebo, 100 caries-active children, 3 months",
+        "Plaque scores lower (P = 0.05)"
+      ],
+      "claims_failed": []
+    },
+    "26382580": {
+      "title": "Effect of the probiotic strain Bifidobacterium animalis subsp. lactis, BB-12®, on defecation frequency in healthy subjects with low defecation frequency and abdominal discomfort: a randomised, double-blind, placebo-controlled, parallel-group trial.",
+      "journal": "Br J Nutr",
+      "year": "2015",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "1,248 adults; BB-12 1 or 10 billion CFU/d vs placebo, 4 weeks",
+        "GI well-being not significant; responder OR 1.31 (0.98-1.75), P = 0.071",
+        "Tightened responder OR 1.55; mean defecation frequency P = 0.0065"
+      ],
+      "claims_failed": []
+    },
+    "26640504": {
+      "title": "Probiotic strain Bacillus subtilis CU1 stimulates immune system of elderly during common infectious disease period: a randomized, double-blind placebo-controlled study.",
+      "journal": "Immun Ageing",
+      "year": "2015",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "CU1 vs placebo, 100 adults aged 60-74",
+        "Primary days with CID symptoms 5.1 vs 6.6, P = 0.2015; respiratory-infection finding post hoc in the 44-person subset"
+      ],
+      "claims_failed": []
+    },
+    "26756877": {
+      "title": "Probiotics for the Prevention of Antibiotic-Associated Diarrhea in Children.",
+      "journal": "J Pediatr Gastroenterol Nutr",
+      "year": "2016",
+      "publication_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "ESPGHAN 2016: LGG and S. boulardii for paediatric AAD prevention, moderate QoE, strong recommendation",
+        "S. boulardii for C. difficile-associated diarrhoea: low QoE, conditional"
+      ],
+      "claims_failed": []
+    },
+    "27825987": {
+      "title": "Safety assessment of Bacillus subtilis CU1 for use as a probiotic in humans.",
+      "journal": "Regul Toxicol Pharmacol",
+      "year": "2017",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Safety assessment of CU1 from the same program"
+      ],
+      "claims_failed": []
+    },
+    "28166427": {
+      "title": "Efficacy of Bifidobacterium infantis 35624 in patients with irritable bowel syndrome: a meta-analysis.",
+      "journal": "Curr Med Res Opin",
+      "year": "2017",
+      "publication_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Systematic Review"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Meta-analysis: three single-strain 35624 trials, two composite",
+        "Single-strain 35624 did not improve abdominal pain, bloating or bowel-habit satisfaction"
+      ],
+      "claims_failed": []
+    },
+    "28943228": {
+      "title": "Effect of Lactobacillus rhamnosus HN001 in Pregnancy on Postpartum Symptoms of Depression and Anxiety: A Randomised Double-blind Placebo-controlled Trial.",
+      "journal": "EBioMedicine",
+      "year": "2017",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "HN001 vs placebo in pregnancy, 423 women",
+        "Postpartum depression/anxiety a secondary outcome; primary offspring eczema"
+      ],
+      "claims_failed": []
+    },
+    "29196920": {
+      "title": "Probiotic Bacillus coagulans GBI-30, 6086 Improves Protein Absorption and Utilization.",
+      "journal": "Probiotics Antimicrob Proteins",
+      "year": "2018",
+      "publication_types": [
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't",
+        "Review"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Narrative review of GBI-30, 6086 and protein absorption"
+      ],
+      "claims_failed": []
+    },
+    "29390535": {
+      "title": "Efficacy of Lactobacillus reuteri DSM 17938 for infantile colic: Systematic review with network meta-analysis.",
+      "journal": "Medicine (Baltimore)",
+      "year": "2017",
+      "publication_types": [
+        "Journal Article",
+        "Systematic Review",
+        "Network Meta-Analysis"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Network meta-analysis, 32 RCTs, 2,242 infants",
+        "DSM 17938 reduced crying duration"
+      ],
+      "claims_failed": []
+    },
+    "29926979": {
+      "title": "Lactobacillus reuteri reduces bone loss in older women with low bone mineral density: a randomized, placebo-controlled, double-blind, clinical trial.",
+      "journal": "J Intern Med",
+      "year": "2018",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "ATCC PTA 6475 10^10 CFU/d vs placebo, 90 women aged 75-80 with low BMD, 12 months",
+        "Primary tibia vBMD loss reduced (ITT mean difference 1.02%, 0.02-2.03)"
+      ],
+      "claims_failed": []
+    },
+    "30439760": {
+      "title": "Probiotic Yogurt for the Prevention of Antibiotic-associated Diarrhea in Adults: A Randomized Double-blind Placebo-controlled Trial.",
+      "journal": "J Clin Gastroenterol",
+      "year": "2019",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Yogurt with LA-5, BB-12 and L. casei LC-01 vs placebo yogurt; 314 hospitalized adults",
+        "AAD 23.0% vs 17.6%, P = 0.30; double-blind"
+      ],
+      "claims_failed": []
+    },
+    "30963591": {
+      "title": "Severity of Candida-associated denture stomatitis is improved in institutionalized elders who consume Lactobacillus rhamnosus SP1.",
+      "journal": "Aust Dent J",
+      "year": "2019",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "SP1 milk vs control, randomized triple-blind, 36 institutionalized elders with denture stomatitis",
+        "Severity and Candida counts reduced"
+      ],
+      "claims_failed": []
+    },
+    "31734734": {
+      "title": "Evaluation of the efficacy of Lactobacillus plantarum HEAL9 and Lactobacillus paracasei 8700:2 on aspects of common cold infections in children attending day care: a randomised, double-blind, placebo-controlled clinical study.",
+      "journal": "Eur J Nutr",
+      "year": "2020",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "HEAL9 + L. paracasei 8700:2 combination (Probi Defendum) vs placebo",
+        "131 randomized of 320 planned; nasal-congestion severity lower"
+      ],
+      "claims_failed": []
+    },
+    "32250565": {
+      "title": "Inhibitory effect of Streptococcus salivarius K12 and M18 on halitosis in vitro.",
+      "journal": "Clin Exp Dent Res",
+      "year": "2020",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "In vitro study of K12 and M18 on halitosis bacteria; not a human study"
+      ],
+      "claims_failed": []
+    },
+    "32402161": {
+      "title": "Randomized Trial of Lactin-V to Prevent Recurrence of Bacterial Vaginosis.",
+      "journal": "N Engl J Med",
+      "year": "2020",
+      "publication_types": [
+        "Clinical Trial, Phase II",
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial",
+        "Research Support, N.I.H., Extramural"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Lactin-V (CTV-05) vs placebo, phase 2b, 228 women",
+        "Primary BV recurrence by week 12: 30% vs 45%, RR 0.66 (0.44-0.87), P = .01"
+      ],
+      "claims_failed": []
+    },
+    "33110439": {
+      "title": "Bacillus coagulans GBI-30, 6086 improves amino acid absorption from milk protein.",
+      "journal": "Nutr Metab (Lond)",
+      "year": "2020",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "checked_against": "Europe PMC full text PMC7585191",
+      "claims_verified": [
+        "Randomized double-blind crossover, n = 30; milk protein with vs without GBI-30 (1 x 10^9 CFU)",
+        "Amino-acid AUC/Cmax/Tmax changes (pharmacokinetic surrogate)"
+      ],
+      "claims_failed": []
+    },
+    "34119240": {
+      "title": "Spore-forming Bacillus coagulans SNZ 1969 improved intestinal motility and constipation perception mediated by microbial alterations in healthy adults with mild intermittent constipation: A randomized controlled trial.",
+      "journal": "Food Res Int",
+      "year": "2021",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "B. coagulans SNZ 1969 alone vs placebo, n = 80, 8 weeks",
+        "CTT, CSBM (weeks 2, 9) and bowel discomfort improved"
+      ],
+      "claims_failed": []
+    },
+    "34405373": {
+      "title": "Effect of Probiotics Lactobacillus acidophilus and Lacticaseibacillus rhamnosus on Antibacterial Response Gene Transcription of Human Peripheral Monocytes.",
+      "journal": "Probiotics Antimicrob Proteins",
+      "year": "2023",
+      "publication_types": [
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Ex vivo: human CD14+ monocytes cultured with LA-5 and LR-32; not a supplementation trial"
+      ],
+      "claims_failed": []
+    },
+    "35659905": {
+      "title": "Sustained effect of LACTIN-V (Lactobacillus crispatus CTV-05) on genital immunology following standard bacterial vaginosis treatment: results from a randomised, placebo-controlled trial.",
+      "journal": "Lancet Microbe",
+      "year": "2022",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't",
+        "Research Support, N.I.H., Extramural"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "66-person immunology substudy of the LACTIN-V phase 2b trial; primary outcomes IL-1a and soluble E-cadherin"
+      ],
+      "claims_failed": []
+    },
+    "36149331": {
+      "title": "Bifidobacterium animalis subsp. lactis Bi-07 supports lactose digestion in vitro and in randomized, placebo- and lactase-controlled clinical trials.",
+      "journal": "Am J Clin Nutr",
+      "year": "2022",
+      "publication_types": [
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Bi-07 alone at 2 x 10^12 CFU with a lactose challenge in two crossover RCTs (Booster Alpha, Omega)",
+        "Primary outcome breath-hydrogen iAUC improved vs placebo in both trials",
+        "GI symptoms secondary; increased odds of nausea with Bi-07 in Booster Omega (OR 4.0)"
+      ],
+      "claims_failed": []
+    },
+    "36261538": {
+      "title": "One-year supplementation with Lactobacillus reuteri ATCC PTA 6475 counteracts a degradation of gut microbiota in older women with low bone mineral density.",
+      "journal": "NPJ Biofilms Microbiomes",
+      "year": "2022",
+      "publication_types": [
+        "Randomized Controlled Trial",
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Secondary analysis of selected good and poor responders from the ATCC PTA 6475 RCT"
+      ],
+      "claims_failed": []
+    },
+    "36372047": {
+      "title": "Probiotics and synbiotics in chronic constipation in adults: A systematic review and meta-analysis of randomized controlled trials.",
+      "journal": "Clin Nutr",
+      "year": "2022",
+      "publication_types": [
+        "Meta-Analysis",
+        "Systematic Review",
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Meta-analysis names B. coagulans Unique IS2 and L. casei Shirota, not SNZ 1969",
+        "Shirota: no significant stool-frequency effect"
+      ],
+      "claims_failed": []
+    },
+    "37686889": {
+      "title": "Outcome-Specific Efficacy of Different Probiotic Strains and Mixtures in Irritable Bowel Syndrome: A Systematic Review and Network Meta-Analysis.",
+      "journal": "Nutrients",
+      "year": "2023",
+      "publication_types": [
+        "Systematic Review",
+        "Journal Article",
+        "Network Meta-Analysis"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Network meta-analysis of 81 IBS RCTs",
+        "MTCC 5856 among the most effective for abdominal pain and IBS-D Bristol stool form"
+      ],
+      "claims_failed": []
+    },
+    "37764667": {
+      "title": "Antigingivitis and Antiplaque Effects of Oral Probiotic Containing the Streptococcus salivarius M18 Strain: A Randomized Clinical Trial.",
+      "journal": "Nutrients",
+      "year": "2023",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "Europe PMC full text PMC10535351",
+      "claims_verified": [
+        "M18-only lozenge (>= 5 x 10^8 CFU) vs placebo, 61 young adults with gingivitis",
+        "Gingival Index and plaque index improved"
+      ],
+      "claims_failed": []
+    },
+    "38215354": {
+      "title": "Streptococcus salivarius K12 Alleviates Oral Mucositis in Patients Undergoing Radiotherapy for Malignant Head and Neck Tumors: A Randomized Controlled Trial.",
+      "journal": "J Clin Oncol",
+      "year": "2024",
+      "publication_types": [
+        "Randomized Controlled Trial",
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "K12 vs placebo, n = 160, head-and-neck radiotherapy",
+        "Primary severe oral mucositis 36.6% vs 54.2%, P = .0351"
+      ],
+      "claims_failed": []
+    },
+    "39102225": {
+      "title": "Bifidobacterium and Lactobacillus Probiotics and Gut Dysbiosis in Preterm Infants: The PRIMAL Randomized Clinical Trial.",
+      "journal": "JAMA Pediatr",
+      "year": "2024",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Multicenter Study",
+        "Clinical Trial, Phase III"
+      ],
+      "checked_against": "Europe PMC full text PMC12549143",
+      "claims_verified": [
+        "PRIMAL phase 3: B. infantis + BB-12 + La-5, 28 days",
+        "Primary MDRO+ colonization aRR 0.99 (0.54-1.81); eubiosis improved",
+        "Full text: 1.5 x 10^9 CFU of each strain per daily capsule; cornstarch placebo"
+      ],
+      "claims_failed": []
+    },
+    "39271904": {
+      "title": "Bifidobacterium regulates premature infant gut metabolites, reducing serum inflammatory factors: a randomised controlled trial.",
+      "journal": "Pediatr Res",
+      "year": "2025",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "71 preterm infants <= 32 weeks, BB-12 group vs control",
+        "Lower TLR4, NF-kB, IL-1b, TNF-a; lower feeding-intolerance incidence; no dose in abstract"
+      ],
+      "claims_failed": []
+    },
+    "39356506": {
+      "title": "Eight-Week Supplementation With Bifidobacterium lactis HN019 and Functional Constipation: A Randomized Clinical Trial.",
+      "journal": "JAMA Netw Open",
+      "year": "2024",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "Europe PMC full text PMC11447574",
+      "claims_verified": [
+        "HN019 vs placebo, 229 randomized, triple-blind, 8 weeks",
+        "Primary CSBM change not different (P = .37)"
+      ],
+      "claims_failed": []
+    },
+    "15479682": {
+      "title": "Maintaining remission of ulcerative colitis with the probiotic Escherichia coli Nissle 1917 is as effective as with standard mesalazine.",
+      "journal": "Gut",
+      "year": "2004",
+      "publication_types": [
+        "Clinical Trial",
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Nissle 1917 vs mesalazine, double-blind double-dummy, 327 adults with UC in remission, 12 months",
+        "Primary aim equivalence in relapse prevention; per-protocol relapse 36.4% vs 33.9%, equivalence p = 0.003"
+      ],
+      "claims_failed": [],
+      "reviewer_cited_not_independently_verified": [
+        "Prespecified 20% equivalence margin; one-sided upper 95% CI 12.8% (PP) and 16.9% (ITT)",
+        "ITT relapse 45.1% vs 37.0%",
+        "Full text PMC1774300 is not open access; the API returns the abstract only"
+      ]
+    },
+    "23176716": {
+      "title": "Clinical changes in periodontal subjects with the probiotic Lactobacillus reuteri Prodentis: a preliminary randomized clinical trial.",
+      "journal": "Acta Odontol Scand",
+      "year": "2013",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "L. reuteri Prodentis vs placebo, 20 patients with chronic periodontitis, 30 days",
+        "Periodontal parameters improved within the test group; control unchanged"
+      ],
+      "claims_failed": []
+    },
+    "23614897": {
+      "title": "Effect of Lactobacillus gasseri SBT2055 in fermented milk on abdominal adiposity in adults in a randomised controlled trial.",
+      "journal": "Br J Nutr",
+      "year": "2013",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "L. gasseri SBT2055 fermented milk (10^7 or 10^6 cfu/g) vs control, 210 adults, 12 weeks",
+        "Visceral fat area fell from baseline in both dose groups; not in control"
+      ],
+      "claims_failed": []
+    },
+    "24717228": {
+      "title": "Lactobacillus acidophilus NCFM affects vitamin E acetate metabolism and intestinal bile acid signature in monocolonized mice.",
+      "journal": "Gut Microbes",
+      "year": "2014",
+      "publication_types": [
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "L. acidophilus NCFM in monocolonized germ-free mice; no human outcome"
+      ],
+      "claims_failed": []
+    },
+    "25926507": {
+      "title": "Effect of Lactobacillus paracasei subsp. paracasei, L. casei 431 on immune response to influenza vaccination and upper respiratory tract infections in healthy adult volunteers: a randomized, double-blind, placebo-controlled, parallel-group study.",
+      "journal": "Am J Clin Nutr",
+      "year": "2015",
+      "publication_types": [
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "L. casei 431 vs placebo, randomized double-blind, 1,104 healthy adults, 42 days",
+        "Primary influenza seroprotection not improved; upper-respiratory symptom duration shorter (secondary)"
+      ],
+      "claims_failed": []
+    },
+    "29688793": {
+      "title": "Lactobacillus gasseri BNR17 Supplementation Reduces the Visceral Fat Accumulation and Waist Circumference in Obese Adults: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+      "journal": "J Med Food",
+      "year": "2018",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "L. gasseri BNR17 low or high dose vs placebo, 90 obese adults, 12 weeks",
+        "Visceral adipose tissue fell vs placebo in the high-dose arm (P = .038)"
+      ],
+      "claims_failed": []
+    },
+    "32019158": {
+      "title": "Lactobacillus acidophilus DDS-1 and Bifidobacterium lactis UABla-12 Improve Abdominal Pain Severity and Symptomology in Irritable Bowel Syndrome: Randomized Controlled Trial.",
+      "journal": "Nutrients",
+      "year": "2020",
+      "publication_types": [
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Three-arm RCT: placebo, L. acidophilus DDS-1 alone, B. lactis UABla-12 alone (1 x 10^10 CFU/day), 330 adults with IBS, 6 weeks",
+        "Primary abdominal pain severity improved in both single-strain arms vs placebo (P = 0.001)"
+      ],
+      "claims_failed": []
+    },
+    "32856298": {
+      "title": "Oral 5-aminosalicylic acid for maintenance of remission in ulcerative colitis.",
+      "journal": "Cochrane Database Syst Rev",
+      "year": "2020",
+      "publication_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Cochrane review: oral 5-ASA more effective than placebo for maintaining UC remission (mesalazine is an evidence-based active control)"
+      ],
+      "claims_failed": []
+    },
+    "35249118": {
+      "title": "The effect of Bacillus coagulans Unique IS-2 supplementation on plasma amino acid levels and muscle strength in resistance trained males consuming whey protein: a double-blind, placebo-controlled study.",
+      "journal": "Eur J Nutr",
+      "year": "2022",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "B. coagulans Unique IS-2 (2 billion CFU) + whey vs placebo, resistance-trained males, 60 days",
+        "Plasma amino acids (primary aim, surrogate) rose; leg press 1RM and vertical-jump power improved"
+      ],
+      "claims_failed": []
+    },
+    "36018495": {
+      "title": "Bacillus clausii for Gastrointestinal Disorders: A Narrative Literature Review.",
+      "journal": "Adv Ther",
+      "year": "2022",
+      "publication_types": [
+        "Journal Article",
+        "Review",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Narrative literature review of Bacillus clausii; no pooled effect estimate"
+      ],
+      "claims_failed": []
+    },
+    "36644601": {
+      "title": "Lactobacillus fermentum ME-3: A Breakthrough in Glutathione Therapy.",
+      "journal": "Integr Med (Encinitas)",
+      "year": "2022",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Narrative article on L. fermentum ME-3 and glutathione; no human outcome reported"
+      ],
+      "claims_failed": []
+    },
+    "36741903": {
+      "title": "Real-time polymerase chain reaction methods for strain specific identification and enumeration of strain Lacticaseibacillus paracasei 8700:2.",
+      "journal": "Front Microbiol",
+      "year": "2022",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Real-time PCR method for identifying and enumerating L. paracasei 8700:2; no human outcome"
+      ],
+      "claims_failed": []
+    },
+    "38665561": {
+      "title": "The effect of probiotic Bifidobacterium lactis Bl-04 on innate antiviral responses invitro.",
+      "journal": "Heliyon",
+      "year": "2024",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "B. lactis Bl-04 innate antiviral responses in vitro; no human outcome"
+      ],
+      "claims_failed": []
+    },
+    "39631408": {
+      "title": "Bacillus subtilis DE111 partially reverses endothelial dysfunction in western-diet fed mice.",
+      "journal": "Benef Microbes",
+      "year": "2024",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "B. subtilis DE111 in western-diet-fed mice; no human outcome"
+      ],
+      "claims_failed": []
+    },
+    "40085083": {
+      "title": "Probiotics and Fever Duration in Children With Upper Respiratory Tract Infections: A Randomized Clinical Trial.",
+      "journal": "JAMA Netw Open",
+      "year": "2025",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Mixture of B. breve M-16V, B. lactis HN019 and L. rhamnosus HN001 vs placebo, 128 children with URTI",
+        "Primary fever duration 3 vs 5 days (aRR 0.64); a combination result"
+      ],
+      "claims_failed": []
+    },
+    "41607522": {
+      "title": "Integrating microbial genomics and neurotranscriptomics to understand the impact of probiotic strains on neurological health.",
+      "journal": "Front Cell Infect Microbiol",
+      "year": "2025",
+      "publication_types": [
+        "Journal Article"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Microbial genomics and neurotranscriptomics laboratory study including B. longum 1714; no human outcome"
+      ],
+      "claims_failed": []
+    },
+    "9354192": {
+      "title": "Double-blind comparison of an oral Escherichia coli preparation and mesalazine in maintaining remission of ulcerative colitis.",
+      "journal": "Aliment Pharmacol Ther",
+      "year": "1997",
+      "publication_types": [
+        "Clinical Trial",
+        "Comparative Study",
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "checked_against": "PubMed abstract",
+      "claims_verified": [
+        "Nissle 1917 vs mesalazine, double-blind double-dummy, 120 patients with inactive UC, 12 weeks",
+        "Relapse 16.0% vs 11.3% (NS); similar relapse-free time"
+      ],
+      "claims_failed": []
+    }
+  }
+}

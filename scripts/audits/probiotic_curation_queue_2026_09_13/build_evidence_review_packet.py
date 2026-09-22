@@ -99,7 +99,7 @@ def build() -> None:
     rejected_count = sum(
         count
         for status, count in status_counts.items()
-        if status in {"rejected", "review_rejected"}
+        if status in {"rejected", "review_rejected", "rejected_source"}
     )
     other_count = len(all_contexts) - pending_count - approved_count - rejected_count
 
@@ -114,7 +114,11 @@ def build() -> None:
         "",
         "## Where we are",
         "",
-        "The source records and citations have already been assembled. The decisions below have not yet been written into the registry, so no evidence change is shipped from this packet by itself.",
+        (f"No contexts require reviewer action in this snapshot. The registry currently contains {approved_count} "
+         "recorded approved contexts. The review protocol below is retained for provenance and for future reopened "
+         "contexts." if not contexts else
+         "The contexts below await review. Nothing in this packet changes the registry by itself; the engineering "
+         "owner applies each verified decision."),
         "",
         f"- **Pending review:** {pending_count}",
         f"- **Recorded approved:** {approved_count}",
@@ -129,6 +133,8 @@ def build() -> None:
         "- Each context already has an identity scope, population, condition, dose fields, outcomes, and limitations where available.",
         "- Clean → Enrich → Score is the production pipeline. Review decisions only change which evidence contexts are eligible; they do not bypass cleaning, enrichment, scoring, or release checks.",
         "- Unresolved values remain unresolved. The system never fills a missing dose, turns a combination result into single-strain evidence, or treats a ranking as a direct treatment effect.",
+        "- Missing direction is unresolved, never positive. Every outcome the scorer uses carries a source-supported `hierarchy`, `kind` and `direction`, and every strain evidence summary carries an explicit `effect_direction`; an outcome or summary without one earns no evidence credit.",
+        "- A withdrawn or replaced strain-summary citation is recorded on its identity (`cfu_thresholds.evidence.previous_citation`, `literature_review.withdrawn_citation`), not as a rejected context, so the counts above do not include it.",
         "",
         "## What the reviewer needs to do",
         "",

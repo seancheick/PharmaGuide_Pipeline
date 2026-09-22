@@ -247,14 +247,16 @@ def test_evidence_metadata_is_json_serializable():
 
 
 def test_registry_medium_support_is_not_lost():
-    p = strain_product(clinical_id="STRAIN_LONGUM_BB536", name="Bifidobacterium longum BB536")
+    # 299v: medium support with a positive between-group result. (BB536 was the example
+    # until its biomarker-only record was recorded as unresolved on 2026-09-22.)
+    p = strain_product(clinical_id="STRAIN_PLANTARUM_299V", name="Lactobacillus plantarum 299v")
     assert score_evidence(p)["score"] == 6
 
 
 def test_unfavorable_strain_does_not_hide_a_separate_supported_record():
     from test_v4_probiotic_evidence_p23 import _match
     p = strain_product()
-    other = strain_product(clinical_id="STRAIN_LONGUM_BB536", name="Bifidobacterium longum BB536")
+    other = strain_product(clinical_id="STRAIN_PLANTARUM_299V", name="Lactobacillus plantarum 299v")
     other["activeIngredients"][0]["raw_source_path"] = "ingredientRows[1]"
     other["probiotic_data"]["clinical_strains"][0]["source_row_ref"] = "ingredientRows[1]"
     p["activeIngredients"] += other["activeIngredients"]

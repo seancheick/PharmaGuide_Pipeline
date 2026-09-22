@@ -166,7 +166,12 @@ def test_clinician_signed_summary_wins_over_contexts(registry):
 
 
 def test_suspended_legacy_signoff_stays_under_the_clinician_gate(registry):
-    entry = registry["STRAIN_LACTIS_BB12"]
+    # BB-12's approved exact-strain contexts cannot replace a suspended clinician
+    # sign-off (its state 2026-09-04 to 2026-09-22, when Dr Pham restored it).
+    from test_evidence_completeness_closure_20260921 import suspend
+
+    entry = suspend(registry["STRAIN_LACTIS_BB12"])
+    assert pm.derived_context_evidence(entry) is not None  # approved contexts exist
     assert entry["cfu_thresholds"]["dr_pham_signoff"] is False
     assert pm.effective_strain_evidence(entry)["type"] != "study_contexts_derived"
     assert pm.identity_review_accepted(entry) is False

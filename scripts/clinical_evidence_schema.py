@@ -282,6 +282,10 @@ def _outcome_errors(context: Mapping) -> list[str]:
         role = outcome.get("outcome_role")
         if role is not None and role not in OUTCOME_ROLE:
             errors.append(f"{prefix}.outcome_role_invalid")
+        # A trial's primary outcome is not a subgroup finding or a result borrowed
+        # from a companion report.
+        if outcome.get("hierarchy") == "primary" and role in {"post_hoc_subgroup", "companion_reported_context"}:
+            errors.append(f"{prefix}.primary_role_contradiction")
         if role == "network_ranking":
             if outcome.get("kind") != "evidence_ranking":
                 errors.append("outcome.network_ranking_kind_must_be_evidence_ranking")

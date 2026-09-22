@@ -37,6 +37,12 @@ REG = ROOT / "scripts/data/clinically_relevant_strains.json"
 
 RESPONSE = REG.parents[2] / "docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json"
 OWNER_DECISION_FIELDS = ("review_status", "clinical_review", "scoring_eligible", "rejection_reason")
+# A row a later review re-decided or corrected is owned and verified by that review's
+# applier (Dr Pham, 2026-09-22: the two held LA-5 + BB-12 trials approved as
+# combination records; the Codex audit response's recorded corrections); here only
+# its identity is checked.
+LATER_CLINICAL_REVIEWS = frozenset({"scripts/audits/closure_20260921/PHAM_REVIEW_20260922.json",
+                                    "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json"})
 
 
 def _declared_disposition_patches():
@@ -743,6 +749,12 @@ def main():
             for field_path, new_value in patches.get(row["context_id"], []):
                 _write_path_appending(expected, field_path, new_value)
             current = stored.get(row["context_id"])
+            review = (current.get("clinical_review") or {}) if isinstance(current, dict) else {}
+            if isinstance(current, dict) and (review.get("basis") in LATER_CLINICAL_REVIEWS or (
+                    review.get("corrected_by") or {}).get("basis") in LATER_CLINICAL_REVIEWS):
+                # A later review may also move a row to a more specific identity (CNCM I-745).
+                assert current["source_pmids"] == row["source_pmids"], row["context_id"]
+                continue
             decision = decisions.get(row["context_id"])
             if decision and isinstance(current, dict):
                 # The owner's final status and its provenance come from the

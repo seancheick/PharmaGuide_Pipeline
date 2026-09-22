@@ -47,8 +47,8 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
         "postpartum",
     },
     "infant": {
-        "infant", "baby", "pediatric", "children", "child", "kids",
-        "toddler", "preterm", "neonatal",
+        "infant", "infants", "baby", "babies", "pediatric", "children", "child", "kids",
+        "toddler", "toddlers", "preterm", "neonatal", "neonates",
     },
     "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
     "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat"},
@@ -372,7 +372,9 @@ def _is_strain_match(match: dict) -> bool:
 
 
 def _effect_multiplier(match: dict) -> float:
-    effect = _norm_text(match.get("effect_direction") or "positive_strong").replace(" ", "_")
+    # A missing direction is unresolved, never positive: evidence earns credit only
+    # when its record states which way the result went (generic Evidence agrees).
+    effect = _norm_text(match.get("effect_direction")).replace(" ", "_")
     return EFFECT_DIRECTION_MULTIPLIERS.get(effect, 0.0)
 
 

@@ -911,7 +911,13 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
             or not text_list(context.get("source_pmids"))
             or not text_list(context.get("components"))
             or reference_id not in context["components"]
-            or not set(context["components"]) <= set(_clinical_strain_registry())
+            # A tested component the registry cannot hold (an unnamed or
+            # unregistered strain) is allowed only in a frozen record that
+            # declares it; the schema check below ties the declaration to the
+            # unknown ids, so it cannot hide a fully registered formula.
+            or not (set(context["components"]) <= set(_clinical_strain_registry())
+                    or (context.get("context_schema_version") is not None
+                        and context.get("component_registration_status") == "unregistered_components_present"))
             or context.get("identity_scope") not in ("exact_strain", "species_general", "combination")
             or context.get("purpose") not in ("prevention", "treatment", "challenge", "physiology")
             or not text_list(context.get("limitations"))):

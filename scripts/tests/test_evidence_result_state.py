@@ -102,15 +102,16 @@ def test_review_gap_and_undisclosed_strain_dose_are_both_named(monkeypatch):
 
 
 def test_finished_review_still_names_undisclosed_strain_amounts():
-    # R0052's contexts are clinician-approved (a finished review that establishes no
-    # applicability); the label still gives no per-strain CFU, and that separate
-    # limit must stay visible. (NCFM used to be the example; its own approved human
-    # trials now own its human evidence and read as a reviewed null.)
+    # Bi-07's contexts are clinician-reviewed (Dr Pham, 2026-09-22): a finished review
+    # that establishes no applicability, since its exact-strain primary outcome is a
+    # surrogate. The label still gives no per-strain CFU, and that separate limit must
+    # stay visible. (R0052 was the example until Dr Pham withdrew its combination trial
+    # as single-strain evidence; NCFM before that now reads as a reviewed null.)
     from scoring_v4.modules.probiotic_evidence import score_evidence as probiotic_evidence
     from test_probiotic_applicability_rubric import strain_product
 
-    product = strain_product(clinical_id="STRAIN_HELVETICUS_R0052",
-                             name="Lactobacillus helveticus R0052", dose=None)
+    product = strain_product(clinical_id="STRAIN_LACTIS_BI07",
+                             name="Bifidobacterium lactis Bi-07", dose=None)
     evidence = probiotic_evidence(product)
     assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
     reason = _pillar_evidence(evidence, 20, "probiotic", _config())["reason"]

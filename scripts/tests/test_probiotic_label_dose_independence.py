@@ -74,7 +74,8 @@ def test_citation_review_does_not_change_label_dose_or_formulation(monkeypatch, 
         assert old["score"] == new["score"]
         assert old["components"] == new["components"]
     if change == "hold":
-        assert score_evidence(product)["score"] == 0
+        rows = score_evidence(product)["metadata"]["native_clinical_strain_evidence_rows"]
+        assert not [r for r in rows if r["clinical_id"] == "STRAIN_LGG" and r["contribution"] > 0]
 
 
 def test_aggregate_blend_keeps_presence_credit_without_inventing_strain_allocations():

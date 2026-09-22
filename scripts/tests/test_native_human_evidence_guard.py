@@ -111,7 +111,7 @@ def test_native_primary_effect_direction_is_not_defaulted_to_positive(monkeypatc
     registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["effect_direction"] = direction
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
     result = score_evidence(strain_product())
-    assert result["score"] == 8 * multiplier
+    assert result["score"] == pytest.approx(6 * multiplier)  # LGG is medium since Dr Pham's 2026-09-22 review
     assert result["metadata"]["native_clinical_strain_evidence_rows"][0]["effect_direction"] == direction
     if direction == "negative":
         assert result["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
@@ -135,7 +135,12 @@ def test_nonhuman_zero_is_not_presented_as_evidence_of_no_benefit(monkeypatch):
     ("STRAIN_LACTIS_BB12", "Bifidobacterium lactis BB-12"),
     ("STRAIN_LACTIS_BI07", "Bifidobacterium lactis Bi-07"),
 ])
-def test_native_source_hold_is_a_review_gap_not_a_negative_result(clinical_id, name):
+def test_native_source_hold_is_a_review_gap_not_a_negative_result(monkeypatch, clinical_id, name):
+    # Both sign-offs were suspended 2026-09-04 and restored by Dr Pham on 2026-09-22;
+    # the suspended state is modelled so the hold's copy stays pinned.
+    from test_evidence_completeness_closure_20260921 import suspend_signoff
+
+    suspend_signoff(monkeypatch, clinical_id)
     result = score_evidence(strain_product(clinical_id=clinical_id, name=name))
     assert result["score"] == 0
     assert result["metadata"]["evidence_result_state"] == "native_research_review_incomplete"

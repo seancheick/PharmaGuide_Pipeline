@@ -18,7 +18,7 @@ AMBIGUOUS_ALIASES = {"human milk oligosaccharide"}  # declared on both 2'-FL and
 def test_catalog_is_the_registry_prebiotic_list():
     rows = json.loads(REGISTRY.read_text())["prebiotics"]["ingredients"]
     assert [name for name, _ in prebiotic_catalog()] == [r["standard_name"] for r in rows]
-    assert len(rows) == 14
+    assert len(rows) == 15  # Resistant Dextrin split from Resistant Starch (2026-09-22)
 
 
 def test_every_catalog_name_and_alias_resolves_to_its_own_entry():
@@ -43,7 +43,7 @@ def test_no_undeclared_duplicate_aliases_across_entries():
     ("FOS (Fructooligosaccharides)", "Fructooligosaccharides"),
     ("Partially Hydrolyzed Guar Gum (Sunfiber)", "Partially Hydrolyzed Guar Gum"),
     ("XOS 95%", "Xylooligosaccharides"),
-    ("Digestion Resistant Maltodextrin", "Resistant Starch"),
+    ("Digestion Resistant Maltodextrin", "Resistant Dextrin"),
     ("Oat Beta-Glucan", "Beta-Glucan"),
     ("2'-FL", "2'-Fucosyllactose"),
     ("Raftiline HP", "Inulin"),

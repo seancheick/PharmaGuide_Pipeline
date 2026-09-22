@@ -1,0 +1,420 @@
+{
+  "source": "Codex probiotic registry audit (26 findings) and a second review (10 corrections), both relayed by Sean B on 2026-09-22",
+  "audited_snapshot_note": "Codex audited an intermediate registry (after Dr Pham's decisions, before the explicit-direction pass).",
+  "verification": "Every cited PMID fetched live from PubMed (efetch XML); DRACMA (PMC11415968), Bi-26 (PMC13167951) and the 2025 Prodentis RCT (PMC12380889) read in open-access full text. The BB-12 preterm, NCFM child-cold, Bl-04 and BS01 full texts are not open access, so their primary endpoints stay unresolved.",
+  "scope_rule": "Label-bounded catalog of supplements and medications: identities absent from every catalog label are not added (MIMBb75).",
+  "findings": {
+    "A01": {
+      "status": "applied",
+      "action": "HEAL9 review reopened; single-strain RCT 37571403 recorded; Dr Pham's withdrawal of the HEAL9 + 8700:2 trial stands"
+    },
+    "A02": {
+      "status": "applied",
+      "action": "431 source type corrected in pham_review_20260922.py; vaccine-response benefit claim removed"
+    },
+    "A03": {
+      "status": "applied",
+      "action": "M-16V: combination trial no longer its anchor; NEC claim removed; anchored to strain-specific review 28796951 (null)"
+    },
+    "A04": {
+      "status": "applied",
+      "action": "DRACMA context: LGG tolerance and wheezing estimates removed from CRL431 + BB-12; scoring stays disabled"
+    },
+    "A05": {
+      "status": "applied",
+      "action": "Prodentis single-strain aliases removed; strain-level credit fail-closed; 2025 null RCT added"
+    },
+    "A06": {
+      "status": "applied",
+      "action": "ATCC PTA 6475 mixed: 2024 null RCT (38865129) added; BMD recorded as a surrogate"
+    },
+    "A07": {
+      "status": "applied",
+      "action": "CTV-05 intravaginal evidence gives oral labels no credit (direction unresolved)"
+    },
+    "A08": {
+      "status": "already_fixed",
+      "action": "all strain summaries state an explicit direction; the scorer fails closed on a missing one"
+    },
+    "A09": {
+      "status": "applied",
+      "action": "UABla-12 solo-arm context added; DDS-1 record's stale limitations corrected"
+    },
+    "A10": {
+      "status": "applied",
+      "action": "Nissle recorded as human active-comparator equivalence evidence; unsourced 'EMA approved' removed"
+    },
+    "A11": {
+      "status": "applied",
+      "action": "indications and benefits bound to their records for K12, HN001, BB536, IS-2, BC30, SP1, DSM 17938 (score-neutral: relevance is metadata)"
+    },
+    "A12": {
+      "status": "applied",
+      "action": "8700:2, ME-3, 1714 source types corrected; 1714 RCTs 38355674 and 42060410 recorded (both primary null); ME-3 kefir trial has no PubMed record and is not added"
+    },
+    "A13": {
+      "status": "applied",
+      "action": "BB-12 infant-colic RCTs 31797399 and 34550055 recorded"
+    },
+    "A14": {
+      "status": "applied",
+      "action": "35624 dose-ranging RCT 16863564 recorded; Shirota stress/sleep not added (no Shirota label in the catalog); BC30 2025 trial's primary endpoint left unresolved (abstract names none)"
+    },
+    "A15": {
+      "status": "applied",
+      "action": "LGG acute-gastroenteritis RCT 30462938 (null) and 299v IBS RCT 22912552 recorded"
+    },
+    "A16": {
+      "status": "applied",
+      "action": "LAFTI L10 identity follows the label and current sources (L. helveticus); RCT 27363733 recorded; acidophilus-era identity left unproven"
+    },
+    "A17": {
+      "status": "applied",
+      "action": "resistant maltodextrin moved to its own 'Resistant Dextrin' entry; 'polyphenol-based prebiotic' and 'guar fiber' aliases removed"
+    },
+    "A18": {
+      "status": "reviewed_no_change",
+      "action": "industry CFU bands already labelled convention in every note; dose applicability uses study contexts, not the bands"
+    },
+    "A19": {
+      "status": "reviewed_no_change",
+      "action": "the 6 contexts whose hierarchy could change credit were checked; no open-access source names a primary endpoint, so they stay unresolved"
+    },
+    "A20": {
+      "status": "applied",
+      "action": "validator rejects a primary outcome carrying a subgroup or companion role; derivation ignores within-group, subgroup, companion and ranking effects; LGG pain and GR-1 MDR records corrected"
+    },
+    "A21": {
+      "status": "applied",
+      "action": "BC30 + enzymes and the synbiotic pasta contexts made ineligible (co-formulated or food interventions)"
+    },
+    "A22": {
+      "status": "applied",
+      "action": "derived 'strong' now needs two positive trials of the same condition"
+    },
+    "A23": {
+      "status": "applied",
+      "action": "measured transit reclassified as a surrogate; Bi-26 adverse-event limitation added"
+    },
+    "A24": {
+      "status": "applied",
+      "action": "Bi-26 dose recorded from full text as an end-of-shelf-life minimum; CU1 intermittent schedule noted"
+    },
+    "A25": {
+      "status": "applied",
+      "action": "IS-2 yes count 3; stale NCFM, Lpc-37, Prodentis and IS-2 notes rewritten"
+    },
+    "A26": {
+      "status": "declined",
+      "action": "MIMBb75 appears on no catalog label; the registry is label-bounded"
+    },
+    "R1": {
+      "status": "applied",
+      "action": "IS-2 arithmetic and stale note"
+    },
+    "R2": {
+      "status": "applied",
+      "action": "DSM 17938 gastroenteritis indication cites 31739457"
+    },
+    "R3": {
+      "status": "applied",
+      "action": "SP1 acne pilot 27596801 added; both indications kept, modestly"
+    },
+    "R4": {
+      "status": "applied",
+      "action": "8700:2 RCT 37506599 recorded (biomarkers); cold/immune claims removed"
+    },
+    "R5": {
+      "status": "applied",
+      "action": "1714 claims and level brought in line with its null-primary RCTs"
+    },
+    "R6": {
+      "status": "applied",
+      "action": "ME-3 double-blind human arm 16080791 recorded (biomarkers)"
+    },
+    "R7": {
+      "status": "applied",
+      "action": "Prodentis fail-closed; ATCC 55730 and PTA 5289 aliases removed"
+    },
+    "R8": {
+      "status": "applied",
+      "action": "STRAIN_BOULARDII_CNCM_I745 created; six I-745 records moved; I-745 and Florastor aliases moved"
+    },
+    "R9": {
+      "status": "applied",
+      "action": "Enterogermina alias removed from the species node; its trials are formula-level"
+    },
+    "R10": {
+      "status": "applied",
+      "action": "M-16V anchored to 28796951: no significant RCT benefit, very low certainty"
+    }
+  },
+  "pmids": {
+    "16080791": {
+      "title": "Evaluation of the functional efficacy of an antioxidative probiotic in healthy volunteers.",
+      "journal": "Nutr J",
+      "year": "2005",
+      "publication_types": [
+        "Controlled Clinical Trial",
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "16863564": {
+      "title": "Efficacy of an encapsulated probiotic Bifidobacterium infantis 35624 in women with irritable bowel syndrome.",
+      "journal": "Am J Gastroenterol",
+      "year": "2006",
+      "publication_types": [
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "19332970": {
+      "title": "Bacillus coagulans significantly improved abdominal pain and bloating in patients with IBS.",
+      "journal": "Postgrad Med",
+      "year": "2009",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ]
+    },
+    "21418261": {
+      "title": "Randomised clinical trial: Bifidobacterium bifidum MIMBb75 significantly alleviates irritable bowel syndrome and improves quality of life--a double-blind, placebo-controlled study.",
+      "journal": "Aliment Pharmacol Ther",
+      "year": "2011",
+      "publication_types": [
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "22912552": {
+      "title": "Clinical trial: Lactobacillus plantarum 299v (DSM 9843) improves symptoms of irritable bowel syndrome.",
+      "journal": "World J Gastroenterol",
+      "year": "2012",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "26509502": {
+      "title": "The Efficacy and Safety of the Probiotic Bacterium Lactobacillus reuteri DSM 17938 for Infantile Colic: A Meta-Analysis of Randomized Controlled Trials.",
+      "journal": "PLoS One",
+      "year": "2015",
+      "publication_types": [
+        "Journal Article",
+        "Meta-Analysis"
+      ]
+    },
+    "27363733": {
+      "title": "Lactobacillus helveticus Lafti L10 supplementation reduces respiratory infection duration in a cohort of elite athletes: a randomized, double-blind, placebo-controlled trial.",
+      "journal": "Appl Physiol Nutr Metab",
+      "year": "2016",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ]
+    },
+    "27596801": {
+      "title": "Supplementation with Lactobacillus rhamnosus SP1 normalises skin expression of genes implicated in insulin signalling and improves adult acne.",
+      "journal": "Benef Microbes",
+      "year": "2016",
+      "publication_types": [
+        "Journal Article"
+      ]
+    },
+    "28443383": {
+      "title": "Beneficial effects of Lactobacillus casei strain Shirota on academic stress-induced sleep disturbance in healthy adults: a double-blind, randomised, placebo-controlled trial.",
+      "journal": "Benef Microbes",
+      "year": "2017",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ]
+    },
+    "28796951": {
+      "title": "Bifidobacterium breve M-16V as a Probiotic for Preterm Infants: A Strain-Specific Systematic Review.",
+      "journal": "JPEN J Parenter Enteral Nutr",
+      "year": "2018",
+      "publication_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Systematic Review"
+      ]
+    },
+    "30462938": {
+      "title": "Lactobacillus rhamnosus GG versus Placebo for Acute Gastroenteritis in Children.",
+      "journal": "N Engl J Med",
+      "year": "2018",
+      "publication_types": [
+        "Comparative Study",
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial",
+        "Research Support, N.I.H., Extramural",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "31162597": {
+      "title": "Glucose- and Lipid-Related Biomarkers Are Affected in Healthy Obese or Hyperglycemic Adults Consuming a Whole-Grain Pasta Enriched in Prebiotics and Probiotics: A 12-Week Randomized Controlled Trial.",
+      "journal": "J Nutr",
+      "year": "2019",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "31739457": {
+      "title": "Systematic Review with Meta-Analysis: Lactobacillus reuteri DSM 17938 for Treating Acute Gastroenteritis in Children. An Update.",
+      "journal": "Nutrients",
+      "year": "2019",
+      "publication_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Systematic Review"
+      ]
+    },
+    "31797399": {
+      "title": "The therapeutic efficacy of Bifidobacterium animalis subsp. lactis BB-12® in infant colic: A randomised, double blind, placebo-controlled trial.",
+      "journal": "Aliment Pharmacol Ther",
+      "year": "2020",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "32277872": {
+      "title": "Heat-inactivated Bifidobacterium bifidum MIMBb75 (SYN-HI-001) in the treatment of irritable bowel syndrome: a multicentre, randomised, double-blind, placebo-controlled clinical trial.",
+      "journal": "Lancet Gastroenterol Hepatol",
+      "year": "2020",
+      "publication_types": [
+        "Journal Article",
+        "Multicenter Study",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "32318476": {
+      "title": "A prospective, randomized, open-label, placebo-controlled comparative study of Bacillus coagulans GBI-30,6086 with digestive enzymes in improving indigestion in geriatric population.",
+      "journal": "J Family Med Prim Care",
+      "year": "2020",
+      "publication_types": [
+        "Journal Article"
+      ]
+    },
+    "34550055": {
+      "title": "Efficacy of Bifidobacterium animalis subsp. lactis, BB-12® on infant colic - a randomised, double-blinded, placebo-controlled study.",
+      "journal": "Benef Microbes",
+      "year": "2021",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ]
+    },
+    "35397572": {
+      "title": "Efficacy and safety of Bacillus clausii (O/C, N/R, SIN, T) probiotic combined with oral rehydration therapy (ORT) and zinc in acute diarrhea in children: a randomized, double-blind, placebo-controlled study in India.",
+      "journal": "Trop Dis Travel Med Vaccines",
+      "year": "2022",
+      "publication_types": [
+        "Journal Article"
+      ]
+    },
+    "37506599": {
+      "title": "Cardiometabolic benefits of Lacticaseibacillus paracasei 8700:2: A randomized double-blind placebo-controlled trial.",
+      "journal": "Clin Nutr",
+      "year": "2023",
+      "publication_types": [
+        "Randomized Controlled Trial",
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "37571403": {
+      "title": "Intake of Lactiplantibacillus plantarum HEAL9 Improves Cognition in Moderately Stressed Subjects: A Randomized Controlled Study.",
+      "journal": "Nutrients",
+      "year": "2023",
+      "publication_types": [
+        "Randomized Controlled Trial",
+        "Journal Article"
+      ]
+    },
+    "38355674": {
+      "title": "Bifidobacterium longum 1714 improves sleep quality and aspects of well-being in healthy adults: a randomized, double-blind, placebo-controlled clinical trial.",
+      "journal": "Sci Rep",
+      "year": "2024",
+      "publication_types": [
+        "Randomized Controlled Trial",
+        "Journal Article"
+      ]
+    },
+    "38865129": {
+      "title": "Limosilactobacillus reuteri 6475 and Prevention of Early Postmenopausal Bone Loss: A Randomized Clinical Trial.",
+      "journal": "JAMA Netw Open",
+      "year": "2024",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ]
+    },
+    "39310372": {
+      "title": "World Allergy Organization (WAO) Diagnosis and Rationale for Action against Cow's Milk Allergy (DRACMA) guideline update - XI - Milk supplement/replacement formulas for infants and toddlers with CMA - Systematic review.",
+      "journal": "World Allergy Organ J",
+      "year": "2024",
+      "publication_types": [
+        "Journal Article"
+      ]
+    },
+    "40707016": {
+      "title": "Impact of Heyndrickxia (Bacillus) coagulans GBI-30, 6086 (BC30) probiotic on gastrointestinal function in healthy adults: a randomised controlled trial.",
+      "journal": "Benef Microbes",
+      "year": "2025",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ]
+    },
+    "40856866": {
+      "title": "Clinical and microbiological effectiveness of limosilactobacillus reuteri in supportive periodontal therapy: randomized clinical trial.",
+      "journal": "Clin Oral Investig",
+      "year": "2025",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ]
+    },
+    "42060410": {
+      "title": "Effects of Bifidobacterium longum 1714 on low mood and related symptoms: A randomized, double-blind, placebo-controlled trial.",
+      "journal": "Exp Clin Psychopharmacol",
+      "year": "2026",
+      "publication_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ]
+    },
+    "42137872": {
+      "title": "Impact of Bifidobacterium infantis supplementation on growth, health outcomes, and gut microbiome features in underweight infants from Pakistan.",
+      "journal": "Front Nutr",
+      "year": "2026",
+      "publication_types": [
+        "Clinical Trial",
+        "Journal Article"
+      ]
+    }
+  },
+  "countersign_for_dr_pham": [
+    "new study contexts (HEAL9, BB-12 x2, 1714 x2, 35624, LGG, 299v, LAFTI L10, UABla-12, 8700:2, ME-3)",
+    "M-16V anchor swap to 28796951",
+    "CTV-05 oral route exclusion",
+    "ATCC PTA 6475 mixed direction",
+    "L. casei 431 strength after its source-type correction",
+    "Nissle equivalence weighting (policy)"
+  ]
+}

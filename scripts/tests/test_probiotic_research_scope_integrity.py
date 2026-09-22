@@ -43,7 +43,7 @@ def test_unknown_scope_preserves_contextual_credit_without_inventing_specificity
     assert row["research_accepted"] is True
     assert row["evidence_scope"] == "scope_unresolved"
     assert row["dose_applicable"] is False
-    assert result["score"] == 8
+    assert result["score"] == 6  # LGG is medium since Dr Pham's 2026-09-22 review
     reason = _pillar_evidence(result, 20, "probiotic", config())["reason"]
     assert "specificity" in reason
     assert "incomplete" in reason

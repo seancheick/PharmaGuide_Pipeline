@@ -139,6 +139,32 @@ def unreview_strain(monkeypatch, strain_id):
     return rows
 
 
+SUSPENDED_SUMMARY = {"type": "unverified_reference", "pmid": None, "evidence_strength": "unreviewed",
+                     "clinical_validation": {"q1_strain_explicit": "UNCLEAR", "q3_human_clinical": "NO"}}
+
+
+def suspend(entry):
+    """Model a suspended clinician sign-off: the state Bi-07 and BB-12 held from
+    2026-09-04 until Dr Pham restored both on 2026-09-22."""
+    from copy import deepcopy
+
+    thresholds = entry["cfu_thresholds"]
+    thresholds["dr_pham_signoff"] = False
+    thresholds["evidence"] = deepcopy(SUSPENDED_SUMMARY)
+    entry.update(evidence_level="unreviewed", key_benefits=[])
+    return entry
+
+
+def suspend_signoff(monkeypatch, strain_id):
+    from copy import deepcopy
+    import studied_formulas
+
+    rows = deepcopy(studied_formulas._clinical_strain_registry())
+    suspend(rows[strain_id])
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: rows)
+    return rows
+
+
 def _reviewed_strain_with_stub():
     from test_probiotic_applicability_rubric import strain_product
 
@@ -261,12 +287,12 @@ def test_surrogate_only_contexts_are_unresolved_not_a_failed_trial():
 
 
 def test_a_literature_review_never_lifts_a_clinician_hold():
-    """Bi-07's suspended sign-off stays a hold even if a review conclusion is added."""
+    """A suspended sign-off stays a hold even if a review conclusion is added."""
     from copy import deepcopy
     import studied_formulas
     from probiotic_measurements import strain_literature_review_concluded
 
-    entry = deepcopy(studied_formulas._clinical_strain_registry()["STRAIN_LACTIS_BI07"])
+    entry = suspend(deepcopy(studied_formulas._clinical_strain_registry()["STRAIN_LACTIS_BI07"]))
     entry["literature_review"] = {"conclusion": "no_qualifying_human_evidence",
                                   "reason": "combination_only_human_research", "reviewed_on": "2026-09-22",
                                   "reviewer": "x", "search_query": "x", "basis": "x", "pmids_screened": []}

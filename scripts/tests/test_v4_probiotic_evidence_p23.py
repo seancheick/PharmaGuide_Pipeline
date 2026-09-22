@@ -13,6 +13,11 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
+# LGG's native record is medium (moderate support) since Dr Pham's 2026-09-22 review:
+# ESPGHAN 2016 grades its paediatric AAD evidence moderate quality.
+LGG_POINTS = 6.0
+
+
 def _match(
     *,
     id: str = "STRAIN_LGG_EVIDENCE",
@@ -104,15 +109,15 @@ def test_undosed_strain_receives_contextual_evidence_without_marketing_points() 
     payload = score_evidence(_product())
 
     assert payload["max"] == 20.0
-    assert payload["score"] == 8.0
+    assert payload["score"] == LGG_POINTS
     assert payload["components"] == {
-        "strain_clinical_evidence": 8.0,
+        "strain_clinical_evidence": LGG_POINTS,
         "dose_applicability": 0.0,
     }
     assert payload["metadata"]["phase"] == "P2.3_probiotic_evidence"
     assert payload["metadata"]["indication_relevance_level"] == "direct"
     assert payload["metadata"]["claim_alignment"]["level"] == "direct"
-    assert payload["metadata"]["native_clinical_strain_evidence_score"] == 8.0
+    assert payload["metadata"]["native_clinical_strain_evidence_score"] == LGG_POINTS
 
 
 def test_native_clinical_strain_evidence_scores_when_generic_matches_are_missing() -> None:
@@ -123,8 +128,9 @@ def test_native_clinical_strain_evidence_scores_when_generic_matches_are_missing
         matches=[],
         clinical_strains=[
             {
-                "strain": "Bifidobacterium longum BB536",
-                "clinical_id": "STRAIN_LONGUM_BB536",
+                # 299v: moderate registry support with a positive between-group result.
+                "strain": "Lactobacillus plantarum 299v",
+                "clinical_id": "STRAIN_PLANTARUM_299V",
                 # Caller claims cannot upgrade the registry's moderate support.
                 "clinical_support_level": "high",
                 "indication_primary": "digestive comfort and immune support",
@@ -141,7 +147,7 @@ def test_native_clinical_strain_evidence_scores_when_generic_matches_are_missing
     assert payload["metadata"]["generic_evidence_score"] == 0.0
     assert payload["metadata"]["native_clinical_strain_evidence_score"] == 6.0
     native_rows = payload["metadata"]["native_clinical_strain_evidence_rows"]
-    assert native_rows[0]["clinical_id"] == "STRAIN_LONGUM_BB536"
+    assert native_rows[0]["clinical_id"] == "STRAIN_PLANTARUM_299V"
     assert native_rows[0]["support_level"] == "moderate"
 
 
@@ -152,8 +158,8 @@ def test_undosed_verified_strains_do_not_stack_beyond_strongest_contextual_recor
         _clinical_strain(), _clinical_strain(strain="Lactobacillus rhamnosus HN001"),
     ]))
 
-    assert payload["components"] == {"strain_clinical_evidence": 8.0, "dose_applicability": 0.0}
-    assert payload["score"] == 8.0
+    assert payload["components"] == {"strain_clinical_evidence": LGG_POINTS, "dose_applicability": 0.0}
+    assert payload["score"] == LGG_POINTS
     assert payload["metadata"]["clinical_strain_count"] == 2
     assert len(payload["metadata"]["native_clinical_strain_evidence_rows"]) == 1
 
@@ -168,9 +174,18 @@ def test_generic_strain_matches_require_verified_native_identity() -> None:
     assert payload["metadata"]["uncredited_strain_match_ids"] == ["STRAIN_LGG_EVIDENCE"]
 
 
-def test_prenatal_positioning_gets_partial_relevance_for_infant_evidence() -> None:
+def test_prenatal_positioning_gets_partial_relevance_for_infant_evidence(monkeypatch) -> None:
+    from copy import deepcopy
+
+    import studied_formulas
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
+    # Relevance reads the registry's indication. HN001's registry indication is now its
+    # own record's (postpartum mood), so pin an infant indication to keep testing the
+    # prenatal <-> infant partial pair.
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    registry["STRAIN_RHAMNOSUS_HN001"]["cfu_thresholds"]["indication_primary"] = "atopic eczema prevention in infants"
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
     product = _product(
         product_name="Once Daily Prenatal",
         clinical_strains=[
@@ -184,8 +199,10 @@ def test_prenatal_positioning_gets_partial_relevance_for_infant_evidence() -> No
     payload = score_evidence(product)
 
     assert payload["components"]["dose_applicability"] == 0.0
-    assert payload["score"] == 8.0
+    # HN001's mood result is a secondary outcome: positive_weak (0.85) on moderate support.
+    assert payload["score"] == 5.1
     assert payload["metadata"]["indication_relevance_level"] == "partial"
+    assert "infant" in payload["metadata"]["matched_relevance_categories"]  # plural "infants" counts
 
 
 def test_generic_daily_probiotic_gets_broad_relevance_for_gut_or_immune_strains() -> None:
@@ -199,7 +216,7 @@ def test_generic_daily_probiotic_gets_broad_relevance_for_gut_or_immune_strains(
     payload = score_evidence(product)
 
     assert payload["components"]["dose_applicability"] == 0.0
-    assert payload["score"] == 8.0
+    assert payload["score"] == LGG_POINTS
     assert payload["metadata"]["indication_relevance_level"] == "broad"
 
 
@@ -290,8 +307,8 @@ def test_effect_direction_mixed_downweights_same_strain_research_credit() -> Non
 
     payload = score_evidence(product)
 
-    assert payload["components"] == {"strain_clinical_evidence": 4.8, "dose_applicability": 0.0}
-    assert payload["score"] == 4.8
+    assert payload["components"] == {"strain_clinical_evidence": 3.6, "dose_applicability": 0.0}
+    assert payload["score"] == 3.6
     assert payload["metadata"]["native_clinical_strain_evidence_rows"][0]["effect_multiplier"] == 0.6
 
 
@@ -301,7 +318,7 @@ def test_score_probiotic_wires_evidence_dimension_at_p23() -> None:
     breakdown = score_probiotic(_product()).to_breakdown()
 
     evidence = breakdown["dimensions"]["evidence"]
-    assert evidence["score"] == 8.0
+    assert evidence["score"] == LGG_POINTS
     assert evidence["metadata"]["phase"] == "P2.3_probiotic_evidence"
     # Module-level phase rolls forward as each P2.x slice lands.
     assert breakdown["phase"].startswith("P2.")
@@ -319,7 +336,7 @@ def test_probiotic_evidence_accepts_final_blob_probiotic_detail_alias() -> None:
 
     payload = score_evidence(product)
 
-    assert payload["score"] == 8.0
+    assert payload["score"] == LGG_POINTS
     assert payload["metadata"]["clinical_strain_count"] == 1
 
 

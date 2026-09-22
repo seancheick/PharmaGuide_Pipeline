@@ -150,7 +150,9 @@ def test_reviewed_lgg_registry_identity_retains_native_support(status: str | Non
     product = _owned_product(include_source_ref=True, **fields)
 
     assert independent_clinical_strains(product) == product["probiotic_data"]["clinical_strains"]
-    assert score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"] == 8
+    # Registry support wins over the row's claim: LGG is medium (moderate, 6 points)
+    # since Dr Pham's 2026-09-22 review graded ESPGHAN's evidence moderate quality.
+    assert score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"] == 6
 
 
 @pytest.mark.parametrize(
@@ -291,10 +293,15 @@ def test_verified_corpus_spelling_variants_keep_exact_native_identity(
     assert studied_formulas.clinical_strain_matches_source_row(
         product, product["probiotic_data"]["clinical_strains"][0],
         product["activeIngredients"][0])
-    # Exact identity does not approve a source. These two native references are
-    # on hold; the other listed sources do not establish human clinical evidence.
-    held = {"STRAIN_LACTIS_BB12", "STRAIN_LACTIS_BI07"}
+    # Exact identity does not approve a source. No native reference is on hold since
+    # Dr Pham's 2026-09-22 review; the listed sources below do not establish human
+    # clinical efficacy.
+    held: set = set()
     nonhuman = {"STRAIN_CASEI_431", "STRAIN_PARACASEI_8700"}
+    # Reviewed, not effective: Bi-07's exact-strain primary outcome is a surrogate
+    # (breath hydrogen); HEAL9's single-strain RCT is exploratory with no named primary.
+    # (BB-12 now earns mixed credit from two infant-colic RCTs beside its null adult trial.)
+    reviewed_not_effective = {"STRAIN_LACTIS_BI07", "STRAIN_PLANTARUM_HEAL9"}
     # Curated as effect_direction "null": real human evidence that did not show a benefit.
     # Since the 2026-09-18 owner decision that earns no affirmative credit, so these score 0
     # for a different reason than a held or non-human strain but with the same result. What
@@ -304,7 +311,7 @@ def test_verified_corpus_spelling_variants_keep_exact_native_identity(
     assert independent_clinical_strains(product) == (
         [] if clinical_id in held else product["probiotic_data"]["clinical_strains"])
     score = score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"]
-    if clinical_id in held | nonhuman | null_direction:
+    if clinical_id in held | nonhuman | null_direction | reviewed_not_effective:
         assert score == 0
     else:
         assert score > 0
@@ -494,7 +501,8 @@ def test_producer_cannot_export_a_badge_for_a_different_strain(
 
 @pytest.mark.parametrize("strain,clinical_id,status", [
     ("Lactobacillus rhamnosus LGG", "STRAIN_LGG", "exact_strain"),
-    ("Bifidobacterium animalis lactis BB-12", "STRAIN_LACTIS_BB12", "pending_review"),
+    # Dr Pham restored BB-12's sign-off on 2026-09-22.
+    ("Bifidobacterium animalis lactis BB-12", "STRAIN_LACTIS_BB12", "exact_strain"),
     # Closure D1 (2026-09-22): M-63's contexts are approved (the app still badges
     # only clinician_verified); DS-01 members and CUL08 are finished reviews
     # with no strain-attributable evidence.

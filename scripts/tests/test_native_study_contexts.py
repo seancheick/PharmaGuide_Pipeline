@@ -225,10 +225,12 @@ def test_priority_native_contexts_are_curated_without_new_approval():
             assert all(p.isdigit() for p in c["source_pmids"])
             assert c["context_id"] not in seen
             seen.add(c["context_id"])
+    # 40 until Dr Pham's 2026-09-22 review: she restored Bi-07 and BB-12 (suspended
+    # 2026-09-04) and withdrew six citations as single-strain evidence.
     assert sum(r.get("cfu_thresholds", {}).get("dr_pham_signoff") is True
-               for r in registry.values()) == 40
+               for r in registry.values()) == 36
     for cid in ("STRAIN_LACTIS_BI07", "STRAIN_LACTIS_BB12"):
-        assert registry[cid]["cfu_thresholds"]["dr_pham_signoff"] is False
+        assert registry[cid]["cfu_thresholds"]["dr_pham_signoff_verified_by"].startswith("Dr Pham (2026-09-22")
     for cid in ("STRAIN_ACIDOPHILUS_NCFM", "STRAIN_LACTIS_BL04"):
         assert "Best-available PubMed hit" not in registry[cid]["cfu_thresholds"]["notes"]
 
@@ -346,11 +348,19 @@ def test_clinician_approved_research_is_a_finished_review_even_without_credit():
         assert evidence["metadata"]["evidence_result_state"] == "evaluated_null"
 
 
-def test_a_context_awaiting_adjudication_is_still_pending():
+def test_a_context_awaiting_adjudication_is_still_pending(monkeypatch):
+    # Dr Pham approved the two held LA-5 + BB-12 trials on 2026-09-22; a context put
+    # back on hold must read as pending again.
     p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_LA5", name="Lactobacillus acidophilus LA-5", dose=1e9)
+    assert studied_formulas.assess_probiotic_evidence(p)["native_context_review"]["status"] == "clinically_reviewed"
+    rows = deepcopy(studied_formulas._clinical_strain_registry())
+    held = next(c for c in rows["STRAIN_ACIDOPHILUS_LA5"]["study_contexts"]
+                if c["context_id"] == "la5_bb12_lc01_yogurt_aad_30439760")
+    held["review_status"] = "adjudication_required"
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: rows)
     review = studied_formulas.assess_probiotic_evidence(p)["native_context_review"]
     assert review["status"] == "pending_clinical_review"
-    assert review["pending_context_ids"]
+    assert review["pending_context_ids"] == ["la5_bb12_lc01_yogurt_aad_30439760"]
 
 
 def test_an_uncurated_strain_stub_stays_incomplete(monkeypatch):

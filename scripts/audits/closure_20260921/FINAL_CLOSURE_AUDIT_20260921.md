@@ -35,6 +35,18 @@ round-2 code for all 15,414 brand labels (0 errors), compared with the C1 scored
 | Blend-total member fix (§2 #33) | 58 labels with a comma-joined blend total carrying member rows: 5 change — 259484 36.3 → 72.5 (EPA 1.5 g + DHA 500 mg were shipped at 0 mg), 231416 79.4 → 70.0 (EPA+DHA had been counted as 1,418 mg on a 500 mg label), 3 evidence-state only |
 | Tests | fast tier 16,126 passed; slow tier 51 → 31, the remainder corpus-dependent (§3b, D9) |
 
+Round 3 (2026-09-22, Dr Pham's review, the Codex audit and the second review; §2 #37–#41). Same-input replay of
+the 1,308 raw labels that name a probiotic organism, raw → clean → enrich → score, committed code (HEAD `2d7d4ea8`)
+vs the round-3 working tree:
+
+| Claim | Proof |
+|---|---|
+| Shipped probiotic partials 55 → 0 | 55 partial → complete (F1 closed); the one remaining partial (78355) is `not_scored` in every run and quarantined, never shipped |
+| Every score mover is attributed | 225 movers, all down, Evidence pillar only; each traced to a strain-row change, 0 unexplained: LGG 102, S. boulardii 16, 299v 10 (strong → medium); HN001 15, IS-2 18, MTCC 5856 9, M18 3, SNZ 1969 3 (positive result secondary, within-group or a ranking: 0.85); BB536 31 and M-16V 10 (surrogate-only / combination: 0); LA-5 6, RC-14 4, GBI-30 1 (withdrawn or surrogate); Bl-04, NCFM, BB-12, La-14 rows surface when the strongest row drops (BB-12 4.8 from its infant-colic RCTs) |
+| No safety change | 0 status, route or safety-verdict movers; 34 SAFE → POOR are the quality-tier verdict of products that fall into the Poor tier (8 Good → Needs improvement) |
+| Label-bounded scope | ATCC PTA 6475, CTV-05, HEAL9, 1714, 8700:2, CNCM I-745, B. clausii, Prodentis and MIMBb75 appear on no catalog label, so their corrections move no product; the replay confirms it |
+| Tests | fast tier 16,212 passed, 0 failed; registry integrity 0 findings |
+
 
 ## 1. What the previous agent left, and what happened to it
 
@@ -88,6 +100,11 @@ round-2 code for all 15,414 brand labels (0 errors), compared with the C1 scored
 | 34 | Silent fallbacks: `router.class_for_product` returned `generic` on any classifier exception; the enricher fell back silently when classification failed | Both removed; the classifier is total on malformed input, so a failure is a defect and surfaces | routing slice 2,090 passed |
 | 35 | **D6** The app's depletion card rendered Dart template sentences instead of the reviewed `alert_body` for four of five relationship types | App (`pg_depletion_card.dart`): the reviewed body is the card's clinical sentence; only the supply line (what the device sees in the stack) stays client-side; the details sheet's "Why" shows the mechanism | Flutter 872 stack/release-gate/signal tests pass; reviewer golden regenerated |
 | 36 | **D7** 12 shipped blob sections have no reader | Kept in the 2.5.0 contract, marked `deprecated: schema_3` in `BLOB_TOP_LEVEL`, documented in `FINAL_EXPORT_SCHEMA_V1.md` | `test_deprecated_blob_sections_have_no_pipeline_reader` |
+| 37 | **F1** Bi-07 / BB-12 clinician holds and two `adjudication_required` LA-5 + BB-12 trials kept 55 shipped products partial | Sent to Dr Pham on a review sheet; her decisions applied after live PubMed verification of all 35 PMIDs she cited: Bi-07 and BB-12 signed off (suspended summaries retired; the reviewed contexts own the evidence; Bi-07 surrogate-only, BB-12 adult trial null); 30439760 and 39102225 approved as literal three-strain records with an `UNREGISTERED:` component. One code change: `valid_native_study_context` accepts an unknown component only in a frozen record declaring `unregistered_components_present` | `pham_review_20260922.py` + `PHAM_REVIEW_20260922.json`; `test_pham_review_20260922.py`; 55 partial → complete on the 1,308-label replay |
+| 38 | 23 strain sign-offs recorded in Dr Pham's name by an automated PMID check alone | She reviewed each: 12 confirmed (LGG, S. boulardii, 299v, HN001 recorded medium; Shirota, 35624 null), 5 replaced with direct human trials (SNZ 1969, M18, GBI-30 6086, ATCC PTA 6475, CTV-05), 6 withdrawn as single-strain evidence (HEAL9, GR-1, RC-14, R0052, R0175, LA-5) with an auditable `withdrawn_citation`. Three verifier fields that contradicted their own notes corrected; no sign-off in her name rests on an agent check | `test_no_signoff_in_her_name_rests_on_an_agent_check_alone` |
+| 39 | **A strain summary with no `effect_direction` scored as fully positive** (`probiotic_evidence._effect_multiplier` defaulted to `positive_strong`): Shirota's and 35624's null evidence earned points | The probiotic scorer fails closed (generic Evidence already did); every one of the 34 strain summaries states a direction verified against its cited record; six source types mislabelled by the 2026-04-21 automated pass corrected (431 is a 1,104-person human RCT, DDS-1/UABla-12 had single-strain arms, 8700:2 / ME-3 / 1714 cite lab or review papers); Nissle recorded as human active-comparator equivalence evidence (no superiority credit until the scorer weights equivalence) | `test_every_strain_evidence_summary_states_its_direction`, `test_a_summary_without_a_direction_earns_no_evidence_credit`, `test_an_approved_context_outcome_without_a_direction_never_credits` |
+| 40 | Codex registry audit (26 findings) and a second review (10) | Every claim reproduced live before applying: HEAL9 and LAFTI L10 "no evidence" conclusions came from incomplete searches (reopened with single-strain RCTs); DRACMA credited LGG's results to CRL431 + BB-12; M-16V carried a three-strain trial as NEC evidence (anchored to its strain-specific review, null); Prodentis aliased single strains to a two-strain blend; ATCC PTA 6475 omitted a 2-year null trial; CTV-05's vaginal efficacy reached oral labels; CNCM I-745 evidence split from the S. boulardii species node; indications and benefit claims bound to their records; co-formulated BC30 trials ineligible; transit is a surrogate; resistant maltodextrin separated from resistant starch; 12 new study records (registry now 132 identities, 157 study records). Model rules: a primary outcome cannot be a subgroup; within-group, subgroup and ranking effects earn no primary credit; "strong" needs two positive trials of the same condition. MIMBb75 and Shirota trials not added (no catalog label) | `codex_audit_response_20260922.py` + `CODEX_AUDIT_RESPONSE_20260922.json` (per-finding disposition); `test_codex_audit_response_20260922.py` |
+| 41 | Evidence review packet contradicted itself at zero pending ("decisions below have not been written") and miscounted `rejected_source` | Generator states the closed state, counts `rejected_source`, and documents the missing-direction invariant and where withdrawn citations are recorded | `test_evidence_review_packet_uses_frozen_fields_without_personal_metadata` |
 
 ## 3. Canonical owner matrix
 
@@ -233,21 +250,23 @@ an owner decision are listed in §7, not here.
 
 ## 6b. Residual partial products (measured on the round-2 code; confirmed in §0 after the final run)
 
-Round-2 full chain, all 15,414 labels: **56 shipped partials, down from 118 at C1.**
+Round-2 full chain, all 15,414 labels: **56 shipped partials, down from 118 at C1**; after Dr Pham's
+2026-09-22 review closed F1 (§2 #37), **1**.
 
 | Products | Held by | End state |
 |---|---|---|
-| 37 | Bi-07: clinician sign-off suspended 2026-09-04 after a citation-identity mismatch ("replacements require clinician review"); two approved exact-strain contexts exist but may not replace a clinician hold | Owner fork F1 (§7) |
-| 16 | BB-12: same suspension, plus the two LA-5/BB-12 combination contexts the owner held `adjudication_required` on 09-14 | F1 |
-| 2 | only those two held contexts (LA-5 products without BB-12): 30439760 (three-strain LC-01 yogurt; LC-01 unregistered) and 39102225 (PRIMAL; an unnamed B. infantis, which no identity can register) | F1 |
+| 37 | Bi-07: clinician sign-off suspended 2026-09-04 after a citation-identity mismatch | CLOSED: Dr Pham restored the sign-off (§2 #37); reviewed, surrogate-only, no efficacy credit |
+| 16 | BB-12: same suspension, plus the two LA-5/BB-12 combination contexts the owner held `adjudication_required` on 09-14 | CLOSED: sign-off restored (null primary outcomes); both contexts approved as literal combination records |
+| 2 | only those two held contexts (LA-5 products without BB-12): 30439760 (three-strain LC-01 yogurt) and 39102225 (PRIMAL; an unnamed B. infantis) | CLOSED: approved with their unregistered third strain recorded (`unregistered_components_present`) |
 | 307560 Bile Acid Factors (Jarrow) | DSLD nests "Total Bile Acids 1000 mg" as the **parent** of "Bovine Bile concentrate 1630 mg" (an assay total cannot contain a heavier material); the only such inversion in 15,414 raw labels. The literature records call both bile-acid rows analytical specifications, and the resolver fails closed on them | IRREDUCIBLE SOURCE LIMITATION — remedy is a reviewed label correction through the submission lane (keeps the DSLD id), not a one-product rule |
-| 307569, 81801, and the five "Bulgarian Yogurt Concentrate" labels | were identity decisions (D3) | CLOSED by §2 #32; any that stay partial are held only by F1 |
+| 307569, 81801, and the five "Bulgarian Yogurt Concentrate" labels | were identity decisions (D3) | CLOSED by §2 #32 |
 
-## 7. Decisions D1–D9 (resolved 2026-09-22) and the one remaining owner fork
+## 7. Decisions D1–D9 (resolved 2026-09-22) and fork F1 (closed by Dr Pham, 2026-09-22)
 
 Round 1 listed D1–D9 as forks. Codex's review (relayed and endorsed by Sean on
 2026-09-22) said each was resolvable from established doctrine; all nine are now
-resolved at their owner. Only a clinician/owner hold remains.
+resolved at their owner. The one clinician hold, F1, was sent to Dr Pham on a review
+sheet (https://claude.ai/artifact/3Bhz3oj3qgLBsYZz3iwiof) and closed by her the same day (§2 #37–#39).
 
 | # | Question | Resolution | Where |
 |---|---|---|---|
@@ -261,7 +280,7 @@ resolved at their owner. Only a clinician/owner hold remains.
 | D8 | Enzymes under the wrong parent | Seven enzymes on their own CUI-verified parents; three dropped aliases restored | §2 #31 |
 | D9 | 51 slow failures | 19 identity pins updated, 2 obsolete premises retargeted, 1 live defect fixed; 30 score pins re-freeze through `regen_canary_pins.py` on the final corpus | §3b, §2 #33 |
 
-### F1 — the one genuine owner fork (55 shipped products stay partial until decided)
+### F1 — closed by Dr Pham on 2026-09-22 (the hold as it stood; she reviewed both and chose option A on the sheet for 1a, 1b and 1c)
 
 | Hold | Facts | Options |
 |---|---|---|

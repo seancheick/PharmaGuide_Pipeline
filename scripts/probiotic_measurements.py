@@ -634,16 +634,23 @@ def identity_confidence(entry) -> str:
     return "label_designation_recognized"
 
 
+# Effects that are not a between-group comparison of the trial's primary question.
+_NON_EFFICACY_ROLES = frozenset({"within_group_change", "post_hoc_subgroup", "companion_reported_context",
+                                 "network_ranking"})
+
+
 def _primary_patient_important(context: Mapping) -> list:
     return [o for o in (context.get("outcomes") or []) if isinstance(o, Mapping)
-            and o.get("hierarchy") == "primary" and o.get("kind") == "patient_important"]
+            and o.get("hierarchy") == "primary" and o.get("kind") == "patient_important"
+            and o.get("outcome_role") not in _NON_EFFICACY_ROLES]
 
 
 def derived_context_evidence(entry) -> dict | None:
     """Summarize the identity's accepted exact-strain contexts in the legacy evidence shape.
 
     Strength: pooled human evidence (meta-analysis, systematic review, guideline) or
-    two or more RCTs with a positive primary patient-important outcome -> strong;
+    two or more RCTs of the same condition with a positive primary patient-important
+    outcome (a between-group result, not a within-group, subgroup or ranking one) -> strong;
     one such RCT -> medium; otherwise weak. Direction: negative-only evidence is
     negative; positive evidence with null, mixed, or negative company is mixed;
     positives only are positive; null-only evidence is null; surrogate-only or
@@ -689,7 +696,14 @@ def derived_context_evidence(entry) -> dict | None:
             nulls.append(representative)
     pooled = [c for c in positives if c.get("study_design") in ("meta_analysis", "systematic_review", "guideline")]
     rcts = [c for c in positives if c.get("study_design") in ("rct", "crossover_rct", "cluster_rct")]
-    strength = "strong" if pooled or len(rcts) >= 2 else "medium" if rcts else "weak"
+    # Replication means two positive trials of the same question; positive trials in
+    # different conditions are two single findings, not one replicated one.
+    per_condition: dict[str, int] = {}
+    for c in rcts:
+        condition = str(c.get("condition") or "")
+        per_condition[condition] = per_condition.get(condition, 0) + 1
+    replicated = any(count >= 2 for count in per_condition.values())
+    strength = "strong" if pooled or replicated else "medium" if rcts else "weak"
     if negatives and not positives:
         direction = "negative"
     elif positives and (nulls or negatives or mixed):

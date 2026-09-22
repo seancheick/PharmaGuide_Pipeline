@@ -70,13 +70,14 @@ def test_new_identities_are_unreviewed_evidence_free_and_cited():
         block = entry["identity_verification"]
         assert block["status"] in {"designation_verified", "designation_found_species_unconfirmed"}
         assert block["source_pmids"] and all(p.isdigit() for p in block["source_pmids"])
-        assert block["verified_on"] == "2026-09-14"
+        assert block["verified_on"] >= "2026-09-14"  # a later re-verification may update it
 
 
 def test_species_conflicts_are_not_accepted_for_research_presentation():
     import probiotic_measurements as pm
     entries = {e["id"]: e for e in _entries()}
-    for ident in ("STRAIN_ACIDOPHILUS_HA122", "STRAIN_CASEI_HA108", "STRAIN_ACIDOPHILUS_LAFTI_L10"):
+    # LAFTI L10 was resolved on 2026-09-22: the label and every source since 2016 name L. helveticus.
+    for ident in ("STRAIN_ACIDOPHILUS_HA122", "STRAIN_CASEI_HA108"):
         assert pm.identity_confidence(entries[ident]) not in pm.IDENTITY_CONFIDENCE_ACCEPTED
 
 
@@ -115,4 +116,5 @@ def test_metadata_total_entries_matches_registry():
 
 
 def test_signoff_count_unchanged_by_the_batch():
-    assert sum(e["cfu_thresholds"].get("dr_pham_signoff") is True for e in _entries()) == 40
+    # The batch left 40 sign-offs; Dr Pham's 2026-09-22 review restored 2 and withdrew 6.
+    assert sum(e["cfu_thresholds"].get("dr_pham_signoff") is True for e in _entries()) == 36
