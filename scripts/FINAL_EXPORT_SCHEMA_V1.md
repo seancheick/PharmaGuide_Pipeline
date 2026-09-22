@@ -813,6 +813,16 @@ delete commit per field, with a regression test pin).
 | `matched_alias`  | move to `_debug` subkey      | Same — internal pipeline diagnostics           |
 | `is_harmful`     | `is_safety_concern` + `severity_status` | Flutter migrates routing logic        |
 
+**Top-level sections with no reader (closure field census, 2026-09-21):**
+`brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,
+`gluten_free_validated`, `compliance_detail`, `dietary_sensitivity_detail`,
+`unverified_ingredient`, `v4_completeness_gate`, `v4_dose_safety`,
+`v4_safety_gate`, `v4_score_provenance`. They stay required in 2.5.0 (published
+contract), are marked `"deprecated": "schema_3"` in
+`audit_contract_sync.BLOB_TOP_LEVEL`, carry no scoring authority, and schema 3
+drops them. `test_deprecated_blob_sections_have_no_pipeline_reader` fails if any
+pipeline module starts reading one.
+
 **Empty-string defaults:** several inactive fields (`category`,
 `additive_type`, `severity_level`, `match_method`, `matched_alias`,
 `notes`, `mechanism_of_harm`) currently emit `""` when unpopulated.

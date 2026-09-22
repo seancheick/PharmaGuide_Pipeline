@@ -294,13 +294,13 @@ def test_verified_corpus_spelling_variants_keep_exact_native_identity(
     # Exact identity does not approve a source. These two native references are
     # on hold; the other listed sources do not establish human clinical evidence.
     held = {"STRAIN_LACTIS_BB12", "STRAIN_LACTIS_BI07"}
-    nonhuman = {"STRAIN_ACIDOPHILUS_NCFM", "STRAIN_LACTIS_BL04",
-                "STRAIN_CASEI_431", "STRAIN_PARACASEI_8700"}
+    nonhuman = {"STRAIN_CASEI_431", "STRAIN_PARACASEI_8700"}
     # Curated as effect_direction "null": real human evidence that did not show a benefit.
     # Since the 2026-09-18 owner decision that earns no affirmative credit, so these score 0
     # for a different reason than a held or non-human strain but with the same result. What
     # this test pins is identity resolution across spelling variants, which is unaffected.
-    null_direction = {"STRAIN_LACTIS_HN019", "STRAIN_PARACASEI_LPC37"}
+    # NCFM's own approved human trials (which own its human evidence) are null too.
+    null_direction = {"STRAIN_LACTIS_HN019", "STRAIN_PARACASEI_LPC37", "STRAIN_ACIDOPHILUS_NCFM"}
     assert independent_clinical_strains(product) == (
         [] if clinical_id in held else product["probiotic_data"]["clinical_strains"])
     score = score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"]
@@ -348,7 +348,11 @@ def test_reviewed_formula_reference_cannot_be_spoofed_as_independent_strain(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     registry = copy.deepcopy(studied_formulas._clinical_strain_registry())
-    registry["STRAIN_BREVE_SD_BR3_IT"]["cfu_thresholds"]["dr_pham_signoff"] = True
+    # A formula-level summary on a strain record (the shape DS-01 members
+    # carried until closure D1 moved it to FORMULA_SEED_DS01), even signed.
+    registry["STRAIN_BREVE_SD_BR3_IT"]["cfu_thresholds"].update(dr_pham_signoff=True, evidence={
+        "type": "product_formula_rct", "pmid": "40944126", "evidence_strength": "medium",
+        "clinical_validation": {"q1_strain_explicit": "FORMULA_LEVEL", "q3_human_clinical": "YES"}})
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
     product = _owned_product(
         clinical_id="STRAIN_BREVE_SD_BR3_IT",
@@ -491,9 +495,12 @@ def test_producer_cannot_export_a_badge_for_a_different_strain(
 @pytest.mark.parametrize("strain,clinical_id,status", [
     ("Lactobacillus rhamnosus LGG", "STRAIN_LGG", "exact_strain"),
     ("Bifidobacterium animalis lactis BB-12", "STRAIN_LACTIS_BB12", "pending_review"),
-    ("Bifidobacterium longum subsp. infantis M-63", "STRAIN_INFANTIS_M63", "pending_review"),
-    ("Bifidobacterium breve SD-BR3-IT", "STRAIN_BREVE_SD_BR3_IT", "pending_review"),
-    ("Lactobacillus paracasei (CUL 08)", "STRAIN_PARACASEI_CUL08", "pending_review"),  # verified 2026-09-14
+    # Closure D1 (2026-09-22): M-63's contexts are approved (the app still badges
+    # only clinician_verified); DS-01 members and CUL08 are finished reviews
+    # with no strain-attributable evidence.
+    ("Bifidobacterium longum subsp. infantis M-63", "STRAIN_INFANTIS_M63", "exact_strain"),
+    ("Bifidobacterium breve SD-BR3-IT", "STRAIN_BREVE_SD_BR3_IT", "no_qualifying_human_evidence"),
+    ("Lactobacillus paracasei (CUL 08)", "STRAIN_PARACASEI_CUL08", "no_qualifying_human_evidence"),
 ])
 def test_producer_keeps_verified_alias_and_exact_pending_identity(
     clinical_enricher, strain: str, clinical_id: str, status: str,

@@ -34,12 +34,11 @@ if set(VALID_CLASSES) != set(SCORING_ROUTE_MODULES):  # pragma: no cover
 def class_for_product(product: Dict[str, Any]) -> str:
     """Return the product's canonical v4 scoring module.
 
-    The classification contract is total and normally returns a valid route.
-    This adapter retains a defensive generic fallback for malformed direct
-    callers without seeding or duplicating classification policy.
+    The classification contract is total (malformed products classify
+    ``generic`` on their own), so a failure here is a classifier defect and
+    surfaces instead of silently scoring the product on the generic route.
     """
-    try:
-        result = build_scoring_classification(product).get("route_module")
-    except Exception:  # pragma: no cover - total public API boundary
-        return "generic"
-    return result if result in VALID_CLASSES else "generic"
+    result = build_scoring_classification(product).get("route_module")
+    if result not in VALID_CLASSES:
+        raise RuntimeError(f"ScoringClassification returned unknown route {result!r}")
+    return result

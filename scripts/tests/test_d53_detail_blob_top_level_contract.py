@@ -166,3 +166,23 @@ def test_warnings_profile_gated_is_a_list(sample_blobs) -> None:
             f"got {type(wpg).__name__}. Flutter's _parseWarnings relies on "
             f"this to concatenate with the main warnings list."
         )
+
+
+def test_deprecated_blob_sections_have_no_pipeline_reader() -> None:
+    """Schema-3 drops these; until then they are one-way copies that nothing may
+    read as a live fact (closure field census 2026-09-21)."""
+    import re
+
+    scripts = Path(__file__).resolve().parents[1]
+    deprecated = sorted(k for k, spec in BLOB_TOP_LEVEL.items() if spec.get("deprecated") == "schema_3")
+    assert len(deprecated) == 12
+    sources = {
+        path: path.read_text(errors="ignore")
+        for path in scripts.rglob("*.py")
+        if not {"tests", "audits", "__pycache__", "products", "dist", "final_db_output"} & set(path.relative_to(scripts).parts)
+        and path.name != "audit_contract_sync.py"
+    }
+    for key in deprecated:
+        reader = re.compile(rf"""\.get\(\s*["']{key}["']|\[\s*["']{key}["']\s*\](?!\s*=[^=])""")
+        readers = sorted(str(p.relative_to(scripts)) for p, text in sources.items() if reader.search(text))
+        assert not readers, f"{key} is deprecated but read by {readers}"

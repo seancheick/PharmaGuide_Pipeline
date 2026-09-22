@@ -25,7 +25,7 @@ EM = json.loads((SCRIPTS_ROOT / "scoring_v4" / "config" / "quality_score.json").
 EXPECTED = {
     "generic": {
         "cap_total": 20.0, "cap_per_ingredient": 7.0, "supra_clinical_multiple": 3.0,
-        "sub_clinical_dose_guard_multiplier": 0.25, "enrollment_default_multiplier": 1.2,
+        "enrollment_default_multiplier": 1.2,
         "primary_floor_strong": 14.0, "primary_floor_moderate": 11.0,
         "primary_floor_branded_strong": 18.0, "primary_floor_branded_moderate": 17.0,
         "nutrition_authority_floor": 10.0, "primary_mass_fraction": 0.5,
@@ -78,7 +78,9 @@ def test_config_matches_reviewed_evidence_magnitudes():
 def test_runtime_constants_read_from_config_no_drift():
     assert generic_evidence.CAP_TOTAL == 20.0
     assert generic_evidence.PRIMARY_FLOOR_BRANDED_STRONG == 18.0
-    assert generic_evidence.SUB_CLINICAL_DOSE_GUARD_MULTIPLIER == 0.25
+    # Below a study's dose the study does not apply: a gate, never a tunable gradient.
+    assert not hasattr(generic_evidence, "SUB_CLINICAL_DOSE_GUARD_MULTIPLIER")
+    assert "sub_clinical_dose_guard_multiplier" not in EM["generic"]
     # JSON lists reconstruct the original tuple-of-tuples / flat tuples
     assert generic_evidence.ENROLLMENT_QUALITY_BANDS == ((50.0, 0.6), (200.0, 0.8), (500.0, 1.0), (1000.0, 1.1))
     assert generic_evidence.TOP_N_WEIGHTS == (1.0, 0.7, 0.5, 0.3)

@@ -28,6 +28,11 @@ def positive_rct(*, approved=False, **changes):
 @pytest.fixture
 def registry(monkeypatch):
     rows = deepcopy(studied_formulas._clinical_strain_registry())
+    # La-14 stands in for a verified identity with no finished review. Its
+    # 2026-09-22 literature review and contexts are removed so each test here
+    # authors the only contexts in play.
+    rows[STUB].pop("literature_review", None)
+    rows[STUB].update(study_contexts=[], evidence_level="unreviewed")
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: rows)
     return rows
 

@@ -20,7 +20,7 @@ from serving_frequency import resolve_daily_serving_range
 from probiotic_measurements import (
     strain_cfu_tier, clinical_strain_research_scope, normalized_cfu_count,
     effective_strain_evidence, identity_review_accepted, context_accepted_for_scoring,
-    context_review_finished,
+    context_review_finished, strain_literature_review_concluded,
     classify_dose_applicability, dose_applicability_credit, DOSE_MEASUREMENT_UNITS,
     clinical_review_provenance_valid, effective_clinical_dose_basis,
 )
@@ -668,7 +668,11 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
         elif not clinical_strain_identity_matches(row.get("strain"), reference):
             status = "strain_identity_mismatch"
         elif id(row) not in accepted:
-            status = "strain_identity_or_review_unresolved"
+            # A finished literature review that found no qualifying human
+            # evidence is a conclusion, not an open review.
+            status = ("strain_reviewed_no_qualifying_human_evidence"
+                      if strain_literature_review_concluded(reference)
+                      else "strain_identity_or_review_unresolved")
         elif row.get("is_inactivated") or row.get("is_postbiotic"):
             status = "strain_context_mismatch"
         elif result["cfu_per_day"] is None or result["cfu_per_day"] <= 0:
@@ -731,6 +735,12 @@ def species_with_clinical_strain_evidence() -> frozenset[str]:
     return frozenset(species_set)
 
 
+def reviewed_strains_without_qualifying_evidence(strain_assessments) -> bool:
+    """Every assessed strain's literature review is finished and none qualifies."""
+    return bool(strain_assessments) and all(
+        row.get("status") == "strain_reviewed_no_qualifying_human_evidence" for row in strain_assessments)
+
+
 def assess_probiotic_component_disposition(product: Mapping) -> dict:
     """Return the canonical Evidence disposition for a product's probiotic component.
 
@@ -784,6 +794,16 @@ def assess_probiotic_component_disposition(product: Mapping) -> dict:
             "has_probiotic_component": True,
             "disposition_state": "evaluated_applicable",
             "reason": "strain_dose_applicable",
+            "evidence_score": 0.0,
+            "exact_strains": [s.get("strain") for s in strains if s.get("strain")],
+            "assessment": assessment,
+        }
+
+    if reviewed_strains_without_qualifying_evidence(strains):
+        return {
+            "has_probiotic_component": True,
+            "disposition_state": "no_qualifying_human_evidence",
+            "reason": "strain_literature_reviewed_no_qualifying_human_evidence",
             "evidence_score": 0.0,
             "exact_strains": [s.get("strain") for s in strains if s.get("strain")],
             "assessment": assessment,

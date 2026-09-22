@@ -1,10 +1,16 @@
-"""Registry identities added for label resolution carry no evidence or approval.
+"""Registry identities added for label resolution are honest about what they know.
 
 2026-09-13: the registry grew from 49 to 100+ identities so that a printed
 strain designation resolves to "exact strain, not yet reviewed" instead of
 falling through to species-only. Every such stub must say how the designation
-was verified, must carry no clinician sign-off, no evidence block and no
-contexts, and must never present as affirmative research.
+was verified, must carry no clinician sign-off and must never present as
+clinician-verified research.
+
+2026-09-22 (closure D1): the stubs were literature-reviewed to a terminal
+state. Each identity-verified entry is now in exactly one honest state:
+unreviewed (no review, no contexts), reviewed with no qualifying human
+evidence (a finished zero), or reviewed with single-strain contexts that own
+its evidence. None of them carries a legacy evidence summary.
 """
 import json
 from pathlib import Path
@@ -13,7 +19,10 @@ import pytest
 
 from constants import DATA_DIR
 from enrich_supplements_v3 import _probiotic_research_presentation
-from probiotic_measurements import label_strain_identity_resolution
+from probiotic_measurements import (
+    derived_context_evidence, effective_strain_evidence, label_strain_identity_resolution,
+    strain_literature_review_concluded,
+)
 from studied_formulas import clinical_strain_identity_matches
 
 VERIFICATION_STATUSES = {
@@ -46,15 +55,32 @@ def test_stub_identity_is_honest_about_what_it_knows(entry):
         assert verification["source_pmids"] == []
     else:
         assert verification["source_pmids"], "a literature-verified designation must cite its PMIDs"
-    assert entry["evidence_level"] == "unreviewed"
     assert entry["cfu_thresholds"]["dr_pham_signoff"] is False
     assert entry["cfu_thresholds"]["evidence"] is None
-    assert entry["cfu_thresholds"]["tiers_cfu_per_day"] is None
-    assert entry["key_benefits"] == []
     presented = _probiotic_research_presentation(entry)
-    assert presented["review_status"] == "pending_review"
-    assert presented["research_match_status"] == "pending_review"
-    assert presented["human_evidence"] is False
+    assert presented["review_status"] != "clinician_verified"
+    review = entry.get("literature_review")
+    if review is None:
+        assert entry["evidence_level"] == "unreviewed"
+        assert entry["study_contexts"] == [] and entry["key_benefits"] == []
+        assert entry["cfu_thresholds"]["tiers_cfu_per_day"] is None
+        assert presented["review_status"] == presented["research_match_status"] == "pending_review"
+        assert presented["human_evidence"] is False
+    elif review["conclusion"] == "no_qualifying_human_evidence":
+        assert strain_literature_review_concluded(entry)
+        assert entry["evidence_level"] == "none" and entry["key_benefits"] == []
+        assert effective_strain_evidence(entry) is None
+        assert presented["review_status"] == "literature_reviewed_no_qualifying_evidence"
+        assert presented["research_match_status"] == "no_qualifying_human_evidence"
+        assert presented["human_evidence"] is False
+    else:
+        assert review["conclusion"] == "exact_strain_contexts_recorded"
+        derived = derived_context_evidence(entry)
+        assert derived is not None and effective_strain_evidence(entry) == derived
+        assert entry["evidence_level"] == {"strong": "high", "medium": "moderate", "weak": "low"}[
+            derived["evidence_strength"]]
+        assert presented["review_status"] == "clinician_context_approved"
+        assert presented["human_evidence"] is True
 
 
 @pytest.mark.parametrize("entry", _stubs(), ids=lambda e: e["id"])

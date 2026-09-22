@@ -3414,6 +3414,14 @@ _ROUTE_EXPLICIT_MULTIVITAMIN_NAME_RE = re.compile(
     r"\b(multivitamin|multi-vitamin|multi vitamin|multimineral)\b",
     re.IGNORECASE,
 )
+# A title that declares a multivitamin. "Multi" alone counts ("Multi + Probiotic",
+# "Centrum Multi + Probiotics"); multi-strain, multi-species, multi-enzyme and
+# "Multi Probiotic" describe a probiotic or enzyme product, not a multivitamin.
+_ROUTE_DECLARED_MULTI_NAME_RE = re.compile(
+    r"\b(multivitamins?|multi-vitamins?|multi vitamins?|multimineral|multi)\b"
+    r"(?![- ]?(?:strains?|species|enzymes?|flora|cultures?|probiotics?)\b)",
+    re.IGNORECASE,
+)
 _ROUTE_B_EXPLICIT_MIN_VITAMINS = 3
 _ROUTE_B_EXPLICIT_MIN_FAMILY_SHARE = 0.615385
 _ROUTE_FIBER_MATERIAL_MIN_MASS_SHARE = 0.753769
@@ -4164,6 +4172,18 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
     features = _route_feature_vector(product)
 
     if primary_type != "greens_powder" and _route_is_probiotic_class(product, name_text):
+        # Dominant formula identity, not mere presence: a declared multivitamin
+        # with a full vitamin/mineral panel is a multi carrying a probiotic
+        # adjunct. Its strains keep probiotic-owned Evidence; the route does not.
+        if (
+            _ROUTE_DECLARED_MULTI_NAME_RE.search(_route_product_label_text(product))
+            and _route_is_multivitamin_eligible(product, name_text, features=features)
+        ):
+            return (
+                "multi_or_prenatal",
+                "declared_multivitamin_with_probiotic_adjunct",
+                ["declared_multivitamin_name", "multi_panel", "probiotic_adjunct"],
+            )
         return "probiotic", "profile_content:probiotic", ["probiotic_identity_or_cfu"]
 
     if _ROUTE_PRENATAL_KEYWORDS.search(_route_product_label_text(product)):

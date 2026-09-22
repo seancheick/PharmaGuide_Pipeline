@@ -82,11 +82,14 @@ _UNDISCLOSED = ("Individual strain amounts are also not disclosed, so no strain 
                 "matched to a studied dose.")
 
 
-def test_review_gap_and_undisclosed_strain_dose_are_both_named():
-    # An uncurated strain stub (La-14) on a label with no per-strain CFU: the
-    # review is genuinely unfinished AND the missing amounts block dose matching.
+def test_review_gap_and_undisclosed_strain_dose_are_both_named(monkeypatch):
+    # An uncurated strain stub (La-14 with its review removed) on a label with no
+    # per-strain CFU: the review is unfinished AND the missing amounts block dose matching.
     from scoring_v4.modules.probiotic_evidence import score_evidence as probiotic_evidence
+    from test_evidence_completeness_closure_20260921 import unreview_strain
     from test_probiotic_applicability_rubric import strain_product
+
+    unreview_strain(monkeypatch, "STRAIN_ACIDOPHILUS_LA14")
 
     product = strain_product(clinical_id="STRAIN_ACIDOPHILUS_LA14",
                              name="Lactobacillus acidophilus La-14", dose=None)
@@ -99,13 +102,15 @@ def test_review_gap_and_undisclosed_strain_dose_are_both_named():
 
 
 def test_finished_review_still_names_undisclosed_strain_amounts():
-    # NCFM's contexts are clinician-approved (a finished review); the label still
-    # gives no per-strain CFU, and that separate limit must stay visible.
+    # R0052's contexts are clinician-approved (a finished review that establishes no
+    # applicability); the label still gives no per-strain CFU, and that separate
+    # limit must stay visible. (NCFM used to be the example; its own approved human
+    # trials now own its human evidence and read as a reviewed null.)
     from scoring_v4.modules.probiotic_evidence import score_evidence as probiotic_evidence
     from test_probiotic_applicability_rubric import strain_product
 
-    product = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM",
-                             name="Lactobacillus acidophilus NCFM", dose=None)
+    product = strain_product(clinical_id="STRAIN_HELVETICUS_R0052",
+                             name="Lactobacillus helveticus R0052", dose=None)
     evidence = probiotic_evidence(product)
     assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
     reason = _pillar_evidence(evidence, 20, "probiotic", _config())["reason"]
@@ -117,8 +122,8 @@ def test_dosed_strain_review_gap_does_not_mention_dose():
     from scoring_v4.modules.probiotic_evidence import score_evidence as probiotic_evidence
     from test_probiotic_applicability_rubric import strain_product
 
-    product = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM",
-                             name="Lactobacillus acidophilus NCFM", dose=1e9)
+    product = strain_product(clinical_id="STRAIN_HELVETICUS_R0052",
+                             name="Lactobacillus helveticus R0052", dose=1e9)
     reason = _pillar_evidence(probiotic_evidence(product), 20, "probiotic", _config())["reason"]
     assert "not disclosed" not in reason
 

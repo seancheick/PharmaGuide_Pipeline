@@ -11,7 +11,7 @@
 The source records and citations have already been assembled. The decisions below have not yet been written into the registry, so no evidence change is shipped from this packet by itself.
 
 - **Pending review:** 0
-- **Recorded approved:** 123
+- **Recorded approved:** 141
 - **Recorded rejected:** 0
 - **Other registry states:** 2
 - **Contexts shown in this packet:** 0

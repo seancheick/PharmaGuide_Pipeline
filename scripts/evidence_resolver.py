@@ -575,6 +575,20 @@ def resolve_evidence_for_row(
                 owner_facts=owner_facts,
                 blocking_reasons=["probiotic_strain_review_incomplete"],
             )
+        elif state == "no_qualifying_human_evidence":
+            # Every identified strain's literature review is finished and found
+            # no qualifying human evidence (combination-only, uncontrolled or
+            # absent research): a reviewed zero.
+            return EvidenceResolution(
+                canonical_id=canonical,
+                ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
+                points_eligible=False,
+                applicability_status=state,
+                reason_code="probiotic_strain_reviewed_no_qualifying_human_evidence",
+                owner_facts=owner_facts,
+            )
         elif state in {"research_present_applicability_unestablished", "applicability_unestablished"}:
             return EvidenceResolution(
                 canonical_id=canonical,
@@ -722,6 +736,13 @@ def resolve_evidence_for_row(
             lit_entry.get("verification_result") == "authoritative_pubmed_verified"
             and prov.get("all_pmids_verified", False) is True
             and not prov.get("retractions_found", False)
+        ) or (
+            # A food-matrix identity classification makes no literature claim,
+            # so PubMed verification has nothing to verify. It may only conclude
+            # "not an efficacy active" and may cite no studies.
+            lit_entry.get("verification_result") == "identity_classification_no_literature_claim"
+            and lit_entry.get("effect_direction") == "not_efficacy_relevant"
+            and not lit_entry.get("qualifying_human_studies")
         )
         if not is_verified:
             # Unverified or generated record membership alone MUST NOT complete Evidence

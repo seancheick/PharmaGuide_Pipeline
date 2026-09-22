@@ -164,3 +164,21 @@ def test_pure_strain_with_nonprobiotic_taxonomy_stays_nonprobiotic():
     name stays non-probiotic even at panel==0."""
     p = _prod("Daily Prebiotic Fiber", "fiber_digestive", [], strains=5, has_cfu=False)
     assert class_for_product(p) != "probiotic"
+
+
+# --- dominant declared identity: taxonomy "probiotic" is not enough -----------
+
+def test_declared_multi_with_probiotic_adjunct_routes_multi_even_under_probiotic_taxonomy():
+    """OLLY "Kids Multi + Probiotic", Centrum "Multi + Probiotics": a full
+    vitamin/mineral panel under a title that declares a multi is a multivitamin
+    carrying a probiotic adjunct (closure D4, 11 products)."""
+    for name in ("Kids Multi + Probiotic Yum Berry Punch", "One Daily Multivitamin plus Probiotics",
+                 "Probiotic + Multivitamin Gummies Mixed Berry"):
+        p = _prod(name, "probiotic", _vit_rows(14), strains=2, has_cfu=True)
+        assert class_for_product(p) == "multi_or_prenatal", name
+
+
+def test_probiotic_titles_keep_the_probiotic_route_despite_a_vitamin_panel():
+    for name in ("Triple Probiotic", "Multi-Strain Probiotic 50 Billion", "Probiotic Solutions Energy 25 Billion CFUs"):
+        p = _prod(name, "probiotic", _vit_rows(14), strains=8, has_cfu=True)
+        assert class_for_product(p) == "probiotic", name

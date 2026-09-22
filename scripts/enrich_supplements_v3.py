@@ -615,7 +615,8 @@ def _derive_clinical_support_level(strain_entry) -> Optional[str]:
       3. conservative default ``"weak"`` (protects against overclaim)
 
     Explicitly unreviewed evidence returns None: a review gap is not weak
-    evidence. Otherwise returns ``"high" | "moderate" | "weak"``.
+    evidence, and neither is a finished review that found none
+    (``evidence_level: none``). Otherwise returns ``"high" | "moderate" | "weak"``.
     """
     if not isinstance(strain_entry, dict):
         return "weak"
@@ -625,7 +626,8 @@ def _derive_clinical_support_level(strain_entry) -> Optional[str]:
     if not isinstance(evidence, dict):
         return "weak"
     if evidence.get("type") != "study_contexts_derived" and (
-            strain_entry.get("evidence_level") == "unreviewed" or evidence.get("evidence_strength") == "unreviewed"):
+            strain_entry.get("evidence_level") in ("unreviewed", "none")
+            or evidence.get("evidence_strength") == "unreviewed"):
         return None
 
     explicit = evidence.get("clinical_support_level") or thresholds.get("clinical_support_level")
@@ -654,7 +656,10 @@ def _probiotic_research_presentation(
     treating membership in ``clinical_strains`` as proof that the exact strain,
     product, dose, and intended use were all clinically validated.
     """
-    from probiotic_measurements import effective_strain_evidence, identity_review_accepted, identity_confidence
+    from probiotic_measurements import (
+        effective_strain_evidence, identity_review_accepted, identity_confidence,
+        strain_literature_review_concluded,
+    )
     entry = strain_entry if isinstance(strain_entry, dict) else {}
     thresholds = entry.get("cfu_thresholds") or {}
     thresholds = thresholds if isinstance(thresholds, dict) else {}
@@ -668,6 +673,9 @@ def _probiotic_research_presentation(
         review_status = "clinician_verified"
     elif identity_review_accepted(entry):
         review_status = "clinician_context_approved"
+    elif strain_literature_review_concluded(entry):
+        # A finished review, not research awaiting sign-off.
+        review_status = "literature_reviewed_no_qualifying_evidence"
     else:
         review_status = "pending_review"
     # Review status gates every affirmative claim; scope only decides which
@@ -680,6 +688,8 @@ def _probiotic_research_presentation(
         match_status = "rejected"
     elif review_status == "pending_review":
         match_status = "pending_review"
+    elif review_status == "literature_reviewed_no_qualifying_evidence":
+        match_status = "no_qualifying_human_evidence"
     elif evidence_scope == "scope_unresolved":
         match_status = "scope_unresolved"
     elif evidence_scope == "formula_specific":
@@ -4649,6 +4659,7 @@ class SupplementEnricherV3:
                 "cleaner_match_method"
             ) in {
                 "contextual_ala_identity",
+                "citrus_bioflavonoid_source_identity",
                 "single_declared_nutrient_form",
             }
             # Phase 3: forward the cleaner's IQM canonical_id as a hard
@@ -16202,18 +16213,15 @@ class SupplementEnricherV3:
             existing_by_key[exposure_key] = len(assessments) - 1
 
     def _collect_product_scoring_classification(self, enriched: Dict[str, Any]) -> Dict[str, Any]:
-        """Emit native ScoringClassification v1 using the shared builder."""
-        try:
-            return build_scoring_classification(
-                enriched,
-                classification_origin="native_enrichment",
-            )
-        except Exception as exc:  # pragma: no cover - builder is total; belt/suspenders
-            self.logger.warning("Scoring classification emit failed: %s", exc)
-            return build_scoring_classification(
-                {},
-                classification_origin="native_enrichment",
-            )
+        """Emit native ScoringClassification v1 using the shared builder.
+
+        No fallback: classifying an empty product on failure silently routed the
+        real one as generic. A failure now surfaces as a failed enrichment.
+        """
+        return build_scoring_classification(
+            enriched,
+            classification_origin="native_enrichment",
+        )
 
     def apply_taxonomy_projection(self, enriched: Dict[str, Any]) -> Dict[str, Any]:
         """Classify with the canonical taxonomy and emit everything derived from it.

@@ -238,7 +238,10 @@ def test_subclinical_dose_guard_applies_when_product_dose_below_minimum() -> Non
         )
     )
 
-    assert payload["score"] == 1.62
+    # An applicability gate, not a dose gradient: trials at 200 mg do not apply to
+    # a 100 mg label, so they earn nothing (the Dose pillar owns adequacy).
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["evidence_result_state"] == "applicability_unestablished"
     assert payload["metadata"]["flags"] == ["SUB_CLINICAL_DOSE_DETECTED"]
     assert payload["metadata"]["sub_clinical_canonicals"] == ["magnesium"]
 
@@ -815,7 +818,7 @@ def test_vitamin_d_iu_and_mcg_apply_same_subclinical_dose_guard() -> None:
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == 1.485
+    assert iu_payload["score"] == 0.0  # below the studied dose: the trials do not apply
     # This independent mass-backed nutrition-authority floor is intentionally
     # unavailable to the IU-only row; IU conversion remains evidence-match-only.
     assert mcg_payload["score"] == 10.0

@@ -266,10 +266,13 @@ def test_edge_pure_epa_synthetic_canary() -> None:
 
 def test_edge_pure_dha_algal_synthetic_canary() -> None:
     """Pure DHA algal product (vegan-friendly) — must route omega, pass
-    completeness, get source disclosed credit (algal/algae)."""
+    completeness, get source disclosed credit (algal/algae). Since 45685529
+    (2026-09-18) source disclosure is scored once, in Transparency, not
+    Formulation."""
     from scoring_v4.router import class_for_product
     from scoring_v4.gate_completeness import evaluate_completeness_gate
     from scoring_v4.modules.omega_formulation import score_formulation
+    from scoring_v4.modules.omega_transparency import score_transparency
 
     product = {
         "status": "active", "form_factor": "softgel",
@@ -284,8 +287,8 @@ def test_edge_pure_dha_algal_synthetic_canary() -> None:
     }
     assert class_for_product(product) == "omega"
     assert evaluate_completeness_gate(product, "omega").is_live_eligible
-    payload = score_formulation(product)
-    assert "source_disclosed" in payload["components"]
+    assert "source_disclosed" not in score_formulation(product)["components"]
+    assert score_transparency(product)["components"]["source_disclosed"] == 3
 
 
 def test_edge_fish_oil_parent_only_routes_omega_but_fails_completeness() -> None:

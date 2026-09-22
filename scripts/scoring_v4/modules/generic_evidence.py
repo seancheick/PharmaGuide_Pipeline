@@ -58,7 +58,6 @@ _EM = _cfg_block("evidence_magnitudes", "generic")["generic"]
 CAP_TOTAL = _EM["cap_total"]
 CAP_PER_INGREDIENT = _EM["cap_per_ingredient"]
 SUPRA_CLINICAL_MULTIPLE = _EM["supra_clinical_multiple"]
-SUB_CLINICAL_DOSE_GUARD_MULTIPLIER = _EM["sub_clinical_dose_guard_multiplier"]
 
 STUDY_TYPE_BASE_POINTS: Dict[str, float] = {
     "systematic_review_meta": 6.0,
@@ -265,7 +264,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             and converted_dose is not None
             and converted_dose < min_clinical_dose
         ):
-            raw *= SUB_CLINICAL_DOSE_GUARD_MULTIPLIER
+            # Applicability gate, not a dose gradient: trials run at doses the
+            # label never reaches do not apply to it, so they earn nothing here.
+            # How well the product is dosed belongs to the Dose pillar.
             _append_once(flags, "SUB_CLINICAL_DOSE_DETECTED")
             canonical_ids = _matched_canonical_ids(entry)
             if canonical_ids:
@@ -274,6 +275,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 canonical = _canonical_from_entry(entry) or lookup_key
                 if canonical:
                     sub_clinical_canonicals.add(canonical)
+            continue
 
         max_studied_dose = _as_float(entry.get("max_studied_clinical_dose"), None)
         if (
@@ -347,7 +349,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     from studied_formulas import assess_probiotic_component_disposition
     probiotic_component_evidence = assess_probiotic_component_disposition(product)
     evidence_result_state = _evidence_result_state(
-        product, total, listed_ids, matches, probiotic_disposition=probiotic_component_evidence
+        product, total, listed_ids, matches, probiotic_disposition=probiotic_component_evidence,
+        dose_gated=bool(sub_clinical_canonicals),
     )
 
     components = {
@@ -447,6 +450,7 @@ def _evidence_result_state(
     listed_ids: set[str],
     accepted: List[Dict[str, Any]],
     probiotic_disposition: Optional[Dict[str, Any]] = None,
+    dose_gated: bool = False,
 ) -> str:
     """Why Evidence landed where it did, from the matches that were scored.
 
@@ -478,6 +482,11 @@ def _evidence_result_state(
         prob_state = probiotic_disposition.get("disposition_state")
         if prob_state:
             return str(prob_state)
+
+    # Reviewed research exists but its trials ran at doses this label never
+    # reaches: a finished conclusion that the research does not apply here.
+    if dose_gated:
+        return "applicability_unestablished"
 
     # Evaluated matches on record take precedence when present
     if accepted:

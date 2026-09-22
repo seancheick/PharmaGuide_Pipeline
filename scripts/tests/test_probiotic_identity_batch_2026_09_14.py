@@ -63,7 +63,10 @@ def test_new_identities_are_unreviewed_evidence_free_and_cited():
         entry = entries[op["id"]]
         assert entry["cfu_thresholds"]["dr_pham_signoff"] is False
         assert entry["cfu_thresholds"]["evidence"] is None
-        assert entry["study_contexts"] == []
+        # The batch itself added no evidence. Contexts may only come from a
+        # later, separately attributed literature review (closure D1).
+        assert all(c["authored_on"] > "2026-09-14" for c in entry["study_contexts"])
+        assert not entry["study_contexts"] or entry["literature_review"]["reviewed_on"] > "2026-09-14"
         block = entry["identity_verification"]
         assert block["status"] in {"designation_verified", "designation_found_species_unconfirmed"}
         assert block["source_pmids"] and all(p.isdigit() for p in block["source_pmids"])

@@ -330,7 +330,9 @@ def test_clinician_approved_research_is_a_finished_review_even_without_credit():
 
     Until 2026-09-21 any recorded context read as 'pending_clinical_review', so a
     finished review kept products incomplete. The conclusion is terminal and earns
-    nothing new: approval records review provenance, it grants no points.
+    nothing new: approval records review provenance, it grants no points. Its own
+    exact-strain trials own its human evidence and are null, so the finished
+    review reads as a reviewed null.
     """
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
@@ -341,7 +343,7 @@ def test_clinician_approved_research_is_a_finished_review_even_without_credit():
         evidence = score_evidence(p)
         assert review["status"] == "clinically_reviewed" and review["pending_context_ids"] == []
         assert evidence["score"] == 0
-        assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
+        assert evidence["metadata"]["evidence_result_state"] == "evaluated_null"
 
 
 def test_a_context_awaiting_adjudication_is_still_pending():
@@ -351,9 +353,11 @@ def test_a_context_awaiting_adjudication_is_still_pending():
     assert review["pending_context_ids"]
 
 
-def test_an_uncurated_strain_stub_stays_incomplete():
+def test_an_uncurated_strain_stub_stays_incomplete(monkeypatch):
     from scoring_v4.modules.probiotic_evidence import score_evidence
+    from test_evidence_completeness_closure_20260921 import unreview_strain
 
+    unreview_strain(monkeypatch, "STRAIN_ACIDOPHILUS_LA14")
     p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_LA14", name="Lactobacillus acidophilus La-14", dose=1e9)
     assert score_evidence(p)["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
 
@@ -411,10 +415,14 @@ def test_research_summary_includes_new_sources_without_lending_them_approval():
     p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM", name="Lactobacillus acidophilus NCFM")
     row = assessment(p)
     assert {"28082816", "19651563", "21436726"} <= set(row["source_pmids"])
-    assert row["scoring_source_pmids"] == ["24717228"]
+    # Scoring cites only the approved exact-strain human record (it owns NCFM's
+    # human evidence); newly found sources and the nonhuman anchor lend nothing.
+    from probiotic_measurements import derived_context_evidence
+    human = derived_context_evidence(studied_formulas._clinical_strain_registry()["STRAIN_ACIDOPHILUS_NCFM"])
+    assert row["scoring_source_pmids"] == [human["pmid"], *human["additional_pmids"]]
+    assert "21436726" not in row["scoring_source_pmids"] and "24717228" not in row["scoring_source_pmids"]
     evidence = score_evidence(p)
-    assert evidence["score"] == 0
-    assert evidence["metadata"]["uncredited_native_strain_evidence_rows"][0]["source_pmids"] == ["24717228"]
+    assert evidence["score"] == 0  # the approved trials are null
 
 
 def test_legacy_native_range_cannot_become_a_second_applicability_engine(registry):

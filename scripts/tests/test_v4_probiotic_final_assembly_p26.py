@@ -276,20 +276,25 @@ def test_shadow_emits_real_score_for_probiotic_at_p26() -> None:
     assert out["v4_confidence"] in {"high", "moderate", "low"}
 
 
-def test_shadow_verdict_safe_when_score_above_40() -> None:
+def test_shadow_verdict_follows_the_tier_and_an_unverified_cert_earns_nothing() -> None:
+    """Was "SAFE when score above 40". Two premises are superseded: the verdict
+    follows the shipped tier (e26c9b98: POOR is the lowest tier's verdict, and
+    the lowest tier now runs to 55), and a SKU certification scores only with
+    verified provenance (55dc2f46). This fixture's entry has none."""
     from score_supplements_v4 import score_product_v4
+    from scoring_v4.modules.generic_trust import _score_b4a
 
-    # Explicit CFU disclosure + SKU certification clears the quality boundary.
-    # This synthetic fixture does not establish source-owned clinical adequacy.
     product = _probiotic_product(
         per_strain_cfu=True,
         trust_certs=[
             {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}
         ],
     )
+    points, metadata = _score_b4a(product)
+    assert points == 0.0
+    assert metadata["verified_skipped_reasons"] == {"missing_or_stale_provenance": 1}
     out = score_product_v4(product)
-    assert out["raw_score_v4_100"] > 40.0
-    assert out["v4_verdict"] == "SAFE"
+    assert out["v4_verdict"] == ("POOR" if out["quality_tier"] == "Poor" else "SAFE")
 
 
 def test_sku_certification_does_not_force_aggregate_only_probiotic_above_40() -> None:

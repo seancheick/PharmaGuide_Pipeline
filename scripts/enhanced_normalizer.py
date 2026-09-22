@@ -3573,6 +3573,42 @@ class EnhancedDSLDNormalizer:
             return None
         return standard_name, canonical_id, source_db
 
+    _CITRUS_SOURCE_RE = re.compile(
+        r"\b(citrus|orange|lemon|lime|grapefruit|tangerine|mandarin|bergamot|pomelo)\b", re.I
+    )
+
+    def _citrus_bioflavonoid_source_identity(
+        self, ingredient: Dict[str, Any]
+    ) -> Optional[Tuple[str, str, str]]:
+        """A generic bioflavonoid row whose declared botanical source is a citrus fruit.
+
+        "Bioflavonoid Fruit Extract" [form: Citrus aurantium Fruit Extract] names
+        the material (bioflavonoids) and its source (bitter orange fruit): the
+        existing citrus_bioflavonoids identity. Both facts are required: the form
+        alone routes to the bitter-orange botanical (a synephrine identity), and a
+        name-only alias would capture non-citrus bioflavonoid labels.
+        """
+        name = str(ingredient.get("name") or "").strip()
+        if not name:
+            return None
+        standard_name, mapped, _ = self._enhanced_ingredient_mapping(
+            name, [], ingredient_group=ingredient.get("ingredientGroup")
+        )
+        if not mapped or self._resolve_canonical_identity(standard_name, raw_name=name)[0] != "bioflavonoids":
+            return None
+        citrus_source = any(
+            isinstance(form, dict)
+            and str(form.get("category") or "").strip().casefold() == "botanical"
+            and self._CITRUS_SOURCE_RE.search(f"{form.get('name') or ''} {form.get('ingredientGroup') or ''}")
+            for form in ingredient.get("forms") or []
+        )
+        if not citrus_source:
+            return None
+        canonical_id, source_db = self._resolve_canonical_identity("Citrus Bioflavonoids")
+        if canonical_id != "citrus_bioflavonoids":
+            return None
+        return "Citrus Bioflavonoids", canonical_id, source_db
+
     def _contextual_ala_identity(
         self, ingredient: Dict[str, Any]
     ) -> Optional[Tuple[str, str, str]]:
@@ -4879,7 +4915,7 @@ class EnhancedDSLDNormalizer:
                 # can recover total_weight without re-reading the dropped
                 # parent row.
                 parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
-                for nested_ing in nested:
+                for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name):
                         continue
@@ -4920,7 +4956,7 @@ class EnhancedDSLDNormalizer:
                 )
                 # Sprint E1.2.1: same parent-mass propagation as above.
                 parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
-                for nested_ing in nested:
+                for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name):
                         continue
@@ -5011,7 +5047,7 @@ class EnhancedDSLDNormalizer:
                     logger.debug(f"Extracting {len(nested)} nestedRows from skipped parent: {name}")
                     # Sprint E1.2.1: same parent-mass stamp.
                     parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
-                    for nested_ing in nested:
+                    for nested_ing in self._lift_decomposition_members(nested):
                         nested_name = nested_ing.get("name", "")
                         if self._should_skip_ingredient(nested_name):
                             # Recurse into skip-listed children that have
@@ -5071,7 +5107,7 @@ class EnhancedDSLDNormalizer:
                 # keeps the parent row in the flattened output (via
                 # _nested_rows_flattened) — downstream may still discard it.
                 parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
-                for nested_ing in nested:
+                for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
 
                     # SKIP ENFORCEMENT: Skip nested items from skip list
@@ -5114,7 +5150,7 @@ class EnhancedDSLDNormalizer:
                                 len(grand_nested), nested_name,
                             )
                             skipped_mass, skipped_unit = self._extract_primary_mass_unit(nested_ing)
-                            for grand_ing in grand_nested:
+                            for grand_ing in self._lift_decomposition_members(grand_nested):
                                 grand_name = grand_ing.get("name", "")
                                 if self._should_skip_ingredient(grand_name):
                                     # Recursively flatten skip-listed
@@ -6726,6 +6762,28 @@ class EnhancedDSLDNormalizer:
 
         return False
 
+    def _lift_decomposition_members(self, rows: Any) -> List[Any]:
+        """Replace a decomposition row by the member rows it prints with it.
+
+        A comma-joined blend total such as "DHA, EPA 2 g Total" (DSLD 259484)
+        can carry its members as nestedRows with their own amounts (EPA 1.5 g,
+        DHA 500 mg). The members are the dosed rows and the total summarizes
+        them; skipping the total must not drop them. Only members that each
+        print their own amount are lifted: members without amounts (a 4-in-1
+        ketone-salt list) stay described by the total, as before. A
+        decomposition row with no members is left to the caller's leaf handling.
+        """
+        lifted: List[Any] = []
+        for row in rows or []:
+            members = row.get("nestedRows") if isinstance(row, dict) else None
+            if (members and self._is_chemical_decomposition_leaf(row)
+                    and all(isinstance(m, dict) and self._extract_primary_mass_unit(m)[0]
+                            for m in members)):
+                lifted.extend(members)
+            else:
+                lifted.append(row)
+        return lifted
+
     def _process_single_ingredient_enhanced(self, ing: Dict, is_active: bool) -> Union[Dict[str, Any], List[Dict[str, Any]], None]:
         """Process a single ingredient with enhanced mapping.
 
@@ -6791,7 +6849,7 @@ class EnhancedDSLDNormalizer:
             if nested_rows:
                 logger.debug(f"Processing {len(nested_rows)} nestedRows from skipped parent: {name}")
                 nested_results = []
-                for nested_ing in nested_rows:
+                for nested_ing in self._lift_decomposition_members(nested_rows):
                     if self._is_chemical_decomposition_leaf(nested_ing):
                         logger.debug(
                             "Skipping chemical-decomposition leaf '%s' (cat=%s) under skipped parent '%s'",
@@ -6993,6 +7051,9 @@ class EnhancedDSLDNormalizer:
         contextual_ala_identity = (
             self._contextual_ala_identity(ing) if is_active else None
         )
+        citrus_bioflavonoid_identity = (
+            self._citrus_bioflavonoid_source_identity(ing) if is_active else None
+        )
         printed_nutrient_identity = (
             self._printed_nutrient_identity(ing) if is_active else None
         )
@@ -7001,6 +7062,7 @@ class EnhancedDSLDNormalizer:
             if (
                 foodstate_nutrient_identity
                 or contextual_ala_identity
+                or citrus_bioflavonoid_identity
                 or printed_nutrient_identity
             )
             else self._try_unii_match(ing)
@@ -7023,6 +7085,15 @@ class EnhancedDSLDNormalizer:
             mapped = True
             mapped_forms = forms or []
             ing["_sprint1_match_method"] = "contextual_ala_identity"
+        elif citrus_bioflavonoid_identity is not None:
+            (
+                standard_name,
+                unii_canonical_id,
+                unii_canonical_source_db,
+            ) = citrus_bioflavonoid_identity
+            mapped = True
+            mapped_forms = forms or []
+            ing["_sprint1_match_method"] = "citrus_bioflavonoid_source_identity"
         elif printed_nutrient_identity is not None:
             (
                 standard_name,
@@ -7210,7 +7281,7 @@ class EnhancedDSLDNormalizer:
             # (not provided) is treated as "no measurable parent mass".
             _parent_blend_mass = quantity if isinstance(quantity, (int, float)) and quantity > 0 and unit not in ("", "NP") else None
             _parent_blend_unit = unit if _parent_blend_mass is not None else None
-            for nested_ing in nested_rows:
+            for nested_ing in self._lift_decomposition_members(nested_rows):
                 if self._is_chemical_decomposition_leaf(nested_ing):
                     logger.debug(
                         "Skipping chemical-decomposition leaf '%s' (cat=%s) under parent '%s'",

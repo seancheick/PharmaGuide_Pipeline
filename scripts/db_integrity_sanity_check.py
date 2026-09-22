@@ -1025,7 +1025,14 @@ def check_clinically_relevant_strains(findings: List[Finding], data: Dict[str, A
             continue
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=False)
-        _check_enum(findings, file, e, i, "evidence_level", {"high", "moderate", "low", "unreviewed"}, severity="warning")
+        _check_enum(findings, file, e, i, "evidence_level", {"high", "moderate", "low", "unreviewed", "none"}, severity="warning")
+        if e.get("evidence_level") == "none":
+            from probiotic_measurements import strain_literature_review_concluded
+            if not strain_literature_review_concluded(e) or e.get("key_benefits"):
+                findings.append(Finding(
+                    "error", file, f"[{i}].evidence_level", "no_evidence_without_concluded_review",
+                    "a concluded literature review and no benefit claims", "missing review or benefits present",
+                ))
         if e.get("evidence_level") == "unreviewed":
             thresholds = e.get("cfu_thresholds")
             approved = isinstance(thresholds, dict) and thresholds.get("dr_pham_signoff") is True

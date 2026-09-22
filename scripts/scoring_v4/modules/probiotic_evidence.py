@@ -15,7 +15,8 @@ from scoring_v4.modules.generic_evidence import evidence_completeness_gap, resol
 from probiotic_measurements import context_review_finished
 from studied_formulas import (assess_probiotic_evidence,
                              assess_probiotic_component_disposition,
-                             independent_clinical_strains, strain_assessments_for_match)
+                             independent_clinical_strains, reviewed_strains_without_qualifying_evidence,
+                             strain_assessments_for_match)
 
 
 PHASE_MARKER = "P2.3_probiotic_evidence"
@@ -169,6 +170,10 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         # is a coverage gap. Clinician-approved contexts that earn nothing for
         # this label are a finished conclusion (handled below).
         evidence_state = "human_clinical_evidence_unestablished"
+    elif reviewed_strains_without_qualifying_evidence(assessment["strain_assessments"]):
+        # Every strain's literature review is finished and found nothing that
+        # qualifies (combination-only, uncontrolled or no human research).
+        evidence_state = "no_qualifying_human_evidence"
     else:
         component_disp = assess_probiotic_component_disposition(product)
         evidence_state = component_disp.get("disposition_state") or "applicability_unestablished"

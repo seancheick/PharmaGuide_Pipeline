@@ -183,7 +183,10 @@ def test_scoring_sums_the_complete_daily_bcaa_dose(entries: dict[str, dict]) -> 
     assert "SUB_CLINICAL_DOSE_DETECTED" in once["metadata"]["flags"]
     assert set(once["metadata"]["sub_clinical_canonicals"]) == BCAA_IDS
     assert "SUB_CLINICAL_DOSE_DETECTED" not in twice["metadata"]["flags"]
-    assert twice["score"] > once["score"] > 0.0
+    # 3 g/day is below the studied 5 g minimum: those trials do not apply (0);
+    # 6 g/day reaches them.
+    assert twice["score"] > once["score"] == 0.0
+    assert once["metadata"]["evidence_result_state"] == "applicability_unestablished"
 
 
 def test_scoring_receives_the_reviewed_bcaa_upper_range(entries: dict[str, dict]) -> None:

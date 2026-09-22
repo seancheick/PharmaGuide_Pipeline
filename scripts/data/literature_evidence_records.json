@@ -3,11 +3,11 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-09-21",
-    "total_entries": 739,
+    "last_updated": "2026-09-22",
+    "total_entries": 747,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 207,
-    "verified_records_count": 739
+    "verified_records_count": 744
   },
   "literature_evidence_records": [
     {
@@ -22819,6 +22819,317 @@
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "invertase",
+      "material_form": "Yeast or Aspergillus beta-fructofuranosidase (invertase; supplement 'sucrase')",
+      "search_query": "(\"invertase\"[tiab] OR \"sacrosidase\"[tiab] OR \"beta-fructofuranosidase\"[tiab] OR \"sucrase\"[tiab]) AND (supplement*[tiab] OR enzyme replacement[tiab] OR oral[tiab] OR therapy[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt]) AND humans[mh]",
+      "search_date": "2026-09-22",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 13,
+      "qualifying_human_studies": [
+        {
+          "pmid": "9932843",
+          "title": "Sacrosidase therapy for congenital sucrase-isomaltase deficiency.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 28,
+          "dose": "sacrosidase liquid, weight-based single and multidose phases",
+          "duration": "10 days per dose-response phase",
+          "outcome": "reduced sucrose breath hydrogen versus placebo in children with congenital sucrase-isomaltase deficiency",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Sacrosidase therapy for congenital sucrase-isomaltase deficiency.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/9932843/",
+            "verified_at": "2026-09-22T04:56:59.393663+00:00",
+            "abstract_evidence_quote": "Breath H2 excretion decreased significantly when patients received sacrosidase or sacrosidase plus milk compared to placebo during sucrose breath tests."
+          }
+        },
+        {
+          "pmid": "8405850",
+          "title": "Evaluation of liquid yeast-derived sucrase enzyme replacement in patients with sucrase-isomaltase deficiency.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 14,
+          "dose": "liquid yeast-derived sucrase, graded concentrations",
+          "duration": "8 weeks",
+          "outcome": "reduced breath hydrogen after a sucrose load and allowed a sucrose-containing diet in congenital sucrase-isomaltase deficiency",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Evaluation of liquid yeast-derived sucrase enzyme replacement in patients with sucrase-isomaltase deficiency.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/8405850/",
+            "verified_at": "2026-09-22T04:56:59.393663+00:00",
+            "abstract_evidence_quote": "Yeast sucrase reduces breath hydrogen excretion in patients with CSID who are given a sucrose load (P < 0.001) and allows most patients to consume a sucrose-containing diet."
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "children and adults with congenital sucrase-isomaltase deficiency",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human trials test sacrosidase, a prescription enzyme-replacement therapy for congenital sucrase-isomaltase deficiency; they do not establish a benefit of invertase in general-purpose digestive-enzyme supplements.",
+      "applicability_status": "disease_specific_enzyme_replacement_not_applicable_to_supplement_use",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "closure 2026-09-22: live PubMed efetch (exact title, human MeSH/publication type, quote taken verbatim from the live abstract)",
+        "verified_at": "2026-09-22T04:56:59.393663+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "maltase",
+      "material_form": "Oral maltase (alpha-glucosidase) digestive enzyme",
+      "search_query": "(\"maltase\"[tiab]) AND (supplement*[tiab] OR enzyme replacement[tiab] OR oral[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt]) AND humans[mh]",
+      "search_date": "2026-09-22",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 4,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The four human-trial records concern acid-maltase gene therapy in Pompe disease and dietary inhibition of disaccharidases; none tests oral maltase as a supplement.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "closure 2026-09-22: live PubMed efetch (exact title, human MeSH/publication type, quote taken verbatim from the live abstract)",
+        "verified_at": "2026-09-22T04:56:59.393663+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "phytase",
+      "material_form": "Microbial (Aspergillus) phytase added to phytate-containing meals",
+      "search_query": "(\"phytase\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt]) AND humans[mh]",
+      "search_date": "2026-09-22",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 17,
+      "qualifying_human_studies": [
+        {
+          "pmid": "8632221",
+          "title": "Dietary Aspergillus niger phytase increases iron absorption in humans.",
+          "study_type": "controlled_clinical_trial",
+          "sample_size": 10,
+          "dose": "Aspergillus niger phytase added to a wheat-bran meal",
+          "duration": "single meal",
+          "outcome": "iron absorption rose from 14.3% to 26.1% when microbial phytase was added to a phytate-rich meal",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Dietary Aspergillus niger phytase increases iron absorption in humans.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/8632221/",
+            "verified_at": "2026-09-22T04:56:59.393663+00:00",
+            "abstract_evidence_quote": "Addition of microbial phytase to the meal containing phytase-deactivated wheat bran increased iron absorption from 14.3 +/- 2.6% to 26.1 +/- 3.8% (P < 0.0001)."
+          }
+        },
+        {
+          "pmid": "31504101",
+          "title": "Effect of exogenous phytase added to small-quantity lipid-based nutrient supplements (SQ-LNS) on the fractional and total absorption of zinc from a millet-based porridge consumed with SQ-LNS in young Gambian children: a randomized controlled trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 30,
+          "dose": "exogenous phytase in 20 g small-quantity lipid-based nutrient supplement",
+          "duration": "1 day per crossover arm",
+          "outcome": "fractional zinc absorption from a millet porridge rose from 8.6% to 16.0% in children aged 18-23 months",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of exogenous phytase added to small-quantity lipid-based nutrient supplements (SQ-LNS) on the fractional and total absorption of zinc from a millet-based porridge consumed with SQ-LNS in young Gambian children: a randomized controlled trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/31504101/",
+            "verified_at": "2026-09-22T04:56:59.393663+00:00",
+            "abstract_evidence_quote": "Mean FAZ increased from 8.6% ± 1.3% to 16.0% ± 1.3% when exogenous phytase was added to the SQ-LNS product (P < 0.001)."
+          }
+        },
+        {
+          "pmid": "24966411",
+          "title": "Influence of phytase, EDTA, and polyphenols on zinc absorption in adults from porridges fortified with zinc sulfate or zinc oxide.",
+          "study_type": "clinical_trial",
+          "sample_size": null,
+          "dose": "phytase added to zinc-fortified maize porridge",
+          "duration": "single meals",
+          "outcome": "fractional zinc absorption increased by more than 80% in young adults",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Influence of phytase, EDTA, and polyphenols on zinc absorption in adults from porridges fortified with zinc sulfate or zinc oxide.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24966411/",
+            "verified_at": "2026-09-22T04:56:59.393663+00:00",
+            "abstract_evidence_quote": "Adding phytase to the maize porridge immediately before consumption or using phytase for dephytinization during meal preparation both increased FAZ by >80% (both P < 0.001)."
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "healthy adults and young children eating phytate-rich cereal meals",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Phytase co-ingested with phytate-rich meals raises measured iron and zinc absorption; these are food-fortification absorption studies, not trials of a phytase capsule in a digestive-enzyme blend, and they report mineral absorption rather than a clinical outcome.",
+      "applicability_status": "food_fortification_absorption_studies_not_applicable_to_supplement_blends",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "closure 2026-09-22: live PubMed efetch (exact title, human MeSH/publication type, quote taken verbatim from the live abstract)",
+        "verified_at": "2026-09-22T04:56:59.393663+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "NHA_YOGURT_POWDER",
+      "material_form": "Dried yogurt / yogurt concentrate (dairy food matrix)",
+      "search_query": null,
+      "search_date": "2026-09-22",
+      "databases_searched": [],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "not_efficacy_relevant",
+      "population_context": "not applicable (food matrix)",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Identity classification, not a literature claim: dried yogurt concentrate is a dairy food matrix (DSLD: animal part or source, group Yogurt, form Milk). Labels that list it name their cultures as separate rows, so it is not scored as an organism.",
+      "applicability_status": "whole_food_matrix_not_efficacy_relevant",
+      "verification_result": "identity_classification_no_literature_claim",
+      "verification_provenance": {
+        "verified_by": "closure 2026-09-22: DSLD raw rows of all 11 corpus labels (category, ingredientGroup, form)",
+        "verified_at": "2026-09-22",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "citrus_polymethoxylated_flavones",
+      "material_form": "Citrus-peel polymethoxylated flavones (PMFs), studied with palm tocotrienols",
+      "search_query": "(\"polymethoxylated flavones\"[tiab] OR \"polymethoxyflavones\"[tiab] OR \"polymethoxyflavone\"[tiab] OR \"sytrinol\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt]) AND humans[mh]",
+      "search_date": "2026-09-22",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 6,
+      "qualifying_human_studies": [
+        {
+          "pmid": "25828621",
+          "title": "A combination of palm oil tocotrienols and citrus peel polymethoxylated flavones does not influence elevated LDL cholesterol and high-sensitivity C-reactive protein levels.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 240,
+          "dose": "12 mg/day tocotrienols + 103 mg/day PMF, or 27 mg/day tocotrienols + 32 mg/day PMF",
+          "duration": "12 weeks",
+          "outcome": "no difference from placebo in LDL cholesterol (primary) or hsCRP in hypercholesterolemic adults",
+          "effect_direction": "null",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A combination of palm oil tocotrienols and citrus peel polymethoxylated flavones does not influence elevated LDL cholesterol and high-sensitivity C-reactive protein levels.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25828621/",
+            "verified_at": "2026-09-22T05:12:31.412312+00:00",
+            "abstract_evidence_quote": "PMF-TT supplements had no effect beyond that of placebo on elevated LDL-C and hsCRP levels."
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "hypercholesterolemic adults with subclinical inflammation",
+      "studied_dose_exposure": {
+        "values": [
+          32,
+          103
+        ],
+        "unit": "mg"
+      },
+      "applicability_decision": "The only human trial tested citrus PMFs combined with palm tocotrienols (the Sytrinol-type pairing) and found no effect beyond placebo; it does not isolate PMFs, and the other screened records concern Kaempferia parviflora PMFs or grapefruit-juice drug interactions.",
+      "applicability_status": "combination_trial_null_cannot_establish_standalone_benefit",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "closure 2026-09-22: live PubMed efetch (exact title, human MeSH, quote taken verbatim from the live abstract)",
+        "verified_at": "2026-09-22T05:12:31.412312+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "pectinase",
+      "material_form": "Oral pectinase (polygalacturonase) digestive enzyme",
+      "search_query": "(\"pectinase\"[tiab] OR \"polygalacturonase\"[tiab]) AND (supplement*[tiab] OR oral[tiab] OR digestive[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt]) AND humans[mh]",
+      "search_date": "2026-09-22",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The search returned no human trial of pectinase or polygalacturonase as an oral supplement.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "closure 2026-09-22: live PubMed esearch/efetch (every retrieved record read; none tests the oral digestive enzyme)",
+        "verified_at": "2026-09-22T06:12:22.657574+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "hemicellulase",
+      "material_form": "Oral hemicellulase / xylanase digestive enzyme",
+      "search_query": "(\"hemicellulase\"[tiab] OR \"xylanase\"[tiab]) AND (supplement*[tiab] OR oral[tiab] OR digestive[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt]) AND humans[mh]",
+      "search_date": "2026-09-22",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The search returned no human trial of hemicellulase or xylanase as an oral supplement.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "closure 2026-09-22: live PubMed esearch/efetch (every retrieved record read; none tests the oral digestive enzyme)",
+        "verified_at": "2026-09-22T06:12:22.657574+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "beta_glucanase",
+      "material_form": "Oral beta-glucanase digestive enzyme",
+      "search_query": "(\"beta-glucanase\"[tiab] OR \"beta glucanase\"[tiab] OR \"glucanase\"[tiab]) AND (supplement*[tiab] OR oral[tiab] OR digestive[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt]) AND humans[mh]",
+      "search_date": "2026-09-22",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 3,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The three human-trial records test multi-enzyme or alpha-1,3-glucanase lozenges and mouthwashes against dental plaque (40676928, 38830531, 2095311); none tests beta-glucanase as an oral digestive supplement.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "closure 2026-09-22: live PubMed esearch/efetch (every retrieved record read; none tests the oral digestive enzyme)",
+        "verified_at": "2026-09-22T06:12:22.657574+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       }

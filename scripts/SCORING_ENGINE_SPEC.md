@@ -1,7 +1,7 @@
 # PharmaGuide Scoring Engine Specification
 
 > Production scoring engine: **4.4.0**
-> V4 quality configuration: **1.12.0-omega-semantics-and-null-no-credit**
+> V4 quality configuration: **1.13.0-dose-applicability-gate**
 > Export schema: **2.5.0** / **117 core columns**
 > Stage-3 artifact schema: **4.3.0**
 > Last verified against code: **2026-09-18**
@@ -110,7 +110,8 @@ The input dict is not mutated.
 
 `scoring_input_contract.py::build_scoring_classification()` is the sole
 route authority (ScoringClassification v1, `SCORING_CLASSIFICATION_SCHEMA_VERSION`);
-`scoring_v4/router.py::class_for_product()` is a defensive adapter that calls it.
+`scoring_v4/router.py::class_for_product()` is a thin adapter that calls it and
+raises on a classifier failure (no silent `generic` fallback).
 Routes are pinned by `SCORING_ROUTE_MODULES` in the same file.
 
 The decision order below is a summary, not a spec — the classifier is the truth.
@@ -118,7 +119,7 @@ Verified route decision order (2026-09-18):
 
 | Order | Route | Trigger (summary) |
 |---:|---|---|
-| 1 | `probiotic` | Probiotic-class identity/CFU evidence (unless greens-powder primary type) |
+| 1 | `probiotic` | Probiotic-class identity/CFU evidence (unless greens-powder primary type); a title that declares a multi ("Multi + Probiotic") over a multi-eligible panel routes `multi_or_prenatal` instead (closure D4); as on every non-probiotic route, the strains add no Evidence points and their disposition/completeness still comes from the probiotic owner (`assess_probiotic_component_disposition`) |
 | 2 | `omega` | Prenatal title whose panel is genuinely omega-primary |
 | 3 | `multi_or_prenatal` | Prenatal title with multi-panel/taxonomy intent |
 | 4 | `sports` | Sports identity or primary-dose evidence |

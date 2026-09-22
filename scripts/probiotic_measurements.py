@@ -646,7 +646,8 @@ def derived_context_evidence(entry) -> dict | None:
     two or more RCTs with a positive primary patient-important outcome -> strong;
     one such RCT -> medium; otherwise weak. Direction: negative-only evidence is
     negative; positive evidence with null, mixed, or negative company is mixed;
-    positives only are positive; null-only or surrogate-only evidence is null.
+    positives only are positive; null-only evidence is null; surrogate-only or
+    unranked evidence (no primary patient-important outcome) is unresolved.
     Combination and species contexts never contribute.
     """
     entry = entry if isinstance(entry, Mapping) else {}
@@ -697,8 +698,13 @@ def derived_context_evidence(entry) -> dict | None:
         direction = "positive_strong" if strength == "strong" else "positive_weak"
     elif mixed:
         direction = "mixed"
-    else:
+    elif nulls:
         direction = "null"
+    else:
+        # No trial family reports a primary patient-important outcome. Surrogate
+        # or unranked outcomes cannot establish benefit, and "null" would claim
+        # the trial failed its primary outcome.
+        direction = "unresolved"
     pmids: list = []
     for c in (positives + mixed + nulls + negatives) or contexts:
         for pmid in c.get("source_pmids") or []:
@@ -723,16 +729,35 @@ def _legacy_evidence_block(entry: Mapping) -> dict | None:
     return dict(legacy) if isinstance(legacy, Mapping) and legacy else None
 
 
+def _summary_asserts_human_evidence(evidence: Mapping) -> bool:
+    """Does this evidence summary itself describe human clinical research?"""
+    validation = evidence.get("clinical_validation") or {}
+    validation = validation if isinstance(validation, Mapping) else {}
+    human = str(validation.get("q3_human_clinical") or "").strip().upper()
+    if human:
+        return human == "YES"
+    evidence_type = str(evidence.get("type") or "").strip().lower()
+    return any(token in evidence_type for token in ("rct", "meta_analysis", "clinical", "guideline", "human"))
+
+
 def effective_strain_evidence(entry) -> dict | None:
-    """A clinician-authored summary always summarizes its identity (signed or
-    suspended); only an identity without one is described by its accepted contexts."""
+    """One owner per fact. A clinician-authored summary (signed or suspended)
+    summarizes its identity and owns what it asserts; an identity without one is
+    described by its accepted contexts. When a signed summary describes only
+    preclinical evidence (animal model, q3 NO/UNCLEAR) and approved exact-strain
+    human contexts exist, the reviewed human-study record owns human evidence:
+    "no human research" and approved human trials cannot both stand.
+    """
     entry = entry if isinstance(entry, Mapping) else {}
     legacy = _legacy_evidence_block(entry)
-    if legacy is not None:
+    derived = (derived_context_evidence(entry)
+               if identity_confidence(entry) in IDENTITY_CONFIDENCE_ACCEPTED else None)
+    signed = (entry.get("cfu_thresholds") or {}).get("dr_pham_signoff") is True
+    # A suspended sign-off stays under the clinician gate: engineering-approved
+    # contexts are not its clinician-reviewed replacement.
+    if legacy is not None and (derived is None or not signed or _summary_asserts_human_evidence(legacy)):
         return legacy
-    if identity_confidence(entry) not in IDENTITY_CONFIDENCE_ACCEPTED:
-        return None
-    return derived_context_evidence(entry)
+    return derived
 
 
 def identity_review_accepted(entry) -> bool:
@@ -748,6 +773,36 @@ def identity_review_accepted(entry) -> bool:
     if _legacy_evidence_block(entry) is not None:
         return False
     return identity_confidence(entry) in IDENTITY_CONFIDENCE_ACCEPTED and derived_context_evidence(entry) is not None
+
+
+# Why a finished literature review found no strain-attributable human evidence.
+# Combination trials never credit one strain, uncontrolled designs do not
+# qualify, and research on a designation whose species the sources dispute
+# cannot be attributed to the label's organism.
+LITERATURE_REVIEW_NO_QUALIFYING_REASONS = frozenset({
+    "no_human_research_found",
+    "combination_only_human_research",
+    "uncontrolled_single_strain_research_only",
+    "species_identity_unconfirmed_in_sources",
+})
+
+
+def strain_literature_review_concluded(entry) -> bool:
+    """A dated, attributable literature review concluded no qualifying human evidence.
+
+    That is a finished conclusion (a reviewed zero), not a pending review. It
+    never lifts a clinician hold: an entry carrying a legacy evidence summary
+    stays under the clinician gate.
+    """
+    entry = entry if isinstance(entry, Mapping) else {}
+    review = entry.get("literature_review")
+    if not isinstance(review, Mapping) or _legacy_evidence_block(entry) is not None:
+        return False
+    return (review.get("conclusion") == "no_qualifying_human_evidence"
+            and review.get("reason") in LITERATURE_REVIEW_NO_QUALIFYING_REASONS
+            and all(isinstance(review.get(k), str) and review[k].strip()
+                    for k in ("reviewed_on", "reviewer", "search_query", "basis"))
+            and isinstance(review.get("pmids_screened"), list))
 
 
 def classify_dose_applicability(amount, dose: Mapping) -> tuple[str, str]:
@@ -789,9 +844,7 @@ def clinical_strain_research_scope(entry: dict) -> dict:
     validation = validation if isinstance(validation, dict) else {}
     evidence_type = str(evidence.get("type") or "").strip().lower()
     explicit = str(validation.get("q1_strain_explicit") or "").strip().upper()
-    human = str(validation.get("q3_human_clinical") or "").strip().upper()
-    human_evidence = human == "YES" if human else any(
-        token in evidence_type for token in ("rct", "meta_analysis", "clinical", "guideline", "human"))
+    human_evidence = _summary_asserts_human_evidence(evidence)
     if explicit == "FORMULA_LEVEL" or evidence_type == "product_formula_rct":
         scope = "formula_specific"
     elif explicit == "YES" or "strain_specific" in evidence_type:

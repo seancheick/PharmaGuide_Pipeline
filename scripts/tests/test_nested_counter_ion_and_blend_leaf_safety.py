@@ -253,3 +253,60 @@ def test_fish_oil_omega_parent_preserved(normalizer) -> None:
     assert omega_signal_present, (
         f"Omega-3 / fish-oil identity must survive. Got actives: {names}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Tests — a blend total that prints its own dosed members (DSLD 259484)
+# ---------------------------------------------------------------------------
+
+def _qty(value: float, unit: str) -> List[Dict[str, Any]]:
+    return [{"servingSizeOrder": 1, "operator": "=", "quantity": value, "unit": unit}]
+
+
+def _fish_oil_with_blend_total(members: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Nature's Way Omega-3 Extra Strength shape: Fish Oil 4.5 g ->
+    "DHA, EPA" 2 g Total (forms list both, unquantified) -> members."""
+    return {
+        "id": 259484, "fullName": "Omega-3 Extra Strength EPA 1500 mg", "brandName": "Nature's Way",
+        "ingredientRows": [{
+            "order": 7, "name": "Fish Oil", "category": "fat", "ingredientGroup": "Fish Oil",
+            "quantity": _qty(4.5, "Gram(s)"), "forms": [],
+            "nestedRows": [{
+                "order": 8, "name": "DHA, EPA", "category": "blend", "ingredientGroup": "Blend",
+                "notes": "Total", "quantity": _qty(2, "Gram(s)"),
+                "forms": [{"order": 1, "name": "Docosahexaenoic Acid", "category": "fatty acid",
+                           "ingredientGroup": "DHA (Docosahexaenoic Acid)"},
+                          {"order": 2, "name": "Eicosapentaenoic Acid", "category": "fatty acid",
+                           "ingredientGroup": "EPA (Eicosapentaenoic Acid)"}],
+                "nestedRows": members,
+            }],
+        }],
+    }
+
+
+def test_blend_total_with_dosed_members_keeps_the_member_doses(normalizer) -> None:
+    """The members print their own amounts, so they are the dosed actives.
+    Expanding the total's unquantified forms instead shipped EPA/DHA at 0 mg
+    (259484 scored 36.3 on a 2 g EPA+DHA label)."""
+    out = normalizer.normalize_product(_fish_oil_with_blend_total([
+        {"order": 9, "name": "Eicosapentaenoic Acid", "category": "fatty acid",
+         "ingredientGroup": "EPA (Eicosapentaenoic Acid)", "quantity": _qty(1.5, "Gram(s)"), "forms": []},
+        {"order": 10, "name": "Docosahexaenoic Acid", "category": "fatty acid",
+         "ingredientGroup": "DHA (Docosahexaenoic Acid)", "quantity": _qty(500, "mg"), "forms": []},
+    ]))
+    doses = {a.get("canonical_id"): (a.get("quantity"), a.get("unit")) for a in out["activeIngredients"]}
+    assert doses.get("epa") == (1.5, "Gram(s)") and doses.get("dha") == (500.0, "mg")
+    assert "DHA, EPA" not in _active_names(out)
+
+
+def test_blend_total_with_undosed_members_keeps_the_leaf_behavior(normalizer) -> None:
+    """Members without amounts stay described by the total, as before."""
+    out = normalizer.normalize_product(_fish_oil_with_blend_total([
+        {"order": 9, "name": "Eicosapentaenoic Acid", "category": "fatty acid",
+         "ingredientGroup": "EPA (Eicosapentaenoic Acid)", "quantity": _qty(0, "NP"), "forms": []},
+        {"order": 10, "name": "Docosahexaenoic Acid", "category": "fatty acid",
+         "ingredientGroup": "DHA (Docosahexaenoic Acid)", "quantity": _qty(0, "NP"), "forms": []},
+    ]))
+    assert "DHA, EPA" not in _active_names(out)
+    paths = [a.get("raw_source_path") for a in out["activeIngredients"]]
+    assert not any(str(p).endswith("nestedRows[0].nestedRows[0]") for p in paths)

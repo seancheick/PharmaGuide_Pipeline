@@ -130,3 +130,13 @@ fresh raw→clean→enrich→score sample of 395 products on the final code: 0 m
 | `quality_tier` (from the shipped whole number) | `grade` | core DB column (app fallback) |
 | `quality_score_confidence` | `v4_confidence` | core DB column (app fallback) |
 | — (V3 retired) | 2.5.0 V3 section columns `score_ingredient_quality*`, … | published 2.5.0 SQLite schema; always NULL by contract, deprecated compatibility, not a live scoring field; schema 3 drops them. Nothing is fabricated to populate them |
+
+## Round 2 (2026-09-22) removals
+
+| Removed | Why it had to go | Proof |
+|---|---|---|
+| `router.class_for_product` `except Exception: return "generic"` and its unknown-route fallback | a classifier defect silently scored the product on the generic route | the classifier returns `generic` on its own for every malformed shape probed (`{}`, null name, null rows); routing slice 2,090 passed |
+| enricher silent fallback around `build_scoring_classification` | same failure mode at enrich time | enrich path now raises; fast suite green |
+| `SUB_CLINICAL_DOSE_GUARD_MULTIPLIER` + config `sub_clinical_dose_guard_multiplier` | Evidence was a second Dose owner (D5) | 119 attributed movers; config fingerprint history `1.13.0-dose-applicability-gate` |
+| legacy `cfu_thresholds.evidence` summaries on BS01, LP01, M-63, the four DS-01 members | agent-authored second owners (LP01's cited a combination as strain-specific; DS-01's duplicated `FORMULA_SEED_DS01`) | D1 applier asserts each block existed and was replaced by contexts, a conclusion, or the formula owner |
+| `pectinase`, `hemicellulase`, `xylanase`, `beta-glucanase` aliases under `cellulase`; `pectinase enzyme` under `digestive_enzymes` | a different enzyme under cellulase's CUI; one identity with two owners | 183 affected labels, 0 movers |

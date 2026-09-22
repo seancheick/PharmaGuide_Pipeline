@@ -18,31 +18,34 @@ from test_probiotic_applicability_rubric import strain_product
     ("STRAIN_LACTIS_BL04", "Bifidobacterium lactis Bl-04", "38665561"),
 ])
 def test_nonhuman_native_reference_does_not_earn_human_clinical_credit(clinical_id, name, pmid):
+    """The signed summary's nonhuman anchor never earns human credit. The identity's
+    own approved exact-strain human trials are its human evidence (one owner):
+    NCFM's are null, Bl-04's are one positive RCT and one null."""
     result = score_evidence(strain_product(clinical_id=clinical_id, name=name))
     metadata = result["metadata"]
     assessment = metadata["evidence_assessment"]["strain_assessments"][0]
     assert assessment["research_accepted"] is True  # Identity/review is a separate decision.
-    assert assessment["human_evidence"] is False
-    assert pmid in assessment["source_pmids"]
-    assert metadata["generic_evidence_score"] == 0
-    assert result["score"] == 0
-    assert metadata["native_clinical_strain_evidence_rows"] == []
-    # The historical anchor is nonhuman. Its human contexts are clinician-approved
-    # and none applies to this label: a finished review that earns nothing new,
-    # not an absence of research and not an unfinished one.
+    assert assessment["human_evidence"] is True
+    assert pmid not in assessment["scoring_source_pmids"]
+    for row in metadata["native_clinical_strain_evidence_rows"]:
+        assert pmid not in row["source_pmids"]
     assert metadata["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
-    assert metadata["evidence_result_state"] == "applicability_unestablished"
-    uncredited = metadata["uncredited_native_strain_evidence_rows"]
-    assert len(uncredited) == 1
-    assert uncredited[0]["clinical_id"] == clinical_id
-    assert uncredited[0]["source_pmids"] == assessment["scoring_source_pmids"]
-    assert uncredited[0]["reason_code"] == "human_clinical_evidence_unestablished"
+    from probiotic_measurements import derived_context_evidence
+    human_record = derived_context_evidence(studied_formulas._clinical_strain_registry()[clinical_id])
+    if human_record["effect_direction"] == "null":
+        assert result["score"] == 0
+        assert metadata["evidence_result_state"] == "evaluated_null"
+    else:
+        assert result["score"] > 0
 
 
 def test_native_nonhuman_reference_cannot_supply_dose_applicability_points(monkeypatch):
     registry = deepcopy(studied_formulas._clinical_strain_registry())
     # A synthetic scope contract proves that dose compatibility cannot override
     # the source's existing nonhuman classification. This is not a data correction.
+    # The nonhuman anchor is the only source here: NCFM's own approved human
+    # trials would otherwise own its human evidence.
+    registry["STRAIN_ACIDOPHILUS_NCFM"]["study_contexts"] = []
     registry["STRAIN_ACIDOPHILUS_NCFM"]["applicability"] = {
         "dose_unit": "CFU", "minimum_daily_dose": 1e9, "maximum_daily_dose": 2e10,
         "dosage_forms": ["capsule"], "target_population": "adult",
@@ -68,6 +71,9 @@ def test_native_source_gap_does_not_silence_independent_backbone_match(monkeypat
             "q1_strain_explicit": "YES", "q3_human_clinical": "NO"}}
         if native_source == "nonhuman" else {"type": "unreviewed_reference"}
     )
+    # Only the native source is under test: LGG's approved human trials would
+    # otherwise own its human evidence.
+    registry["STRAIN_LGG"]["study_contexts"] = []
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
     product = strain_product()
     product["evidence_data"] = {"clinical_matches": [deepcopy(reviewed_entries()["STRAIN_LGG"])]}
@@ -111,7 +117,10 @@ def test_native_primary_effect_direction_is_not_defaulted_to_positive(monkeypatc
         assert result["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
 
 
-def test_nonhuman_zero_is_not_presented_as_evidence_of_no_benefit():
+def test_nonhuman_zero_is_not_presented_as_evidence_of_no_benefit(monkeypatch):
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    registry["STRAIN_ACIDOPHILUS_NCFM"]["study_contexts"] = []  # the nonhuman anchor alone
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
     result = score_evidence(strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM",
                                           name="Lactobacillus acidophilus NCFM"))
     reason = _pillar_evidence(result, 20, "probiotic", config())["reason"]

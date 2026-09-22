@@ -328,7 +328,9 @@ def test_m63_resolves_to_its_own_reviewed_identity_and_evidence(enricher) -> Non
     ]
     assert len(clinical_rows) == 1
     assert clinical_rows[0]["clinical_id"] == "STRAIN_INFANTIS_M63"
-    assert clinical_rows[0]["clinical_support_level"] == "moderate"
+    # Owned by its study contexts since closure D1: two placebo RCTs with no
+    # primary patient-important outcome derive weak support.
+    assert clinical_rows[0]["clinical_support_level"] == "weak"
     assert clinical_rows[0]["cfu_per_day"] == 1_000_000_000
     assert clinical_rows[0]["adequacy_tier"] == "adequate"
 
@@ -412,7 +414,12 @@ def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enric
     assert "STRAIN_RHAMNOSUS_HN001" not in ids
     assert pd["prebiotic_present"] is True
     assert "pomegranate" in pd["prebiotic_name"].lower()
-    assert all(entry["research_match_status"] == "pending_review" for entry in pd["clinical_strains"])
+    # Their only human research is the whole DS-01 formula (FORMULA_SEED_DS01):
+    # each member is a finished review with no strain-attributable evidence.
+    ds01 = [e for e in pd["clinical_strains"] if e["clinical_id"] in {
+        "STRAIN_BREVE_SD_BR3_IT", "STRAIN_SALIVARIUS_SD_LS1_IT",
+        "STRAIN_PLANTARUM_SD_LP1_IT", "STRAIN_PLANTARUM_SD_LPLDL_UK"}]
+    assert ds01 and all(e["research_match_status"] == "no_qualifying_human_evidence" for e in ds01)
     from studied_formulas import independent_clinical_strains
     assert independent_clinical_strains({**product, "probiotic_data": pd}) == []
 

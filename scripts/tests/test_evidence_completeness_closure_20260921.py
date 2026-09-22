@@ -123,6 +123,22 @@ def test_label_spellings_reach_their_existing_iqm_owner(label, owner):
     assert (match or {}).get("canonical_id") == owner
 
 
+def unreview_strain(monkeypatch, strain_id):
+    """Model a registry stub: a verified identity with no finished literature review.
+
+    Closure D1 (2026-09-22) reviewed every stub, so tests that need an open review
+    remove that review from a copy of the registry.
+    """
+    from copy import deepcopy
+    import studied_formulas
+
+    rows = deepcopy(studied_formulas._clinical_strain_registry())
+    rows[strain_id].pop("literature_review", None)
+    rows[strain_id].update(study_contexts=[], evidence_level="unreviewed")
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: rows)
+    return rows
+
+
 def _reviewed_strain_with_stub():
     from test_probiotic_applicability_rubric import strain_product
 
@@ -140,12 +156,13 @@ def _reviewed_strain_with_stub():
     return reviewed, mixed
 
 
-def test_one_strains_points_cannot_close_a_product_holding_an_unreviewed_strain():
+def test_one_strains_points_cannot_close_a_product_holding_an_unreviewed_strain(monkeypatch):
     """185 products shipped 'complete' because a reviewed strain's points were
     checked before the unreviewed registry stub beside it (La-14 et al.)."""
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from scoring_v4.quality_score import evidence_display_state
 
+    unreview_strain(monkeypatch, "STRAIN_ACIDOPHILUS_LA14")
     reviewed, mixed = _reviewed_strain_with_stub()
     alone, both = score_evidence(reviewed), score_evidence(mixed)
     assert evidence_display_state(alone["metadata"]["evidence_result_state"]) != "not_yet_reviewed"
@@ -166,3 +183,106 @@ def test_resolver_never_treats_an_open_strain_review_as_terminal(monkeypatch):
     res = evidence_resolver.resolve_evidence_for_row(row, {"ingredient_quality_data": {"ingredients": [row]}})
     assert res.disposition == evidence_resolver.EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert res.blocking_reasons == ["probiotic_strain_review_incomplete"]
+
+
+def test_approved_human_contexts_own_human_evidence_over_a_preclinical_summary():
+    """NCFM, Bl-04 and DE111 carried a signed summary saying q3 NO / animal model
+    beside approved exact-strain human trials: two owners of one fact."""
+    from probiotic_measurements import (clinical_strain_research_scope, derived_context_evidence,
+                                        effective_strain_evidence, _legacy_evidence_block)
+    from studied_formulas import _clinical_strain_registry
+
+    registry = _clinical_strain_registry()
+    for cid, entry in registry.items():
+        signed = (entry.get("cfu_thresholds") or {}).get("dr_pham_signoff") is True
+        # A suspended sign-off (Bi-07, BB-12) stays under the clinician gate.
+        if signed and derived_context_evidence(entry) is not None:
+            assert clinical_strain_research_scope(entry)["human_evidence"] is True, cid
+    ncfm = registry["STRAIN_ACIDOPHILUS_NCFM"]
+    assert _legacy_evidence_block(ncfm)["type"] == "animal_model"
+    assert effective_strain_evidence(ncfm)["type"] == "study_contexts_derived"
+
+
+def test_a_signed_human_evidence_summary_keeps_ownership():
+    from probiotic_measurements import effective_strain_evidence
+    from studied_formulas import _clinical_strain_registry
+
+    lgg = _clinical_strain_registry()["STRAIN_LGG"]
+    assert effective_strain_evidence(lgg)["type"] != "study_contexts_derived"
+
+
+# --- closure D1: every stub reviewed to a terminal state -----------------------
+
+def test_a_stub_reviewed_to_no_qualifying_evidence_is_a_reviewed_zero():
+    """Lc-11's human research is two five-strain mixtures: a finished zero, not a gap."""
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    from scoring_v4.quality_score import EVIDENCE_REVIEWED_ZERO_STATES
+    from test_probiotic_applicability_rubric import strain_product
+
+    p = strain_product(clinical_id="STRAIN_CASEI_LC11", name="Lactobacillus casei Lc-11", dose=1e10)
+    row = studied_formulas_assess(p)["strain_assessments"][0]
+    assert row["status"] == "strain_reviewed_no_qualifying_human_evidence"
+    evidence = score_evidence(p)
+    assert evidence["score"] == 0
+    assert evidence["metadata"]["evidence_result_state"] == "no_qualifying_human_evidence"
+    assert evidence["metadata"]["evidence_result_state"] in EVIDENCE_REVIEWED_ZERO_STATES
+
+
+def test_resolver_reads_a_finished_strain_review_as_no_qualifying_evidence(monkeypatch):
+    import evidence_resolver
+    import studied_formulas
+
+    monkeypatch.setattr(studied_formulas, "assess_probiotic_component_disposition",
+                        lambda product: {"has_probiotic_component": True,
+                                         "disposition_state": "no_qualifying_human_evidence"})
+    row = {"name": "Lactobacillus casei Lc-11", "raw_source_text": "Lactobacillus casei Lc-11",
+           "canonical_id": "lactobacillus_casei"}
+    res = evidence_resolver.resolve_evidence_for_row(row, {"ingredient_quality_data": {"ingredients": [row]}})
+    assert res.disposition == evidence_resolver.EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert res.blocking_reasons == []
+
+
+def test_surrogate_only_contexts_are_unresolved_not_a_failed_trial():
+    """NCIMB 30242 lowered LDL in two RCTs: a surrogate, so no benefit is
+    established, but "null" would claim the trials failed their primary outcome."""
+    import studied_formulas
+    from probiotic_measurements import derived_context_evidence
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    from scoring_v4.quality_score import EVIDENCE_APPLICABILITY_STATES
+    from test_probiotic_applicability_rubric import strain_product
+
+    entry = studied_formulas._clinical_strain_registry()["STRAIN_REUTERI_NCIMB30242"]
+    assert derived_context_evidence(entry)["effect_direction"] == "unresolved"
+    p = strain_product(clinical_id="STRAIN_REUTERI_NCIMB30242", name="Lactobacillus reuteri NCIMB 30242", dose=5.8e9)
+    evidence = score_evidence(p)
+    assert evidence["score"] == 0
+    state = evidence["metadata"]["evidence_result_state"]
+    assert state != "evaluated_null" and state in EVIDENCE_APPLICABILITY_STATES
+
+
+def test_a_literature_review_never_lifts_a_clinician_hold():
+    """Bi-07's suspended sign-off stays a hold even if a review conclusion is added."""
+    from copy import deepcopy
+    import studied_formulas
+    from probiotic_measurements import strain_literature_review_concluded
+
+    entry = deepcopy(studied_formulas._clinical_strain_registry()["STRAIN_LACTIS_BI07"])
+    entry["literature_review"] = {"conclusion": "no_qualifying_human_evidence",
+                                  "reason": "combination_only_human_research", "reviewed_on": "2026-09-22",
+                                  "reviewer": "x", "search_query": "x", "basis": "x", "pmids_screened": []}
+    assert strain_literature_review_concluded(entry) is False
+
+
+def test_no_product_holding_stub_is_left_unreviewed():
+    """Only the two clinician-gated identities may still read as an open review."""
+    import studied_formulas
+
+    open_ids = {sid for sid, e in studied_formulas._clinical_strain_registry().items()
+                if isinstance(e.get("identity_verification"), dict) and "literature_review" not in e}
+    assert open_ids == set()
+
+
+def studied_formulas_assess(product):
+    import studied_formulas
+
+    return studied_formulas.assess_probiotic_evidence(product)

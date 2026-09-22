@@ -76,7 +76,7 @@ def test_protein_macro_reaches_v4_as_sports_primary_dose_evidence() -> None:
 
 
 def test_omega_aggregate_and_forms_reach_v4_as_epa_dha_evidence() -> None:
-    for dsld_id, minimum in (("13801", 750.0), ("26691", 500.0), ("259484", 4.5)):
+    for dsld_id, minimum in (("13801", 750.0), ("26691", 500.0)):
         product = _load_product(dsld_id)
 
         rows = _evidence_rows(product, "omega_epa_dha_aggregate")
@@ -85,6 +85,16 @@ def test_omega_aggregate_and_forms_reach_v4_as_epa_dha_evidence() -> None:
 
         out = score_product_v4(product)
         assert out["v4_verdict"] != "NOT_SCORED"
+
+
+def test_printed_epa_dha_members_own_their_doses_under_a_blend_total() -> None:
+    """259484 prints "DHA, EPA 2 g Total" with EPA 1.5 g and DHA 500 mg under it.
+    The members own the dose (EPA/DHA label ownership, 25610891); the old pin
+    here expected an aggregate built from the 4.5 g fish-oil mass."""
+    rows = get_scoring_ingredients(_load_product("259484"), strict=True).rows
+    doses = {r.get("canonical_id"): (float(r.get("quantity") or 0), r.get("unit")) for r in rows
+             if r.get("canonical_id") in ("epa", "dha")}
+    assert doses == {"epa": (1.5, "Gram(s)"), "dha": (500.0, "mg")}
 
 
 def test_vitamin_carried_in_fish_oil_does_not_emit_omega_evidence() -> None:
