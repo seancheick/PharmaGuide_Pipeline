@@ -114,6 +114,26 @@ def test_no_banned_substance_flag_with_nonzero_safety_score():
     assert offenders == []
 
 
+def _ban_blocking_reasons() -> set[str]:
+    """Every reason the safety gate may record for a critical ban.
+
+    "banned_ingredient" is the gate's default; a banned/recalled entry may also
+    author its own ``verdict_reason_code`` (the 2026-09-19 non-routine chelator
+    policy did). Reading the authored data keeps this gate from failing on a
+    reason the clinical owner added deliberately, while still rejecting a blank
+    or unauthored one.
+    """
+    entries = json.loads(
+        (REPO_ROOT / "scripts/data/banned_recalled_ingredients.json").read_text(encoding="utf-8")
+    )["ingredients"]
+    authored = {
+        str(entry["verdict_reason_code"]).strip()
+        for entry in entries
+        if isinstance(entry, dict) and str(entry.get("verdict_reason_code") or "").strip()
+    }
+    return {"banned_ingredient"} | authored
+
+
 def test_no_critical_banned_warning_with_nonzero_safety_score_or_missing_blocking_reason():
     rows_by_id = _core_rows_by_id()
     offenders: list[tuple[str, object, object, str]] = []
@@ -137,7 +157,8 @@ def test_no_critical_banned_warning_with_nonzero_safety_score_or_missing_blockin
             continue
         if (
             float(core.get("score_safety_purity") or 0) != 0.0
-            or core.get("blocking_reason") != "banned_ingredient"
+            or str(core.get("blocking_reason") or "") not in _ban_blocking_reasons()
+            or str(core.get("verdict") or "").upper() != "BLOCKED"
         ):
             offenders.append((
                 dsld_id,
