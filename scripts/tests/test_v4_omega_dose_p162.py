@@ -416,7 +416,7 @@ _CANARY_DOSE_IDS = {
     "288740",
     "273630",
     "239592",
-    "182968",
+    "184654",
     "261863",
     "267461",
 }
@@ -464,7 +464,7 @@ def _load_canaries(ids):
     ("288740", 16.4, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
     ("273630", 16.64, "aha_cvd"),   # Garden of Life Advanced Omega: 1160 mg
     ("239592", 0.0, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day
-    ("182968", 4.0, "near_efsa_ai"),  # Pure Encap Krill-Plex: 240 mg/day
+    ("184654", 4.28, "near_efsa_ai"),  # Pure Encap Krill-Plex (2026-09-22: 182968 left the catalog)
     ("261863", 4.5, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
     ("267461", 0.0, "below_efsa_ai"),  # Vitafusion gummy: only 50 mg aggregate
 ])

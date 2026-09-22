@@ -488,7 +488,7 @@ def test_dimension_cap_constant() -> None:
 # --- Real-catalog canary lock -------------------------------------------
 
 
-_CANARY_TRUST_IDS = {"327776", "326270", "288740", "273630", "239592", "182968"}
+_CANARY_TRUST_IDS = {"327776", "326270", "288740", "273630", "239592", "184654"}
 _CANARY_TRUST_EXPECTED = {
     # P1.7 curated IFOS overrides verified the Sports Research line. B4d
     # also credits low brand-testing posture from top_manufacturers_data.
@@ -498,12 +498,12 @@ _CANARY_TRUST_EXPECTED = {
     # Exact top-manufacturer testing posture now contributes B4d=2.
     # 288740 (Nordic): evidence text is "third-party purity"/IFOS — no GMP-mandating
     # keyword, so no facility-GMP B4b (data-wording gap, not policy).
-    "288740": 2.0,
+    "288740": 6.0,
     # Exact softgel SKU NSF_CERTIFIE_FE59EE128321 is verified, not merely a
     # manufacturer-wide claim. Canonical-form ordering now exposes it at runtime.
     "273630": 15.0,
     "239592": 0.0,
-    "182968": 0.0,
+    "184654": 6.0,
 }
 _canary_cache = None
 

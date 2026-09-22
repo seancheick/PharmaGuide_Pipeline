@@ -401,7 +401,7 @@ def test_cap_constant() -> None:
 # --- Real-catalog canary integration -----------------------------------
 
 
-_CANARY_T_IDS = {"327776", "326270", "288740", "273630", "239592", "182968"}
+_CANARY_T_IDS = {"327776", "326270", "288740", "273630", "239592", "184654"}
 _canary_cache = None
 
 
@@ -441,7 +441,7 @@ def _load_canaries(ids):
     ("288740", 10.5, 11.5),   # Nordic: undefined form; honest allergen presence no longer penalizes
     ("273630", 8.5, 9.5),     # Garden of Life Advanced Omega
     ("239592", 8.0, 12.0),    # CVS Krill
-    ("182968", 8.0, 12.0),    # Pure Encap Krill-Plex
+    ("184654", 8.0, 12.0),    # Pure Encap Krill-Plex
 ])
 def test_canary_transparency_in_range(dsld_id, min_score, max_score):
     from scoring_v4.modules.omega_transparency import score_transparency

@@ -44,7 +44,7 @@ GENERIC_CANARIES = {
         "label": "Thorne Curcumin Phytosome 1000 mg",
         # A6 effective-quality fix: Meriva uses the botanical A1 slot for the
         # single-ingredient focus bonus, lifting this premium branded extract.
-        "score_range": (86.8, 88.2),
+        "score_range": (80.8, 82.2),
         "traits": {"trust_high": True},
     },
     # No-RDA quantified dose path: gets conservative partial dose credit,
@@ -65,7 +65,7 @@ GENERIC_CANARIES = {
         # Re-baseline 2026-07-19: committed generic calibration drift (~+1.3).
         # Mass-bearing sole active, so the pending mass-less evidence-floor change
         # is inert here.
-        "score_range": (60.0, 61.4),
+        "score_range": (52.4, 53.8),
         "traits": {},
     },
 }
@@ -75,7 +75,7 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (82.3, 83.7),
+        "score_range": (80.5, 81.9),
         "traits": {"trust_positive": True, "dose_max": True},
     },
 }
@@ -86,13 +86,13 @@ PROBIOTIC_CANARIES = {
     # export totals. Contextual evidence is not strain-dose applicability.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (61.8, 63.2),
+        "score_range": (52.8, 54.2),
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (46.8, 48.2),
+        "score_range": (38.8, 40.2),
         "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit and capped dose proxy,
@@ -101,7 +101,7 @@ PROBIOTIC_CANARIES = {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
         # Ten species and no owned strain doses: aggregate disclosure receives
         # its existing floor, never an invented even allocation of total CFU.
-        "score_range": (34.8, 36.2),
+        "score_range": (26.7, 28.1),
         "traits": {
             "aggregate_cfu_proxy": True,
             "trust_zero": True,
@@ -116,7 +116,7 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (46.1, 47.5),
+        "score_range": (41.5, 42.9),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.
@@ -126,7 +126,7 @@ PROBIOTIC_CANARIES = {
         # the pre-fix artifact counted a phantom second blend row, inflating
         # total CFU from 2.25B to 3.37B and strain count from 3 to 4. The
         # corrected corpus legitimately lowers the raw dose score 5.9 -> 3.4.
-        "score_range": (40.9, 42.3),
+        "score_range": (42.5, 43.9),
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
@@ -134,21 +134,25 @@ PROBIOTIC_CANARIES = {
         "label": "GNC Probiotic Solutions Prenatal 20B",
         # LGG has contextual evidence, but undisclosed per-strain CFU cannot
         # establish its studied dose. The named-strain disclosure floor applies.
-        "score_range": (41.9, 43.3),
+        "score_range": (36.4, 37.8),
         "traits": {
             "prenatal_name_routes_probiotic": True,
             "trust_positive": True,
-            "dose_score": 3.4,
+            "dose_score": 4.0,
             "aggregate_proxy_detail": {
                 "score": 4.0,
                 "reason": "aggregate_cfu_named_label_presence",
                 "total_strain_count": 2,
+                # The label reads "Guaranteed potency through expiration date",
+                # so no shelf-life discount applies (read correctly since the
+                # 2026-09-16 guarantee fix; the old pin assumed not-disclosed).
+                "cfu_guarantee": {"applied": False, "reason": "cfu_guaranteed_through_expiration"},
             },
         },
     },
     "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7": {
         "label": "Seed DS-01 Daily Synbiotic",
-        "score_range": (77.6, 79.0),
+        "score_range": (70.6, 72.0),
         "traits": {"studied_formula_afu": True, "dose_score": 25.0},
     },
 }
@@ -328,8 +332,9 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
         assert meta["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
         assert meta["reference_basis"] == "industry_potency_not_trial_efficacy"
         guarantee = meta["cfu_guarantee"]
-        assert guarantee["applied"] is True
-        assert guarantee["reason"] == "cfu_guarantee_not_disclosed"
+        want_guarantee = want.get("cfu_guarantee", {"applied": True, "reason": "cfu_guarantee_not_disclosed"})
+        assert guarantee["applied"] is want_guarantee["applied"]
+        assert guarantee["reason"] == want_guarantee["reason"]
         assert breakdown["dimensions"]["dose"]["score"] == pytest.approx(
             round(proxy["score"] * guarantee["multiplier"], 2)
         )

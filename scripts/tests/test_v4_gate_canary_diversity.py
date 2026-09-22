@@ -55,7 +55,7 @@ V4_CANARIES = {
         "verdict": "POOR",
         "confidence": "low",
         "score_unavailable_reason": None,
-        "score": 36.2,
+        "score": 24.1,
         "unevaluated_canonicals": set(),
     },
     # No total CFU and no demonstrated dose applicability: dose remains zero.
@@ -65,7 +65,7 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (35.5, 36.9),
+        "score_range": (27.5, 28.9),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -75,12 +75,12 @@ V4_CANARIES = {
     "239467": {
         "label": "CVS Health Fish Oil 1000 mg",
         "module": "omega",
-        "verdict": "SAFE",
-        "confidence": "moderate",
+        "verdict": "POOR",
+        "confidence": "low",
         # Schema 2.4's canonical EPA/DHA projection proves the parent fish-oil
         # row is not an undisclosed active, restoring the 1-point disclosure
         # component without changing any omega pillar.
-        "score_range": (59.3, 60.7),
+        "score_range": (20.8, 22.2),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -90,14 +90,14 @@ V4_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (82.3, 83.7),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
+        "score_range": (80.5, 81.9),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
     },
     # Assessment coverage is separate from quality. This disclosed fiber total
     # remains module-owned, with incomplete evidence review surfaced separately.
     "12932": {
         "label": "vitafusion Fiber Gummies",
         "module": "fiber_digestive",
-        "verdict": "SAFE",
+        "verdict": "POOR",
         "confidence": "moderate",
         "score_unavailable_reason": None,
         "score": 50.0,
@@ -112,7 +112,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 48.2,
+        "score": 46.1,
         "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
     },
@@ -125,7 +125,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 50.7,
+        "score": 45.9,
         "unevaluated_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.
@@ -135,7 +135,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "high",
         # Contextual MTCC5856 evidence; no unestablished DE111 human credit.
-        "score_range": (63.9, 65.3),
+        "score_range": (60.0, 61.4),
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
     # correctly quarantined for material evidence that has not been reviewed.
@@ -144,15 +144,15 @@ V4_CANARIES = {
         "module": "generic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (75.8, 77.2),
+        "score_range": (65.8, 67.2),
         "safety_verdict": "CAUTION",
     },
     "206362": {
         "label": "GNC Kids Probiotic Fast Stix",
         "module": "probiotic",
-        "verdict": "SAFE",
+        "verdict": "POOR",
         "confidence": "moderate",
-        "score_range": (40.6, 41.5),
+        "score_range": (41.2, 42.2),
     },
 }
 

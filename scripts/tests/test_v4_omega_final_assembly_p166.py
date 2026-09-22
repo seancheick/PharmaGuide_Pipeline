@@ -223,7 +223,7 @@ def test_excluded_dimensions_rescale_correctly() -> None:
 # --- Real-catalog canary locks ------------------------------------------
 
 
-_CANARY_FINAL_IDS = {"327776", "326270", "288740", "273630", "239592", "182968"}
+_CANARY_FINAL_IDS = {"327776", "326270", "288740", "273630", "239592", "184654"}
 _canary_cache = None
 
 
@@ -284,7 +284,7 @@ def _load_canaries(ids):
     # the approved audit already carries its verification15 (not brand-only2).
     ("273630", "Garden of Life", 63.6, 64.6),
     ("239592", "CVS Health", 32.9, 33.9),
-    ("182968", "Pure Encapsulations",  52.0, 59.0),
+    ("184654", "Pure Encapsulations",  42.4, 43.4),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):
     """Real-catalog raw-rubric omega scores lock in expected ranges.

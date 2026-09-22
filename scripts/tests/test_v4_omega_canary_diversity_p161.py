@@ -42,45 +42,51 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # DSLD IDs and expected behavior, gathered from the P1.6.1 catalog sweep.
 # Each entry: (expected_route, expected_form, expected_score_min, expected_score_max, label)
 CANARY_TARGETS = {
-    # --- Max-reachable 23/25 (TG + source + premium + sustainability + concentration) ---
-    "326270": ("omega", "rtg", 23.0, 23.0,
+    # Bands below are stated against the dimension's own declared ceiling
+    # (``max_reachable_in_p161``, 12/25 since 2026-09-18: molecular form 8 +
+    # EPA/DHA concentration 4; disclosure moved to Transparency).
+    # --- Max reachable (12/12): TG/rTG + full concentration ---
+    "326270": ("omega", "rtg", 12.0, 12.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (one of several SKUs)"),
-    "327776": ("omega", "rtg", 23.0, 23.0,
+    "327776": ("omega", "rtg", 12.0, 12.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (original canary)"),
-    "273630": ("omega", "tg", 23.0, 23.0,
+    "273630": ("omega", "tg", 12.0, 12.0,
                "Garden of Life Dr. Formulated Advanced Omega Lemon Flavor"),
-    "273636": ("omega", "tg", 20.0, 20.0,
+    "273636": ("omega", "tg", 9.0, 9.0,
                "Garden of Life Dr. Formulated Alaskan Cod Liver Oil Lemon Flavor "
                "— cod liver source"),
-    "292796": ("omega", "tg", 21.0, 21.0,  # re-baseline 2026-06-06: concentration partial (2.0)
+    "292796": ("omega", "tg", 10.0, 10.0,  # re-baseline 2026-06-06: concentration partial (2.0)
                "Garden of Life Dr. Formulated Advanced Omega Citrus Flavor"),
 
-    # --- 18/25 (PL krill + source + premium + sustainability) ---
-    "239592": ("omega", "pl", 19.0, 19.0,
+    # --- Mid band: PL krill (form 6) + concentration ---
+    "239592": ("omega", "pl", 8.0, 8.0,
                "CVS Health 100% Pure Omega-3 Krill Oil 350 mg"),
-    "223169": ("omega", "pl", 18.0, 18.0,
+    "223169": ("omega", "pl", 8.0, 8.0,
                "Nordic Naturals Omega-3 Phospholipids"),
-
-    # --- 16-17/25 (PL krill mid-tier — no sustainability cert) ---
-    "1072":   ("omega", "pl", 16.0, 16.0,
-               "GNC Ultra Omega Krill Oil"),
-    "179775": ("omega", "pl", 16.5, 16.5,
+    # 2026-09-22: GNC 1072, Nutricost 223318 and Pure Encapsulations 182968 left
+    # the catalog and their pins had gone unchecked (the loader skipped them).
+    # Replaced by the same brands' current krill SKUs.
+    "1073":   ("omega", "pl", 11.0, 11.0,
+               "GNC Fish Oil +Krill"),
+    "179775": ("omega", "pl", 7.5, 7.5,
                "Nature Made Krill Oil 300 mg"),
-    "223318": ("omega", "pl", 16.0, 16.0,
+    "269559": ("omega", "pl", 8.0, 8.0,
                "Nutricost Krill Oil 1000 mg"),
-    "182968": ("omega", "pl", 16.0, 16.0,
+    "184654": ("omega", "pl", 8.0, 8.0,
                "Pure Encapsulations Krill-Plex"),
 
-    # --- 19/25 EE form with concentration (rare in catalog) ---
-    "239845": ("omega", "ee", 18.5, 18.5,
+    # --- EE form with concentration (rare in catalog) ---
+    "239845": ("omega", "ee", 9.5, 9.5,
                "Spring Valley Omega-3 520 mg Natural Lemon Flavor — EE form"),
 
-    # --- 8/25 undefined-form, source + sustainability in current enriched artifact ---
+    # --- Undefined form, concentration only ---
     # Nordic Naturals Ultimate Omega + CoQ10 — label omits molecular form in
-    # this artifact, so form remains 'undefined'. Source and Friend of the Sea
-    # sustainability are real signals and still score.
+    # this artifact, so form remains 'undefined'. Concentration still scores.
     "288740": ("omega", "undefined", 8.0, 8.0,
                "Nordic Naturals Ultimate Omega + CoQ10 Lemon"),
+    # --- Low band: plain fish oil, no molecular form, low concentration ---
+    "179447": ("omega", "undefined", 1.0, 1.0,
+               "Nature Made Fish Oil 1200 mg"),
 }
 
 
@@ -90,7 +96,7 @@ FALSE_POSITIVE_TARGETS = {
     "182799": "Pure Encapsulations CLA 1,000 mg (CLA = omega-6 isomer)",
     "184340": "Pure Encapsulations Borage Oil (GLA = omega-6)",
     "13567":  "Pure Encapsulations Flax Seed Oil (Organic) (ALA-only, no EPA/DHA)",
-    "184571": "Pure Encapsulations Liposomal Glutathione (lecithin carrier)",
+    "184661": "Pure Encapsulations Liposomal Glutathione (lecithin carrier)",  # 184571 left the catalog
 }
 
 
@@ -211,11 +217,33 @@ def test_canary_set_covers_all_form_tiers():
 
 def test_canary_set_covers_score_ranges():
     """The canary set must cover low/mid/high Formulation score bands so
-    future rubric changes that compress or stretch scores are visible."""
+    future rubric changes that compress or stretch scores are visible.
+
+    The bands follow the dimension's own declared ceiling rather than a
+    hard-coded number: the 2026-09-18 one-pillar change moved disclosure to
+    Transparency, and a 20/25 threshold then pinned a score no product can reach.
+    """
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    canaries = _load_canaries(set(CANARY_TARGETS))
+    if not canaries:
+        pytest.skip("no enriched catalog in this checkout")
+    ceiling = score_formulation(next(iter(canaries.values())))["metadata"]["max_reachable_in_p161"]
     scores = {expected[2] for expected in CANARY_TARGETS.values()}
-    assert max(scores) >= 20.0, "missing max-reachable canary (20+/25)"
-    assert any(15.0 <= s <= 20.0 for s in scores), "missing mid-tier canary (15-20/25)"
-    assert any(s <= 10.0 for s in scores), "missing low-tier canary (<=10/25)"
+    assert max(scores) >= ceiling, f"missing max-reachable canary ({ceiling}/25 reachable)"
+    assert any(ceiling / 2 <= s < ceiling for s in scores), "missing mid-tier canary"
+    assert any(s <= ceiling / 3 for s in scores), "missing low-tier canary"
+
+
+def test_every_canary_is_in_the_catalog():
+    """A canary that left the catalog stops testing anything: the per-canary
+    tests skip it and its pin is never checked again (three did, until
+    2026-09-22). Fail loudly instead, so the set is re-pointed on purpose."""
+    canaries = _load_canaries(set(CANARY_TARGETS) | set(FALSE_POSITIVE_TARGETS))
+    if not canaries:
+        pytest.skip("no enriched catalog in this checkout")
+    missing = sorted((set(CANARY_TARGETS) | set(FALSE_POSITIVE_TARGETS)) - set(canaries))
+    assert not missing, f"canaries no longer in the enriched catalog: {missing}"
 
 
 def test_canary_set_size_at_least_10() -> None:

@@ -86,11 +86,20 @@ def cross_module(changes):
         for pid, exp in pins.items():
             if pid not in products:
                 continue
-            score = scorer(products[pid]).to_breakdown()["score_100"]
+            breakdown = scorer(products[pid]).to_breakdown()
+            score = breakdown["score_100"]
+            diff = {}
             lo, hi = exp["score_range"]
             if not lo <= score <= hi:
-                changes.append(("test_v4_cross_module_canary_diversity.py", pid, exp["label"],
-                                {"score_range": (exp["score_range"], _centered(exp["score_range"], score))}))
+                diff["score_range"] = (exp["score_range"], _centered(exp["score_range"], score))
+            # A pinned dimension trait is recomputed through the same call too,
+            # so no pin is ever updated by hand.
+            pinned_dose = (exp.get("traits") or {}).get("dose_score")
+            dose = breakdown["dimensions"]["dose"]["score"]
+            if pinned_dose is not None and abs(float(dose) - float(pinned_dose)) > 1e-9:
+                diff["dose_score"] = (pinned_dose, dose)
+            if diff:
+                changes.append(("test_v4_cross_module_canary_diversity.py", pid, exp["label"], diff))
 
 
 def omega(changes):

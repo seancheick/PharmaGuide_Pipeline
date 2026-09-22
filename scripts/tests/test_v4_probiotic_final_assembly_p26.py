@@ -377,23 +377,27 @@ def test_canary_spring_valley_probiotic_50b_scoreable_at_p26() -> None:
     import json
     from score_supplements_v4 import score_product_v4
 
-    products_root = Path("/Users/seancheick/Downloads/dsld_clean/scripts/products")
+    # The loop below used to sit after ``continue`` inside the except handler,
+    # so it never ran and the test always skipped (fixed 2026-09-22). The
+    # products root is resolved from the repo, not from one machine's path.
+    products_root = Path(__file__).resolve().parents[1] / "products"
     for p in products_root.glob("output_*_enriched/enriched/enriched_cleaned_batch_*.json"):
         try:
             items = json.loads(p.read_text())
-            if isinstance(items, dict): items = items.get("products", items.get("items", []))
+            if isinstance(items, dict):
+                items = items.get("products", items.get("items", []))
         except Exception:
             continue
-            for item in items:
-                if str(item.get("dsld_id")) == "178346":
-                    from scoring_input_contract import get_scoring_ingredients
-                    scoring_input = get_scoring_ingredients(item, strict=True)
-                    if not scoring_input.rows:
-                        pytest.skip(
-                            "Spring Valley 50B canary artifact lacks strict v4 scoring inputs; "
-                            "rerun enrichment before using as canary"
-                        )
-                    out = score_product_v4(item)
+        for item in items:
+            if str(item.get("dsld_id")) == "178346":
+                from scoring_input_contract import get_scoring_ingredients
+                scoring_input = get_scoring_ingredients(item, strict=True)
+                if not scoring_input.rows:
+                    pytest.skip(
+                        "Spring Valley 50B canary artifact lacks strict v4 scoring inputs; "
+                        "rerun enrichment before using as canary"
+                    )
+                out = score_product_v4(item)
                 assert out["v4_module"] == "probiotic"
                 assert out["raw_score_v4_100"] is not None
                 assert out["v4_verdict"] in {"SAFE", "POOR", "CAUTION"}

@@ -275,7 +275,7 @@ def test_total_score_clamps_to_20() -> None:
 # --- Real canary integration --------------------------------------------
 
 
-_CANARY_EVIDENCE_IDS = {"327776", "326270", "288740", "273630", "239592", "182968"}
+_CANARY_EVIDENCE_IDS = {"327776", "326270", "288740", "273630", "239592", "184654"}
 _canary_cache = None
 
 
@@ -314,7 +314,7 @@ def _load_canaries(ids):
     ("288740", False),    # Nordic: 1100 mg/day
     ("273630", False),    # GoL Advanced Omega: 1160 mg/day
     ("239592", False),   # CVS Krill: 74 mg/day
-    ("182968", False),   # Pure Encap Krill-Plex: 240 mg/day
+    ("184654", False),   # Pure Encap Krill-Plex
 ])
 def test_canary_indication_relevance(dsld_id, expected_indication):
     """Real-catalog indication relevance: high-dose canaries qualify,
@@ -334,7 +334,7 @@ def test_canary_indication_relevance(dsld_id, expected_indication):
     ("288740", 5.0, 20.0),    # Nordic
     ("273630", 5.0, 20.0),    # GoL Advanced Omega
     ("239592", 0.0, 15.0),    # CVS Krill: clinical only
-    ("182968", 0.0, 15.0),    # Pure Encap Krill: clinical only
+    ("184654", 0.0, 15.0),    # Pure Encap Krill: clinical only
 ])
 def test_canary_evidence_score_in_range(dsld_id, min_score, max_score):
     """Real-catalog Evidence scores fall within rubric-expected ranges.
