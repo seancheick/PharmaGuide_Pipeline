@@ -10756,7 +10756,6 @@
           "l-selenomethionine",
           "methionine-bound selenium",
           "selenomethionine supplement",
-          "organic selenium supplement",
           "l-selenomethionine supplement",
           "methionine-bound selenium supplement",
           "SelenoPure L-Selenomethionine"
@@ -10932,11 +10931,9 @@
         "notes": "The most common inorganic selenium form in supplements. An inorganic salt (Na2SeO3) that must be reduced and then converted to organic selenium species in your body. ~50% absorbed, but poorly retained compared to organic forms. Can generate oxidative stress during metabolism at high doses.",
         "aliases": [
           "selenious acid sodium",
-          "selenite",
           "Na\u2082SeO\u2083",
           "sodium selenite supplement",
           "selenious acid sodium supplement",
-          "selenite supplement",
           "Na\u2082SeO\u2083 supplement"
         ],
         "dosage_importance": 0.5,
@@ -10963,11 +10960,9 @@
         "notes": "An inorganic selenium salt (Na2SeO4) similar to selenite but even less efficiently retained. Must undergo multiple conversion steps to become biologically active. Higher toxicity risk at elevated doses than organic forms. Used in some water treatment and food fortification applications.",
         "aliases": [
           "selenic acid sodium",
-          "selenate",
           "Na\u2082SeO\u2084",
           "sodium selenate supplement",
           "selenic acid sodium supplement",
-          "selenate supplement",
           "Na\u2082SeO\u2084 supplement",
           "selenium selenate"
         ],
@@ -11254,7 +11249,12 @@
           "selenium supplement",
           "selenium hydrolyzed rice protein chelate",
           "{selenium} hydrolyzed rice protein chelate",
-          "Selenium Aspartate"
+          "Selenium Aspartate",
+          "organic selenium supplement",
+          "selenite",
+          "selenite supplement",
+          "selenate",
+          "selenate supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15199,8 +15199,6 @@
           "KI tablets",
           "SSKI",
           "saturated solution potassium iodide",
-          "iodine tablets",
-          "thyroid iodine",
           "potassium iodide USP"
         ],
         "dosage_importance": 1.0,
@@ -15337,7 +15335,9 @@
           "iodine complex",
           "iodine, natural",
           "natural iodine",
-          "Iodine Chelate"
+          "Iodine Chelate",
+          "iodine tablets",
+          "thyroid iodine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15907,7 +15907,6 @@
         "notes": "The standard inorganic salt form and the most common molybdenum in multivitamins. Turnlund 1995 (the only published human isotope study) showed 88-93% absorption across all intake levels \u2014 making it highly bioavailable. Affordable and effective. The actual peer-reviewed absorption data comes from this form, not chelates.",
         "aliases": [
           "Na\u2082MoO\u2084",
-          "molybdate salt",
           "Sodium Molybdate Dihydrate",
           "Na2MoO4"
         ],
@@ -16018,7 +16017,8 @@
           "molybdenum yeast",
           "yeast-bound molybdenum",
           "{molybdenum} hydrolyzed protein chelate",
-          "molybdenum hydrolyzed protein chelate"
+          "molybdenum hydrolyzed protein chelate",
+          "molybdate salt"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

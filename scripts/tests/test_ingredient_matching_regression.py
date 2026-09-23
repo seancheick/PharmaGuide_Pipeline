@@ -762,3 +762,16 @@ def test_names_that_do_not_establish_the_form_live_on_the_unspecified_form(iqm_d
     forms = iqm_data[parent]['forms']
     assert not {a.lower() for a in forms[form]['aliases']} & names
     assert names <= {a.lower() for a in forms[unspecified]['aliases']}
+
+
+@pytest.mark.parametrize("parent,form,unspecified,names", [
+    ("selenium", "selenomethionine", "selenium (unspecified)", {"organic selenium supplement"}),
+    ("selenium", "sodium selenite", "selenium (unspecified)", {"selenite", "selenite supplement"}),
+    ("selenium", "sodium selenate", "selenium (unspecified)", {"selenate", "selenate supplement"}),
+    ("molybdenum", "sodium molybdate", "molybdenum (unspecified)", {"molybdate salt"}),
+    ("iodine", "potassium iodide", "iodine (unspecified)", {"iodine tablets", "thyroid iodine"}),
+])
+def test_trace_mineral_generic_names_live_on_the_unspecified_form(iqm_data, parent, form, unspecified, names):
+    forms = iqm_data[parent]['forms']
+    assert not {a.lower() for a in forms[form]['aliases']} & names
+    assert names <= {a.lower() for a in forms[unspecified]['aliases']}
