@@ -2451,9 +2451,6 @@
           "vitamin b1 hcl supplement",
           "vit b1 hcl",
           "hydrochloride thiamine supplement",
-          "thiamine supplement",
-          "vitamin b1 supplement",
-          "b1 supplement",
           "thiaminum hydrochloridum supplement",
           "Thiamine Chloride"
         ],
@@ -2706,7 +2703,10 @@
           "thiamin",
           "b1",
           "vit b1",
-          "thiamine vitamin"
+          "thiamine vitamin",
+          "thiamine supplement",
+          "vitamin b1 supplement",
+          "b1 supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

@@ -718,3 +718,10 @@ def test_animal_based_vitamin_d_does_not_claim_cholecalciferol(iqm_data):
     animal = {'animal-based vitamin d', 'animal-based vitamin d supplement', 'animal-based vit d'}
     assert not {a.lower() for a in forms['cholecalciferol (D3)']['aliases']} & animal
     assert animal <= {a.lower() for a in forms['vitamin d (unspecified)']['aliases']}
+
+
+def test_generic_thiamine_names_do_not_claim_thiamine_hydrochloride(iqm_data):
+    forms = iqm_data['vitamin_b1_thiamine']['forms']
+    generic = {'thiamine supplement', 'vitamin b1 supplement', 'b1 supplement'}
+    assert not {a.lower() for a in forms['thiamine hydrochloride']['aliases']} & generic
+    assert generic <= {a.lower() for a in forms['vitamin b1 (unspecified)']['aliases']}
