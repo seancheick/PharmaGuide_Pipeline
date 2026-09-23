@@ -672,3 +672,9 @@ def test_generic_vitamin_c_names_do_not_claim_ascorbic_acid(iqm_data):
     forms = iqm_data['vitamin_c']['forms']
     assert not {a.lower() for a in forms['ascorbic acid']['aliases']} & GENERIC_VITAMIN_C
     assert GENERIC_VITAMIN_C <= {a.lower() for a in forms['vitamin c (unspecified)']['aliases']}
+
+
+def test_magnesium_biotinate_is_not_d_biotin(iqm_data):
+    # Distinct compound (PubChem CID 139593965, C20H30MgN4O6S2): no reviewed IQM form yet.
+    forms = iqm_data['vitamin_b7_biotin']['forms']
+    assert all('magnesium biotinate' not in {a.lower() for a in f.get('aliases') or []} for f in forms.values())
