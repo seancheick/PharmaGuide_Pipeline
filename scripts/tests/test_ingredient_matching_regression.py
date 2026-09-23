@@ -628,3 +628,16 @@ class TestMultiFormMatching:
         assert result.get('has_form_evidence') == True, "Should flag form evidence exists"
         assert 'totally_fake_form_xyz123' in str(result.get('unmapped_forms', [])), \
             "Should include unmapped form in result"
+
+
+def test_synonym_forms_of_one_form_key_are_not_dual(enricher):
+    """'Cholecalciferol' and 'Vitamin D3' name one form; only distinct form keys make a dual form."""
+    product = {"id": "TEST_SYNONYM_FORMS", "product_name": "Test D3",
+               "activeIngredients": [{"name": "Vitamin D (as cholecalciferol and vitamin D3)", "quantity": 25, "unit": "mcg"}]}
+    enriched, _ = enricher.enrich_product(product)
+    entry = next(i for i in enriched['ingredient_quality_data']['ingredients_scorable']
+                 if i.get('canonical_id') == 'vitamin_d')
+    assert {f['form_key'] for f in entry['matched_forms']} == {'cholecalciferol (D3)'}
+    assert len(entry['matched_forms']) == 2  # both label synonyms stay as evidence
+    assert entry['is_dual_form'] is False
+    assert entry['additional_forms'] == []

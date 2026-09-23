@@ -8225,6 +8225,19 @@ class SupplementEnricherV3:
         # Use primary form (first matched) as the base for canonical fields
         primary_match = matched_forms[0]['full_match_data']
 
+        # Label synonyms ("Cholecalciferol", "Vitamin D3") can match one form
+        # key twice. Dual form means distinct matched forms (or an unmapped
+        # one); matched_forms keeps every synonym as label evidence.
+        distinct_forms = {}
+        for f in matched_forms:
+            key = (f['canonical_id'], f['form_key'])
+            if key in distinct_forms:
+                distinct_forms[key] = {**distinct_forms[key],
+                                       'percent_share': distinct_forms[key]['percent_share'] + f['percent_share']}
+            else:
+                distinct_forms[key] = f
+        distinct_forms = list(distinct_forms.values())
+
         # Build result with multi-form contract
         result = {
             # Standard match fields (from primary)
@@ -8248,7 +8261,8 @@ class SupplementEnricherV3:
             # Multi-form contract fields
             'form_extraction_used': True,
             'original_label': form_info.get('original'),
-            'is_dual_form': form_info.get('is_dual_form', False),
+            'is_dual_form': bool(form_info.get('is_dual_form', False)
+                                 and (len(distinct_forms) > 1 or unmapped_forms)),
             'extracted_forms': form_info.get('extracted_forms', []),
             'matched_forms': [
                 {
@@ -8278,8 +8292,8 @@ class SupplementEnricherV3:
                     'score': f['score'],  # Pre-computed from database
                     'percent_share': f['percent_share']
                 }
-                for f in matched_forms[1:]
-            ] if len(matched_forms) > 1 else []
+                for f in distinct_forms[1:]
+            ]
         }
 
         for key in (
