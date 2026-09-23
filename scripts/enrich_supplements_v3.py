@@ -23118,6 +23118,19 @@ class SupplementEnricherV3:
             self.logger.info(f"Summary saved: {summary_file}")
         self.logger.info("=" * 50)
 
+        # A caught per-product exception marks that product failed and empties
+        # its enrichment. One systemic defect (e.g. a shadowed method) fails
+        # every product the same way, so stop the run after the summary is
+        # written. Mirrors the cleaning stage's min_success_rate gate.
+        total = total_stats["total_products"]
+        min_rate = float(self.config.get("validation", {}).get("min_success_rate", 95.0))
+        if total and total_stats["successful"] / total * 100 < min_rate:
+            raise RuntimeError(
+                f"enrichment success rate {total_stats['successful'] / total * 100:.1f}% "
+                f"is below {min_rate}% ({total_stats['failed']} of {total} products failed); "
+                f"see {summary_file or 'the enrichment log'}"
+            )
+
         return summary
 
 def _verify_working_directory(config_path: str) -> None:
