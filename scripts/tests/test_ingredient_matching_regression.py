@@ -710,3 +710,11 @@ def test_generic_alias_form_text_is_not_unresolved(enricher):
     row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
                if r.get('canonical_id') == 'vitamin_b7_biotin')
     assert not row.get('unresolved_form_tokens')
+
+
+def test_animal_based_vitamin_d_does_not_claim_cholecalciferol(iqm_data):
+    # Origin is not a compound identifier (animal foods also carry 25(OH)D).
+    forms = iqm_data['vitamin_d']['forms']
+    animal = {'animal-based vitamin d', 'animal-based vitamin d supplement', 'animal-based vit d'}
+    assert not {a.lower() for a in forms['cholecalciferol (D3)']['aliases']} & animal
+    assert animal <= {a.lower() for a in forms['vitamin d (unspecified)']['aliases']}
