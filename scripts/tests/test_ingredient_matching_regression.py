@@ -678,3 +678,35 @@ def test_magnesium_biotinate_is_not_d_biotin(iqm_data):
     # Distinct compound (PubChem CID 139593965, C20H30MgN4O6S2): no reviewed IQM form yet.
     forms = iqm_data['vitamin_b7_biotin']['forms']
     assert all('magnesium biotinate' not in {a.lower() for a in f.get('aliases') or []} for f in forms.values())
+
+
+def _biotin_row(form):
+    # Cleaned-row shape of DSLD 299744's biotin line (portable copy of its fields).
+    row = {"name": "Biotin", "standardName": "Vitamin B7 (Biotin)", "canonical_id": "vitamin_b7_biotin",
+           "canonical_source_db": "ingredient_quality_map", "mapped": True, "quantity": 10000.0, "unit": "mcg",
+           "dailyValue": 33333.0, "raw_source_text": "Biotin", "raw_source_path": "ingredientRows[0]",
+           "source_section": "active", "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
+           "dose_class": "therapeutic_mass", "ingredientGroup": "Biotin", "raw_category": "vitamin",
+           "hierarchyType": None, "order": 1, "forms": [form]}
+    return {"id": "TEST_BIOTINATE", "product_name": "Test Biotin", "activeIngredients": [row]}
+
+
+def test_declared_but_unresolved_form_is_recorded_not_dropped(enricher):
+    # DSLD 299744: "Biotin (as Magnesium Biotinate)". The salt matches no IQM
+    # form; the row name still selects the parent, but the declared form is kept
+    # as unresolved provenance instead of silently vanishing.
+    form = {"name": "Magnesium Biotinate", "order": 1, "prefix": None, "percent": None,
+            "category": "mineral", "ingredientGroup": "Magnesium", "uniiCode": None}
+    enriched, _ = enricher.enrich_product(_biotin_row(form))
+    row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
+               if r.get('canonical_id') == 'vitamin_b7_biotin')
+    assert row['unresolved_form_tokens'] == ['Magnesium Biotinate']
+
+
+def test_generic_alias_form_text_is_not_unresolved(enricher):
+    form = {"name": "Vitamin B7", "order": 1, "prefix": None, "percent": None,
+            "category": "vitamin", "ingredientGroup": "Biotin", "uniiCode": None}
+    enriched, _ = enricher.enrich_product(_biotin_row(form))
+    row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
+               if r.get('canonical_id') == 'vitamin_b7_biotin')
+    assert not row.get('unresolved_form_tokens')

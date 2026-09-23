@@ -7234,6 +7234,7 @@ class SupplementEnricherV3:
                 "extracted_forms": match_result.get('extracted_forms', []),
                 "matched_forms": match_result.get('matched_forms', []),
                 "unmapped_forms": match_result.get('unmapped_forms', []),
+                "unresolved_form_tokens": match_result.get('unresolved_form_tokens', []),
                 "aggregation_method": match_result.get('aggregation_method'),
                 "final_form_bio_score": match_result.get('final_form_bio_score'),
                 "additional_forms": match_result.get('additional_forms', []),
@@ -8053,28 +8054,10 @@ class SupplementEnricherV3:
             # the form-alias match entirely. These forms name the ORIGIN of
             # the nutrient, not its chemical form — forcing them through the
             # matcher produces false fallbacks and audit noise.
-            _dsld_category = (form_data.get('dsld_category') or '').lower().strip()
-            _dsld_prefix = (form_data.get('dsld_prefix') or '').lower().strip()
-            # Exception: "from"-prefix forms that are actually DELIVERY
-            # TECHNOLOGIES (MicroActive cyclodextrin, phytosome, liposome,
-            # chelate, etc.) are real form identifiers even though DSLD
-            # tagged them with prefix="from". Don't short-circuit those.
-            _is_delivery_tech_from_prefix = (
-                _dsld_prefix == 'from'
-                and (
-                    form_data.get("keep_from_prefixed_form") is True
-                    or self._should_keep_from_prefixed_form_as_actual(
-                        raw_form_text
-                    )
-                )
-            )
-            if (
-                (
-                    _dsld_category in _SOURCE_DESCRIPTOR_FORM_CATEGORIES
-                    or _dsld_prefix in _SOURCE_DESCRIPTOR_FORM_PREFIXES
-                )
-                and not _is_delivery_tech_from_prefix
-            ):
+            # Exception inside the predicate: "from"-prefix forms that are
+            # DELIVERY TECHNOLOGIES (MicroActive cyclodextrin, phytosome,
+            # liposome, chelate, etc.) are real form identifiers.
+            if self._is_dsld_source_descriptor_form(form_data):
                 # Treat as a generic/source descriptor — do not enter the
                 # unmapped_forms pool; this prevents the form_fallback_audit
                 # from flagging it as actionable.
@@ -8679,8 +8662,53 @@ class SupplementEnricherV3:
         )
         # Store an isolated copy (defends against any impl-side aliasing) and
         # hand every caller its own isolated copy — the cache entry is immutable.
+        if (result and not _form_extraction_attempt and cleaned_forms
+                and not result.get('matched_forms') and not result.get('unmapped_forms')):
+            unresolved = self._unresolved_form_tokens(
+                ing_name, cleaned_forms, quality_map, result.get('canonical_id'))
+            if unresolved:
+                result['unresolved_form_tokens'] = unresolved
         self._match_quality_cache[key] = copy.deepcopy(result)
         return copy.deepcopy(result)
+
+    def _unresolved_form_tokens(self, ing_name: str, cleaned_forms: List[Dict],
+                                quality_map: Dict, canonical_id: Optional[str]) -> List[str]:
+        """Declared label forms that no IQM alias recognises (provenance only).
+
+        A form treated as generic because it matched an alias of the parent's
+        unspecified form ("Vitamin B7") is genuinely generic. A form that only
+        fell through to the parent default ("Magnesium Biotinate") is a named
+        compound the registry does not know; recording it keeps the row from
+        silently borrowing a specific form from the ingredient name. Source
+        descriptors are skipped exactly as in _match_multi_form. Scores are
+        unchanged.
+        """
+        if not canonical_id or canonical_id not in quality_map:
+            return []
+        form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms)
+        unresolved = []
+        for form_data in (form_info or {}).get('extracted_forms', []):
+            if self._is_dsld_source_descriptor_form(form_data):
+                continue
+            tiers = []
+            for candidate in form_data.get('match_candidates', []):
+                match = self._match_quality_map(
+                    candidate, candidate, quality_map, _form_extraction_attempt=True,
+                    cleaner_canonical_id=canonical_id)
+                tiers.append(match.get('match_tier') if match else None)
+            if tiers and all(t in (None, 'cleaner_canonical_parent') for t in tiers):
+                unresolved.append(form_data.get('raw_form_text', ''))
+        return [t for t in unresolved if t]
+
+    def _is_dsld_source_descriptor_form(self, form_data: Dict) -> bool:
+        """DSLD origin/culture descriptors are not chemical forms."""
+        category = (form_data.get('dsld_category') or '').lower().strip()
+        prefix = (form_data.get('dsld_prefix') or '').lower().strip()
+        delivery_tech = prefix == 'from' and (
+            form_data.get("keep_from_prefixed_form") is True
+            or self._should_keep_from_prefixed_form_as_actual(form_data.get('raw_form_text', '')))
+        return (category in _SOURCE_DESCRIPTOR_FORM_CATEGORIES
+                or prefix in _SOURCE_DESCRIPTOR_FORM_PREFIXES) and not delivery_tech
 
     def _match_quality_map_impl(self, ing_name: str, std_name: str, quality_map: Dict,
                                 _form_extraction_attempt: bool = False,
