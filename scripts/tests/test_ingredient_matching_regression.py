@@ -641,3 +641,16 @@ def test_synonym_forms_of_one_form_key_are_not_dual(enricher):
     assert len(entry['matched_forms']) == 2  # both label synonyms stay as evidence
     assert entry['is_dual_form'] is False
     assert entry['additional_forms'] == []
+
+
+@pytest.mark.parametrize("label,expected", [
+    ("Vitamin B12 (as Vitamin B12)", "b12 (unspecified)"),
+    ("Vitamin B12 (as cyanocobalamin)", "cyanocobalamin"),
+])
+def test_generic_b12_form_text_does_not_claim_cyanocobalamin(enricher, label, expected):
+    product = {"id": "TEST_B12_FORM", "product_name": "Test B12",
+               "activeIngredients": [{"name": label, "quantity": 500, "unit": "mcg"}]}
+    enriched, _ = enricher.enrich_product(product)
+    entry = next(i for i in enriched['ingredient_quality_data']['ingredients_scorable']
+                 if i.get('canonical_id') == 'vitamin_b12_cobalamin')
+    assert entry['matched_form'] == expected

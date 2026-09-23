@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 652,
       "total_forms": 1444,
-      "total_form_aliases": 12142,
+      "total_form_aliases": 12145,
       "parents_with_parent_aliases": 138,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -5043,12 +5043,9 @@
           "date": "2026-08-08"
         },
         "aliases": [
-          "vitamin b12",
-          "b12",
-          "cobalamin",
-          "cbl",
-          "standard b12",
-          "synthetic b12"
+          "cyanocobalamine",
+          "cn-cbl",
+          "cyancobalamin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5077,7 +5074,13 @@
           "b12 unspecified",
           "cobalamin unspecified",
           "vitamin b-12",
-          "vit b12"
+          "vit b12",
+          "vitamin b12",
+          "b12",
+          "cobalamin",
+          "cbl",
+          "standard b12",
+          "synthetic b12"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
