@@ -11728,19 +11728,13 @@
         "aliases": [
           "hplc pure creatine monohydrate",
           "creapure",
-          "creatine powder",
-          "micronized creatine",
           "Creapure Creatine Monohydrate",
           "micronized creatine monohydrate",
           "creatine monohydrate supplement",
-          "creatine supplement",
           "hplc pure creatine monohydrate supplement",
           "creapure supplement",
-          "creatine powder supplement",
-          "micronized creatine supplement",
           "Creapure Creatine Monohydrate supplement",
           "Creatine Monohydrate, Micronized",
-          "creatine, micronized",
           "creatin monohydrate"
         ],
         "dosage_importance": 0.5,
@@ -12081,11 +12075,11 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "form-unverified monohydrate; assume class-typical F",
-        "consumer_note": "This listing identifies creatine monohydrate without naming a branded preparation or delivery format. It is the standard monohydrate form of creatine.",
+        "absorption": "creatine form not specified; assume class-typical F",
+        "consumer_note": "This label identifies creatine without specifying its chemical form. The specific creatine preparation is not established.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex engineering identity-disclosure correction",
+          "date": "2026-09-22"
         },
         "notes": "Generic creatine listing without a specified form. Could be monohydrate, HCl, or another salt. Since creatine monohydrate is the gold standard with the most research, products that don't specify the form may be using a less-studied variant. Conservative score applied. Evidence update 2026-04-25 (Batch 14): Creatine audit \u2014 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and J\u00e4ger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent \u2192 Persky 2003; \"Greenwood 2003 citrate\" non-existent \u2192 J\u00e4ger 2007.",
         "aliases": [
@@ -12096,7 +12090,13 @@
           "creatine pyruvate supplement",
           "ot2 creatine monohydrate",
           "ot2 creatine",
-          "ot2(tm) creatine"
+          "ot2(tm) creatine",
+          "creatine powder",
+          "micronized creatine",
+          "creatine supplement",
+          "creatine powder supplement",
+          "micronized creatine supplement",
+          "creatine, micronized"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {

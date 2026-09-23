@@ -408,3 +408,57 @@ def test_cleaner_preserves_unmapped_creatine_anhydrous_label():
     assert name == 'creatine anhydrous'
     assert mapped is False
     assert normalizer._fast_ingredient_lookup('creatine anhydrous')['mapped'] is False
+
+
+GENERIC_CREATINE_ALIASES = (
+    'creatine powder', 'micronized creatine', 'creatine supplement',
+    'creatine powder supplement', 'micronized creatine supplement', 'creatine, micronized',
+)
+UNSPECIFIED_CREATINE_FORM = 'creatine monohydrate ((unspecified))'
+
+
+@pytest.fixture(scope='module')
+def creatine_identity_owners():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    return EnhancedDSLDNormalizer(), SupplementEnricherV3()
+
+
+@pytest.mark.parametrize('name', ('creatine',) + GENERIC_CREATINE_ALIASES)
+def test_generic_creatine_keeps_parent_without_hydration_certainty(iqm,creatine_identity_owners,name):
+    normalizer,enricher=creatine_identity_owners
+    normalized=normalizer.matcher.preprocess_text(name)
+    assert normalizer.ingredient_alias_lookup[normalized]=='Creatine'
+    assert normalizer.ingredient_forms_lookup[normalized]==UNSPECIFIED_CREATINE_FORM
+    match=enricher._match_quality_map(name,name,iqm)
+    assert match['canonical_id']=='creatine_monohydrate'
+    assert match['form_id']==UNSPECIFIED_CREATINE_FORM
+
+
+@pytest.mark.parametrize('name,form', [
+    ('creatine monohydrate','creatine monohydrate'),
+    ('micronized creatine monohydrate','creatine monohydrate'),
+    ('creatine monohydrate supplement','creatine monohydrate'),
+    ('Creapure','creatine monohydrate'),
+    ('Creapure Creatine Monohydrate','creatine monohydrate'),
+    ('creatine HCl','creatine hydrochloride'),
+    ('micronized creatine hydrochloride','creatine hydrochloride'),
+])
+def test_explicit_creatine_forms_keep_existing_identity(iqm,creatine_identity_owners,name,form):
+    normalizer,enricher=creatine_identity_owners
+    normalized=normalizer.matcher.preprocess_text(name)
+    assert normalizer.ingredient_forms_lookup[normalized]==form
+    match=enricher._match_quality_map(name,name,iqm)
+    assert match['canonical_id']=='creatine_monohydrate'
+    assert match['form_id']==form
+
+
+def test_generic_alias_ownership_and_unspecified_copy(iqm):
+    forms=iqm['creatine_monohydrate']['forms']
+    assert not set(GENERIC_CREATINE_ALIASES) & set(forms['creatine monohydrate']['aliases'])
+    assert set(GENERIC_CREATINE_ALIASES) <= set(forms[UNSPECIFIED_CREATINE_FORM]['aliases'])
+    copy=forms[UNSPECIFIED_CREATINE_FORM]['consumer_note']
+    assert 'without specifying its chemical form' in copy
+    assert 'standard monohydrate form' not in copy
+    assert forms['creatine monohydrate']['score']==14
+    assert forms[UNSPECIFIED_CREATINE_FORM]['score']==6
