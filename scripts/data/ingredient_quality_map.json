@@ -3853,17 +3853,13 @@
           "pyridoxine hcl",
           "vitamin b6 hcl",
           "b6 hcl",
-          "standard b6",
           "pyridoxine",
           "pyridoxine hcl supplement",
           "pyridoxine hydrochloride supplement",
           "vitamin b6 hcl supplement",
           "vit b6 hcl",
           "b6 hcl supplement",
-          "standard b6 supplement",
           "pyridoxine supplement",
-          "vitamin b6 supplement",
-          "vitamin b-6 supplement",
           "Pyridoxine Hydrchloride"
         ],
         "dosage_importance": 1.5,
@@ -3977,7 +3973,11 @@
           "vit b6",
           "poten-zyme vitamin b6",
           "poten zyme vitamin b6",
-          "fermented vitamin b6"
+          "fermented vitamin b6",
+          "standard b6",
+          "standard b6 supplement",
+          "vitamin b6 supplement",
+          "vitamin b-6 supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

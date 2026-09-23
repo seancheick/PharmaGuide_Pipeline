@@ -725,3 +725,10 @@ def test_generic_thiamine_names_do_not_claim_thiamine_hydrochloride(iqm_data):
     generic = {'thiamine supplement', 'vitamin b1 supplement', 'b1 supplement'}
     assert not {a.lower() for a in forms['thiamine hydrochloride']['aliases']} & generic
     assert generic <= {a.lower() for a in forms['vitamin b1 (unspecified)']['aliases']}
+
+
+def test_generic_b6_names_do_not_claim_pyridoxine_hydrochloride(iqm_data):
+    forms = iqm_data['vitamin_b6_pyridoxine']['forms']
+    generic = {'standard b6', 'standard b6 supplement', 'vitamin b6 supplement', 'vitamin b-6 supplement'}
+    assert not {a.lower() for a in forms['pyridoxine hydrochloride']['aliases']} & generic
+    assert generic <= {a.lower() for a in forms['vitamin b6 (unspecified)']['aliases']}
