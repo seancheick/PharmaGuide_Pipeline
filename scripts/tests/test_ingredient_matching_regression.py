@@ -746,3 +746,19 @@ def test_niacin_nutrient_name_does_not_claim_nicotinic_acid(enricher, label, exp
     entry = next(i for i in enriched['ingredient_quality_data']['ingredients_scorable']
                  if i.get('canonical_id') == 'vitamin_b3_niacin')
     assert entry['matched_form'] == expected
+
+
+@pytest.mark.parametrize("parent,form,unspecified,names", [
+    ("vitamin_b3_niacin", "niacinamide", "vitamin b3 (unspecified)",
+     {"niacin/niacinamide", "niacinamide/niacin", "non-flushing niacin"}),
+    ("vitamin_b5_pantothenic", "calcium pantothenate", "vitamin b5 (unspecified)", {"pantothenate"}),
+    ("vitamin_b9_folate", "folic acid", "vitamin b9 (unspecified)", {"folacin"}),
+    ("vitamin_b9_folate", "5-methyltetrahydrofolate (5-MTHF)", "vitamin b9 (unspecified)", {"active folate"}),
+    ("vitamin_k2", "menaquinone-7 (MK-7)", "vitamin k2 (unspecified subtype)", {"long-chain k2"}),
+])
+def test_names_that_do_not_establish_the_form_live_on_the_unspecified_form(iqm_data, parent, form, unspecified, names):
+    # Mixtures, bare anions, legacy generic terms, marketing and chain-length
+    # classes do not identify one compound.
+    forms = iqm_data[parent]['forms']
+    assert not {a.lower() for a in forms[form]['aliases']} & names
+    assert names <= {a.lower() for a in forms[unspecified]['aliases']}

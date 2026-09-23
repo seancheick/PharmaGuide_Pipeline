@@ -3090,16 +3090,13 @@
         "aliases": [
           "b3 amide",
           "b3 amide supplement",
-          "niacin/niacinamide",
           "niacinamide supplement",
           "Niacinamide USP",
           "Niacinamide USP supplement",
-          "niacinamide/niacin",
           "nicotinamide",
           "nicotinamide supplement",
           "nicotinic acid amide",
           "nicotinic acid amide supplement",
-          "non-flushing niacin",
           "non-flushing niacin supplement",
           "vit b3 amide",
           "vitamin b3 amide",
@@ -3282,7 +3279,10 @@
           "b3",
           "niacin supplement",
           "vitamin b3 supplement",
-          "b3 supplement"
+          "b3 supplement",
+          "niacin/niacinamide",
+          "niacinamide/niacin",
+          "non-flushing niacin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -3443,7 +3443,6 @@
           "vitamin b5 calcium",
           "b5 calcium salt",
           "D-Calcium Pantothenate",
-          "pantothenate",
           "calcium pantothenate supplement",
           "calcium d-pantothenate supplement",
           "pantothenic acid calcium supplement",
@@ -3640,7 +3639,8 @@
           "Vitamin B5",
           "vitamin b5 pantothenic",
           "vitamin b-5",
-          "vit b5"
+          "vit b5",
+          "pantothenate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -4377,7 +4377,6 @@
           "methylfolate",
           "l-methylfolate",
           "5-methylfolate",
-          "active folate",
           "levomefolic acid",
           "5-methyl-THF",
           "L-5-Methyltetrahydrofolate",
@@ -4628,7 +4627,6 @@
         "notes": "The synthetic, inactive form of folate used in most cheap supplements and fortified foods. Must be converted through multiple enzymatic steps to become active 5-MTHF. Up to 40% of people carry MTHFR variants that impair this conversion, potentially leading to unmetabolized folic acid buildup. Evidence update 2026-04-25 (Batch 12): B-vitamin audit \u2014 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks \u2014 bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent \u2192 Keenan 2013; \"Wittwer 1989\" \u2192 1985; \"Loew 5x F\" \u2192 Cmax 5x/AUC 3.6x.",
         "aliases": [
           "pteroylmonoglutamic acid",
-          "folacin",
           "synthetic folate",
           "vitamin b9 synthetic",
           "Folic Acid USP",
@@ -4810,7 +4808,9 @@
           "Folate",
           "Folatine",
           "vitamin b-9",
-          "vit b9"
+          "vit b9",
+          "folacin",
+          "active folate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -73229,7 +73229,6 @@
           "vitamin k2 mk7",
           "natto vitamin k",
           "mk7 vitamin k2",
-          "long-chain k2",
           "MK-7 supplement",
           "menaquinone-7 supplement",
           "vitamin k2 mk7 supplement",
@@ -73554,7 +73553,8 @@
         "aliases": [
           "vitamin k2 unspecified",
           "unspecified vitamin k2",
-          "menaquinone unspecified"
+          "menaquinone unspecified",
+          "long-chain k2"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
