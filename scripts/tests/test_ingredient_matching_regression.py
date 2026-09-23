@@ -654,3 +654,11 @@ def test_generic_b12_form_text_does_not_claim_cyanocobalamin(enricher, label, ex
     entry = next(i for i in enriched['ingredient_quality_data']['ingredients_scorable']
                  if i.get('canonical_id') == 'vitamin_b12_cobalamin')
     assert entry['matched_form'] == expected
+
+
+def test_natural_vitamin_d_does_not_claim_cholecalciferol(iqm_data):
+    # UV-exposed mushroom vitamin D is D2; "natural" does not establish D3.
+    forms = iqm_data['vitamin_d']['forms']
+    d3 = {a.lower() for a in forms['cholecalciferol (D3)']['aliases']}
+    assert not d3 & {'natural vitamin d', 'natural vitamin d supplement', 'natural vit d'}
+    assert 'natural vitamin d' in {a.lower() for a in forms['vitamin d (unspecified)']['aliases']}

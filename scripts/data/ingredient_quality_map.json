@@ -5875,7 +5875,6 @@
           "d-3",
           "vit d3",
           "colecalciferol",
-          "natural vitamin d",
           "animal-based vitamin d",
           "vita d3",
           "vitamin d 3",
@@ -5885,8 +5884,6 @@
           "d-3 supplement",
           "vit d3 supplement",
           "colecalciferol supplement",
-          "natural vitamin d supplement",
-          "natural vit d",
           "animal-based vitamin d supplement",
           "animal-based vit d",
           "vita d3 supplement",
@@ -6393,7 +6390,10 @@
           "vit d",
           "vitamin d-",
           "Poten-Zyme Vitamin D",
-          "Poten-Zyme(R) Vitamin D"
+          "Poten-Zyme(R) Vitamin D",
+          "natural vitamin d",
+          "natural vitamin d supplement",
+          "natural vit d"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
