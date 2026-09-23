@@ -3157,14 +3157,9 @@
         },
         "notes": "The original, traditional form of niacin. Highly effective for raising HDL cholesterol and lowering triglycerides, but causes the 'niacin flush' (skin redness, warmth, tingling) at higher doses due to prostaglandin release. Evidence update 2026-04-25 (Batch 12): B-vitamin audit \u2014 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks \u2014 bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent \u2192 Keenan 2013; \"Wittwer 1989\" \u2192 1985; \"Loew 5x F\" \u2192 Cmax 5x/AUC 3.6x.",
         "aliases": [
-          "niacin",
-          "b3",
           "flushing niacin",
           "nicotinic acid USP",
-          "niacin supplement",
           "nicotinic acid supplement",
-          "vitamin b3 supplement",
-          "b3 supplement",
           "flushing niacin supplement",
           "nicotinic acid USP supplement"
         ],
@@ -3282,7 +3277,12 @@
           "vit b3",
           "niacin & niacinamide",
           "niacin and niacinamide",
-          "niacinamide & niacin"
+          "niacinamide & niacin",
+          "niacin",
+          "b3",
+          "niacin supplement",
+          "vitamin b3 supplement",
+          "b3 supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

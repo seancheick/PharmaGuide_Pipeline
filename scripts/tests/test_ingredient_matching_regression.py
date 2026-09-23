@@ -732,3 +732,17 @@ def test_generic_b6_names_do_not_claim_pyridoxine_hydrochloride(iqm_data):
     generic = {'standard b6', 'standard b6 supplement', 'vitamin b6 supplement', 'vitamin b-6 supplement'}
     assert not {a.lower() for a in forms['pyridoxine hydrochloride']['aliases']} & generic
     assert generic <= {a.lower() for a in forms['vitamin b6 (unspecified)']['aliases']}
+
+
+@pytest.mark.parametrize("label,expected", [
+    ("Niacin", "vitamin b3 (unspecified)"),               # US label nutrient name, any form
+    ("Niacin (as niacinamide)", "niacinamide"),
+    ("Niacin (as nicotinic acid)", "nicotinic acid"),
+])
+def test_niacin_nutrient_name_does_not_claim_nicotinic_acid(enricher, label, expected):
+    product = {"id": "TEST_NIACIN", "product_name": "Test B3",
+               "activeIngredients": [{"name": label, "quantity": 20, "unit": "mg"}]}
+    enriched, _ = enricher.enrich_product(product)
+    entry = next(i for i in enriched['ingredient_quality_data']['ingredients_scorable']
+                 if i.get('canonical_id') == 'vitamin_b3_niacin')
+    assert entry['matched_form'] == expected
