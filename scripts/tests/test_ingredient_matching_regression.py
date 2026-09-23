@@ -662,3 +662,13 @@ def test_natural_vitamin_d_does_not_claim_cholecalciferol(iqm_data):
     d3 = {a.lower() for a in forms['cholecalciferol (D3)']['aliases']}
     assert not d3 & {'natural vitamin d', 'natural vitamin d supplement', 'natural vit d'}
     assert 'natural vitamin d' in {a.lower() for a in forms['vitamin d (unspecified)']['aliases']}
+
+
+GENERIC_VITAMIN_C = {'standard vitamin c', 'vitc', 'vitamin c supplement', 'standard vitamin c supplement',
+                     'standard vit c', 'vit c supplement', 'vitc supplement', 'vitamin c, natural'}
+
+
+def test_generic_vitamin_c_names_do_not_claim_ascorbic_acid(iqm_data):
+    forms = iqm_data['vitamin_c']['forms']
+    assert not {a.lower() for a in forms['ascorbic acid']['aliases']} & GENERIC_VITAMIN_C
+    assert GENERIC_VITAMIN_C <= {a.lower() for a in forms['vitamin c (unspecified)']['aliases']}

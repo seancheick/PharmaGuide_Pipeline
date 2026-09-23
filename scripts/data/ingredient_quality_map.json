@@ -5366,18 +5366,10 @@
         },
         "aliases": [
           "l-ascorbic acid",
-          "standard vitamin c",
           "pure ascorbic acid",
-          "vitc",
           "ascorbic acid supplement",
-          "vitamin c supplement",
           "l-ascorbic acid supplement",
-          "standard vitamin c supplement",
-          "standard vit c",
-          "pure ascorbic acid supplement",
-          "vit c supplement",
-          "vitc supplement",
-          "Vitamin C, Natural"
+          "pure ascorbic acid supplement"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -5664,7 +5656,15 @@
           "Vitamin C",
           "vit c",
           "RAW Whole Food Vitamin C",
-          "whole food vitamin c"
+          "whole food vitamin c",
+          "standard vitamin c",
+          "vitc",
+          "vitamin c supplement",
+          "standard vitamin c supplement",
+          "standard vit c",
+          "vit c supplement",
+          "vitc supplement",
+          "Vitamin C, Natural"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
