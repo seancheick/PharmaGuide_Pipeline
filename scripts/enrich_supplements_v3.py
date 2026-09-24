@@ -4095,6 +4095,13 @@ class SupplementEnricherV3:
         descendants = self._identity_parent_descendants
         return lambda parent, child: child in descendants.get(parent, ())
 
+    @staticmethod
+    def _row_unii_is_iqm_parent_unii(ingredient: Dict, canonical_id: str, quality_map: Dict) -> bool:
+        row_unii = ingredient.get("uniiCode") or (ingredient.get("raw_taxonomy") or {}).get("uniiCode")
+        entry = quality_map.get(canonical_id) if isinstance(quality_map, dict) else None
+        parent_unii = ((entry or {}).get("external_ids") or {}).get("unii") if isinstance(entry, dict) else None
+        return bool(row_unii and parent_unii and str(row_unii).strip().upper() == str(parent_unii).strip().upper())
+
     def _resolve_iqd_identity(
         self,
         ingredient: Dict,
@@ -4187,9 +4194,24 @@ class SupplementEnricherV3:
             def resolve_candidate(candidate: str) -> Optional[str]:
                 return "fish_oil"
 
+        # A row the enricher never re-matched (nested display-only rows) has no
+        # match to be coherent with. Its cleaner identity is still proven when
+        # the row's own UNII is the IQM parent's registered UNII AND the literal
+        # label resolves to that parent: DSLD 293400 "Oat Bran" (KQX236OK4U) is
+        # oat_bran, not the "Oat Fiber" group's oat_generic. A literal naming a
+        # different identity ("Saccharomyces boulardii" carrying the S.
+        # cerevisiae UNII) keeps its structured repair.
+        unii_and_literal_prove_supplied = bool(
+            supplied_canonical_id
+            and not isinstance(match_result, dict)
+            and self._row_unii_is_iqm_parent_unii(ingredient, supplied_canonical_id, quality_map)
+            and self._identity_candidate_resolver(
+                quality_map, supplied_canonical_id=supplied_canonical_id
+            )(literal_label) == supplied_canonical_id
+        )
         authoritative_iqm_unii = bool(
             supplied_canonical_id
-            and taxonomy_coherent
+            and (taxonomy_coherent or unii_and_literal_prove_supplied)
             and not ingredient.get("_structural_parent_total")
             and not self._is_generic_unspecified_omega3(ingredient)
             and ingredient.get("canonical_source_db") == "ingredient_quality_map"
@@ -16744,6 +16766,7 @@ class SupplementEnricherV3:
             "total_fat_g": _gram_amount("totalFat"),
             "protein_g": _gram_amount("protein"),
             "dietary_fiber_g": _gram_amount("dietaryFiber"),
+            "dietary_fiber_source": dict(ni["dietaryFiber"]) if isinstance(ni.get("dietaryFiber"), dict) else None,
             "total_sugars_g": _gram_amount("sugars"),
         }
 

@@ -164,6 +164,7 @@ def test_route_classification_runs_after_nutrition_summary(monkeypatch, enricher
         "total_fat_g": None,
         "protein_g": None,
         "dietary_fiber_g": None,
+        "dietary_fiber_source": None,
         "total_sugars_g": None,
     }
 

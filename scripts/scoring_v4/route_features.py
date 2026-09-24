@@ -99,6 +99,7 @@ FIBER_CANONICALS = frozenset({
     "acacia_gum",
     "partially_hydrolyzed_guar_gum",
     "guar_gum",
+    "oi_guar_gum",
     "glucomannan",
     "konjac_glucomannan",
     "beta_glucan",
@@ -106,12 +107,16 @@ FIBER_CANONICALS = frozenset({
     "pectin",
     "resistant_starch",
     "prebiotics",
+    # Whole-oat beta-glucan soluble fiber source (21 CFR 101.81(c)(2)(ii)(A)(1)).
+    "oat_bran",
+    # IQM "Oligosaccharides" (category fibers): prebiotic fiber like "prebiotics".
+    "oligosaccharides",
 })
 
 # These identities can define a fiber product when they dominate disclosed
 # comparable active mass.  Generic prebiotic and beta-glucan rows need explicit
 # label intent because they are frequently adjuncts in probiotic/immune formulas.
-MATERIAL_FIBER_CANONICALS = FIBER_CANONICALS - {"prebiotics", "beta_glucan"}
+MATERIAL_FIBER_CANONICALS = FIBER_CANONICALS - {"prebiotics", "oligosaccharides", "beta_glucan"}
 
 DIGESTIVE_ENZYME_CANONICALS = frozenset({
     "digestive_enzymes",
@@ -401,6 +406,63 @@ def row_category(row: Mapping[str, Any]) -> str:
     return normalize_identity(row.get("category")).replace("_", " ")
 
 
+PHGG_CANONICALS = frozenset({
+    "nha_sunfiber",
+    "nha_sunfiber_ag",
+    "partially_hydrolyzed_guar_gum",
+})
+
+GUAR_CANONICALS = frozenset({
+    "guar_gum",
+    "oi_guar_gum",
+})
+
+COMPATIBLE_GUAR_CANONICALS = frozenset({
+    "",
+    "fiber",
+    *GUAR_CANONICALS,
+})
+
+PHGG_ROW_TERMS = (
+    re.compile(r"\bphgg\b"),
+    re.compile(r"\bsunfiber(?:\s+ag)?\b"),
+    re.compile(r"\bpartially\s+hydrolyzed\s+guar(?:\s+gum)?\b"),
+    re.compile(r"\bhydrolyzed\s+guar\s+gum\b"),
+    re.compile(r"\bguar\s+gum\s+hydrolyzed\b"),
+)
+
+
+def _normalize_signal_text(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", str(value or "").strip().lower()).strip()
+
+
+def _phgg_signal_text(row: Dict[str, Any]) -> str:
+    pieces = [
+        _normalize_signal_text(row.get("name")),
+        _normalize_signal_text(row.get("raw_source_text")),
+    ]
+    for form in (row.get("forms") or []):
+        if isinstance(form, dict):
+            pieces.append(_normalize_signal_text(form.get("name")))
+    raw_taxonomy = (row.get("raw_taxonomy") or {})
+    for form in (raw_taxonomy.get("forms") or []):
+        if isinstance(form, dict):
+            pieces.append(_normalize_signal_text(form.get("name")))
+    return " ".join(piece for piece in pieces if piece)
+
+
+def is_hydrolyzed_guar_fiber_row(row: Dict[str, Any]) -> bool:
+    if not isinstance(row, dict):
+        return False
+    cid = row_canonical(row)
+    if cid in PHGG_CANONICALS:
+        return True
+    if cid not in COMPATIBLE_GUAR_CANONICALS:
+        return False
+    text = _phgg_signal_text(row)
+    return any(pattern.search(text) for pattern in PHGG_ROW_TERMS)
+
+
 def is_fiber_row(row: Mapping[str, Any]) -> bool:
     """Return whether the row has a reviewed canonical fiber identity.
 
@@ -409,7 +471,17 @@ def is_fiber_row(row: Mapping[str, Any]) -> bool:
     and hyaluronic acid as ``fibers``.  Category-only rows must therefore not
     contribute material fiber mass or satisfy fiber routing evidence.
     """
-    return row_canonical(row) in FIBER_CANONICALS
+    return row_canonical(row) in FIBER_CANONICALS or is_hydrolyzed_guar_fiber_row(row)
+
+
+def is_material_fiber_row(row: Mapping[str, Any]) -> bool:
+    """A reviewed fiber identity that can define digestive product intent.
+
+    Generic prebiotic and beta-glucan identities remain dual-purpose; absent
+    explicit digestive intent, their prominent claims still compete with an
+    incidental digestive-enzyme row.
+    """
+    return row_canonical(row) in MATERIAL_FIBER_CANONICALS or is_hydrolyzed_guar_fiber_row(row)
 
 
 def is_fiber_category_row(row: Mapping[str, Any]) -> bool:
@@ -425,6 +497,11 @@ def is_declared_fiber_blend(row: Mapping[str, Any]) -> bool:
     if disposition not in {"blend_header_total", "recognized_non_scorable"}:
         return False
     return bool(_FIBER_DECLARATION_RE.search(row_name(row)))
+
+
+def is_fiber_declaring_anchor(row: Mapping[str, Any]) -> bool:
+    """A structural label-taxonomy anchor whose own name declares fiber."""
+    return row.get("identity_kind") == "label_taxonomy_anchor" and bool(_FIBER_DECLARATION_RE.search(row_name(row)))
 
 
 def is_dual_use_enzyme_row(row: Mapping[str, Any]) -> bool:
@@ -590,6 +667,7 @@ def extract_route_features(
         row
         for row in positive_rows
         if row not in digestive_enzyme_identity_rows
+        and not is_material_fiber_row(row)
         and _row_role(row, by_ref, by_canonical) in _PRIMARY_ROLES
     ]
 

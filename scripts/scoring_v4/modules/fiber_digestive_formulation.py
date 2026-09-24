@@ -27,6 +27,7 @@ from scoring_v4.modules.generic_helpers import (
 )
 
 
+from scoring_v4.route_features import is_fiber_declaring_anchor
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _FVM = _cfg_block("formulation_variant_magnitudes", "fiber_digestive")["fiber_digestive"]
@@ -151,7 +152,11 @@ def _fiber_focus(all_rows: List[Dict[str, Any]], rows: List[Dict[str, Any]]) -> 
         return 1.0
     if not all_rows:
         return 2.0
-    if len(all_rows) <= max(2, len(rows) + 1):
+    # A label-taxonomy anchor that declares fiber ("Proprietary Fiber Blend",
+    # a Nutrition Facts "Insoluble Fiber" sub-row) is on-focus; any other
+    # anchor ("Superfood, Greens & Herbal Blends") stays off-focus.
+    fiber_like = len(rows) + sum(1 for r in all_rows if r not in rows and is_fiber_declaring_anchor(r))
+    if len(all_rows) <= max(2, fiber_like + 1):
         return 5.0
     return 3.0
 

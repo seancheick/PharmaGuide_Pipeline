@@ -6514,7 +6514,7 @@ class EnhancedDSLDNormalizer:
         """Extract nutritional information (Calories, Carbs, Sugar, etc.) from ingredients"""
         nutritional_info = {}
 
-        for ing in ingredient_rows:
+        for row_index, ing in enumerate(ingredient_rows):
             if not isinstance(ing, dict):
                 continue
             name = ing.get("name", "").lower()
@@ -6527,7 +6527,7 @@ class EnhancedDSLDNormalizer:
             elif ing.get("unit") and isinstance(quantity_data, dict) and "unit" not in quantity_data:
                 quantity_data["unit"] = ing.get("unit")
 
-            quantity, unit, _, _ = self._process_quantity(quantity_data)
+            quantity, unit, _, quantity_variants = self._process_quantity(quantity_data)
 
             # Capture nutritional facts. Every panel field records through the
             # single _record_nutrition_fact authority (C6: identity-bound match +
@@ -6554,10 +6554,15 @@ class EnhancedDSLDNormalizer:
                 self._record_nutrition_fact(nutritional_info, "sodium", quantity, unit, "mg")
             elif "fiber" in name or "dietary fiber" in name:
                 self._record_nutrition_fact(nutritional_info, "dietaryFiber", quantity, unit, "g")
+                if nutritional_info["dietaryFiber"].get("amount") == quantity and nutritional_info["dietaryFiber"].get("unit") == unit:
+                    nutritional_info["dietaryFiber"].update({
+                        "quantityVariants": quantity_variants,
+                        "raw_source_path": ing.get("raw_source_path") or f"ingredientRows[{row_index}]",
+                    })
 
             # P0.2: Check nestedRows for sugar/fiber (commonly nested under Total Carbohydrates)
             nested_rows = ing.get("nestedRows", [])
-            for nested in nested_rows:
+            for nested_index, nested in enumerate(nested_rows):
                 if not isinstance(nested, dict):
                     continue
                 nested_name = nested.get("name", "").lower()
@@ -6569,7 +6574,7 @@ class EnhancedDSLDNormalizer:
                 elif nested.get("unit") and isinstance(nested_qty_data, dict) and "unit" not in nested_qty_data:
                     nested_qty_data["unit"] = nested.get("unit")
 
-                nested_qty, nested_unit, _, _ = self._process_quantity(nested_qty_data)
+                nested_qty, nested_unit, _, nested_variants = self._process_quantity(nested_qty_data)
 
                 # Extract sugar from nested row (only if not already found at top level)
                 if (nested_name == "sugar" or "sugars" in nested_name) and "sugars" not in nutritional_info:
@@ -6583,7 +6588,9 @@ class EnhancedDSLDNormalizer:
                 if ("fiber" in nested_name or "dietary fiber" in nested_name) and "dietaryFiber" not in nutritional_info:
                     nutritional_info["dietaryFiber"] = {
                         "amount": nested_qty,
-                        "unit": nested_unit or "g"
+                        "unit": nested_unit or "g",
+                        "quantityVariants": nested_variants,
+                        "raw_source_path": nested.get("raw_source_path") or f"ingredientRows[{row_index}].nestedRows[{nested_index}]",
                     }
                     logger.debug(f"Extracted fiber from nested row: {nested_qty}{nested_unit or 'g'}")
 
@@ -9320,6 +9327,8 @@ class EnhancedDSLDNormalizer:
                 "quantity": quantity,
                 "unit": unit,
                 "context": "single_dict",
+                "operator": quantities.get("operator"),
+                "selected_for_analysis": True,
                 "quantity_parsed": qty_parsed,
             }
             if quantities.get("servingSizeOrder") is not None:
@@ -9359,6 +9368,7 @@ class EnhancedDSLDNormalizer:
                         "quantity": qty,
                         "unit": u,
                         "index": idx,
+                        "operator": q.get("operator"),
                         "quantity_parsed": qty_parsed,
                     }
                     if q.get("servingSizeOrder") is not None:
@@ -9449,6 +9459,7 @@ class EnhancedDSLDNormalizer:
                         ),
                         primary,
                     )
+                primary["selected_for_analysis"] = True
                 quantity = primary["quantity"]
                 unit = primary["unit"]
                 daily_value = primary.get("daily_value")

@@ -81,6 +81,7 @@ def _fiber_product(
     matches: list[dict] | None = None,
 ) -> dict:
     return {
+        "servingSizes": [{"quantity": 1, "unit": "scoop", "minDailyServings": 1, "maxDailyServings": 1}],
         "id": 910001,
         "dsld_id": "910001",
         "fullName": name,
@@ -100,10 +101,14 @@ def _fiber_product(
         },
         "nutrition_summary": {
             "dietary_fiber_g": dietary_fiber_g,
+            "dietary_fiber_source": {"amount": dietary_fiber_g, "unit": "g", "raw_source_path": "ingredientRows[0]",
+                                     "quantityVariants": [{"quantity": dietary_fiber_g, "unit": "g", "operator": "="}]},
             "total_sugars_g": 0.0 if sugar is None else sugar.get("amount_g"),
         },
         "nutrition_detail": {
             "dietary_fiber_g": dietary_fiber_g,
+            "dietary_fiber_source": {"amount": dietary_fiber_g, "unit": "g", "raw_source_path": "ingredientRows[0]",
+                                     "quantityVariants": [{"quantity": dietary_fiber_g, "unit": "g", "operator": "="}]},
             "total_sugars_g": 0.0 if sugar is None else sugar.get("amount_g"),
         },
         "dietary_sensitivity_data": {

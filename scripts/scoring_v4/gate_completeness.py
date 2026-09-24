@@ -203,6 +203,17 @@ def _status_is_active(product: Dict[str, Any]) -> bool:
     return status in {"active", "on_market", "on market", "marketed", "current"}
 
 
+def _has_unresolved_source_quantity(product: Dict[str, Any], rows: List[Dict[str, Any]]) -> bool:
+    """A scoring amount the label does not settle (conflicting quantity columns
+    with none selected) is a pipeline defect to fix upstream, never a score."""
+    from scoring_v4.exposure import UNRESOLVED_OPERATORS, quantity_is_unresolved
+    from scoring_v4.modules.fiber_digestive_helpers import nutrition_fiber_exposure
+    if any(quantity_is_unresolved(row) for row in rows):
+        return True
+    fiber = nutrition_fiber_exposure(product or {})
+    return fiber is not None and fiber.quantity_operator in UNRESOLVED_OPERATORS
+
+
 def _base_checks(
     product: Dict[str, Any],
     ingredients: List[Dict[str, Any]],
@@ -220,6 +231,8 @@ def _base_checks(
     ]
     if blocking_contract_findings:
         missing.append("strict_scoring_contract")
+    if _has_unresolved_source_quantity(product, scoring_input.rows):
+        missing.append("unresolved_source_quantity")
     catalog_disposition = _safe_dict(
         _safe_dict(assessment_readiness).get("catalog_disposition")
     )

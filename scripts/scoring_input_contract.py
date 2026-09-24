@@ -4324,6 +4324,7 @@ def _route_fiber_digestive_decision(
         fiber_ids & set(MATERIAL_FIBER_CANONICALS)
         and not facts.get("fiber_delivery_carrier_only")
         and mass_share >= _ROUTE_FIBER_MATERIAL_MIN_MASS_SHARE
+        and int(facts.get("non_digestive_claim_prominent_count") or 0) == 0
     ):
         return True, "material_fiber_panel", ["material_fiber_mass_share"]
     return False, "fiber_digestive_intent_missing", ["no_material_fiber_or_digestive_intent"]

@@ -34,6 +34,7 @@ def _row(canonical_id: str, quantity: float, unit: str, *, name: str | None = No
 def _sports_product() -> dict:
     row = _row("creatine_monohydrate", 3, "Gram(s)", name="Creatine Monohydrate")
     return {
+        "servingSizes": [{"quantity": 1, "unit": "scoop", "minDailyServings": 1, "maxDailyServings": 1}],
         "id": 269425,
         "assessment_readiness_contract_version": "1.0.0",
         "fullName": "Creatine Monohydrate 3 g",

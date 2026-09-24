@@ -4,10 +4,10 @@
     "schema_version": "1.0.0",
     "version": "2026-07-13",
     "total_entries": 7,
-    "total_relationships": 2,
+    "total_relationships": 4,
     "purpose": "Prevent cleaner/enricher identity drift using reviewed exact-identity and broad-to-specific contracts.",
     "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
-    "last_updated": "2026-09-22"
+    "last_updated": "2026-09-24"
   },
   "equivalences": [
     {
@@ -100,6 +100,15 @@
       "child_id": "citrus_polymethoxylated_flavones",
       "relation": "broader_than",
       "basis": "Flavones is the broad chemical class. A literal 'Citrus Polymethoxylated Flavones' label names a characterized subclass and botanical source, so it keeps that more-specific identity when DSLD's structured group reads 'Polymethoxylated flavones'.",
+      "scope": "specificity_resolution_only"
+    },
+    {
+      "parent_db": "botanical_ingredients",
+      "parent_id": "oat_generic",
+      "child_db": "ingredient_quality_map",
+      "child_id": "oat_bran",
+      "relation": "broader_than",
+      "basis": "Oat (Avena sativa) is the broad plant identity. Oat bran is a specific milled fraction of the oat groat (21 CFR 101.81(c)(2)(ii)(A)(1)), so a literal 'Oat Bran' label that independently resolves to oat_bran keeps that identity when DSLD's structured group reads 'Oat Fiber' (DSLD 293280, 293400).",
       "scope": "specificity_resolution_only"
     }
   ]

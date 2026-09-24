@@ -50,6 +50,7 @@ def _row(canonical_id: str, quantity, unit: str, *, name: str | None = None) -> 
 
 def _product(*rows: dict, name: str = "Pre-Workout Elite", primary_type: str = "pre_workout") -> dict:
     return {
+        "servingSizes": [{"quantity": 1, "unit": "scoop", "minDailyServings": 1, "maxDailyServings": 1}],
         "fullName": name,
         "product_name": name,
         "primary_type": primary_type,

@@ -51,6 +51,7 @@ def _row(
 
 def _product(*rows: dict, name: str = "Sports Product", primary_type: str = "amino_acid") -> dict:
     return {
+        "servingSizes": [{"quantity": 1, "unit": "scoop", "minDailyServings": 1, "maxDailyServings": 1}],
         "fullName": name,
         "product_name": name,
         "primary_type": primary_type,

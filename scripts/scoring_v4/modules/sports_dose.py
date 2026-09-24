@@ -7,6 +7,10 @@ than the generic RDA/UL proxy used for vitamins and minerals.
 from __future__ import annotations
 
 from typing import Any, Dict, Optional, Tuple
+from dataclasses import asdict
+
+from scoring_v4.exposure import row_exposure
+from serving_frequency import has_loading_protocol
 
 from scoring_v4.modules.generic_helpers import _norm_text, _safe_list, get_active_ingredients
 from scoring_v4.modules.sports_helpers import (
@@ -38,6 +42,9 @@ from scoring_v4.modules.sports_helpers import (
 
 PHASE_MARKER = "P1.7_sports_dose_v1"
 METHOD_MARKER = "sports_active_dose_bands_v1"
+# Daily basis verified against NIH ODS exercise fact sheet; caffeine is per use.
+_DAILY_CANONICALS = CREATINE_CANONICALS | BETA_ALANINE_CANONICALS | HMB_CANONICALS
+
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _DM = _cfg_block("dose_magnitudes", "sports")["sports"]
@@ -84,7 +91,17 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "method": METHOD_MARKER,
         "primary_identity": identity,
         "dose_basis": basis,
+        "benchmark_exposures": [
+            asdict(row_exposure(product, row, basis="daily" if canonical(row) in _DAILY_CANONICALS else "per_use", unit="g"))
+            for row in sports_dosed_rows(product)
+            if canonical(row) in _DAILY_CANONICALS | CAFFEINE_CANONICALS
+        ],
+        "daily_interval_selection": "maximum_directed_use",
+
     }
+    unknown_daily = [e for e in metadata["benchmark_exposures"] if e["benchmark_amount"] is None and e["uncertainty"]]
+    if unknown_daily and primary <= 0:
+        not_evaluable = unknown_daily[0]["uncertainty"]
     if not_evaluable:
         metadata["not_evaluable_reason"] = not_evaluable
 
@@ -160,7 +177,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         return 16.0, "protein_above_40_g"
 
     if identity == "creatine":
-        grams = _max_g(rows, CREATINE_CANONICALS)
+        grams = _max_benchmark_amount(product, rows, CREATINE_CANONICALS, basis="daily", unit="g")
         if grams is None:
             return 0.0, "creatine_no_dose"
         if grams < 2:
@@ -169,10 +186,16 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
             return 16.0, "creatine_2_to_3_g"
         if grams <= 10:
             return 20.0, "creatine_3_to_10_g"
+        # DSLD prints a loading phase's servings as the daily maximum. The
+        # reviewed NIH ODS loading protocol is ~20 g/day for 5-7 days, so a
+        # labelled loading regimen up to 20 g/day earns full credit; anything
+        # above it, or without loading directions, keeps the high-dose band.
+        if grams <= 20 and has_loading_protocol(product):
+            return 20.0, "creatine_loading_protocol_up_to_20_g"
         return 16.0, "creatine_above_10_g_no_loading_protocol"
 
     if identity == "beta_alanine":
-        grams = _max_g(rows, BETA_ALANINE_CANONICALS)
+        grams = _max_benchmark_amount(product, rows, BETA_ALANINE_CANONICALS, basis="daily", unit="g")
         if grams is None:
             return 0.0, "beta_alanine_no_dose"
         if grams < 2:
@@ -203,7 +226,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         return 18.0, "l_citrulline_6_to_8_g"
 
     if identity == "hmb":
-        grams = _max_g(rows, HMB_CANONICALS)
+        grams = _max_benchmark_amount(product, rows, HMB_CANONICALS, basis="daily", unit="g")
         if grams is None:
             return 0.0, "hmb_no_dose"
         if grams < 1.5:
@@ -285,7 +308,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         return 12.0, "atp_at_least_400_mg"
 
     if identity == "caffeine":
-        mg = _max_mg(rows, CAFFEINE_CANONICALS)
+        mg = _max_benchmark_amount(product, rows, CAFFEINE_CANONICALS, basis="per_use", unit="mg")
         if mg is None:
             return 0.0, "caffeine_no_dose"
         if mg < 150:
@@ -415,6 +438,13 @@ def _opaque_penalty(product: Dict[str, Any], primary_score: float) -> Tuple[floa
         if _norm_text(blend.get("disclosure_level")) in {"none", "partial", ""}:
             return 10.0, "opaque_primary_sports_blend"
     return 0.0, "no_sports_primary_dose"
+
+
+def _max_benchmark_amount(product: Dict[str, Any], rows: list[Dict[str, Any]], canonicals: frozenset[str], *, basis: str, unit: str) -> Optional[float]:
+    exposures = [row_exposure(product, row, basis=basis, unit=unit)
+                 for row in rows if canonical(row) in canonicals]
+    values = [e.benchmark_amount for e in exposures if e.benchmark_amount is not None]
+    return max(values) if values else None
 
 
 def _max_g(rows: list[Dict[str, Any]], canonicals: frozenset[str]) -> Optional[float]:

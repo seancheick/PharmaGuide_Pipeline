@@ -494,8 +494,9 @@ def test_incompatible_canonical_with_stale_guar_and_sunfiber_text_does_not_take_
 
     payload = score_formulation(_product(row, name="Neutral Product"))
 
-    assert payload["components"]["fiber_source_quality"] != 10.0
-    assert payload["metadata"]["fiber_source_class"] != "hydrolyzed_guar_fiber"
+    assert is_fiber_row(row) is False
+    assert "fiber_source_quality" not in payload["components"]
+    assert payload["metadata"].get("fiber_source_class") != "hydrolyzed_guar_fiber"
 
 
 def test_sunfiber_ag_note_uses_agglomerated_identity_without_unverified_regulatory_claim() -> None:
