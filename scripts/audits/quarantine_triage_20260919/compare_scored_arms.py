@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from collections import Counter
 from pathlib import Path
 
 # Fields whose change is a scored-conclusion change (not bookkeeping).
@@ -141,6 +142,27 @@ def breakdown_of(record: dict):
     }
 
 
+def review_changes(left: dict, right: dict) -> dict:
+    """Route, eligibility, identity and exposure differences from the collector projections."""
+    rl, rr = left.get("_review") or {}, right.get("_review") or {}
+    out = {}
+    if (rl.get("module"), rl.get("route")) != (rr.get("module"), rr.get("route")):
+        out["route"] = {"before": [rl.get("module"), rl.get("route")], "after": [rr.get("module"), rr.get("route")]}
+    eligibility = ("is_live_eligible", "missing_fields", "soft_missing", "is_live_ready", "catalog_disposition")
+    if [rl.get(k) for k in eligibility] != [rr.get(k) for k in eligibility]:
+        out["eligibility"] = {"before": {k: rl.get(k) for k in eligibility},
+                              "after": {k: rr.get(k) for k in eligibility}}
+    if rl.get("exposures") != rr.get("exposures"):
+        out["exposure"] = {"before": rl.get("exposures"), "after": rr.get("exposures")}
+    # Occurrence-aware: two rows sharing a source path and name are both kept.
+    il = Counter(tuple(row[:4]) for row in left.get("_identities") or [])
+    ir = Counter(tuple(row[:4]) for row in right.get("_identities") or [])
+    if il != ir:
+        out["identity"] = {"only_before": [list(k) for k in sorted((il - ir).elements(), key=str)],
+                           "only_after": [list(k) for k in sorted((ir - il).elements(), key=str)]}
+    return out
+
+
 def deep_diff(before, after, path="") -> list:
     out = []
     if isinstance(before, dict) and isinstance(after, dict):
@@ -196,6 +218,10 @@ def main() -> int:
         "safety_changes": [],
         "outside_expected_families": [],
         "bookkeeping_only_changes": [],
+        "route_changes": [],
+        "eligibility_changes": [],
+        "identity_changes": [],
+        "exposure_changes": [],
     }
 
     for dsld_id in shared:
@@ -281,12 +307,16 @@ def main() -> int:
                 }
             )
 
+        semantic = review_changes(left, right)
+        for kind, change in semantic.items():
+            report[f"{kind}_changes"].append({"dsld_id": dsld_id, "name": name, **change})
+
         if expected and dsld_id not in expected and conclusion_fields:
             report["outside_expected_families"].append(
                 {"dsld_id": dsld_id, "name": name, "fields": conclusion_fields}
             )
 
-        if changed_fields and not conclusion_fields and not (
+        if changed_fields and not conclusion_fields and not semantic and not (
             left_score is not None and right_score is not None and left_score != right_score
         ):
             report["bookkeeping_only_changes"].append(
@@ -305,6 +335,10 @@ def main() -> int:
                 report["quarantine_entries"],
                 report["safety_changes"],
                 report["bookkeeping_only_changes"],
+                report["route_changes"],
+                report["eligibility_changes"],
+                report["identity_changes"],
+                report["exposure_changes"],
             )
             for entry in bucket
         },
@@ -322,6 +356,10 @@ def main() -> int:
         "safety_changes": len(report["safety_changes"]),
         "outside_expected_families": len(report["outside_expected_families"]),
         "bookkeeping_only_changes": len(report["bookkeeping_only_changes"]),
+        "route_changes": len(report["route_changes"]),
+        "eligibility_changes": len(report["eligibility_changes"]),
+        "identity_changes": len(report["identity_changes"]),
+        "exposure_changes": len(report["exposure_changes"]),
         "max_abs_delta": max(
             (abs(item["delta"]) for item in report["score_changes"]), default=0
         ),

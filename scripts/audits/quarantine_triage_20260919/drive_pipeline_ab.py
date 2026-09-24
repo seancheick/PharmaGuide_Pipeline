@@ -137,7 +137,47 @@ SCORE_FIELDS = (
 )
 
 
-def collect(paths: list, out_path: Path) -> None:
+IDENTITY_FIELDS = ("raw_source_path", "name", "canonical_id", "identity_disposition",
+                   "canonical_id_before", "scoreable_identity", "matched_form")
+EXPOSURE_FIELDS = ("basis", "unit", "per_serving_amount", "minimum", "maximum", "benchmark_amount",
+                   "quantity_operator", "uncertainty", "frequency_defaulted", "source_path")
+
+
+def identity_projection(product: dict) -> list:
+    """Every ingredient row's identity, nested and display-only rows included."""
+    rows = ((product or {}).get("ingredient_quality_data") or {}).get("ingredients") or []
+    return [[row.get(field) for field in IDENTITY_FIELDS] for row in rows if isinstance(row, dict)]
+
+
+def review_projection(scored: dict) -> dict:
+    """Route, live eligibility/completeness and Dose exposure provenance of one scored artifact."""
+    gate = scored.get("_v4_completeness_gate") or {}
+    route = scored.get("route_decision") or scored.get("_v4_route_decision") or {}
+    dose = (((scored.get("_v4_module_breakdown") or {}).get("dimensions") or {}).get("dose") or {}).get("metadata") or {}
+    return {
+        "module": scored.get("_v4_module"),
+        "route": route.get("module") if isinstance(route, dict) else None,
+        "is_live_eligible": gate.get("is_live_eligible"),
+        "missing_fields": gate.get("missing_fields"),
+        "soft_missing": gate.get("soft_missing"),
+        "is_live_ready": (scored.get("assessment_readiness") or {}).get("is_live_ready"),
+        "catalog_disposition": ((scored.get("assessment_readiness") or {}).get("catalog_disposition") or {}).get("disposition"),
+        "exposures": [{field: item.get(field) for field in EXPOSURE_FIELDS}
+                      for item in dose.get("benchmark_exposures") or [] if isinstance(item, dict)],
+    }
+
+
+def enriched_identities(paths: list) -> dict:
+    out = {}
+    for path in paths:
+        rows = json.loads(path.read_bytes())
+        for row in rows if isinstance(rows, list) else [rows]:
+            if isinstance(row, dict):
+                out[str(row.get("dsld_id") or row.get("id"))] = identity_projection(row)
+    return out
+
+
+def collect(paths: list, out_path: Path, identities: dict | None = None) -> None:
     written = 0
     with out_path.open("w", encoding="utf-8") as handle:
         for path in paths:
@@ -154,6 +194,9 @@ def collect(paths: list, out_path: Path) -> None:
                 record["_pillars"] = row.get("_v4_pillars")
                 record["_flags"] = row.get("flags")
                 record["_badges"] = row.get("badges")
+                record["_review"] = review_projection(row)
+                if identities is not None:
+                    record["_identities"] = identities.get(str(row.get("dsld_id")))
                 for key in (
                     "quality_pillars_v4",
                     "iqd_contract_diagnostics",
@@ -256,7 +299,7 @@ def main() -> int:
 
     scored = sorted((out_root / "score_out").glob("*/scored/*.json"))
     log(f"{args.arm}: {len(scored)} scored batches")
-    collect(scored, out_root / "scored_records.jsonl")
+    collect(scored, out_root / "scored_records.jsonl", enriched_identities(enriched_batches))
     return 0
 
 
