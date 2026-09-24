@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-09-24",
-    "total_entries": 55,
+    "total_entries": 56,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -1230,6 +1230,27 @@
         "https://api.ods.od.nih.gov/dsld/v9/label/233406"
       ],
       "reviewer": "Engineering data review: Claude (2026-09-24); independently verified: Codex",
+      "review_date": "2026-09-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction"
+    },
+    "77225": {
+      "brand": "Solgar",
+      "product_name": "Naturally Sourced Omega-3 Vegetarian DHA 200 mg",
+      "raw_ingredient_text": "life'sDHA Oil",
+      "corrected_ingredient_text": "life'sDHA Oil",
+      "corrected_category": "fat",
+      "corrected_ingredient_group": "Algal Oil",
+      "correction_fields": [
+        "category",
+        "ingredientGroup"
+      ],
+      "evidence": "DSLD files the 600 mg source oil nested under 'Docosahexaenoic Acid 200 mg' with category 'fatty acid' and ingredientGroup 'DHA (Docosahexaenoic Acid)', so the oil's whole mass was read as DHA (800 mg DHA per softgel instead of the printed 200 mg). The same record states the formula 'utilizes a trademarked algal oil which contains DHA' and that life'sDHA is a DSM trademark; the row's own form is 'derived from a plant based Algae'. DSLD files the same branded oil as category 'fat', ingredientGroup 'Algal Oil' on GNC 219942 ('life'sDHA Algal Oil'). The printed name is kept; only the category and group are corrected so the row is the carrier oil and the 200 mg row stays the DHA amount.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/77225",
+        "https://api.ods.od.nih.gov/dsld/v9/label/219942"
+      ],
+      "reviewer": "Engineering data review: Claude (2026-09-24)",
       "review_date": "2026-09-24",
       "scope": "dsld_id_only",
       "provenance_tag": "official_source_identity_correction"
