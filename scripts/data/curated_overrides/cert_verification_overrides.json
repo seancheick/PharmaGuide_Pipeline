@@ -3,7 +3,7 @@
     "schema_version": "6.0.0",
     "description": "Manual overrides for cert verification scope. Used when (a) the fuzzy resolver returns needs_review and a human confirms/downgrades, or (b) a known-good cert isn't in the public registry snapshots yet. Pattern matches scripts/data/curated_overrides/upc_overrides.json.",
     "purpose": "cert_verification_manual_override",
-    "last_updated": "2026-09-18",
+    "last_updated": "2026-09-24",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
     "total_overrides": 715,
     "status_meanings": {
@@ -13110,6 +13110,21 @@
       "record_id": "CONSUMERLAB_533EB9D32ED2",
       "matched_product": "GNC Pro L-Glutamine - Unflavored",
       "source_url": "https://www.consumerlab.com/quality-certification-program/certified-products/"
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Iron Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "The label is Nature Made iron, 65 mg per tablet (one active, label claims USP Verified). USP's live USP Verified directory (read 2026-09-24) lists 'Nature Made Iron 65 Mg Tablets' and, separately, 'Nature Made Multivitamin with Iron Tablets'. The resolver used to match the multivitamin record (A16 attribution audit); the strength-less label title leaves the iron record at needs_review, so this entry binds the claim to the correct record.",
+      "reviewed_at": "2026-09-24",
+      "review_source": "v41_a16_attribution_audit_2026-09-24",
+      "reviewer": "Claude",
+      "dsld_id": "9080",
+      "record_id": "USP_VERIFIED_76840A3548EA",
+      "matched_product": "Nature Made Iron 65 Mg Tablets",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=8"
     }
   ]
 }
