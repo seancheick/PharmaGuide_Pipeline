@@ -190,6 +190,7 @@ def evaluate_profile_gate(
 
     user_profile keys: conditions, drug_classes, profile_flags  (each list[str])
     product_context keys: product_form (str|None), nutrient_form (str|None),
+                          nutrient_forms (list[str]|None: every declared form),
                           dose_per_day (number|None), dose_unit (str|None)
     base_severity: the sub-rule's static severity field; passed in so the dose
                    block can override it.
@@ -236,12 +237,18 @@ def evaluate_profile_gate(
             reason=f"excludes.product_forms_any suppressed: product_form={product_form!r}",
         )
 
-    nutrient_form = product_context.get("nutrient_form")
-    if nutrient_form and nutrient_form in (excludes.get("nutrient_forms_any") or []):
+    # A row can declare several forms ("Vitamin A (as Beta-Carotene, Retinyl
+    # Acetate)"). The exclusion holds only when EVERY declared form is excluded;
+    # excluding beta-carotene must not hide the retinyl acetate beside it.
+    nutrient_forms = [f for f in (product_context.get("nutrient_forms") or []) if f]
+    if not nutrient_forms and product_context.get("nutrient_form"):
+        nutrient_forms = [product_context["nutrient_form"]]
+    excluded_forms = set(excludes.get("nutrient_forms_any") or [])
+    if nutrient_forms and all(form in excluded_forms for form in nutrient_forms):
         return EvaluationResult(
             fires=False,
             severity=None,
-            reason=f"excludes.nutrient_forms_any suppressed: nutrient_form={nutrient_form!r}",
+            reason=f"excludes.nutrient_forms_any suppressed: nutrient_forms={sorted(set(nutrient_forms))!r}",
         )
 
     # Gate matched. Compute severity.

@@ -17573,16 +17573,27 @@ class SupplementEnricherV3:
             })
         return rows
 
+    @staticmethod
+    def _row_form_ids(ingredient: Dict) -> set:
+        form_ids = {str(ingredient.get("form_id") or "").strip()}
+        form_ids.update(
+            str(form.get("form_key") or "").strip()
+            for form in ingredient.get("matched_forms") or []
+            if isinstance(form, dict)
+        )
+        form_ids.discard("")
+        return form_ids
+
     def _interaction_rule_applies(self, rule: Dict, ingredient: Dict) -> bool:
         form_scope = rule.get("form_scope")
         if form_scope is None:
             return True
         if not isinstance(form_scope, list) or not form_scope:
             return False
-        form_id = str(ingredient.get("form_id") or "").strip()
-        if not form_id:
-            return False
-        return form_id in {str(item).strip() for item in form_scope if str(item).strip()}
+        # Every declared form counts: 331488 "Vitamin A (as Beta-Carotene,
+        # Retinyl Acetate)" has form_id beta-carotene, and reading form_id alone
+        # hid the retinyl acetate from the preformed vitamin A pregnancy rule.
+        return bool(self._row_form_ids(ingredient) & {str(item).strip() for item in form_scope if str(item).strip()})
 
     def _collect_profile_context(self, user_profile: Any) -> Dict[str, List[str]]:
         if not isinstance(user_profile, dict):
