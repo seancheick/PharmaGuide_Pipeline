@@ -1493,7 +1493,11 @@ def check_ingredient_interaction_rules(findings: List[Finding], data: Dict[str, 
                 if not isinstance(threshold, dict):
                     findings.append(Finding("error", file, f"[{i}].dose_thresholds[{j}]", "entry_not_object", "dict", _type_name(threshold)))
                     continue
+                # ADR v6: a pure-dose threshold has no scope/target and a dose gate.
+                pure_dose = threshold.get("scope") is None and (threshold.get("profile_gate") or {}).get("gate_type") == "dose"
                 for key in ("scope", "target_id", "basis", "comparator", "unit", "severity_if_met"):
+                    if pure_dose and key in ("scope", "target_id"):
+                        continue
                     if key not in threshold:
                         findings.append(Finding("error", file, f"[{i}].dose_thresholds[{j}].{key}", "missing_required_key", "non-empty string", "missing"))
                     elif not isinstance(threshold.get(key), str) or not str(threshold.get(key)).strip():
@@ -1509,7 +1513,7 @@ def check_ingredient_interaction_rules(findings: List[Finding], data: Dict[str, 
                 severity_if_met = str(threshold.get("severity_if_met", "")).strip().lower()
                 severity_if_not_met = str(threshold.get("severity_if_not_met", "")).strip().lower()
 
-                if scope not in valid_scope:
+                if scope not in valid_scope and not pure_dose:
                     findings.append(Finding("error", file, f"[{i}].dose_thresholds[{j}].scope", "enum_value_not_supported", "|".join(sorted(valid_scope)), scope))
                 if basis not in valid_basis:
                     findings.append(Finding("error", file, f"[{i}].dose_thresholds[{j}].basis", "enum_value_not_supported", "|".join(sorted(valid_basis)), basis))

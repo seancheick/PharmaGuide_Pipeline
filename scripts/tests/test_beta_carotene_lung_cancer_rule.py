@@ -5,7 +5,9 @@ section 5), P4 of the v41 recovery:
 - under 15 mg/day: no warning (informational, suppressed; the repo's threshold-gated pattern);
 - 15 mg/day or more with current/former smoking or asbestos exposure: caution;
 - 20 mg/day or more with a risk factor: stronger caution (same severity, its own copy);
-- 20 mg/day or more, risk status unknown: one contextual card for every viewer.
+- 20 mg/day or more, risk status unknown: one contextual card for every viewer
+  (the ADR v6 pure-dose threshold: scope None, gate_type dose; projected by the
+  exporter's generic dose-hit path, which knows nothing about beta-carotene).
 
 15 mg/day is a PharmaGuide operational threshold, not an upper limit. Amounts are
 compared in mcg RAE (NIH ODS: 2 mcg supplemental beta-carotene = 1 mcg RAE;
@@ -50,6 +52,14 @@ def _hits(enricher, rows):
     return {"interaction_profile": profile}, hits
 
 
+def _card_fires(profile):
+    """A pure-dose hit the consumer sees: dose gate, disposition review."""
+    return any(hit["profile_gate"]["gate_type"] == "dose"
+               and hit["dose_threshold_evaluation"]["consumer_disposition"] == "review"
+               for alert in profile["ingredient_alerts"] if alert["rule_id"] in (RULE_ID, VITA_RULE_ID)
+               for hit in alert.get("dose_hits") or [])
+
+
 def _row(canonical_id, form_id, name, quantity, unit, matched_forms=()):
     return {"name": name, "raw_source_text": name, "standard_name": name, "canonical_id": canonical_id,
             "form_id": form_id, "matched_form": form_id, "matched_forms": [{"form_key": k} for k in matched_forms],
@@ -69,9 +79,12 @@ def test_rule_carries_exactly_the_approved_thresholds(rule_id):
     rule = _rule(rule_id)
     assert {c["condition_id"]: c["severity"] for c in rule["condition_rules"]} == dict.fromkeys(CONDITIONS, "caution")
     tiers = sorted((t["target_id"], t["value"], t["unit"], t["severity_if_met"], t["consumer_disposition_if_not_met"],
-                    bool(t.get("alert_headline_if_met"))) for t in rule["dose_thresholds"])
+                    bool(t.get("alert_headline_if_met"))) for t in rule["dose_thresholds"] if t["scope"] is not None)
     assert tiers == sorted([(cid, v, "mcg RAE", "caution", "suppress", v == 10000)
                             for cid in CONDITIONS for v in (10000, 7500)])
+    pure = [t for t in rule["dose_thresholds"] if t["scope"] is None]
+    assert [(t["value"], t["unit"], t["severity_if_met"], t["profile_gate"]["gate_type"]) for t in pure] == [
+        (10000, "mcg RAE", "caution", "dose")]
     assert rule["review_owner"] == "pharmaguide_clinical_team"
 
 
@@ -94,14 +107,13 @@ def test_vitamin_a_rule_needs_every_declared_form_to_be_beta_carotene(enricher):
     (30, "mg", "review", True),
 ])
 def test_tiers_follow_the_approved_policy(enricher, quantity, unit, disposition, high):
-    import build_final_db as B
     enriched, hits = _hits(enricher, [_row("beta_carotene", "beta-carotene (unspecified)", "Beta-Carotene", quantity, unit)])
     for cid in CONDITIONS:
         hit = hits[(RULE_ID, cid)]
         assert hit["severity"] == ("caution" if disposition == "review" else "informational")
         assert hit["dose_threshold_evaluation"]["consumer_disposition"] == disposition
         assert (hit["alert_headline"] == HIGH_HEADLINE) is high
-    assert (B.beta_carotene_high_dose_card(enriched) is not None) is high
+    assert _card_fires(enriched["interaction_profile"]) is high
 
 
 def test_unknown_amount_is_not_a_warning(enricher):
@@ -116,6 +128,7 @@ def test_real_labels(pid, high):
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
     import build_final_db as B
+    from scoring_v4.scored_artifact import build_scored_artifact
     raw = json.loads((FIXTURES / f"beta_carotene_{pid}_raw.json").read_text())
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     hits = [h for a in enriched["interaction_profile"]["ingredient_alerts"] if a["rule_id"] == RULE_ID
@@ -123,7 +136,7 @@ def test_real_labels(pid, high):
     assert {h["condition_id"] for h in hits} == set(CONDITIONS)
     assert all(h["dose_threshold_evaluation"]["consumer_disposition"] == "review" for h in hits)
     assert all((h["alert_headline"] == HIGH_HEADLINE) is high for h in hits)
-    card = B.beta_carotene_high_dose_card(enriched)
-    assert (card is not None) is high
-    if card:
-        assert card["profile_gate"] is None and card["display_mode_default"] == "informational"
+    blob = B.build_detail_blob(enriched, build_scored_artifact(enriched))
+    cards = [w for w in blob["warnings"] if (w.get("profile_gate") or {}).get("gate_type") == "dose"
+             and (w.get("dose_decision") or {}).get("consumer_disposition") == "review"]
+    assert [w["alert_headline"] for w in cards] == (["High-dose beta-carotene: check your lung risk"] if high else [])

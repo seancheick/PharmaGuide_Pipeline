@@ -18768,7 +18768,33 @@ class SupplementEnricherV3:
                         "profile_gate": drug_rule.get("profile_gate"),
                     })
 
-                if not condition_hits and not drug_hits and not pregnancy_block:
+                # ADR v6 pure-dose thresholds (scope None, gate_type dose) apply to
+                # every viewer; the app evaluates the dose gate against its intake.
+                dose_hits: List[Dict[str, Any]] = []
+                for threshold in thresholds:
+                    if not isinstance(threshold, dict) or threshold.get("scope") is not None:
+                        continue
+                    severity, threshold_eval = self._evaluate_dose_thresholds_for_target(
+                        thresholds=[threshold],
+                        target_type="",
+                        target_id="",
+                        ingredient=ingredient,
+                        servings_per_day_max=servings_per_day_max,
+                        base_severity=str(threshold.get("severity_if_not_met") or "informational").strip().lower(),
+                    )
+                    sources = [str(s).strip() for s in (threshold.get("sources") or []) if str(s).strip()]
+                    source_set.update(sources)
+                    dose_hits.append({
+                        "severity": severity,
+                        "sources": sources,
+                        "dose_threshold_evaluation": threshold_eval,
+                        "dose_decision": threshold_eval,
+                        "alert_headline": threshold.get("alert_headline"),
+                        "alert_body": threshold.get("alert_body"),
+                        "profile_gate": threshold.get("profile_gate"),
+                    })
+
+                if not condition_hits and not drug_hits and not dose_hits and not pregnancy_block:
                     continue
 
                 safety_hit = {
@@ -18789,6 +18815,7 @@ class SupplementEnricherV3:
                     "rule_id": rule.get("id"),
                     "condition_hits": condition_hits,
                     "drug_class_hits": drug_hits,
+                    "dose_hits": dose_hits,
                 })
 
                 for condition_hit in condition_hits:

@@ -25185,6 +25185,50 @@
               "severity_if_not_met": "informational"
             }
           }
+        },
+        {
+          "scope": null,
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 10000,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "alert_headline": "High-dose beta-carotene: check your lung risk",
+          "alert_body": "This product supplies 20 mg or more of beta-carotene a day. At similar doses it raised lung cancer risk in smokers, former smokers and asbestos-exposed workers. Ask your doctor if any apply to you.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/8127329/",
+            "https://pubmed.ncbi.nlm.nih.gov/8602180/"
+          ],
+          "note": "Contextual card for every viewer whose smoking / asbestos status is unknown (policy section 5, Dr. Pham, 2026-09-21): 20 mg/day supplemental beta-carotene = 10,000 mcg RAE. Pure-dose threshold (ADR v6: scope None -> gate_type dose); never changes the product verdict.",
+          "profile_gate": {
+            "gate_type": "dose",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 10000,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
         }
       ],
       "last_reviewed": "2026-09-24",
@@ -25589,6 +25633,50 @@
               "basis": "per_day",
               "comparator": ">=",
               "value": 7500,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": null,
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 10000,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "alert_headline": "High-dose beta-carotene: check your lung risk",
+          "alert_body": "This product supplies 20 mg or more of beta-carotene a day. At similar doses it raised lung cancer risk in smokers, former smokers and asbestos-exposed workers. Ask your doctor if any apply to you.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/8127329/",
+            "https://pubmed.ncbi.nlm.nih.gov/8602180/"
+          ],
+          "note": "Contextual card for every viewer whose smoking / asbestos status is unknown (policy section 5, Dr. Pham, 2026-09-21): 20 mg/day supplemental beta-carotene = 10,000 mcg RAE. Pure-dose threshold (ADR v6: scope None -> gate_type dose); never changes the product verdict.",
+          "profile_gate": {
+            "gate_type": "dose",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 10000,
               "unit": "mcg RAE",
               "severity_if_met": "caution",
               "severity_if_not_met": "informational"
