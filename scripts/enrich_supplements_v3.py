@@ -2114,6 +2114,13 @@ class SupplementEnricherV3:
         """
         if not match_result or not isinstance(match_result, dict):
             return False
+        if self._is_reviewed_context_override_match(match_result):
+            # A reviewed product-context override is the authored identity
+            # decision, not a marker substitution. Without this, the cleaner's
+            # override (canonical_source_db now IQM) sends the raw-label replay
+            # fallback in _botanical_source_identity back to the botanical the
+            # override corrected (Barley -> barley_unspecified), vetoing it.
+            return False
         source_identity = self._botanical_source_identity(ingredient)
         if not source_identity:
             # An invalid declared botanical record is not permission to score

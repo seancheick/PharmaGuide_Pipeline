@@ -848,6 +848,44 @@ def test_live_raw_dsld_through_cleaner_and_enricher(
     assert match_result["context_override_id"] == override_id
 
 
+@pytest.mark.parametrize("brand,dsld_id,row_name,override_id,canonical,form", [
+    ("Jarrow_Formulas",     "265081", "Chicken Sternum Collagen extract",
+     "jarrow_265081_biocell_hydrolyzed",       "collagen",        "hydrolyzed collagen peptides"),
+    ("Pure_Encapsulations", "317962", "Porcine Kidney Extract",
+     "pure_encap_317962_dao_enzyme",            "diamine_oxidase", "diamine oxidase (unspecified)"),
+    ("Natures_Way",         "259304", "Barley",
+     "natures_way_259304_barley_grass",         "barley_grass",    "barley grass (unspecified)"),
+    ("Natures_Way",         "259306", "Barley",
+     "natures_way_259306_barley_grass_powder",  "barley_grass",    "barley grass (unspecified)"),
+])
+def test_live_override_survives_full_enrich_product(
+    normalizer, enricher_with_iqm,
+    brand, dsld_id, row_name, override_id, canonical, form,
+):
+    """REGRESSION: the helper test above passed while enrich_product still
+    dropped the Barley rows to botanical barley_unspecified — the
+    botanical-source marker guard re-derived the source from the raw label
+    and vetoed the reviewed override. Assert on the enriched row itself."""
+    raw = _load_raw_dsld(brand, dsld_id)
+    if raw is None:
+        pytest.skip(f"raw DSLD {brand}/{dsld_id}.json not mounted at {RAW_DSLD_STAGING_ROOT}")
+
+    enriched, _ = enricher_with_iqm.enrich_product(normalizer.normalize_product(raw))
+
+    rows = [
+        r for r in enriched["ingredient_quality_data"]["ingredients"]
+        if (r.get("name") or "").strip().lower() == row_name.lower()
+    ]
+    assert len(rows) == 1, f"DSLD {dsld_id}: expected one {row_name!r} row, got {rows}"
+    row = rows[0]
+    assert row["canonical_id"] == canonical
+    assert row["form_id"] == form
+    assert row["match_tier"] == "curated_context_override"
+    assert row["context_override_applied"] is True
+    assert row["context_override_id"] == override_id
+    assert row["role_classification"] == "active_scorable"
+
+
 # ---------------------------------------------------------------------------
 # Tier 3.5: skip-path regression. Reproduces the actual full-rerun bug
 # where DSLD 317962 DAO Enzyme landed in ingredients_skipped because
