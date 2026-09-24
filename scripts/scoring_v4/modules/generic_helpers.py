@@ -16,7 +16,6 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple
 
 from scoring_input_contract import (
-    dose_disclosure_status,
     get_scoring_ingredients,
     get_source_score_eligible_active_rows,
 )
@@ -118,20 +117,6 @@ def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
     if unit.replace(" ", "") in _DOSE_UNIT_WHITELIST:
         return True
     return bool(ingredient.get("has_dose", False))
-
-
-def has_disclosed_amount(ingredient: Dict[str, Any]) -> bool:
-    """True when the label prints the row's own amount (the shared
-    dose_disclosure_status owner), in any stated unit. Transparency asks this;
-    whether Dose can use the amount is has_usable_individual_dose.
-    """
-    if not isinstance(ingredient, dict):
-        return False
-    unit = ingredient.get("unit_normalized") or ingredient.get("unit")
-    return (
-        dose_disclosure_status(ingredient.get("quantity"), unit, False) == "disclosed"
-        or bool(ingredient.get("has_dose", False))
-    )
 
 
 def is_scorable(ingredient: Dict[str, Any]) -> bool:

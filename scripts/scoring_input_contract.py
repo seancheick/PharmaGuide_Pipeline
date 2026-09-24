@@ -458,22 +458,27 @@ def epa_dha_row_is_trustworthy(row: Dict[str, Any]) -> bool:
 DOSE_NOT_PROVIDED_UNITS = frozenset({"np", "n/p", "not provided", ""})
 
 
-def dose_disclosure_status(quantity: Any, unit: Any, is_blend_member: bool) -> str:
-    """'disclosed' | 'not_disclosed_blend' | 'missing' for one label row.
+def dose_disclosure_status(row: Mapping[str, Any]) -> str:
+    """'disclosed' | 'not_disclosed_blend' | 'missing' for one label row; the one
+    owner the export's dose_status and display label and v4 Transparency read.
 
     Disclosure is a label fact: any positive printed amount with a stated unit
     (mg, HUT, mg NE, %DV) is disclosed, whether or not Dose can use it as an
-    exposure. A blend member printed without its own amount is a label
-    nondisclosure (shown as "Amount not disclosed"); a row outside a blend with
-    no amount is missing capture. One owner for the export and Transparency.
+    exposure. A probiotic strain whose CFU the enricher found on strain-side
+    fields carries has_dose. A blend member printed without its own amount is a
+    label nondisclosure ("Amount not disclosed"); any other row with no amount
+    is missing capture. Blend membership is the cleaner's flag on either row
+    shape (export row or scoring row).
     """
-    try:
-        amount = float(quantity) if quantity is not None else 0.0
-    except (TypeError, ValueError):
-        amount = 0.0
-    if math.isfinite(amount) and amount > 0 and str(unit or "").strip().lower() not in DOSE_NOT_PROVIDED_UNITS:
+    amount = _positive_quantity(row)
+    unit = str(row.get("unit_normalized") or row.get("unit") or "").strip().lower()
+    if (amount is not None and math.isfinite(amount) and unit not in DOSE_NOT_PROVIDED_UNITS) or row.get("has_dose"):
         return "disclosed"
-    return "not_disclosed_blend" if is_blend_member else "missing"
+    member = (
+        row.get("isNestedIngredient") or row.get("proprietaryBlend") or row.get("parent_blend")
+        or row.get("cleaner_row_role") == "nested_display_only"
+    )
+    return "not_disclosed_blend" if member else "missing"
 
 
 EPA_DHA_CANONICALS = frozenset({"epa", "dha", "epa_dha"})

@@ -1,5 +1,7 @@
-"""Quantity disclosure has one owner, scoring_input_contract.dose_disclosure_status,
-read by the export's dose_status and by v4 Transparency.
+"""Quantity disclosure has one owner, scoring_input_contract.dose_disclosure_status(row):
+it selects the amount, checks the unit, reads blend membership and returns
+'disclosed' | 'not_disclosed_blend' | 'missing'. The export's dose_status and
+display label and both v4 Transparency modules read it directly.
 
 Disclosure is a label fact: a printed enzyme activity (45,000 HUT) is disclosed
 even though Dose cannot use it as a mass exposure. Real record 232243 (digestive
@@ -15,37 +17,32 @@ import pytest
 from scoring_input_contract import dose_disclosure_status
 
 
-@pytest.mark.parametrize('quantity,unit,member,expected', [
-    (500, 'mg', False, 'disclosed'),
-    (45000, 'HUT', False, 'disclosed'),
-    (18, 'mg NE', True, 'disclosed'),
-    ('2.5', 'g', False, 'disclosed'),
-    (0, 'NP', True, 'not_disclosed_blend'),
-    (0, 'mg', True, 'not_disclosed_blend'),
-    (5, 'NP', False, 'missing'),
-    (None, None, False, 'missing'),
-    (math.nan, 'mg', False, 'missing'),
-    ('abc', 'mg', True, 'not_disclosed_blend'),
+@pytest.mark.parametrize('row,expected', [
+    ({'quantity': 500, 'unit': 'mg'}, 'disclosed'),
+    ({'quantity': 45000, 'unit': 'HUT'}, 'disclosed'),
+    ({'quantity': 18, 'unit': 'mg NE', 'isNestedIngredient': True}, 'disclosed'),
+    ({'quantity': '2.5', 'unit': 'Gram(s)', 'unit_normalized': 'g'}, 'disclosed'),
+    ({'quantity': None, 'has_dose': True}, 'disclosed'),                      # strain-side CFU
+    ({'quantity': 0, 'unit': 'NP', 'isNestedIngredient': True}, 'not_disclosed_blend'),
+    ({'quantity': 0, 'unit': 'NP', 'proprietaryBlend': True}, 'not_disclosed_blend'),
+    ({'quantity': 0, 'unit': 'NP', 'parent_blend': 'Energy Blend'}, 'not_disclosed_blend'),
+    ({'quantity': 0, 'unit': 'NP', 'cleaner_row_role': 'nested_display_only'}, 'not_disclosed_blend'),
+    ({'quantity': 5, 'unit': 'NP'}, 'missing'),
+    ({'quantity': None, 'unit': None}, 'missing'),
+    ({'quantity': math.nan, 'unit': 'mg'}, 'missing'),
 ])
-def test_owner(quantity, unit, member, expected):
-    assert dose_disclosure_status(quantity, unit, member) == expected
+def test_owner(row, expected):
+    assert dose_disclosure_status(row) == expected
 
 
-def test_export_reads_the_owner():
+def test_export_and_transparency_read_the_owner_only():
     from build_final_db import _compute_dose_status
-    rows = [{'quantity': 45000, 'unit': 'HUT'}, {'quantity': 0, 'unit': 'NP', 'isNestedIngredient': True},
-            {'quantity': 0, 'unit': 'NP', 'proprietaryBlend': True}, {'quantity': 0, 'unit': 'mg'}]
-    for row in rows:
-        member = bool(row.get('isNestedIngredient') or row.get('proprietaryBlend'))
-        assert _compute_dose_status(row) == dose_disclosure_status(row['quantity'], row['unit'], member)
-
-
-def test_transparency_counts_activity_units_as_disclosed():
-    from scoring_v4.modules.generic_helpers import has_disclosed_amount, has_usable_individual_dose
-    enzyme = {'quantity': 45000, 'unit': 'HUT'}
-    assert has_disclosed_amount(enzyme) and not has_usable_individual_dose(enzyme)
-    assert not has_disclosed_amount({'quantity': 0, 'unit': 'NP'})
-    assert has_disclosed_amount({'quantity': None, 'has_dose': True})
+    for row in ({'quantity': 45000, 'unit': 'HUT'}, {'quantity': 0, 'unit': 'NP', 'isNestedIngredient': True}):
+        assert _compute_dose_status(row) == dose_disclosure_status(row)
+    modules = Path(__file__).resolve().parents[1] / 'scoring_v4' / 'modules'
+    for name in ('generic_transparency', 'multi_prenatal_transparency'):
+        text = (modules / f'{name}.py').read_text()
+        assert 'dose_disclosure_status(row)' in text and 'has_dose' not in text, name
 
 
 def test_real_enzyme_label_rows_are_all_disclosed():

@@ -4166,17 +4166,10 @@ def _compute_display_dose_label(
     qty = safe_float(qty_raw, 0) if qty_raw is not None else 0.0
     unit = safe_str(ingredient.get("unit")).strip()
     unit_lower = unit.lower()
-
-    is_blend_member = bool(
-        ingredient.get("isNestedIngredient")
-        or ingredient.get("proprietaryBlend")
-    )
-
-    has_real_unit = unit_lower not in _NP_SENTINELS
-    has_real_dose = isinstance(qty, (int, float)) and qty > 0 and has_real_unit
+    status = dose_disclosure_status(ingredient)
 
     # Class 1 — individually disclosed wins regardless of blend membership.
-    if has_real_dose:
+    if status == "disclosed" and qty > 0:
         qty_str = _format_dose_number(qty)
         # CFU count → render in billions when ≥ 1e9 for human readability.
         if unit_lower == "cfu" and qty >= 1_000_000_000:
@@ -4185,7 +4178,7 @@ def _compute_display_dose_label(
         return f"{qty_str} {unit}"
 
     # Class 2 — prop-blend member without an individual dose.
-    if is_blend_member:
+    if status == "not_disclosed_blend":
         return (
             _PROBIOTIC_STRAIN_NOT_LISTED_TEXT if is_probiotic_strain
             else _NOT_DISCLOSED_TEXT
@@ -4203,11 +4196,7 @@ def _compute_dose_status(ingredient: Dict[str, Any]) -> str:
       not_disclosed_blend prop-blend member with no own dose
       missing             no dose, not in a blend
     """
-    return dose_disclosure_status(
-        ingredient.get("quantity"),
-        ingredient.get("unit"),
-        bool(ingredient.get("isNestedIngredient") or ingredient.get("proprietaryBlend")),
-    )
+    return dose_disclosure_status(ingredient)
 
 
 _ZERO_DOSE_DUPLICATE_UNITS = _NP_SENTINELS | {"unspecified", "unknown", "not specified"}

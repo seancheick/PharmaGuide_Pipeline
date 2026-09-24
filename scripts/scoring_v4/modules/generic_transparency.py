@@ -21,13 +21,13 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
+from scoring_input_contract import dose_disclosure_status
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
     _safe_dict,
     _safe_list,
     get_active_ingredients,
-    has_disclosed_amount,
 )
 
 
@@ -395,7 +395,7 @@ def _score_complete_active_disclosure_bonus(
             row_blockers.append("parent_total_row")
         if not _has_active_identity(row):
             row_blockers.append("missing_identity")
-        if not _has_usable_disclosure_dose(row):
+        if dose_disclosure_status(row) != "disclosed":
             row_blockers.append("missing_usable_dose")
         if row_blockers:
             incomplete_rows.append(
@@ -439,16 +439,6 @@ def _declared_active_count(product: Dict[str, Any], rows: List[Dict[str, Any]]) 
 
 def _has_active_identity(row: Dict[str, Any]) -> bool:
     return any(row.get(field) for field in ("canonical_id", "standard_name", "name"))
-
-
-def _has_usable_disclosure_dose(row: Dict[str, Any]) -> bool:
-    if has_disclosed_amount(row):
-        return True
-    for key in ("amount", "dose", "quantity_mg", "amount_mg"):
-        value = _as_float(row.get(key), None)
-        if value is not None and value > 0:
-            return True
-    return False
 
 
 def _score_b6_disease_claim_penalty(product: Dict[str, Any], flags: List[str]) -> float:
