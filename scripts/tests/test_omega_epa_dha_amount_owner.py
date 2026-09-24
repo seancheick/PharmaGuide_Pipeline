@@ -1,4 +1,4 @@
-"""EPA+DHA per serving has one owner (omega_dose._sum_epa_dha_per_serving), and
+"""EPA+DHA per serving has one owner (scoring_input_contract.epa_dha_amounts_per_serving), and
 the label facts it reads are one serving column and never a carrier oil.
 
 Real DSLD records (tests/fixtures/omega_amount_*_raw.json):
@@ -32,10 +32,10 @@ def _pipeline(pid):
 
 @pytest.mark.parametrize('pid', sorted(EXPECTED_PER_SERVING))
 def test_epa_dha_per_serving_on_real_labels(pid):
-    from scoring_v4.modules.omega_dose import _sum_epa_dha_per_serving
+    from scoring_input_contract import epa_dha_amounts_per_serving
     from scoring_v4.modules.omega_formulation import _epa_dha_and_oil_mass_mg
     enriched = _pipeline(pid)
-    epa, dha, combined = _sum_epa_dha_per_serving(enriched)
+    epa, dha, combined = epa_dha_amounts_per_serving(enriched)
     assert max(epa + dha, combined) == EXPECTED_PER_SERVING[pid]
     assert _epa_dha_and_oil_mass_mg(enriched)['epa_dha_mg'] == EXPECTED_PER_SERVING[pid]
 
@@ -80,3 +80,15 @@ def test_blocks_that_differ_or_share_a_column_stay_separate():
     assert len(merge([_column(1, 2, 1000, [(EPA, 600)]), _column(1, 1, 500, [(DHA, 200)])])) == 2
     # Same column: two sources in one serving add; they are not alternatives.
     assert len(merge([_column(1, 2, 1000, [(EPA, 600)]), _column(1, 2, 500, [(EPA, 300)])])) == 2
+
+
+def test_omega_pillars_read_the_public_owner_only():
+    """Dose, Evidence and Formulation read the contract's public provider; no
+    omega pillar imports another pillar's private helpers or re-derives trust."""
+    import re
+    modules = Path(__file__).resolve().parents[1] / 'scoring_v4' / 'modules'
+    for name in ('omega_dose', 'omega_evidence', 'omega_formulation'):
+        text = (modules / f'{name}.py').read_text()
+        assert 'epa_dha_amounts_per_serving' in text
+        assert not re.search(r'from scoring_v4\.modules\.omega_\w+ import \(?\s*_', text), name
+        assert '_trustworthy_epa_dha_row' not in text and 'EPA_DHA_SOURCE_RE' not in text, name

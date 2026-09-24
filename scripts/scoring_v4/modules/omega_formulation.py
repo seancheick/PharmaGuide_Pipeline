@@ -45,7 +45,7 @@ from typing import Any, Dict, List, Optional
 
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import get_active_ingredients
-from scoring_v4.modules.omega_dose import _sum_epa_dha_per_serving
+from scoring_input_contract import epa_dha_amounts_per_serving
 
 
 PHASE_MARKER = "P1.6.1_omega_formulation"
@@ -287,7 +287,7 @@ def _is_parent_oil_row(row: Dict[str, Any]) -> bool:
 def _epa_dha_and_oil_mass_mg(product: Dict[str, Any]) -> Dict[str, float]:
     # EPA+DHA comes from the one omega amount owner that Dose and Evidence
     # read, so the concentration numerator can never count a row they refuse.
-    epa, dha, combined = _sum_epa_dha_per_serving(product)
+    epa, dha, combined = epa_dha_amounts_per_serving(product)
     oil = 0.0
     for row in get_active_ingredients(product):
         if not isinstance(row, dict):

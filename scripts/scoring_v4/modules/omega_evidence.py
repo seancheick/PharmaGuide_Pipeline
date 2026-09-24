@@ -39,12 +39,8 @@ from __future__ import annotations
 from typing import Any, Dict
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
-from scoring_v4.modules.omega_dose import (
-    _PRENATAL_DHA_TARGET_MG,
-    _PRENATAL_DOSE_RE,
-    _extract_daily_servings,
-    _sum_epa_dha_per_serving,
-)
+from scoring_input_contract import PRENATAL_DHA_TARGET_MG, PRENATAL_TITLE_RE, epa_dha_amounts_per_serving
+from scoring_v4.modules.generic_helpers import daily_serving_range
 
 
 PHASE_MARKER = "P1.6.3_omega_evidence"
@@ -77,11 +73,11 @@ def _compute_per_day_components(product: Dict[str, Any]) -> Dict[str, float]:
     'how much EPA+DHA does this product deliver per day?' across the
     omega module.
     """
-    epa_ps, dha_ps, combined_ps = _sum_epa_dha_per_serving(product)
+    epa_ps, dha_ps, combined_ps = epa_dha_amounts_per_serving(product)
     total_per_serving = max(epa_ps + dha_ps, combined_ps)
     if total_per_serving <= 0:
         return {"epa": 0.0, "dha": 0.0, "combined": 0.0, "total": 0.0}
-    min_daily, max_daily, _defaulted = _extract_daily_servings(product)
+    min_daily, max_daily, _defaulted = daily_serving_range(product)
     mid_daily = (min_daily + max_daily) / 2.0
     return {
         "epa": epa_ps * mid_daily,
@@ -96,7 +92,7 @@ def _prenatal_dha_indication_relevant(product: Dict[str, Any], dha_per_day: floa
         str(product.get(key) or "")
         for key in ("product_name", "fullName", "brand_name", "brandName")
     )
-    return bool(_PRENATAL_DOSE_RE.search(name_text)) and dha_per_day >= _PRENATAL_DHA_TARGET_MG
+    return bool(PRENATAL_TITLE_RE.search(name_text)) and dha_per_day >= PRENATAL_DHA_TARGET_MG
 
 
 def score_evidence(product: Any) -> Dict[str, Any]:

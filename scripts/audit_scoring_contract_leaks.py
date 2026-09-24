@@ -98,7 +98,6 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/modules/multi_prenatal_dose.py|_quantity_mg|get|quantity|3fd4e11ae842": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/multi_prenatal_dose.py|_quantity_mg|get|unit_normalized|dcf5fcc7cc91": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/multi_prenatal_dose.py|_quantity_mg|get|unit|30c24beac47d": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/omega_dose.py|_sum_epa_dha_per_serving|get|unit|44abae5cc7d8": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/omega_formulation.py|_row_mg|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/omega_transparency.py|_epa_or_dha_disclosed|get|unit|44abae5cc7d8": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/omega_transparency.py|_epa_or_dha_disclosed|get|unit_normalized|320965a122ab": "pass_a_known_pending_native_evidence_contract",

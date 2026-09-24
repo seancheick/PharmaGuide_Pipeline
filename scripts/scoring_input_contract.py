@@ -16,7 +16,7 @@ import json
 import math
 import re
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Mapping, Optional
+from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
 
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
@@ -441,7 +441,7 @@ def _source_is_non_epa_dha_oil(row: Dict[str, Any]) -> bool:
     return bool(_NON_EPA_DHA_SOURCE_RE.search(_row_source_text(row)))
 
 
-def _trustworthy_epa_dha_row(row: Dict[str, Any]) -> bool:
+def epa_dha_row_is_trustworthy(row: Dict[str, Any]) -> bool:
     canonical = _norm(row.get("canonical_id"))
     if canonical not in {"epa", "dha", "epa_dha"}:
         return False
@@ -474,6 +474,44 @@ def dose_disclosure_status(quantity: Any, unit: Any, is_blend_member: bool) -> s
     if math.isfinite(amount) and amount > 0 and str(unit or "").strip().lower() not in DOSE_NOT_PROVIDED_UNITS:
         return "disclosed"
     return "not_disclosed_blend" if is_blend_member else "missing"
+
+
+EPA_DHA_CANONICALS = frozenset({"epa", "dha", "epa_dha"})
+# A DHA-dominant product named for pregnancy is judged against the prenatal DHA
+# target (~200 mg DHA/day, EFSA NDA 2014; ACOG ~200-300 mg), read by omega Dose
+# and Evidence.
+PRENATAL_TITLE_RE = re.compile(r"\b(prenatal|pregnancy|pre-natal|maternal|gestation)\b", re.IGNORECASE)
+PRENATAL_DHA_TARGET_MG = 200.0
+_EPA_DHA_MG_PER_UNIT = {
+    "mg": 1.0, "milligram": 1.0, "milligrams": 1.0,
+    "g": 1000.0, "gram": 1000.0, "grams": 1000.0, "gram(s)": 1000.0,
+    "mcg": 0.001, "ug": 0.001, "\u00b5g": 0.001, "microgram": 0.001, "micrograms": 0.001,
+}
+
+
+def _epa_dha_row_mg(row: Dict[str, Any]) -> Optional[float]:
+    amount = _positive_quantity(row)
+    factor = _EPA_DHA_MG_PER_UNIT.get(_norm(row.get("unit") or row.get("dose_unit")))
+    return None if amount is None or factor is None else amount * factor
+
+
+def epa_dha_amounts_per_serving(product: Dict[str, Any]) -> Tuple[float, float, float]:
+    """(EPA, DHA, combined EPA+DHA) mg per serving; the one owner omega Dose,
+    Evidence and Formulation read. A plant/seed/MCT 'omega-3' with no marine
+    source and no EPA/DHA token carries none; only trustworthy epa/dha/epa_dha
+    rows with a mass count. Callers take max(EPA + DHA, combined): a combined
+    row reports the same oil another way."""
+    if product_lacks_epa_dha_identity(product):
+        return 0.0, 0.0, 0.0
+    totals = {"epa": 0.0, "dha": 0.0, "epa_dha": 0.0}
+    for row in get_scoring_ingredients(product or {}, strict=True).rows:
+        canonical = _norm(row.get("canonical_id"))
+        if canonical not in EPA_DHA_CANONICALS or not epa_dha_row_is_trustworthy(row):
+            continue
+        mg = _epa_dha_row_mg(row)
+        if mg is not None:
+            totals[canonical] += mg
+    return totals["epa"], totals["dha"], totals["epa_dha"]
 
 
 def _slug(value: Any) -> str:
@@ -1763,7 +1801,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         )
     }
     special_evidence_paths: set[str] = set()
-    has_explicit_epa_dha_row = any(_trustworthy_epa_dha_row(row) for row in active_rows)
+    has_explicit_epa_dha_row = any(epa_dha_row_is_trustworthy(row) for row in active_rows)
 
     if not has_explicit_epa_dha_row:
         for item in _derive_explicit_epa_dha_aggregate_evidence(active_rows):
@@ -3625,7 +3663,7 @@ def _route_omega_panel_counts(product: Dict[str, Any]) -> tuple[int, int]:
         if not canonical or not _route_has_positive_quantity(row):
             continue
         total_rows += 1
-        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS and _trustworthy_epa_dha_row(row):
+        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS and epa_dha_row_is_trustworthy(row):
             omega_rows += 1
     return omega_rows, total_rows
 
@@ -3639,7 +3677,7 @@ def _route_has_primary_omega_panel(product: Dict[str, Any]) -> bool:
 
 def _route_has_any_epa_dha_row(product: Dict[str, Any]) -> bool:
     for row in _route_rows(product):
-        if _trustworthy_epa_dha_row(row):
+        if epa_dha_row_is_trustworthy(row):
             return True
     return False
 
@@ -3875,7 +3913,7 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     return False
 
 
-def _route_product_lacks_epa_dha_identity(product: Dict[str, Any]) -> bool:
+def product_lacks_epa_dha_identity(product: Dict[str, Any]) -> bool:
     """True when the product source is an explicit non-EPA/DHA plant/seed/MCT oil
     (flax/ALA/chia/hemp/fiber/seed/MCT/coconut) with NO marine source and NO
     explicit EPA/DHA token — plant 'omega-3' (ALA), which must route generic even
@@ -3898,7 +3936,7 @@ def _route_is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     # EPA/DHA omega module — even when primary_type=='omega_3' or a row was
     # mis-canonicalized upstream (the row-level checks below run too late because
     # _route_has_primary_omega_panel short-circuits on the polluted canonical).
-    if _route_product_lacks_epa_dha_identity(product):
+    if product_lacks_epa_dha_identity(product):
         return False
     if _route_has_primary_omega_panel(product):
         return True

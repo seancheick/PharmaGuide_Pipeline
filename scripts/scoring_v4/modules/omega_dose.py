@@ -42,7 +42,8 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from scoring_v4.modules.generic_helpers import daily_serving_range, get_active_ingredients
+from scoring_input_contract import PRENATAL_DHA_TARGET_MG, PRENATAL_TITLE_RE, epa_dha_amounts_per_serving
+from scoring_v4.modules.generic_helpers import daily_serving_range
 
 
 PHASE_MARKER = "P1.6.2_omega_dose"
@@ -59,48 +60,9 @@ CAP_DOSE = _DM["cap_dose"]
 # Panel 2014; ACOG/March of Dimes ~200-300 mg), so a 650 mg-DHA prenatal product
 # is generous for its indication. A DHA-dominant product named for prenatal use
 # is scored against the DHA target; we take the higher of this and the general band.
-_PRENATAL_DOSE_RE = re.compile(r"\b(prenatal|pregnancy|pre-natal|maternal|gestation)\b", re.IGNORECASE)
-_PRENATAL_DHA_TARGET_MG = 200.0
 _PRENATAL_DHA_WITHIN = 20.0
 _PRENATAL_DHA_NEAR = 14.0
 _PRENATAL_DHA_BELOW = 10.0
-
-
-# Unit-conversion table — normalized to mg.
-_UNIT_TO_MG: Dict[str, float] = {
-    "mg": 1.0,
-    "milligram": 1.0,
-    "milligrams": 1.0,
-    "g": 1000.0,
-    "gram": 1000.0,
-    "grams": 1000.0,
-    "gram(s)": 1000.0,
-    "mcg": 0.001,
-    "ug": 0.001,
-    "µg": 0.001,
-    "microgram": 0.001,
-    "micrograms": 0.001,
-    # Unrecognized units (NP, empty, "unspecified", "softgel", etc.) → not convertible.
-    # The completeness gate already requires a valid unit; this is a
-    # defensive check in case a malformed product reaches dose scoring.
-}
-
-
-_OMEGA_CANONICALS = {"epa", "dha", "epa_dha"}
-_EPA_DHA_SOURCE_RE = re.compile(
-    r"\b(epa|dha|eicosapentaenoic|docosahexaenoic)\b",
-    re.IGNORECASE,
-)
-_NON_EPA_DHA_SOURCE_RE = re.compile(
-    r"\b("
-    r"mct|medium\s+chain\s+triglycerides?|coconut|caprylic|capric|palm|"
-    r"flax(?:seed)?|linseed|alpha[-\s]?linolenic|ala|chia|hemp|"
-    r"evening\s+primrose|borage|gamma[-\s]?linolenic|gla|"
-    r"conjugated\s+linoleic|cla|omega[-\s]?6|omega[-\s]?9|"
-    r"fiber|fibre|seed\s+blend|super\s+seed"
-    r")\b",
-    re.IGNORECASE,
-)
 
 
 def _load_rubric() -> Dict[str, Any]:
@@ -108,128 +70,6 @@ def _load_rubric() -> Dict[str, Any]:
     fresh per call for testability; cost is negligible."""
     from scoring_v4.config_registry import load_rubric
     return load_rubric("omega")  # Phase 0: shared registry (validated + fingerprinted)
-
-
-def _safe_list(value: Any) -> List[Any]:
-    return value if isinstance(value, list) else []
-
-
-def _normalize_unit(unit: Any) -> str:
-    return str(unit or "").strip().lower()
-
-
-def _to_mg(quantity: Any, unit: Any) -> Optional[float]:
-    """Convert (quantity, unit) → mg. Returns None when the unit is
-    unrecognized or quantity is not a positive number."""
-    try:
-        q = float(quantity)
-    except (TypeError, ValueError):
-        return None
-    if q <= 0:
-        return None
-    factor = _UNIT_TO_MG.get(_normalize_unit(unit))
-    if factor is None:
-        return None
-    return q * factor
-
-
-def _ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    return get_active_ingredients(product)
-
-
-def _row_source_text(row: Dict[str, Any]) -> str:
-    return " ".join(
-        str(row.get(key) or "")
-        for key in (
-            "name",
-            "raw_source_text",
-            "display_label",
-            "normalized_key",
-            "parent_key",
-            "matched_candidate",
-        )
-    )
-
-
-def _product_source_text(product: Dict[str, Any]) -> str:
-    row_text = " ".join(_row_source_text(row) for row in _ingredient_rows(product))
-    label_text = " ".join(
-        str(product.get(key) or "")
-        for key in ("product_name", "fullName", "brand_name", "bundleName")
-    )
-    return f"{label_text} {row_text}".strip()
-
-
-# Marine EPA/DHA sources — the only oils that legitimately carry EPA/DHA. A
-# product whose source is an explicit non-EPA/DHA plant oil (flax/ALA/chia/hemp/
-# fiber/seed/MCT/coconut) with NO marine source and NO explicit EPA/DHA token has
-# no real EPA/DHA, even if a row was mis-canonicalized to epa/dha/fish_oil.
-_MARINE_OMEGA_SOURCE_RE = re.compile(
-    r"\b("
-    r"fish\s*oil|fish\s+body\s+oil|salmon|anchovy|sardine|mackerel|menhaden|"
-    r"herring|cod\s+liver|krill|algae?\s*oil|algal|calamari|squid|marine"
-    r")\b",
-    re.IGNORECASE,
-)
-
-
-def _product_lacks_epa_dha_identity(product: Dict[str, Any]) -> bool:
-    """True when the product is an explicit non-EPA/DHA source (plant/seed/MCT)
-    with no marine source and no explicit EPA/DHA token — i.e. ALA/plant 'omega-3'
-    that must NOT receive marine EPA/DHA dose credit."""
-    src = _product_source_text(product)
-    return bool(
-        _NON_EPA_DHA_SOURCE_RE.search(src)
-        and not _EPA_DHA_SOURCE_RE.search(src)
-        and not _MARINE_OMEGA_SOURCE_RE.search(src)
-    )
-
-
-def _trustworthy_epa_dha_row(row: Dict[str, Any]) -> bool:
-    text = _row_source_text(row)
-    if _NON_EPA_DHA_SOURCE_RE.search(text) and not _EPA_DHA_SOURCE_RE.search(text):
-        return False
-    return True
-
-
-def _sum_epa_dha_per_serving(product: Dict[str, Any]) -> Tuple[float, float, float]:
-    """Return (epa_mg_per_serving, dha_mg_per_serving, combined_mg_per_serving).
-
-    Rows with `canonical_id` ∈ {epa, dha, epa_dha} and a recognizable mg
-    quantity are included. Rows with unspecified units (the duplicate
-    Nordic-style "qty=0 unit=unspecified" rows the enricher sometimes
-    emits) are filtered out by _to_mg returning None.
-    """
-    epa_total = 0.0
-    dha_total = 0.0
-    combined_total = 0.0
-    # Product-level guard FIRST: an explicit plant/seed/MCT 'omega-3' (ALA) with
-    # no marine source carries no real EPA/DHA, even if a row was mis-canonicalized
-    # to epa/dha. This catches "Organic Flax Oil" / "Raw Organic Fiber" / "Super
-    # Seed" whose mis-canonicalized rows pass the row-level text check.
-    if _product_lacks_epa_dha_identity(product):
-        return 0.0, 0.0, 0.0
-    for ing in _ingredient_rows(product):
-        canon = str(ing.get("canonical_id") or "").strip().lower()
-        if canon not in _OMEGA_CANONICALS:
-            continue
-        if not _trustworthy_epa_dha_row(ing):
-            continue
-        # Try all the dose field names the enricher emits.
-        mg: Optional[float] = None
-        for qty_key in ("quantity", "amount", "dose", "dosage"):
-            mg = _to_mg(ing.get(qty_key), ing.get("unit") or ing.get("dose_unit"))
-            if mg is not None:
-                break
-        if mg is None:
-            continue
-        if canon == "epa":
-            epa_total += mg
-        elif canon == "dha":
-            dha_total += mg
-        elif canon == "epa_dha":
-            combined_total += mg
-    return epa_total, dha_total, combined_total
 
 
 def _extract_daily_servings(product: Dict[str, Any]) -> Tuple[float, float, bool]:
@@ -300,7 +140,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
     bands = list(dose_cfg["epa_dha_bands"])
     band_cap = float(dose_cfg.get("epa_dha_band_cap", 20) or 20)
 
-    epa_ps, dha_ps, combined_ps = _sum_epa_dha_per_serving(product)
+    epa_ps, dha_ps, combined_ps = epa_dha_amounts_per_serving(product)
     # Avoid additive double-count when both separates AND combined are
     # disclosed — treat combined as an alternative reporting and take the
     # max (the row that disclosed more wins).
@@ -338,13 +178,13 @@ def score_dose(product: Any) -> Dict[str, Any]:
     # bands. Take the higher of the two so a generous prenatal DHA isn't penalized
     # for a modest combined EPA+DHA total.
     name_text = " ".join(str(product.get(k) or "") for k in ("product_name", "fullName", "brand_name"))
-    prenatal_dha = bool(_PRENATAL_DOSE_RE.search(name_text)) and dha_ps >= epa_ps and dha_ps > 0
+    prenatal_dha = bool(PRENATAL_TITLE_RE.search(name_text)) and dha_ps >= epa_ps and dha_ps > 0
     indication_label: Optional[str] = None
     if prenatal_dha:
         dha_per_day = dha_ps * ((min_daily + max_daily) / 2.0)
-        if dha_per_day >= _PRENATAL_DHA_TARGET_MG:
+        if dha_per_day >= PRENATAL_DHA_TARGET_MG:
             ind_score, indication_label = _PRENATAL_DHA_WITHIN, "prenatal_dha_within_target"
-        elif dha_per_day >= _PRENATAL_DHA_TARGET_MG * 0.5:
+        elif dha_per_day >= PRENATAL_DHA_TARGET_MG * 0.5:
             ind_score, indication_label = _PRENATAL_DHA_NEAR, "prenatal_dha_near_target"
         else:
             ind_score, indication_label = _PRENATAL_DHA_BELOW, "prenatal_dha_below_target"
