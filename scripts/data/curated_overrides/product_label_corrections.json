@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-09-20",
-    "total_entries": 50,
+    "last_updated": "2026-09-23",
+    "total_entries": 53,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -1129,6 +1129,66 @@
       "review_date": "2026-09-20",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_source_and_activity_dose_correction"
+    },
+    "299069": {
+      "brand": "Pure Encapsulations",
+      "product_name": "Multi t/d",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The label PDF and the DSLD API both print 'Vitamin A (as beta carotene) 675 mg' at 75% DV. 675 mcg RAE is 75% of the 900 mcg RAE DV; 675 mg would be 75,000%. The same label prints iodine, selenium and chromium in 'mg' with %DVs that fit only mcg, and DSLD already records those three rows in mcg. As mg, the row read as 1,350,000 mcg of supplemental beta-carotene and raised a false contraindicated lung-cancer warning. Unit-only correction; amount and identity unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/299069",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/299069.pdf"
+      ],
+      "reviewer": "Claude engineering data-integrity review (label PDF and printed %DV checked); owner sign-off pending",
+      "review_date": "2026-09-23",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "228355": {
+      "brand": "Solgar",
+      "product_name": "Female Multiple",
+      "raw_ingredient_text": "Mixed Carotenoids",
+      "corrected_ingredient_text": "Mixed Carotenoids",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API records 'Mixed Carotenoids 172 mg', but the label PDF prints 'Mixed Carotenoids ... 172 mcg (alpha and beta-carotene, lutein, zeaxanthin, cryptoxanthin)'. Five other DSLD records of the same Solgar Female Multiple (218034, 218177, 231332, 231333, 73806) record 172 mcg. As mg, the row read as 86,000 mcg RAE and raised a false contraindicated lung-cancer warning. Unit-only correction; amount and identity unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/228355",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/228355.pdf"
+      ],
+      "reviewer": "Claude engineering data-integrity review (label PDF and sister labels checked); owner sign-off pending",
+      "review_date": "2026-09-23",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "311646": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Psyllium Husk",
+      "raw_ingredient_text": "Psyllium Husk",
+      "corrected_ingredient_text": "Psyllium Husk",
+      "raw_quantity_unit": "Gram(s)",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API records 'Psyllium Husk 1400 Gram(s)', but the label PDF prints 'Serving Size: 1400 milligrams (about 1/2 tsp)' and 'Psyllium Husk (Plantago ovata) 1400mg', with directions to mix 1400 mg once daily. Sister records of the same product (311639, 311642, 311649) record 1400 mg. As grams the row read as 1.4 kg per serving. Unit-only correction; amount and identity unchanged. The raw servingSizes block (4 Gram(s)) also disagrees with the printed 1400 mg serving; this schema corrects ingredient rows only, so that field is left as recorded.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/311646",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/311646.pdf"
+      ],
+      "reviewer": "Claude engineering data-integrity review (label PDF and sister labels checked); owner sign-off pending",
+      "review_date": "2026-09-23",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
     }
   }
 }
