@@ -27,7 +27,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
     get_active_ingredients,
-    has_usable_individual_dose,
+    has_disclosed_amount,
 )
 
 
@@ -442,7 +442,7 @@ def _has_active_identity(row: Dict[str, Any]) -> bool:
 
 
 def _has_usable_disclosure_dose(row: Dict[str, Any]) -> bool:
-    if has_usable_individual_dose(row):
+    if has_disclosed_amount(row):
         return True
     for key in ("amount", "dose", "quantity_mg", "amount_mg"):
         value = _as_float(row.get(key), None)

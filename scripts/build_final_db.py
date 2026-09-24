@@ -91,7 +91,7 @@ from identity_integrity import (
     normalize_label_display,
     safety_only_conflict_paths,
 )
-from scoring_input_contract import get_scoring_ingredients
+from scoring_input_contract import DOSE_NOT_PROVIDED_UNITS, dose_disclosure_status, get_scoring_ingredients
 from serving_frequency import (
     format_daily_frequency,
     resolve_daily_serving_multiplier,
@@ -4093,7 +4093,7 @@ def _derive_form_evidence(
 _EM_DASH = "—"
 _NOT_DISCLOSED_TEXT = "Amount not disclosed"
 _PROBIOTIC_STRAIN_NOT_LISTED_TEXT = "Per-strain dose not listed"
-_NP_SENTINELS = {"np", "n/p", "not provided", ""}
+_NP_SENTINELS = set(DOSE_NOT_PROVIDED_UNITS)
 
 
 def _format_dose_number(qty: float) -> str:
@@ -4159,20 +4159,11 @@ def _compute_dose_status(ingredient: Dict[str, Any]) -> str:
       not_disclosed_blend prop-blend member with no own dose
       missing             no dose, not in a blend
     """
-    qty_raw = ingredient.get("quantity")
-    qty = safe_float(qty_raw, 0) if qty_raw is not None else 0.0
-    unit = safe_str(ingredient.get("unit")).strip().lower()
-    has_real_unit = unit not in _NP_SENTINELS
-    has_real_dose = isinstance(qty, (int, float)) and qty > 0 and has_real_unit
-    if has_real_dose:
-        return "disclosed"
-    is_blend_member = bool(
-        ingredient.get("isNestedIngredient")
-        or ingredient.get("proprietaryBlend")
+    return dose_disclosure_status(
+        ingredient.get("quantity"),
+        ingredient.get("unit"),
+        bool(ingredient.get("isNestedIngredient") or ingredient.get("proprietaryBlend")),
     )
-    if is_blend_member:
-        return "not_disclosed_blend"
-    return "missing"
 
 
 _ZERO_DOSE_DUPLICATE_UNITS = _NP_SENTINELS | {"unspecified", "unknown", "not specified"}

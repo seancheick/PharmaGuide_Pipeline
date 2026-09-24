@@ -26,7 +26,7 @@ from scoring_v4.modules.generic_helpers import (
     _norm_text,
     _safe_dict,
     _safe_list,
-    has_usable_individual_dose,
+    has_disclosed_amount,
 )
 from scoring_v4.modules.generic_transparency import (
     B5_SAFETY_RELEVANT_BLEND_PATTERN,
@@ -214,7 +214,7 @@ def _score_panel_individual_dose_disclosure(product: Dict[str, Any]) -> tuple[fl
             **row_meta,
         }
 
-    dose_count = sum(1 for row in rows if has_usable_individual_dose(row))
+    dose_count = sum(1 for row in rows if has_disclosed_amount(row))
     coverage = min(1.0, dose_count / len(rows))
     return round(CAP_PANEL_INDIVIDUAL_DOSE_DISCLOSURE * coverage, 4), {
         "panel_dose_count": dose_count,
@@ -304,7 +304,7 @@ def _looks_like_adjunct_source_row(row: Dict[str, Any]) -> bool:
     if PANEL_NUTRIENT_PATTERN.search(text):
         return False
     dose_status = _norm_text(row.get("dose_status"))
-    lacks_dose = not has_usable_individual_dose(row)
+    lacks_dose = not has_disclosed_amount(row)
     if (dose_status in {"not_disclosed_blend", "hidden_blend", "not_disclosed"} or lacks_dose) and (
         ADJUNCT_SOURCE_PATTERN.search(text) or BLEND_CONTAINER_PATTERN.search(text)
     ):

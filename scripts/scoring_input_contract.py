@@ -13,6 +13,7 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from functools import lru_cache
 import json
+import math
 import re
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional
@@ -451,6 +452,28 @@ def _trustworthy_epa_dha_row(row: Dict[str, Any]) -> bool:
     if _source_is_non_epa_dha_oil(row) and not _source_has_epa_dha_identity(row):
         return False
     return True
+
+
+# DSLD writes quantity 0 with unit "NP" (not provided) for a row printed with no amount.
+DOSE_NOT_PROVIDED_UNITS = frozenset({"np", "n/p", "not provided", ""})
+
+
+def dose_disclosure_status(quantity: Any, unit: Any, is_blend_member: bool) -> str:
+    """'disclosed' | 'not_disclosed_blend' | 'missing' for one label row.
+
+    Disclosure is a label fact: any positive printed amount with a stated unit
+    (mg, HUT, mg NE, %DV) is disclosed, whether or not Dose can use it as an
+    exposure. A blend member printed without its own amount is a label
+    nondisclosure (shown as "Amount not disclosed"); a row outside a blend with
+    no amount is missing capture. One owner for the export and Transparency.
+    """
+    try:
+        amount = float(quantity) if quantity is not None else 0.0
+    except (TypeError, ValueError):
+        amount = 0.0
+    if math.isfinite(amount) and amount > 0 and str(unit or "").strip().lower() not in DOSE_NOT_PROVIDED_UNITS:
+        return "disclosed"
+    return "not_disclosed_blend" if is_blend_member else "missing"
 
 
 def _slug(value: Any) -> str:
