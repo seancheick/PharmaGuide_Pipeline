@@ -1434,3 +1434,19 @@ class TestVerifiedOverrideProvenance:
 
         assert result.scoring_blocked_reason
         assert not result.scores_points() or result.scoring_blocked_reason
+
+
+@pytest.mark.parametrize("query,registered,scores", [
+    # 9080 Nature Made Iron Supplement: the USP record for the multivitamin
+    # with iron is a different product (A16 attribution audit).
+    ("Iron Supplement", "Nature Made Multivitamin with Iron Tablets", False),
+    ("Multivitamin with Iron", "Nature Made Iron Tablets", False),
+    ("Multivitamin with Iron", "Nature Made Multivitamin with Iron Tablets", True),
+])
+def test_multivitamin_record_never_names_a_single_nutrient_label(query, registered, scores):
+    registry = _make_registry(records=[{
+        "program": "USP Verified", "brand": "Nature Made", "product": registered,
+    }])
+    result = resolve("Nature Made", query, ["USP Verified"], registry,
+                     label_context={"form_factor_canonical": "tablet"})[0]
+    assert result.scores_points() is scores

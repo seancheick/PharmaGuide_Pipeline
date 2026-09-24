@@ -578,14 +578,13 @@ def evaluate_verification_assessment(product: Mapping[str, Any]) -> Dict[str, An
         if isinstance(explicit, Mapping):
             state = str(explicit.get("state") or "")
             readiness = str(explicit.get("readiness") or "")
-            if (
-                state in {
-                    VERIFICATION_VERIFIED_PRESENT,
-                    VERIFICATION_VERIFIED_ABSENT,
-                    VERIFICATION_NOT_EVALUATED,
-                }
-                and readiness in {READINESS_COMPLETE, READINESS_INCOMPLETE}
-            ):
+            # State and readiness must agree: an evaluated result (present or
+            # absent) is complete, and not_evaluated is never complete.
+            if (state, readiness) in {
+                (VERIFICATION_VERIFIED_PRESENT, READINESS_COMPLETE),
+                (VERIFICATION_VERIFIED_ABSENT, READINESS_COMPLETE),
+                (VERIFICATION_NOT_EVALUATED, READINESS_INCOMPLETE),
+            }:
                 return dict(explicit)
             return {
                 "state": VERIFICATION_NOT_EVALUATED,

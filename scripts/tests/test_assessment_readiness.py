@@ -1233,3 +1233,17 @@ def test_unresolved_protein_product_intent_blocks_route_readiness() -> None:
     assert result["route"]["readiness"] == "incomplete"
     assert "protein_identity_or_mass_missing" in result["route"]["reason_codes"]
     assert "route_assessment_readiness" in result["unavailable_reasons"]
+
+
+@pytest.mark.parametrize('state,readiness', [
+    ('not_evaluated', 'complete'),
+    ('verified_present', 'incomplete'),
+    ('verified_absent', 'incomplete'),
+])
+def test_verification_explicit_state_readiness_must_agree(state, readiness):
+    from assessment_readiness import evaluate_verification_assessment
+    result = evaluate_verification_assessment({'certification_data': {
+        'verification_assessment': {'state': state, 'readiness': readiness}}})
+    assert result['state'] == 'not_evaluated'
+    assert result['readiness'] == 'incomplete'
+    assert result['reason_code'] == 'invalid_verification_assessment_contract'

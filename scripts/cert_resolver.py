@@ -565,6 +565,36 @@ def _sku_named_addition_conflict(product: str, candidate: str, brand_tokens: set
     return False
 
 
+_MULTIVITAMIN_NAME = re.compile(
+    r"\bmulti(?:[\s-]*vitamins?|vits?|vites)\b"
+    r"|\bmulti\b(?![\s-]*(?:strain|species|collagen|enzymes?|probiotic|flora|carotenoid|mineral))",
+    re.IGNORECASE,
+)
+
+
+def _names_multivitamin(text: str) -> bool:
+    return bool(_MULTIVITAMIN_NAME.search(_strip_accents(str(text or ""))))
+
+
+def _multivitamin_addon_conflict(product: str, candidate: str, brand_tokens: set[str]) -> bool:
+    """A multivitamin "with X" record is not the single-nutrient X label.
+
+    Identity tokens treat "multivitamin" as a descriptor so multi listings
+    match each other, and a label may omit the word ("Essential for Women
+    18+"). The conflict is narrower: exactly one side names a multivitamin and
+    the other side's whole identity is the multi's add-on (9080 "Iron
+    Supplement" vs "Multivitamin with Iron Tablets").
+    """
+    if _names_multivitamin(product) == _names_multivitamin(candidate):
+        return False
+    multi, single = (product, candidate) if _names_multivitamin(product) else (candidate, product)
+    addon = re.split(r"\bwith\b|\+|\bplus\b", _strip_accents(multi).lower(), maxsplit=1)
+    if len(addon) < 2:
+        return False
+    single_tokens = _sku_identity_tokens(single, brand_tokens)
+    return bool(single_tokens) and single_tokens <= _sku_identity_tokens(addon[1], brand_tokens)
+
+
 def _program_requires_marine_context(program: str) -> bool:
     return normalize_program(program) in _MARINE_CERT_PROGRAMS
 
@@ -978,7 +1008,10 @@ def resolve(
                 - query_flavor_tokens
             )
             unsupported_edition = bool(query_additions) and c.get("scope") != "product_line"
-            variant_conflict = variant_conflict or insufficient_identity or unsupported_edition
+            multivitamin_mismatch = _multivitamin_addon_conflict(product, raw_candidate_product, brand_tokens)
+            variant_conflict = (
+                variant_conflict or insufficient_identity or unsupported_edition or multivitamin_mismatch
+            )
 
             # SKU exact-ish match via token_set_ratio
             ratio = fuzz.token_set_ratio(product_norm, c_product)
