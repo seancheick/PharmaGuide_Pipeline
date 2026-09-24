@@ -103,3 +103,28 @@ def test_flutter_projection_generator_contains_only_the_app_read_set() -> None:
     for column in SERVER_CORE_COLUMNS:
         assert f"'{column}'" not in rendered
     assert "export schema 2.4.0" in rendered
+
+
+def test_projection_lists_the_manifest_columns_it_fingerprints(monkeypatch):
+    """The Dart set and its model sha come from one manifest (A17): a schema
+    whose app columns differ must never render another schema's columns."""
+    import generate_flutter_core_projection as projection
+    from core_export_model import build_projection_manifest
+    from export_schema import SUPPORTED_EXPORT_SCHEMA_VERSIONS
+
+    for version in SUPPORTED_EXPORT_SCHEMA_VERSIONS:
+        manifest = build_projection_manifest(export_schema_version=version)
+        rendered = projection.render_dart_projection(export_schema_version=version)
+        listed = [line.strip()[1:-2] for line in rendered.splitlines() if line.startswith("  '")]
+        assert listed == manifest["app_core"]["columns"]
+
+    real = projection.build_projection_manifest
+
+    def narrowed(*, export_schema_version):
+        manifest = real(export_schema_version=export_schema_version)
+        manifest["app_core"]["columns"] = manifest["app_core"]["columns"][:2]
+        return manifest
+
+    monkeypatch.setattr(projection, "build_projection_manifest", narrowed)
+    rendered = projection.render_dart_projection(export_schema_version="2.5.0")
+    assert len([line for line in rendered.splitlines() if line.startswith("  '")]) == 2

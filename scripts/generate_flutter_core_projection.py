@@ -6,14 +6,14 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from core_export_model import APP_CORE_COLUMNS, build_projection_manifest
+from core_export_model import build_projection_manifest
 
 
 def render_dart_projection(*, export_schema_version: str) -> str:
     manifest = build_projection_manifest(
         export_schema_version=export_schema_version
     )
-    columns = "\n".join(f"  '{column}'," for column in APP_CORE_COLUMNS)
+    columns = "\n".join(f"  '{column}'," for column in manifest["app_core"]["columns"])
     return f"""// GENERATED FILE — DO NOT EDIT.
 // Source: PharmaGuide_Pipeline/scripts/core_export_model.py
 // App projection for export schema {export_schema_version}.
