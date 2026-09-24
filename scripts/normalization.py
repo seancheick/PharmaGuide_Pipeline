@@ -12,7 +12,7 @@ import re
 import string
 import unicodedata
 from functools import lru_cache
-from typing import Tuple
+from typing import Optional, Tuple
 
 VERSION = "1.0.0"
 
@@ -50,6 +50,43 @@ def canonicalize_mass_unit(unit: str) -> str:
     normalized = unicodedata.normalize("NFKC", str(unit)).lower().strip().rstrip(".")
     normalized = re.sub(r"\(s\)$", "s", normalized)
     return _MASS_UNIT_ALIASES.get(normalized, normalized)
+
+_NUTRIENT_ACTIVITY_UNITS = {
+    "mcgrae": "mcg rae",
+    "mcgdfe": "mcg dfe",
+    "mgdfe": "mg dfe",
+    "mgne": "mg ne",
+}
+
+# Units that name WHICH analyte the milligrams measure rather than rescaling
+# one substance into another. FDA vitamin E amounts are mg alpha-tocopherol,
+# DSLD also spells that "mg AT"; the enricher treats both as mg the same way.
+# The analyte's canonical parent is kept so only that nutrient may use them.
+_ANALYTE_QUALIFIED_MASS_UNITS = {
+    "mgat": ("mg", "vitamin_e"),
+    "mgalpha-tocopherol": ("mg", "vitamin_e"),
+    "mgalphatocopherol": ("mg", "vitamin_e"),
+}
+
+
+def analyte_unit_parent(unit: str) -> Optional[str]:
+    """Canonical parent an analyte-qualified unit belongs to, else None."""
+    entry = _ANALYTE_QUALIFIED_MASS_UNITS.get(re.sub(r"[\s_]+", "", str(unit or "").lower()))
+    return entry[1] if entry else None
+
+
+def canonicalize_nutrient_unit(unit: str) -> str:
+    """Canonical mass token, or the spaced activity unit (``mcg dfe``, ``mg ne``).
+
+    Analyte-qualified mass (``mg alpha-tocopherol``, ``mg AT``) is plain ``mg``.
+
+    Enriched rows spell activity units without spaces (``mcgdfe``) while
+    reference data spells them with spaces; both map to one token here.
+    """
+    compact = re.sub(r"[\s_]+", "", str(unit or "").lower())
+    analyte = _ANALYTE_QUALIFIED_MASS_UNITS.get(compact)
+    return _NUTRIENT_ACTIVITY_UNITS.get(compact) or (analyte and analyte[0]) or canonicalize_mass_unit(unit)
+
 
 # Pre-built translation table for smart quotes, primes, and apostrophe variants.
 # Built once at module load — used by normalize_text() on every uncached call.

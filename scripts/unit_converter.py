@@ -436,6 +436,14 @@ class UnitConverter:
         if rule_id == 'vitamin_a_unknown':
             warnings.append("Vitamin A form unknown - flagged for review")
 
+        # A label naming both natural and synthetic vitamin E keeps the natural
+        # factor as the conservative UL upper bound, but its exact mg is unknown.
+        mixed_vitamin_e = rule_id == 'vitamin_e_d_alpha_tocopherol' and any(
+            re.search(pattern, ingredient_text, re.IGNORECASE)
+            for pattern in self.form_patterns.get('vitamin_e', {}).get('synthetic_patterns', []))
+        if mixed_vitamin_e:
+            warnings.append("Mixed natural and synthetic vitamin E: natural factor used as an upper bound")
+
         # Determine form detection source
         form_source = "alias_match"
         if ingredient_name and ingredient_name.lower() != nutrient_lower:
@@ -455,6 +463,7 @@ class UnitConverter:
             confidence=(
                 "low"
                 if rule_id in {'vitamin_a_unknown', 'vitamin_e_unknown', 'folate_unknown'}
+                else "medium" if mixed_vitamin_e
                 else "high"
             ),
             warnings=warnings,

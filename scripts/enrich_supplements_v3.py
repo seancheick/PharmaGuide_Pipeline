@@ -17625,14 +17625,9 @@ class SupplementEnricherV3:
     def _normalize_threshold_unit(self, unit: Any) -> str:
         raw = str(unit or "").strip()
         compact = re.sub(r"[\s_]+", "", raw.lower())
-        semantic_unit_map = {
-            "mcgrae": "mcg rae",
-            "mcgdfe": "mcg dfe",
-            "mgdfe": "mg dfe",
-            "mgne": "mg ne",
-        }
-        if compact in semantic_unit_map:
-            return semantic_unit_map[compact]
+        activity = norm_module.canonicalize_nutrient_unit(raw)
+        if activity in {"mcg rae", "mcg dfe", "mg dfe", "mg ne"}:
+            return activity
         spaced = re.sub(r"[\s_]+", " ", raw.lower()).strip()
         marker_unit = re.fullmatch(r"(mcg|mg|g)\s+([a-z][a-z0-9 -]*)", spaced)
         if marker_unit:
