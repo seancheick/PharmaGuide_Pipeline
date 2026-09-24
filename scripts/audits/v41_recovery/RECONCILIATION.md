@@ -129,10 +129,37 @@ recency, scope and stacking).
 | de63b205 | tooling | A/B harness records route, eligibility, identity, exposure; comparator buckets; tooling only |
 | da8a572b | data (/data-fix) | FiberSMART 233404/233406: resistant dextrin (GRN 1045), no equivalent canonical; label corrections make it the unmapped active, both NOT_SCORED; approved on the evidence (engineering review: Claude; independently verified: Codex) |
 
+| 36d7ff82 | data | FiberSMART review provenance recorded (engineering review: Claude; independently verified: Codex) |
+| 25decbf5 e8c6da11 | A13 + data | EPA+DHA reads one serving column: the cleaner's column merge now merges repeated nested blocks (224615 1,563 -> 1,042 mg; 206295, 219942); 77225 life'sDHA Oil is the algal source oil (label correction). Combined A13+A15 cohort, 1,432 labels: 22 score changes, 3 verdict (77225, 206295, 219942 SAFE -> POOR), 1 safety signal (69374 caffeine ELEVATED -> MODERATE, CAUTION kept) |
+| 33ba3973 | A15 | quantity disclosure owner; enzyme activity units count as disclosed in Transparency (2505, 82372, 333715 up) |
+| 2da82226 9aeb7fbc | A16 + data | verification state/readiness pairs agree; attribution audit of 871 matches found one wrong product (9080 iron vs the multivitamin-with-iron USP record); resolver guard + one override to the live-verified Iron 65 mg record |
+| e44ceee8 | A17 | Flutter projection renders the manifest's app columns; output byte-identical for 2.4.0/2.5.0/3.0.0 |
+| 7ee85a26 | P4 | beta-carotene lung-cancer warnings per Dr. Pham 2026-09-21 (under 15 mg none; 15 mg caution; 20 mg stronger caution; 20 mg unknown risk contextual card). Conditions current_smoker, former_smoker, asbestos_exposure (ICD-10-CM verified at NLM); PMIDs 8127329, 8602180, 23644932 verified at PubMed. Owner decisions 2026-09-24: both tiers caution with 20 mg tier copy; card without verdict change |
+| 7db29838 f7b73abb a6222c7d | one-brain consolidation | EPA/DHA amounts, quantity disclosure and the P4 card each have one owner (contract provider; row-based disclosure owner; ADR v6 pure-dose threshold projected generically). Byte parity: disclosure outputs on every frozen row identical; 15,412-product re-score 0 differences; beta-carotene blob warnings identical on 11 real products |
+
+
+## Integration comparison (A10-A17 + P4), 2026-09-24
+
+Production A/B over every raw label, one sequential chain (drive_pipeline_ab + compare_scored_arms): before `origin/main` 0b7bf3f7, after `v41-recovery` 7ee85a26 (clean tree, unchanged during the run). 9 frozen submissions without raw labels replayed with replay.py on both checkouts.
+
+| Measure | Result |
+|---|---|
+| Records compared | 15,412 (+ 9 submissions: 0 differences) |
+| Score changes | 486 (149 up, 337 down) |
+| Verdict changes | 34: 26 Task 2 (reviewed routes, daily exposure, 2 FiberSMART NOT_SCORED), 3 A13 omega, 2 A8 barley grass overrides (POOR -> SAFE), 3 generic "Niacin" labels with no printed form now B3 unspecified (27420, 315848, 30565 SAFE -> POOR) |
+| Route / eligibility / quarantine entries | 53 / 2 / 2 (all Task 2) |
+| Safety changes | 1 (69374, above) |
+| Unexplained | 0 |
+
+Score changes outside the two measured cohorts (159) are all Formulation form identity from the A1/A2/A7 ports (77 generic Niacin -> niacinamide, 49 -> B3 unspecified, 33 cyanocobalamin -> B12 unspecified, 4 niacinamide ascorbate, 2 MK-7 -> K2 unspecified, 1 5-MTHF -> B9 unspecified), 7 Nature Made Iron 65 mg (Verification 10 -> 15: the A16 guard leaves the correct USP record), 4 rows whose "Calcium Salt" / "Mixed Carotenoids" token no longer borrows a named form (328613, 232326, 65003, 293269). Receipts `~/pg_quality/integ_ab` (sha256 before 7753c741a4ec6b33, after 6f3c94dda08679e3, diff 7e489126ba2afe40, submissions 37517e5f3dc66819).
+
 ## Tracked follow-ups (from Task 2)
 
 - Childless positive-quantity blend rows with no canonical: 2,961 rows on 1,873 frozen products (1,735 blend-named, 212 single-item-named). Measure per entry before any global rule; true opaque blends need separate handling. Census: `~/pg_quality/recon/childless_blend_census.txt`.
 - Fiber identities in IQM category "fibers" not in the reviewed fiber set: `pgx_fiber`, `larch_arabinogalactan`, `mucilage` (one-entry review each).
 - A reviewed resistant-dextrin identity (would un-quarantine 233404/233406).
 - Directed-range adequacy (maximum vs minimum): shadow shows 77 of 3,704 labels differ; decision deferred to calibration.
-
+- Formulation calibration: a declared form plus a token that only restates the nutrient or a salt ("Thiamine Hydrochloride, Vitamin B1"; "L-5-MTHF, Calcium Salt") averages the named form with a hardcoded 5.0 at 50% share (_match_multi_form). The 5.0 duplicates IQM's per-parent unspecified value; resolve both in the Formulation candidates.
+- Verification: NSF Certified + NSF Sport stack as two certifications on 28 products; NSF pages read did not state that Certified for Sport includes NSF/ANSI 173.
+- 69374 prints "1-3 scoops" while DSLD records at most 2 daily servings (P6 frequency policy, held).
+- The personalized P4 tiers reach users after the app's reference-data sync (taxonomy 5.4.0) at release.
