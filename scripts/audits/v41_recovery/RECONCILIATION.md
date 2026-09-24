@@ -117,7 +117,8 @@ recency, scope and stacking).
 
 | Commit | Items | Validation |
 |---|---|---|
-| aba89280 47d17d4b 50323975 a455c655 e16c782e 0e55886b ddcb353e adb4d6ca 81139b24 9acff28e 13c47521 52c233a5 4e24ba05 097a65f0 9224cd21 | A1 A2 A7 | identity regression suite (158); targeted-brand main-vs-v41 replay pending |
-| f363f795 | A8 | the four reviewed overrides asserted on enriched rows; the enricher hunk had been committed inside e7c98160 by a staging slip in a shared worktree |
+| aba89280 47d17d4b 50323975 a455c655 e16c782e 0e55886b ddcb353e adb4d6ca 81139b24 9acff28e 13c47521 52c233a5 4e24ba05 097a65f0 9224cd21 | A1 A2 A7 | identity regression suite (158). Targeted replay main vs v41 on 3,018 real products (Nature Made, Centrum, Doctors Best, Kirkland, Nature's Bounty, Jarrow, Nature's Way; 0 errors): 490 products change an identity/form fact (253 vitamin D synonym rows no longer a false dual form; 229 generic 'Vitamin B12' rows now unspecified B12, not cyanocobalamin; 190 generic 'Niacin' rows now unspecified, not nicotinic acid). Scores change on 42 (mean -0.43; largest 236915 'Niacin 250 mg' -5.3 Formulation, verified form-less on the raw label). No verdict change from these items |
+| f363f795 | A8 | the four reviewed overrides asserted on enriched rows; targeted replay: 259304 and 259306 barley grass 53.7 -> 55.6, POOR -> SAFE (the only verdict changes in the batch). The enricher hunk had been committed inside e7c98160 by a staging slip in a shared worktree |
 | cdacec15 | A9 | focused unit tests plus 787 unit/threshold tests |
 | 0374508d | A6 | real labels main -> v41: 299069 77.7 -> 78.5; 228355 unchanged; 311646 86.6 -> 74.6 (Dose 20 -> 8) |
+| 8722ebc9 | A5 | 331488 and 12012 now carry the vitamin A pregnancy/TTC rule; 395 products gain it in the regenerated corpus; profile-gated warnings only |
