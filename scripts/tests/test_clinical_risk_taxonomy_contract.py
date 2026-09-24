@@ -79,7 +79,7 @@ def test_serotonergic_medications_drug_class_is_taxonomy_backed(blob):
 
 def test_conditions_are_the_complete_user_profile_contract(blob):
     conditions = blob["conditions"]
-    assert len(conditions) == 15
+    assert len(conditions) == 18
     assert all(condition.get("user_selectable") is True for condition in conditions)
 
     ids = [condition["id"] for condition in conditions]

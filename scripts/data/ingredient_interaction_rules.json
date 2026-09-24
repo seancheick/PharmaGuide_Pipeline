@@ -2,11 +2,11 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "6.2.4",
-    "last_updated": "2026-09-21",
-    "total_entries": 145,
+    "schema_version": "6.3.0",
+    "last_updated": "2026-09-24",
+    "total_entries": 147,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 145,
+    "total_rules": 147,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -109,6 +109,12 @@
           "to": "6.2.4",
           "date": "2026-07-27",
           "summary": "Aligned the holy-basil pregnancy rule with the cited evidence: changed informational to caution, removed unsupported uterotonic wording, distinguished concentrated extracts from culinary exposure, and replaced the generic NCCIH landing page with PMID 34315377."
+        },
+        {
+          "from": "6.2.4",
+          "to": "6.3.0",
+          "date": "2026-09-24",
+          "summary": "P4: beta-carotene lung-cancer warnings per the clinician-approved policy (Dr. Pham, 2026-09-21): current_smoker, former_smoker and asbestos_exposure conditions; no warning under 15 mg/day supplemental beta-carotene, caution at 15 mg/day or more, stronger caution (same severity, tier copy via alert_headline_if_met / alert_body_if_met / action_if_met) at 20 mg/day or more. vitamin_a rows count only when every declared form is a beta-carotene form (form_scope_match='all'). Two rules added."
         }
       ]
     },
@@ -120,7 +126,7 @@
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-04-18",
     "review_round": "full_authoring_pass_v1",
-    "rules_with_dose_thresholds": 42,
+    "rules_with_dose_thresholds": 43,
     "pregnancy_lactation_evidence_levels": [
       "no_data",
       "limited",
@@ -24778,6 +24784,819 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-07-03",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_BETA_CAROTENE_LUNG_CANCER",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "beta_carotene"
+      },
+      "pregnancy_lactation": {
+        "pregnancy_category": "informational",
+        "lactation_category": "informational",
+        "evidence_level": "established",
+        "mechanism": "Unlike preformed vitamin A (retinol), beta-carotene is not known to be teratogenic or to cause reproductive toxicity (NIH ODS).",
+        "notes": "The prenatal vitamin A limit applies to preformed retinol (RULE_IQM_VITAMIN_A_PREGNANCY_DOSE), not beta-carotene (clinical policy 2026-09-21, section 4).",
+        "alert_headline": "Beta-carotene is not the pregnancy vitamin A concern",
+        "alert_body": "Unlike preformed vitamin A (retinol), beta-carotene is not known to cause birth defects. The prenatal vitamin A limit applies to retinol, not beta-carotene.",
+        "informational_note": "Beta-carotene is not known to cause birth defects; relevant during pregnancy.",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        },
+        "direction": "neutral",
+        "materiality": "presence"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "current_smoker",
+          "severity": "caution",
+          "evidence_level": "established",
+          "last_reviewed": "2026-09-24",
+          "mechanism": "In the ATBC trial, 20 mg/day beta-carotene raised lung cancer incidence by 18% in male smokers. In CARET, 30 mg/day beta-carotene with 25,000 IU retinyl palmitate raised it (relative risk 1.28) in smokers, former smokers and asbestos-exposed workers. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "action": "Talk to your doctor before taking 15 mg or more of beta-carotene a day.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/8127329/",
+            "https://pubmed.ncbi.nlm.nih.gov/8602180/"
+          ],
+          "alert_headline": "High-dose beta-carotene: lung risk if you smoke",
+          "alert_body": "This product supplies 15 mg or more of beta-carotene a day. High-dose beta-carotene raised lung cancer risk in smokers in large trials. Talk to your doctor before using it.",
+          "informational_note": "High-dose beta-carotene supplements are linked to higher lung cancer risk in smokers.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "current_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "former_smoker",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "last_reviewed": "2026-09-24",
+          "mechanism": "In AREDS2, more lung cancers occurred with beta-carotene (15 mg/day in the AREDS formula) than without it, mostly in former smokers. CARET (30 mg/day with retinyl palmitate) raised lung cancer risk in a population that included former smokers. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "action": "Talk to your doctor before taking 15 mg or more of beta-carotene a day.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/23644932/",
+            "https://pubmed.ncbi.nlm.nih.gov/8602180/"
+          ],
+          "alert_headline": "High-dose beta-carotene: lung risk for ex-smokers",
+          "alert_body": "This product supplies 15 mg or more of beta-carotene a day. In a large eye-health trial, extra lung cancers with beta-carotene occurred mostly in former smokers. Talk to your doctor first.",
+          "informational_note": "High-dose beta-carotene supplements are linked to lung cancer in former smokers.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "former_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "asbestos_exposure",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "last_reviewed": "2026-09-24",
+          "mechanism": "CARET gave 30 mg/day beta-carotene with 25,000 IU retinyl palmitate to smokers, former smokers and asbestos-exposed workers; lung cancer incidence rose (relative risk 1.28) and the trial stopped early. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "action": "Talk to your doctor before taking 15 mg or more of beta-carotene a day.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/8602180/"
+          ],
+          "alert_headline": "High-dose beta-carotene: lung risk after asbestos",
+          "alert_body": "This product supplies 15 mg or more of beta-carotene a day. High-dose beta-carotene with vitamin A raised lung cancer risk in asbestos-exposed workers. Talk to your doctor first.",
+          "informational_note": "High-dose beta-carotene is linked to lung cancer in people exposed to asbestos.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "asbestos_exposure"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "current_smoker",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 10000,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "20 mg/day supplemental beta-carotene = 10,000 mcg RAE (NIH ODS: 2 mcg supplemental beta-carotene = 1 mcg RAE; 1 IU = 0.3 mcg RAE). Stronger-caution tier. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "alert_headline_if_met": "Beta-carotene at a dose linked to lung cancer",
+          "alert_body_if_met": "This product supplies 20 mg or more of beta-carotene a day, in the range that raised lung cancer risk in large trials of people with your risk factor. Talk to your doctor before using it.",
+          "action_if_met": "Talk to your doctor before using this product. A lower-dose or beta-carotene-free option may suit you better.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "current_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 10000,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "current_smoker",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 7500,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "15 mg/day supplemental beta-carotene = 7,500 mcg RAE. Below it: no warning (suppressed).  PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "current_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 7500,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "former_smoker",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 10000,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "20 mg/day supplemental beta-carotene = 10,000 mcg RAE (NIH ODS: 2 mcg supplemental beta-carotene = 1 mcg RAE; 1 IU = 0.3 mcg RAE). Stronger-caution tier. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "alert_headline_if_met": "Beta-carotene at a dose linked to lung cancer",
+          "alert_body_if_met": "This product supplies 20 mg or more of beta-carotene a day, in the range that raised lung cancer risk in large trials of people with your risk factor. Talk to your doctor before using it.",
+          "action_if_met": "Talk to your doctor before using this product. A lower-dose or beta-carotene-free option may suit you better.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "former_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 10000,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "former_smoker",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 7500,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "15 mg/day supplemental beta-carotene = 7,500 mcg RAE. Below it: no warning (suppressed).  PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "former_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 7500,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "asbestos_exposure",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 10000,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "20 mg/day supplemental beta-carotene = 10,000 mcg RAE (NIH ODS: 2 mcg supplemental beta-carotene = 1 mcg RAE; 1 IU = 0.3 mcg RAE). Stronger-caution tier. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "alert_headline_if_met": "Beta-carotene at a dose linked to lung cancer",
+          "alert_body_if_met": "This product supplies 20 mg or more of beta-carotene a day, in the range that raised lung cancer risk in large trials of people with your risk factor. Talk to your doctor before using it.",
+          "action_if_met": "Talk to your doctor before using this product. A lower-dose or beta-carotene-free option may suit you better.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "asbestos_exposure"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 10000,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "asbestos_exposure",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 7500,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "15 mg/day supplemental beta-carotene = 7,500 mcg RAE. Below it: no warning (suppressed).  PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "asbestos_exposure"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 7500,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        }
+      ],
+      "last_reviewed": "2026-09-24",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "vitamin_a"
+      },
+      "form_scope": [
+        "beta-carotene from mixed carotenoids",
+        "beta-carotene synthetic"
+      ],
+      "form_scope_match": "all",
+      "pregnancy_lactation": {
+        "pregnancy_category": "informational",
+        "lactation_category": "informational",
+        "evidence_level": "established",
+        "mechanism": "Unlike preformed vitamin A (retinol), beta-carotene is not known to be teratogenic or to cause reproductive toxicity (NIH ODS).",
+        "notes": "The prenatal vitamin A limit applies to preformed retinol (RULE_IQM_VITAMIN_A_PREGNANCY_DOSE), not beta-carotene (clinical policy 2026-09-21, section 4).",
+        "alert_headline": "Beta-carotene is not the pregnancy vitamin A concern",
+        "alert_body": "Unlike preformed vitamin A (retinol), beta-carotene is not known to cause birth defects. The prenatal vitamin A limit applies to retinol, not beta-carotene.",
+        "informational_note": "Beta-carotene is not known to cause birth defects; relevant during pregnancy.",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        },
+        "direction": "neutral",
+        "materiality": "presence"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "current_smoker",
+          "severity": "caution",
+          "evidence_level": "established",
+          "last_reviewed": "2026-09-24",
+          "mechanism": "In the ATBC trial, 20 mg/day beta-carotene raised lung cancer incidence by 18% in male smokers. In CARET, 30 mg/day beta-carotene with 25,000 IU retinyl palmitate raised it (relative risk 1.28) in smokers, former smokers and asbestos-exposed workers. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "action": "Talk to your doctor before taking 15 mg or more of beta-carotene a day.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/8127329/",
+            "https://pubmed.ncbi.nlm.nih.gov/8602180/"
+          ],
+          "alert_headline": "High-dose beta-carotene: lung risk if you smoke",
+          "alert_body": "This product supplies 15 mg or more of beta-carotene a day. High-dose beta-carotene raised lung cancer risk in smokers in large trials. Talk to your doctor before using it.",
+          "informational_note": "High-dose beta-carotene supplements are linked to higher lung cancer risk in smokers.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "current_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "former_smoker",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "last_reviewed": "2026-09-24",
+          "mechanism": "In AREDS2, more lung cancers occurred with beta-carotene (15 mg/day in the AREDS formula) than without it, mostly in former smokers. CARET (30 mg/day with retinyl palmitate) raised lung cancer risk in a population that included former smokers. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "action": "Talk to your doctor before taking 15 mg or more of beta-carotene a day.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/23644932/",
+            "https://pubmed.ncbi.nlm.nih.gov/8602180/"
+          ],
+          "alert_headline": "High-dose beta-carotene: lung risk for ex-smokers",
+          "alert_body": "This product supplies 15 mg or more of beta-carotene a day. In a large eye-health trial, extra lung cancers with beta-carotene occurred mostly in former smokers. Talk to your doctor first.",
+          "informational_note": "High-dose beta-carotene supplements are linked to lung cancer in former smokers.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "former_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "asbestos_exposure",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "last_reviewed": "2026-09-24",
+          "mechanism": "CARET gave 30 mg/day beta-carotene with 25,000 IU retinyl palmitate to smokers, former smokers and asbestos-exposed workers; lung cancer incidence rose (relative risk 1.28) and the trial stopped early. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "action": "Talk to your doctor before taking 15 mg or more of beta-carotene a day.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/8602180/"
+          ],
+          "alert_headline": "High-dose beta-carotene: lung risk after asbestos",
+          "alert_body": "This product supplies 15 mg or more of beta-carotene a day. High-dose beta-carotene with vitamin A raised lung cancer risk in asbestos-exposed workers. Talk to your doctor first.",
+          "informational_note": "High-dose beta-carotene is linked to lung cancer in people exposed to asbestos.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "asbestos_exposure"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "current_smoker",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 10000,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "20 mg/day supplemental beta-carotene = 10,000 mcg RAE (NIH ODS: 2 mcg supplemental beta-carotene = 1 mcg RAE; 1 IU = 0.3 mcg RAE). Stronger-caution tier. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "alert_headline_if_met": "Beta-carotene at a dose linked to lung cancer",
+          "alert_body_if_met": "This product supplies 20 mg or more of beta-carotene a day, in the range that raised lung cancer risk in large trials of people with your risk factor. Talk to your doctor before using it.",
+          "action_if_met": "Talk to your doctor before using this product. A lower-dose or beta-carotene-free option may suit you better.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "current_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 10000,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "current_smoker",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 7500,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "15 mg/day supplemental beta-carotene = 7,500 mcg RAE. Below it: no warning (suppressed).  PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "current_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 7500,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "former_smoker",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 10000,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "20 mg/day supplemental beta-carotene = 10,000 mcg RAE (NIH ODS: 2 mcg supplemental beta-carotene = 1 mcg RAE; 1 IU = 0.3 mcg RAE). Stronger-caution tier. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "alert_headline_if_met": "Beta-carotene at a dose linked to lung cancer",
+          "alert_body_if_met": "This product supplies 20 mg or more of beta-carotene a day, in the range that raised lung cancer risk in large trials of people with your risk factor. Talk to your doctor before using it.",
+          "action_if_met": "Talk to your doctor before using this product. A lower-dose or beta-carotene-free option may suit you better.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "former_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 10000,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "former_smoker",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 7500,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "15 mg/day supplemental beta-carotene = 7,500 mcg RAE. Below it: no warning (suppressed).  PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "former_smoker"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 7500,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "asbestos_exposure",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 10000,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "20 mg/day supplemental beta-carotene = 10,000 mcg RAE (NIH ODS: 2 mcg supplemental beta-carotene = 1 mcg RAE; 1 IU = 0.3 mcg RAE). Stronger-caution tier. PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "alert_headline_if_met": "Beta-carotene at a dose linked to lung cancer",
+          "alert_body_if_met": "This product supplies 20 mg or more of beta-carotene a day, in the range that raised lung cancer risk in large trials of people with your risk factor. Talk to your doctor before using it.",
+          "action_if_met": "Talk to your doctor before using this product. A lower-dose or beta-carotene-free option may suit you better.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "asbestos_exposure"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 10000,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "asbestos_exposure",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 7500,
+          "unit": "mcg RAE",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
+          "consumer_disposition_if_met": "review",
+          "consumer_disposition_if_not_met": "suppress",
+          "amount_missing_disposition": "suppress",
+          "unknown_form_disposition": "suppress",
+          "note": "15 mg/day supplemental beta-carotene = 7,500 mcg RAE. Below it: no warning (suppressed).  PharmaGuide clinical policy (Dr. Pham, PharmaGuide Clinical Team, 2026-09-21; PHASE3_CLINICAL_POLICY_20260921.md section 5): under 15 mg/day supplemental beta-carotene no warning; 15 mg/day or more with the risk factor caution; 20 mg/day or more stronger caution. 15 mg/day is a PharmaGuide operational threshold, not an official upper limit; no beta-carotene UL is established.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "asbestos_exposure"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 7500,
+              "unit": "mcg RAE",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
+            }
+          }
+        }
+      ],
+      "last_reviewed": "2026-09-24",
       "review_owner": "pharmaguide_clinical_team"
     }
   ]

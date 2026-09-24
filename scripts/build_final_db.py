@@ -235,6 +235,50 @@ def safe_dict(value: Any) -> dict:
     return value if isinstance(value, dict) else {}
 
 
+# Beta-carotene lung-cancer policy (Dr. Pham, PharmaGuide Clinical Team,
+# 2026-09-21): at 20 mg/day or more, a viewer whose smoking / asbestos status is
+# unknown sees one contextual card. The 20 mg tier is owned by the interaction
+# rules; a hit carries matched_copy only when that tier matched.
+_BETA_CAROTENE_LUNG_RULES = frozenset({
+    "RULE_IQM_BETA_CAROTENE_LUNG_CANCER",
+    "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER",
+})
+_BETA_CAROTENE_CONTEXT_HEADLINE = "High-dose beta-carotene: check your lung risk"
+_BETA_CAROTENE_CONTEXT_BODY = (
+    "This product supplies 20 mg or more of beta-carotene a day. At similar doses it "
+    "raised lung cancer risk in smokers, former smokers and asbestos-exposed workers. "
+    "Ask your doctor if any apply to you."
+)
+
+
+def beta_carotene_high_dose_card(enriched: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """The all-viewer card for >= 20 mg/day supplemental beta-carotene, or None."""
+    for alert in safe_list(safe_dict(enriched.get("interaction_profile")).get("ingredient_alerts")):
+        if not isinstance(alert, dict) or safe_str(alert.get("rule_id")) not in _BETA_CAROTENE_LUNG_RULES:
+            continue
+        for hit in safe_list(alert.get("condition_hits")):
+            evaluation = safe_dict(safe_dict(hit).get("dose_threshold_evaluation"))
+            if not evaluation.get("matched_copy"):
+                continue
+            return {
+                "type": "dose_safety",
+                "severity": "caution",
+                "severity_contextual": "caution",
+                "display_mode_default": "informational",
+                "title": f"High-dose beta-carotene: {safe_str(alert.get('ingredient_name'))}",
+                "detail": _BETA_CAROTENE_CONTEXT_BODY,
+                "alert_headline": _BETA_CAROTENE_CONTEXT_HEADLINE,
+                "alert_body": _BETA_CAROTENE_CONTEXT_BODY,
+                "ingredient_name": safe_str(alert.get("ingredient_name")),
+                "sources": safe_list(hit.get("sources")),
+                "dose_decision": compact_dose_decision(hit.get("dose_decision") or evaluation),
+                "source": "interaction_rules",
+                "source_rule_id": safe_str(alert.get("rule_id")),
+                "profile_gate": None,
+            }
+    return None
+
+
 def compact_dose_decision(value: Any) -> Optional[Dict[str, Any]]:
     """Project an internal dose trace into the shipped decision contract.
 
@@ -7439,6 +7483,10 @@ def build_detail_blob(
                     "source_rule_id": safe_str(alert.get("rule_id")) or None,
                     "profile_gate": dh.get("profile_gate"),
                 })
+
+    beta_carotene_card = beta_carotene_high_dose_card(enriched)
+    if beta_carotene_card is not None:
+        warnings.append(beta_carotene_card)
 
     ds = safe_dict(enriched.get("dietary_sensitivity_data"))
     dietary_warnings = safe_list(ds.get("warnings"))

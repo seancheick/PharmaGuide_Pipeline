@@ -17616,7 +17616,14 @@ class SupplementEnricherV3:
         # Every declared form counts: 331488 "Vitamin A (as Beta-Carotene,
         # Retinyl Acetate)" has form_id beta-carotene, and reading form_id alone
         # hid the retinyl acetate from the preformed vitamin A pregnancy rule.
-        return bool(self._row_form_ids(ingredient) & {str(item).strip() for item in form_scope if str(item).strip()})
+        scope = {str(item).strip() for item in form_scope if str(item).strip()}
+        row_forms = self._row_form_ids(ingredient)
+        if rule.get("form_scope_match") == "all":
+            # The row amount is this form's amount only when every declared
+            # form is in scope; a mixed retinyl + beta-carotene row with no
+            # declared share does not state its beta-carotene amount.
+            return bool(row_forms) and row_forms <= scope
+        return bool(row_forms & scope)
 
     def _collect_profile_context(self, user_profile: Any) -> Dict[str, List[str]]:
         if not isinstance(user_profile, dict):
@@ -18143,6 +18150,15 @@ class SupplementEnricherV3:
             if comparison and severity_if_met:
                 severity_candidate = severity_if_met
                 details["matched_threshold"] = True
+                # A higher tier with the same severity carries its own authored
+                # copy (beta-carotene >= 20 mg/day: stronger caution, 2026-09-21).
+                matched_copy = {
+                    field: threshold[f"{field}_if_met"]
+                    for field in ("alert_headline", "alert_body", "action")
+                    if threshold.get(f"{field}_if_met")
+                }
+                if matched_copy:
+                    details["matched_copy"] = matched_copy
                 details["selected_from"] = "severity_if_met"
                 details["selected_severity"] = severity_candidate
                 details["clinical_severity"] = severity_candidate
@@ -18652,17 +18668,18 @@ class SupplementEnricherV3:
                     sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
                         source_set.add(src)
+                    tier_copy = (threshold_eval or {}).get("matched_copy") or {}
                     condition_hits.append({
                         "condition_id": condition_id,
                         "severity": severity,
                         "evidence_level": evidence or None,
                         "mechanism": cond_rule.get("mechanism"),
-                        "action": cond_rule.get("action"),
+                        "action": tier_copy.get("action") or cond_rule.get("action"),
                         "sources": sources,
                         "dose_threshold_evaluation": threshold_eval,
                         "dose_decision": dose_decision,
-                        "alert_headline": cond_rule.get("alert_headline"),
-                        "alert_body": cond_rule.get("alert_body"),
+                        "alert_headline": tier_copy.get("alert_headline") or cond_rule.get("alert_headline"),
+                        "alert_body": tier_copy.get("alert_body") or cond_rule.get("alert_body"),
                         "informational_note": cond_rule.get("informational_note"),
                         "warning_type": cond_rule.get("warning_type"),
                         "direction": cond_rule.get("direction"),
