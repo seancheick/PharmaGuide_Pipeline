@@ -11,27 +11,61 @@ Porting is by change, not by commit: many redesign commits mix a correctness fix
 with new scoring policy. "Prod" means the change alters live v4 output (scores,
 verdicts, warnings or blobs) and needs a frozen-corpus replay before merge.
 
+**Rule (2026-09-24):** keep facts and correctness fixes after independent
+validation; simulate and review scoring-policy changes before adoption; retire
+duplicate architecture. Items that mix a factual correction with clinical or
+calibration policy are split: the factual part is ported (A), the policy part
+is held (P, clinical/safety review; C, shadow calibration).
+
+**Validation standard for every port:** reproduce the defect on current main
+with the real raw label, port the smallest change to its canonical owner, add a
+focused regression, measure the affected real corpus, and state in the commit:
+reproduced defect, canonical owner, real-product validation, affected-product
+count, and whether it changes scores, safety verdicts or display only. A green
+synthetic test alone is not validation.
+
+**Recalibration gate:** no recalibrated Formulation, Dose, Evidence,
+Transparency or penalty formula enters production v4 until a read-only
+candidate evaluator (same frozen v4 facts, no change to the scorer, export or
+Flutter contract) has compared current v4 with at least two candidates on
+reference ordering and full frozen-corpus effects, and Sean has reviewed the
+report. Verification is excluded from recalibration (audit only attribution,
+recency, scope and stacking).
+
 ## A. Correctness fixes to port into v4
 
 | # | Change | Owning files | Redesign commits | Tests | Prod |
 |---|---|---|---|---|---|
 | A1 | IQM alias corrections: generic names move to the parent's unspecified form (B12, vitamin D x2, vitamin C, thiamine, B6, niacin, trace minerals, mixture/anion/legacy/class names); Magnesium Biotinate is not d-biotin; anhydrous creatine is not monohydrate | `data/ingredient_quality_map.json` | 38285b53 a4322b7b ac9adb66 ced7e264 4f227907 7f6f9bba 6d4d6bfe 6528eed1 d57c750c 185d6585 fcb2e0ec | test_ingredient_matching_regression, test_creatine_integrity | yes: bio_score of affected rows |
 | A2 | Cleaner: a literal form name outranks generated variants (generic creatine aliases stay unspecified) | `enhanced_normalizer.py` (register_form) | da20b9ef | test_cleaner_exact_form_precedence | yes |
-| A3 | B6 adult UL follows EFSA 2023 (12 mg/day) and covers every vitamer; vitamin E UL covers all supplemental alpha-tocopherol | `data/rda_optimal_uls.json` | baa0981b 6d40da3c f78a7de6 a4e6efe8 | test_vitamin_b6_efsa_ul, test_vitamin_e_ul_scope | yes: B6 CAUTION on ~215 products (measured on the redesign) |
-| A4 | Beta-carotene lung-cancer warnings for current/former smokers and asbestos exposure, per population, every declared form in scope; possible-presence subjects for generic carotenoid wording | `data/ingredient_interaction_rules.json`, `data/clinical_risk_taxonomy.json`, `identity/interaction.py`, `enrich_supplements_v3.py` (possible presence, form-scope share), `data/views/by_condition/*` | 92f3c297 f49d8118 ea2e5953 7fc94b0e e609fb40 | test_beta_carotene_lung_cancer_rule | yes: new warnings. Engineering review only; clinician approval pending |
+| A3 | Moved to P1-P3 (UL selection and scope are clinical policy) | `data/rda_optimal_uls.json` | baa0981b 6d40da3c f78a7de6 a4e6efe8 | test_vitamin_b6_efsa_ul, test_vitamin_e_ul_scope | yes: B6 CAUTION on ~215 products (measured on the redesign) |
+| A4 | Factual part only: possible-presence subjects for generic carotenoid wording, and the label-declared share of a mixed vitamin A row (identity and attribution). The warning rules and thresholds are P4 | `data/ingredient_interaction_rules.json`, `data/clinical_risk_taxonomy.json`, `identity/interaction.py`, `enrich_supplements_v3.py` (possible presence, form-scope share), `data/views/by_condition/*` | 92f3c297 f49d8118 ea2e5953 7fc94b0e e609fb40 | test_beta_carotene_lung_cancer_rule | yes: new warnings. Engineering review only; clinician approval pending |
 | A5 | Profile gate: a form exclusion holds only when every declared form is excluded (mixed vitamin A rows) | `profile_gate_evaluator.py`, `data/profile_gate_test_cases.json`, enricher `_interaction_rule_applies` | 2578adb3 | test_profile_gate_* | yes (app side already shipped: PharmaGuide ai 908c4bc) |
 | A6 | Label unit corrections: 299069, 228355, 311646 | `data/curated_overrides/product_label_corrections.json` | 21ebd0db 5b7d9694 (311646 part) | test_product_label_corrections | yes |
 | A7 | Enricher form matching: label synonyms of one form key are not a dual form; unresolved declared forms kept as provenance; culture sources and DSLD placeholders are not forms; one source-descriptor predicate | `enrich_supplements_v3.py` | 18c33bb8 5c5b2ed4 d5671bfd | test_quality_declared_forms, test_enrich_* | yes (dual-form flag, bio_score averaging) |
 | A8 | Curated context override survives enrichment (259304/259306 barley grass) | `enrich_supplements_v3.py` | 514602bf | test_context_canonical_overrides_2026_05_24 | yes |
 | A9 | Units: one owner for activity units (mcg DFE, mg NE, mcg RAE) and analyte mass (mg alpha-tocopherol); mixed natural+synthetic vitamin E is a medium-confidence upper bound | `normalization.py`, `unit_converter.py`, enricher `_normalize_threshold_unit` | ffe6315a a8b08b11 aa7f5d3c 732dc573 | test_quality_exposure_identity (unit parts) | yes (threshold units) |
-| A10 | Daily exposure: fiber and sports (creatine, beta-alanine, HMB) Dose use daily exposure; caffeine per use; unknown frequency fails closed; a defaulted DSLD frequency is not label-declared | `serving_frequency.py`, `scoring_v4/modules/fiber_digestive_dose.py`, `fiber_digestive_helpers.py`, `sports_dose.py` (+ B2 exposure provider) | 38406274 96812fba 7e334ccb 5967d7fb | test_quality_dose_path_parity, test_v4_fiber_digestive_module, test_v4_sports_* | yes: the plan's "Task 2 live-path change"; needs its own replay |
-| A11 | Vitamin E IU with no named form bounded by the two reviewed factors (Dose minimum 0.45, UL maximum 0.67) | `scoring_v4/exposure.py` | 58caff1e | test_quality_exposure_identity | yes once v4 Dose reads B2 |
+| A10 | Daily exposure: fiber and sports (creatine, beta-alanine, HMB) Dose multiply per-serving amounts by the directed daily frequency; caffeine is per use. The missing/defaulted-frequency behavior is P6 | `serving_frequency.py`, `scoring_v4/modules/fiber_digestive_dose.py`, `fiber_digestive_helpers.py`, `sports_dose.py` (+ B2 exposure provider) | 38406274 96812fba 7e334ccb 5967d7fb | test_quality_dose_path_parity, test_v4_fiber_digestive_module, test_v4_sports_* | yes: the plan's "Task 2 live-path change"; needs its own replay |
+| A11 | Moved to P5 (conversion policy for an unnamed form) | `scoring_v4/exposure.py` | 58caff1e | test_quality_exposure_identity | yes once v4 Dose reads B2 |
 | A12 | Routing: partially hydrolyzed guar gum is fiber; prominent non-digestive claims keep a product off the fiber route | `scoring_v4/route_features.py`, `scoring_input_contract.py` (_route_fiber_digestive_decision), `enhanced_normalizer.py` (fiber source provenance) | 38406274 | test_phgg_formulation_identity, test_route_* | yes: route changes |
 | A13 | EPA+DHA amount has one owner: separate vs combined rows never double-count; carrier oil mass is never EPA+DHA; qualified or repeated rows are unknown | `scoring_input_contract.py` (epa_dha_label_amount_mg) | b6f1d3ae 5b7d9694 | test_quality_omega_supply (amount parts) | yes when v4 omega Dose reads it |
-| A14 | Audience-specific UL: the UL check uses the strictest UL among the printed audience's ages (calcium 2,000 mg for generic adult and 50+ labels; phosphorus 71+) | `label_audience.py` (new), enricher `_safety_at_strictest_audience_age` | 10945a2d | test_audience_specific_ul | yes in principle; 0 verdict changes on 3,166 rows today |
+| A14 | Moved to P7 (which population's UL applies is clinical policy) | `label_audience.py` (new), enricher `_safety_at_strictest_audience_age` | 10945a2d | test_audience_specific_ul | yes in principle; 0 verdict changes on 3,166 rows today |
 | A15 | Dose-disclosure status has one owner (blend nondisclosure vs missing capture) for the blob and scoring | `scoring_input_contract.py` (dose_disclosure_status), `build_final_db.py` | 7fc94b0e 900547fe | test_dose_disclosure_status | yes: blob display labels |
 | A16 | Verification readiness pairs state and readiness exactly (no "verified absent" on incomplete readiness) | `assessment_readiness.py` | 93b95dcb | test_assessment_readiness | check on replay |
 | A17 | Flutter projection generator reads the manifest's app_core columns | `generate_flutter_core_projection.py` | 26865c63 (fix part) | test_core_export_model | no (tooling) |
+
+## P. Held for clinical/safety policy review (factual parts ported separately)
+
+| # | Policy | Owning files | Commits | Record needed before adoption |
+|---|---|---|---|---|
+| P1 | Adopt EFSA 2023 vitamin B6 adult UL (12 mg/day) over the US 100 mg/day | `data/rda_optimal_uls.json` | baa0981b 6d40da3c | source receipt, population, exposure basis, approval; measured ~215 new CAUTION verdicts on the redesign |
+| P2 | B6 UL applies to every vitamer (pyridoxine, pyridoxal, pyridoxamine, phosphates) | `data/rda_optimal_uls.json` | f78a7de6 | same |
+| P3 | Vitamin E UL covers all supplemental alpha-tocopherol, natural and synthetic | `data/rda_optimal_uls.json` | a4e6efe8 | same |
+| P4 | Beta-carotene lung-cancer warnings (current/former smokers, asbestos exposure), thresholds and severities | `data/ingredient_interaction_rules.json`, `data/clinical_risk_taxonomy.json`, views | 92f3c297 f49d8118 ea2e5953 7fc94b0e e609fb40 | clinician approval (engineering review only so far) |
+| P5 | Vitamin E IU with no named form bounded by the synthetic and natural factors | `scoring_v4/exposure.py` | 58caff1e | conversion policy review |
+| P6 | Missing or defaulted daily frequency fails closed (Dose pending) | `serving_frequency.py` | 38406274 | calibration: affected counts and pending rate by route |
+| P7 | UL taken at the strictest age among the printed audience | `label_audience.py`, enricher | 10945a2d | clinical policy review (0 verdict changes on 3,166 rows today) |
+| P8 | New probiotic study contexts and the 299v outcome split | `data/clinically_relevant_strains.json` | b6f1d3ae 5b7d9694 | clinical review of each context; see C7/C8 |
 
 ## B. Reusable infrastructure to port
 
@@ -72,8 +106,18 @@ verdicts, warnings or blobs) and needs a frozen-corpus replay before merge.
 
 ## Port order on this branch
 
-1. A1 A2 (identity and aliases), A7 A8 (enricher form matching), A9 (units), A6 (label corrections): one commit each, focused tests.
-2. A3 A4 A5 A14 (safety data and warnings), with the beta-carotene clinician-approval status stated.
+1. Done: A1 A2 A7 A8 A9 A6. Then the targeted-brand main-vs-v41 replay for them.
+2. A4 (factual part) and A5 (profile gate: every declared form counts).
 3. B1 B2 B3 B5 (tooling, exposure object, incomplete facts, guards).
-4. A10 A11 A12 A13 A15 A16 (live Dose and routing changes), then one frozen-corpus replay against `main`.
-5. Calibration steps 7-10 (C-items) inside existing v4 modules, each reported as semantic correctness, reference behavior and corpus behavior.
+4. A10 (daily multiplication; not the P6 missing-frequency policy), A12, A13, A15, A16, A17, each with its real-product validation, then one frozen-corpus replay against `main`.
+5. P items go to clinical/safety review with their receipts; none is ported without approval.
+6. Build the read-only candidate evaluator and the first calibration report (C items). Stop there for Sean's review.
+
+## Ported so far (v41-recovery)
+
+| Commit | Items | Validation |
+|---|---|---|
+| aba89280 47d17d4b 50323975 a455c655 e16c782e 0e55886b ddcb353e adb4d6ca 81139b24 9acff28e 13c47521 52c233a5 4e24ba05 097a65f0 9224cd21 | A1 A2 A7 | identity regression suite (158); targeted-brand main-vs-v41 replay pending |
+| f363f795 | A8 | the four reviewed overrides asserted on enriched rows; the enricher hunk had been committed inside e7c98160 by a staging slip in a shared worktree |
+| cdacec15 | A9 | focused unit tests plus 787 unit/threshold tests |
+| 0374508d | A6 | real labels main -> v41: 299069 77.7 -> 78.5; 228355 unchanged; 311646 86.6 -> 74.6 (Dose 20 -> 8) |
