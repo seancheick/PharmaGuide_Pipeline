@@ -125,4 +125,14 @@ recency, scope and stacking).
 | c9634ec0 | B5 | systemic-failure guard + no-shadowed-definitions test; no score path |
 | c3ad0955 | B1 | replay/regenerate tooling and reference cases; tooling only |
 | 7b031050 | B3 | safety gate records whether its ingredient assessment completed; fact fields only |
-| e46897f5 | A10 A12 B2 | 5,289 labels (BulkSupplements, Legion, Nature's Way, Double Wood): 40 score changes (34 up, 6 down, mean +5.6). Daily exposure: 331143 inulin Dose 7.2 -> 16.0, 312819 HMB 3.5 -> 12.8. Honest fiber identity: 287495 Dose 12.0 -> 7.2 (label fiber 1 g x2, main summed carbohydrate + fiber + blend), SAFE -> POOR. 293400 SAFE -> POOR on Formulation -1.4: 'Oat Bran'/'Fiber (unspecified)' rows lack a fiber identity (mapping follow-up). The redesign's "qualified amount or unstated frequency zeroes Dose" was NOT ported (it flipped four cleanse kits); Dose benchmarks the stated amount, qualifier kept as provenance |
+| 5c9996f4 | A10 A12 B2 B9 (fact only) | Production A/B on a 2,507-label affected cohort (35 brands, 7 routes): 159 score changes (128 up, 31 down, each decrease read against its label), 53 route changes (the 51 reviewed fiber -> generic + the 2 FiberSMART quarantines), 26 verdict changes (12 reviewed route, 12 POOR -> SAFE daily exposure, 2 FiberSMART), 0 safety changes. Oat Bran identity kept (UNII + literal; reviewed oat_generic > oat_bran). Unresolved quantity columns fail completeness. Creatine loading up to 20 g/day via has_loading_protocol. Min/max shadow reported, policy unchanged. Full receipt: quality_redesign/TASK2.md |
+| de63b205 | tooling | A/B harness records route, eligibility, identity, exposure; comparator buckets; tooling only |
+| da8a572b | data (/data-fix) | FiberSMART 233404/233406: resistant dextrin (GRN 1045), no equivalent canonical; label corrections make it the unmapped active, both NOT_SCORED; owner approval pending |
+
+## Tracked follow-ups (from Task 2)
+
+- Childless positive-quantity blend rows with no canonical: 2,961 rows on 1,873 frozen products (1,735 blend-named, 212 single-item-named). Measure per entry before any global rule; true opaque blends need separate handling. Census: `~/pg_quality/recon/childless_blend_census.txt`.
+- Fiber identities in IQM category "fibers" not in the reviewed fiber set: `pgx_fiber`, `larch_arabinogalactan`, `mucilage` (one-entry review each).
+- A reviewed resistant-dextrin identity (would un-quarantine 233404/233406).
+- Directed-range adequacy (maximum vs minimum): shadow shows 77 of 3,704 labels differ; decision deferred to calibration.
+
