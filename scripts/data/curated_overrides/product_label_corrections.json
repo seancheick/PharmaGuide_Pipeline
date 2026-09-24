@@ -1207,7 +1207,7 @@
         "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=1045&set=GRASNotices",
         "https://api.ods.od.nih.gov/dsld/v9/label/233404"
       ],
-      "reviewer": "Engineering data review (Claude, 2026-09-24); owner approval pending",
+      "reviewer": "Engineering data review: Claude (2026-09-24); independently verified: Codex",
       "review_date": "2026-09-24",
       "scope": "dsld_id_only",
       "provenance_tag": "official_source_identity_correction"
@@ -1229,7 +1229,7 @@
         "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=1045&set=GRASNotices",
         "https://api.ods.od.nih.gov/dsld/v9/label/233406"
       ],
-      "reviewer": "Engineering data review (Claude, 2026-09-24); owner approval pending",
+      "reviewer": "Engineering data review: Claude (2026-09-24); independently verified: Codex",
       "review_date": "2026-09-24",
       "scope": "dsld_id_only",
       "provenance_tag": "official_source_identity_correction"

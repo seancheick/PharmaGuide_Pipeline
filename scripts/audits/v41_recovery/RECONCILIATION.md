@@ -127,7 +127,7 @@ recency, scope and stacking).
 | 7b031050 | B3 | safety gate records whether its ingredient assessment completed; fact fields only |
 | 5c9996f4 | A10 A12 B2 B9 (fact only) | Production A/B on a 2,507-label affected cohort (35 brands, 7 routes): 159 score changes (128 up, 31 down, each decrease read against its label), 53 route changes (the 51 reviewed fiber -> generic + the 2 FiberSMART quarantines), 26 verdict changes (12 reviewed route, 12 POOR -> SAFE daily exposure, 2 FiberSMART), 0 safety changes. Oat Bran identity kept (UNII + literal; reviewed oat_generic > oat_bran). Unresolved quantity columns fail completeness. Creatine loading up to 20 g/day via has_loading_protocol. Min/max shadow reported, policy unchanged. Full receipt: quality_redesign/TASK2.md |
 | de63b205 | tooling | A/B harness records route, eligibility, identity, exposure; comparator buckets; tooling only |
-| da8a572b | data (/data-fix) | FiberSMART 233404/233406: resistant dextrin (GRN 1045), no equivalent canonical; label corrections make it the unmapped active, both NOT_SCORED; owner approval pending |
+| da8a572b | data (/data-fix) | FiberSMART 233404/233406: resistant dextrin (GRN 1045), no equivalent canonical; label corrections make it the unmapped active, both NOT_SCORED; approved on the evidence (engineering review: Claude; independently verified: Codex) |
 
 ## Tracked follow-ups (from Task 2)
 
