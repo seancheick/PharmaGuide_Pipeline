@@ -122,3 +122,7 @@ recency, scope and stacking).
 | cdacec15 | A9 | focused unit tests plus 787 unit/threshold tests |
 | 0374508d | A6 | real labels main -> v41: 299069 77.7 -> 78.5; 228355 unchanged; 311646 86.6 -> 74.6 (Dose 20 -> 8) |
 | 8722ebc9 | A5 | 331488 and 12012 now carry the vitamin A pregnancy/TTC rule; 395 products gain it in the regenerated corpus; profile-gated warnings only |
+| c9634ec0 | B5 | systemic-failure guard + no-shadowed-definitions test; no score path |
+| c3ad0955 | B1 | replay/regenerate tooling and reference cases; tooling only |
+| 7b031050 | B3 | safety gate records whether its ingredient assessment completed; fact fields only |
+| e46897f5 | A10 A12 B2 | 5,289 labels (BulkSupplements, Legion, Nature's Way, Double Wood): 40 score changes (34 up, 6 down, mean +5.6). Daily exposure: 331143 inulin Dose 7.2 -> 16.0, 312819 HMB 3.5 -> 12.8. Honest fiber identity: 287495 Dose 12.0 -> 7.2 (label fiber 1 g x2, main summed carbohydrate + fiber + blend), SAFE -> POOR. 293400 SAFE -> POOR on Formulation -1.4: 'Oat Bran'/'Fiber (unspecified)' rows lack a fiber identity (mapping follow-up). The redesign's "qualified amount or unstated frequency zeroes Dose" was NOT ported (it flipped four cleanse kits); Dose benchmarks the stated amount, qualifier kept as provenance |
