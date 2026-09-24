@@ -171,6 +171,11 @@ class SafetyResult:
     quarantine_required: bool = False
     quarantine_reason: Optional[str] = None
     review_records: List[Dict[str, Any]] = field(default_factory=list)
+    # Internal factual completion for the inactive Hygiene evaluator. These
+    # facts never alter gate verdicts or existing public warning projections.
+    ingredient_assessment_complete: bool = False
+    ingredient_assessment_errors: List[str] = field(default_factory=list)
+    ingredient_concerns: List[SafetySignal] = field(default_factory=list)
 
 
 # NOTE: match-type → trust mapping moved to the SafetySignal v1 kernel
@@ -438,12 +443,19 @@ def _policy_verification_status_for_role(
     return _norm(entry.get("policy_verification_status"))
 
 
+def _append_ingredient_concern(result: SafetyResult, signal: SafetySignal) -> None:
+    """Record only facts surviving the canonical gate's policy exemptions."""
+    if signal not in result.ingredient_concerns:
+        result.ingredient_concerns.append(signal)
+
+
 def _append_policy_review(
     result: SafetyResult,
     signal: SafetySignal,
     entry: Dict[str, Any],
     missing_requirements: List[str],
 ) -> None:
+    _append_ingredient_concern(result, signal)
     rule_id = safety_rule_id_or_unresolved(entry.get("id"), signal.entry_id)
     substance = str(
         entry.get("standard_name")
@@ -642,7 +654,9 @@ def _ingredient_safety_terms(
     return raw_name, standard_name, extra
 
 
-def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+def _iter_resolver_safety_hits(
+    product: Dict[str, Any], *, errors: Optional[List[str]] = None,
+) -> List[Dict[str, Any]]:
     """Return banned_recalled resolver hits from active + inactive rows.
 
     v3/final DB already use the unified inactive resolver to close the gap
@@ -652,7 +666,11 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
     try:
         resolver = _inactive_resolver()
+        if errors is not None:
+            errors.extend(getattr(resolver, 'initialization_errors', ()))
     except Exception:
+        if errors is not None:
+            errors.append("safety_resolver_unavailable")
         return []
 
     hits: List[Dict[str, Any]] = []
@@ -660,7 +678,7 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
         ("activeIngredients", "active"),
         ("inactiveIngredients", "inactive"),
     ):
-        for ingredient in _safe_list((product or {}).get(source_key)):
+        for index, ingredient in enumerate(_safe_list((product or {}).get(source_key))):
             if not isinstance(ingredient, dict):
                 continue
             raw_name, standard_name, extra_terms = _ingredient_safety_terms(ingredient)
@@ -691,6 +709,8 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
                     role=role,
                 )
             except Exception:
+                if errors is not None:
+                    errors.append(f"safety_resolver_failed:{source_key}[{index}]")
                 continue
             if resolution.matched_source != SOURCE_BANNED_RECALLED:
                 continue
@@ -764,7 +784,9 @@ def _clean_label_candidate_terms(
     return terms
 
 
-def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+def _iter_resolver_clean_label_hits(
+    product: Dict[str, Any], *, errors: Optional[List[str]] = None,
+) -> List[Dict[str, Any]]:
     """Collect clean-label additive concerns (e.g. titanium dioxide / E171).
 
     A SEPARATE pass from `_iter_resolver_safety_hits` on purpose: clean-label
@@ -780,7 +802,11 @@ def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, A
     """
     try:
         resolver = _inactive_resolver()
+        if errors is not None:
+            errors.extend(getattr(resolver, 'initialization_errors', ()))
     except Exception:
+        if errors is not None:
+            errors.append("clean_label_resolver_unavailable")
         return []
 
     hits: List[Dict[str, Any]] = []
@@ -789,14 +815,11 @@ def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, A
         ("activeIngredients", "active"),
         ("inactiveIngredients", "inactive"),
     ):
-        for ingredient in _safe_list((product or {}).get(source_key)):
+        for index, ingredient in enumerate(_safe_list((product or {}).get(source_key))):
             if not isinstance(ingredient, dict):
                 continue
             for raw_name, standard_name in _clean_label_candidate_terms(
-                ingredient,
-                role=role,
-                product=product,
-                resolver=resolver,
+                ingredient, role=role, product=product, resolver=resolver,
             ):
                 try:
                     resolution = resolver.resolve(
@@ -804,6 +827,8 @@ def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, A
                         standard_name=standard_name,
                     )
                 except Exception:
+                    if errors is not None:
+                        errors.append(f"clean_label_resolver_failed:{source_key}[{index}]")
                     continue
                 if not resolution.is_clean_label_concern:
                     continue
@@ -1047,6 +1072,7 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
         return
 
     if sig.review_required:
+        _append_ingredient_concern(result, sig)
         result.needs_review = True
         return
 
@@ -1055,6 +1081,8 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
         if status:
             _append_signal(result, f"B0_LOWCONF_{status.upper()}")
         return
+
+    _append_ingredient_concern(result, sig)
 
     # policy_eligible == confirmed or likely from here.
     #
@@ -1179,6 +1207,17 @@ def evaluate_safety_gate(
         return SafetyResult()
 
     result = SafetyResult()
+    # Missing capture is not a clean label. Explicit empty inactives are valid;
+    # an empty active panel cannot establish an assessable supplement identity.
+    for source_key in ('activeIngredients', 'inactiveIngredients'):
+        rows = product.get(source_key)
+        if (not isinstance(rows, list)
+                or source_key == 'activeIngredients' and not rows):
+            result.ingredient_assessment_errors.append('capture_unavailable:' + source_key)
+            continue
+        for index, row in enumerate(rows):
+            if not isinstance(row, dict) or not _ingredient_name_terms(row)[0].strip():
+                result.ingredient_assessment_errors.append(f'capture_unavailable:{source_key}[{index}]')
     if dose_safety is None:
         policy = _quality_config_block("dose_safety_policy", "ul_pct_threshold")
         dose_safety = resolve_dose_safety(
@@ -1194,7 +1233,7 @@ def evaluate_safety_gate(
     # (match_resolution, status) and never sees a raw match_type.
     signals = normalize_safety_signals(
         product,
-        resolver_hits=_iter_resolver_safety_hits(product),
+        resolver_hits=_iter_resolver_safety_hits(product, errors=result.ingredient_assessment_errors),
     )
     for raw_signal in signals:
         entry = _rule_for_signal(raw_signal)
@@ -1306,7 +1345,10 @@ def evaluate_safety_gate(
     # Clean-label additive flags (e.g. titanium dioxide). Collected on a
     # SEPARATE lane that never touches the verdict — inform + small graduated
     # penalty, applied later by the six-pillar quality_score. Verdict-independent.
-    result.clean_label_hits = _iter_resolver_clean_label_hits(product)
+    result.clean_label_hits = _iter_resolver_clean_label_hits(
+        product, errors=result.ingredient_assessment_errors)
+    result.ingredient_assessment_errors = list(dict.fromkeys(result.ingredient_assessment_errors))
+    result.ingredient_assessment_complete = not result.ingredient_assessment_errors
 
     # short_circuits_scoring is purely a function of verdict severity.
     result.short_circuits_scoring = result.verdict in {"BLOCKED", "UNSAFE"}

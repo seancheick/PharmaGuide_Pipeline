@@ -455,6 +455,10 @@ class InactiveIngredientResolver:
         self._iqm_path = ingredient_quality_map_path or d / "ingredient_quality_map.json"
         self._clean_label_path = clean_label_policy_path or d / "clean_label_policy.json"
 
+        # Optional source failures remain observable even though matching keeps
+        # its established fallback behavior. Consumers cannot infer completion
+        # from an empty index after a failed read.
+        self.initialization_errors: tuple[str, ...] = ()
         self._banned_entries: list[dict] = []
         self._harmful_entries: list[dict] = []
         self._other_entries: list[dict] = []
@@ -546,6 +550,7 @@ class InactiveIngredientResolver:
         try:
             clean_label = _load_json(self._clean_label_path).get("policies") or []
         except (OSError, ValueError):
+            self.initialization_errors += ("clean_label_policy_unavailable",)
             clean_label = []
         for entry in clean_label:
             if not isinstance(entry, dict):
@@ -567,6 +572,7 @@ class InactiveIngredientResolver:
         try:
             iqm = _load_json(self._iqm_path)
         except (OSError, ValueError):
+            self.initialization_errors += ("ingredient_quality_map_unavailable",)
             iqm = {}
         for parent_key, parent in iqm.items():
             if parent_key.startswith("_") or not isinstance(parent, dict):
