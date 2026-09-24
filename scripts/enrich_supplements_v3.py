@@ -8662,8 +8662,10 @@ class SupplementEnricherV3:
         )
         # Store an isolated copy (defends against any impl-side aliasing) and
         # hand every caller its own isolated copy — the cache entry is immutable.
+        # Also when other declared forms matched: 228355 matched beta-carotene
+        # while alpha-carotene and cryptoxanthin fell to the parent tier.
         if (result and not _form_extraction_attempt and cleaned_forms
-                and not result.get('matched_forms') and not result.get('unmapped_forms')):
+                and not result.get('unmapped_forms')):
             unresolved = self._unresolved_form_tokens(
                 ing_name, cleaned_forms, quality_map, result.get('canonical_id'))
             if unresolved:
@@ -8689,6 +8691,12 @@ class SupplementEnricherV3:
         unresolved = []
         for form_data in (form_info or {}).get('extracted_forms', []):
             if self._is_dsld_source_descriptor_form(form_data):
+                continue
+            prefix = (form_data.get('dsld_prefix') or '').lower().strip()
+            category = (form_data.get('dsld_category') or '').lower().strip()
+            if prefix == 'from culture of' or category == 'tbd':
+                # A culture source ("from culture of S. cerevisiae") or a DSLD
+                # placeholder ("DELETE", category TBD) names no form.
                 continue
             tiers = []
             for candidate in form_data.get('match_candidates', []):

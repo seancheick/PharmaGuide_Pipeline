@@ -775,3 +775,39 @@ def test_trace_mineral_generic_names_live_on_the_unspecified_form(iqm_data, pare
     forms = iqm_data[parent]['forms']
     assert not {a.lower() for a in forms[form]['aliases']} & names
     assert names <= {a.lower() for a in forms[unspecified]['aliases']}
+
+
+def _vitamin_a_row(forms):
+    # Cleaned-row shape of DSLD 228355's "Mixed Carotenoids" vitamin A line.
+    row = {"name": "Mixed Carotenoids", "standardName": "Vitamin A", "canonical_id": "vitamin_a",
+           "canonical_source_db": "ingredient_quality_map", "mapped": True, "quantity": 1000.0, "unit": "mcg RAE",
+           "dailyValue": 111.0, "raw_source_text": "Mixed Carotenoids", "raw_source_path": "ingredientRows[3]",
+           "source_section": "active", "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
+           "dose_class": "therapeutic_mass", "ingredientGroup": "Vitamin A", "raw_category": "vitamin",
+           "hierarchyType": None, "order": 1,
+           "forms": [{"name": n, "order": i + 1, "prefix": p, "percent": None, "category": c, "ingredientGroup": None,
+                      "uniiCode": None} for i, (n, p, c) in enumerate(forms)]}
+    return {"id": "TEST_CAROTENOIDS", "product_name": "Test Carotenoids", "activeIngredients": [row]}
+
+
+def test_partially_matched_row_still_records_its_unresolved_declared_forms(enricher):
+    # 228355: beta-carotene matched, but alpha-carotene and cryptoxanthin (other
+    # provitamin A contributors) fell to the parent tier. They must be recorded,
+    # or the row reads as pure beta-carotene.
+    enriched, _ = enricher.enrich_product(_vitamin_a_row([
+        ('Alpha-Carotene', None, 'non-nutrient/non-botanical'), ('Beta-Carotene', 'and', 'vitamin'),
+        ('Cryptoxanthin', None, 'non-nutrient/non-botanical')]))
+    row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
+               if r.get('canonical_id') == 'vitamin_a')
+    assert {'Alpha-Carotene', 'Cryptoxanthin'} <= set(row.get('unresolved_form_tokens') or [])
+
+
+@pytest.mark.parametrize('extra', [
+    ('S. cerevisiae', 'from culture of ', 'other'),   # 236745: culture source, prefix with a trailing space
+    ('DELETE', None, 'TBD'),                           # 214142: DSLD placeholder, not a form
+])
+def test_culture_sources_and_dsld_placeholders_are_not_unresolved_forms(enricher, extra):
+    enriched, _ = enricher.enrich_product(_vitamin_a_row([('Beta-Carotene', 'as', 'vitamin'), extra]))
+    row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
+               if r.get('canonical_id') == 'vitamin_a')
+    assert extra[0] not in (row.get('unresolved_form_tokens') or [])
