@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-09-23",
-    "total_entries": 53,
+    "last_updated": "2026-09-24",
+    "total_entries": 55,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -1189,6 +1189,50 @@
       "review_date": "2026-09-23",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
+    },
+    "233404": {
+      "brand": "Life Extension",
+      "product_name": "Keto Brain and Body Boost Peach Flavor",
+      "raw_ingredient_text": "FiberSmart Resistant Starch",
+      "corrected_ingredient_text": "FiberSmart Resistant Starch",
+      "corrected_category": "fiber",
+      "corrected_ingredient_group": "Resistant Dextrin",
+      "correction_fields": [
+        "category",
+        "ingredientGroup"
+      ],
+      "evidence": "DSLD files this 20 g row as category 'blend' (ingredientGroup 'Proprietary Blend ...') with no nested components and one form ('from Cassava'), so the cleaner treated it as a weight-only blend header and the row never entered mapped coverage. The label prints one branded ingredient, kept here exactly as printed ('FiberSmart Resistant Starch'). Its manufacturer, Anderson Advanced Ingredients, describes FiberSMART as 'a resistant dextrin' (soluble tapioca or corn fiber), not resistant starch. FDA GRAS Notice GRN 1045 (Anderson Global Group; closed Aug 26, 2022, no questions) covers resistant dextrin from tapioca, which matches this label's 'from Cassava' form; it does not establish the manufacturer's corn products. No existing canonical is the same substance, so the row is corrected to the single unmapped resistant-dextrin active it is, and the product stays out of the catalog until a reviewed resistant-dextrin identity exists.",
+      "sources": [
+        "https://www.advancedingredients.com/products/fibersmart",
+        "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=1045&set=GRASNotices",
+        "https://api.ods.od.nih.gov/dsld/v9/label/233404"
+      ],
+      "reviewer": "Engineering data review (Claude, 2026-09-24); owner approval pending",
+      "review_date": "2026-09-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction"
+    },
+    "233406": {
+      "brand": "Life Extension",
+      "product_name": "Keto Brain and Body Boost Peach Flavor",
+      "raw_ingredient_text": "FiberSmart Resistant Starch",
+      "corrected_ingredient_text": "FiberSmart Resistant Starch",
+      "corrected_category": "fiber",
+      "corrected_ingredient_group": "Resistant Dextrin",
+      "correction_fields": [
+        "category",
+        "ingredientGroup"
+      ],
+      "evidence": "DSLD files this 20 g row as category 'blend' (ingredientGroup 'Proprietary Blend ...') with no nested components and one form ('from Cassava'), so the cleaner treated it as a weight-only blend header and the row never entered mapped coverage. The label prints one branded ingredient, kept here exactly as printed ('FiberSmart Resistant Starch'). Its manufacturer, Anderson Advanced Ingredients, describes FiberSMART as 'a resistant dextrin' (soluble tapioca or corn fiber), not resistant starch. FDA GRAS Notice GRN 1045 (Anderson Global Group; closed Aug 26, 2022, no questions) covers resistant dextrin from tapioca, which matches this label's 'from Cassava' form; it does not establish the manufacturer's corn products. No existing canonical is the same substance, so the row is corrected to the single unmapped resistant-dextrin active it is, and the product stays out of the catalog until a reviewed resistant-dextrin identity exists.",
+      "sources": [
+        "https://www.advancedingredients.com/products/fibersmart",
+        "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=1045&set=GRASNotices",
+        "https://api.ods.od.nih.gov/dsld/v9/label/233406"
+      ],
+      "reviewer": "Engineering data review (Claude, 2026-09-24); owner approval pending",
+      "review_date": "2026-09-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction"
     }
   }
 }
