@@ -4737,7 +4737,10 @@ class EnhancedDSLDNormalizer:
         column. Those rows are alternatives, not additive ingredients. Merge
         only exact identity matches with disjoint serving contexts, and leave
         the immutable display-source ledger untouched so every printed amount
-        remains available to the final Label view.
+        remains available to the final Label view. A column can repeat a whole
+        block (Total Omega-3 with its EPA and DHA rows, DSLD 224615 and
+        206295); such blocks merge node by node when every row matches and
+        every row's serving context differs.
         """
 
         def normalized_text(value: Any) -> str:
@@ -4773,11 +4776,15 @@ class EnhancedDSLDNormalizer:
             )
 
         def identity_key(row: Dict[str, Any]) -> Optional[tuple]:
-            if row.get("nestedRows"):
-                return None
             name = normalized_text(row.get("name"))
             if not name:
                 return None
+            children = []
+            for child in row.get("nestedRows") or []:
+                child_key = identity_key(child) if isinstance(child, dict) else None
+                if child_key is None:
+                    return None
+                children.append(child_key)
             return (
                 name,
                 normalized_text(row.get("ingredientGroup")),
@@ -4786,7 +4793,13 @@ class EnhancedDSLDNormalizer:
                 normalized_text(row.get("uniiCode")),
                 tuple(sorted(normalized_text(v) for v in row.get("alternateNames") or [])),
                 form_signature(row),
+                tuple(children),
             )
+
+        def subtree(row: Dict[str, Any]) -> List[Dict[str, Any]]:
+            return [row] + [
+                node for child in row.get("nestedRows") or [] for node in subtree(child)
+            ]
 
         for row in ingredient_rows:
             nested = row.get("nestedRows") if isinstance(row, dict) else None
@@ -4800,12 +4813,10 @@ class EnhancedDSLDNormalizer:
             if not isinstance(row, dict):
                 continue
             key = identity_key(row)
-            quantities = quantity_rows(row)
-            contexts = [serving_context(quantity) for quantity in quantities]
-            if (
-                key is None
-                or not quantities
-                or any(context is None for context in contexts)
+            if key is None or not all(
+                quantity_rows(node)
+                and all(serving_context(quantity) is not None for quantity in quantity_rows(node))
+                for node in subtree(row)
             ):
                 continue
             groups.setdefault(key, []).append(row)
@@ -4814,19 +4825,20 @@ class EnhancedDSLDNormalizer:
         for alternatives in groups.values():
             if len(alternatives) < 2:
                 continue
-            contexts = [
-                serving_context(quantity)
-                for row in alternatives
-                for quantity in quantity_rows(row)
-            ]
-            if len(contexts) != len(set(contexts)):
+            aligned = list(zip(*(subtree(row) for row in alternatives)))
+            if any(
+                len(contexts) != len(set(contexts))
+                for contexts in (
+                    [serving_context(q) for node in nodes for q in quantity_rows(node)]
+                    for nodes in aligned
+                )
+            ):
                 continue
+            for nodes in aligned:
+                nodes[0]["quantity"] = [
+                    quantity for node in nodes for quantity in quantity_rows(node)
+                ]
             owner = alternatives[0]
-            owner["quantity"] = [
-                quantity
-                for row in alternatives
-                for quantity in quantity_rows(row)
-            ]
             merged_ids.update(id(row) for row in alternatives[1:])
             logger.info(
                 "Merged %d alternate serving row(s) for '%s'",
