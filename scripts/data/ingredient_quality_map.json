@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 652,
       "total_forms": 1444,
-      "total_form_aliases": 12145,
+      "total_form_aliases": 12146,
       "parents_with_parent_aliases": 138,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -47089,7 +47089,8 @@
           "nigella sativa oil",
           "black cumin oil",
           "kalonji oil",
-          "habbatus sauda oil"
+          "habbatus sauda oil",
+          "nigella sativa seed oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
