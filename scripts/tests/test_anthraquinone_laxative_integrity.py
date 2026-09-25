@@ -230,3 +230,36 @@ def test_frangula_labels_match_exactly(enricher, label):
 )
 def test_ambiguous_buckthorn_labels_do_not_match_frangula(enricher, label):
     assert not _matches(enricher, label, "WATCH_FRANGULA"), label
+
+
+# --- Rhubarb root, Rheum palmatum / officinale (EU Annex III Part C; EFSA 2024) ---
+
+def test_rhubarb_root_is_a_watchlist_entry_with_verified_identity():
+    entry = BANNED["WATCH_RHUBARB_ROOT"]
+    assert entry["status"] == "watchlist"
+    assert entry["external_ids"]["unii"] == "G025DAL7CE"  # GSRS CHINESE RHUBARB ROOT (RHEUM PALMATUM)
+    assert entry["cui"] == "C1090801"  # UMLS Rheum palmatum
+    # 21 CFR 172.510 lists rhubarb root (R. officinale, R. palmatum) as a natural flavoring.
+    assert entry["inactive_policy"] == "excipient_acceptable"
+
+
+@pytest.mark.parametrize(
+    "label",
+    ["Turkey Rhubarb", "Turkey Rhubarb extract", "Turkey Rhubarb Root Extract", "Rhubarb Root Extract",
+     "Rheum palmatum root", "Chinese rhubarb root", "Da huang"],
+)
+def test_rhubarb_root_labels_match_exactly(enricher, label):
+    hits = _matches(enricher, label, "WATCH_RHUBARB_ROOT")
+    assert hits, f"{label!r} should match WATCH_RHUBARB_ROOT"
+    assert hits[0]["match_type"] in {"exact", "alias"}
+
+
+@pytest.mark.parametrize(
+    "label",
+    # Rheum rhaponticum (ERr 731) is outside the EU Part C entry; bare "rhubarb"
+    # can be the food stalk.
+    ["ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract", "Siberian rhubarb", "organic Rhubarb",
+     "Rhubarb", "Rhubarb leaf"],
+)
+def test_other_rhubarb_labels_do_not_match(enricher, label):
+    assert not _matches(enricher, label, "WATCH_RHUBARB_ROOT"), label

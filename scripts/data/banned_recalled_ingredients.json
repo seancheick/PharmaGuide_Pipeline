@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
     "last_updated": "2026-09-25",
-    "total_entries": 181,
+    "total_entries": 182,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -15746,6 +15746,159 @@
       "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Talk to your doctor first.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "21 CFR 172.510 does not list frangula or buckthorn as a natural flavoring substance, and frangula bark is a stimulant laxative, so an inactive-panel listing is a hidden active.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "WATCH_RHUBARB_ROOT",
+      "standard_name": "Rhubarb Root (Rheum palmatum / Rheum officinale)",
+      "aliases": [
+        "turkey rhubarb",
+        "turkey rhubarb root",
+        "turkey rhubarb extract",
+        "turkey rhubarb root extract",
+        "chinese rhubarb",
+        "chinese rhubarb root",
+        "chinese rhubarb root extract",
+        "rhubarb root",
+        "rhubarb root extract",
+        "rhubarb root powder",
+        "rheum palmatum",
+        "rheum palmatum root",
+        "rheum palmatum root extract",
+        "rheum palmatum rhizome",
+        "rheum officinale",
+        "rheum officinale root",
+        "da huang",
+        "dahuang",
+        "rhei radix",
+        "rhei radix et rhizoma"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "watchlist",
+      "reason": "Rhubarb root (Rheum palmatum, Rheum officinale and their hybrids) is a stimulant laxative containing hydroxyanthracene derivatives. The EU keeps root or rhizome preparations containing them under Union scrutiny (Regulation (EU) 2021/468, Annex III Part C), and EFSA (2024) found that their safety cannot be established because the tested preparations contained a compound genotoxic in vivo. EFSA (2018) concluded that hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless shown otherwise. The EU herbal monograph contraindicates rhubarb root in pregnancy, breastfeeding, inflammatory colon disease and children under 12. Siberian rhubarb (Rheum rhaponticum, e.g. ERr 731) is a different species outside this entry. The catalog flags a confirmed supplement match for caution.",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Rhubarb Root",
+        "negative_match_terms": [
+          "rhaponticum",
+          "siberian rhubarb",
+          "err 731",
+          "garden rhubarb",
+          "rhubarb leaf",
+          "rhubarb stalk"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2020-05-06",
+          "source": {
+            "type": "ema_monograph",
+            "citation": "European Union herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix (EMA/HMPC/113700/2019, Revision 1)",
+            "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rheum-palmatum-l-and-rheum-officinale-baillon-radix-revision-1_en.pdf",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part C (Union scrutiny) to Regulation (EC) No 1925/2006: preparations from the root or rhizome of Rheum palmatum L., Rheum officinale Baillon and their hybrids containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Under Union scrutiny since 2021-04-08. EFSA's 2024 opinion on the data submitted during scrutiny found that safety cannot be established. The General Court judgment in T-189/21 annulled only the Aloe-leaf Part A entry, not this Part C entry.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EMA",
+          "citation": "European Union herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix (EMA/HMPC/113700/2019, Revision 1), adopted 6 May 2020",
+          "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rheum-palmatum-l-and-rheum-officinale-baillon-radix-revision-1_en.pdf",
+          "published_date": "2020-05-06",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EU herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix - Revision 1",
+          "evidence_summary": "Contraindicated in pregnancy (genotoxic risk of anthranoids such as emodin and aloe-emodin), lactation, inflammatory colon disease and children under 12; hypokalaemia potentiates cardiac glycosides, and diuretics, corticosteroids and liquorice enhance potassium loss."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Scientific Opinion on additional scientific data related to the safety of preparations of Rheum palmatum L., Rheum officinale Baill. and their hybrids, Rhamnus purshiana DC., Rhamnus frangula L. and Cassia senna L., submitted pursuant to Article 8(4) of Regulation (EC) No 1925/2006",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny",
+          "evidence_summary": "The tested preparations contained a compound genotoxic in vivo and must be considered of concern for genotoxicity; the safety of Rheum palmatum and Rheum officinale root or rhizome preparations containing hydroxyanthracene derivatives cannot be established."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise; no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Places preparations from the root or rhizome of Rheum palmatum L., Rheum officinale Baillon and their hybrids containing hydroxyanthracene derivatives in Annex III Part C (Union scrutiny) of Regulation (EC) No 1925/2006."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Turkey and Chinese rhubarb root products (e.g. dsld 294519, 291221) matched no safety entry and shipped SAFE. Identity: GSRS G025DAL7CE (CHINESE RHUBARB ROOT, RHEUM PALMATUM); UMLS C1090801 Rheum palmatum; Rheum officinale root (GSRS A47JP5ZG9M) is covered by aliases under the same EU entry. Bare 'rhubarb' is not aliased because it can be the food stalk.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C1090801",
+      "external_ids": {
+        "unii": "G025DAL7CE"
+      },
+      "ban_context": "watchlist",
+      "safety_warning": "Stimulant laxative root meant for short-term use. EFSA could not establish its safety because of genotoxicity concerns. Talk to your doctor before regular use.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Talk to your doctor first.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists rhubarb root (Rheum officinale, R. palmatum or other Rheum species except R. rhaponticum) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
       "inactive_policy_reviewed_on": "2026-09-25"
     },
     {

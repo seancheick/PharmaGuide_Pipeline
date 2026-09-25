@@ -338,6 +338,7 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
         # Senna: same owner rule; moved from harmful_additives (ADD_SENNA).
         ("senna", "WATCH_SENNA"),
         ("frangula", "WATCH_FRANGULA"),
+        ("chinese_rhubarb", "WATCH_RHUBARB_ROOT"),
         # DHEA parent: legal in US under DSHEA (IQM scores it as an active),
         # prescription-only in Canada/UK/Australia and WADA-banned in sport
         # (banned_recalled high_risk status drives the safety gate). Same
