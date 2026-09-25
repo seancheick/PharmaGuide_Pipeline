@@ -209,7 +209,7 @@ Affected cohort (`~/pg_quality/calib/uf_cohort.py`): 1,323 frozen products with 
 
 ## Architecture ownership fixes (2026-09-24)
 
-Detached from `v41-recovery` `4cf582b1`. Not a scoring-policy change. No catalog replay. The focused owner suites passed 114 tests. The post-review fast run passed 16,333 tests and skipped 172; its only failure was an existing test invoking a missing literal `python` executable. That test passed 7/7 when the pinned project interpreter was present on `PATH`.
+Detached from `v41-recovery` `4cf582b1`. Not a scoring-policy change. Integrated 2026-09-25 by cherry-pick onto `56314f5c` as `4233181d` (cert) and `40efe44d` (UL), no conflicts: fast suite 16,259 passed; the 1,323-product unknown-form cohort re-enriched and scored on the integrated tree is byte-identical to the `56314f5c` arm (8283c24391cc670e). No catalog replay. The focused owner suites passed 114 tests. The post-review fast run passed 16,333 tests and skipped 172; its only failure was an existing test invoking a missing literal `python` executable. That test passed 7/7 when the pinned project interpreter was present on `PATH`.
 
 | Commit | Defect reproduced | Canonical owner | Tests | Measured output |
 |---|---|---|---|---|
