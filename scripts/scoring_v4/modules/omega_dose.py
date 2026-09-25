@@ -170,8 +170,17 @@ def score_dose(product: Any) -> Dict[str, Any]:
     per_day_max = total_per_serving * max_daily
     per_day_mid = (per_day_min + per_day_max) / 2.0
 
-    band_score, band_label, band_flag = _band_score(per_day_mid, bands)
-    band_score = min(band_score, band_cap)
+    # Score the directed interval itself.  Applying a nonlinear band function
+    # to its midpoint can grant full credit even when the minimum permitted
+    # regimen is below the reviewed target.  Averaging the two endpoint scores
+    # preserves both instructions and gives partial credit when the interval
+    # crosses a band.
+    minimum_score, minimum_label, minimum_flag = _band_score(per_day_min, bands)
+    maximum_score, maximum_label, maximum_flag = _band_score(per_day_max, bands)
+    band_score = min((minimum_score + maximum_score) / 2.0, band_cap)
+    band_label = minimum_label if minimum_label == maximum_label else f"{minimum_label}_to_{maximum_label}"
+    band_flag = minimum_flag or maximum_flag
+    interval_crosses_band = minimum_label != maximum_label
 
     # Indication-aware: a prenatal, DHA-dominant product is scored against the
     # prenatal DHA target (EFSA/ACOG ~200 mg DHA/day), not the general EPA+DHA
@@ -181,13 +190,21 @@ def score_dose(product: Any) -> Dict[str, Any]:
     prenatal_dha = bool(PRENATAL_TITLE_RE.search(name_text)) and dha_ps >= epa_ps and dha_ps > 0
     indication_label: Optional[str] = None
     if prenatal_dha:
-        dha_per_day = dha_ps * ((min_daily + max_daily) / 2.0)
-        if dha_per_day >= PRENATAL_DHA_TARGET_MG:
-            ind_score, indication_label = _PRENATAL_DHA_WITHIN, "prenatal_dha_within_target"
-        elif dha_per_day >= PRENATAL_DHA_TARGET_MG * 0.5:
-            ind_score, indication_label = _PRENATAL_DHA_NEAR, "prenatal_dha_near_target"
-        else:
-            ind_score, indication_label = _PRENATAL_DHA_BELOW, "prenatal_dha_below_target"
+        def prenatal_score(dha_per_day: float) -> Tuple[float, str]:
+            if dha_per_day >= PRENATAL_DHA_TARGET_MG:
+                return _PRENATAL_DHA_WITHIN, "prenatal_dha_within_target"
+            if dha_per_day >= PRENATAL_DHA_TARGET_MG * 0.5:
+                return _PRENATAL_DHA_NEAR, "prenatal_dha_near_target"
+            return _PRENATAL_DHA_BELOW, "prenatal_dha_below_target"
+
+        prenatal_min_score, prenatal_min_label = prenatal_score(dha_ps * min_daily)
+        prenatal_max_score, prenatal_max_label = prenatal_score(dha_ps * max_daily)
+        ind_score = (prenatal_min_score + prenatal_max_score) / 2.0
+        indication_label = (
+            prenatal_min_label
+            if prenatal_min_label == prenatal_max_label
+            else f"{prenatal_min_label}_to_{prenatal_max_label}"
+        )
         ind_score = min(ind_score, band_cap)
         if ind_score > band_score:
             band_score, band_label = ind_score, indication_label
@@ -214,6 +231,9 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "per_day_max_mg": round(per_day_max, 2),
         "epa_dha_band_label": band_label,
         "epa_dha_band_flag": band_flag,
+        "interval_crosses_band": interval_crosses_band,
+        "minimum_band_score": round(minimum_score, 2),
+        "maximum_band_score": round(maximum_score, 2),
         "raw_score": round(raw_score, 4),
         "cap_applied": raw_score > CAP_DOSE,
     }

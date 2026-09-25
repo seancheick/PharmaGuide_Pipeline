@@ -174,6 +174,98 @@ class ProductEvidenceResolution:
     owner_contributions: Dict[str, int]
 
 
+def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any]:
+    """Resolve the reviewed omega purpose record against directed exposure.
+
+    The evidence registry owns the available records and their scores.  The
+    shared serving-frequency contract owns the daily interval.  This function
+    only joins those facts; it does not award Dose credit or infer EPA/DHA from
+    carrier-oil mass.
+    """
+    from scoring_input_contract import (
+        PRENATAL_TITLE_RE,
+        epa_dha_amounts_per_serving,
+    )
+    from serving_frequency import resolve_daily_serving_range
+
+    prod = dict(product or {})
+    record = next(
+        (entry for entry in _load_backed_studies() if entry.get("id") == "INGR_OMEGA3"),
+        None,
+    )
+    standards = {
+        str(item.get("id")): item
+        for item in (record or {}).get("purpose_evidence", [])
+        if isinstance(item, dict) and item.get("id")
+    }
+    required = {
+        "omega_reviewed_weak",
+        "triglyceride_strong",
+        "prenatal_dha_intake_authority",
+    }
+    missing = sorted(required - standards.keys())
+    if missing:
+        raise ValueError(f"INGR_OMEGA3 purpose evidence is incomplete: {missing}")
+
+    epa_ps, dha_ps, combined_ps = epa_dha_amounts_per_serving(prod)
+    total_ps = max(epa_ps + dha_ps, combined_ps)
+    servings_min, servings_max, defaulted = resolve_daily_serving_range(prod)
+    minimum = total_ps * servings_min if total_ps > 0 else 0.0
+    maximum = total_ps * servings_max if total_ps > 0 else 0.0
+    dha_minimum = dha_ps * servings_min if dha_ps > 0 else 0.0
+    title = " ".join(
+        str(prod.get(key) or "")
+        for key in ("product_name", "fullName", "brand_name", "brandName")
+    )
+    prenatal = bool(PRENATAL_TITLE_RE.search(title))
+
+    weak = standards["omega_reviewed_weak"]
+    strong = standards["triglyceride_strong"]
+    prenatal_intake = standards["prenatal_dha_intake_authority"]
+    weak_score = float(weak["pillar_score"])
+    strong_score = float(strong["pillar_score"])
+    strong_minimum = float(strong["minimum_daily_epa_dha_mg"])
+    graduated_minimum = float(strong["graduated_from_daily_epa_dha_mg"])
+
+    selected = weak
+    score = weak_score if minimum > 0 else 0.0
+    qualified = bool(defaulted)
+    if prenatal:
+        if dha_minimum >= float(prenatal_intake["minimum_daily_dha_mg"]):
+            selected = prenatal_intake
+            score = float(prenatal_intake["pillar_score"])
+        else:
+            score = 0.0
+    elif minimum >= strong_minimum:
+        selected = strong
+        score = strong_score
+    elif minimum >= graduated_minimum:
+        selected = strong
+        fraction = (minimum - graduated_minimum) / (strong_minimum - graduated_minimum)
+        score = weak_score + fraction * (strong_score - weak_score)
+        qualified = True
+
+    if maximum >= strong_minimum > minimum:
+        qualified = True
+
+    return {
+        "score": round(score, 4),
+        "record_id": selected.get("id") if score > 0 else None,
+        "record_source_pmids": list(selected.get("source_pmids") or []) if score > 0 else [],
+        "minimum_daily_epa_dha_mg": round(minimum, 4),
+        "maximum_daily_epa_dha_mg": round(maximum, 4),
+        "minimum_daily_dha_mg": round(dha_minimum, 4),
+        "servings_defaulted": bool(defaulted),
+        "applicability_qualified": qualified,
+        "prenatal": prenatal,
+        # The reviewed outcome evidence is population-dependent (notably
+        # baseline DHA status), which a product label cannot establish.  It is
+        # retained in the registry but cannot alter a fixed product-quality
+        # score.
+        "prenatal_outcome_credit_awarded": False,
+    }
+
+
 def _norm(val: Any) -> str:
     return str(val or "").strip().lower()
 

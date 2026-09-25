@@ -39,8 +39,7 @@ from __future__ import annotations
 from typing import Any, Dict
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
-from scoring_input_contract import PRENATAL_DHA_TARGET_MG, PRENATAL_TITLE_RE, epa_dha_amounts_per_serving
-from scoring_v4.modules.generic_helpers import daily_serving_range
+from evidence_resolver import resolve_omega_evidence_standard
 
 
 PHASE_MARKER = "P1.6.3_omega_evidence"
@@ -66,35 +65,6 @@ def _as_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
-def _compute_per_day_components(product: Dict[str, Any]) -> Dict[str, float]:
-    """Compute per-day midpoint dose components for indication relevance.
-
-    Reuses omega_dose's identical helpers — single source of truth for
-    'how much EPA+DHA does this product deliver per day?' across the
-    omega module.
-    """
-    epa_ps, dha_ps, combined_ps = epa_dha_amounts_per_serving(product)
-    total_per_serving = max(epa_ps + dha_ps, combined_ps)
-    if total_per_serving <= 0:
-        return {"epa": 0.0, "dha": 0.0, "combined": 0.0, "total": 0.0}
-    min_daily, max_daily, _defaulted = daily_serving_range(product)
-    mid_daily = (min_daily + max_daily) / 2.0
-    return {
-        "epa": epa_ps * mid_daily,
-        "dha": dha_ps * mid_daily,
-        "combined": combined_ps * mid_daily,
-        "total": total_per_serving * mid_daily,
-    }
-
-
-def _prenatal_dha_indication_relevant(product: Dict[str, Any], dha_per_day: float) -> bool:
-    name_text = " ".join(
-        str(product.get(key) or "")
-        for key in ("product_name", "fullName", "brand_name", "brandName")
-    )
-    return bool(PRENATAL_TITLE_RE.search(name_text)) and dha_per_day >= PRENATAL_DHA_TARGET_MG
-
-
 def score_evidence(product: Any) -> Dict[str, Any]:
     """Score omega-class Evidence dimension."""
     if not isinstance(product, dict):
@@ -103,65 +73,47 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     rubric = _load_rubric()
     ev_cfg = rubric["evidence"]
     total_cap = float(ev_cfg.get("cap", 20) or 20)
-    indication_cfg = ev_cfg.get("indication_relevance", {}) or {}
-    indication_score_max = float(indication_cfg.get("score", 5) or 5)
-    floor_cfg = ev_cfg.get("disclosed_epa_dha_clinical_floor", {}) or {}
-    floor_threshold = float(floor_cfg.get("min_epa_dha_mg_day", 250) or 250)
-    floor_score = float(floor_cfg.get("score", 0) or 0)
-
-    # Clinical evidence sub-cap = total_cap - indication_score_max.
-    # Keeps the dimension cap-additive (15 + 5 = 20) without hardcoding
-    # constants in module-level globals.
-    clinical_sub_cap = max(0.0, total_cap - indication_score_max)
-
-    # 1) Generic multiplicative evidence pipeline.
+    # Keep the generic engine's output for audit continuity.  It no longer
+    # awards omega points: adjunct D3/CoQ10 records and breadth must not own an
+    # omega product's Evidence pillar.
     generic_payload = score_generic_evidence(product)
     raw_generic_score = _as_float(generic_payload.get("score"), 0.0)
-
-    # 2) Indication relevance bonus.
-    per_day = _compute_per_day_components(product)
-    per_day_epa_dha = per_day["total"]
-    class_floor_score = 0.0
-    class_floor_awarded = False
-    if floor_score > 0 and per_day_epa_dha >= floor_threshold:
-        class_floor_score = min(clinical_sub_cap, floor_score)
-        class_floor_awarded = True
-    clinical_score = min(clinical_sub_cap, max(raw_generic_score, class_floor_score))
-
-    indication_reason = "none"
-    # The bare "EPA+DHA >= 1000 mg/day" branch was retired 2026-09-18: a
-    # milligram threshold is a Dose fact, and paying for it here scored the
-    # same fact twice. Only indication-specific applicability remains.
-    if _prenatal_dha_indication_relevant(product, per_day["dha"]):
-        indication_score = indication_score_max
-        indication_reason = "prenatal_dha_target"
-    else:
-        indication_score = 0.0
+    resolved = resolve_omega_evidence_standard(product)
+    clinical_score = min(total_cap, _as_float(resolved.get("score"), 0.0))
 
     components: Dict[str, float] = {}
     if clinical_score > 0:
         components["clinical_evidence"] = round(clinical_score, 2)
-    if indication_score > 0:
-        components["indication_relevance"] = indication_score
-
-    raw_score = clinical_score + indication_score
+    raw_score = clinical_score
     score = max(0.0, min(CAP_EVIDENCE, raw_score))
+
+    per_day_min = _as_float(resolved.get("minimum_daily_epa_dha_mg"), 0.0)
+    per_day_max = _as_float(resolved.get("maximum_daily_epa_dha_mg"), 0.0)
+    per_day_mid = (per_day_min + per_day_max) / 2.0
+    prenatal_authority = resolved.get("record_id") == "prenatal_dha_intake_authority"
 
     metadata: Dict[str, Any] = {
         "phase": PHASE_MARKER,
         "raw_score": round(raw_score, 4),
         "cap_applied": raw_score > CAP_EVIDENCE,
-        "clinical_sub_cap": clinical_sub_cap,
+        "clinical_sub_cap": total_cap,
         "generic_evidence_raw_score": round(raw_generic_score, 4),
-        "disclosed_epa_dha_clinical_floor_score": round(class_floor_score, 4),
-        "disclosed_epa_dha_clinical_floor_awarded": class_floor_awarded,
-        "disclosed_epa_dha_clinical_floor_threshold_mg_day": floor_threshold,
+        "disclosed_epa_dha_clinical_floor_score": 0.0,
+        "disclosed_epa_dha_clinical_floor_awarded": False,
+        "disclosed_epa_dha_clinical_floor_threshold_mg_day": None,
         "clinical_evidence_after_cap": round(clinical_score, 4),
-        "per_day_epa_dha_mg": round(per_day_epa_dha, 2),
-        "per_day_dha_mg": round(per_day["dha"], 2),
-        "indication_threshold_mg_day": None,  # retired 2026-09-18 (duplicate Dose credit)
-        "indication_relevance_awarded": indication_score > 0,
-        "indication_relevance_reason": indication_reason,
+        "per_day_epa_dha_mg": round(per_day_mid, 2),
+        "per_day_epa_dha_min_mg": round(per_day_min, 2),
+        "per_day_epa_dha_max_mg": round(per_day_max, 2),
+        "per_day_dha_mg": round(_as_float(resolved.get("minimum_daily_dha_mg"), 0.0), 2),
+        "servings_defaulted": bool(resolved.get("servings_defaulted")),
+        "applicability_qualified": bool(resolved.get("applicability_qualified")),
+        "evidence_standard": resolved.get("record_id"),
+        "evidence_source_pmids": list(resolved.get("record_source_pmids") or []),
+        "prenatal_outcome_credit_awarded": bool(resolved.get("prenatal_outcome_credit_awarded")),
+        "indication_threshold_mg_day": 200.0 if prenatal_authority else None,
+        "indication_relevance_awarded": prenatal_authority,
+        "indication_relevance_reason": "prenatal_dha_intake_authority" if prenatal_authority else "none",
         "generic_evidence_metadata": generic_payload.get("metadata", {}),
     }
 

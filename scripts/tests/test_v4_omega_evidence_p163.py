@@ -87,24 +87,25 @@ def test_none_input_scores_zero_safely() -> None:
 # --- Indication relevance bonus -----------------------------------------
 
 
-def test_crossing_1000_mg_no_longer_buys_evidence_points() -> None:
-    """Retired 2026-09-18: a milligram threshold is a Dose fact. Scoring it in
-    Evidence too made one milligram worth 11 public points."""
+def test_one_to_two_grams_graduates_reviewed_record_applicability() -> None:
+    """Exposure gates which reviewed record applies; it is not a Dose bonus."""
     from scoring_v4.modules.omega_evidence import score_evidence
 
     below = score_evidence(_epa_dha_product(epa=599, dha=400))   # 999 mg/day
     at = score_evidence(_epa_dha_product(epa=700, dha=400))      # 1100 mg/day
     assert "indication_relevance" not in at["components"]
     assert at["metadata"]["indication_relevance_awarded"] is False
-    assert at["score"] == below["score"]
+    assert at["score"] > below["score"]
 
 
-def test_evidence_does_not_move_with_dose_alone() -> None:
+def test_evidence_applicability_is_monotonic_across_reviewed_exposure_range() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
-    scores = {score_evidence(_epa_dha_product(epa=mg / 2, dha=mg / 2))["score"]
-              for mg in (600, 1000, 1500, 2400, 4500)}
-    assert len(scores) == 1
+    scores = [score_evidence(_epa_dha_product(epa=mg / 2, dha=mg / 2))["score"]
+              for mg in (600, 1000, 1500, 2400, 4500)]
+    assert scores == sorted(scores)
+    assert scores[0] == 10.4
+    assert scores[-1] == 20.0
 
 
 def test_indication_relevance_not_awarded_below_threshold() -> None:
@@ -155,29 +156,22 @@ def test_indication_relevance_awarded_for_prenatal_dha_target() -> None:
     product = _epa_dha_product(name="Prenatal DHA 650 mg", epa=200, dha=650)
     payload = score_evidence(product)
 
-    assert payload["components"]["indication_relevance"] == 5.0
+    assert payload["components"]["clinical_evidence"] == 11.1
     assert payload["metadata"]["indication_relevance_awarded"] is True
-    assert payload["metadata"]["indication_relevance_reason"] == "prenatal_dha_target"
+    assert payload["metadata"]["indication_relevance_reason"] == "prenatal_dha_intake_authority"
 
 
 # --- Clinical evidence (generic pipeline delegation) --------------------
 
 
-def test_clinical_evidence_capped_at_15() -> None:
-    """Even if the generic pipeline produces >15, omega Evidence caps at
-    15 for the clinical component so total stays at most 20 (15 + 5)."""
+def test_reviewed_omega_standard_owns_the_full_evidence_pillar() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
-    # Synthesize a product whose generic pipeline would produce high output.
-    # We can't easily trigger >15 with synthetic evidence_data (depends
-    # on the real pipeline), but the metadata.clinical_sub_cap is the
-    # contract.
     payload = score_evidence(_epa_dha_product())
-    assert payload["metadata"]["clinical_sub_cap"] == 15.0
+    assert payload["metadata"]["clinical_sub_cap"] == 20.0
 
 
-def test_engine_can_reach_full_twenty_with_clinical_and_indication(monkeypatch) -> None:
-    """The omega reference must not be lowered to the current corpus maximum."""
+def test_generic_addin_evidence_cannot_own_omega_evidence(monkeypatch) -> None:
     import scoring_v4.modules.omega_evidence as omega_evidence
 
     monkeypatch.setattr(
@@ -191,39 +185,29 @@ def test_engine_can_reach_full_twenty_with_clinical_and_indication(monkeypatch) 
         },
     )
 
-    prenatal = _epa_dha_product(epa=200, dha=650)
-    prenatal["product_name"] = "Prenatal DHA"
-    payload = omega_evidence.score_evidence(prenatal)
-
-    assert payload["components"] == {
-        "clinical_evidence": 15.0,
-        "indication_relevance": 5.0,
-    }
+    payload = omega_evidence.score_evidence(_epa_dha_product(epa=1600, dha=400))
+    assert payload["components"] == {"clinical_evidence": 20.0}
     assert payload["score"] == 20.0
 
 
-def test_disclosed_epa_dha_class_floor_when_no_evidence_data() -> None:
-    """Disclosed EPA+DHA at an evidence-relevant daily dose earns the
-    conservative omega class-evidence floor even when generic evidence_data
-    is missing. This prevents matcher gaps from making EPA/DHA look
-    evidence-poor, without crediting parent fish-oil mass."""
+def test_reviewed_record_is_resolved_without_enrichment_match() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
     product = _epa_dha_product(epa=700, dha=400)  # 1100 mg/day, no evidence
     payload = score_evidence(product)
-    assert payload["components"]["clinical_evidence"] == 10.0
+    assert payload["components"]["clinical_evidence"] == 11.36
     assert "indication_relevance" not in payload["components"]
     assert payload["metadata"]["generic_evidence_raw_score"] == 0.0
-    assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is True
+    assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is False
 
 
-def test_disclosed_epa_dha_class_floor_not_awarded_below_efsa_zone() -> None:
+def test_reviewed_weak_record_applies_below_efsa_dose_zone() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
     product = _epa_dha_product(epa=100, dha=100)  # 200 mg/day
     payload = score_evidence(product)
 
-    assert "clinical_evidence" not in payload["components"]
+    assert payload["components"]["clinical_evidence"] == 10.4
     assert "indication_relevance" not in payload["components"]
     assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is False
 
@@ -405,9 +389,6 @@ def test_evidence_weights_match_rubric_config() -> None:
     ev = rubric["evidence"]
     assert ev["cap"] == 20
     assert ev["omega_canonicals"] == ["epa", "dha", "epa_dha"]
-    floor = ev["disclosed_epa_dha_clinical_floor"]
-    assert floor["min_epa_dha_mg_day"] == 250
-    assert floor["score"] == 10
-    ir = ev["indication_relevance"]
-    assert ir["min_epa_dha_mg_day_for_bonus"] is None  # retired 2026-09-18
-    assert ir["score"] == 5
+    assert ev["registry_record_id"] == "INGR_OMEGA3"
+    assert ev["retired_fields"]["disclosed_epa_dha_clinical_floor"]["score"] == 0
+    assert ev["retired_fields"]["prenatal_indication_bonus"]["score"] == 0

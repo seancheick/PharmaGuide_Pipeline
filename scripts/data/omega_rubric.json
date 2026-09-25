@@ -1,11 +1,15 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "version": "1.3.0-omega-semantics-2026-09",
-    "description": "P1.6 omega/fish-oil module rubric. 1.3.0 (2026-09-18): dose bands became interpolation anchors (no value changed); molecular-form spread compressed with unknown at the commodity baseline; source disclosure and the premium-form carry retired (Transparency owns disclosure); the bare >=1000 mg Evidence bonus retired as duplicate Dose credit; oxidation testing retired from Transparency (cap 15 -> 13) because Verification owns independently established testing. Original: Defines dimension caps, per-dimension sub-component weights, IFOS scope policy, EPA/DHA dose bands, and form/source/sustainability/oxidation scoring rules. Consumed by scripts/scoring_v4/modules/omega.py and its per-dimension helpers.",
+    "version": "2.0.0-purpose-evidence-2026-09",
+    "description": "P1.6 omega/fish-oil rubric. 2.0.0: reviewed purpose evidence is resolved from INGR_OMEGA3 through evidence_resolver against the shared directed daily-exposure interval; the 250 mg Evidence floor and prenatal additive bonus are retired. Dose scores both interval endpoints. Molecular-form quality is being migrated to IQM as the sole form-quality owner.",
     "purpose": "scoring_v4_omega_module_rubric",
-    "last_updated": "2026-09-17",
-    "owners": ["Claude", "Codex", "Sean"],
+    "last_updated": "2026-09-25",
+    "owners": [
+      "Claude",
+      "Codex",
+      "Sean"
+    ],
     "notes": "Config-driven per Codex's P1.5 omega-debt plan + Sean's 2026-05-20 instruction. Every weight here must be referenced by code AND locked by tests (no untested policy blob). Backed by scoring_config.section_A_ingredient_quality.omega3_dose_bonus for the dose-band heritage. Purpose-fit calibration 2026-06-07 adds low-dose EPA/DHA bands below EFSA AI (100 and 200 mg/day) to remove the zero-credit cliff while preserving zero for trace-dose products."
   },
   "phase": "P1.6.0_skeleton",
@@ -36,17 +40,40 @@
     "epa_dha_concentration": {
       "_doc": "EPA+DHA concentration as a proportion of disclosed parent omega oil mass. Requires label-disclosed EPA/DHA mg and parent oil mg; when no oil row is printed, the declared Total Fat plus its FDA rounding half-increment (0.25 g up to 5 g, 0.5 g above) is the oil mass, which can only understate concentration. No product-name inference. Rewards concentrated fish/algae/krill oils without overcrediting products that omit oil mass.",
       "score_bands": [
-        {"min_ratio": 0.75, "score": 4, "label": "very_high_concentration"},
-        {"min_ratio": 0.50, "score": 3, "label": "high_concentration"},
-        {"min_ratio": 0.30, "score": 2, "label": "moderate_concentration"},
-        {"min_ratio": 0.15, "score": 1, "label": "low_concentration"},
-        {"min_ratio": 0.0, "score": 0, "label": "very_low_concentration"}
+        {
+          "min_ratio": 0.75,
+          "score": 4,
+          "label": "very_high_concentration"
+        },
+        {
+          "min_ratio": 0.5,
+          "score": 3,
+          "label": "high_concentration"
+        },
+        {
+          "min_ratio": 0.3,
+          "score": 2,
+          "label": "moderate_concentration"
+        },
+        {
+          "min_ratio": 0.15,
+          "score": 1,
+          "label": "low_concentration"
+        },
+        {
+          "min_ratio": 0.0,
+          "score": 0,
+          "label": "very_low_concentration"
+        }
       ]
     },
     "sustainability_cert": {
       "_doc": "Marine sustainability cert (Friend of the Sea / MSC) — verified via rules_db third_party_programs.verified=true. Per Codex §9: 'lower weight than purity/testing certs' — sits in Formulation as a product attribute, not Trust as a third-party-test signal. 1.2.0 (2026-09-14): 0 points -- sustainable sourcing is a consumer attribute, not evidence of clinical formulation quality; the matched program stays in formulation metadata (sustainability_cert_program).",
       "score": 0,
-      "eligible_programs": ["Friend of the Sea", "MSC"],
+      "eligible_programs": [
+        "Friend of the Sea",
+        "MSC"
+      ],
       "eligibility": "rules_db_verified",
       "_eligibility_doc": "Required: program present in certification_data.evidence_based.third_party_programs with score_eligible=true. Bare label-text without rules_db backing does NOT score (per 'no manufacturer overcredit' policy)."
     }
@@ -54,11 +81,37 @@
   "dose": {
     "_doc": "EPA+DHA per-day dose adequacy bands (lifted and rescaled from scoring_config.section_A_ingredient_quality.omega3_dose_bonus.bands). Band cap /20. 1.2.0 (2026-09-14): the +5 EPA:DHA 1:3..3:1 ratio bonus was removed -- no clinical optimum ratio is established for a generic omega product; per-serving EPA and DHA stay in dose metadata for indication-specific logic.",
     "epa_dha_bands": [
-      {"min_mg_day": 4000, "score": 20, "label": "prescription_dose", "flag": "PRESCRIPTION_DOSE_OMEGA3", "_source": "AHA science advisory dose for prescription omega-3 in hypertriglyceridemia (4 g/day). Indication-specific therapy, not a supplement-quality target: this band carries the context flag and no extra credit"},
-      {"min_mg_day": 2000, "score": 20, "label": "high_clinical", "_source": "EFSA approved health claim for blood triglycerides: >= 2 g/day. Full dose credit at 2 g/day: a genuine high-clinical consumer dose, no longer gated behind the prescription-level 4000 mg band (purpose-fit calibration 2026-06-05). The 4000 mg band gives no extra credit but keeps its PRESCRIPTION_DOSE_OMEGA3 context flag"},
-      {"min_mg_day": 1000, "score": 16.0, "label": "aha_cvd", "_source": "AHA recommendation for CVD patients: ~1 g/day EPA+DHA"},
-      {"min_mg_day": 500, "score": 10.0, "label": "general_health", "_source": "PharmaGuide calibration point between the 250 mg/day reference intake and the ~1 g/day cardiovascular intake. NOT an FDA threshold: FDA's omega-3 qualified health claim condition is 0.8 g EPA+DHA per serving, and a qualified-claim condition is a labeling requirement, not an optimal-dose recommendation. Corrected 2026-09-18; the earlier 'FDA qualified health claim minimum' citation was wrong"},
-      {"min_mg_day": 250, "score": 5.0, "label": "efsa_ai_zone", "_source": "EFSA adequate intake for EPA+DHA, 250 mg/day for adults (2010 dietary reference values opinion); 250 mg/day is also the intake condition for the EU/GB 'contributes to the normal function of the heart' claim"},
+      {
+        "min_mg_day": 4000,
+        "score": 20,
+        "label": "prescription_dose",
+        "flag": "PRESCRIPTION_DOSE_OMEGA3",
+        "_source": "AHA science advisory dose for prescription omega-3 in hypertriglyceridemia (4 g/day). Indication-specific therapy, not a supplement-quality target: this band carries the context flag and no extra credit"
+      },
+      {
+        "min_mg_day": 2000,
+        "score": 20,
+        "label": "high_clinical",
+        "_source": "EFSA approved health claim for blood triglycerides: >= 2 g/day. Full dose credit at 2 g/day: a genuine high-clinical consumer dose, no longer gated behind the prescription-level 4000 mg band (purpose-fit calibration 2026-06-05). The 4000 mg band gives no extra credit but keeps its PRESCRIPTION_DOSE_OMEGA3 context flag"
+      },
+      {
+        "min_mg_day": 1000,
+        "score": 16.0,
+        "label": "aha_cvd",
+        "_source": "AHA recommendation for CVD patients: ~1 g/day EPA+DHA"
+      },
+      {
+        "min_mg_day": 500,
+        "score": 10.0,
+        "label": "general_health",
+        "_source": "PharmaGuide calibration point between the 250 mg/day reference intake and the ~1 g/day cardiovascular intake. NOT an FDA threshold: FDA's omega-3 qualified health claim condition is 0.8 g EPA+DHA per serving, and a qualified-claim condition is a labeling requirement, not an optimal-dose recommendation. Corrected 2026-09-18; the earlier 'FDA qualified health claim minimum' citation was wrong"
+      },
+      {
+        "min_mg_day": 250,
+        "score": 5.0,
+        "label": "efsa_ai_zone",
+        "_source": "EFSA adequate intake for EPA+DHA, 250 mg/day for adults (2010 dietary reference values opinion); 250 mg/day is also the intake condition for the EU/GB 'contributes to the normal function of the heart' claim"
+      },
       {
         "min_mg_day": 200,
         "score": 4.0,
@@ -71,23 +124,32 @@
         "label": "low_disclosed_epa_dha",
         "_source": "Purpose-fit calibration 2026-06-07: 100-199 mg/day disclosed EPA/DHA earns minimal partial dose credit; <100 mg/day remains zero to avoid inflating gummies/trace omega products."
       },
-      {"min_mg_day": 0, "score": 0.0, "label": "below_efsa_ai"}
+      {
+        "min_mg_day": 0,
+        "score": 0.0,
+        "label": "below_efsa_ai"
+      }
     ],
     "epa_dha_band_cap": 20
   },
   "evidence": {
-    "_doc": "Delegates to the generic evidence pipeline with omega-specific canonicals (EPA, DHA) prioritized in top-N selection. EPA/DHA evidence is well-established AHA/EFSA-backed; cap stays /20 with cap_per_ingredient = 7 inherited from scoring_config.",
+    "_doc": "Evidence is resolved from INGR_OMEGA3 purpose_evidence by evidence_resolver. EPA/DHA exposure gates record applicability and never adds a second Dose bonus. Add-ins cannot own omega Evidence.",
     "cap": 20,
-    "omega_canonicals": ["epa", "dha", "epa_dha"],
-    "disclosed_epa_dha_clinical_floor": {
-      "_doc": "Conservative class-evidence floor when a product discloses EPA/DHA at or above the EFSA adequate-intake zone. Prevents well-disclosed EPA/DHA products from scoring as evidence-poor solely because the generic evidence matcher emits one broad omega-3 match. Parent fish-oil mass without EPA/DHA disclosure does not qualify.",
-      "min_epa_dha_mg_day": 250,
-      "score": 10
-    },
-    "indication_relevance": {
-      "_doc": "Score 5 when a prenatal DHA-labeled product meets the prenatal DHA target already used by omega_dose. The bare 'EPA+DHA >= 1000 mg/day' branch was RETIRED 2026-09-18: crossing a milligram threshold is a Dose fact, and scoring it here made one milligram worth 11 public points (6 Dose + 5 Evidence). Evidence differentiation inside omega now waits on reviewed clinical records, not another numeric threshold.",
-      "min_epa_dha_mg_day_for_bonus": null,
-      "score": 5
+    "omega_canonicals": [
+      "epa",
+      "dha",
+      "epa_dha"
+    ],
+    "registry_record_id": "INGR_OMEGA3",
+    "retired_fields": {
+      "disclosed_epa_dha_clinical_floor": {
+        "score": 0,
+        "reason": "Replaced by reviewed purpose records."
+      },
+      "prenatal_indication_bonus": {
+        "score": 0,
+        "reason": "Prenatal intake authority is a complete evidence standard, not an additive bonus."
+      }
     }
   },
   "trust": {
@@ -129,15 +191,44 @@
       "_doc": "Reuses generic Transparency B3 sub-rubric (allergen_free / gluten_free / vegan / vegetarian display claims), cap 4.",
       "cap": 4
     },
-    "penalties_inherited": ["b2_allergen", "b5_opacity_class_aware", "b6_marketing"]
+    "penalties_inherited": [
+      "b2_allergen",
+      "b5_opacity_class_aware",
+      "b6_marketing"
+    ]
   },
   "router": {
     "_doc": "Routing signals (any one triggers omega module dispatch). Inspected by scripts/scoring_v4/router.py with priority between multi_or_prenatal and generic. The ingredient-panel signal is the strongest because it operates on the enricher's canonicalized identity rather than label text.",
-    "primary_category_match": ["omega-3", "omega_3", "fish_oil", "omega3"],
-    "name_keywords": ["fish oil", "omega-3", "omega 3", "omega3", "krill", "krill oil", "algae oil", "algal oil", "cod liver", "epa+dha", "epa dha", "epa/dha"],
-    "name_standalone_word_boundary": ["EPA", "DHA"],
+    "primary_category_match": [
+      "omega-3",
+      "omega_3",
+      "fish_oil",
+      "omega3"
+    ],
+    "name_keywords": [
+      "fish oil",
+      "omega-3",
+      "omega 3",
+      "omega3",
+      "krill",
+      "krill oil",
+      "algae oil",
+      "algal oil",
+      "cod liver",
+      "epa+dha",
+      "epa dha",
+      "epa/dha"
+    ],
+    "name_standalone_word_boundary": [
+      "EPA",
+      "DHA"
+    ],
     "_standalone_word_boundary_doc": "Word-boundary regex match for standalone EPA or DHA in product/brand/bundle name text. \\b is critical to exclude false-positives like DHEA (D-H-E-A is one word; \\bDHA\\b does NOT match inside DHEA). Substring matching is forbidden for these short tokens.",
-    "ingredient_panel_canonicals": ["epa", "dha", "epa_dha"],
+    "ingredient_panel_canonicals": [
+      "epa",
+      "dha",
+      "epa_dha"
+    ],
     "_ingredient_panel_doc": "Strongest router signal: an enriched product whose ingredient_quality_data has an ingredient with canonical_id in {epa, dha, epa_dha} and a positive quantity routes to omega regardless of name keywords. Operates on the enricher's identity output, not loose text.",
     "_category_breakdown_removed_doc": "A category_breakdown fatty_acid plurality check was REMOVED 2026-05-20 after a real-catalog audit caught ~250 false positives. The plurality signal flagged CLA / Borage Oil GLA / Flax Seed Oil ALA-only / MCT / Liposomal Glutathione (lecithin) as omega because all are fatty_acid in the enricher's category breakdown, but NONE bear EPA/DHA. Per the dev's 2026-05-20 RDA-table feedback: ALA is alpha-linolenic acid, a different molecule from EPA/DHA. ALA-only products belong in the generic module (where ALA gets the IOM AI when rda_optimal_uls is fixed). The plurality check was redundant — every legitimate omega product is already caught by ingredient_panel_canonicals."
   },

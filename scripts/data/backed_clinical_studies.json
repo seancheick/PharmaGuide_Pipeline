@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.4.2",
-    "last_updated": "2026-09-18",
+    "schema_version": "5.5.0",
+    "last_updated": "2026-09-25",
     "total_entries": 208,
     "changelog": [
+      "5.5.0 (2026-09-25): INGR_OMEGA3 gains reviewed purpose-specific records. General omega evidence remains positive_weak; triglyceride evidence becomes fully applicable only when the minimum directed EPA+DHA exposure reaches 2 g/day, with graduated applicability from 1-2 g/day. Prenatal 200 mg DHA is intake-guideline evidence only. Preterm-birth, depression and atrial-fibrillation records are retained as non-scoring contexts where a fixed product label cannot establish the required purpose, population or safety owner.",
       "5.4.2 (2026-09-18): INGR_AMLA scoring HELD at reference tier by owner decision. The direction stays positive_weak and the 500 mg/day dose context is kept - the evidence is not being erased or called null. The measured reason: primary floor 14.0 x 0.85 = 11.9 raw, rescaled by the generic_botanical_branded archetype reference (11.9 / 18.0 x 20) = 13.2 of 20 for three single-active products, which overstates overlapping syntheses whose LDL-C and triglyceride prediction intervals cross null. Diagnostic run on INGR_WHITE_KIDNEY_BEAN shows the SAME 13.2 by the same path, so this is a structural floor-calibration question, not an amla-specific one; white kidney bean is left approved pending that review. No scoring rule changed.",
       "5.4.1 (2026-09-18): Wave 2 corrections after independent review, each re-verified against the live sources. INGR_DEVILS_CLAW moved to reference tier (non-scoring): the stored total_enrollment 2050 was the whole Cochrane review's total across SIX herbal medicines, not devil's claw (corrected to 197), and the studied exposure is 50-100 mg/day of harpagoside (PMID 10101629: extract WS 1531 at 600/1200 mg containing 50/100 mg harpagoside; PMID 12509627: Doloteffin, 60 mg harpagoside) while the single catalog label stating harpagoside delivers about 10.5 mg/day. INGR_SENNA moved to reference tier and its confidence lowered: PMID 35943487 calls itself a synopsis of the authors' own updated systematic review, so it is not a second independent grade-A confirmation; 0 of 15 catalog labels state sennosides. INGR_AMLA stays positive_weak with its limitations made explicit - prediction intervals crossing null for LDL-C and triglycerides, I2 of 77% and 62%, biomarker rather than event endpoints, and two overlapping rather than independent syntheses. No scoring rule changed by these corrections.",
       "5.4.0 (2026-09-18): Wave 2 owner decisions applied. SIX new reviewed identities, 202 -> 208. APPROVED positive_weak: INGR_WHITE_KIDNEY_BEAN (PMID 42066439, 8 RCTs/543, weight -1.62 kg; 1,000 mg/day floor; extract mg is NOT an alpha-amylase potency guarantee) and INGR_AMLA (PMIDs 37296402/36934568, 500-1500 mg/day studied; 500 mg/day floor keeps the 120 mg catalog median out). APPROVED evidence with product scoring HELD by a source-label potency requirement: INGR_DEVILS_CLAW (Cochrane 26630428, moderate quality at best; applies only where the label states harpagoside - 1 of 25 products today) and INGR_SENNA (grade A first-line laxative; applies only where the label states sennosides - 0 of 15 today; stimulant-laxative adverse effects routed to the safety owner and NOT netted against efficacy). REVIEWED-NULL, curated in full and earning zero affirmative credit: INGR_D_MANNOSE (JAMA Intern Med 38587819, n=598, 2 g/day, null on its primary endpoint) and INGR_D_ASPARTIC_ACID (three single-ingredient RCTs null for testosterone). Both carry a dose floor so products below the studied exposure are refused rather than characterised by a result at a dose they do not deliver. Paired with the scoring owner's null = 0.0 decision in scoring_v4/config/quality_score.json.",
@@ -7258,6 +7259,79 @@
       "endpoint_relevance_tags": [
         "cardiovascular",
         "glycemic_control"
+      ],
+      "purpose_evidence": [
+        {
+          "id": "omega_reviewed_weak",
+          "purpose": "general_omega_3",
+          "effect_direction": "positive_weak",
+          "pillar_score": 10.4,
+          "source_pmids": [
+            "31567003",
+            "32951855"
+          ],
+          "rationale": "Broad supplement evidence supports modest cardiovascular effects, while several major 1 g/day outcome trials were null. This record establishes reviewed evidence without claiming a strong treatment effect."
+        },
+        {
+          "id": "triglyceride_strong",
+          "purpose": "triglyceride_lowering",
+          "effect_direction": "positive_strong",
+          "pillar_score": 20.0,
+          "minimum_daily_epa_dha_mg": 2000,
+          "graduated_from_daily_epa_dha_mg": 1000,
+          "source_pmids": [
+            "31422671",
+            "37264945",
+            "30521670"
+          ],
+          "rationale": "EFSA identifies 2-4 g/day EPA+DHA for triglyceride effects; the reviewed meta-analytic evidence is dose responsive. Full applicability requires the minimum directed daily exposure to reach 2 g."
+        },
+        {
+          "id": "prenatal_dha_intake_authority",
+          "purpose": "prenatal_dha_intake",
+          "effect_direction": "guideline",
+          "pillar_score": 11.1,
+          "minimum_daily_dha_mg": 200,
+          "source_pmids": [
+            "18184094"
+          ],
+          "rationale": "At least 200 mg/day DHA establishes prenatal intake-guideline applicability. It does not establish a preterm-birth treatment effect."
+        },
+        {
+          "id": "prenatal_preterm_birth_outcome",
+          "purpose": "prenatal_preterm_birth",
+          "effect_direction": "mixed_by_population_and_dose",
+          "score_eligible": false,
+          "source_pmids": [
+            "30480773",
+            "34308309",
+            "34959801",
+            "31509674"
+          ],
+          "rationale": "The broad review is favorable, but higher-dose benefit varies with baseline DHA status and a large 900 mg trial in a well-nourished population was null. Baseline status is personal fit and cannot change a fixed product-quality score."
+        },
+        {
+          "id": "epa_predominant_depression",
+          "purpose": "depression",
+          "effect_direction": "positive_weak",
+          "score_eligible": false,
+          "source_pmids": [
+            "31383846",
+            "31480057"
+          ],
+          "rationale": "Potentially applicable only to an explicitly resolved depression purpose and an EPA-predominant exposure; the generic omega route does not establish that purpose."
+        },
+        {
+          "id": "high_dose_atrial_fibrillation_context",
+          "purpose": "safety_context",
+          "effect_direction": "negative_risk_signal",
+          "score_eligible": false,
+          "minimum_daily_epa_dha_mg": 1000,
+          "source_pmids": [
+            "34612056"
+          ],
+          "rationale": "Contextual consumer warning candidate only. Safety messaging is owned outside Evidence and this record never deducts quality points."
+        }
       ]
     },
     {
