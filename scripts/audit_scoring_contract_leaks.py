@@ -57,9 +57,12 @@ PROFILE_SELECTOR_FORBIDDEN_FIELDS: dict[str, str] = {
     "forms": "PROFILE_SELECTOR_ROW_FORM",
 }
 
-# Stable finding id -> justification.
-# Populated with known Pass-A violations; these are pending native ScoringEvidence
-# and SafetySignal emission in the enricher before P5.
+# Stable finding id -> justification. Three kinds, and no others:
+#   pass_a_known_pending_*      Pass-A reads pending native evidence/safety contracts.
+#   canonical_owner: <why>      the provider whose job is reading the raw field.
+#   legacy_debt_main_0b7bf3f7   pre-existing downstream reads recorded as debt.
+# Any other raw read fails the audit; a scoring module is never allowlisted
+# for convenience.
 ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/gate_completeness.py|_has_enzyme_activity_evidence|get|unit|30c24beac47d": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/gate_safety.py|_ingredient_name_terms|get|raw_source_text|defe2b573198": "pass_a_known_pending_native_safety_signal_contract",
@@ -90,7 +93,6 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/modules/generic_transparency.py|_blend_child_payload|get|unit|d9cb180449d5": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_transparency.py|_blend_child_payload|get|unit_normalized|7a4fb5de2b96": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_transparency.py|_blend_child_payload|get|unit|d9cb180449d5": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/generic_transparency.py|_blend_dedupe_fingerprint|get|unit|33fd471d33c2": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_transparency.py|_blend_total_mg|get|unit|33fd471d33c2": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_transparency.py|_sum_total_active_mg|get|quantity|aacd9ff64a58": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_transparency.py|_sum_total_active_mg|get|unit_normalized|320965a122ab": "pass_a_known_pending_native_evidence_contract",
@@ -108,10 +110,40 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/confidence.py|_is_non_contributory_epa_dha_placeholder|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/gate_safety.py|_ingredient_safety_terms|get|raw_source_text|defe2b573198": "pass_a_known_pending_native_safety_signal_contract",
     "scripts/scoring_v4/gate_safety.py|_blend_children_text|get|raw_source_text|785fb9c4489c": "pass_a_known_pending_native_safety_signal_contract",
+    "scripts/scoring_v4/cert_evidence.py|facility_audit_resolution|get|match_type|2d68ef6686e9": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/dose_safety.py|is_folate_parent_total_duplicate_flag|get|unit|d22733e3184e": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/exposure.py|row_exposure|get|quantity|437869d0a4ab": "canonical_owner: exposure.row_exposure is the shared daily-exposure provider (Task 2, 5c9996f4); reading the label quantity and unit is its job, and Dose modules consume its Exposure",
+    "scripts/scoring_v4/exposure.py|row_exposure|get|unit_normalized|c7a08b90a025": "canonical_owner: exposure.row_exposure is the shared daily-exposure provider (Task 2, 5c9996f4); reading the label quantity and unit is its job, and Dose modules consume its Exposure",
+    "scripts/scoring_v4/exposure.py|row_exposure|get|unit|d22733e3184e": "canonical_owner: exposure.row_exposure is the shared daily-exposure provider (Task 2, 5c9996f4); reading the label quantity and unit is its job, and Dose modules consume its Exposure",
+    "scripts/scoring_v4/gate_completeness.py|_has_missing_micronutrient_amount_panel|get|unit|d22733e3184e": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/gate_safety.py|_clean_label_candidate_terms|get|activeIngredients|33d332e2e210": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/gate_safety.py|_iter_resolver_safety_hits|get|activeIngredients|33d332e2e210": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/fiber_digestive_formulation.py|_fiber_disclosure|get|quantity|437869d0a4ab": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/fiber_digestive_formulation.py|_has_row_owned_guar_signal|get|raw_source_text|2574dd84d909": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/fiber_digestive_helpers.py|nutrition_fiber_exposure|get|unit|7d8612ac5a11": "canonical_owner: nutrition_fiber_exposure owns the Nutrition Facts dietary-fiber quantity (Task 2); it reads the panel unit, not an ingredient row",
+    "scripts/scoring_v4/modules/generic_evidence.py|_evidence_matching_mass_mg|get|quantity|437869d0a4ab": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/generic_evidence.py|_evidence_matching_mass_mg|get|unit_normalized|c7a08b90a025": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/generic_evidence.py|_evidence_matching_mass_mg|get|unit|d22733e3184e": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/generic_formulation.py|_b1_harmful_additive_penalty_detail|get|raw_source_text|16a3dad81790": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/immune_support.py|_row_amount|get|quantity|437869d0a4ab": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/immune_support.py|_row_amount|get|unit_normalized|c7a08b90a025": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/immune_support.py|_row_amount|get|unit|d22733e3184e": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/immune_support.py|_row_keys|get|raw_source_text|2574dd84d909": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/joint_support.py|_joint_active_id|get|raw_source_text|2574dd84d909": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/joint_support.py|_row_quantity_mg|get|quantity|437869d0a4ab": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/joint_support.py|_row_quantity_mg|get|unit_normalized|c7a08b90a025": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/joint_support.py|_row_quantity_mg|get|unit|d22733e3184e": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/omega_formulation.py|_total_fat_upper_bound_mg|get|unit|2569a05be991": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/sleep_support.py|_row_quantity_mg|get|quantity|437869d0a4ab": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/sleep_support.py|_row_quantity_mg|get|unit_normalized|c7a08b90a025": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/modules/sleep_support.py|_row_quantity_mg|get|unit|d22733e3184e": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/route_features.py|_phgg_signal_text|get|raw_source_text|2574dd84d909": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/route_features.py|comparable_mass_mg|get|unit_normalized|c7a08b90a025": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/route_features.py|comparable_mass_mg|get|unit|d22733e3184e": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
+    "scripts/scoring_v4/route_features.py|row_name|get|raw_source_text|2574dd84d909": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
     "scripts/scoring_v4/modules/generic_dose.py|_score_no_reference_quantified_dose|get|quantity|3fd4e11ae842": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_evidence.py|_row_identity_text|get|raw_source_text|2574dd84d909": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/multi_prenatal_dose.py|_unit_text|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/probiotic_dose.py|_ingredient_rows|get|activeIngredients|c732cecc648f": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/probiotic_dose.py|_row_positive_mass|get|unit_normalized|c7a08b90a025": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/probiotic_dose.py|_row_positive_mass|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/probiotic_dose.py|_compute_direct_strain_mass_floor|get|raw_source_text|2574dd84d909": "pass_a_known_pending_native_evidence_contract",
