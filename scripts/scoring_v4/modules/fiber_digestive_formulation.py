@@ -7,6 +7,7 @@ from typing import Any, Dict, List
 
 from scoring_v4.modules.fiber_digestive_helpers import (
     canonical,
+    COMPATIBLE_GUAR_CANONICALS,
     fiber_rows,
     has_fiber_context,
     GUAR_CANONICALS,
@@ -112,7 +113,7 @@ def _has_row_owned_guar_signal(row: Dict[str, Any]) -> bool:
     cid = canonical(row)
     if cid in GUAR_CANONICALS:
         return True
-    if cid not in {"", "fiber"}:
+    if cid not in COMPATIBLE_GUAR_CANONICALS:
         return False
     owned_text = " ".join(
         _norm_text(part)

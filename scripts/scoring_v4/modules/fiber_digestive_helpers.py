@@ -12,25 +12,10 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
     get_active_ingredients,
 )
+# Routing owns the fiber canonical identity; the scorer reads the same set.
+from scoring_v4.route_features import FIBER_CANONICALS
 
 
-FIBER_CANONICALS = frozenset({
-    "fiber",
-    "psyllium",
-    "psyllium_husk",
-    "inulin",
-    "acacia_fiber",
-    "acacia_gum",
-    "partially_hydrolyzed_guar_gum",
-    "guar_gum",
-    "glucomannan",
-    "konjac_glucomannan",
-    "beta_glucan",
-    "wheat_dextrin",
-    "pectin",
-    "resistant_starch",
-    "prebiotics",
-})
 
 FIBER_TERMS = (
     "fiber",

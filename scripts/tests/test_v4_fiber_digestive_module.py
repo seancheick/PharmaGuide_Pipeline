@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -219,3 +220,22 @@ def test_fiber_dose_prefers_label_fiber_grams_over_active_mass_noise() -> None:
     assert dose["score"] >= 22.0
     assert dose["metadata"]["fiber_dose_source"] == "nutrition_facts"
     assert dose["metadata"]["fiber_grams_per_serving"] == 7.0
+
+
+def test_fiber_canonical_identity_has_one_declaration() -> None:
+    """Routing and the fiber scorer read one fiber canonical set.
+
+    route_features and fiber_digestive_helpers each kept an identical literal
+    copy, so a canonical added to one would route a product to fiber_digestive
+    without the fiber scorer recognising its rows, or the reverse. route_features
+    owns it: fiber_digestive_helpers reaches scoring_input_contract through
+    generic_helpers, and scoring_input_contract imports route_features, so the
+    leaf module is the only owner both sides can import.
+    """
+    from scoring_v4 import route_features
+    from scoring_v4.modules import fiber_digestive_formulation, fiber_digestive_helpers
+
+    assert fiber_digestive_helpers.FIBER_CANONICALS is route_features.FIBER_CANONICALS
+    assert route_features.MATERIAL_FIBER_CANONICALS <= route_features.FIBER_CANONICALS
+    source = Path(fiber_digestive_formulation.__file__).read_text(encoding="utf-8")
+    assert '{"", "fiber"}' not in source, "use fiber_digestive_helpers.COMPATIBLE_GUAR_CANONICALS"
