@@ -10,7 +10,7 @@ Run against `scripts/final_db_output` or a fresh `/tmp/pharmaguide_release_build
 | Script | What it gates |
 |---|---|
 | `scripts/audit_source_of_truth_contract.py matrix\|cleaner\|clinical` | One owner per concept (`scripts/contracts/source_of_truth_matrix.json`), cleaner-first row contract, clinical drift |
-| `scripts/audit_contract_sync.py` | Blob-contract emit rates (GREEN/YELLOW/RED) and undeclared blob top-level keys |
+| `scripts/audit_contract_sync.py` | Blob-contract emit rates (GREEN/YELLOW/RED) and undeclared blob keys (top level and ingredient rows) |
 | `scripts/audit_raw_to_final.py` | Raw → blob reconciliation with a canary set |
 | `scripts/audit_inactive_safety.py` | Banned-in-inactives carry a safety signal; unknown-role counter |
 | `scripts/db_integrity_sanity_check.py` | SQLite schema + data validation |

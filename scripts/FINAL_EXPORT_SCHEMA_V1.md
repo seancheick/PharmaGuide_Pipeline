@@ -508,7 +508,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
 {
   "raw_source_text": "Vitamin A Palmitate",
   "name": "Vitamin A Palmitate",
-  "standardName": "Retinyl Palmitate",
   "normalized_key": "vitamin_a",
   "forms": [{"name": "Palmitate"}],
   "quantity": 2000.0,
@@ -539,20 +538,16 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   },
   "_score_note": "v3.6.0+: `score` is a deprecated alias of `bio_score` (no natural-source bonus). Pre-v3.6.0 blobs had `score = bio_score + 3*natural` (range 0-18). New consumers should read `bio_score` directly (range 0-15, pure form quality). Sourcing is not scored in v4.",
   "notes": "The most common preformed Vitamin A in supplements...",
-  "mapped": true,
-  "safety_hits": [...],
   "normalized_amount": null,
   "normalized_unit": null,
   "role": "active",
   "parent_key": "vitamin_a",
   "dosage": 2000.0,
   "dosage_unit": "IU",
-  "normalized_value": null,
   "is_mapped": true,
   "is_harmful": false,
   "harmful_severity": null,
   "is_safety_concern": false,
-  "harmful_notes": null,
   "is_banned": false,
   "is_allergen": false,
   "identifiers": {"cui": "C0042839", "unii": "81G40H8B0T"},
@@ -593,7 +588,6 @@ per concern.
 {
   "raw_source_text": "Silicon Dioxide",
   "name": "Silicon Dioxide",
-  "standardName": "Silicon Dioxide (E551)",
   "normalized_key": "silicon_dioxide",
   "forms": [],
   "category": "flow_agent_anticaking",
@@ -610,7 +604,6 @@ per concern.
   "population_warnings": ["No specific population concerns at <2% w/w"],
   "is_harmful": true,
   "harmful_severity": "low",
-  "harmful_notes": "FDA GRAS, EFSA 2018 data gap (precautionary, not finding of harm)...",
   "identifiers": {
     "cui": "C0037098",
     "cas": "7631-86-9",
@@ -812,6 +805,14 @@ delete commit per field, with a regression test pin).
 | `match_method`   | move to `_debug` subkey      | Flutter never reads internal IQM telemetry     |
 | `matched_alias`  | move to `_debug` subkey      | Same — internal pipeline diagnostics           |
 | `is_harmful`     | `is_safety_concern` + `severity_status` | Flutter migrates routing logic        |
+
+**Row keys retired (row-key census, 2026-09-25):** `standardName` (active and
+inactive; same value as `standard_name`), `normalized_value` (same value as
+`normalized_amount`), `mapped` (same value as `is_mapped`), inactive
+`label_display` (same value as `display_label`), and `safety_hits` and
+`harmful_notes` (no reader). `audit_contract_sync.ACTIVE_CONTRACT` and
+`INACTIVE_CONTRACT` declare the whole row shape; a row key they do not declare
+fails the snapshot gate, as an undeclared top-level key already did.
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,
