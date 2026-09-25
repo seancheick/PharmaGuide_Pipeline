@@ -46,7 +46,6 @@ def test_known_wrong_cuis_are_corrected():
         "ADD_BLUE2": "C0021219",
         "ADD_CANOLA_OIL": "C0072982",
         "ADD_CARMINE_RED": "C0007250",
-        "ADD_SENNA": "C0330722",
         "ADD_NEOTAME": "C0912295",
         "ADD_POLYVINYLPYRROLIDONE": "C0032856",
         "ADD_SODIUM_BENZOATE": "C0142805",

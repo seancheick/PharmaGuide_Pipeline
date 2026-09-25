@@ -4,8 +4,8 @@
     "schema_version": "5.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-09-21",
-    "total_entries": 59,
+    "last_updated": "2026-09-25",
+    "total_entries": 53,
     "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches \u2014 the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
     "reviewed_at": "2026-09-21"
   },
@@ -44,13 +44,6 @@
         "harmful:iqm"
       ],
       "reason": "Copper sulfate synonym; can appear as active mineral form while still treated as harmful additive in inactive context."
-    },
-    {
-      "term_normalized": "cassia angustifolia",
-      "db_pairs": [
-        "harmful:iqm"
-      ],
-      "reason": "Senna species synonym; FDA-approved OTC laxative with legitimate therapeutic use, but chronic overuse carries safety concerns (anthraquinone stimulant laxative)."
     },
     {
       "term_normalized": "chlorophyllin",
@@ -114,41 +107,6 @@
         "harmful:iqm"
       ],
       "reason": "Synthetic folate synonym; context-aware policy overlap."
-    },
-    {
-      "term_normalized": "senna",
-      "db_pairs": [
-        "harmful:iqm"
-      ],
-      "reason": "Senna herb; dual-listed because it is a legitimate laxative supplement ingredient but also flagged for chronic-use safety concerns."
-    },
-    {
-      "term_normalized": "senna alexandrina",
-      "db_pairs": [
-        "harmful:iqm"
-      ],
-      "reason": "Senna species name; same dual-listing rationale as senna."
-    },
-    {
-      "term_normalized": "senna extract",
-      "db_pairs": [
-        "harmful:iqm"
-      ],
-      "reason": "Senna extract form; same dual-listing rationale as senna."
-    },
-    {
-      "term_normalized": "senna leaf",
-      "db_pairs": [
-        "harmful:iqm"
-      ],
-      "reason": "Senna leaf form; same dual-listing rationale as senna."
-    },
-    {
-      "term_normalized": "sennosides",
-      "db_pairs": [
-        "harmful:iqm"
-      ],
-      "reason": "Active glycosides in senna; same dual-listing rationale as senna."
     },
     {
       "term_normalized": "silica",

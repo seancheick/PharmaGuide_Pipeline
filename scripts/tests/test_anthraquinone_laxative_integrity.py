@@ -104,3 +104,58 @@ def test_aloe_as_trace_flavoring_inactive_is_not_penalized(enricher):
     # 21 CFR 172.510 lists aloe (A. barbadensis, A. ferox) as a natural flavoring substance.
     assert BANNED["RISK_ALOE_LATEX"]["inactive_policy"] == "excipient_acceptable"
     assert not _matches(enricher, "Cape aloe", "RISK_ALOE_LATEX", section="inactive")
+
+
+# --- Senna (Sean 2026-09-25: one owner; ADD_SENNA leaves harmful_additives) ---
+
+HARMFUL_IDS = {
+    e["id"]
+    for e in json.loads((DATA / "harmful_additives.json").read_text())["harmful_additives"]
+}
+
+
+def test_senna_is_a_watchlist_entry_with_one_owner():
+    entry = BANNED["WATCH_SENNA"]
+    assert entry["status"] == "watchlist"
+    assert entry["external_ids"]["unii"] == "AK7JF626KX"  # GSRS SENNA ALEXANDRINA LEAF
+    assert entry["cui"] == "C0330722"  # UMLS Senna alexandrina
+    assert entry.get("rxcui") is None  # RxNav 237929 returns an empty record
+    urls = {r.get("url") for r in entry["references_structured"]}
+    assert "https://doi.org/10.2903/j.efsa.2024.8766" in urls
+    codes = {j.get("jurisdiction_code") for j in entry["jurisdictions"]}
+    assert {"US", "EU"} <= codes
+    assert "ADD_SENNA" not in HARMFUL_IDS
+
+
+@pytest.mark.parametrize(
+    "label",
+    ["Senna", "Senna leaf extract", "Senna Leaf", "Sennosides", "Senna alexandrina leaf",
+     "Cassia angustifolia"],
+)
+def test_senna_labels_match_exactly(enricher, label):
+    hits = _matches(enricher, label, "WATCH_SENNA")
+    assert hits, f"{label!r} should match WATCH_SENNA"
+    assert hits[0]["match_type"] in {"exact", "alias"}
+    assert hits[0]["status"] == "watchlist"
+
+
+@pytest.mark.parametrize(
+    "label",
+    ["Coffee senna", "Senna occidentalis", "Cassia occidentalis", "Cassia bark", "Cassia cinnamon"],
+)
+def test_other_cassia_species_do_not_match_senna(enricher, label):
+    assert not _matches(enricher, label, "WATCH_SENNA"), label
+
+
+def test_senna_gets_us_caution_and_trace_flavoring_is_not_penalized(enricher):
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    result = evaluate_safety_gate({
+        "dsld_id": "clinical-WATCH_SENNA",
+        "activeIngredients": [{"name": "Senna leaf extract", "standardName": "Senna leaf extract"}],
+    })
+    assert result.verdict == "CAUTION"
+    assert result.quarantine_required is False
+    # 21 CFR 172.510 lists Senna, Alexandria (Cassia acutifolia) as a natural flavoring substance.
+    assert BANNED["WATCH_SENNA"]["inactive_policy"] == "excipient_acceptable"
+    assert not _matches(enricher, "Senna", "WATCH_SENNA", section="inactive")
