@@ -60,8 +60,9 @@ def score_dose(product: Any) -> Dict[str, Any]:
     """Return the probiotic Dose dimension payload.
 
     Per-strain disclosure is proportional to the number of named strains
-    with an individual CFU value. Physical potency uses source-owned daily
-    measurements and the existing /5 to /15 scaling, not clinical review flags.
+    with an individual CFU value. Physical potency uses the strongest
+    source-owned strain adequacy tier on the existing /5 to /15 scale, not
+    strain count or clinical review flags.
     """
     product = product if isinstance(product, dict) else {}
     from studied_formulas import (
@@ -186,6 +187,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
 def _compute_cfu_adequacy(clinical_strains: Iterable[Any]) -> Dict[str, Any]:
     contributions: List[Dict[str, Any]] = []
     total = 0.0
+    tier_max = max((float(value) for value in TIER_POINTS.values()), default=0.0)
 
     for item in clinical_strains or []:
         strain = _safe_dict(item)
@@ -212,8 +214,15 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any]) -> Dict[str, Any]:
             })
             continue
 
-        points = TIER_POINTS.get(tier, 0.0)
-        total += points
+        raw_points = float(TIER_POINTS.get(tier, 0.0))
+        points = (
+            raw_points / tier_max * V3_CFU_ADEQUACY_CAP
+            if tier_max > 0.0
+            else 0.0
+        )
+        # One correctly dosed excellent strain can satisfy adequacy. Adding
+        # strains cannot manufacture more Dose credit.
+        total = max(total, points)
         contributions.append({
             "tier": tier,
             "clinical_id": strain.get("clinical_id"),
@@ -224,7 +233,7 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any]) -> Dict[str, Any]:
             "points": round(points, 4),
         })
 
-    total = min(V3_CFU_ADEQUACY_CAP, total)
+    total = round(min(V3_CFU_ADEQUACY_CAP, total), 4)
     return {
         "v3_points": total,
         "strain_contributions": contributions,

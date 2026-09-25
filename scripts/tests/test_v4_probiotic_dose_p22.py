@@ -75,7 +75,8 @@ def _product(
         # Use currently reviewed identities for the saturation arithmetic.
         # BB-12's source hold is tested separately, not bypassed here.
         clinical_strains = [
-            _strain("Lactobacillus rhamnosus GG", adequacy_tier="excellent", support="high"),
+            _strain("Lactobacillus rhamnosus GG", cfu_per_day=50_000_000_000,
+                    adequacy_tier="excellent", support="high"),
             _strain("Bifidobacterium longum BB536", adequacy_tier="good", support="moderate"),
             _strain("Lactobacillus reuteri DSM 17938", adequacy_tier="adequate", support="weak"),
         ]
@@ -177,6 +178,26 @@ def test_probiotic_dose_scores_full_25_when_all_strains_have_cfu_and_adequacy_ca
     assert payload["metadata"]["cfu_adequacy_v3_points"] == 5.0
     assert payload["metadata"]["cfu_adequacy_scaled_points"] == 15.0
     assert payload["metadata"]["cfu_adequacy_basis"] == "per_strain_cfu_disclosed"
+
+
+def test_single_excellent_strain_can_reach_full_dose_without_count_bonus() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+
+    payload = score_dose(_product(
+        total_strain_count=1,
+        clinical_strains=[_strain(
+            "Lactobacillus rhamnosus GG",
+            cfu_per_day=50_000_000_000,
+            adequacy_tier="excellent",
+            support="high",
+        )],
+    ))
+
+    assert payload["score"] == 25.0
+    assert payload["components"] == {
+        "per_strain_cfu_disclosure": 10.0,
+        "cfu_adequacy": 15.0,
+    }
 
 
 def test_at_manufacture_cfu_guarantee_reduces_adequacy_not_disclosure() -> None:
@@ -459,12 +480,12 @@ def test_single_strain_has_cfu_boolean_does_not_substitute_for_numeric_disclosur
     ("tier", "support", "expected_points"),
     [
         ("low", "high", 0.0),
-        ("adequate", "high", 1.0),
-        ("good", "high", 2.0),
-        ("excellent", "high", 3.0),
-        ("good", "moderate", 2.0),
-        ("excellent", "weak", 3.0),
-        ("good", "unknown", 2.0),
+        ("adequate", "high", 1.6667),
+        ("good", "high", 3.3333),
+        ("excellent", "high", 5.0),
+        ("good", "moderate", 3.3333),
+        ("excellent", "weak", 5.0),
+        ("good", "unknown", 3.3333),
     ],
 )
 def test_cfu_potency_tier_is_independent_of_clinical_support(
@@ -486,7 +507,8 @@ def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     strains = [
-        _strain(name, adequacy_tier="excellent", support="high")
+        _strain(name, cfu_per_day=50_000_000_000,
+                adequacy_tier="excellent", support="high")
         for name in (
             "Lactobacillus rhamnosus GG", "Bifidobacterium lactis BB-12",
             "Lactobacillus reuteri DSM 17938", "Bifidobacterium longum BB536",
