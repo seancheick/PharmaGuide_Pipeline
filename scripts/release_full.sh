@@ -25,6 +25,11 @@
 #   4. Rebuild interaction DB      (rebuild_interaction_db.sh)
 #                                  AUTO-SKIPS when no rule-data file is
 #                                  newer than the bundled interaction_db.
+#      Publish interaction asset   (release_interaction_artifact.py
+#                                  --publish-flutter-pin) after the preflight
+#                                  gates: GitHub Release asset + the app's
+#                                  hydration pin, committed with the bundle.
+#                                  NO-OP when the pin already names dist/.
 #   5. Sync to Supabase            (sync_to_supabase.py — UPLOAD ONLY)
 #                                  Trusts sync_to_supabase's built-in
 #                                  "up_to_date" detection (manifest checksum).
@@ -695,6 +700,19 @@ else
   skip "Strict gate: Flutter import preflight skipped (--skip-flutter)"
 fi
 
+# The app hydrates interaction_db.sqlite from the GitHub Release asset named by
+# its pin (tool/interaction_db.release.json); the import only stages the
+# manifest. Publish the staged asset and move the pin with the bundle, so the
+# bundle commit never names an interaction DB the app cannot hydrate. Only when
+# this run commits the bundle; a no-op without network when the pin is current.
+if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
+  run_strict_gate "interaction DB release asset + app hydration pin" \
+    "$PG_PYTHON" scripts/release_interaction_artifact.py \
+      --output-dir "$DIST_DIR" --publish-flutter-pin "$FLUTTER_REPO"
+else
+  skip "Interaction DB publication skipped (this run does not commit the bundle)"
+fi
+
 # ---------------------------------------------------------------------------
 # Step 5: Sync to Supabase (upload only; cleanup is post-bundle)
 #
@@ -775,6 +793,12 @@ if (( SKIP_FLUTTER == 0 )); then
       --dist-dir "$DIST_DIR" \
       --flutter-repo "$FLUTTER_REPO" \
       --strict-release
+  # The app's own verifier: pin, staged manifest and bundled DB are one
+  # artifact, and the DB carries the clinical drug-class taxonomy.
+  if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
+    run_strict_gate "Flutter interaction hydration" \
+      bash "$FLUTTER_REPO/tool/fetch_interaction_db.sh"
+  fi
 else
   skip "Step 6/8: Flutter import skipped (--skip-flutter)"
 fi
@@ -824,9 +848,9 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
       die "Flutter repository is in detached HEAD state; refusing aligned storage cleanup"
     fi
 
-    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json | grep -q .; then
+    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db tool/interaction_db.release.json assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json | grep -q .; then
       info "Committing Flutter bundle and canonical reference data (local) so storage cleanup runs aligned..."
-      git -C "$FLUTTER_REPO" add assets/db/ assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json
+      git -C "$FLUTTER_REPO" add assets/db/ tool/interaction_db.release.json assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json
       if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
         ok "Flutter bundle committed locally (push remains manual)"
       else
