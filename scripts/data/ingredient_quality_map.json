@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 652,
       "total_forms": 1444,
-      "total_form_aliases": 12144,
+      "total_form_aliases": 12145,
       "parents_with_parent_aliases": 138,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -2014,7 +2014,8 @@
           "marine vit a",
           "fish liver oil vit a",
           "CLO vitamin a",
-          "halibut liver oil vitamin a"
+          "halibut liver oil vitamin a",
+          "vitamin a fish liver oil"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
