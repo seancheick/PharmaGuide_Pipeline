@@ -819,6 +819,8 @@ value):
   `probiotic_detail.clinical_strains`, linked to the row by `source_row_ref`.
 - inactive `mechanism_of_harm`, `common_uses`: no reader; harmful-additive warnings
   still carry `mechanism_of_harm`.
+- `jurisdiction_scope` (both lists): derived from `us_applicable` + `jurisdictions`;
+  warnings keep their own.
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,

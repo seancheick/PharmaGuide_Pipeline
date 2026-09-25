@@ -6741,7 +6741,6 @@ def build_detail_blob(
             "matched_rule_id": active_safety_contract["matched_rule_id"],
             "us_applicable": active_policy_projection.get("us_applicable"),
             "jurisdictions": safe_list(active_policy_projection.get("jurisdictions")),
-            "jurisdiction_scope": active_policy_projection.get("jurisdiction_scope"),
             # Sprint E1.1.4 / 2026-05-13 — pass authored Dr Pham copy
             # through to the warning emitter. None when the safety contract
             # didn't fire on a banned-recalled hit.
@@ -6960,7 +6959,6 @@ def build_detail_blob(
             "regulatory_status": res.regulatory_status,
             "us_applicable": inactive_policy_projection.get("us_applicable"),
             "jurisdictions": safe_list(inactive_policy_projection.get("jurisdictions")),
-            "jurisdiction_scope": inactive_policy_projection.get("jurisdiction_scope"),
             "inactive_policy": res.inactive_policy,
             "safety_display_name": (
                 safe_str(res.standard_name)

@@ -1842,6 +1842,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "is_allergen",
         "source_label_key", "identity_resolution_rationale", "canonical_id_before",
         "adequacy_tier", "cfu_confidence", "dose_basis", "ui_copy_hint",
+        "jurisdiction_scope",
     ):
         assert retired not in ingredient
 
@@ -1854,6 +1855,7 @@ def test_detail_blob_inactive_rows_carry_one_name_per_value():
     for retired in (
         "standardName", "label_display", "harmful_notes",
         "mechanism_of_harm", "common_uses",
+        "jurisdiction_scope",
     ):
         assert retired not in inactive
 
