@@ -54,7 +54,8 @@
     "display_ingredient_contract",
     "ingredient_form_quality",
     "probiotic_row_identity",
-    "prebiotic_identity"
+    "prebiotic_identity",
+    "certification_evidence"
   ],
   "concepts": [
     {
@@ -588,6 +589,19 @@
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
       "tests": ["scripts/tests/test_prebiotic_catalog_matcher.py", "scripts/tests/test_p05_probiotic_prebiotic_consistency.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "certification_evidence",
+      "owner": "scripts/scoring_v4/cert_evidence.py",
+      "first_created_stage": "enriched",
+      "field_kind": "derived",
+      "source_data_files": ["scripts/data/cert_registry.json", "scripts/data/curated_overrides/cert_verification_overrides.json", "scripts/data/cert_claim_rules.json"],
+      "consumers": ["scripts/scoring_v4/modules/generic_trust.py", "scripts/scoring_v4/modules/omega_trust.py", "scripts/scoring_v4/modules/generic_manufacturer.py", "scripts/scoring_v4/quality_score.py", "scripts/scoring_v4/confidence.py", "scripts/build_final_db.py", "Flutter app"],
+      "forbidden_recomputation": ["cert_resolver.py (called by enrichment) alone matches registry rows to a product; cert_evidence.py alone decides what those rows verify: brand match, verified vs claimed programs, GMP implied by a verified cert, audited-facility GMP; scorer modules, export and the app consume its results and never re-match brands, re-read the registry, or treat a label claim as verification"],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
+      "tests": ["scripts/tests/test_cert_claimed_vs_verified.py", "scripts/tests/test_gmp_one_owner.py", "scripts/tests/test_certification_quality_flag_semantics.py"],
       "retirement_status": "active"
     }
   ]
