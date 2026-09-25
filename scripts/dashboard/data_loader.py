@@ -966,7 +966,7 @@ def _compute_blob_analytics(
                 label_trust["formula_history_products"] += 1
 
         completeness_checks = {
-            "ingredients_mapped": bool(ingredients) and all(bool(ing.get("mapped", True)) for ing in ingredients),
+            "ingredients_mapped": bool(ingredients) and all(bool(ing.get("is_mapped", True)) for ing in ingredients),
             "manufacturer_present": bool(manufacturer_detail),
             "evidence_present": bool(evidence_data),
             "interaction_screened": bool(interaction_summary),
@@ -985,7 +985,6 @@ def _compute_blob_analytics(
         for ingredient in ingredients:
             ingredient_name = (
                 ingredient.get("standard_name")
-                or ingredient.get("standardName")
                 or ingredient.get("name")
                 or "Unknown"
             )
