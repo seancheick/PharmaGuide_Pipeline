@@ -486,6 +486,21 @@ def test_prenatal_bundle_context_does_not_trigger_prenatal_critical_anchors() ->
     assert "dha" not in payload["metadata"]["critical_nutrient_scores"]
 
 
+def test_expecting_uses_the_shared_prenatal_route_definition() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Expecting Prenatal",
+        adequacy_results=[_adequacy(n) for n in PRENATAL_CORE],
+        ingredients=[
+            _ingredient("folate"), _ingredient("iron"), _ingredient("iodine"),
+            _ingredient("vitamin_d"), _ingredient("vitamin_b12"),
+        ],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_mode"] == "prenatal"
+
+
 def test_no_rda_reference_returns_zero_score_not_none_for_multi_direct_call() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 

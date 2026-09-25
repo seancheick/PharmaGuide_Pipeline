@@ -20,6 +20,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
+from scoring_input_contract import PRENATAL_TITLE_RE
 
 # Coverage is not weighted by form bio_score (quality_score 1.7.0). bio_score is
 # an ordinal IQM form rating, not a measured absorption fraction, and it already
@@ -49,7 +50,6 @@ PRENATAL_DHA_PARTIAL_MG = _DM["prenatal_dha_partial_mg"]
 PHASE_MARKER = "P3.2_multi_prenatal_dose"
 METHOD_MARKER = "rda_ai_panel_coverage_from_enriched_rda_ul_data"
 
-PRENATAL_RE = re.compile(r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b")
 DHA_RE = re.compile(r"\bdha\b|docosahexaenoic", re.IGNORECASE)
 TARGETED_MULTI_RE = re.compile(r"\b(essential|targeted|selective|minimalist|core)\b", re.IGNORECASE)
 BROAD_MULTI_RE = re.compile(
@@ -156,7 +156,7 @@ def _is_prenatal(product: Dict[str, Any]) -> bool:
         str(product.get(key) or "")
         for key in ("product_name", "fullName")
     )
-    return bool(PRENATAL_RE.search(_norm_text(haystack)))
+    return bool(PRENATAL_TITLE_RE.search(haystack))
 
 
 def _label_text(product: Dict[str, Any]) -> str:

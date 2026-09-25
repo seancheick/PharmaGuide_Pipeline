@@ -494,7 +494,7 @@ EPA_DHA_CANONICALS = frozenset({"epa", "dha", "epa_dha"})
 # A DHA-dominant product named for pregnancy is judged against the prenatal DHA
 # target (~200 mg DHA/day, EFSA NDA 2014; ACOG ~200-300 mg), read by omega Dose
 # and Evidence.
-PRENATAL_TITLE_RE = re.compile(r"\b(prenatal|pregnancy|pre-natal|maternal|gestation)\b", re.IGNORECASE)
+PRENATAL_TITLE_RE = re.compile(r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b", re.IGNORECASE)
 PRENATAL_DHA_TARGET_MG = 200.0
 _EPA_DHA_MG_PER_UNIT = {
     "mg": 1.0, "milligram": 1.0, "milligrams": 1.0,
