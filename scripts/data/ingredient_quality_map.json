@@ -4785,7 +4785,7 @@
     "forms": {
       "methylcobalamin sublingual": {
         "bio_score": 11,
-        "absorption": "sublingual; bypasses IF \u2014 ~10-40% absorbed at 1000 mcg via oral mucosa",
+        "absorption": "Sublingual fractional absorption is not quantified by the cited efficacy comparison; no demonstrated efficacy advantage over oral B12.",
         "consumer_note": "This is methylcobalamin presented in a sublingual delivery format. The sublingual designation identifies how the product is intended to be used, while methylcobalamin identifies the B12 compound.",
         "consumer_note_review": {
           "by": "Product owner approval",
@@ -4800,10 +4800,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.2,
-          "range_low": 0.1,
-          "range_high": 0.4,
-          "quality": "low"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "PMID:14616423 measured serum response, not mucosal absorption. Do not substitute oral dose-dependent absorption estimates for a measured sublingual fraction."
         }
       },
       "methylcobalamin": {
@@ -4893,7 +4894,7 @@
       },
       "cyanocobalamin sublingual": {
         "bio_score": 9,
-        "absorption": "sublingual; bypasses IF \u2014 comparable to methyl-SL but requires intracellular conversion",
+        "absorption": "Sublingual fractional absorption is not quantified by the cited efficacy comparison; no demonstrated efficacy advantage over oral B12.",
         "consumer_note": "This is cyanocobalamin presented in a sublingual delivery format. The sublingual designation identifies how the product is intended to be used, while cyanocobalamin identifies the B12 compound.",
         "consumer_note_review": {
           "by": "Product owner approval",
@@ -4907,10 +4908,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.15,
-          "range_low": 0.1,
-          "range_high": 0.3,
-          "quality": "low"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "PMID:14616423 measured serum response, not mucosal absorption. Do not substitute oral dose-dependent absorption estimates for a measured sublingual fraction."
         }
       },
       "cyanocobalamin": {
