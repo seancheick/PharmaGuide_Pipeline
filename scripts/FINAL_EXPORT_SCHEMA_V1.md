@@ -821,6 +821,7 @@ value):
   still carry `mechanism_of_harm`.
 - `jurisdiction_scope` (both lists): derived from `us_applicable` + `jurisdictions`;
   warnings keep their own.
+- inactive `label_row_disposition`: derived from `is_label_descriptor` / `is_active_only`.
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,

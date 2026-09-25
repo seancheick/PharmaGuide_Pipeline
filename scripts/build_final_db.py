@@ -6871,14 +6871,8 @@ def build_detail_blob(
 
         # Label fidelity contract (2026-06-15): inactive_ingredients[] is
         # the user-visible "Other Ingredients" surface, so resolver flags
-        # must not delete rows that appeared on the label. Keep the row and
-        # expose disposition metadata for scoring / secondary UI decisions.
-        if res.is_label_descriptor:
-            label_row_disposition = "label_descriptor"
-        elif res.is_active_only:
-            label_row_disposition = "active_only"
-        else:
-            label_row_disposition = "standard"
+        # must not delete rows that appeared on the label. The row keeps
+        # is_label_descriptor / is_active_only for scoring and secondary UI.
         inactive_standard_name = _inactive_identity_name_for_export(
             name=name,
             upstream_standard_name=std_name_ing,
@@ -6948,7 +6942,6 @@ def build_detail_blob(
                 else None
             ),
             "is_safety_concern": inactive_contract["is_safety_concern"],
-            "label_row_disposition": label_row_disposition,
             "is_label_descriptor": res.is_label_descriptor,
             "is_active_only": res.is_active_only,
             # v1.6.0+ unified contract additions:

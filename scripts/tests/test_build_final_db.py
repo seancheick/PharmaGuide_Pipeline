@@ -1431,7 +1431,8 @@ def test_inactive_display_label_preserves_label_wording_with_resolved_identity_m
     assert inactive["resolved_display_label"] == "Natural Preservatives"
     assert inactive["standard_name"] == "Natural Preservatives"
     assert inactive["display_role_label"] == "Preservative natural"
-    assert inactive["label_row_disposition"] == "standard"
+    assert inactive["is_label_descriptor"] is False
+    assert inactive["is_active_only"] is False
 
 
 def test_inactive_display_tone_uses_public_scoring_penalty_outcome():
@@ -1504,7 +1505,6 @@ def test_label_descriptor_inactive_row_stays_visible_but_marked_nonstandard():
     assert inactive["standard_name"] == "Phospholipid Descriptor"
     assert inactive["resolved_display_label"] == "Phospholipid Descriptor"
     assert inactive["matched_rule_id"] == "PII_PHOSPHOLIPID_DESCRIPTOR"
-    assert inactive["label_row_disposition"] == "label_descriptor"
     assert inactive["is_label_descriptor"] is True
     assert inactive["functional_roles"] == []
 
@@ -1856,6 +1856,7 @@ def test_detail_blob_inactive_rows_carry_one_name_per_value():
         "standardName", "label_display", "harmful_notes",
         "mechanism_of_harm", "common_uses",
         "jurisdiction_scope",
+        "label_row_disposition",
     ):
         assert retired not in inactive
 

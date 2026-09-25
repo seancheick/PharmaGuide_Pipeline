@@ -141,7 +141,6 @@ INACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "population_warnings": {"required": True,  "type": "array",    "is_enum": False},
     "harmful_severity":    {"required": False, "type": "string?",  "is_enum": False},
     "resolved_display_label": {"required": True, "type": "string", "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
-    "label_row_disposition": {"required": True, "type": "string",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
     "is_label_descriptor": {"required": True,  "type": "bool",     "is_enum": False},
     "is_active_only":      {"required": True,  "type": "bool",     "is_enum": False},
     "is_banned":           {"required": True,  "type": "bool",     "is_enum": False},

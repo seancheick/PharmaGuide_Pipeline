@@ -189,7 +189,6 @@ def test_builder_tags_duplicate_form_when_parent_active_is_present():
     assert row["matched_source"] == "active_nutrient_form"
     assert row["matched_rule_id"] == "vitamin_b6_pyridoxine"
     assert row["is_active_only"] is True
-    assert row["label_row_disposition"] == "active_only"
     assert row["functional_roles"] == []
 
 
