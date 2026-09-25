@@ -314,6 +314,28 @@ def test_immune_all_bands_full_lands_exactly_on_dose_cap() -> None:
     assert dose["score"] == 22.0 and isinstance(dose["score"], float)
 
 
+def test_immune_dose_reads_every_magnitude_from_config(monkeypatch) -> None:
+    # A literal left beside a matching constant passes the drift guard; this does not.
+    product = _immune_product()
+    with monkeypatch.context() as m:
+        m.setitem(immune_support.IMMUNE_DOSE_BANDS, "vitamin_c_mg", {"low": 600.0, "high": 900.0, "points": 4.0})
+        m.setitem(immune_support.IMMUNE_DOSE_BANDS, "copper_mg", {"low": 0.1, "high": 0.5, "points": 2.0})
+        m.setattr(immune_support, "IMMUNE_DOSE_ABOVE_BAND_FRACTION", 0.25)
+        m.setattr(immune_support, "IMMUNE_DAILY_USE_DISCIPLINE_POINTS", 1.0)
+        m.setattr(immune_support, "IMMUNE_DOSE_CAP", 5.0)
+        dose = immune_support.score_immune_support_dose(product)
+        assert dose["components"]["vitamin_c_daily_range"] == round(500 / 600 * 4.0, 4)
+        assert dose["components"]["copper_balance"] == 0.5
+        assert dose["components"]["daily_use_discipline"] == 1.0
+        assert dose["score"] == 5.0
+    with monkeypatch.context() as m:
+        m.setattr(immune_support, "HIGH_ZINC_THRESHOLD_MG", 10.0)
+        m.setattr(immune_support, "HIGH_VITAMIN_D_THRESHOLD_MCG", 20.0)
+        meta = immune_support.score_immune_support_dose(product)["metadata"]
+        assert meta["high_zinc"] is True and meta["high_vitamin_d"] is True
+        assert immune_support.immune_support_formulation_adjustment(product)["metadata"]["high_zinc"] is True
+
+
 def test_immune_goal_mapping_excludes_broad_lifestyle_clusters() -> None:
     mappings = json.loads((DATA_DIR / "user_goals_to_clusters.json").read_text())[
         "user_goal_mappings"

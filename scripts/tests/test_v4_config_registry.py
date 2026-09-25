@@ -59,7 +59,7 @@ def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
     assert config_version("omega") == "1.3.0-omega-semantics-2026-09"
-    assert config_version("quality_score") == "1.13.1-immune-botanical-stack-config"
+    assert config_version("quality_score") == "1.13.2-immune-dose-bands-config"
 
 
 def test_all_config_provenance_shape():

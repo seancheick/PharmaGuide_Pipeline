@@ -29,6 +29,12 @@ _CM = _cfg_block("category_magnitudes", "immune_support")["immune_support"]
 IMMUNE_EVIDENCE_CAP = _CM["evidence_cap"]
 HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT = _CM["high_variability_botanical_stack_min_count"]
 HIGH_VARIABILITY_BOTANICAL_STACK_PENALTY = _CM["high_variability_botanical_stack_penalty"]
+IMMUNE_DOSE_CAP = _CM["dose_cap"]
+IMMUNE_DOSE_BANDS = {key: dict(band) for key, band in _CM["dose_bands"].items()}
+IMMUNE_DOSE_ABOVE_BAND_FRACTION = _CM["dose_above_band_fraction"]
+IMMUNE_DAILY_USE_DISCIPLINE_POINTS = _CM["daily_use_discipline_points"]
+HIGH_ZINC_THRESHOLD_MG = _CM["high_zinc_threshold_mg"]
+HIGH_VITAMIN_D_THRESHOLD_MCG = _CM["high_vitamin_d_threshold_mcg"]
 
 _ALIASES = {
     "vitamin_c": ("vitamin_c", "ascorbic acid", "ascorbate", "ester-c", "vitamin c"),
@@ -69,18 +75,18 @@ def score_immune_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any
     high_d = design_flags["high_vitamin_d"]
 
     components = {
-        "vitamin_c_daily_range": _range_score(doses.get("vitamin_c_mg"), 100.0, 1000.0, 3.0),
-        "vitamin_d_daily_range": 0.0 if high_d else _range_score(doses.get("vitamin_d_mcg"), 15.0, 50.0, 3.0),
-        "zinc_daily_range": 0.0 if high_zinc else _range_score(doses.get("zinc_mg"), 8.0, 25.0, 3.0),
-        "copper_balance": _range_score(doses.get("copper_mg"), 0.5, 2.0, 1.5),
-        "selenium_daily_range": _range_score(doses.get("selenium_mcg"), 45.0, 200.0, 1.5),
-        "beta_glucan_disclosed": _range_score(doses.get("beta_glucan_mg"), 100.0, 250.0, 3.0),
-        "quercetin_disclosed": _range_score(doses.get("quercetin_mg"), 250.0, 1000.0, 2.5),
-        "elderberry_disclosed": _range_score(doses.get("elderberry_mg"), 100.0, 600.0, 2.5),
-        "daily_use_discipline": 0.0 if (high_zinc or high_d) else 2.0,
+        "vitamin_c_daily_range": _band_score(doses, "vitamin_c_mg"),
+        "vitamin_d_daily_range": 0.0 if high_d else _band_score(doses, "vitamin_d_mcg"),
+        "zinc_daily_range": 0.0 if high_zinc else _band_score(doses, "zinc_mg"),
+        "copper_balance": _band_score(doses, "copper_mg"),
+        "selenium_daily_range": _band_score(doses, "selenium_mcg"),
+        "beta_glucan_disclosed": _band_score(doses, "beta_glucan_mg"),
+        "quercetin_disclosed": _band_score(doses, "quercetin_mg"),
+        "elderberry_disclosed": _band_score(doses, "elderberry_mg"),
+        "daily_use_discipline": 0.0 if (high_zinc or high_d) else IMMUNE_DAILY_USE_DISCIPLINE_POINTS,
     }
 
-    score = min(22.0, sum(components.values()))
+    score = min(IMMUNE_DOSE_CAP, sum(components.values()))
     return {
         "score": round(score, 4),
         "components": {k: round(v, 4) for k, v in components.items()},
@@ -108,7 +114,7 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
         if (identity := _active_id(row))
     }
     doses = immune_active_doses(product)
-    high_zinc = (doses.get("zinc_mg") or 0.0) > 40.0
+    high_zinc = (doses.get("zinc_mg") or 0.0) > HIGH_ZINC_THRESHOLD_MG
     botanical_count = _high_variability_botanical_count(product)
     herb_soup = botanical_count >= HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT
 
@@ -138,8 +144,8 @@ def immune_support_evidence_cap(product: Dict[str, Any]) -> Optional[float]:
 
 def _immune_design_flags(product: Dict[str, Any], doses: Dict[str, float]) -> Dict[str, bool]:
     return {
-        "high_zinc": (doses.get("zinc_mg") or 0.0) > 40.0,
-        "high_vitamin_d": (doses.get("vitamin_d_mcg") or 0.0) > 100.0,
+        "high_zinc": (doses.get("zinc_mg") or 0.0) > HIGH_ZINC_THRESHOLD_MG,
+        "high_vitamin_d": (doses.get("vitamin_d_mcg") or 0.0) > HIGH_VITAMIN_D_THRESHOLD_MCG,
         "gummy_or_syrup": _is_gummy_or_syrup(product),
         "high_glycemic_sugar": _has_high_glycemic_sugar(product),
     }
@@ -221,6 +227,11 @@ def _row_amount(row: Dict[str, Any], active: str) -> Optional[float]:
     return None
 
 
+def _band_score(doses: Dict[str, float], dose_key: str) -> float:
+    band = IMMUNE_DOSE_BANDS[dose_key]
+    return _range_score(doses.get(dose_key), band["low"], band["high"], band["points"])
+
+
 def _range_score(amount: Optional[float], low: float, high: float, cap: float) -> float:
     if amount is None or amount <= 0:
         return 0.0
@@ -228,7 +239,7 @@ def _range_score(amount: Optional[float], low: float, high: float, cap: float) -
         return cap
     if amount < low:
         return max(0.0, min(cap, (amount / low) * cap))
-    return max(0.0, cap * 0.5)
+    return max(0.0, cap * IMMUNE_DOSE_ABOVE_BAND_FRACTION)
 
 
 def _daily_serving_multiplier(product: Dict[str, Any]) -> float:

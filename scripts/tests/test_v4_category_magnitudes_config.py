@@ -45,9 +45,26 @@ ORIGINAL = {
     "b_complex": {"formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0},
     # 1.13.1: the high-variability botanical stack penalty moved out of
     # immune_support.py literals (pure refactor, values unchanged).
+    # 1.13.2: the Dose bands, above-band fraction, daily-use points, Dose cap
+    # and high-zinc / high-vitamin-D thresholds followed (pure refactor).
     "immune_support": {"evidence_cap": 17.0,
                        "high_variability_botanical_stack_min_count": 3,
-                       "high_variability_botanical_stack_penalty": 3.0},
+                       "high_variability_botanical_stack_penalty": 3.0,
+                       "dose_cap": 22.0,
+                       "dose_bands": {
+                           "vitamin_c_mg": {"low": 100.0, "high": 1000.0, "points": 3.0},
+                           "vitamin_d_mcg": {"low": 15.0, "high": 50.0, "points": 3.0},
+                           "zinc_mg": {"low": 8.0, "high": 25.0, "points": 3.0},
+                           "copper_mg": {"low": 0.5, "high": 2.0, "points": 1.5},
+                           "selenium_mcg": {"low": 45.0, "high": 200.0, "points": 1.5},
+                           "beta_glucan_mg": {"low": 100.0, "high": 250.0, "points": 3.0},
+                           "quercetin_mg": {"low": 250.0, "high": 1000.0, "points": 2.5},
+                           "elderberry_mg": {"low": 100.0, "high": 600.0, "points": 2.5},
+                       },
+                       "dose_above_band_fraction": 0.5,
+                       "daily_use_discipline_points": 2.0,
+                       "high_zinc_threshold_mg": 40.0,
+                       "high_vitamin_d_threshold_mcg": 100.0},
     "joint_support": {"evidence_cap": 14.0,
                       "target_dose_mg": {"glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0,
                                          "uc_ii": 40.0, "hyaluronic_acid": 120.0}},
@@ -81,6 +98,12 @@ def test_runtime_constants_read_from_config_no_drift():
     assert immune_support.IMMUNE_EVIDENCE_CAP == 17.0
     assert immune_support.HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT == 3
     assert immune_support.HIGH_VARIABILITY_BOTANICAL_STACK_PENALTY == 3.0
+    assert immune_support.IMMUNE_DOSE_CAP == 22.0
+    assert immune_support.IMMUNE_DOSE_BANDS == ORIGINAL["immune_support"]["dose_bands"]
+    assert immune_support.IMMUNE_DOSE_ABOVE_BAND_FRACTION == 0.5
+    assert immune_support.IMMUNE_DAILY_USE_DISCIPLINE_POINTS == 2.0
+    assert immune_support.HIGH_ZINC_THRESHOLD_MG == 40.0
+    assert immune_support.HIGH_VITAMIN_D_THRESHOLD_MCG == 100.0
     assert joint_support.JOINT_SUPPORT_EVIDENCE_CAP == 14.0
     assert joint_support.JOINT_TARGET_DOSE_MG == ORIGINAL["joint_support"]["target_dose_mg"]
     assert safety_hygiene.SAFETY_HYGIENE_CAP == 4.0

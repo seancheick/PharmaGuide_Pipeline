@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.13.1-immune-botanical-stack-config",
+    "version": "1.13.2-immune-dose-bands-config",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-25",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). POOR is the verdict of the lowest shipped tier; the module raw score never decides it (1.9.0). Omega label ownership is enforced in 1.10.0. v4 is the production catalog scoring contract as of export schema 2.2.0.",
@@ -302,7 +302,7 @@
     "collagen": { "collagen_formulation_cap": 15.0 }
   },
   "category_magnitudes": {
-    "_doc": "Category-router dimension caps and category-adapter magnitudes (b_complex/immune/joint/sleep/safety_hygiene) — hoisted from the router + adapter modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_generic/multi_prenatal/omega/probiotic/b_complex + the adapter fns). Canonical-ID sets, regex form patterns, and the retired affine constants stay in code. Drift-guarded by test_v4_category_magnitudes_config. 1.13.1 (2026-09-25): the immune high-variability botanical stack penalty and its botanical-count threshold joined immune_support, also a pure refactor.",
+    "_doc": "Category-router dimension caps and category-adapter magnitudes (b_complex/immune/joint/sleep/safety_hygiene) — hoisted from the router + adapter modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_generic/multi_prenatal/omega/probiotic/b_complex + the adapter fns). Canonical-ID sets, regex form patterns, and the retired affine constants stay in code. Drift-guarded by test_v4_category_magnitudes_config. 1.13.1 (2026-09-25): the immune high-variability botanical stack penalty and its botanical-count threshold joined immune_support, also a pure refactor. 1.13.2 (2026-09-25): the immune Dose bands (low/high/points; below low is linear, above high earns dose_above_band_fraction), daily-use points, Dose cap and the strictly-greater-than high-zinc / high-vitamin-D thresholds joined immune_support, also a pure refactor.",
     "generic": {
       "dimension_caps": [["formulation", 30], ["dose", 25], ["evidence", 20], ["transparency", 10]],
       "manufacturer_trust_cap": 5,
@@ -318,7 +318,22 @@
     "immune_support": {
       "evidence_cap": 17.0,
       "high_variability_botanical_stack_min_count": 3,
-      "high_variability_botanical_stack_penalty": 3.0
+      "high_variability_botanical_stack_penalty": 3.0,
+      "dose_cap": 22.0,
+      "dose_bands": {
+        "vitamin_c_mg": { "low": 100.0, "high": 1000.0, "points": 3.0 },
+        "vitamin_d_mcg": { "low": 15.0, "high": 50.0, "points": 3.0 },
+        "zinc_mg": { "low": 8.0, "high": 25.0, "points": 3.0 },
+        "copper_mg": { "low": 0.5, "high": 2.0, "points": 1.5 },
+        "selenium_mcg": { "low": 45.0, "high": 200.0, "points": 1.5 },
+        "beta_glucan_mg": { "low": 100.0, "high": 250.0, "points": 3.0 },
+        "quercetin_mg": { "low": 250.0, "high": 1000.0, "points": 2.5 },
+        "elderberry_mg": { "low": 100.0, "high": 600.0, "points": 2.5 }
+      },
+      "dose_above_band_fraction": 0.5,
+      "daily_use_discipline_points": 2.0,
+      "high_zinc_threshold_mg": 40.0,
+      "high_vitamin_d_threshold_mcg": 100.0
     },
     "joint_support": {
       "evidence_cap": 14.0,
