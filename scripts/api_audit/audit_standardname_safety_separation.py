@@ -305,6 +305,8 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
             for section, ing in _iter_ingredients(blob):
                 std_camel = _safe_str(ing.get("standardName"))
                 std_snake = _safe_str(ing.get("standard_name"))
+                # Blob rows name it standard_name; enriched rows, standardName.
+                standard_name = std_snake or std_camel
                 safety_flags = [f for f in ing.get("safety_flags") or [] if isinstance(f, dict)]
                 matched_source = _safe_str(ing.get("matched_source"))
                 matched_rule_id = _safe_str(ing.get("matched_rule_id"))
@@ -329,7 +331,7 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
                         "section": section,
                         "ingredient": ing.get("name"),
                         "canonical_source_db": canonical_source_db,
-                        "standardName": std_camel,
+                        "standard_name": standard_name,
                         "path": str(path),
                     })
 
@@ -339,7 +341,7 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
                     _norm(ing.get("ingredient_name")),
                     _norm(ing.get("display_name")),
                 }
-                std_norm = _norm(std_camel)
+                std_norm = _norm(standard_name)
                 if (
                     safety_reference_keys
                     and std_norm
@@ -358,7 +360,7 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
                         "dsld_id": dsld_id,
                         "section": section,
                         "ingredient": ing.get("name"),
-                        "standardName": std_camel,
+                        "standard_name": standard_name,
                         "canonical_source_db": canonical_source_db,
                         "source_file": ref.get("source_file"),
                         "entry_id": ref.get("entry_id"),
@@ -411,7 +413,7 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
                             "entry_id": flag.get("entry_id") or flag.get("rule_id"),
                             "evidence_text": flag.get("evidence_text"),
                             "matched_variant": flag.get("matched_variant"),
-                            "standardName": std_camel,
+                            "standard_name": standard_name,
                             "path": str(path),
                         })
 
@@ -427,14 +429,14 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
                             "section": section,
                             "ingredient": ing.get("name"),
                             "raw_source_text": ing.get("raw_source_text"),
-                            "standardName": std_camel,
+                            "standard_name": standard_name,
                             "path": str(path),
                         })
 
                 if (
                     _norm(ing.get("name")) == "chromium"
                     and _norm(ing.get("raw_source_text")) == "chromium"
-                    and "hexavalent" in _norm(std_camel)
+                    and "hexavalent" in _norm(standard_name)
                     and not _has_explicit_hexavalent_evidence(ing)
                 ):
                     findings.append({
@@ -442,7 +444,7 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
                         "dsld_id": dsld_id,
                         "section": section,
                         "ingredient": ing.get("name"),
-                        "standardName": std_camel,
+                        "standard_name": standard_name,
                         "path": str(path),
                     })
 
