@@ -167,6 +167,27 @@ def test_clean_active_form_b_complex_scores_in_fair_top_band() -> None:
     assert scored["quality_score_v4_100"] <= 96.0
 
 
+def test_b_complex_form_quality_uses_parent_relative_iqm_scale() -> None:
+    from scoring_v4.modules.b_complex import _score_form_quality
+
+    # Riboflavin-5-phosphate is tied for the best reviewed B2 form at IQM 10.
+    # Formulation therefore gives it the full within-parent contribution while
+    # preserving the authored raw IQM value in metadata.
+    contribution, average_bio = _score_form_quality({
+        "vitamin_b2_riboflavin": _row(
+            "vitamin_b2_riboflavin",
+            "Riboflavin-5-Phosphate",
+            10,
+            "mg",
+            bio_score=10,
+            matched_form="riboflavin-5-phosphate",
+        ),
+    })
+
+    assert contribution == 8.0
+    assert average_bio == 10.0
+
+
 def test_over_ul_b_complex_carries_dose_and_safety_hygiene_penalty() -> None:
     scored = score_product_v4(_megadose_b_complex())
 

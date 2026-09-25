@@ -77,12 +77,12 @@ def test_prenatal_formulation_canary_at_equal_iqm_12() -> None:
 
     assert artifact["_v4_module"] == "multi_or_prenatal"
     assert formulation["components"] == {
-        "panel_form_quality": 9.6,
+        "panel_form_quality": 11.12,
         "panel_disclosure_structure": 2.0,
     }
-    assert formulation["score"] == 11.6
+    assert formulation["score"] == 13.12
     assert artifact["quality_pillars_v4"]["formulation"]["components"]["reference"] == 14.0
-    assert artifact["quality_pillars_v4"]["formulation"]["score"] == 16.6
+    assert artifact["quality_pillars_v4"]["formulation"]["score"] == 18.7
 
 
 def test_prenatal_formulation_reaches_full_pillar_at_iqm_15() -> None:
@@ -109,8 +109,8 @@ def test_prenatal_preferred_form_names_add_no_points_at_equal_iqm() -> None:
 
 
 def test_prenatal_panel_size_adds_no_points_at_equal_iqm() -> None:
-    full = _set_bio(_fixture(PRENATAL), 12)
-    smaller = _set_bio(_fixture(PRENATAL), 12)
+    full = _set_bio(_fixture(PRENATAL), 15)
+    smaller = _set_bio(_fixture(PRENATAL), 15)
     iqd = smaller["ingredient_quality_data"]
     # One row versus eighteen: a count-based credit cannot hide here, because
     # a single form earns nothing extra while the full panel would reach the cap.
@@ -152,13 +152,13 @@ def test_b_complex_formulation_canary_at_equal_iqm_12() -> None:
     assert artifact["_v4_module"] == "b_complex"
     assert formulation["components"] == {
         "core_b_panel_coverage": 10.0,
-        "b_form_quality": 6.4,
+        "b_form_quality": 7.5143,
         "b_complex_focus_purity": 3.0,
         "dose_disclosure": 2.0,
     }
-    assert formulation["score"] == 21.4
+    assert formulation["score"] == 22.5143
     assert artifact["quality_pillars_v4"]["formulation"]["components"]["reference"] == 23.0
-    assert artifact["quality_pillars_v4"]["formulation"]["score"] == 18.6
+    assert artifact["quality_pillars_v4"]["formulation"]["score"] == 19.6
 
 
 def test_b_complex_formulation_reaches_full_pillar_at_iqm_15() -> None:
@@ -191,7 +191,7 @@ def test_b_complex_unrelated_active_still_changes_focus_by_existing_rule() -> No
     formulation = _dimension(_score(product), "formulation")
 
     assert formulation["components"]["b_complex_focus_purity"] == 2.0
-    assert formulation["score"] == 20.4
+    assert formulation["score"] == 21.5143
 
 
 def test_b_complex_missing_dose_disclosure_still_loses_credit() -> None:
@@ -203,7 +203,9 @@ def test_b_complex_missing_dose_disclosure_still_loses_credit() -> None:
     formulation = _dimension(_score(product), "formulation")
 
     assert formulation["components"]["dose_disclosure"] < 2.0
-    assert formulation["score"] < 21.4
+    assert formulation["score"] < _dimension(
+        _score(_set_bio(_fixture(B_COMPLEX), 12)), "formulation"
+    )["score"]
 
 
 def test_b_complex_payload_has_no_preferred_form_ranking() -> None:

@@ -5,8 +5,9 @@ as broad multivitamins/prenatals, but they also should not get single-ingredient
 rubric treatment. This module rewards:
   - a complete core B-vitamin panel,
   - moderate disclosed RDA/AI coverage,
-  - IQM form quality (bio_score is the one form-quality owner; the separate
-    preferred-form name table was removed in quality_score 1.7.0),
+  - IQM form quality on the shared parent-relative scale (bio_score is the one
+    form-quality owner; the separate preferred-form name table was removed in
+    quality_score 1.7.0),
   - clean formulation / transparency / verification via the shared v4 contracts.
 """
 
@@ -35,6 +36,7 @@ from scoring_v4.modules.generic_manufacturer import (
 from scoring_v4.modules.generic_transparency import score_transparency
 from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
 from scoring_v4.modules.verification_bonus import score_verification_bonus
+from scoring_reference_resolver import parent_relative_form_quality
 
 
 PHASE_MARKER = "P1.9_b_complex_module"
@@ -128,7 +130,8 @@ def _b_rows(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
 
 
 def _score_form_quality(rows: Dict[str, Dict[str, Any]]) -> tuple[float, Optional[float]]:
-    scores = []
+    raw_scores = []
+    relative_scores = []
     for key in B_CORE:
         row = rows.get(key)
         if not row:
@@ -136,11 +139,17 @@ def _score_form_quality(rows: Dict[str, Dict[str, Any]]) -> tuple[float, Optiona
         score = bio_score_of(row)
         if score is None:
             score = 10.0 if row.get("mapped") else 0.0
-        scores.append(_clamp(0.0, 15.0, float(score)))
-    if not scores:
+        raw_score = _clamp(0.0, 15.0, float(score))
+        relative_score = parent_relative_form_quality(row.get("canonical_id"), raw_score)
+        if relative_score is None:
+            relative_score = raw_score
+        raw_scores.append(raw_score)
+        relative_scores.append(_clamp(0.0, 15.0, relative_score))
+    if not relative_scores:
         return 0.0, None
-    avg = sum(scores) / len(scores)
-    return _round((avg / 15.0) * 8.0), _round(avg)
+    raw_avg = sum(raw_scores) / len(raw_scores)
+    relative_avg = sum(relative_scores) / len(relative_scores)
+    return _round((relative_avg / 15.0) * 8.0), _round(raw_avg)
 
 
 def _score_focus_purity(product: Dict[str, Any], rows: Dict[str, Dict[str, Any]]) -> tuple[float, int]:
