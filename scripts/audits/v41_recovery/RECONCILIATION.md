@@ -153,13 +153,29 @@ Production A/B over every raw label, one sequential chain (drive_pipeline_ab + c
 
 Score changes outside the two measured cohorts (159) are all Formulation form identity from the A1/A2/A7 ports (77 generic Niacin -> niacinamide, 49 -> B3 unspecified, 33 cyanocobalamin -> B12 unspecified, 4 niacinamide ascorbate, 2 MK-7 -> K2 unspecified, 1 5-MTHF -> B9 unspecified), 7 Nature Made Iron 65 mg (Verification 10 -> 15: the A16 guard leaves the correct USP record), 4 rows whose "Calcium Salt" / "Mixed Carotenoids" token no longer borrows a named form (328613, 232326, 65003, 293269). Receipts `~/pg_quality/integ_ab` (sha256 before 7753c741a4ec6b33, after 6f3c94dda08679e3, diff 7e489126ba2afe40, submissions 37517e5f3dc66819).
 
+## Form association (15823), 2026-09-24
+
+15823 lists "Cranberry powder" under Magnesium; the parent fallback followed the word "powder" to magnesium citrate (bio 14). The same seam let a nutrient's source or its own name take a form share at an invented 5.0. Fixed at the one owner of form shares (`enrich_supplements_v3._match_multi_form` and its parent fallback):
+
+| Commit | Change |
+|---|---|
+| 08351e2d | Sources (botanical/protein under a vitamin, mineral, amino acid or enzyme parent), restated nutrient names and DSLD source descriptors leave the share denominator; named salts the IQM lacks still count. The fallback never selects above the parent's unknown form. |
+| e00bcdc9 | IQM alias "vitamin a fish liver oil" (vitamin A from cod liver oil). |
+| c20a80b5 | IQM alias "nigella sativa seed oil" (black seed oil). |
+| follow-up | One owner of form quality in the fallback: `_effective_form_bio` (IQM bio_score with the provisional-review cap; the retired `score` is never read) and `_parent_unknown_form` (exact "(unspecified)" form, deterministic; vitamin D never resolves to D2 by file order). An unmatched share takes the parent's own unknown-form value instead of 5.0; `final_score` mirrors `final_bio_score`. |
+
+Affected-cohort comparison, final tree: every product with an unresolved form token (1,758), re-enriched from raw and scored with HEAD 4cf582b1 and with the follow-up tree. 0 errors, 0 status changes, 666 score changes (647 up, 19 down; min -1.4, max +24.0, mean +0.42). The largest rise is 231940 "Pycnogenol ... Pine extract": the old default took the first form containing "generic" by file order, the row now resolves to the `pycnogenol` form its label names, and branded evidence applies (Evidence 0 -> 20). Decreases: unknown shares of parents with no unspecified form now take the lowest named form (chlorophyllin 5 -> 3; 168 IQM parents lack an unspecified entry). The four alias products (214477, 328082, 4341, 317111) no longer move. Receipts `~/pg_quality/calib`: before 18a9486e39dfb025, after 5edcba604c19ddad, comparison `report/form_association_cohort.json` ac806f8ff70575b6.
+
+Remaining unresolved form tokens (4,891 on the frozen corpus, `report/form_strata.json`, heuristic strata): repeated names 1,314 and sources 1,048 are resolved by this fix; open for one-entry curation or review: real forms missing from the IQM 1,222 (calcium ascorbate, potassium carbonate, monobasic calcium phosphate), salts owned by another nutrient 313, cross-parent other 805 (includes mixed-tocopherol components), Latin restatements 134, markers 28, unclassified 27.
+
 ## Tracked follow-ups (from Task 2)
 
 - Childless positive-quantity blend rows with no canonical: 2,961 rows on 1,873 frozen products (1,735 blend-named, 212 single-item-named). Measure per entry before any global rule; true opaque blends need separate handling. Census: `~/pg_quality/recon/childless_blend_census.txt`.
 - Fiber identities in IQM category "fibers" not in the reviewed fiber set: `pgx_fiber`, `larch_arabinogalactan`, `mucilage` (one-entry review each).
 - A reviewed resistant-dextrin identity (would un-quarantine 233404/233406).
 - Directed-range adequacy (maximum vs minimum): shadow shows 77 of 3,704 labels differ; decision deferred to calibration.
-- Formulation calibration: a declared form plus a token that only restates the nutrient or a salt ("Thiamine Hydrochloride, Vitamin B1"; "L-5-MTHF, Calcium Salt") averages the named form with a hardcoded 5.0 at 50% share (_match_multi_form). The 5.0 duplicates IQM's per-parent unspecified value; resolve both in the Formulation candidates.
 - Verification: NSF Certified + NSF Sport stack as two certifications on 28 products; NSF pages read did not state that Certified for Sport includes NSF/ANSI 173.
+- 168 IQM parents have no unspecified form; their unknown shares fall back to the lowest named form until an entry is curated.
+- 73 IQM parents score an unspecified form at or above their best named form (e.g. pine bark 12 vs Pycnogenol 10); audit against the unspecified policy one entry at a time.
 - 69374 prints "1-3 scoops" while DSLD records at most 2 daily servings (P6 frequency policy, held).
 - The personalized P4 tiers reach users after the app's reference-data sync (taxonomy 5.4.0) at release.

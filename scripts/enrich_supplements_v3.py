@@ -292,6 +292,44 @@ _SOURCE_DESCRIPTOR_FORM_CATEGORIES = frozenset({
 # powder" under Magnesium) supplies that nutrient; it is not a form of it.
 _SOURCE_CLASS_FORM_CATEGORIES = frozenset({"botanical", "protein"})
 _DEFINED_NUTRIENT_PARENT_CATEGORIES = frozenset({"vitamins", "minerals", "amino_acids", "enzymes"})
+_LOW_CONFIDENCE_REVIEW_STATUSES = frozenset({"stub", "pending", "needs_review"})
+_UNKNOWN_FORM_TOKENS = ("unspecified", "unknown", "generic", "default")
+
+
+def _effective_form_bio(parent_data: Dict, form_data: Dict) -> float:
+    """The one form-quality value: IQM bio_score, capped at 10 while the
+    parent's review is provisional. The retired IQM `score` is never read."""
+    try:
+        bio = float(form_data.get("bio_score", 5))
+    except (TypeError, ValueError):
+        bio = 5.0
+    review = str((parent_data.get("data_quality") or {}).get("review_status", "")).strip().lower()
+    return min(bio, 10.0) if review in _LOW_CONFIDENCE_REVIEW_STATUSES else bio
+
+
+def _parent_unknown_form(parent_data: Dict) -> Optional[Tuple[str, Dict]]:
+    """What an unknown form of this parent is worth, chosen deterministically:
+    the exact "(unspecified)" form (vitamin D: 'vitamin d (unspecified)', never
+    'vitamin D2 (unspecified source)'), else another unspecified/unknown/
+    generic/default form, else the lowest effective bio_score. Named source
+    preparations are never a default."""
+    forms = {
+        name: data for name, data in (parent_data.get("forms") or {}).items()
+        if isinstance(data, dict) and data.get("alias_identity_scope") != "source_preparation"
+    }
+    if not forms:
+        return None
+    exact = sorted(n for n in forms if re.search(r"\(unspecified\)\s*$", n, re.IGNORECASE))
+    if exact:
+        return exact[0], forms[exact[0]]
+    for token in _UNKNOWN_FORM_TOKENS:
+        named = sorted(n for n in forms if token in n.lower())
+        if named:
+            return named[0], forms[named[0]]
+    name = min(forms, key=lambda n: (_effective_form_bio(parent_data, forms[n]), n.lower()))
+    return name, forms[name]
+
+
 _SOURCE_DESCRIPTOR_FORM_PREFIXES = frozenset({
     "from",
     "culture of",
@@ -8235,28 +8273,24 @@ class SupplementEnricherV3:
         )
         unmatched_weight = max(0.0, max(1.0, declared_weight) - excluded_weight - matched_weight)
         total_weight = matched_weight + unmatched_weight
+        # An unmatched share is worth what IQM says an unknown form of this
+        # parent is worth, not an invented global 5.0.
+        unknown_parent_key = preferred_parent or matched_forms[0].get('canonical_id')
+        unknown_parent = quality_map.get(unknown_parent_key) or {}
+        unknown = _parent_unknown_form(unknown_parent)
+        unknown_bio = (_effective_form_bio(unknown_parent, unknown[1]) if unknown
+                       else min(f['bio_score'] for f in matched_forms))
         if total_weight > 0:
-            final_bio_score = sum(
-                f['bio_score'] * f['percent_share'] for f in matched_forms
-            )
             final_bio_score = (
-                final_bio_score + (5.0 * unmatched_weight)
+                sum(f['bio_score'] * f['percent_share'] for f in matched_forms)
+                + unknown_bio * unmatched_weight
             ) / total_weight
-            final_score = sum(
-                f['score'] * f['percent_share'] for f in matched_forms
-            )
-            final_score = (final_score + (5.0 * unmatched_weight)) / total_weight
         else:
-            if matched_forms:
-                final_bio_score = sum(f['bio_score'] for f in matched_forms) / len(matched_forms)
-                final_score = sum(f['score'] for f in matched_forms) / len(matched_forms)
-            else:
-                final_bio_score = 5.0  # Conservative fallback (unspecified)
-                final_score = 5.0
+            final_bio_score = sum(f['bio_score'] for f in matched_forms) / len(matched_forms)
 
         # Round to 1 decimal place for consistency
         final_bio_score = round(final_bio_score, 1)
-        final_score = round(final_score, 1)
+        final_score = final_bio_score
 
         # Use primary form (first matched) as the base for canonical fields
         primary_match = matched_forms[0]['full_match_data']
@@ -9346,21 +9380,10 @@ class SupplementEnricherV3:
                         return str_map[normalized]
                 return 1.0
 
-            review_status = str((parent_data.get("data_quality") or {}).get("review_status", "")).strip().lower()
-            low_confidence_review = review_status in {"stub", "pending", "needs_review"}
-
-            bio_score = _as_float(form_data.get('bio_score', 5), 5.0)
             natural = bool(form_data.get('natural', False))
-            # v3.6.0: force sourcing-neutral. Ignore legacy IQM `score` field
-            # (still has natural+3 baked in). Contract: score == bio_score.
-            # Natural signal is consumed by A5e in the scorer.
+            # Provisional IQM entries are capped inside _effective_form_bio.
+            bio_score = _effective_form_bio(parent_data, form_data)
             score = bio_score
-
-            # Conservative runtime cap for provisional IQM entries until validated.
-            # Prevents provisional records from receiving premium-form credit.
-            if low_confidence_review:
-                bio_score = min(bio_score, 10.0)
-                score = min(score, 10.0)
 
             return {
                 "canonical_id": parent_key,
@@ -9392,15 +9415,12 @@ class SupplementEnricherV3:
                     """
                     Select a conservative fallback form for parent-level matches.
 
-                    Best-practice policy:
-                    1) If label text clearly indicates a preparation (e.g., powder/oil),
-                       prefer the corresponding non-premium form when available.
-                    2) Otherwise prefer explicit unspecified/default forms when actual form
-                       is unknown.
-                    3) Otherwise choose the lowest-score form to avoid premium over-credit.
+                    1) A preparation word on the label (powder/oil) may pick the
+                       plainest matching form, never one above the parent's
+                       unknown-form value.
+                    2) Otherwise the parent's unknown form (_parent_unknown_form).
+                    Form quality is the effective bio_score only.
                     """
-                    preferred_tokens = ("unspecified", "unknown", "generic", "default")
-
                     input_norm = f"{_norm(ing_name)} {_norm(std_name)}".strip()
                     hint_tokens = {
                         "powder": ("powder", "particulate", "meal"),
@@ -9408,29 +9428,14 @@ class SupplementEnricherV3:
                     }
 
                     def _form_matches_hint(form_name: str, form_data: Dict, hint: str) -> bool:
-                        form_norm = _norm(form_name)
-                        if hint in form_norm:
+                        if hint in _norm(form_name):
                             return True
-                        for alias in form_data.get("aliases", []) or []:
-                            if hint in _norm(alias):
-                                return True
-                        return False
+                        return any(hint in _norm(alias) for alias in form_data.get("aliases", []) or [])
 
-                    def _score_key(item: Tuple[str, Dict]) -> Tuple[float, str]:
-                        form_name, form_data = item
-                        score = form_data.get("score")
-                        bio = form_data.get("bio_score")
-                        try:
-                            numeric = float(score if score is not None else bio if bio is not None else 5.0)
-                        except (TypeError, ValueError):
-                            numeric = 5.0
-                        return numeric, _norm(form_name)
+                    def _bio_key(item: Tuple[str, Dict]) -> Tuple[float, str]:
+                        return _effective_form_bio(parent_data, item[1]), _norm(item[0])
 
-                    default = next(
-                        ((form_name, form_data) for form_name, form_data in forms_dict.items()
-                         if any(token in _norm(form_name) for token in preferred_tokens)),
-                        None,
-                    )
+                    default = _parent_unknown_form({**parent_data, "forms": forms_dict})
                     for hint, tokens in hint_tokens.items():
                         if any(token in input_norm for token in tokens):
                             hinted_matches = [
@@ -9439,22 +9444,15 @@ class SupplementEnricherV3:
                                 if _form_matches_hint(form_name, form_data, hint)
                             ]
                             if hinted_matches:
-                                for form_name, form_data in hinted_matches:
-                                    normalized = _norm(form_name)
-                                    if any(token in normalized for token in preferred_tokens):
-                                        return form_name, form_data
-                                hinted = min(hinted_matches, key=_score_key)
-                                # A preparation word ("powder") may pick a plainer
-                                # form, never one above the unknown-form default:
+                                for item in sorted(hinted_matches, key=lambda it: _norm(it[0])):
+                                    if any(token in _norm(item[0]) for token in _UNKNOWN_FORM_TOKENS):
+                                        return item
+                                hinted = min(hinted_matches, key=_bio_key)
                                 # "Cranberry powder" under Magnesium once picked
                                 # magnesium citrate (14) over the unspecified 5.
-                                if default is None or _score_key(hinted)[0] <= _score_key(default)[0]:
+                                if default is None or _bio_key(hinted)[0] <= _bio_key(default)[0]:
                                     return hinted
-
-                    if default is not None:
-                        return default
-
-                    return min(forms_dict.items(), key=_score_key)
+                    return default
 
                 selected_form_name, selected_form = _select_conservative_parent_form(forms)
                 return (
