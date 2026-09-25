@@ -54,7 +54,7 @@ block — read counts and versions from it; never copy them into docs.
 - Verdict precedence: BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE.
 - Ingredient-level safety flags are `has_banned_substance` / `has_recalled_ingredient`; never
   `is_recalled`.
-- Scoring invariants and the change procedure: `.claude/rules/scoring.md`.
+- Scoring invariants: `.claude/rules/scoring.md`. Changing a score: the `/pg-scoring-change` skill.
 
 ## Truth order — memory never overrules code
 
@@ -81,8 +81,8 @@ bug-fix notes are history, not specifications.
 
 - Fix them: failing test first, the fix in its own atomic commit, logged in the handoff, then back
   to the task. No TODO left behind; no tangent into a redesign.
-- A fix that moves shipped scores or safety verdicts still gets the measurement in
-  `.claude/rules/scoring.md`.
+- A fix that moves shipped scores or safety verdicts still gets the measurement in the
+  `/pg-scoring-change` skill.
 - On an infrastructure branch (harness/config/docs) fix only infrastructure bugs. For an application
   defect: reproduce it, record `path::symbol` + probe + impact + confidence in the handoff, and spawn
   a separate fix task. A P0 stops the work and goes to Sean.
