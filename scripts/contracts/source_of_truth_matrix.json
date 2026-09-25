@@ -41,6 +41,7 @@
     "scoring_fallback_policy",
     "scored_artifact_compatibility_outputs",
     "product_level_scoring_evidence",
+    "fiber_identity",
     "nutrition_only_scoring_class",
     "final_db_export",
     "flutter_bundled_assets",
@@ -403,6 +404,23 @@
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
       "tests": ["scripts/tests/test_scoring_input_contract.py", "scripts/tests/test_enrichment_regressions.py", "scripts/tests/test_probiotic_strain_dose_label.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "fiber_identity",
+      "owner": "scripts/scoring_v4/route_features.py",
+      "first_created_stage": "enriched",
+      "field_kind": "derived",
+      "source_data_files": ["scripts/data/ingredient_quality_map.json"],
+      "consumers": ["scripts/scoring_input_contract.py", "scripts/scoring_v4/modules/fiber_digestive_helpers.py", "scripts/scoring_v4/modules/fiber_digestive_formulation.py", "scripts/scoring_v4/modules/fiber_digestive_dose.py", "scripts/build_final_db.py"],
+      "forbidden_recomputation": [
+        "which canonical ids are fiber identities comes only from route_features.FIBER_CANONICALS (MATERIAL_FIBER_CANONICALS for route-defining fiber mass); fiber_digestive_helpers imports that set and no other module keeps its own canonical fiber list",
+        "the fiber text vocabularies are separate policies, each owned where it decides and none of them canonical fiber identity: route_features._FIBER_TITLE_RE (title intent) and _FIBER_DECLARATION_RE (structural blend declaration), fiber_digestive_helpers.FIBER_TERMS (fiber-module text match), fiber_digestive_dose._fiber_type_bonus and fiber_digestive_formulation._source_quality (per-pillar fiber-type tiers), supplement_taxonomy._FIBER_NAME_TOKENS (taxonomy name signal), scoring_input_contract._ROUTE_NON_PROBIOTIC_HERO_TITLE_RE (probiotic-route veto); merging any two changes routes or scores and needs a measured policy decision",
+        "fiber identity never credits probiotic prebiotic support; prebiotic_catalog.match_prebiotic owns that"
+      ],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
+      "tests": ["scripts/tests/test_v4_fiber_digestive_module.py", "scripts/tests/test_phgg_formulation_identity.py", "scripts/tests/test_routing_feature_shadow.py"],
       "retirement_status": "active"
     },
     {

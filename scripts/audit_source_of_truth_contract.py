@@ -99,6 +99,7 @@ REQUIRED_CONCEPTS = {
     "scoring_fallback_policy",
     "scored_artifact_compatibility_outputs",
     "product_level_scoring_evidence",
+    "fiber_identity",
     "nutrition_only_scoring_class",
     "final_db_export",
     "flutter_bundled_assets",
