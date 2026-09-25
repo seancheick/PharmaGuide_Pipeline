@@ -1,37 +1,40 @@
-# PharmaGuide Pipeline — Claude Code
+@AGENTS.md
 
-**Read `AGENTS.md` in this directory first.** It is the single source of truth for this repo:
-commands, project structure, the v4 scoring contract, conventions, engineering principles, and
-the non-negotiable data rules. This file carries only the Claude-Code-specific delta.
+# Claude Code delta
 
-Why so short: this file used to be a near-duplicate of AGENTS.md (232 of 282 lines identical).
-The copies silently diverged, and CLAUDE.md went on documenting the retired v3.4.0 / 80-point
-scorer — and a `score_supplements.py` that no longer exists — for a month after AGENTS.md was
-corrected. One canonical file, one delta file. Do not grow this back into a second copy.
+AGENTS.md above is imported on purpose. This repo has a CLAUDE.md, so Claude Code's default
+instruction mode (`claude-md-or-agents-md`) would otherwise skip AGENTS.md. Put shared rules in
+AGENTS.md; this file holds only Claude-specific material. Don't grow it into a second copy.
 
-## The one command to remember
+## Session flow
 
-```bash
-scripts/test.sh fast          # dev loop (~3-5 min). NEVER raw pytest.
-scripts/test.sh fast -k <kw>  # single topic
-scripts/test.sh release       # release gates before a ship
-```
+- **Starting a session on existing work:** the SessionStart hook prints the branch, HEAD and
+  handoff age. If a handoff exists, run `/pg-resume` before editing anything.
+- **At a phase boundary** (audit → implement → review → release, or after two wrong architecture
+  assumptions): run `/handoff`, then recommend a fresh session to Sean over continuing a
+  compacted one.
+- **Reviews of important changes** go to a fresh-context subagent (or Codex). It gets only the
+  requirement, the matrix owners and the diff, never the builder's reasoning.
 
-Raw `python3 -m pytest` picks the wrong interpreter (macOS 3.9, not pyenv 3.13.3) **and** runs
-every heavy test — ~1 hour instead of ~4 minutes. See the ⚠️ section in AGENTS.md.
+## Skills for this repo
 
-## Claude-Code specifics
+| Skill | Use |
+|---|---|
+| `/catalog-release` | the release train; wraps `scripts/release_full.sh` |
+| `/data-fix` | curated-data corrections, one entry at a time |
+| `/verify-data` | live-API identifier verification |
+| `/fda-weekly-sync` | FDA recall/ban sync |
+| `/prepare-product-submissions` | submission extraction queue |
+| `/handoff`, `/pg-resume` | save and recover worktree state |
 
-- **Project skills** live in `.claude/skills/` — e.g. `fda-weekly-sync`, `verify-data`, `diagnose`. (18 generic/stale ones incl. `v4-phase` archived to `~/claude-attic/2026-08-06/` in the 2026-08-06 de-noising.)
-- **Web browsing:** use the built-in Browser pane tools (`mcp__Claude_Browser__*`), or
-  WebFetch/WebSearch inside a subagent so only the summary returns. Never
-  `mcp__claude-in-chrome__*`. The former gstack `/browse` skill was archived 2026-07-24 —
-  every `/office-hours`, `/ship`, `/qa`, `/retro`, `/cso`, `/autoplan` reference in older docs
-  is dead.
-- **Skills for this work:** `/catalog-release` (the dsld_clean → Flutter release train, wraps
-  `scripts/release_full.sh`) and `/data-fix` (one-entry-at-a-time curated-data corrections).
-- **Memory** for this repo:
-  `~/.claude/projects/-Users-seancheick-Downloads-dsld-clean/memory/` — check `MEMORY.md`
-  before re-opening past work, and trust the memory *file* over its index line.
-- **Never hand-copy counts into docs.** Entry counts, file counts, and schema versions drift
-  within weeks. Read `_metadata.total_entries` from the data file, or `scripts/DATABASE_SCHEMA.md`.
+Path rules in `.claude/rules/` load on their own when you touch `scripts/data/`,
+`scripts/scoring_v4/`, or the release chain.
+
+## Environment
+
+- **Test runner:** `scripts/test.sh` (see AGENTS.md). The Bash tool is zsh: brace variables before
+  `:`, and split word lists with `${=VAR}`.
+- **Web:** use the Browser pane tools (`mcp__Claude_Browser__*`) or WebFetch/WebSearch. Never use
+  `mcp__claude-in-chrome__*`.
+- **Memory:** `~/.claude/projects/-Users-seancheick-Downloads-dsld-clean/memory/` holds stable
+  preferences and corrections only (see AGENTS.md "Knowledge placement").

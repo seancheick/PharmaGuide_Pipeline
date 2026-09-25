@@ -48,7 +48,7 @@ def pytest_configure(config: pytest.Config) -> None:  # noqa: ARG001
         "     scripts/test.sh fast     # dev loop (~3-5 min, pinned Python 3.13)\n"
         "     scripts/test.sh full     # full suite, pre-ship / CI\n"
         "   Raw `python3 -m pytest` uses Xcode's Python 3.9 and runs the full\n"
-        "   heavy suite (~1 hr). See AGENTS.md > Running tests.\033[0m\n\n"
+        "   heavy suite (~1 hr). See AGENTS.md > Tests.\033[0m\n\n"
     )
 
 
