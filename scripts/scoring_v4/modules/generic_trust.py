@@ -13,10 +13,8 @@ Manufacturer Trust slice (P1.3.6), not this dimension.
 
 from __future__ import annotations
 
-import json
 import re
 from collections import defaultdict
-from pathlib import Path
 from typing import Any, Dict
 
 from scoring_v4.modules.generic_helpers import (
@@ -30,6 +28,7 @@ from scoring_v4.cert_evidence import (
     cert_entry_brand_matches_product,
     facility_audit_programs,
     is_verified_product_cert_entry,
+    marine_cert_tokens,
 )
 from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
 
@@ -68,7 +67,6 @@ LABEL_ASSERTED_OMEGA_ONLY_WHITELIST = frozenset({"ifos", "ifos certified"})
 SUSTAINABILITY_ONLY_CERTS = frozenset(
     {"friend of the sea", "msc", "msc certified", "goed", "goed certified"}
 )
-MARINE_CERTS_FALLBACK = frozenset({"ifos", "friend of the sea", "msc", "goed"})
 
 B4B_GMP_CERTIFIED = _VM["b4b_gmp_certified"]
 B4C_COA = _VM["b4c_coa"]
@@ -123,7 +121,7 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
     if not isinstance(verified, list):
         verified = []
 
-    marine_tokens = _get_marine_cert_tokens()
+    marine_tokens = marine_cert_tokens()
     omega_like = _is_omega_like(product)
     best_scope_by_program: Dict[str, str] = {}
     unscored_scope_counts: Dict[str, int] = defaultdict(int)
@@ -350,41 +348,6 @@ def _is_omega_like(product: Dict[str, Any]) -> bool:
         if _DHA_EPA_WORD_BOUNDARY_RE.search(text):
             return True
     return False
-
-
-_MARINE_CERT_TOKENS_CACHE: frozenset[str] | None = None
-
-
-def _get_marine_cert_tokens() -> frozenset[str]:
-    global _MARINE_CERT_TOKENS_CACHE
-    if _MARINE_CERT_TOKENS_CACHE is not None:
-        return _MARINE_CERT_TOKENS_CACHE
-
-    tokens: set[str] = set()
-    try:
-        rules_path = Path(__file__).resolve().parents[2] / "data" / "cert_claim_rules.json"
-        data = json.loads(rules_path.read_text()) if rules_path.exists() else {}
-        programs = data.get("rules", {}).get("third_party_programs", {})
-        if isinstance(programs, dict):
-            for key, entry in programs.items():
-                if key.startswith("_") or not isinstance(entry, dict):
-                    continue
-                if _norm_text(entry.get("product_scope")) != "marine":
-                    continue
-                display = _norm_text(entry.get("display_name"))
-                if display:
-                    tokens.add(display)
-                key_norm = _norm_text(key.replace("_", " "))
-                if key_norm:
-                    tokens.add(key_norm)
-    except Exception:
-        tokens = set()
-
-    if not tokens:
-        tokens = set(MARINE_CERTS_FALLBACK)
-
-    _MARINE_CERT_TOKENS_CACHE = frozenset(tokens)
-    return _MARINE_CERT_TOKENS_CACHE
 
 
 def _clamp(lo: float, hi: float, value: float) -> float:

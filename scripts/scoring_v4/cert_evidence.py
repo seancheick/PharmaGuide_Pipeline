@@ -32,6 +32,10 @@ AUDITED_GMP_BASES = frozenset({"verified_certification", "manufacturer_facility"
 _USABLE_PRODUCT_CERT_RECENCY = frozenset({"fresh", "warn"})
 
 
+class CertificationPolicyError(RuntimeError):
+    """The canonical certification policy cannot be loaded safely."""
+
+
 def _norm(value: Any) -> str:
     return str(value or "").strip().lower()
 
@@ -82,6 +86,48 @@ def verified_cert_entries(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     if isinstance(nested, list):
         return [entry for entry in nested if isinstance(entry, dict)]
     return []
+
+
+@lru_cache(maxsize=1)
+def marine_cert_tokens() -> frozenset[str]:
+    """Normalized names of certification programs whose registry scope is marine.
+
+    ``cert_claim_rules.json`` ``rules.third_party_programs`` is the only
+    source. A missing file, malformed JSON, or a registry that declares no
+    marine program is a systemic configuration failure. Scoring stops rather
+    than substituting a private list or silently withholding unrelated
+    certification credit.
+    """
+    try:
+        data = json.loads(_CERT_CLAIM_RULES_PATH.read_text())
+    except (OSError, ValueError) as exc:
+        raise CertificationPolicyError(
+            f"cannot load canonical certification policy: {_CERT_CLAIM_RULES_PATH}"
+        ) from exc
+    if not isinstance(data, dict):
+        raise CertificationPolicyError("canonical certification policy root is not an object")
+    programs = (data.get("rules") or {}).get("third_party_programs") if isinstance(data.get("rules"), dict) else None
+    if not isinstance(programs, dict):
+        raise CertificationPolicyError(
+            "canonical certification policy has no third_party_programs object"
+        )
+    tokens: set[str] = set()
+    for key, entry in programs.items():
+        if not isinstance(key, str) or key.startswith("_") or not isinstance(entry, dict):
+            continue
+        if _norm(entry.get("product_scope")) != "marine":
+            continue
+        display = _norm(entry.get("display_name"))
+        key_norm = _norm(key.replace("_", " "))
+        if display:
+            tokens.add(display)
+        if key_norm:
+            tokens.add(key_norm)
+    if not tokens:
+        raise CertificationPolicyError(
+            "canonical certification policy declares no marine-scoped program"
+        )
+    return frozenset(tokens)
 
 
 @lru_cache(maxsize=1)
