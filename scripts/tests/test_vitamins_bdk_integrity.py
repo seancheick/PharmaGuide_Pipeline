@@ -183,7 +183,8 @@ def test_b12_active_form_oral_F_class_consistent(iqm):
     is identical (~1-2% passive at supplemental doses) across active forms.
     methylcobalamin / adenosylcobalamin / hydroxocobalamin / cyanocobalamin
     must all have struct.value in the 0.01-0.05 band when given orally.
-    Sublingual forms are exempt (10-40% via mucosa).
+    Sublingual rows are excluded because their fractional absorption is not
+    quantified by the cited efficacy comparison.
     """
     forms = iqm['vitamin_b12_cobalamin']['forms']
     oral_forms = ('methylcobalamin', 'adenosylcobalamin', 'hydroxocobalamin',

@@ -3,7 +3,8 @@
 Verifies that all Dr Pham approved decisions from
 docs/DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md are correctly applied:
 
-  • Section C bio_score downgrades (52 forms)
+  • Section C reviewed bio_score decisions (52 forms), with later
+    parent-relative recalibrations where explicitly recorded in IQM history
   • Section E open-question decisions (10 forms)
   • Section D7 category_error_type enum (41 forms)
 
@@ -28,18 +29,19 @@ def iqm():
 
 
 # ============================================================================
-# Section C — bio_score downgrades
+# Section C — reviewed bio_score decisions
 # ============================================================================
 
 @pytest.mark.parametrize('pid,fname,expected_bio', [
     # C2 — B12
-    # Human data support sublingual delivery, but not an Excellent
-    # methylcobalamin-specific absorption advantage.
-    ('vitamin_b12_cobalamin', 'methylcobalamin sublingual',  11),
-    ('vitamin_b12_cobalamin', 'methylcobalamin',              8),
-    ('vitamin_b12_cobalamin', 'adenosylcobalamin',            8),
-    ('vitamin_b12_cobalamin', 'hydroxocobalamin',             8),
-    ('vitamin_b12_cobalamin', 'cyanocobalamin sublingual',    9),
+    # The later parent-relative B12 recalibration preserves Dr Pham's finding
+    # that the reviewed forms have no established absorption advantage, while
+    # assigning tied best forms the IQM parent maximum.
+    ('vitamin_b12_cobalamin', 'methylcobalamin sublingual',  15),
+    ('vitamin_b12_cobalamin', 'methylcobalamin',             15),
+    ('vitamin_b12_cobalamin', 'adenosylcobalamin',           15),
+    ('vitamin_b12_cobalamin', 'hydroxocobalamin',            15),
+    ('vitamin_b12_cobalamin', 'cyanocobalamin sublingual',   15),
     # C3 — Crominex
     ('chromium', 'crominex 3+ chromium complex',              7),
     ('boswellia', '5-loxin',                                  7),
@@ -102,7 +104,7 @@ def iqm():
     ('iron', 'iron picolinate',                               8),
 ])
 def test_dr_pham_section_c_bio_score(iqm, pid, fname, expected_bio):
-    """Section C bio_score downgrades must be applied per Dr Pham sign-off."""
+    """Section C decisions plus recorded later recalibrations must stay pinned."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
     actual = form.get('bio_score')

@@ -5,7 +5,7 @@
     "purpose": "quality_scoring",
     "scoring_system": {
       "bio_score": {
-        "description": "bio_score: 0\u201315. For systemic actives, based on absorption/bioavailability evidence. For local/matrix actives (fibers, prebiotics, mushrooms, demulcents, phytosterols), based on active-form quality and delivery-to-site confidence rather than systemic absorption.",
+        "description": "bio_score: 0\u201315 within each canonical parent. The best evidence-supported eligible form of a parent is 15; other forms preserve evidence-supported differences relative to that parent. For systemic actives, comparisons use absorption/bioavailability evidence. For local/matrix actives (fibers, prebiotics, mushrooms, demulcents, phytosterols), comparisons use active-form quality and delivery-to-site confidence rather than systemic absorption.",
         "range": "0-15",
         "scoring_factors": [
           "Direct human absorption or bioavailability evidence",
@@ -14,11 +14,11 @@
           "Clinically relevant absorption proxy evidence, documented as lower confidence when indirect"
         ],
         "practical_rule_for_pharmaguide": {
-          "15": "Strongest direct human evidence, clear top-tier absorption.",
-          "13-14": "Excellent, but not proven best.",
-          "10-12": "Good/solid.",
-          "6-9": "Acceptable but not premium.",
-          "0-5": "Weak, poor, or mostly formulation/tolerability-driven."
+          "15": "Best evidence-supported eligible form or tied forms within this parent.",
+          "13-14": "Near the parent's best; 14 is also the nondisclosure value when all eligible named forms tie at 15.",
+          "10-12": "Solid relative to other forms of this parent.",
+          "6-9": "Lower-quality relative form.",
+          "0-5": "Weak or non-delivering relative form."
         },
         "honesty_rule": "Do not inflate bio_score for natural sourcing, manufacturing polish, branding, tolerability, or indication-specific effects. Systemic actives require absorption/bioavailability evidence. Local/matrix actives may use form-quality/delivery-to-site evidence, but must not treat poor systemic absorption as premium systemic bioavailability."
       },
@@ -53,8 +53,8 @@
       "proteins": 16,
       "vitamins": 25
     },
-    "schema_version": "5.6.0",
-    "last_updated": "2026-09-24",
+    "schema_version": "5.6.1",
+    "last_updated": "2026-09-25",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1737,6 +1737,16 @@
           "No form scores, identifiers, or clinical claims changed."
         ],
         "regression_tests": "scripts/tests/test_creatine_integrity.py"
+      },
+      "5.6.1": {
+        "date": "2026-09-25",
+        "audit": "parent_relative_b12_recalibration",
+        "changes": [
+          "Defined bio_score as a within-parent 0-15 form-quality scale; the best evidence-supported eligible form or tied forms receive 15.",
+          "Aligned six disclosed oral/sublingual B12 forms at 15 because reviewed evidence does not establish meaningful absorption or efficacy superiority at equivalent supplemental doses.",
+          "Set B12 unspecified to 14 under the existing lowest-eligible-minus-one nondisclosure rule and removed conflicting methyl/MTHFR and sublingual-premium copy."
+        ],
+        "regression_tests": "scripts/tests/test_iqm_b12_sublingual_integrity.py, scripts/tests/test_b35_dr_pham_signoff_integrity.py, scripts/tests/test_ingredient_matching_regression.py"
       },
       "5.6.0": {
         "date": "2026-09-24",
@@ -4784,7 +4794,7 @@
     "rxcui": "11248",
     "forms": {
       "methylcobalamin sublingual": {
-        "bio_score": 11,
+        "bio_score": 15,
         "absorption": "Sublingual fractional absorption is not quantified by the cited efficacy comparison; no demonstrated efficacy advantage over oral B12.",
         "consumer_note": "This is methylcobalamin presented in a sublingual delivery format. The sublingual designation identifies how the product is intended to be used, while methylcobalamin identifies the B12 compound.",
         "consumer_note_review": {
@@ -4808,14 +4818,14 @@
         }
       },
       "methylcobalamin": {
-        "bio_score": 8,
+        "bio_score": 15,
         "absorption": "active coenzyme form; ~1-2% passive absorption at 1000 mcg supplemental dose",
         "consumer_note": "Methylcobalamin is a vitamin B12 form carrying a methyl group, distinct from cyano-, hydroxo-, and adenosylcobalamin.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "The bioactive methyl form of B12 \u2014 used directly by your cells without conversion. Supports nerve health, brain function, and methylation pathways. Preferred over cyanocobalamin for people with MTHFR variants. Does not require intrinsic factor conversion, only GI absorption. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) \u2014 bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 14 \u2192 8. Oral B12 above intrinsic factor saturation absorbs at passive 1-2%; oral methylcobalamin at 14 was \"fantasy\" per Dr Pham. Cited evidence: PMID:18709891.",
+        "notes": "Methylcobalamin is a coenzyme form of vitamin B12. At equivalent supplemental doses, reviewed evidence does not establish superior oral absorption or clinical efficacy versus cyano-, adenosyl-, or hydroxocobalamin. Dose and correction of B12 status remain separate Dose and Evidence questions. Evidence: NIH ODS Vitamin B12 fact sheet; PMID:18709891.",
         "aliases": [
           "methyl b12",
           "methyl cobalamin",
@@ -4843,14 +4853,14 @@
         }
       },
       "adenosylcobalamin": {
-        "bio_score": 8,
+        "bio_score": 15,
         "absorption": "mitochondrial coenzyme form; ~1-2% passive absorption at 1000 mcg dose",
-        "consumer_note": "Adenosylcobalamin is a coenzyme form of vitamin B12 in which cobalamin carries a 5\u2032-deoxyadenosyl group.",
+        "consumer_note": "Adenosylcobalamin is a coenzyme form of vitamin B12 in which cobalamin carries a 5′-deoxyadenosyl group.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "The mitochondrial active form of B12 (also called dibencozide or coenzyme B12). Essential for energy production in the Krebs cycle. The form your mitochondria actually use. Less common in supplements than methylcobalamin but equally important biologically. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) \u2014 bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 14 \u2192 8. Same passive 1-2% F as oral methylcobalamin.",
+        "notes": "Adenosylcobalamin is a mitochondrial coenzyme form of vitamin B12. At equivalent supplemental doses, reviewed evidence does not establish superior oral absorption or clinical efficacy versus other B12 forms. Its post-absorption biochemical role does not prove a bioavailability premium. Evidence: NIH ODS Vitamin B12 fact sheet; PMID:18709891.",
         "aliases": [
           "dibencozide",
           "cobamamide",
@@ -4867,14 +4877,14 @@
         }
       },
       "hydroxocobalamin": {
-        "bio_score": 8,
+        "bio_score": 15,
         "absorption": "long retention; ~1-3% oral F, IM preferred for cyanide antidote use",
         "consumer_note": "Hydroxocobalamin is a specific form of vitamin B12 with a hydroxyl group attached to cobalamin. It is distinct from methylcobalamin, adenosylcobalamin, and cyanocobalamin.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "A natural form of B12 with excellent tissue retention \u2014 stays in the body longer than cyanocobalamin. Used medically for cyanide poisoning treatment and B12 injections. Converts to both methylcobalamin and adenosylcobalamin as needed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) \u2014 bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 13 \u2192 8. Oral hydroxocobalamin F~3%; injectable form is the clinical default.",
+        "notes": "Hydroxocobalamin is a vitamin B12 form used clinically by injection and converted to active cobalamin forms. For oral supplements, reviewed evidence does not establish a form-quality advantage over methyl-, adenosyl-, or cyanocobalamin at equivalent doses. Route-specific medical use is not an oral bioavailability premium. Evidence: NIH ODS Vitamin B12 fact sheet; PMID:18709891.",
         "aliases": [
           "hydroxy b12",
           "hydroxo b12",
@@ -4893,14 +4903,14 @@
         }
       },
       "cyanocobalamin sublingual": {
-        "bio_score": 9,
+        "bio_score": 15,
         "absorption": "Sublingual fractional absorption is not quantified by the cited efficacy comparison; no demonstrated efficacy advantage over oral B12.",
         "consumer_note": "This is cyanocobalamin presented in a sublingual delivery format. The sublingual designation identifies how the product is intended to be used, while cyanocobalamin identifies the B12 compound.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Synthetic B12 with sublingual delivery to improve absorption. While sublingual bypasses some GI barriers, cyanocobalamin still requires liver conversion to active forms and releases a tiny amount of cyanide during metabolism. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) \u2014 bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 11 \u2192 9. Sublingual partial first-pass bypass; modest premium.",
+        "notes": "Cyanocobalamin in a sublingual delivery format can correct B12 deficiency, but a randomized comparison found no meaningful efficacy difference from the same oral dose. The reviewed evidence does not establish a sublingual absorption premium. Evidence: PMID:14616423; NIH ODS Vitamin B12 fact sheet.",
         "aliases": [
           "sublingual b12",
           "b12 sublingual",
@@ -4916,9 +4926,9 @@
         }
       },
       "cyanocobalamin": {
-        "bio_score": 10,
+        "bio_score": 15,
         "absorption": "synthetic; ~1-2% passive at 1000 mcg, requires conversion to methyl/adenosyl forms",
-        "notes": "The most common and cheapest synthetic B12 form. Contains a cyanide group that must be removed during metabolism (the amount is toxicologically insignificant). Requires liver conversion to active methylcobalamin or adenosylcobalamin. The most clinically studied form. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) \u2014 bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "notes": "Cyanocobalamin is the most clinically studied and commonly used supplemental B12 form. It is converted to active cobalamin forms after absorption. At equivalent supplemental doses, reviewed evidence does not establish inferior clinical efficacy or absorption versus other oral B12 forms. Evidence: NIH ODS Vitamin B12 fact sheet; PMID:18709891.",
         "consumer_note": "Cyanocobalamin is the most common form of vitamin B12 in supplements. It is converted to active B12 forms after absorption.",
         "consumer_note_review": {
           "by": "Product owner approval",
@@ -4941,14 +4951,14 @@
         }
       },
       "b12 (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 14,
         "absorption": "form unspecified; assume ~1-2% passive absorption at supplemental dose",
         "consumer_note": "This listing identifies vitamin B12 without naming methylcobalamin, cyanocobalamin, hydroxocobalamin, or another compound. The label does not provide enough form detail to distinguish among B12 forms.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "The supplement label does not specify which form of B12 is used. Cheap supplements typically use cyanocobalamin; premium ones use methylcobalamin or adenosylcobalamin. The form matters significantly for people with MTHFR variants or absorption issues. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) \u2014 bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "notes": "The label identifies vitamin B12 but does not disclose the cobalamin form. Reviewed evidence does not establish meaningful oral absorption or efficacy superiority among the common supplemental forms, so nondisclosure receives the standard one-point parent-relative deduction without inventing a specific form.",
         "aliases": [
           "vitamin b12 unspecified",
           "b12 unspecified",
@@ -4996,7 +5006,7 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26",
+      "last_reviewed_at": "2026-09-25",
       "research_status": "validated"
     },
     "external_ids": {

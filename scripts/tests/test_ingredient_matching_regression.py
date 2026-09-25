@@ -491,12 +491,11 @@ class TestMultiFormMatching:
         matched_forms = b12_entry.get('matched_forms', [])
         assert len(matched_forms) == 2, f"Should match both forms, got {len(matched_forms)}"
 
-        # Per Dr Pham C2 (2026-04-25): adenosylcobalamin and methylcobalamin
-        # downgraded from 14 → 8 (sublingual-only PK premium retained on the
-        # 'methylcobalamin sublingual' form). Plain forms now bio=8.
-        # Average should be 8.0.
+        # Reviewed B12 supplement forms have no established absorption or
+        # efficacy superiority at equivalent oral doses. Both disclosed forms
+        # therefore sit at the within-parent maximum.
         bio_score = b12_entry.get('bio_score')
-        assert bio_score == 8.0, f"Expected bio_score 8.0 (average post-Dr-Pham C2), got {bio_score}"
+        assert bio_score == 15.0, f"Expected parent-relative bio_score 15.0, got {bio_score}"
 
         # Verify aggregation method
         assert b12_entry.get('aggregation_method') == 'equal', \
