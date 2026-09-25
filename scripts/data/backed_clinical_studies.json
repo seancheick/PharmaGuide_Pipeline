@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.5.0",
+    "schema_version": "5.5.1",
     "last_updated": "2026-09-25",
     "total_entries": 208,
     "changelog": [
+      "5.5.1 (2026-09-25): INGR_OMEGA3 general-purpose evidence now requires at least 376 mg/day of disclosed EPA+DHA, the lowest exposure in the cited 13-trial cardiovascular meta-analysis (PMID 31567003). Trace-dose gummies no longer inherit the reviewed cardiovascular evidence record. No evidence strength or pillar magnitude changed.",
       "5.5.0 (2026-09-25): INGR_OMEGA3 gains reviewed purpose-specific records. General omega evidence remains positive_weak; triglyceride evidence becomes fully applicable only when the minimum directed EPA+DHA exposure reaches 2 g/day, with graduated applicability from 1-2 g/day. Prenatal 200 mg DHA is intake-guideline evidence only. Preterm-birth, depression and atrial-fibrillation records are retained as non-scoring contexts where a fixed product label cannot establish the required purpose, population or safety owner.",
       "5.4.2 (2026-09-18): INGR_AMLA scoring HELD at reference tier by owner decision. The direction stays positive_weak and the 500 mg/day dose context is kept - the evidence is not being erased or called null. The measured reason: primary floor 14.0 x 0.85 = 11.9 raw, rescaled by the generic_botanical_branded archetype reference (11.9 / 18.0 x 20) = 13.2 of 20 for three single-active products, which overstates overlapping syntheses whose LDL-C and triglyceride prediction intervals cross null. Diagnostic run on INGR_WHITE_KIDNEY_BEAN shows the SAME 13.2 by the same path, so this is a structural floor-calibration question, not an amla-specific one; white kidney bean is left approved pending that review. No scoring rule changed.",
       "5.4.1 (2026-09-18): Wave 2 corrections after independent review, each re-verified against the live sources. INGR_DEVILS_CLAW moved to reference tier (non-scoring): the stored total_enrollment 2050 was the whole Cochrane review's total across SIX herbal medicines, not devil's claw (corrected to 197), and the studied exposure is 50-100 mg/day of harpagoside (PMID 10101629: extract WS 1531 at 600/1200 mg containing 50/100 mg harpagoside; PMID 12509627: Doloteffin, 60 mg harpagoside) while the single catalog label stating harpagoside delivers about 10.5 mg/day. INGR_SENNA moved to reference tier and its confidence lowered: PMID 35943487 calls itself a synopsis of the authors' own updated systematic review, so it is not a second independent grade-A confirmation; 0 of 15 catalog labels state sennosides. INGR_AMLA stays positive_weak with its limitations made explicit - prediction intervals crossing null for LDL-C and triglycerides, I2 of 77% and 62%, biomarker rather than event endpoints, and two overlapping rather than independent syntheses. No scoring rule changed by these corrections.",
@@ -7266,11 +7267,12 @@
           "purpose": "general_omega_3",
           "effect_direction": "positive_weak",
           "pillar_score": 10.4,
+          "minimum_daily_epa_dha_mg": 376,
           "source_pmids": [
             "31567003",
             "32951855"
           ],
-          "rationale": "Broad supplement evidence supports modest cardiovascular effects, while several major 1 g/day outcome trials were null. This record establishes reviewed evidence without claiming a strong treatment effect."
+          "rationale": "Broad supplement evidence supports modest cardiovascular effects, while several major 1 g/day outcome trials were null. PMID 31567003 studied 376-4000 mg/day, so the record does not apply below 376 mg/day of disclosed EPA+DHA. This record establishes reviewed evidence without claiming a strong treatment effect."
         },
         {
           "id": "triglyceride_strong",

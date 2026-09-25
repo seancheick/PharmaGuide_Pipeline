@@ -71,6 +71,19 @@ def test_evidence_keeps_reviewed_weak_record_below_one_gram() -> None:
     assert payload["metadata"]["applicability_qualified"] is True
 
 
+def test_evidence_requires_the_reviewed_weak_record_minimum_exposure() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    below_reviewed_range = score_evidence(_product(epa=200, dha=175))
+    at_reviewed_range = score_evidence(_product(epa=200, dha=176))
+
+    assert below_reviewed_range["score"] == 0.0
+    assert below_reviewed_range["metadata"]["evidence_standard"] is None
+    assert below_reviewed_range["metadata"]["applicability_qualified"] is False
+    assert at_reviewed_range["score"] == 10.4
+    assert at_reviewed_range["metadata"]["evidence_standard"] == "omega_reviewed_weak"
+
+
 def test_prenatal_intake_authority_is_not_preterm_outcome_credit() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 

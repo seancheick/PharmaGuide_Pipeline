@@ -223,16 +223,18 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     strong = standards["triglyceride_strong"]
     prenatal_intake = standards["prenatal_dha_intake_authority"]
     weak_score = float(weak["pillar_score"])
+    weak_minimum = float(weak["minimum_daily_epa_dha_mg"])
     strong_score = float(strong["pillar_score"])
     strong_minimum = float(strong["minimum_daily_epa_dha_mg"])
     graduated_minimum = float(strong["graduated_from_daily_epa_dha_mg"])
 
     selected = weak
-    score = weak_score if minimum > 0 else 0.0
-    # A disclosed amount is sufficient to apply the reviewed weak record;
-    # defaulted frequency remains explicitly marked but does not make the
-    # product ineligible. Prenatal intake is handled below by its own floor.
-    qualified = bool(minimum > 0)
+    score = weak_score if minimum >= weak_minimum else 0.0
+    # The weak record starts at the lowest exposure represented in its cited
+    # trials. A disclosed trace amount cannot inherit that evidence. Defaulted
+    # frequency remains explicitly marked but does not itself make a qualifying
+    # exposure ineligible. Prenatal intake is handled below by its own floor.
+    qualified = bool(minimum >= weak_minimum)
     if prenatal:
         if dha_minimum >= float(prenatal_intake["minimum_daily_dha_mg"]):
             selected = prenatal_intake
