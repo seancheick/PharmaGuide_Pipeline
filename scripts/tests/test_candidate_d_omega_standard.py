@@ -68,6 +68,7 @@ def test_evidence_keeps_reviewed_weak_record_below_one_gram() -> None:
     assert payload["score"] == 10.4
     assert payload["metadata"]["evidence_standard"] == "omega_reviewed_weak"
     assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is False
+    assert payload["metadata"]["applicability_qualified"] is True
 
 
 def test_prenatal_intake_authority_is_not_preterm_outcome_credit() -> None:
@@ -103,4 +104,3 @@ def test_dose_scores_directed_interval_not_midpoint_dose() -> None:
     assert payload["metadata"]["per_day_max_mg"] == 2400.0
     assert payload["metadata"]["interval_crosses_band"] is True
     assert payload["score"] == pytest.approx(18.4)
-

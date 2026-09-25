@@ -229,7 +229,10 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
 
     selected = weak
     score = weak_score if minimum > 0 else 0.0
-    qualified = bool(defaulted)
+    # A disclosed amount is sufficient to apply the reviewed weak record;
+    # defaulted frequency remains explicitly marked but does not make the
+    # product ineligible. Prenatal intake is handled below by its own floor.
+    qualified = bool(minimum > 0)
     if prenatal:
         if dha_minimum >= float(prenatal_intake["minimum_daily_dha_mg"]):
             selected = prenatal_intake
