@@ -523,7 +523,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   "category": "vitamins",
   "bio_score": 14,
   "natural": false,
-  "score": 14,
   "form_evidence": {
     "evidence_level": "moderate",
     "references_structured": [{
@@ -536,7 +535,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
       "verified_on": "2026-08-13"
     }]
   },
-  "_score_note": "v3.6.0+: `score` is a deprecated alias of `bio_score` (no natural-source bonus). Pre-v3.6.0 blobs had `score = bio_score + 3*natural` (range 0-18). New consumers should read `bio_score` directly (range 0-15, pure form quality). Sourcing is not scored in v4.",
   "notes": "The most common preformed Vitamin A in supplements...",
   "normalized_amount": null,
   "normalized_unit": null,
@@ -815,6 +813,7 @@ fails the snapshot gate, as an undeclared top-level key already did.
 Retired in the same-day follow-up (no reader, or a second name for a shipped
 value):
 - `dosage` / `dosage_unit`: same values as `quantity` / `unit`.
+- `score`: the v3.6.0 alias of `bio_score`; read `bio_score` (range 0-15).
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,

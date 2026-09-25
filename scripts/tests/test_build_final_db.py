@@ -1824,14 +1824,13 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "extracted_forms",
         "bio_score",
         "natural",
-        "score",
         "notes",
         "category",
         "is_mapped",
         "normalized_amount",
     }
     assert expected_keys.issubset(set(ingredient.keys()))
-    assert ingredient["score"] == 14.0
+    assert ingredient["bio_score"] == 14.0
     assert (ingredient["quantity"], ingredient["unit"]) == (2000.0, "IU")
     assert ingredient["standard_name"] == "Retinyl Palmitate"
     # Retired twins (row-key census 2026-09-25): each duplicated a value that
@@ -1839,6 +1838,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
     for retired in (
         "standardName", "mapped", "normalized_value", "safety_hits", "harmful_notes",
         "dosage", "dosage_unit",
+        "score",
     ):
         assert retired not in ingredient
 

@@ -44,7 +44,6 @@ ACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "quantity":            {"required": False, "type": "number?",  "is_enum": False},
     "unit":                {"required": False, "type": "string?",  "is_enum": False},
     "bio_score":           {"required": False, "type": "number?",  "is_enum": False},
-    "score":               {"required": False, "type": "number?",  "is_enum": False, "deprecated": True},
     "form":                {"required": False, "type": "string?",  "is_enum": False, "deprecated": True},
     "is_harmful":          {"required": False, "type": "bool?",    "is_enum": False, "deprecated": True},
     # v1.5.0 canonical fields (PROMISED in doc):

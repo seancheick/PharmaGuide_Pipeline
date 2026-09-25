@@ -6693,7 +6693,6 @@ def build_detail_blob(
                 canonical_id and canonical_id in sub_clinical_set
             ),
             "natural": bool(m.get("natural")),
-            "score": safe_float(m.get("score")),
             # Curation workspace — audit prose expected. Never rendered.
             "notes": safe_str(m.get("notes")),
             # Reviewed consumer copy, or None. See _derive_form_note.
