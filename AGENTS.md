@@ -1,325 +1,197 @@
-# PharmaGuide — Data Pipeline & Scoring Engine
+# PharmaGuide Pipeline — agent constitution
 
-## Project Overview
+Shared by Claude, Codex and every other agent; Claude loads it through `@AGENTS.md` in CLAUDE.md.
+Kept short on purpose: path-specific rules live in `.claude/rules/`, procedures in skills, rationale
+in `docs/adr/`, ownership in `scripts/contracts/source_of_truth_matrix.json`.
 
-PharmaGuide is a 3-stage data pipeline (Clean → Enrich → Score) that processes dietary supplement products from the NIH DSLD database into evidence-based quality scores. The scored output feeds a Flutter mobile app for consumers.
+## Project
 
-**Repo:** github.com/seancheick/PharmaGuide_Pipeline (the local directory is still named
-`dsld_clean`; the remote was renamed — `git fetch` before asserting any commit/branch state)
-**Language:** Python 3.13
-**Test framework:** pytest 9
+- Pipeline Clean → Enrich → Score → Export: NIH DSLD supplement labels become evidence-based scores
+  plus a catalog and interaction DB for the Flutter app at `/Users/seancheick/PharmaGuide ai`.
+- Repo github.com/seancheick/PharmaGuide_Pipeline is **public** (a push is publishing); the local
+  dir is still `dsld_clean`. Python 3.13, pytest 9.
+- `git fetch` before asserting commit/branch state: Codex, Claude and rebuild automation all commit
+  here, and the session-start git snapshot goes stale. The main-checkout agent has been seen
+  fast-forwarding local `claude/*` branches into `main` within seconds, so treat a commit as a
+  handoff and verify before committing.
 
-## ⚠️ Running tests — use `scripts/test.sh`, never raw `pytest`
+## Tests — `scripts/test.sh`, never raw pytest
 
-The dev loop is **`scripts/test.sh fast`** (~3–5 min). The runner pins the
-project interpreter (pyenv **3.13.3**; macOS/Xcode `python3` is 3.9 and wrong)
-and skips the ~15 heavy real-catalog / V4-canary tests. Running
-`python3 -m pytest scripts/tests/` directly uses the wrong interpreter **and**
-runs every heavy test (one alone is ~8 min) — that is why ad-hoc runs balloon to
-~1 hour.
-
-```bash
-scripts/test.sh fast            # dev loop — ~3–5 min (DEFAULT; use this)
-scripts/test.sh fast -k banned  # filter by keyword
-scripts/test.sh fast scripts/tests/test_v4_scored_artifact.py  # one file
-scripts/test.sh release         # release gates before a ship / commit
-scripts/test.sh full            # entire suite, parallel (-n auto) — pre-ship / CI
-scripts/test.sh slow            # only the heavy integration tests
-```
-
-The ~15 catalog/release tests are **release gates**, not dev-loop tests — run
-them via `release`/`full` before a ship, not while iterating. (conftest.py prints
-a reminder if pytest is launched without the runner.)
-
-## Commands
+Raw `python3 -m pytest` picks macOS Python 3.9 and runs every heavy test (~1 h).
 
 ```bash
-# Tests — ALWAYS via the runner (see "Running tests" above), NEVER raw pytest.
-scripts/test.sh fast                 # dev loop (~3-5 min, pinned Python 3.13)
-scripts/test.sh fast -k banned       # filter by keyword
-scripts/test.sh full                 # full suite (pre-ship / CI)
-
-# Canonical operational runs
-bash batch_run_all_datasets.sh
-bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
-bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/staging/brands"
-
-# Rebuild dashboard/catalog snapshot from existing brand outputs
-bash scripts/rebuild_dashboard_snapshot.sh
-
-# Release-stage work: catalog staging, product images, interaction DB, Supabase, Flutter bundle
-bash scripts/release_full.sh
-
-# Single-brand/stage runner for local iteration only
-python3 scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand>
-
-# Run individual pipeline stages
-python3 scripts/clean_dsld_data.py <input> <output>
-python3 scripts/enrich_supplements_v3.py <cleaned_input> <output>
-python3 scripts/score_products_v4.py --input-dir <enriched_dir> --output-dir <scored_dir>
-
-# Manual/internal final DB export; normal shipping goes through rebuild_dashboard_snapshot.sh + release_full.sh
-python3 scripts/build_final_db.py --enriched-dir <enriched_dir> --scored-dir <scored_dir> --output-dir <output>
-
-# Sync pipeline output to Supabase
-python3 scripts/sync_to_supabase.py <build_output_dir>
-
-# Dry run (preview without uploading)
-python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
-
-# FDA weekly sync (regulatory recall updates)
-bash scripts/run_fda_sync.sh
-
-# Data integrity check
-python3 scripts/db_integrity_sanity_check.py
-
-# Enrichment contract validation
-python3 scripts/enrichment_contract_validator.py <enriched_file>
-
-# Coverage gate (quality thresholds)
-python3 scripts/coverage_gate.py <scored_file>
+scripts/test.sh fast -k <kw>   # iterating: only the topic you touched
+scripts/test.sh fast           # checkpoint: completed batch or shared-code change
+scripts/test.sh release        # release gates before a ship
+scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
 ```
 
-## Project Structure
+Pick the rung by what changed and say which rung ran. Docs/config-only changes need no pytest.
+"Done" without output from the rung that covers the change is not done.
 
-```
-scripts/
-  *.py                        # Core pipeline scripts (~30 files)
-  api_audit/                  # External API verification tools (UMLS, FDA, PubMed, ChEMBL, EFSA)
-  config/                     # cleaning_config.json, enrichment_config.json, scoring_config.json
-  data/                       # Reference JSON databases — see scripts/DATABASE_SCHEMA.md
-  data/curated_overrides/     # Manual CUI/PubChem/GSRS policy overrides
-  tests/                      # pytest suite (count drifts; use `ls scripts/tests/test_*.py | wc -l`)
-  logs/                       # Runtime logs
-  reports/                    # Generated audit reports
-docs/                         # Technical deep-dives and infographics
-.claude/skills/fda-weekly-sync/  # Claude Code skill for FDA regulatory sync
-```
+## Pipeline map
 
-## Key Scripts
+| Stage | Entry point |
+|---|---|
+| Corpus run | `batch_run_all_datasets.sh` — can publish; see "Operations safety" |
+| One brand (iteration) | `scripts/run_pipeline.py` |
+| Clean | `scripts/clean_dsld_data.py` → `scripts/enhanced_normalizer.py` |
+| Enrich | `scripts/enrich_supplements_v3.py` (mega-file: gray box, test at the boundary) |
+| Score | `scripts/score_products_v4.py` (batch I/O) → `scripts/score_supplements_v4.py::score_product_v4` → `scripts/scoring_v4/scored_artifact.py` |
+| Export / release | `scripts/rebuild_dashboard_snapshot.sh` → `scripts/release_full.sh` (`build_final_db.py`, Supabase, Flutter bundle) |
 
-| Script                         | Role                                                        |
-| ------------------------------ | ----------------------------------------------------------- |
-| `batch_run_all_datasets.sh`    | Main full-corpus / targeted operational runner               |
-| `scripts/rebuild_dashboard_snapshot.sh` | Rebuilds final DB/dashboard snapshot from brand outputs |
-| `scripts/release_full.sh`      | Release-stage owner: catalog, images, interaction DB, Supabase, Flutter |
-| `run_pipeline.py`              | Single-brand/stage Clean → Enrich → Score runner             |
-| `clean_dsld_data.py`           | Stage 1: normalize raw DSLD JSON                            |
-| `enrich_supplements_v3.py`     | Stage 2: match ingredients, classify, enrich (mega-file)    |
-| `score_products_v4.py`         | Stage 3: v4 artifact batch I/O and atomic writes            |
-| `scoring_v4/scored_artifact.py` | Single scored-artifact assembly and verdict/coverage contract |
-| `enhanced_normalizer.py`       | Core text normalization engine (mega-file)                  |
-| `build_final_db.py`            | Internal/manual final DB builder used by snapshot/release flows |
-| `audit_source_of_truth_contract.py` | Cleaner-first source-of-truth and strict release gates  |
-| `constants.py`                 | Shared constants and mappings                               |
-| `batch_processor.py`           | Batch processing with resume capability                     |
-| `db_integrity_sanity_check.py` | Schema and data validation                                  |
-| `coverage_gate.py`             | Quality/coverage threshold enforcement                      |
+Data files live in `scripts/data/` (schema: `scripts/DATABASE_SCHEMA.md`). Each has a `_metadata`
+block — read counts and versions from it; never copy them into docs.
 
-## Key Data Files (scripts/data/)
+## Production score (v4) — one public scorer
 
-| File                               | Purpose                                                         |
-| ---------------------------------- | --------------------------------------------------------------- |
-| `ingredient_quality_map.json`      | Quality scoring per IQM parent (largest file)                   |
-| `banned_recalled_ingredients.json` | Regulatory safety disqualifications or penalties                |
-| `harmful_additives.json`           | Penalty scoring for harmful additives                           |
-| `backed_clinical_studies.json`     | Clinical evidence bonus points (all PMID-backed)                |
-| `allergens.json`                   | Allergen classification (Big 8 types)                           |
-| `rda_optimal_uls.json`             | Dosing adequacy benchmarks                                      |
-| `manufacturer_violations.json`     | Brand trust penalties                                           |
-| `synergy_cluster.json`             | Ingredient synergy bonuses                                      |
+- Six pillars /100: Formulation 20, Dose 20, Evidence 20, Transparency 15, Verification 15,
+  Safety/Hygiene 10. `scripts/scoring_v4/config/quality_score.json` is the only production config.
+  Export consumes the scored artifact directly and never runs a second scorer.
+- Frozen fields: `quality_score_v4_100`, `quality_score_status` (`scored` / `suppressed_safety` /
+  `not_scored`), `quality_pillars_v4`; `score_100_equivalent` and `score_display_100_equivalent` are
+  compatibility mirrors. Never reintroduce `score_quality_80` / `score_display_80`.
+- Verdict precedence: BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE.
+- Ingredient-level safety flags are `has_banned_substance` / `has_recalled_ingredient`; never
+  `is_recalled`.
+- Scoring invariants and the change procedure: `.claude/rules/scoring.md`.
 
-All data files use the `_metadata` contract with `schema_version`, `last_updated`, `total_entries`.
+## Truth order — memory never overrules code
 
-**Entry counts are deliberately not listed here.** They drift within weeks, and hand-copied
-numbers in this file were wrong by 10-40% (e.g. IQM 610→629, banned 143→168, additives 115→117,
-data files 39→82, tests 580→703). Read `_metadata.total_entries` from the file itself.
+1. Current code and the artifact it produces (what actually ships).
+2. `scripts/contracts/source_of_truth_matrix.json` and accepted ADRs (intended ownership).
+3. Tests, contracts, audit reports.
+4. Docs, then memory and chat history — evidence only.
 
-## API Audit Tools (scripts/api_audit/)
+When behavior and intended ownership disagree, that is a finding: report it, don't silently pick
+one. Never change code to match a memory entry. `docs/archive/`, `docs/superpowers/` and old
+bug-fix notes are history, not specifications.
 
-Verification scripts that call external APIs to validate data accuracy:
+## Autonomy — decide, don't queue
 
-- `verify_cui.py` — UMLS CUI verification
-- `verify_pubchem.py` — PubChem CID + CAS verification
-- `verify_unii.py` — FDA UNII and CFR verification
-- `verify_rda_uls.py` — RDA/AI/UL verification against National Academies DRI tables + USDA FoodData Central API
-- `verify_efsa.py` — EU regulatory ADI/opinion validation
-- `verify_clinical_trials.py` — ClinicalTrials.gov NCT ID verification
-- `fda_weekly_sync.py` — FDA recall tracking (openFDA, RSS, DEA)
-- `enrich_chembl_bioactivity.py` — ChEMBL mechanism of action enrichment
-- `audit_banned_recalled_accuracy.py` — Release gate for banned/recalled data
-- `audit_clinical_evidence_strength.py` — Evidence strength classification
+- Before asking Sean: inspect the owner, current state and artifacts, run a safe probe, check
+  history. Most "forks" already have a doctrinal answer — apply it, measure, record it in the handoff.
+- **Sean decides only:** a new semantic owner (new persisted or public/export field, new status or
+  verdict meaning, new scoring/clinical policy or owner, new registry), deleting curated clinical
+  data, pushes, releases.
+- Private helpers, local names, test utilities and internal files need no approval once the
+  Owner Check passes.
 
-## Production Scoring System (v4)
+## Bugs you find
 
-The shipped catalog score is the v4 six-pillar /100 model emitted through
-`scripts/score_products_v4.py` and
-`scripts/scoring_v4/scored_artifact.py`. Final DB export consumes that artifact
-directly and never runs a second scorer.
+- Fix them: failing test first, the fix in its own atomic commit, logged in the handoff, then back
+  to the task. No TODO left behind; no tangent into a redesign.
+- A fix that moves shipped scores or safety verdicts still gets the measurement in
+  `.claude/rules/scoring.md`.
+- On an infrastructure branch (harness/config/docs) fix only infrastructure bugs. For an application
+  defect: reproduce it, record `path::symbol` + probe + impact + confidence in the handoff, and spawn
+  a separate fix task. A P0 stops the work and goes to Sean.
 
-- **Formulation** (20): ingredient form quality, delivery, formulation fit
-- **Dose** (20): category-aware dosing adequacy and excess-dose handling
-- **Evidence** (20): verified clinical support and category fit
-- **Transparency** (15): disclosure, proprietary blend opacity, label completeness
-- **Verification** (15): verified third-party testing, COA, GMP/certification signals
-- **Safety/Hygiene** (10): product-level safety hygiene and clean-label penalties
+## One brain — extend the owner, never build a second one
 
-Canonical exported fields:
+- Before creating any field, state, status value, module, normalizer, queue, registry, skill or
+  file, run an **Owner Check**: the matrix, `scripts/GLOSSARY.md`, and `rg` for the name *and* its
+  stem. Extend what exists. Owners bypassed before: `scripts/normalization.py` (the only
+  normalizer), IQM parent `relationships`, `form_match_status`, `rda_ul_data.adequacy_results`
+  (Dose), `scripts/scoring_v4/cert_evidence.py` (certification).
+- Reuse existing field names (`notes`, `name`, `category`, `aliases`); one description field, not a
+  short/long pair. `score` beside `score_new` is a defect.
+- Duplicated decision logic → one shared util every consumer (scorer, pillar copy, export, app)
+  calls. Copies drift silently and green suites don't catch it.
+- Classify before removing an apparent duplicate:
+  - *false dual brain* (same decision, different rules) → delete the weaker, route callers to the
+    production seam;
+  - *one policy, many consumers* → keep all, share ONE result object;
+  - *two policies, one topic* → keep both, unify the contract.
+- **Owner Check block**, required in every plan and handoff:
+  `Owner: path::symbol — evidence: <command>` or `No owner: searched <matrix, terms, glossary>`,
+  then `Will NOT create: …`. Line numbers are supplementary only.
 
-- `quality_score_v4_100` — shipped /100 score
-- `quality_score_status` — `scored`, `suppressed_safety`, or `not_scored`
-- `quality_pillars_v4` — six-pillar detail surface for Flutter
-- `score_100_equivalent` and `score_display_100_equivalent` — compatibility mirrors of the v4 score
+## Dead code and fields — delete once proven dead
 
-`score_supplements.py` is retired from every operational entrypoint. It may
-remain temporarily only for Phase-5 test disposition after the v4 corpus
-rebuild; do not invoke it, restore it as fallback, or build compatibility
-logic around it. Do not reintroduce `score_quality_80` or `score_display_80`.
+- Proof: a key census across artifact layers, a corpus line trace of the production entry point,
+  or zero references.
+- Zero references alone is not proof. Also check lazy/`getattr` imports, shell and release scripts,
+  JSON/config, export consumers, migrations/compat contracts, manual CLI use, and the Flutter repo:
+  `rg <name> scripts/ *.sh "/Users/seancheick/PharmaGuide ai/lib"`.
+- Remove the code, its docs and its tests in one commit; no "legacy" shim unless a named consumer
+  is live. A dormant data-driven guard (trigger absent from today's corpus) is not dead.
+- Deleting curated clinical data or a live public contract needs Sean.
 
-Verdicts: BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE (deterministic precedence)
+## Cross-repo contract (pipeline → Flutter)
 
-Config: `scripts/scoring_v4/config/quality_score.json` is the sole production
-scoring configuration.
+| Seam | Owner |
+|---|---|
+| Blob top-level keys | `scripts/audit_contract_sync.py::BLOB_TOP_LEVEL` — the one declaration; the audit fails on undeclared keys |
+| Core DB columns | `scripts/core_export_model.py` |
+| Export schema doc | `scripts/FINAL_EXPORT_SCHEMA_V1.md` |
+| Flutter core reader | `lib/data/database/tables/products_core_table.dart`, `lib/data/database/products_core_projection.dart` |
+| Flutter blob reader | `lib/data/supabase/detail_blob_service.dart`, `lib/data/providers/detail_blob_provider.dart` |
 
-## Key Documentation
-
-| File                                | What it covers                                |
-| ----------------------------------- | --------------------------------------------- |
-| `scripts/DATABASE_SCHEMA.md`        | Master schema reference for every data file   |
-| `scripts/SCORING_ENGINE_SPEC.md`    | Detailed scoring formulas and section logic   |
-| `scripts/SCORING_README.md`         | Implementation guide for the scorer           |
-| `scripts/PIPELINE_ARCHITECTURE.md`  | Pipeline design and stage contracts           |
-| `scripts/FINAL_EXPORT_SCHEMA_V1.md` | Flutter MVP data contract                     |
-| `scripts/api_audit/README.md`       | API audit tooling reference                   |
-
-## Documentation truth priority
-
-When you need to know how the pipeline behaves, consult sources in this
-order:
-
-1. **Python source files in `scripts/`** — the code is the truth.
-2. **Generated artifacts** in `scripts/final_db_output/` or `/tmp/pharmaguide_release_build*/` — what actually ships.
-3. **Tests + audit reports** under `scripts/tests/` and `reports/`.
-4. **Schema docs** (`FINAL_EXPORT_SCHEMA_V1.md`, `SCORING_ENGINE_SPEC.md`, etc.) — only after cross-checking against 1–3.
-
-Do NOT use `docs/archive/*`, `docs/superpowers/*`, or top-level historical
-bug-fix `.md` as implementation truth. They are conversational history,
-not specifications. If in doubt, run
-`scripts/audit_contract_sync.py` and `scripts/audit_raw_to_final.py`
-against a fresh `build_final_db.py` output to get an objective state
-snapshot.
-
-## Active audit + verification scripts
-
-These are the data-integrity gates the pipeline relies on. Run any of
-them against `scripts/final_db_output` or a fresh
-`/tmp/pharmaguide_release_build*/` to verify the contract.
-
-| Script                                          | What it gates                                                |
-| ----------------------------------------------- | ------------------------------------------------------------ |
-| `scripts/audit_contract_sync.py`                | v1.5.0/v1.6.x blob-contract field emit rates (GREEN/YELLOW/RED) |
-| `scripts/audit_raw_to_final.py`                 | Raw → blob reconciliation; 23 finding codes; canary set       |
-| `scripts/audit_inactive_safety.py`              | Banned-in-inactives have safety signal; notes-text FP catcher; unknown-role counter (CI gate) |
-| `scripts/db_integrity_sanity_check.py`          | SQLite schema + data validation                              |
-| `scripts/coverage_gate.py`                      | Quality / coverage threshold enforcement                     |
-| `scripts/coverage_gate_functional_roles.py`     | functional_roles coverage on inactives                       |
-| `scripts/enrichment_contract_validator.py`      | Enrichment output contract                                   |
-| `scripts/tests/test_inactive_ingredient_resolver.py` | Resolver unit + canary suite (20 tests)                |
-| `scripts/tests/test_canonical_id_delivers_markers_emit.py` | Active-side canonical_id + delivers_markers contract |
-| `scripts/tests/test_capsimax_display_label_fidelity.py` | Branded botanical display fidelity              |
-| `scripts/tests/test_vitamin_a_form_aware_normalization.py` | Vitamin A IU→mcg RAE form detection         |
-| `scripts/tests/test_label_fidelity_contract.py` | 8 invariants for blob ↔ label fidelity                       |
-| `scripts/tests/test_active_count_reconciliation.py` | E1.2.5 drop-reason enum                                 |
-
-## Conventions
-
-- **Data schema version:** every JSON data file has a `_metadata` block — read `schema_version` from the file. No version number is reproduced here on purpose: the last one drifted for months while this line told readers not to trust it.
-- **Score field naming is FROZEN:** use `quality_score_v4_100`, `quality_score_status`, and `quality_pillars_v4`; do not reintroduce `score_quality_80` or `score_display_80`
-- **Safety distinction:** `has_banned_substance` / `has_recalled_ingredient` for ingredient-level. Never use `is_recalled` (implies product-level recall, not supported in v1)
-- **Tests are mandatory:** every data file change, scoring logic change, or enrichment change must have test coverage
-- **No linter configured** — follow existing code style (snake_case, type hints encouraged but not enforced)
-- **API keys:** loaded via `scripts/env_loader.py` from `.env` (UMLS, openFDA, PubMed keys)
-- **Offline-first architecture:** phone loads from local SQLite cache first, hydrates from Supabase on cache miss
-
-## Engineering Principles
-
-These override speed when they conflict.
-
-- **No hallucinated identifiers — ever.** PMIDs, CUIs, RXCUIs, UNIIs, NCT IDs, CAS, CIDs must be content-verified against the live API (PubMed/UMLS/RxNorm/FDA/ClinicalTrials.gov). Existence is not enough — a real PMID about the wrong topic is a *ghost reference* and is a defect. Use `scripts/api_audit/verify_*.py`. This is a clinical product; one corrupt entry = a red flag for the whole product. See `critical_no_hallucinated_citations` and `critical_clinical_data_integrity` memories.
-- **Code is not cheap.** AI velocity is real, but bad code is *more* expensive than ever because AI works best in good codebases. Optimize for maintainability and the next reader, not lines-per-minute. Boring, idiomatic code beats clever code.
-- **Small batches, decomposed problems.** Solve one thing at a time. Atomic commits. Localize blast radius. The IQM batch cadence is the right shape — keep it.
-- **Deep modules over shallow ones.** Prefer few large modules with simple interfaces (Ousterhout). When working on the mega-files (`enrich_supplements_v3.py`, `enhanced_normalizer.py` — run `wc -l`, they grow): treat them as gray boxes — design and lock the interface, verify at the boundary with tests.
-- **Watch for cognitive debt and code bloat.** Generating code is nearly free; understanding it isn't. If a change adds volume without removing complexity, push back. If a CLAUDE.md / doc / config grows without being read, slim it.
-- **AI is an amplifier, not a fixer.** Discipline doesn't get optional with AI — it gets more important. Specs-to-code without humans reviewing produces entropy.
+- Adding an export field: declare it in `BLOB_TOP_LEVEL` / `core_export_model.py` and name its
+  Flutter consumer. Renaming or removing one: `rg` Flutter `lib/` first and change both repos together.
+- Detail-blob flags are real JSON booleans (`build_final_db.py::json_bool`). `safe_bool` (int 0/1)
+  is for SQLite core columns only.
+- The pipeline decides; Flutter renders. Flutter never recomputes a pipeline score or verdict.
 
 ## Non-negotiable data rules
 
-Promoted here from the memory bank 2026-07-24. These are standing rules — they were firing only
-when memory recall happened to surface them, which is not acceptable for clinical data. The
-incident that produced each one is still in the named memory file; read it when you need the why.
+- **No unverified clinical claim or identifier.** Every mechanism, severity or interaction needs a
+  citable source; PMID/CUI/RXCUI/UNII/NCT/CAS/CID are content-verified against the live API. A real
+  PMID about the wrong topic is a ghost reference — a defect. Details: `.claude/rules/clinical-data.md`.
+- **One entry at a time.** Never bulk-apply API results or batch-edit curated data; batch
+  operations skip entries silently.
+- **Identity by chemistry, not name.** Confirm via PubChem CID / CAS / InChI and search existing
+  entries before adding one.
+- **Two similar data files?** Check `_metadata.schema_version`, migration history and what the
+  loader reads — never guess from the filename.
+- **Changing a structured value** means fixing every free-text field that references it and
+  asserting the old phrase is gone.
+- **A specific clinical lock beats a generic floor.** Exempt and pin the generic test; never raise
+  a score to satisfy it.
+- **Banned/recalled products always ship** with their reason (BLOCKED). A withheld product answers a
+  scan with "not found" and hides the ban; under-warning is the worse failure.
+- **Pipeline safety copy uses risk-matched verbs.** `safety_warning_one_liner` / `safety_warning`
+  in banned_recalled and harmful_additives use Stop using / Do not use / Avoid / Talk to your
+  doctor by hazard context, and are never blanket-rewritten. The app renders this text verbatim
+  and keeps its own strings calm-advisory (Flutter AGENTS.md).
+- **Outside-agent claims** (Codex, reviews, other models) are hypotheses: reproduce each against the
+  real file before agreeing or refuting.
 
-- **Zero unverified clinical claims.** Every mechanism, severity, or interaction assertion needs a
-  citable authoritative source. (`critical_clinical_data_integrity`)
-- **No bulk API enrichment.** Never bulk-apply API results across entries — verify each entry
-  individually before writing it. (`feedback_no_bulk_api_enrichment`)
-- **Verify chemical identity, never name similarity.** Before adding a new IQM/botanical/probiotic
-  entry, search existing entries and confirm identity via PubChem CID / CAS / InChI. Marketing or
-  name overlap is not proof of same-compound.
-  (`feedback_verify_parent_before_new_entry`, `feedback_user_strict_chemistry_verification`)
-- **Never guess which of two similar data files is canonical.** Check `_metadata.schema_version`,
-  migration history, and what the loader actually reads — not filename or file size.
-  (`feedback_dual_source_file_canonical`)
-- **Verify every shipped identifier, including reused ones,** through a live gate. A green
-  structural test suite does not prove clinical-ID correctness.
-  (`feedback_verify_reused_identifiers_and_full_artifact`)
-- **Changing a structured value means fixing its free text too.** Update every free-text field that
-  references the old value and assert the old phrase is gone.
-  (`feedback_data_field_change_check_freetext`)
-- **A specific clinical lock always beats a generic floor.** Exempt and pin the generic test; never
-  raise a score to satisfy it. (`feedback_unspec_peer_min_exemption`)
-- **Validate routing/scoring fixes on the real enriched corpus** plus a full-corpus diff. Synthetic
-  tests alone hide over-promotion. (`feedback_validate_routing_on_real_corpus`)
-- **Safety copy uses risk-matched action verbs** and is never blanket-rewritten. Under-warning is a
-  worse failure than over-warning. (`feedback_pharmaguide_safety_voice`)
-- **Verify each Codex claim individually against the real file** — Codex mixes fabrications in with
-  genuine catches. If Codex is unavailable for the outside-voice gate, fall back to a fresh-context
-  opus adversarial subagent rather than skipping the gate.
-  (`feedback_codex_verify_each_claim`, `feedback_outside_voice_opus_fallback`)
-- **Claude runs the full test suite as backstop AFTER the pipeline,** never alongside it.
-  (`project_codex_backstop_workflow`)
-- **`git fetch` before asserting any commit or branch state** — this repo has concurrent Codex and
-  Claude sessions plus automated rebuild commits. (`reference_repo_rename_and_fetch_first`)
+## Operations safety
 
-## Workflow Patterns
+- `batch_run_all_datasets.sh` without `--targets` continues into the snapshot and `release_full.sh`
+  (Supabase + Flutter) unless `--pipeline-only`; `SKIP_RELEASE=1` skips the publish but still runs
+  the snapshot. `--targets` implies pipeline-only unless `--release`. Run it as
+  `source scripts/python_env.sh; PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh …`.
+- At most one full-corpus job at a time (16 GB Mac), never alongside the full suite. Keep durable
+  inputs outside `/tmp` — a reboot wipes it.
+- One worktree + branch per agent; one integrator mutates and pushes `main`. Stage explicit paths
+  only. Re-check the branch tip before claiming a lane.
 
-### Codebase navigation
-- For structural questions (call graphs, cross-file refs, blast radius), check `graphify-out/GRAPH_REPORT.md` and `graphify-out/graph.json` first.
-- Fall back to Grep/Read for runtime behavior, recent uncommitted code, or actual data values.
-- Re-run `/graphify` after major refactors or once a few IQM batches have shipped (graph drifts).
+## Engineering principles
 
-### Before non-trivial work
-- For audits, refactors, or cross-file features: ask clarifying questions until shared understanding before any tool calls or edits. This is upstream of plan mode — better than the eager "create a plan and start" default.
-- Reference `scripts/GLOSSARY.md` for IQM/scoring terminology — every term used in code, tests, and conversation should match the glossary. Add new terms to the glossary first.
+- Build lazy: shortest working diff, no speculative scaffolding. Complexity creates obligations,
+  not bonuses.
+- Small batches, atomic commits, localized blast radius. Deep modules with simple interfaces.
+- A change that adds volume without removing complexity gets pushed back — this file included.
 
-### IQM audit batches (ongoing pattern)
-- **Cache research per-batch** in `scripts/audits/batch_NN/research.md` (verified PMIDs + abstracts) before writing the fix script. Delete or archive when batch ships — research rots.
-- **Test-first**: write the failing regression assertion in `scripts/tests/test_<topic>_integrity.py` *before* the fix. Confirm it fails on current data, then apply the fix.
-- **Atomic commit per batch** with summary in commit message (parents corrected, ghost references found, framework errors caught).
-- Memory entries (`feedback_*`, `project_*`) capture *why* and *what surprised us*, not just what was done.
+## Knowledge placement
 
-## Dependencies
+| Knowledge | Lives in |
+|---|---|
+| Current task state of a worktree | `.claude/state/CURRENT_HANDOFF.md` (gitignored; `/handoff`, `/pg-resume`) |
+| Ownership decision + rationale | `source_of_truth_matrix.json` + `docs/adr/` |
+| Executable lesson | regression test |
+| Path-specific invariant | `.claude/rules/` |
+| Procedure repeated 3+ times | skill |
+| Stable preference or correction | auto memory — never architecture, policy or branch state |
+| History | git + audit artifacts |
 
-See `requirements-dev.txt` (install with `pip install -r requirements-dev.txt`).
----
+## Navigation
 
-# Tooling note
-
-The gstack skill pack was archived 2026-07-24 — `/browse`, `/ship`, `/qa`, `/retro`, `/cso`,
-`/office-hours`, `/autoplan`, `/investigate` and the ~16 others previously listed here no longer
-exist. Do not reference them.
-
-- **Web browsing:** built-in Browser pane tools (`mcp__Claude_Browser__*`), or WebFetch/WebSearch
-  inside a subagent so only the summary returns. Never `mcp__claude-in-chrome__*`.
-- **Skills for this repo:** `/catalog-release` (dsld_clean → Flutter release train, wraps
-  `scripts/release_full.sh`), `/data-fix` (one-entry-at-a-time curated-data corrections), plus
-  project skills under `.claude/skills/`.
+- `graphify-out/` is a navigation hint, never evidence: compare `graph.json` `built_at_commit` with
+  `git rev-parse HEAD`, and verify with `rg`/Read when they differ.
+- New terms go into `scripts/GLOSSARY.md` first. Deeper references: `scripts/SCORING_ENGINE_SPEC.md`,
+  `scripts/PIPELINE_ARCHITECTURE.md`, `docs/runbooks/verification-gates.md` (audit and API verifiers).
+- API keys load via `scripts/env_loader.py` from `.env`. No linter: follow the existing style.

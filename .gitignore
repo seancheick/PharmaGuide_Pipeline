@@ -75,7 +75,11 @@ scripts/logs/
 *.bak.json
 scripts/data/*.json.bak
 .claude/scheduled_tasks.lock
-.claude/
+# .claude/: ignore local state, but track the shared harness (rules, repo skills, settings)
+.claude/*
+!.claude/settings.json
+!.claude/rules/
+!.claude/skills/
 manual_labels/product_submissions/.product_submission_import_receipts
 # Release mutex held only while scripts/release_full.sh runs
 scripts/.release.lock
