@@ -195,3 +195,38 @@ def test_cape_aloe_interaction_rule_follows_the_ema_monograph():
         assert not GHOST_PMID_URLS & set(sub["sources"])
     assert EMA_ALOE in drugs["cardiac_glycosides"]["sources"]
     assert EMA_ALOE in preg["sources"]
+
+
+# --- Frangula bark (EU Annex III Part C; EFSA 2024 e8766) ---
+
+def test_frangula_is_a_watchlist_entry_with_verified_identity():
+    entry = BANNED["WATCH_FRANGULA"]
+    assert entry["status"] == "watchlist"
+    assert entry["external_ids"]["unii"] == "S2D77IH61R"  # GSRS FRANGULA ALNUS BARK
+    assert entry["cui"] == "C0080354"  # UMLS Frangula
+    urls = {r.get("url") for r in entry["references_structured"]}
+    assert "https://doi.org/10.2903/j.efsa.2024.8766" in urls
+    eu = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "EU"]
+    assert eu and eu[0]["status"] == "under_review"
+
+
+@pytest.mark.parametrize(
+    "label",
+    ["Frangula", "Frangula bark", "Frangula bark extract", "Rhamnus frangula", "Frangula alnus",
+     "Alder buckthorn bark"],
+)
+def test_frangula_labels_match_exactly(enricher, label):
+    hits = _matches(enricher, label, "WATCH_FRANGULA")
+    assert hits, f"{label!r} should match WATCH_FRANGULA"
+    assert hits[0]["match_type"] in {"exact", "alias"}
+
+
+@pytest.mark.parametrize(
+    "label",
+    # Bare "buckthorn" is ambiguous (Frangula alnus, Rhamnus cathartica, or sea
+    # buckthorn berry), so it stays unmatched until the label names the species.
+    ["Buckthorn", "Buckthorn bark extract", "wild crafted Buckthorn", "Sea Buckthorn",
+     "Sea Buckthorn Berry Fruit Powder"],
+)
+def test_ambiguous_buckthorn_labels_do_not_match_frangula(enricher, label):
+    assert not _matches(enricher, label, "WATCH_FRANGULA"), label

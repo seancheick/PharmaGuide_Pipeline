@@ -238,6 +238,7 @@ def validate_iqm_br_collision(data_dir: Path = DATA_DIR) -> Dict:
         "cascara_sagrada",   # ADD_CASCARA_SAGRADA high_risk — FDA Category III, legal in supplements
         "aloe_ferox",        # RISK_ALOE_LATEX high_risk — same 2002 FDA OTC rule as cascara; EFSA: genotoxic HADs
         "senna",             # WATCH_SENNA watchlist — FDA OTC category III; EU Union scrutiny (Part C)
+        "frangula",          # WATCH_FRANGULA watchlist — EU Union scrutiny (Part C); EFSA 2024 safety not established
         "dhea",              # BANNED_DHEA high_risk — legal in US (DSHEA), Rx-only abroad (CA/UK/AU); WADA-banned
         "vinpocetine",       # NOOTROPIC_VINPOCETINE high_risk — FDA legal conclusion tentative; reproductive-risk CAUTION
         "withaferin_a",      # WATCH_WITHAFERIN_A watchlist — standardization marker; dose-dependent caution layer

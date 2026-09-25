@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
     "last_updated": "2026-09-25",
-    "total_entries": 180,
+    "total_entries": 181,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -15603,6 +15603,149 @@
       "safety_warning_one_liner": "Stimulant laxative for short-term use. Talk to your doctor before regular use.",
       "inactive_policy": "excipient_acceptable",
       "inactive_policy_reason": "21 CFR 172.510 lists Senna, Alexandria (Cassia acutifolia) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "WATCH_FRANGULA",
+      "standard_name": "Frangula Bark",
+      "aliases": [
+        "frangula",
+        "frangula bark",
+        "frangula bark extract",
+        "frangula bark powder",
+        "frangula alnus",
+        "frangula alnus bark",
+        "frangula alnus bark extract",
+        "rhamnus frangula",
+        "rhamnus frangula bark",
+        "frangulae cortex",
+        "alder buckthorn",
+        "alder buckthorn bark",
+        "glossy buckthorn bark",
+        "european alder buckthorn bark"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "watchlist",
+      "reason": "Frangula bark is a stimulant laxative containing hydroxyanthracene derivatives (glucofrangulins). The EU keeps Rhamnus frangula bark preparations containing them under Union scrutiny (Regulation (EU) 2021/468, Annex III Part C), and EFSA (2024) found that their safety cannot be established because the tested preparations contained a compound genotoxic in vivo. EFSA (2018) concluded that hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless shown otherwise. The EU herbal monograph limits use to one week and contraindicates it in pregnancy, breastfeeding and children under 12. The catalog flags a confirmed supplement match for caution.",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Frangula Bark",
+        "negative_match_terms": [
+          "sea buckthorn",
+          "hippophae"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2019-09-25",
+          "source": {
+            "type": "ema_monograph",
+            "citation": "European Union herbal monograph on Rhamnus frangula L., cortex (EMA/HMPC/726261/2016, Revision 1)",
+            "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/european-union-herbal-monograph-rhamnus-frangula-l-cortex-revision-1_en.pdf",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part C (Union scrutiny) to Regulation (EC) No 1925/2006: preparations from the bark of Rhamnus frangula L. containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Under Union scrutiny since 2021-04-08. EFSA's 2024 opinion on the data submitted during scrutiny found that safety cannot be established. The General Court judgment in T-189/21 annulled only the Aloe-leaf Part A entry, not this Part C entry.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EMA",
+          "citation": "European Union herbal monograph on Rhamnus frangula L., cortex (EMA/HMPC/726261/2016, Revision 1), adopted 25 September 2019",
+          "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/european-union-herbal-monograph-rhamnus-frangula-l-cortex-revision-1_en.pdf",
+          "published_date": "2019-09-25",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EU herbal monograph on Rhamnus frangula L., cortex - Revision 1",
+          "evidence_summary": "Short-term use for occasional constipation, not for more than one week; contraindicated in pregnancy (genotoxic risk of anthranoids such as emodin and frangulin), lactation, children under 12 and inflammatory bowel disease; hypokalaemia potentiates cardiac glycosides, and diuretics, corticosteroids and liquorice enhance potassium loss."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Scientific Opinion on additional scientific data related to the safety of preparations of Rheum palmatum L., Rheum officinale Baill. and their hybrids, Rhamnus purshiana DC., Rhamnus frangula L. and Cassia senna L., submitted pursuant to Article 8(4) of Regulation (EC) No 1925/2006",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny",
+          "evidence_summary": "The tested preparations contained a compound genotoxic in vivo and must be considered of concern for genotoxicity; the safety of Rhamnus frangula bark preparations containing hydroxyanthracene derivatives cannot be established."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise; no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Places preparations from the bark of Rhamnus frangula L. containing hydroxyanthracene derivatives in Annex III Part C (Union scrutiny) of Regulation (EC) No 1925/2006."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Frangula bark products (e.g. dsld 311187, whose label names Frangula alnus bark extract) matched no safety entry and shipped SAFE. Identity: GSRS S2D77IH61R (FRANGULA ALNUS BARK); UMLS C0080354 Frangula. Bare 'buckthorn' labels are not aliased: GSRS lists buckthorn as a Frangula alnus synonym, the botanical file maps it to Rhamnus cathartica, and sea buckthorn is unrelated.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C0080354",
+      "external_ids": {
+        "unii": "S2D77IH61R"
+      },
+      "ban_context": "watchlist",
+      "safety_warning": "Stimulant laxative for short-term use (up to a week). EFSA could not establish its safety because of genotoxicity concerns. Talk to your doctor before regular use.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Talk to your doctor first.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "21 CFR 172.510 does not list frangula or buckthorn as a natural flavoring substance, and frangula bark is a stimulant laxative, so an inactive-panel listing is a hidden active.",
       "inactive_policy_reviewed_on": "2026-09-25"
     },
     {
