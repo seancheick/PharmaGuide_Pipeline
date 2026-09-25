@@ -287,6 +287,11 @@ _SOURCE_DESCRIPTOR_FORM_CATEGORIES = frozenset({
     "plant part",
     "source material",
 })
+# A whole-food or protein source named under a defined nutrient ("Acerola
+# Extract" under Vitamin C, "Whey Protein Isolate" under Leucine, "Cranberry
+# powder" under Magnesium) supplies that nutrient; it is not a form of it.
+_SOURCE_CLASS_FORM_CATEGORIES = frozenset({"botanical", "protein"})
+_DEFINED_NUTRIENT_PARENT_CATEGORIES = frozenset({"vitamins", "minerals", "amino_acids", "enzymes"})
 _SOURCE_DESCRIPTOR_FORM_PREFIXES = frozenset({
     "from",
     "culture of",
@@ -8034,6 +8039,11 @@ class SupplementEnricherV3:
         matched_forms = []
         unmapped_forms = []
         generic_form_tokens = []
+        # Tokens that are not forms of this parent at all (a source, another
+        # ingredient's source, or the nutrient's own name) leave the shares.
+        non_form_tokens = []
+        parent_category = (quality_map.get(preferred_parent) or {}).get('category') if preferred_parent else None
+        parent_names = self._parent_identity_names(preferred_parent, quality_map, base_name)
         cleaner_canonical_enforced_by_form = False
         cleaner_canonical_fallback_by_form = False
         _non_epa_dha_source_re = re.compile(
@@ -8091,6 +8101,7 @@ class SupplementEnricherV3:
                 # unmapped_forms pool; this prevents the form_fallback_audit
                 # from flagging it as actionable.
                 generic_form_tokens.append(raw_form_text)
+                non_form_tokens.append(raw_form_text)
                 continue
 
             # Try each match candidate until one succeeds
@@ -8143,6 +8154,12 @@ class SupplementEnricherV3:
                     matched_unspecified = True
                     form_match = None
 
+            if (form_match is None or form_match.get('fallback_form_selected')) and \
+                    self._is_cross_class_source_form(form_data, parent_category):
+                generic_form_tokens.append(raw_form_text)
+                non_form_tokens.append(raw_form_text)
+                continue
+
             if form_match and matched_candidate:
                 bio_score = form_match.get('bio_score', 5)
                 natural = form_match.get('natural', False)
@@ -8166,6 +8183,8 @@ class SupplementEnricherV3:
             else:
                 if matched_unspecified:
                     generic_form_tokens.append(raw_form_text)
+                    if self._norm_form_name(raw_form_text) in parent_names:
+                        non_form_tokens.append(raw_form_text)
                 else:
                     unmapped_forms.append(raw_form_text)
                     # Track unmapped form for database expansion
@@ -8202,14 +8221,19 @@ class SupplementEnricherV3:
         # Calculate against the full authored composition. Any unmatched or
         # undeclared share retains conservative unspecified-form quality (5)
         # instead of being silently redistributed across matched forms.
+        # A source descriptor, the nutrient's own name, or another
+        # ingredient's source (non_form_tokens) is not a form of this parent,
+        # so its share leaves the composition instead of scoring 5.
         matched_weight = sum(f['percent_share'] for f in matched_forms)
         declared_weight = sum(
             float(f.get('percent_share') or 0.0) for f in extracted_forms
         )
-        if declared_weight <= 1.0:
-            unmatched_weight = max(0.0, 1.0 - matched_weight)
-        else:
-            unmatched_weight = max(0.0, declared_weight - matched_weight)
+        excluded = set(non_form_tokens)
+        excluded_weight = sum(
+            float(f.get('percent_share') or 0.0) for f in extracted_forms
+            if f.get('raw_form_text') in excluded
+        )
+        unmatched_weight = max(0.0, max(1.0, declared_weight) - excluded_weight - matched_weight)
         total_weight = matched_weight + unmatched_weight
         if total_weight > 0:
             final_bio_score = sum(
@@ -8736,6 +8760,31 @@ class SupplementEnricherV3:
             if tiers and all(t in (None, 'cleaner_canonical_parent') for t in tiers):
                 unresolved.append(form_data.get('raw_form_text', ''))
         return [t for t in unresolved if t]
+
+    @staticmethod
+    def _norm_form_name(value: Any) -> str:
+        return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", str(value or "").lower())).strip()
+
+    @classmethod
+    def _parent_identity_names(cls, parent_key: Optional[str], quality_map: Dict, base_name: str) -> set:
+        """The nutrient's own names: the IQM parent key, each part of its
+        standard name ("Vitamin B1 (Thiamine)" -> vitamin b1, thiamine) and
+        the row's label name. A form token equal to one restates the row."""
+        names = {cls._norm_form_name(base_name)}
+        if parent_key:
+            names.add(cls._norm_form_name(parent_key.replace("_", " ")))
+            standard = str((quality_map.get(parent_key) or {}).get("standard_name") or "")
+            names.update(cls._norm_form_name(part) for part in re.split(r"[()]", standard))
+        return {name for name in names if name}
+
+    @staticmethod
+    def _is_cross_class_source_form(form_data: Dict, parent_category: Optional[str]) -> bool:
+        """A botanical/protein token under a vitamin, mineral, amino acid or
+        enzyme parent names a source. Only asked after the token failed to
+        match a real form of that parent, so a listed IQM form still wins."""
+        category = (form_data.get('dsld_category') or '').lower().strip()
+        return (category in _SOURCE_CLASS_FORM_CATEGORIES
+                and (parent_category or '').lower() in _DEFINED_NUTRIENT_PARENT_CATEGORIES)
 
     def _is_dsld_source_descriptor_form(self, form_data: Dict) -> bool:
         """DSLD origin/culture descriptors are not chemical forms."""
@@ -9377,6 +9426,11 @@ class SupplementEnricherV3:
                             numeric = 5.0
                         return numeric, _norm(form_name)
 
+                    default = next(
+                        ((form_name, form_data) for form_name, form_data in forms_dict.items()
+                         if any(token in _norm(form_name) for token in preferred_tokens)),
+                        None,
+                    )
                     for hint, tokens in hint_tokens.items():
                         if any(token in input_norm for token in tokens):
                             hinted_matches = [
@@ -9389,12 +9443,16 @@ class SupplementEnricherV3:
                                     normalized = _norm(form_name)
                                     if any(token in normalized for token in preferred_tokens):
                                         return form_name, form_data
-                                return min(hinted_matches, key=_score_key)
+                                hinted = min(hinted_matches, key=_score_key)
+                                # A preparation word ("powder") may pick a plainer
+                                # form, never one above the unknown-form default:
+                                # "Cranberry powder" under Magnesium once picked
+                                # magnesium citrate (14) over the unspecified 5.
+                                if default is None or _score_key(hinted)[0] <= _score_key(default)[0]:
+                                    return hinted
 
-                    for form_name, form_data in forms_dict.items():
-                        normalized = _norm(form_name)
-                        if any(token in normalized for token in preferred_tokens):
-                            return form_name, form_data
+                    if default is not None:
+                        return default
 
                     return min(forms_dict.items(), key=_score_key)
 
