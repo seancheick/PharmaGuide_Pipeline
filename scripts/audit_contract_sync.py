@@ -106,11 +106,7 @@ ACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "label_display_name":   {"required": False, "type": "string?",  "is_enum": False},
     "label_display_form":   {"required": False, "type": "string?",  "is_enum": False},
     "identity_disposition": {"required": False, "type": "string?",  "is_enum": False},
-    "adequacy_tier":        {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
     "clinical_support_level": {"required": False, "type": "string?", "is_enum": False},
-    "cfu_confidence":       {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
-    "dose_basis":           {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
-    "ui_copy_hint":         {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
 }
 
 

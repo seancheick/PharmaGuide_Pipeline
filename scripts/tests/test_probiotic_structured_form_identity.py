@@ -161,11 +161,13 @@ def test_real_327965_retains_three_distinct_howaru_source_owners(enricher):
     # Twelve other identities plus three distinct source-owned HOWARU forms.
     assert product["probiotic_data"]["total_strain_count"] == 15
     blob = build_detail_blob(product, {})
-    exported = {r["raw_source_path"]: r for r in blob["ingredients"]}
+    exported_refs = {
+        s["source_row_ref"] for s in blob["probiotic_detail"]["clinical_strains"]
+        if s["clinical_id"] in expected
+    }
+    assert exported_refs == {r["raw_source_path"] for r in owners}
     for owner in owners:
         assert _probiotic_native_evidence_state(product, owner) is not None
-        assert exported[owner["raw_source_path"]]["cfu_confidence"] is not None
-        assert exported[owner["raw_source_path"]]["adequacy_tier"] is None
 
 
 @pytest.mark.parametrize("name,form", [
@@ -194,11 +196,13 @@ def test_owner_form_proof_reaches_readiness_and_export(enricher, name, form):
     assert product["probiotic_data"]["probiotic_blends"][1]["strain_identity_resolution"][0]["resolution"] in {"species_only", "unresolved_label_text"}
     assert _probiotic_native_evidence_state(product, owner) is not None
     assert _probiotic_native_evidence_state(product, sibling) is None
-    exported = build_detail_blob(product, {})["ingredients"]
-    assert exported[0]["cfu_confidence"] is not None
-    assert exported[0]["adequacy_tier"] is not None
-    assert exported[1]["cfu_confidence"] is None
-    assert exported[1]["adequacy_tier"] is None
+    blob = build_detail_blob(product, {})
+    # Per-strain adequacy ships once, on the owning probiotic_detail record,
+    # and reaches the owner row only through its display_badge.
+    assert [s["source_row_ref"] for s in blob["probiotic_detail"]["clinical_strains"]] == [
+        owner["raw_source_path"]
+    ]
+    assert [row["display_badge"] for row in blob["ingredients"]] == ["well_dosed", "no_data"]
 
 
 @pytest.mark.parametrize("name,form", [
@@ -321,7 +325,7 @@ def test_recorded_source_reference_is_reproved_against_actual_label(enricher, fo
     assert independent_clinical_strains(product) == []
     blob = build_detail_blob(product, {})
     assert blob["probiotic_detail"]["clinical_strains"] == []
-    assert all(row["cfu_confidence"] is None for row in blob["ingredients"])
+    assert {row["display_badge"] for row in blob["ingredients"]} == {"no_data"}
 
 
 @pytest.mark.parametrize("name", ["HOWARU", "Lactobacillus acidophilus NCFM"])
@@ -356,7 +360,7 @@ def test_legacy_no_ref_fallback_requires_one_exact_label_owner(enricher, duplica
     expected = not duplicates
     assert (_probiotic_native_evidence_state(product, rows[0]) is not None) is expected
     for row in build_detail_blob(product, {})["ingredients"]:
-        assert (row["cfu_confidence"] is not None) is expected
+        assert (row["display_badge"] == "well_dosed") is expected
 
 
 def test_invalid_clinical_ref_never_falls_back_to_matching_name(enricher):
@@ -364,7 +368,7 @@ def test_invalid_clinical_ref_never_falls_back_to_matching_name(enricher):
     product = _collect(enricher, [owner])
     product["probiotic_data"]["clinical_strains"][0]["source_row_ref"] = "ingredientRows[99]"
     assert _probiotic_native_evidence_state(product, owner) is None
-    assert build_detail_blob(product, {})["ingredients"][0]["cfu_confidence"] is None
+    assert build_detail_blob(product, {})["ingredients"][0]["display_badge"] == "no_data"
 
 
 def test_full_form_cannot_override_conflicting_parent_taxonomy(enricher):
@@ -454,9 +458,13 @@ def test_exact_group_code_is_owned_through_producer_readiness_and_export(enriche
     assert clinical[0]["cfu_per_day"] == 10_000_000_000
     assert _probiotic_native_evidence_state(product, owner) is not None
     assert _probiotic_native_evidence_state(product, sibling) is None
-    exported = build_detail_blob(product, {})["ingredients"]
-    assert exported[0]["cfu_confidence"] is not None
-    assert exported[1]["cfu_confidence"] is None
+    blob = build_detail_blob(product, {})
+    # Per-strain adequacy ships once, on the owning probiotic_detail record,
+    # and reaches the owner row only through its display_badge.
+    assert [s["source_row_ref"] for s in blob["probiotic_detail"]["clinical_strains"]] == [
+        owner["raw_source_path"]
+    ]
+    assert [row["display_badge"] for row in blob["ingredients"]] == ["well_dosed", "no_data"]
 
 
 @pytest.mark.parametrize("case", [

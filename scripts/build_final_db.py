@@ -6779,19 +6779,12 @@ def build_detail_blob(
                 "notes": m.get("notes") or ing.get("notes"),
                 "raw_source_text": ing.get("raw_source_text"),
             }),
-            # Sprint E1.3.2 — per-strain adequacy (None when not a
+            # Sprint E1.3.2 — per-strain clinical support (None when not a
             # matched clinical strain OR when per-strain CFU isn't
             # knowable e.g. multi-strain blend).
-            "adequacy_tier": _strain_adequacy.get("adequacy_tier"),
             "clinical_support_level": _strain_adequacy.get("clinical_support_level"),
-            # Sprint E1.3.2.b — hybrid confidence descriptors (controlled
-            # enums; None on non-probiotic ingredients so this stays off
-            # generic ingredient surfaces).
-            "cfu_confidence": _strain_adequacy.get("cfu_confidence"),
-            "dose_basis": _strain_adequacy.get("dose_basis"),
-            "ui_copy_hint": _strain_adequacy.get("ui_copy_hint"),
-            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative).
-            # Reads adequacy_tier above, so must come AFTER the E1.3.2 fields.
+            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative),
+            # from the same per-strain adequacy tier.
             "display_badge": _compute_display_badge({**ing, "adequacy_tier": _strain_adequacy.get("adequacy_tier")}),
         })
     ingredients = _suppress_zero_dose_duplicate_active_rows(ingredients)

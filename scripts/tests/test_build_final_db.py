@@ -1841,6 +1841,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "natural",
         "is_allergen",
         "source_label_key", "identity_resolution_rationale", "canonical_id_before",
+        "adequacy_tier", "cfu_confidence", "dose_basis", "ui_copy_hint",
     ):
         assert retired not in ingredient
 

@@ -3,7 +3,7 @@ Sprint E1.3.2.b — probiotic confidence hybrid regression tests.
 
 Step 3 of the mini-sprint (per external-dev plan): descriptive-only
 layer on top of the adequacy signal from E1.3.2.a. Adds three fields
-per strain-matched ingredient:
+per matched clinical strain (exported on ``probiotic_detail.clinical_strains``):
 
   * ``cfu_confidence``  — ``high | moderate | low``
   * ``dose_basis``      — ``clinical | industry_standard | inferred``
@@ -231,9 +231,9 @@ def test_canary_19067_probiotic_confidence_fields() -> None:
         pytest.skip("19067 canary not rebuilt yet")
     blob = json.loads(blob_path.read_text())
     plantarum = None
-    for ing in blob.get("ingredients") or []:
-        if "plantarum" in (ing.get("name") or "").lower() and "299v" in (ing.get("name") or ""):
-            plantarum = ing
+    for strain in (blob.get("probiotic_detail") or {}).get("clinical_strains") or []:
+        if "plantarum" in (strain.get("strain") or "").lower() and "299v" in (strain.get("strain") or ""):
+            plantarum = strain
             break
     assert plantarum is not None
     # Dr Pham 2026-09-22: 299v is medium (n = 40) and positive -> moderate.
@@ -244,16 +244,13 @@ def test_canary_19067_probiotic_confidence_fields() -> None:
 
 def test_non_probiotic_canary_does_not_get_confidence_fields() -> None:
     """Per dev: keep hybrid fields off generic ingredient surfaces.
-    Non-probiotic ingredients must NOT carry these keys (either absent
-    entirely, or explicitly None — both acceptable)."""
+    A non-probiotic product exports no clinical strain to carry them, and
+    no ingredient row carries them (row-key census 2026-09-25)."""
     import json
     blob_path = ROOT / "reports" / "canary_rebuild" / "306237.json"  # KSM-66 ashwagandha
     if not blob_path.exists():
         pytest.skip("306237 canary not rebuilt yet")
     blob = json.loads(blob_path.read_text())
+    assert not (blob.get("probiotic_detail") or {}).get("clinical_strains")
     for ing in blob.get("ingredients") or []:
-        # Not a probiotic strain — confidence fields must be absent or None
-        cfu_conf = ing.get("cfu_confidence")
-        assert cfu_conf in (None, ""), (
-            f"non-probiotic ingredient {ing.get('name')!r} has cfu_confidence={cfu_conf!r}"
-        )
+        assert "cfu_confidence" not in ing, ing.get("name")

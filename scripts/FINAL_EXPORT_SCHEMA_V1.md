@@ -817,6 +817,8 @@ value):
 - active `source_label_key`, `identity_resolution_rationale`, `canonical_id_before`:
   the identity repair trail stays on the enriched IQD row, where
   `audit_identity_integrity` reads it.
+- active `adequacy_tier`, `cfu_confidence`, `dose_basis`, `ui_copy_hint`: they ship on
+  `probiotic_detail.clinical_strains`, linked to the row by `source_row_ref`.
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,
