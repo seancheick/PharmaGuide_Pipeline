@@ -170,13 +170,15 @@ def require_success(rows):
         raise ValueError('Empty replay or failed scorer calls; inspect persisted records')
 
 
-def read_rows(path):
+def read_rows(path, project=None):
+    """Verified snapshot rows; `project` slims each row while streaming."""
     metadata = json.loads(Path(str(path) + '.meta.json').read_text())
     if metadata.get('exit_code') != 0 or metadata.get('source_unchanged') is not True:
         raise ValueError('Snapshot metadata records a failed run')
     if metadata.get('output_sha256') != sha(path):
         raise ValueError('Snapshot output hash mismatch or missing receipt')
-    rows = [json.loads(line) for line in Path(path).read_text().splitlines() if line.strip()]
+    with Path(path).open() as handle:
+        rows = [(project or (lambda row: row))(json.loads(line)) for line in handle if line.strip()]
     require_success(rows)
     if len(rows) != metadata.get('product_count') or len(rows) != metadata.get('expected_product_count'):
         raise ValueError('Snapshot product count mismatch')
@@ -221,6 +223,146 @@ def check_records(rows, cases):
             failures.append({'case': case, 'error': str(exc)})
     return failures
 
+
+THRESHOLDS = (55, 70, 80, 90)
+PILLARS = ('formulation', 'dose', 'evidence', 'transparency', 'verification', 'safety_hygiene')
+RAW_KEYS = ('raw_formulation', 'raw_dose', 'raw_evidence', 'raw_score')
+MATERIAL_DELTA = 2.0
+
+
+def slim(row):
+    """The fields a calibration report reads; everything else is dropped while streaming."""
+    if 'error' in row:
+        return row
+    dims = ((row.get('reasons') or {}).get('module') or {}).get('dimensions') or {}
+    return {'id': row['id'], 'name': row.get('name'), 'route': row.get('route'), 'subroute': row.get('subroute'),
+            'total': row.get('total'), 'input_sha256': row.get('input_sha256'),
+            'pillars': {k: {'score': v.get('score'), 'components': {c: x for c, x in (v.get('components') or {}).items() if not isinstance(x, (dict, list))}}
+                        for k, v in (row.get('pillars') or {}).items()},
+            'dims': {k: {'components': dict(v.get('components') or {}), 'penalties': dict(v.get('penalties') or {})}
+                     for k, v in dims.items() if isinstance(v, dict)}}
+
+
+def _changed(before, after):
+    return sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
+
+
+def reason_codes(before, after, eps=0.05):
+    """Per pillar that moved: the reference, component and penalty keys that changed."""
+    codes = []
+    for pillar in PILLARS:
+        b, a = before['pillars'].get(pillar) or {}, after['pillars'].get(pillar) or {}
+        delta = round((a.get('score') or 0) - (b.get('score') or 0), 2)
+        if abs(delta) < eps:
+            continue
+        bc, ac = b.get('components') or {}, a.get('components') or {}
+        causes = []
+        if bc.get('reference') != ac.get('reference') or bc.get('raw_max') != ac.get('raw_max'):
+            causes.append('reference')
+        dim = 'transparency' if pillar == 'transparency' else pillar
+        raw_moved = any(bc.get(k) != ac.get(k) for k in RAW_KEYS)
+        if raw_moved and dim in before['dims']:
+            bd, ad = before['dims'].get(dim) or {}, after['dims'].get(dim) or {}
+            causes += ['component:' + k for k in _changed(bd.get('components') or {}, ad.get('components') or {})]
+            causes += ['penalty:' + k for k in _changed(bd.get('penalties') or {}, ad.get('penalties') or {})]
+        if pillar in ('verification', 'safety_hygiene'):
+            causes += ['component:' + k for k in _changed(bc, ac)]
+        codes.append({'pillar': pillar, 'delta': delta, 'causes': causes or ['unattributed']})
+    return codes
+
+
+def _quantile(values, q):
+    return values[min(len(values) - 1, int(q * len(values)))] if values else None
+
+
+def distribution(scores):
+    values = sorted(scores)
+    return {'n': len(values), 'p10': _quantile(values, .1), 'median': _quantile(values, .5), 'p90': _quantile(values, .9),
+            'max': values[-1] if values else None, **{f'ge_{t}': sum(v >= t for v in values) for t in THRESHOLDS}}
+
+
+def arm_report(baseline, candidate, reference_ids):
+    left = {r['id']: r for r in baseline}
+    right = {r['id']: r for r in candidate}
+    if left.keys() != right.keys() or any(left[k]['input_sha256'] != right[k]['input_sha256'] for k in left):
+        raise ValueError('Snapshot product IDs or input hashes differ')
+    scored = [k for k in left if left[k]['total'] is not None and right[k]['total'] is not None]
+    groups = {}
+    movers, causes = [], {}
+    crossings = {t: {'up': 0, 'down': 0} for t in THRESHOLDS}
+    denominator_only = unexplained = 0
+    for key in scored:
+        b, a = left[key], right[key]
+        delta = round(a['total'] - b['total'], 1)
+        for level in ('route', 'subroute'):
+            name = b['route'] if level == 'route' else f"{b['route']}/{b['subroute']}"
+            groups.setdefault(name, {'before': [], 'after': []})
+            groups[name]['before'].append(b['total'])
+            groups[name]['after'].append(a['total'])
+        for t in THRESHOLDS:
+            if b['total'] < t <= a['total']:
+                crossings[t]['up'] += 1
+            elif a['total'] < t <= b['total']:
+                crossings[t]['down'] += 1
+        if delta == 0:
+            continue
+        codes = reason_codes(b, a)
+        flat = sorted({f"{c['pillar']}:{cause}" for c in codes for cause in c['causes']})
+        if not codes or any('unattributed' in c['causes'] for c in codes):
+            unexplained += abs(delta) >= MATERIAL_DELTA
+        if codes and all(c['causes'] == ['reference'] for c in codes):
+            denominator_only += 1
+        for code in flat:
+            entry = causes.setdefault(code, {'products': 0, 'delta_sum': 0.0})
+            entry['products'] += 1
+            entry['delta_sum'] += delta
+        movers.append({'id': key, 'name': b['name'], 'route': b['route'], 'subroute': b['subroute'],
+                       'before': b['total'], 'after': a['total'], 'delta': delta, 'reasons': codes})
+    movers.sort(key=lambda m: m['delta'])
+    deltas = sorted(m['delta'] for m in movers)
+    return {
+        'scored': len(scored), 'changed': len(movers),
+        'material_changes': sum(abs(d) >= MATERIAL_DELTA for d in deltas),
+        'unexplained_material_changes': unexplained, 'denominator_only_changes': denominator_only,
+        'mean_delta_all': round(sum(deltas) / len(scored), 2) if scored else 0,
+        'crossings': crossings,
+        'groups': {name: {'before': distribution(v['before']), 'after': distribution(v['after'])} for name, v in sorted(groups.items())},
+        'causes': {k: {'products': v['products'], 'mean_delta': round(v['delta_sum'] / v['products'], 2)}
+                   for k, v in sorted(causes.items(), key=lambda kv: -kv[1]['products'])},
+        'largest_decreases': movers[:25], 'largest_increases': movers[::-1][:25],
+        'reference_products': [{'id': k, 'name': left[k]['name'], 'subroute': f"{left[k]['route']}/{left[k]['subroute']}",
+                                'before': left[k]['total'], 'after': right[k]['total'],
+                                'reasons': reason_codes(left[k], right[k])} for k in reference_ids if k in left],
+    }
+
+
+def reference_ids(baseline, reference_cases=None):
+    """Coverage references plus the top and median product of every subroute."""
+    ids = list((reference_cases or {}).get('coverage', {}).values())
+    groups = {}
+    for row in baseline:
+        if row['total'] is not None:
+            groups.setdefault((row['route'], row['subroute']), []).append(row)
+    for rows in groups.values():
+        rows.sort(key=lambda r: (r['total'], r['id']))
+        ids += [rows[-1]['id'], rows[len(rows) // 2]['id']]
+    return list(dict.fromkeys(ids))
+
+
+def build_report(baseline_path, candidates, reference_cases=None):
+    base_meta = json.loads(Path(str(baseline_path) + '.meta.json').read_text())
+    baseline = read_rows(baseline_path, slim)
+    refs = reference_ids(baseline, reference_cases)
+    report = {'baseline': {'path': str(baseline_path), 'output_sha256': base_meta['output_sha256'],
+                           'head': base_meta['repository']['head']}, 'arms': {}}
+    for name, path in candidates:
+        meta = json.loads(Path(str(path) + '.meta.json').read_text())
+        if meta['inputs_manifest_sha256'] != base_meta['inputs_manifest_sha256']:
+            raise ValueError('Snapshot input manifest hashes differ')
+        report['arms'][name] = {'path': str(path), 'output_sha256': meta['output_sha256'],
+                                'head': meta['repository']['head'],
+                                **arm_report(baseline, read_rows(path, slim), refs)}
+    return report
 
 def repository_provenance(checkout):
     checkout = Path(checkout)
@@ -294,6 +436,11 @@ def main():
     p = subs.add_parser('compare')
     for flag in ('baseline', 'candidate', 'out'):
         p.add_argument('--' + flag, required=True)
+    p = subs.add_parser('report')
+    p.add_argument('--baseline', required=True)
+    p.add_argument('--candidate', action='append', required=True, help='name=path; repeatable')
+    p.add_argument('--reference-cases')
+    p.add_argument('--out', required=True)
     p = subs.add_parser('check')
     p.add_argument('--candidate', required=True)
     p.add_argument('--reference-cases', required=True)
@@ -310,6 +457,10 @@ def main():
         if baseline_meta['inputs_manifest_sha256'] != candidate_meta['inputs_manifest_sha256']:
             raise ValueError('Snapshot input manifest hashes differ')
         write_json(args.out, compare_records(read_rows(args.baseline), read_rows(args.candidate)))
+    elif args.command == 'report':
+        cases = json.loads(Path(args.reference_cases).read_text()) if args.reference_cases else None
+        arms = [tuple(item.split('=', 1)) for item in args.candidate]
+        write_json(args.out, build_report(args.baseline, arms, cases))
     else:
         failures = check_records(read_rows(args.candidate), json.loads(Path(args.reference_cases).read_text())['comparisons'])
         print(json.dumps({'failures': failures}, indent=2))

@@ -168,3 +168,56 @@ def test_provenance_includes_nested_production_package(tmp_path):
     source.write_text('VALUE = 2\n')
     after = replay.repository_provenance(checkout)
     assert before['source_sha256']['scripts/identity/safety.py'] != after['source_sha256']['scripts/identity/safety.py']
+
+
+def _scored_row(pid, total, *, dose_raw=11.0, dose_ref=22.0, dose=10.0, safety=10.0, add_pen=0.0, route='generic', sub='generic_iqm'):
+    return {'id': pid, 'name': f'P{pid}', 'route': route, 'subroute': sub, 'total': total, 'input_sha256': 'h' + pid,
+            'pillars': {'dose': {'score': dose, 'components': {'raw_dose': dose_raw, 'reference': dose_ref}},
+                        'safety_hygiene': {'score': safety, 'components': {'clean_base': 10.0, 'additive_or_sweetener_penalty': add_pen}}},
+            'reasons': {'module': {'dimensions': {'dose': {'components': {'window': dose_raw}, 'penalties': {}}}}}}
+
+
+def _snapshot(tmp_path, name, rows):
+    out = tmp_path / f'{name}.jsonl'
+    out.write_text(''.join(json.dumps(r) + '\n' for r in rows))
+    replay.write_json(str(out) + '.meta.json', {'exit_code': 0, 'source_unchanged': True, 'output_sha256': replay.sha(out),
+                                                'product_count': len(rows), 'expected_product_count': len(rows),
+                                                'inputs_manifest_sha256': 'm', 'repository': {'head': name}})
+    return out
+
+
+def test_report_attributes_every_move_and_counts_crossings(tmp_path):
+    base = _snapshot(tmp_path, 'base', [_scored_row('1', 68.0, safety=7.0, add_pen=3.0), _scored_row('2', 89.0), _scored_row('3', 60.0)])
+    cand = _snapshot(tmp_path, 'cand', [_scored_row('1', 71.0),  # safety mirror removed
+                                        _scored_row('2', 91.0, dose_ref=20.0, dose=11.0),  # denominator only
+                                        _scored_row('3', 60.0)])
+    report = replay.build_report(base, [('a', cand)])['arms']['a']
+    assert report['changed'] == 2 and report['unexplained_material_changes'] == 0
+    assert report['denominator_only_changes'] == 1
+    assert report['crossings'][70] == {'up': 1, 'down': 0} and report['crossings'][90] == {'up': 1, 'down': 0}
+    by_id = {m['id']: m for m in report['largest_increases']}
+    assert by_id['1']['reasons'] == [{'pillar': 'safety_hygiene', 'delta': 3.0, 'causes': ['component:additive_or_sweetener_penalty']}]
+    assert by_id['2']['reasons'][0]['causes'] == ['reference']
+    assert report['groups']['generic']['after']['ge_90'] == 1
+
+
+def test_report_attributes_raw_moves_to_dimension_components(tmp_path):
+    base = _snapshot(tmp_path, 'base', [_scored_row('1', 60.0)])
+    cand = _snapshot(tmp_path, 'cand', [_scored_row('1', 65.0, dose_raw=16.5, dose=15.0)])
+    reasons = replay.build_report(base, [('a', cand)])['arms']['a']['largest_increases'][0]['reasons']
+    assert reasons == [{'pillar': 'dose', 'delta': 5.0, 'causes': ['component:window']}]
+
+
+def test_report_rejects_different_inputs(tmp_path):
+    base = _snapshot(tmp_path, 'base', [_scored_row('1', 60.0)])
+    other = dict(_scored_row('1', 60.0), input_sha256='changed')
+    with pytest.raises(ValueError, match='input hashes'):
+        replay.build_report(base, [('a', _snapshot(tmp_path, 'cand', [other]))])
+
+
+def test_projected_reader_keeps_integrity_checks(tmp_path):
+    base = _snapshot(tmp_path, 'base', [_scored_row('1', 60.0)])
+    assert replay.read_rows(base, replay.slim)[0]['dims']['dose']['components'] == {'window': 11.0}
+    base.write_text('')
+    with pytest.raises(ValueError, match='hash'):
+        replay.read_rows(base, replay.slim)
