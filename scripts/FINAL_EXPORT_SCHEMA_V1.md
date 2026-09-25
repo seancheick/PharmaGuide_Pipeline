@@ -822,6 +822,8 @@ value):
 - `jurisdiction_scope` (both lists): derived from `us_applicable` + `jurisdictions`;
   warnings keep their own.
 - inactive `label_row_disposition`: derived from `is_label_descriptor` / `is_active_only`.
+- inactive `resolved_display_label`: the resolver's name, which `display_label` showed
+  until it switched to the label's wording on 2026-06-15.
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,

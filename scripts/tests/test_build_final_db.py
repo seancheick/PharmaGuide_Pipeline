@@ -1428,7 +1428,6 @@ def test_inactive_display_label_preserves_label_wording_with_resolved_identity_m
 
     assert inactive["name"] == "Ascorbyl Palmitate"
     assert inactive["display_label"] == "Ascorbyl Palmitate"
-    assert inactive["resolved_display_label"] == "Natural Preservatives"
     assert inactive["standard_name"] == "Natural Preservatives"
     assert inactive["display_role_label"] == "Preservative natural"
     assert inactive["is_label_descriptor"] is False
@@ -1503,7 +1502,6 @@ def test_label_descriptor_inactive_row_stays_visible_but_marked_nonstandard():
     assert inactive["name"] == "Phospholipids"
     assert inactive["display_label"] == "Phospholipids"
     assert inactive["standard_name"] == "Phospholipid Descriptor"
-    assert inactive["resolved_display_label"] == "Phospholipid Descriptor"
     assert inactive["matched_rule_id"] == "PII_PHOSPHOLIPID_DESCRIPTOR"
     assert inactive["is_label_descriptor"] is True
     assert inactive["functional_roles"] == []
@@ -1857,6 +1855,7 @@ def test_detail_blob_inactive_rows_carry_one_name_per_value():
         "mechanism_of_harm", "common_uses",
         "jurisdiction_scope",
         "label_row_disposition",
+        "resolved_display_label",
     ):
         assert retired not in inactive
 

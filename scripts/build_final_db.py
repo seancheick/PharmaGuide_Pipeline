@@ -6879,8 +6879,7 @@ def build_detail_blob(
             resolver_standard_name=safe_str(res.standard_name),
             matched_source=safe_str(res.matched_source),
         )
-        resolved_display_label = safe_str(res.display_label)
-        inactive_display_label = name or raw or resolved_display_label
+        inactive_display_label = name or raw or safe_str(res.display_label)
         inactive_contract = {
             "is_safety_concern": res.is_safety_concern,
             "is_banned": res.is_banned,
@@ -6923,7 +6922,6 @@ def build_detail_blob(
             # Canonical inactive contract (v1.5.0+) — Flutter renders
             # these directly without local inference.
             "display_label": inactive_display_label,
-            "resolved_display_label": resolved_display_label,
             "display_role_label": res.display_role_label,
             "severity_status": res.severity_status,
             # Penalty-aware dot tone (green/light_orange/dark_orange/red): reflects
