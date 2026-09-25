@@ -1,5 +1,5 @@
 """
-Expanded source-descriptor recognition for _is_source_material_descriptor_for_fallback_audit.
+Expanded source-descriptor recognition for _is_source_material_descriptor.
 
 The form_fallback_audit_report's action_needed_differs bucket is being flooded
 with rows where the raw label text is genuinely a SOURCE descriptor (animal
@@ -56,7 +56,7 @@ class TestAnimalTissueSources:
         "bos taurus pancreas extract, dried, purified, sus scrofa pancreas extract, dried, purified",
     ])
     def test_pancreas_variants(self, enricher, text):
-        assert enricher._is_source_material_descriptor_for_fallback_audit(text), text
+        assert enricher._is_source_material_descriptor(text), text
 
 
 class TestLatinBinomialSources:
@@ -80,7 +80,7 @@ class TestLatinBinomialSources:
         "withania somnifera leaf extract, withania somnifera root extract",
     ])
     def test_latin_binomial_with_tissue(self, enricher, text):
-        assert enricher._is_source_material_descriptor_for_fallback_audit(text), text
+        assert enricher._is_source_material_descriptor(text), text
 
 
 class TestYeastCultureSources:
@@ -93,7 +93,7 @@ class TestYeastCultureSources:
         "saccharomyces cerevisiae culture",
     ])
     def test_cerevisiae_culture(self, enricher, text):
-        assert enricher._is_source_material_descriptor_for_fallback_audit(text), text
+        assert enricher._is_source_material_descriptor(text), text
 
 
 class TestWholeFoodPlantSources:
@@ -108,7 +108,7 @@ class TestWholeFoodPlantSources:
         "organic black elderberry juice concentrate",
     ])
     def test_plant_source_descriptors(self, enricher, text):
-        assert enricher._is_source_material_descriptor_for_fallback_audit(text), text
+        assert enricher._is_source_material_descriptor(text), text
 
 
 class TestFishAndMarineSources:
@@ -121,7 +121,7 @@ class TestFishAndMarineSources:
         "omega-3 fatty acids, sardines",
     ])
     def test_marine_sources(self, enricher, text):
-        assert enricher._is_source_material_descriptor_for_fallback_audit(text), text
+        assert enricher._is_source_material_descriptor(text), text
 
 
 class TestMineralSourceClaims:
@@ -135,7 +135,7 @@ class TestMineralSourceClaims:
         "mineral complex",
     ])
     def test_mineral_source_claims(self, enricher, text):
-        assert enricher._is_source_material_descriptor_for_fallback_audit(text), text
+        assert enricher._is_source_material_descriptor(text), text
 
 
 class TestMarkerCompoundsAsStandardization:
@@ -152,8 +152,8 @@ class TestMarkerCompoundsAsStandardization:
     def test_marker_compound(self, enricher, text):
         # Either source_material_descriptor OR standardization_marker is acceptable
         assert (
-            enricher._is_source_material_descriptor_for_fallback_audit(text)
-            or enricher._is_standardization_marker_for_fallback_audit(text)
+            enricher._is_source_material_descriptor(text)
+            or enricher._is_standardization_marker_token(text)
         ), text
 
 
@@ -167,7 +167,7 @@ class TestMarketingBlendLabels:
         "trace mineral complex",
     ])
     def test_marketing_blend(self, enricher, text):
-        assert enricher._is_source_material_descriptor_for_fallback_audit(text), text
+        assert enricher._is_source_material_descriptor(text), text
 
 
 class TestVitaminComplexMarketingLabels:
@@ -183,7 +183,7 @@ class TestVitaminComplexMarketingLabels:
         "vitamin d complex",
     ])
     def test_vitamin_complex_labels(self, enricher, text):
-        assert enricher._is_source_material_descriptor_for_fallback_audit(text), text
+        assert enricher._is_source_material_descriptor(text), text
 
 
 class TestNegativeCases:
@@ -213,6 +213,6 @@ class TestNegativeCases:
         # source descriptors). Tested separately: lb-87 etc. are strain codes.
     ])
     def test_real_forms_not_misclassified(self, enricher, text):
-        assert not enricher._is_source_material_descriptor_for_fallback_audit(text), (
+        assert not enricher._is_source_material_descriptor(text), (
             f"{text!r} is a real form alias gap, not a source descriptor"
         )

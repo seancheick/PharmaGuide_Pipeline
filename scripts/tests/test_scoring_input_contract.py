@@ -560,7 +560,7 @@ def test_product_level_probiotic_evidence_is_accepted_from_contract_only():
     assert result.rows[0]["canonical_id"] == "probiotic_cfu_total"
     assert result.rows[0]["scoring_input_kind"] == "product_level_evidence"
     assert result.rows[0]["section_support"] == ["probiotic_dose_adequacy"]
-    assert result.rows[0]["generic_form_quality_credit"] is False
+    assert result.rows[0].get("bio_score") is None
     assert "product_scoring_evidence" in result.source
 
 
@@ -1301,40 +1301,41 @@ def test_generic_amino_blend_total_does_not_become_eaa_aggregate():
     )
 
 
-def test_iqm_blend_anchor_mass_carries_conservative_form_quality():
-    product = _product(
-        [],
-        activeIngredients=[
-            {
-                "name": "Pancreatin",
-                "standardName": "Digestive Enzymes",
-                "canonical_id": "digestive_enzymes",
-                "canonical_source_db": "ingredient_quality_map",
-                "quantity": 1.0,
-                "unit": "Gram(s)",
-                "source_section": "active",
-                "raw_source_path": "ingredientRows[0]",
-                "cleaner_row_role": "blend_header_total",
-                "score_eligible_by_cleaner": False,
-                "dose_class": "blend_total_weight",
-                "raw_taxonomy": {
-                    "category": "blend",
-                    "ingredientGroup": "Blend (non-nutrient/non-botanical)",
-                    "forms": [{"name": "Porcine"}],
-                },
-            }
-        ],
-    )
+def test_blend_anchor_form_quality_comes_only_from_enrichment():
+    """The contract never re-matches IQM aliases: a blend-anchor row carries
+    exactly the form reading enrichment stamped on product_scoring_evidence,
+    and nothing when enrichment stamped none."""
+    base = {
+        "evidence_type": "blend_anchor_mass", "scoreable": True, "scoreable_identity": True,
+        "score_eligible_by_cleaner": True, "dose_class": "therapeutic_mass",
+        "dose_value": 1.0, "dose_unit": "Gram(s)", "source": "activeIngredients",
+        "raw_source_path": "ingredientRows[0]", "evidence_scope": "blend_level",
+        "linked_rows": ["ingredientRows[0]"], "confidence": "medium",
+        "reason": "identity_bearing_blend_header_mass", "name": "Pancreatin",
+        "canonical_id": "digestive_enzymes", "evidence_canonical_id": "digestive_enzymes",
+        "canonical_source_db": "ingredient_quality_map", "source_section": "product",
+        "identity_disposition": "clean", "clean_identity_id": "digestive_enzymes",
+        "scoring_parent_id": "digestive_enzymes", "evidence_origin": "compatibility_derived",
+    }
+    stamped = {**base, "bio_score": 11.0, "matched_form": "pancreatic enzymes (animal-derived)",
+               "form_match_status": "mapped"}
+    for evidence, expected in ((stamped, (11.0, "pancreatic enzymes (animal-derived)")), (base, (None, None))):
+        product = _product([], product_scoring_evidence=[evidence])
+        row = next(r for r in get_scoring_ingredients(product, strict=True).rows
+                   if r.get("evidence_type") == "blend_anchor_mass")
+        assert (row.get("bio_score"), row.get("matched_form")) == expected
 
-    result = get_scoring_ingredients(product, strict=True)
 
-    assert len(result.rows) == 1
-    row = result.rows[0]
-    assert row["evidence_type"] == "blend_anchor_mass"
-    assert row["canonical_id"] == "digestive_enzymes"
-    assert row["bio_score"] == 11
-    assert row["matched_form"] == "pancreatic enzymes (animal-derived)"
-    assert row["generic_form_quality_credit"] is True
+def test_enricher_reads_a_blend_anchor_form_with_its_own_matcher():
+    from enrich_supplements_v3 import SupplementEnricherV3
+    reading = SupplementEnricherV3()._anchor_form_reading({
+        "canonical_id": "digestive_enzymes", "name": "Pancreatin",
+        "raw_source_text": "Pancreatin", "standardName": "Digestive Enzymes",
+        "forms": [{"name": "Porcine"}],
+    })
+    assert reading["bio_score"] == 11
+    assert reading["matched_form"] == "pancreatic enzymes (animal-derived)"
+    assert reading["form_match_status"] == "mapped"
 
 
 def test_unmapped_blend_anchor_mass_does_not_get_iqm_form_quality_credit():
@@ -1368,7 +1369,7 @@ def test_unmapped_blend_anchor_mass_does_not_get_iqm_form_quality_credit():
     assert row["evidence_type"] == "blend_anchor_mass"
     assert row["canonical_id"] == "relora_patented_proprietary_blend"
     assert row.get("bio_score") is None
-    assert row["generic_form_quality_credit"] is False
+    assert row.get("form_match_status") is None
 
 
 # --- Task 3: strict scoring-input identity disposition guard ---

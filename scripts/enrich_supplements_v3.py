@@ -113,6 +113,7 @@ from scoring_input_contract import (
 )
 from scoring_reference_resolver import (
     UNKNOWN_FORM_NAME,
+    authored_unknown_form,
     effective_form_bio,
     unknown_form_quality,
 )
@@ -297,6 +298,16 @@ _SOURCE_DESCRIPTOR_FORM_CATEGORIES = frozenset({
 # powder" under Magnesium) supplies that nutrient; it is not a form of it.
 _SOURCE_CLASS_FORM_CATEGORIES = frozenset({"botanical", "protein"})
 _DEFINED_NUTRIENT_PARENT_CATEGORIES = frozenset({"vitamins", "minerals", "amino_acids", "enzymes"})
+# Parents whose DSLD 'fat' form tokens are carrier or source oils.
+_CARRIER_OIL_PARENT_CATEGORIES = frozenset({"vitamins", "fatty_acids"})
+# A token made only of these words names how an ingredient was prepared, not
+# which chemical form it is ("Powder", "Dried Extract").
+_PREPARATION_WORDS = frozenset({
+    "dried", "purified", "aqueous", "concentrate", "extract",
+    "powder", "juice", "culture", "fermentation", "liquid",
+    "fresh", "whole", "standardized",
+})
+
 _SOURCE_DESCRIPTOR_FORM_PREFIXES = frozenset({
     "from",
     "culture of",
@@ -326,6 +337,16 @@ IQM_CANONICAL_CROSS_PARENT_ALLOWLIST: Dict[Tuple[str, str], Tuple[str, ...]] = {
         "phytonadione",
         "phylloquinone",
         "vitamin k1",
+    ),
+    # Menaquinones are vitamin K2; interaction rules still reach vitamin K
+    # through interaction_subject_ids.
+    ("vitamin_k", "vitamin_k2"): (
+        "menaquinone",
+        "menaquinone-4",
+        "menaquinone-7",
+        "mk-4",
+        "mk-7",
+        "vitamin k2",
     ),
     ("turmeric", "curcumin"): (
         "curcuminoid",
@@ -1104,7 +1125,7 @@ class SupplementEnricherV3:
         self._ambiguity_warning_count = 0
         self._parent_fallback_info_count = 0
         self._parent_fallback_details = []  # Collect ALL fallback details for report
-        self._form_fallback_details = []   # Collect FORM_UNMAPPED_FALLBACK details for audit
+        self._form_fallback_details = []   # Collect FORM_DISCLOSED_UNMAPPED details for audit
 
         # Initialize scoring hardening modules
         self._init_scoring_modules()
@@ -3587,8 +3608,8 @@ class SupplementEnricherV3:
     def _quality_match_identity_confidence(match_result: Optional[Dict]) -> float:
         if not isinstance(match_result, dict):
             return 0.0
-        if match_result.get("match_status") == "FORM_UNMAPPED_FALLBACK":
-            return 0.8
+        # Identity confidence only: a disclosed form IQM lacks leaves the
+        # identity match as strong as its tier (the form is reported apart).
         return 1.0 if match_result.get("match_tier") == "exact" else 0.9
 
     def _identity_unii_values(
@@ -3914,7 +3935,14 @@ class SupplementEnricherV3:
             if not isinstance(forms, dict) or form_id not in forms:
                 return False
             selected_form = forms[form_id]
-        elif ingredient.get("forms"):
+        elif ingredient.get("forms") and not (
+            match_result.get("match_status") == "FORM_DISCLOSED_UNMAPPED"
+            or match_result.get("form_name") == UNKNOWN_FORM_NAME
+        ):
+            # A form-less match beside declared forms is incoherent, except
+            # when the forms were read and found unmapped, or were only
+            # generic (the parent's derived unknown): the identity stands and
+            # the form is reported on its own.
             return False
 
         # A direct row UNII identifies the active parent and therefore must be
@@ -4663,7 +4691,7 @@ class SupplementEnricherV3:
                     "additional_forms": [],
                     "form_source": None,
                     "form_id": None,
-                    "form_unmapped": False,
+                    "form_match_status": "n/a",
                     "matched_alias": None,
                     "matched_target": None,
                     "match_tier": None,
@@ -4922,7 +4950,7 @@ class SupplementEnricherV3:
                     contains_match_wins_count += 1
                 if match_result.get('fallback_form_selected'):
                     parent_fallback_count += 1
-                if match_result.get('bio_score', 0) > 12:
+                if (match_result.get('bio_score') or 0) > 12:
                     premium_form_count += 1
             else:
 
@@ -5138,7 +5166,7 @@ class SupplementEnricherV3:
                         contains_match_wins_count += 1
                     if match_result.get('fallback_form_selected'):
                         parent_fallback_count += 1
-                    if match_result.get('bio_score', 0) > 12:
+                    if (match_result.get('bio_score') or 0) > 12:
                         premium_form_count += 1
                 else:
                     # Apply the same identity fallback used in pass-1 actives.
@@ -7145,31 +7173,12 @@ class SupplementEnricherV3:
                 canonical_redirect_from = matched_canonical_id
                 canonical_redirect_source = 'match_rules.target_id'
                 matched_entry_id = matched_canonical_id
-            used_form_fallback = match_result.get('match_status') == 'FORM_UNMAPPED_FALLBACK'
+            used_form_fallback = match_result.get('match_status') == 'FORM_DISCLOSED_UNMAPPED'
 
             # Track form fallbacks for audit report
             if used_form_fallback:
                 unmapped_forms = match_result.get('unmapped_forms', [])
-                fallback_form_name = match_result.get('form_name', '(unspecified)')
-                # Look up the parent canonical's form count so the classifier
-                # can short-circuit on single-form parents (structurally
-                # unambiguous fallbacks are audit noise, not action items).
-                parent_form_count: Optional[int] = None
-                canonical_id = match_result.get('canonical_id')
-                if canonical_id:
-                    parent_entry = self.databases.get(
-                        'ingredient_quality_map', {}
-                    ).get(canonical_id, {})
-                    parent_forms = parent_entry.get('forms', {}) or {}
-                    if isinstance(parent_forms, dict):
-                        parent_form_count = len(parent_forms)
-                audit_classification = self._classify_form_fallback_audit(
-                    ing_name,
-                    match_result.get('standard_name', ''),
-                    unmapped_forms,
-                    fallback_form_name,
-                    parent_form_count=parent_form_count,
-                )
+                fallback_form_name = match_result.get('form_name') or '(unmapped)'
                 self._form_fallback_details.append({
                     "ingredient_label": ing_name,
                     "raw_source_text": raw_source_text,
@@ -7178,8 +7187,6 @@ class SupplementEnricherV3:
                     "unmapped_form_text": ', '.join(unmapped_forms) if unmapped_forms else ing_name,
                     "fallback_form": fallback_form_name,
                     "fallback_bio_score": bio_score,
-                    "forms_differ": audit_classification["forms_differ"],
-                    "audit_noise_reason": audit_classification["audit_noise_reason"],
                     "form_source": match_result.get('form_source', ''),
                     "source_section": source_section,
                 })
@@ -7221,7 +7228,7 @@ class SupplementEnricherV3:
                 "scoreable_identity": True,
                 "role_classification": "active_scorable",
                 "identity_confidence": self._quality_match_identity_confidence(match_result),
-                "identity_decision_reason": "form_unmapped_fallback" if used_form_fallback else "quality_map_match",
+                "identity_decision_reason": "disclosed_form_unmapped" if used_form_fallback else "quality_map_match",
                 "safety_hits": [],
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section,
@@ -7245,12 +7252,10 @@ class SupplementEnricherV3:
                 "extracted_forms": match_result.get('extracted_forms', []),
                 "matched_forms": match_result.get('matched_forms', []),
                 "unmapped_forms": match_result.get('unmapped_forms', []),
-                "unresolved_form_tokens": match_result.get('unresolved_form_tokens', []),
                 "aggregation_method": match_result.get('aggregation_method'),
                 "final_form_bio_score": match_result.get('final_form_bio_score'),
                 "additional_forms": match_result.get('additional_forms', []),
                 "form_source": match_result.get('form_source'),
-                "form_unmapped": bool(used_form_fallback),
             }
         else:
             entry = {
@@ -7313,7 +7318,6 @@ class SupplementEnricherV3:
                 "final_form_bio_score": None,
                 "additional_forms": [],
                 "form_source": None,
-                "form_unmapped": False,
             }
 
         # Add promotion metadata if applicable
@@ -7354,12 +7358,12 @@ class SupplementEnricherV3:
         entry.setdefault("recognition_reason", None)
         entry.setdefault("form_id", None)
         entry.setdefault("form_source", None)
-        entry.setdefault("form_unmapped", bool(is_form_unmapped))
+        entry["form_match_status"] = self._row_form_match_status(entry, match_result)
         entry.setdefault("delivers_markers", [])
         entry.setdefault("fallback_class", None)
         entry.setdefault("fallback_reason", None)
-        if entry.get("identity_decision_reason") == "form_unmapped_fallback":
-            self._tag_fallback_decision(entry, "clinical_fail_safe", "form_unmapped_fallback")
+        if entry.get("identity_decision_reason") == "disclosed_form_unmapped":
+            self._tag_fallback_decision(entry, "clinical_fail_safe", "disclosed_form_unmapped")
         self._mark_cleaner_contract_fallback(entry, missing_cleaner_contract_fields)
 
         # Sprint 1.1: propagate cleaner-side match method (UNII / alternateNames)
@@ -7392,8 +7396,8 @@ class SupplementEnricherV3:
 
         return entry
 
-    def _normalize_form_fallback_audit_text(self, value: Optional[str]) -> str:
-        """Normalize free-text form/source labels for fallback-audit comparison."""
+    def _normalize_source_token_text(self, value: Optional[str]) -> str:
+        """Normalize free-text form/source labels for token classification."""
         if not value:
             return ""
 
@@ -7420,6 +7424,8 @@ class SupplementEnricherV3:
         "fish", "cod", "cod fish", "pollock", "alaska pollock", "alaskan pollock",
         "wild-caught alaska pollock", "usa wild-caught alaska pollock",
         "wild-caught", "wild caught",
+        # Milk-protein sources of amino acids (DSLD files them as minerals)
+        "calcium caseinate", "sodium caseinate", "caseinate",
         # Plant / fruit whole-food sources surfaced as forms
         "cantaloupe", "cantaloupe melon", "melon",
         "amla", "emblic", "emblic fruit", "emblic fruit extract",
@@ -7488,7 +7494,7 @@ class SupplementEnricherV3:
 
     # Individual tokens that, when ALL words of a normalized text are drawn
     # from this set (plus prep qualifiers), indicate a source/marker descriptor.
-    # This handles the reality that `_normalize_form_fallback_audit_text` loses
+    # This handles the reality that `_normalize_source_token_text` loses
     # commas (the shared `_normalize_text` converts comma → space), so
     # multi-term phrases like "polyphenols, punicalagin" arrive here as
     # "polyphenols punicalagin".
@@ -7523,7 +7529,7 @@ class SupplementEnricherV3:
         "immune", "food", "beauty", "system", "blend", "organic",
     })
 
-    def _is_source_material_descriptor_for_fallback_audit(self, normalized_text: str) -> bool:
+    def _is_source_material_descriptor(self, normalized_text: str) -> bool:
         """
         Return True when fallback text names a source material, not a missing
         IQM form.
@@ -7647,7 +7653,7 @@ class SupplementEnricherV3:
 
         return False
 
-    def _is_standardization_marker_for_fallback_audit(self, normalized_text: str) -> bool:
+    def _is_standardization_marker_token(self, normalized_text: str) -> bool:
         """Return True for standardized active-marker text that is not itself an IQM form."""
         if not normalized_text:
             return False
@@ -7657,80 +7663,6 @@ class SupplementEnricherV3:
             "8 prenylnaringenin",
         }
         return normalized_text in marker_terms
-
-    def _classify_form_fallback_audit(
-        self,
-        ing_name: str,
-        parent_name: str,
-        unmapped_forms: List[str],
-        fallback_form_name: str,
-        parent_form_count: Optional[int] = None,
-    ) -> Dict[str, Optional[str]]:
-        """
-        Classify form-fallback telemetry into actionable alias gaps vs audit noise.
-
-        The report should surface unresolved chemical/form identities, not source
-        materials like "Shrimp" or generic tokens like "extract".
-
-        When parent_form_count == 1, the parent canonical has exactly one form in
-        IQM, so any FORM_UNMAPPED_FALLBACK can only land on that single form by
-        construction. This is applied as a fallback noise reason ONLY when the
-        regular text-based classification would have otherwise flagged the row
-        as action_needed — more specific reasons (e.g., ``standardization_marker``)
-        still win.
-        """
-        normalized_fallback = self._normalize_form_fallback_audit_text(fallback_form_name)
-        normalized_unmapped: List[str] = []
-        for form in unmapped_forms or []:
-            normalized = self._normalize_form_fallback_audit_text(form)
-            if normalized:
-                normalized_unmapped.append(normalized)
-
-        if not normalized_unmapped:
-            return {"forms_differ": False, "audit_noise_reason": "no_unmapped_form"}
-
-        ingredient_norm = self._normalize_form_fallback_audit_text(ing_name)
-        parent_norm = self._normalize_form_fallback_audit_text(parent_name)
-        substantive_forms: List[str] = []
-        audit_noise_reason: Optional[str] = None
-
-        for form in normalized_unmapped:
-            if form == "extract":
-                audit_noise_reason = audit_noise_reason or "generic_extract_token"
-                continue
-            if self._is_source_material_descriptor_for_fallback_audit(form):
-                audit_noise_reason = audit_noise_reason or "source_material_descriptor"
-                continue
-            if self._is_standardization_marker_for_fallback_audit(form):
-                audit_noise_reason = audit_noise_reason or "standardization_marker"
-                continue
-            if form in {ingredient_norm, parent_norm}:
-                audit_noise_reason = audit_noise_reason or "parent_label_restatement"
-                continue
-            substantive_forms.append(form)
-
-        if not substantive_forms:
-            return {
-                "forms_differ": False,
-                "audit_noise_reason": audit_noise_reason or "non_actionable_form_text",
-            }
-
-        # Existing text-based classification would return forms_differ=True
-        # (an action_needed row). Apply the single-form-parent guard here as a
-        # last-resort override: if the parent canonical has exactly one form in
-        # IQM, any FORM_UNMAPPED_FALLBACK is structurally noise because there
-        # is no alternate form to select.
-        would_differ = normalized_fallback not in substantive_forms
-        if would_differ and parent_form_count == 1:
-            return {
-                "forms_differ": False,
-                "audit_noise_reason": "single_form_parent",
-            }
-
-        return {
-            "forms_differ": would_differ,
-            "audit_noise_reason": None,
-        }
 
     def _structural_parent_total_row_ids(
         self,
@@ -8079,10 +8011,13 @@ class SupplementEnricherV3:
                 non_form_tokens.append(raw_form_text)
                 continue
 
-            # Try each match candidate until one succeeds
+            # Try each match candidate until one succeeds. A candidate that
+            # only reaches the parent default (no alias of this parent or of
+            # its forms matched) is not a reading of the token.
             form_match = None
             matched_candidate = None
             matched_unspecified = False
+            restates_parent = False
             deferred_parent_match = None
             has_source_suffix = bool(re.search(r'\s+from\s+', raw_form_text, flags=re.IGNORECASE))
             for candidate in match_candidates:
@@ -8110,23 +8045,30 @@ class SupplementEnricherV3:
                         continue
                     form_id = form_match.get('form_id', '')
                     # Accept if it's a specific form (not unspecified)
-                    if form_id and 'unspecified' not in form_id.lower():
+                    if self._is_specific_form_match(form_match, quality_map):
                         matched_candidate = candidate
                         break
-                    else:
-                        # Generic/source descriptors frequently resolve to
-                        # unspecified forms (e.g., "fish oil" for DHA/EPA).
-                        # Track these separately to avoid false form-loss flags.
+                    if not form_match.get('fallback_form_selected'):
+                        # An alias of the parent's unspecified form: a generic
+                        # descriptor (e.g., "fish oil" for DHA/EPA).
                         matched_unspecified = True
-                        form_match = None
+                    elif (form_match.get('match_tier') != 'cleaner_canonical_parent'
+                          and self._restated_parent(form_match.get('canonical_id'), preferred_parent)):
+                        # An alias of the parent itself ("Vitamin B1" under
+                        # Thiamine), or of its reviewed child ("Vitamin K2"
+                        # under Vitamin K): the row's identity restated.
+                        matched_unspecified = restates_parent = True
+                    form_match = None
 
             if form_match is None and deferred_parent_match is not None:
                 form_match, candidate = deferred_parent_match
                 form_id = form_match.get('form_id', '')
-                if form_id and 'unspecified' not in form_id.lower():
+                if self._is_specific_form_match(form_match, quality_map):
                     matched_candidate = candidate
                 else:
-                    matched_unspecified = True
+                    if (form_match.get('match_tier') != 'cleaner_canonical_parent'
+                            and self._restated_parent(form_match.get('canonical_id'), preferred_parent)):
+                        matched_unspecified = restates_parent = True
                     form_match = None
 
             if (form_match is None or form_match.get('fallback_form_selected')) and \
@@ -8134,6 +8076,15 @@ class SupplementEnricherV3:
                 generic_form_tokens.append(raw_form_text)
                 non_form_tokens.append(raw_form_text)
                 continue
+
+            if not (form_match and matched_candidate) and not matched_unspecified and preferred_parent:
+                counter_ion = self._counter_ion_form(match_candidates, preferred_parent, quality_map)
+                if counter_ion:
+                    form_match = self._match_quality_map(
+                        counter_ion, counter_ion, quality_map, _form_extraction_attempt=True,
+                        preferred_parent=preferred_parent, cleaner_canonical_id=preferred_parent,
+                    )
+                    matched_candidate = counter_ion if form_match and form_match.get('form_id') == counter_ion else None
 
             if form_match and matched_candidate:
                 bio_score = form_match.get('bio_score', 5)
@@ -8148,11 +8099,17 @@ class SupplementEnricherV3:
                     'full_match_data': form_match
                 })
             else:
-                if matched_unspecified:
+                context = None if matched_unspecified else self._form_token_context(
+                    form_data, parent_names, preferred_parent,
+                    row_label=form_info.get('base_name') or '')
+                if matched_unspecified or context:
                     generic_form_tokens.append(raw_form_text)
-                    if self._norm_form_name(raw_form_text) in parent_names:
+                    if (restates_parent or context in ('restatement', 'marker', 'placeholder', 'source')
+                            or self._norm_form_name(raw_form_text) in parent_names):
                         non_form_tokens.append(raw_form_text)
                 else:
+                    # A named form IQM does not recognize: unmapped, never
+                    # scored as the parent's default or as the row name's form.
                     unmapped_forms.append(raw_form_text)
                     # Track unmapped form for database expansion
                     base_name = form_info.get('base_name', '')
@@ -8160,8 +8117,16 @@ class SupplementEnricherV3:
                     if raw_form_text:
                         self._track_unmapped_form(raw_form_text, base_name, original_label)
 
-        # If no forms matched, return None (let caller handle FORM_UNMAPPED)
+        # No form matched. Named forms IQM lacks go back to the caller, which
+        # keeps the parent identity and leaves the form unmapped.
         if not matched_forms:
+            if unmapped_forms:
+                return {
+                    'no_form_matched': True,
+                    'unmapped_forms': unmapped_forms,
+                    'cleaner_canonical_enforced': cleaner_canonical_enforced_by_form,
+                    'cleaner_canonical_fallback': cleaner_canonical_fallback_by_form,
+                }
             if generic_form_tokens and not unmapped_forms:
                 # All form tokens were generic/source descriptors that only
                 # resolved to unspecified forms; treat as no actionable form
@@ -8672,51 +8637,8 @@ class SupplementEnricherV3:
         )
         # Store an isolated copy (defends against any impl-side aliasing) and
         # hand every caller its own isolated copy — the cache entry is immutable.
-        # Also when other declared forms matched: 228355 matched beta-carotene
-        # while alpha-carotene and cryptoxanthin fell to the parent tier.
-        if (result and not _form_extraction_attempt and cleaned_forms
-                and not result.get('unmapped_forms')):
-            unresolved = self._unresolved_form_tokens(
-                ing_name, cleaned_forms, quality_map, result.get('canonical_id'))
-            if unresolved:
-                result['unresolved_form_tokens'] = unresolved
         self._match_quality_cache[key] = copy.deepcopy(result)
         return copy.deepcopy(result)
-
-    def _unresolved_form_tokens(self, ing_name: str, cleaned_forms: List[Dict],
-                                quality_map: Dict, canonical_id: Optional[str]) -> List[str]:
-        """Declared label forms that no IQM alias recognises (provenance only).
-
-        A form treated as generic because it matched an alias of the parent's
-        unspecified form ("Vitamin B7") is genuinely generic. A form that only
-        fell through to the parent default ("Magnesium Biotinate") is a named
-        compound the registry does not know; recording it keeps the row from
-        silently borrowing a specific form from the ingredient name. Source
-        descriptors are skipped exactly as in _match_multi_form. Scores are
-        unchanged.
-        """
-        if not canonical_id or canonical_id not in quality_map:
-            return []
-        form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms)
-        unresolved = []
-        for form_data in (form_info or {}).get('extracted_forms', []):
-            if self._is_dsld_source_descriptor_form(form_data):
-                continue
-            prefix = (form_data.get('dsld_prefix') or '').lower().strip()
-            category = (form_data.get('dsld_category') or '').lower().strip()
-            if prefix == 'from culture of' or category == 'tbd':
-                # A culture source ("from culture of S. cerevisiae") or a DSLD
-                # placeholder ("DELETE", category TBD) names no form.
-                continue
-            tiers = []
-            for candidate in form_data.get('match_candidates', []):
-                match = self._match_quality_map(
-                    candidate, candidate, quality_map, _form_extraction_attempt=True,
-                    cleaner_canonical_id=canonical_id)
-                tiers.append(match.get('match_tier') if match else None)
-            if tiers and all(t in (None, 'cleaner_canonical_parent') for t in tiers):
-                unresolved.append(form_data.get('raw_form_text', ''))
-        return [t for t in unresolved if t]
 
     @staticmethod
     def _norm_form_name(value: Any) -> str:
@@ -8729,9 +8651,12 @@ class SupplementEnricherV3:
         the row's label name. A form token equal to one restates the row."""
         names = {cls._norm_form_name(base_name)}
         if parent_key:
+            entry = quality_map.get(parent_key) or {}
             names.add(cls._norm_form_name(parent_key.replace("_", " ")))
-            standard = str((quality_map.get(parent_key) or {}).get("standard_name") or "")
+            standard = str(entry.get("standard_name") or "")
             names.update(cls._norm_form_name(part) for part in re.split(r"[()]", standard))
+            # Parent-level aliases name the identity itself, never a form.
+            names.update(cls._norm_form_name(alias) for alias in entry.get("aliases") or [])
         return {name for name in names if name}
 
     @staticmethod
@@ -8752,6 +8677,183 @@ class SupplementEnricherV3:
             or self._should_keep_from_prefixed_form_as_actual(form_data.get('raw_form_text', '')))
         return (category in _SOURCE_DESCRIPTOR_FORM_CATEGORIES
                 or prefix in _SOURCE_DESCRIPTOR_FORM_PREFIXES) and not delivery_tech
+
+    @staticmethod
+    def _is_specific_form_match(match: Optional[Dict], quality_map: Dict) -> bool:
+        """Whether a match read a named IQM form: not the parent default
+        (fallback) and not the parent's authored unspecified form, whatever
+        that form is called ("taurine (generic)" is not a form of taurine)."""
+        if not match or not match.get('form_id') or match.get('fallback_form_selected'):
+            return False
+        authored = authored_unknown_form(quality_map.get(match.get('canonical_id')) or {})
+        return not (authored and authored[0] == match['form_id'])
+
+    def _row_form_match_status(self, entry: Dict, match_result: Optional[Dict]) -> str:
+        """The row's form disclosure, in the export's vocabulary:
+        ``unmapped`` when the label names a form IQM does not recognize,
+        ``mapped`` when a named IQM form was read, ``n/a`` when no form is
+        known (only the parent's unspecified or derived unknown value)."""
+        match_result = match_result if isinstance(match_result, dict) else {}
+        if (match_result.get('match_status') in ('FORM_DISCLOSED_UNMAPPED', 'FORM_UNMAPPED')
+                or entry.get('unmapped_forms')):
+            return 'unmapped'
+        parent = (self.databases.get('ingredient_quality_map') or {}).get(entry.get('canonical_id')) or {}
+        form_id = entry.get('form_id')
+        if not form_id or form_id not in (parent.get('forms') or {}):
+            return 'n/a'
+        authored = authored_unknown_form(parent)
+        return 'n/a' if authored and authored[0] == form_id else 'mapped'
+
+    def _counter_ion_form(self, candidates: List[str], parent_key: str, quality_map: Dict) -> Optional[str]:
+        """The row parent's own form for a compound IQM files under another
+        parent: "Dicalcium Phosphate" under Phosphorus is phosphorus's
+        'dicalcium phosphate (as phosphorus source)'; "Magnesium Ascorbate"
+        under Magnesium follows vitamin C's redirect. Only relationships the
+        IQM records (redirect, or the "(as <parent> source)" name) apply."""
+        forms = (quality_map.get(parent_key) or {}).get('forms') or {}
+        source_forms = {
+            self._norm_form_name(re.sub(r'\s*\(as [^)]+ source\)\s*$', '', name, flags=re.IGNORECASE)): name
+            for name in forms if re.search(r'\(as [^)]+ source\)\s*$', name, re.IGNORECASE)
+        }
+        for candidate in candidates:
+            if self._norm_form_name(candidate) in source_forms:
+                return source_forms[self._norm_form_name(candidate)]
+            match = self._match_quality_map(candidate, candidate, quality_map, _form_extraction_attempt=True)
+            if not match or not match.get('form_id') or match.get('canonical_id') == parent_key:
+                continue
+            other = ((quality_map.get(match['canonical_id']) or {}).get('forms') or {}).get(match['form_id']) or {}
+            redirect = str(other.get('redirect') or '')
+            if redirect.startswith(f"{parent_key}.forms.") and redirect.split('.forms.', 1)[1] in forms:
+                return redirect.split('.forms.', 1)[1]
+            if self._norm_form_name(match['form_id']) in source_forms:
+                return source_forms[self._norm_form_name(match['form_id'])]
+        return None
+
+    @staticmethod
+    def _restated_parent(matched_parent: Optional[str], row_parent: Optional[str]) -> bool:
+        """The row's parent, or a reviewed more-specific child of it
+        (IQM_CANONICAL_CROSS_PARENT_ALLOWLIST)."""
+        return bool(matched_parent) and (
+            matched_parent == row_parent
+            or (row_parent, matched_parent) in IQM_CANONICAL_CROSS_PARENT_ALLOWLIST)
+
+    @staticmethod
+    def _disclosed_unmapped_match(parent_match: Dict) -> Dict:
+        """The parent identity of a row whose label names a form IQM lacks:
+        identity and match provenance kept, every form fact cleared."""
+        match = dict(parent_match)
+        match.update({
+            'form_id': None,
+            'form_name': None,
+            'bio_score': None,
+            'absorption': None,
+            'notes': None,
+            'fallback_form_selected': False,
+            'fallback_form_name': None,
+        })
+        return match
+
+    def _standardization_marker_names(self) -> frozenset:
+        """Normalized marker names from standardized_botanicals.json."""
+        cached = getattr(self, "_marker_names_cache", None)
+        if cached is None:
+            db = (self.databases or {}).get("standardized_botanicals") or {}
+            cached = frozenset(
+                self._norm_form_name(marker)
+                for entry in db.get("standardized_botanicals") or []
+                if isinstance(entry, dict)
+                for marker in entry.get("markers") or []
+                if self._norm_form_name(marker)
+            )
+            self._marker_names_cache = cached
+        return cached
+
+    def _is_recorded_source(self, token: str, group: str, parent_key: Optional[str]) -> bool:
+        """The token names a botanical that botanical_marker_contributions.json
+        records as delivering this parent ("Marigold Flower Extract" under
+        Lutein, "Turmeric Extract" under Curcumin)."""
+        if not parent_key:
+            return False
+        botanicals = ((self.databases or {}).get("botanical_marker_contributions") or {}).get("botanicals") or {}
+        padded = f" {token} {group} "
+        for botanical_id, entry in botanicals.items():
+            delivers = {str(m.get("marker_canonical_id") or "") for m in (entry or {}).get("delivers") or []}
+            if parent_key in delivers and f" {botanical_id.replace('_', ' ')} " in padded:
+                return True
+        return False
+
+    @staticmethod
+    def _restates_identity(token: str, parent_names: set) -> bool:
+        """The identity plus only plant-part or preparation words
+        ("Pomegranate (Fruit)", "Ashwagandha Root"). A counter-ion or another
+        word keeps it a form ("L-Glutamine Alpha-Ketoglutarate")."""
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+        allowed = set(_PREPARATION_WORDS) | {
+            word for part in EnhancedDSLDNormalizer._PLANT_PART_TOKENS for word in part.split()}
+        padded = f" {token} "
+        for name in parent_names:
+            if len(name) >= 3 and f" {name} " in padded:
+                rest = padded.replace(f" {name} ", " ", 1).split()
+                if all(word in allowed for word in rest):
+                    return True
+        return False
+
+    def _form_token_context(self, form_data: Dict, parent_names: set,
+                            parent_key: Optional[str] = None, row_label: str = '') -> Optional[str]:
+        """Why a label form token that no IQM form recognizes still names no
+        form, or None when it names one (a disclosed form IQM lacks, which
+        stays unmapped for curation):
+
+        - ``restatement``: the row's own identity again: by name, by name plus
+          plant-part words, or a botanical token in the row's DSLD ingredient
+          group ("Matricaria chamomilla Flower Extract" under Chamomile).
+        - ``marker``: a standardization marker ("Polyphenols").
+        - ``source``: the material the nutrient comes from ("Cantaloupe"
+          under SOD, "Emblic Fruit Extract" under Vitamin C, a Latin binomial,
+          a yeast culture, a mineral-source claim).
+        - ``preparation``: only preparation words ("Powder").
+        - ``placeholder``: a DSLD placeholder (category TBD) or culture source.
+        """
+        raw = form_data.get('raw_form_text', '')
+        token = self._norm_form_name(raw)
+        group = self._norm_form_name(form_data.get('dsld_ingredient_group'))
+        category = (form_data.get('dsld_category') or '').lower().strip()
+        prefix = (form_data.get('dsld_prefix') or '').lower().strip()
+        if category == 'tbd' or prefix == 'from culture of':
+            return 'placeholder'
+        # DSLD files a salt under the nutrient it supplies (every calcium salt
+        # has group "Calcium"), so an equal group only restates the identity
+        # for a botanical token ("Matricaria chamomilla" under Chamomile).
+        botanical_restatement = category == 'botanical' and group and group in parent_names
+        singular = lambda words: {w[:-1] if len(w) > 3 and w.endswith('s') else w for w in words}
+        label_words = singular(self._norm_form_name(row_label).split())
+        repeats_label = bool(token) and singular(token.split()) <= label_words
+        if (token in parent_names or botanical_restatement or repeats_label
+                or self._restates_identity(token, parent_names)):
+            return 'restatement'
+        source_text = self._normalize_source_token_text(raw)
+        if token in self._standardization_marker_names() or self._is_standardization_marker_token(source_text):
+            return 'marker'
+        words = token.split()
+        if words and all(word in _PREPARATION_WORDS for word in words):
+            return 'preparation'
+        parent_category = str(((self.databases.get('ingredient_quality_map') or {}).get(parent_key) or {})
+                              .get('category') or '').lower()
+        if category == 'fat' and parent_category in _CARRIER_OIL_PARENT_CATEGORIES:
+            # A carrier or source oil ("Sunflower Oil" under Vitamin E, "Fish
+            # Oil" under DHA) names what the nutrient is delivered in.
+            return 'source'
+        if self._is_recorded_source(token, group, parent_key):
+            return 'source'
+        # A botanical token names a plant identity. Only a curated source term
+        # ("Cantaloupe" under SOD) makes it a source; the Latin-genus guess
+        # would also swallow a different plant ("Cerasus avium", sweet cherry,
+        # under Wild Cherry), which stays unmapped for curation.
+        curated_terms_only = category == 'botanical'
+        if (source_text in self._SOURCE_MATERIAL_TERMS if curated_terms_only
+                else self._is_source_material_descriptor(source_text)):
+            return 'source'
+        return None
 
     def _match_quality_map_impl(self, ing_name: str, std_name: str, quality_map: Dict,
                                 _form_extraction_attempt: bool = False,
@@ -8910,15 +9012,15 @@ class SupplementEnricherV3:
                             cleaner_form_constraint_enforced = True
                         if multi_form_result.get("cleaner_canonical_fallback"):
                             cleaner_form_constraint_fallback = True
-                        if not multi_form_result.get('all_forms_generic'):
+                        if not (multi_form_result.get('all_forms_generic')
+                                or multi_form_result.get('no_form_matched')):
                             # Branded tokens (KSM-66, Sensoril, etc.) are more specific than
                             # DSLD sub-form labels like "Ashwagandha Root Extract". If the
                             # branded token resolves to a higher bio_score form, prefer it.
                             if branded_token:
                                 branded_match = _try_branded_token_fallback()
                                 if (branded_match
-                                        and branded_match.get('form_id')
-                                        and 'unspecified' not in branded_match.get('form_id', '').lower()
+                                        and self._is_specific_form_match(branded_match, quality_map)
                                         and branded_match.get('bio_score', 0) > multi_form_result.get('bio_score', 0)):
                                     return branded_match
                             return multi_form_result
@@ -8935,19 +9037,26 @@ class SupplementEnricherV3:
                             f.get('raw_form_text', '') for f in form_info.get('extracted_forms', [])
                             if f.get('raw_form_text')
                         )
-                        if combined_forms:
+                        # The lookup stays inside the row's own parent: the
+                        # combined text alone ("triglyceride") would otherwise
+                        # match another ingredient's form (DHA fish oil
+                        # triglyceride under Medium Chain Triglyceride).
+                        row_parent = cleaner_iqm_canonical or self._infer_preferred_parent_from_context_cached(
+                            form_info.get('base_name') or ing_name, quality_map)
+                        if combined_forms and row_parent:
                             combined_match = self._match_quality_map(
-                                combined_forms, std_name, quality_map, _form_extraction_attempt=True,
-                                preferred_parent=preferred_parent if 'preferred_parent' in dir() else None,
-                                cleaner_canonical_id=cleaner_iqm_canonical,
+                                combined_forms, combined_forms, quality_map, _form_extraction_attempt=True,
+                                preferred_parent=row_parent, cleaner_canonical_id=row_parent,
                             )
-                            if combined_match and combined_match.get('form_id') and 'unspecified' not in combined_match.get('form_id', '').lower():
+                            if (self._is_specific_form_match(combined_match, quality_map)
+                                    and combined_match.get('canonical_id') == row_parent):
                                 combined_match['combined_form_match'] = True
                                 combined_match['original_label'] = ing_name
                                 return combined_match
 
-                        # Fallback: try parent/base matching so product can still score
-                        # conservatively while preserving form-unmapped telemetry.
+                        # The label names a form IQM does not recognize. Keep
+                        # the parent identity; the form stays unmapped, with no
+                        # form quality, until it is curated.
                         fallback_base = form_info.get('base_name') or ing_name
                         fallback_match = self._match_quality_map(
                             fallback_base, std_name, quality_map, _form_extraction_attempt=True,
@@ -8959,15 +9068,20 @@ class SupplementEnricherV3:
                             # exist in IQM but are never reached because the base parent match
                             # (→ unspecified) returns first.
                             branded_match = _try_branded_token_fallback()
-                            if (branded_match and branded_match.get('form_id')
-                                    and 'unspecified' not in branded_match.get('form_id', '').lower()):
+                            if (branded_match and self._is_specific_form_match(branded_match, quality_map)):
                                 return branded_match
-                            fallback = dict(fallback_match)
-                            fallback['match_status'] = 'FORM_UNMAPPED_FALLBACK'
+                            fallback = self._disclosed_unmapped_match(fallback_match)
+                            fallback['match_status'] = 'FORM_DISCLOSED_UNMAPPED'
+                            fallback['cleaner_canonical_enforced'] = bool(
+                                fallback.get('cleaner_canonical_enforced') or cleaner_form_constraint_enforced)
+                            fallback['cleaner_canonical_fallback'] = bool(
+                                fallback.get('cleaner_canonical_fallback') or cleaner_form_constraint_fallback)
+                            if cleaner_iqm_canonical:
+                                fallback['cleaner_canonical_id'] = cleaner_iqm_canonical
                             fallback['has_form_evidence'] = True
                             fallback['original_label'] = ing_name
                             fallback['extracted_forms'] = form_info['extracted_forms']
-                            fallback['unmapped_forms'] = [f['raw_form_text'] for f in form_info['extracted_forms']]
+                            fallback['unmapped_forms'] = (multi_form_result or {}).get('unmapped_forms') or [f['raw_form_text'] for f in form_info['extracted_forms']]
                             fallback['base_name'] = form_info['base_name']
                             fallback['form_source'] = 'cleaned_forms'
                             fallback['form_extraction_used'] = True
@@ -8997,14 +9111,14 @@ class SupplementEnricherV3:
                         cleaner_form_constraint_enforced = True
                     if multi_form_result.get("cleaner_canonical_fallback"):
                         cleaner_form_constraint_fallback = True
-                    if not multi_form_result.get('all_forms_generic'):
+                    if not (multi_form_result.get('all_forms_generic')
+                            or multi_form_result.get('no_form_matched')):
                         # Branded tokens are more specific than label-extracted form text.
                         # If branded token resolves to a higher bio_score form, prefer it.
                         if branded_token:
                             branded_match = _try_branded_token_fallback()
                             if (branded_match
-                                    and branded_match.get('form_id')
-                                    and 'unspecified' not in branded_match.get('form_id', '').lower()
+                                    and self._is_specific_form_match(branded_match, quality_map)
                                     and branded_match.get('bio_score', 0) > multi_form_result.get('bio_score', 0)):
                                 return branded_match
                         return multi_form_result
@@ -9021,15 +9135,20 @@ class SupplementEnricherV3:
                     if fallback_match:
                         # Try branded token before accepting a conservative (unspecified) match.
                         branded_match = _try_branded_token_fallback()
-                        if (branded_match and branded_match.get('form_id')
-                                and 'unspecified' not in branded_match.get('form_id', '').lower()):
+                        if (branded_match and self._is_specific_form_match(branded_match, quality_map)):
                             return branded_match
-                        fallback = dict(fallback_match)
-                        fallback['match_status'] = 'FORM_UNMAPPED_FALLBACK'
+                        fallback = self._disclosed_unmapped_match(fallback_match)
+                        fallback['match_status'] = 'FORM_DISCLOSED_UNMAPPED'
+                        fallback['cleaner_canonical_enforced'] = bool(
+                            fallback.get('cleaner_canonical_enforced') or cleaner_form_constraint_enforced)
+                        fallback['cleaner_canonical_fallback'] = bool(
+                            fallback.get('cleaner_canonical_fallback') or cleaner_form_constraint_fallback)
+                        if cleaner_iqm_canonical:
+                            fallback['cleaner_canonical_id'] = cleaner_iqm_canonical
                         fallback['has_form_evidence'] = True
                         fallback['original_label'] = ing_name
                         fallback['extracted_forms'] = form_info['extracted_forms']
-                        fallback['unmapped_forms'] = [f['raw_form_text'] for f in form_info['extracted_forms']]
+                        fallback['unmapped_forms'] = (multi_form_result or {}).get('unmapped_forms') or [f['raw_form_text'] for f in form_info['extracted_forms']]
                         fallback['base_name'] = form_info['base_name']
                         fallback['form_source'] = 'label_extraction'
                         fallback['form_extraction_used'] = True
@@ -16010,12 +16129,40 @@ class SupplementEnricherV3:
             "postbiotic_metabolite_name": postbiotic_metabolite_name,
         }
 
+    def _anchor_form_reading(self, item: Dict[str, Any]) -> Dict[str, Any]:
+        """The enricher's own form reading for a blend-anchor identity: the
+        same matcher and unknown-form owner as an ingredient row, so scoring
+        never re-matches IQM aliases."""
+        quality_map = self.databases.get('ingredient_quality_map') or {}
+        canonical = item.get('canonical_id')
+        if canonical not in quality_map:
+            return {}
+        name = str(item.get('raw_source_text') or item.get('name') or '')
+        match = self._match_quality_map(
+            name, str(item.get('standardName') or item.get('standard_name') or name), quality_map,
+            cleaned_forms=item.get('forms') or [], cleaner_canonical_id=canonical,
+        )
+        if not match or match.get('canonical_id') != canonical:
+            return {}
+        status = self._row_form_match_status(
+            {'canonical_id': canonical, 'form_id': match.get('form_id'),
+             'unmapped_forms': match.get('unmapped_forms')}, match)
+        return {
+            'bio_score': match.get('bio_score'),
+            'matched_form': match.get('form_name'),
+            'form_match_status': status,
+            'unmapped_forms': match.get('unmapped_forms') or [],
+        }
+
     def _collect_product_scoring_evidence(self, enriched: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Emit enrichment-owned product-level scoring evidence."""
         evidence: List[Dict[str, Any]] = [
             item for item in derive_product_scoring_evidence(enriched)
             if item.get("evidence_type") != "probiotic_cfu"
         ]
+        for item in evidence:
+            if item.get("evidence_type") == "blend_anchor_mass":
+                item.update(self._anchor_form_reading(item))
         probiotic_data = enriched.get("probiotic_data") if isinstance(enriched.get("probiotic_data"), dict) else {}
         try:
             total_cfu_value = float(probiotic_data.get("total_cfu") or 0)
@@ -17867,6 +18014,19 @@ class SupplementEnricherV3:
             return None, "unit_not_comparable", None
         return None, "no_conversion_rule", None
 
+    @staticmethod
+    def _conversion_form_context(ingredient: Dict[str, Any]) -> str:
+        """Unit-conversion context for a row: its matched form, or, when the
+        row names no form (a disclosed form IQM lacks, or a derived unknown),
+        its identity. "Vitamin A" alone cannot be converted to RAE; the
+        identity "Beta-Carotene" can, without inventing a form."""
+        matched = str(ingredient.get("matched_form") or "").strip()
+        if matched and matched != UNKNOWN_FORM_NAME:
+            return matched
+        if ingredient.get("canonical_id"):
+            return str(ingredient.get("standard_name") or "").strip()
+        return ""
+
     def _marker_amount_for_threshold_unit(
         self,
         ingredient: Dict[str, Any],
@@ -18023,7 +18183,7 @@ class SupplementEnricherV3:
             details["decision_rule"] = self._dose_decision_rule(threshold)
 
             amount_basis = quantity * (servings_per_day_max if basis == "per_day" else 1.0)
-            form_context = str(ingredient.get("matched_form") or "").strip()
+            form_context = self._conversion_form_context(ingredient)
             conversion_name = " ".join(
                 value for value in (ingredient_name, form_context) if value
             )
@@ -18251,12 +18411,12 @@ class SupplementEnricherV3:
         # emitted form_mismatch, SUPPRESSING a genuine nicotinic-acid
         # flush/hepatotoxicity warning — a generic B3 could BE nicotinic acid,
         # so that is an under-warn. Require a confirmed form, mirroring the
-        # matcher's own test (`form_id and 'unspecified' not in form_id`).
+        # row's own reading: form_match_status == 'mapped' (a named IQM form).
         form_scope = min_effective_dose.get("form_scope")
         if isinstance(form_scope, list) and form_scope:
             ingredient_form = str(ingredient.get("matched_form") or "").strip().lower()
             form_id = str(ingredient.get("form_id") or "").strip().lower()
-            form_confirmed = bool(form_id) and "unspecified" not in form_id
+            form_confirmed = ingredient.get("form_match_status") == "mapped"
             allowed = {str(f).strip().lower() for f in form_scope if str(f).strip()}
             if not ingredient_form or not form_confirmed:
                 return None
@@ -18276,7 +18436,7 @@ class SupplementEnricherV3:
         amount_basis = quantity * (servings_per_day_max if basis == "per_day" else 1.0)
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
-        form_context = str(ingredient.get("matched_form") or "").strip()
+        form_context = self._conversion_form_context(ingredient)
         conversion_name = " ".join(
             value for value in (ingredient_name, form_context) if value
         )
@@ -18343,7 +18503,7 @@ class SupplementEnricherV3:
         if isinstance(form_scope, list) and form_scope:
             ingredient_form = str(ingredient.get("matched_form") or "").strip().lower()
             form_id = str(ingredient.get("form_id") or "").strip().lower()
-            form_confirmed = bool(form_id) and "unspecified" not in form_id
+            form_confirmed = ingredient.get("form_match_status") == "mapped"
             allowed = {str(value).strip().lower() for value in form_scope if str(value).strip()}
             if not ingredient_form or not form_confirmed:
                 result["evaluation_status"] = "form_unknown"
@@ -18379,7 +18539,7 @@ class SupplementEnricherV3:
         amount_basis = quantity * serving_multiplier
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
-        form_context = str(ingredient.get("matched_form") or "").strip()
+        form_context = self._conversion_form_context(ingredient)
         conversion_name = " ".join(
             value for value in (ingredient_name, form_context) if value
         )
@@ -23088,63 +23248,35 @@ class SupplementEnricherV3:
                 self._atomic_write_json(fallback_file, fallback_report)
                 self.logger.info(f"Parent fallback report: 0 fallbacks ({fallback_file})")
 
-            # Save FORM_UNMAPPED_FALLBACK audit report — always overwrite to prevent stale files
+            # Disclosed-unmapped form report: every entry is a named label form
+            # IQM does not recognize (the curation queue). Always overwritten.
             form_fb_file = os.path.join(reports_dir, "form_fallback_audit_report.json")
-            if self._form_fallback_details:
-                # Deduplicate by (unmapped_form_text, canonical_id) and count occurrences
-                seen_form_fb = {}
-                for fb in self._form_fallback_details:
-                    key = ((fb.get("unmapped_form_text") or "").lower().strip(), fb.get("canonical_id", ""))
-                    if key not in seen_form_fb:
-                        seen_form_fb[key] = {**fb, "occurrence_count": 1}
-                    else:
-                        seen_form_fb[key]["occurrence_count"] += 1
-
-                # Separate into "differ" (needs alias) vs "same" (form matches fallback)
-                differs = [v for v in seen_form_fb.values() if v["forms_differ"]]
-                same = [v for v in seen_form_fb.values() if not v["forms_differ"]]
-
-                form_fallback_report = {
-                    "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-                    "total_form_fallback_count": len(self._form_fallback_details),
-                    "unique_form_fallback_count": len(seen_form_fb),
-                    "forms_differ_count": len(differs),
-                    "forms_same_count": len(same),
-                    "note": (
-                        "AUDIT THIS FILE: Each entry shows an ingredient where form evidence "
-                        "existed but no IQM alias matched. The ingredient scored using the "
-                        "parent's (unspecified) fallback. 'forms_differ=true' means the "
-                        "unmapped form text is DIFFERENT from the fallback form — these are "
-                        "the ones most likely to be scored wrong and need IQM alias additions."
-                    ),
-                    "action_needed_differs": sorted(
-                        differs,
-                        key=lambda x: (-x["occurrence_count"], x["canonical_id"]),
-                    ),
-                    "likely_ok_same": sorted(
-                        same,
-                        key=lambda x: (-x["occurrence_count"], x["canonical_id"]),
-                    ),
-                }
-                self._atomic_write_json(form_fb_file, form_fallback_report)
-                self.logger.info(
-                    f"Form fallback audit report saved: {form_fb_file} "
-                    f"({len(differs)} differ, {len(same)} same, "
-                    f"{len(self._form_fallback_details)} total occurrences)"
-                )
-            else:
-                form_fallback_report = {
-                    "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-                    "total_form_fallback_count": 0,
-                    "unique_form_fallback_count": 0,
-                    "forms_differ_count": 0,
-                    "forms_same_count": 0,
-                    "note": "No form fallback issues — all ingredients matched specific form aliases.",
-                    "action_needed_differs": [],
-                    "likely_ok_same": [],
-                }
-                self._atomic_write_json(form_fb_file, form_fallback_report)
-                self.logger.info(f"Form fallback audit report: 0 fallbacks ({form_fb_file})")
+            seen_form_fb = {}
+            for fb in self._form_fallback_details:
+                key = ((fb.get("unmapped_form_text") or "").lower().strip(), fb.get("canonical_id", ""))
+                if key not in seen_form_fb:
+                    seen_form_fb[key] = {**fb, "occurrence_count": 1}
+                else:
+                    seen_form_fb[key]["occurrence_count"] += 1
+            form_fallback_report = {
+                "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+                "total_form_fallback_count": len(self._form_fallback_details),
+                "unique_form_fallback_count": len(seen_form_fb),
+                "note": (
+                    "Named label forms IQM does not recognize. The row keeps its "
+                    "ingredient identity, receives no form quality, and the product "
+                    "is held from release until the form is curated."
+                ),
+                "form_fallbacks": sorted(
+                    seen_form_fb.values(),
+                    key=lambda x: (-x["occurrence_count"], x["canonical_id"] or ""),
+                ),
+            }
+            self._atomic_write_json(form_fb_file, form_fallback_report)
+            self.logger.info(
+                f"Disclosed-unmapped form report: {len(seen_form_fb)} unique, "
+                f"{len(self._form_fallback_details)} occurrences ({form_fb_file})"
+            )
         else:
             self.logger.info("Report generation disabled by config option: options.generate_reports=false")
 

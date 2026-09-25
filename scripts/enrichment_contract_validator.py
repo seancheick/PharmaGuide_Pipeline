@@ -1319,7 +1319,7 @@ class EnrichmentContractValidator:
             or row.get("fallback_reason")
             or row.get("recognized_non_scorable")
             or reason in {
-                "form_unmapped_fallback",
+                "disclosed_form_unmapped",
                 "source_descriptor_child_row",
                 "recognized_non_scorable",
                 "no_dose_evidence",

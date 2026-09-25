@@ -22,6 +22,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
+from scoring_reference_resolver import (
+    UNKNOWN_FLOOR_INELIGIBLE_REASONS,
+    UNKNOWN_FLOOR_OVERRIDE_FIELDS,
+    authored_unknown_form,
+    unknown_floor,
+    unknown_floor_override,
+)
+
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
 
@@ -770,6 +778,32 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
                 if retired in form:
                     findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.{retired}",
                                             "retired_field_present", "absent", "present"))
+
+            # unknown_floor: an ineligible mark with a known reason, or a
+            # complete reviewed override (scoring_reference_resolver owns both).
+            floor_mark = form.get("unknown_floor")
+            if floor_mark is not None:
+                ineligible = (isinstance(floor_mark, dict) and set(floor_mark) == {"eligible", "reason"}
+                              and floor_mark.get("eligible") is False
+                              and floor_mark.get("reason") in UNKNOWN_FLOOR_INELIGIBLE_REASONS)
+                override = (isinstance(floor_mark, dict)
+                            and set(floor_mark) == {"override", *UNKNOWN_FLOOR_OVERRIDE_FIELDS}
+                            and unknown_floor_override(form))
+                if not (ineligible or override):
+                    findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.unknown_floor",
+                                            "invalid_unknown_floor", "ineligible mark or reviewed override",
+                                            json.dumps(floor_mark)))
+
+        # Nondisclosure never scores above the plainest real form: a stored
+        # authored unspecified value above lowest eligible - 1 needs a
+        # reviewed override.
+        authored = authored_unknown_form(entry)
+        floor = unknown_floor(entry)
+        if authored and floor and not unknown_floor_override(authored[1]):
+            stored = authored[1].get("bio_score")
+            if isinstance(stored, (int, float)) and stored > floor[0]:
+                findings.append(Finding("error", file, f"{ing_key}.forms.{authored[0]}.bio_score",
+                                        "unspecified_above_floor", f"<= {floor[0]} ({floor[1]} - 1)", str(stored)))
 
             # absorption: optional string.
             abs_val = form.get("absorption")

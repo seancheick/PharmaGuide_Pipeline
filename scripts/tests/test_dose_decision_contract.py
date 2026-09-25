@@ -58,6 +58,7 @@ def test_below_threshold_has_suppressed_consumer_disposition_and_trace():
             "standard_name": "Vitamin D3 (Cholecalciferol)",
             "matched_form": "cholecalciferol",
             "form_id": "vitamin_d3_cholecalciferol",
+            "form_match_status": "mapped",
         }
     )
 
@@ -91,6 +92,7 @@ def test_threshold_match_uses_authored_review_disposition():
             "standard_name": "Vitamin D3 (Cholecalciferol)",
             "matched_form": "cholecalciferol",
             "form_id": "vitamin_d3_cholecalciferol",
+            "form_match_status": "mapped",
         }
     )
 
@@ -175,6 +177,7 @@ def test_unauthored_floor_unknown_form_and_amount_default_to_suppress():
             "unit": "mg",
             "matched_form": "niacin",
             "form_id": "niacin_unspecified",
+            "form_match_status": "n/a",
         },
         1.0,
         "caution",
@@ -185,6 +188,7 @@ def test_unauthored_floor_unknown_form_and_amount_default_to_suppress():
             "unit": "mg",
             "matched_form": "nicotinic acid",
             "form_id": "nicotinic_acid",
+            "form_match_status": "mapped",
         },
         1.0,
         "caution",
@@ -421,6 +425,7 @@ def test_vitamin_e_floor_uses_resolved_form_for_iu_conversion():
             "standard_name": "Vitamin E",
             "matched_form": "dl-alpha-tocopheryl acetate",
             "form_id": "dl-alpha-tocopheryl acetate",
+            "form_match_status": "mapped",
         },
         1.0,
         "caution",

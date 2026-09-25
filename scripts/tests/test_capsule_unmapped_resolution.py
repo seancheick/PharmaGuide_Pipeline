@@ -268,102 +268,18 @@ class TestCapsuleStructuralRows:
         assert normalizer._is_label_header("Gelatin Caplique Capsule") is True
 
 
-class TestFormFallbackAuditNoiseRegression:
-    def test_generic_extract_fallback_is_not_marked_action_needed(self, enricher):
-        enricher._form_fallback_details.clear()
+class TestFormTokenContext:
+    """A label form token no IQM form recognizes is either context (it names
+    no form) or a disclosed form IQM lacks, which stays unmapped and holds the
+    product. enrich_supplements_v3._form_token_context owns the split."""
 
-        match = {
-            "match_status": "FORM_UNMAPPED_FALLBACK",
-            "canonical_id": "blueberry_extract",
-            "standard_name": "Blueberry Extract",
-            "form_name": "blueberry extract",
-            "bio_score": 10,
-            "unmapped_forms": ["extract"],
-            "form_source": "cleaned_forms",
-        }
-
-        enricher._build_quality_entry(
-            {"name": "Blueberry (Vaccinium angustifolium) extract", "standardName": "Blueberry Extract"},
-            match,
-            hierarchy_type=None,
-            source_section="active",
-        )
-
-        detail = enricher._form_fallback_details[-1]
-        assert detail["forms_differ"] is False
-        assert detail["audit_noise_reason"] == "generic_extract_token"
-
-    def test_source_material_descriptor_is_not_marked_action_needed(self, enricher):
-        enricher._form_fallback_details.clear()
-
-        match = {
-            "match_status": "FORM_UNMAPPED_FALLBACK",
-            "canonical_id": "glucosamine",
-            "standard_name": "Glucosamine",
-            "form_name": "glucosamine hydrochloride",
-            "bio_score": 10,
-            "unmapped_forms": ["Shrimp"],
-            "form_source": "cleaned_forms",
-        }
-
-        enricher._build_quality_entry(
-            {"name": "Glucosamine HCl", "standardName": "Glucosamine HCl"},
-            match,
-            hierarchy_type=None,
-            source_section="active",
-        )
-
-        detail = enricher._form_fallback_details[-1]
-        assert detail["forms_differ"] is False
-        assert detail["audit_noise_reason"] == "source_material_descriptor"
-
-    def test_real_unresolved_form_stays_action_needed(self, enricher):
-        enricher._form_fallback_details.clear()
-
-        match = {
-            "match_status": "FORM_UNMAPPED_FALLBACK",
-            "canonical_id": "selenium",
-            "standard_name": "Selenium",
-            "form_name": "selenium (unspecified)",
-            "bio_score": 10,
-            "unmapped_forms": ["Selenium Citrate"],
-            "form_source": "cleaned_forms",
-        }
-
-        enricher._build_quality_entry(
-            {"name": "Selenium", "standardName": "Selenium"},
-            match,
-            hierarchy_type=None,
-            source_section="active",
-        )
-
-        detail = enricher._form_fallback_details[-1]
-        assert detail["forms_differ"] is True
-        assert detail["audit_noise_reason"] is None
-
-    def test_standardization_marker_is_not_marked_action_needed(self, enricher):
-        enricher._form_fallback_details.clear()
-
-        match = {
-            "match_status": "FORM_UNMAPPED_FALLBACK",
-            "canonical_id": "hops",
-            "standard_name": "Hops (Humulus lupulus)",
-            "form_name": "hops extract (unspecified)",
-            "bio_score": 7,
-            "unmapped_forms": ["8-Prenylnaringenin"],
-            "form_source": "cleaned_forms",
-        }
-
-        enricher._build_quality_entry(
-            {
-                "name": "Lifenol Hops (Humulus lupulus) extract",
-                "standardName": "Hops (Humulus lupulus)",
-            },
-            match,
-            hierarchy_type=None,
-            source_section="active",
-        )
-
-        detail = enricher._form_fallback_details[-1]
-        assert detail["forms_differ"] is False
-        assert detail["audit_noise_reason"] == "standardization_marker"
+    @pytest.mark.parametrize("token, parent_names, expected", [
+        ("extract", set(), "preparation"),
+        ("Shrimp", set(), "source"),
+        ("8-Prenylnaringenin", set(), "marker"),
+        ("Selenium Citrate", {"selenium"}, None),
+    ])
+    def test_context_or_unmapped(self, enricher, token, parent_names, expected):
+        form_data = {"raw_form_text": token, "dsld_category": None,
+                     "dsld_prefix": None, "dsld_ingredient_group": None}
+        assert enricher._form_token_context(form_data, parent_names) == expected

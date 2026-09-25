@@ -693,14 +693,15 @@ def _biotin_row(form):
 
 def test_declared_but_unresolved_form_is_recorded_not_dropped(enricher):
     # DSLD 299744: "Biotin (as Magnesium Biotinate)". The salt matches no IQM
-    # form; the row name still selects the parent, but the declared form is kept
-    # as unresolved provenance instead of silently vanishing.
+    # form: the row keeps the biotin identity, the declared form is unmapped
+    # (held for curation), and it is never scored as the row name's form.
     form = {"name": "Magnesium Biotinate", "order": 1, "prefix": None, "percent": None,
             "category": "mineral", "ingredientGroup": "Magnesium", "uniiCode": None}
     enriched, _ = enricher.enrich_product(_biotin_row(form))
     row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
                if r.get('canonical_id') == 'vitamin_b7_biotin')
-    assert row['unresolved_form_tokens'] == ['Magnesium Biotinate']
+    assert row['unmapped_forms'] == ['Magnesium Biotinate']
+    assert row['form_match_status'] == 'unmapped' and row['bio_score'] is None
 
 
 def test_generic_alias_form_text_is_not_unresolved(enricher):
@@ -709,7 +710,7 @@ def test_generic_alias_form_text_is_not_unresolved(enricher):
     enriched, _ = enricher.enrich_product(_biotin_row(form))
     row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
                if r.get('canonical_id') == 'vitamin_b7_biotin')
-    assert not row.get('unresolved_form_tokens')
+    assert not row.get('unmapped_forms') and row['form_match_status'] != 'unmapped'
 
 
 def test_animal_based_vitamin_d_does_not_claim_cholecalciferol(iqm_data):
@@ -791,15 +792,16 @@ def _vitamin_a_row(forms):
 
 
 def test_partially_matched_row_still_records_its_unresolved_declared_forms(enricher):
-    # 228355: beta-carotene matched, but alpha-carotene and cryptoxanthin (other
-    # provitamin A contributors) fell to the parent tier. They must be recorded,
-    # or the row reads as pure beta-carotene.
+    # 228355: beta-carotene matched beside alpha-carotene and cryptoxanthin
+    # (other provitamin A contributors). Every declared form is either read as
+    # a form or kept as unmapped; none silently vanishes.
     enriched, _ = enricher.enrich_product(_vitamin_a_row([
         ('Alpha-Carotene', None, 'non-nutrient/non-botanical'), ('Beta-Carotene', 'and', 'vitamin'),
         ('Cryptoxanthin', None, 'non-nutrient/non-botanical')]))
     row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
                if r.get('canonical_id') == 'vitamin_a')
-    assert {'Alpha-Carotene', 'Cryptoxanthin'} <= set(row.get('unresolved_form_tokens') or [])
+    accounted = set(row.get('unmapped_forms') or []) | {m['raw_form_text'] for m in row.get('matched_forms') or []}
+    assert {'Alpha-Carotene', 'Cryptoxanthin'} <= accounted
 
 
 @pytest.mark.parametrize('extra', [
@@ -810,4 +812,4 @@ def test_culture_sources_and_dsld_placeholders_are_not_unresolved_forms(enricher
     enriched, _ = enricher.enrich_product(_vitamin_a_row([('Beta-Carotene', 'as', 'vitamin'), extra]))
     row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
                if r.get('canonical_id') == 'vitamin_a')
-    assert extra[0] not in (row.get('unresolved_form_tokens') or [])
+    assert extra[0] not in (row.get('unmapped_forms') or [])

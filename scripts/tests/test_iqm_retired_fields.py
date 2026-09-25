@@ -19,7 +19,9 @@ import pytest
 SCRIPTS = Path(__file__).resolve().parents[1]
 FIXTURES = Path(__file__).parent / 'fixtures'
 RETIRED = ('score', 'natural')
-LABELS = ['form_association_15823_raw.json', 'form_association_47815_raw.json',
+# Labels that score end to end (a held product stops before the scoring
+# modules, so it would not exercise their reads).
+LABELS = ['form_association_176044_raw.json', 'form_association_318107_raw.json',
           'form_association_214477_raw.json', 'omega_amount_35718_raw.json']
 
 

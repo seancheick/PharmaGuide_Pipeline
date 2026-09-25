@@ -141,6 +141,14 @@ _STANDARDIZATION_MARKER_LOCKED_SPREAD = {
     },
 }
 
+# Every disclosed BCAA form is a premium ratio / instantized / peptide form
+# (14-15). The ratio-unspecified generic form (renamed from "(standard)" on
+# 2026-09-25, value unchanged at the curated 10) is not required to sit
+# within one of them. Pinned in test_audit_locked_unspecified_scores_pinned.
+_PREMIUM_ONLY_PEER_EXEMPTIONS = {
+    'branched_chain_amino_acids',
+}
+
 _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
     'lions_mane',
     'reishi',
@@ -196,6 +204,7 @@ _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
     'ginkgo':               8,  # botanicals_06o: < EGb 24% flavone-glycoside extract
     'vanadium':             4,  # minerals/B25: hazardous trace mineral — unknown-form floor (UMLS poison flag, GI tox >1.8 mg/day, ~5% F) kept below the disclosed sodium-vanadate class floor (7); conservative-by-design, and the safety-correct direction
     'vitamin_k2':           6,  # subtype undisclosed: cannot inherit MK-4, MK-7, cis-isomer, or source-specific properties
+    'branched_chain_amino_acids': 10,  # ratio-unspecified generic BCAA; see _PREMIUM_ONLY_PEER_EXEMPTIONS
 }
 
 
@@ -218,6 +227,8 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
         if parent_key in _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS:
             continue
         if parent_key in _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS:
+            continue
+        if parent_key in _PREMIUM_ONLY_PEER_EXEMPTIONS:
             continue
         forms = v.get('forms', {})
         if not isinstance(forms, dict):
@@ -284,40 +295,30 @@ def test_audit_locked_unspecified_scores_pinned(iqm):
 
 
 def test_recalibrated_high_impact_entries(iqm):
-    """Spot-check the highest-impact recalibrations from the audit."""
+    """Spot-check the highest-impact unspecified forms against the unknown-form
+    owner (scoring_reference_resolver): the value is lowest eligible named
+    bio_score - 1, or a documented override. The Batch-5 minimums these once
+    pinned (maca 11, psyllium 11, holy basil 11) came from the 2026-08-13
+    legacy restore and rewarded nondisclosure; they are superseded."""
+    from scoring_reference_resolver import authored_unknown_form, unknown_floor, unknown_floor_override
     expected = {
-        # parent: minimum acceptable unspec score (peer-min from audit)
-        'maca': 11,
-        'ashwagandha': 7,
-        # rhodiola/pygeum/atp/phosphatidylserine were lowered to their later
-        # audit-locked unspecified scores (botanicals_06o / botanicals_actives_06c /
-        # the phospholipid audit). The generic peer-min spot-check must not
-        # demand more than the specific audit lock allows. See
-        # _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS and
-        # test_audit_locked_unspecified_scores_pinned.
-        'rhodiola': 8,
-        'pygeum': 8,
-        'atp': 6,
-        'resveratrol': 11,
-        'phosphatidylserine': 10,
-        'collagen': 10,
-        'psyllium': 11,
-        'holy_basil': 11,
-        'sulforaphane': 10,
+        # parent: (value, 'floor' | 'override')
+        'maca': (8, 'floor'),          # maca root powder 9 - 1
+        'psyllium': (8, 'floor'),      # psyllium seed 9 - 1
+        'holy_basil': (9, 'floor'),    # holy basil extract 10 - 1
+        'rosemary': (9, 'floor'),      # rosemary essential oil 10 - 1
+        'immunoglobulin': (10, 'floor'),
+        'rhodiola': (8, 'override'),   # batch-13 audit lock
+        'phosphatidylserine': (10, 'override'),
+        'magnesium': (5, 'override'),  # clinician mineral table
     }
-    for parent, min_score in expected.items():
-        if parent not in iqm:
-            continue
-        forms = iqm[parent].get('forms', {})
-        unspec_forms = {k: v for k, v in forms.items()
-                        if isinstance(v, dict) and 'unspecified' in k.lower()}
-        if not unspec_forms:
-            continue
-        unspec = next(iter(unspec_forms.values()))
-        s = unspec.get('bio_score')
-        assert isinstance(s, (int, float)) and s >= min_score, (
-            f"{parent} unspec must score ≥{min_score} (peer-min); got {s}"
-        )
+    for parent, (value, basis) in expected.items():
+        name, form = authored_unknown_form(iqm[parent])
+        assert form['bio_score'] == value, (parent, name, form['bio_score'])
+        if basis == 'override':
+            assert unknown_floor_override(form), parent
+        else:
+            assert not unknown_floor_override(form) and unknown_floor(iqm[parent])[0] == value, parent
 
 
 def test_standardization_marker_spread_locked(iqm):

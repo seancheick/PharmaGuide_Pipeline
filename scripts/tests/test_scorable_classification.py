@@ -1985,11 +1985,12 @@ class TestGummiesHeaderLeakRegression:
 class TestFormUnmappedFallbackRegression:
     """Regression test for form-unmapped fallback behavior."""
 
-    def test_form_unmapped_falls_back_to_parent_not_unmapped(self, enricher):
+    def test_disclosed_unmapped_form_keeps_identity_without_form_credit(self, enricher):
         """
-        If cleaned forms[] has an unrecognized form, mapper should:
-        - keep mapped=True via conservative parent fallback
-        - retain form_unmapped_fallback trace fields for QA.
+        A cleaned form IQM does not recognize is a disclosed, unmapped form:
+        - the parent identity is kept (mapped=True), never a parent default form
+        - no form quality (bio_score None), form_match_status 'unmapped'
+        - the product is held from release until the form is curated.
         """
         quality_map = enricher.databases.get('ingredient_quality_map', {})
 
@@ -2000,7 +2001,8 @@ class TestFormUnmappedFallbackRegression:
             cleaned_forms=[{"name": "D-Alpha-Tocopheryl Phosphate Complex"}],
         )
         assert match is not None
-        assert match.get("match_status") == "FORM_UNMAPPED_FALLBACK"
+        assert match.get("match_status") == "FORM_DISCLOSED_UNMAPPED"
+        assert (match.get("canonical_id"), match.get("form_id"), match.get("bio_score")) == ("vitamin_e", None, None)
 
         entry = enricher._build_quality_entry(
             {"name": "Vitamin E", "standardName": "Vitamin E", "quantity": 30, "unit": "mg"},
@@ -2009,14 +2011,15 @@ class TestFormUnmappedFallbackRegression:
             source_section="active",
         )
         assert entry.get("mapped") is True
-        assert entry.get("identity_decision_reason") == "form_unmapped_fallback"
-        assert entry.get("form_unmapped") is True
+        assert entry.get("identity_decision_reason") == "disclosed_form_unmapped"
+        assert entry.get("form_match_status") == "unmapped"
+        assert entry.get("bio_score") is None
 
     def test_generic_source_token_does_not_trigger_form_unmapped_fallback(self, enricher):
         """
         Generic/source-only tokens (e.g., fish-oil provenance) should not be
         treated as form-loss failures. They should fall back to normal parent
-        matching without FORM_UNMAPPED_FALLBACK telemetry.
+        matching, never a disclosed-unmapped hold.
         """
         quality_map = enricher.databases.get('ingredient_quality_map', {})
         match = enricher._match_quality_map(
@@ -2026,7 +2029,7 @@ class TestFormUnmappedFallbackRegression:
             cleaned_forms=[{"name": "Fish Oil"}],
         )
         assert match is not None
-        assert match.get("match_status") != "FORM_UNMAPPED_FALLBACK"
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED"
 
     def test_parent_level_dha_fallback_uses_unspecified_form(self, enricher):
         """

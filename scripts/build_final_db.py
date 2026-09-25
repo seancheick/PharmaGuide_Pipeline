@@ -397,52 +397,6 @@ def _form_alias_key(value: Any) -> str:
     return re.sub(r"[^a-z0-9]+", " ", safe_str(value).lower()).strip()
 
 
-def _label_form_is_iqm_alias(label_form: str, ingredient: Dict[str, Any], match: Dict[str, Any]) -> bool:
-    """Return True when the cleaner-disclosed label form is known by IQM.
-
-    The selected ``matched_form`` may be an "(unspecified)" scoring fallback
-    even though the label form itself is an alias on the same IQM parent
-    (for example Silica with form "Silicon Dioxide"). The export contract
-    should call that form mapped because it is present in our reference data.
-    Keep the lookup parent-scoped so unrelated terms never become globally
-    mapped just because another ingredient has a matching alias.
-    """
-    label_key = _form_alias_key(label_form)
-    if not label_key:
-        return False
-
-    parent_keys = []
-    for value in (
-        match.get("parent_key"),
-        match.get("canonical_id"),
-        ingredient.get("parent_key"),
-        ingredient.get("canonical_id"),
-        ingredient.get("normalized_key"),
-    ):
-        key = safe_str(value)
-        if key and key not in parent_keys:
-            parent_keys.append(key)
-
-    iqm_index = load_iqm_reference_index()
-    for parent_key in parent_keys:
-        entry = iqm_index.get(parent_key)
-        if not isinstance(entry, dict):
-            continue
-        for form_key, form in safe_dict(entry.get("forms")).items():
-            terms = [form_key]
-            if isinstance(form, dict):
-                terms.extend(safe_list(form.get("aliases")))
-                terms.extend([
-                    form.get("standard_name"),
-                    form.get("display_name"),
-                    form.get("name"),
-                ])
-            for term in terms:
-                if label_key == _form_alias_key(term):
-                    return True
-    return False
-
-
 def _label_form_repeats_identity(
     label_form: str, ingredient: Dict[str, Any], match: Dict[str, Any]
 ) -> bool:
@@ -476,7 +430,11 @@ def _compute_form_contract(
 
       display_form_label  user-visible form, or None when truly unknown
       form_status         'known' | 'unknown'
-      form_match_status   'mapped' | 'unmapped' | 'n/a' (n/a when unknown)
+      form_match_status   'mapped' | 'unmapped' | 'n/a', from the enricher's
+                          row reading; the export never re-matches IQM aliases.
+                          A disclosed label form is 'mapped' unless the
+                          enricher found it unmapped (it accepted the form as
+                          an IQM form, a generic descriptor or context).
 
     Resolution order:
       1. Cleaner forms[0].name present     -> known
@@ -505,22 +463,19 @@ def _compute_form_contract(
     # evidence discarded legitimate one-token chemical forms and left Flutter
     # with no form disclosure despite a successful IQM resolution.
     matched_is_real = not _is_placeholder_form(matched)
+    form_match_status = safe_str(match.get("form_match_status")) or "n/a"
 
     if label_form:
         return {
             "display_form_label": label_form,
             "form_status": "known",
-            "form_match_status": (
-                "mapped"
-                if matched_is_real or _label_form_is_iqm_alias(label_form, ingredient, match)
-                else "unmapped"
-            ),
+            "form_match_status": "unmapped" if form_match_status == "unmapped" else "mapped",
         }
     if matched_is_real:
         return {
             "display_form_label": _prettify_matched_form(matched),
             "form_status": "known",
-            "form_match_status": "mapped",
+            "form_match_status": form_match_status,
         }
     return {
         "display_form_label": None,

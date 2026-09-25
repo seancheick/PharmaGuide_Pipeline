@@ -55,7 +55,7 @@ B22_BANDS_VALUED = [
     ('inositol', 'd-chiro-inositol',                                    0.70, 0.95,  'class-equiv to myo'),
     ('d_beta_hydroxybutyrate_bhb', 'd beta hydroxybutyrate bhb (standard)', 0.80, 0.90,  'Stubbs 2017 salt-form'),
     ('methionine', 'l-methionine',                                       0.90, 1.00,  'B0AT1/PepT1 class'),
-    ('branched_chain_amino_acids', 'branched chain amino acids (standard)', 0.85, 0.95,  'BCAA class'),
+    ('branched_chain_amino_acids', 'branched chain amino acids (unspecified)', 0.85, 0.95,  'BCAA class'),
     ('docosapentaenoic_acid_dpa', 'docosapentaenoic acid dpa (standard)', 0.75, 0.90,  'omega-3 TG class'),
     ('fluoride', 'fluoride (standard)',                                  0.80, 0.95,  'Rigalli 2001 NaF'),
 ]

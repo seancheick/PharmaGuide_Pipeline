@@ -178,7 +178,7 @@ def test_botanical_parent_does_not_take_its_declared_children_identity_or_mass(
     assert parent["canonical_id"] == "black_tea_leaf"
     assert parent["standardName"] == "Black Tea Leaf"
     assert parent["quantity"] == 100.0
-    assert parent["generic_form_quality_credit"] is False
+    assert parent.get("bio_score") is None
     assert rows["ingredientRows[7].nestedRows[0]"]["canonical_id"] == "caffeine"
     assert rows["ingredientRows[7].nestedRows[0]"]["quantity"] == 10.0
     assert rows["ingredientRows[7].nestedRows[1]"]["canonical_id"] == "polyphenols"

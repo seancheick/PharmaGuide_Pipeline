@@ -149,12 +149,15 @@ def _ing(qty, form="nicotinic acid", unit="mg", form_id=None):
     # form name so the confirmed-form cases exercise the mismatch path; pass an
     # explicit form_id to model an inferred form.
     resolved_form_id = form_id if form_id is not None else form.replace(" ", "_")
+    confirmed = bool(resolved_form_id) and "unspecified" not in resolved_form_id
     return {
         "quantity": qty,
         "unit": unit,
         "raw_source_text": "Niacin",
         "matched_form": form,
         "form_id": resolved_form_id,
+        # The enricher's row reading (_row_form_match_status).
+        "form_match_status": "mapped" if confirmed else "n/a",
     }
 
 
@@ -180,7 +183,7 @@ def test_form_scope_inferred_form_fails_open():
     BE nicotinic acid, gating on the inferred form (form_mismatch → suppress)
     would hide a genuine flush/hepatotoxicity warning. The floor must fail open
     until the form is label-confirmed. Mirrors the matcher's own confirmation
-    test (`form_id and 'unspecified' not in form_id`).
+    reading (form_match_status == 'mapped').
     """
     e = SupplementEnricher()
     # matched_form populated but form_id is the unspecified fallback → not confirmed

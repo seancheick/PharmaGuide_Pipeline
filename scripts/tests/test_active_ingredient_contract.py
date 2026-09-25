@@ -85,7 +85,7 @@ def test_form_contract_bridges_to_matched_form_when_cleaner_empty():
     """The Thorne Basic Prenatal regression — cleaner missed inline
     form on 'Vitamin A Palmitate' so forms=[]; enricher caught it."""
     ing = {"forms": [], "name": "Vitamin A Palmitate"}
-    m = {"matched_form": "retinyl palmitate"}
+    m = {"matched_form": "retinyl palmitate", "form_match_status": "mapped"}
     out = _compute_form_contract(ing, m)
     assert out == {
         "display_form_label": "Retinyl Palmitate",
@@ -109,7 +109,7 @@ def test_form_contract_unknown_when_label_has_no_form_and_match_is_placeholder()
 
 def test_form_contract_label_form_with_no_iqm_match_is_unmapped():
     ing = {"forms": [{"name": "Mixed Carotenoids"}]}
-    m = {"matched_form": ""}
+    m = {"matched_form": "", "form_match_status": "unmapped"}
     out = _compute_form_contract(ing, m)
     assert out == {
         "display_form_label": "Mixed Carotenoids",
@@ -186,7 +186,7 @@ def test_form_contract_falls_back_to_ingredient_matched_form_field():
     # Older enricher paths put matched_form on the ingredient directly
     # rather than via the ingredient_quality_data lookup.
     ing = {"forms": [], "matched_form": "methylcobalamin"}
-    m = {}
+    m = {"form_match_status": "mapped"}
     out = _compute_form_contract(ing, m)
     assert out["form_status"] == "known"
     assert out["form_match_status"] == "mapped"
@@ -289,6 +289,7 @@ def _minimal_enriched_with_thorne_vitamin_a():
                     "bio_score": 14,
                     "mapped": True,
                     "matched_form": "retinyl palmitate",
+                    "form_match_status": "mapped",
                     "matched_forms": [],
                     "extracted_forms": [],
                     "safety_hits": [],

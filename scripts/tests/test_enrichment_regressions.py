@@ -2088,21 +2088,21 @@ class TestFormFallbackPrecisionRegression:
         match = enricher._match_quality_map("Flaxseed particulates", "Flaxseed particulates", qm)
         assert match.get("canonical_id") == "flaxseed"
         assert match.get("form_name") == "flaxseed meal/powder"
-        assert not match.get("form_unmapped_fallback")
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED"
 
     def test_amla_powder_maps_to_powder_not_standardized_extract(self, enricher):
         qm = enricher.databases.get("ingredient_quality_map", {})
         match = enricher._match_quality_map("Amla, Powder", "Amla, Powder", qm)
         assert match.get("canonical_id") == "amla"
         assert match.get("form_name") == "amla fruit powder"
-        assert not match.get("form_unmapped_fallback")
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED"
 
     def test_turmeric_powder_maps_to_turmeric_parent_not_curcumin(self, enricher):
         qm = enricher.databases.get("ingredient_quality_map", {})
         match = enricher._match_quality_map("Turmeric, Powder", "Turmeric, Powder", qm)
         assert match.get("canonical_id") == "turmeric"
         assert match.get("form_name") == "whole turmeric powder"
-        assert not match.get("form_unmapped_fallback")
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED"
 
     def test_st_johns_wort_generic_extract_stays_conservative(self, enricher):
         qm = enricher.databases.get("ingredient_quality_map", {})
@@ -2170,7 +2170,7 @@ class TestFormFallbackPrecisionRegression:
         assert match is not None
         assert match.get("canonical_id") == "green_tea_extract"
         assert "oxidized" not in str(match.get("form_name", "")).lower()
-        assert not match.get("form_unmapped_fallback")
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED"
 
     def test_fish_oil_generic_oil_text_does_not_pick_premium_form_on_fallback(self, enricher):
         qm = enricher.databases.get("ingredient_quality_map", {})
@@ -2767,7 +2767,7 @@ def test_capsules_high_confidence_form_variants_map_after_alias_updates():
     for raw_name, expected_canonical in cases:
         match = enricher._match_quality_map(raw_name, raw_name, enricher.databases["ingredient_quality_map"])
         assert match.get("canonical_id") == expected_canonical, raw_name
-        assert not match.get("form_unmapped_fallback"), raw_name
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED", raw_name
 
 
 def test_reviewed_botanical_parents_do_not_override_specific_iqm_extracts():
@@ -2863,7 +2863,7 @@ def test_pure_encapsulations_form_fallback_aliases_map_without_fallback():
             "Medium Chain Triglycerides",
             [{"name": "triglyceride", "source": "name_extraction"}],
             "mct_oil",
-            "mct oil c8/c10",
+            None,  # the label names no C8/C10 composition: MCT identity, no form
         ),
     ]
 
@@ -2877,7 +2877,7 @@ def test_pure_encapsulations_form_fallback_aliases_map_without_fallback():
         assert match is not None, label
         assert match.get("canonical_id") == expected_canonical, label
         assert match.get("form_id") == expected_form, label
-        assert not match.get("form_unmapped_fallback"), label
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED", label
 
 
 def test_pure_encapsulations_branded_parent_fallbacks_map_to_specific_forms():
@@ -2899,7 +2899,7 @@ def test_pure_encapsulations_branded_parent_fallbacks_map_to_specific_forms():
         assert match is not None, label
         assert match.get("canonical_id") == expected_canonical, label
         assert match.get("form_id") == expected_form, label
-        assert not match.get("form_unmapped_fallback"), label
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED", label
 
 
 def test_olly_nature_thorne_safe_form_gaps_map_without_fallback():
@@ -2953,7 +2953,7 @@ def test_olly_nature_thorne_safe_form_gaps_map_without_fallback():
         assert match is not None, label
         assert match.get("canonical_id") == expected_canonical, label
         assert match.get("form_id") == expected_form, label
-        assert not match.get("form_unmapped_fallback"), label
+        assert match.get("match_status") != "FORM_DISCLOSED_UNMAPPED", label
 
 
 class TestEvidenceMultiMatch:

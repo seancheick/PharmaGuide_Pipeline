@@ -165,7 +165,7 @@ def test_jarrow_extract_has_non_scorable_preparation_identity(
     assert source_projection["scoring_input_kind"] == "label_active_projection"
     assert source_projection["quantity"] == 250.0
     assert source_projection["unit"] == "mg"
-    assert source_projection["generic_form_quality_credit"] is False
+    assert source_projection.get("bio_score") is None
 
 
 @pytest.mark.parametrize("dsld_id", ["264610", "307558"])

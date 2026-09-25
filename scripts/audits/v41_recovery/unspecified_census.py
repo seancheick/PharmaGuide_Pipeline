@@ -9,10 +9,16 @@ it is a census, not the reviewed "lowest legitimate form" the policy uses.
 Parents without an authored form take the derived lowest - 1 at runtime and
 are counted separately.
 
-    python scripts/audits/v41_recovery/unspecified_census.py [--parents]
+    python scripts/audits/v41_recovery/unspecified_census.py [--parents] [--standard]
+
+--standard lists forms named "standard" under two definitions: (A) the name
+ends in "(standard)"; (B) the word "standard" anywhere in the name, within
+parents that have no authored unspecified form. "Standard" is not read as
+unspecified; an entry is renamed only when its own notes say it is.
 """
 import collections
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -47,6 +53,17 @@ if __name__ == '__main__':
     for gap in sorted(gaps):
         print(f'  gap {gap:+d}: {gaps[gap]}')
     print(f'{sum(u >= b for _, _, u, _, b in rows)} parents score the unspecified form at or above their best other form')
+    if '--standard' in sys.argv:
+        iqm = json.loads(IQM.read_text())
+        forms = [(k, f) for k, e in iqm.items() if isinstance(e, dict) and isinstance(e.get('forms'), dict)
+                 for f in e['forms']]
+        exact = [(k, f) for k, f in forms if re.search(r'\(standard\)\s*$', f, re.I)]
+        word = [(k, f) for k, f in forms if re.search(r'\bstandard\b', f, re.I)
+                and authored_unknown_form(iqm[k]) is None]
+        print(f'(A) name ends "(standard)": {len(exact)}; (B) "standard" in a parent '
+              f'with no authored unspecified form: {len(word)}')
+        for k, f in sorted(set(exact) | set(word)):
+            print(f"{'A' if (k, f) in exact else ' '}{'B' if (k, f) in word else ' '}\t{k}\t{f}")
     if '--parents' in sys.argv:
         for parent, form, u, m, _ in sorted(rows):
             print(f'{parent}\t{form}\t{u}\t{m}\t{u - m:+d}')

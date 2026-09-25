@@ -141,7 +141,7 @@ REQUIRED_ENRICHMENT_ROW_FIELDS = {
     "recognition_reason",
     "form_id",
     "form_source",
-    "form_unmapped",
+    "form_match_status",
     "delivers_markers",
 }
 REQUIRED_CLEANER_ROW_FIELDS = {
@@ -156,7 +156,7 @@ REQUIRED_CLEANER_ROW_FIELDS = {
 FALLBACK_DECISION_REASONS = {
     "recognized_non_scorable",
     "source_descriptor_child_row",
-    "form_unmapped_fallback",
+    "disclosed_form_unmapped",
     "parent_form_fallback",
     "cleaner_safety_canonical_preservation",
     "cleaner_botanical_canonical_preservation",

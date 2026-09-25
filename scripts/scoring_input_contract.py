@@ -28,11 +28,8 @@ from constants import (
     IQD_DOSE_EVIDENCE_CLASSES,
 )
 from scoring_reference_resolver import (
-    effective_form_bio,
     has_therapeutic_reference,
-    iqm_reference_index,
     is_known_botanical,
-    unknown_form_quality,
 )
 
 # Single source of truth for identity disposition vocabulary and scoreability.
@@ -290,6 +287,9 @@ def _norm(value: Any) -> str:
 # the previous mismatch left coverage unable to observe an unmapped active at all.
 UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH = "no_quality_map_match"
 UNRESOLVED_IDENTITY_FORM_UNMAPPED = "form_unmapped"
+# A row whose label names a form IQM does not recognize. Blocking: identity
+# readiness and the completeness gate hold the product until it is curated.
+DISCLOSED_FORM_UNMAPPED_FINDING = "disclosed_form_unmapped"
 UNRESOLVED_IDENTITY_REASONS = frozenset({
     UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
     UNRESOLVED_IDENTITY_FORM_UNMAPPED,
@@ -637,65 +637,6 @@ def _botanical_child_identity(name: Any) -> Optional[Dict[str, str]]:
         if pattern.search(text):
             return identity
     return None
-
-
-@lru_cache(maxsize=1)
-def _iqm_index() -> Dict[str, Dict[str, Any]]:
-    """Compatibility accessor backed by the shared reference-data owner."""
-    return iqm_reference_index()
-
-
-def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[str, Any]:
-    """Resolve conservative form-quality fields for product evidence rows.
-
-    Blend-anchor evidence is the compatibility bridge for current enriched
-    blobs: dose can be known at a parent/blend level while no IQD scorable row
-    exists. When the anchor canonical maps to IQM, carry label-supported form
-    quality into the scoring row so Formulation does not see a false zero.
-    A form the label names is matched by alias; otherwise the parent's
-    unknown form comes from the shared provider (unknown_form_quality), and a
-    derived unknown names no form. Unmapped/generic blend headers return no
-    credit.
-    """
-    entry = _iqm_index().get(_slug(canonical_id))
-    forms = _safe_dict(entry.get("forms")) if entry else {}
-    if not forms:
-        return {}
-
-    text = _norm(_row_text(context))
-    candidates: List[tuple[int, int, float, str]] = []
-    for form_name, form in forms.items():
-        if not isinstance(form, dict):
-            continue
-        quality = effective_form_bio(entry, form)
-        if quality is None:
-            continue
-        aliases = [form_name] + [
-            str(alias)
-            for alias in _safe_list(form.get("aliases"))
-            if alias
-        ]
-        for alias in aliases:
-            alias_norm = _norm(alias)
-            if alias_norm and alias_norm in text:
-                specificity = 0 if "unspecified" in _norm(form_name) else 1
-                candidates.append((specificity, len(alias_norm), quality, str(form_name)))
-
-    if candidates:
-        _, _, bio, chosen_name = sorted(candidates, reverse=True)[0]
-    else:
-        unknown = unknown_form_quality(entry)
-        if not unknown:
-            return {}
-        bio, chosen_name = unknown["bio_score"], unknown["form_id"]
-
-    out: Dict[str, Any] = {"bio_score": bio, "generic_form_quality_credit": True}
-    if chosen_name:
-        out["matched_form"] = chosen_name
-    category = entry.get("category_enum") or entry.get("category")
-    if category:
-        out["category"] = category
-    return out
 
 
 def _is_verified_canonical(value: Any) -> bool:
@@ -2460,12 +2401,7 @@ def _product_scoring_evidence_rows(
                 item
             ),
             "section_support": PRODUCT_EVIDENCE_SECTION_SUPPORT[evidence_type],
-            "generic_form_quality_credit": bool(item.get("generic_form_quality_credit", False)),
         }
-        if evidence_type == "blend_anchor_mass" and not row.get("bio_score"):
-            quality = _form_quality_from_iqm(row.get("canonical_id"), row)
-            if quality:
-                row.update(quality)
         dedupe_key = (
             row.get("evidence_type"),
             row.get("canonical_id"),
@@ -2547,6 +2483,11 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
 
     if not _has_identity(row):
         return False, _reject(row, "missing_scoring_identity"), findings
+
+    # The label names a form IQM does not recognize: the identity scores, but
+    # the product is held from release until the form is curated.
+    if row.get("form_match_status") == "unmapped":
+        findings.append(DISCLOSED_FORM_UNMAPPED_FINDING)
 
     return True, None, findings
 

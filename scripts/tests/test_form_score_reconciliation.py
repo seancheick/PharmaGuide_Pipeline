@@ -49,6 +49,8 @@ def test_reconciliation_manifest_is_complete_and_matches_iqm():
         assert row["rationale"].strip()
         assert isinstance(row["citation_ids"], list)
         form = iqm[row["ingredient_key"]]["forms"][row["form_key"]]
+        if _superseded_by_unknown_floor(iqm, row):
+            continue
         assert form["bio_score"] == row["final_score"]
         if row["action"] == "RESTORE_LEGACY":
             assert row["final_score"] == row["pre_migration_score"]
@@ -56,6 +58,22 @@ def test_reconciliation_manifest_is_complete_and_matches_iqm():
 
     assert manifest["summary"]["scores_restored"] == 161
     assert manifest["summary"]["affirmative_corrections_preserved"] == 21
+
+
+def _superseded_by_unknown_floor(iqm, row):
+    """A legacy-restored unspecified score later governed by the unknown-form
+    floor (2026-09-25): the parent's authored unspecified form, no reviewed
+    override, now exactly lowest eligible named bio_score - 1."""
+    from scoring_reference_resolver import authored_unknown_form, unknown_floor, unknown_floor_override
+    entry = iqm[row["ingredient_key"]]
+    authored = authored_unknown_form(entry)
+    floor = unknown_floor(entry)
+    return bool(
+        row["provenance_status"] == "legacy_curated_unvalidated"
+        and authored and authored[0] == row["form_key"]
+        and not unknown_floor_override(authored[1])
+        and floor and authored[1]["bio_score"] == floor[0]
+    )
 
 
 def test_legacy_excellent_forms_are_frozen_without_weakening_new_score_gate():
@@ -66,6 +84,7 @@ def test_legacy_excellent_forms_are_frozen_without_weakening_new_score_gate():
         for row in manifest["changes"]
         if row["provenance_status"] == "legacy_curated_unvalidated"
         and row["final_score"] >= 12
+        and not _superseded_by_unknown_floor(iqm, row)
     }
 
     # Reference reconciliation can return previously cited legacy forms to the

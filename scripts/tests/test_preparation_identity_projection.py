@@ -98,7 +98,7 @@ def test_preparation_projection_preserves_material_rows_and_literal_lineage(
     assert projected["canonical_source_db"] == source_db
     assert projected["standardName"] == standard_name
     assert projected["scoring_input_kind"] == "label_active_projection"
-    assert projected["generic_form_quality_credit"] is False
+    assert projected.get("bio_score") is None
     assert projected["quantity"] == source["activeIngredients"][0]["quantity"]
     assert projected["unit"] == "mg"
     for before, after in zip(source["activeIngredients"], product["activeIngredients"], strict=True):

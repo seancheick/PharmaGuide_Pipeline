@@ -318,7 +318,7 @@ def test_fallback_iqd_decisions_require_field_level_diagnostics():
         "ingredient_quality_data": {
             "ingredients": [],
             "ingredients_scorable": [
-                _row(identity_decision_reason="form_unmapped_fallback")
+                _row(identity_decision_reason="disclosed_form_unmapped")
             ],
         },
     }
