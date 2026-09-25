@@ -52,6 +52,7 @@ class DashboardData:
     coverage_reports: dict[str, dict[str, Any]] = field(default_factory=dict)
     form_fallback_reports: dict[str, dict[str, Any]] = field(default_factory=dict)
     parent_fallback_reports: dict[str, dict[str, Any]] = field(default_factory=dict)
+    report_dirs: dict[str, Path] = field(default_factory=dict)
     dataset_reports: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     processing_state: dict[str, Any] | None = None
@@ -251,6 +252,22 @@ def _load_unmapped_report(path: Path, key: str) -> list[dict[str, Any]]:
     if not isinstance(rows, list):
         return []
     return rows
+
+
+def _latest_report_dir(report_root: Path) -> Path:
+    """The directory holding a dataset's newest reports. Enrich and score
+    write ``reports/runs/<run_id>/``; older outputs wrote flat
+    ``reports/*.json``. All reports are read from one run so the dashboard
+    never pairs one run's queue with another run's summary."""
+    runs = report_root / "runs"
+    candidates = [path for path in runs.iterdir() if path.is_dir()] if runs.is_dir() else []
+    candidates.append(report_root)
+    dated = []
+    for directory in candidates:
+        times = [path.stat().st_mtime for path in directory.glob("*.json")]
+        if times:
+            dated.append((max(times), str(directory), directory))
+    return max(dated)[2] if dated else report_root
 
 
 def _parse_dataset_report(output_dir: Path) -> dict[str, Any]:
@@ -1441,7 +1458,8 @@ def load_dashboard_data(config: Any) -> DashboardData:
                 data.latest_enriched_at = dataset_report["latest_pipeline_at"]
         data.missing_artifacts[dataset_name] = dataset_report["missing_expected"]
 
-        report_dir = output_dir / "reports"
+        report_dir = _latest_report_dir(output_dir / "reports")
+        data.report_dirs[dataset_name] = report_dir
         for report_path in report_dir.glob("*.json"):
             content = safe_load_json(report_path)
             if not content:

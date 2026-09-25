@@ -156,15 +156,20 @@ _EXACT_UNSPECIFIED_RE = re.compile(r"\(unspecified\)\s*$", re.IGNORECASE)
 UNKNOWN_FORM_NAME = "unspecified"
 
 
-# Why a form cannot define the nondisclosure floor (IQM form field
-# ``unknown_floor: {"eligible": false, "reason": ...}``). Absent = eligible.
-UNKNOWN_FLOOR_INELIGIBLE_REASONS = frozenset({
+# IQM form field ``parent_relationship``: a form that is not an ordinary form
+# of its parent. Absent = an ordinary form. Any relationship makes the form
+# ineligible for the nondisclosure floor.
+PARENT_RELATIONSHIPS = frozenset({
     "non_functional_analog",
     "degradation_product",
+    "not_a_nutrient_source",
     "wrong_stereoisomer",
     "different_compound",
-    "not_a_nutrient_source",
 })
+# Not this parent's identity: a row matching such a form is held for identity
+# verification and never scored as the parent (D-tyrosine is not L-tyrosine;
+# eleuthero is not Panax ginseng).
+IDENTITY_MISMATCH_RELATIONSHIPS = frozenset({"wrong_stereoisomer", "different_compound"})
 # A reviewed override lets an authored unspecified form sit above the floor:
 # ``unknown_floor: {"override": true, "rationale", "reviewed_by", "reviewed_on"}``.
 UNKNOWN_FLOOR_OVERRIDE_FIELDS = ("rationale", "reviewed_by", "reviewed_on")
@@ -189,9 +194,14 @@ def _candidate_forms(parent: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     }
 
 
+def parent_relationship(form: Optional[Dict[str, Any]]) -> Optional[str]:
+    """The form's typed relationship to its parent; None for an ordinary form."""
+    return (form or {}).get("parent_relationship") or None
+
+
 def floor_eligible(form: Dict[str, Any]) -> bool:
     """Whether a named form may define the nondisclosure floor."""
-    return (form.get("unknown_floor") or {}).get("eligible", True) is not False
+    return parent_relationship(form) is None
 
 
 def unknown_floor_override(form: Dict[str, Any]) -> bool:

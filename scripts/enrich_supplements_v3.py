@@ -112,8 +112,10 @@ from scoring_input_contract import (
     normalize_product_evidence_scope,
 )
 from scoring_reference_resolver import (
+    IDENTITY_MISMATCH_RELATIONSHIPS,
     UNKNOWN_FORM_NAME,
     authored_unknown_form,
+    parent_relationship,
     effective_form_bio,
     unknown_form_quality,
 )
@@ -1118,14 +1120,11 @@ class SupplementEnricherV3:
             "contains_match_wins_count": 0,
             "parent_fallback_count": 0
         }
-        # Track unmapped forms for database expansion
-        # Key: raw_form_text, Value: {count, examples, base_names}
-        self.unmapped_forms_tracker = {}
         self._rda_ul_warning_count = 0
         self._ambiguity_warning_count = 0
         self._parent_fallback_info_count = 0
         self._parent_fallback_details = []  # Collect ALL fallback details for report
-        self._form_fallback_details = []   # Collect FORM_DISCLOSED_UNMAPPED details for audit
+        self._form_fallback_details = []   # Form curation queue, from each product's final state
 
         # Initialize scoring hardening modules
         self._init_scoring_modules()
@@ -7175,22 +7174,6 @@ class SupplementEnricherV3:
                 matched_entry_id = matched_canonical_id
             used_form_fallback = match_result.get('match_status') == 'FORM_DISCLOSED_UNMAPPED'
 
-            # Track form fallbacks for audit report
-            if used_form_fallback:
-                unmapped_forms = match_result.get('unmapped_forms', [])
-                fallback_form_name = match_result.get('form_name') or '(unmapped)'
-                self._form_fallback_details.append({
-                    "ingredient_label": ing_name,
-                    "raw_source_text": raw_source_text,
-                    "canonical_id": match_result.get('canonical_id', ''),
-                    "parent_name": match_result.get('standard_name', ''),
-                    "unmapped_form_text": ', '.join(unmapped_forms) if unmapped_forms else ing_name,
-                    "fallback_form": fallback_form_name,
-                    "fallback_bio_score": bio_score,
-                    "form_source": match_result.get('form_source', ''),
-                    "source_section": source_section,
-                })
-
             entry = {
                 # LABEL NAME PRESERVATION:
                 "name": ing_name,  # Label-facing name (user-visible)
@@ -7358,7 +7341,19 @@ class SupplementEnricherV3:
         entry.setdefault("recognition_reason", None)
         entry.setdefault("form_id", None)
         entry.setdefault("form_source", None)
+        # form_match_status: mapped | n/a (scored) or unmapped | lost |
+        # needs_identity_verification (held; queued by _record_form_curation_gaps).
         entry["form_match_status"] = self._row_form_match_status(entry, match_result)
+        if self._identity_mismatch_forms(entry):
+            # The matched IQM form is not this parent's identity (a wrong
+            # stereoisomer or a different compound): no parent scoring.
+            entry["form_match_status"] = "needs_identity_verification"
+            entry["bio_score"] = None
+        if entry["form_match_status"] == "n/a" and entry.get("role_classification") == "active_scorable":
+            lost_forms = self._dropped_label_forms(ing_name, entry.get("canonical_id"), ingredient.get("forms"))
+            if lost_forms:
+                entry["form_match_status"] = "lost"
+                entry["lost_forms"] = lost_forms
         entry.setdefault("delivers_markers", [])
         entry.setdefault("fallback_class", None)
         entry.setdefault("fallback_reason", None)
@@ -8111,11 +8106,6 @@ class SupplementEnricherV3:
                     # A named form IQM does not recognize: unmapped, never
                     # scored as the parent's default or as the row name's form.
                     unmapped_forms.append(raw_form_text)
-                    # Track unmapped form for database expansion
-                    base_name = form_info.get('base_name', '')
-                    original_label = form_info.get('original', '')
-                    if raw_form_text:
-                        self._track_unmapped_form(raw_form_text, base_name, original_label)
 
         # No form matched. Named forms IQM lacks go back to the caller, which
         # keeps the parent identity and leaves the form unmapped.
@@ -8687,6 +8677,38 @@ class SupplementEnricherV3:
             return False
         authored = authored_unknown_form(quality_map.get(match.get('canonical_id')) or {})
         return not (authored and authored[0] == match['form_id'])
+
+    def _identity_mismatch_forms(self, row: Dict) -> List[str]:
+        """The row's matched IQM forms whose parent_relationship says they are
+        not the parent's identity (IDENTITY_MISMATCH_RELATIONSHIPS)."""
+        forms = ((self.databases.get('ingredient_quality_map') or {}).get(row.get('canonical_id')) or {}).get('forms') or {}
+        names = [row.get('form_id')] + [m.get('form_key') for m in row.get('matched_forms') or []
+                                        if isinstance(m, dict)]
+        return sorted({name for name in names if name in forms
+                       and parent_relationship(forms[name]) in IDENTITY_MISMATCH_RELATIONSHIPS})
+
+    def _dropped_label_forms(self, name: str, canonical_id: Optional[str], label_forms) -> List[str]:
+        """Label form tokens the form classifier reads (a named IQM form, or a
+        form IQM lacks) that a row read as 'n/a' does not carry. Some match
+        paths never consult the cleaner's forms; when one of them wins, the
+        disclosed form is lost by the pipeline, which is a defect to repair
+        (status 'lost', product held), never label nondisclosure. Tokens the
+        classifier treats as descriptors (source, marker, preparation,
+        restatement) or IQM aliases to the unspecified form are not lost."""
+        quality_map = self.databases.get('ingredient_quality_map') or {}
+        if canonical_id not in quality_map or not isinstance(label_forms, list) or not label_forms:
+            return []
+        form_info = self._build_form_info_from_cleaned(name, label_forms)
+        if not (form_info and form_info.get('form_extraction_success')):
+            return []
+        result = self._match_multi_form(form_info, quality_map, cleaner_canonical_id=canonical_id)
+        if not result or result.get('all_forms_generic'):
+            return []
+        if result.get('no_form_matched'):
+            return list(result.get('unmapped_forms') or [])
+        if not self._is_specific_form_match(result, quality_map):
+            return []
+        return [m['raw_form_text'] for m in result.get('matched_forms') or [] if m.get('raw_form_text')]
 
     def _row_form_match_status(self, entry: Dict, match_result: Optional[Dict]) -> str:
         """The row's form disclosure, in the export's vocabulary:
@@ -9459,17 +9481,26 @@ class SupplementEnricherV3:
                     unknown-form value ("Cranberry powder" under Magnesium once
                     picked magnesium citrate 14 over the unspecified 5)."""
                     input_norm = f"{_norm(ing_name)} {_norm(std_name)}".strip()
+                    label_words = set(re.findall(r"[a-z0-9]+", input_norm))
                     hint_tokens = {
                         "powder": ("powder", "particulate", "meal"),
                         "oil": ("oil",),
                     }
+
+                    def _stated(text: str, hint: str) -> bool:
+                        # The label states this form: every word of the form
+                        # text other than the hint is on the label. "Ginseng,
+                        # Powder" does not state "siberian root & rhizome powder".
+                        words = set(re.findall(r"[a-z0-9]+", _norm(text)))
+                        return hint in words and words - {hint} <= label_words
+
                     for hint, tokens in hint_tokens.items():
                         if not any(token in input_norm for token in tokens):
                             continue
                         hinted = [
                             (name, data) for name, data in forms.items()
-                            if hint in _norm(name)
-                            or any(hint in _norm(alias) for alias in data.get("aliases", []) or [])
+                            if _stated(name, hint)
+                            or any(_stated(alias, hint) for alias in data.get("aliases", []) or [])
                         ]
                         if not hinted:
                             continue
@@ -16144,11 +16175,14 @@ class SupplementEnricherV3:
         )
         if not match or match.get('canonical_id') != canonical:
             return {}
-        status = self._row_form_match_status(
-            {'canonical_id': canonical, 'form_id': match.get('form_id'),
-             'unmapped_forms': match.get('unmapped_forms')}, match)
+        reading = {'canonical_id': canonical, 'form_id': match.get('form_id'),
+                   'unmapped_forms': match.get('unmapped_forms'), 'matched_forms': match.get('matched_forms')}
+        status = self._row_form_match_status(reading, match)
+        mismatch = bool(self._identity_mismatch_forms(reading))
+        if mismatch:
+            status = 'needs_identity_verification'
         return {
-            'bio_score': match.get('bio_score'),
+            'bio_score': None if mismatch else match.get('bio_score'),
             'matched_form': match.get('form_name'),
             'form_match_status': status,
             'unmapped_forms': match.get('unmapped_forms') or [],
@@ -22513,6 +22547,7 @@ class SupplementEnricherV3:
             enriched["rejected_manufacturer_matches"] = ledger_data.get("rejected_manufacturer_matches", [])
             enriched["rejected_claim_matches"] = ledger_data.get("rejected_claim_matches", [])
 
+            self._record_form_curation_gaps(enriched)
             return enriched, issues
 
         except (KeyError, TypeError) as e:
@@ -22579,33 +22614,93 @@ class SupplementEnricherV3:
         key = f"{ing_type}:{ingredient_name}"
         self.unmapped_tracker[key] = self.unmapped_tracker.get(key, 0) + 1
 
-    def _track_unmapped_form(self, raw_form_text: str, base_name: str, original_label: str):
-        """
-        Track unmapped forms for database expansion.
+    def _form_curation_report(self) -> Dict:
+        """The form curation queue report over ``_form_fallback_details``."""
+        grouped: Dict[Tuple[str, str, str], Dict] = {}
+        for fb in self._form_fallback_details:
+            key = (fb['gap_type'], fb['canonical_id'], self._norm_form_name(fb['unmapped_form_text']))
+            item = grouped.setdefault(key, {
+                'gap_type': fb['gap_type'], 'canonical_id': fb['canonical_id'],
+                'parent_name': fb['parent_name'], 'unmapped_form_text': fb['unmapped_form_text'],
+                'occurrence_count': 0, 'products': set(), 'brands': set(), 'examples': [],
+            })
+            item['occurrence_count'] += 1
+            item['products'].add(fb['dsld_id'])
+            item['brands'].add(fb['brand_name'])
+            example = {k: fb[k] for k in ('dsld_id', 'brand_name', 'product_name', 'ingredient_label',
+                                          'raw_source_text', 'origin')}
+            if len(item['examples']) < 3 and example not in item['examples']:
+                item['examples'].append(example)
+        entries = []
+        for item in grouped.values():
+            products, brands = sorted(item.pop('products')), sorted(b for b in item.pop('brands') if b)
+            entries.append({**item, 'affected_product_count': len(products), 'dsld_ids': products,
+                            'brands': brands})
+        entries.sort(key=lambda x: (-x['affected_product_count'], -x['occurrence_count'],
+                                    x['canonical_id'], x['unmapped_form_text'].lower()))
+        return {
+            'generated_at': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'total_form_fallback_count': len(self._form_fallback_details),
+            'unique_form_fallback_count': len(entries),
+            'held_product_count': len({fb['dsld_id'] for fb in self._form_fallback_details}),
+            'note': (
+                'Label forms that hold products. disclosed_form_unmapped: a named '
+                'form IQM does not recognize; the row keeps its ingredient '
+                'identity, receives no form quality, and the product is held '
+                'until the form is curated. pipeline_form_loss: a disclosed form '
+                'the row reading dropped; repair the pipeline. '
+                'needs_identity_verification: the matched IQM form is not the '
+                "parent's identity (wrong stereoisomer or different compound). "
+                'Curation is: alias to an '
+                'existing form, a new verified form or parent, a recognized '
+                'non-scorable ingredient, a typed source/component relationship, '
+                'or a rejected/safety-relevant compound.'
+            ),
+            'form_fallbacks': entries,
+        }
 
-        Args:
-            raw_form_text: The raw form string that failed to match
-            base_name: The base ingredient name (e.g., "Vitamin A")
-            original_label: The full original label text
-        """
-        # Normalize key for deduplication
-        key = raw_form_text.lower().strip()
-        if not key:
-            return
-
-        if key not in self.unmapped_forms_tracker:
-            self.unmapped_forms_tracker[key] = {
-                'raw_text': raw_form_text,
-                'count': 0,
-                'base_names': set(),
-                'example_labels': []
-            }
-
-        entry = self.unmapped_forms_tracker[key]
-        entry['count'] += 1
-        entry['base_names'].add(base_name)
-        if len(entry['example_labels']) < 3 and original_label not in entry['example_labels']:
-            entry['example_labels'].append(original_label)
+    def _record_form_curation_gaps(self, enriched: Dict) -> None:
+        """Queue every label form that holds a product, from the product's
+        final state: ingredient rows and product scoring evidence (the anchor
+        path can hold a product on its own). ``disclosed_form_unmapped``: a
+        named form IQM does not recognize (curate it). ``pipeline_form_loss``:
+        a disclosed form the row's reading dropped (repair the pipeline).
+        ``needs_identity_verification``: the matched IQM form is not the
+        parent's identity (move it to its own parent). One entry per
+        (gap, ingredient, token)."""
+        rows = [('ingredient_row', r) for r in (enriched.get('ingredient_quality_data') or {}).get('ingredients') or []]
+        rows += [('product_evidence', r) for r in enriched.get('product_scoring_evidence') or []]
+        seen = set()
+        for origin, row in rows:
+            status = row.get('form_match_status') if isinstance(row, dict) else None
+            tokens = {
+                'unmapped': ('disclosed_form_unmapped', lambda: row.get('unmapped_forms')),
+                'lost': ('pipeline_form_loss', lambda: row.get('lost_forms')),
+                'needs_identity_verification': ('needs_identity_verification',
+                                                lambda: self._identity_mismatch_forms(row)),
+            }.get(status)
+            if not tokens:
+                continue
+            gap_type = tokens[0]
+            for token in tokens[1]() or []:
+                key = (gap_type, row.get('canonical_id'), self._norm_form_name(token))
+                if key in seen:
+                    continue
+                seen.add(key)
+                self._form_fallback_details.append({
+                    'gap_type': gap_type,
+                    'unmapped_form_text': token,
+                    'canonical_id': row.get('canonical_id') or '',
+                    'parent_name': row.get('standard_name') or '',
+                    'ingredient_label': row.get('name') or '',
+                    'raw_source_text': row.get('raw_source_text') or '',
+                    'form_source': row.get('form_source') or '',
+                    'source_section': row.get('source_section') or '',
+                    'origin': origin,
+                    'dsld_id': str(enriched.get('dsld_id') or ''),
+                    'brand_name': enriched.get('brand_name') or '',
+                    'product_name': enriched.get('product_name') or '',
+                })
 
     def _build_quality_parent_context_index(self, quality_map: Dict) -> Dict[str, str]:
         """
@@ -23248,34 +23343,13 @@ class SupplementEnricherV3:
                 self._atomic_write_json(fallback_file, fallback_report)
                 self.logger.info(f"Parent fallback report: 0 fallbacks ({fallback_file})")
 
-            # Disclosed-unmapped form report: every entry is a named label form
-            # IQM does not recognize (the curation queue). Always overwritten.
+            # Form curation queue: every label form that holds a product, one
+            # entry per (gap, parent, token), ranked by products held. Always
+            # overwritten.
             form_fb_file = os.path.join(reports_dir, "form_fallback_audit_report.json")
-            seen_form_fb = {}
-            for fb in self._form_fallback_details:
-                key = ((fb.get("unmapped_form_text") or "").lower().strip(), fb.get("canonical_id", ""))
-                if key not in seen_form_fb:
-                    seen_form_fb[key] = {**fb, "occurrence_count": 1}
-                else:
-                    seen_form_fb[key]["occurrence_count"] += 1
-            form_fallback_report = {
-                "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-                "total_form_fallback_count": len(self._form_fallback_details),
-                "unique_form_fallback_count": len(seen_form_fb),
-                "note": (
-                    "Named label forms IQM does not recognize. The row keeps its "
-                    "ingredient identity, receives no form quality, and the product "
-                    "is held from release until the form is curated."
-                ),
-                "form_fallbacks": sorted(
-                    seen_form_fb.values(),
-                    key=lambda x: (-x["occurrence_count"], x["canonical_id"] or ""),
-                ),
-            }
-            self._atomic_write_json(form_fb_file, form_fallback_report)
+            self._atomic_write_json(form_fb_file, self._form_curation_report())
             self.logger.info(
-                f"Disclosed-unmapped form report: {len(seen_form_fb)} unique, "
-                f"{len(self._form_fallback_details)} occurrences ({form_fb_file})"
+                f"Form curation queue: {len(self._form_fallback_details)} occurrences ({form_fb_file})"
             )
         else:
             self.logger.info("Report generation disabled by config option: options.generate_reports=false")

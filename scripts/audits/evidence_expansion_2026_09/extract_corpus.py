@@ -31,7 +31,7 @@ from scoring_v4.modules import generic_evidence as ge  # noqa: E402
 ROW_FIELDS = ("name", "standard_name", "canonical_id", "form_id", "matched_form", "category",
               "quantity", "unit_normalized", "has_dose", "mapped", "identity_confidence",
               "is_proprietary_blend", "parent_blend", "is_nested_ingredient", "raw_source_path",
-              "role_classification", "form_unmapped", "source_section", "score_exclusion_reason")
+              "role_classification", "form_match_status", "source_section", "score_exclusion_reason")
 ACTIVE_ROLES = {"active_scorable", "recognized_non_scorable", "active_unmapped"}
 
 

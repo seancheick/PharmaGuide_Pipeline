@@ -190,7 +190,7 @@ def main() -> int:
             item["forms"][row.get("form_id") or "(none)"] += 1
             item["evidence"][p["dsld_id"]] = p["evidence"]
             item["dosed_slots"] += bool(row.get("has_dose"))
-            item["form_unmapped_slots"] += bool(row.get("form_unmapped"))
+            item["form_unmapped_slots"] += row.get("form_match_status") == "unmapped"
             item["names"][row.get("standard_name") or row.get("name")] += 1
             item["categories"][row.get("category") or "(none)"] += 1
             item["modules"][p["module"]] += 1

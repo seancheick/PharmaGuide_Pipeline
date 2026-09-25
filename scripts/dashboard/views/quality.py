@@ -30,6 +30,8 @@ def render_quality(data):
             "Run a pipeline build to populate `scripts/final_db_output/`."
         )
         _render_coverage_gate(data, dataset_scope)
+        st.divider()
+        _render_form_curation(data, dataset_scope)
         return
 
     _render_safety_summary(data, filtered_products)
@@ -42,16 +44,19 @@ def render_quality(data):
     st.divider()
 
     try:
-        tabs = st.tabs(["Not-Scored Queue", "Unmapped Hotspots", "Fallback & Review Queues", "Config Snapshot"])
-        if not isinstance(tabs, (list, tuple)) or len(tabs) < 4:
+        tabs = st.tabs(["Not-Scored Queue", "Unmapped Hotspots", "Form Curation", "Fallback & Review Queues",
+                        "Config Snapshot"])
+        if not isinstance(tabs, (list, tuple)) or len(tabs) < 5:
             raise ValueError("tabs unavailable")
-        tab_not_scored, tab_unmapped, tab_fallbacks, tab_config = tabs[:4]
+        tab_not_scored, tab_unmapped, tab_forms, tab_fallbacks, tab_config = tabs[:5]
     except Exception:
-        tab_not_scored = tab_unmapped = tab_fallbacks = tab_config = st
+        tab_not_scored = tab_unmapped = tab_forms = tab_fallbacks = tab_config = st
     with tab_not_scored:
         _render_not_scored_queue(data, filtered_products)
     with tab_unmapped:
         _render_unmapped_hotspots(data, dataset_scope)
+    with tab_forms:
+        _render_form_curation(data, dataset_scope)
     with tab_fallbacks:
         _render_fallback_tables(data, dataset_scope)
     with tab_config:
@@ -424,6 +429,93 @@ def _render_unmapped_hotspots(data, dataset_scope):
     )
     df = df.sort_values(["occurrences", "ingredient_name"], ascending=[False, True])
     data_table(df, max_rows=50)
+
+
+def _scoped(reports: dict, dataset_scope):
+    if dataset_scope == "All Datasets":
+        return reports
+    return {dataset_scope: reports[dataset_scope]} if dataset_scope in reports else {}
+
+
+def build_form_curation_rows(form_fallback_reports: dict) -> list[dict]:
+    """One row per (parent, unmapped form token) across datasets, ranked by
+    held products. Each row names a label form IQM does not recognize; the
+    products carrying it are held until it is curated."""
+    grouped: dict[tuple[str, str, str], dict] = {}
+    for dataset, report in form_fallback_reports.items():
+        for entry in (report or {}).get("form_fallbacks") or []:
+            token = str(entry.get("unmapped_form_text") or "")
+            gap_type = entry.get("gap_type") or "disclosed_form_unmapped"
+            key = (gap_type, str(entry.get("canonical_id") or ""), token.lower().strip())
+            row = grouped.setdefault(key, {
+                "canonical_id": key[1], "parent_name": entry.get("parent_name") or "",
+                "unmapped_form": token, "gap_type": gap_type,
+                "occurrences": 0, "_products": set(), "_brands": set(), "_datasets": set(), "example": "",
+            })
+            row["occurrences"] += int(entry.get("occurrence_count") or 0)
+            row["_products"].update(entry.get("dsld_ids") or [])
+            row["_brands"].update(entry.get("brands") or [])
+            row["_datasets"].add(dataset)
+            examples = entry.get("examples") or []
+            if not row["example"] and examples:
+                first = examples[0]
+                row["example"] = f"{first.get('dsld_id')}: {first.get('raw_source_text') or first.get('ingredient_label')}"
+    rows = []
+    for row in grouped.values():
+        products, brands = sorted(row.pop("_products")), sorted(row.pop("_brands"))
+        rows.append({**row, "held_products": len(products), "brands": ", ".join(brands[:5]),
+                     "datasets": ", ".join(sorted(row.pop("_datasets"))), "dsld_ids": ", ".join(products[:10])})
+    return sorted(rows, key=lambda r: (-r["held_products"], -r["occurrences"], r["canonical_id"], r["unmapped_form"]))
+
+
+def build_parent_fallback_rows(parent_fallback_reports: dict) -> list[dict]:
+    """Rows whose label names no form: scored at the parent's unknown-form value."""
+    grouped: dict[tuple[str, str], dict] = {}
+    for dataset, report in parent_fallback_reports.items():
+        for entry in (report or {}).get("fallbacks") or []:
+            key = (str(entry.get("canonical_id") or ""), str(entry.get("ingredient_normalized") or ""))
+            row = grouped.setdefault(key, {
+                "canonical_id": key[0], "ingredient": entry.get("ingredient_raw") or key[1],
+                "unknown_form": entry.get("fallback_form_name") or "", "occurrences": 0, "_datasets": set(),
+            })
+            row["occurrences"] += int(entry.get("occurrence_count") or 0)
+            row["_datasets"].add(dataset)
+    rows = [{**r, "datasets": ", ".join(sorted(r.pop("_datasets")))} for r in grouped.values()]
+    return sorted(rows, key=lambda r: (-r["occurrences"], r["canonical_id"], r["ingredient"]))
+
+
+def _render_form_curation(data, dataset_scope):
+    st.write("### Form Curation Queue")
+    st.caption(
+        "Label forms that hold products from release. disclosed_form_unmapped: a named form the IQM "
+        "does not recognize; curate it through /data-fix (alias to an existing form, a new verified "
+        "form or parent, a recognized non-scorable ingredient, a typed source/component relationship, "
+        "or a rejected compound). pipeline_form_loss: a disclosed form the enricher dropped; repair "
+        "the pipeline. Sorted by held products; click a column to re-sort."
+    )
+    runs = {name: str(path) for name, path in _scoped(getattr(data, "report_dirs", {}), dataset_scope).items()}
+    form_reports = _scoped(data.form_fallback_reports, dataset_scope)
+    legacy = sorted(name for name, report in form_reports.items() if "form_fallbacks" not in (report or {}))
+    if legacy:
+        st.warning(
+            f"{len(legacy)} dataset(s) have a form report from before the form contract "
+            f"(rows then scored at the parent fallback); re-enrich to queue them: {', '.join(legacy)}"
+        )
+    form_rows = build_form_curation_rows(form_reports)
+    if form_rows:
+        data_table(pd.DataFrame(form_rows), max_rows=500)
+    else:
+        st.info("No disclosed-unmapped forms in the latest enrichment runs.")
+    st.write("### Undisclosed Forms (parent fallback)")
+    st.caption("The label names no form; the row scores at the parent's unknown-form value. Not a hold.")
+    parent_rows = build_parent_fallback_rows(_scoped(data.parent_fallback_reports, dataset_scope))
+    if parent_rows:
+        data_table(pd.DataFrame(parent_rows), max_rows=500)
+    else:
+        st.info("No parent-fallback rows in the latest enrichment runs.")
+    if runs:
+        with st.expander("Report runs read"):
+            st.dataframe(pd.DataFrame(sorted(runs.items()), columns=["dataset", "report_dir"]), hide_index=True)
 
 
 def _render_fallback_tables(data, dataset_scope):

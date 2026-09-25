@@ -25,7 +25,7 @@
       "unknown_form": {
         "description": "What a form the label does not disclose is worth. Owner: scoring_reference_resolver.unknown_form_quality; enrichment reads it and scoring consumes enrichment's reading.",
         "rule": "Lowest eligible named bio_score - 1. An authored unspecified form supplies the identity and may sit at or below that floor; above it only with a reviewed override. With no authored form the result names no form.",
-        "eligibility": "Form field unknown_floor {eligible: false, reason}; reasons: non_functional_analog, degradation_product, wrong_stereoisomer, different_compound, not_a_nutrient_source. Absent = eligible. Source preparations are never eligible.",
+        "eligibility": "Form field parent_relationship names a form that is not an ordinary form of its parent: non_functional_analog, degradation_product, not_a_nutrient_source (this nutrient, poorly delivered: scored at its own bio_score), wrong_stereoisomer, different_compound (not this parent's identity: a matching row is held for identity verification and never scored as the parent). Any relationship makes the form ineligible for the floor. Absent = an ordinary form. Source preparations are never eligible.",
         "override": "Form field unknown_floor {override: true, rationale, reviewed_by, reviewed_on} on an authored unspecified form; db_integrity_sanity_check rejects an incomplete override or an undocumented value above the floor.",
         "not_covered": "A named form IQM does not recognize is a disclosed unmapped form: the row keeps its identity, gets no form quality, and the product is held until curated. A disclosed form the pipeline lost is a pipeline defect."
       }
@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 652,
       "total_forms": 1444,
-      "total_form_aliases": 12123,
+      "total_form_aliases": 12121,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -1746,7 +1746,10 @@
           "Added scoring_system.unknown_form: an undisclosed form takes the authored unspecified form, else lowest named bio_score - 1 with no form identity.",
           "2026-09-25: hyphenated aliases 'n-acetyl-l-tyrosine' (GSRS DA8G610ZO5, Acetyl L-tyrosine) and 'n-acetyl-l-cysteine'; manganese yeast-bound and Dunaliella beta-carotene notes no longer claim a natural bonus.",
           "No bio_score changed.",
-          "2026-09-25 form contract closeout: 38 forms marked unknown_floor ineligible (analogs, degradation products, D-tyrosine and D-carnitine, iron oxide, six different compounds); 152 authored unspecified values set to their floor, 15 kept as documented overrides of earlier clinician or audit locks; 31 form-inventing parent-name aliases on 18 parents moved off named forms (HMB 12, CLA 2, MCT 2; one each: L. acidophilus LA-14, flaxseed, bacopa, Sambucol, lycopene, white willow, evening primrose, flower pollen, magnolia, pea protein, Irish moss, PE, algae oil, olive fruit, policosanol); 3-hydroxy-3-methylbutyric acid moved to HMB free acid; BCAA '(standard)' renamed '(unspecified)'; parent alias 'Indian pomegranate'."
+          "2026-09-25 form contract closeout: 38 forms marked unknown_floor ineligible (analogs, degradation products, D-tyrosine and D-carnitine, iron oxide, six different compounds); 152 authored unspecified values set to their floor, 15 kept as documented overrides of earlier clinician or audit locks; 31 form-inventing parent-name aliases on 18 parents moved off named forms (HMB 12, CLA 2, MCT 2; one each: L. acidophilus LA-14, flaxseed, bacopa, Sambucol, lycopene, white willow, evening primrose, flower pollen, magnolia, pea protein, Irish moss, PE, algae oil, olive fruit, policosanol); 3-hydroxy-3-methylbutyric acid moved to HMB free acid; BCAA '(standard)' renamed '(unspecified)'; parent alias 'Indian pomegranate'.",
+          "2026-09-25: 'l-glutamine hydrochloride' and 'l-glutamine hcl' removed from the free l-glutamine form. PubChem lists the hydrochloride as its own salt (CID 57364844, C5H11ClN2O3; free L-glutamine is CID 5961); GSRS has no UNII for it and no bio_score evidence exists, so a label naming it is a disclosed unmapped form, not free glutamine. No corpus label named it.",
+          "2026-09-25: the 38 unknown_floor {eligible: false, reason} marks became the typed form field parent_relationship (same values; one owner for floor eligibility and identity). A row matching a wrong_stereoisomer or different_compound form is held for identity verification instead of inheriting the parent's scoring.",
+          "2026-09-25: n-acetyl-l-carnosine is an ordinary L-carnosine form again, as the 2026-06-22 live-verified bioactive review placed it (PubChem 9903482, conservative bio 6); the different_compound mark contradicted that lock. 'l-carnosine (unspecified)' renamed 'l-carnosine (free form)': its aliases (l-carnosine, carnosine, beta-alanyl-l-histidine) name the free dipeptide, a disclosed compound, as with l-glutamine; bio 9 unchanged. Carnosine's undisclosed value is now derived (NALC 6 - 1 = 5) and names no form."
         ],
         "regression_tests": "scripts/tests/test_iqm_retired_fields.py, scripts/tests/test_unknown_form_quality.py, scripts/tests/test_iqm_unspecified_form_floor.py"
       }
@@ -2598,10 +2601,7 @@
           "range_high": 0.2,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "thiamine analog": {
         "bio_score": 3,
@@ -2628,10 +2628,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "thiamine with thiaminase": {
         "bio_score": 2,
@@ -2658,10 +2655,7 @@
           "range_high": 0.02,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "vitamin b1 (unspecified)": {
         "bio_score": 6,
@@ -2903,10 +2897,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "light-degraded riboflavin": {
         "bio_score": 3,
@@ -2935,10 +2926,7 @@
           "range_high": 0.1,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "vitamin b2 (unspecified)": {
         "bio_score": 6,
@@ -3183,10 +3171,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "heat-degraded niacin": {
         "bio_score": 3,
@@ -3213,10 +3198,7 @@
           "range_high": 0.2,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "vitamin b3 (unspecified)": {
         "bio_score": 4,
@@ -3573,10 +3555,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "vitamin b5 (unspecified)": {
         "bio_score": 5,
@@ -3867,10 +3846,7 @@
           "range_high": 0.2,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "pyridoxine_analog": {
         "bio_score": 3,
@@ -3898,10 +3874,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "vitamin b6 (unspecified)": {
         "bio_score": 6,
@@ -4168,10 +4141,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "biotin degraded by avidin": {
         "bio_score": 3,
@@ -4199,10 +4169,7 @@
           "range_high": 0.02,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "vitamin b7 (unspecified)": {
         "bio_score": 6,
@@ -4672,10 +4639,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "heat_degraded_folate": {
         "bio_score": 3,
@@ -4703,10 +4667,7 @@
           "range_high": 0.1,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "vitamin b9 (unspecified)": {
         "bio_score": 5,
@@ -5484,10 +5445,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "vitamin c (unspecified)": {
         "bio_score": 5,
@@ -6200,10 +6158,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "oxidized vitamin D": {
         "bio_score": 3,
@@ -6235,10 +6190,7 @@
           "range_high": 0.1,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "vitamin d (unspecified)": {
         "bio_score": 5,
@@ -6740,10 +6692,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "oxidized vitamin E": {
         "bio_score": 3,
@@ -6776,10 +6725,7 @@
           "range_high": 0.1,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "vitamin e (unspecified)": {
         "bio_score": 5,
@@ -6872,10 +6818,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "oxidized vitamin K": {
         "bio_score": 2,
@@ -6907,10 +6850,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "vitamin k (unspecified)": {
         "same_identity_aliases": [
@@ -7509,10 +7449,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "calcium (unspecified)": {
         "bio_score": 3,
@@ -8931,10 +8868,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "not_a_nutrient_source"
-        }
+        "parent_relationship": "not_a_nutrient_source"
       },
       "iron (unspecified)": {
         "bio_score": 6,
@@ -10879,10 +10813,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "non_functional_analog"
-        }
+        "parent_relationship": "non_functional_analog"
       },
       "oxidized selenium": {
         "bio_score": 2,
@@ -10909,10 +10840,7 @@
           "range_high": 0.1,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "selenium (unspecified)": {
         "bio_score": 5,
@@ -13188,10 +13116,7 @@
           "range_high": 0.8,
           "quality": "variable"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "different_compound"
-        }
+        "parent_relationship": "different_compound"
       }
     },
     "match_rules": {
@@ -19340,10 +19265,7 @@
           "range_high": 0.18,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "wrong_stereoisomer"
-        }
+        "parent_relationship": "wrong_stereoisomer"
       },
       "l-carnitine (unspecified)": {
         "bio_score": 5,
@@ -19647,8 +19569,6 @@
           "glutamine",
           "free-form l-glutamine",
           "micronized glutamine",
-          "l-glutamine hydrochloride",
-          "l-glutamine hcl",
           "l-glutamine, micronized",
           "glutamine, micronized",
           "l-glutamine ot2",
@@ -20414,10 +20334,7 @@
           "range_high": 0.5,
           "quality": "moderate"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "wrong_stereoisomer"
-        }
+        "parent_relationship": "wrong_stereoisomer"
       }
     },
     "match_rules": {
@@ -20630,10 +20547,7 @@
         "external_ids": {
           "unii": "RMB44WO89X"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "different_compound"
-        }
+        "parent_relationship": "different_compound"
       }
     },
     "match_rules": {
@@ -24364,10 +24278,7 @@
           "range_high": 0.01,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "different_compound"
-        }
+        "parent_relationship": "different_compound"
       },
       "silydianin (minor flavonolignan)": {
         "bio_score": 4,
@@ -24390,10 +24301,7 @@
           "range_high": 0.01,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "different_compound"
-        }
+        "parent_relationship": "different_compound"
       }
     },
     "match_rules": {
@@ -26221,10 +26129,7 @@
           "range_high": 0.01,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "different_compound"
-        }
+        "parent_relationship": "different_compound"
       },
       "ginseng (unspecified)": {
         "bio_score": 8,
@@ -27651,10 +27556,7 @@
           "range_high": null,
           "quality": "unknown"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "digestive enzymes (unspecified)": {
         "bio_score": 5,
@@ -28222,10 +28124,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "degradation_product"
-        }
+        "parent_relationship": "degradation_product"
       },
       "nad+ precursors (unspecified)": {
         "bio_score": 5,
@@ -37226,10 +37125,7 @@
           "range_high": 0.05,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "different_compound"
-        }
+        "parent_relationship": "different_compound"
       }
     },
     "cui": "C0654158",
@@ -37440,10 +37336,7 @@
           "range_high": 0.2,
           "quality": "poor"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "different_compound"
-        }
+        "parent_relationship": "different_compound"
       }
     },
     "cui": "C0074405",
@@ -55239,7 +55132,7 @@
     "cui": "C0007267",
     "rxcui": "1362697",
     "forms": {
-      "l-carnosine (unspecified)": {
+      "l-carnosine (free form)": {
         "bio_score": 9,
         "absorption": "moderate",
         "consumer_note": "L-carnosine is a dipeptide made from beta-alanine and L-histidine. This form identifies carnosine itself without naming a particular salt or delivery system.",
@@ -55289,10 +55182,6 @@
         "external_ids": {
           "pubchem_cid": "9903482",
           "cas": "56353-15-2"
-        },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "different_compound"
         }
       }
     },
@@ -71044,10 +70933,7 @@
           "range_high": 0.1,
           "quality": "low"
         },
-        "unknown_floor": {
-          "eligible": false,
-          "reason": "wrong_stereoisomer"
-        }
+        "parent_relationship": "wrong_stereoisomer"
       },
       "vitamin K2 from natto": {
         "bio_score": 12,

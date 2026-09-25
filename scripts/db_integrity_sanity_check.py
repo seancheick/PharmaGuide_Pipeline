@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
 from scoring_reference_resolver import (
-    UNKNOWN_FLOOR_INELIGIBLE_REASONS,
+    PARENT_RELATIONSHIPS,
     UNKNOWN_FLOOR_OVERRIDE_FIELDS,
     authored_unknown_form,
     unknown_floor,
@@ -779,31 +779,24 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
                     findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.{retired}",
                                             "retired_field_present", "absent", "present"))
 
-            # unknown_floor: an ineligible mark with a known reason, or a
-            # complete reviewed override (scoring_reference_resolver owns both).
+            # parent_relationship: a known typed relationship, or absent
+            # (scoring_reference_resolver owns the vocabulary).
+            relationship = form.get("parent_relationship")
+            if relationship is not None and relationship not in PARENT_RELATIONSHIPS:
+                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.parent_relationship",
+                                        "enum_value_not_supported", "|".join(sorted(PARENT_RELATIONSHIPS)),
+                                        str(relationship)))
+
+            # unknown_floor: only a complete reviewed override.
             floor_mark = form.get("unknown_floor")
             if floor_mark is not None:
-                ineligible = (isinstance(floor_mark, dict) and set(floor_mark) == {"eligible", "reason"}
-                              and floor_mark.get("eligible") is False
-                              and floor_mark.get("reason") in UNKNOWN_FLOOR_INELIGIBLE_REASONS)
                 override = (isinstance(floor_mark, dict)
                             and set(floor_mark) == {"override", *UNKNOWN_FLOOR_OVERRIDE_FIELDS}
                             and unknown_floor_override(form))
-                if not (ineligible or override):
+                if not override:
                     findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.unknown_floor",
-                                            "invalid_unknown_floor", "ineligible mark or reviewed override",
+                                            "invalid_unknown_floor", "reviewed override",
                                             json.dumps(floor_mark)))
-
-        # Nondisclosure never scores above the plainest real form: a stored
-        # authored unspecified value above lowest eligible - 1 needs a
-        # reviewed override.
-        authored = authored_unknown_form(entry)
-        floor = unknown_floor(entry)
-        if authored and floor and not unknown_floor_override(authored[1]):
-            stored = authored[1].get("bio_score")
-            if isinstance(stored, (int, float)) and stored > floor[0]:
-                findings.append(Finding("error", file, f"{ing_key}.forms.{authored[0]}.bio_score",
-                                        "unspecified_above_floor", f"<= {floor[0]} ({floor[1]} - 1)", str(stored)))
 
             # absorption: optional string.
             abs_val = form.get("absorption")
@@ -819,6 +812,17 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
             di = form.get("dosage_importance")
             if di is not None and not isinstance(di, (int, float, str)):
                 findings.append(Finding("warning", file, f"{ing_key}.forms.{form_name}.dosage_importance", "type_fallback_risk", "number|string", _type_name(di)))
+
+        # Nondisclosure never scores above the plainest real form: a stored
+        # authored unspecified value above lowest eligible - 1 needs a
+        # reviewed override.
+        authored = authored_unknown_form(entry)
+        floor = unknown_floor(entry)
+        if authored and floor and not unknown_floor_override(authored[1]):
+            stored = authored[1].get("bio_score")
+            if isinstance(stored, (int, float)) and stored > floor[0]:
+                findings.append(Finding("error", file, f"{ing_key}.forms.{authored[0]}.bio_score",
+                                        "unspecified_above_floor", f"<= {floor[0]} ({floor[1]} - 1)", str(stored)))
 
 
 def check_allergens(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
