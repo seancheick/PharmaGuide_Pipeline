@@ -170,6 +170,9 @@ PARENT_RELATIONSHIPS = frozenset({
 # verification and never scored as the parent (D-tyrosine is not L-tyrosine;
 # eleuthero is not Panax ginseng).
 IDENTITY_MISMATCH_RELATIONSHIPS = frozenset({"wrong_stereoisomer", "different_compound"})
+# This nutrient in a form that delivers none of it: a matching row is
+# recognized but not scored (no parent Formulation, Dose or Evidence credit).
+NON_DELIVERING_RELATIONSHIPS = PARENT_RELATIONSHIPS - IDENTITY_MISMATCH_RELATIONSHIPS
 # A reviewed override lets an authored unspecified form sit above the floor:
 # ``unknown_floor: {"override": true, "rationale", "reviewed_by", "reviewed_on"}``.
 UNKNOWN_FLOOR_OVERRIDE_FIELDS = ("rationale", "reviewed_by", "reviewed_on")
@@ -197,6 +200,15 @@ def _candidate_forms(parent: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
 def parent_relationship(form: Optional[Dict[str, Any]]) -> Optional[str]:
     """The form's typed relationship to its parent; None for an ordinary form."""
     return (form or {}).get("parent_relationship") or None
+
+
+def delivers_parent_nutrient(canonical_id: Any, form_ids: Any) -> bool:
+    """False when every IQM form a row read is its nutrient in a form that
+    delivers none of it (NON_DELIVERING_RELATIONSHIPS). Unknown or absent
+    forms deliver (nothing to say otherwise)."""
+    forms = ((iqm_reference_entry(canonical_id) or {}).get("forms") or {})
+    relationships = {parent_relationship(forms.get(f)) for f in form_ids or () if f in forms}
+    return not relationships or not relationships <= NON_DELIVERING_RELATIONSHIPS
 
 
 def floor_eligible(form: Dict[str, Any]) -> bool:

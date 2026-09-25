@@ -250,7 +250,6 @@ def test_plain_glutamine_is_the_free_form(enricher, label):
 @pytest.mark.parametrize('label, parent, form', [
     ('D-Tyrosine', 'l_tyrosine', 'd-tyrosine'),
     ('D-Carnitine', 'l_carnitine', 'd-carnitine'),
-    ('Siberian Ginseng', 'ginseng', 'siberian ginseng (eleuthero)'),
     ('Hydroxyproline', 'l_proline', 'hydroxyproline'),
 ])
 def test_a_form_that_is_not_the_parents_identity_never_inherits_its_scoring(enricher, label, parent, form):

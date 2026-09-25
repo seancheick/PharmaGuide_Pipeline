@@ -8,6 +8,10 @@ score -> curation queue):
 5. a named IQM form            -> that form's bio_score
 6. a form the pipeline dropped -> held, queued as pipeline_form_loss; distinct
                                   from label nondisclosure (1)
+
+A held row always reads form_match_status 'unmapped' (the only three values are
+mapped, unmapped and n/a); why it is held is curation-report data (gap_type),
+not a product field.
 """
 import copy
 import json
@@ -135,9 +139,10 @@ def test_a_form_the_pipeline_dropped_is_held_and_not_mistaken_for_nondisclosure(
     finally:
         enricher._match_quality_cache.clear()
     row = rows['Vitamin C']
-    assert row['form_match_status'] == 'lost' and row['lost_forms'] == ['Ascorbic Acid']
+    assert (row['form_match_status'], row['unmapped_forms'], row['bio_score']) == ('unmapped', ['Ascorbic Acid'], None)
+    assert 'lost_forms' not in row
     assert readiness['is_live_ready'] is False
-    assert readiness['identity']['blocking_contract_findings'] == ['pipeline_form_loss']
+    assert readiness['identity']['blocking_contract_findings'] == ['disclosed_form_unmapped']
     assert queue == [('pipeline_form_loss', 'Ascorbic Acid', '4')]
 
 
@@ -168,11 +173,101 @@ def test_the_redundant_match_time_tracker_is_gone():
     assert not hasattr(SupplementEnricherV3, '_track_unmapped_form')
 
 
-def test_a_label_naming_a_different_identity_is_held_for_identity_verification(pipeline):
-    # Eleuthero (Eleutherococcus senticosus) is filed as a form of Panax
-    # ginseng; it must not take ginseng's scoring.
-    _, readiness, rows, queue = _run(pipeline, _label(5, [_row(1, 'Siberian Ginseng', 'Eleuthero', 'botanical')]))
-    row = rows['Siberian Ginseng']
-    assert (row['form_match_status'], row['bio_score']) == ('needs_identity_verification', None)
-    assert readiness['identity']['blocking_contract_findings'] == ['needs_identity_verification']
-    assert queue == [('needs_identity_verification', 'siberian ginseng (eleuthero)', '5')]
+def test_a_label_naming_a_different_identity_is_held_as_unmapped(pipeline):
+    # D-tyrosine (the (2R) enantiomer) is filed under L-tyrosine as a
+    # wrong_stereoisomer; it must not take L-tyrosine's scoring.
+    _, readiness, rows, queue = _run(pipeline, _label(5, [_row(1, 'D-Tyrosine', 'Tyrosine', 'amino acid')]))
+    row = rows['D-Tyrosine']
+    assert (row['form_match_status'], row['unmapped_forms'], row['bio_score']) == ('unmapped', ['d-tyrosine'], None)
+    assert readiness['identity']['blocking_contract_findings'] == ['disclosed_form_unmapped']
+    assert queue == [('identity_mismatch', 'd-tyrosine', '5')]
+
+
+def test_form_match_status_keeps_three_values(pipeline):
+    raws = [_label(6, [_row(1, *VITAMIN_C), _row(2, 'Magnesium', 'Magnesium', 'mineral', ['Magnesium Citrate'])]),
+            _label(7, [_row(1, *VITAMIN_C, forms=['Ascorbyl Zqxate'])]),
+            _label(8, [_row(1, 'D-Tyrosine', 'Tyrosine', 'amino acid')])]
+    statuses = {row['form_match_status'] for raw in raws for row in _run(pipeline, raw)[2].values()}
+    assert statuses == {'mapped', 'unmapped', 'n/a'}
+
+
+def _iron(form, mg=10):
+    row = _row(2, 'Iron', 'Iron', 'mineral', [form])
+    row['quantity'][0]['quantity'] = mg
+    return row
+
+
+def _pillars(pipeline, raw):
+    from score_supplements_v4 import score_product_v4
+    normalizer, enricher = pipeline
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    result = score_product_v4(enriched)
+    return result['quality_score_status'], {k: v.get('score') for k, v in (result['quality_pillars_v4'] or {}).items()}
+
+
+def test_a_form_that_delivers_none_of_its_nutrient_earns_no_dose_or_evidence(pipeline):
+    # IQM parent_relationship not_a_nutrient_source: iron oxide supplies no
+    # iron. A label listing it beside vitamin C scores Dose and Evidence
+    # exactly as vitamin C alone; iron bisglycinate still earns iron's Dose.
+    _, c_only = _pillars(pipeline, _label(46, [_row(1, *VITAMIN_C)]))
+    _, with_oxide = _pillars(pipeline, _label(47, [_row(1, *VITAMIN_C), _iron('Iron Oxide')]))
+    _, with_glycinate = _pillars(pipeline, _label(48, [_row(1, *VITAMIN_C), _iron('Ferrous Bisglycinate')]))
+    assert (with_oxide['dose'], with_oxide['evidence']) == (c_only['dose'], c_only['evidence'])
+    assert with_glycinate['dose'] != c_only['dose']
+
+
+def test_a_form_that_delivers_nothing_keeps_its_own_formulation_only(pipeline):
+    # Formulation reads iron oxide's own low bio_score; Dose and Evidence
+    # give nothing as iron (bisglycinate, for contrast, earns both).
+    _, oxide = _pillars(pipeline, _label(49, [_iron('Iron Oxide')]))
+    _, glycinate = _pillars(pipeline, _label(50, [_iron('Ferrous Bisglycinate')]))
+    assert (oxide['dose'], oxide['evidence']) == (0.0, 0.0)
+    assert 0 < oxide['formulation'] < glycinate['formulation']
+    assert glycinate['dose'] > 0 and glycinate['evidence'] > 0
+
+
+def test_delivery_is_derived_from_parent_relationship_alone():
+    from scoring_reference_resolver import delivers_parent_nutrient
+    assert delivers_parent_nutrient('iron', ['iron oxide']) is False
+    assert delivers_parent_nutrient('vitamin_e', ['oxidized vitamin E']) is False
+    assert delivers_parent_nutrient('vitamin_d', ['vitamin D analogs (non-functional)']) is False
+    assert delivers_parent_nutrient('iron', ['iron oxide', 'iron bisglycinate']) is True
+    assert delivers_parent_nutrient('iron', [None]) is True
+
+
+def test_an_omega3_total_reads_its_disclosed_ethyl_ester(pipeline):
+    # 302644 Doctor's Best Calamari DHA: "Total Omega-3 Fatty Acids" as
+    # "Omega-3 Fatty Acids Ethyl Ester". The generic-omega-3 path once
+    # dropped the form; the printed spelling is now an IQM alias of the form.
+    from score_supplements_v4 import score_product_v4
+    normalizer, enricher = pipeline
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'form_association_302644_raw.json').read_text())
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    row = next(r for r in enriched['ingredient_quality_data']['ingredients'] if r['name'] == 'Total Omega-3 Fatty Acids')
+    assert (row['canonical_id'], row['form_id'], row['form_match_status']) == ('fish_oil', 'ethyl ester', 'mapped')
+    assert score_product_v4(enriched)['quality_score_status'] == 'scored'
+
+
+@pytest.mark.parametrize('label', ['Siberian Ginseng', 'Eleuthero Root Extract', 'Eleutherococcus senticosus root Extract'])
+def test_eleuthero_is_its_own_identity_not_panax_ginseng(pipeline, label):
+    _, enricher = pipeline
+    match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'])
+    assert (match['canonical_id'], match['form_id']) == ('siberian_ginseng', 'eleuthero (Eleutherococcus senticosus)')
+
+
+@pytest.mark.parametrize('label', ['CurcuWIN Turmeric root extract', 'CurcuWIN Turmeric extract'])
+def test_curcuwin_reads_its_own_form(pipeline, label):
+    _, enricher = pipeline
+    match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],
+                                        cleaned_forms=[{'name': 'Curcuminoids'}], cleaner_canonical_id='turmeric')
+    assert (match['canonical_id'], match['form_id']) == ('curcumin', 'curcuwin')
+
+
+def test_epa_under_an_omega3_total_is_a_component_not_a_form(pipeline):
+    # IQM fish_oil relationships: contains epa, dha. "Omega-3 Fatty Acids"
+    # with an EPA line is read as fish oil with a component, not an EPA form.
+    _, enricher = pipeline
+    form_data = {'raw_form_text': 'Eicosapentaenoic Acid', 'dsld_category': 'fatty acid',
+                 'dsld_ingredient_group': 'EPA (Eicosapentaenoic Acid)'}
+    assert enricher._form_token_context(form_data, {'fish oil'}, 'fish_oil', 'Omega-3 Fatty Acids') == 'component'
+    assert enricher._form_token_context(form_data, {'vitamin c'}, 'vitamin_c', 'Vitamin C') is None

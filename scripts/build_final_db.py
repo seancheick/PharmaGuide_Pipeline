@@ -420,10 +420,6 @@ def _label_form_repeats_identity(
     )
 
 
-# Enricher form statuses that hold a product: the export reports them unmapped.
-_UNRESOLVED_FORM_STATUSES = frozenset({"unmapped", "lost", "needs_identity_verification"})
-
-
 def _compute_form_contract(
     ingredient: Dict[str, Any], match: Dict[str, Any]
 ) -> Dict[str, Any]:
@@ -435,9 +431,7 @@ def _compute_form_contract(
       display_form_label  user-visible form, or None when truly unknown
       form_status         'known' | 'unknown'
       form_match_status   'mapped' | 'unmapped' | 'n/a', from the enricher's
-                          row reading (its held states 'lost' and
-                          'needs_identity_verification' export as
-                          'unmapped'); the export never re-matches IQM aliases.
+                          row reading; the export never re-matches IQM aliases.
                           A disclosed label form is 'mapped' unless the
                           enricher found it unmapped (it accepted the form as
                           an IQM form, a generic descriptor or context).
@@ -475,13 +469,13 @@ def _compute_form_contract(
         return {
             "display_form_label": label_form,
             "form_status": "known",
-            "form_match_status": "unmapped" if form_match_status in _UNRESOLVED_FORM_STATUSES else "mapped",
+            "form_match_status": "unmapped" if form_match_status == "unmapped" else "mapped",
         }
     if matched_is_real:
         return {
             "display_form_label": _prettify_matched_form(matched),
             "form_status": "known",
-            "form_match_status": "unmapped" if form_match_status in _UNRESOLVED_FORM_STATUSES else form_match_status,
+            "form_match_status": form_match_status,
         }
     return {
         "display_form_label": None,

@@ -81,6 +81,7 @@ from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
     is_scorable,
+    nutrient_delivering_rows,
     _as_float,
     _norm_text,
     _safe_dict,
@@ -257,7 +258,7 @@ def _score_no_reference_quantified_dose(product: Dict[str, Any]) -> tuple[float,
     also should not make the dose dimension disappear. Cleaner/enricher-owned
     product_scoring_evidence is used for aggregate/blend/activity evidence.
     """
-    for ingredient in get_active_ingredients(product):
+    for ingredient in nutrient_delivering_rows(product):
         if not isinstance(ingredient, dict):
             continue
         if ingredient.get("is_parent_total"):
@@ -309,7 +310,7 @@ def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
         assessed.update(
             _norm_text(row.get(key)) for key in ("canonical_id", "nutrient") if row.get(key)
         )
-    active_rows = get_active_ingredients(product)
+    active_rows = nutrient_delivering_rows(product)
     for primary in mass_primary_label_actives(product, active_rows):
         # An assessment is source-linked: it may sit on the primary itself, on
         # a projection of the same label row, or on a constituent the row

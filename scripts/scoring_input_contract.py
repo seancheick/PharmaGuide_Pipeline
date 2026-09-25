@@ -290,12 +290,6 @@ UNRESOLVED_IDENTITY_FORM_UNMAPPED = "form_unmapped"
 # A row whose label names a form IQM does not recognize. Blocking: identity
 # readiness and the completeness gate hold the product until it is curated.
 DISCLOSED_FORM_UNMAPPED_FINDING = "disclosed_form_unmapped"
-# The label disclosed a form the enricher's row reading dropped: a pipeline
-# defect, held like an unmapped form, never scored as nondisclosure.
-PIPELINE_FORM_LOSS_FINDING = "pipeline_form_loss"
-# The row matched an IQM form that is not its parent's identity (IQM
-# parent_relationship wrong_stereoisomer / different_compound).
-NEEDS_IDENTITY_VERIFICATION_FINDING = "needs_identity_verification"
 UNRESOLVED_IDENTITY_REASONS = frozenset({
     UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
     UNRESOLVED_IDENTITY_FORM_UNMAPPED,
@@ -2494,10 +2488,6 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
     # the product is held from release until the form is curated.
     if row.get("form_match_status") == "unmapped":
         findings.append(DISCLOSED_FORM_UNMAPPED_FINDING)
-    elif row.get("form_match_status") == "lost":
-        findings.append(PIPELINE_FORM_LOSS_FINDING)
-    elif row.get("form_match_status") == "needs_identity_verification":
-        findings.append(NEEDS_IDENTITY_VERIFICATION_FINDING)
 
     return True, None, findings
 

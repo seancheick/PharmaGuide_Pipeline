@@ -491,7 +491,8 @@ def _render_form_curation(data, dataset_scope):
         "does not recognize; curate it through /data-fix (alias to an existing form, a new verified "
         "form or parent, a recognized non-scorable ingredient, a typed source/component relationship, "
         "or a rejected compound). pipeline_form_loss: a disclosed form the enricher dropped; repair "
-        "the pipeline. Sorted by held products; click a column to re-sort."
+        "the pipeline. identity_mismatch: an IQM form that is not the parent's identity; move it to "
+        "its owner. Sorted by held products; click a column to re-sort."
     )
     runs = {name: str(path) for name, path in _scoped(getattr(data, "report_dirs", {}), dataset_scope).items()}
     form_reports = _scoped(data.form_fallback_reports, dataset_scope)

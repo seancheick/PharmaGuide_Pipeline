@@ -19,6 +19,7 @@ from scoring_input_contract import (
     get_scoring_ingredients,
     get_source_score_eligible_active_rows,
 )
+from scoring_reference_resolver import delivers_parent_nutrient
 from serving_frequency import resolve_daily_serving_range
 
 
@@ -93,6 +94,22 @@ def get_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     handled by the adapter only when explicitly requested elsewhere.
     """
     return list(get_scoring_ingredients(product or {}, strict=True).rows)
+
+
+def nutrient_delivering_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Active rows that deliver their nutrient, for Dose and Evidence. A row
+    whose every IQM form is the nutrient in a form that delivers none of it
+    (IQM parent_relationship, via scoring_reference_resolver: iron oxide, a
+    degradation product, a non-functional analog) keeps its Formulation
+    reading and its safety checks but earns no Dose or Evidence as the
+    nutrient."""
+    return [
+        row for row in get_active_ingredients(product)
+        if not isinstance(row, dict) or delivers_parent_nutrient(
+            row.get("canonical_id"),
+            [row.get("form_id")] + [m.get("form_key") for m in row.get("matched_forms") or [] if isinstance(m, dict)],
+        )
+    ]
 
 
 def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:

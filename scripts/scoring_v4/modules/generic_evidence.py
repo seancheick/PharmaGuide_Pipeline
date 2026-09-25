@@ -34,6 +34,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
     daily_serving_multiplier,
     get_active_ingredients,
+    nutrient_delivering_rows,
     has_usable_individual_dose,
     is_scorable,
 )
@@ -598,7 +599,7 @@ def _recover_verified_product_level_matches(
         if isinstance(entry, dict)
     }
     recovered: List[Dict[str, Any]] = []
-    for row in get_active_ingredients(product):
+    for row in nutrient_delivering_rows(product):
         if not isinstance(row, dict):
             continue
         if (row.get("evidence_type") or "") != "blend_anchor_mass":
@@ -674,7 +675,7 @@ def _recover_verified_primary_ingredient_matches(
     threshold = PRIMARY_MASS_FRACTION * max_mass
 
     recovered: List[Dict[str, Any]] = []
-    for row in get_active_ingredients(product):
+    for row in nutrient_delivering_rows(product):
         if not isinstance(row, dict):
             continue
         if _is_nutrition_fact_declaration(row):
@@ -961,7 +962,7 @@ def _existing_match_identity_keys(matches: List[Any]) -> set[str]:
 def _is_clear_primary_recovery_row(product: Dict[str, Any], row_keys: set[str]) -> bool:
     scorable = [
         ing
-        for ing in get_active_ingredients(product)
+        for ing in nutrient_delivering_rows(product)
         if isinstance(ing, dict) and is_scorable(ing)
     ]
     if len(scorable) == 1:
@@ -1106,7 +1107,7 @@ def _competing_active_rows(
     Also removes lineage-owned product_level_evidence totals via primary_mass_competitor_rows.
     """
     if rows is None:
-        rows = get_active_ingredients(product)
+        rows = nutrient_delivering_rows(product)
     raw_competitors = primary_mass_competitor_rows(product, rows)
     competing = []
     for row in raw_competitors:
@@ -1138,7 +1139,7 @@ def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float
     row is indexed at its real mass; only competitors set the maximum."""
     index: Dict[str, float] = {}
     max_mass = 0.0
-    rows = get_active_ingredients(product)
+    rows = nutrient_delivering_rows(product)
     # Projected rows are rebuilt on every contract call, so the competitor
     # set must be derived from this same row list.
     competitors = {id(row) for row in _competing_active_rows(product, rows)}
@@ -1196,7 +1197,7 @@ def _unambiguous_non_structural_source_ref(
         return None
 
     anchors = set()
-    for row in get_active_ingredients(product):
+    for row in nutrient_delivering_rows(product):
         if not isinstance(row, dict):
             continue
         if _norm_text(row.get("scoring_input_kind")) == "product_level_evidence":
@@ -1217,7 +1218,7 @@ def _active_canonical_index(product: Dict[str, Any]) -> Dict[str, str]:
     'vitamin d3'); this lets it be tied back to the active's clean canonical_id
     ('psyllium', 'vitamin_d') for the consensus gold-standard allowlist check."""
     out: Dict[str, str] = {}
-    for row in get_active_ingredients(product):
+    for row in nutrient_delivering_rows(product):
         if not isinstance(row, dict):
             continue
         cid_raw = str(row.get("canonical_id") or "").strip().lower()
@@ -1444,7 +1445,7 @@ def _enrollment_multiplier(enrollment: float) -> float:
 def _dose_map(product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
     doses: Dict[str, Tuple[float, str]] = {}
     daily_multiplier = _daily_serving_multiplier(product)
-    for ing in get_active_ingredients(product):
+    for ing in nutrient_delivering_rows(product):
         quantity = _as_float(ing.get("quantity"), None)
         if quantity is None:
             continue

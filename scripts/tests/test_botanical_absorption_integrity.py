@@ -41,7 +41,7 @@ LOW_F_BOTANICAL_FORMS = [
     # 95% OPC string mentions "monomers ~10-30%" — allow monomer callout
     ('grape_seed_extract', 'grape seed extract (95% proanthocyanidins)', 30),
     # Saponin / triterpene glycoside extracts — parent saponins minimal plasma
-    ('ginseng', 'siberian ginseng (eleuthero)',                       5),
+    ('siberian_ginseng', 'eleuthero (Eleutherococcus senticosus)',   5),
     # Panax string cites "Rg1 ~18%" (specific ginsenoside F) — allow
     ('ginseng', 'panax ginseng extract (4–7% ginsenosides)',          20),
     ('ginseng', 'american ginseng (panax quinquefolius)',             10),
@@ -131,7 +131,7 @@ def test_struct_values_consistent_with_botanical_evidence(iqm):
         ('pine_bark_extract', 'pycnogenol'):                          0.15,
         ('grape_seed_extract', 'whole grape extract'):                0.15,
         ('grape_seed_extract', 'grape seed extract (95% proanthocyanidins)'): 0.15,
-        ('ginseng', 'siberian ginseng (eleuthero)'):                  0.05,
+        ('siberian_ginseng', 'eleuthero (Eleutherococcus senticosus)'): 0.05,
         ('ginseng', 'panax ginseng extract (4–7% ginsenosides)'):     0.10,
         ('ginseng', 'american ginseng (panax quinquefolius)'):        0.10,
         ('gotu_kola', 'gotu kola aerial extract'):                    0.10,

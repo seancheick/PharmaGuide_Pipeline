@@ -31,9 +31,9 @@
       }
     },
     "statistics": {
-      "total_parents": 652,
+      "total_parents": 653,
       "total_forms": 1444,
-      "total_form_aliases": 12121,
+      "total_form_aliases": 12119,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -1749,7 +1749,11 @@
           "2026-09-25 form contract closeout: 38 forms marked unknown_floor ineligible (analogs, degradation products, D-tyrosine and D-carnitine, iron oxide, six different compounds); 152 authored unspecified values set to their floor, 15 kept as documented overrides of earlier clinician or audit locks; 31 form-inventing parent-name aliases on 18 parents moved off named forms (HMB 12, CLA 2, MCT 2; one each: L. acidophilus LA-14, flaxseed, bacopa, Sambucol, lycopene, white willow, evening primrose, flower pollen, magnolia, pea protein, Irish moss, PE, algae oil, olive fruit, policosanol); 3-hydroxy-3-methylbutyric acid moved to HMB free acid; BCAA '(standard)' renamed '(unspecified)'; parent alias 'Indian pomegranate'.",
           "2026-09-25: 'l-glutamine hydrochloride' and 'l-glutamine hcl' removed from the free l-glutamine form. PubChem lists the hydrochloride as its own salt (CID 57364844, C5H11ClN2O3; free L-glutamine is CID 5961); GSRS has no UNII for it and no bio_score evidence exists, so a label naming it is a disclosed unmapped form, not free glutamine. No corpus label named it.",
           "2026-09-25: the 38 unknown_floor {eligible: false, reason} marks became the typed form field parent_relationship (same values; one owner for floor eligibility and identity). A row matching a wrong_stereoisomer or different_compound form is held for identity verification instead of inheriting the parent's scoring.",
-          "2026-09-25: n-acetyl-l-carnosine is an ordinary L-carnosine form again, as the 2026-06-22 live-verified bioactive review placed it (PubChem 9903482, conservative bio 6); the different_compound mark contradicted that lock. 'l-carnosine (unspecified)' renamed 'l-carnosine (free form)': its aliases (l-carnosine, carnosine, beta-alanyl-l-histidine) name the free dipeptide, a disclosed compound, as with l-glutamine; bio 9 unchanged. Carnosine's undisclosed value is now derived (NALC 6 - 1 = 5) and names no form."
+          "2026-09-25: n-acetyl-l-carnosine is an ordinary L-carnosine form again, as the 2026-06-22 live-verified bioactive review placed it (PubChem 9903482, conservative bio 6); the different_compound mark contradicted that lock. 'l-carnosine (unspecified)' renamed 'l-carnosine (free form)': its aliases (l-carnosine, carnosine, beta-alanyl-l-histidine) name the free dipeptide, a disclosed compound, as with l-glutamine; bio 9 unchanged. Carnosine's undisclosed value is now derived (NALC 6 - 1 = 5) and names no form.",
+          "2026-09-25: eleuthero moved off Panax ginseng. Its form (bio 7, aliases, notes unchanged) is now 'eleuthero (Eleutherococcus senticosus)' under siberian_ginseng, the canonical id the standardized_botanicals identity already owns (GSRS ZQH6VH092Z ELEUTHERO, CUI C1035215), as for the 69 other botanicals with an identity and an IQM form record. Eleuthero rows no longer take Panax ginseng's identity, evidence or dosing.",
+          "2026-09-25: the four CurcuWIN aliases (curcuwin turmeric extract curcuminoids, curcuwin turmeric extract, curcuwin turmeric root extract curcuminoids, curcuwin turmeric root extract 20% curcuminoids) (plus the printed label 'curcuwin turmeric root extract') moved from turmeric's 95%-curcuminoid form to the existing curcumin 'curcuwin' form (OmniActive CurcuWIN, a carrier formulation standardized to ~20% curcuminoids, not a 95% extract).",
+          "2026-09-25: the ALCAR form's arginate aliases (acetyl-l-carnitine arginate dihydrochloride, acetyl-l-carnitine arginate, acetyl l-carnitine arginate, alcar arginate) removed. other_ingredients OI_ACETYL_L_CARNITINE_ARGINATE (2026-07-13, UNII PIY2W03CO6) owns the arginate salt as identity-only with no form or dose credit; the IQM aliases only failed to match before because of hyphenation.",
+          "2026-09-25: fish oil 'ethyl ester' form gains the printed alias 'omega-3 fatty acids ethyl ester' (302644, Doctor's Best Calamari DHA; the form already carries the singular and plural variants). fish_oil relationships: contains epa, dha, so an EPA or DHA line under an omega-3 total is read as a component, not as its form (179514)."
         ],
         "regression_tests": "scripts/tests/test_iqm_retired_fields.py, scripts/tests/test_unknown_form_quality.py, scripts/tests/test_iqm_unspecified_form_floor.py"
       }
@@ -1802,7 +1806,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 652,
+    "total_entries": 653,
     "total_ingredients": 13882,
     "data_quality": {
       "review_status": "stub"
@@ -16841,7 +16845,12 @@
         "aliases": [
           "curcuwin curcumin",
           "ultrasol curcumin",
-          "omniactive curcuwin"
+          "omniactive curcuwin",
+          "curcuwin turmeric extract curcuminoids",
+          "curcuwin turmeric extract",
+          "curcuwin turmeric root extract curcuminoids",
+          "curcuwin turmeric root extract 20% curcuminoids",
+          "curcuwin turmeric root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19117,10 +19126,6 @@
           "Acetyl L Carnitine Hydrochloride",
           "Acetyl-L-Carnitine Chloride",
           "ALCAR Chloride",
-          "acetyl-l-carnitine arginate dihydrochloride",
-          "acetyl-l-carnitine arginate",
-          "acetyl l-carnitine arginate",
-          "alcar arginate",
           "acetyl-l-carnitine",
           "alcar"
         ],
@@ -26081,56 +26086,6 @@
           "quality": "poor"
         }
       },
-      "siberian ginseng (eleuthero)": {
-        "bio_score": 7,
-        "absorption": "very poor (<1% parent eleutheroside; rat PK only)",
-        "consumer_note": "Eleuthero is Eleutherococcus senticosus, not a Panax ginseng species. It contains eleutherosides rather than the ginsenosides found in Panax ginseng.",
-        "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
-        },
-        "notes": "NOT true ginseng \u2014 Eleutherococcus senticosus, different genus, contains NO ginsenosides. Active compounds: eleutherosides B (syringin) and E (syringaresinol). Very poor oral bioavailability \u2014 eleutheroside K F = 0.30%. Adaptogenic effects well-documented but PK data is limited compared to Panax species (PMID:18718179 for comparison context). PMID:23369882 (Ma 2013) rat oral vs IV PK of eleutheroside B/E; no human PK data for eleutherosides; sub-1% F consistent with saponin class absorption biology.",
-        "aliases": [
-          "siberian ginseng",
-          "eleuthero",
-          "eleutherococcus senticosus",
-          "adaptogenic shrub",
-          "siberian ginseng extract",
-          "eleuthero root",
-          "siberian adaptogen",
-          "eleutherococcus extract",
-          "siberian eleuthero",
-          "siberian root",
-          "eleutherococcus senticosus root extract",
-          "eleuthero ginseng",
-          "eleutherococcus senticosus 0.8% extract",
-          "siberian eleuthero root extract",
-          "eleutherosides",
-          "eleutherosides B and E",
-          "eleutheroside B",
-          "eleutheroside E",
-          "syringin eleutheroside B",
-          "eleuthero extract",
-          "standardized Eleuthero extract",
-          "eleutherococcus senticosus extract",
-          "eleuthero root extract",
-          "siberian ginseng root extract",
-          "siberian eleutherococcus",
-          "siberian root & rhizome powder",
-          "siberian root and rhizome powder",
-          "eleuthero root bark extract",
-          "eleuthero root bark 50:1 extract",
-          "eleuthero root bark"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.003,
-          "range_low": 0.001,
-          "range_high": 0.01,
-          "quality": "poor"
-        },
-        "parent_relationship": "different_compound"
-      },
       "ginseng (unspecified)": {
         "bio_score": 8,
         "absorption": "low (ginsenoside biotransformation-dependent)",
@@ -26204,6 +26159,83 @@
       "asian ginseng root",
       "asian ginseng"
     ]
+  },
+  "siberian_ginseng": {
+    "standard_name": "Siberian Ginseng (Eleuthero)",
+    "category": "herbs",
+    "cui": "C1035215",
+    "rxcui": "1368902",
+    "forms": {
+      "eleuthero (Eleutherococcus senticosus)": {
+        "bio_score": 7,
+        "absorption": "very poor (<1% parent eleutheroside; rat PK only)",
+        "consumer_note": "Eleuthero is Eleutherococcus senticosus, not a Panax ginseng species. It contains eleutherosides rather than the ginsenosides found in Panax ginseng.",
+        "consumer_note_review": {
+          "by": "Product owner approval",
+          "date": "2026-08-08"
+        },
+        "notes": "NOT true ginseng \u2014 Eleutherococcus senticosus, different genus, contains NO ginsenosides. Active compounds: eleutherosides B (syringin) and E (syringaresinol). Very poor oral bioavailability \u2014 eleutheroside K F = 0.30%. Adaptogenic effects well-documented but PK data is limited compared to Panax species (PMID:18718179 for comparison context). PMID:23369882 (Ma 2013) rat oral vs IV PK of eleutheroside B/E; no human PK data for eleutherosides; sub-1% F consistent with saponin class absorption biology.",
+        "aliases": [
+          "siberian ginseng",
+          "eleuthero",
+          "eleutherococcus senticosus",
+          "adaptogenic shrub",
+          "siberian ginseng extract",
+          "eleuthero root",
+          "siberian adaptogen",
+          "eleutherococcus extract",
+          "siberian eleuthero",
+          "siberian root",
+          "eleutherococcus senticosus root extract",
+          "eleuthero ginseng",
+          "eleutherococcus senticosus 0.8% extract",
+          "siberian eleuthero root extract",
+          "eleutherosides",
+          "eleutherosides B and E",
+          "eleutheroside B",
+          "eleutheroside E",
+          "syringin eleutheroside B",
+          "eleuthero extract",
+          "standardized Eleuthero extract",
+          "eleutherococcus senticosus extract",
+          "eleuthero root extract",
+          "siberian ginseng root extract",
+          "siberian eleutherococcus",
+          "siberian root & rhizome powder",
+          "siberian root and rhizome powder",
+          "eleuthero root bark extract",
+          "eleuthero root bark 50:1 extract",
+          "eleuthero root bark"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.003,
+          "range_low": 0.001,
+          "range_high": 0.01,
+          "quality": "poor"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-09-25",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "unii": "ZQH6VH092Z"
+    },
+    "aliases": [],
+    "notes": "Form-quality record for the standardized_botanicals identity siberian_ginseng (Eleutherococcus senticosus, Araliaceae; GSRS ZQH6VH092Z ELEUTHERO). Not Panax: moved 2026-09-25 from the ginseng parent, where it inherited Panax ginseng scoring. RxNorm IN 1368902 \"eleuthero preparation\" (RxNav 2026-09-25); IN 319812 \"Siberian ginseng preparation\" also exists."
   },
   "echinacea": {
     "standard_name": "Echinacea",
@@ -26443,12 +26475,8 @@
           "organic turmeric extract",
           "organic turmeric extract curcuminoids",
           "turmeric complex curcuma longa rhizome extract",
-          "curcuwin turmeric extract curcuminoids",
-          "curcuwin turmeric extract",
           "turmeric root extract curcumin",
           "turmeric root extract 20% curcuminoids",
-          "curcuwin turmeric root extract curcuminoids",
-          "curcuwin turmeric root extract 20% curcuminoids",
           "turmeric root and rhizome extract curcuminoids",
           "turmeric root extract (curcuma longa) blend curcuminoids",
           "turmeric rhizome extract curcumin",
@@ -48514,7 +48542,8 @@
           "omega-3 concentrate ethyl esters",
           "fish oil ethyl ester concentrate",
           "omega-3 acid ethyl esters",
-          "Ester-Omega Fish Oil Ethyl Ester"
+          "Ester-Omega Fish Oil Ethyl Ester",
+          "omega-3 fatty acids ethyl ester"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48767,7 +48796,19 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "relationships": [
+      {
+        "type": "contains",
+        "target_id": "epa",
+        "notes": "EPA is a component of fish oil, not its form"
+      },
+      {
+        "type": "contains",
+        "target_id": "dha",
+        "notes": "DHA is a component of fish oil, not its form"
+      }
+    ]
   },
   "propolis": {
     "standard_name": "Propolis",

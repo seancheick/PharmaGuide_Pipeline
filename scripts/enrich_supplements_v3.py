@@ -113,6 +113,7 @@ from scoring_input_contract import (
 )
 from scoring_reference_resolver import (
     IDENTITY_MISMATCH_RELATIONSHIPS,
+    delivers_parent_nutrient,
     UNKNOWN_FORM_NAME,
     authored_unknown_form,
     parent_relationship,
@@ -4777,11 +4778,13 @@ class SupplementEnricherV3:
             )
             if match_result is None:
                 if self._is_generic_unspecified_omega3(ingredient):
+                    # A generic omega-3 total is fish oil; its disclosed forms
+                    # (ethyl ester, triglyceride) are read under fish oil.
                     match_result = self._match_quality_map(
                         "fish oil",
                         "fish oil",
                         quality_map,
-                        cleaned_forms=[],
+                        cleaned_forms=ingredient_forms,
                         cleaner_canonical_id="fish_oil",
                     )
                 else:
@@ -7341,19 +7344,18 @@ class SupplementEnricherV3:
         entry.setdefault("recognition_reason", None)
         entry.setdefault("form_id", None)
         entry.setdefault("form_source", None)
-        # form_match_status: mapped | n/a (scored) or unmapped | lost |
-        # needs_identity_verification (held; queued by _record_form_curation_gaps).
+        # form_match_status: mapped | n/a (scored) | unmapped (held; the
+        # curation report derives why: _form_gap_reason).
         entry["form_match_status"] = self._row_form_match_status(entry, match_result)
-        if self._identity_mismatch_forms(entry):
-            # The matched IQM form is not this parent's identity (a wrong
-            # stereoisomer or a different compound): no parent scoring.
-            entry["form_match_status"] = "needs_identity_verification"
+        # A matched IQM form that is not this parent's identity, or a disclosed
+        # form this row's reading dropped, is unresolved like any other.
+        unresolved = self._identity_mismatch_forms(entry)
+        if not unresolved and entry["form_match_status"] == "n/a" and entry.get("role_classification") == "active_scorable":
+            unresolved = self._dropped_label_forms(ing_name, entry.get("canonical_id"), ingredient.get("forms"))
+        if unresolved:
+            entry["form_match_status"] = "unmapped"
+            entry["unmapped_forms"] = unresolved
             entry["bio_score"] = None
-        if entry["form_match_status"] == "n/a" and entry.get("role_classification") == "active_scorable":
-            lost_forms = self._dropped_label_forms(ing_name, entry.get("canonical_id"), ingredient.get("forms"))
-            if lost_forms:
-                entry["form_match_status"] = "lost"
-                entry["lost_forms"] = lost_forms
         entry.setdefault("delivers_markers", [])
         entry.setdefault("fallback_class", None)
         entry.setdefault("fallback_reason", None)
@@ -8099,7 +8101,7 @@ class SupplementEnricherV3:
                     row_label=form_info.get('base_name') or '')
                 if matched_unspecified or context:
                     generic_form_tokens.append(raw_form_text)
-                    if (restates_parent or context in ('restatement', 'marker', 'placeholder', 'source')
+                    if (restates_parent or context in ('restatement', 'marker', 'placeholder', 'source', 'component')
                             or self._norm_form_name(raw_form_text) in parent_names):
                         non_form_tokens.append(raw_form_text)
                 else:
@@ -8691,8 +8693,8 @@ class SupplementEnricherV3:
         """Label form tokens the form classifier reads (a named IQM form, or a
         form IQM lacks) that a row read as 'n/a' does not carry. Some match
         paths never consult the cleaner's forms; when one of them wins, the
-        disclosed form is lost by the pipeline, which is a defect to repair
-        (status 'lost', product held), never label nondisclosure. Tokens the
+        disclosed form is lost by the pipeline, a defect to repair (the row
+        reads 'unmapped' and the product is held), never label nondisclosure. Tokens the
         classifier treats as descriptors (source, marker, preparation,
         restatement) or IQM aliases to the unspecified form are not lost."""
         quality_map = self.databases.get('ingredient_quality_map') or {}
@@ -8835,6 +8837,9 @@ class SupplementEnricherV3:
           a yeast culture, a mineral-source claim).
         - ``preparation``: only preparation words ("Powder").
         - ``placeholder``: a DSLD placeholder (category TBD) or culture source.
+        - ``component``: an IQM identity the row's parent records under
+          ``relationships`` as ``contains`` (EPA or DHA under a fish oil /
+          omega-3 total).
         """
         raw = form_data.get('raw_form_text', '')
         token = self._norm_form_name(raw)
@@ -8856,6 +8861,11 @@ class SupplementEnricherV3:
         source_text = self._normalize_source_token_text(raw)
         if token in self._standardization_marker_names() or self._is_standardization_marker_token(source_text):
             return 'marker'
+        contains = {rel.get('target_id') for rel in
+                    ((self.databases.get('ingredient_quality_map') or {}).get(parent_key) or {}).get('relationships') or []
+                    if isinstance(rel, dict) and rel.get('type') == 'contains'}
+        if contains and any(entry[0] in contains for entry in self._iqm_norm_index.get(self._normalize_text(raw), [])):
+            return 'component'
         words = token.split()
         if words and all(word in _PREPARATION_WORDS for word in words):
             return 'preparation'
@@ -14712,6 +14722,17 @@ class SupplementEnricherV3:
                 or ""
             ).strip().lower()
             quality_matches = _quality_rows_for_ingredient(ingredient)
+            if quality_matches and not any(
+                delivers_parent_nutrient(
+                    row.get("canonical_id"),
+                    [row.get("form_id")] + [m.get("form_key") for m in row.get("matched_forms") or []
+                                            if isinstance(m, dict)],
+                )
+                for row in quality_matches
+            ):
+                # IQM parent_relationship: this nutrient in a form that
+                # delivers none of it earns no research as the nutrient.
+                continue
             candidate_names = [
                 ing_name,
                 std_name,
@@ -16177,15 +16198,13 @@ class SupplementEnricherV3:
             return {}
         reading = {'canonical_id': canonical, 'form_id': match.get('form_id'),
                    'unmapped_forms': match.get('unmapped_forms'), 'matched_forms': match.get('matched_forms')}
-        status = self._row_form_match_status(reading, match)
-        mismatch = bool(self._identity_mismatch_forms(reading))
-        if mismatch:
-            status = 'needs_identity_verification'
+        mismatch = self._identity_mismatch_forms(reading)
+        status = 'unmapped' if mismatch else self._row_form_match_status(reading, match)
         return {
             'bio_score': None if mismatch else match.get('bio_score'),
             'matched_form': match.get('form_name'),
             'form_match_status': status,
-            'unmapped_forms': match.get('unmapped_forms') or [],
+            'unmapped_forms': mismatch or match.get('unmapped_forms') or [],
         }
 
     def _collect_product_scoring_evidence(self, enriched: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -21477,6 +21496,16 @@ class SupplementEnricherV3:
                     adequacy_dict["is_servings_estimated"] = servings_estimated
                     if dose_data_quality:
                         adequacy_dict["dose_data_quality"] = dose_data_quality
+                    form_ids = [quality_identity.get("form_id")] + [
+                        m.get("form_key") for m in quality_identity.get("matched_forms") or []
+                        if isinstance(m, dict)
+                    ]
+                    if not delivers_parent_nutrient(resolved_canonical_id, form_ids):
+                        # IQM parent_relationship: this nutrient in a form that
+                        # delivers none of it (iron oxide, a degradation
+                        # product). No adequacy credit; the UL check stands.
+                        adequacy_dict.update({"pct_rda": None, "scoring_eligible": False,
+                                              "point_recommendation": 0})
                     adequacy_results.append(adequacy_dict)
 
                     dose_assessment = build_dose_assessment(
@@ -22644,13 +22673,11 @@ class SupplementEnricherV3:
             'unique_form_fallback_count': len(entries),
             'held_product_count': len({fb['dsld_id'] for fb in self._form_fallback_details}),
             'note': (
-                'Label forms that hold products. disclosed_form_unmapped: a named '
-                'form IQM does not recognize; the row keeps its ingredient '
-                'identity, receives no form quality, and the product is held '
-                'until the form is curated. pipeline_form_loss: a disclosed form '
-                'the row reading dropped; repair the pipeline. '
-                'needs_identity_verification: the matched IQM form is not the '
-                "parent's identity (wrong stereoisomer or different compound). "
+                'Unmapped form tokens that hold products (form_match_status '
+                "'unmapped'). gap_type disclosed_form_unmapped: a named form IQM "
+                'does not recognize. pipeline_form_loss: a named IQM form the row '
+                'reading dropped; repair the pipeline. identity_mismatch: an IQM '
+                "form that is not the parent's identity; move it to its owner. "
                 'Curation is: alias to an '
                 'existing form, a new verified form or parent, a recognized '
                 'non-scorable ingredient, a typed source/component relationship, '
@@ -22659,36 +22686,47 @@ class SupplementEnricherV3:
             'form_fallbacks': entries,
         }
 
+    def _form_gap_reason(self, canonical_id: Optional[str], token: str, name: str) -> str:
+        """Why an unmapped token holds a product (curation report only):
+        ``identity_mismatch`` when it is an IQM form whose parent_relationship
+        says it is not this parent; ``pipeline_form_loss`` when the one form
+        classifier reads it as a named form of this parent (the row's match
+        path dropped it); otherwise ``disclosed_form_unmapped``."""
+        forms = ((self.databases.get('ingredient_quality_map') or {}).get(canonical_id) or {}).get('forms') or {}
+        if token in forms and parent_relationship(forms[token]) in IDENTITY_MISMATCH_RELATIONSHIPS:
+            return 'identity_mismatch'
+        if self._form_reads_as_named(name, canonical_id, token):
+            return 'pipeline_form_loss'
+        return 'disclosed_form_unmapped'
+
+    def _form_reads_as_named(self, name: str, canonical_id: Optional[str], token: str) -> bool:
+        quality_map = self.databases.get('ingredient_quality_map') or {}
+        form_info = self._build_form_info_from_cleaned(name, [{'name': token}])
+        if not (form_info and form_info.get('form_extraction_success')):
+            return False
+        result = self._match_multi_form(form_info, quality_map, cleaner_canonical_id=canonical_id)
+        return bool(result and not result.get('all_forms_generic') and not result.get('no_form_matched')
+                    and self._is_specific_form_match(result, quality_map))
+
     def _record_form_curation_gaps(self, enriched: Dict) -> None:
-        """Queue every label form that holds a product, from the product's
-        final state: ingredient rows and product scoring evidence (the anchor
-        path can hold a product on its own). ``disclosed_form_unmapped``: a
-        named form IQM does not recognize (curate it). ``pipeline_form_loss``:
-        a disclosed form the row's reading dropped (repair the pipeline).
-        ``needs_identity_verification``: the matched IQM form is not the
-        parent's identity (move it to its own parent). One entry per
-        (gap, ingredient, token)."""
+        """Queue every unmapped form token that holds a product, from the
+        product's final state: ingredient rows and product scoring evidence
+        (the anchor path can hold a product on its own). The reason
+        (_form_gap_reason) is audit data for curation, not a product field.
+        One entry per (ingredient, token)."""
         rows = [('ingredient_row', r) for r in (enriched.get('ingredient_quality_data') or {}).get('ingredients') or []]
         rows += [('product_evidence', r) for r in enriched.get('product_scoring_evidence') or []]
         seen = set()
         for origin, row in rows:
-            status = row.get('form_match_status') if isinstance(row, dict) else None
-            tokens = {
-                'unmapped': ('disclosed_form_unmapped', lambda: row.get('unmapped_forms')),
-                'lost': ('pipeline_form_loss', lambda: row.get('lost_forms')),
-                'needs_identity_verification': ('needs_identity_verification',
-                                                lambda: self._identity_mismatch_forms(row)),
-            }.get(status)
-            if not tokens:
+            if not isinstance(row, dict) or row.get('form_match_status') != 'unmapped':
                 continue
-            gap_type = tokens[0]
-            for token in tokens[1]() or []:
-                key = (gap_type, row.get('canonical_id'), self._norm_form_name(token))
+            for token in row.get('unmapped_forms') or []:
+                key = (row.get('canonical_id'), self._norm_form_name(token))
                 if key in seen:
                     continue
                 seen.add(key)
                 self._form_fallback_details.append({
-                    'gap_type': gap_type,
+                    'gap_type': self._form_gap_reason(row.get('canonical_id'), token, row.get('name') or ''),
                     'unmapped_form_text': token,
                     'canonical_id': row.get('canonical_id') or '',
                     'parent_name': row.get('standard_name') or '',

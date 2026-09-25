@@ -44,7 +44,7 @@ def test_active_section_headers_are_not_unmapped_actives(label):
         ("PreticX Prebiotic Fiber", "prebiotics", "ingredient_quality_map"),
         ("PreticX Xylooligosacharides", "prebiotics", "ingredient_quality_map"),
         ("FloraGLO Marigold extract", "lutein", "ingredient_quality_map"),
-        ("standardized Eleuthero extract", "ginseng", "ingredient_quality_map"),
+        ("standardized Eleuthero extract", "siberian_ginseng", "ingredient_quality_map"),
         ("Goji Berry Fruit Juice, Powder", "goji_berry", "ingredient_quality_map"),
         ("Lycium (Goji) Berry fruit juice powder", "goji_berry", "ingredient_quality_map"),
         ("Ginkgo Flavone Glycoside", "ginkgo", "ingredient_quality_map"),
