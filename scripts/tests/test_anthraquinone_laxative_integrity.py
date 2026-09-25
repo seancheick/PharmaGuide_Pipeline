@@ -159,3 +159,39 @@ def test_senna_gets_us_caution_and_trace_flavoring_is_not_penalized(enricher):
     # 21 CFR 172.510 lists Senna, Alexandria (Cassia acutifolia) as a natural flavoring substance.
     assert BANNED["WATCH_SENNA"]["inactive_policy"] == "excipient_acceptable"
     assert not _matches(enricher, "Senna", "WATCH_SENNA", section="inactive")
+
+
+# --- Cape aloe interaction rule (EMA/HMPC/625788/2015 sections 4.3-4.6; NCCIH) ---
+
+EMA_ALOE = (
+    "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-"
+    "aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf"
+)
+# Wrong-topic PMIDs found on sibling laxative rules: a cascaroside chromatography
+# paper and a Cassiae Semen (cassia seed) review. They must not spread.
+GHOST_PMID_URLS = {
+    "https://pubmed.ncbi.nlm.nih.gov/32876395/",
+    "https://pubmed.ncbi.nlm.nih.gov/36702448/",
+}
+
+
+def test_cape_aloe_interaction_rule_follows_the_ema_monograph():
+    rules = json.loads((DATA / "ingredient_interaction_rules.json").read_text())["interaction_rules"]
+    matching = [r for r in rules if r.get("subject_ref", {}).get("canonical_id") == "aloe_ferox"]
+    assert len(matching) == 1  # one rule per ingredient
+    rule = matching[0]
+    conditions = {c["condition_id"]: c for c in rule["condition_rules"]}
+    drugs = {d["drug_class_id"]: d for d in rule["drug_class_rules"]}
+    assert set(conditions) == {"pregnancy", "kidney_disease", "liver_disease"}
+    assert set(drugs) == {"cardiac_glycosides", "antiarrhythmics", "thiazide_diuretics"}
+    assert conditions["pregnancy"]["severity"] == "contraindicated"
+    assert drugs["cardiac_glycosides"]["severity"] == "avoid"
+    preg = rule["pregnancy_lactation"]
+    assert preg["pregnancy_category"] == "contraindicated"
+    assert preg["lactation_category"] == "contraindicated"
+    subs = [*rule["condition_rules"], *rule["drug_class_rules"], preg]
+    for sub in subs:
+        assert sub["sources"], sub
+        assert not GHOST_PMID_URLS & set(sub["sources"])
+    assert EMA_ALOE in drugs["cardiac_glycosides"]["sources"]
+    assert EMA_ALOE in preg["sources"]

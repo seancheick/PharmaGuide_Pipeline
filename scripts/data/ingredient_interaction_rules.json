@@ -3,8 +3,8 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.2.4",
-    "last_updated": "2026-09-21",
-    "total_entries": 145,
+    "last_updated": "2026-09-25",
+    "total_entries": 146,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
@@ -19616,6 +19616,255 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_ALOE_FEROX",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "aloe_ferox"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "contraindicated",
+          "evidence_level": "probable",
+          "mechanism": "Cape aloe latex contains anthranoid laxatives, including emodin and aloe-emodin, that showed genotoxic potential in experimental studies, so the EU herbal monograph contraindicates aloes in pregnancy.",
+          "action": "Do not use during pregnancy. Ask your obstetrician about a gentler bulk-forming or osmotic laxative.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf",
+            "https://www.nccih.nih.gov/health/aloe-vera"
+          ],
+          "alert_headline": "Stimulant laxative — not for use in pregnancy",
+          "alert_body": "Aloe latex laxatives are not recommended during pregnancy. If you are pregnant, talk to your obstetrician about a gentler laxative.",
+          "informational_note": "Aloe latex is a stimulant laxative — relevant to anyone pregnant.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "kidney_disease",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Long-term stimulant laxative use can cause water and electrolyte imbalance, including potassium loss, and has been linked to albuminuria and haematuria; people with kidney disorders are more exposed to these shifts.",
+          "action": "Avoid regular use in kidney disease and ask your clinician before any use; electrolytes may need checking.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf"
+          ],
+          "alert_headline": "Electrolyte loss with repeated use",
+          "alert_body": "Repeated use of aloe latex laxatives can upset fluid and electrolyte balance. If you have kidney disease, use them only with your clinician's guidance.",
+          "informational_note": "Aloe latex can shift electrolytes — relevant to people with kidney conditions.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "kidney_disease"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "liver_disease",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Oral aloe is a likely but rare cause of clinically apparent hepatocellular liver injury (LiverTox likelihood B), and chronic overdose of anthranoid laxatives may lead to toxic hepatitis.",
+          "action": "Avoid in liver disease unless your clinician advises otherwise.",
+          "sources": [
+            "https://www.ncbi.nlm.nih.gov/books/NBK548634/",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf"
+          ],
+          "alert_headline": "Rare liver injury reported",
+          "alert_body": "Oral aloe has been linked to rare cases of liver injury. If you have liver disease, talk to your clinician before using it.",
+          "informational_note": "Oral aloe has rare liver-injury reports — relevant to people with liver conditions.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "liver_disease"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "cardiac_glycosides",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Potassium loss from stimulant laxative use potentiates the action of cardiac glycosides such as digoxin and raises the risk of toxicity.",
+          "action": "Avoid combining with digoxin or other cardiac glycosides unless your prescriber advises it; potassium may need monitoring.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf",
+            "https://www.nccih.nih.gov/health/aloe-vera"
+          ],
+          "alert_headline": "Can raise digoxin toxicity risk",
+          "alert_body": "Potassium loss from aloe latex laxatives can make digoxin more toxic. If you take digoxin, talk to your prescriber before using aloe latex.",
+          "informational_note": "Aloe latex can lower potassium — relevant to people taking digoxin or other cardiac glycosides.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "cardiac_glycosides"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "drug_class_id": "antiarrhythmics",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Laxative-induced hypokalaemia interacts with antiarrhythmic medicines, and low potassium can raise the risk of arrhythmia.",
+          "action": "Ask your prescriber before combining with an antiarrhythmic medicine.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf"
+          ],
+          "alert_headline": "Low potassium can affect heart-rhythm medicines",
+          "alert_body": "Aloe latex laxatives can lower potassium, which matters with heart-rhythm medicines. Talk to your prescriber before using them together.",
+          "informational_note": "Aloe latex can lower potassium — relevant to people on antiarrhythmic medicines.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antiarrhythmics"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "drug_class_id": "thiazide_diuretics",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Diuretics and stimulant laxatives both promote potassium loss, so using them together may enhance hypokalaemia.",
+          "action": "Ask your prescriber before combining with a diuretic; potassium may need checking.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf"
+          ],
+          "alert_headline": "Extra potassium loss with diuretics",
+          "alert_body": "Aloe latex laxatives and diuretics both lower potassium. Talk to your prescriber before using them together.",
+          "informational_note": "Aloe latex can lower potassium — relevant to people on thiazide diuretics.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "thiazide_diuretics"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "sources": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf",
+          "https://www.nccih.nih.gov/health/aloe-vera"
+        ],
+        "pregnancy_category": "contraindicated",
+        "lactation_category": "contraindicated",
+        "evidence_level": "probable",
+        "notes": "Pregnancy: contraindicated by the EU herbal monograph because experimental data show a genotoxic risk for several anthranoids (emodin, aloe-emodin). Lactation: contraindicated because active metabolites of other anthranoids, such as rhein, pass into breast milk in small amounts.",
+        "alert_headline": "Not for use in pregnancy or breastfeeding",
+        "alert_body": "Aloe latex laxatives are not recommended while pregnant or breastfeeding. Talk to your clinician about a gentler laxative.",
+        "informational_note": "Aloe latex is a stimulant laxative — relevant to anyone pregnant or breastfeeding.",
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        },
+        "direction": "harmful",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-09-25",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
