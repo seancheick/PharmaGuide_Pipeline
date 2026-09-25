@@ -337,6 +337,13 @@ def _primary_type(product: Dict[str, Any]) -> str:
     return _norm(product.get("primary_type") or taxonomy.get("primary_type"))
 
 
+def _row_unit(row: Mapping[str, Any]) -> Any:
+    """The row's label unit, the one selector every amount reader uses: the
+    printed unit, else the normalized unit, else the legacy dose_unit. Returned
+    as found; each reader normalizes it for its own comparison."""
+    return row.get("unit") or row.get("unit_normalized") or row.get("dose_unit")
+
+
 def _unit_is_mass(unit: Any) -> bool:
     return _norm(unit).replace(" ", "") in {u.replace(" ", "") for u in _MASS_UNITS}
 
@@ -447,7 +454,7 @@ def epa_dha_row_is_trustworthy(row: Dict[str, Any]) -> bool:
         return False
     if _positive_quantity(row) is None:
         return False
-    if not _unit_is_mass(row.get("unit") or row.get("unit_normalized") or row.get("dose_unit")):
+    if not _unit_is_mass(_row_unit(row)):
         return False
     if _source_is_non_epa_dha_oil(row) and not _source_has_epa_dha_identity(row):
         return False
@@ -471,7 +478,7 @@ def dose_disclosure_status(row: Mapping[str, Any]) -> str:
     shape (export row or scoring row).
     """
     amount = _positive_quantity(row)
-    unit = str(row.get("unit_normalized") or row.get("unit") or "").strip().lower()
+    unit = _norm(_row_unit(row))
     if (amount is not None and math.isfinite(amount) and unit not in DOSE_NOT_PROVIDED_UNITS) or row.get("has_dose"):
         return "disclosed"
     member = (
@@ -496,7 +503,7 @@ _EPA_DHA_MG_PER_UNIT = {
 
 def _epa_dha_row_mg(row: Dict[str, Any]) -> Optional[float]:
     amount = _positive_quantity(row)
-    factor = _EPA_DHA_MG_PER_UNIT.get(_norm(row.get("unit") or row.get("dose_unit")))
+    factor = _EPA_DHA_MG_PER_UNIT.get(_norm(_row_unit(row)))
     return None if amount is None or factor is None else amount * factor
 
 
@@ -1052,7 +1059,7 @@ def _derive_explicit_eaa_aggregate_evidence(
         return []
     if any(
         _positive_quantity(row) is not None
-        and _unit_is_mass(row.get("unit") or row.get("unit_normalized") or row.get("dose_unit"))
+        and _unit_is_mass(_row_unit(row))
         for row in child_rows
     ):
         return []
@@ -1069,7 +1076,7 @@ def _derive_explicit_eaa_aggregate_evidence(
         if _norm(owner.get("cleaner_row_role")) != "blend_header_total":
             continue
         mass = _positive_quantity(owner)
-        unit = owner.get("unit") or owner.get("unit_normalized") or owner.get("dose_unit")
+        unit = _row_unit(owner)
         if mass is None or not _unit_is_mass(unit):
             continue
         item = _evidence_base(
@@ -1130,7 +1137,7 @@ def _derive_declared_nutrition_protein_evidence(
         and _norm(row.get("canonical_id")) in _PROTEIN_CANONICALS
         and _positive_quantity(row) is not None
         and _unit_is_mass(
-            row.get("unit") or row.get("unit_normalized") or row.get("dose_unit")
+            _row_unit(row)
         )
         for row in active_rows
     ):
@@ -1507,7 +1514,7 @@ def _derive_blend_header_anchor_from_nested_child(
     if cleaner_role != "blend_header_total" and not parent.get("blend_total_weight_only"):
         return None
     quantity = _positive_quantity(parent)
-    unit = parent.get("unit") or parent.get("unit_normalized") or parent.get("dose_unit")
+    unit = _row_unit(parent)
     if quantity is None or not _unit_is_mass(unit):
         return None
 
@@ -1547,7 +1554,7 @@ def _blend_total_amount_unit(blend: Dict[str, Any]) -> tuple[Optional[float], Op
     for key in ("total_weight", "amount", "quantity"):
         value = _as_float(blend.get(key), None)
         if value is not None and value > 0:
-            return value, str(blend.get("unit") or blend.get("unit_normalized") or "mg")
+            return value, str(_row_unit(blend) or "mg")
     return None, None
 
 
@@ -1800,7 +1807,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 or row.get("has_dose") is True
                 or (
                     _positive_quantity(row) is not None
-                    and _unit_is_mass(row.get("unit") or row.get("unit_normalized") or row.get("dose_unit"))
+                    and _unit_is_mass(_row_unit(row))
                 )
             )
         )
@@ -1833,7 +1840,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
 
     for row in active_rows:
         quantity = _positive_quantity(row)
-        unit = row.get("unit") or row.get("unit_normalized") or row.get("dose_unit")
+        unit = _row_unit(row)
         canonical = _norm(row.get("canonical_id"))
         anchor_canonical, anchor_name = _anchor_identity(row)
         text = _row_text(row).lower()
@@ -4498,7 +4505,7 @@ def _botanical_source_evidence(row: Dict[str, Any], product: Optional[Dict[str, 
 def _ingredient_domain(row: Dict[str, Any], *, botanical_source: bool) -> str:
     canonical = _classification_identity(row)
     dose_class = _norm(row.get("dose_class"))
-    unit = _norm(row.get("unit") or row.get("dose_unit"))
+    unit = _norm(_row_unit(row))
     text = _classification_row_text(row)
     raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
     raw_category = _norm(raw_taxonomy.get("category") or row.get("category")).replace("-", "_")
@@ -5642,12 +5649,7 @@ def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
     qty = _positive_quantity(row)
     if qty is None:
         return None
-    unit = _norm(
-        row.get("unit")
-        or row.get("unit_normalized")
-        or row.get("normalized_unit")
-        or row.get("dose_unit")
-    ).replace(" ", "")
+    unit = _norm(_row_unit(row)).replace(" ", "")
     if unit in {"mg", "milligram", "milligrams", "milligram(s)"}:
         return qty
     if unit in {"g", "gram", "grams", "gram(s)"}:
@@ -5684,7 +5686,7 @@ def _role_is_blend_member(row: Dict[str, Any]) -> bool:
 def _role_is_probiotic_strain(row: Dict[str, Any]) -> bool:
     if _norm(row.get("dose_class")) == "probiotic_cfu":
         return True
-    return "cfu" in _norm(row.get("unit") or row.get("dose_unit"))
+    return "cfu" in _norm(_row_unit(row))
 
 
 def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:

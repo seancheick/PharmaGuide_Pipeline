@@ -92,3 +92,14 @@ def test_omega_pillars_read_the_public_owner_only():
         assert 'epa_dha_amounts_per_serving' in text
         assert not re.search(r'from scoring_v4\.modules\.omega_\w+ import \(?\s*_', text), name
         assert '_trustworthy_epa_dha_row' not in text and 'EPA_DHA_SOURCE_RE' not in text, name
+
+
+def test_trust_and_conversion_read_the_same_unit():
+    """A row carrying only unit_normalized passes the trust check and converts
+    (one unit selector, scoring_input_contract._row_unit)."""
+    from scoring_input_contract import epa_dha_row_is_trustworthy, _epa_dha_row_mg, _row_unit
+    row = {'canonical_id': 'dha', 'name': 'DHA', 'quantity': 250, 'unit_normalized': 'mg'}
+    assert _row_unit(row) == 'mg'
+    assert epa_dha_row_is_trustworthy(row)
+    assert _epa_dha_row_mg(row) == 250.0
+    assert _epa_dha_row_mg({'quantity': 2, 'unit': 'g', 'unit_normalized': 'mg'}) == 2000.0  # printed unit first
