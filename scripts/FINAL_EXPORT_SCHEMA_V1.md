@@ -548,7 +548,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   "is_harmful": false,
   "harmful_severity": null,
   "is_safety_concern": false,
-  "harmful_notes": null,
   "is_banned": false,
   "is_allergen": false,
   "identifiers": {"cui": "C0042839", "unii": "81G40H8B0T"},
@@ -605,7 +604,6 @@ per concern.
   "population_warnings": ["No specific population concerns at <2% w/w"],
   "is_harmful": true,
   "harmful_severity": "low",
-  "harmful_notes": "FDA GRAS, EFSA 2018 data gap (precautionary, not finding of harm)...",
   "identifiers": {
     "cui": "C0037098",
     "cas": "7631-86-9",

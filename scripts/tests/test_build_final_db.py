@@ -1835,7 +1835,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
     assert ingredient["standard_name"] == "Retinyl Palmitate"
     # Retired twins (row-key census 2026-09-25): each duplicated a value that
     # ships under the name kept above, or had no reader at all.
-    for retired in ("standardName", "mapped", "normalized_value", "safety_hits"):
+    for retired in ("standardName", "mapped", "normalized_value", "safety_hits", "harmful_notes"):
         assert retired not in ingredient
 
 
@@ -1844,7 +1844,7 @@ def test_detail_blob_inactive_rows_carry_one_name_per_value():
     inactive = blob["inactive_ingredients"][0]
 
     assert {"standard_name", "display_label"}.issubset(inactive)
-    for retired in ("standardName", "label_display"):
+    for retired in ("standardName", "label_display", "harmful_notes"):
         assert retired not in inactive
 
 

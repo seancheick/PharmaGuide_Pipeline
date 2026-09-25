@@ -6758,12 +6758,6 @@ def build_detail_blob(
             # didn't fire on a banned-recalled hit.
             "safety_warning_one_liner": active_safety_contract.get("safety_warning_one_liner"),
             "safety_warning": active_safety_contract.get("safety_warning"),
-            "harmful_notes": (
-                safe_str(harmful_ref.get("mechanism_of_harm"))
-                or safe_str(harmful_ref.get("notes"))
-                or safe_str(harmful_hit.get("classification_evidence"))
-                or safe_str(harmful_hit.get("category"))
-            ) if harmful_hit else None,
             "is_allergen": bool(allergen_hits),
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
@@ -6955,7 +6949,6 @@ def build_detail_blob(
             "common_uses": res.common_uses,
             "population_warnings": res.population_warnings,
             "harmful_severity": res.harmful_severity,
-            "harmful_notes": res.harmful_notes,
             "identifiers": res.identifiers or {},
             # Canonical inactive contract (v1.5.0+) — Flutter renders
             # these directly without local inference.

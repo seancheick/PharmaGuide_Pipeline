@@ -362,7 +362,6 @@ class InactiveResolution:
     safety_reason: Optional[str]
     # Harmful-additive metadata (when sourced from harmful_additives.json)
     harmful_severity: Optional[str]
-    harmful_notes: Optional[str]
     mechanism_of_harm: Optional[str]
     population_warnings: list[str]
     # Other-ingredient metadata
@@ -962,7 +961,6 @@ class InactiveIngredientResolver:
             is_banned=is_banned,
             safety_reason=str(safety_reason)[:500] if safety_reason else None,
             harmful_severity=(entry.get("clinical_risk_enum") or None),
-            harmful_notes=entry.get("safety_warning") or entry.get("reason"),
             mechanism_of_harm=None,
             population_warnings=list(entry.get("population_warnings") or []),
             common_uses=[],
@@ -1029,7 +1027,6 @@ class InactiveIngredientResolver:
             is_banned=False,
             safety_reason=entry.get("safety_summary_one_liner") or entry.get("safety_summary"),
             harmful_severity=entry.get("severity_level"),
-            harmful_notes=entry.get("notes"),
             mechanism_of_harm=entry.get("mechanism_of_harm"),
             population_warnings=list(entry.get("population_warnings") or []),
             common_uses=[],
@@ -1081,7 +1078,6 @@ class InactiveIngredientResolver:
             is_banned=False,
             safety_reason=None,
             harmful_severity=None,
-            harmful_notes=None,
             mechanism_of_harm=None,
             population_warnings=[],
             common_uses=list(entry.get("common_uses") or []),
@@ -1118,7 +1114,6 @@ class InactiveIngredientResolver:
             is_banned=False,
             safety_reason=None,
             harmful_severity=None,
-            harmful_notes=None,
             mechanism_of_harm=None,
             population_warnings=[],
             common_uses=[],
@@ -1148,7 +1143,6 @@ class InactiveIngredientResolver:
             is_banned=False,
             safety_reason=None,
             harmful_severity=None,
-            harmful_notes=None,
             mechanism_of_harm=None,
             population_warnings=[],
             common_uses=[],
