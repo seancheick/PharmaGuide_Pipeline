@@ -265,6 +265,9 @@ def reason_codes(before, after, eps=0.05):
             bd, ad = before['dims'].get(dim) or {}, after['dims'].get(dim) or {}
             causes += ['component:' + k for k in _changed(bd.get('components') or {}, ad.get('components') or {})]
             causes += ['penalty:' + k for k in _changed(bd.get('penalties') or {}, ad.get('penalties') or {})]
+            if not causes:
+                # Same inputs, different raw: the pillar's own aggregation changed.
+                causes.append('formula')
         if pillar in ('verification', 'safety_hygiene'):
             causes += ['component:' + k for k in _changed(bc, ac)]
         codes.append({'pillar': pillar, 'delta': delta, 'causes': causes or ['unattributed']})

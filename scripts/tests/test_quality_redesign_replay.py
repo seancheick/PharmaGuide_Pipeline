@@ -221,3 +221,13 @@ def test_projected_reader_keeps_integrity_checks(tmp_path):
     base.write_text('')
     with pytest.raises(ValueError, match='hash'):
         replay.read_rows(base, replay.slim)
+
+
+def test_report_names_an_aggregation_change_over_unchanged_inputs(tmp_path):
+    base = _snapshot(tmp_path, 'base', [_scored_row('1', 60.0)])
+    moved = _scored_row('1', 64.0, dose=14.0)
+    moved['pillars']['dose']['components']['raw_dose'] = 15.4  # same component inputs, new aggregation
+    cand = _snapshot(tmp_path, 'cand', [moved])
+    report = replay.build_report(base, [('a', cand)])['arms']['a']
+    assert report['largest_increases'][0]['reasons'][0]['causes'] == ['formula']
+    assert report['unexplained_material_changes'] == 0
