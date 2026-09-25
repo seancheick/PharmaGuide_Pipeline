@@ -101,7 +101,6 @@ ACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "jurisdiction_scope":   {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
     "safety_warning_one_liner": {"required": False, "type": "string?", "is_enum": False},
     "safety_warning":       {"required": False, "type": "string?",  "is_enum": False},
-    "is_allergen":          {"required": True,  "type": "bool",     "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
     "source_label_key":     {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
     "source_label_name":    {"required": False, "type": "string?",  "is_enum": False},
     "source_label_form":    {"required": False, "type": "string?",  "is_enum": False},

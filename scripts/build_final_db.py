@@ -6615,7 +6615,6 @@ def build_detail_blob(
             identity_mapped=safe_bool(m.get("mapped", ing.get("mapped"))),
         )
         ingredient_hits = matching_contaminant_hits(contaminant_lookup, raw, name)
-        allergen_hits = matching_allergen_hits(allergen_patterns, raw, name)
         harmful_hit = None
         for term in collect_match_terms(raw, name):
             harmful_hit = harmful_lookup.get(term)
@@ -6748,7 +6747,6 @@ def build_detail_blob(
             # didn't fire on a banned-recalled hit.
             "safety_warning_one_liner": active_safety_contract.get("safety_warning_one_liner"),
             "safety_warning": active_safety_contract.get("safety_warning"),
-            "is_allergen": bool(allergen_hits),
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
             ),

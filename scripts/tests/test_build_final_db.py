@@ -1839,6 +1839,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "dosage", "dosage_unit",
         "score",
         "natural",
+        "is_allergen",
     ):
         assert retired not in ingredient
 
@@ -1906,7 +1907,6 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
     blob = build_detail_blob(enriched, make_scored())
     by_name = {ingredient["name"]: ingredient for ingredient in blob["ingredients"]}
     vitamin_a = by_name["Vitamin A Palmitate"]
-    soy = by_name["Soy Lecithin"]
 
     # v1.5.x: is_harmful retired in favor of is_safety_concern (semantic)
     # + harmful_severity (raw enum). Vitamin A Palmitate is high severity
@@ -1914,7 +1914,9 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
     assert vitamin_a["is_safety_concern"] is True
     assert vitamin_a["harmful_severity"] == "high"
     assert vitamin_a["is_banned"] is True
-    assert soy["is_allergen"] is True
+    # Allergens ship on the blob-level `allergens` list the app reads.
+    assert "Soy Lecithin" in by_name
+    assert [a["allergen_id"] for a in blob["allergens"]] == ["ALLERGEN_SOY"]
 
 
 def test_detail_blob_warnings_cover_banned_interaction_dietary_and_status_not_allergens():
