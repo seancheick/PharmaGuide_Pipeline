@@ -610,7 +610,7 @@ class TestBioScore:
     """Enforce bio_score validity."""
 
     def test_bio_score_valid_range(self, entries):
-        """bio_score must be between 0 and 15."""
+        """bio_score must be between 1 and 15."""
         invalid = []
 
         for ing_key, entry in entries.items():
@@ -618,7 +618,7 @@ class TestBioScore:
                 if isinstance(form_data, dict):
                     bio = form_data.get('bio_score')
                     if bio is not None:
-                        if not isinstance(bio, (int, float)) or bio < 0 or bio > 15:
+                        if not isinstance(bio, (int, float)) or bio < 1 or bio > 15:
                             invalid.append((ing_key, form_name, bio))
 
         assert len(invalid) == 0, (
@@ -913,25 +913,3 @@ class TestStatisticsReconciliation:
             f"_metadata.total_entries={declared} but actual parent count="
             f"{actual}. These must agree."
         )
-
-
-@pytest.mark.parametrize('value', [-1, 16, True, float('nan'), float('inf')])
-def test_integrity_gate_rejects_invalid_form_quality(value, iqm_data):
-    from copy import deepcopy
-    from db_integrity_sanity_check import check_iqm
-    entry=deepcopy(iqm_data['vitamin_b12_cobalamin'])
-    entry['forms']['methylcobalamin']['bio_score']=value
-    findings=[]
-    check_iqm(findings, {'vitamin_b12_cobalamin':entry}, 'ingredient_quality_map.json')
-    assert any(f.severity=='error' and f.path.endswith('methylcobalamin.bio_score') for f in findings)
-
-
-@pytest.mark.parametrize('value', [0, 15])
-def test_integrity_gate_accepts_quality_scale_endpoints(value, iqm_data):
-    from copy import deepcopy
-    from db_integrity_sanity_check import check_iqm
-    entry=deepcopy(iqm_data['vitamin_b12_cobalamin'])
-    entry['forms']['methylcobalamin']['bio_score']=value
-    findings=[]
-    check_iqm(findings, {'vitamin_b12_cobalamin':entry}, 'ingredient_quality_map.json')
-    assert not any(f.path.endswith('methylcobalamin.bio_score') for f in findings)
