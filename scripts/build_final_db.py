@@ -6226,14 +6226,8 @@ def _anchor_amount(ingredients: List[Dict], anchor: Dict[str, Any]) -> Tuple[Opt
             ingredient.get("normalized_amount")
             if ingredient.get("normalized_amount") is not None
             else ingredient.get("quantity")
-            if ingredient.get("quantity") is not None
-            else ingredient.get("dosage")
         )
-        raw_unit = (
-            ingredient.get("normalized_unit")
-            or ingredient.get("dosage_unit")
-            or ingredient.get("unit")
-        )
+        raw_unit = ingredient.get("normalized_unit") or ingredient.get("unit")
         converted = _amount_in_unit(raw_amount, raw_unit, safe_str(anchor.get("unit")))
         if converted is None:
             continue
@@ -6716,8 +6710,6 @@ def build_detail_blob(
             "conversion_evidence": safe_dict(ne.get("conversion_evidence")) or None,
             "role": "active",
             "parent_key": safe_str(m.get("parent_key") or ing.get("normalized_key")),
-            "dosage": safe_float(qty),
-            "dosage_unit": safe_str(ing.get("unit")),
             "is_mapped": is_mapped,
             # canonical_id — foundational identifier for interactions, stack
             # logic, evidence routing, biomarker scoring, dedup, and analytics.
@@ -8189,8 +8181,8 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
 
         # Extract nutrients with doses
         if category in nutrient_categories:
-            normalized_amount = ing.get("normalized_amount") or ing.get("dosage") or ing.get("quantity")
-            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit") or ing.get("unit"))
+            normalized_amount = ing.get("normalized_amount") or ing.get("quantity")
+            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("unit"))
 
             if normalized_amount is not None:
                 amount = float(normalized_amount)
@@ -8262,10 +8254,9 @@ def generate_key_nutrients_summary(enriched: Dict) -> List[Dict]:
         if category not in ["vitamins", "minerals", "amino_acids", "fatty_acids", "fiber", "fibers"]:
             continue
 
-        normalized_amount = ing.get("normalized_amount") or ing.get("dosage") or ing.get("quantity")
+        normalized_amount = ing.get("normalized_amount") or ing.get("quantity")
         normalized_unit = safe_str(
             ing.get("normalized_unit")
-            or ing.get("dosage_unit")
             or ing.get("unit_normalized")
             or ing.get("unit")
         )

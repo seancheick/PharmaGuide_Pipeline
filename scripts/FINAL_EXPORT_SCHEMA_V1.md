@@ -542,8 +542,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   "normalized_unit": null,
   "role": "active",
   "parent_key": "vitamin_a",
-  "dosage": 2000.0,
-  "dosage_unit": "IU",
   "is_mapped": true,
   "is_harmful": false,
   "harmful_severity": null,
@@ -813,6 +811,10 @@ inactive; same value as `standard_name`), `normalized_value` (same value as
 `harmful_notes` (no reader). `audit_contract_sync.ACTIVE_CONTRACT` and
 `INACTIVE_CONTRACT` declare the whole row shape; a row key they do not declare
 fails the snapshot gate, as an undeclared top-level key already did.
+
+Retired in the same-day follow-up (no reader, or a second name for a shipped
+value):
+- `dosage` / `dosage_unit`: same values as `quantity` / `unit`.
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,

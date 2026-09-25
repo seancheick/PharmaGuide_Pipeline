@@ -43,8 +43,6 @@ ACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "normalized_key":      {"required": False, "type": "string?",  "is_enum": False},
     "quantity":            {"required": False, "type": "number?",  "is_enum": False},
     "unit":                {"required": False, "type": "string?",  "is_enum": False},
-    "dosage":              {"required": False, "type": "number?",  "is_enum": False},
-    "dosage_unit":         {"required": False, "type": "string?",  "is_enum": False},
     "bio_score":           {"required": False, "type": "number?",  "is_enum": False},
     "score":               {"required": False, "type": "number?",  "is_enum": False, "deprecated": True},
     "form":                {"required": False, "type": "string?",  "is_enum": False, "deprecated": True},

@@ -1832,10 +1832,14 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
     }
     assert expected_keys.issubset(set(ingredient.keys()))
     assert ingredient["score"] == 14.0
+    assert (ingredient["quantity"], ingredient["unit"]) == (2000.0, "IU")
     assert ingredient["standard_name"] == "Retinyl Palmitate"
     # Retired twins (row-key census 2026-09-25): each duplicated a value that
     # ships under the name kept above, or had no reader at all.
-    for retired in ("standardName", "mapped", "normalized_value", "safety_hits", "harmful_notes"):
+    for retired in (
+        "standardName", "mapped", "normalized_value", "safety_hits", "harmful_notes",
+        "dosage", "dosage_unit",
+    ):
         assert retired not in ingredient
 
 
@@ -2025,8 +2029,8 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
             "parent_key": "potassium",
             "category": "mineral",
             "mapped": True,
-            "dosage": 99,
-            "dosage_unit": "mg",
+            "quantity": 99,
+            "unit": "mg",
         },
         {
             "name": "Potassium Gluconate",
@@ -2035,8 +2039,8 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
             "parent_key": "potassium_gluconate",
             "category": "mineral",
             "mapped": True,
-            "dosage": 595,
-            "dosage_unit": "mg",
+            "quantity": 595,
+            "unit": "mg",
         },
         {
             "name": "Magnesium",
@@ -2045,8 +2049,8 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
             "parent_key": "magnesium",
             "category": "mineral",
             "mapped": True,
-            "dosage": 100,
-            "dosage_unit": "mg",
+            "quantity": 100,
+            "unit": "mg",
         },
     ]
 
@@ -2452,8 +2456,8 @@ def test_key_ingredient_tags_merge_iqm_and_active_canonicals_without_dropping_cl
             "parent_key": "coq10",
             "category": "antioxidants",
             "mapped": True,
-            "dosage": 100,
-            "dosage_unit": "mg",
+            "quantity": 100,
+            "unit": "mg",
         }
     ]
 
