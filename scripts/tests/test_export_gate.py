@@ -29,7 +29,6 @@ from build_final_db import (
     CORE_COLUMN_COUNT,
     EXPORT_REQUIRED_IQD_FIELDS,
     build_core_row,
-    build_combined_safety_hits,
     build_detail_blob,
     build_top_warnings,
     derive_blocking_reason,
@@ -42,54 +41,6 @@ from build_final_db import (
     write_audit_report,
 )
 from core_export_model import PRODUCTS_CORE_COLUMNS
-
-
-def test_nested_interaction_safety_hits_ship_compact_dose_provenance_only():
-    full_decision = {
-        "clinical_severity": "caution",
-        "evaluation_status": "below_threshold",
-        "consumer_disposition": "suppress",
-        "release_blocking": False,
-        "decision_rule": {
-            "basis": "per_day",
-            "comparator": ">=",
-            "threshold": 1000,
-            "threshold_unit": "mg",
-            "consumer_disposition_if_met": "review",
-            "consumer_disposition_if_not_met": "suppress",
-        },
-        "dose_evaluation": {
-            "observed_amount": 20,
-            "observed_unit": "mg",
-            "serving_multiplier": 1,
-            "converted_amount": 20,
-            "threshold": 1000,
-            "threshold_unit": "mg",
-            "comparator": ">=",
-            "conversion_method": "identity",
-        },
-        "thresholds_checked": [{"internal_only": True}],
-    }
-    hits = build_combined_safety_hits(
-        [{
-            "rule_id": "niacin_statins",
-            "condition_hits": [],
-            "drug_class_hits": [{
-                "drug_class_id": "statins",
-                "dose_threshold_evaluation": {"internal_only": True},
-                "dose_decision": full_decision,
-            }],
-        }],
-        [],
-        [],
-        None,
-    )
-
-    emitted = hits[0]["drug_class_hits"][0]
-    assert "dose_threshold_evaluation" not in emitted
-    assert "thresholds_checked" not in emitted["dose_decision"]
-    assert "dose_evaluation" not in emitted["dose_decision"]
-    assert emitted["dose_decision"]["evaluated_daily_amount"] == 20.0
 
 
 # ─── Fixture Factories ───
@@ -720,7 +671,7 @@ FLUTTER_INGREDIENT_KEYS = {
     "raw_source_text", "name", "normalized_key", "forms",
     "quantity", "unit", "standard_name", "matched_form",
     "matched_forms", "extracted_forms", "category", "bio_score", "natural",
-    "score", "notes", "safety_hits",
+    "score", "notes",
     "normalized_amount", "normalized_unit", "role", "parent_key",
     "dosage", "dosage_unit",
     "is_mapped", "harmful_severity", "harmful_notes",

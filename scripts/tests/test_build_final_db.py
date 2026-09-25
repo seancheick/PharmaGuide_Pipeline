@@ -1828,7 +1828,6 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "notes",
         "category",
         "is_mapped",
-        "safety_hits",
         "normalized_amount",
     }
     assert expected_keys.issubset(set(ingredient.keys()))
@@ -1836,7 +1835,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
     assert ingredient["standard_name"] == "Retinyl Palmitate"
     # Retired twins (row-key census 2026-09-25): each duplicated a value that
     # ships under the name kept above, or had no reader at all.
-    for retired in ("standardName", "mapped", "normalized_value"):
+    for retired in ("standardName", "mapped", "normalized_value", "safety_hits"):
         assert retired not in ingredient
 
 
@@ -1912,8 +1911,6 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
     assert vitamin_a["harmful_severity"] == "high"
     assert vitamin_a["is_banned"] is True
     assert soy["is_allergen"] is True
-    assert any(hit["status"] == "banned" for hit in vitamin_a["safety_hits"])
-    assert any(hit["kind"] == "allergen" for hit in soy["safety_hits"])
 
 
 def test_detail_blob_warnings_cover_banned_interaction_dietary_and_status_not_allergens():
