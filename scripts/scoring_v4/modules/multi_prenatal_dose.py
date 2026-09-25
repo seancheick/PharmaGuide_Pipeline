@@ -209,7 +209,11 @@ def _coverage_unit_credit(pct_rda: Optional[float], pct_ul: Optional[float]) -> 
     return 0.65
 
 
-def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
+def _coverage_scores(
+    product: Dict[str, Any],
+    *,
+    rda_group: Optional[str] = None,
+) -> Dict[str, float]:
     rda_ul = _safe_dict(product.get("rda_ul_data"))
     rows = _safe_list(rda_ul.get("adequacy_results"))
     scores: Dict[str, float] = {}
@@ -222,7 +226,7 @@ def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
         key = _nutrient_key(row.get("nutrient") or row.get("standard_name"))
         if not key:
             continue
-        pct_rda, pct_ul = _normalized_pct_values(row, key)
+        pct_rda, pct_ul = _normalized_pct_values(row, key, rda_group=rda_group)
         credit = _coverage_unit_credit(
             pct_rda,
             pct_ul,
@@ -239,43 +243,74 @@ def _unit_text(row: Dict[str, Any]) -> str:
     return _norm_text(row.get("unit") or row.get("original_unit"))
 
 
-def _normalized_pct_values(row: Dict[str, Any], nutrient_key: str) -> tuple[Optional[float], Optional[float]]:
-    """Return pct_rda/pct_ul, correcting stale folate mg-DFE enriched rows.
+def _group_rda_ai(row: Dict[str, Any], group: str) -> Optional[float]:
+    """Read the adult reference for a life-stage group from the RDA/UL owner."""
+    candidates = [
+        item
+        for item in _safe_list(row.get("data_by_group"))
+        if isinstance(item, dict) and _norm_text(item.get("group")) == _norm_text(group)
+    ]
+    for age_range in ("19-30", "31-50"):
+        for item in candidates:
+            if str(item.get("age_range") or "").strip() != age_range:
+                continue
+            value = _as_float(item.get("rda_ai"), None)
+            if value is not None and value > 0:
+                return value
+    return None
+
+
+def _normalized_pct_values(
+    row: Dict[str, Any],
+    nutrient_key: str,
+    *,
+    rda_group: Optional[str] = None,
+) -> tuple[Optional[float], Optional[float]]:
+    """Return normalized adequacy and safety percentages.
 
     Older enriched artifacts treated `1.7 mg DFE` as `1.7 mcg DFE` when
     computing pct_rda/pct_ul because `unit_conversions.json` lacked
     mg_DFE -> mcg_DFE conversion rules. The converter fix prevents this on the
     next pipeline run; this guard keeps v4 scoring correct on already-enriched
-    blobs. It is deliberately limited to folate rows with tiny percent values
-    and mg-like units.
+    blobs. For prenatal products, adequacy is then rebased from the neutral RDA
+    to the adult Pregnancy RDA already carried in `data_by_group`. The UL
+    percentage remains owned by the universal safety policy.
     """
     pct_rda = _as_float(row.get("pct_rda"), None)
     pct_ul = _as_float(row.get("pct_ul"), None)
-    if nutrient_key != "folate":
-        return pct_rda, pct_ul
+    if nutrient_key == "folate":
+        amount = _as_float(row.get("amount") or row.get("original_quantity"), None)
+        unit = _unit_text(row)
+        stale_mg_dfe = (
+            amount is not None
+            and amount > 0
+            and unit.startswith("mg")
+            and (pct_rda is None or pct_rda < 10.0)
+            and (pct_ul is None or pct_ul < 10.0)
+        )
+        if stale_mg_dfe:
+            amount_mcg_dfe = amount * (1000.0 if "dfe" in unit else 1700.0)
+            rda_ai = _as_float(row.get("rda_ai"), None)
+            ul = _as_float(row.get("ul"), None)
+            if rda_ai and rda_ai > 0:
+                pct_rda = (amount_mcg_dfe / rda_ai) * 100.0
+            if ul and ul > 0:
+                pct_ul = (amount_mcg_dfe / ul) * 100.0
 
-    amount = _as_float(row.get("amount") or row.get("original_quantity"), None)
-    if amount is None or amount <= 0:
-        return pct_rda, pct_ul
+    if rda_group and pct_rda is not None:
+        neutral_rda = _as_float(row.get("rda_ai"), None)
+        group_rda = _group_rda_ai(row, rda_group)
+        if neutral_rda is not None and neutral_rda > 0 and group_rda is not None:
+            pct_rda = pct_rda * neutral_rda / group_rda
 
-    unit = _unit_text(row)
-    if not unit.startswith("mg"):
-        return pct_rda, pct_ul
-
-    # Only correct the known stale shape. A properly enriched 1.7 mg DFE row
-    # should already be ~425% RDA / ~102% UL, not sub-1%.
-    if (pct_rda is not None and pct_rda >= 10.0) or (pct_ul is not None and pct_ul >= 10.0):
-        return pct_rda, pct_ul
-
-    amount_mcg_dfe = amount * (1000.0 if "dfe" in unit else 1700.0)
-    rda_ai = _as_float(row.get("rda_ai"), None)
-    ul = _as_float(row.get("ul"), None)
-    corrected_rda = (amount_mcg_dfe / rda_ai) * 100.0 if rda_ai and rda_ai > 0 else pct_rda
-    corrected_ul = (amount_mcg_dfe / ul) * 100.0 if ul and ul > 0 else pct_ul
-    return corrected_rda, corrected_ul
+    return pct_rda, pct_ul
 
 
-def _critical_threshold_scores(product: Dict[str, Any]) -> Dict[str, float]:
+def _critical_threshold_scores(
+    product: Dict[str, Any],
+    *,
+    rda_group: Optional[str] = None,
+) -> Dict[str, float]:
     """Raw RDA/AI threshold credit for prenatal-critical nutrients.
 
     Broad dose coverage credits the disclosed amount across the panel.
@@ -295,7 +330,7 @@ def _critical_threshold_scores(product: Dict[str, Any]) -> Dict[str, float]:
         min_pct = CRITICAL_MIN_PCT_RDA.get(key)
         if min_pct is None:
             continue
-        pct_rda, _ = _normalized_pct_values(row, key)
+        pct_rda, _ = _normalized_pct_values(row, key, rda_group=rda_group)
         if pct_rda is None or pct_rda <= 0:
             credit = 0.0
         elif pct_rda >= min_pct:
@@ -407,7 +442,7 @@ def _critical_scores(product: Dict[str, Any], coverage_scores: Dict[str, float])
     targeted_multi = (not prenatal) and _is_targeted_multi(product)
     anchors = PRENATAL_CORE_ANCHORS if prenatal else CORE_MULTI_ANCHORS
     mode = "prenatal" if prenatal else ("targeted_core_multi" if targeted_multi else "core_multi")
-    threshold_scores = _critical_threshold_scores(product)
+    threshold_scores = _critical_threshold_scores(product, rda_group="Pregnancy" if prenatal else None)
 
     if targeted_multi:
         scores, all_scores = _targeted_multi_critical_scores(coverage_scores, threshold_scores)
@@ -432,7 +467,7 @@ def _critical_scores(product: Dict[str, Any], coverage_scores: Dict[str, float])
 def _prenatal_complement_scores(product: Dict[str, Any]) -> Dict[str, float]:
     if not _is_prenatal(product):
         return {}
-    threshold_scores = _critical_threshold_scores(product)
+    threshold_scores = _critical_threshold_scores(product, rda_group="Pregnancy")
     scores = {
         "choline": _round(_clamp(0.0, 1.0, threshold_scores.get("choline", 0.0))),
         "dha": _round(_clamp(0.0, 1.0, _dha_score(product))),
@@ -458,7 +493,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
     """Compute the P3.2 multi/prenatal Dose 25 dimension."""
     product = _safe_product(product)
 
-    coverage_scores = _coverage_scores(product)
+    prenatal = _is_prenatal(product)
+    coverage_scores = _coverage_scores(product, rda_group="Pregnancy" if prenatal else None)
     rda_ai_coverage = _score_rda_ai_coverage(coverage_scores)
     panel_breadth = _score_panel_breadth(coverage_scores)
     critical_mode, critical_scores, critical_missing = _critical_scores(product, coverage_scores)

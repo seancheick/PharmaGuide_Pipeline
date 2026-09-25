@@ -18,13 +18,20 @@ def _adequacy(
     pct_rda: float | None = 100.0,
     pct_ul: float | None = 20.0,
     scoring_eligible: bool = True,
+    rda_ai: float | None = None,
+    data_by_group: list[dict] | None = None,
 ) -> dict:
-    return {
+    row = {
         "nutrient": nutrient,
         "pct_rda": pct_rda,
         "pct_ul": pct_ul,
         "scoring_eligible": scoring_eligible,
     }
+    if rda_ai is not None:
+        row["rda_ai"] = rda_ai
+    if data_by_group is not None:
+        row["data_by_group"] = data_by_group
+    return row
 
 
 def _ingredient(
@@ -499,6 +506,48 @@ def test_expecting_uses_the_shared_prenatal_route_definition() -> None:
     ))
 
     assert payload["metadata"]["critical_nutrient_mode"] == "prenatal"
+
+
+def test_prenatal_adequacy_uses_adult_pregnancy_rda_from_enriched_owner() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    iodine = _adequacy(
+        "Iodine",
+        pct_rda=50.0,
+        pct_ul=6.8,
+        rda_ai=150.0,
+        data_by_group=[
+            {"group": "Pregnancy", "age_range": "14-18", "rda_ai": 220.0},
+            {"group": "Pregnancy", "age_range": "19-30", "rda_ai": 220.0},
+            {"group": "Pregnancy", "age_range": "31-50", "rda_ai": 220.0},
+        ],
+    )
+
+    payload = score_dose(_product(name="Complete Prenatal", adequacy_results=[iodine]))
+
+    # 75 mcg is 50% of the neutral 150 mcg RDA, but only 34.09% of the
+    # pregnancy 220 mcg RDA. The prenatal scorer must consume the existing
+    # data_by_group owner rather than the neutral compatibility percentage.
+    assert payload["metadata"]["coverage_nutrient_scores"]["iodine"] == 0.6273
+    assert payload["metadata"]["critical_nutrient_scores"]["iodine"] == 0.5
+
+
+def test_adult_multi_keeps_neutral_rda_when_pregnancy_rows_exist() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    iodine = _adequacy(
+        "Iodine",
+        pct_rda=50.0,
+        pct_ul=6.8,
+        rda_ai=150.0,
+        data_by_group=[
+            {"group": "Pregnancy", "age_range": "19-30", "rda_ai": 220.0},
+        ],
+    )
+
+    payload = score_dose(_product(name="Complete Multivitamin", adequacy_results=[iodine]))
+
+    assert payload["metadata"]["coverage_nutrient_scores"]["iodine"] == 1.0
 
 
 def test_no_rda_reference_returns_zero_score_not_none_for_multi_direct_call() -> None:
