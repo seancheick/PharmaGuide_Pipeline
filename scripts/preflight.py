@@ -236,6 +236,7 @@ def validate_iqm_br_collision(data_dir: Path = DATA_DIR) -> Dict:
         "garcinia_cambogia", # RISK_GARCINIA_CAMBOGIA high_risk — hepatotoxicity warning layer
         "7_keto_dhea",       # BANNED_7_KETO_DHEA high_risk — legal in US, banned in UK/CA/AU/NZ
         "cascara_sagrada",   # ADD_CASCARA_SAGRADA high_risk — FDA Category III, legal in supplements
+        "aloe_ferox",        # RISK_ALOE_LATEX high_risk — same 2002 FDA OTC rule as cascara; EU-prohibited leaf latex
         "dhea",              # BANNED_DHEA high_risk — legal in US (DSHEA), Rx-only abroad (CA/UK/AU); WADA-banned
         "vinpocetine",       # NOOTROPIC_VINPOCETINE high_risk — FDA legal conclusion tentative; reproductive-risk CAUTION
         "withaferin_a",      # WATCH_WITHAFERIN_A watchlist — standardization marker; dose-dependent caution layer

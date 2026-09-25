@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-21",
-    "total_entries": 178,
+    "last_updated": "2026-09-25",
+    "total_entries": 179,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -15268,6 +15268,163 @@
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "NIH LiverTox documents duration- and dose-related adverse effects plus rare liver injury. Cascara's active compounds are stimulant-laxative hydroxyanthracene derivatives, so there is no plausible trace-excipient use. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
       "inactive_policy_reviewed_on": "2026-05-12"
+    },
+    {
+      "id": "RISK_ALOE_LATEX",
+      "standard_name": "Aloe Latex",
+      "aliases": [
+        "aloe latex",
+        "aloe leaf latex",
+        "aloe vera latex",
+        "aloe leaf inspissated juice",
+        "aloes",
+        "aloe ferox",
+        "aloe ferox mill.",
+        "aloe ferox leaf",
+        "aloe ferox leaf extract",
+        "aloe ferox leaf exudate",
+        "aloe ferox leaf juice",
+        "aloe ferox leaf juice extract",
+        "aloe ferox leaf juice powder",
+        "aloe ferox leaf powder",
+        "aloe ferox dry leaf juice",
+        "cape aloe",
+        "cape aloes",
+        "cape aloe leaf",
+        "aloe capensis",
+        "aloe cape",
+        "bitter aloe",
+        "non-decolorized aloe vera whole leaf extract"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "high_risk",
+      "reason": "FDA's 2002 final rule (67 FR 31125) deemed aloe stimulant-laxative ingredients not generally recognized as safe and effective for OTC use because the requested carcinogenicity data were never submitted; it is not a blanket US dietary-supplement ban. EFSA (2018) concluded that aloe extracts are genotoxic in vitro and whole-leaf aloe extract is carcinogenic, and could not set a safe daily intake for hydroxyanthracene derivatives. Regulation (EU) 2021/468 prohibits preparations from the leaf of Aloe species containing hydroxyanthracene derivatives in food. NIH LiverTox rates oral aloe a likely but rare cause of clinically apparent liver injury. The US catalog therefore treats a confirmed supplement match as a clinical caution, not a legal block. Decolorized inner-leaf aloe vera gel, from which these derivatives are removed, is out of scope.",
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Aloe Latex",
+        "negative_match_terms": [
+          "aloe ferox gel",
+          "leaf gel",
+          "inner leaf",
+          "inner-leaf",
+          "inner fillet",
+          "acemannan",
+          "polysaccharide",
+          "polymax"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2022-05-24",
+          "source": {
+            "type": "nih_livertox",
+            "citation": "NIH LiverTox: Aloe Vera",
+            "url": "https://www.ncbi.nlm.nih.gov/books/NBK548634/",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part A to Regulation (EC) No 1925/2006: preparations from the leaf of Aloe species containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)",
+          "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
+          "published_date": "2002-05-09",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)",
+          "evidence_summary": "Final rule (PubMed 12001972): aloe, including aloe extract and aloe flower extract, in OTC laxative drug products is not generally recognized as safe and effective, because the carcinogenicity data FDA requested were not submitted."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Aloe extracts were genotoxic in vitro, aloe-emodin was genotoxic in vivo and whole-leaf aloe extract was carcinogenic; hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise, and no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Adds aloe-emodin, emodin, danthron and preparations from the leaf of Aloe species containing hydroxyanthracene derivatives to Annex III Part A (prohibited) of Regulation (EC) No 1925/2006."
+        },
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Aloe Vera",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548634/",
+          "published_date": "2022-05-24",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "LiverTox: Aloe Vera",
+          "evidence_summary": "Likelihood score B: oral aloe is a likely but rare cause of clinically apparent hepatocellular liver injury, usually at high doses taken for constipation, dyspepsia or weight loss; leaf-rind latex supplies the laxative anthraquinones."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Cape aloe (Aloe ferox) and aloe latex matched no safety entry, so dsld 267819, 273379 and 337239 shipped SAFE while cascara, under the same FDA rule, shipped CAUTION. Identity: GSRS V5VD430YW9 (ALOE [USP], leaf latex of A. vera or A. ferox); UMLS C4760748 Cape Aloes.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C4760748",
+      "cui_note": "UMLS C4760748 Cape Aloes (DrugBank Aloe Capensis / Aloes (Aloe ferox)) is the concept every corpus match resolves to (Aloe ferox). The USP-level concept spanning both species' latex is C0304554 (RxNorm 91263), whose preferred name 'aloe extract' is too generic to use as an alias.",
+      "external_ids": {
+        "unii": "V5VD430YW9"
+      },
+      "ban_context": "substance",
+      "safety_warning": "Stimulant laxative for short-term use only. EFSA found whole-leaf aloe extract carcinogenic and the EU prohibits it in food. Avoid regular use; it is linked to rare liver injury.",
+      "safety_warning_one_liner": "Stimulant laxative prohibited in EU food. Avoid and talk to your doctor.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists aloe (Aloe perryi, A. barbadensis, A. ferox) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
+      "inactive_policy_reviewed_on": "2026-09-25"
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
