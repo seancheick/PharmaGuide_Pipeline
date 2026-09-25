@@ -1851,7 +1851,10 @@ def test_detail_blob_inactive_rows_carry_one_name_per_value():
     inactive = blob["inactive_ingredients"][0]
 
     assert {"standard_name", "display_label"}.issubset(inactive)
-    for retired in ("standardName", "label_display", "harmful_notes"):
+    for retired in (
+        "standardName", "label_display", "harmful_notes",
+        "mechanism_of_harm", "common_uses",
+    ):
         assert retired not in inactive
 
 

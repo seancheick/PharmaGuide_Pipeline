@@ -139,8 +139,6 @@ INACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "category":            {"required": True,  "type": "string",   "is_enum": False},
     "safety_flags":        {"required": True,  "type": "array",    "is_enum": False},
     "notes":               {"required": True,  "type": "string",   "is_enum": False},
-    "mechanism_of_harm":   {"required": True,  "type": "string",   "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
-    "common_uses":         {"required": True,  "type": "array",    "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
     "population_warnings": {"required": True,  "type": "array",    "is_enum": False},
     "harmful_severity":    {"required": False, "type": "string?",  "is_enum": False},
     "resolved_display_label": {"required": True, "type": "string", "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},

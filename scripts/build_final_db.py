@@ -6924,8 +6924,6 @@ def build_detail_blob(
                 or _safety_flags_from_contract(inactive_contract)
             ),
             "notes": res.notes,
-            "mechanism_of_harm": res.mechanism_of_harm or "",
-            "common_uses": res.common_uses,
             "population_warnings": res.population_warnings,
             "harmful_severity": res.harmful_severity,
             "identifiers": res.identifiers or {},
