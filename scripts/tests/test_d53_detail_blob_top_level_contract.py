@@ -86,6 +86,25 @@ def test_an_undeclared_top_level_key_fails_the_gate(tmp_path) -> None:
     assert "some_new_unreviewed_block" in result.stdout
 
 
+@pytest.mark.parametrize("section", ["ingredients", "inactive_ingredients"])
+def test_an_undeclared_ingredient_row_key_fails_the_gate(tmp_path, section) -> None:
+    import subprocess
+    import sys
+
+    blobs = tmp_path / "detail_blobs"
+    blobs.mkdir()
+    blob = {key: [] for key in REQUIRED_TOP_LEVEL_KEYS}
+    blob[section] = [{"name": "Magnesium", "standardName": "Magnesium"}]
+    (blobs / "1.json").write_text(json.dumps(blob))
+    script = Path(__file__).resolve().parents[1] / "audit_contract_sync.py"
+    result = subprocess.run(
+        [sys.executable, str(script), "--build-dir", str(tmp_path), "--out", str(tmp_path / "r.json")],
+        capture_output=True, text=True,
+    )
+    assert result.returncode == 1
+    assert "standardName" in result.stdout
+
+
 def _find_blob_dir() -> Path | None:
     candidates = [final_build_dir() / "detail_blobs", catalog_dist_dir() / "detail_blobs"]
     for c in candidates:
@@ -113,6 +132,16 @@ def sample_blobs():
 def test_every_blob_key_is_declared(sample_blobs) -> None:
     undeclared = {key for blob in sample_blobs for key in blob} - set(BLOB_TOP_LEVEL)
     assert not undeclared, f"undeclared detail-blob keys: {sorted(undeclared)}"
+
+
+def test_every_ingredient_row_key_is_declared(sample_blobs) -> None:
+    from audit_contract_sync import ACTIVE_CONTRACT, INACTIVE_CONTRACT
+
+    for section, contract in (("ingredients", ACTIVE_CONTRACT), ("inactive_ingredients", INACTIVE_CONTRACT)):
+        undeclared = {
+            key for blob in sample_blobs for row in blob.get(section) or [] for key in row
+        } - set(contract)
+        assert not undeclared, f"undeclared {section}[] keys: {sorted(undeclared)}"
 
 
 def test_every_blob_has_required_top_level_keys(sample_blobs) -> None:

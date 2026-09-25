@@ -806,6 +806,14 @@ delete commit per field, with a regression test pin).
 | `matched_alias`  | move to `_debug` subkey      | Same — internal pipeline diagnostics           |
 | `is_harmful`     | `is_safety_concern` + `severity_status` | Flutter migrates routing logic        |
 
+**Row keys retired (row-key census, 2026-09-25):** `standardName` (active and
+inactive; same value as `standard_name`), `normalized_value` (same value as
+`normalized_amount`), `mapped` (same value as `is_mapped`), inactive
+`label_display` (same value as `display_label`), and `safety_hits` and
+`harmful_notes` (no reader). `audit_contract_sync.ACTIVE_CONTRACT` and
+`INACTIVE_CONTRACT` declare the whole row shape; a row key they do not declare
+fails the snapshot gate, as an undeclared top-level key already did.
+
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,
 `gluten_free_validated`, `compliance_detail`, `dietary_sensitivity_detail`,

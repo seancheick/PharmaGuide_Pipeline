@@ -40,6 +40,7 @@ from build_final_db import (
     classify_product_categories,
     write_audit_report,
 )
+from audit_contract_sync import ACTIVE_CONTRACT, INACTIVE_CONTRACT
 from core_export_model import PRODUCTS_CORE_COLUMNS
 
 
@@ -667,28 +668,24 @@ class TestSafetyCategoryRouting:
 # 4. Detail Blob Contract
 # ═══════════════════════════════════════════════════════════════
 
-FLUTTER_INGREDIENT_KEYS = {
-    "raw_source_text", "name", "normalized_key", "forms",
-    "quantity", "unit", "standard_name", "matched_form",
-    "matched_forms", "extracted_forms", "category", "bio_score", "natural",
-    "score", "notes",
-    "normalized_amount", "normalized_unit", "role", "parent_key",
-    "dosage", "dosage_unit",
-    "is_mapped", "harmful_severity",
-    "is_banned", "is_allergen",
-    # v1.5.x canonical contract — replaces legacy `form` + `is_harmful`.
-    "display_form_label", "form_status", "form_match_status",
-    "is_safety_concern",
-}
-
-
 class TestDetailBlobContract:
 
-    def test_ingredient_keys_match_flutter_contract(self):
-        blob = build_detail_blob(_base_enriched(), _base_scored())
-        ingredient = blob["ingredients"][0]
-        missing = FLUTTER_INGREDIENT_KEYS - set(ingredient.keys())
-        assert not missing, f"Missing keys in detail blob ingredient: {missing}"
+    def test_ingredient_rows_match_the_declared_row_contract(self):
+        # One declaration of the row shape: audit_contract_sync. A row key it
+        # does not declare fails here, before a build reaches the gate.
+        e = _base_enriched()
+        e["inactiveIngredients"] = [{"name": "Gelatin", "raw_source_text": "Gelatin"}]
+        blob = build_detail_blob(e, _base_scored())
+        for section, contract in (
+            ("ingredients", ACTIVE_CONTRACT),
+            ("inactive_ingredients", INACTIVE_CONTRACT),
+        ):
+            row = blob[section][0]
+            undeclared = set(row) - set(contract)
+            assert not undeclared, f"undeclared {section}[] keys: {sorted(undeclared)}"
+            required = {key for key, spec in contract.items() if spec.get("required")}
+            missing = required - set(row)
+            assert not missing, f"{section}[] rows lack required keys: {sorted(missing)}"
 
     def test_blob_has_required_top_level_keys(self):
         blob = build_detail_blob(_base_enriched(), _base_scored())
