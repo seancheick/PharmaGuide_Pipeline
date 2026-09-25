@@ -41,19 +41,6 @@ def test_phosphatidylcholine_identifiers(iqm):
     assert e.get("external_ids", {}).get("unii") == "1T6N4D9YV6"
 
 
-def test_phosphatidylcholine_score_formula(iqm):
-    e = iqm["phosphatidylcholine"]
-    for form_key, form in e.get("forms", {}).items():
-        if not isinstance(form, dict):
-            continue
-        bio = form.get("bio_score")
-        score = form.get("score")
-        natural = bool(form.get("natural", False))
-        if isinstance(bio, (int, float)) and isinstance(score, (int, float)):
-            expected = bio + (3 if natural else 0)
-            assert score == expected, f"{form_key}: schema rule violated"
-
-
 def test_phosphatidylcholine_aliases_cover_supplement_forms(iqm):
     e = iqm["phosphatidylcholine"]
     all_aliases = set()

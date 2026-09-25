@@ -4,8 +4,8 @@
 - No IQM form carries either field.
 - The enricher and scorer run end to end over real labels with IQM forms that
   raise on any access to them.
-- Enriched ingredient rows, matched forms and the exported form payload carry
-  neither field.
+- Enriched ingredient rows and matched forms, and the ingredients and matched
+  forms of a detail blob built from them, carry neither field.
 - Formulation reads bio_score only: a row without it has no form rating.
 
 Product and pillar `score` fields are the V4 score and are not affected.
@@ -99,7 +99,17 @@ def test_formulation_reads_bio_score_only():
     assert bio_score_of({'bio_score': 9}) == 9.0
 
 
-def test_exported_form_payload_has_no_retired_field():
-    text = (SCRIPTS / 'build_final_db.py').read_text()
-    assert '"natural": bool(m.get("natural"))' not in text
-    assert '"score": safe_float(m.get("score"))' not in text
+@pytest.mark.parametrize('label', LABELS)
+def test_the_exported_detail_blob_carries_no_retired_field(guarded_enricher, label):
+    from build_final_db import build_detail_blob
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from score_supplements_v4 import score_product_v4
+    raw = json.loads((FIXTURES / label).read_text())
+    enriched, _ = guarded_enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    blob = build_detail_blob(enriched, score_product_v4(enriched))
+    rows = blob['ingredients']
+    assert rows and any(r.get('matched_forms') for r in rows), 'blob exported no matched forms'
+    for row in rows:
+        assert not set(RETIRED) & set(row), row.get('name')
+        for match in row.get('matched_forms') or []:
+            assert not set(RETIRED) & set(match), row.get('name')

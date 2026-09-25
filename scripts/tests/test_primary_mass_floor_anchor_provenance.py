@@ -144,7 +144,7 @@ def _floor_for(direction, score_evidence):
     """
     ingredient = {"name": "Ashwagandha", "standard_name": "Ashwagandha",
                   "canonical_id": "ashwagandha", "mapped": True,
-                  "bio_score": 11, "score": 11, "quantity": 600, "unit": "mg"}
+                  "bio_score": 11, "quantity": 600, "unit": "mg"}
     product = {
         "status": "active", "form_factor": "capsule",
         "supplement_type": {"type": "single_nutrient"},

@@ -648,8 +648,6 @@ def test_export_uses_taxonomy_over_stale_compatibility_values():
             "form": "",
             "category": "probiotics",
             "bio_score": 10,
-            "natural": True,
-            "score": 10.0,
             "mapped": True,
             "standard_name": "Lactobacillus Gasseri",
             "notes": "",
@@ -932,8 +930,6 @@ def make_enriched():
                     "form": "retinyl palmitate",
                     "category": "vitamins",
                     "bio_score": 14,
-                    "natural": False,
-                    "score": 14.0,
                     "mapped": True,
                     "notes": "Preformed vitamin A form.",
                     "matched_form": "retinyl palmitate",
@@ -949,12 +945,10 @@ def make_enriched():
                     "form": "lecithin",
                     "category": "other",
                     "bio_score": 4,
-                    "natural": True,
-                    "score": 6.0,
                     "mapped": True,
                     "notes": "Soy-derived emulsifier.",
                     "matched_form": "lecithin",
-                    "matched_forms": [{"form_key": "lecithin", "bio_score": 4, "natural": True, "score": 6}],
+                    "matched_forms": [{"form_key": "lecithin", "bio_score": 4}],
                     "extracted_forms": [{"raw_form_text": "Lecithin", "percent_share": 1.0}],
                     "safety_hits": [],
                 }
@@ -1641,7 +1635,6 @@ def test_iso_phos_acronym_flag_is_not_banned_evidence():
             "standard_name": "Phosphatidylserine",
             "canonical_id": "phosphatidylserine",
             "mapped": True,
-            "score": 10,
         }
     ]
     enriched["contaminant_data"]["banned_substances"] = {
@@ -1861,7 +1854,6 @@ def test_detail_blob_does_not_mark_active_mapped_without_canonical_id():
             "recognized_non_scorable": True,
             "role_classification": "recognized_non_scorable",
             "recognition_reason": "source_descriptor_child_row",
-            "score": 9,
             "category": "herbs",
         }
     ]
@@ -2148,8 +2140,6 @@ def test_export_uses_strict_scoring_rows_not_flattened_blend_children():
             "unit": unit,
             "category": "vitamins",
             "bio_score": 14,
-            "natural": False,
-            "score": 14.0,
             "notes": "",
             "safety_hits": [],
         }

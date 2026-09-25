@@ -4,7 +4,7 @@ Verified against the file's own honesty_rule (bio_score = absorption for systemi
 actives) and content-confirmed PK (PMIDs 22971354 buffered-creatine equivalence,
 19228401 CEE→creatinine, 24272966 D-ribose absorption; NIH ODS Mg/Zn/Se).
 
-Invariant: score == bio_score + 3*natural (capped 18).
+bio_score is the only IQM form-quality field (IQM 5.6.0).
 """
 import json
 import os

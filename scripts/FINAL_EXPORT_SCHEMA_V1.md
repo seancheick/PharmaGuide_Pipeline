@@ -537,7 +537,7 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
       "verified_on": "2026-08-13"
     }]
   },
-  "_score_note": "v3.6.0+: `score` is a deprecated alias of `bio_score` (no natural-source bonus). Pre-v3.6.0 blobs had `score = bio_score + 3*natural` (range 0-18). New consumers should read `bio_score` directly (range 0-15, pure form quality). Sourcing is not scored in v4.",
+  "_score_note": "Ingredients carry `bio_score` (0-15, form quality) only. The legacy `score` and `natural` fields were removed (IQM 5.6.0) and are not exported. Sourcing is not scored in v4.",
   "notes": "The most common preformed Vitamin A in supplements...",
   "mapped": true,
   "safety_hits": [...],

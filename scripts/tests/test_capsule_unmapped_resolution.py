@@ -278,7 +278,6 @@ class TestFormFallbackAuditNoiseRegression:
             "standard_name": "Blueberry Extract",
             "form_name": "blueberry extract",
             "bio_score": 10,
-            "score": 13,
             "unmapped_forms": ["extract"],
             "form_source": "cleaned_forms",
         }
@@ -303,7 +302,6 @@ class TestFormFallbackAuditNoiseRegression:
             "standard_name": "Glucosamine",
             "form_name": "glucosamine hydrochloride",
             "bio_score": 10,
-            "score": 13,
             "unmapped_forms": ["Shrimp"],
             "form_source": "cleaned_forms",
         }
@@ -328,7 +326,6 @@ class TestFormFallbackAuditNoiseRegression:
             "standard_name": "Selenium",
             "form_name": "selenium (unspecified)",
             "bio_score": 10,
-            "score": 13,
             "unmapped_forms": ["Selenium Citrate"],
             "form_source": "cleaned_forms",
         }
@@ -353,7 +350,6 @@ class TestFormFallbackAuditNoiseRegression:
             "standard_name": "Hops (Humulus lupulus)",
             "form_name": "hops extract (unspecified)",
             "bio_score": 7,
-            "score": 10,
             "unmapped_forms": ["8-Prenylnaringenin"],
             "form_source": "cleaned_forms",
         }

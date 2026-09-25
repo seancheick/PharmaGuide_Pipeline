@@ -99,9 +99,9 @@ def test_alias_phrases(enricher, phrase, parent, form):
 def test_an_unmatched_share_takes_the_parents_own_unknown_form_value(enricher):
     # Calcium carbonate 8, dicalcium phosphate 6, D-pantothenate unmatched at
     # calcium (unspecified) = 6, not 5: (8 + 6 + 6) / 3.
-    from enrich_supplements_v3 import _parent_unknown_form
+    from scoring_reference_resolver import unknown_form_quality
     iqm = enricher.databases['ingredient_quality_map']
-    assert _parent_unknown_form(iqm['calcium'])[1]['bio_score'] == 6
+    assert unknown_form_quality(iqm['calcium'])['bio_score'] == 6
     assert _row(enricher, '17118', 'Calcium')['bio_score'] == 6.7
 
 
@@ -114,12 +114,9 @@ def test_fallback_reads_bio_score_not_the_retired_score(enricher):
     assert (match['form_id'], match['bio_score']) == ('spirulina powder', 9.0)
 
 
-def test_generic_vitamin_d_never_becomes_d2_by_form_order(enricher):
-    from enrich_supplements_v3 import _parent_unknown_form
+def test_generic_vitamin_d_never_becomes_d2(enricher):
+    # Form-order independence of the choice: test_unknown_form_quality.py.
     iqm = enricher.databases['ingredient_quality_map']
-    parent = iqm['vitamin_d']
-    shuffled = {**parent, 'forms': dict(reversed(list(parent['forms'].items())))}
-    assert _parent_unknown_form(parent)[0] == _parent_unknown_form(shuffled)[0] == 'vitamin d (unspecified)'
     match = enricher._match_quality_map('Zqx Blend', 'Zqx Blend', iqm, _form_extraction_attempt=True,
                                         preferred_parent='vitamin_d', cleaner_canonical_id='vitamin_d')
     assert match['form_id'] == 'vitamin d (unspecified)'

@@ -3,7 +3,6 @@
 Verified against NIH ODS (Cu/Mn/Cr/I/K/Mo/B: no comparative form bioavailability
 data; minerals poorly absorbed) and PK (CoQ10 low/limited all forms — PMID 16551570;
 ubiquinol edge contested — PMID 32380795; D-pinitol CID 164619 != DCI).
-Invariant: score == bio_score + 3*natural.
 """
 import json
 import os

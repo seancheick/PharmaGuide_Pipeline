@@ -29,7 +29,7 @@ def _al(iqm, p, f):
     return {a.lower() for a in _form(iqm, p, f).get("aliases", [])}
 
 
-# ── score corrections (all non-signed-off; natural=false so score == bio) ────
+# ── bio_score corrections (all non-signed-off) ──────────────────────────────
 SCORE_TARGETS = [
     ("l_tryptophan", "l-tryptophan powder", 10),       # systemic/brain delivery limited (val 0.4 tier)
     ("gaba", "liposomal gaba", 6),                       # BBB unproven; = the signed-off plain-GABA tier

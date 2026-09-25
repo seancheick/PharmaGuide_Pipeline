@@ -25,7 +25,6 @@ def _ingredient(
         "canonical_id": canonical_id,
         "mapped": bool(canonical_id),
         "bio_score": bio_score,
-        "score": bio_score,
         "quantity": quantity,
         "unit": unit,
     }

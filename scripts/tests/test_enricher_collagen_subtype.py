@@ -27,7 +27,6 @@ def _match(form, canonical_id="collagen", bio_score=11):
     return {
         "canonical_id": canonical_id,
         "bio_score": bio_score,
-        "natural": False,
         "form_name": form,
         "matched_form": form,
         "match_status": "MATCHED",
@@ -67,7 +66,7 @@ def test_generic_collagen_row_unspecified(enricher):
     entry = enricher._build_quality_entry(
         {"name": "Collagen", "standardName": "Collagen", "quantity": 5, "unit": "Gram(s)",
          "raw_source_text": "Collagen"},
-        {"canonical_id": "collagen", "bio_score": 5, "natural": False,
+        {"canonical_id": "collagen", "bio_score": 5,
          "form_name": "collagen", "matched_form": "collagen", "match_status": "MATCHED"},
         hierarchy_type=None,
     )
@@ -78,7 +77,7 @@ def test_non_collagen_row_has_no_subtype(enricher):
     entry = enricher._build_quality_entry(
         {"name": "Magnesium Glycinate", "standardName": "Magnesium", "quantity": 200, "unit": "mg",
          "raw_source_text": "Magnesium Glycinate"},
-        {"canonical_id": "magnesium", "bio_score": 14, "natural": False,
+        {"canonical_id": "magnesium", "bio_score": 14,
          "form_name": "magnesium glycinate", "matched_form": "magnesium glycinate",
          "match_status": "MATCHED"},
         hierarchy_type=None,

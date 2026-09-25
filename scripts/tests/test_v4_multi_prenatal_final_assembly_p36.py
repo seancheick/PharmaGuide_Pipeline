@@ -39,7 +39,6 @@ def _ingredient(
         "quantity": quantity,
         "unit": unit,
         "bio_score": bio_score,
-        "score": bio_score,
         "matched_form": matched_form or "",
     }
 

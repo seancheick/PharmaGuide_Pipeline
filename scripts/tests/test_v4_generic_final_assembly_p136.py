@@ -29,7 +29,6 @@ def _ingredient(
         "canonical_id": canonical_id or (standard_name or name).lower().replace(" ", "_"),
         "mapped": True,
         "bio_score": bio_score,
-        "score": bio_score,
         "quantity": quantity,
         "unit": unit,
     }

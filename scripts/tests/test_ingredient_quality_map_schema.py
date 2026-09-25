@@ -626,29 +626,6 @@ class TestBioScore:
             + "\n".join(f"  {ing}/{form}: {b}" for ing, form, b in invalid[:10])
         )
 
-    def test_score_matches_bio_and_natural_formula(self, entries):
-        """score must be deterministic: bio_score + 3 if natural else bio_score."""
-        mismatches = []
-        for ing_key, entry in entries.items():
-            for form_name, form_data in entry.get("forms", {}).items():
-                if not isinstance(form_data, dict):
-                    continue
-                bio = form_data.get("bio_score")
-                natural = bool(form_data.get("natural", False))
-                score = form_data.get("score")
-                if isinstance(bio, (int, float)) and isinstance(score, (int, float)):
-                    expected = bio + (3 if natural else 0)
-                    if score != expected:
-                        mismatches.append((ing_key, form_name, bio, natural, score, expected))
-
-        assert len(mismatches) == 0, (
-            f"Found {len(mismatches)} score/bio_score mismatches:\n"
-            + "\n".join(
-                f"  {ing}/{form}: bio={bio}, natural={nat}, score={score}, expected={expected}"
-                for ing, form, bio, nat, score, expected in mismatches[:10]
-            )
-        )
-
     def test_dosage_importance_numeric(self, entries):
         """dosage_importance should be numeric to avoid silent scorer fallback."""
         invalid = []

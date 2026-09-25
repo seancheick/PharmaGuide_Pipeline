@@ -72,8 +72,6 @@ def _enriched(active, inactive, *, product_name="Active Form Duplicate Test"):
             "form": row.get("matched_form", ""),
             "category": row.get("category", "vitamins"),
             "bio_score": 10,
-            "natural": True,
-            "score": 10.0,
             "mapped": True,
             "notes": "",
             "matched_form": row.get("matched_form", ""),

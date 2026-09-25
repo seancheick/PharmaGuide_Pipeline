@@ -28,9 +28,11 @@ from constants import (
     IQD_DOSE_EVIDENCE_CLASSES,
 )
 from scoring_reference_resolver import (
+    effective_form_bio,
     has_therapeutic_reference,
     iqm_reference_index,
     is_known_botanical,
+    unknown_form_quality,
 )
 
 # Single source of truth for identity disposition vocabulary and scoreability.
@@ -650,7 +652,10 @@ def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[s
     blobs: dose can be known at a parent/blend level while no IQD scorable row
     exists. When the anchor canonical maps to IQM, carry label-supported form
     quality into the scoring row so Formulation does not see a false zero.
-    Unmapped/generic blend headers return no credit.
+    A form the label names is matched by alias; otherwise the parent's
+    unknown form comes from the shared provider (unknown_form_quality), and a
+    derived unknown names no form. Unmapped/generic blend headers return no
+    credit.
     """
     entry = _iqm_index().get(_slug(canonical_id))
     forms = _safe_dict(entry.get("forms")) if entry else {}
@@ -658,15 +663,13 @@ def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[s
         return {}
 
     text = _norm(_row_text(context))
-    candidates: List[tuple[int, int, float, str, Dict[str, Any]]] = []
-    fallback: List[tuple[float, str, Dict[str, Any]]] = []
+    candidates: List[tuple[int, int, float, str]] = []
     for form_name, form in forms.items():
         if not isinstance(form, dict):
             continue
-        quality = _as_float(form.get("bio_score"), None)
+        quality = effective_form_bio(entry, form)
         if quality is None:
             continue
-        fallback.append((float(quality), str(form_name), form))
         aliases = [form_name] + [
             str(alias)
             for alias in _safe_list(form.get("aliases"))
@@ -676,26 +679,19 @@ def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[s
             alias_norm = _norm(alias)
             if alias_norm and alias_norm in text:
                 specificity = 0 if "unspecified" in _norm(form_name) else 1
-                candidates.append((specificity, len(alias_norm), float(quality), str(form_name), form))
+                candidates.append((specificity, len(alias_norm), quality, str(form_name)))
 
-    chosen_name = ""
-    chosen: Dict[str, Any] = {}
     if candidates:
-        _, _, _, chosen_name, chosen = sorted(candidates, key=lambda row: (row[0], row[1], row[2]), reverse=True)[0]
-    elif len(fallback) == 1:
-        _, chosen_name, chosen = fallback[0]
-    elif fallback:
-        _, chosen_name, chosen = sorted(fallback, key=lambda row: row[0])[0]
-    if not chosen:
-        return {}
+        _, _, bio, chosen_name = sorted(candidates, reverse=True)[0]
+    else:
+        unknown = unknown_form_quality(entry)
+        if not unknown:
+            return {}
+        bio, chosen_name = unknown["bio_score"], unknown["form_id"]
 
-    bio = _as_float(chosen.get("bio_score"), None)
-    out: Dict[str, Any] = {
-        "matched_form": chosen_name,
-        "generic_form_quality_credit": True,
-    }
-    if bio is not None:
-        out["bio_score"] = bio
+    out: Dict[str, Any] = {"bio_score": bio, "generic_form_quality_credit": True}
+    if chosen_name:
+        out["matched_form"] = chosen_name
     category = entry.get("category_enum") or entry.get("category")
     if category:
         out["category"] = category

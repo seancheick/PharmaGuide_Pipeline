@@ -68,10 +68,10 @@
     "_max": 25,
     "A1_bioavailability_form": {
       "max": 18,
-      "_max_rationale": "v3.6.0: A1 reads pure bio_score (0-15, form quality only). Natural-source bonus moved to A5e where sourcing belongs. A1.max stays 18 — the (avg_bio_score / 15) * 18 rescale preserves the per-product budget without per-ingredient bias. A1 measures form/absorption only; sourcing lives in A5.",
+      "_max_rationale": "v3.6.0: A1 reads pure bio_score (0-15, form quality only). A1.max stays 18 — the (avg_bio_score / 15) * 18 rescale preserves the per-product budget without per-ingredient bias. A1 measures form/absorption only. The natural-source bonus and IQM `score`/`natural` fields were removed in IQM 5.6.0.",
       "range_score_field": "0-15",
       "score_field": "bio_score",
-      "_score_field_note": "Scorer reads ingredient.bio_score (form quality, 0-15). The legacy 'score' field (= bio_score + 3 if natural; 0-18) is deprecated and emitted as an alias of bio_score for backward compatibility.",
+      "_score_field_note": "Scorer reads ingredient.bio_score (form quality, 0-15), the only IQM form-quality field. The legacy 'score' and 'natural' fields no longer exist (IQM 5.6.0).",
       "multivitamin_floor": 9
     },
     "A2_premium_forms": {
@@ -99,7 +99,7 @@
     },
     "A5_formulation_excellence": {
       "max": 8,
-      "_max_rationale": "v3.7.0 (calibration): A5 pool raised 4→8 to make room for the tiered standardized-botanical bonus (A5b 0→4) without displacing organic/synergy/non-GMO/natural. A5 lives inside core_quality (a1+..+a6), clamped only by Section A max=25 — so a genuinely premium standardized single-ingredient product can finally rise, while Section A's 25 cap remains the runaway safety valve. Prior rationale (v3.6.0): cap was 3→4 to absorb the natural-source signal (A5e).",
+      "_max_rationale": "v3.7.0 (calibration): A5 pool raised 4→8 to make room for the tiered standardized-botanical bonus (A5b 0→4) without displacing organic/synergy/non-GMO. A5 lives inside core_quality (a1+..+a6), clamped only by Section A max=25 — so a genuinely premium standardized single-ingredient product can finally rise, while Section A's 25 cap remains the runaway safety valve. Prior rationale (v3.6.0, historical): cap was 3→4 to absorb a natural-source signal (A5e), since removed.",
       "organic": 1,
       "standardized_botanical": {
         "_description": "v3.7.0 tiered, unit-aware, class-capped standardized-botanical bonus (replaces binary 0/0.5/1). Tier is computed at enrich time from marker percentage vs threshold (unit-aware) or branded-form/marker evidence; class cap prevents non-botanicals (minerals, enzymes, isolated compounds) from earning the full botanical tier.",

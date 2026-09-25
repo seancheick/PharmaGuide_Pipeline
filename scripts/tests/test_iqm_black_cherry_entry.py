@@ -47,18 +47,6 @@ def test_dark_sweet_cherry_identifiers(iqm):
     assert e.get("external_ids", {}).get("unii") == "93T4562ZI3"
 
 
-def test_black_cherry_score_formula(iqm):
-    e = iqm["black_cherry"]
-    for form_key, form in e.get("forms", {}).items():
-        if not isinstance(form, dict):
-            continue
-        bio = form.get("bio_score")
-        score = form.get("score")
-        natural = bool(form.get("natural", False))
-        if isinstance(bio, (int, float)) and isinstance(score, (int, float)):
-            assert score == bio + (3 if natural else 0)
-
-
 def test_black_cherry_aliases(iqm):
     e = iqm["black_cherry"]
     all_aliases = set()

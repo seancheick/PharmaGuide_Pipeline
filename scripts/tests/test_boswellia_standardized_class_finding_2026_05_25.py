@@ -24,7 +24,6 @@ THREE signs the generic form should match the Class Finding floor:
 
 This test enforces:
   • Generic standardized matches branded floor (bio_score = 7).
-  • final score = 10 (= 7 + 3 natural bonus per score-field invariant).
   • Notes document the 2026-05-25 Class Finding extension.
   • Monotonicity: branded forms >= standardized >= resin >= unspecified.
 """

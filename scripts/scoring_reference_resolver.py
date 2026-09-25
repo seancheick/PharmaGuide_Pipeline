@@ -40,6 +40,7 @@ intent.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -147,6 +148,74 @@ def iqm_reference_entry(canonical_id: Any) -> Optional[Dict[str, Any]]:
     """Return the exact IQM entry for a canonical id, without alias guessing."""
     key = _norm(canonical_id)
     return iqm_reference_index().get(key) if key else None
+
+
+_LOW_CONFIDENCE_REVIEW_STATUSES = frozenset({"stub", "pending", "needs_review"})
+_UNKNOWN_FORM_TOKENS = ("unspecified", "unknown", "generic", "default")
+_EXACT_UNSPECIFIED_RE = re.compile(r"\(unspecified\)\s*$", re.IGNORECASE)
+UNKNOWN_FORM_NAME = "unspecified"
+
+
+def effective_form_bio(parent: Dict[str, Any], form: Dict[str, Any]) -> Optional[float]:
+    """The one form-quality value: IQM ``bio_score``, capped at 10 while the
+    parent's review is provisional. None when the form carries no bio_score."""
+    try:
+        bio = float(form.get("bio_score"))
+    except (TypeError, ValueError):
+        return None
+    review = str((parent.get("data_quality") or {}).get("review_status", "")).strip().lower()
+    return min(bio, 10.0) if review in _LOW_CONFIDENCE_REVIEW_STATUSES else bio
+
+
+def _eligible_forms(parent: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    # A named source preparation is never an identity-neutral default.
+    return {
+        name: form for name, form in (parent.get("forms") or {}).items()
+        if isinstance(form, dict)
+        and form.get("alias_identity_scope") != "source_preparation"
+        and effective_form_bio(parent, form) is not None
+    }
+
+
+def authored_unknown_form(parent: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    """The parent's authored unspecified form, chosen deterministically: the
+    exact "(unspecified)" form (vitamin D: 'vitamin d (unspecified)', never
+    'vitamin D2 (unspecified source)'), else a form named unspecified/unknown/
+    generic/default. None when IQM authored none."""
+    forms = _eligible_forms(parent)
+    exact = sorted(n for n in forms if _EXACT_UNSPECIFIED_RE.search(n))
+    if exact:
+        return exact[0], forms[exact[0]]
+    for token in _UNKNOWN_FORM_TOKENS:
+        named = sorted(n for n in forms if token in n.lower())
+        if named:
+            return named[0], forms[named[0]]
+    return None
+
+
+def unknown_form_quality(parent: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """What a form the label does not disclose is worth under this parent.
+
+    - An authored unspecified IQM form wins: its name and effective bio_score.
+    - Otherwise ``max(0, lowest eligible named bio_score - 1)``, identity-
+      neutral: ``form_id`` is None, so no named form's aliases, absorption,
+      notes, identifiers, evidence or consumer copy can attach to it.
+
+    Only genuine nondisclosure belongs here. A named form IQM does not
+    recognize stays unmapped for curation, and a disclosed form the pipeline
+    lost is a pipeline defect; neither should be routed to this value.
+    """
+    authored = authored_unknown_form(parent)
+    if authored:
+        return {"form_id": authored[0], "form": authored[1],
+                "bio_score": effective_form_bio(parent, authored[1]),
+                "basis": "authored_unspecified"}
+    forms = _eligible_forms(parent)
+    if not forms:
+        return None
+    lowest = min(effective_form_bio(parent, form) for form in forms.values())
+    return {"form_id": None, "form": None, "bio_score": max(0.0, lowest - 1.0),
+            "basis": "derived_lowest_named_minus_one"}
 
 
 @dataclass(frozen=True)

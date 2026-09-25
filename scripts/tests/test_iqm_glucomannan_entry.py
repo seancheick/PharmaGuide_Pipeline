@@ -3,7 +3,7 @@
 IQM coverage: Glucomannan (Batch 5 — verified pre-existing).
 
 VERIFIED ALREADY IN IQM under `fiber` parent → form `konjac glucomannan`
-(bio=9, score=12, natural=true). Per the user's "no double entry" rule,
+(bio_score 9). Per the user's "no double entry" rule,
 do NOT create a duplicate top-level glucomannan entry. The 5 audit fires
 must be tracked through alias coverage instead.
 
@@ -56,17 +56,6 @@ def test_glucomannan_aliases_cover_label_renderings(iqm):
     }
     missing = needed - aliases
     assert not missing, f"fiber/konjac glucomannan missing aliases: {missing}"
-
-
-def test_glucomannan_form_score_formula_consistent(iqm):
-    """Schema rule: score = bio_score + (3 if natural else 0)."""
-    fiber = iqm.get("fiber", {})
-    form = fiber.get("forms", {}).get("konjac glucomannan", {})
-    bio = form.get("bio_score")
-    score = form.get("score")
-    natural = bool(form.get("natural", False))
-    if isinstance(bio, (int, float)) and isinstance(score, (int, float)):
-        assert score == bio + (3 if natural else 0)
 
 
 def test_no_duplicate_top_level_glucomannan(iqm):

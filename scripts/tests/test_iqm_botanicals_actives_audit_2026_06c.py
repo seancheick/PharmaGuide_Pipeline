@@ -2,7 +2,7 @@
 
 Content-verified PK/identity (PMIDs 22429945 oral-ATP-not-bioavailable,
 15333514 resveratrol, 22551330 saw palmetto, 9405716 whey/casein; PubChem
-CID 3071 DIM vs 3712 I3C; NCCIH). Invariant: score == bio_score + 3*natural.
+CID 3071 DIM vs 3712 I3C; NCCIH).
 """
 import json
 import os

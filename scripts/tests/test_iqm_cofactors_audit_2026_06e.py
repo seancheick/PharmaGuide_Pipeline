@@ -2,7 +2,7 @@
 glutathione/GPx). PK/identity content-verified (curcumin conjugate-dominance
 Vareed 2008 PMID 18559556; quercetin poor F Hollman 1995 PMID 7491892; S-acetyl-
 GSH 80-90% claim REFUTED, no human PK; GGC CID 123938 != GSH CID 124886; GSSG
-CID 65359; GPx selenoenzyme family PMID 23201771). Invariant: score == bio + 3*natural.
+CID 65359; GPx selenoenzyme family PMID 23201771).
 
 Score changes are limited to NON-signed-off forms. Dr Pham sign-off forms
 (LifePQQ, NovaSol/CurcuWin/Meriva/Theracurmin, liposomal glutathione) are NOT

@@ -146,8 +146,6 @@ def _base_enriched(**overrides):
                     "form": "ascorbic acid",
                     "category": "vitamins",
                     "bio_score": 10,
-                    "natural": False,
-                    "score": 10.0,
                     "mapped": True,
                     "standard_name": "Vitamin C",
                     "notes": "Most common Vitamin C form.",
@@ -1406,7 +1404,7 @@ def _safety_only_row(path="ingredientRows[1].nestedRows[0]",
                      safety_id="BANNED_CBD_US", **overrides):
     row = {
         "raw_source_text": label, "name": label, "standard_name": label,
-        "bio_score": None, "natural": None, "score": None, "notes": None,
+        "bio_score": None, "notes": None,
         "category": None, "mapped": False, "safety_hits": [],
         "raw_source_path": path,
         "source_label_name": label, "label_display_name": label,

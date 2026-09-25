@@ -535,7 +535,6 @@ class TestIdentityIntegrityBoundary:
             "match_tier": match_tier,
             "match_ambiguity_candidates": [],
             "bio_score": 8,
-            "natural": False,
             "dosage_importance": 1.0,
             "category": "fatty_acids",
         }
@@ -2043,7 +2042,7 @@ class TestFormUnmappedFallbackRegression:
         assert match is not None
         assert match.get("canonical_id") == "dha"
         assert "unspecified" in str(match.get("form_id", "")).lower()
-        assert float(match.get("score", 0)) <= 13.0
+        assert match["bio_score"] < 14.0  # below the premium TG/rTG forms
 
     def test_combined_dha_epa_does_not_get_premium_form_credit(self, enricher):
         """
@@ -2069,9 +2068,9 @@ class TestFormUnmappedFallbackRegression:
         )
         assert match is not None
         assert match.get("canonical_id") == "fish_oil"
-        # Premium-form ceiling guard — fish_oil (unspecified) is bio=10,
-        # natural=true → score=13 ≤ TG/rTG premium ceilings (bio=14, score=17).
-        assert float(match.get("score", 0)) <= 13.0
+        # Premium-form ceiling guard: fish_oil (unspecified) sits below the
+        # TG/rTG premium forms (bio 14).
+        assert match["bio_score"] < 14.0
 
 
 class TestParentTotalFlagging:
@@ -2085,8 +2084,6 @@ class TestParentTotalFlagging:
             "form_name": "folic acid",
             "match_tier": "exact",
             "bio_score": 12,
-            "score": 12,
-            "natural": False,
             "dosage_importance": 1.0,
             "category": "vitamins",
         }
@@ -2116,8 +2113,6 @@ class TestParentTotalFlagging:
                 "form_name": "(unspecified)",
                 "match_tier": "exact",
                 "bio_score": 9,
-                "score": 9,
-                "natural": False,
                 "dosage_importance": 1.0,
                 "category": "vitamins",
             }
@@ -2172,8 +2167,6 @@ class TestParentTotalFlagging:
                 "form_name": "(unspecified)",
                 "match_tier": "exact",
                 "bio_score": 9,
-                "score": 9,
-                "natural": False,
                 "dosage_importance": 1.0,
                 "category": "vitamins",
             }
@@ -2217,8 +2210,6 @@ class TestParentTotalFlagging:
                 "form_name": "(unspecified)",
                 "match_tier": "exact",
                 "bio_score": 9,
-                "score": 9,
-                "natural": False,
                 "dosage_importance": 1.0,
                 "category": "vitamins",
             }
@@ -2273,8 +2264,6 @@ class TestParentTotalFlagging:
                 "form_name": "(unspecified)",
                 "match_tier": "exact",
                 "bio_score": 9,
-                "score": 9,
-                "natural": False,
                 "dosage_importance": 1.0,
                 "category": "vitamins",
             }
@@ -2325,8 +2314,6 @@ class TestParentTotalFlagging:
                 "form_name": "ascorbic acid",
                 "match_tier": "exact",
                 "bio_score": 13,
-                "score": 13,
-                "natural": False,
                 "dosage_importance": 1.0,
                 "category": "vitamins",
             }
@@ -2378,8 +2365,6 @@ class TestParentTotalFlagging:
                 "form_name": "caffeine anhydrous",
                 "match_tier": "exact",
                 "bio_score": 13,
-                "score": 13,
-                "natural": False,
                 "dosage_importance": 1.0,
                 "category": "other",
             }
@@ -2429,8 +2414,6 @@ class TestParentTotalFlagging:
                 "form_name": "fish oil (unspecified)",
                 "match_tier": "exact",
                 "bio_score": 10,
-                "score": 10,
-                "natural": True,
                 "dosage_importance": 1.0,
                 "category": "fatty_acids",
             }
@@ -2479,8 +2462,6 @@ class TestParentTotalFlagging:
                 "form_name": "fish oil (unspecified)",
                 "match_tier": "exact",
                 "bio_score": 10,
-                "score": 10,
-                "natural": True,
                 "dosage_importance": 1.0,
                 "category": "fatty_acids",
             }
@@ -2530,8 +2511,6 @@ class TestParentTotalFlagging:
                 "form_name": "dha (unspecified)",
                 "match_tier": "exact",
                 "bio_score": 10,
-                "score": 10,
-                "natural": True,
                 "dosage_importance": 1.0,
                 "category": "fatty_acids",
             }
@@ -2575,8 +2554,6 @@ class TestParentTotalFlagging:
                 "form_name": "(unspecified)",
                 "match_tier": "exact",
                 "bio_score": 9,
-                "score": 9,
-                "natural": False,
                 "dosage_importance": 1.0,
                 "category": "vitamins",
             }
@@ -2609,8 +2586,6 @@ class TestParentTotalFlagging:
                 "form_name": "meriva curcumin",
                 "match_tier": "exact",
                 "bio_score": 13,
-                "score": 16,
-                "natural": True,
                 "dosage_importance": 1.5,
                 "category": "botanicals",
             }
@@ -2907,8 +2882,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "EGCG™": {
                         "bio_score": 10,
-                        "natural": True,
-                        "score": 10,
                         "aliases": ["EGCG™"]
                     }
                 }
@@ -2919,8 +2892,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "EGCG": {
                         "bio_score": 5,
-                        "natural": False,
-                        "score": 5,
                         "aliases": ["EGCG"]
                     }
                 }
@@ -2940,8 +2911,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "green tea catechins": {
                         "bio_score": 12,
-                        "natural": True,
-                        "score": 12,
                         "aliases": ["EGCG"]
                     }
                 }
@@ -2960,8 +2929,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "elderberry extract": {
                         "bio_score": 8,
-                        "natural": True,
-                        "score": 8,
                         "contains_aliases": ["elderberry extract"]
                     }
                 }
@@ -2972,8 +2939,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "elderberry fruit extract": {
                         "bio_score": 10,
-                        "natural": True,
-                        "score": 10,
                         "contains_aliases": ["elderberry fruit extract"]
                     }
                 }
@@ -2996,8 +2961,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "EGCG": {
                         "bio_score": 10,
-                        "natural": True,
-                        "score": 10,
                         "aliases": ["EGCG"]
                     }
                 }
@@ -3008,8 +2971,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "contains_eg": {
                         "bio_score": 5,
-                        "natural": False,
-                        "score": 5,
                         "contains_aliases": ["EG"]
                     }
                 }
@@ -3028,8 +2989,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "alpha": {
                         "bio_score": 8,
-                        "natural": True,
-                        "score": 8,
                         "aliases": ["Alpha"]
                     }
                 }
@@ -3040,8 +2999,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "beta": {
                         "bio_score": 6,
-                        "natural": False,
-                        "score": 6,
                         "aliases": ["Beta"]
                     }
                 }
@@ -3060,8 +3017,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "alpha_form": {
                         "bio_score": 8,
-                        "natural": True,
-                        "score": 8,
                         "aliases": ["Herb"]
                     }
                 }
@@ -3072,8 +3027,6 @@ class TestQualityMapPrecedence:
                 "forms": {
                     "beta_form": {
                         "bio_score": 7,
-                        "natural": True,
-                        "score": 7,
                         "aliases": ["Herb"]
                     }
                 }

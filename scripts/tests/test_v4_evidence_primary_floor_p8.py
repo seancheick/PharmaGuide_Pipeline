@@ -28,7 +28,7 @@ def _match(*, ingredient="Ashwagandha", standard_name=None, study_type="rct_mult
 
 def _ing(name="Ashwagandha", canonical_id="ashwagandha", quantity=600, unit="mg"):
     return {"name": name, "standard_name": name, "canonical_id": canonical_id,
-            "mapped": True, "bio_score": 11, "score": 11, "quantity": quantity, "unit": unit}
+            "mapped": True, "bio_score": 11, "quantity": quantity, "unit": unit}
 
 
 def _product(ingredients, matches):

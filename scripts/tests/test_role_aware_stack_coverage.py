@@ -42,8 +42,6 @@ def _ingredient(
             "parent_key": canonical_id,
             "category": category,
             "bio_score": 12,
-            "natural": False,
-            "score": 12.0,
             "mapped": True,
             "notes": "",
             "matched_form": "",

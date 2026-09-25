@@ -70,7 +70,7 @@ def test_black_tea_source_identity_is_coherent_on_active_iqd_and_scoring_rows(
     assert (quality["recognized_entry_id"], quality["recognition_source"],
             quality["recognized_entry_name"]) == expected
     assert quality["recognition_type"] == "botanical_marker_lineage"
-    for field in ("bio_score", "score", "form_id", "matched_form", "final_form_bio_score"):
+    for field in ("bio_score", "form_id", "matched_form", "final_form_bio_score"):
         assert quality.get(field) is None
     scoring = get_scoring_ingredients(product, strict=True)
     projected = next(row for row in scoring.rows if row.get("raw_source_path") == source_ref)
@@ -214,7 +214,6 @@ def test_valid_source_owner_remains_primary(
     assert quality["canonical_id"] == canonical
     assert quality["scoreable_identity"] is False
     assert quality.get("bio_score") is None
-    assert quality.get("score") is None
 
 
 def test_source_owned_standardized_marker_form_stays_secondary(

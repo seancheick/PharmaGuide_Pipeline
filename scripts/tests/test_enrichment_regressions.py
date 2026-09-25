@@ -1228,8 +1228,6 @@ class TestBrandedFormMatching:
                 "forms": {
                     "brandx form": {
                         "bio_score": 10,
-                        "natural": True,
-                        "score": 12,
                         "aliases": ["brandx"],
                         "dosage_importance": 1.0,
                     }
@@ -1535,7 +1533,6 @@ class TestMatchRulesBehavior:
         assert result is not None
         assert result["canonical_id"] == "butterbur"
         assert result["bio_score"] <= 10
-        assert result["score"] <= 10
 
     def test_legacy_match_mode_standard_is_treated_as_exact(self, enricher):
         """Legacy match_mode='standard' must not allow pattern/contains tiers."""
@@ -1546,8 +1543,6 @@ class TestMatchRulesBehavior:
                 "forms": {
                     "legacy form": {
                         "bio_score": 10,
-                        "natural": True,
-                        "score": 13,
                         "aliases": ["legacy ingredient"],
                         "pattern_aliases": [r"legacy\s+.+\s+ingredient"],
                         "contains_aliases": ["legacy ingredient complex"],
@@ -2388,8 +2383,6 @@ class TestPrimaryActiveContractForBlendChildren:
             "quantity": quantity,
             "unit": unit,
             "bio_score": 14,
-            "natural": False,
-            "score": 14.0,
             "notes": "",
             "safety_hits": [],
         }
@@ -2474,8 +2467,6 @@ class TestPrimaryActiveContractForBlendChildren:
                         "unit": "mg",
                         "raw_taxonomy": {"category": "botanical"},
                         "bio_score": 10,
-                        "natural": True,
-                        "score": 10.0,
                     },
                     {
                         "raw_source_text": "Zinc",
@@ -2497,8 +2488,6 @@ class TestPrimaryActiveContractForBlendChildren:
                         "unit": "mg",
                         "raw_taxonomy": {"category": "botanical"},
                         "bio_score": 10,
-                        "natural": True,
-                        "score": 10.0,
                     },
                 ],
                 "ingredients": [

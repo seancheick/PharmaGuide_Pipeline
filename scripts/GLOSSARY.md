@@ -86,8 +86,7 @@ committed outcome after a lost response without borrowing another attempt's resu
 | Field | Contract |
 |---|---|
 | `bio_score` | 0–15 form-quality signal. For systemic actives it represents absorption/bioavailability evidence; for local/matrix actives it represents relevant form and delivery-to-site confidence. |
-| `natural` | Whether the form is supported as naturally derived. |
-| `score` | Legacy `bio_score + 3` when `natural=true`, capped at 18. Do not use this value as pure bioavailability. |
+| `natural`, `score` | Removed in IQM 5.6.0. `bio_score` is the only form-quality field; no alias exists. |
 | `absorption_structured` | Structured value/range/quality/notes evidence. It must not claim more precision than the supporting source. |
 | `form_evidence_axis` | The single authored home for a form's assessment axis, and the value validation uses. It records which evidence standard the form is judged against, and exists before evidence work begins so a reviewer knows which bar applies. It is the only place the axis may appear: the 55 records that once carried it inside `form_evidence` were hoisted out on 2026-09-09, and a nested `form_evidence.axis` is now rejected by validation rather than read as a fallback. Resolve it only through `validate_iqm_form`, which takes the owning form. |
 | **Assessment axis** | One of `systemic_bioavailability`, `delivery_to_site`, `form_quality_confidence`, `organism_survivability`, `class_equivalence`, `microbial_substrate_utilization`. Declaring an axis never changes a score and never clears the evidence backlog. |

@@ -2794,8 +2794,6 @@ def test_batch48_brown_rice_chelate_forms_exist_in_iqm(mineral_key, form_name, e
     assert form.get("bio_score") == expected_bio, (
         f"{form_name} bio_score must be {expected_bio} per Dr Pham C4 BRC review."
     )
-    assert form.get("score") == expected_bio  # natural=False so score == bio
-    assert form.get("natural") is False
     assert isinstance(form.get("aliases"), list) and len(form["aliases"]) >= 3
     struct = form.get("absorption_structured") or {}
     valid_qualities = {"excellent", "very_good", "good", "moderate", "low", "poor", "variable", "unknown"}

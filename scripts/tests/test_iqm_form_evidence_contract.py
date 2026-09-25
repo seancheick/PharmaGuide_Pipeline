@@ -93,7 +93,7 @@ def _iqm(form: dict) -> dict:
 
 
 def test_excellent_form_requires_approved_structured_evidence():
-    iqm = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    iqm = _iqm({"bio_score": 14})
 
     issues = validate_iqm_form_evidence(iqm, backlog=set())
 
@@ -103,7 +103,7 @@ def test_excellent_form_requires_approved_structured_evidence():
 
 
 def test_frozen_backlog_allows_existing_gap_but_rejects_stale_entries():
-    iqm = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    iqm = _iqm({"bio_score": 14})
 
     assert validate_iqm_form_evidence(
         iqm,
@@ -122,7 +122,7 @@ def test_frozen_backlog_allows_existing_gap_but_rejects_stale_entries():
 
 
 def test_backlog_rejects_form_resolved_by_score_recalibration():
-    iqm = _iqm({"bio_score": 11, "score": 11, "natural": False})
+    iqm = _iqm({"bio_score": 11})
 
     assert validate_iqm_form_evidence(
         iqm,
@@ -139,8 +139,6 @@ def test_excellent_form_rejects_evidence_too_weak_for_public_tier(level: str):
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence": evidence,
         }
     )
@@ -158,8 +156,6 @@ def test_pubmed_reference_requires_claim_scope_and_verification_receipt():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence": evidence,
         }
     )
@@ -186,8 +182,6 @@ def test_authoritative_guidance_is_a_supported_source_type():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence": evidence,
         }
     )
@@ -212,7 +206,7 @@ def test_exported_form_evidence_is_compact_and_still_source_verified():
 def test_manifest_apply_is_atomic_when_any_precondition_is_stale(tmp_path: Path):
     iqm_path = tmp_path / "ingredient_quality_map.json"
     manifest_path = tmp_path / "manifest.json"
-    original = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    original = _iqm({"bio_score": 14})
     iqm_path.write_text(json.dumps(original, indent=2) + "\n")
     form = original["magnesium"]["forms"]["magnesium citrate"]
     manifest_path.write_text(
@@ -251,8 +245,6 @@ def test_manifest_apply_can_atomically_remove_stale_form_evidence(tmp_path: Path
     original = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence": _approved_evidence(),
         }
     )
@@ -284,7 +276,7 @@ def test_manifest_apply_can_atomically_remove_stale_form_evidence(tmp_path: Path
 def test_manifest_apply_updates_all_entries_and_reports_exact_counts(tmp_path: Path):
     iqm_path = tmp_path / "ingredient_quality_map.json"
     manifest_path = tmp_path / "manifest.json"
-    original = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    original = _iqm({"bio_score": 14})
     iqm_path.write_text(json.dumps(original, indent=2) + "\n")
     form = original["magnesium"]["forms"]["magnesium citrate"]
     manifest_path.write_text(
@@ -319,7 +311,7 @@ def test_manifest_apply_updates_all_entries_and_reports_exact_counts(tmp_path: P
 
 
 def test_backlog_freezes_initial_keys_and_only_remaining_keys_gate():
-    iqm = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    iqm = _iqm({"bio_score": 14})
 
     backlog = build_initial_backlog(iqm, created_on="2026-08-13")
 
@@ -487,7 +479,7 @@ def test_catalog_usage_counts_rows_and_products_separately(tmp_path: Path):
 
 
 def test_catalog_gate_reports_only_used_excellent_forms_without_evidence():
-    iqm = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    iqm = _iqm({"bio_score": 14})
     usage = {
         "magnesium::magnesium citrate": {"ingredient_rows": 10, "products": 8},
         "vitamin_c::ascorbic acid": {"ingredient_rows": 20, "products": 20},
@@ -511,8 +503,6 @@ def test_live_pubmed_check_detects_wrong_paper_and_retraction():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence": evidence,
         }
     )
@@ -538,8 +528,6 @@ def test_live_pubmed_check_accepts_matching_content():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence": evidence,
         }
     )
@@ -561,8 +549,6 @@ def test_pubmed_collection_is_sorted_and_deduplicated():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence": evidence,
         }
     )
@@ -663,7 +649,7 @@ def test_microbial_substrate_utilization_is_a_supported_axis():
 
 
 def test_form_level_axis_is_the_authored_value():
-    form = {"bio_score": 14, "score": 14, "natural": False}
+    form = {"bio_score": 14}
     form["form_evidence_axis"] = "systemic_bioavailability"
     assert resolve_form_axis(form) == "systemic_bioavailability"
 
@@ -672,8 +658,6 @@ def test_form_level_axis_rejects_a_value_outside_the_vocabulary():
     iqm = _iqm(
         {
             "bio_score": 11,
-            "score": 11,
-            "natural": False,
             "form_evidence_axis": "vibes_based_absorption",
         }
     )
@@ -693,8 +677,6 @@ def test_a_nested_axis_is_rejected_rather_than_reconciled():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence_axis": "systemic_bioavailability",
             "form_evidence": evidence,
         }
@@ -714,8 +696,6 @@ def test_assigning_an_axis_alone_never_clears_a_backlog_form():
     """
     form = {
         "bio_score": 14,
-        "score": 14,
-        "natural": False,
         "form_evidence_axis": "organism_survivability",
     }
     iqm = _iqm(form)
@@ -742,11 +722,9 @@ def test_axis_coverage_counts_only_excellent_forms():
             "forms": {
                 "magnesium citrate": {
                     "bio_score": 14,
-                    "score": 14,
-                    "natural": False,
                     "form_evidence_axis": "systemic_bioavailability",
                 },
-                "magnesium oxide": {"bio_score": 3, "score": 3, "natural": False},
+                "magnesium oxide": {"bio_score": 3},
             },
         },
     }
@@ -761,7 +739,7 @@ def test_axis_coverage_reports_gaps_without_failing_validation():
     Failing every missing axis today would block the pipeline on 195 forms
     nobody has reviewed yet.
     """
-    iqm = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    iqm = _iqm({"bio_score": 14})
     key = "magnesium::magnesium citrate"
 
     coverage = excellent_axis_coverage(iqm)
@@ -773,7 +751,7 @@ def test_axis_coverage_reports_gaps_without_failing_validation():
 def test_complete_axis_coverage_can_be_enforced_once_reached():
     """The switch exists and is off by default; turning it on is the final
     step after all Excellent forms carry a reviewed axis."""
-    iqm = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    iqm = _iqm({"bio_score": 14})
     key = "magnesium::magnesium citrate"
 
     assert validate_iqm_form_evidence(
@@ -793,8 +771,6 @@ def test_canonical_axis_alone_satisfies_evidence_validation():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence_axis": "systemic_bioavailability",
             "form_evidence": evidence,
         }
@@ -813,8 +789,6 @@ def test_prebiotic_axis_rejects_evidence_that_only_shows_bioavailability():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence_axis": "microbial_substrate_utilization",
             "form_evidence": evidence,
         }
@@ -834,8 +808,6 @@ def test_prebiotic_axis_accepts_selective_utilisation_with_host_benefit():
     iqm = _iqm(
         {
             "bio_score": 14,
-            "score": 14,
-            "natural": False,
             "form_evidence_axis": "microbial_substrate_utilization",
             "form_evidence": evidence,
         }
@@ -864,17 +836,13 @@ def test_axis_coverage_separates_canonical_from_legacy():
             "forms": {
                 "magnesium citrate": {
                     "bio_score": 14,
-                    "score": 14,
-                    "natural": False,
                     "form_evidence_axis": "systemic_bioavailability",
                 },
                 "magnesium malate": {
                     "bio_score": 13,
-                    "score": 13,
-                    "natural": False,
                     "form_evidence": legacy_evidence,
                 },
-                "magnesium taurate": {"bio_score": 12, "score": 12, "natural": False},
+                "magnesium taurate": {"bio_score": 12},
             },
         },
     }
@@ -902,8 +870,6 @@ def _hoisted_form(bio_score: int = 14) -> dict:
     axis = "systemic_bioavailability"
     return {
         "bio_score": bio_score,
-        "score": bio_score,
-        "natural": False,
         "form_evidence_axis": axis,
         "form_evidence": evidence,
     }
@@ -930,8 +896,6 @@ def test_manifest_hoists_the_axis_and_drops_the_nested_copy_atomically(
             "forms": {
                 "magnesium citrate": {
                     "bio_score": 14,
-                    "score": 14,
-                    "natural": False,
                     "form_evidence": legacy_evidence,
                 }
             },
@@ -1022,8 +986,6 @@ def test_nested_axis_is_rejected_and_no_longer_resolves():
     evidence["axis"] = "systemic_bioavailability"
     form = {
         "bio_score": 14,
-        "score": 14,
-        "natural": False,
         "form_evidence_axis": "systemic_bioavailability",
         "form_evidence": evidence,
     }

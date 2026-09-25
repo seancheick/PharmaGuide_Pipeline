@@ -7,7 +7,8 @@ Encodes the corrected state for findings verified against:
   - independently content-verified PK (PMIDs 6120218, 4056044, 23351578, 23140417,
     12899840; PubChem CID 61833, 5280791).
 
-Invariant relied on throughout: score == bio_score + 3*natural (capped 18).
+bio_score is the only IQM form-quality field (the natural-bonus `score` and
+`natural` were removed in IQM 5.6.0).
 """
 import json
 import os

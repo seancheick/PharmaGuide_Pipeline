@@ -4,7 +4,7 @@ choline/phosphatidylserine/phosphatidylinositol).
 Verified: ISAPP — strain count is not a quality axis (Hill 2014 PMID 24912386),
 prebiotics are local/selective (Gibson 2017 PMID 28611480); ODS — no comparative
 choline-form bioavailability data; liposomal-PS/Actiserine superiority rests on a
-single conflicted industry PK study. Invariant: score == bio + 3*natural.
+single conflicted industry PK study.
 
 Score changes only on NON-signed-off forms (probiotics-unspecified and pectin
 sign-offs untouched). bovine-PS prion safety, choline category, HMO/PI natural

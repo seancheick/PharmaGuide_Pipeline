@@ -350,8 +350,6 @@ def _enriched():
                     "matched_form": "riboflavin-5-phosphate",
                     "matched_forms": [],
                     "bio_score": 10.0,
-                    "score": 10.0,
-                    "natural": False,
                     "notes": "Workspace prose. Cited evidence: PMID:8604671.",
                     "category": "vitamins",
                     "mapped": True,

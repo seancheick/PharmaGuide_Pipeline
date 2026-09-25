@@ -22,7 +22,7 @@ rows across 20 brands. Four real gaps were identified:
    only had an `extract` form. Falling back to the extract form
    overstated bio-availability. Added a dedicated
    `cascara sagrada bark powder` form (bio=4) so powder labels
-   score correctly (score = bio + 3 natural = 7).
+   score correctly.
 
 3. **OCR-typo "Bioperinie" full-string variants** — canonical-level
    resolution missed "Bioperinie(R) Black Pepper Extract" because

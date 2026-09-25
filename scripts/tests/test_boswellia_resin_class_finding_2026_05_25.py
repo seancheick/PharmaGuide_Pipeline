@@ -39,7 +39,6 @@ Blast radius: 1 product in the corpus.
 
 This test enforces:
   • resin bio_score = 7 (Class Finding floor)
-  • resin score = 10 (= 7 + 3 natural bonus per score-field invariant)
   • Notes still cite the Batch 16 Class Finding
   • resin bio_score <= branded floor (no inversion)
   • No boswellia form scores higher than any other form with strictly
