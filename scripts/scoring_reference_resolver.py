@@ -298,6 +298,53 @@ def effective_form_bio(parent: Dict[str, Any], form: Dict[str, Any]) -> Optional
     return bio
 
 
+def parent_best_form_quality(canonical_id: Any) -> Optional[float]:
+    """Highest eligible named-form quality under one IQM parent.
+
+    The authored unspecified form and typed non-parent relationships cannot
+    define what "best form of this parent" means. Low-confidence parents keep
+    the same provisional cap used by :func:`effective_form_bio`.
+    """
+    parent = iqm_reference_entry(canonical_id)
+    if not parent:
+        return None
+    authored = authored_unknown_form(parent)
+    values = []
+    for name, form in _candidate_forms(parent).items():
+        if authored and name == authored[0]:
+            continue
+        if not floor_eligible(form):
+            continue
+        value = effective_form_bio(parent, form)
+        if value is not None:
+            values.append(value)
+    return max(values) if values else None
+
+
+def parent_relative_form_quality(
+    canonical_id: Any,
+    bio_score: Any,
+    *,
+    scale: float = 15.0,
+) -> Optional[float]:
+    """Put an IQM form on a parent-relative Formulation scale.
+
+    IQM remains the only form-quality owner. This normalization makes the best
+    eligible form for each parent worth the top of the scoring scale while
+    preserving every authored within-parent difference. Unknown parents retain
+    their stored value so older or synthetic artifacts remain deterministic.
+    """
+    try:
+        value = float(bio_score)
+    except (TypeError, ValueError):
+        return None
+    value = max(0.0, min(float(scale), value))
+    ceiling = parent_best_form_quality(canonical_id)
+    if ceiling is None or ceiling <= 0:
+        return value
+    return max(0.0, min(float(scale), value / ceiling * float(scale)))
+
+
 @dataclass(frozen=True)
 class ReferenceResult:
     family: str

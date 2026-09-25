@@ -110,6 +110,23 @@ def test_panel_form_quality_floor_never_reduces_premium_panel() -> None:
     assert payload["components"]["panel_form_quality"] == 12.0
 
 
+def test_panel_form_quality_uses_each_iqm_parents_best_eligible_form() -> None:
+    from scoring_v4.modules.multi_prenatal_formulation import score_formulation
+
+    payload = score_formulation(_product(ingredients=[
+        _ingredient(
+            "vitamin_b12_cobalamin",
+            name="Vitamin B12",
+            bio_score=10.0,
+            matched_form="cyanocobalamin",
+        ),
+    ]))
+
+    # B12's current best eligible IQM form is 11. Cyanocobalamin therefore
+    # earns 10/11 of the panel form-quality component, instead of 10/15.
+    assert payload["components"]["panel_form_quality"] == 10.91
+
+
 def test_equally_rated_panel_size_adds_no_formulation_points() -> None:
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 

@@ -1162,8 +1162,8 @@
         "archetype": "prenatal_multi",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 93.7,
-        "quality_tier": "Excellent",
+        "quality_score_v4_100": 95.5,
+        "quality_tier": "Exceptional",
         "v4_confidence": "high",
         "normalization_references": {
           "formulation": 14.0,
@@ -1171,7 +1171,7 @@
           "evidence": 18.0
         },
         "pillars": {
-          "formulation": 17.7,
+          "formulation": 19.5,
           "dose": 20.0,
           "evidence": 20.0,
           "transparency": 11.0,
@@ -1179,7 +1179,7 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 12.4,
+          "formulation": 13.63,
           "dose": 23.8517,
           "evidence": 18.0,
           "transparency": 11.0

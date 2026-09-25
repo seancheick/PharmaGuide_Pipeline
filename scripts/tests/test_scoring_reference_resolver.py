@@ -106,6 +106,21 @@ def test_iqm_reference_entry_owns_canonical_category_lookup():
     assert iqm_reference_entry("not_a_real_canonical_id") is None
 
 
+def test_parent_relative_form_quality_normalizes_best_eligible_form_to_fifteen():
+    from scoring_reference_resolver import parent_relative_form_quality
+
+    # Current reviewed B12 values top out at 11. Parent-relative Formulation
+    # treats that best eligible form as 15 while preserving the IQM ordering.
+    assert parent_relative_form_quality("vitamin_b12_cobalamin", 11.0) == 15.0
+    assert parent_relative_form_quality("vitamin_b12_cobalamin", 10.0) == 13.636363636363637
+
+
+def test_parent_relative_form_quality_falls_back_to_stored_scale_without_parent():
+    from scoring_reference_resolver import parent_relative_form_quality
+
+    assert parent_relative_form_quality("not_a_real_canonical_id", 12.0) == 12.0
+
+
 def test_therapeutic_index_parity_with_botanical_profile_dosing_index():
     """Resolver and the live scorer must agree on therapeutic-reference membership."""
     from scoring_reference_resolver import _therapeutic_index

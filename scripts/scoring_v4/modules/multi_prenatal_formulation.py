@@ -31,6 +31,7 @@ from scoring_v4.modules.generic_formulation import (
     apply_formulation_presence_floor,
     shared_formulation_penalty_detail,
 )
+from scoring_reference_resolver import parent_relative_form_quality
 
 
 from scoring_v4.quality_score_config import block as _cfg_block
@@ -72,21 +73,29 @@ def _score_panel_form_quality(product: Dict[str, Any]) -> tuple[float, float | N
     if not rows:
         return 0.0, None, None
 
-    weighted: List[tuple[float, float]] = []
+    weighted: List[tuple[float, float, float]] = []
     for ing in rows:
-        score = bio_score_of(ing)
+        raw_score = bio_score_of(ing)
+        if raw_score is None:
+            raw_score = PANEL_FORM_NEUTRAL_FLOOR if ing.get("mapped") else 0.0
+        score = parent_relative_form_quality(ing.get("canonical_id"), raw_score)
         if score is None:
-            score = PANEL_FORM_NEUTRAL_FLOOR if ing.get("mapped") else 0.0
+            score = raw_score
         weight = _as_float(ing.get("dosage_importance"), 1.0) or 1.0
         if weight <= 0:
             weight = 1.0
-        weighted.append((_clamp(0.0, BIO_SCORE_MAX, score), weight))
+        weighted.append((
+            _clamp(0.0, BIO_SCORE_MAX, raw_score),
+            _clamp(0.0, BIO_SCORE_MAX, score),
+            weight,
+        ))
 
-    denom = sum(weight for _, weight in weighted)
+    denom = sum(weight for _, _, weight in weighted)
     if denom <= 0:
         return 0.0, None, None
-    avg = sum(score * weight for score, weight in weighted) / denom
-    effective = max(avg, PANEL_FORM_NEUTRAL_FLOOR)
+    avg = sum(raw_score * weight for raw_score, _, weight in weighted) / denom
+    relative_avg = sum(score * weight for _, score, weight in weighted) / denom
+    effective = max(relative_avg, PANEL_FORM_NEUTRAL_FLOOR)
     contribution = _clamp(0.0, CAP_PANEL_FORM_QUALITY, (effective / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
     return _round(contribution), _round(avg), _round(effective)
 
