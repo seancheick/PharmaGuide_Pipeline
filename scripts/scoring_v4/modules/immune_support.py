@@ -27,6 +27,8 @@ _CM = _cfg_block("category_magnitudes", "immune_support")["immune_support"]
 
 
 IMMUNE_EVIDENCE_CAP = _CM["evidence_cap"]
+HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT = _CM["high_variability_botanical_stack_min_count"]
+HIGH_VARIABILITY_BOTANICAL_STACK_PENALTY = _CM["high_variability_botanical_stack_penalty"]
 
 _ALIASES = {
     "vitamin_c": ("vitamin_c", "ascorbic acid", "ascorbate", "ester-c", "vitamin c"),
@@ -108,11 +110,11 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
     doses = immune_active_doses(product)
     high_zinc = (doses.get("zinc_mg") or 0.0) > 40.0
     botanical_count = _high_variability_botanical_count(product)
-    herb_soup = botanical_count >= 3
+    herb_soup = botanical_count >= HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT
 
     penalties: Dict[str, float] = {}
     if herb_soup:
-        penalties["immune_high_variability_botanical_stack"] = -3.0
+        penalties["immune_high_variability_botanical_stack"] = -HIGH_VARIABILITY_BOTANICAL_STACK_PENALTY
 
     return {
         "penalties": penalties,

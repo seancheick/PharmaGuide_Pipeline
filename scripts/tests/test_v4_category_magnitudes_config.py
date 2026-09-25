@@ -43,7 +43,11 @@ ORIGINAL = {
     "omega": {"dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 13]]},
     "probiotic": {"dimension_caps": [["formulation", 16], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
     "b_complex": {"formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0},
-    "immune_support": {"evidence_cap": 17.0},
+    # 1.13.1: the high-variability botanical stack penalty moved out of
+    # immune_support.py literals (pure refactor, values unchanged).
+    "immune_support": {"evidence_cap": 17.0,
+                       "high_variability_botanical_stack_min_count": 3,
+                       "high_variability_botanical_stack_penalty": 3.0},
     "joint_support": {"evidence_cap": 14.0,
                       "target_dose_mg": {"glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0,
                                          "uc_ii": 40.0, "hyaluronic_acid": 120.0}},
@@ -75,6 +79,8 @@ def test_runtime_constants_read_from_config_no_drift():
     assert probiotic.DIMENSION_CAPS == (("formulation", 16), ("dose", 25), ("evidence", 20), ("transparency", 15))
     assert b_complex.FORMULATION_CAP == 23.0 and b_complex.B7_CAP == 3.0
     assert immune_support.IMMUNE_EVIDENCE_CAP == 17.0
+    assert immune_support.HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT == 3
+    assert immune_support.HIGH_VARIABILITY_BOTANICAL_STACK_PENALTY == 3.0
     assert joint_support.JOINT_SUPPORT_EVIDENCE_CAP == 14.0
     assert joint_support.JOINT_TARGET_DOSE_MG == ORIGINAL["joint_support"]["target_dose_mg"]
     assert safety_hygiene.SAFETY_HYGIENE_CAP == 4.0

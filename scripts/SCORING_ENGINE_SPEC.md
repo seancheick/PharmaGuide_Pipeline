@@ -1,7 +1,7 @@
 # PharmaGuide Scoring Engine Specification
 
 > Production scoring engine: **4.4.0**
-> V4 quality configuration: **1.13.0-dose-applicability-gate**
+> V4 quality configuration: **1.13.1-immune-botanical-stack-config**
 > Export schema: **2.5.0** / **117 core columns**
 > Stage-3 artifact schema: **4.3.0**
 > Last verified against code: **2026-09-18**
