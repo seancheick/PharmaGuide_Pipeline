@@ -112,6 +112,7 @@ REQUIRED_CONCEPTS = {
     "display_ingredient_contract",
     "ingredient_form_quality",
     "probiotic_row_identity",
+    "prebiotic_identity",
 }
 
 SCORABLE_BLOCKED_ROLES = CLEANER_NON_SCORABLE_ROLES

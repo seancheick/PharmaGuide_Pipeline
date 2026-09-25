@@ -53,7 +53,8 @@
     "enrichment_fallback_policy",
     "display_ingredient_contract",
     "ingredient_form_quality",
-    "probiotic_row_identity"
+    "probiotic_row_identity",
+    "prebiotic_identity"
   ],
   "concepts": [
     {
@@ -574,6 +575,19 @@
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
       "tests": ["scripts/tests/test_probiotic_identity_single_owner.py", "scripts/tests/test_microbial_derivative_identity.py", "scripts/tests/test_p05_probiotic_prebiotic_consistency.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "prebiotic_identity",
+      "owner": "scripts/prebiotic_catalog.py",
+      "first_created_stage": "enriched",
+      "field_kind": "derived",
+      "source_data_files": ["scripts/data/clinically_relevant_strains.json"],
+      "consumers": ["scripts/probiotic_measurements.py", "scripts/enrich_supplements_v3.py", "scripts/scoring_v4/modules/probiotic_formulation.py"],
+      "forbidden_recomputation": ["prebiotic identity used for probiotic support and probiotic Formulation comes only from prebiotic_catalog.match_prebiotic over the registry's prebiotics.ingredients; the fiber-supplement routing term lists (route_features, fiber_digestive_*, supplement_taxonomy) are a separate policy and must not be used to credit probiotic prebiotic support"],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
+      "tests": ["scripts/tests/test_prebiotic_catalog_matcher.py", "scripts/tests/test_p05_probiotic_prebiotic_consistency.py"],
       "retirement_status": "active"
     }
   ]
