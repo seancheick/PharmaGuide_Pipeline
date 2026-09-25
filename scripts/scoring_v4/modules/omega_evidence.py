@@ -40,6 +40,7 @@ from typing import Any, Dict
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from evidence_resolver import resolve_omega_evidence_standard
+from scoring_input_contract import epa_dha_amounts_per_serving
 
 
 PHASE_MARKER = "P1.6.3_omega_evidence"

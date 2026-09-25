@@ -7289,7 +7289,6 @@
         {
           "id": "prenatal_dha_intake_authority",
           "purpose": "prenatal_dha_intake",
-          "effect_direction": "guideline",
           "pillar_score": 11.1,
           "minimum_daily_dha_mg": 200,
           "source_pmids": [
@@ -7300,7 +7299,6 @@
         {
           "id": "prenatal_preterm_birth_outcome",
           "purpose": "prenatal_preterm_birth",
-          "effect_direction": "mixed_by_population_and_dose",
           "score_eligible": false,
           "source_pmids": [
             "30480773",
@@ -7324,7 +7322,6 @@
         {
           "id": "high_dose_atrial_fibrillation_context",
           "purpose": "safety_context",
-          "effect_direction": "negative_risk_signal",
           "score_eligible": false,
           "minimum_daily_epa_dha_mg": 1000,
           "source_pmids": [

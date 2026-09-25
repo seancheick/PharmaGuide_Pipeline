@@ -76,6 +76,9 @@ def test_bdk_value_in_evidence_band(iqm, pid, fname, vmin, vmax, basis):
     form = iqm.get(pid, {}).get('forms', {}).get(fname)
     assert form is not None, f'{pid}::{fname} missing'
     val = (form.get('absorption_structured') or {}).get('value')
+    if 'sublingual' in fname:
+        assert val is None, f'{pid}::{fname} must not claim an unmeasured fraction'
+        return
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
         f'{pid}::{fname}: struct.value={val} outside band [{vmin}, {vmax}]. '
