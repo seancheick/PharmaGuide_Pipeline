@@ -49,6 +49,10 @@ def assessment(product):
 
 
 def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_applicable(registry):
+    # A strong exact-strain record at its reviewed dose must be able to reach
+    # full Evidence credit without requiring unrelated additional strains.
+    registry["STRAIN_LGG"]["evidence_level"] = "high"
+    registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["evidence_strength"] = "high"
     registry["STRAIN_LGG"]["study_contexts"] = [approved()]
     row = assessment(strain_product(dose=1e9))
     assert row["status"] == "strain_dose_applicable"
@@ -59,7 +63,11 @@ def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_app
     assert ctx["dose_applicability_class"] == "EXACT_TESTED_DOSE"
     assert ctx["dose_applicability_credit"] == 1.0
     evidence = score_evidence(strain_product(dose=1e9))
-    assert evidence["components"]["dose_applicability"] > 0
+    assert evidence["components"] == {
+        "strain_clinical_evidence": 12.0,
+        "dose_applicability": 8.0,
+    }
+    assert evidence["score"] == 20.0
 
 
 @pytest.mark.parametrize("dose,reason", [

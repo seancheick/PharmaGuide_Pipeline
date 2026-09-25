@@ -1,11 +1,11 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.13.0-dose-applicability-gate",
+    "version": "1.15.0-parent-relative-probiotic-fairness",
     "schema_version": "1.0.0",
-    "last_updated": "2026-09-22",
+    "last_updated": "2026-09-25",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). POOR is the verdict of the lowest shipped tier; the module raw score never decides it (1.9.0). Omega label ownership is enforced in 1.10.0. v4 is the production catalog scoring contract as of export schema 2.2.0.",
-    "phase": "rubric_proxy_removal"
+    "phase": "scoring_fairness_recalibration"
   },
   "pillars": {
     "formulation":    { "weight": 20, "assembler": "formulation" },
@@ -198,13 +198,13 @@
       "cap_strain_clinical": 12.0,
       "cap_dose_applicability": 8.0,
       "effect_direction_multipliers": { "positive_strong": 1.0, "positive_weak": 0.85, "mixed": 0.6, "null": 0.0, "negative": 0.0 },
-      "native_strain_evidence_points": { "strong": 8.0, "high": 8.0, "moderate": 6.0, "medium": 6.0, "weak": 3.0, "low": 3.0, "limited": 3.0 },
-      "native_strain_evidence_weights": [1.0, 0.7, 0.5, 0.3],
+      "native_strain_evidence_points": { "strong": 12.0, "high": 12.0, "moderate": 9.0, "medium": 9.0, "weak": 4.5, "low": 4.5, "limited": 4.5 },
+      "native_strain_evidence_weights": [1.0],
       "native_context_review_policy": "clinician_only",
       "dose_applicability_policy": {
         "credit": {"EXACT_TESTED_DOSE": 1.0, "WITHIN_TESTED_RANGE": 0.0, "NEAR_TESTED_RANGE": 0.0, "OUTSIDE_TESTED_RANGE": 0.0, "DOSE_UNKNOWN": 0.0}
       },
-      "_context_policy_doc": "1.1.6 (2026-09-13): native study contexts remain research records until an attributable clinician approval names the reviewer, review time, and identity-dose-outcome applicability scope. Source-verified pending contexts never score. Discrete trial arms are points, not continuous dose windows: only an exact tested daily arm can earn applicability credit. Start/end viable-count measurements describe stability and do not establish an efficacy dose. Combination and species-level contexts never earn individual-strain applicability."
+      "_context_policy_doc": "1.15.0 (2026-09-25): native study contexts remain research records until an attributable clinical approval names the reviewer, review time, and identity-dose-outcome applicability scope. Source-verified pending contexts never score. Discrete trial arms are points, not continuous dose windows: only an exact tested daily arm can earn applicability credit. Start/end viable-count measurements describe stability and do not establish an efficacy dose. Combination and species-level contexts never earn individual-strain applicability. The strongest applicable exact-strain record owns clinical support; adding strains does not manufacture Evidence credit, and one strong record at its reviewed exact dose can reach the 20-point Evidence cap."
     },
     "multi_prenatal": { "cap_evidence": 20.0, "generic_cap_evidence": 20.0 },
     "omega": { "cap_evidence": 20.0 }

@@ -15,7 +15,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 # LGG's native record is medium (moderate support) since Dr Pham's 2026-09-22 review:
 # ESPGHAN 2016 grades its paediatric AAD evidence moderate quality.
-LGG_POINTS = 6.0
+LGG_POINTS = 9.0
 
 
 def _match(
@@ -140,12 +140,12 @@ def test_native_clinical_strain_evidence_scores_when_generic_matches_are_missing
 
     payload = score_evidence(product)
 
-    assert payload["components"]["strain_clinical_evidence"] == 6.0
+    assert payload["components"]["strain_clinical_evidence"] == 9.0
     assert payload["components"]["dose_applicability"] == 0.0
-    assert payload["score"] == 6.0
+    assert payload["score"] == 9.0
     assert payload["metadata"]["indication_relevance_level"] == "direct"
     assert payload["metadata"]["generic_evidence_score"] == 0.0
-    assert payload["metadata"]["native_clinical_strain_evidence_score"] == 6.0
+    assert payload["metadata"]["native_clinical_strain_evidence_score"] == 9.0
     native_rows = payload["metadata"]["native_clinical_strain_evidence_rows"]
     assert native_rows[0]["clinical_id"] == "STRAIN_PLANTARUM_299V"
     assert native_rows[0]["support_level"] == "moderate"
@@ -200,7 +200,7 @@ def test_prenatal_positioning_gets_partial_relevance_for_infant_evidence(monkeyp
 
     assert payload["components"]["dose_applicability"] == 0.0
     # HN001's mood result is a secondary outcome: positive_weak (0.85) on moderate support.
-    assert payload["score"] == 5.1
+    assert payload["score"] == 7.65
     assert payload["metadata"]["indication_relevance_level"] == "partial"
     assert "infant" in payload["metadata"]["matched_relevance_categories"]  # plural "infants" counts
 
@@ -307,8 +307,8 @@ def test_effect_direction_mixed_downweights_same_strain_research_credit() -> Non
 
     payload = score_evidence(product)
 
-    assert payload["components"] == {"strain_clinical_evidence": 3.6, "dose_applicability": 0.0}
-    assert payload["score"] == 3.6
+    assert payload["components"] == {"strain_clinical_evidence": 5.4, "dose_applicability": 0.0}
+    assert payload["score"] == 5.4
     assert payload["metadata"]["native_clinical_strain_evidence_rows"][0]["effect_multiplier"] == 0.6
 
 

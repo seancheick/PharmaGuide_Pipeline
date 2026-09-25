@@ -42,9 +42,9 @@ EXPECTED = {
         "cap_evidence": 20.0, "cap_strain_clinical": 12.0, "cap_dose_applicability": 8.0,
         "effect_direction_multipliers": {"positive_strong": 1.0, "positive_weak": 0.85,
                                          "mixed": 0.6, "null": 0.0, "negative": 0.0},
-        "native_strain_evidence_points": {"strong": 8.0, "high": 8.0, "moderate": 6.0,
-                                          "medium": 6.0, "weak": 3.0, "low": 3.0, "limited": 3.0},
-        "native_strain_evidence_weights": [1.0, 0.7, 0.5, 0.3],
+        "native_strain_evidence_points": {"strong": 12.0, "high": 12.0, "moderate": 9.0,
+                                          "medium": 9.0, "weak": 4.5, "low": 4.5, "limited": 4.5},
+        "native_strain_evidence_weights": [1.0],
         "native_context_review_policy": "clinician_only",
         "dose_applicability_policy": {
             "credit": {
@@ -56,13 +56,16 @@ EXPECTED = {
             }
         },
         "_context_policy_doc": (
-            "1.1.6 (2026-09-13): native study contexts remain research records until an "
-            "attributable clinician approval names the reviewer, review time, and "
+            "1.15.0 (2026-09-25): native study contexts remain research records until an "
+            "attributable clinical approval names the reviewer, review time, and "
             "identity-dose-outcome applicability scope. Source-verified pending contexts "
             "never score. Discrete trial arms are points, not continuous dose windows: "
             "only an exact tested daily arm can earn applicability credit. Start/end viable-count "
             "measurements describe stability and do not establish an efficacy dose. Combination "
-            "and species-level contexts never earn individual-strain applicability."
+            "and species-level contexts never earn individual-strain applicability. The strongest "
+            "applicable exact-strain record owns clinical support; adding strains does not manufacture "
+            "Evidence credit, and one strong record at its reviewed exact dose can reach the 20-point "
+            "Evidence cap."
         ),
     },
     "multi_prenatal": {"cap_evidence": 20.0, "generic_cap_evidence": 20.0},
@@ -92,6 +95,6 @@ def test_runtime_constants_read_from_config_no_drift():
     assert generic_evidence.EFFECT_DIRECTION_MULTIPLIERS == EXPECTED["generic"]["effect_direction_multipliers"]
     assert generic_evidence._EFFECT_FLOOR_MULTIPLIER is generic_evidence.EFFECT_DIRECTION_MULTIPLIERS
     assert probiotic_evidence.NATIVE_STRAIN_EVIDENCE_POINTS == EXPECTED["probiotic"]["native_strain_evidence_points"]
-    assert probiotic_evidence.NATIVE_STRAIN_EVIDENCE_WEIGHTS == (1.0, 0.7, 0.5, 0.3)
+    assert probiotic_evidence.NATIVE_STRAIN_EVIDENCE_WEIGHTS == (1.0,)
     assert multi_prenatal_evidence.CAP_EVIDENCE == multi_prenatal_evidence.GENERIC_CAP_EVIDENCE == 20.0
     assert omega_evidence.CAP_EVIDENCE == 20.0
