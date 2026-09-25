@@ -1823,7 +1823,6 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "matched_forms",
         "extracted_forms",
         "bio_score",
-        "natural",
         "notes",
         "category",
         "is_mapped",
@@ -1839,6 +1838,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "standardName", "mapped", "normalized_value", "safety_hits", "harmful_notes",
         "dosage", "dosage_unit",
         "score",
+        "natural",
     ):
         assert retired not in ingredient
 

@@ -522,7 +522,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   "form_match_status": "mapped",
   "category": "vitamins",
   "bio_score": 14,
-  "natural": false,
   "form_evidence": {
     "evidence_level": "moderate",
     "references_structured": [{
@@ -814,6 +813,7 @@ Retired in the same-day follow-up (no reader, or a second name for a shipped
 value):
 - `dosage` / `dosage_unit`: same values as `quantity` / `unit`.
 - `score`: the v3.6.0 alias of `bio_score`; read `bio_score` (range 0-15).
+- active `natural`: no reader; sourcing is not scored since v3.6.0.
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,

@@ -6692,7 +6692,6 @@ def build_detail_blob(
             "below_clinical_dose": bool(
                 canonical_id and canonical_id in sub_clinical_set
             ),
-            "natural": bool(m.get("natural")),
             # Curation workspace — audit prose expected. Never rendered.
             "notes": safe_str(m.get("notes")),
             # Reviewed consumer copy, or None. See _derive_form_note.

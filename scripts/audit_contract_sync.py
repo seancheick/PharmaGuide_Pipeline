@@ -78,7 +78,6 @@ ACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "extracted_forms":      {"required": True,  "type": "array",    "is_enum": False},
     "category":             {"required": True,  "type": "string",   "is_enum": False},
     "below_clinical_dose":  {"required": True,  "type": "bool",     "is_enum": False},
-    "natural":              {"required": True,  "type": "bool",     "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
     "notes":                {"required": True,  "type": "string",   "is_enum": False},
     "form_note":            {"required": False, "type": "string?",  "is_enum": False},
     "form_note_preview":    {"required": False, "type": "string?",  "is_enum": False},
