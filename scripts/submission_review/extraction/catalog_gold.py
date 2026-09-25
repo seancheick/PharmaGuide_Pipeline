@@ -243,7 +243,7 @@ def gold_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
 
 def other_ingredients_text(blob: Mapping[str, Any]) -> str | None:
     """The inactive ingredients as the record lists them, or nothing."""
-    names = [str(r.get("label_display") or r.get("raw_source_text") or "").strip()
+    names = [str(r.get("display_label") or r.get("raw_source_text") or "").strip()
              for r in (blob.get("inactive_ingredients") or ())]
     joined = ", ".join(n for n in names if n)
     return joined or None

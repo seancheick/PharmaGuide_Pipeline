@@ -1428,7 +1428,6 @@ def test_inactive_display_label_preserves_label_wording_with_resolved_identity_m
 
     assert inactive["name"] == "Ascorbyl Palmitate"
     assert inactive["display_label"] == "Ascorbyl Palmitate"
-    assert inactive["label_display"] == "Ascorbyl Palmitate"
     assert inactive["resolved_display_label"] == "Natural Preservatives"
     assert inactive["standard_name"] == "Natural Preservatives"
     assert inactive["display_role_label"] == "Preservative natural"
@@ -1502,7 +1501,6 @@ def test_label_descriptor_inactive_row_stays_visible_but_marked_nonstandard():
 
     assert inactive["name"] == "Phospholipids"
     assert inactive["display_label"] == "Phospholipids"
-    assert inactive["label_display"] == "Phospholipids"
     assert inactive["standard_name"] == "Phospholipid Descriptor"
     assert inactive["resolved_display_label"] == "Phospholipid Descriptor"
     assert inactive["matched_rule_id"] == "PII_PHOSPHOLIPID_DESCRIPTOR"
@@ -1847,7 +1845,7 @@ def test_detail_blob_inactive_rows_carry_one_name_per_value():
     inactive = blob["inactive_ingredients"][0]
 
     assert {"standard_name", "display_label"}.issubset(inactive)
-    for retired in ("standardName",):
+    for retired in ("standardName", "label_display"):
         assert retired not in inactive
 
 

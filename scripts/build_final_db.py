@@ -7018,7 +7018,6 @@ def build_detail_blob(
         inactive.append({
             "raw_source_text": raw,
             "name": name,
-            "label_display": inactive_display_label,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "category": res.category or safe_str(ing.get("category")),
