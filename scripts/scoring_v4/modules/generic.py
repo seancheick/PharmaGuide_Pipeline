@@ -8,8 +8,8 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
     Formulation         30     P1.3.1 — A1 bio_score 15 + A3 delivery 3
                                + A4 absorption 3 + A5b standardized botanical 1
                                (botanical/collagen profiles replace A1, same
-                               cap, and zero A5b); minus B0 safety signals
-                               (per substance, up to the dimension cap)
+                               cap, and zero A5b); minus the sum of B0 safety
+                               signals (per substance, up to the dimension cap)
                                + immune herb-stack (immune only) + B1 (caps:
                                additives 15, sugar 4) harmful additives
                                + dietary sugar
