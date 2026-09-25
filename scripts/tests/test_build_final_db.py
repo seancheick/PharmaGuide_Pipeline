@@ -1829,7 +1829,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "score",
         "notes",
         "category",
-        "mapped",
+        "is_mapped",
         "safety_hits",
         "normalized_amount",
     }
@@ -1838,7 +1838,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
     assert ingredient["standard_name"] == "Retinyl Palmitate"
     # Retired twins (row-key census 2026-09-25): each duplicated a value that
     # ships under the name kept above, or had no reader at all.
-    for retired in ("standardName", "normalized_value"):
+    for retired in ("standardName", "mapped", "normalized_value"):
         assert retired not in ingredient
 
 
@@ -1881,7 +1881,6 @@ def test_detail_blob_does_not_mark_active_mapped_without_canonical_id():
     ingredient = build_detail_blob(enriched, make_scored())["ingredients"][0]
 
     assert ingredient["canonical_id"] == ""
-    assert ingredient["mapped"] is False
     assert ingredient["is_mapped"] is False
 
 
@@ -2756,7 +2755,6 @@ def test_detail_blob_flag_fields_are_real_json_booleans():
     # Row-level flags — same field must not ship mixed int/bool across products.
     for row in blob["ingredients"]:
         flag_values[f"ingredients[].is_mapped:{row['name']}"] = row["is_mapped"]
-        flag_values[f"ingredients[].mapped:{row['name']}"] = row["mapped"]
     for row in blob["inactive_ingredients"]:
         flag_values[f"inactive[].is_additive:{row['name']}"] = row["is_additive"]
 

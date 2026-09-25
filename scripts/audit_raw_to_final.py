@@ -570,7 +570,7 @@ def _check_v1_5_0_contract(rec: ProductRecord, blob: dict) -> None:
 
 def _check_canonical_id_on_mapped(rec: ProductRecord, blob: dict) -> None:
     for ing in blob.get("ingredients") or []:
-        is_mapped = bool(ing.get("is_mapped") or ing.get("mapped"))
+        is_mapped = bool(ing.get("is_mapped"))
         cid = ing.get("canonical_id") or ing.get("normalized_key") or ing.get("parent_key")
         if is_mapped and not cid:
             rec.add("CANONICAL_ID_MISSING_ON_MAPPED",

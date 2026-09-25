@@ -720,7 +720,7 @@ FLUTTER_INGREDIENT_KEYS = {
     "raw_source_text", "name", "normalized_key", "forms",
     "quantity", "unit", "standard_name", "matched_form",
     "matched_forms", "extracted_forms", "category", "bio_score", "natural",
-    "score", "notes", "mapped", "safety_hits",
+    "score", "notes", "safety_hits",
     "normalized_amount", "normalized_unit", "role", "parent_key",
     "dosage", "dosage_unit",
     "is_mapped", "harmful_severity", "harmful_notes",

@@ -6788,7 +6788,6 @@ def build_detail_blob(
                 if form_evidence is not None
                 else {}
             ),
-            "mapped": is_mapped,
             "safety_hits": combined_safety_hits,
             "safety_flags": projected_safety_flags,
             "normalized_amount": safe_float(ne.get("normalized_amount")),
