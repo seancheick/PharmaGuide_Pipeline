@@ -853,7 +853,7 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
         n = (ing.get("name") or "").lower()
         unit = (ing.get("dosage_unit") or ing.get("unit") or "").upper()
         normalized_unit = (ing.get("normalized_unit") or "").upper()
-        normalized_value = ing.get("normalized_value")
+        normalized_value = ing.get("normalized_amount")
         if unit == "IU" and ("vitamin a" in n or "retinyl" in n or "carotene" in n):
             # Need a normalized RAE value AND form-aware factor.
             if normalized_value is None or normalized_unit not in ("MCG RAE", "MCG", "UG RAE", "UG"):

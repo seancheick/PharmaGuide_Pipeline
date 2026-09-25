@@ -1831,13 +1831,14 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "category",
         "mapped",
         "safety_hits",
+        "normalized_amount",
     }
     assert expected_keys.issubset(set(ingredient.keys()))
     assert ingredient["score"] == 14.0
     assert ingredient["standard_name"] == "Retinyl Palmitate"
     # Retired twins (row-key census 2026-09-25): each duplicated a value that
     # ships under the name kept above, or had no reader at all.
-    for retired in ("standardName",):
+    for retired in ("standardName", "normalized_value"):
         assert retired not in ingredient
 
 

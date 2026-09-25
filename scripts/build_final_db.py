@@ -6297,8 +6297,6 @@ def _anchor_amount(ingredients: List[Dict], anchor: Dict[str, Any]) -> Tuple[Opt
         raw_amount = (
             ingredient.get("normalized_amount")
             if ingredient.get("normalized_amount") is not None
-            else ingredient.get("normalized_value")
-            if ingredient.get("normalized_value") is not None
             else ingredient.get("quantity")
             if ingredient.get("quantity") is not None
             else ingredient.get("dosage")
@@ -6800,7 +6798,6 @@ def build_detail_blob(
             "parent_key": safe_str(m.get("parent_key") or ing.get("normalized_key")),
             "dosage": safe_float(qty),
             "dosage_unit": safe_str(ing.get("unit")),
-            "normalized_value": safe_float(ne.get("normalized_amount")),
             "is_mapped": is_mapped,
             # canonical_id — foundational identifier for interactions, stack
             # logic, evidence routing, biomarker scoring, dedup, and analytics.

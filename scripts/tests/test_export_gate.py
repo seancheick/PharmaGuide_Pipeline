@@ -722,7 +722,7 @@ FLUTTER_INGREDIENT_KEYS = {
     "matched_forms", "extracted_forms", "category", "bio_score", "natural",
     "score", "notes", "mapped", "safety_hits",
     "normalized_amount", "normalized_unit", "role", "parent_key",
-    "dosage", "dosage_unit", "normalized_value",
+    "dosage", "dosage_unit",
     "is_mapped", "harmful_severity", "harmful_notes",
     "is_banned", "is_allergen",
     # v1.5.x canonical contract — replaces legacy `form` + `is_harmful`.
