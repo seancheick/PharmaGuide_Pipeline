@@ -48,27 +48,10 @@ def test_phellodendron_has_scorable_form(iqm):
     assert forms, "Must have at least one form"
     has_score = any(
         isinstance(f, dict)
-        and isinstance(f.get("score"), (int, float))
         and isinstance(f.get("bio_score"), (int, float))
         for f in forms.values()
     )
     assert has_score
-
-
-def test_phellodendron_score_formula_consistent(iqm):
-    """Schema rule: score = bio_score + (3 if natural else 0)."""
-    e = iqm.get("phellodendron_amurense") or iqm.get("phellodendron")
-    for form_key, form in e.get("forms", {}).items():
-        if not isinstance(form, dict):
-            continue
-        bio = form.get("bio_score")
-        score = form.get("score")
-        natural = bool(form.get("natural", False))
-        if isinstance(bio, (int, float)) and isinstance(score, (int, float)):
-            expected = bio + (3 if natural else 0)
-            assert score == expected, (
-                f"{form_key}: score={score} != bio_score({bio}) + natural({natural})*3"
-            )
 
 
 def test_phellodendron_aliases_cover_label_renderings(iqm):

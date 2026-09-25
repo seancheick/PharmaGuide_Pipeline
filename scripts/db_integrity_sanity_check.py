@@ -764,31 +764,12 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
             elif not isinstance(bs, (int, float)):
                 findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "type_mismatch", "number", _type_name(bs)))
 
-            # natural must be a boolean.
-            nat = form.get("natural")
-            if nat is None:
-                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.natural", "missing_required_key", "bool", "missing"))
-            elif not isinstance(nat, bool):
-                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.natural", "type_mismatch", "bool", _type_name(nat)))
-
-            # score must be a number.
-            sc = form.get("score")
-            if sc is None:
-                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.score", "missing_required_key", "number", "missing"))
-            elif not isinstance(sc, (int, float)):
-                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.score", "type_mismatch", "number", _type_name(sc)))
-
-            # score = bio_score + 3 when natural=True, else bio_score.
-            if isinstance(bs, (int, float)) and isinstance(sc, (int, float)) and isinstance(nat, bool):
-                expected_score = bs + 3 if nat else bs
-                if abs(sc - expected_score) > 0.01:
-                    findings.append(Finding(
-                        "error", file,
-                        f"{ing_key}.forms.{form_name}.score",
-                        "score_formula_mismatch",
-                        f"bio_score({bs})+{'3' if nat else '0'}={expected_score}",
-                        str(sc),
-                    ))
+            # score and natural are retired (IQM 5.6.0): bio_score is the only
+            # form-quality value, and neither field may come back.
+            for retired in ("score", "natural"):
+                if retired in form:
+                    findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.{retired}",
+                                            "retired_field_present", "absent", "present"))
 
             # absorption: optional string.
             abs_val = form.get("absorption")

@@ -109,7 +109,6 @@ def test_vanadyl_sulfate_forms_obey_class_equivalence_bio_score_floor():
     for form_name, bio_score in expected_bio.items():
         form = forms[form_name]
         assert form["bio_score"] == bio_score, form_name
-        assert form["score"] == bio_score, form_name
         notes = form.get("notes", "").lower()
         assert "23982218" in notes or "dr pham c12" in notes or "v class" in notes, form_name
 

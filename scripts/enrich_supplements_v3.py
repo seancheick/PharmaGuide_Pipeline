@@ -889,8 +889,6 @@ class SupplementEnricherV3:
         "name",
         "standard_name",
         "bio_score",
-        "natural",
-        "score",
         "notes",
         "category",
         "mapped",
@@ -2300,17 +2298,12 @@ class SupplementEnricherV3:
         # Build the canonical match_result shape mirroring
         # _match_quality_map's form-level return at scripts/enrich_supplements_v3.py:6447
         bio_score = form_data.get("bio_score")
-        natural = form_data.get("natural", False)
-        # v3.6.0: score == bio_score (no natural+3 bake-in)
-        score = bio_score
         return {
             "canonical_id": parent_id,
             "form_id": form_name,
             "standard_name": parent.get("standard_name", parent_id),
             "form_name": form_name,
             "bio_score": bio_score,
-            "natural": natural,
-            "score": score,
             "absorption": form_data.get("absorption"),
             "notes": form_data.get("notes"),
             "dosage_importance": form_data.get("dosage_importance", 1.0),
@@ -4387,7 +4380,7 @@ class SupplementEnricherV3:
             # rating. Do not retain either a rejected candidate's rating or
             # the legacy neutral fallback after the identity decision.
             for field in (
-                "bio_score", "score", "natural", "form_id", "matched_form",
+                "bio_score", "form_id", "matched_form",
                 "final_form_bio_score", "aggregation_method", "form_source",
                 "absorption", "notes",
             ):
@@ -4661,8 +4654,6 @@ class SupplementEnricherV3:
                     "extracted_forms": [],
                     "skip_reason": skip_reason,
                     "bio_score": None,
-                    "natural": None,
-                    "score": None,
                     "notes": None,
                     "category": self._infer_category_from_name(ing_name, std_name),
                     "quantity": quantity,
@@ -5637,8 +5628,6 @@ class SupplementEnricherV3:
             row["matched_form"] = TARGET_FORM_KEY
             row["form_id"] = TARGET_FORM_KEY
             row["bio_score"] = new_bio_score
-            # v3.6.0 sourcing-neutral contract: score mirrors bio_score.
-            row["score"] = new_bio_score
             if new_absorption is not None:
                 row["absorption"] = new_absorption
             if new_notes is not None:
@@ -7123,8 +7112,6 @@ class SupplementEnricherV3:
                 "matched_target": None,
                 "match_ambiguity_candidates": [],
                 "bio_score": None,
-                "natural": None,
-                "score": 9,
                 "absorption": None,
                 "notes": None,
                 "dosage_importance": 1.0,
@@ -7175,7 +7162,6 @@ class SupplementEnricherV3:
             }
         elif match_result:
             bio_score = match_result.get('bio_score', 5)
-            natural = match_result.get('natural', False)
             matched_canonical_id = match_result.get('canonical_id')
             quality_map = self.databases.get('ingredient_quality_map', {})
             canonical_id = self._quality_match_scoring_canonical(
@@ -7192,17 +7178,6 @@ class SupplementEnricherV3:
                 canonical_redirect_from = matched_canonical_id
                 canonical_redirect_source = 'match_rules.target_id'
                 matched_entry_id = matched_canonical_id
-            # v3.6.0: `score` is now an alias of bio_score (no natural-source
-            # bonus). The legacy formula `bio_score + 3 if natural` was retired
-            # because A1/A2/A6 in the scorer now read bio_score directly, and
-            # the natural-source signal moved to A5e where sourcing belongs.
-            # The field is still emitted for backward compatibility during the
-            # v3.6.x shadow window — older scorers reading `score` will get
-            # the same answer as bio_score (sourcing-neutral).
-            # Force sourcing-neutral. Ignore any legacy pre-computed `score`
-            # value in the IQM data file (which still has natural+3 baked in
-            # — see ingredient_quality_map.json). v3.6.0 contract: score == bio_score.
-            score = bio_score
             used_form_fallback = match_result.get('match_status') == 'FORM_UNMAPPED_FALLBACK'
 
             # Track form fallbacks for audit report
@@ -7236,7 +7211,6 @@ class SupplementEnricherV3:
                     "unmapped_form_text": ', '.join(unmapped_forms) if unmapped_forms else ing_name,
                     "fallback_form": fallback_form_name,
                     "fallback_bio_score": bio_score,
-                    "fallback_score": score,
                     "forms_differ": audit_classification["forms_differ"],
                     "audit_noise_reason": audit_classification["audit_noise_reason"],
                     "form_source": match_result.get('form_source', ''),
@@ -7260,8 +7234,6 @@ class SupplementEnricherV3:
                 "matched_target": match_result.get('matched_target'),
                 "match_ambiguity_candidates": match_result.get('match_ambiguity_candidates', []),
                 "bio_score": bio_score,
-                "natural": natural,
-                "score": score,
                 "absorption": match_result.get('absorption'),
                 "notes": match_result.get('notes'),
                 "dosage_importance": match_result.get('dosage_importance', 1.0),
@@ -7327,8 +7299,6 @@ class SupplementEnricherV3:
                 "matched_target": None,
                 "match_ambiguity_candidates": [],
                 "bio_score": None,
-                "natural": None,
-                "score": 9,  # Neutral midpoint fallback for unmapped
                 "absorption": None,
                 "notes": None,
                 "dosage_importance": 1.0,
@@ -8200,18 +8170,10 @@ class SupplementEnricherV3:
 
             if form_match and matched_candidate:
                 bio_score = form_match.get('bio_score', 5)
-                natural = form_match.get('natural', False)
-                # v3.6.0: force sourcing-neutral. Ignore any legacy
-                # pre-computed `score` (IQM data still has natural+3
-                # baked in — see ingredient_quality_map.json). Contract:
-                # score == bio_score.
-                score = bio_score
                 matched_forms.append({
                     'form_key': form_match.get('form_id'),
                     'canonical_id': form_match.get('canonical_id'),
                     'bio_score': bio_score,
-                    'natural': natural,
-                    'score': score,  # v3.6.0: deprecated alias of bio_score
                     'match_method': form_match.get('match_tier', 'unknown'),
                     'matched_candidate': matched_candidate,
                     'percent_share': percent_share,
@@ -8290,7 +8252,6 @@ class SupplementEnricherV3:
 
         # Round to 1 decimal place for consistency
         final_bio_score = round(final_bio_score, 1)
-        final_score = final_bio_score
 
         # Use primary form (first matched) as the base for canonical fields
         primary_match = matched_forms[0]['full_match_data']
@@ -8323,10 +8284,8 @@ class SupplementEnricherV3:
             'matched_alias': primary_match.get('matched_alias'),
             'matched_target': primary_match.get('matched_target'),
 
-            # Aggregated scores (using pre-computed scores from database)
+            # Aggregated form quality
             'bio_score': final_bio_score,
-            'natural': any(f['natural'] for f in matched_forms),  # Natural if any form is natural
-            'score': final_score,  # Pre-computed weighted average from database scores
 
             # Multi-form contract fields
             'form_extraction_used': True,
@@ -8339,8 +8298,6 @@ class SupplementEnricherV3:
                     'form_key': f['form_key'],
                     'canonical_id': f['canonical_id'],
                     'bio_score': f['bio_score'],
-                    'natural': f['natural'],
-                    'score': f['score'],  # Pre-computed from database
                     'match_method': f['match_method'],
                     'percent_share': f['percent_share'],
                     'raw_form_text': f['raw_form_text'],
@@ -8359,7 +8316,6 @@ class SupplementEnricherV3:
                 {
                     'form_key': f['form_key'],
                     'bio_score': f['bio_score'],
-                    'score': f['score'],  # Pre-computed from database
                     'percent_share': f['percent_share']
                 }
                 for f in distinct_forms[1:]
@@ -9380,10 +9336,8 @@ class SupplementEnricherV3:
                         return str_map[normalized]
                 return 1.0
 
-            natural = bool(form_data.get('natural', False))
             # Provisional IQM entries are capped inside _effective_form_bio.
             bio_score = _effective_form_bio(parent_data, form_data)
-            score = bio_score
 
             return {
                 "canonical_id": parent_key,
@@ -9391,8 +9345,6 @@ class SupplementEnricherV3:
                 "standard_name": parent_data.get('standard_name', parent_key),
                 "form_name": form_name,
                 "bio_score": bio_score,
-                "natural": natural,
-                "score": score,
                 "absorption": form_data.get('absorption'),
                 "notes": form_data.get('notes'),
                 "dosage_importance": _coerce_dosage_importance(form_data.get('dosage_importance', 1.0)),
@@ -9467,8 +9419,6 @@ class SupplementEnricherV3:
                     "standard_name": parent_data.get('standard_name', parent_key),
                     "form_name": "standard",
                     "bio_score": 5,
-                    "natural": False,
-                    "score": 5,
                     "absorption": None,
                     "notes": None,
                     "dosage_importance": 1.0,

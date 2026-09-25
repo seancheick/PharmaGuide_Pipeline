@@ -82,8 +82,6 @@ def test_vinpocetine_bio_score_reflects_poor_absorption(iqm):
     for form in iqm["vinpocetine"]["forms"].values():
         assert form["bio_score"] <= 9, "absorption evidence is weak"
         assert form["absorption_structured"]["quality"] in {"poor", "low"}
-        assert form["natural"] is False, "semi-synthetic vincamine derivative"
-        assert form["score"] == form["bio_score"]
 
 
 def test_vinpocetine_aliases_cover_the_printed_label(iqm):

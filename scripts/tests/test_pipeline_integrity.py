@@ -308,7 +308,7 @@ class TestIngredientMappingIntegrity:
     # ------------------------------------------------------------------
     def test_iqm_forms_have_required_fields(self, iqm_entries):
         """Every form in every IQM ingredient must have 'score', 'bio_score', and 'aliases'."""
-        required_form_fields = ("score", "bio_score", "aliases")
+        required_form_fields = ("bio_score", "aliases")
         failures = []
 
         for ingredient_key, ingredient in iqm_entries.items():

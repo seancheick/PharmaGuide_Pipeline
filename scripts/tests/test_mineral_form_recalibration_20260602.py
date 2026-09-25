@@ -1,8 +1,8 @@
 """Regression tests for 2026-06-02 Zn/Mg/Fe mineral form recalibration.
 
 This locks the clinician rule applied after live API verification:
-bio_score is absorption/bioavailability only, while score is
-bio_score + natural bonus, capped at 18.
+bio_score is absorption/bioavailability only (the retired natural-bonus
+`score` was removed in IQM 5.6.0).
 """
 from __future__ import annotations
 
@@ -104,20 +104,6 @@ def test_clinician_mineral_bio_score_table(iqm, parent, form_name, expected):
     form = iqm[parent]["forms"].get(form_name)
     assert form is not None, f"{parent}::{form_name} missing"
     assert form["bio_score"] == expected
-
-
-@pytest.mark.parametrize(
-    "parent,form_name",
-    [
-        (parent, form_name)
-        for parent, forms in EXPECTED_BIO_SCORES.items()
-        for form_name in forms
-    ],
-)
-def test_mineral_score_matches_natural_bonus_formula(iqm, parent, form_name):
-    form = iqm[parent]["forms"][form_name]
-    expected = min(18, form["bio_score"] + (3 if form["natural"] else 0))
-    assert form["score"] == expected
 
 
 @pytest.mark.parametrize(

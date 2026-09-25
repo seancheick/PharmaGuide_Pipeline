@@ -663,9 +663,7 @@ def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[s
     for form_name, form in forms.items():
         if not isinstance(form, dict):
             continue
-        bio = _as_float(form.get("bio_score"), None)
-        score = _as_float(form.get("score"), bio)
-        quality = bio if bio is not None else score
+        quality = _as_float(form.get("bio_score"), None)
         if quality is None:
             continue
         fallback.append((float(quality), str(form_name), form))
@@ -692,17 +690,12 @@ def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[s
         return {}
 
     bio = _as_float(chosen.get("bio_score"), None)
-    score = _as_float(chosen.get("score"), bio)
     out: Dict[str, Any] = {
         "matched_form": chosen_name,
         "generic_form_quality_credit": True,
     }
     if bio is not None:
         out["bio_score"] = bio
-    if score is not None:
-        out["score"] = score
-    if "natural" in chosen:
-        out["natural"] = bool(chosen.get("natural"))
     category = entry.get("category_enum") or entry.get("category")
     if category:
         out["category"] = category

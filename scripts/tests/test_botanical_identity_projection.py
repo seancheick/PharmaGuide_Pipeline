@@ -117,7 +117,6 @@ def test_invalid_botanical_record_blocks_marker_and_retains_required_coverage(
     assert quality["mapped_identity"] is False
     assert quality["canonical_id"] is None
     assert quality["bio_score"] is None
-    assert quality["score"] is None
     scoring = get_scoring_ingredients(product, strict=strict)
     assert scoring.unmapped_count == 1
     assert scoring.mapped_coverage == 0.5
@@ -148,7 +147,6 @@ def test_unknown_declared_botanical_id_cannot_gain_marker_credit(
     assert quality["canonical_id"] is None
     assert quality["scoreable_identity"] is False
     assert quality["bio_score"] is None
-    assert quality["score"] is None
     scoring = get_scoring_ingredients(product, strict=True)
     assert scoring.rows == []
     assert scoring.unmapped_count == 1
@@ -241,6 +239,5 @@ def test_source_owned_standardized_marker_form_stays_secondary(
     assert quality["recognition_source"] == "standardized_botanicals"
     assert quality["recognized_entry_name"] == "Green Coffee Bean"
     assert quality["bio_score"] is None
-    assert quality["score"] is None
     assert active["forms"] == [form]
     assert active["quantity"] == 400.0

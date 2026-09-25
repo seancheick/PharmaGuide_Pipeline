@@ -48,20 +48,7 @@ def test_bio_score_corrected(iqm, parent, form, expected):
     assert _form(iqm, parent, form)["bio_score"] == expected
 
 
-@pytest.mark.parametrize("parent,form,_", SCORE_TARGETS)
-def test_score_invariant(iqm, parent, form, _):
-    f = _form(iqm, parent, form)
-    assert f["score"] == min(18, f["bio_score"] + (3 if f.get("natural") else 0))
-
-
 # ── 2. natural-bonus misapplied to a purified crystalline ingredient ──────────
-def test_d_ribose_not_natural(iqm):
-    f = _form(iqm, "d_ribose", "d-ribose powder")
-    assert f["natural"] is False           # purified/fermentation crystalline, not a natural-source matrix
-    assert f["bio_score"] == 14            # absorption ~95% justifies the bio_score on its own
-    assert f["score"] == 14
-
-
 # ── 3. identity-error aliases removed ─────────────────────────────────────────
 def test_astaxanthin_drops_broad_carotenoid(iqm):
     al = _al(iqm, "astaxanthin", "natural astaxanthin (haematococcus pluvialis)")

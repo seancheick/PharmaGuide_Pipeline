@@ -137,8 +137,6 @@ class TestPipelineSmokeTest:
             "name",
             "standard_name",
             "bio_score",
-            "natural",
-            "score",
             "notes",
             "category",
             "mapped",

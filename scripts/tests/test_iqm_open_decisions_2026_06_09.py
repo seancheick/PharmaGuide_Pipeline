@@ -42,17 +42,11 @@ def _aliases(form: dict) -> set[str]:
     return {str(alias).lower().strip() for alias in form.get("aliases", [])}
 
 
-def _assert_score_formula(form: dict) -> None:
-    expected = min(18, form["bio_score"] + (3 if form.get("natural") else 0))
-    assert form["score"] == expected
-
-
 def test_coq10_crystal_free_has_no_clinical_utility_bio_score_exception() -> None:
     form = _form(_iqm(), "coq10", "ubiquinol crystal-free")
     assert form["bio_score"] == 13
     assert form["absorption_structured"]["value"] <= 0.10
     assert "no clinical-utility exception" in form["notes"].lower()
-    _assert_score_formula(form)
 
 
 def test_black_cherry_and_dark_sweet_cherry_are_separate_species_identities() -> None:
@@ -75,8 +69,6 @@ def test_black_cherry_and_dark_sweet_cherry_are_separate_species_identities() ->
     assert sweet["external_ids"]["unii"] == "93T4562ZI3"
     assert "prunus avium" in sweet_form["notes"].lower()
     assert {"sweet cherry powder", "prunus avium", "dark sweet cherry"} <= _aliases(sweet_form)
-    _assert_score_formula(black_form)
-    _assert_score_formula(sweet_form)
 
 
 def test_curcumin_hydrocurc_and_bcm95_are_capped_to_signed_ladder() -> None:
@@ -90,8 +82,6 @@ def test_curcumin_hydrocurc_and_bcm95_are_capped_to_signed_ladder() -> None:
     assert bcm95["bio_score"] <= hydrocurc["bio_score"]
     assert "signed curcumin ladder" in hydrocurc["notes"].lower()
     assert "signed curcumin ladder" in bcm95["notes"].lower()
-    _assert_score_formula(hydrocurc)
-    _assert_score_formula(bcm95)
 
 
 def test_bovine_brain_phosphatidylserine_keeps_safety_in_watchlist_lane() -> None:

@@ -31,57 +31,12 @@ def test_bcaa_211_does_not_hijack_generic_amino_acid_labels(iqm: dict) -> None:
     )
 
 
-def test_generic_bcaa_standard_does_not_receive_natural_bonus(iqm: dict) -> None:
-    form = iqm["branched_chain_amino_acids"]["forms"]["branched chain amino acids (standard)"]
-    assert form["natural"] is False
-    assert form["score"] == form["bio_score"]
-
-
-@pytest.mark.parametrize(
-    "parent,form_name",
-    [
-        ("pine_bark_extract", "generic pine bark extract"),
-        ("lactobacillus_salivarius", "generic lactobacillus salivarius"),
-    ],
-)
-def test_generic_catch_all_forms_do_not_receive_natural_bonus(
-    iqm: dict,
-    parent: str,
-    form_name: str,
-) -> None:
-    form = iqm[parent]["forms"][form_name]
-    assert form["natural"] is False
-    assert form["score"] == form["bio_score"]
-
-
-@pytest.mark.parametrize(
-    "parent,form_name",
-    [
-        ("saw_palmetto", "liposomal saw palmetto"),
-        ("quercetin", "quercetin phytosome"),
-        ("probiotics", "liposomal probiotics"),
-        ("milk_thistle", "silymarin phytosome"),
-        ("vitamin_k1", "micellized k1"),
-    ],
-)
-def test_manufactured_delivery_forms_do_not_receive_natural_bonus(
-    iqm: dict,
-    parent: str,
-    form_name: str,
-) -> None:
-    form = iqm[parent]["forms"][form_name]
-    assert form["natural"] is False
-    assert form["score"] == form["bio_score"]
-
-
 def test_manuka_unspecified_does_not_outrank_disclosed_ungraded_form(iqm: dict) -> None:
     forms = iqm["manuka_honey"]["forms"]
     unspecified = forms["manuka honey (unspecified)"]
     ungraded = forms["ungraded manuka"]
 
-    assert unspecified["natural"] is False
-    assert unspecified["score"] == unspecified["bio_score"]
-    assert unspecified["score"] < ungraded["score"]
+    assert unspecified["bio_score"] < ungraded["bio_score"]
 
 
 @pytest.mark.parametrize(
@@ -109,34 +64,34 @@ def test_mushroom_parents_use_fungal_category_contract(iqm: dict, parent: str) -
 
 
 @pytest.mark.parametrize(
-    "parent,form_name,bio,natural,score",
+    "parent,form_name,bio",
     [
-        ("turkey_tail", "turkey tail standardized extract", 11, True, 14),
-        ("turkey_tail", "turkey tail fruiting body", 9, True, 12),
-        ("turkey_tail", "turkey tail (unspecified)", 5, False, 5),
-        ("chaga", "chaga extract", 11, True, 14),
-        ("chaga", "chaga sclerotium", 9, True, 12),
-        ("chaga", "chaga (unspecified)", 5, False, 5),
-        ("maitake", "maitake d-fraction", 11, True, 14),
-        ("maitake", "maitake fruiting body", 9, True, 12),
-        ("maitake", "maitake (unspecified)", 5, False, 5),
-        ("shiitake", "shiitake extract", 11, True, 14),
-        ("shiitake", "shiitake fruiting body", 9, True, 12),
-        ("shiitake", "shiitake (unspecified)", 5, False, 5),
-        ("button_mushroom", "button mushroom fruiting body extract", 8, True, 11),
-        ("button_mushroom", "button mushroom (unspecified)", 5, False, 5),
-        ("auricularia", "auricularia fruiting body extract", 9, True, 12),
-        ("auricularia", "auricularia (unspecified)", 5, False, 5),
-        ("lions_mane", "lions mane standardized extract", 11, True, 14),
-        ("lions_mane", "lions mane fruiting body", 9, True, 12),
-        ("lions_mane", "lion's mane (unspecified)", 5, False, 5),
-        ("reishi", "reishi standardized extract", 11, True, 14),
-        ("reishi", "reishi fruiting body", 9, True, 12),
-        ("reishi", "reishi (unspecified)", 5, False, 5),
-        ("cordyceps", "cordyceps militaris", 11, True, 14),
-        ("cordyceps", "cordyceps sinensis mycelium", 8, True, 11),
-        ("cordyceps", "cordyceps (unspecified)", 5, False, 5),
-        ("ahcc", "AHCC (unspecified)", 10, False, 10),
+        ("turkey_tail", "turkey tail standardized extract", 11),
+        ("turkey_tail", "turkey tail fruiting body", 9),
+        ("turkey_tail", "turkey tail (unspecified)", 5),
+        ("chaga", "chaga extract", 11),
+        ("chaga", "chaga sclerotium", 9),
+        ("chaga", "chaga (unspecified)", 5),
+        ("maitake", "maitake d-fraction", 11),
+        ("maitake", "maitake fruiting body", 9),
+        ("maitake", "maitake (unspecified)", 5),
+        ("shiitake", "shiitake extract", 11),
+        ("shiitake", "shiitake fruiting body", 9),
+        ("shiitake", "shiitake (unspecified)", 5),
+        ("button_mushroom", "button mushroom fruiting body extract", 8),
+        ("button_mushroom", "button mushroom (unspecified)", 5),
+        ("auricularia", "auricularia fruiting body extract", 9),
+        ("auricularia", "auricularia (unspecified)", 5),
+        ("lions_mane", "lions mane standardized extract", 11),
+        ("lions_mane", "lions mane fruiting body", 9),
+        ("lions_mane", "lion's mane (unspecified)", 5),
+        ("reishi", "reishi standardized extract", 11),
+        ("reishi", "reishi fruiting body", 9),
+        ("reishi", "reishi (unspecified)", 5),
+        ("cordyceps", "cordyceps militaris", 11),
+        ("cordyceps", "cordyceps sinensis mycelium", 8),
+        ("cordyceps", "cordyceps (unspecified)", 5),
+        ("ahcc", "AHCC (unspecified)", 10),
     ],
 )
 def test_mushroom_local_matrix_form_gradient_locked(
@@ -144,13 +99,9 @@ def test_mushroom_local_matrix_form_gradient_locked(
     parent: str,
     form_name: str,
     bio: int,
-    natural: bool,
-    score: int,
 ) -> None:
     form = iqm[parent]["forms"][form_name]
     assert form["bio_score"] == bio
-    assert form["natural"] is natural
-    assert form["score"] == score
 
 
 def test_dihydroberberine_routes_to_dedicated_form_not_berberine_hcl(iqm: dict) -> None:
@@ -166,8 +117,6 @@ def test_dihydroberberine_routes_to_dedicated_form_not_berberine_hcl(iqm: dict) 
     assert {"dihydroberberine", "dhb", "glucovantage"} <= dhb_aliases
     assert {"dihydroberberine", "glucovantage"}.isdisjoint(hcl_aliases)
     assert dhb["bio_score"] == 11
-    assert dhb["natural"] is False
-    assert dhb["score"] == 11
     assert hcl["absorption_structured"]["quality"] == "poor"
 
 
@@ -188,8 +137,6 @@ def test_berbevis_routes_to_phytosome_not_berberine_hcl(iqm: dict) -> None:
     )
     assert {"berbevis", "berberine phytosome"}.isdisjoint(hcl_aliases)
     assert phytosome["bio_score"] == 10
-    assert phytosome["natural"] is False
-    assert phytosome["score"] == 10
 
 
 def test_branded_lutein_routes_to_dedicated_form_not_unspecified(iqm: dict) -> None:
@@ -218,11 +165,8 @@ def test_branded_lutein_routes_to_dedicated_form_not_unspecified(iqm: dict) -> N
     }
     assert branded_aliases <= premium_aliases
     assert branded_aliases.isdisjoint(unspecified_aliases)
-    assert forms["lutein (unspecified)"]["natural"] is False
     assert forms["lutein (unspecified)"]["absorption_structured"]["quality"] == "low"
     assert premium["bio_score"] == 10
-    assert premium["natural"] is True
-    assert premium["score"] == 13
 
 
 @pytest.mark.parametrize(
@@ -243,11 +187,10 @@ def test_unspecified_form_does_not_outrank_lowest_specific_form(
 ) -> None:
     forms = iqm[parent]["forms"]
     unspecified_form = forms[unspecified]
-    specific_scores = [forms[name]["score"] for name in specific_forms]
-    assert unspecified_form["score"] <= min(specific_scores), (
+    specific_scores = [forms[name]["bio_score"] for name in specific_forms]
+    assert unspecified_form["bio_score"] <= min(specific_scores), (
         f"{parent}::{unspecified} should not outscore a disclosed lower-quality form."
     )
-    assert unspecified_form["natural"] is False
 
 
 def test_acetyl_l_carnitine_aliases_route_to_l_carnitine_alcar_form(iqm: dict) -> None:
@@ -271,7 +214,6 @@ def test_acetyl_l_carnitine_aliases_route_to_l_carnitine_alcar_form(iqm: dict) -
     # propionyl-l-carnitine (10); 10 is the deliberate canonical value, and the
     # deprecated acetyl_l_carnitine duplicate is synced to match.
     assert form["bio_score"] == 10
-    assert form["score"] == 10
     assert form["external_ids"]["unii"] == "6DH1W9VH8Q"
 
 
@@ -291,7 +233,6 @@ def test_acetyl_l_carnitine_duplicate_parent_is_deprecated_compat_only(iqm: dict
             "ALCAR routing aliases that compete with l_carnitine."
         )
         assert form["bio_score"] == canonical["bio_score"]
-        assert form["score"] == canonical["score"]
         assert "deprecated compatibility form" in form["notes"]
 
 

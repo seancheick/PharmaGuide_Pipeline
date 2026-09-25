@@ -17,11 +17,6 @@ def load_iqm() -> dict:
     return json.loads(IQM_PATH.read_text())
 
 
-def assert_score_formula(form: dict) -> None:
-    expected = min(18, form["bio_score"] + (3 if form.get("natural") else 0))
-    assert form["score"] == expected
-
-
 def test_vitamin_a_direct_forms_use_absorption_only_scores() -> None:
     iqm = load_iqm()
     forms = iqm["vitamin_a"]["forms"]
@@ -41,7 +36,6 @@ def test_vitamin_a_direct_forms_use_absorption_only_scores() -> None:
     for form_name, bio_score in expected.items():
         form = forms[form_name]
         assert form["bio_score"] == bio_score
-        assert_score_formula(form)
 
 
 def test_delivery_tech_forms_are_evidence_thin_not_top_tier() -> None:
@@ -78,7 +72,6 @@ def test_standalone_carotenoid_forms_use_conservative_provitamin_a_scores() -> N
     for (parent, form_name), bio_score in expected.items():
         form = iqm[parent]["forms"][form_name]
         assert form["bio_score"] == bio_score
-        assert_score_formula(form)
 
 
 def test_vitamin_a_context_forms_do_not_duplicate_exact_carotenoid_identity_ids() -> None:
@@ -93,8 +86,6 @@ def test_vitamin_a_context_forms_do_not_duplicate_exact_carotenoid_identity_ids(
     for form_name, exact_parent in expected_forms.items():
         form = vitamin_a_forms[form_name]
         assert form["bio_score"] == 5
-        assert form["natural"] is True
-        assert_score_formula(form)
         assert "external_ids" not in form or not form["external_ids"].get("unii")
         assert form["api_verification"]["exact_identity_parent"] == exact_parent
         for alias in form["aliases"]:

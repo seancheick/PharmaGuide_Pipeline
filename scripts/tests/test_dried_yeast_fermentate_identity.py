@@ -64,4 +64,3 @@ def test_generic_fermentate_does_not_cite_spirulina_or_claim_branded_efficacy() 
     assert "19298191" not in json.dumps(data["yeast_fermentate"])
     assert "reduced cold/flu" not in form["notes"]
     assert form["bio_score"] == 5
-    assert form["score"] == 8

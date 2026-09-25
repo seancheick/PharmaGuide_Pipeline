@@ -197,22 +197,3 @@ def test_e3_digestive_enzymes_category_error(iqm):
 # ============================================================================
 # Schema integrity post-Dr-Pham
 # ============================================================================
-
-def test_score_field_recomputed_after_bio_changes(iqm):
-    """score = bio_score + (3 if natural else 0) — must hold after B35 bio
-    downgrades.
-    """
-    mismatches = []
-    for pid, parent in iqm.items():
-        for fname, form in parent.get('forms', {}).items():
-            bio = form.get('bio_score')
-            if not isinstance(bio, (int, float)):
-                continue
-            natural = bool(form.get('natural', False))
-            expected = bio + (3 if natural else 0)
-            actual = form.get('score')
-            if actual != expected:
-                mismatches.append((pid, fname, bio, natural, actual, expected))
-    assert not mismatches, (
-        f'{len(mismatches)} score field mismatches: {mismatches[:5]}'
-    )

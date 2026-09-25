@@ -578,13 +578,11 @@ Each ingredient entry:
 | `category_enum` | string | NO | Standardized category |
 | `data_quality` | object | NO | Completeness tracking |
 
-Each **form** within `forms`:
+Each **form** within `forms` (IQM 5.6.0 removed the retired natural-bonus `score` and the `natural` flag; `db_integrity_sanity_check` and `test_iqm_retired_fields` reject either field):
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `score` | float | YES | Natural-bonus-inclusive form score: `bio_score + (natural ? 3 : 0)`, capped at 18 |
-| `bio_score` | float | YES | Bioavailability/absorption score (0-15); runtime scoring uses this for form quality |
-| `natural` | bool | YES | Natural vs synthetic |
+| `bio_score` | float | YES | Form quality (0-15): bioavailability/absorption for systemic actives, delivery-to-site/form-quality confidence for local/matrix actives. The only form-quality value. |
 | `absorption` | string | YES | Absorption characteristic |
 | `notes` | string | NO | Form-specific notes |
 | `aliases` | string[] | YES | Form aliases for matching |

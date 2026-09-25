@@ -63,19 +63,6 @@ def test_standardized_extract_bio_score_aligned_to_class_finding(boswellia_forms
     )
 
 
-def test_standardized_extract_final_score_recomputed(boswellia_forms):
-    """final score = bio_score + (3 if natural) per IQM invariant. With
-    bio=7 and natural=True, score must be 10.
-    """
-    form = boswellia_forms['boswellia standardized extract']
-    assert form.get('natural') is True, 'natural flag must remain True'
-    score = form.get('score')
-    assert score == 10, (
-        f'boswellia standardized extract score={score}, expected 10 '
-        f'(7 bio + 3 natural). Score field violates invariant.'
-    )
-
-
 def test_standardized_extract_documents_class_finding_extension(boswellia_forms):
     """Notes must document the 2026-05-25 Class Finding extension so the
     rationale survives future audits.

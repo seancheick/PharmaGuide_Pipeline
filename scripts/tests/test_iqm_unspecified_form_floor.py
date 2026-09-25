@@ -34,14 +34,14 @@ def iqm():
 
 
 def _peer_min_score(forms):
-    """Return min score across forms whose key does NOT contain 'unspecified'."""
+    """Return min bio_score across forms whose key does NOT contain 'unspecified'."""
     scores = []
     for fk, ff in forms.items():
         if not isinstance(ff, dict):
             continue
         if 'unspecified' in fk.lower():
             continue
-        s = ff.get('score')
+        s = ff.get('bio_score')
         if isinstance(s, (int, float)):
             scores.append(s)
     return min(scores) if scores else None
@@ -228,14 +228,14 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
         for fk, ff in forms.items():
             if not isinstance(ff, dict) or 'unspecified' not in fk.lower():
                 continue
-            s = ff.get('score')
-            # The 2026-08-13 evidence contract supersedes the old assumption
-            # that a peer-min floor may silently promote an undisclosed form
-            # into the public Excellent tier. Keep the honest-middle floor,
-            # but cap unsupported unspecified forms at bio_score 11 plus the
-            # existing natural-source bonus.
-            evidence_ceiling = 11 + (3 if ff.get('natural') else 0)
-            required_floor = min(peer_min, evidence_ceiling)
+            s = ff.get('bio_score')
+            # The 2026-08-13 evidence contract caps unsupported unspecified
+            # forms at bio_score 11. On bio_score (IQM 5.6.0, natural bonus
+            # retired) the agreed rule is "unspecified = lowest valid named
+            # form - 1", so an unspecified form may sit exactly one below
+            # peer-min (curcumin: 5 vs 6), never further.
+            evidence_ceiling = 11
+            required_floor = min(peer_min - 1, evidence_ceiling)
             if isinstance(s, (int, float)) and s < required_floor:
                 violations.append((parent_key, fk, s, required_floor))
 
@@ -270,7 +270,7 @@ def test_audit_locked_unspecified_scores_pinned(iqm):
             mismatches.append(f'{parent_key}: no unspecified form found')
             continue
         fk, ff = next(iter(unspec.items()))
-        s = ff.get('score')
+        s = ff.get('bio_score')
         if s != locked_score:
             mismatches.append(
                 f'{parent_key}/{fk}: score={s}, expected audit-locked {locked_score}'
@@ -314,7 +314,7 @@ def test_recalibrated_high_impact_entries(iqm):
         if not unspec_forms:
             continue
         unspec = next(iter(unspec_forms.values()))
-        s = unspec.get('score')
+        s = unspec.get('bio_score')
         assert isinstance(s, (int, float)) and s >= min_score, (
             f"{parent} unspec must score ≥{min_score} (peer-min); got {s}"
         )
@@ -354,14 +354,9 @@ def test_standardization_marker_spread_locked(iqm):
                 mismatches.append(f'{parent_key}/{form_key}: missing form')
                 continue
             bio = form.get('bio_score')
-            score = form.get('score')
             exp_bio = spec[f'{side}_bio']
-            exp_score = spec[f'{side}_score']
-            if bio != exp_bio or score != exp_score:
-                mismatches.append(
-                    f'{parent_key}/{form_key}: bio={bio}/score={score} '
-                    f'(expected bio={exp_bio}/score={exp_score})'
-                )
+            if bio != exp_bio:
+                mismatches.append(f'{parent_key}/{form_key}: bio={bio} (expected bio={exp_bio})')
     assert not mismatches, (
         'Standardization-marker spread drifted from locked values. Either '
         'the IQM was edited without updating _STANDARDIZATION_MARKER_LOCKED_'
@@ -405,13 +400,8 @@ def test_local_matrix_mushroom_unspecified_spread_locked(iqm):
         ]
         lowest_disclosed = min(disclosed_bios) if disclosed_bios else None
 
-        if unspec.get('bio_score') != exp_bio or unspec.get('score') != exp_score:
-            mismatches.append(
-                f'{parent_key}/{unspec_form}: bio={unspec.get("bio_score")}/'
-                f'score={unspec.get("score")} expected bio={exp_bio}/score={exp_score}'
-            )
-        if unspec.get('natural') is not False:
-            mismatches.append(f'{parent_key}/{unspec_form}: natural must be false')
+        if unspec.get('bio_score') != exp_bio:
+            mismatches.append(f'{parent_key}/{unspec_form}: bio={unspec.get("bio_score")} expected bio={exp_bio}')
         if lowest_disclosed != exp_lowest_disclosed:
             mismatches.append(
                 f'{parent_key}: lowest disclosed bio={lowest_disclosed}, '
@@ -426,30 +416,4 @@ def test_local_matrix_mushroom_unspecified_spread_locked(iqm):
     assert not mismatches, (
         'Local/matrix mushroom unspecified spread drifted from locked values:\n  '
         + '\n  '.join(mismatches)
-    )
-
-
-def test_schema_formula_still_holds_after_recalibration(iqm):
-    """Recalibration must preserve schema rule:
-    score = bio_score + (3 if natural else 0)."""
-    mismatches = []
-    for parent_key, v in iqm.items():
-        if parent_key.startswith('_') or not isinstance(v, dict):
-            continue
-        for form_key, form in v.get('forms', {}).items():
-            if not isinstance(form, dict):
-                continue
-            bio = form.get('bio_score')
-            score = form.get('score')
-            natural = bool(form.get('natural', False))
-            if isinstance(bio, (int, float)) and isinstance(score, (int, float)):
-                expected = bio + (3 if natural else 0)
-                if score != expected:
-                    mismatches.append((parent_key, form_key, bio, natural, score, expected))
-    assert not mismatches, (
-        f"Recalibration broke schema formula in {len(mismatches)} forms:\n"
-        + "\n".join(
-            f"  {p}/{f}: bio={b}, natural={n}, score={s}, expected={e}"
-            for p, f, b, n, s, e in mismatches[:10]
-        )
     )

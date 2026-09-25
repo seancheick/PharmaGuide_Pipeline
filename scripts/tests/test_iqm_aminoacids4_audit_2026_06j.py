@@ -41,7 +41,6 @@ SCORE_TARGETS = [
 def test_bio_score_corrected(iqm, parent, form, expected):
     f = _form(iqm, parent, form)
     assert f["bio_score"] == expected
-    assert f["score"] == min(18, f["bio_score"] + (3 if f.get("natural") else 0))
 
 
 def test_carnosyn_equals_generic_beta_alanine(iqm):

@@ -77,7 +77,7 @@ def test_preparation_has_no_borrowed_iqm_quality_or_live_organism_evidence(
     _, product, _ = preparation_case
     quality = product["ingredient_quality_data"]["ingredients"][0]
     assert quality["recognized_non_scorable"] is True
-    for field in ("bio_score", "score", "natural", "form_id", "matched_form",
+    for field in ("bio_score", "form_id", "matched_form",
                   "final_form_bio_score"):
         assert quality.get(field) is None, (field, quality.get(field))
     assert quality.get("matched_forms") == []
@@ -145,7 +145,6 @@ def test_unknown_extract_stays_conflicted_without_fallback_quality(
     assert quality["canonical_id"] is None
     assert quality["scoreable_identity"] is False
     assert not quality.get("recognized_non_scorable")
-    assert quality["score"] is None
     active = product["activeIngredients"][0]
     for field, value in original[0].items():
         assert active[field] == value, field
@@ -227,7 +226,7 @@ def test_genuine_iqm_repair_retains_its_form_rating(
     assert quality["canonical_id"] == active["canonical_id"] == "epa"
     assert active["canonical_source_db"] == "ingredient_quality_map"
     assert active["form_id"] == quality["form_id"] == "EPA fish oil ethyl ester"
-    assert quality["bio_score"] == quality["score"] == 9
+    assert quality["bio_score"] == 9
     assert active["canonical_id_before"] == "dha"
     if quantity == 0.0:
         assert result["ingredients_scorable"] == []
@@ -436,7 +435,7 @@ def test_safety_only_recognition_keeps_required_primary_identity_unresolved(
     assert "primary identity" in quality["identity_resolution_rationale"].lower()
     assert quality["identity_decision_reason"] == "safety_recognition_without_primary_identity"
     assert quality["scoreable_identity"] is False
-    assert quality["score"] is quality["bio_score"] is quality["form_id"] is None
+    assert quality["bio_score"] is quality["form_id"] is None
     assert product["activeIngredients"][0]["canonical_id"] == supplied_canonical
 
     scoring = get_scoring_ingredients(product)
@@ -495,7 +494,7 @@ def test_safety_recognition_preserves_a_validated_primary_without_form_credit(
     assert quality["identity_disposition"] in {"clean", "taxonomy_only"}
     assert quality["mapped_identity"] is True
     assert quality["scoreable_identity"] is False
-    assert quality["bio_score"] is quality["score"] is quality["form_id"] is None
+    assert quality["bio_score"] is quality["form_id"] is None
     assert quality["matched_forms"] == []
     assert product["activeIngredients"][0]["canonical_id"] == canonical
 
@@ -518,7 +517,7 @@ def test_classification_keeps_a_safety_only_conflict_in_the_required_role(
     assert quality["role_classification"] == "active_unmapped"
     assert quality["canonical_id"] is None
     assert quality["safety_identity_id"] == "ADD_ANTIMONY"
-    assert quality["bio_score"] is quality["score"] is None
+    assert quality["bio_score"] is None
     scoring = get_scoring_ingredients(product)
     assert scoring.mapped_count == scoring.unmapped_count == 1
     assert scoring.mapped_coverage == 0.5

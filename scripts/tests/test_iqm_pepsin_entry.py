@@ -68,7 +68,6 @@ def test_pepsin_iqm_has_scorable_form(iqm):
     for form_key, form in forms.items():
         if (
             isinstance(form, dict)
-            and isinstance(form.get("score"), (int, float))
             and isinstance(form.get("bio_score"), (int, float))
         ):
             found_scorable = True
@@ -76,15 +75,12 @@ def test_pepsin_iqm_has_scorable_form(iqm):
             #   alpha_amylase: score 15, bio 12 (excellent absorption)
             #   lysozyme:      score 13, bio 10 (limited oral)
             # Pepsin sits between (acid-pH only, denatured post-gastric)
-            assert 8 <= form["score"] <= 16, (
-                f"Pepsin score should sit ~10-14 (acid-pH-only enzyme); got {form['score']}"
-            )
             assert 6 <= form["bio_score"] <= 14, (
                 f"Pepsin bio_score should sit ~8-12; got {form['bio_score']}"
             )
             assert form.get("dosage_importance") is not None
             break
-    assert found_scorable, "At least one pepsin form must carry score + bio_score"
+    assert found_scorable, "At least one pepsin form must carry bio_score"
 
 
 def test_pepsin_iqm_aliases_cover_common_label_renderings(iqm):

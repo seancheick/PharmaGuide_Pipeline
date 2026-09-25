@@ -937,7 +937,7 @@ def make_enriched():
                     "mapped": True,
                     "notes": "Preformed vitamin A form.",
                     "matched_form": "retinyl palmitate",
-                    "matched_forms": [{"form_key": "retinyl_palmitate", "bio_score": 14, "natural": False, "score": 14}],
+                    "matched_forms": [{"form_key": "retinyl_palmitate", "bio_score": 14}],
                     "extracted_forms": [{"raw_form_text": "Palmitate", "percent_share": 1.0}],
                     "safety_hits": [],
                 },
@@ -1829,15 +1829,13 @@ def test_detail_blob_preserves_real_upstream_field_names_for_active_ingredients(
         "matched_forms",
         "extracted_forms",
         "bio_score",
-        "natural",
-        "score",
         "notes",
         "category",
         "mapped",
         "safety_hits",
     }
     assert expected_keys.issubset(set(ingredient.keys()))
-    assert ingredient["score"] == 14.0
+    assert not {"natural", "score"} & set(ingredient.keys())
     assert ingredient["standardName"] == "Retinyl Palmitate"
 
 
@@ -3042,11 +3040,11 @@ def test_top_warnings_preserve_structured_identity_for_flutter():
 
 def test_export_contract_validator_fails_loudly_when_real_upstream_field_is_missing():
     enriched = make_enriched()
-    del enriched["ingredient_quality_data"]["ingredients"][0]["score"]
+    del enriched["ingredient_quality_data"]["ingredients"][0]["bio_score"]
 
     issues = validate_export_contract(enriched, make_scored())
 
-    assert any("ingredient_quality_data.ingredients[0].score" in issue for issue in issues)
+    assert any("ingredient_quality_data.ingredients[0].bio_score" in issue for issue in issues)
 
 
 def test_banned_warning_includes_source_urls_from_references_structured():

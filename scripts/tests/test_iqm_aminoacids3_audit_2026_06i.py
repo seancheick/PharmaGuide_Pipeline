@@ -29,9 +29,7 @@ def iqm():
 
 def test_glutamate_aligned_to_glutamic_acid(iqm):
     g = iqm["glutamate"]["forms"]["l-glutamate"]
-    assert g["natural"] is False                      # MSG/glutamate is synthetic, not natural matrix
     assert g["absorption_structured"]["value"] == 0.1  # splanchnic extraction (= l_glutamic_acid)
-    assert g["score"] == min(18, g["bio_score"])       # natural bonus removed
 
 
 def test_glutamate_no_longer_contradicts_glutamic_acid(iqm):
@@ -39,5 +37,4 @@ def test_glutamate_no_longer_contradicts_glutamic_acid(iqm):
     ga = iqm["l_glutamic_acid"]["forms"]["l-glutamic acid standard"]
     # shared labels (glutamate/MSG) must score identically whichever parent wins
     assert g["bio_score"] == ga["bio_score"]
-    assert g["natural"] == ga["natural"]
     assert g["absorption_structured"]["value"] == ga["absorption_structured"]["value"]

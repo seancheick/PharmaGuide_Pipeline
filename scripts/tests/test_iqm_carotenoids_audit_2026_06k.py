@@ -29,12 +29,6 @@ def _al(iqm, p, f):
 
 
 # ── zeaxanthin unspecified: natural bonus misapplied (no declared source) ─────
-def test_zeaxanthin_unspecified_not_natural(iqm):
-    f = iqm["zeaxanthin"]["forms"]["zeaxanthin (unspecified)"]
-    assert f["natural"] is False
-    assert f["score"] == min(18, f["bio_score"])
-
-
 # ── identity / class alias cleanup ───────────────────────────────────────────
 def test_macularsynergy_off_lutein(iqm):
     al = _al(iqm, "lutein", "lutein (unspecified)")

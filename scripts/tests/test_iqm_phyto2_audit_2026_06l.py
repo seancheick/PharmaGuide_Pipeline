@@ -26,12 +26,6 @@ def _al(iqm, p, f):
 
 
 # ── flag + display-value consistency ─────────────────────────────────────────
-def test_alpha_carotene_not_natural(iqm):
-    f = iqm["alpha_carotene"]["forms"]["alpha-carotene (unspecified)"]
-    assert f["natural"] is False                  # purified, no declared source
-    assert f["score"] == min(18, f["bio_score"])
-
-
 def test_msm_unspecified_value_aligned(iqm):
     # MSM = single compound (dimethyl sulfone); unspecified must match exact MSM
     ex = iqm["msm"]["forms"]["MSM (methylsulfonylmethane)"]

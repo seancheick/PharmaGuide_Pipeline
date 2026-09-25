@@ -265,7 +265,6 @@ def test_peg_creatine_bio_score_in_salt_tier(iqm):
         "(class-equivalent to creatine salt forms per limited but consistent "
         "ergogenic-equivalence evidence from Herda 2009 / Camic 2010 + 2014)."
     )
-    assert form.get('score') == 10, "Top-level 'score' must mirror bio_score"
 
 
 def test_peg_creatine_absorption_conservative(iqm):
@@ -395,7 +394,6 @@ def test_explicit_creatine_form_identity_preserved(
     assert match['standard_name'] == 'Creatine'
     assert match['form_id'] == expected_form
     assert match['form_name'] == expected_form
-    assert match['score'] == expected_score
     assert match['bio_score'] == expected_score
     assert match['fallback_form_selected'] is False
 
@@ -460,5 +458,5 @@ def test_generic_alias_ownership_and_unspecified_copy(iqm):
     copy=forms[UNSPECIFIED_CREATINE_FORM]['consumer_note']
     assert 'without specifying its chemical form' in copy
     assert 'standard monohydrate form' not in copy
-    assert forms['creatine monohydrate']['score']==14
-    assert forms[UNSPECIFIED_CREATINE_FORM]['score']==6
+    assert forms['creatine monohydrate']['bio_score']==14
+    assert forms[UNSPECIFIED_CREATINE_FORM]['bio_score']==6

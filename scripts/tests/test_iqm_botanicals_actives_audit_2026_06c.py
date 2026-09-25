@@ -42,23 +42,7 @@ def test_bio_score_corrected(iqm, parent, form, expected):
     assert _form(iqm, parent, form)["bio_score"] == expected
 
 
-@pytest.mark.parametrize("parent,form,_", SCORE_TARGETS)
-def test_score_invariant(iqm, parent, form, _):
-    f = _form(iqm, parent, form)
-    assert f["score"] == min(18, f["bio_score"] + (3 if f.get("natural") else 0))
-
-
 # ── 2. natural-bonus misapplied (purified salt / unknown source) ──────────────
-def test_atp_disodium_not_natural(iqm):
-    f = _form(iqm, "atp", "atp disodium salt")
-    assert f["natural"] is False and f["score"] == f["bio_score"]
-
-
-def test_pc_unspecified_not_natural(iqm):
-    f = _form(iqm, "phosphatidylcholine", "phosphatidylcholine (unspecified)")
-    assert f["natural"] is False and f["score"] == f["bio_score"]
-
-
 # ── 3. marketing aliases removed ──────────────────────────────────────────────
 # NOTE: black_cherry "sweet cherry"/"prunus avium" aliases were NOT removed.
 # The black_cherry entry is deliberately Prunus avium (GSRS UNII A77056YJ4K,

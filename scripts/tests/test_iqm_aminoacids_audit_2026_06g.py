@@ -35,7 +35,6 @@ def test_alcar_bio_score(iqm):
     # over base, but NOT a proven oral-F advantage; BBB positioning is not absorption.
     f = _form(iqm, "l_carnitine", "acetyl-l-carnitine (alcar)")
     assert f["bio_score"] == 10
-    assert f["score"] == min(18, f["bio_score"] + (3 if f.get("natural") else 0))
 
 
 # ── 2. marketing / typo / combo alias cleanup ────────────────────────────────

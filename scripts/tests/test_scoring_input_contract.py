@@ -1333,7 +1333,6 @@ def test_iqm_blend_anchor_mass_carries_conservative_form_quality():
     assert row["evidence_type"] == "blend_anchor_mass"
     assert row["canonical_id"] == "digestive_enzymes"
     assert row["bio_score"] == 11
-    assert row["score"] == 14
     assert row["matched_form"] == "pancreatic enzymes (animal-derived)"
     assert row["generic_form_quality_credit"] is True
 

@@ -32,8 +32,3 @@ def test_lutemax_2020_on_free_lutein(iqm):
     for a in ["lutein 2020", "lutein 2020 marigold flower extract"]:
         assert a not in uns and a in free
 
-
-def test_stabilized_sulforaphane_not_natural(iqm):
-    f = iqm["sulforaphane"]["forms"]["stabilized sulforaphane"]
-    assert f["natural"] is False
-    assert f["score"] == min(18, f["bio_score"])

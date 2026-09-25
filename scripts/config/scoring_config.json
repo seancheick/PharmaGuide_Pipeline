@@ -129,9 +129,7 @@
         "tier_3_promising": 0.5,
         "tier_4_popular": 0.25
       },
-      "non_gmo_project_verified": 0.5,
-      "natural_source": 1,
-      "_natural_source_note": "v3.6.0: natural-source signal moved here from A1 (was +3 in A1 inflating the form/absorption score with sourcing). Now +1 in A5 where it conceptually belongs alongside organic, standardized, non-GMO. Detection: majority of active scorable ingredients have natural=true. Tiebreaker, not tier."
+      "non_gmo_project_verified": 0.5
     },
     "standardized_botanical_anchor": {
       "_description": "Track A.1 (2026-05-23). Cap + verdict ceiling for products that satisfy the strict standardized-botanical-anchor eligibility check in score_supplements.SupplementScorer._has_standardized_botanical_anchor. Spec: reports/not_scored_triage/track_A1_standardized_botanical_anchor_spec.md.",

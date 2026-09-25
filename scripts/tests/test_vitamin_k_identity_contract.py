@@ -142,7 +142,6 @@ def test_k2_form_resolution_never_infers_inactive_cis_isomer(
     assert row["matched_form"] != "vitamin K2 (cis form)"
     if declared_form is None:
         assert row["bio_score"] == 6
-        assert row["score"] == 6
         form_contract = enricher.databases["ingredient_quality_map"][
             "vitamin_k2"
         ]["forms"][expected_form]

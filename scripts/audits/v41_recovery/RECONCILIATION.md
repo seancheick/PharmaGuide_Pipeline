@@ -168,6 +168,19 @@ Affected-cohort comparison, final tree: every product with an unresolved form to
 
 Remaining unresolved form tokens (4,891 on the frozen corpus, `report/form_strata.json`, heuristic strata): repeated names 1,314 and sources 1,048 are resolved by this fix; open for one-entry curation or review: real forms missing from the IQM 1,222 (calcium ascorbate, potassium carbonate, monobasic calcium phosphate), salts owned by another nutrient 313, cross-parent other 805 (includes mixed-tocopherol components), Latin restatements 134, markers 28, unclassified 27.
 
+## IQM `score` / `natural` retired, 2026-09-25
+
+IQM owns form quality through `bio_score` alone. The natural-bonus-inclusive `score` (883 of 1,444 forms differed from `bio_score`) and the `natural` flag were physically removed rather than guarded:
+
+- Data: both keys removed from all 1,444 IQM forms (2,888 keys; every other value verified unchanged); IQM schema 5.5.7 -> 5.6.0; metadata notes corrected.
+- Runtime: removed from enrichment payloads (form match, matched_forms, additional_forms, multi-form aggregate, unmapped placeholders `score: 9` / `score: 5`, the fallback audit's `fallback_score`), the enricher and export required-field contracts, `scoring_input_contract`'s form projection, `build_final_db`'s ingredient export, and `bio_score_of`'s fallback to `score`. The v3 `natural_source` bonus left `config/scoring_config.json`.
+- Gates: `db_integrity_sanity_check` now errors on either field in an IQM form; `test_iqm_retired_fields` runs enrichment and scoring over real labels with guarded IQM forms and fails on any read, and checks rows, matched forms and the export.
+- Tests: assertions of the retired invariant (`score == bio_score + 3 x natural`, `natural is False/True`) removed; value pins moved to `bio_score`. The unspecified peer-min floor is now stated on `bio_score` with the agreed rule (unspecified may sit exactly one below the lowest named form: curcumin 5 vs 6); it previously passed only because the natural bonus inflated the total.
+- Flutter: no consumer of either ingredient field (only an RxNorm API `score`, unrelated); removed from the export gate's Flutter ingredient-key contract.
+- Clinically meaningful natural/synthetic facts are untouched: they live in form identity (d-alpha vs dl-alpha tocopherol), label-token lists and natural-colour data.
+
+Neutrality: scorer replay of all 15,412 frozen labels against the 30af5396 baseline, 0 records differ (snapshot 61d1aaf0f48782b4); the 1,758-product form cohort re-enriched from raw is identical to the a9801685 arm (0 differ, 5edcba604c19ddad). The removal is score-neutral; the placeholder `score: 9` on unmapped rows was dead (no scorable row carried it).
+
 ## Tracked follow-ups (from Task 2)
 
 - Childless positive-quantity blend rows with no canonical: 2,961 rows on 1,873 frozen products (1,735 blend-named, 212 single-item-named). Measure per entry before any global rule; true opaque blends need separate handling. Census: `~/pg_quality/recon/childless_blend_census.txt`.

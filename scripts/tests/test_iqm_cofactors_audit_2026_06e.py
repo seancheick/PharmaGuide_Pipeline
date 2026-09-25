@@ -43,14 +43,6 @@ def test_bio_score_corrected(iqm, parent, form, expected):
 
 
 # ── 2. natural-bonus misapplied to purified/generic compounds + an enzyme ─────
-def test_purified_not_natural(iqm):
-    for p, f in [("quercetin", "quercetin dihydrate"), ("quercetin", "quercetin (unspecified)"),
-                 ("glutathione_peroxidase", "glutathione peroxidase enzyme")]:
-        x = _form(iqm, p, f)
-        assert x["natural"] is False, f"{p}::{f}"
-        assert x["score"] == min(18, x["bio_score"])
-
-
 # ── 3. distinct-compound aliases removed (verified different CIDs) ─────────────
 def test_ggc_precursor_off_glutathione(iqm):
     al = _al(iqm, "glutathione", "standard glutathione")

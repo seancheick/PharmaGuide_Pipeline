@@ -50,7 +50,6 @@ def test_reconciliation_manifest_is_complete_and_matches_iqm():
         assert isinstance(row["citation_ids"], list)
         form = iqm[row["ingredient_key"]]["forms"][row["form_key"]]
         assert form["bio_score"] == row["final_score"]
-        assert form["score"] == row["final_total_score"]
         if row["action"] == "RESTORE_LEGACY":
             assert row["final_score"] == row["pre_migration_score"]
             assert row["final_total_score"] == row["pre_migration_total_score"]

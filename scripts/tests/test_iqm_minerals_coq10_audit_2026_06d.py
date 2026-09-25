@@ -53,20 +53,7 @@ def test_bio_score_corrected(iqm, parent, form, expected):
     assert _form(iqm, parent, form)["bio_score"] == expected
 
 
-@pytest.mark.parametrize("parent,form,_", SCORE_TARGETS)
-def test_score_invariant(iqm, parent, form, _):
-    f = _form(iqm, parent, form)
-    assert f["score"] == min(18, f["bio_score"] + (3 if f.get("natural") else 0))
-
-
 # ── 2. natural-bonus misapplied to purified inositols ─────────────────────────
-def test_purified_inositols_not_natural(iqm):
-    for form in ["myo-inositol", "d-chiro-inositol"]:
-        f = _form(iqm, "inositol", form)
-        assert f["natural"] is False, f"{form} purified compound, not a natural-source matrix"
-        assert f["score"] == f["bio_score"]
-
-
 # ── 3. marketing / wrong-entity aliases removed ───────────────────────────────
 def test_iodine_marketing_removed(iqm):
     al = _al(iqm, "iodine", "molecular iodine")

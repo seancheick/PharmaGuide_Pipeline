@@ -37,7 +37,6 @@ def test_used_species_only_probiotic_forms_are_not_premium_strain_tier() -> None
     for parent, form_name, expected_bio in species_only:
         form = data[parent]["forms"][form_name]
         assert form["bio_score"] == expected_bio
-        assert form["score"] == min(18, expected_bio + 3)
         assert form["absorption_structured"]["value"] < 0.8
 
 

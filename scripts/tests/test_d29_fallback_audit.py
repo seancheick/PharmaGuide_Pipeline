@@ -120,9 +120,6 @@ class TestCascaraSagradaPowderForm:
         )
         powder = forms["cascara sagrada bark powder"]
         assert powder.get("bio_score") == 4
-        assert powder.get("natural") is True
-        # score = bio + 3 (natural modifier)
-        assert powder.get("score") == 7
 
     def test_cascara_powder_aliases_cover_label_variants(self, iqm) -> None:
         powder = (

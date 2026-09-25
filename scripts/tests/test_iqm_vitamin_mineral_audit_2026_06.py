@@ -51,29 +51,7 @@ def test_bio_score_corrected(iqm, parent, form, expected):
     assert _form(iqm, parent, form)["bio_score"] == expected
 
 
-@pytest.mark.parametrize("parent,form,_", SCORE_TARGETS)
-def test_score_invariant_holds(iqm, parent, form, _):
-    f = _form(iqm, parent, form)
-    expected = min(18, f["bio_score"] + (3 if f.get("natural") else 0))
-    assert f["score"] == expected, f"{parent}::{form} score must equal bio_score+3*natural"
-
-
 # ── 2. natural-source bonus misapplied to synthetic/inorganic forms ─────────
-def test_phosphate_salts_not_natural(iqm):
-    f = _form(iqm, "phosphorus", "phosphate salts")
-    assert f["natural"] is False
-    assert f["score"] == f["bio_score"]
-
-
-def test_generic_d_biotin_not_natural(iqm):
-    # commercial d-biotin is synthetic; natural bonus stays available via
-    # `biotin from yeast` / `protein_bound_biotin`.
-    f = _form(iqm, "vitamin_b7_biotin", "d-biotin")
-    assert f["natural"] is False
-    assert f["score"] == f["bio_score"]
-    assert _form(iqm, "vitamin_b7_biotin", "biotin from yeast")["natural"] is True
-
-
 # ── 3. Alias identity errors removed (fall through to conservative match) ────
 def test_gamma_carotene_not_betacarotene(iqm):
     assert "gamma-carotene" not in _aliases_lower(iqm, "vitamin_a", "beta-carotene from mixed carotenoids")

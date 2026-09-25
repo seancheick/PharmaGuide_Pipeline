@@ -104,9 +104,9 @@ def test_score_corrections_are_narrow_and_match_the_reviewed_form_axis():
         ("epa", "EPA fish oil rTG"): (14, 17),
     }
 
-    for (ingredient_key, form_key), (bio_score, total_score) in expected.items():
+    for (ingredient_key, form_key), (bio_score, _retired_total) in expected.items():
         form = _form(iqm, ingredient_key, form_key)
-        assert (form["bio_score"], form["score"]) == (bio_score, total_score)
+        assert form["bio_score"] == bio_score
 
 
 def test_backlog_exactly_tracks_legacy_excellent_forms_without_verified_evidence():

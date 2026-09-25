@@ -219,17 +219,12 @@ def scorable_ingredients(
 
 
 def bio_score_of(ingredient: Dict[str, Any]) -> Optional[float]:
-    """Return the ingredient's form-quality bio_score (0-15 scale), or
-    None when unavailable. Falls back to the legacy `score` field for
-    blobs from pre-v3.6.0 enrichers — v3.6.0+ emits score == bio_score
-    so the fallback yields identical numbers.
-    """
+    """Return the ingredient's form-quality bio_score (0-15 scale), or None
+    when unavailable. bio_score is the only form-quality value; the retired
+    IQM `score` is never read."""
     if not isinstance(ingredient, dict):
         return None
-    score = _as_float(ingredient.get("bio_score"), None)
-    if score is None:
-        score = _as_float(ingredient.get("score"), None)
-    return score
+    return _as_float(ingredient.get("bio_score"), None)
 
 
 def canonical_key(ingredient: Dict[str, Any]) -> str:

@@ -427,9 +427,9 @@ class TestExportContractValidator:
 
     def test_missing_required_iqd_field_flagged(self):
         e = _base_enriched()
-        del e["ingredient_quality_data"]["ingredients"][0]["score"]
+        del e["ingredient_quality_data"]["ingredients"][0]["bio_score"]
         issues = validate_export_contract(e, _base_scored())
-        assert any("score" in i for i in issues)
+        assert any("bio_score" in i for i in issues)
 
     def _opaque_no_identity_enriched(self):
         e = _base_enriched()
@@ -719,8 +719,8 @@ class TestSafetyCategoryRouting:
 FLUTTER_INGREDIENT_KEYS = {
     "raw_source_text", "name", "standardName", "normalized_key", "forms",
     "quantity", "unit", "standard_name", "matched_form",
-    "matched_forms", "extracted_forms", "category", "bio_score", "natural",
-    "score", "notes", "mapped", "safety_hits",
+    "matched_forms", "extracted_forms", "category", "bio_score",
+    "notes", "mapped", "safety_hits",
     "normalized_amount", "normalized_unit", "role", "parent_key",
     "dosage", "dosage_unit", "normalized_value",
     "is_mapped", "harmful_severity", "harmful_notes",

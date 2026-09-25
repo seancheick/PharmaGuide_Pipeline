@@ -49,12 +49,6 @@ def test_bio_score_corrected(iqm, parent, form, expected):
     assert _form(iqm, parent, form)["bio_score"] == expected
 
 
-@pytest.mark.parametrize("parent,form,_", SCORE_TARGETS)
-def test_score_invariant(iqm, parent, form, _):
-    f = _form(iqm, parent, form)
-    assert f["score"] == min(18, f["bio_score"] + (3 if f.get("natural") else 0))
-
-
 # ── 2. concept/blend/marketing alias cleanup ─────────────────────────────────
 def test_synbiotic_off_freeze_dried(iqm):
     al = _al(iqm, "probiotics", "freeze-dried with prebiotics")

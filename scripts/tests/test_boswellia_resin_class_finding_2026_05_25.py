@@ -80,20 +80,6 @@ def test_resin_powder_bio_score_aligned_to_class_finding(boswellia_forms):
     )
 
 
-def test_resin_powder_final_score_recomputed(boswellia_forms):
-    """score = bio_score + 3 (natural bonus). 7 + 3 = 10. Old score=11
-    (8 + 3) must be recomputed when bio_score drops.
-    """
-    form = boswellia_forms['boswellia resin powder']
-    bio = form['bio_score']
-    score = form.get('score')
-    assert score == bio + 3, (
-        f'boswellia resin powder score={score}, expected {bio + 3} '
-        f'(bio_score + 3 natural bonus). Was the score field forgotten '
-        f'after the bio_score change?'
-    )
-
-
 def test_resin_powder_documents_class_finding(boswellia_forms):
     """Notes must continue to cite Batch 16 Class Finding markers (already
     present per 2026-04-25 audit); the 2026-05-25 fix is bio_score-only
