@@ -167,7 +167,9 @@ bug-fix notes are history, not specifications.
 - At most one full-corpus job at a time (16 GB Mac), never alongside the full suite. Keep durable
   inputs outside `/tmp` — a reboot wipes it.
 - One worktree + branch per agent; one integrator mutates and pushes `main`. Stage explicit paths
-  only. Re-check the branch tip before claiming a lane.
+  only. Re-check the branch tip before claiming a lane. Record your lane (goal + files you will
+  touch) early in your worktree's `.claude/state/CURRENT_HANDOFF.md`. Every agent reads the other
+  lanes there before editing a shared owner (scoring config, matrix, rule files, export contract).
 
 ## Engineering principles
 
