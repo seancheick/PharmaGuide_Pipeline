@@ -51,7 +51,8 @@
     "enriched_inactive_safety_contract",
     "interaction_profile_contract",
     "enrichment_fallback_policy",
-    "display_ingredient_contract"
+    "display_ingredient_contract",
+    "ingredient_form_quality"
   ],
   "concepts": [
     {
@@ -546,6 +547,19 @@
       "fallback_class": "flutter_backward_compat",
       "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
       "tests": ["scripts/tests/test_label_fidelity_contract.py", "scripts/tests/test_source_of_truth_contract.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "ingredient_form_quality",
+      "owner": "scripts/scoring_v4/modules/generic_helpers.py",
+      "first_created_stage": "enriched",
+      "field_kind": "enriched",
+      "source_data_files": ["scripts/data/ingredient_quality_map.json"],
+      "consumers": ["scripts/scoring_v4/modules/generic_formulation.py", "scripts/scoring_v4/modules/multi_prenatal_formulation.py", "scripts/scoring_v4/modules/b_complex.py", "scripts/scoring_v4/modules/generic_dose.py", "scripts/scoring_v4/modules/botanical_profile.py"],
+      "forbidden_recomputation": ["IQM forms[].bio_score is the one form-quality fact; scoring reads it through generic_helpers.bio_score_of, and no pillar may re-rank form quality with premium-form counts, preferred-form name tables or bio_score dose multipliers (quality_score 1.7.0; docs/adr/0003-iqm-owns-form-quality.md)"],
+      "fallback_class": "old_batch_compatibility",
+      "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
+      "tests": ["scripts/tests/test_vitamin_form_ownership.py", "scripts/tests/test_v4_generic_formulation_p131.py", "scripts/tests/test_v4_multi_prenatal_formulation_p31.py"],
       "retirement_status": "active"
     }
   ]

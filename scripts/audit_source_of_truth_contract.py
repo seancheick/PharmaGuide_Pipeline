@@ -110,6 +110,7 @@ REQUIRED_CONCEPTS = {
     "interaction_profile_contract",
     "enrichment_fallback_policy",
     "display_ingredient_contract",
+    "ingredient_form_quality",
 }
 
 SCORABLE_BLOCKED_ROLES = CLEANER_NON_SCORABLE_ROLES
