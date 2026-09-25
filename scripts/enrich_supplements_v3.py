@@ -136,7 +136,7 @@ import form_vocab as _form_vocab  # noqa: E402
 from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer
 from proprietary_blend_detector import ProprietaryBlendDetector
-from rda_ul_calculator import RDAULCalculator, ul_exceedance_sentence
+from rda_ul_calculator import RDAULCalculator, ul_display_severity, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
@@ -21340,7 +21340,7 @@ class SupplementEnricherV3:
                                 "warning": ul_exceedance_sentence(
                                     float(amount_for_ul or 0.0), float(safety_ul or 0.0), str(converted_unit or "")
                                 ),
-                                "severity": "critical" if pct_ul_val >= 200 else "warning",
+                                "severity": ul_display_severity(pct_ul_val),
                                 **ul_exposure,
                             }
                         ))
@@ -21643,7 +21643,7 @@ class SupplementEnricherV3:
                                     float(group["total_amount"] or 0.0), float(agg_adequacy.ul or 0.0), str(group["unit"] or "")
                                 )
                             ),
-                            "severity": "critical" if pct_ul_val >= 200 else "warning",
+                            "severity": ul_display_severity(pct_ul_val),
                             "aggregation": "canonical_sum",
                             "canonical_id": cid,
                             "contributing_rows": group["rows"],

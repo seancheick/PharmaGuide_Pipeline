@@ -26,6 +26,7 @@ Usage:
 import json
 import re
 import logging
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
@@ -75,6 +76,28 @@ ADEQUACY_BANDS = {
 # because unit_converter.convert_nutrient is a no-op for plain minerals. These
 # support converting the label amount into the table unit before any pct math.
 _MASS_TO_MCG = {"g": 1_000_000.0, "mg": 1_000.0, "mcg": 1.0}
+
+
+def ul_display_severity(pct_ul: Any) -> str:
+    """Display severity for an exposure that already exceeds its UL.
+
+    Twice the limit (200%) is ``critical``. Every lower percentage is
+    ``warning``. This is only that display word. It is not the 100%
+    confirmed-exceedance test, the 150% quality-score deduction, or the
+    personalized 80% approaching-UL tier.
+    """
+    if isinstance(pct_ul, bool):
+        pct = 0.0
+    else:
+        try:
+            pct = float(pct_ul)
+        except (TypeError, ValueError):
+            pct = 0.0
+        if not math.isfinite(pct):
+            pct = 0.0
+    return "critical" if pct >= 200.0 else "warning"
+
+
 def ul_exceedance_sentence(amount: float, ul: float, unit: str) -> str:
     """The consumer sentence for an amount above the upper limit.
 
@@ -513,11 +536,14 @@ class RDAULCalculator:
 
         for result in adequacy_results:
             if result.over_ul and result.over_ul_amount:
-                # Determine severity
-                if result.pct_ul and result.pct_ul >= 200:
-                    severity = "critical"
-                elif result.pct_ul and result.pct_ul >= 150:
-                    severity = "warning"
+                # 150% separates warning from caution in this convenience
+                # helper. The 200% display word is ul_display_severity.
+                if result.pct_ul and result.pct_ul >= 150:
+                    severity = (
+                        ul_display_severity(result.pct_ul)
+                        if result.pct_ul >= 200
+                        else "warning"
+                    )
                 else:
                     severity = "caution"
 

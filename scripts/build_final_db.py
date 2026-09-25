@@ -72,6 +72,7 @@ from inactive_ingredient_resolver import (
     safety_terms_without_active_form_duplicates,
 )
 from iqm_form_evidence import validate_iqm_form
+from rda_ul_calculator import ul_display_severity
 from identity.safety import (
     has_explicit_form_evidence,
     normalize_safety_source,
@@ -200,6 +201,35 @@ def safe_float(value: Any, default: float = None) -> Optional[float]:
         return result if _math.isfinite(result) else default
     except (TypeError, ValueError):
         return default
+
+
+# Projection of ul_display_severity into the consumer warning lane.
+# The enricher stores critical/warning. The app's warning copy uses
+# high/moderate for the same 200% cut, because "critical" reads as
+# contraindicated.
+_UL_FLAG_WARNING_SEVERITY = {"critical": "high", "warning": "moderate"}
+
+
+def ul_flag_display_severity(flag: Dict[str, Any]) -> str:
+    """The one display severity for an enriched UL flag.
+
+    ``pct_ul`` is the canonical fact when present and is interpreted by the
+    shared ``ul_display_severity`` owner. A stored word is compatibility input
+    only when the percentage is unavailable. This prevents a stale but valid
+    word from contradicting the exposure printed beside it.
+    """
+    pct_ul = safe_float(flag.get("pct_ul"))
+    if pct_ul is not None:
+        return ul_display_severity(pct_ul)
+    stored = safe_str(flag.get("severity")).strip().lower()
+    if stored in _UL_FLAG_WARNING_SEVERITY:
+        return stored
+    return ul_display_severity(None)
+
+
+def ul_flag_warning_severity(flag: Dict[str, Any]) -> str:
+    """Consumer warning word for ``ul_flag_display_severity``."""
+    return _UL_FLAG_WARNING_SEVERITY[ul_flag_display_severity(flag)]
 
 
 def safe_str(value: Any, default: str = "") -> str:
@@ -2823,7 +2853,7 @@ def derive_v4_tradeoffs(
         penalties.append({
             "id": "B7",
             "label": f"Exceeds safe dose limit: {nutrient} at {pct:.0f}% of UL",
-            "severity": "critical" if pct >= 200 else "warning",
+            "severity": ul_flag_display_severity(ev),
             "reason": f"{nutrient}: {ev.get('amount')} vs UL {ev.get('ul')}",
         })
     for flag in safe_list(
@@ -5514,10 +5544,9 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         if not nutrient:
             continue
         pct_ul = safe_float(flag.get("pct_ul"))
-        # The enricher's own scale (warning / critical) is not the consumer
-        # vocabulary; 'critical' would read as contraindicated. Twice the
-        # limit is high, above the limit is moderate: the split the app uses.
-        sev = "high" if pct_ul is not None and pct_ul >= 200 else "moderate"
+        # high/moderate is the consumer projection of the enricher's
+        # critical/warning decision (ul_flag_display_severity).
+        sev = ul_flag_warning_severity(flag)
         if pct_ul is not None:
             message = f"Upper-limit warning: {nutrient} at {pct_ul:.0f}% of UL"
         else:
