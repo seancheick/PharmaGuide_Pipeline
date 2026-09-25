@@ -52,7 +52,8 @@
     "interaction_profile_contract",
     "enrichment_fallback_policy",
     "display_ingredient_contract",
-    "ingredient_form_quality"
+    "ingredient_form_quality",
+    "probiotic_row_identity"
   ],
   "concepts": [
     {
@@ -560,6 +561,19 @@
       "fallback_class": "old_batch_compatibility",
       "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
       "tests": ["scripts/tests/test_vitamin_form_ownership.py", "scripts/tests/test_v4_generic_formulation_p131.py", "scripts/tests/test_v4_multi_prenatal_formulation_p31.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "probiotic_row_identity",
+      "owner": "scripts/probiotic_measurements.py",
+      "first_created_stage": "enriched",
+      "field_kind": "derived",
+      "source_data_files": ["scripts/data/ingredient_quality_map.json", "scripts/data/other_ingredients.json"],
+      "consumers": ["scripts/enrich_supplements_v3.py", "scripts/scoring_input_contract.py", "scripts/supplement_taxonomy.py", "scripts/scoring_v4/route_features.py", "scripts/scoring_v4/modules/probiotic_formulation.py", "scripts/scoring_v4/modules/probiotic_evidence.py", "scripts/build_final_db.py"],
+      "forbidden_recomputation": ["whether a row is a live probiotic organism, a probiotic source header, or a fiber/prebiotic support companion is decided only by probiotic_measurements (is_probiotic_source_identity, is_probiotic_source_header, is_probiotic_support_source, has_probiotic_identity_text); no other module keeps its own probiotic name regex or category test, and a resolved IQM identity outside 'probiotics' or any other_ingredients record outranks DSLD category evidence"],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
+      "tests": ["scripts/tests/test_probiotic_identity_single_owner.py", "scripts/tests/test_microbial_derivative_identity.py", "scripts/tests/test_p05_probiotic_prebiotic_consistency.py"],
       "retirement_status": "active"
     }
   ]
