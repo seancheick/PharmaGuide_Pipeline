@@ -1404,7 +1404,6 @@ def test_safety_source_inactive_does_not_export_safety_standard_name_as_identity
     blob = build_detail_blob(enriched, make_scored())
     inactive = blob["inactive_ingredients"][0]
 
-    assert inactive["standardName"] == "Titanium Dioxide"
     assert inactive["standard_name"] == "Titanium Dioxide"
     assert inactive["display_label"] == "Titanium Dioxide"
     assert inactive["matched_rule_id"] == "BANNED_ADD_TITANIUM_DIOXIDE"
@@ -1431,7 +1430,7 @@ def test_inactive_display_label_preserves_label_wording_with_resolved_identity_m
     assert inactive["display_label"] == "Ascorbyl Palmitate"
     assert inactive["label_display"] == "Ascorbyl Palmitate"
     assert inactive["resolved_display_label"] == "Natural Preservatives"
-    assert inactive["standardName"] == "Natural Preservatives"
+    assert inactive["standard_name"] == "Natural Preservatives"
     assert inactive["display_role_label"] == "Preservative natural"
     assert inactive["label_row_disposition"] == "standard"
 
@@ -1504,7 +1503,7 @@ def test_label_descriptor_inactive_row_stays_visible_but_marked_nonstandard():
     assert inactive["name"] == "Phospholipids"
     assert inactive["display_label"] == "Phospholipids"
     assert inactive["label_display"] == "Phospholipids"
-    assert inactive["standardName"] == "Phospholipid Descriptor"
+    assert inactive["standard_name"] == "Phospholipid Descriptor"
     assert inactive["resolved_display_label"] == "Phospholipid Descriptor"
     assert inactive["matched_rule_id"] == "PII_PHOSPHOLIPID_DESCRIPTOR"
     assert inactive["label_row_disposition"] == "label_descriptor"
@@ -1540,7 +1539,6 @@ def test_safety_source_active_without_canonical_keeps_label_identity():
 
     ingredient = build_detail_blob(enriched, make_scored())["ingredients"][0]
 
-    assert ingredient["standardName"] == "Bitter Orange Citrus Bioflavonoids"
     assert ingredient["standard_name"] == "Bitter Orange Citrus Bioflavonoids"
     assert ingredient["matched_rule_id"] == "RISK_BITTER_ORANGE"
     assert ingredient["safety_flags"][0]["entry_id"] == "RISK_BITTER_ORANGE"
@@ -1565,7 +1563,6 @@ def test_inactive_form_terms_emit_banned_preflight_detail():
     blob = build_detail_blob(enriched, make_scored())
     inactive = blob["inactive_ingredients"][0]
 
-    assert inactive["standardName"] == "Creamer"
     assert inactive["standard_name"] == "Creamer"
     assert inactive["matched_rule_id"] == "BANNED_PHO"
     assert inactive["is_banned"] is True
@@ -1807,14 +1804,13 @@ def test_detail_blob_excludes_gate_ineligible_exposure_rows_from_consumer_rda_su
     assert blob["rda_ul_data"]["count"] == 1
 
 
-def test_detail_blob_preserves_real_upstream_field_names_for_active_ingredients():
+def test_detail_blob_active_rows_carry_one_name_per_value():
     blob = build_detail_blob(make_enriched(), make_scored())
     ingredient = blob["ingredients"][0]
 
     expected_keys = {
         "raw_source_text",
         "name",
-        "standardName",
         "normalized_key",
         "forms",
         "quantity",
@@ -1838,7 +1834,20 @@ def test_detail_blob_preserves_real_upstream_field_names_for_active_ingredients(
     }
     assert expected_keys.issubset(set(ingredient.keys()))
     assert ingredient["score"] == 14.0
-    assert ingredient["standardName"] == "Retinyl Palmitate"
+    assert ingredient["standard_name"] == "Retinyl Palmitate"
+    # Retired twins (row-key census 2026-09-25): each duplicated a value that
+    # ships under the name kept above, or had no reader at all.
+    for retired in ("standardName",):
+        assert retired not in ingredient
+
+
+def test_detail_blob_inactive_rows_carry_one_name_per_value():
+    blob = build_detail_blob(make_enriched(), make_scored())
+    inactive = blob["inactive_ingredients"][0]
+
+    assert {"standard_name", "display_label"}.issubset(inactive)
+    for retired in ("standardName",):
+        assert retired not in inactive
 
 
 def test_detail_blob_does_not_mark_active_mapped_without_canonical_id():

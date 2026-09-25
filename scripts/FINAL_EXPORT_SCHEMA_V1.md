@@ -508,7 +508,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
 {
   "raw_source_text": "Vitamin A Palmitate",
   "name": "Vitamin A Palmitate",
-  "standardName": "Retinyl Palmitate",
   "normalized_key": "vitamin_a",
   "forms": [{"name": "Palmitate"}],
   "quantity": 2000.0,
@@ -593,7 +592,6 @@ per concern.
 {
   "raw_source_text": "Silicon Dioxide",
   "name": "Silicon Dioxide",
-  "standardName": "Silicon Dioxide (E551)",
   "normalized_key": "silicon_dioxide",
   "forms": [],
   "category": "flow_agent_anticaking",

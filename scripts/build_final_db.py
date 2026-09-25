@@ -800,7 +800,7 @@ def _inactive_identity_name_for_export(
     can project safety flags and warning metadata. Those safety sources do
     not own identity fields. If the resolver match came from banned/recalled
     or harmful-additives, preserve the label identity instead of exporting a
-    safety table's standard_name as standardName/standard_name.
+    safety table's standard_name as the row's standard_name.
     """
     if matched_source in _SAFETY_ONLY_IDENTITY_SOURCES:
         return name or upstream_standard_name or resolver_standard_name
@@ -823,7 +823,7 @@ def _active_identity_name_for_export(
 
     If an active ingredient is not canonically mapped and the only pressure to
     standardize the name comes from a safety flag, keep the label identity in
-    `standardName`/`standard_name`. The safety fact still ships in
+    `standard_name`. The safety fact still ships in
     `safety_flags`; it just cannot overwrite identity.
     """
     if canonical_id:
@@ -4189,8 +4189,7 @@ def _ingredient_export_dedup_key(ingredient: Dict[str, Any]) -> str:
     if canonical_id:
         return f"canonical:{canonical_id}"
     name = (
-        safe_str(ingredient.get("standardName"))
-        or safe_str(ingredient.get("standard_name"))
+        safe_str(ingredient.get("standard_name"))
         or safe_str(ingredient.get("name"))
         or safe_str(ingredient.get("raw_source_text"))
     ).lower()
@@ -6241,7 +6240,6 @@ def _ingredient_anchor_key(ingredient: Dict[str, Any]) -> str:
         ingredient.get("canonical_id"),
         ingredient.get("nutrient_group_id"),
         ingredient.get("standard_name"),
-        ingredient.get("standardName"),
         ingredient.get("name"),
         ingredient.get("display_label"),
         ingredient.get("raw_source_text"),
@@ -6762,7 +6760,6 @@ def build_detail_blob(
                 ing.get("raw_source_path") or m.get("raw_source_path")
             ),
             "name": name,
-            "standardName": standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "quantity": safe_float(qty),
@@ -7026,7 +7023,6 @@ def build_detail_blob(
             "raw_source_text": raw,
             "name": name,
             "label_display": inactive_display_label,
-            "standardName": inactive_standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "category": res.category or safe_str(ing.get("category")),

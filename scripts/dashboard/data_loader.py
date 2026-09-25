@@ -985,7 +985,6 @@ def _compute_blob_analytics(
         for ingredient in ingredients:
             ingredient_name = (
                 ingredient.get("standard_name")
-                or ingredient.get("standardName")
                 or ingredient.get("name")
                 or "Unknown"
             )
