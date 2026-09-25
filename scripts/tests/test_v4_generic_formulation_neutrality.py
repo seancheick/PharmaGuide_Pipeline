@@ -73,7 +73,9 @@ def _immune_product(count: int, *, disclosed_count: int | None = None) -> dict:
     for index, (name, canonical_id, quantity, unit) in enumerate(
         _IMMUNE_ROWS[:count]
     ):
-        row = _row(index, bio=14.0, dose=index < disclosed)
+        # Use an equal parent-relative form value so this fixture isolates
+        # ingredient count from form-quality differences among parents.
+        row = _row(index, bio=15.0, dose=index < disclosed)
         row.update(
             name=name,
             standard_name=name,
@@ -121,7 +123,7 @@ def test_immune_formulation_is_neutral_to_recognized_ingredient_count() -> None:
 
     results = [score_formulation(_immune_product(count)) for count in (1, 3, 5, 8)]
 
-    assert [result["score"] for result in results] == [14.0] * 4
+    assert [result["score"] for result in results] == [15.0] * 4
     assert all("immune_support_profile" not in result["components"] for result in results)
 
 
@@ -133,7 +135,7 @@ def test_undisclosed_immune_rows_cannot_manufacture_formulation_credit() -> None
         _immune_product(8, disclosed_count=1)
     )
 
-    assert seven_undisclosed["score"] == one_disclosed["score"] == 14.0
+    assert seven_undisclosed["score"] == one_disclosed["score"] == 15.0
     assert "immune_support_profile" not in seven_undisclosed["components"]
 
 

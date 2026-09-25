@@ -99,6 +99,20 @@ def test_a1_is_equal_weight_mean_and_clamped() -> None:
     assert clamped["components"]["A1_bio_score"] == 15.0
 
 
+def test_a1_uses_parent_relative_iqm_form_quality() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    # Riboflavin is tied for the best reviewed B2 form at IQM 10. Generic
+    # Formulation must use the same within-parent scale as panel routes.
+    result = score_formulation(_product(ingredients=[_ingredient(
+        name="Riboflavin",
+        canonical_id="vitamin_b2_riboflavin",
+        bio_score=10,
+    )]))
+
+    assert result["components"]["A1_bio_score"] == 15.0
+
+
 def test_a1_does_not_require_dose_disclosure() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 

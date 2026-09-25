@@ -35,6 +35,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
 )
 from scoring_v4.modules.immune_support import immune_support_formulation_adjustment
+from scoring_reference_resolver import parent_relative_form_quality
 
 
 # --- v4 generic Formulation weights ---------------------------------------
@@ -114,7 +115,7 @@ PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
 
 
 def _bio_score_assessment(product: Dict[str, Any]) -> tuple[float, int]:
-    """Return the unchanged A1 average and the count of available form ratings.
+    """Return the parent-relative A1 average and available-rating count.
 
     No rating and an explicit zero both contribute zero numerically, but they
     must not produce the same consumer explanation. Use the same eligible
@@ -125,7 +126,13 @@ def _bio_score_assessment(product: Dict[str, Any]) -> tuple[float, int]:
         allow_sole_mapped_blend=True,
         require_dose=False,
     )
-    scores = [s for s in (bio_score_of(i) for i in scorable) if s is not None]
+    scores = []
+    for ingredient in scorable:
+        raw_score = bio_score_of(ingredient)
+        if raw_score is None:
+            continue
+        score = parent_relative_form_quality(ingredient.get("canonical_id"), raw_score)
+        scores.append(raw_score if score is None else score)
     if not scores:
         return 0.0, 0
     avg = sum(scores) / len(scores)
@@ -440,9 +447,10 @@ def apply_formulation_presence_floor(
 def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     """Compute the generic Formulation dimension from formulation signals.
 
-    A1 is the equal-weight mean of cleaner-owned form-quality ratings. It is
-    intentionally independent of ingredient count and dose disclosure. Dose,
-    evidence, badges, and formula breadth are owned by their respective
+    A1 is the equal-weight mean of cleaner-owned form-quality ratings after
+    the shared IQM provider places each rating on its parent-relative scale.
+    It is intentionally independent of ingredient count and dose disclosure.
+    Dose, evidence, badges, and formula breadth are owned by their respective
     pillars or display surfaces.
     """
     if not isinstance(product, dict):
