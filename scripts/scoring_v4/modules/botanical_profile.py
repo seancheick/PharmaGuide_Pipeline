@@ -37,6 +37,7 @@ from typing import Any, Dict, List, Optional
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
+from scoring_v4.modules.generic_helpers import bio_score_of
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _FVM = _cfg_block("formulation_variant_magnitudes", "botanical")["botanical"]
@@ -370,7 +371,7 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
     return max(candidates, key=lambda r: (
         _mass_mg(r) or 0.0,
         _recognized_botanical_identity(r),
-        _as_float(r.get("bio_score")) or 0.0,
+        bio_score_of(r) or 0.0,
     ))
 
 

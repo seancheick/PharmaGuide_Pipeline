@@ -16,6 +16,7 @@ from scoring_v4.modules.botanical_profile import (  # noqa: E402
     score_botanical_dose,
     BOTANICAL_FORMULATION_CAP,
     _mass_mg,
+    _primary_botanical_active,
 )
 
 
@@ -611,3 +612,19 @@ def test_botanical_formulation_prefers_recognized_anchor_over_unmapped_blend_hea
     assert out["components"]["recognized_botanical_identity"] == 6.0
     assert out["components"]["quantified_dose_present"] == 2.0
     assert out["score"] > 0.0
+
+
+def test_primary_botanical_tie_break_reads_form_quality_through_its_owner():
+    """Equal mass, both recognized: the last tie-break is form quality, read
+    through generic_helpers.bio_score_of (the one owner). A row from an older
+    enricher that carries only the legacy `score` keeps its form quality
+    instead of counting as 0."""
+    current = _botanical_ingredient(bio_score=6)
+    legacy = _botanical_ingredient(name="Rhodiola Extract", standard_name="Rhodiola",
+                                   canonical_id="rhodiola", form="Rhodiola Root Extract",
+                                   quantity=600, score=12)
+    product = _botanical_product(current)
+    product["ingredient_quality_data"]["ingredients_scorable"] = [current, legacy]
+    product["ingredient_quality_data"]["ingredients"] = [current, legacy]
+
+    assert _primary_botanical_active(product)["canonical_id"] == "rhodiola"
