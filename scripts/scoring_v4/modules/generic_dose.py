@@ -5,7 +5,6 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §6 generic rubric — Dose 25:
     | Item                                  | Cap | Notes                  |
     |---------------------------------------|----:|------------------------|
     | Dose inside the supplemental window   |  22 | NEW per §6 line 369    |
-    | Multi-form complex bonus              |   3 | ≥2 premium forms / nutrient |
     | B7 dose safety penalty (>150% UL)     |  -3 | up to -3               |
 
 The "supplemental window" per §6 line 369 is:
@@ -53,9 +52,10 @@ safety flag is present. That distinction is intentional: "no RDA/UL
 benchmark exists" (common for botanicals like KSM-66) is not the same
 as "bad dose."
 
-Multi-form bonus: group scorable actives by `standard_name`
-(case-insensitive nutrient-family key), count distinct premium forms
-(bio_score ≥ 12) per group, +3 when any group has ≥ 2.
+Form quality is not a Dose input. IQM forms[].bio_score is its one owner
+(matrix concept `ingredient_form_quality`), read by Formulation; the former
++3 for >= 2 premium forms of one nutrient was retired in quality_score
+1.14.0: a count of forms is neither an amount nor a reference.
 
 B7 penalty: read `rda_ul_data.safety_flags[]`, sum 2.0 per flag with
 `pct_ul >= 150%`, cap at 3.0. v3-equivalent.
@@ -77,10 +77,8 @@ from scoring_v4.modules.collagen_profile import (
     score_collagen_dose,
 )
 from scoring_v4.modules.generic_helpers import (
-    bio_score_of,
     get_active_ingredients,
     has_usable_individual_dose,
-    is_scorable,
     _as_float,
     _norm_text,
     _safe_dict,
@@ -102,7 +100,6 @@ _B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 
 CAP_SUPPLEMENTAL_WINDOW = _DM["cap_supplemental_window"]
-CAP_MULTI_FORM_BONUS = _DM["cap_multi_form_bonus"]
 DIMENSION_CAP = _DM["dimension_cap"]
 
 # Proxy band cutoffs.
@@ -114,10 +111,6 @@ WINDOW_HIGH_SOURCE_PCT = _DM["window_high_source_pct"]    # 21 CFR 101.54(b) "hi
 WINDOW_FULL_ADEQUACY_PCT = _DM["window_full_adequacy_pct"]
 NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT = _DM["no_reference_individual_dose_credit"]
 NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT = _DM["no_reference_product_evidence_credit"]
-
-# Multi-form bonus thresholds.
-MULTI_FORM_PREMIUM_BIO_THRESHOLD = _DM["multi_form_premium_bio_threshold"]
-MULTI_FORM_MIN_GROUP_COUNT = _DM["multi_form_min_group_count"]
 
 # B7 penalty.
 B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
@@ -325,37 +318,6 @@ def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
     return None
 
 
-# --- Multi-form bonus ----------------------------------------------------
-
-
-def _score_multi_form_bonus(product: Dict[str, Any]) -> float:
-    """+3 when any nutrient family has ≥ 2 distinct premium forms.
-
-    Groups scorable actives by `standard_name` (case-insensitive) and
-    counts distinct `canonical_id`s with `bio_score >= 12` per group.
-    A single 3-pt bonus — no stacking beyond that.
-    """
-    groups: Dict[str, set[str]] = {}
-    for ing in get_active_ingredients(product):
-        if not is_scorable(ing):
-            continue
-        score = bio_score_of(ing)
-        if score is None or score < MULTI_FORM_PREMIUM_BIO_THRESHOLD:
-            continue
-        family = _norm_text(ing.get("standard_name"))
-        if not family:
-            continue
-        canonical = _norm_text(ing.get("canonical_id") or ing.get("name"))
-        if not canonical:
-            continue
-        groups.setdefault(family, set()).add(canonical)
-
-    for forms in groups.values():
-        if len(forms) >= MULTI_FORM_MIN_GROUP_COUNT:
-            return CAP_MULTI_FORM_BONUS
-    return 0.0
-
-
 # --- B7 dose safety penalty ----------------------------------------------
 
 
@@ -392,7 +354,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "max": 25.0,
                 "components": {
                     "supplemental_window_proxy": <0..22>,
-                    "multi_form_bonus": <0 or 3>,
                 },
                 "penalties": {
                     "B7_dose_safety": <0 or -2 or -3>,
@@ -428,7 +389,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         col = score_collagen_dose(product)
         components = {
             "collagen_clinical_dose": round(float(col["score"]), 4),
-            "multi_form_bonus": 0.0,
         }
         penalties = {"B7_dose_safety": round(-b7, 4)}
         score = _clamp(0.0, DIMENSION_CAP, float(col["score"]) - b7)
@@ -455,7 +415,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         bot = score_botanical_dose(product)
         components = {
             "botanical_clinical_dose": round(float(bot["score"]), 4),
-            "multi_form_bonus": 0.0,
         }
         penalties = {"B7_dose_safety": round(-b7, 4)}
         score = _clamp(0.0, DIMENSION_CAP, float(bot["score"]) - b7)
@@ -478,7 +437,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if sleep is not None:
         components = {
             "sleep_support_dose": round(float(sleep["score"]), 4),
-            "multi_form_bonus": 0.0,
         }
         penalties = {"B7_dose_safety": round(-b7, 4)}
         score = _clamp(0.0, DIMENSION_CAP, float(sleep["score"]) - b7)
@@ -499,7 +457,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     immune = score_immune_support_dose(product)
     if immune is not None:
         components = dict(immune["components"])
-        components["multi_form_bonus"] = 0.0
         penalties = {"B7_dose_safety": round(-b7, 4)}
         score = _clamp(0.0, DIMENSION_CAP, float(immune["score"]) - b7)
         return {
@@ -520,7 +477,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if joint is not None:
         components = {
             "joint_support_dose": round(float(joint["score"]), 4),
-            "multi_form_bonus": 0.0,
         }
         penalties = {"B7_dose_safety": round(-b7, 4)}
         score = _clamp(0.0, DIMENSION_CAP, float(joint["score"]) - b7)
@@ -556,7 +512,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             # has no reference at all; it can earn no more than the existing
             # partial credit for a disclosed dose without a reference.
             window_credit = NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
-    multi_form = _score_multi_form_bonus(product)
 
     components: Dict[str, float] = {
         "supplemental_window_proxy": round(
@@ -567,7 +522,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             ),
             4,
         ),
-        "multi_form_bonus":          round(multi_form, 4),
     }
     penalties: Dict[str, float] = {
         # Stored as negatives for JSON readability; _sum_penalty_magnitudes
@@ -575,7 +529,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "B7_dose_safety":            round(-b7, 4),
     }
 
-    positive = components["supplemental_window_proxy"] + components["multi_form_bonus"]
+    positive = components["supplemental_window_proxy"]
     penalty_total = _sum_penalty_magnitudes(penalties)
     no_rda_reference = window_reason in {
         "no_rda_reference_data",

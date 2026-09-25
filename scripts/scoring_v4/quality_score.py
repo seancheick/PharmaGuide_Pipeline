@@ -960,10 +960,10 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
 def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
                  cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Category-aware purpose-fit dose. Normalize to the archetype's APPROPRIATE-dose
-    ceiling (a single nutrient/botanical in its clinical window caps ~22; the top 3 is
-    multi-form/completion). Megadose-safe: an overdosed product already has low raw
-    dose (overdose half-credit), a sub-clinical one is proportional-low — normalizing
-    only lifts appropriately-dosed products, never rewards excess."""
+    ceiling (a single nutrient/botanical in its clinical window caps ~22). Megadose-safe:
+    an overdosed product already has low raw dose (overdose half-credit), a sub-clinical
+    one is proportional-low — normalizing only lifts appropriately-dosed products, never
+    rewards excess."""
     sub = cfg["dose_subscale"]
     ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
     score = _num(dim.get("score"))

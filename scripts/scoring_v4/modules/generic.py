@@ -9,7 +9,7 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
                                + absorption 3 + excellence 4 + single-ingredient 1
                                + enzyme 2; minus B0 (moderate/watchlist) + B1
                                + dietary sugar
-    Dose                25     P1.3.2 — supplemental-window 22 + multi-form 3
+    Dose                25     P1.3.2 — supplemental-window 22
                                minus B7 (>150% UL)
     Evidence            20     P1.3.3 — full multiplicative pipeline (study_type
                                * evidence_level * effect_direction * enrollment
