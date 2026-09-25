@@ -45,8 +45,14 @@ def test_aloe_latex_entry_is_high_risk_with_verified_identity():
     urls = {r.get("url") for r in entry["references_structured"]}
     assert "https://doi.org/10.2903/j.efsa.2018.5090" in urls
     assert any("02-11510" in (u or "") for u in urls)  # 67 FR 31125
+    # The EU General Court annulled the Aloe-leaf listing of Reg 2021/468 on
+    # 2024-11-13 (T-189/21); the Commission's appeal C-38/25 P is pending, so the
+    # EU position is contested, not a settled ban. Consumer copy must not claim one.
     eu = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "EU"]
-    assert eu and eu[0]["status"] == "banned"
+    assert eu and eu[0]["status"] == "under_review"
+    assert "T-189/21" in eu[0]["notes"] and "C-38/25" in eu[0]["notes"]
+    for field in ("safety_warning", "safety_warning_one_liner"):
+        assert "EU" not in entry[field], field
 
 
 @pytest.mark.parametrize(

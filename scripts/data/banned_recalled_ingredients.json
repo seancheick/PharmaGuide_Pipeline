@@ -15299,7 +15299,7 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "high_risk",
-      "reason": "FDA's 2002 final rule (67 FR 31125) deemed aloe stimulant-laxative ingredients not generally recognized as safe and effective for OTC use because the requested carcinogenicity data were never submitted; it is not a blanket US dietary-supplement ban. EFSA (2018) concluded that aloe extracts are genotoxic in vitro and whole-leaf aloe extract is carcinogenic, and could not set a safe daily intake for hydroxyanthracene derivatives. Regulation (EU) 2021/468 prohibits preparations from the leaf of Aloe species containing hydroxyanthracene derivatives in food. NIH LiverTox rates oral aloe a likely but rare cause of clinically apparent liver injury. The US catalog therefore treats a confirmed supplement match as a clinical caution, not a legal block. Decolorized inner-leaf aloe vera gel, from which these derivatives are removed, is out of scope.",
+      "reason": "FDA's 2002 final rule (67 FR 31125) deemed aloe stimulant-laxative ingredients not generally recognized as safe and effective for OTC use because the requested carcinogenicity data were never submitted; it is not a blanket US dietary-supplement ban. EFSA (2018) concluded that aloe extracts are genotoxic in vitro and whole-leaf aloe extract is carcinogenic, and could not set a safe daily intake for hydroxyanthracene derivatives. Regulation (EU) 2021/468 listed preparations from the leaf of Aloe species containing hydroxyanthracene derivatives as prohibited in food; the EU General Court annulled that listing on 13 November 2024 (T-189/21), the Commission's appeal (C-38/25 P) is pending, and aloe-emodin and preparations containing it remain prohibited. NIH LiverTox rates oral aloe a likely but rare cause of clinically apparent liver injury. The US catalog therefore treats a confirmed supplement match as a clinical caution, not a legal block. Decolorized inner-leaf aloe vera gel, from which these derivatives are removed, is out of scope.",
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "high",
       "policy_verification_status": "verified",
@@ -15342,14 +15342,15 @@
         {
           "region": "EU",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": "2021-04-08",
           "source": {
-            "type": "regulation",
-            "citation": "Commission Regulation (EU) 2021/468, Annex III Part A to Regulation (EC) No 1925/2006: preparations from the leaf of Aloe species containing hydroxyanthracene derivatives",
-            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "type": "court_ruling",
+            "citation": "General Court judgment of 13 November 2024, Case T-189/21 Aloe Vera of Europe v Commission (ECLI:EU:T:2024:802), under appeal in Case C-38/25 P",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021TJ0189",
             "accessed_date": "2026-09-25"
           },
+          "notes": "Regulation (EU) 2021/468 (in force 2021-04-08) added preparations from the leaf of Aloe species containing hydroxyanthracene derivatives to Annex III Part A (prohibited) of Regulation (EC) No 1925/2006. The General Court annulled that entry on 2024-11-13 (T-189/21). The Commission appealed (C-38/25 P, lodged 2025-01-22, pending; Advocate General opinion 2026-09-10); under Article 60 of the Court's Statute the annulment of a regulation takes effect only if the appeal is dismissed. Aloe-emodin and all preparations containing it remain in Part A.",
           "jurisdiction_type": "region",
           "jurisdiction_code": "EU",
           "last_verified_date": "2026-09-25"
@@ -15387,7 +15388,18 @@
           "evidence_grade": "A",
           "confidence": "high",
           "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
-          "evidence_summary": "Adds aloe-emodin, emodin, danthron and preparations from the leaf of Aloe species containing hydroxyanthracene derivatives to Annex III Part A (prohibited) of Regulation (EC) No 1925/2006."
+          "evidence_summary": "Adds aloe-emodin, emodin, danthron and preparations from the leaf of Aloe species containing hydroxyanthracene derivatives to Annex III Part A (prohibited) of Regulation (EC) No 1925/2006. The Aloe-leaf entry was annulled by the General Court in T-189/21 (under appeal)."
+        },
+        {
+          "type": "court_ruling",
+          "authority": "General Court of the European Union",
+          "citation": "Judgment of 13 November 2024, Case T-189/21 Aloe Vera of Europe v Commission, ECLI:EU:T:2024:802",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021TJ0189",
+          "published_date": "2024-11-13",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "General Court T-189/21 - annulment of the Aloe-leaf entry in Regulation (EU) 2021/468",
+          "evidence_summary": "Annuls the third entry in Article 1(1) of Regulation (EU) 2021/468, which had placed preparations from the leaf of Aloe species containing hydroxyanthracene derivatives in Annex III Part A. The Commission's appeal, Case C-38/25 P, is pending."
         },
         {
           "type": "case_report",
@@ -15411,6 +15423,11 @@
             "date": "2026-09-25",
             "change": "Added. Cape aloe (Aloe ferox) and aloe latex matched no safety entry, so dsld 267819, 273379 and 337239 shipped SAFE while cascara, under the same FDA rule, shipped CAUTION. Identity: GSRS V5VD430YW9 (ALOE [USP], leaf latex of A. vera or A. ferox); UMLS C4760748 Cape Aloes.",
             "by": "claude_anthraquinone_laxative_pass"
+          },
+          {
+            "date": "2026-09-25",
+            "change": "EU status corrected from banned to under_review: the General Court annulled the Aloe-leaf entry of Regulation (EU) 2021/468 on 2024-11-13 (T-189/21) and the appeal C-38/25 P is pending. Consumer copy no longer claims an EU prohibition.",
+            "by": "claude_anthraquinone_laxative_pass"
           }
         ]
       },
@@ -15420,8 +15437,8 @@
         "unii": "V5VD430YW9"
       },
       "ban_context": "substance",
-      "safety_warning": "Stimulant laxative for short-term use only. EFSA found whole-leaf aloe extract carcinogenic and the EU prohibits it in food. Avoid regular use; it is linked to rare liver injury.",
-      "safety_warning_one_liner": "Stimulant laxative prohibited in EU food. Avoid and talk to your doctor.",
+      "safety_warning": "Stimulant laxative for short-term use only. EFSA found aloe extracts genotoxic and whole-leaf aloe extract carcinogenic. Avoid regular use; it is linked to rare liver injury.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Avoid and talk to your doctor.",
       "inactive_policy": "excipient_acceptable",
       "inactive_policy_reason": "21 CFR 172.510 lists aloe (Aloe perryi, A. barbadensis, A. ferox) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
       "inactive_policy_reviewed_on": "2026-09-25"
