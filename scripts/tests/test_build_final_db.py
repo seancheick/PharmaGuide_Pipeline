@@ -1840,6 +1840,7 @@ def test_detail_blob_active_rows_carry_one_name_per_value():
         "score",
         "natural",
         "is_allergen",
+        "source_label_key", "identity_resolution_rationale", "canonical_id_before",
     ):
         assert retired not in ingredient
 
@@ -4292,14 +4293,14 @@ def test_label_identity_display_form_prefers_label_display_form():
     assert ingredient["form_status"] == "known"
 
 
-def test_label_identity_emits_audit_trail_fields():
+def test_label_identity_emits_label_native_fields():
     ingredient = build_detail_blob(_enriched_with_label_identity(), make_scored())["ingredients"][0]
     assert ingredient["identity_disposition"] == "repaired"
-    assert ingredient["canonical_id_before"] == "dha"
-    assert ingredient["source_label_key"] == "epa|as ethyl esters"
     assert ingredient["label_display_name"] == "EPA"
     assert ingredient["label_display_form"] == "as Ethyl Esters"
-    assert ingredient["identity_resolution_rationale"]
+    # The repair trail stays on the enriched IQD row (audit_identity_integrity).
+    for enriched_only in ("canonical_id_before", "source_label_key", "identity_resolution_rationale"):
+        assert enriched_only not in ingredient
 
 
 def test_label_identity_179681_locks_epa_display_with_epa_canonical():

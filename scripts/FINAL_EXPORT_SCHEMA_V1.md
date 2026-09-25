@@ -814,6 +814,9 @@ value):
 - `score`: the v3.6.0 alias of `bio_score`; read `bio_score` (range 0-15).
 - active `natural`: no reader; sourcing is not scored since v3.6.0.
 - active `is_allergen`: no reader; allergens ship on the blob-level `allergens` list.
+- active `source_label_key`, `identity_resolution_rationale`, `canonical_id_before`:
+  the identity repair trail stays on the enriched IQD row, where
+  `audit_identity_integrity` reads it.
 
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,

@@ -6750,17 +6750,15 @@ def build_detail_blob(
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
             ),
-            # Label-native identity audit trail (label-first export). Sourced
-            # from the IQD identity stamp so the blob carries how the display was
-            # derived and what canonical was supplied before any repair.
-            "source_label_key": safe_str(m.get("source_label_key")) or None,
+            # Label-native identity (label-first export), sourced from the IQD
+            # identity stamp. The rest of the audit trail (source_label_key,
+            # rationale, canonical-before-repair) stays on the enriched IQD row,
+            # where audit_identity_integrity reads it.
             "source_label_name": m.get("source_label_name"),
             "source_label_form": m.get("source_label_form"),
             "label_display_name": m.get("label_display_name"),
             "label_display_form": m.get("label_display_form"),
             "identity_disposition": safe_str(m.get("identity_disposition")) or None,
-            "identity_resolution_rationale": m.get("identity_resolution_rationale"),
-            "canonical_id_before": m.get("canonical_id_before"),
             # Sprint E1.2.2.a — pre-computed Flutter display label
             "display_label": _compute_display_label(ing, m),
             # Sprint E1.2.2.b — pre-computed Flutter dose label.
