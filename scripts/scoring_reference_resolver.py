@@ -170,8 +170,8 @@ PARENT_RELATIONSHIPS = frozenset({
 # verification and never scored as the parent (D-tyrosine is not L-tyrosine;
 # eleuthero is not Panax ginseng).
 IDENTITY_MISMATCH_RELATIONSHIPS = frozenset({"wrong_stereoisomer", "different_compound"})
-# This nutrient in a form that delivers none of it: a matching row is
-# recognized but not scored (no parent Formulation, Dose or Evidence credit).
+# This nutrient in a form that delivers none of it: a matching row is scored
+# at its own IQM Formulation quality, with no parent Dose or Evidence credit.
 NON_DELIVERING_RELATIONSHIPS = PARENT_RELATIONSHIPS - IDENTITY_MISMATCH_RELATIONSHIPS
 # A reviewed override lets an authored unspecified form sit above the floor:
 # ``unknown_floor: {"override": true, "rationale", "reviewed_by", "reviewed_on"}``.
