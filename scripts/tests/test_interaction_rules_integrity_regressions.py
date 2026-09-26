@@ -419,3 +419,28 @@ def test_valerian_pregnancy_rule_cites_the_eu_monograph_not_a_liver_case():
     assert "has not been established" in pregnancy_lactation["mechanism"]
     assert "baldrinals" in pregnancy_lactation["mechanism"]
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+NCCIH_KAVA = "https://www.nccih.nih.gov/health/kava"
+
+
+def test_kava_pregnancy_and_seizure_rules_say_what_their_sources_say():
+    rule = _rule("RULE_IQM_KAVALACTONES_LIVER")
+    pregnancy_lactation = rule["pregnancy_lactation"]
+    seizure = _sub_rule(rule, "condition_id", "seizure_disorder")
+
+    # 27092496 is a hepatotoxicity review: nothing on pregnancy or lactation.
+    assert pregnancy_lactation["sources"] == [NCCIH_KAVA]
+    assert "pyrone" in pregnancy_lactation["mechanism"]
+    # 12383029's withdrawal sentence is about conventional anxiolytics; the
+    # kava withdrawal and proconvulsant statements need their own sources.
+    assert seizure["sources"] == [
+        _pmid("12383029"), _pmid("22062945"), _pmid("38829029"), NCCIH_KAVA,
+    ]
+    assert seizure["evidence_level"] == "limited"
+    assert seizure["severity"] == "caution"
+    assert "proconvulsant" in seizure["mechanism"]
+    assert "heavy users" in seizure["mechanism"] and "heavily" in seizure["action"]
+    assert "after regular use may produce withdrawal seizures" not in seizure["mechanism"]
+    assert pregnancy_lactation["pregnancy_category"] == "contraindicated"
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review

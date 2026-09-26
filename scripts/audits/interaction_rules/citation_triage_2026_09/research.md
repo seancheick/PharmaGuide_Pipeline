@@ -120,3 +120,27 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   efficacy of valerian in nursing mothers or infants"; "Valerian is often not recommended during
   lactation because of the theoretical concerns over its valepotriates and baldrinals which have
   been shown to be cytotoxic and mutagenic in vitro."
+
+## RULE_IQM_KAVALACTONES_LIVER — re-sourced (pregnancy_lactation; seizure_disorder copy)
+
+- Ghost for pregnancy_lactation: **PMID 27092496** = "Hepatotoxicity Induced by 'the 3Ks': Kava, Kratom
+  and Khat" (Int J Mol Sci 2016). Liver review; no pregnancy/lactation content. Stays on liver_disease.
+- **NCCIH Kava** (https://www.nccih.nih.gov/health/kava): "Kava may have special risks if taken during
+  pregnancy or while breastfeeding because of the presence of harmful pyrone constituents"; "Various
+  kava products have been linked to rare cases of liver injury, some of which have been serious or
+  even fatal"; "Kava should not be used together with other substances that have sedative effects,
+  such as benzodiazepines or alcohol." No seizure or withdrawal statement.
+- No LactMed kava record (NCBI Books esearch `kava AND lactmed`: 0).
+- seizure_disorder: **PMID 12383029** (Singh & Singh, CNS Drugs 2002) is on topic (kavalactones'
+  "anticonvulsant" properties, GABA-A binding, sodium-channel blockade); the verifier's stems miss
+  "anticonvulsant". Its withdrawal sentence is about conventional anxiolytics ("these agents"), not
+  kava, so it cannot carry the rule's withdrawal-seizure claim. Sources that do:
+  - **PMID 38829029** (Cassidy, J Addict Med 2024, case + systematic review): heavy user, "acute kava
+    withdrawal with hyperactive delirium", treated with phenobarbital; of 9 studies, "Eight assessed
+    withdrawal symptoms after cessation of a low controlled dose of kava extract with no symptoms
+    noted. One reported a case series of heavy kava users with seizure-like events."
+  - **PMID 22062945** (Pearl, Semin Pediatr Neurol 2011, herbs in epilepsy incl. kava): these herbs
+    "paradoxically often have a proconvulsant effect"; "Herb-drug interactions also occur at the
+    level of the P450 hepatic enzyme system ... and the P-glycoprotein transport system".
+  Mechanism rewritten to these (withdrawal limited to heavy use); action keeps "do not stop
+  abruptly" scoped to heavy use; evidence_level probable → limited (case-level evidence).

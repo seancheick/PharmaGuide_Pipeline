@@ -135,7 +135,8 @@
       "2026-09-25: RULE_IQM_RED_CLOVER drug:anticoagulants cited PMID 9464451 (a soybean thyroid-peroxidase paper). It now cites Heck 2000 (PMID 10902065, lists red clover), the Hall 2018 subdural-haemorrhage case (PMID 29541484) and MSKCC About Herbs; thyroid_disorder adds the Huser 2018 isoflavone safety review (PMID 30132047) beside 9464451; bleeding_disorders no longer says no bleeding case has been documented. Coumestrol/vitamin K antagonist claims removed. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL drug sub-rules cited PMID 39517207 (bergamot for osteosarcopenic obesity) and, for statins/CCBs, PMID 23184849 (a grapefruit review) as if they showed a bergamot interaction. They now cite bergamot-juice furanocoumarin content (PMID 18830151), the bergamottin-felodipine study (PMID 15592332) and the grapefruit review (PMID 23184849, drug-specific data); mechanisms say the concern is inferred from grapefruit and evidence_level moved from established to limited. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER pregnancy_lactation cited PMID 16800417 (a pancreatitis case), ttc cited PMID 30980598 (a hair-loss review) for a semen-impairment claim no saw palmetto study makes, and anticoagulants cited PMID 10902065, which does not name saw palmetto. They now cite NCCIH Saw Palmetto, PMID 16985705 (in vitro 5-alpha-reductase inhibition, no clinical DHT fall), PMID 31002161 (never studied in male infertility) and, for anticoagulants, the bleeding cases (11489067, 20120986), an in vivo platelet study (18090773) and an interaction review (19719333). ttc evidence_level probable -> theoretical; anticoagulant/antiplatelet/NSAID alert copy no longer says saw palmetto has antiplatelet activity. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_VALERIAN_LIVER pregnancy_lactation cited PMID 18431248 (a valerian hepatotoxicity case). It now cites the EU herbal monograph on valerian root (EMA/HMPC/150848/2015: pregnancy/lactation safety not established, use not recommended) and LactMed Valerian (no data in nursing mothers; valepotriates and baldrinals cytotoxic and mutagenic in vitro). Categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_VALERIAN_LIVER pregnancy_lactation cited PMID 18431248 (a valerian hepatotoxicity case). It now cites the EU herbal monograph on valerian root (EMA/HMPC/150848/2015: pregnancy/lactation safety not established, use not recommended) and LactMed Valerian (no data in nursing mothers; valepotriates and baldrinals cytotoxic and mutagenic in vitro). Categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_KAVALACTONES_LIVER pregnancy_lactation cited PMID 27092496 (a kava/kratom/khat hepatotoxicity review); it now cites NCCIH Kava (special risks in pregnancy and breastfeeding from pyrone constituents; rare serious liver injury). seizure_disorder claimed withdrawal seizures after regular use on the strength of PMID 12383029, whose withdrawal sentence is about conventional anxiolytics; it now also cites PMID 38829029 (kava withdrawal delirium in a heavy user; seizure-like events in a case series of heavy users; none after low controlled doses) and PMID 22062945 (herbs used in epilepsy incl. kava: proconvulsant effects, P450/P-gp interactions), plus NCCIH. evidence_level probable -> limited. Severities, categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -9613,14 +9614,17 @@
         },
         {
           "severity": "caution",
-          "mechanism": "Kavalactones have demonstrated anticonvulsant properties in animal models via GABA-A receptor modulation. However, abrupt discontinuation after regular use may produce withdrawal seizures. Additionally, unpredictable CNS effects make kava use in epilepsy patients risky without neurologist oversight.",
-          "action": "Avoid kava in seizure disorders without neurologist supervision. Do not abruptly discontinue if already in use.",
+          "mechanism": "Kavalactones enhance GABA-A receptor binding, block voltage-gated sodium channels and have shown anticonvulsant and sedative effects. Yet herbs used for epilepsy, kava among them, may paradoxically have proconvulsant effects and can interact with antiseizure drugs through hepatic P450 enzymes and P-glycoprotein. Stopping a low controlled dose of kava extract caused no withdrawal symptoms in trials, but heavy users have had withdrawal delirium and, in one case series, seizure-like events. NCCIH advises against combining kava with other sedating substances.",
+          "action": "Avoid kava in seizure disorders without neurologist supervision. If you have been using kava heavily, do not stop abruptly without medical advice.",
           "last_reviewed": "2026-04-09",
           "condition_id": "seizure_disorder",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12383029/"
+            "https://pubmed.ncbi.nlm.nih.gov/12383029/",
+            "https://pubmed.ncbi.nlm.nih.gov/22062945/",
+            "https://pubmed.ncbi.nlm.nih.gov/38829029/",
+            "https://www.nccih.nih.gov/health/kava"
           ],
-          "evidence_level": "probable",
+          "evidence_level": "limited",
           "alert_headline": "May interact with seizure medications",
           "alert_body": "Kava can affect the central nervous system and liver drug metabolism. If you take antiseizure medication, review kava with your clinician before use.",
           "informational_note": "Kava may affect seizure threshold \u2014 relevant to people with a seizure disorder.",
@@ -9687,10 +9691,10 @@
         "pregnancy_category": "contraindicated",
         "lactation_category": "contraindicated",
         "evidence_level": "probable",
-        "mechanism": "Kava has CNS-active constituents and documented hepatotoxic potential. No safe dose in pregnancy or lactation has been established.",
+        "mechanism": "NCCIH states kava may have special risks during pregnancy or breastfeeding because of harmful pyrone constituents. Kava products have also been linked to rare but sometimes serious or fatal liver injury.",
         "notes": "Avoid kava supplements entirely during pregnancy and lactation.",
         "sources": [
-          "https://pubmed.ncbi.nlm.nih.gov/27092496/"
+          "https://www.nccih.nih.gov/health/kava"
         ],
         "alert_headline": "Not recommended in pregnancy or breastfeeding",
         "alert_body": "Kava has CNS-active compounds and no established safe dose in pregnancy or breastfeeding. If you are pregnant or nursing, do not use kava supplements.",
