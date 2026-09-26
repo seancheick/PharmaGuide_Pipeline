@@ -1,0 +1,3541 @@
+{
+ "_metadata": {
+  "generated": "2026-09-26",
+  "command": "verify_all_citations_content.py --report (after e349a2b7: every citation in scripts/data read)",
+  "meaning": "mismatch = the live PubMed title/abstract/MeSH shares no identity word with the entry; a heuristic. Many are wrong papers, some are naming misses (e.g. caramel color cited to a 4-methylimidazole report). Review one entry at a time with /data-fix; never bulk-edit.",
+  "depletion_note": "The 10 medication_depletions mismatches are all citation_review_status needs_revision, which the app suppresses (verify_medication_depletion_identifiers.py); their labels name real papers while the URLs point at other PMIDs.",
+  "not_found_recheck": "esummary 2026-09-26: 28200047 (ginger_extract) and 22647284 (slendesta) return 'cannot get document summary', so they do not exist in PubMed; 29144655 (lutemax_2020) resolves to a record with an empty title (pubdate 2015 Jun 25)."
+ },
+ "summary": {
+  "timing_rules.json": {
+   "total_citations": 16,
+   "match": 16,
+   "partial": 0,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "medication_depletions.json": {
+   "total_citations": 77,
+   "match": 66,
+   "partial": 1,
+   "mismatch": 10,
+   "not_found": 0
+  },
+  "curated_interactions/curated_interactions_v1.json": {
+   "total_citations": 70,
+   "match": 67,
+   "partial": 3,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "curated_interactions/batch_critical_2026_05.json": {
+   "total_citations": 5,
+   "match": 5,
+   "partial": 0,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "curated_interactions/med_med_pairs_v1.json": {
+   "total_citations": 6,
+   "match": 6,
+   "partial": 0,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "rda_therapeutic_dosing.json": {
+   "total_citations": 71,
+   "match": 67,
+   "partial": 4,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "rda_optimal_uls.json": {
+   "total_citations": 74,
+   "match": 71,
+   "partial": 3,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "clinically_relevant_strains.json": {
+   "total_citations": 425,
+   "match": 397,
+   "partial": 22,
+   "mismatch": 6,
+   "not_found": 0
+  },
+  "ingredient_quality_map.json": {
+   "total_citations": 706,
+   "match": 454,
+   "partial": 107,
+   "mismatch": 145,
+   "not_found": 0
+  },
+  "botanical_ingredients.json": {
+   "total_citations": 56,
+   "match": 31,
+   "partial": 5,
+   "mismatch": 20,
+   "not_found": 0
+  },
+  "standardized_botanicals.json": {
+   "total_citations": 55,
+   "match": 9,
+   "partial": 2,
+   "mismatch": 41,
+   "not_found": 3
+  },
+  "harmful_additives.json": {
+   "total_citations": 36,
+   "match": 24,
+   "partial": 6,
+   "mismatch": 6,
+   "not_found": 0
+  },
+  "banned_recalled_ingredients.json": {
+   "total_citations": 14,
+   "match": 9,
+   "partial": 4,
+   "mismatch": 1,
+   "not_found": 0
+  },
+  "other_ingredients.json": {
+   "total_citations": 6,
+   "match": 5,
+   "partial": 1,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "synergy_cluster.json": {
+   "total_citations": 11,
+   "match": 10,
+   "partial": 0,
+   "mismatch": 1,
+   "not_found": 0
+  },
+  "botanical_marker_contributions.json": {
+   "total_citations": 9,
+   "match": 3,
+   "partial": 5,
+   "mismatch": 1,
+   "not_found": 0
+  },
+  "branded_blend_anchor_overrides.json": {
+   "total_citations": 6,
+   "match": 5,
+   "partial": 1,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "absorption_enhancers.json": {
+   "total_citations": 2,
+   "match": 2,
+   "partial": 0,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "interaction_orphan_allowlist.json": {
+   "total_citations": 2,
+   "match": 0,
+   "partial": 2,
+   "mismatch": 0,
+   "not_found": 0
+  },
+  "curated_overrides/product_context_canonical_overrides.json": {
+   "total_citations": 1,
+   "match": 1,
+   "partial": 0,
+   "mismatch": 0,
+   "not_found": 0
+  }
+ },
+ "to_review": [
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_OCP_MAGNESIUM",
+   "pmid": "23636014",
+   "status": "mismatch",
+   "live_title": "Hypertension-related target organ damage: is it a continuum?",
+   "identity_words": [
+    "magnesium",
+    "unrelated",
+    "contraceptives",
+    "pills",
+    "control",
+    "asserted:"
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_OCP_ZINC",
+   "pmid": "23636014",
+   "status": "mismatch",
+   "live_title": "Hypertension-related target organ damage: is it a continuum?",
+   "identity_words": [
+    "unrelated",
+    "contraceptives",
+    "pills",
+    "control",
+    "asserted:",
+    "inherited"
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_ANTIPSYCHOTICS_VITAMIND",
+   "pmid": "25638514",
+   "status": "mismatch",
+   "live_title": "Agreement between stroke volume measured by oesophageal Doppler and uncalibrated pulse contour analysis during fluid loads in severe aortic stenosis.",
+   "identity_words": [
+    "antipsychotics",
+    "depletion",
+    "atypical",
+    "evidence.",
+    "mechanism",
+    "pending"
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_ANTIPSYCHOTICS_COQ10",
+   "pmid": "18316143",
+   "status": "mismatch",
+   "live_title": "Linking chemical extraction to microbial degradation of 14C-hexadecane in soil.",
+   "identity_words": [
+    "coenzyme",
+    "antipsychotics",
+    "depletion",
+    "atypical",
+    "evidence.",
+    "mechanism"
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_STIMULANTS_VITAMINC",
+   "pmid": "10870150",
+   "status": "mismatch",
+   "live_title": "Comparison between the outer table and intracortical methods of obtaining autogenous bone graft from the iliac crest.",
+   "identity_words": [
+    "depletion",
+    "amphetamines",
+    "adhd",
+    "evidence.",
+    "stimulants",
+    "mechanism"
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_HIVPI_VITAMIND",
+   "pmid": "21694637",
+   "status": "mismatch",
+   "live_title": "Exploring potential noninvasive biomarkers in eosinophilic esophagitis in children.",
+   "identity_words": [
+    "depletion",
+    "protease",
+    "evidence.",
+    "mechanism",
+    "pending",
+    "inhibitors"
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_HIVPI_ZINC",
+   "pmid": "12591569",
+   "status": "mismatch",
+   "live_title": "T2 relaxation time histograms in multiple sclerosis.",
+   "identity_words": [
+    "depletion",
+    "protease",
+    "evidence.",
+    "mechanism",
+    "pending",
+    "zinc"
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_IMMUNOSUPPRESSANTS_MAGNESIUM",
+   "pmid": "16641596",
+   "status": "mismatch",
+   "live_title": "Preemptive versus Non-preemptive simultaneous pancreas-kidney transplantation: a single-center, long-term, follow-up study.",
+   "identity_words": [
+    "magnesium",
+    "cyclosporine",
+    "immunosuppressants",
+    "depletion",
+    "tacrolimus",
+    "evidence."
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_IMMUNOSUPPRESSANTS_VITAMIND",
+   "pmid": "19528952",
+   "status": "mismatch",
+   "live_title": "Screening individual hybridomas by microengraving to discover monoclonal antibodies.",
+   "identity_words": [
+    "immunosuppressants",
+    "depletion",
+    "evidence.",
+    "mechanism",
+    "pending",
+    "mycophenolate"
+   ]
+  },
+  {
+   "file": "medication_depletions.json",
+   "entry_id": "DEP_BENZODIAZEPINES_MELATONIN",
+   "pmid": "2733455",
+   "status": "mismatch",
+   "live_title": "Philadelphia-positive chronic myelogenous leukemia with typical bcr/abl molecular features and atypical, prolonged survival.",
+   "identity_words": [
+    "alprazolam",
+    "depletion",
+    "melatonin",
+    "evidence.",
+    "benzodiazepines",
+    "mechanism"
+   ]
+  },
+  {
+   "file": "clinically_relevant_strains.json",
+   "entry_id": "STRAIN_PLANTARUM_LP01",
+   "pmid": "29799760",
+   "status": "mismatch",
+   "live_title": "Single Charge and Exciton Dynamics Probed by Molecular-Scale-Induced Electroluminescence.",
+   "identity_words": [
+    "lactobacillus",
+    "2026",
+    "qualifying",
+    "21021",
+    "lp01",
+    "human"
+   ]
+  },
+  {
+   "file": "clinically_relevant_strains.json",
+   "entry_id": "STRAIN_CASEI_LC11",
+   "pmid": "35875231",
+   "status": "mismatch",
+   "live_title": "In vitro assessment of histamine and lactate production by a multi-strain synbiotic.",
+   "identity_words": [
+    "casei",
+    "lactobacillus",
+    "2026",
+    "qualifying",
+    "human",
+    "combination"
+   ]
+  },
+  {
+   "file": "clinically_relevant_strains.json",
+   "entry_id": "STRAIN_CASEI_LC11",
+   "pmid": "28118640",
+   "status": "mismatch",
+   "live_title": "Inhibition of Streptococcus mutans Growth and Biofilm Formation by Probiotics in vitro.",
+   "identity_words": [
+    "casei",
+    "lactobacillus",
+    "2026",
+    "qualifying",
+    "human",
+    "combination"
+   ]
+  },
+  {
+   "file": "clinically_relevant_strains.json",
+   "entry_id": "STRAIN_PLANTARUM_LP02",
+   "pmid": "36569057",
+   "status": "mismatch",
+   "live_title": "In-process real-time probiotic phenotypic strain identity tracking: The use of Fourier transform infrared spectroscopy.",
+   "identity_words": [
+    "lactobacillus",
+    "2026",
+    "qualifying",
+    "human",
+    "combination",
+    "plantarum"
+   ]
+  },
+  {
+   "file": "clinically_relevant_strains.json",
+   "entry_id": "STRAIN_BREVE_R0070",
+   "pmid": "36145418",
+   "status": "mismatch",
+   "live_title": "Effect of Probiotics on Host-Microbiota in Bacterial Infections.",
+   "identity_words": [
+    "2026",
+    "qualifying",
+    "r0070",
+    "human",
+    "combination",
+    "research"
+   ]
+  },
+  {
+   "file": "clinically_relevant_strains.json",
+   "entry_id": "STRAIN_LACTOCOCCUS_R1058",
+   "pmid": "36145418",
+   "status": "mismatch",
+   "live_title": "Effect of Probiotics on Host-Microbiota in Bacterial Infections.",
+   "identity_words": [
+    "lactis",
+    "2026",
+    "r1058",
+    "qualifying",
+    "human",
+    "combination"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "vitamin_b2_riboflavin",
+   "pmid": "23351578",
+   "status": "mismatch",
+   "live_title": "Wax-matrix extended-release niacin vs inositol hexanicotinate: a comparison of wax-matrix, extended-release niacin to inositol hexanicotinate \"no-flush\" niacin in persons with mild to moderate dyslipidemia.",
+   "identity_words": [
+    "analog",
+    "pseudo",
+    "exposed",
+    "inactive",
+    "damaged",
+    "sodium"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "iron",
+   "pmid": "25888289",
+   "status": "mismatch",
+   "live_title": "The effectiveness of high dose zinc acetate lozenges on various common cold symptoms: a meta-analysis.",
+   "identity_words": [
+    "sideral",
+    "oxide",
+    "albion",
+    "ironaid",
+    "powder",
+    "ferrochel"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "manganese",
+   "pmid": "25888289",
+   "status": "mismatch",
+   "live_title": "The effectiveness of high dose zinc acetate lozenges on various common cold symptoms: a meta-analysis.",
+   "identity_words": [
+    "oxide",
+    "albion",
+    "picolinic",
+    "mno2",
+    "picolinate",
+    "plant"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "atp",
+   "pmid": "22429945",
+   "status": "mismatch",
+   "live_title": "Spontaneous tegmen defect and semicircular canal dehiscence: same etiopathogenic entity?",
+   "identity_words": [
+    "salt",
+    "adenosine",
+    "triphosphate",
+    "peak",
+    "5'triphosphate",
+    "energy"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "inositol",
+   "pmid": "28165863",
+   "status": "mismatch",
+   "live_title": "Dietary fiber and prebiotics and the gastrointestinal microbiota.",
+   "identity_words": [
+    "elemental",
+    "powder",
+    "cyclohexanehexol",
+    "pinitol",
+    "blend",
+    "inositol"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "5_htp",
+   "pmid": "28165863",
+   "status": "mismatch",
+   "live_title": "Dietary fiber and prebiotics and the gastrointestinal microbiota.",
+   "identity_words": [
+    "seed",
+    "unspecified",
+    "extract",
+    "oxitriptan",
+    "hydroxytryptophan",
+    "simplicifolia"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "fluoride",
+   "pmid": "28165863",
+   "status": "mismatch",
+   "live_title": "Dietary fiber and prebiotics and the gastrointestinal microbiota.",
+   "identity_words": [
+    "sodium",
+    "standard",
+    "fluoride"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "d_beta_hydroxybutyrate_bhb",
+   "pmid": "28165863",
+   "status": "mismatch",
+   "live_title": "Dietary fiber and prebiotics and the gastrointestinal microbiota.",
+   "identity_words": [
+    "magnesium",
+    "ketone",
+    "standard",
+    "salts",
+    "calcium",
+    "potassium"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "inositol",
+   "pmid": "29163194",
+   "status": "mismatch",
+   "live_title": "On the Metabolism of Exogenous Ketones in Humans.",
+   "identity_words": [
+    "elemental",
+    "powder",
+    "cyclohexanehexol",
+    "pinitol",
+    "blend",
+    "inositol"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "inulin",
+   "pmid": "29163194",
+   "status": "mismatch",
+   "live_title": "On the Metabolism of Exogenous Ketones in Humans.",
+   "identity_words": [
+    "root",
+    "agave",
+    "chicory",
+    "inulin",
+    "artichoke",
+    "organic"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "larch_arabinogalactan",
+   "pmid": "29163194",
+   "status": "mismatch",
+   "live_title": "On the Metabolism of Exogenous Ketones in Humans.",
+   "identity_words": [
+    "larch",
+    "immune",
+    "powder",
+    "arabinogalactans",
+    "enhancer",
+    "occidentalis"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "methionine",
+   "pmid": "29163194",
+   "status": "mismatch",
+   "live_title": "On the Metabolism of Exogenous Ketones in Humans.",
+   "identity_words": [
+    "acid",
+    "micronized",
+    "methionine",
+    "amino",
+    "racemic"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "5_htp",
+   "pmid": "29163194",
+   "status": "mismatch",
+   "live_title": "On the Metabolism of Exogenous Ketones in Humans.",
+   "identity_words": [
+    "seed",
+    "unspecified",
+    "extract",
+    "oxitriptan",
+    "hydroxytryptophan",
+    "simplicifolia"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "docosapentaenoic_acid_dpa",
+   "pmid": "29163194",
+   "status": "mismatch",
+   "live_title": "On the Metabolism of Exogenous Ketones in Humans.",
+   "identity_words": [
+    "docosapentaenoic",
+    "standard",
+    "acid"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "tudca",
+   "pmid": "29163194",
+   "status": "mismatch",
+   "live_title": "On the Metabolism of Exogenous Ketones in Humans.",
+   "identity_words": [
+    "acid",
+    "tudca",
+    "taurursodiol",
+    "tauroursodeoxycholic",
+    "standard"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "inulin",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "root",
+    "agave",
+    "chicory",
+    "inulin",
+    "artichoke",
+    "organic"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "larch_arabinogalactan",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "larch",
+    "immune",
+    "powder",
+    "arabinogalactans",
+    "enhancer",
+    "occidentalis"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "methionine",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "acid",
+    "micronized",
+    "methionine",
+    "amino",
+    "racemic"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "5_htp",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "seed",
+    "unspecified",
+    "extract",
+    "oxitriptan",
+    "hydroxytryptophan",
+    "simplicifolia"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "fluoride",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "sodium",
+    "standard",
+    "fluoride"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "branched_chain_amino_acids",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "4:1:1",
+    "acids",
+    "powder",
+    "peptides",
+    "instant",
+    "hydrolysate"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "docosapentaenoic_acid_dpa",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "docosapentaenoic",
+    "standard",
+    "acid"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "d_beta_hydroxybutyrate_bhb",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "magnesium",
+    "ketone",
+    "standard",
+    "salts",
+    "calcium",
+    "potassium"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "tudca",
+   "pmid": "34202683",
+   "status": "mismatch",
+   "live_title": "Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies.",
+   "identity_words": [
+    "acid",
+    "tudca",
+    "taurursodiol",
+    "tauroursodeoxycholic",
+    "standard"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "inositol",
+   "pmid": "28261556",
+   "status": "mismatch",
+   "live_title": "Relationships between Dietary Intake and Cognitive Function in Healthy Korean Children and Adolescents.",
+   "identity_words": [
+    "elemental",
+    "powder",
+    "cyclohexanehexol",
+    "pinitol",
+    "blend",
+    "inositol"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "larch_arabinogalactan",
+   "pmid": "28261556",
+   "status": "mismatch",
+   "live_title": "Relationships between Dietary Intake and Cognitive Function in Healthy Korean Children and Adolescents.",
+   "identity_words": [
+    "larch",
+    "immune",
+    "powder",
+    "arabinogalactans",
+    "enhancer",
+    "occidentalis"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "methionine",
+   "pmid": "28261556",
+   "status": "mismatch",
+   "live_title": "Relationships between Dietary Intake and Cognitive Function in Healthy Korean Children and Adolescents.",
+   "identity_words": [
+    "acid",
+    "micronized",
+    "methionine",
+    "amino",
+    "racemic"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "5_htp",
+   "pmid": "28261556",
+   "status": "mismatch",
+   "live_title": "Relationships between Dietary Intake and Cognitive Function in Healthy Korean Children and Adolescents.",
+   "identity_words": [
+    "seed",
+    "unspecified",
+    "extract",
+    "oxitriptan",
+    "hydroxytryptophan",
+    "simplicifolia"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "branched_chain_amino_acids",
+   "pmid": "28261556",
+   "status": "mismatch",
+   "live_title": "Relationships between Dietary Intake and Cognitive Function in Healthy Korean Children and Adolescents.",
+   "identity_words": [
+    "4:1:1",
+    "acids",
+    "powder",
+    "peptides",
+    "instant",
+    "hydrolysate"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "inositol",
+   "pmid": "29618497",
+   "status": "mismatch",
+   "live_title": "Distal versus proximal intestinal short-chain fatty acid release in man.",
+   "identity_words": [
+    "elemental",
+    "powder",
+    "cyclohexanehexol",
+    "pinitol",
+    "blend",
+    "inositol"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "larch_arabinogalactan",
+   "pmid": "29618497",
+   "status": "mismatch",
+   "live_title": "Distal versus proximal intestinal short-chain fatty acid release in man.",
+   "identity_words": [
+    "larch",
+    "immune",
+    "powder",
+    "arabinogalactans",
+    "enhancer",
+    "occidentalis"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "5_htp",
+   "pmid": "29618497",
+   "status": "mismatch",
+   "live_title": "Distal versus proximal intestinal short-chain fatty acid release in man.",
+   "identity_words": [
+    "seed",
+    "unspecified",
+    "extract",
+    "oxitriptan",
+    "hydroxytryptophan",
+    "simplicifolia"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "fluoride",
+   "pmid": "29618497",
+   "status": "mismatch",
+   "live_title": "Distal versus proximal intestinal short-chain fatty acid release in man.",
+   "identity_words": [
+    "sodium",
+    "standard",
+    "fluoride"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "d_beta_hydroxybutyrate_bhb",
+   "pmid": "29618497",
+   "status": "mismatch",
+   "live_title": "Distal versus proximal intestinal short-chain fatty acid release in man.",
+   "identity_words": [
+    "magnesium",
+    "ketone",
+    "standard",
+    "salts",
+    "calcium",
+    "potassium"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "chromium",
+   "pmid": "2718922",
+   "status": "mismatch",
+   "live_title": "Copper absorption and retention in young men at three levels of dietary copper by use of the stable isotope 65Cu.",
+   "identity_words": [
+    "picolinic",
+    "albion",
+    "arginate",
+    "crominex",
+    "picolinate",
+    "niacin"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "molybdenum",
+   "pmid": "2718922",
+   "status": "mismatch",
+   "live_title": "Copper absorption and retention in young men at three levels of dietary copper by use of the stable isotope 65Cu.",
+   "identity_words": [
+    "na2moo4",
+    "albion",
+    "picolinate",
+    "molibdeno",
+    "salt",
+    "molybdendum"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "copper",
+   "pmid": "7572711",
+   "status": "mismatch",
+   "live_title": "Molybdenum absorption, excretion, and retention studied with stable isotopes in young men at five intakes of dietary molybdenum.",
+   "identity_words": [
+    "oxide",
+    "albion",
+    "picolinate",
+    "cobre",
+    "bound",
+    "citrate"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "potassium",
+   "pmid": "7751878",
+   "status": "mismatch",
+   "live_title": "CD30/Ki-1-positive lymphoproliferative disorders of the skin--clinicopathologic correlation and statistical analysis of 86 cases: a multicentric study from the European Organization for Research and Treatment of Cancer Cutaneous Lymphoma Project Group.",
+   "identity_words": [
+    "substitute",
+    "release",
+    "potasio",
+    "salt",
+    "dibasic",
+    "k₂hpo₄"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "spermidine",
+   "pmid": "30094136",
+   "status": "mismatch",
+   "live_title": "Thermal effect of percutaneous radiofrequency ablation with a clustered electrode for vertebral tumors: In vitro and vivo experiments and clinical application.",
+   "identity_words": [
+    "base",
+    "germ",
+    "spermidinelife",
+    "3hcl",
+    "hydrochloride",
+    "trihydrochloride"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "red_wine_extract",
+   "pmid": "26889234",
+   "status": "mismatch",
+   "live_title": "Bioavailability and safety study of resveratrol 500 mg tablets in healthy male and female volunteers.",
+   "identity_words": [
+    "polyphenol",
+    "polyphenols",
+    "grape",
+    "antioxidants",
+    "standardized",
+    "concentrate"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "nicotinamide_riboside",
+   "pmid": "27720903",
+   "status": "mismatch",
+   "live_title": "Early Development of Definitive Erythroblasts from Human Pluripotent Stem Cells Defined by Expression of Glycophorin A/CD235a, CD34, and CD36.",
+   "identity_words": [
+    "malate",
+    "nicotinamide",
+    "hydrogen",
+    "riboside",
+    "unspecified",
+    "booster"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "l_leucine",
+   "pmid": "34642762",
+   "status": "mismatch",
+   "live_title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
+   "identity_words": [
+    "instantized",
+    "powder",
+    "micronized",
+    "bcaa",
+    "leucine",
+    "pure"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "l_valine",
+   "pmid": "34642762",
+   "status": "mismatch",
+   "live_title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
+   "identity_words": [
+    "instantized",
+    "micronized",
+    "powder",
+    "bcaa",
+    "valine",
+    "pure"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "l_isoleucine",
+   "pmid": "34642762",
+   "status": "mismatch",
+   "live_title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
+   "identity_words": [
+    "isoleucine",
+    "instantized",
+    "micronized",
+    "powder",
+    "bcaa",
+    "pure"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "synephrine",
+   "pmid": "22176753",
+   "status": "mismatch",
+   "live_title": "Minimum 5-year wear analysis of first-generation highly cross-linked polyethylene in patients 65 years and younger.",
+   "identity_words": [
+    "aurantium",
+    "synephrine",
+    "alkaloids",
+    "citrus",
+    "hydrochloride",
+    "unspecified"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "gamma_linolenic_acid",
+   "pmid": "2181884",
+   "status": "mismatch",
+   "live_title": "Attributes of tinnitus and the acceptance of masking.",
+   "identity_words": [
+    "acid",
+    "delta6",
+    "omega",
+    "linolenic",
+    "sonova",
+    "gamma"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "gamma_linolenic_acid",
+   "pmid": "8177983",
+   "status": "mismatch",
+   "live_title": "Regulation of parathyroid hormone synthesis and secretion.",
+   "identity_words": [
+    "acid",
+    "delta6",
+    "omega",
+    "linolenic",
+    "sonova",
+    "gamma"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "apigenin",
+   "pmid": "23093624",
+   "status": "mismatch",
+   "live_title": "Se rapprocher avec les survivants de la cancer de la prostate.",
+   "identity_words": [
+    "apigenin",
+    "chamomile",
+    "extract",
+    "flavone",
+    "trihydroxyflavone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "daidzein",
+   "pmid": "22433977",
+   "status": "mismatch",
+   "live_title": "Extracted or synthesized soybean isoflavones reduce menopausal hot flash frequency and severity: systematic review and meta-analysis of randomized controlled trials.",
+   "identity_words": [
+    "daidzein",
+    "diadzein",
+    "aglycone",
+    "daidzen",
+    "unspecified",
+    "daidzin"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "delphinidin",
+   "pmid": "27163077",
+   "status": "mismatch",
+   "live_title": "Exposure of both the radius and ulna through a single posterior incision: a technical note.",
+   "identity_words": [
+    "delphinidin",
+    "berry",
+    "maqui",
+    "sambubioside",
+    "unspecified",
+    "glucoside"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "delphinidin",
+   "pmid": "25412725",
+   "status": "mismatch",
+   "live_title": "Relapsing pityriasis rosea.",
+   "identity_words": [
+    "delphinidin",
+    "berry",
+    "maqui",
+    "sambubioside",
+    "unspecified",
+    "glucoside"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "diosgenin",
+   "pmid": "21116018",
+   "status": "mismatch",
+   "live_title": "Effects of a purported aromatase and 5α-reductase inhibitor on hormone profiles in college-age men.",
+   "identity_words": [
+    "steroidal",
+    "diosgenin",
+    "fenugreek",
+    "saponin",
+    "unspecified",
+    "sapogenin"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "glucosinolates",
+   "pmid": "9041956",
+   "status": "mismatch",
+   "live_title": "Treatment of juvenile rheumatoid arthritis with oral type II collagen: comment on the article by Barnett et al.",
+   "identity_words": [
+    "indole",
+    "broccoli",
+    "complex",
+    "glucosinolate",
+    "unspecified",
+    "glucosinolates"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "isothiocyanates",
+   "pmid": "9041956",
+   "status": "mismatch",
+   "live_title": "Treatment of juvenile rheumatoid arthritis with oral type II collagen: comment on the article by Barnett et al.",
+   "identity_words": [
+    "broccoli",
+    "complex",
+    "isothiocyanates",
+    "isothiocyanate",
+    "peitc",
+    "phenethyl"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "glucosinolates",
+   "pmid": "12432933",
+   "status": "mismatch",
+   "live_title": "Thromboxane synthase: structure and function of protein and gene.",
+   "identity_words": [
+    "indole",
+    "broccoli",
+    "complex",
+    "glucosinolate",
+    "unspecified",
+    "glucosinolates"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "isothiocyanates",
+   "pmid": "12432933",
+   "status": "mismatch",
+   "live_title": "Thromboxane synthase: structure and function of protein and gene.",
+   "identity_words": [
+    "broccoli",
+    "complex",
+    "isothiocyanates",
+    "isothiocyanate",
+    "peitc",
+    "phenethyl"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "glycitein",
+   "pmid": "10799377",
+   "status": "mismatch",
+   "live_title": "Prediction of dietary iron absorption: an algorithm for calculating absorption and bioavailability of dietary iron.",
+   "identity_words": [
+    "methoxydaidzein",
+    "unspecified",
+    "glycitein",
+    "isoflavone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "huperzine_a",
+   "pmid": "9421157",
+   "status": "mismatch",
+   "live_title": "Electron spin resonance and electron nuclear double resonance study of X-irradiated deoxyadenosine: proton transfer behavior of primary ionic radicals.",
+   "identity_words": [
+    "serrata",
+    "moss",
+    "chinese",
+    "huperzia",
+    "unspecified",
+    "clubmoss"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "isothiocyanates",
+   "pmid": "21747065",
+   "status": "mismatch",
+   "live_title": "Pulmonary hypertension in heart failure with preserved ejection fraction: a target for therapy?",
+   "identity_words": [
+    "broccoli",
+    "complex",
+    "isothiocyanates",
+    "isothiocyanate",
+    "peitc",
+    "phenethyl"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "linoleic_acid",
+   "pmid": "1940613",
+   "status": "mismatch",
+   "live_title": "Induction of tumor necrosis factor and macrophage-mediated cytotoxicity by horseradish peroxidase and other glycosylated proteins: the role of enzymatic activity and LPS.",
+   "identity_words": [
+    "acid",
+    "omega",
+    "18:2",
+    "linoleic",
+    "octadecadienoic",
+    "unspecified"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "luteolin",
+   "pmid": "22493219",
+   "status": "mismatch",
+   "live_title": "Coupling actin flow, adhesion, and morphology in a computational cell motility model.",
+   "identity_words": [
+    "japonica",
+    "sophora",
+    "glucoside",
+    "d.r.",
+    "extract",
+    "flavone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "luteolin",
+   "pmid": "9649280",
+   "status": "mismatch",
+   "live_title": "Re: Bladder prolapse in a female infant with complete epispadias.",
+   "identity_words": [
+    "japonica",
+    "sophora",
+    "glucoside",
+    "d.r.",
+    "extract",
+    "flavone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "mesembrine",
+   "pmid": "21130846",
+   "status": "mismatch",
+   "live_title": "Nitric oxide in the ventral tegmental area is involved in retrieval of inhibitory avoidance memory by nicotine.",
+   "identity_words": [
+    "zembrin",
+    "tortuosum",
+    "extract",
+    "mesembrenone",
+    "alkaloids",
+    "kanna"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "mesembrine",
+   "pmid": "23428430",
+   "status": "mismatch",
+   "live_title": "WITHDRAWN: Intrinsic molecular characteristics of inhibiting STAT3 activation and dimerization through targeting the phosphotyrosine binding site within the SH2 domain-A molecular dynamics study.",
+   "identity_words": [
+    "zembrin",
+    "tortuosum",
+    "extract",
+    "mesembrenone",
+    "alkaloids",
+    "kanna"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "mesembrine",
+   "pmid": "25029945",
+   "status": "mismatch",
+   "live_title": "Influences of Allocating HIV/AIDS Specialized Nurses on Clinical Outcomes in Japan.",
+   "identity_words": [
+    "zembrin",
+    "tortuosum",
+    "extract",
+    "mesembrenone",
+    "alkaloids",
+    "kanna"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "mucilage",
+   "pmid": "30348445",
+   "status": "mismatch",
+   "live_title": "Fecaloma as a cause of acute renal failure.",
+   "identity_words": [
+    "seed",
+    "root",
+    "herbal",
+    "mucilage",
+    "fiber",
+    "plant"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "theobromine",
+   "pmid": "3098622",
+   "status": "mismatch",
+   "live_title": "[Effect of lithium carbonate on the experimental post-radiation recovery of the blood system].",
+   "identity_words": [
+    "methylxanthine",
+    "cacao",
+    "theobromine",
+    "alkaloid",
+    "xantheose",
+    "cocoa"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "theobromine",
+   "pmid": "23810065",
+   "status": "mismatch",
+   "live_title": "Distribution of amoxicillin-resistant oral streptococci in dental plaque specimens obtained from Japanese children and adolescents at risk for infective endocarditis.",
+   "identity_words": [
+    "methylxanthine",
+    "cacao",
+    "theobromine",
+    "alkaloid",
+    "xantheose",
+    "cocoa"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "total_carotenoids",
+   "pmid": "12936953",
+   "status": "mismatch",
+   "live_title": "Dietary protein, calcium metabolism, and skeletal homeostasis revisited.",
+   "identity_words": [
+    "natural",
+    "carotenoid",
+    "complex",
+    "unspecified",
+    "total",
+    "full"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "triterpene_glycosides",
+   "pmid": "25892825",
+   "status": "mismatch",
+   "live_title": "On the evolutionary and ontogenetic origins of tool-oriented behaviour in New Caledonian crows (Corvus moneduloides).",
+   "identity_words": [
+    "glycosylated",
+    "pentacyclic",
+    "glycosides",
+    "triterpenes",
+    "saponin",
+    "triterpene"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "triterpenes",
+   "pmid": "31600905",
+   "status": "mismatch",
+   "live_title": "Periodontal Pathogens as Risk Factors of Cardiovascular Diseases, Diabetes, Rheumatoid Arthritis, Cancer, and Chronic Obstructive Pulmonary Disease-Is There Cause for Consideration?",
+   "identity_words": [
+    "total",
+    "compounds",
+    "triterpenes",
+    "fraction",
+    "triterpene",
+    "plant"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "ursolic_acid",
+   "pmid": "23549054",
+   "status": "mismatch",
+   "live_title": "Clinical interest of postural and vestibulo-ocular reflex changes induced by cervical muscles and skull vibration in compensated unilateral vestibular lesion patients.",
+   "identity_words": [
+    "urson",
+    "hydroxy",
+    "acid",
+    "prunol",
+    "apple",
+    "rosemary"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "verbascoside",
+   "pmid": "16460997",
+   "status": "mismatch",
+   "live_title": "Comparison of the grade evaluated by \"Liver damage\" of Liver Cancer Study Group of Japan and Child-Pugh classification in patients with hepatocellular carcinoma.",
+   "identity_words": [
+    "orobanchoside",
+    "acteoside",
+    "glycoside",
+    "phenylethanoid",
+    "mullein",
+    "kusaginin"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "verbascoside",
+   "pmid": "18835060",
+   "status": "mismatch",
+   "live_title": "Potential misclassification of patients with psoriasis in electronic databases.",
+   "identity_words": [
+    "orobanchoside",
+    "acteoside",
+    "glycoside",
+    "phenylethanoid",
+    "mullein",
+    "kusaginin"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "vicine",
+   "pmid": "23718910",
+   "status": "mismatch",
+   "live_title": "Connexin43 mediates NF-κB signalling activation induced by high glucose in GMCs: involvement of c-Src.",
+   "identity_words": [
+    "bean",
+    "faba",
+    "glucoside",
+    "broad",
+    "vicine",
+    "vicia"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "viscotoxin",
+   "pmid": "10535766",
+   "status": "mismatch",
+   "live_title": "Melatonin content in plasma and large intestine of patients with colorectal carcinoma before and after surgery.",
+   "identity_words": [
+    "album",
+    "mistletoe",
+    "thionin",
+    "viscum",
+    "polypeptide",
+    "viscotoxin"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "vitexin",
+   "pmid": "25822272",
+   "status": "mismatch",
+   "live_title": "Diagnosis and treatment of seborrheic dermatitis.",
+   "identity_words": [
+    "hawthorn",
+    "vitexin",
+    "apigenin",
+    "passionflower",
+    "bamboo",
+    "unspecified"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "shiitake",
+   "pmid": "41943369",
+   "status": "mismatch",
+   "live_title": "From nature to clinic: Lessons from successfully marketed polysaccharide drugs.",
+   "identity_words": [
+    "body",
+    "mushroom",
+    "lentinus",
+    "powder",
+    "unspecified",
+    "standardized"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "turkey_tail",
+   "pmid": "41943369",
+   "status": "mismatch",
+   "live_title": "From nature to clinic: Lessons from successfully marketed polysaccharide drugs.",
+   "identity_words": [
+    "body",
+    "mushroom",
+    "powder",
+    "unspecified",
+    "standardized",
+    "turkey"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "lactobacillus_acidophilus",
+   "pmid": "27773241",
+   "status": "mismatch",
+   "live_title": "Ionic liquid mediated extraction, assisted by ultrasound energy, of available/mobilizable metals from sediment samples.",
+   "identity_words": [
+    "lactobacillus",
+    "unspecified",
+    "acidophilus",
+    "4356",
+    "labs",
+    "la14"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "boswellia",
+   "pmid": "21235550",
+   "status": "mismatch",
+   "live_title": "Shoaling and mate choice of wild-type Tanichthys albonubes in the presence of the red fluorescent transgenic conspecifics.",
+   "identity_words": [
+    "acids",
+    "casperome",
+    "olibanum",
+    "powder",
+    "total",
+    "apresflex"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "black_seed_oil",
+   "pmid": "26328782",
+   "status": "mismatch",
+   "live_title": "Similar eicosapentaenoic acid and docosahexaenoic acid plasma levels achieved with fish oil or krill oil in a randomized double-blind four-week bioavailability study.",
+   "identity_words": [
+    "seed",
+    "cumin",
+    "powder",
+    "kalonji",
+    "pressed",
+    "nigellone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "manuka_honey",
+   "pmid": "26328782",
+   "status": "mismatch",
+   "live_title": "Similar eicosapentaenoic acid and docosahexaenoic acid plasma levels achieved with fish oil or krill oil in a randomized double-blind four-week bioavailability study.",
+   "identity_words": [
+    "500+",
+    "manuka",
+    "honey",
+    "zealand",
+    "263+",
+    "250+"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "black_seed_oil",
+   "pmid": "26395129",
+   "status": "mismatch",
+   "live_title": "Clinical evaluation of purified Shilajit on testosterone levels in healthy volunteers.",
+   "identity_words": [
+    "seed",
+    "cumin",
+    "powder",
+    "kalonji",
+    "pressed",
+    "nigellone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "tuna_oil",
+   "pmid": "26395129",
+   "status": "mismatch",
+   "live_title": "Clinical evaluation of purified Shilajit on testosterone levels in healthy volunteers.",
+   "identity_words": [
+    "triglyceride",
+    "fish",
+    "tuna",
+    "bluefin",
+    "form",
+    "molecular"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "manuka_honey",
+   "pmid": "26395129",
+   "status": "mismatch",
+   "live_title": "Clinical evaluation of purified Shilajit on testosterone levels in healthy volunteers.",
+   "identity_words": [
+    "500+",
+    "manuka",
+    "honey",
+    "zealand",
+    "263+",
+    "250+"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "krill_oil",
+   "pmid": "26395129",
+   "status": "mismatch",
+   "live_title": "Clinical evaluation of purified Shilajit on testosterone levels in healthy volunteers.",
+   "identity_words": [
+    "phosphoboost",
+    "superba",
+    "euphausia",
+    "enriched",
+    "aker",
+    "premium"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "calamari_oil",
+   "pmid": "26434126",
+   "status": "mismatch",
+   "live_title": "Effects of Thymoquinone on the Pharmacokinetics and Pharmacodynamics of Glibenclamide in a Rat Model.",
+   "identity_words": [
+    "total",
+    "triglyceride",
+    "marine",
+    "concentrate",
+    "calamari",
+    "calamarine"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "tuna_oil",
+   "pmid": "26434126",
+   "status": "mismatch",
+   "live_title": "Effects of Thymoquinone on the Pharmacokinetics and Pharmacodynamics of Glibenclamide in a Rat Model.",
+   "identity_words": [
+    "triglyceride",
+    "fish",
+    "tuna",
+    "bluefin",
+    "form",
+    "molecular"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "manuka_honey",
+   "pmid": "26434126",
+   "status": "mismatch",
+   "live_title": "Effects of Thymoquinone on the Pharmacokinetics and Pharmacodynamics of Glibenclamide in a Rat Model.",
+   "identity_words": [
+    "500+",
+    "manuka",
+    "honey",
+    "zealand",
+    "263+",
+    "250+"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "krill_oil",
+   "pmid": "26434126",
+   "status": "mismatch",
+   "live_title": "Effects of Thymoquinone on the Pharmacokinetics and Pharmacodynamics of Glibenclamide in a Rat Model.",
+   "identity_words": [
+    "phosphoboost",
+    "superba",
+    "euphausia",
+    "enriched",
+    "aker",
+    "premium"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "fenugreek",
+   "pmid": "12571654",
+   "status": "mismatch",
+   "live_title": "Bioavailability in humans of the flavanones hesperidin and narirutin after the ingestion of two doses of orange juice.",
+   "identity_words": [
+    "seed",
+    "surge",
+    "powder",
+    "branded",
+    "furanomax",
+    "enhanced"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "hemp_seed_oil",
+   "pmid": "12571654",
+   "status": "mismatch",
+   "live_title": "Bioavailability in humans of the flavanones hesperidin and narirutin after the ingestion of two doses of orange juice.",
+   "identity_words": [
+    "seed",
+    "pressed",
+    "european",
+    "cannabid",
+    "caryophyllene",
+    "vesisorb"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "sea_buckthorn",
+   "pmid": "7491892",
+   "status": "mismatch",
+   "live_title": "Absorption of dietary quercetin glycosides and quercetin in healthy ileostomy volunteers.",
+   "identity_words": [
+    "buckthorn",
+    "seed",
+    "acid",
+    "seaberry",
+    "powder",
+    "berry"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "fenugreek",
+   "pmid": "7491892",
+   "status": "mismatch",
+   "live_title": "Absorption of dietary quercetin glycosides and quercetin in healthy ileostomy volunteers.",
+   "identity_words": [
+    "seed",
+    "surge",
+    "powder",
+    "branded",
+    "furanomax",
+    "enhanced"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "hemp_seed_oil",
+   "pmid": "7491892",
+   "status": "mismatch",
+   "live_title": "Absorption of dietary quercetin glycosides and quercetin in healthy ileostomy volunteers.",
+   "identity_words": [
+    "seed",
+    "pressed",
+    "european",
+    "cannabid",
+    "caryophyllene",
+    "vesisorb"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "silk_amino_acids",
+   "pmid": "35905137",
+   "status": "mismatch",
+   "live_title": "Sphingolipids as Functional Food Components: Benefits in Skin Improvement and Disease Prevention.",
+   "identity_words": [
+    "acids",
+    "sericin",
+    "bombyx",
+    "silk",
+    "peptide",
+    "powder"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "silk_amino_acids",
+   "pmid": "34208952",
+   "status": "mismatch",
+   "live_title": "Dietary Sphingolipids Contribute to Health via Intestinal Maintenance.",
+   "identity_words": [
+    "acids",
+    "sericin",
+    "bombyx",
+    "silk",
+    "peptide",
+    "powder"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "organ_extracts",
+   "pmid": "34208952",
+   "status": "mismatch",
+   "live_title": "Dietary Sphingolipids Contribute to Health via Intestinal Maintenance.",
+   "identity_words": [
+    "porcine",
+    "scrofa",
+    "powder",
+    "glandular",
+    "concentrate",
+    "stomach"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "ceramides",
+   "pmid": "447109",
+   "status": "mismatch",
+   "live_title": "Comparison of oral feeding of peptide and amino acid meals to normal human subjects.",
+   "identity_words": [
+    "seed",
+    "vulgare",
+    "hydropeach",
+    "ceramide",
+    "synthetic",
+    "derived"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "organ_extracts",
+   "pmid": "447109",
+   "status": "mismatch",
+   "live_title": "Comparison of oral feeding of peptide and amino acid meals to normal human subjects.",
+   "identity_words": [
+    "porcine",
+    "scrofa",
+    "powder",
+    "glandular",
+    "concentrate",
+    "stomach"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "olive_leaf",
+   "pmid": "19007325",
+   "status": "mismatch",
+   "live_title": "Targeting the angiotensin pathway in idiopathic pulmonary fibrosis.",
+   "identity_words": [
+    "olivol",
+    "powder",
+    "olea",
+    "juice",
+    "oleuropein",
+    "ethanol"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "olive_fruit_extract",
+   "pmid": "19007325",
+   "status": "mismatch",
+   "live_title": "Targeting the angiotensin pathway in idiopathic pulmonary fibrosis.",
+   "identity_words": [
+    "olive",
+    "europaea",
+    "hytolive",
+    "fruit",
+    "standardized",
+    "olea"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "olive_leaf",
+   "pmid": "11754880",
+   "status": "mismatch",
+   "live_title": "Needle thoracostomy may not be indicated in the trauma patient.",
+   "identity_words": [
+    "olivol",
+    "powder",
+    "olea",
+    "juice",
+    "oleuropein",
+    "ethanol"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "magnolia_bark",
+   "pmid": "24893163",
+   "status": "mismatch",
+   "live_title": "Satellite tracking of sympatric marine megafauna can inform the biological basis for species co-management.",
+   "identity_words": [
+    "enriched",
+    "standardized",
+    "officinalis",
+    "bark",
+    "honokiol",
+    "extract"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "magnolia_bark",
+   "pmid": "23394783",
+   "status": "mismatch",
+   "live_title": "Centronuclear myopathy related to dynamin 2 mutations: clinical, morphological, muscle imaging and genetic features of an Italian cohort.",
+   "identity_words": [
+    "enriched",
+    "standardized",
+    "officinalis",
+    "bark",
+    "honokiol",
+    "extract"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "perilla_oil",
+   "pmid": "12323085",
+   "status": "mismatch",
+   "live_title": "Eicosapentaenoic and docosapentaenoic acids are the principal products of alpha-linolenic acid metabolism in young men*.",
+   "identity_words": [
+    "seed",
+    "benegut",
+    "frutescens",
+    "perilla",
+    "extract",
+    "egoma"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "ahiflower_seed_oil",
+   "pmid": "22279143",
+   "status": "mismatch",
+   "live_title": "Effects of dietary stearidonic acid on biomarkers of lipid metabolism.",
+   "identity_words": [
+    "seed",
+    "ahiflower",
+    "buglossoides",
+    "plantagineum",
+    "arvensis",
+    "pressed"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "fisetin",
+   "pmid": "29859999",
+   "status": "mismatch",
+   "live_title": "3'-O-Substituted 5-(perylen-3-ylethynyl)-2'-deoxyuridines as tick-borne encephalitis virus reproduction inhibitors.",
+   "identity_words": [
+    "unspecified",
+    "fisetin"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "theacrine",
+   "pmid": "27164800",
+   "status": "mismatch",
+   "live_title": "Physical and sexual violence against children in Kenya within a cultural context.",
+   "identity_words": [
+    "theacrine",
+    "solutions",
+    "acid",
+    "branded",
+    "compound",
+    "teacrine"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "agmatine",
+   "pmid": "20863897",
+   "status": "mismatch",
+   "live_title": "Semi-permeable species boundaries in the coral genus Madracis: introgression in a brooding coral system.",
+   "identity_words": [
+    "agmatine",
+    "aminobutylguanidine",
+    "sulfate",
+    "sulphate",
+    "unspecified"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "devils_claw",
+   "pmid": "11054882",
+   "status": "mismatch",
+   "live_title": "Vascular imaging and intervention in peripheral arteries in the diabetic patient.",
+   "identity_words": [
+    "preparation",
+    "spider",
+    "devil's",
+    "root",
+    "devils",
+    "claw"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "devils_claw",
+   "pmid": "24395557",
+   "status": "mismatch",
+   "live_title": "Glucosamine and chondroitin for knee osteoarthritis: a double-blind randomised placebo-controlled clinical trial evaluating single and combination regimens.",
+   "identity_words": [
+    "preparation",
+    "spider",
+    "devil's",
+    "root",
+    "devils",
+    "claw"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "calcium_pyruvate",
+   "pmid": "8290828",
+   "status": "mismatch",
+   "live_title": "Adjunctive adjuvant or neoadjuvant chemotherapy for locally advanced bladder cancer: a critical appraisal of the present status.",
+   "identity_words": [
+    "acid",
+    "calcium",
+    "salt",
+    "pyruvic",
+    "pyruvate",
+    "unspecified"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "inosine",
+   "pmid": "19474430",
+   "status": "mismatch",
+   "live_title": "Predisposing factors for adrenal insufficiency.",
+   "identity_words": [
+    "unspecified",
+    "hypoxanthine",
+    "purine",
+    "nucleoside",
+    "riboside",
+    "monohydrate"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "inosine",
+   "pmid": "1569488",
+   "status": "mismatch",
+   "live_title": "Four radionuclide methods for left ventricular volume determination: comparison of a manual and an automated technique.",
+   "identity_words": [
+    "unspecified",
+    "hypoxanthine",
+    "purine",
+    "nucleoside",
+    "riboside",
+    "monohydrate"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "humic_acid",
+   "pmid": "27137840",
+   "status": "mismatch",
+   "live_title": "Maintaining Consistency of Spatial Information in the Hippocampal Network: A Combinatorial Geometry Model.",
+   "identity_words": [
+    "mineral",
+    "acid",
+    "complex",
+    "substances",
+    "leonardite",
+    "humate"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "dimethyl_glycine",
+   "pmid": "6125095",
+   "status": "mismatch",
+   "live_title": "Pharmacokinetic comparison of pindolol with other beta-adrenoceptor-blocking agents.",
+   "identity_words": [
+    "acid",
+    "pangamic",
+    "glycine",
+    "hydrochloride",
+    "dimethyl",
+    "dimethylglycine"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "dimethyl_glycine",
+   "pmid": "8117012",
+   "status": "mismatch",
+   "live_title": "Provision of postoperative care in UK hospitals.",
+   "identity_words": [
+    "acid",
+    "pangamic",
+    "glycine",
+    "hydrochloride",
+    "dimethyl",
+    "dimethylglycine"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "methylliberine",
+   "pmid": "32150228",
+   "status": "mismatch",
+   "live_title": "The Skyrocketing Cost of Rectal Indomethacin.",
+   "identity_words": [
+    "dynamine",
+    "solutions",
+    "methyl",
+    "liberine",
+    "methyliberine",
+    "compound"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "methylliberine",
+   "pmid": "37979661",
+   "status": "mismatch",
+   "live_title": "Comment on \"Effect of probiotic strain, Lactiplantibacillus plantarum P9, on chronic constipation: A randomized, double-blind, placebo-controlled study\".",
+   "identity_words": [
+    "dynamine",
+    "solutions",
+    "methyl",
+    "liberine",
+    "methyliberine",
+    "compound"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "ipriflavone",
+   "pmid": "10754346",
+   "status": "mismatch",
+   "live_title": "Monitoring of extracellular aspartate aminotransferase and troponin T by microdialysis during and after cardioplegic heart arrest.",
+   "identity_words": [
+    "200mg",
+    "derivative",
+    "ipriflavone",
+    "bone",
+    "ostivone",
+    "isoflavone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "theophylline",
+   "pmid": "15282340",
+   "status": "mismatch",
+   "live_title": "Defective epidermal barrier in neonatal mice lacking the C-terminal region of connexin43.",
+   "identity_words": [
+    "oxtriphylline",
+    "anhydrous",
+    "theophylline",
+    "monohydrate",
+    "unspecified",
+    "aminophylline"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "cat_s_claw",
+   "pmid": "11753476",
+   "status": "mismatch",
+   "live_title": "Lepidium meyenii (Maca) improved semen parameters in adult men.",
+   "identity_words": [
+    "uncaria",
+    "claw",
+    "vine",
+    "pentacyclic",
+    "standardized",
+    "bark"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "rye_pollen",
+   "pmid": "10604694",
+   "status": "mismatch",
+   "live_title": "Hydrogel/silver ion-coated urinary catheter reduces nosocomial urinary tract infection rates in intensive care unit patients: a multicenter study.",
+   "identity_words": [
+    "pollen",
+    "secale",
+    "cereale",
+    "graminex",
+    "flower",
+    "extract"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "nobiletin",
+   "pmid": "27476752",
+   "status": "mismatch",
+   "live_title": "Aluminum chloride induced splenic lymphocytes apoptosis through NF-κB inhibition.",
+   "identity_words": [
+    "nobiletin",
+    "unspecified",
+    "extract"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "andrographis",
+   "pmid": "19657410",
+   "status": "mismatch",
+   "live_title": "Kawasaki disease at British Columbia's Children's Hospital.",
+   "identity_words": [
+    "paractin",
+    "unspecified",
+    "andrographolide",
+    "standardized",
+    "king",
+    "herb"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "sage",
+   "pmid": "16205659",
+   "status": "mismatch",
+   "live_title": "[Not Available].",
+   "identity_words": [
+    "salvia",
+    "powder",
+    "unspecified",
+    "organic",
+    "common",
+    "herb"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "undecylenic_acid",
+   "pmid": "11403866",
+   "status": "mismatch",
+   "live_title": "The genetics of species differences.",
+   "identity_words": [
+    "acid",
+    "calcium",
+    "zinc",
+    "undecylenate",
+    "undecylenic",
+    "undecenoic"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "guanidinoacetate",
+   "pmid": "31553717",
+   "status": "mismatch",
+   "live_title": "Heterogeneous responses to low level death receptor activation are explained by random molecular assembly of the Caspase-8 activation platform.",
+   "identity_words": [
+    "acid",
+    "micronized",
+    "guanido",
+    "amidinoglycine",
+    "amidino",
+    "glycine"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "guanidinoacetate",
+   "pmid": "34474639",
+   "status": "mismatch",
+   "live_title": "Low glucose at 3-hour 100 gram oral glucose tolerance test: implications for glucose control.",
+   "identity_words": [
+    "acid",
+    "micronized",
+    "guanido",
+    "amidinoglycine",
+    "amidino",
+    "glycine"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "blood_orange_extract",
+   "pmid": "17177405",
+   "status": "mismatch",
+   "live_title": "Electronic communication and negative binding cooperativity in diborylated bithiophenes.",
+   "identity_words": [
+    "orange",
+    "sinensis",
+    "blood",
+    "fruit",
+    "morosil",
+    "juice"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "blood_orange_extract",
+   "pmid": "26400477",
+   "status": "mismatch",
+   "live_title": "Controlled release of glaucocalyxin - a self-nanoemulsifying system from osmotic pump tablets with enhanced bioavailability.",
+   "identity_words": [
+    "orange",
+    "sinensis",
+    "blood",
+    "fruit",
+    "morosil",
+    "juice"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "epigallocatechin",
+   "pmid": "29069445",
+   "status": "mismatch",
+   "live_title": "TCSBN: a database of tissue and cancer specific biological networks.",
+   "identity_words": [
+    "epigallocatechin",
+    "gallocatechin",
+    "unspecified"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "yerba_mate",
+   "pmid": "25538068",
+   "status": "mismatch",
+   "live_title": "Angelica sinensis and osteoarthritis: a natural therapeutic link?",
+   "identity_words": [
+    "yerba",
+    "leaves",
+    "mate",
+    "paraguariensis",
+    "extract",
+    "ilex"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "dill",
+   "pmid": "24847471",
+   "status": "mismatch",
+   "live_title": "Rapid detection of predation of Escherichia coli O157:H7 and sorting of bacterivorous Tetrahymena by flow cytometry.",
+   "identity_words": [
+    "seed",
+    "graveolens",
+    "parts",
+    "weed",
+    "anethum",
+    "herb"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "salacia",
+   "pmid": "29656413",
+   "status": "mismatch",
+   "live_title": "Influence of thermal treatment on the characteristics of major oyster allergen Cra g 1 (tropomyosin).",
+   "identity_words": [
+    "saptrangi",
+    "salacia",
+    "metavive",
+    "chinensis",
+    "extract",
+    "unspecified"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "touchi_extract",
+   "pmid": "15199382",
+   "status": "mismatch",
+   "live_title": "Screening of the ARX gene in 682 retarded males.",
+   "identity_words": [
+    "aspergillus",
+    "soybean",
+    "oryzae",
+    "fermented",
+    "extract",
+    "unspecified"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "barley_grass",
+   "pmid": "29949890",
+   "status": "mismatch",
+   "live_title": "The Pattern of Complementary Foods in American Infants and Children Aged 0⁻5 Years Old-A Cross-Sectional Analysis of Data from the NHANES 2011⁻2014.",
+   "identity_words": [
+    "barley",
+    "powder",
+    "vulgare",
+    "organic",
+    "hordeum",
+    "grass"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "calcium_d_glucarate",
+   "pmid": "2023925",
+   "status": "mismatch",
+   "live_title": "Epidermis as the source of ecdysone in an argasid tick.",
+   "identity_words": [
+    "glucaric",
+    "acid",
+    "calcium",
+    "anhydrous",
+    "salt",
+    "glucarate"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "isatis",
+   "pmid": "19146932",
+   "status": "mismatch",
+   "live_title": "The developmentally-regulated Smoc2 gene is repressed by Aryl-hydrocarbon receptor (Ahr) signaling.",
+   "identity_words": [
+    "radix",
+    "dyer's",
+    "root",
+    "indigotica",
+    "isatis",
+    "woad"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "7_keto_dhea",
+   "pmid": "17227968",
+   "status": "mismatch",
+   "live_title": "MRI contrast agents may pose risk for patients with kidney disease.",
+   "identity_words": [
+    "metabolite",
+    "dhea",
+    "unspecified",
+    "acetate",
+    "acetyl",
+    "oxodehydroepiandrosterone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "7_keto_dhea",
+   "pmid": "10435590",
+   "status": "mismatch",
+   "live_title": "Signaling through the antigen receptor of B lymphocytes activates a p53-independent pathway of c-Myc-induced apoptosis.",
+   "identity_words": [
+    "metabolite",
+    "dhea",
+    "unspecified",
+    "acetate",
+    "acetyl",
+    "oxodehydroepiandrosterone"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "cascara_sagrada",
+   "pmid": "22982073",
+   "status": "mismatch",
+   "live_title": "Coupling of UDP-glucuronosyltransferases and multidrug resistance-associated proteins is responsible for the intestinal disposition and poor bioavailability of emodin.",
+   "identity_words": [
+    "sacred",
+    "cascara",
+    "sagrada",
+    "powder",
+    "extract",
+    "bark"
+   ]
+  },
+  {
+   "file": "ingredient_quality_map.json",
+   "entry_id": "cayenne_pepper",
+   "pmid": "6528310",
+   "status": "mismatch",
+   "live_title": "Antiplatelet effect of capsaicin.",
+   "identity_words": [
+    "capsicum",
+    "powder",
+    "fruit",
+    "pepper",
+    "cayenne",
+    "extract"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "african_geranium",
+   "pmid": "18425868",
+   "status": "mismatch",
+   "live_title": "House dust mite control measures for asthma.",
+   "identity_words": [
+    "tuber",
+    "root",
+    "geranium",
+    "african",
+    "sidoides",
+    "extract"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "beet_root",
+   "pmid": "28983845",
+   "status": "mismatch",
+   "live_title": "Correction to: Oxidizable Phenolic Concentrations Do Not Affect Development and Survival of Paropsis Atomaria Larvae Eating Eucalyptus Foliage.",
+   "identity_words": [
+    "root",
+    "powder",
+    "beetroot",
+    "extract",
+    "beet",
+    "beta"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "boswellia_serrata_resin",
+   "pmid": "21110389",
+   "status": "mismatch",
+   "live_title": "Application of liquid chromatography-tandem mass spectrometry method for the simultaneous quantitative analysis of propentofylline and its chiral metabolite M1 in rats.",
+   "identity_words": [
+    "serrata",
+    "boswellia",
+    "indian",
+    "resin",
+    "frankincense"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "cranberry",
+   "pmid": "23440782",
+   "status": "mismatch",
+   "live_title": "Vitamin C for preventing and treating the common cold.",
+   "identity_words": [
+    "powder",
+    "vaccinium",
+    "organic",
+    "fruit",
+    "puree",
+    "extract"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "devils_claw_tuber",
+   "pmid": "14669258",
+   "status": "mismatch",
+   "live_title": "Effect of Nigella sativa (black seed) on subjective feeling in patients with allergic diseases.",
+   "identity_words": [
+    "tuber",
+    "claw",
+    "harpagophytum",
+    "devil's",
+    "procumbens",
+    "devils"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "fenugreek_seed",
+   "pmid": "20676249",
+   "status": "mismatch",
+   "live_title": "Providing more choices for those who depend on ventilators.",
+   "identity_words": [
+    "seed",
+    "trigonella",
+    "powder",
+    "graecum",
+    "foenum",
+    "fenugreek"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "feverfew",
+   "pmid": "15257711",
+   "status": "mismatch",
+   "live_title": "Resonance-thrombography indices of the haemostatic process in relation to risk of incident coronary heart disease: 9 years follow-up in the Caerphilly Prospective Heart Disease Study.",
+   "identity_words": [
+    "freeze",
+    "parthenium",
+    "powder",
+    "herb",
+    "feverfew",
+    "dried"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "graviola",
+   "pmid": "15269786",
+   "status": "mismatch",
+   "live_title": "Ancient adaptive evolution of the primate antiviral DNA-editing enzyme APOBEC3G.",
+   "identity_words": [
+    "powder",
+    "muricata",
+    "soursop",
+    "graviola",
+    "extract",
+    "guanabana"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "guava",
+   "pmid": "20170471",
+   "status": "mismatch",
+   "live_title": "General Practice Super Clinics - how will they meet their educational objectives?",
+   "identity_words": [
+    "organic",
+    "psidium",
+    "fruit",
+    "guava",
+    "guajava",
+    "extract"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "milk_thistle_seed",
+   "pmid": "17127537",
+   "status": "mismatch",
+   "live_title": "Is caffeine addictive?--a review of the literature.",
+   "identity_words": [
+    "seed",
+    "thistle",
+    "powder",
+    "silybum",
+    "marianum",
+    "milk"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "nigella",
+   "pmid": "28068824",
+   "status": "mismatch",
+   "live_title": "Three-dimensional power Doppler ultrasound in the early assessment of response to concurrent chemo-radiotherapy for advanced cervical cancer.",
+   "identity_words": [
+    "seed",
+    "cumin",
+    "sativa",
+    "kalonji",
+    "organic",
+    "black"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "polypodium_leucotomos",
+   "pmid": "25064166",
+   "status": "mismatch",
+   "live_title": "What is \"masked syndrome of inappropriate antidiuretic hormone?\" Is it an \"isonatremic syndrome?\".",
+   "identity_words": [
+    "fernblock",
+    "extract",
+    "aerial",
+    "parts",
+    "polypodium",
+    "leucotomos"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "pomegranate",
+   "pmid": "22648174",
+   "status": "mismatch",
+   "live_title": "Dietary supplementation with methyl donors reduces fatty liver and modifies the fatty acid synthase DNA methylation profile in rats fed an obesogenic diet.",
+   "identity_words": [
+    "powder",
+    "punica",
+    "fruit",
+    "granatum",
+    "pomegrante",
+    "juice"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "prune",
+   "pmid": "21681165",
+   "status": "mismatch",
+   "live_title": "Baseline simple and complex reaction times in female compared to male boxers.",
+   "identity_words": [
+    "powder",
+    "domestica",
+    "prunus",
+    "prune",
+    "plum",
+    "dried"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "rose_hips",
+   "pmid": "18326603",
+   "status": "mismatch",
+   "live_title": "Effect of cereal test breakfasts differing in glycemic index and content of indigestible carbohydrates on daylong glucose tolerance in healthy subjects.",
+   "identity_words": [
+    "hips",
+    "rose",
+    "fruit",
+    "rosehip",
+    "canina",
+    "extract"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "tart_cherry_fruit",
+   "pmid": "23075559",
+   "status": "mismatch",
+   "live_title": "Impact of milk consumption and resistance training on body composition of female athletes.",
+   "identity_words": [
+    "cherry",
+    "powder",
+    "cerasus",
+    "fruit",
+    "puree",
+    "montmorency"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "tylophora_leaf",
+   "pmid": "18288292",
+   "status": "mismatch",
+   "live_title": "Placental implications of peroxisome proliferator-activated receptors in gestation and parturition.",
+   "identity_words": [
+    "leaf",
+    "extract",
+    "indica",
+    "tylophora"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "valerian_root",
+   "pmid": "16619700",
+   "status": "mismatch",
+   "live_title": "Pancreatic duct rupture in a 26-year-old patient.",
+   "identity_words": [
+    "root",
+    "powder",
+    "valeriana",
+    "valerian",
+    "officinalis",
+    "heal"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "white_willow_bark",
+   "pmid": "11201053",
+   "status": "mismatch",
+   "live_title": "Successful separation of apoptosis and necrosis pathways in HaCaT keratinocyte cells induced by UVB irradiation.",
+   "identity_words": [
+    "willow",
+    "alba",
+    "purple",
+    "bark",
+    "ext.",
+    "purpurea"
+   ]
+  },
+  {
+   "file": "botanical_ingredients.json",
+   "entry_id": "russian_tarragon",
+   "pmid": "22034519",
+   "status": "mismatch",
+   "live_title": "Review of the NICE guidance on bacterial meningitis and meningococcal septicaemia.",
+   "identity_words": [
+    "tarragon",
+    "artemisia",
+    "russian",
+    "extract",
+    "dracunculus"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "astaxanthin_haematococcus_pluvialis",
+   "pmid": "21962237",
+   "status": "mismatch",
+   "live_title": "Inhibition of TLR8- and TLR4-induced Type I IFN induction by alcohol is different from its effects on inflammatory cytokine production in monocytes.",
+   "identity_words": [
+    "astaxanthin",
+    "zanthin",
+    "microalgal",
+    "algae",
+    "pluvialis",
+    "bioastin"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "astazine",
+   "pmid": "21962237",
+   "status": "mismatch",
+   "live_title": "Inhibition of TLR8- and TLR4-induced Type I IFN induction by alcohol is different from its effects on inflammatory cytokine production in monocytes.",
+   "identity_words": [
+    "astazine",
+    "astaferm"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "bil_max",
+   "pmid": "15642341",
+   "status": "mismatch",
+   "live_title": "AtNTRB is the major mitochondrial thioredoxin reductase in Arabidopsis thaliana.",
+   "identity_words": [
+    "concentrate",
+    "bilberry"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "bilberry",
+   "pmid": "21660670",
+   "status": "mismatch",
+   "live_title": "A systematic review with meta-analysis of the effect of low-level laser therapy (LLLT) in cancer therapy-induced oral mucositis.",
+   "identity_words": [
+    "bilberry",
+    "vaccinium",
+    "fruit",
+    "extract",
+    "standardized",
+    "anthocyanins"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "blue_max",
+   "pmid": "22376060",
+   "status": "mismatch",
+   "live_title": "Sufentanil versus fentanyl: efficacy and patient satisfaction with intrathecal pain management.",
+   "identity_words": [
+    "concentrate",
+    "blue",
+    "blueberry"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "boswellia",
+   "pmid": "21679876",
+   "status": "mismatch",
+   "live_title": "Maimonides: part 1--The man and his writings.",
+   "identity_words": [
+    "serrata",
+    "resin",
+    "bosclear",
+    "acids",
+    "standardized",
+    "boswellia"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "boswellia",
+   "pmid": "18667066",
+   "status": "mismatch",
+   "live_title": "Predictors of adherence to antiretroviral therapy among HIV-infected persons: a prospective study in Southwest Ethiopia.",
+   "identity_words": [
+    "serrata",
+    "resin",
+    "bosclear",
+    "acids",
+    "standardized",
+    "boswellia"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "chromax",
+   "pmid": "16823477",
+   "status": "mismatch",
+   "live_title": "Inflammation and insulin resistance.",
+   "identity_words": [
+    "cromax",
+    "chromax"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "coffeeberry",
+   "pmid": "24013626",
+   "status": "mismatch",
+   "live_title": "Role for cis-acting RNA sequences in the temperature-dependent expression of the multiadhesive lig proteins in Leptospira interrogans.",
+   "identity_words": [
+    "coffee",
+    "chlorogenic",
+    "acids",
+    "fruit",
+    "standardized",
+    "whole"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "neurofactor",
+   "pmid": "24013626",
+   "status": "mismatch",
+   "live_title": "Role for cis-acting RNA sequences in the temperature-dependent expression of the multiadhesive lig proteins in Leptospira interrogans.",
+   "identity_words": [
+    "coffee",
+    "fruit",
+    "whole",
+    "extract",
+    "coffeeberry",
+    "neurofactor"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "cognigrape",
+   "pmid": "28552883",
+   "status": "mismatch",
+   "live_title": "SEL1L-dependent Substrates Require Derlin2/3 and Herp1/2 for Endoplasmic Reticulum-associated Degradation.",
+   "identity_words": [
+    "seed",
+    "grape",
+    "standardized",
+    "cognitive",
+    "extract",
+    "cognigrape"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "cognigrape",
+   "pmid": "28391595",
+   "status": "mismatch",
+   "live_title": "Human METTL12 is a mitochondrial methyltransferase that modifies citrate synthase.",
+   "identity_words": [
+    "seed",
+    "grape",
+    "standardized",
+    "cognitive",
+    "extract",
+    "cognigrape"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "cordyceps",
+   "pmid": "18197785",
+   "status": "mismatch",
+   "live_title": "Gene expression in pulmonary fibrosis.",
+   "identity_words": [
+    "sinensis",
+    "mushroom",
+    "mycelium",
+    "fungus",
+    "polysaccharides",
+    "standardized"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "cordyceps_militaris",
+   "pmid": "28012484",
+   "status": "mismatch",
+   "live_title": "Blue.",
+   "identity_words": [
+    "body",
+    "0.3%",
+    "standardized",
+    "0.1%",
+    "cordyceps",
+    "extract"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "cordyceps_militaris",
+   "pmid": "23538328",
+   "status": "mismatch",
+   "live_title": "MDCT angiography to evaluate the therapeutic effect of PTVE for esophageal varices.",
+   "identity_words": [
+    "body",
+    "0.3%",
+    "standardized",
+    "0.1%",
+    "cordyceps",
+    "extract"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "cran_max",
+   "pmid": "12010289",
+   "status": "mismatch",
+   "live_title": "US-guided fine-needle aspiration biopsy of thyroid nodules.",
+   "identity_words": [
+    "cran",
+    "cranberry",
+    "concentrate"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "eps_7630",
+   "pmid": "24199972",
+   "status": "mismatch",
+   "live_title": "Valerian/lemon balm use for sleep disorders during menopause.",
+   "identity_words": [
+    "7630"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "floraglo",
+   "pmid": "23644932",
+   "status": "mismatch",
+   "live_title": "Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial.",
+   "identity_words": [
+    "floraglo"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "flowens",
+   "pmid": "27530809",
+   "status": "mismatch",
+   "live_title": "Adaptive deep brain stimulation for Parkinson's disease demonstrates reduced speech side effects compared to conventional stimulation in the acute setting.",
+   "identity_words": [
+    "organic",
+    "whole",
+    "flowens",
+    "cranberry"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "fruitex_b_calcium_fructoborate",
+   "pmid": "21669589",
+   "status": "mismatch",
+   "live_title": "Nutritional adequacy of energy restricted diets for young obese women.",
+   "identity_words": [
+    "calcium",
+    "fructoborate",
+    "fruitex"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "ginger_extract",
+   "pmid": "28200047",
+   "status": "not_found",
+   "live_title": "NOT FOUND",
+   "identity_words": [
+    "gingerol",
+    "root",
+    "gingerols",
+    "complex",
+    "powder",
+    "standardized"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "grape_seed",
+   "pmid": "17190620",
+   "status": "mismatch",
+   "live_title": "The CASH (color, architecture, symmetry, and homogeneity) algorithm for dermoscopy.",
+   "identity_words": [
+    "seed",
+    "grape",
+    "standardized",
+    "vinifera",
+    "masquelier's",
+    "grapeseed"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "grape_seed",
+   "pmid": "12867234",
+   "status": "mismatch",
+   "live_title": "Older Asian Americans and Pacific Islanders dying of cancer use hospice less frequently than older white patients.",
+   "identity_words": [
+    "seed",
+    "grape",
+    "standardized",
+    "vinifera",
+    "masquelier's",
+    "grapeseed"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "green_coffee_bean",
+   "pmid": "21861914",
+   "status": "mismatch",
+   "live_title": "Two-year home-based nocturnal noninvasive ventilation added to rehabilitation in chronic obstructive pulmonary disease patients: a randomized controlled trial.",
+   "identity_words": [
+    "slimpure",
+    "coffee",
+    "bean",
+    "chlorogenic",
+    "acids",
+    "standardized"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "life_s_dha",
+   "pmid": "18689548",
+   "status": "mismatch",
+   "live_title": "Immunoassay for human serum hepcidin.",
+   "identity_words": [
+    "life'sdha",
+    "life's"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "sea_buckthorn_seed_oil",
+   "pmid": "18689548",
+   "status": "mismatch",
+   "live_title": "Immunoassay for human serum hepcidin.",
+   "identity_words": [
+    "buckthorn",
+    "seed",
+    "alpha",
+    "acids",
+    "kernel",
+    "acid"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "lutemax_2020",
+   "pmid": "28494836",
+   "status": "mismatch",
+   "live_title": "Pulmonary Toxicity in Rats Caused by Exposure to Intratracheal Instillation of SiO2 Nanoparticles.",
+   "identity_words": [
+    "2020",
+    "marigold",
+    "lutemax",
+    "extract",
+    "flower"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "lutemax_2020",
+   "pmid": "29144655",
+   "status": "not_found",
+   "live_title": "NOT FOUND",
+   "identity_words": [
+    "2020",
+    "marigold",
+    "lutemax",
+    "extract",
+    "flower"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "microactive_melatonin",
+   "pmid": "27535533",
+   "status": "mismatch",
+   "live_title": "Analysis of protein-coding genetic variation in 60,706 humans.",
+   "identity_words": [
+    "melatonin",
+    "microactive"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "nettle",
+   "pmid": "15211420",
+   "status": "mismatch",
+   "live_title": "Ethical listening as therapy.",
+   "identity_words": [
+    "dioica",
+    "root",
+    "silica",
+    "standardized",
+    "stinging",
+    "sitosterol"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "optiberry",
+   "pmid": "15050362",
+   "status": "mismatch",
+   "live_title": "Measurements of 60Co in spoons activated by neutrons during the JCO criticality accident at Tokai-mura in 1999.",
+   "identity_words": [
+    "opriberry",
+    "optiberry"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "optiberry",
+   "pmid": "16219800",
+   "status": "mismatch",
+   "live_title": "Stem cell transplantation with reduced-intensity conditioning for hemophagocytic lymphohistiocytosis.",
+   "identity_words": [
+    "opriberry",
+    "optiberry"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "pacran",
+   "pmid": "27013539",
+   "status": "mismatch",
+   "live_title": "Subtype-Specific Interactions and Prognosis in Cardiac Amyloidosis.",
+   "identity_words": [
+    "organic",
+    "whole",
+    "cranberry",
+    "pacran"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "pycnogenol",
+   "pmid": "22260513",
+   "status": "mismatch",
+   "live_title": "The effect of nitric-oxide-related supplements on human performance.",
+   "identity_words": [
+    "french",
+    "bark",
+    "pycnogenol",
+    "maritime",
+    "pinus",
+    "extract"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "sea_buckthorn",
+   "pmid": "20429767",
+   "status": "mismatch",
+   "live_title": "Breast plasmacytoma.",
+   "identity_words": [
+    "buckthorn",
+    "acid",
+    "fruit",
+    "berry",
+    "pulp",
+    "standardized"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "sea_buckthorn",
+   "pmid": "24787677",
+   "status": "mismatch",
+   "live_title": "A Methodological Approach to Quantifying Plyometric Intensity.",
+   "identity_words": [
+    "buckthorn",
+    "acid",
+    "fruit",
+    "berry",
+    "pulp",
+    "standardized"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "sea_buckthorn_seed_oil",
+   "pmid": "19883366",
+   "status": "mismatch",
+   "live_title": "Bone modeling and remodeling.",
+   "identity_words": [
+    "buckthorn",
+    "seed",
+    "alpha",
+    "acids",
+    "kernel",
+    "acid"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "sharp_ps_green",
+   "pmid": "24345046",
+   "status": "mismatch",
+   "live_title": "Resveratrol in peanuts.",
+   "identity_words": [
+    "green",
+    "sharp"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "slendesta",
+   "pmid": "22647284",
+   "status": "not_found",
+   "live_title": "NOT FOUND",
+   "identity_words": [
+    "potato",
+    "protein",
+    "slendesta",
+    "proteinase",
+    "extract",
+    "inhibitor"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "sunactive_iron",
+   "pmid": "19674817",
+   "status": "mismatch",
+   "live_title": "Synthesis, anticonvulsant and CNS depressant activity of some new bioactive 1-(4-substituted-phenyl)-3-(4-oxo-2-phenyl/ethyl-4H-quinazolin-3-yl)-urea.",
+   "identity_words": [
+    "sunactive",
+    "iron"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "thermosil",
+   "pmid": "18046594",
+   "status": "mismatch",
+   "live_title": "Comparison of low fat and low carbohydrate diets on circulating fatty acid composition and markers of inflammation.",
+   "identity_words": [
+    "thermosil"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "turkey_tail",
+   "pmid": "22972503",
+   "status": "mismatch",
+   "live_title": "Expression of the molecular chaperone αB-crystallin in infiltrating ductal breast carcinomas and the significance thereof: an immunohistochemical and proteomics-based strategy.",
+   "identity_words": [
+    "mushroom",
+    "polysaccharides",
+    "standardized",
+    "turkey",
+    "coriolus",
+    "polysaccharide"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "turmipure_gold",
+   "pmid": "31935893",
+   "status": "mismatch",
+   "live_title": "A Wrapper Feature Selection Algorithm: An Emotional Assessment Using Physiological Recordings from Wearable Sensors.",
+   "identity_words": [
+    "gold",
+    "turmipure"
+   ]
+  },
+  {
+   "file": "standardized_botanicals.json",
+   "entry_id": "uniflex",
+   "pmid": "19185917",
+   "status": "mismatch",
+   "live_title": "Impact on survival of different treatments for myelodysplastic syndromes (MDS).",
+   "identity_words": [
+    "uniflex"
+   ]
+  },
+  {
+   "file": "harmful_additives.json",
+   "entry_id": "ADD_CARAMEL_COLOR",
+   "pmid": "17342198",
+   "status": "mismatch",
+   "live_title": "Toxicology and carcinogenesis studies of 4-methylimidazole (Cas No. 822-36-6) in F344/N rats and B6C3F1 mice (feed studies).",
+   "identity_words": [
+    "carmel",
+    "ammonia",
+    "powder",
+    "liquid",
+    "e150d",
+    "caramel"
+   ]
+  },
+  {
+   "file": "harmful_additives.json",
+   "entry_id": "ADD_FATTY_ACID_POLYGLYCEROL_ESTERS",
+   "pmid": "25731162",
+   "status": "mismatch",
+   "live_title": "Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome.",
+   "identity_words": [
+    "acids",
+    "esters",
+    "acid",
+    "e475",
+    "polyglycerol",
+    "fatty"
+   ]
+  },
+  {
+   "file": "harmful_additives.json",
+   "entry_id": "ADD_SYNTHETIC_B_VITAMINS",
+   "pmid": "22529856",
+   "status": "mismatch",
+   "live_title": "Circulating unmetabolized folic Acid: relationship to folate status and effect of supplementation.",
+   "identity_words": [
+    "vitamins",
+    "complex",
+    "synthetic",
+    "blend",
+    "vitamin"
+   ]
+  },
+  {
+   "file": "harmful_additives.json",
+   "entry_id": "ADD_YELLOW5",
+   "pmid": "17825405",
+   "status": "mismatch",
+   "live_title": "Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial.",
+   "identity_words": [
+    "lake",
+    "tartrazine",
+    "fd&c",
+    "e102",
+    "yellow",
+    "aluminum"
+   ]
+  },
+  {
+   "file": "harmful_additives.json",
+   "entry_id": "ADD_XYLITOL",
+   "pmid": "38814334",
+   "status": "mismatch",
+   "live_title": "Respiratory Depression Following Intraoperative Methadone: A Retrospective Cohort Study.",
+   "identity_words": [
+    "xylite",
+    "xylitol",
+    "e967",
+    "wood",
+    "birch",
+    "sugar"
+   ]
+  },
+  {
+   "file": "harmful_additives.json",
+   "entry_id": "ADD_POLYSORBATE_20",
+   "pmid": "25731862",
+   "status": "mismatch",
+   "live_title": "Predicting a change in the order of spring phenology in temperate forests.",
+   "identity_words": [
+    "polysorbate",
+    "e432",
+    "monolaurate",
+    "sorbitan",
+    "tween",
+    "polyoxyethylene"
+   ]
+  },
+  {
+   "file": "banned_recalled_ingredients.json",
+   "entry_id": "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
+   "pmid": "32927348",
+   "status": "mismatch",
+   "live_title": "Numerous long single-stranded DNAs produced by dual amplification reactions for electrochemical detection of exosomal microRNAs.",
+   "identity_words": [
+    "deterenol",
+    "isopropylnorsynephrine"
+   ]
+  },
+  {
+   "file": "synergy_cluster.json",
+   "entry_id": "omega3_niacin_lipid",
+   "pmid": "PMC10600480",
+   "status": "mismatch",
+   "live_title": "Nutrient synergy: definition, evidence, and future directions.",
+   "identity_words": [
+    "fish",
+    "support",
+    "niacin",
+    "omega",
+    "niacinamide",
+    "lipid"
+   ]
+  },
+  {
+   "file": "botanical_marker_contributions.json",
+   "entry_id": "japanese_knotweed",
+   "pmid": "34410415",
+   "status": "mismatch",
+   "live_title": "Response Surface Methodology to Optimize Supercritical Carbon Dioxide Extraction of Polygonum cuspidatum.",
+   "identity_words": [
+    "japanese",
+    "knotweed"
+   ]
+  }
+ ]
+}
