@@ -1082,3 +1082,10 @@ Will NOT create: another normalizer, fiber registry, title inference, inactive
 fallback, public/export field, status, verdict or app-side scoring rule.
 Commits: b42b5b39, a40880a9, 7cf610e1. Full fast and final fresh 12-brand
 acceptance remain pending; no push or release.
+
+Full fast checkpoint at tracked receipt head 7b055d5b: **16,527 passed,
+265 skipped, zero failures in 511.65 seconds**. Log:
+`~/pg_quality/candd/final_fast_7b055d5b.log`. The skip increase relative to the
+earlier checkpoint is explained by the current main test inventory and missing
+Node/local-review opt-ins listed in the report; it is not a failing gate.
+Final fresh 12-brand pipeline/export acceptance remains pending.
