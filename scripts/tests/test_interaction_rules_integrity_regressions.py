@@ -607,3 +607,21 @@ def test_guarana_sedative_rule_treats_guarana_as_a_stimulant():
         assert stale not in copy, stale
     assert "stimulant" in sedatives["alert_body"].lower()
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+ARICEPT_LABEL = (
+    "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?"
+    "setid=98e451e1-e4d7-4439-a675-c5457ba20975"
+)
+
+
+def test_huperzine_anticholinergic_rule_cites_ache_pharmacology_and_class_label():
+    rule = _rule("RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS")
+    anticholinergics = _sub_rule(rule, "drug_class_id", "anticholinergics")
+
+    # 19370686 is a Cochrane review of huperzine for vascular dementia.
+    assert anticholinergics["sources"] == [_pmid("25191267"), ARICEPT_LABEL]
+    assert anticholinergics["severity"] == "avoid"
+    assert "interfere with the activity of anticholinergic" in anticholinergics["mechanism"]
+    assert "toxidrome" not in anticholinergics["mechanism"]
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review

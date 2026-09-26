@@ -301,3 +301,17 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   "sedative effects of Mid 12 mg were only moderately antagonized by Caf 250 mg but not by Caf 125
   mg"; "the effects of zolpidem ... were not antagonized by Caf"; "Caf 300 mg increased plasma Mid at
   45 min". The old "rebound stimulation that disrupts sleep architecture" had no source; removed.
+
+## RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS — re-sourced (anticholinergics)
+
+- Ghost: **PMID 19370686** = "Huperzine A for vascular dementia" (Cochrane 2009): one 14-patient trial,
+  no MMSE benefit; nothing on acetylcholinesterase pharmacology or anticholinergic drugs.
+- **PMID 25191267** (Qian & Ke, Front Aging Neurosci 2014): "Huperzine A (HupA) is a natural inhibitor
+  of acetylcholinesterase (AChE) ... a licensed anti-AD drug in China and is available as a
+  nutraceutical in the US."
+- **ARICEPT (donepezil) prescribing information**, DailyMed setid 98e451e1-e4d7-4439-a675-c5457ba20975,
+  revised 12/2021, 7.1 Use with Anticholinergics: "Because of their mechanism of action, cholinesterase
+  inhibitors have the potential to interfere with the activity of anticholinergic medications."
+  Class-level statement; no huperzine-specific interaction study found.
+- Removed as unsourced: the combination "can result in cholinergic toxidrome (bronchospasm,
+  bradycardia, excessive secretions, miosis)".
