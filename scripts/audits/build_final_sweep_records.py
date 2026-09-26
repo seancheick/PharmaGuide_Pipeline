@@ -97,10 +97,10 @@ REVIEWED_NULL_UNFAVORABLE = {
         "sample_size": 0,
         "dose": "unspecified",
         "duration": "chronic",
-        "outcome": "FDA removed stimulant anthraquinone laxatives (Aloe ferox latex) from OTC GRASE status due to lack of safety data and potential carcinogenicity.",
+        "outcome": "FDA deemed the stimulant laxative ingredient aloe (including aloe extract and aloe flower extract) in OTC laxative drug products not generally recognized as safe and effective because the carcinogenicity data it requested in 1998 were not submitted.",
         "effect_direction": "negative",
         "exposure_values": [],
-        "decision": "FDA regulatory safety rule removed aloe latex stimulant anthraquinones from OTC status due to genotoxicity/tumorigenicity risks.",
+        "decision": "FDA's 2002 final rule (67 FR 31125) reclassified aloe to category II (not generally recognized as safe and effective) for OTC laxative drug products because the carcinogenicity data FDA requested were not submitted; the rule states no genotoxicity or tumorigenicity finding and applies to OTC drug products labeled for laxative use.",
     },
     "kavalactones": {
         "material_form": "Piper methysticum kavalactones",
