@@ -12,7 +12,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List
 
-from identity.safety import normalize_safety_signals
+from scoring_v4.gate_safety import resolve_safety_gate
 from scoring_v4.modules.generic_helpers import _safe_dict, _safe_list
 
 
@@ -138,14 +138,12 @@ _REGISTRY_ID_RE = re.compile(r"^[A-Z0-9_]+$")
 
 
 def _hard_failure_drivers(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """US-applicable, policy-eligible signals that zero the hygiene base.
+    """Concerns that survived the safety gate's policy and zero the hygiene base.
 
     One list decides the failure and explains it, so the explanation can never
     name a different cause than the one that removed the points."""
     drivers: List[Dict[str, Any]] = []
-    for sig in normalize_safety_signals(product):
-        if not sig.us_applicable or not (sig.policy_eligible or sig.review_required):
-            continue
+    for sig in resolve_safety_gate(product).ingredient_concerns:
         if sig.status not in _DRIVER_ORDER:
             continue
         name = (sig.evidence_text or "").strip() or None

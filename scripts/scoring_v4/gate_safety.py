@@ -35,10 +35,12 @@ The signal SOURCE is shared with v3, but the verdict policy here is v4-owned.
 from __future__ import annotations
 
 import json
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field, replace
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urlparse
 
 from inactive_ingredient_resolver import (
@@ -172,8 +174,10 @@ class SafetyResult:
     quarantine_required: bool = False
     quarantine_reason: Optional[str] = None
     review_records: List[Dict[str, Any]] = field(default_factory=list)
-    # Internal factual completion for the inactive Hygiene evaluator. These
-    # facts never alter gate verdicts or existing public warning projections.
+    # Factual completion of the ingredient assessment. These facts never alter
+    # gate verdicts or public warning projections. ingredient_concerns holds
+    # the signals that survived this gate's policy; the B0 penalty and the
+    # Safety/Hygiene base read them instead of re-interpreting raw signals.
     ingredient_assessment_complete: bool = False
     ingredient_assessment_errors: List[str] = field(default_factory=list)
     ingredient_concerns: List[SafetySignal] = field(default_factory=list)
@@ -1345,3 +1349,32 @@ def evaluate_safety_gate(
         result.matched_substance = None
         result.safety_decision = None
     return result
+
+
+_ACTIVE_RESULT: ContextVar[Optional[SafetyResult]] = ContextVar(
+    "v4_active_safety_gate_result",
+    default=None,
+)
+
+
+@contextmanager
+def safety_gate_scope(result: SafetyResult) -> Iterator[None]:
+    """Share the gate's one evaluation with the routed module.
+
+    Production scoring opens this scope once per product, so the B0 penalty
+    and the Safety/Hygiene base consume the same policy-filtered concerns as
+    the verdict instead of applying a second policy to raw signals.
+    """
+    token = _ACTIVE_RESULT.set(result)
+    try:
+        yield
+    finally:
+        _ACTIVE_RESULT.reset(token)
+
+
+def resolve_safety_gate(product: Dict[str, Any]) -> SafetyResult:
+    """Return the production-scoped result, or evaluate for a direct caller."""
+    active = _ACTIVE_RESULT.get()
+    if active is not None:
+        return active
+    return evaluate_safety_gate(product)
