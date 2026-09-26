@@ -111,3 +111,37 @@ def test_top_level_non_scorable_row_stays_out(enricher):
     }
     profile = enricher._collect_interaction_profile(_product([], [row]))
     assert not _hits(profile, "RULE_IQM_L_TRYPTOPHAN")
+
+
+def _hit(profile, rule_id, key, target):
+    for alert in _hits(profile, rule_id):
+        for hit in alert["condition_hits"] + alert["drug_class_hits"]:
+            if hit.get(key) == target:
+                return hit
+    return None
+
+
+def test_presence_rule_with_a_dose_tier_still_flags_when_the_amount_is_unknown(enricher):
+    """Sean, 2026-09-26: a presence rule always flags; only a dose-dependent rule
+    falls back to the missing-amount setting. Licorice in pregnancy is presence
+    (avoid, contraindicated from 71 mg); an unquantified child must not hide it."""
+    child = _child("Licorice Root Extract", "licorice", "ingredientRows[2].nestedRows[3]")
+    profile = enricher._collect_interaction_profile(_product([], [child]))
+    pregnancy = _hit(profile, "RULE_IQM_LICORICE_HYPERTENSION", "condition_id", "pregnancy")
+    assert pregnancy["severity"] == "avoid"
+    decision = pregnancy["dose_decision"]
+    assert decision["evaluation_status"] == "amount_unknown"
+    assert decision["consumer_disposition"] == "block"
+    assert decision["decision_rule"]["amount_missing_disposition"] == "block"
+    # The dose-dependent sub-rules of the same rule keep the missing-amount default.
+    hypertension = _hit(profile, "RULE_IQM_LICORICE_HYPERTENSION", "condition_id", "hypertension")
+    assert hypertension["dose_decision"]["consumer_disposition"] == "suppress"
+
+
+def test_authored_missing_amount_policy_still_wins_over_presence(enricher):
+    """Beta-carotene's smoker tiers carry Dr. Pham's explicit amount-missing
+    'suppress' (policy 2026-09-21): an authored choice is kept."""
+    child = _child("Beta-Carotene", "beta_carotene", "ingredientRows[1].nestedRows[0]")
+    profile = enricher._collect_interaction_profile(_product([], [child]))
+    smoker = _hit(profile, "RULE_IQM_BETA_CAROTENE_LUNG_CANCER", "condition_id", "current_smoker")
+    assert smoker is None or smoker["dose_decision"]["consumer_disposition"] == "suppress"

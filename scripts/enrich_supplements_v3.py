@@ -18372,7 +18372,33 @@ class SupplementEnricherV3:
                 return converted, "label_standardization"
         return None, None
 
-    def _dose_decision_rule(self, threshold: Dict[str, Any]) -> Dict[str, Any]:
+    @staticmethod
+    def _amount_missing_disposition(
+        policy: Dict[str, Any], materiality: Optional[str], severity: Optional[str]
+    ) -> str:
+        """What a consumer sees when the label gives no amount for this rule.
+
+        An authored policy wins. Otherwise a rule that fires on presence stays
+        visible (Sean, 2026-09-26): a dose tier can only refine it once the
+        amount is known. Only a dose-dependent rule falls back to suppress.
+        """
+        authored = str(policy.get("amount_missing_disposition") or "").strip().lower()
+        if authored:
+            return authored
+        if str(materiality or "").strip().lower() == "presence":
+            return (
+                "block"
+                if str(severity or "").strip().lower() in {"avoid", "contraindicated"}
+                else "review"
+            )
+        return "suppress"
+
+    def _dose_decision_rule(
+        self,
+        threshold: Dict[str, Any],
+        materiality: Optional[str] = None,
+        severity: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """Emit the complete, pipeline-owned policy contract for a threshold."""
         return {
             "basis": str(threshold.get("basis") or "per_day").strip().lower(),
@@ -18385,9 +18411,9 @@ class SupplementEnricherV3:
             "consumer_disposition_if_not_met": str(
                 threshold.get("consumer_disposition_if_not_met") or "suppress"
             ).strip().lower(),
-            "amount_missing_disposition": str(
-                threshold.get("amount_missing_disposition") or "suppress"
-            ).strip().lower(),
+            "amount_missing_disposition": self._amount_missing_disposition(
+                threshold, materiality, severity
+            ),
             "unknown_form_disposition": str(
                 threshold.get("unknown_form_disposition") or "suppress"
             ).strip().lower(),
@@ -18402,6 +18428,7 @@ class SupplementEnricherV3:
         ingredient: Dict[str, Any],
         servings_per_day_max: float,
         base_severity: str,
+        materiality: Optional[str] = None,
     ) -> Tuple[str, Optional[Dict[str, Any]]]:
         relevant = []
         for threshold in thresholds:
@@ -18425,12 +18452,12 @@ class SupplementEnricherV3:
                 "reason": "missing_or_invalid_dose",
                 "evaluation_status": "amount_unknown",
                 "clinical_severity": base_severity,
-                "consumer_disposition": str(
-                    policy.get("amount_missing_disposition") or "suppress"
-                ).strip().lower(),
+                "consumer_disposition": self._amount_missing_disposition(
+                    policy, materiality, base_severity
+                ),
                 "release_blocking": False,
                 "dose_evaluation": None,
-                "decision_rule": self._dose_decision_rule(policy),
+                "decision_rule": self._dose_decision_rule(policy, materiality, base_severity),
             }
 
         severity_candidate = base_severity
@@ -18465,7 +18492,7 @@ class SupplementEnricherV3:
             # Keep the source policy attached even if a label cannot be
             # evaluated.  The release audit and Flutter must never have to
             # infer a disposition from severity alone.
-            details["decision_rule"] = self._dose_decision_rule(threshold)
+            details["decision_rule"] = self._dose_decision_rule(threshold, materiality, base_severity)
 
             amount_basis = quantity * (servings_per_day_max if basis == "per_day" else 1.0)
             form_context = self._conversion_form_context(ingredient)
@@ -18551,7 +18578,7 @@ class SupplementEnricherV3:
                 ),
                 "form_context": form_context or None,
             }
-            details["decision_rule"] = self._dose_decision_rule(threshold)
+            details["decision_rule"] = self._dose_decision_rule(threshold, materiality, base_severity)
             details["consumer_disposition"] = str(
                 threshold.get(
                     "consumer_disposition_if_met"
@@ -19095,6 +19122,7 @@ class SupplementEnricherV3:
                         ingredient=ingredient,
                         servings_per_day_max=servings_per_day_max,
                         base_severity=severity,
+                        materiality=cond_rule.get("materiality"),
                     )
                     if adjusted_severity in severity_weights:
                         severity = adjusted_severity
@@ -19175,6 +19203,7 @@ class SupplementEnricherV3:
                         ingredient=ingredient,
                         servings_per_day_max=servings_per_day_max,
                         base_severity=severity,
+                        materiality=drug_rule.get("materiality"),
                     )
                     if adjusted_severity in severity_weights:
                         severity = adjusted_severity
