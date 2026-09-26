@@ -280,6 +280,27 @@ def test_two_plants_keep_their_own_interaction_cards() -> None:
 
 
 def test_one_plant_different_severities_stay_separate() -> None:
-    avoid = _interaction_card("raw St. John's Wort powder", "st_john_s_wort", "caution")
+    caution = _interaction_card("raw St. John's Wort powder", "st_john_s_wort", "caution")
     monitor = _interaction_card("standardized St. John's Wort extract", "st_johns_wort", "monitor")
-    assert len(_dedup_warnings([avoid, monitor])) == 2
+    assert len(_dedup_warnings([caution, monitor])) == 2
+
+
+def _dosed_card(name: str, floor_status: str, disposition: str) -> dict:
+    card = _interaction_card(name, "stinging_nettle", "caution")
+    card.update({
+        "source_rule_id": "RULE_IQM_STINGING_NETTLE_DIABETES", "drug_class_id": "hypoglycemics",
+        "dose_floor_status": floor_status, "dose_decision": {"consumer_disposition": disposition},
+    })
+    return card
+
+
+def test_a_below_floor_row_never_displaces_the_row_that_fires() -> None:
+    """The app hides a below-floor card of a non-hard severity. Merging it with
+    the same plant's at-or-above card could keep the hidden one."""
+    below = _dosed_card("Nettle leaf powder", "below", "suppress")
+    above = _dosed_card("Stinging Nettle Leaf Extract", "at_or_above", "review")
+    kept = _dedup_warnings([below, above])
+    assert [(c["dose_floor_status"], c["dose_decision"]["consumer_disposition"]) for c in kept] == [
+        ("below", "suppress"), ("at_or_above", "review"),
+    ]
+    assert len(_dedup_warnings([above, dict(above, ingredient_name="Nettle leaf")])) == 1

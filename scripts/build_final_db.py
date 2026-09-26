@@ -3553,6 +3553,15 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
     subject = safe_str(
         w.get("matched_rule_id") or interaction_subject or w.get("ingredient_name")
     ).casefold()
+    # Rows of one plant can sit on either side of a dose floor. The app hides
+    # a below-floor card of a non-hard severity, so only cards that share a
+    # dose state merge; otherwise the hidden row could displace the one that fires.
+    dose_state = (
+        _norm(w.get("dose_floor_status"))
+        + _norm(safe_dict(w.get("dose_decision")).get("consumer_disposition"))
+        if interaction_subject
+        else ()
+    )
     if subject and (
         display_mode == "critical"
         or severity in {"contraindicated", "avoid", "critical", "blocked"}
@@ -3563,6 +3572,7 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
             _norm(w.get("condition_id") or w.get("condition_ids")),
             _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
             _norm(w.get("ban_context")),
+            dose_state,
         )
 
     # Per-ingredient identity: include matched_rule_id (when present) or
@@ -3578,6 +3588,7 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
         _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
         _norm(w.get("source")),
         _norm(w.get("matched_rule_id") or interaction_subject or w.get("ingredient_name")),
+        dose_state,
     )
 
 
