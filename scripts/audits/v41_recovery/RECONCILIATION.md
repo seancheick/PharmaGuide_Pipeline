@@ -389,3 +389,28 @@ safety are untouched. Omega record audit date corrected (metadata only).
 All 210 focused owner, archetype, source, omega and readiness checks passed.
 Source projection equality was checked on all 1,353 frozen products: identical
 before/after the ownership-only extraction, so the final score replay remains valid.
+
+### Final acceptance — requested items 1 and 2 (2026-09-26)
+
+Code checkpoint: `2b9a0454`, existing `v41-recovery` branch.
+`scripts/test.sh fast`: **16,333 passed, 171 skipped, 0 failed**, 432.96 seconds.
+Log: `~/pg_quality/candd/final_ownership_fast.log`. This supersedes the failed
+intermediate gate; no code changed during this successful run.
+
+Final fixed-input comparison: 1,353 products; exactly 14 sports Evidence changes,
+no other pillar changes, no omega score changes, and no changes to route, status,
+safety, completeness or readiness. Receipt:
+`~/pg_quality/candd/runs/protein_omega_verified_diff_20260926.json`.
+The final ownership extraction was additionally equal on all 1,353 inputs.
+These are sample/stored-input results, not a full fresh-corpus release validation.
+
+The 14 reductions require source-family evidence review before release: three
+egg-containing blends, two hemp/rice, seven plant/alternative-source products,
+and two whey labels without usable source declarations in these inputs. Do not
+restore generic protein aliases or create product exceptions to hide those gaps.
+
+Items 1/2 are implemented and verified; the overall calibration is not complete.
+Continue existing generic/fiber Evidence ownership, iron-oxide/non-delivering Dose,
+botanical exposure/basis and population-reference work, then validate integration
+with fresh representative inputs and export/Flutter consumers. No push, merge,
+release, new worktree, or new public contract was performed for this batch.
