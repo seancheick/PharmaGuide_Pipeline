@@ -58,3 +58,27 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   inhibits the activity of mitochondrial NADH-ubiquinone oxidoreductase."
 - The source label named a different paper (Folkers K, lovastatin, PNAS 1990) while its URL pointed to
   12392188. The record is already suppressed (citation_review_status needs_revision).
+
+## RULE_INGREDIENT_GINSENG: anticoagulant dose-threshold citation
+- PMID 22137021 (efetch 2026-09-26): "Intensity-modulated radiation therapy with concurrent
+  chemotherapy as preoperative treatment for localized gastric adenocarcinoma." No ginseng, no
+  warfarin: a ghost reference in `dose_thresholds[anticoagulants].note`.
+- PMID 15238367 (Yuan CS et al. Ann Intern Med 2004;141(1):23-7, DOI 10.7326/0003-4819-141-1-200407060-00011,
+  efetch 2026-09-26): randomized, double-blind, placebo-controlled; 20 healthy volunteers; American
+  ginseng from week 2; "The peak INR statistically significantly decreased after 2 weeks of ginseng
+  administration"; INR AUC, peak plasma warfarin and warfarin AUC also reduced. MeSH: Panax,
+  Warfarin, International Normalized Ratio.
+- Applicability: IQM `ginseng` includes the form "american ginseng (panax quinquefolius)". Panax
+  ginseng studies found no warfarin effect (Jiang X et al. Br J Clin Pharmacol 2004;57(5):592-9,
+  healthy subjects; Lee YH et al. Int J Cardiol 2010;145(2):275-6, Korean red ginseng after valve
+  replacement), as tabulated in Choi S et al. PLoS One 2017 (PMC5552262). The rule's mechanism
+  already calls the evidence mixed.
+- Species limit, from the article's online correspondence (acpjournals.org page opened by Sean
+  2026-09-26): Plotnikoff et al. (21 Jul 2004) note P. quinquefolius data are not applicable to other
+  Panax species; Yuan's reply (8 Sep 2004): "We did not extrapolate our data on American ginseng to
+  other species" and "Whether Asian ginseng interacts with warfarin remains to be tested." The note
+  names American ginseng for that reason; the threshold still gates every IQM ginseng form.
+- Dose: the abstract gives none. The publisher page is behind a bot check. A secondary review (EXCLI J
+  2014, PMC4464477) reports 0.5 g capsules "at the high end of the recommended dose range", not a daily
+  total. No source found supports ">1000 mg"; it is the authored threshold from e0978c2e (2026-04-27
+  dose-gating pass). Value and severities unchanged.

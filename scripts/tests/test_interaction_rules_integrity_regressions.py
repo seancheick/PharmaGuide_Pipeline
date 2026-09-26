@@ -1084,3 +1084,18 @@ def test_evening_primrose_dose_floor_rationale_matches_its_rabbit_source():
         assert "300 mg GLA" not in floor["rationale"], floor
         assert "bleeding time" not in floor["rationale"], floor
         assert "rabbit" in floor["rationale"], floor
+
+
+def test_ginseng_warfarin_threshold_cites_the_warfarin_trial_not_a_gastric_cancer_paper():
+    """PMID 22137021 is a preoperative IMRT study in gastric adenocarcinoma: no
+    ginseng, no warfarin. Yuan 2004 (PMID 15238367), an RCT of American ginseng
+    and warfarin, replaces it. The trial does not test a 1000 mg cut-off, so the
+    note must call that figure the authored threshold (receipt:
+    scripts/audits/pending_items_20260926/research.md)."""
+    assert "22137021" not in json.dumps(_rule("RULE_INGREDIENT_GINSENG"))
+    threshold = next(t for t in _rule("RULE_INGREDIENT_GINSENG")["dose_thresholds"]
+                     if t.get("target_id") == "anticoagulants")
+    assert threshold["value"] == 1000 and threshold["unit"] == "mg"
+    assert _pmid("15238367") in threshold["note"]
+    assert "authored" in threshold["note"]
+    assert "high-dose ginseng may antagonize" not in threshold["note"]

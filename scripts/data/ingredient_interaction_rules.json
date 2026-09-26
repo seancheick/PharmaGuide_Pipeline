@@ -4766,7 +4766,7 @@
           "unit": "mg",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor",
-          "note": "Ginsenosides in high-dose ginseng may antagonize warfarin effects. https://pubmed.ncbi.nlm.nih.gov/22137021/",
+          "note": "In a randomized, placebo-controlled trial in 20 healthy volunteers, 2 weeks of American ginseng (Panax quinquefolius) lowered peak INR and warfarin exposure versus placebo. The trial tested no 1000 mg cut-off: >1000 mg/day is the authored threshold from the clinical-team dose-gating pass (2026-04-27). https://pubmed.ncbi.nlm.nih.gov/15238367/",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
