@@ -256,6 +256,31 @@ class TestNutrientIdentityBinding:
         ])
         assert result["sugars"]["amount"] == 5.0, result["sugars"]
 
+    def test_dietary_fiber_total_owns_summary_over_fiber_children(self, normalizer) -> None:
+        result = normalizer._extract_nutritional_info([
+            {
+                "name": "Dietary Fiber",
+                "quantity": 8,
+                "unit": "g",
+                "raw_source_path": "ingredientRows[3].nestedRows[0]",
+            },
+            {"name": "Soluble Fiber", "quantity": 5, "unit": "g"},
+            {"name": "Insoluble Fiber", "quantity": 3, "unit": "g"},
+        ])
+
+        assert result["dietaryFiber"]["amount"] == 8.0
+        assert result["dietaryFiber"]["raw_source_path"] == (
+            "ingredientRows[3].nestedRows[0]"
+        )
+
+    def test_total_sugars_owns_summary_over_added_sugars(self, normalizer) -> None:
+        result = normalizer._extract_nutritional_info([
+            {"name": "Total Sugars", "quantity": 4, "unit": "g"},
+            {"name": "Added Sugars", "quantity": 1, "unit": "g"},
+        ])
+
+        assert result["sugars"] == {"amount": 4.0, "unit": "g"}
+
 
 # ---------------------------------------------------------------------------
 # Data invariants — severity_level="low" on formulation sugar/fat entries
