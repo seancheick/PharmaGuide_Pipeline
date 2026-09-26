@@ -17934,16 +17934,39 @@ class SupplementEnricherV3:
             SKIP_REASON_NUTRITION_FACT,
         ) and label_row_establishes_presence(row)
 
+    def _interaction_registry_ids(self) -> Dict[str, set]:
+        """Ids held by each registry a row can be an interaction subject of,
+        IQM first so an IQM id always resolves to IQM."""
+        cached = getattr(self, "_interaction_registry_id_cache", None)
+        if cached is None:
+            quality_map = self.databases.get("ingredient_quality_map") or {}
+            cached = {
+                "ingredient_quality_map": {
+                    key for key, value in quality_map.items()
+                    if not str(key).startswith("_") and isinstance(value, dict)
+                },
+            }
+            for db in ("botanical_ingredients", "other_ingredients"):
+                rows = (self.databases.get(db) or {}).get(db) or []
+                cached[db] = {row.get("id") for row in rows if isinstance(row, dict) and row.get("id")}
+            self._interaction_registry_id_cache = cached
+        return cached
+
     def _derive_interaction_subject_ref(self, ingredient: Dict) -> Optional[Dict[str, str]]:
         canonical_id = str(ingredient.get("canonical_id") or "").strip()
         if canonical_id:
             # A recognized botanical or other ingredient keeps its registry, so
             # it meets the rules authored there; rows without a routable
             # registry (probiotic, standardized botanical) stay IQM subjects.
+            db = self._normalize_interaction_db_key(ingredient.get("canonical_source_db"))
+            registry_ids = self._interaction_registry_ids()
+            if db in registry_ids and canonical_id not in registry_ids[db]:
+                # The identity decision can rewrite canonical_id and leave
+                # canonical_source_db behind (reishi under botanical): the
+                # subject is the registry that holds the id.
+                db = next((name for name, ids in registry_ids.items() if canonical_id in ids), None)
             return {
-                "db": self._normalize_interaction_db_key(
-                    ingredient.get("canonical_source_db")
-                ) or "ingredient_quality_map",
+                "db": db or "ingredient_quality_map",
                 "canonical_id": canonical_id,
             }
 

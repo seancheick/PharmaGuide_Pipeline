@@ -125,6 +125,35 @@ def test_a_row_listed_in_two_buckets_is_scanned_once(enricher, row):
     assert alerts and len(alerts) == len({alert["rule_id"] for alert in alerts})
 
 
+@pytest.mark.parametrize(
+    "canonical_id,source_db,expected_db",
+    [
+        # The identity decision rewrote the id and left the registry behind.
+        ("reishi", "botanical_ingredients", IQM),
+        ("strawberry", "other_ingredients", "botanical_ingredients"),
+        ("NHA_CHILI_PEPPER", "botanical_ingredients", "other_ingredients"),
+        ("garlic_bulb", "botanical_ingredients", "botanical_ingredients"),
+    ],
+)
+def test_a_registry_that_does_not_hold_the_id_is_not_its_subject(
+    enricher, canonical_id, source_db, expected_db
+):
+    row = {"canonical_id": canonical_id, "canonical_source_db": source_db}
+    assert enricher._derive_interaction_subject_ref(row) == {"db": expected_db, "canonical_id": canonical_id}
+
+
+def test_stale_registry_blend_member_keeps_its_iqm_rules():
+    """210555 GNC AMP Test 1700 lists "Reishi Mushroom powder" in a blend; its
+    row carries the IQM id reishi under a stale botanical registry and met no
+    reishi rule."""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / "stale_registry_210555_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    fired = {alert["rule_id"] for alert in enriched["interaction_profile"]["ingredient_alerts"]}
+    assert "RULE_INGREDIENT_REISHI__AUTOIMMUNE" in fired
+
 # ---------------------------------------------------------------------------
 # Botanical twin: a botanical identity that is the same plant and part as an
 # IQM parent answers to the rules authored on that parent. Before the twin,
