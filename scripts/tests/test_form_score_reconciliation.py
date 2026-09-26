@@ -49,7 +49,7 @@ def test_reconciliation_manifest_is_complete_and_matches_iqm():
         assert row["rationale"].strip()
         assert isinstance(row["citation_ids"], list)
         form = iqm[row["ingredient_key"]]["forms"][row["form_key"]]
-        if _superseded_by_unknown_floor(iqm, row):
+        if _superseded_by_unknown_floor(iqm, row) or _superseded_by_verified_recalibration(form, row):
             continue
         assert form["bio_score"] == row["final_score"]
         if row["action"] == "RESTORE_LEGACY":
@@ -73,6 +73,25 @@ def _superseded_by_unknown_floor(iqm, row):
         and authored and authored[0] == row["form_key"]
         and not unknown_floor_override(authored[1])
         and floor and authored[1]["bio_score"] == floor[0]
+    )
+
+
+def _superseded_by_verified_recalibration(form, row):
+    """A later source-verified form review supersedes this historical manifest.
+
+    The 2026-08 manifest remains an immutable record of that migration. A newer
+    score may differ only when the current form carries approved structured
+    evidence that passes the same release validator used by production data.
+    """
+    from iqm_form_evidence import validate_iqm_form
+
+    return bool(
+        form.get("bio_score") != row["final_score"]
+        and form.get("form_evidence", {}).get("score_supported") is True
+        and validate_iqm_form(
+            form,
+            label=f'{row["ingredient_key"]}::{row["form_key"]}',
+        ) == []
     )
 
 

@@ -4795,6 +4795,31 @@
     "forms": {
       "methylcobalamin sublingual": {
         "bio_score": 15,
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS finds no form-specific absorption advantage and no efficacy difference between oral and sublingual vitamin B12, supporting a tied top form-quality tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-25"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-09-25"
+            }
+          ]
+        },
         "absorption": "Sublingual fractional absorption is not quantified by the cited efficacy comparison; no demonstrated efficacy advantage over oral B12.",
         "consumer_note": "This is methylcobalamin presented in a sublingual delivery format. The sublingual designation identifies how the product is intended to be used, while methylcobalamin identifies the B12 compound.",
         "consumer_note_review": {
@@ -4819,6 +4844,31 @@
       },
       "methylcobalamin": {
         "bio_score": 15,
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS reports no evidence that supplemental vitamin B12 absorption differs by form, supporting a tied top form-quality tier for methylcobalamin.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-25"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-09-25"
+            }
+          ]
+        },
         "absorption": "active coenzyme form; ~1-2% passive absorption at 1000 mcg supplemental dose",
         "consumer_note": "Methylcobalamin is a vitamin B12 form carrying a methyl group, distinct from cyano-, hydroxo-, and adenosylcobalamin.",
         "consumer_note_review": {
@@ -4854,6 +4904,31 @@
       },
       "adenosylcobalamin": {
         "bio_score": 15,
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS reports no evidence that supplemental vitamin B12 absorption differs by form, supporting a tied top form-quality tier for adenosylcobalamin.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-25"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-09-25"
+            }
+          ]
+        },
         "absorption": "mitochondrial coenzyme form; ~1-2% passive absorption at 1000 mcg dose",
         "consumer_note": "Adenosylcobalamin is a coenzyme form of vitamin B12 in which cobalamin carries a 5′-deoxyadenosyl group.",
         "consumer_note_review": {
@@ -4878,6 +4953,31 @@
       },
       "hydroxocobalamin": {
         "bio_score": 15,
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS reports no evidence that supplemental vitamin B12 absorption differs by form, supporting a tied top form-quality tier for oral hydroxocobalamin.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-25"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-09-25"
+            }
+          ]
+        },
         "absorption": "long retention; ~1-3% oral F, IM preferred for cyanide antidote use",
         "consumer_note": "Hydroxocobalamin is a specific form of vitamin B12 with a hydroxyl group attached to cobalamin. It is distinct from methylcobalamin, adenosylcobalamin, and cyanocobalamin.",
         "consumer_note_review": {
@@ -4904,6 +5004,31 @@
       },
       "cyanocobalamin sublingual": {
         "bio_score": 15,
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS finds no form-specific absorption advantage and no efficacy difference between oral and sublingual vitamin B12, supporting a tied top form-quality tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-25"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-09-25"
+            }
+          ]
+        },
         "absorption": "Sublingual fractional absorption is not quantified by the cited efficacy comparison; no demonstrated efficacy advantage over oral B12.",
         "consumer_note": "This is cyanocobalamin presented in a sublingual delivery format. The sublingual designation identifies how the product is intended to be used, while cyanocobalamin identifies the B12 compound.",
         "consumer_note_review": {
@@ -4927,6 +5052,31 @@
       },
       "cyanocobalamin": {
         "bio_score": 15,
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS reports no evidence that supplemental vitamin B12 absorption differs by form, supporting a tied top form-quality tier for cyanocobalamin.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-25"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-09-25"
+            }
+          ]
+        },
         "absorption": "synthetic; ~1-2% passive at 1000 mcg, requires conversion to methyl/adenosyl forms",
         "notes": "Cyanocobalamin is the most clinically studied and commonly used supplemental B12 form. It is converted to active cobalamin forms after absorption. At equivalent supplemental doses, reviewed evidence does not establish inferior clinical efficacy or absorption versus other oral B12 forms. Evidence: NIH ODS Vitamin B12 fact sheet; PMID:18709891.",
         "consumer_note": "Cyanocobalamin is the most common form of vitamin B12 in supplements. It is converted to active B12 forms after absorption.",
@@ -4952,6 +5102,31 @@
       },
       "b12 (unspecified)": {
         "bio_score": 14,
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS reports no evidence that common supplemental B12 forms differ in absorption; the score preserves that equivalence with the authored one-point nondisclosure deduction.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-25"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-09-25"
+            }
+          ]
+        },
         "absorption": "form unspecified; assume ~1-2% passive absorption at supplemental dose",
         "consumer_note": "This listing identifies vitamin B12 without naming methylcobalamin, cyanocobalamin, hydroxocobalamin, or another compound. The label does not provide enough form detail to distinguish among B12 forms.",
         "consumer_note_review": {
