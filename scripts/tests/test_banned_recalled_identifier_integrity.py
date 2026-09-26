@@ -128,3 +128,16 @@ def test_add_n_phenethyl_dimethylamine_unii_is_the_amine_not_the_ketone(banned_r
     aliases = {a.lower() for a in entry["aliases"]}
     assert "2-(dimethylamino)-1-phenylethanone" not in aliases
     assert "G8WX4UG544" in json.dumps(entry["review"]["change_log"])
+
+
+def test_banned_tansy_cui_is_the_plant_not_a_flower_essence(banned_recalled):
+    """BANNED_TANSY covers tansy herb and oil (Tanacetum vulgare), so its CUI
+    is C0331409 'Tanacetum vulgare' (Plant; NCBI, MSH, SNOMEDCT_US; common
+    name tansy). C1256219 is 'Tanacetum vulgare, flower essence'
+    (Pharmacologic Substance; MTH/CHV/ALT atoms only), a flower-remedy
+    preparation. Botanical siblings anchor to the Plant concept (e.g.
+    BANNED_CALAMUS_ACORUS_CALAMUS, RISK_KRATOM_NATURAL). Verified in UMLS
+    2026-09-26."""
+    entry = _find(banned_recalled, "BANNED_TANSY")
+    assert entry["cui"] == "C0331409"
+    assert "C1256219" in json.dumps(entry["review"]["change_log"])

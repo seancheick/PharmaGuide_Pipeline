@@ -18359,12 +18359,17 @@
             "date": "2026-09-18",
             "change": "Added content-verified 21 CFR 172.510 citation (thujone restriction)",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "CUI C1256219 -> C0331409. UMLS: C1256219 is 'Tanacetum vulgare, flower essence' (Pharmacologic Substance; MTH/CHV/ALT atoms only), a flower-remedy preparation, not the herb or oil this entry covers. C0331409 is 'Tanacetum vulgare' (Plant; NCBI, MSH, SNOMEDCT_US; common name tansy), matching the Plant-concept anchoring of the file's other single-species botanicals. No shipped detail blob or frozen enriched product references this entry.",
+            "by": "claude-audit"
           }
         ]
       },
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Neurotoxic / reproductive-toxic botanical — never an excipient",
-      "cui": "C1256219",
+      "cui": "C0331409",
       "source_category": "toxic_botanical",
       "references_structured": [
         {
