@@ -750,3 +750,17 @@ def test_omega3_nsaid_rule_reports_the_aspirin_bleeding_data():
                   "may add to nsaid bleeding risk"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+def test_nettle_glucose_rules_cite_human_trials():
+    rule = _rule("RULE_IQM_STINGING_NETTLE_DIABETES")
+    subs = [_sub_rule(rule, "condition_id", "diabetes")] + [
+        _sub_rule(rule, "drug_class_id", dc)
+        for dc in ("hypoglycemics_high_risk", "hypoglycemics_lower_risk", "hypoglycemics_unknown")
+    ]
+    for sub in subs:
+        # 35800714 is a general nettle review with no glucose data in its abstract.
+        assert sub["sources"] == [_pmid("24273930"), _pmid("31802554")]
+        assert "18 mg/dL" in sub["mechanism"]
+    assert [s["severity"] for s in subs] == ["caution", "caution", "monitor", "caution"]
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review

@@ -432,3 +432,16 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
   increase bleeding (such as aspirin and warfarin)".
 - No study with non-aspirin NSAIDs found. evidence_level probable → theoretical; headline and alert no
   longer say omega-3 adds to NSAID bleeding risk.
+
+## RULE_IQM_STINGING_NETTLE_DIABETES — re-sourced (diabetes, three hypoglycemic drug classes)
+
+- **PMID 35800714** ("Nutritional and pharmacological importance of stinging nettle", Heliyon 2022;
+  PMC9253158) — abstract has no glucose content; full text: aqueous leaf extract anti-diabetic in
+  diabetic mice, "decreased glucose absorption in their intestine", "nettle stimulates insulin
+  secretion". No alpha-glucosidase or human data. Kept only as the min_effective_dose source.
+- **PMID 24273930** (Kianbakht, Clin Lab 2013; RCT, 46 vs 46, advanced T2DM needing insulin): nettle leaf
+  extract 500 mg every 8 hours for 3 months "combined with the conventional oral anti-hyperglycemic
+  drugs" lowered fasting glucose, 2-h postprandial glucose and HbA1c vs placebo; background: nettle
+  leaves "have insulin secretagogue, PPARgamma agonistic, and alpha-glucosidase inhibitory effects".
+- **PMID 31802554** (Ziaei, Phytother Res 2020; SR/MA, 8 RCTs, n = 401): fasting blood sugar WMD
+  -18.01 mg/dl (95% CI -30.04 to -5.97); insulin, HOMA-IR and HbA1c not significantly reduced.
