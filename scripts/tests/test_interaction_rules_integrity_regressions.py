@@ -529,3 +529,19 @@ def test_yerba_mate_anticoagulant_rule_drops_the_unsourced_vitamin_k_claim():
     for stale in ("vitamin k", "phylloquinone", "consistent intake"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+def test_andrographis_immune_rules_cite_trials_not_antiplatelet_papers():
+    rule = _rule("RULE_IQM_ANDROGRAPHIS")
+    autoimmune = _sub_rule(rule, "condition_id", "autoimmune")
+    immunosuppressants = _sub_rule(rule, "drug_class_id", "immunosuppressants")
+
+    # 28745507 and 21822619 are antiplatelet papers.
+    assert autoimmune["sources"] == [_pmid("19408036"), _pmid("27215274"), _pmid("33372366")]
+    assert immunosuppressants["sources"] == [_pmid("27215274"), _pmid("33372366")]
+    assert (autoimmune["severity"], immunosuppressants["severity"]) == ("caution", "caution")
+    assert "rheumatoid arthritis" in autoimmune["mechanism"]
+    copy = json.dumps([autoimmune, immunosuppressants]).lower()
+    for stale in ("upregulating t-cell", "nk cell", "triggering rejection", "may stimulate immune"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review

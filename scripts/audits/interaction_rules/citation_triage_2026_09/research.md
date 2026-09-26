@@ -228,3 +228,23 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   thromboplastin time, and thrombin time", inhibits thrombin, factor Xa and platelet aggregation in
   vitro; antithrombotic in rats "although it did not induce a significant bleeding effect".
 - No clinical interaction study with anticoagulants found; evidence_level stays theoretical.
+
+## RULE_IQM_ANDROGRAPHIS — re-sourced (autoimmune, immunosuppressants)
+
+- Ghosts: **PMID 28745507** = "Discovery of Potent Orally Active Protease-Activated Receptor 1 (PAR1)
+  Antagonists Based on Andrographolide" (J Med Chem 2017; synthetic antiplatelet derivatives) and
+  **PMID 21822619** = "A novel role of andrographolide, an NF-kappa B inhibitor, on inhibition of
+  platelet activation" (J Mol Med 2011). Both antiplatelet; cited for "immunostimulatory activity,
+  upregulating T-cell proliferation, NK cell activity ... could theoretically exacerbate" autoimmune
+  disease and for opposing immunosuppressants. Neither says anything about immune stimulation.
+- No NCCIH andrographis page (404). No source found for immunostimulation worsening autoimmune disease.
+- **PMID 19408036** (Burgos, Clin Rheumatol 2009; RCT, n = 60 active RA): A. paniculata extract
+  (30% andrographolides) three times daily for 14 weeks; within-group reductions in swollen and tender
+  joints, HAQ; "associated to a reduction of rheumatoid factor, IgA, and C4".
+- **PMID 27215274** (Bertoglio, BMC Neurol 2016; RCT, 12 months, RRMS on interferon beta): 170 mg
+  twice daily reduced fatigue; "No statistically significant differences were observed for relapse
+  rate, EDSS or inflammatory parameters"; "A. paniculata was well tolerated".
+- **PMID 33372366** (Worakunphanich, Pharmacoepidemiol Drug Saf 2021; SR/MA incl. autoimmune-disease
+  trials): serious AEs "0.02 per 1000 patients"; nonserious AEs common (GI, skin).
+- Mechanisms rewritten to these; severities (caution/caution) unchanged and reported to Sean as a
+  probable over-warning. No study of andrographis with immunosuppressant drugs was found.

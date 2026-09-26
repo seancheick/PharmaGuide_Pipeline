@@ -140,7 +140,8 @@
       "2026-09-26: RULE_IQM_COQ10_HEART_DISEASE_STATINS heart_disease claimed improved ejection fraction in Q-SYMBIO while citing only warfarin papers (PMIDs 17723077, 12083489). It now cites Q-SYMBIO itself (PMID 25282031: no short-term change; fewer MACE, deaths and HF hospitalisations and better NYHA class at 2 years; no ejection-fraction result) and NCCIH (heart-failure evidence inconclusive; may interact with warfarin); 17723077 stays for the warfarin caveat and 12083489 (no readable result) was dropped. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_WHITE_WILLOW_BARK_BLEEDING cited only PMID 25997859 (a willow efficacy review with nothing on bleeding) on all five sub-rules, whose mechanisms described aspirin (irreversible COX-1 acetylation for the platelet lifespan, a 7-10 day pre-op stop, warfarin albumin displacement). They now cite the EU herbal monograph on willow bark (EMA/HMPC/80630/2016: coagulation disorders contraindicated; may increase coumarin anticoagulant effects; not with salicylates/NSAIDs without advice) and the Krivoy 2001 platelet RCT (PMID 11345689: effect far less than aspirin 100 mg). min_effective_dose rationales no longer call the 120 mg salicin floor aspirin-equivalent (value unchanged). surgery_scheduled evidence_level established -> limited. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_BANNED_TANSY_PREGNANCY pregnancy cited only PMID 28472675 (a rat/brine-shrimp thujone toxicity study with no pregnancy data). It now cites the Dosoky 2021 review of maternal reproductive toxicity of essential oils (PMID 33673548: whole tansy can induce miscarriage; tansy oil ~45% beta-thujone, a convulsant) and Conway 1979 (PMID 232204: tansy among plants used as abortifacients). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_YERBA_MATE_CARDIOVASCULAR drug:anticoagulants cited PMID 39708247 (an endothelial-function trial) for a claim that yerba mate's vitamin K opposes warfarin, which no source supports. It now cites a 6-week RCT (PMID 25562195: mate tea lowered thromboxane B2 and blood viscosity) and an in vitro/rat study of a mate-fruit saponin (PMID 23134458: prolonged clotting times, thrombin/FXa and platelet inhibition, no significant bleeding in rats); the action no longer gives vitamin K advice. Severity, evidence_level and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_YERBA_MATE_CARDIOVASCULAR drug:anticoagulants cited PMID 39708247 (an endothelial-function trial) for a claim that yerba mate's vitamin K opposes warfarin, which no source supports. It now cites a 6-week RCT (PMID 25562195: mate tea lowered thromboxane B2 and blood viscosity) and an in vitro/rat study of a mate-fruit saponin (PMID 23134458: prolonged clotting times, thrombin/FXa and platelet inhibition, no significant bleeding in rats); the action no longer gives vitamin K advice. Severity, evidence_level and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_ANDROGRAPHIS autoimmune and immunosuppressants cited two antiplatelet papers (PMIDs 28745507, 21822619) for an immunostimulation claim neither makes. They now cite a 14-week RA RCT (PMID 19408036), a 12-month RRMS RCT on interferon beta (PMID 27215274) and a safety meta-analysis including autoimmune trials (PMID 33372366); mechanisms say andrographis was tolerated in those trials and that its use with immunosuppressants is unstudied. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -17614,14 +17615,15 @@
           "condition_id": "autoimmune",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Andrographis paniculata exhibits immunostimulatory activity, upregulating T-cell proliferation, NK cell activity, and cytokine production (IL-2, IFN-\u03b3). In patients with autoimmune conditions relying on immune suppression for disease control, stimulation of autoreactive immune pathways could theoretically exacerbate disease activity.",
+          "mechanism": "Andrographis and its main constituent andrographolide act on immune and inflammatory pathways. In randomised trials it did not worsen autoimmune disease: in rheumatoid arthritis (14 weeks) swollen and tender joints and rheumatoid factor fell within the treated group, and in relapsing-remitting multiple sclerosis (12 months, added to interferon beta) relapse rate and disability did not change and it was well tolerated. Serious adverse events were very rare in a meta-analysis that included autoimmune-disease trials. The evidence is small and does not cover every autoimmune condition or treatment.",
           "action": "Use caution in patients with autoimmune conditions (lupus, rheumatoid arthritis, multiple sclerosis, IBD). Consult treating physician before use. Monitor for symptom flares.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/28745507/",
-            "https://pubmed.ncbi.nlm.nih.gov/21822619/"
+            "https://pubmed.ncbi.nlm.nih.gov/19408036/",
+            "https://pubmed.ncbi.nlm.nih.gov/27215274/",
+            "https://pubmed.ncbi.nlm.nih.gov/33372366/"
           ],
           "alert_headline": "Immune-active herb \u2014 use caution",
-          "alert_body": "Andrographis may stimulate immune pathways. If you have an autoimmune condition or take immune-suppressing medication, review use with your clinician.",
+          "alert_body": "Andrographis affects immune and inflammatory pathways. It was well tolerated in small autoimmune trials, but if you have an autoimmune condition, review use with your clinician.",
           "informational_note": "Andrographis affects immune function \u2014 relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -17753,10 +17755,11 @@
           "drug_class_id": "immunosuppressants",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Andrographis's immunostimulatory effects may pharmacodynamically oppose immunosuppressant medications (calcineurin inhibitors, corticosteroids, biologics), potentially reducing their therapeutic efficacy or triggering rejection episodes in transplant recipients.",
+          "mechanism": "Andrographis acts on immune pathways, but no study has examined it alongside immunosuppressant drugs such as calcineurin inhibitors or corticosteroids. In a 12-month multiple sclerosis trial it was well tolerated as an add-on to interferon beta, and serious adverse events were very rare across trials. Any effect on immunosuppressive therapy, including transplant rejection risk, is theoretical.",
           "action": "Avoid use in transplant recipients or patients on immunosuppressive therapy for serious autoimmune conditions without specialist guidance.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/28745507/"
+            "https://pubmed.ncbi.nlm.nih.gov/27215274/",
+            "https://pubmed.ncbi.nlm.nih.gov/33372366/"
           ],
           "alert_headline": "Caution with immunosuppressants",
           "alert_body": "Andrographis has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding andrographis.",
