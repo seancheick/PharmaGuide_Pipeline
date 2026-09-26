@@ -17903,6 +17903,32 @@ class SupplementEnricherV3:
         }
         return db_key if db_key in valid else None
 
+    @staticmethod
+    def _interaction_row_key(row: Dict) -> Tuple[str, str, str]:
+        """One label row across the scorable/all/skipped lists, which are
+        separate objects once an artifact is reloaded from JSON."""
+        return (
+            str(row.get("raw_source_path") or row.get("source_path") or ""),
+            str(row.get("raw_source_text") or row.get("name") or ""),
+            str(row.get("canonical_id") or ""),
+        )
+
+    @staticmethod
+    def _is_interaction_blend_child(row: Dict) -> bool:
+        """A label row inside a blend whose identity was recognized but not
+        scored. Blend headers, nutrition facts, additives, markers, sources and
+        specification limits keep their own owners."""
+        path = str(row.get("raw_source_path") or row.get("source_path") or "").lower()
+        nested = (
+            row.get("cleaner_row_role") == "nested_display_only"
+            or "nestedrows" in path
+            or "child_ingredients" in path
+        )
+        return nested and row.get("skip_reason") in (
+            SKIP_REASON_NESTED_NON_THERAPEUTIC,
+            SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+        )
+
     def _derive_interaction_subject_ref(self, ingredient: Dict) -> Optional[Dict[str, str]]:
         canonical_id = str(ingredient.get("canonical_id") or "").strip()
         if canonical_id:
@@ -18915,18 +18941,37 @@ class SupplementEnricherV3:
             # A rule written on a banned, botanical, additive or other-ingredient
             # entry can only match a row that is not scorable, so scanning
             # scorable rows alone silenced every such rule (CBD, yohimbe, red
-            # yeast rice, pennyroyal ...). Non-scorable rows of scored
-            # ingredients (blend children, inactives) stay out. One row object
-            # can sit in both lists; it is scanned once.
+            # yeast rice, pennyroyal ...). An identified ingredient inside a
+            # blend keeps its rules too (Sean, D1, 2026-09-26): nesting does not
+            # make it safe. Its dose is its own row's; when that is unknown the
+            # rule's amount-missing policy decides, never the blend total. Other
+            # non-scorable rows (inactives, top-level no-amount nutrition rows)
+            # stay out. One row object can sit in both lists; it is scanned once.
             scanned = {id(row) for row in ingredients}
-            skipped = list({
-                id(row): row for row in raw_ingredients + raw_skipped
-                if isinstance(row, dict) and id(row) not in scanned
-                and (self._derive_interaction_subject_ref(row) or {}).get("db") not in (None, "ingredient_quality_map")
-            }.values())
+            scanned_keys = {self._interaction_row_key(row) for row in ingredients}
+            skipped = []
+            for row in raw_ingredients + raw_skipped:
+                if not isinstance(row, dict) or id(row) in scanned:
+                    continue
+                scanned.add(id(row))
+                subject_db = (self._derive_interaction_subject_ref(row) or {}).get("db")
+                if subject_db is None:
+                    continue
+                if subject_db != "ingredient_quality_map":
+                    skipped.append(row)
+                elif self._is_interaction_blend_child(row):
+                    key = self._interaction_row_key(row)
+                    if key not in scanned_keys:
+                        scanned_keys.add(key)
+                        skipped.append(row)
+            blend_children = {
+                id(row) for row in skipped
+                if (self._derive_interaction_subject_ref(row) or {}).get("db") == "ingredient_quality_map"
+            }
         else:
             ingredients = [row for row in raw_ingredients if isinstance(row, dict)]
             skipped = [row for row in raw_skipped if isinstance(row, dict)]
+            blend_children = set()
 
         rows_to_clear = list(raw_ingredients) + list(raw_skipped) + list(ingredients)
         for ingredient in rows_to_clear:
@@ -18989,11 +19034,20 @@ class SupplementEnricherV3:
                 all_ingredient_rows.append(("ingredients", row))
                 for marker_row in self._derived_marker_interaction_rows(row):
                     all_ingredient_rows.append(("derived_marker", marker_row))
+        # Blend children (and their markers) only add what the product does not
+        # already warn about: a (rule, target) fired at the same or higher
+        # severity by another row is not repeated.
+        repeat_checked_rows: set = set()
+        fired_targets: Dict[Tuple[Any, str, str], float] = {}
         for row in skipped:
             if isinstance(row, dict):
                 all_ingredient_rows.append(("ingredients_skipped", row))
+                if id(row) in blend_children:
+                    repeat_checked_rows.add(id(row))
                 for marker_row in self._derived_marker_interaction_rows(row):
                     all_ingredient_rows.append(("derived_marker", marker_row))
+                    if id(row) in blend_children:
+                        repeat_checked_rows.add(id(marker_row))
 
         for source_bucket, ingredient in all_ingredient_rows:
             subject = self._derive_interaction_subject_ref(ingredient)
@@ -19186,8 +19240,36 @@ class SupplementEnricherV3:
                         "profile_gate": threshold.get("profile_gate"),
                     })
 
-                if not condition_hits and not drug_hits and not dose_hits and not pregnancy_block:
+                rule_key = rule.get("id")
+                if id(ingredient) in repeat_checked_rows:
+                    def _new(kind: str, target: str, severity: Any) -> bool:
+                        weight = severity_weights.get(str(severity or ""), 0.0)
+                        return fired_targets.get((rule_key, kind, target), -1.0) < weight
+
+                    condition_hits = [
+                        h for h in condition_hits
+                        if _new("condition", h["condition_id"], h.get("severity"))
+                    ]
+                    drug_hits = [
+                        h for h in drug_hits
+                        if _new("drug_class", h["drug_class_id"], h.get("severity"))
+                    ]
+                    dose_hits = [h for h in dose_hits if _new("dose", "", h.get("severity"))]
+                    if not condition_hits and not drug_hits and not dose_hits:
+                        continue
+                elif not condition_hits and not drug_hits and not dose_hits and not pregnancy_block:
                     continue
+                for kind, target_key, hits in (
+                    ("condition", "condition_id", condition_hits),
+                    ("drug_class", "drug_class_id", drug_hits),
+                    ("dose", None, dose_hits),
+                ):
+                    for hit in hits:
+                        fired_key = (rule_key, kind, hit[target_key] if target_key else "")
+                        fired_targets[fired_key] = max(
+                            fired_targets.get(fired_key, -1.0),
+                            severity_weights.get(str(hit.get("severity") or ""), 0.0),
+                        )
 
                 safety_hit = {
                     "rule_id": rule.get("id"),
