@@ -123,6 +123,9 @@ TOPIC_STEMS = {
     "seizure_disorder": ["seizur", "epilep", "convuls"],
     "high_cholesterol": ["cholester", "lipid", "lipoprotein", "triglycer", "statin",
                          "ldl", "hdl"],
+    "current_smoker": ["smok", "tobacco", "cigarett"],
+    "former_smoker": ["smok", "tobacco", "cigarett"],
+    "asbestos_exposure": ["asbestos"],
     # drug classes
     "anticoagulants": ["warfarin", "coumarin", "heparin", "apixaban", "rivaroxaban",
                        "dabigatran"] + _BLEEDING,
