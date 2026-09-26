@@ -465,3 +465,21 @@ micrograms. 163 focused tests pass. The immune ideal fixture changes 93.0 -> 94.
 because existing reviewed quercetin/elderberry records are recovered despite
 other pre-existing matches (raw Evidence 11.8881 -> 13.2651); no magnitudes changed.
 Frozen score/route/safety comparison follows at the combined checkpoint.
+
+### Non-delivering nutrient forms: absorption and Dose
+
+Owner: `scoring_reference_resolver.py::delivers_parent_nutrient` reads IQM
+parent_relationship; enrichment owns absorption pairing and adequacy projection.
+Physical source joins use `scoring_input_contract.py::source_linked_rows`.
+Evidence: `rg 'delivers_parent_nutrient|source_linked_rows|_collect_absorption_data' scripts`.
+Will NOT create: a form-quality table, a delivery policy, field or status.
+
+Two failing normalize->enrich regressions showed iron oxide + vitamin C earned
+an enhancer bonus and emitted unknown rather than zero adequacy. Absorption now
+excludes source-linked non-delivering IQM rows. Adequacy emits pct_rda=0 while
+keeping its noneligible flag and UL assessment. Generic Dose consequently counts
+zero instead of dropping that exposure from its average (vitamin C + oxide 20 ->
+10 public Dose in the regression). Evidence unchanged; glycine-chelated iron
+still qualifies for pairing. 163 focused form/absorption/generic/multi tests pass.
+Existing equal-Dose regression was corrected to pin zero contribution rather
+than denominator exclusion. Fresh regeneration is required for these fields.

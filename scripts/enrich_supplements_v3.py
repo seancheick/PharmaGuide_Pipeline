@@ -110,6 +110,7 @@ from scoring_input_contract import (
     derive_product_scoring_evidence,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
+    source_linked_rows,
 )
 from scoring_reference_resolver import (
     IDENTITY_MISMATCH_RELATIONSHIPS,
@@ -10411,6 +10412,22 @@ class SupplementEnricherV3:
         # v3.0 scoring contract: enhancer pairing is ACTIVE-ONLY and must
         # follow the same primary-active contract used by Section A scoring.
         all_ingredients = self._primary_active_ingredients_for_enrichment(product)
+        quality_rows = product.get("ingredient_quality_data", {}).get("ingredients", [])
+        quality_row_ids = {id(row) for row in quality_rows if isinstance(row, dict)}
+        delivering_ingredients = []
+        for ingredient in all_ingredients:
+            linked_quality = [row for row in source_linked_rows(product, ingredient, quality_rows)
+                              if id(row) in quality_row_ids]
+            if linked_quality and not any(
+                delivers_parent_nutrient(
+                    row.get("canonical_id"),
+                    [row.get("form_id")] + [m.get("form_key") for m in row.get("matched_forms") or []
+                                            if isinstance(m, dict)],
+                ) for row in linked_quality
+            ):
+                continue
+            delivering_ingredients.append(ingredient)
+        all_ingredients = delivering_ingredients
 
         # Build ingredient name set for quick lookup
         ingredient_names = set()
@@ -21626,7 +21643,7 @@ class SupplementEnricherV3:
                         # IQM parent_relationship: this nutrient in a form that
                         # delivers none of it (iron oxide, a degradation
                         # product). No adequacy credit; the UL check stands.
-                        adequacy_dict.update({"pct_rda": None, "scoring_eligible": False,
+                        adequacy_dict.update({"pct_rda": 0.0, "scoring_eligible": False,
                                               "point_recommendation": 0})
                     adequacy_results.append(adequacy_dict)
 
