@@ -12,6 +12,7 @@ botanical-subject rules only fired for rows that had lost their canonical_id.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -133,34 +134,45 @@ def test_a_row_listed_in_two_buckets_is_scanned_once(enricher, row):
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
-# Pairs whose botanical and IQM records do not share a GSRS UNII, verified by
-# species and part against GSRS and the rule text instead.
-VERIFIED_WITHOUT_SHARED_UNII = {
-    "aloe_vera": "Aloe vera leaf (GSRS ZY81Z83H0X); the rule covers oral leaf gel/latex",
-    "american_ginseng": "P. quinquefolius root (GSRS 8W75VCV53Q); the IQM parent carries an "
-    "American ginseng form and the rule names American ginseng",
-    "andrographis": "Andrographis paniculata aerial parts on both records",
-    "ashwagandha": "Withania somnifera on both records",
-    "bacopa": "Bacopa monnieri (IQM GSRS DUB5K84ELI) on both records",
-    "boswellia_serrata_resin": "B. serrata oleo-gum resin (GSRS 4PW41QCO2M), the boswellic "
-    "acid source the rule describes; IQM carries a resin form",
-    "citrus_bergamot": "Citrus bergamia fruit on both records",
-    "cordyceps": "Cordyceps militaris; the IQM parent carries a militaris form and the rule "
-    "names C. sinensis/militaris",
-    "dong_quai": "Angelica sinensis root (GSRS B66F4574UG); IQM forms are root",
-    "flaxseed": "Linum usitatissimum seed (GSRS 310OJT00CG); IQM forms are oil and meal",
-    "gotu_kola": "Centella asiatica aerial parts (GSRS 7M867G6T1U) on both records",
-    "gymnema_sylvestre": "Gymnema sylvestre leaf (GSRS 2ZK6ZS8392); IQM forms are leaf",
-    "lion_s_mane": "Hericium erinaceus (GSRS Y62T8P9AAP); the rule names Hericium erinaceus",
-    "maca_root": "Lepidium meyenii root (GSRS HP7119212T); IQM forms are root",
-}
-
-# Reviewed candidates that must not inherit the parent's rules.
+MARKER_OR_SOURCE = "a source of the parent's compound or nutrient, not the same ingredient"
+TEA_LEAF = (
+    "tea leaf; canonical_equivalences.json records green_tea as broader than "
+    "green_tea_extract, and theanine is a leaf constituent"
+)
+# Same-species candidates that must not inherit the parent's rules.
 REVIEWED_NOT_TWINNED = {
-    # RULE_IQM_DANDELION_KIDNEY's diuretic, kidney and lithium claims rest on
-    # leaf evidence (PMID 19678785, Taraxacum officinale folium); a root-only
-    # product would inherit them. Root routing is a clinical-policy question.
-    "dandelion_root": "dandelion",
+    # The dandelion rule's diuretic, kidney and lithium claims rest on leaf
+    # evidence (PMID 19678785, Taraxacum officinale folium); its glucose claims
+    # cite root. IQM dandelion's only form already aliases "dandelion root", so
+    # whether root carries the rule is a clinical-policy question.
+    ("dandelion_root", "dandelion"): "part: the rule mixes leaf and root evidence",
+    # The nettle rule's glucose claims cite leaf extract trials; root is a
+    # different preparation (lectins, sterols; BPH use).
+    ("nettle_root", "stinging_nettle"): "part: the rule's glucose evidence is leaf",
+    ("elder_blossom", "elderberry"): "part: flower, the rule is on the fruit",
+    ("elder_flower", "elderberry"): "part: flower, the rule is on the fruit",
+    ("dgl_deglycyrrhizinated_licorice", "licorice"): "preparation: the rule excludes DGL",
+    ("bergamot_essential_oil", "citrus_bergamot"): "preparation: essential oil, not fruit extract",
+    ("chamomile_essential_oil", "chamomile"): "preparation: essential oil, not flower extract",
+    ("vitex", "chasteberry"): "species: aliases name V. negundo and V. trifolia",
+    ("amla_fruit", "chromium"): MARKER_OR_SOURCE,
+    ("coleus_forskohlii_root", "forskolin"): MARKER_OR_SOURCE,
+    ("japanese_knotweed", "resveratrol"): MARKER_OR_SOURCE,
+    ("toothed_clubmoss", "huperzine_a"): MARKER_OR_SOURCE,
+    ("turmeric", "curcumin"): MARKER_OR_SOURCE,
+    ("turmeric_root_powder", "curcumin"): MARKER_OR_SOURCE,
+    ("wheat_germ", "vitamin_e"): MARKER_OR_SOURCE,
+    ("wheat_germ_oil", "vitamin_e"): MARKER_OR_SOURCE,
+    ("wheatgrass_powder", "vitamin_e"): MARKER_OR_SOURCE,
+    ("l_theanine", "green_tea_extract"): MARKER_OR_SOURCE,
+    **{
+        (tea, parent): TEA_LEAF
+        for tea in (
+            "black_tea_leaf", "green_tea", "green_tea_leaf", "matcha_tea_powder",
+            "oolong_tea_leaf", "pu_erh_tea_leaf",
+        )
+        for parent in ("green_tea_extract", "l_theanine")
+    },
 }
 
 
@@ -177,6 +189,22 @@ def _unii(entry: dict):
     return (entry.get("external_ids") or {}).get("unii")
 
 
+def _binomial(latin_name):
+    match = re.match(r"\s*([A-Z][a-z]+)\s+([a-z][a-z-]+)", latin_name or "")
+    if not match or match.group(2) in {"spp", "sp"}:
+        return None
+    return f"{match.group(1)} {match.group(2)}".lower()
+
+
+def _names_species(iqm_entry: dict, binomial: str) -> bool:
+    """The IQM parent names the species in its own aliases, forms or notes."""
+    parts = [iqm_entry.get("standard_name"), iqm_entry.get("notes"), *(iqm_entry.get("aliases") or [])]
+    for form_name, form in (iqm_entry.get("forms") or {}).items():
+        parts += [form_name, form.get("notes"), *(form.get("aliases") or [])]
+    text = " ".join(str(part) for part in parts if part).lower()
+    return bool(re.search(r"\b" + re.escape(binomial) + r"\b", text))
+
+
 def _enrich_fixture(pid: int) -> dict:
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
@@ -186,21 +214,29 @@ def _enrich_fixture(pid: int) -> dict:
     return enriched
 
 
-@pytest.mark.parametrize("pid,canonical_id", [(184004, "garlic_bulb"), (311160, "black_garlic")])
-def test_botanical_garlic_label_carries_the_garlic_rule(pid, canonical_id):
+@pytest.mark.parametrize(
+    "pid,canonical_id,rule_id,parent_tag",
+    [
+        (184004, "garlic_bulb", "RULE_INGREDIENT_GARLIC", "garlic"),
+        (311160, "black_garlic", "RULE_INGREDIENT_GARLIC", "garlic"),
+        # 100 mg yerba mate leaf extract in GNC Herbal Plus Energy Formula
+        (74529, "yerba_mate_leaf", "RULE_IQM_YERBA_MATE_CARDIOVASCULAR", "yerba_mate"),
+    ],
+)
+def test_botanical_label_carries_its_iqm_twin_rule(pid, canonical_id, rule_id, parent_tag):
     enriched = _enrich_fixture(pid)
     alerts = [
         alert for alert in enriched["interaction_profile"]["ingredient_alerts"]
-        if alert["rule_id"] == "RULE_INGREDIENT_GARLIC"
+        if alert["rule_id"] == rule_id
     ]
-    assert alerts, f"{pid} carries no garlic rule"
-    assert {alert["subject_ref"]["canonical_id"] for alert in alerts} == {canonical_id}
+    assert len(alerts) == 1, f"{pid}: {len(alerts)} {rule_id} alerts"
+    assert alerts[0]["subject_ref"] == {"db": "botanical_ingredients", "canonical_id": canonical_id}
     assert "anticoagulants" in enriched["interaction_profile"]["drug_class_summary"]
 
     from build_final_db import classify_product_categories
 
     tags = classify_product_categories(enriched)["key_ingredient_tags"]
-    assert canonical_id in tags and "garlic" in tags
+    assert canonical_id in tags and parent_tag in tags
 
 
 def test_twin_ids_answer_to_their_iqm_parent():
@@ -219,6 +255,7 @@ def test_twin_ids_answer_to_their_iqm_parent():
 
 
 def test_every_twin_is_a_verified_same_plant_pair():
+    """Same substance by GSRS UNII, or a species the IQM parent itself names."""
     from identity.interaction import BOTANICAL_INTERACTION_TWIN
 
     botanicals, iqm = _botanicals(), _iqm()
@@ -227,14 +264,16 @@ def test_every_twin_is_a_verified_same_plant_pair():
         assert iqm_id in iqm and not iqm_id.startswith("_"), iqm_id
         # Catalog tags carry no registry, so a renamed twin must not be an IQM id.
         assert botanical_id == iqm_id or botanical_id not in iqm, botanical_id
-        shared = _unii(botanicals[botanical_id]) and _unii(botanicals[botanical_id]) == _unii(iqm[iqm_id])
-        assert shared or botanical_id in VERIFIED_WITHOUT_SHARED_UNII, botanical_id
-    for botanical_id, iqm_id in REVIEWED_NOT_TWINNED.items():
-        assert BOTANICAL_INTERACTION_TWIN.get(botanical_id) != iqm_id, botanical_id
+        row, parent = botanicals[botanical_id], iqm[iqm_id]
+        binomial = _binomial(row.get("latin_name"))
+        shared_unii = _unii(row) and _unii(row) == _unii(parent)
+        assert shared_unii or (binomial and _names_species(parent, binomial)), botanical_id
+    for pair in REVIEWED_NOT_TWINNED:
+        assert BOTANICAL_INTERACTION_TWIN.get(pair[0]) != pair[1], pair
 
 
 def test_every_botanical_record_of_a_ruled_iqm_parent_is_reviewed():
-    """A same-id or same-UNII botanical record of a parent with rules needs a decision."""
+    """A botanical sharing the id, UNII or species of a parent with rules needs a decision."""
     from identity.interaction import BOTANICAL_INTERACTION_TWIN
 
     botanicals, iqm = _botanicals(), _iqm()
@@ -245,13 +284,21 @@ def test_every_botanical_record_of_a_ruled_iqm_parent_is_reviewed():
     }
     unreviewed = []
     for iqm_id in sorted(ruled):
-        parent_unii = _unii(iqm.get(iqm_id) or {})
+        parent = iqm.get(iqm_id) or {}
+        twin_species = {
+            _binomial(botanicals[b].get("latin_name"))
+            for b, target in BOTANICAL_INTERACTION_TWIN.items()
+            if target == iqm_id
+        } - {None}
         for botanical_id, row in botanicals.items():
-            if botanical_id != iqm_id and not (parent_unii and _unii(row) == parent_unii):
+            binomial = _binomial(row.get("latin_name"))
+            candidate = (
+                botanical_id == iqm_id
+                or (_unii(parent) and _unii(row) == _unii(parent))
+                or (binomial and (binomial in twin_species or _names_species(parent, binomial)))
+            )
+            if not candidate or BOTANICAL_INTERACTION_TWIN.get(botanical_id) == iqm_id:
                 continue
-            if BOTANICAL_INTERACTION_TWIN.get(botanical_id) == iqm_id:
-                continue
-            if REVIEWED_NOT_TWINNED.get(botanical_id) == iqm_id:
-                continue
-            unreviewed.append((botanical_id, iqm_id))
+            if (botanical_id, iqm_id) not in REVIEWED_NOT_TWINNED:
+                unreviewed.append((botanical_id, iqm_id))
     assert unreviewed == []

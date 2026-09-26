@@ -62,29 +62,46 @@ INTERACTION_SUBJECT_FAMILY: dict[str, str] = {
 # and plant part as an IQM parent answers to the interactions authored on that
 # parent (RULE_INGREDIENT_GARLIC is authored on IQM `garlic`, so 320 mg of
 # `garlic_bulb` warned about nothing). Interaction lookup only: scoring keeps
-# the botanical identity. Each pair shares a GSRS UNII or was verified by
-# species and part against GSRS and the rule text; dandelion_root is left out
-# because the dandelion rule's diuretic evidence is leaf. Pinned, with the
-# review of every candidate, by test_botanical_interaction_subjects.py.
+# the botanical identity. Each pair shares a GSRS UNII or is a species the IQM
+# parent names, and its part is one the rule's evidence covers. Same-species
+# records left out (a marker or nutrient source, another part or preparation,
+# e.g. dandelion and nettle root under leaf-evidence rules) are listed with
+# their reasons in test_botanical_interaction_subjects.py, which requires a
+# decision for every candidate.
 BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "aloe_vera": "aloe_vera",
+    "aloe_vera_concentrated_gel": "aloe_vera",
     "american_ginseng": "ginseng",
     "andrographis": "andrographis",
     "ashwagandha": "ashwagandha",
+    "ashwagandha_root": "ashwagandha",
+    "astragalus_root": "astragalus",
     "bacopa": "bacopa",
+    "bitter_melon_fruit": "bitter_melon",
     "black_cohosh": "black_cohosh",
     "black_garlic": "garlic",
     "boswellia_serrata_resin": "boswellia",
+    "cat_s_claw_bark": "cat_s_claw",
     "ceylon_cinnamon": "cinnamon",
     "chamomile": "chamomile",
+    "chaste_tree": "chasteberry",
     "cinnamon": "cinnamon",
+    "cinnamon_bark": "cinnamon",
     "citrus_bergamot": "citrus_bergamot",
     "cordyceps": "cordyceps",
+    "cordyceps_mushroom_powder": "cordyceps",
     "cranberry": "cranberry",
     "cranberry_fruit": "cranberry",
     "dandelion": "dandelion",
+    "devils_claw_tuber": "devils_claw",
     "dong_quai": "dong_quai",
+    "echinacea_angustifolia": "echinacea",
+    "echinacea_purpurea_aerial": "echinacea",
+    "echinacea_purpurea_herb": "echinacea",
+    "echinacea_purpurea_root_extract": "echinacea",
     "elderberries": "elderberry",
+    "evening_primrose_seed_oil": "evening_primrose_oil",
+    "fenugreek_seed": "fenugreek",
     "feverfew": "feverfew",
     "flaxseed": "flaxseed",
     "garlic_bulb": "garlic",
@@ -95,17 +112,26 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "goldenseal": "goldenseal",
     "gotu_kola": "gotu_kola",
     "gymnema_sylvestre": "gymnema_sylvestre",
+    "hawthorn_flowering_tops": "hawthorn",
+    "holy_basil_leaf": "holy_basil",
     "huperzine_a": "huperzine_a",
     "l_theanine": "l_theanine",
     "licorice_root": "licorice",
     "lion_s_mane": "lions_mane",
+    "lions_mane_mushroom_powder": "lions_mane",
     "maca_root": "maca",
     "milk_thistle": "milk_thistle",
     "milk_thistle_seed": "milk_thistle",
+    "nettle_leaf": "stinging_nettle",
+    "nigella": "black_seed_oil",
+    "olive_leaf_powder": "olive_leaf",
+    "passion_flower": "passionflower",
     "passionflower_herb": "passionflower",
+    "psyllium_husk": "psyllium",
     "red_clover": "red_clover",
     "red_clover_flower": "red_clover",
     "reishi_mushroom": "reishi",
+    "rhodiola_rosea_root": "rhodiola",
     "sage_leaf_extract": "sage",
     "saw_palmetto_berry": "saw_palmetto",
     "st_john_s_wort": "st_johns_wort",
@@ -115,6 +141,7 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "valerian_root": "valerian",
     "white_willow_bark": "white_willow_bark",
     "wild_yam_root": "wild_yam",
+    "yerba_mate_leaf": "yerba_mate",
 }
 
 
