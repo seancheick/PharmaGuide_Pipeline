@@ -131,7 +131,8 @@
       "2026-05-26: Added profile-gated fluoroquinolone mineral timing rules for calcium, iron, magnesium, and zinc; active antibiotic context only.",
       "2026-09-21: RULE_IQM_VITAMIN_K_MK7_FORM_ONLY form_scope named 'menaquinone_7_mk7', a key no IQM form carries, so the rule never fired; it now names the vitamin_k2 MK-7 forms. Vitamin K1/K2 rows reach both vitamin K rules through the interaction subject family (identity/interaction.py) after the 2026-07-28 K1/K2/K3 identity split. Clinical content unchanged.",
       "2026-09-25: RULE_IQM_CASCARA_SAGRADA_PREGNANCY cited PMID 32876395 (a cascaroside chromatography paper) for every sub-rule. It now cites the EU herbal monograph on cascara (EMA/HMPC/726270/2016 Rev.1), NIH LiverTox and LactMed Cascara, and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state (liver action now matches its caution severity). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-25: RULE_IQM_SENNA_PREGNANCY kidney_disease and cardiac_glycosides cited PMID 36702448 (a Cassiae Semen review: Cassia obtusifolia/tora seeds, not senna). They now cite the EU herbal monographs on senna leaf and pod (EMA/HMPC/625849/2015 and EMA/HMPC/228761/2016, Rev.1) and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-25: RULE_IQM_SENNA_PREGNANCY kidney_disease and cardiac_glycosides cited PMID 36702448 (a Cassiae Semen review: Cassia obtusifolia/tora seeds, not senna). They now cite the EU herbal monographs on senna leaf and pod (EMA/HMPC/625849/2015 and EMA/HMPC/228761/2016, Rev.1) and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-25: RULE_IQM_RED_CLOVER drug:anticoagulants cited PMID 9464451 (a soybean thyroid-peroxidase paper). It now cites Heck 2000 (PMID 10902065, lists red clover), the Hall 2018 subdural-haemorrhage case (PMID 29541484) and MSKCC About Herbs; thyroid_disorder adds the Huser 2018 isoflavone safety review (PMID 30132047) beside 9464451; bleeding_disorders no longer says no bleeding case has been documented. Coumestrol/vitamin K antagonist claims removed. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -17855,10 +17856,11 @@
           "condition_id": "bleeding_disorders",
           "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "Red clover (Trifolium pratense) contains coumestrol and coumarin-like compounds alongside isoflavones (biochanin A, formononetin, genistein, daidzein). Coumarins share structural homology with warfarin. Additionally, isoflavone metabolites may mildly inhibit platelet aggregation. While no direct clinical evidence of red clover-induced bleeding has been documented, the structural pharmacology of its constituents supports a caution-level concern in patients with pre-existing bleeding disorders.",
+          "mechanism": "A bleeding concern for red clover has been raised on the basis of its coumarin content, with little supporting evidence. Preclinical studies suggest red clover may increase the effects of anticoagulant and antiplatelet drugs. Case reports describe intracranial haemorrhage in women taking red clover or a red clover combination product; in one, a normal INR with an abnormal thromboelastogram pointed to an antiplatelet effect. Relevance at usual supplement doses is uncertain, but people with a bleeding disorder have less margin.",
           "action": "Use caution in patients with bleeding disorders. Avoid high-dose red clover isoflavone extracts (>160 mg/day) in active bleeding. Disclose use to clinician.",
           "sources": [
-            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/red-clover"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/red-clover",
+            "https://pubmed.ncbi.nlm.nih.gov/29541484/"
           ],
           "alert_headline": "Coumarin-like \u2014 limited bleeding evidence",
           "alert_body": "Red clover contains natural coumarins, but clinical bleeding significance at supplement doses is uncertain. If you use blood thinners, mention red clover to your clinician.",
@@ -17888,9 +17890,10 @@
           "condition_id": "thyroid_disorder",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "The soy isoflavones genistein and daidzein \u2014 present in red clover at significant concentrations \u2014 are established inhibitors of thyroid peroxidase (TPO), the enzyme responsible for thyroid hormone synthesis. In vitro data demonstrate that genistein and daidzein competitively inhibit TPO at nutritional concentrations. In iodine-deficient individuals or those on thyroid replacement therapy, this inhibition can impair thyroid hormone synthesis and reduce circulating T3/T4.",
+          "mechanism": "Red clover supplements contain mainly the isoflavones formononetin and biochanin A, with smaller amounts of genistein and daidzein. In vitro, genistein and daidzein inhibit thyroid peroxidase (TPO)-catalysed reactions (IC50 about 1-10 micromolar) by acting as alternate substrates, and inactivate TPO when iodide is absent. With adequate iodine intake, isoflavones are unlikely to harm thyroid function in healthy people, but limited human data suggest they might adversely affect the thyroid hormone system in people with existing thyroid dysfunction.",
           "action": "Use caution in patients with hypothyroidism or those on levothyroxine. Separate red clover isoflavone supplements from thyroid medications by at least 4 hours. Monitor thyroid function (TSH) if initiating high-dose red clover supplements.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/30132047/",
             "https://pubmed.ncbi.nlm.nih.gov/9464451/"
           ],
           "alert_headline": "Isoflavones may affect thyroid balance",
@@ -17923,10 +17926,12 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Red clover's naturally occurring coumarin constituents (coumestrol) share structural similarity with vitamin K antagonists. While clinical evidence of warfarin potentiation is limited to case-level data, the herb is listed in systematic reviews of plants with anticoagulant potential. Additive effect with warfarin, heparins, or direct oral anticoagulants cannot be excluded.",
+          "mechanism": "Red clover is listed among herbs that may increase bleeding risk or potentiate warfarin, a list based mainly on in vitro data, animal studies and case reports. Preclinical studies suggest red clover may increase the effects of anticoagulant and antiplatelet drugs; clinical relevance has not been determined. Case reports describe intracranial haemorrhage in women taking red clover or a red clover combination product; in one, a normal INR with an abnormal thromboelastogram pointed to an antiplatelet effect rather than coumarin-like anticoagulation. An additive bleeding effect with anticoagulants is possible but not established.",
           "action": "Inform prescriber of red clover supplement use while on anticoagulant therapy. Consider periodic INR monitoring in warfarin users taking red clover supplements.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/9464451/"
+            "https://pubmed.ncbi.nlm.nih.gov/10902065/",
+            "https://pubmed.ncbi.nlm.nih.gov/29541484/",
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/red-clover"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Red clover has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding red clover and ask about INR or bleeding checks.",

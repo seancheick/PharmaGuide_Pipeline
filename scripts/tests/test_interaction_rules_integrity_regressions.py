@@ -286,3 +286,44 @@ def test_senna_kidney_and_digoxin_rules_cite_the_eu_monographs():
     ):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
+
+
+# Citation triage 2026-09 (verify_interaction_rules_citations.py --strict suspects).
+# Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.
+def _pmid(pmid: str) -> str:
+    return f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+
+
+MSKCC_RED_CLOVER = "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/red-clover"
+
+
+def test_red_clover_anticoagulant_rule_no_longer_cites_a_soy_thyroid_paper():
+    rule = _rule("RULE_IQM_RED_CLOVER")
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+    bleeding = _sub_rule(rule, "condition_id", "bleeding_disorders")
+    thyroid = _sub_rule(rule, "condition_id", "thyroid_disorder")
+
+    # 9464451 is a soybean thyroid-peroxidase paper: a constituent source for
+    # thyroid, nothing for anticoagulants.
+    assert anticoagulants["sources"] == [
+        _pmid("10902065"), _pmid("29541484"), MSKCC_RED_CLOVER,
+    ]
+    assert bleeding["sources"] == [MSKCC_RED_CLOVER, _pmid("29541484")]
+    assert thyroid["sources"] == [_pmid("30132047"), _pmid("9464451")]
+    assert (anticoagulants["severity"], bleeding["severity"], thyroid["severity"]) == (
+        "caution", "monitor", "monitor",
+    )
+
+    assert "antiplatelet" in anticoagulants["mechanism"]
+    assert "antiplatelet" in bleeding["mechanism"]
+    assert "formononetin" in thyroid["mechanism"]
+    copy = json.dumps([anticoagulants, bleeding, thyroid]).lower()
+    for stale in (
+        "coumestrol",
+        "vitamin k antagonists",
+        "no direct clinical evidence",
+        "at significant concentrations",
+        "competitively inhibit",
+    ):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review
