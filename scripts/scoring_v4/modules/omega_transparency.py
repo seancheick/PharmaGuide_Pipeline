@@ -15,8 +15,7 @@ omega_rubric.json:
       - oxidation_disclosed    2  (TOTOX / peroxide / anisidine values
                                    labeled — usually 0 today; future-ready
                                    for when lot-test scrapers populate)
-      - b3_claim_compliance    up to +4 (allergen_free / gluten_free /
-                                  vegan reused from generic_transparency)
+      - b3 optional claim validation       0 (claims remain checked)
 
     Penalties (reused from generic_transparency):
       - b2_false_allergen_free_claim up to -2
@@ -27,11 +26,9 @@ omega_rubric.json:
 
   Hard-clamped at dimension_cap = 15.
 
-Max positive reachable: 5 + 3 + 3 + 2 + 4 = 17, capped at 15. The
-2-point headroom over the cap means a product with full B3 +
-disclosure ALSO needs minor B2/B5/B6 penalties to actually hit 15
-naturally — or the cap clamps. This is intentional discipline so a
-perfect Transparency score requires both disclosure AND clean labels.
+The native omega cap is 13: EPA/DHA, molecular form, and source disclosure.
+The public pillar assembler maps that full native contract to 15/15. Optional
+claims do not fill missing disclosure points.
 
 Per §13 architecture lock — no v3 imports. Reuses v4 omega_formulation
 helpers (form/source detection) and v4 generic_transparency helpers
@@ -173,7 +170,7 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     form_pts = float(t_cfg.get("form_disclosed", 3) or 3)
     source_pts = float(t_cfg.get("source_disclosed", 3) or 3)
     oxidation_pts = float(_safe_dict(t_cfg.get("oxidation_disclosed")).get("score", 2) or 2)
-    b3_cap = float(_safe_dict(t_cfg.get("b3_claim_compliance")).get("cap", 4) or 4)
+    b3_cap = float(_safe_dict(t_cfg.get("b3_claim_compliance")).get("cap", 0) or 0)
 
     flags: List[str] = []
 
@@ -188,8 +185,8 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     if _oxidation_disclosed(product):
         components["oxidation_disclosed"] = oxidation_pts
 
-    # B3 reused from generic — produces 0..4 based on allergen_free /
-    # gluten_free / vegan validations.
+    # B3 reuses generic validation. Optional free-from and dietary-preference
+    # claims are audited for contradictions but carry zero positive points.
     b2_for_validations, b2_meta = _score_b2_false_allergen_claim_penalty(product)
     allergen_valid, gluten_valid, vegan_valid, claim_flags = _derive_claim_validations(
         product, b2_for_validations

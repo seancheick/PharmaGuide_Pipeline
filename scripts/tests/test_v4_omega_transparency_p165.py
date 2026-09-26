@@ -7,7 +7,7 @@ Locks the positive + penalty math:
       form_disclosed         3   (TG/rTG/EE/PL explicit)
       source_disclosed       3   (fish/krill/algae/cod-liver)
       oxidation_disclosed    2   (TOTOX/peroxide/anisidine — future-ready)
-      b3_claim_compliance    up to +4
+      b3 optional claim validation    0
 
     Penalties (reused from generic_transparency):
       b2_allergen            up to -2
@@ -302,7 +302,7 @@ def test_undefined_form_high_dose_without_verified_quality_stays_label_only() ->
 # --- B3 claim_compliance (reused from generic) --------------------------
 
 
-def test_b3_awarded_when_compliance_claims_present() -> None:
+def test_optional_compliance_claims_do_not_add_quality_points() -> None:
     from scoring_v4.modules.omega_transparency import score_transparency
 
     product = _omega_product(compliance_data={
@@ -311,8 +311,7 @@ def test_b3_awarded_when_compliance_claims_present() -> None:
         "vegan": True,
     })
     payload = score_transparency(product)
-    # Allergen 2 + gluten 1 + vegan 1 = 4
-    assert payload["components"].get("b3_claim_compliance", 0) > 0
+    assert payload["components"].get("b3_claim_compliance", 0) == 0
 
 
 def test_b3_capped_at_4() -> None:
@@ -374,7 +373,7 @@ def test_b6_marketing_penalty_applied() -> None:
 
 
 def test_max_transparency_reaches_the_cap() -> None:
-    """A premium product with full disclosure + B3 max + oxidation +
+    """A premium product with full native omega disclosure and
     no penalties hits the 15 cap."""
     from scoring_v4.modules.omega_transparency import score_transparency
 
@@ -389,7 +388,7 @@ def test_max_transparency_reaches_the_cap() -> None:
     )
     payload = score_transparency(product)
     assert payload["score"] == 13.0  # cap lowered 2026-09-18 with the oxidation retirement
-    assert payload["metadata"]["cap_applied"] is True
+    assert payload["metadata"]["cap_applied"] is False
 
 
 def test_cap_constant() -> None:
@@ -523,7 +522,7 @@ def test_transparency_weights_match_rubric_config() -> None:
     assert t["source_disclosed"] == 3
     assert t["oxidation_disclosed"]["score"] == 0  # retired 2026-09-18; Verification owns it
     assert rubric["dimension_caps"]["transparency"] == 13
-    assert t["b3_claim_compliance"]["cap"] == 4
+    assert t["b3_claim_compliance"]["cap"] == 0
     assert "b2_allergen" in t["penalties_inherited"]
     assert "b5_opacity_class_aware" in t["penalties_inherited"]
     assert "b6_marketing" in t["penalties_inherited"]

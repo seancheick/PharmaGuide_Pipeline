@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.16.0-sports-evidence-ownership",
+    "version": "1.17.0-disclosure-owned-transparency",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-25",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). POOR is the verdict of the lowest shipped tier; the module raw score never decides it (1.9.0). Omega label ownership is enforced in 1.10.0. v4 is the production catalog scoring contract as of export schema 2.2.0.",
@@ -238,17 +238,17 @@
     "omega_trust": { "cap_trust": 15.0 }
   },
   "transparency_magnitudes": {
-    "_doc": "Transparency-dimension disclosure bases, blend (B5) coefficients/multipliers, allergen (B2)/label (B3) points and disease-claim (B6) penalty per module — hoisted from the score_transparency modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty score_transparency diff verified). Regex keyword patterns + the generic-override category set stay in code. Drift-guarded by test_v4_transparency_magnitudes_config.",
+    "_doc": "Transparency measures what the label discloses. Complete identity and dose disclosure can reach the category cap without optional free-from, gluten-free, vegan, or vegetarian marketing claims. Those claims remain validated for contradiction and false-claim penalties but earn no positive quality points. Blend-opacity and disease-claim penalties remain in this pillar. Regex keyword patterns and the generic-override category set stay in code. Drift-guarded by test_v4_transparency_magnitudes_config.",
     "generic": {
       "dimension_cap": 10.0,
       "clear_disclosure_base": 6.0,
-      "complete_active_disclosure_bonus": 3.0,
+      "complete_active_disclosure_bonus": 4.0,
       "b2_cap": 2.0,
       "b2_severity_points": { "high": 2.0, "moderate": 1.5, "low": 1.0 },
-      "b3_cap": 4.0,
-      "b3_allergen_free": 2.0,
-      "b3_gluten_free": 1.0,
-      "b3_vegan_or_vegetarian": 1.0,
+      "b3_cap": 0.0,
+      "b3_allergen_free": 0.0,
+      "b3_gluten_free": 0.0,
+      "b3_vegan_or_vegetarian": 0.0,
       "b5_base": { "full": 0.0, "partial": 1.0, "none": 2.0 },
       "b5_prop_coef": { "full": 0.0, "partial": 3.0, "none": 5.0 },
       "b5_cap": 10.0,
@@ -260,8 +260,8 @@
     },
     "multi_prenatal": {
       "dimension_cap": 15.0,
-      "cap_panel_identity_disclosure": 4.0,
-      "cap_panel_individual_dose_disclosure": 7.0,
+      "cap_panel_identity_disclosure": 5.0,
+      "cap_panel_individual_dose_disclosure": 10.0,
       "adjunct_blend_panel_disclosure_threshold": 0.9,
       "adjunct_blend_b5_cap": 2.0
     },

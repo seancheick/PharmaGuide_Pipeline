@@ -3,13 +3,15 @@
 Transparency (10) is the user-facing home for disclosure quality:
 
     clear disclosure base             6
-    complete active identity+dose     +3
-    B3 claim compliance              +4
+    complete active identity+dose     +4
+    B3 optional claim validation       0
     B2 false allergen-free claim     -2
     B5 proprietary blend opacity     -10 (class-aware)
     B6 marketing / disease claims    -5
 
-Final: clamp(0, 10, base + B3 - penalty magnitudes).
+Final: clamp(0, 10, disclosure - penalty magnitudes). Optional free-from,
+gluten-free, vegan, and vegetarian claims remain validated for contradictions
+but do not manufacture product-quality credit.
 
 This module re-implements the mature v3 B2/B3/B5/B6 logic without
 importing `score_supplements.py`, preserving the v4 architecture

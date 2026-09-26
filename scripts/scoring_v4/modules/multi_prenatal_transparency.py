@@ -4,9 +4,9 @@ Transparency for broad panels should answer a simple question: can the user
 and scorer see what each panel nutrient is and how much is present?
 
 Positive components:
-  - panel ingredient identities disclosed   4
-  - panel individual doses disclosed        7
-  - B3 claim_compliance bonus               up to 4
+  - panel ingredient identities disclosed   5
+  - panel individual doses disclosed       10
+  - B3 optional claim validation             0
 
 Penalties reuse the v4 generic Transparency implementation, including the
 class-aware B5 multiplier where multi/prenatal proprietary opacity is more

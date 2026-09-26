@@ -27,9 +27,9 @@ TM = json.loads((SCRIPTS_ROOT / "scoring_v4" / "config" / "quality_score.json").
 
 ORIGINAL = {
     "generic": {
-        "dimension_cap": 10.0, "clear_disclosure_base": 6.0, "complete_active_disclosure_bonus": 3.0,
+        "dimension_cap": 10.0, "clear_disclosure_base": 6.0, "complete_active_disclosure_bonus": 4.0,
         "b2_cap": 2.0, "b2_severity_points": {"high": 2.0, "moderate": 1.5, "low": 1.0},
-        "b3_cap": 4.0, "b3_allergen_free": 2.0, "b3_gluten_free": 1.0, "b3_vegan_or_vegetarian": 1.0,
+        "b3_cap": 0.0, "b3_allergen_free": 0.0, "b3_gluten_free": 0.0, "b3_vegan_or_vegetarian": 0.0,
         "b5_base": {"full": 0.0, "partial": 1.0, "none": 2.0},
         "b5_prop_coef": {"full": 0.0, "partial": 3.0, "none": 5.0},
         "b5_cap": 10.0, "b5_count_denom_min": 8,
@@ -38,8 +38,8 @@ ORIGINAL = {
         "b6_disease_claim_penalty": 5.0,
     },
     "multi_prenatal": {
-        "dimension_cap": 15.0, "cap_panel_identity_disclosure": 4.0,
-        "cap_panel_individual_dose_disclosure": 7.0,
+        "dimension_cap": 15.0, "cap_panel_identity_disclosure": 5.0,
+        "cap_panel_individual_dose_disclosure": 10.0,
         "adjunct_blend_panel_disclosure_threshold": 0.9, "adjunct_blend_b5_cap": 2.0,
     },
     "probiotic": {
@@ -63,7 +63,7 @@ def test_runtime_constants_read_from_config_no_drift():
     assert generic_transparency.B5_CLASS_MULTIPLIERS == TM["generic"]["b5_class_multipliers"]
     assert generic_transparency.B5_COUNT_DENOM_MIN == 8
     assert generic_transparency.B6_DISEASE_CLAIM_PENALTY == 5.0
-    assert multi_prenatal_transparency.CAP_PANEL_INDIVIDUAL_DOSE_DISCLOSURE == 7.0
+    assert multi_prenatal_transparency.CAP_PANEL_INDIVIDUAL_DOSE_DISCLOSURE == 10.0
     assert multi_prenatal_transparency.ADJUNCT_BLEND_PANEL_DISCLOSURE_THRESHOLD == 0.9
     assert probiotic_transparency.CAP_STRAIN_IDENTITIES == 8.0
     assert omega_transparency.CAP_TRANSPARENCY == 13.0

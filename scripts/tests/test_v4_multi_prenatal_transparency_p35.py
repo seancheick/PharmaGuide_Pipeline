@@ -5,7 +5,7 @@ Multi/prenatal Transparency is panel-aware:
     Positive components:
         panel ingredient identities disclosed   4 pts
         panel individual doses disclosed        7 pts
-        B3 claim_compliance bonus               up to +4
+        B3 optional claim validation                  0
 
     Penalties reused from generic_transparency:
         B2 false allergen-free claim            up to -2
@@ -101,10 +101,10 @@ def test_transparency_full_panel_disclosure_scores_identity_and_dose_components(
 
     payload = score_transparency(_product())
 
-    assert payload["score"] == 11.0
+    assert payload["score"] == 15.0
     assert payload["max"] == 15.0
-    assert payload["components"]["panel_identity_disclosure"] == 4.0
-    assert payload["components"]["panel_individual_dose_disclosure"] == 7.0
+    assert payload["components"]["panel_identity_disclosure"] == 5.0
+    assert payload["components"]["panel_individual_dose_disclosure"] == 10.0
     assert payload["components"]["B3_claim_compliance"] == 0.0
     assert payload["metadata"]["panel_dose_coverage"] == 1.0
 
@@ -117,10 +117,10 @@ def test_transparency_partial_dose_disclosure_is_proportional() -> None:
         row.pop("unit", None)
     payload = score_transparency(_product(ingredients=rows))
 
-    assert payload["components"]["panel_identity_disclosure"] == 4.0
+    assert payload["components"]["panel_identity_disclosure"] == 5.0
     # No-unit rows stay scoreable identity rows but no longer count as
     # individual dose disclosure.
-    assert payload["components"]["panel_individual_dose_disclosure"] == 3.5
+    assert payload["components"]["panel_individual_dose_disclosure"] == 5.0
     assert payload["metadata"]["panel_dose_count"] == 4
     assert payload["metadata"]["panel_dose_coverage"] == 0.5
 
@@ -138,11 +138,11 @@ def test_transparency_partial_identity_disclosure_is_proportional() -> None:
 
     # Strict scoring excludes unmapped identity rows upstream; module sees
     # only validated panel rows.
-    assert payload["components"]["panel_identity_disclosure"] == 4.0
+    assert payload["components"]["panel_identity_disclosure"] == 5.0
     assert payload["metadata"]["panel_named_count"] == 6
 
 
-def test_transparency_b3_claim_compliance_reuses_generic_and_clamps_at_15() -> None:
+def test_optional_claims_do_not_add_points_to_full_panel_disclosure() -> None:
     from scoring_v4.modules.multi_prenatal_transparency import score_transparency
 
     product = _product(
@@ -156,7 +156,7 @@ def test_transparency_b3_claim_compliance_reuses_generic_and_clamps_at_15() -> N
     )
     payload = score_transparency(product)
 
-    assert payload["components"]["B3_claim_compliance"] == 4.0
+    assert payload["components"]["B3_claim_compliance"] == 0.0
     assert payload["score"] == 15.0
     assert payload["metadata"]["cap_applied"] is False
 
@@ -169,7 +169,7 @@ def test_transparency_b2_allergen_presence_alone_has_no_penalty() -> None:
     ))
 
     assert payload["penalties"]["B2_false_allergen_free_claim"] == 0.0
-    assert payload["score"] == 11.0
+    assert payload["score"] == 15.0
 
 
 def test_transparency_b2_false_allergen_claim_reuses_generic() -> None:
@@ -187,7 +187,7 @@ def test_transparency_b2_false_allergen_claim_reuses_generic() -> None:
     ))
 
     assert payload["penalties"]["B2_false_allergen_free_claim"] == -2.0
-    assert payload["score"] == 9.0
+    assert payload["score"] == 13.0
 
 
 def test_transparency_b6_disease_claim_penalty_reuses_generic() -> None:
@@ -197,7 +197,7 @@ def test_transparency_b6_disease_claim_penalty_reuses_generic() -> None:
 
     assert payload["penalties"]["B6_marketing_claims"] == -5.0
     assert payload["metadata"]["flags"] == ["DISEASE_CLAIM_DETECTED"]
-    assert payload["score"] == 6.0
+    assert payload["score"] == 10.0
 
 
 def test_transparency_b5_opacity_uses_multi_prenatal_class_multiplier() -> None:
@@ -259,10 +259,10 @@ def test_transparency_disclosed_panel_with_opaque_food_matrix_gets_moderate_hit(
     assert payload["metadata"]["panel_active_count"] == 8
     assert payload["metadata"]["panel_excluded_adjunct_count"] == 10
     assert payload["metadata"]["panel_dose_coverage"] == 1.0
-    assert payload["components"]["panel_individual_dose_disclosure"] == 7.0
+    assert payload["components"]["panel_individual_dose_disclosure"] == 10.0
     assert payload["penalties"]["B5_proprietary_blend_opacity"] == -2.0
     assert payload["metadata"]["B5_adjunct_blend_cap_applied"] is True
-    assert payload["score"] == 9.0
+    assert payload["score"] == 13.0
 
 
 def test_transparency_hidden_prenatal_nutrients_still_keeps_full_b5_penalty() -> None:
@@ -289,7 +289,7 @@ def test_transparency_hidden_prenatal_nutrients_still_keeps_full_b5_penalty() ->
     assert payload["metadata"]["panel_dose_coverage"] == 1.0
     assert payload["metadata"]["B5_adjunct_blend_cap_applied"] is False
     assert payload["penalties"]["B5_proprietary_blend_opacity"] < -3.0
-    assert payload["score"] < 8.0
+    assert payload["score"] < 12.0
 
 
 def test_transparency_value_driving_opaque_blends_do_not_use_adjunct_cap() -> None:
@@ -317,7 +317,7 @@ def test_transparency_value_driving_opaque_blends_do_not_use_adjunct_cap() -> No
     assert payload["metadata"]["B5_adjunct_blend_cap_applied"] is False
     assert payload["metadata"]["B5_adjunct_blend_cap_reason"] == "value_relevant_blend_payload"
     assert payload["penalties"]["B5_proprietary_blend_opacity"] < -3.0
-    assert payload["score"] < 8.0
+    assert payload["score"] < 12.0
 
 
 def test_transparency_floors_at_zero_under_heavy_penalties() -> None:
@@ -367,7 +367,7 @@ def test_score_multi_prenatal_wires_transparency_dimension() -> None:
     breakdown = score_multi_prenatal(_product()).to_breakdown()
     trans = breakdown["dimensions"]["transparency"]
 
-    assert trans["score"] == 11.0
+    assert trans["score"] == 15.0
     assert trans["metadata"]["phase"] == "P3.5_multi_prenatal_transparency"
     assert breakdown["score_100"] is not None
     assert breakdown["phase"].startswith("P3.")

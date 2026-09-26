@@ -9,9 +9,9 @@ generic Transparency penalty machinery:
       - per-strain CFU on label                 7 pts
         (Aggregate CFU can floor this line at 4 pts; per-strain CFU is
          still required for full premium disclosure.)
-      - B3 claim_compliance bonus               up to +4
-        (allergen_free +2, gluten_free +1, vegan_or_veg +1; reused
-         from generic_transparency unchanged.)
+      - B3 optional claim validation                 0
+        (free-from and dietary-preference claims remain checked for
+         contradiction but do not add quality points.)
 
     Penalties (reused from generic_transparency):
       - B2 false allergen-free claim            up to -2
@@ -20,7 +20,7 @@ generic Transparency penalty machinery:
         already measured by the disclosure component and is not deducted twice.
       - B6 marketing / disease claims           -5
 
-    Final: clamp(0, 15, sum(positives) - sum(|penalties|))
+    Final: clamp(0, 15, disclosure positives - sum(|penalties|))
 
 Strain identities (8 pts): credited proportionally. A blend container
 ("Probiotic Blend") with named children counts the children as named

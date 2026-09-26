@@ -206,12 +206,12 @@ def test_complete_single_active_identity_and_dose_earns_disclosure_credit() -> N
     )
 
     assert payload["components"]["clear_disclosure_base"] == 6.0
-    assert payload["components"]["complete_active_identity_dose_disclosure"] == 3.0
+    assert payload["components"]["complete_active_identity_dose_disclosure"] == 4.0
     assert payload["components"]["B3_claim_compliance"] == 0.0
-    assert payload["score"] == 9.0
+    assert payload["score"] == 10.0
     assert payload["metadata"]["complete_active_disclosure"] == {
         "qualifies": True,
-        "bonus": 3.0,
+        "bonus": 4.0,
         "declared_active_count": 1,
         "active_row_count": 1,
         "complete_row_count": 1,
@@ -272,14 +272,14 @@ def test_complete_active_disclosure_and_claims_still_cap_at_ten() -> None:
         _product(total_active_ingredients=1, total_active_mg=200.0, compliance_data=compliance)
     )
 
-    assert payload["components"]["complete_active_identity_dose_disclosure"] == 3.0
-    assert payload["components"]["B3_claim_compliance"] == 4.0
-    assert payload["metadata"]["raw_transparency"] == 13.0
-    assert payload["metadata"]["cap_applied"] is True
+    assert payload["components"]["complete_active_identity_dose_disclosure"] == 4.0
+    assert payload["components"]["B3_claim_compliance"] == 0.0
+    assert payload["metadata"]["raw_transparency"] == 10.0
+    assert payload["metadata"]["cap_applied"] is False
     assert payload["score"] == 10.0
 
 
-def test_valid_claims_can_reach_full_transparency_score() -> None:
+def test_optional_claims_do_not_replace_missing_disclosure() -> None:
     from scoring_v4.modules.generic_transparency import score_transparency
 
     compliance = {
@@ -293,8 +293,8 @@ def test_valid_claims_can_reach_full_transparency_score() -> None:
 
     payload = score_transparency(_product(compliance_data=compliance))
 
-    assert payload["components"]["B3_claim_compliance"] == 4.0
-    assert payload["score"] == 10.0
+    assert payload["components"]["B3_claim_compliance"] == 0.0
+    assert payload["score"] == 6.0
     assert payload["metadata"]["claim_validations"] == {
         "allergen_free": True,
         "gluten_free": True,

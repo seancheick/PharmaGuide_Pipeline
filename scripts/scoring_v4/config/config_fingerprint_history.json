@@ -11,7 +11,8 @@
    "1.2.0-label-stated-omega-amounts": "aba2c8fb9ece9b77",
    "1.2.1-dose-band-citations": "7b98a08d11bbbce3",
    "1.3.0-omega-semantics-2026-09": "c44235dc3aa7db5c",
-   "2.0.0-purpose-evidence-2026-09": "d13d1387560baa5d"
+   "2.0.0-purpose-evidence-2026-09": "d13d1387560baa5d",
+   "2.0.1-disclosure-owned-transparency": "72ede2446f4eec12"
   },
   "quality_score": {
    "1.0.4-sports-subtypes": "4e040a97fe26f559",
@@ -44,7 +45,8 @@
    "1.12.0-omega-semantics-and-null-no-credit": "15c0bf887de5680f",
    "1.13.0-dose-applicability-gate": "d70f38bb941acd2c",
    "1.15.0-parent-relative-probiotic-fairness": "f75b71cc3554782a",
-   "1.16.0-sports-evidence-ownership": "33021d6361d1faaa"
+   "1.16.0-sports-evidence-ownership": "33021d6361d1faaa",
+   "1.17.0-disclosure-owned-transparency": "729d7ab72c83a701"
   }
  }
 }

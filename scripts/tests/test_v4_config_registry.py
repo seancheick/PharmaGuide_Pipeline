@@ -58,8 +58,8 @@ def test_config_fingerprint_is_stable_hex():
 def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
-    assert config_version("omega") == "2.0.0-purpose-evidence-2026-09"
-    assert config_version("quality_score") == "1.16.0-sports-evidence-ownership"
+    assert config_version("omega") == "2.0.1-disclosure-owned-transparency"
+    assert config_version("quality_score") == "1.17.0-disclosure-owned-transparency"
 
 
 def test_all_config_provenance_shape():

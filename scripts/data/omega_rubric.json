@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "version": "2.0.0-purpose-evidence-2026-09",
-    "description": "P1.6 omega/fish-oil rubric. 2.0.0: reviewed purpose evidence is resolved from INGR_OMEGA3 through evidence_resolver against the shared directed daily-exposure interval; the 250 mg Evidence floor and prenatal additive bonus are retired. Dose scores both interval endpoints. Molecular-form quality is being migrated to IQM as the sole form-quality owner.",
+    "version": "2.0.1-disclosure-owned-transparency",
+    "description": "P1.6 omega/fish-oil rubric. Reviewed purpose evidence is resolved from INGR_OMEGA3 through evidence_resolver against the shared directed daily-exposure interval; the 250 mg Evidence floor and prenatal additive bonus are retired. Dose scores both interval endpoints. Molecular-form quality is being migrated to IQM as the sole form-quality owner. Optional free-from and dietary-preference claims are validated but earn no Transparency points.",
     "purpose": "scoring_v4_omega_module_rubric",
     "last_updated": "2026-09-25",
     "owners": [
@@ -178,7 +178,7 @@
     "dimension_cap": 15
   },
   "transparency": {
-    "_doc": "EPA/DHA breakdown disclosed (at least one component) + Form disclosed + Source disclosed + B3 claim_compliance bonus (oxidation testing retired 2026-09-18; Verification owns it). Penalties B2 allergen / B5 opacity (class-aware) / B6 marketing reuse the same helpers as generic/probiotic.",
+    "_doc": "EPA/DHA breakdown disclosed (at least one component) + Form disclosed + Source disclosed. Optional B3 claims are validated but earn no points (oxidation testing retired 2026-09-18; Verification owns it). Penalties B2 allergen / B5 opacity (class-aware) / B6 marketing reuse the same helpers as generic/probiotic.",
     "epa_or_dha_disclosed": 5,
     "_epa_or_dha_disclosed_doc": "Awarded when at least one of EPA or DHA is labeled with a positive mg quantity. Pure-EPA and pure-DHA (e.g. algal DHA) products qualify — disclosure of the active component(s) the product carries is what matters.",
     "form_disclosed": 3,
@@ -188,8 +188,8 @@
       "score": 0
     },
     "b3_claim_compliance": {
-      "_doc": "Reuses generic Transparency B3 sub-rubric (allergen_free / gluten_free / vegan / vegetarian display claims), cap 4.",
-      "cap": 4
+      "_doc": "Reuses generic Transparency B3 validation for allergen-free, gluten-free, vegan, and vegetarian display claims; optional claims earn no positive quality points.",
+      "cap": 0
     },
     "penalties_inherited": [
       "b2_allergen",

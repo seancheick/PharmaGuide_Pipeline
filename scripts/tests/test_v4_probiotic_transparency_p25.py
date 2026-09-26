@@ -7,7 +7,7 @@ positives + reuses the generic Transparency penalty machinery:
         all strain identities named on label    8 pts
         per-strain CFU on label                 7 pts
         aggregate CFU floor                     up to +4, non-stacking
-        B3 claim_compliance bonus               up to +4  (allergen_free +2,
+        B3 optional claim validation                  0  (claims remain checked,
                                                            gluten_free +1,
                                                            vegan_or_veg +1)
 
@@ -232,11 +232,10 @@ def test_transparency_no_cfu_still_gets_no_cfu_disclosure_credit() -> None:
     assert payload["metadata"]["aggregate_cfu_disclosure"]["basis"] == "no_cfu_disclosure"
 
 
-# --- B3 claim_compliance bonus (reused) ----------------------------------
+# --- B3 optional-claim validation (reused) -------------------------------
 
 
-def test_transparency_b3_claim_compliance_reuses_generic() -> None:
-    """Gluten-free + allergen-free → +3 (1 + 2). Vegan only → +1. Cap +4."""
+def test_optional_claims_are_validated_but_do_not_add_quality_points() -> None:
     from scoring_v4.modules.probiotic_transparency import score_transparency
 
     product = _probiotic(
@@ -244,7 +243,7 @@ def test_transparency_b3_claim_compliance_reuses_generic() -> None:
                     "conflicts": [], "has_may_contain_warning": False, "vegan": False},
     )
     payload = score_transparency(product)
-    assert payload["components"]["B3_claim_compliance"] == 3.0
+    assert payload["components"]["B3_claim_compliance"] == 0.0
 
 
 # --- B2 allergen penalty (reused) ----------------------------------------
@@ -331,7 +330,7 @@ def test_transparency_dimension_cap_15() -> None:
 
 
 def test_transparency_dimension_clamps_to_15() -> None:
-    """Strain identities 8 + per-strain CFU 7 + B3 +4 = 19. Must clamp to 15."""
+    """Complete strain identity and per-strain CFU disclosure reaches 15."""
     from scoring_v4.modules.probiotic_transparency import score_transparency
 
     product = _probiotic(
