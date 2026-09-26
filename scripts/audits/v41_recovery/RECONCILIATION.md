@@ -537,3 +537,64 @@ ranges (including phytosome mass versus constituent mass) remain a review gap;
 this narrow correction does not assert full botanical clinical closure.
 59 focused botanical/role/omega-standard checks passed. The stale omega test
 now expects 16.8 at the 1,200 mg minimum, rather than 18.4 endpoint averaging.
+
+### Protein mover dispositions — current registry coverage, not a quality judgment
+
+Owner: `backed_clinical_studies.json::INGR_WHEY_PROTEIN` and existing source
+projection/recovery. Will NOT create: broad aliases, a source-family registry,
+product exceptions, or implied equivalence between isolated and blended evidence.
+Raw labels were read from the existing frozen sample's source paths, alongside
+active/inactive rows and `declared_protein_source_rows`. Fourteen dispositions:
+
+| Product | Source finding | Disposition |
+|---|---|---|
+| 42306 | Raw inactive proprietary whey blend was dropped | Cleaner/projection fixed; Evidence recovers on fresh input |
+| 42289 | Raw casein/egg/soy/whey blend was dropped | Source loss fixed; mixed-egg applicability remains unrepresented |
+| 25694 | Casein/egg/milk/soy/whey declared | Mixed-egg applicability gap; no isolated-egg alias added |
+| 259796 | Casein/whey/egg declared | Mixed-egg applicability gap |
+| 317624 | Casein/whey/egg declared | Mixed-egg applicability gap |
+| 330181 | Hemp protein declared | Outside current record; hemp-specific trial reviewed below |
+| 330187 | Rice protein declared | Outside current record; rice-specific trials reviewed below |
+| 264831 | Fava isolate plus rice source declared | Outside current record; fava cannot borrow whey/pea scope |
+| 273676 | Fava/barley/rice blend | Outside current record |
+| 273685 | Fava/barley/rice blend | Outside current record |
+| 273696 | Fava/pea/salmon blend | Outside current record; raw salmon row has misleading pea ingredientGroup |
+| 277517 | Fava/pea/ProGo salmon blend | Outside current record; same misleading raw taxonomy; rejected by complete-source rule |
+| 29098 | Sprouted rice and additional plant/Chlorella sources | Mixed source scope unrepresented |
+| 180692 | Mixed pea/rice/flax/hemp/quinoa/other greens blend | Macro/title is not a complete reviewed protein-source declaration |
+
+Content verified 2026-09-26 via Europe PMC REST MED records and fullTextXML for
+PMC5867436. PMID 28698222 explicitly includes egg-containing **blends** among
+its sources; it does not establish isolated-egg applicability. The current flat
+alias join cannot express that conditional scope without also admitting isolated
+egg. Keep these four entries as a representation gap, not a claim of absent
+human evidence. PMID 39303495 is whey-specific in older adults; it does not
+broaden this scope to alternative plants or fish sources.
+
+PMID 33261645 compared 24 g rice versus whey in 24 trained males for eight weeks;
+PMID 23782948 studied 48 g rice versus whey. These active-comparator results do
+not inherit the 49-trial meta-analysis rating by adding a rice alias. PMID
+37847288 studied 60 g hemp supplement (40 g protein and 9 g oil) versus soy in
+34 adults, with sex-specific findings; this is not proof that 11 g hemp protein
+on product 330181 receives the same rating. No curated record was edited and
+no clinician approval is asserted.
+
+Sources: https://pubmed.ncbi.nlm.nih.gov/28698222/,
+https://pubmed.ncbi.nlm.nih.gov/39303495/,
+https://pubmed.ncbi.nlm.nih.gov/33261645/,
+https://pubmed.ncbi.nlm.nih.gov/23782948/,
+https://pubmed.ncbi.nlm.nih.gov/37847288/.
+These are completed source-coverage dispositions, with explicitly unresolved
+registry representation/curation; they are not fourteen restored scores.
+
+### Readiness shares recovered clinical matches
+
+Owner: `generic_evidence.py::resolved_clinical_matches` — evidence: `rg -n
+'resolved_clinical_matches|owner_scoped' scripts/assessment_readiness.py
+scripts/scoring_v4/modules/*.py`. Will NOT create: a second matcher or readiness
+state. A failing NAC regression reproduced score recovery alongside an existing
+incidental match while readiness omitted the recovered evidence. Readiness now
+uses the same recovery mode for the three owner-scoped scoring modules.
+115 focused readiness/Evidence checks passed. The preceding stable code checkpoint
+at a4cc5c6b passed 16,347 fast tests, 171 skipped (372.01 s); that checkpoint
+predates this final readiness alignment and is not its complete-suite proof.
