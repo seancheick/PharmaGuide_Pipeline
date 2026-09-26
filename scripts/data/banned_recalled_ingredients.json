@@ -4427,28 +4427,28 @@
           "region": "US",
           "level": "federal",
           "status": "banned",
-          "effective_date": "2020-11-10",
+          "effective_date": null,
           "source": {
             "type": "fda_warning_letter",
-            "citation": "FDA Warning Letter 607248: products containing ibutamoren (MK-677) are unapproved new drugs and unlawful in supplements",
-            "accessed_date": "2026-02-23"
+            "citation": "FDA Warning Letter 719339 (CDER, 2025-12-12): a product marketed as a dietary supplement containing ibutamoren (MK-677) is an unapproved new drug; ibutamoren is excluded from the dietary supplement definition under FD&C Act 201(ff)(3)(B)(ii)",
+            "accessed_date": "2026-09-26"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-02-23"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
         {
           "type": "fda_warning_letter",
-          "title": "FDA Warning Letter 607248 (Andro Pharma LLC)",
+          "title": "Musclepower Enterprise Ltd. dba MONSTER KING and GE LABS - 719339 - 12/12/2025",
           "evidence_grade": "R",
-          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/musclepower-enterprise-ltd-dba-monster-king-and-ge-labs-719339-12122025",
           "supports_claims": [
             "regulatory_action",
             "legal_status"
           ],
-          "evidence_summary": "Identifies ibutamoren (MK-677) products as unapproved new drugs."
+          "evidence_summary": "States that 'GE Labs MK 677' is marketed as a dietary supplement containing ibutamoren, that FDA has concluded ibutamoren is excluded from the dietary supplement definition under 201(ff)(3)(B)(ii) (authorized for investigation as a new drug before any supplement marketing), and that the products are unapproved new drugs."
         },
         {
           "type": "wada_list",
@@ -4473,11 +4473,16 @@
             "date": "2026-02-23",
             "change": "Added MK-677/Ibutamoren unlawful supplement ingredient mapping from P3 regulatory audit",
             "by": "codex"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "Replaced 'FDA Warning Letter 607248 (Andro Pharma LLC)' (https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020) in references_structured and the US jurisdiction source. The URL returned HTTP 404, the Wayback Machine has no capture of any andro-pharma warning-letter URL or any URL containing 607248, and no search found the letter, so it could not be verified. New source: FDA Warning Letter 719339 to Musclepower Enterprise Ltd. dba MONSTER KING and GE LABS (CDER, 2025-12-12), read live; it is the earliest FDA letter found that places ibutamoren in a dietary-supplement context (2021-2023 letters treat MK-677 only as an unapproved drug sold as a SARM). Dates, as decided by Sean on 2026-09-26: regulatory_date 2020-11-10 'FDA ban effective' -> 2025-12-12 'FDA warning letter'; US jurisdiction effective_date 2020-11-10 -> null, because a warning letter dates FDA's statement, not when the exclusion took effect.",
+            "by": "claude-audit"
           }
         ]
       },
-      "regulatory_date": "2020-11-10",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2025-12-12",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C0528358",
       "external_ids": {

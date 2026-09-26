@@ -226,3 +226,34 @@ def test_high_risk_chaparral_cui_is_larrea_tridentata(banned_recalled):
     assert entry["cui"] == "C0697139"
     assert "larrea divaricata" in {a.lower() for a in entry["aliases"]}
     assert "C1050700" in json.dumps(entry["review"]["change_log"])
+
+
+def test_banned_ibutamoren_cites_a_live_fda_letter_not_the_andro_pharma_ghost(banned_recalled):
+    """BANNED_IBUTAMOREN_MK677 cited "FDA Warning Letter 607248 (Andro Pharma
+    LLC)" (andro-pharma-llc-607248-11102020) as its reference and its US
+    jurisdiction source, with 2020-11-10 as both regulatory_date ("FDA ban
+    effective") and effective_date. The URL returned HTTP 404 on 2026-09-26,
+    the Wayback Machine has no capture of it, and no search found the letter.
+    FDA Warning Letter 719339 (Musclepower Enterprise Ltd. dba MONSTER KING
+    and GE LABS, CDER, 2025-12-12) says "GE Labs MK 677" is marketed as a
+    dietary supplement and that ibutamoren is excluded from the dietary
+    supplement definition under FD&C Act 201(ff)(3)(B)(ii). A letter dates
+    FDA's statement, not when the exclusion took effect, so effective_date is
+    null (Sean, 2026-09-26)."""
+    entry = _find(banned_recalled, "BANNED_IBUTAMOREN_MK677")
+    live = {k: v for k, v in entry.items() if k != "review"}
+    blob = json.dumps(live)
+    assert "607248" not in blob and "andro-pharma" not in blob.lower()
+    assert "Andro Pharma" not in blob and "2020-11-10" not in blob
+    urls = [r.get("url") for r in entry["references_structured"]]
+    assert (
+        "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/"
+        "warning-letters/musclepower-enterprise-ltd-dba-monster-king-and-ge-labs-719339-12122025"
+    ) in urls
+    us = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "US"]
+    assert len(us) == 1 and us[0]["effective_date"] is None
+    assert "719339" in us[0]["source"]["citation"]
+    assert entry["regulatory_date"] == "2025-12-12"
+    assert entry["regulatory_date_label"] == "FDA warning letter"
+    log = json.dumps(entry["review"]["change_log"])
+    assert "607248" in log and "2020-11-10" in log
