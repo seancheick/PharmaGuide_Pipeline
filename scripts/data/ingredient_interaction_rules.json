@@ -145,7 +145,8 @@
       "2026-09-26: RULE_IQM_BACOPA_THYROID cited only PMID 27912958 (bacopa for cognition in children) on its thyroid, thyroid-medication and sedative sub-rules. Thyroid sub-rules now cite Kar 2002 (PMID 12065164: bacopa raised T4 41% in male mice); sedatives cite a 2022 pharmacology review (PMID 36061899: traditional sedative use, rodent GABAergic data) and a mouse study in which bacopa reversed diazepam-induced amnesia (PMID 18193203). Unsourced claims removed (iodide uptake/thyroglobulin synthesis, additive sedation in animals, effect on levothyroxine absorption). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES antihypertensives cited an EEG study (PMID 18296328) and an anxiety meta-analysis (PMID 35378276) for 5-8 mmHg blood-pressure reductions neither reports. It now cites the two blood-pressure trials: Yoto 2012 (PMID 23107346: 200 mg blunted stress-induced BP rises) and Rogers 2008 (PMID 17891480: 200 mg antagonised caffeine's BP rise). The sedatives sibling's copy (CNS depressant, mild sedative effects) contradicted its own sources, which report relaxation without drowsiness and no anxiolytic effect over placebo; rewritten. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_GUARANA drug:sedatives cited two weight-loss-product cardiovascular papers (PMIDs 21676849, 15961987), and its alert copy said guarana has sedative effects, the opposite of its mechanism. It now cites a guarana review (PMID 23981847: seeds up to 6% caffeine) and a midazolam-caffeine trial (PMID 11125871: 250 mg caffeine moderately antagonised midazolam sedation, 125 mg did not, zolpidem not antagonised); headline, alert and note now describe a stimulant. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS cited only PMID 19370686 (Cochrane review of huperzine A for vascular dementia). It now cites a huperzine A pharmacology review (PMID 25191267: natural acetylcholinesterase inhibitor) and the ARICEPT prescribing information (7.1: cholinesterase inhibitors may interfere with anticholinergic medications); the unsourced cholinergic-toxidrome claim was removed. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS cited only PMID 19370686 (Cochrane review of huperzine A for vascular dementia). It now cites a huperzine A pharmacology review (PMID 25191267: natural acetylcholinesterase inhibitor) and the ARICEPT prescribing information (7.1: cholinesterase inhibitors may interfere with anticholinergic medications); the unsourced cholinergic-toxidrome claim was removed. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_RHODIOLA_IMMUNE_BP drug:sedatives cited only PMID 26613955 (a CYP2C9 study) for an unsourced claim of unpredictable, dose-dependent sedative interaction, and its alert said rhodiola is mildly sedative. It now cites the EU herbal monograph (EMA/HMPC/24177/2023 Rev.1: no clinically relevant interactions; no sedation among undesirable effects) and says no interaction is established; evidence_level probable -> theoretical. Severity and last_reviewed unchanged; flagged to Sean as a retirement candidate. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -16282,15 +16283,15 @@
         {
           "drug_class_id": "sedatives",
           "severity": "monitor",
-          "evidence_level": "probable",
-          "mechanism": "Rhodiola rosea inhibits CYP2C9 activity by ~21% in healthy volunteers (RCT, n=13), reducing metabolism of CYP2C9 substrates such as warfarin and phenytoin. Additionally, its adaptogenic/stimulant profile may interact unpredictably with CNS sedatives. Bidirectional modulation (stimulant at low dose, sedating at high dose) is reported in the literature.",
-          "action": "Caution with concurrent sedative use. Monitor for altered drug levels if co-administered with CYP2C9-metabolized medications. Avoid high-dose combination.",
+          "evidence_level": "theoretical",
+          "mechanism": "No study of rhodiola with sedative medicines was found. The EU herbal monograph reports that no clinically relevant interactions have been observed and lists headache, gastrointestinal upset and skin rash, not drowsiness, as undesirable effects. Any additive effect with sedatives is theoretical.",
+          "action": "Mention rhodiola to your prescriber if you take sedative or sleep medication; no interaction has been established.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/26613955/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhodiola-rosea-l-rhizoma-et-radix-revision-1_en.pdf"
           ],
-          "alert_headline": "May add to sedative drowsiness",
-          "alert_body": "Rhodiola has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding rhodiola \u2014 the combination can increase drowsiness.",
-          "informational_note": "Rhodiola has sedative activity \u2014 relevant to people on sedatives or sleep medications.",
+          "alert_headline": "Sedative interaction not established",
+          "alert_body": "Rhodiola has not been shown to add to sedatives, and EU regulators report no clinically relevant interactions. If you take a sleep medication, mention rhodiola to your prescriber.",
+          "informational_note": "Rhodiola has no established sedative interaction \u2014 relevant to people on sedatives or sleep medications.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {

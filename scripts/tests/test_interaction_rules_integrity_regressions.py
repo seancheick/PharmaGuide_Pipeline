@@ -625,3 +625,24 @@ def test_huperzine_anticholinergic_rule_cites_ache_pharmacology_and_class_label(
     assert "interfere with the activity of anticholinergic" in anticholinergics["mechanism"]
     assert "toxidrome" not in anticholinergics["mechanism"]
     assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+
+
+EMA_RHODIOLA = (
+    "https://www.ema.europa.eu/en/documents/herbal-monograph/"
+    "final-european-union-herbal-monograph-rhodiola-rosea-l-rhizoma-et-radix-revision-1_en.pdf"
+)
+
+
+def test_rhodiola_sedative_rule_no_longer_claims_a_sedative_effect():
+    rule = _rule("RULE_IQM_RHODIOLA_IMMUNE_BP")
+    sedatives = _sub_rule(rule, "drug_class_id", "sedatives")
+
+    # 26613955 is a CYP2C9 study; the EU monograph reports no clinically
+    # relevant interactions and no sedation.
+    assert sedatives["sources"] == [EMA_RHODIOLA]
+    assert (sedatives["severity"], sedatives["evidence_level"]) == ("monitor", "theoretical")
+    copy = json.dumps(sedatives).lower()
+    for stale in ("mild sedative", "sedative activity", "bidirectional", "cyp2c9",
+                  "add to sedative drowsiness"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review

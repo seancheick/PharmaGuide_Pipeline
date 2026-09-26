@@ -315,3 +315,20 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   Class-level statement; no huperzine-specific interaction study found.
 - Removed as unsourced: the combination "can result in cholinergic toxidrome (bronchospasm,
   bradycardia, excessive secretions, miosis)".
+
+## RULE_IQM_RHODIOLA_IMMUNE_BP — re-sourced (sedatives)
+
+- Ghost for sedatives: **PMID 26613955** = "Effect of commercial Rhodiola rosea on CYP enzyme activity in
+  humans" (Eur J Clin Pharmacol 2016): 21% lower CYP2C9 activity; "clinically relevant during
+  treatment with CYP2C9 substrates with a narrow therapeutic index, such as phenytoin and warfarin".
+  Nothing on sedatives. (It stays on immunosuppressants, where it passed.)
+- The sub-rule's "adaptogenic/stimulant profile may interact unpredictably with CNS sedatives.
+  Bidirectional modulation (stimulant at low dose, sedating at high dose) is reported in the
+  literature" had no source; its alert said "Rhodiola has mild sedative effects".
+- **EU herbal monograph, Rhodiola rosea L., rhizoma et radix, Rev.1** — EMA/HMPC/24177/2023, 20 March
+  2024. `https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhodiola-rosea-l-rhizoma-et-radix-revision-1_en.pdf`
+  4.5: "No clinically relevant interactions have been observed." 4.8: headache; nausea, abdominal
+  pain, diarrhoea; skin rash, itching. No sedation or drowsiness. 4.6: pregnancy/lactation "not
+  recommended" in the absence of sufficient data.
+- No study of rhodiola with sedative drugs found. evidence_level probable → theoretical. Reported to
+  Sean: this sub-rule has no supporting evidence and is a candidate for retirement (deletion is his).
