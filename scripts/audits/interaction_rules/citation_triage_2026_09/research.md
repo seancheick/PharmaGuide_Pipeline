@@ -462,3 +462,22 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
   glucose and hemoglobin A1c (HbA1c) decreased significantly in the 150- and 300-mg VOSO4 groups";
   "The 150- and 300-mg vanadyl doses caused some gastrointestinal intolerance"; "it does not
   dramatically improve insulin sensitivity or glycemic control".
+
+## RULE_IQM_HORNY_GOAT_WEED_HEART — re-sourced (heart_disease, antihypertensives)
+
+- **PMID 15546831** (Partin, Psychosomatics 2004; letter, no abstract): "Tachyarrhythmia and hypomania with
+  horny goat weed". MSKCC summarises it: a 66-year-old man with congestive heart failure hospitalised
+  with new-onset symptomatic arrhythmia. Fits heart_disease (the old heart mechanism never mentioned
+  it); says nothing about hypotension, so it is removed from antihypertensives.
+- **PMID 18778098** (Dell'Agli, J Nat Prod 2008): icariin inhibits PDE5A1 with "IC50 5.9 microM"; the
+  synthetic derivative 3,7-bis(2-hydroxyethyl)icaritin matched sildenafil ("IC50 75 vs 74 nM").
+- **MSKCC About Herbs: Epimedium**: "Icariin can also exhibit a mild phosphodiesterase-5 inhibition
+  effect"; "Do Not Take if ... You have heart disease: Epimedium caused rapid irregular heartbeat and
+  excitability in a patient with heart disease"; estrogen-like activity is attributed "to icariin
+  derivatives icaritin and desmethylicaritin, rather than icariin itself".
+- **VIAGRA (sildenafil) prescribing information**, DailyMed setid 0b0be196-0c62-461c-94f4-9a35339b4501:
+  4.1 "VIAGRA was shown to potentiate the hypotensive effects of nitrates, and its administration to
+  patients who are using nitric oxide donors ... is therefore contraindicated"; 7.2 Alpha-blockers.
+  Class reference for the PDE5 extrapolation; no icariin-nitrate case found.
+- Removed as unsourced: PDE4 inhibition, "weak estrogen receptor agonist activity" of icariin,
+  "producing additive hypotension".

@@ -778,3 +778,28 @@ def test_vanadium_glucose_rules_cite_vanadyl_sulfate_trials():
         assert "PTP-1B" not in sub["mechanism"]
     assert [s["severity"] for s in subs] == ["caution", "caution", "monitor", "caution"]
     assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review
+
+
+MSKCC_EPIMEDIUM = "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/epimedium"
+VIAGRA_LABEL = (
+    "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?"
+    "setid=0b0be196-0c62-461c-94f4-9a35339b4501"
+)
+
+
+def test_horny_goat_weed_rules_say_what_the_pde5_and_case_sources_say():
+    rule = _rule("RULE_IQM_HORNY_GOAT_WEED_HEART")
+    heart = _sub_rule(rule, "condition_id", "heart_disease")
+    antihypertensives = _sub_rule(rule, "drug_class_id", "antihypertensives")
+
+    assert heart["sources"] == [
+        MSKCC_EPIMEDIUM, _pmid("18778098"), _pmid("15546831"), VIAGRA_LABEL,
+    ]
+    # The tachyarrhythmia case says nothing about blood pressure.
+    assert antihypertensives["sources"] == [MSKCC_EPIMEDIUM, _pmid("18778098"), VIAGRA_LABEL]
+    assert (heart["severity"], antihypertensives["severity"]) == ("caution", "caution")
+    assert "tachyarrhythmia" in heart["mechanism"]
+    copy = json.dumps([heart, antihypertensives]).lower()
+    for stale in ("pde4", "estrogen receptor agonist", "producing additive hypotension"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
