@@ -1211,3 +1211,13 @@ def test_licorice_root_bp_floor_cites_the_100_mg_glycyrrhizic_acid_trial():
     assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day")
     assert floor["source"] == LICORICE_FLOOR_SOURCE
     assert floor["confidence_basis"] == "documented_effective_dose"
+
+
+def test_iqm_licorice_bp_floors_cite_the_100_mg_glycyrrhizic_acid_trial():
+    """Same defect as the licorice root rule: PMID 393503 never mentions 100 mg."""
+    rule = _rule("RULE_IQM_LICORICE_HYPERTENSION")
+    for key, target in (("condition_id", "hypertension"), ("drug_class_id", "antihypertensives")):
+        floor = _sub_rule(rule, key, target)["min_effective_dose"]
+        assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
+        assert floor["source"] == LICORICE_FLOOR_SOURCE, target
+        assert floor["confidence_basis"] == "documented_effective_dose", target
