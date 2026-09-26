@@ -142,7 +142,8 @@
       "2026-09-26: RULE_BANNED_TANSY_PREGNANCY pregnancy cited only PMID 28472675 (a rat/brine-shrimp thujone toxicity study with no pregnancy data). It now cites the Dosoky 2021 review of maternal reproductive toxicity of essential oils (PMID 33673548: whole tansy can induce miscarriage; tansy oil ~45% beta-thujone, a convulsant) and Conway 1979 (PMID 232204: tansy among plants used as abortifacients). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_YERBA_MATE_CARDIOVASCULAR drug:anticoagulants cited PMID 39708247 (an endothelial-function trial) for a claim that yerba mate's vitamin K opposes warfarin, which no source supports. It now cites a 6-week RCT (PMID 25562195: mate tea lowered thromboxane B2 and blood viscosity) and an in vitro/rat study of a mate-fruit saponin (PMID 23134458: prolonged clotting times, thrombin/FXa and platelet inhibition, no significant bleeding in rats); the action no longer gives vitamin K advice. Severity, evidence_level and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_ANDROGRAPHIS autoimmune and immunosuppressants cited two antiplatelet papers (PMIDs 28745507, 21822619) for an immunostimulation claim neither makes. They now cite a 14-week RA RCT (PMID 19408036), a 12-month RRMS RCT on interferon beta (PMID 27215274) and a safety meta-analysis including autoimmune trials (PMID 33372366); mechanisms say andrographis was tolerated in those trials and that its use with immunosuppressants is unstudied. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_BACOPA_THYROID cited only PMID 27912958 (bacopa for cognition in children) on its thyroid, thyroid-medication and sedative sub-rules. Thyroid sub-rules now cite Kar 2002 (PMID 12065164: bacopa raised T4 41% in male mice); sedatives cite a 2022 pharmacology review (PMID 36061899: traditional sedative use, rodent GABAergic data) and a mouse study in which bacopa reversed diazepam-induced amnesia (PMID 18193203). Unsourced claims removed (iodide uptake/thyroglobulin synthesis, additive sedation in animals, effect on levothyroxine absorption). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_BACOPA_THYROID cited only PMID 27912958 (bacopa for cognition in children) on its thyroid, thyroid-medication and sedative sub-rules. Thyroid sub-rules now cite Kar 2002 (PMID 12065164: bacopa raised T4 41% in male mice); sedatives cite a 2022 pharmacology review (PMID 36061899: traditional sedative use, rodent GABAergic data) and a mouse study in which bacopa reversed diazepam-induced amnesia (PMID 18193203). Unsourced claims removed (iodide uptake/thyroglobulin synthesis, additive sedation in animals, effect on levothyroxine absorption). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES antihypertensives cited an EEG study (PMID 18296328) and an anxiety meta-analysis (PMID 35378276) for 5-8 mmHg blood-pressure reductions neither reports. It now cites the two blood-pressure trials: Yoto 2012 (PMID 23107346: 200 mg blunted stress-induced BP rises) and Rogers 2008 (PMID 17891480: 200 mg antagonised caffeine's BP rise). The sedatives sibling's copy (CNS depressant, mild sedative effects) contradicted its own sources, which report relaxation without drowsiness and no anxiolytic effect over placebo; rewritten. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -20593,11 +20594,11 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "L-theanine stimulates alpha-wave brain activity and attenuates sympathetic nervous system activation, which has been associated with modest blood pressure reductions (approximately 5-8 mmHg systolic) in small RCTs. Additive hypotensive effects are possible, particularly with alpha-blocker and calcium channel blocker antihypertensives.",
+          "mechanism": "L-theanine has lowered blood pressure in hypertensive rats. In people, 200 mg blocked the blood pressure rise caused by 250 mg caffeine (randomised, n = 48) and blunted stress-induced blood pressure rises in adults whose pressure rose most during mental tasks (crossover, n = 14). It has not been studied with antihypertensive drugs, so an additive lowering effect is theoretical.",
           "action": "Monitor blood pressure when combining L-theanine with antihypertensive medications, particularly in patients with borderline-low blood pressure.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/18296328/",
-            "https://pubmed.ncbi.nlm.nih.gov/35378276/"
+            "https://pubmed.ncbi.nlm.nih.gov/23107346/",
+            "https://pubmed.ncbi.nlm.nih.gov/17891480/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "L-theanine can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding L-theanine.",
@@ -20636,15 +20637,15 @@
           "drug_class_id": "sedatives",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "L-theanine increases GABA, glycine, and serotonin levels in the brain and modulates AMPA receptor activity, producing anxiolytic and sedative-like effects. These CNS depressant effects may be additive with benzodiazepines, non-benzodiazepine hypnotics (z-drugs), and barbiturates.",
+          "mechanism": "At a dietary dose (50 mg), L-theanine increased EEG alpha activity, which the authors describe as relaxing the mind without inducing drowsiness. In a network meta-analysis of herbal treatments for anxiety, L-theanine did not outperform placebo. It has not been studied with benzodiazepines, z-drugs or other sedatives, so an additive sedative effect is theoretical.",
           "action": "Advise patients on sedative-hypnotic medications of potential additive sedation. Avoid high doses of L-theanine if operating machinery or driving.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18296328/",
             "https://pubmed.ncbi.nlm.nih.gov/35378276/"
           ],
-          "alert_headline": "May add to sedative drowsiness",
-          "alert_body": "L-theanine has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding L-theanine \u2014 the combination can increase drowsiness.",
-          "informational_note": "L-theanine has sedative activity \u2014 relevant to people on sedatives or sleep medications.",
+          "alert_headline": "Relaxing effect; not tested with sedatives",
+          "alert_body": "In studies L-theanine promoted relaxation without drowsiness, and it has not been tested with sleep medicines. If you take a sedative, mention L-theanine to your prescriber.",
+          "informational_note": "L-theanine has relaxing effects \u2014 relevant to people on sedatives or sleep medications.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {

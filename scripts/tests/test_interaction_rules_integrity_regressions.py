@@ -573,3 +573,21 @@ def test_bacopa_rules_drop_a_pediatric_cognition_review():
     ):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+
+
+def test_l_theanine_rules_say_what_the_blood_pressure_and_eeg_studies_say():
+    rule = _rule("RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES")
+    antihypertensives = _sub_rule(rule, "drug_class_id", "antihypertensives")
+    sedatives = _sub_rule(rule, "drug_class_id", "sedatives")
+
+    # 18296328 (EEG) and 35378276 (anxiety NMA) measure no blood pressure.
+    assert antihypertensives["sources"] == [_pmid("23107346"), _pmid("17891480")]
+    assert sedatives["sources"] == [_pmid("18296328"), _pmid("35378276")]
+    assert (antihypertensives["severity"], sedatives["severity"]) == ("caution", "caution")
+    assert "caffeine" in antihypertensives["mechanism"]
+    assert "without inducing drowsiness" in sedatives["mechanism"]
+    copy = json.dumps([antihypertensives, sedatives]).lower()
+    for stale in ("5-8 mmhg", "cns depressant", "glycine", "has mild sedative effects",
+                  "has sedative activity"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review

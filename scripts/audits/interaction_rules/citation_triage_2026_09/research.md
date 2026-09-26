@@ -267,3 +267,21 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   diazepam-induced anterograde amnesia ("antiamnesic effects"). No study of bacopa with sedative
   drugs was found; the rule's "Animal studies show additive sedative effects when combined with CNS
   depressants" has no source and is removed.
+
+## RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES — re-sourced (antihypertensives; sibling sedatives copy)
+
+- Ghosts for antihypertensives: **PMID 18296328** ("L-theanine, a natural constituent in tea, and its
+  effect on mental state", EEG alpha activity at 50 mg) and **PMID 35378276** (herbal anxiety network
+  meta-analysis; "L-theanine ... did not outperform a placebo"). Neither measures blood pressure; the
+  rule said "modest blood pressure reductions (approximately 5-8 mmHg systolic) in small RCTs".
+- **PMID 23107346** (Yoto, J Physiol Anthropol 2012; PMC3518171; crossover n = 14): L-theanine 200 mg
+  "significantly inhibited the blood-pressure increases in a high-response group" under mental
+  stress (already the rule's min_effective_dose source; 200 mg confirmed in full text).
+- **PMID 17891480** (Rogers, Psychopharmacology 2008; RCT n = 48): 200 mg theanine "antagonised the
+  effect of caffeine on blood pressure"; theanine "has been found to reduce blood pressure in
+  hypertensive rats". No trial found of theanine with antihypertensive drugs, and none showing a
+  fixed 5-8 mmHg fall.
+- Sibling sedatives cites 18296328 and 35378276, which contradict its copy: 18296328 says L-theanine
+  "relaxes the mind without inducing drowsiness"; 35378276 found no anxiolytic effect over placebo.
+  Mechanism, headline, alert and note rewritten; "increases GABA, glycine, and serotonin" and "CNS
+  depressant effects" had no source. Severity (caution) unchanged; reported as a likely over-warning.
