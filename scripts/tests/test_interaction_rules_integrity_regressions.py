@@ -887,3 +887,13 @@ def test_borage_seizure_rule_cites_the_borage_case_and_the_epo_counterpoint():
     for stale in ("~24%", "neurotoxic risk", "applies similarly to borage"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+def test_red_yeast_rice_efsa_2025_sentence_cites_the_2025_opinion():
+    rule = _rule("RULE_BANNED_RED_YEAST_RICE_STATINS")
+    high_cholesterol = _sub_rule(rule, "condition_id", "high_cholesterol")
+
+    assert "EFSA 2025" in high_cholesterol["mechanism"]
+    assert _pmid("40027377") in high_cholesterol["sources"]  # EFSA NDA 2025
+    assert _pmid("32626016") in high_cholesterol["sources"]  # EFSA ANS 2018
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review

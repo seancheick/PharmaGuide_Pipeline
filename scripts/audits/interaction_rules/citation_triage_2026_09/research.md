@@ -569,3 +569,20 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
   certified free of toxic compounds called unsaturated pyrrolizidine alkaloids (UPAs)"; UPAs cause
   "toxic liver effects". Removed as unsourced: "GLA, ~24%" and PAs "pose additional neurotoxic risk".
   evidence_level theoretical → limited (one human case).
+
+## RULE_BANNED_RED_YEAST_RICE_STATINS — source added (high_cholesterol); reviewed (statins)
+
+- high_cholesterol said "EFSA 2025 concluded no safe daily intake level for monacolins can be
+  established" but cited the 2018 EFSA ANS opinion, **PMID 32626016** ("monacolin K in lactone form is
+  identical to lovastatin"; adverse effects "at intake levels as low as 3 mg/day"; "unable to
+  identify a dietary intake of monacolins from RYR that does not give rise to concerns"). 32626016 is
+  on topic (its word is "hypercholesterolaemia", which the verifier's "cholester" stem misses) and
+  stays as a reviewed entry.
+- **PMID 40027377** (EFSA NDA Panel, EFSA J 2025): "reiterates the concerns of the ANS Panel ... that
+  exposure to monacolin K from RYR at intake levels as low as 3 mg/day could lead to severe adverse
+  effects on the musculoskeletal system, including rhabdomyolysis, and on the liver"; data "do not
+  allow establishing the safety of monacolins in RYR supplements below 3 mg/day or to identify a daily
+  intake ... that does not raise safety concerns". Added as the source of the "EFSA 2025" sentence.
+- statins: **PMID 12622602** (Arch Intern Med 2003) — statin myopathy "is dose related and is increased
+  when statins are used in combination with agents that share common metabolic pathways". Class-level
+  support for stacking a lovastatin-equivalent on a statin (reviewed entry).
