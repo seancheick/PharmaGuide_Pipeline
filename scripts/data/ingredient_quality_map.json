@@ -1744,7 +1744,9 @@
         "changes": [
           "Defined bio_score as a within-parent 0-15 form-quality scale; the best evidence-supported eligible form or tied forms receive 15.",
           "Aligned six disclosed oral/sublingual B12 forms at 15 because reviewed evidence does not establish meaningful absorption or efficacy superiority at equivalent supplemental doses.",
-          "Set B12 unspecified to 14 under the existing lowest-eligible-minus-one nondisclosure rule and removed conflicting methyl/MTHFR and sublingual-premium copy."
+          "Set B12 unspecified to 14 under the existing lowest-eligible-minus-one nondisclosure rule and removed conflicting methyl/MTHFR and sublingual-premium copy.",
+          "2026-09-26: cascara_sagrada gains rxcui 66869 (RxNorm IN 'cascara sagrada', ATC A06AB07); its note had said no RxNorm concept existed. Receipt: scripts/audits/pending_items_20260926/research.md.",
+          "2026-09-26: miroestrol description no longer calls it a coumestan: PubChem CID 165001 (C20H22O6) is a pentacyclic phytoestrogen, while the coumestan skeleton is [1]benzofuro[3,2-c]chromen-6-one (CID 638309). Receipt: scripts/audits/pending_items_20260926/research.md."
         ],
         "regression_tests": "scripts/tests/test_iqm_b12_sublingual_integrity.py, scripts/tests/test_b35_dr_pham_signoff_integrity.py, scripts/tests/test_ingredient_matching_regression.py"
       },
@@ -35380,7 +35382,7 @@
     "aliases": [
       "Miroestrol"
     ],
-    "description": "Estrogenic coumestan constituent of Pueraria mirifica, used as a standardization marker for kwao krua root extracts.",
+    "description": "Estrogenic constituent of Pueraria mirifica, used as a standardization marker for kwao krua root extracts.",
     "dosage_importance": 0.3,
     "source": "quarantine_remediation_2026_09_19_clinical_signoff",
     "priority": 1,
@@ -67334,6 +67336,7 @@
     "category": "herbs",
     "category_enum": "herbs",
     "cui": "C0205704",
+    "rxcui": "66869",
     "aliases": [
       "cascara",
       "rhamnus purshiana",
@@ -67409,7 +67412,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "RxCUI 66869 is the RxNorm ingredient 'cascara sagrada' (tty IN, ATC A06AB07); 1350209 'Frangula purshiana bark extract' is the narrower extract concept. Verified on RxNav 2026-09-26."
   },
   "blue_flag": {
     "standard_name": "Blue Flag",
