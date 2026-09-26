@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
     "last_updated": "2026-09-26",
-    "total_entries": 178,
+    "total_entries": 182,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -15279,6 +15279,638 @@
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "NIH LiverTox documents duration- and dose-related adverse effects plus rare liver injury. Cascara's active compounds are stimulant-laxative hydroxyanthracene derivatives, so there is no plausible trace-excipient use. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
       "inactive_policy_reviewed_on": "2026-05-12"
+    },
+    {
+      "id": "RISK_ALOE_LATEX",
+      "standard_name": "Aloe Latex",
+      "aliases": [
+        "aloe latex",
+        "aloe leaf latex",
+        "aloe vera latex",
+        "aloe leaf inspissated juice",
+        "aloes",
+        "aloe ferox",
+        "aloe ferox mill.",
+        "aloe ferox leaf",
+        "aloe ferox leaf extract",
+        "aloe ferox leaf exudate",
+        "aloe ferox leaf juice",
+        "aloe ferox leaf juice extract",
+        "aloe ferox leaf juice powder",
+        "aloe ferox leaf powder",
+        "aloe ferox dry leaf juice",
+        "cape aloe",
+        "cape aloes",
+        "cape aloe leaf",
+        "aloe capensis",
+        "aloe cape",
+        "bitter aloe",
+        "non-decolorized aloe vera whole leaf extract"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "high_risk",
+      "reason": "FDA's 2002 final rule (67 FR 31125) deemed aloe stimulant-laxative ingredients not generally recognized as safe and effective for OTC use because the requested carcinogenicity data were never submitted; it is not a blanket US dietary-supplement ban. EFSA (2018) concluded that aloe extracts are genotoxic in vitro and whole-leaf aloe extract is carcinogenic, and could not set a safe daily intake for hydroxyanthracene derivatives. Regulation (EU) 2021/468 listed preparations from the leaf of Aloe species containing hydroxyanthracene derivatives as prohibited in food; the EU General Court annulled that listing on 13 November 2024 (T-189/21), the Commission's appeal (C-38/25 P) is pending, and aloe-emodin and preparations containing it remain prohibited. NIH LiverTox rates oral aloe a likely but rare cause of clinically apparent liver injury. The US catalog therefore treats a confirmed supplement match as a clinical caution, not a legal block. Decolorized inner-leaf aloe vera gel, from which these derivatives are removed, is out of scope.",
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Aloe Latex",
+        "negative_match_terms": [
+          "aloe ferox gel",
+          "leaf gel",
+          "inner leaf",
+          "inner-leaf",
+          "inner fillet",
+          "acemannan",
+          "polysaccharide",
+          "polymax"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2022-05-24",
+          "source": {
+            "type": "nih_livertox",
+            "citation": "NIH LiverTox: Aloe Vera",
+            "url": "https://www.ncbi.nlm.nih.gov/books/NBK548634/",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "court_ruling",
+            "citation": "General Court judgment of 13 November 2024, Case T-189/21 Aloe Vera of Europe v Commission (ECLI:EU:T:2024:802), under appeal in Case C-38/25 P",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021TJ0189",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Regulation (EU) 2021/468 (in force 2021-04-08) added preparations from the leaf of Aloe species containing hydroxyanthracene derivatives to Annex III Part A (prohibited) of Regulation (EC) No 1925/2006. The General Court annulled that entry on 2024-11-13 (T-189/21). The Commission appealed (C-38/25 P, lodged 2025-01-22, pending; Advocate General opinion 2026-09-10); under Article 60 of the Court's Statute the annulment of a regulation takes effect only if the appeal is dismissed. Aloe-emodin and all preparations containing it remain in Part A.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)",
+          "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
+          "published_date": "2002-05-09",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)",
+          "evidence_summary": "Final rule (PubMed 12001972): aloe, including aloe extract and aloe flower extract, in OTC laxative drug products is not generally recognized as safe and effective, because the carcinogenicity data FDA requested were not submitted."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Aloe extracts were genotoxic in vitro, aloe-emodin was genotoxic in vivo and whole-leaf aloe extract was carcinogenic; hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise, and no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Adds aloe-emodin, emodin, danthron and preparations from the leaf of Aloe species containing hydroxyanthracene derivatives to Annex III Part A (prohibited) of Regulation (EC) No 1925/2006. The Aloe-leaf entry was annulled by the General Court in T-189/21 (under appeal)."
+        },
+        {
+          "type": "court_ruling",
+          "authority": "General Court of the European Union",
+          "citation": "Judgment of 13 November 2024, Case T-189/21 Aloe Vera of Europe v Commission, ECLI:EU:T:2024:802",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021TJ0189",
+          "published_date": "2024-11-13",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "General Court T-189/21 - annulment of the Aloe-leaf entry in Regulation (EU) 2021/468",
+          "evidence_summary": "Annuls the third entry in Article 1(1) of Regulation (EU) 2021/468, which had placed preparations from the leaf of Aloe species containing hydroxyanthracene derivatives in Annex III Part A. The Commission's appeal, Case C-38/25 P, is pending."
+        },
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Aloe Vera",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548634/",
+          "published_date": "2022-05-24",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "LiverTox: Aloe Vera",
+          "evidence_summary": "Likelihood score B: oral aloe is a likely but rare cause of clinically apparent hepatocellular liver injury, usually at high doses taken for constipation, dyspepsia or weight loss; leaf-rind latex supplies the laxative anthraquinones."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Cape aloe (Aloe ferox) and aloe latex matched no safety entry, so dsld 267819, 273379 and 337239 shipped SAFE while cascara, under the same FDA rule, shipped CAUTION. Identity: GSRS V5VD430YW9 (ALOE [USP], leaf latex of A. vera or A. ferox); UMLS C4760748 Cape Aloes.",
+            "by": "claude_anthraquinone_laxative_pass"
+          },
+          {
+            "date": "2026-09-25",
+            "change": "EU status corrected from banned to under_review: the General Court annulled the Aloe-leaf entry of Regulation (EU) 2021/468 on 2024-11-13 (T-189/21) and the appeal C-38/25 P is pending. Consumer copy no longer claims an EU prohibition.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C4760748",
+      "cui_note": "UMLS C4760748 Cape Aloes (DrugBank Aloe Capensis / Aloes (Aloe ferox)) is the concept every corpus match resolves to (Aloe ferox). The USP-level concept spanning both species' latex is C0304554 (RxNorm 91263), whose preferred name 'aloe extract' is too generic to use as an alias.",
+      "external_ids": {
+        "unii": "V5VD430YW9"
+      },
+      "ban_context": "substance",
+      "safety_warning": "Stimulant laxative for short-term use only. EFSA found aloe extracts genotoxic and whole-leaf aloe extract carcinogenic. Avoid regular use; it is linked to rare liver injury.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Avoid and talk to your doctor.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists aloe (Aloe perryi, A. barbadensis, A. ferox) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "WATCH_SENNA",
+      "standard_name": "Senna",
+      "aliases": [
+        "senna",
+        "senna leaf",
+        "senna leaves",
+        "senna leaf extract",
+        "senna extract",
+        "senna pod",
+        "senna fruit",
+        "sennosides",
+        "sennosides a and b",
+        "senna glycoside",
+        "senna alexandrina",
+        "senna alexandrina leaf",
+        "senna alexandrina leaf extract",
+        "cassia senna",
+        "cassia angustifolia",
+        "cassia acutifolia",
+        "alexandrian senna",
+        "indian senna",
+        "senokot"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "watchlist",
+      "reason": "FDA moved senna (including sennosides A and B) from OTC laxative category I to category III (more data needed) in 1998 and later received the carcinogenicity data it requested; unlike aloe and cascara, senna was not ruled not generally recognized as safe and effective in 2002 (67 FR 31125) and remains an OTC stimulant laxative. EFSA (2018) concluded that hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless shown otherwise, and in 2024 found that the safety of Cassia senna leaf or fruit preparations containing them cannot be established. The EU keeps these preparations under Union scrutiny (Regulation (EU) 2021/468, Annex III Part C). NIH LiverTox calls senna generally safe for short-term use but a possible rare cause of liver injury with high-dose, prolonged use. The catalog flags a confirmed supplement match for caution.",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Senna",
+        "negative_match_terms": [
+          "coffee senna",
+          "occidentalis",
+          "obtusifolia",
+          "senna tora",
+          "cassia tora"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2020-04-01",
+          "source": {
+            "type": "nih_livertox",
+            "citation": "NIH LiverTox: Senna",
+            "url": "https://www.ncbi.nlm.nih.gov/books/NBK547922/",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part C (Union scrutiny) to Regulation (EC) No 1925/2006: preparations from the leaf or fruit of Cassia senna L. containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Under Union scrutiny since 2021-04-08. EFSA's 2024 opinion on the data submitted during scrutiny found that safety cannot be established. The General Court judgment in T-189/21 annulled only the Aloe-leaf Part A entry, not this Part C entry.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients",
+          "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
+          "published_date": "2002-05-09",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients",
+          "evidence_summary": "Recounts FDA's 1998 reclassification of senna, including sennosides A and B, from category I to category III (more data needed) and FDA's request for senna carcinogenicity data, which it received; unlike aloe and cascara, senna was not ruled not generally recognized as safe and effective."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise; no safe daily intake could be set."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Scientific Opinion on additional scientific data related to the safety of preparations of Rheum palmatum L., Rheum officinale Baill. and their hybrids, Rhamnus purshiana DC., Rhamnus frangula L. and Cassia senna L., submitted pursuant to Article 8(4) of Regulation (EC) No 1925/2006",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny",
+          "evidence_summary": "The submitted genotoxicity studies were negative, but the tested preparations were not sufficiently characterised and contained a compound genotoxic in vivo, so they must be considered of concern for genotoxicity; the safety of Cassia senna leaf or fruit preparations containing hydroxyanthracene derivatives cannot be established."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Places preparations from the leaf or fruit of Cassia senna L. containing hydroxyanthracene derivatives in Annex III Part C (Union scrutiny) of Regulation (EC) No 1925/2006."
+        },
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Senna",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547922/",
+          "published_date": "2020-04-01",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "LiverTox: Senna",
+          "evidence_summary": "Likelihood score D: generally safe and well tolerated for short-term use (under one week); cramps and electrolyte imbalance are side effects, and high-dose use beyond recommended periods has caused clinically apparent liver injury."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Moved from harmful_additives (ADD_SENNA, deleted) with Sean's approval so senna has one safety owner. There it took B1 -3 in Formulation and -3 in Safety with an empty explanation ledger while the 15 senna products shipped SAFE or POOR. Identity: GSRS AK7JF626KX (SENNA ALEXANDRINA LEAF); UMLS C0330722 Senna alexandrina. No RxCUI: RxNav 237929 returns an empty record.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C0330722",
+      "external_ids": {
+        "unii": "AK7JF626KX"
+      },
+      "ban_context": "watchlist",
+      "safety_warning": "Stimulant laxative for short-term use (under a week). Long or high-dose use is linked to cramping, electrolyte loss and rare liver injury. Talk to your doctor before regular use.",
+      "safety_warning_one_liner": "Stimulant laxative for short-term use. Talk to your doctor before regular use.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists Senna, Alexandria (Cassia acutifolia) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "WATCH_FRANGULA",
+      "standard_name": "Frangula Bark",
+      "aliases": [
+        "frangula",
+        "frangula bark",
+        "frangula bark extract",
+        "frangula bark powder",
+        "frangula alnus",
+        "frangula alnus bark",
+        "frangula alnus bark extract",
+        "rhamnus frangula",
+        "rhamnus frangula bark",
+        "frangulae cortex",
+        "alder buckthorn",
+        "alder buckthorn bark",
+        "glossy buckthorn bark",
+        "european alder buckthorn bark"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "watchlist",
+      "reason": "Frangula bark is a stimulant laxative containing hydroxyanthracene derivatives (glucofrangulins). The EU keeps Rhamnus frangula bark preparations containing them under Union scrutiny (Regulation (EU) 2021/468, Annex III Part C), and EFSA (2024) found that their safety cannot be established because the tested preparations contained a compound genotoxic in vivo. EFSA (2018) concluded that hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless shown otherwise. The EU herbal monograph limits use to one week and contraindicates it in pregnancy, breastfeeding and children under 12. The catalog flags a confirmed supplement match for caution.",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Frangula Bark",
+        "negative_match_terms": [
+          "sea buckthorn",
+          "hippophae"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2019-09-25",
+          "source": {
+            "type": "ema_monograph",
+            "citation": "European Union herbal monograph on Rhamnus frangula L., cortex (EMA/HMPC/726261/2016, Revision 1)",
+            "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/european-union-herbal-monograph-rhamnus-frangula-l-cortex-revision-1_en.pdf",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part C (Union scrutiny) to Regulation (EC) No 1925/2006: preparations from the bark of Rhamnus frangula L. containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Under Union scrutiny since 2021-04-08. EFSA's 2024 opinion on the data submitted during scrutiny found that safety cannot be established. The General Court judgment in T-189/21 annulled only the Aloe-leaf Part A entry, not this Part C entry.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EMA",
+          "citation": "European Union herbal monograph on Rhamnus frangula L., cortex (EMA/HMPC/726261/2016, Revision 1), adopted 25 September 2019",
+          "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/european-union-herbal-monograph-rhamnus-frangula-l-cortex-revision-1_en.pdf",
+          "published_date": "2019-09-25",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EU herbal monograph on Rhamnus frangula L., cortex - Revision 1",
+          "evidence_summary": "Short-term use for occasional constipation, not for more than one week; contraindicated in pregnancy (genotoxic risk of anthranoids such as emodin and frangulin), lactation, children under 12 and inflammatory bowel disease; hypokalaemia potentiates cardiac glycosides, and diuretics, corticosteroids and liquorice enhance potassium loss."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Scientific Opinion on additional scientific data related to the safety of preparations of Rheum palmatum L., Rheum officinale Baill. and their hybrids, Rhamnus purshiana DC., Rhamnus frangula L. and Cassia senna L., submitted pursuant to Article 8(4) of Regulation (EC) No 1925/2006",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny",
+          "evidence_summary": "The tested preparations contained a compound genotoxic in vivo and must be considered of concern for genotoxicity; the safety of Rhamnus frangula bark preparations containing hydroxyanthracene derivatives cannot be established."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise; no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Places preparations from the bark of Rhamnus frangula L. containing hydroxyanthracene derivatives in Annex III Part C (Union scrutiny) of Regulation (EC) No 1925/2006."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Frangula bark products (e.g. dsld 311187, whose label names Frangula alnus bark extract) matched no safety entry and shipped SAFE. Identity: GSRS S2D77IH61R (FRANGULA ALNUS BARK); UMLS C0080354 Frangula. Bare 'buckthorn' labels are not aliased: GSRS lists buckthorn as a Frangula alnus synonym, the botanical file maps it to Rhamnus cathartica, and sea buckthorn is unrelated.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C0080354",
+      "external_ids": {
+        "unii": "S2D77IH61R"
+      },
+      "ban_context": "watchlist",
+      "safety_warning": "Stimulant laxative for short-term use (up to a week). EFSA could not establish its safety because of genotoxicity concerns. Talk to your doctor before regular use.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Talk to your doctor first.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "21 CFR 172.510 does not list frangula or buckthorn as a natural flavoring substance, and frangula bark is a stimulant laxative, so an inactive-panel listing is a hidden active.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "WATCH_RHUBARB_ROOT",
+      "standard_name": "Rhubarb Root (Rheum palmatum / Rheum officinale)",
+      "aliases": [
+        "turkey rhubarb",
+        "turkey rhubarb root",
+        "turkey rhubarb extract",
+        "turkey rhubarb root extract",
+        "chinese rhubarb",
+        "chinese rhubarb root",
+        "chinese rhubarb root extract",
+        "rhubarb root",
+        "rhubarb root extract",
+        "rhubarb root powder",
+        "rheum palmatum",
+        "rheum palmatum root",
+        "rheum palmatum root extract",
+        "rheum palmatum rhizome",
+        "rheum officinale",
+        "rheum officinale root",
+        "da huang",
+        "dahuang",
+        "rhei radix",
+        "rhei radix et rhizoma"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "watchlist",
+      "reason": "Rhubarb root (Rheum palmatum, Rheum officinale and their hybrids) is a stimulant laxative containing hydroxyanthracene derivatives. The EU keeps root or rhizome preparations containing them under Union scrutiny (Regulation (EU) 2021/468, Annex III Part C), and EFSA (2024) found that their safety cannot be established because the tested preparations contained a compound genotoxic in vivo. EFSA (2018) concluded that hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless shown otherwise. The EU herbal monograph contraindicates rhubarb root in pregnancy, breastfeeding, inflammatory colon disease and children under 12. Siberian rhubarb (Rheum rhaponticum, e.g. ERr 731) is a different species outside this entry. The catalog flags a confirmed supplement match for caution.",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Rhubarb Root",
+        "negative_match_terms": [
+          "rhaponticum",
+          "siberian rhubarb",
+          "err 731",
+          "garden rhubarb",
+          "rhubarb leaf",
+          "rhubarb stalk"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2020-05-06",
+          "source": {
+            "type": "ema_monograph",
+            "citation": "European Union herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix (EMA/HMPC/113700/2019, Revision 1)",
+            "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rheum-palmatum-l-and-rheum-officinale-baillon-radix-revision-1_en.pdf",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part C (Union scrutiny) to Regulation (EC) No 1925/2006: preparations from the root or rhizome of Rheum palmatum L., Rheum officinale Baillon and their hybrids containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Under Union scrutiny since 2021-04-08. EFSA's 2024 opinion on the data submitted during scrutiny found that safety cannot be established. The General Court judgment in T-189/21 annulled only the Aloe-leaf Part A entry, not this Part C entry.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EMA",
+          "citation": "European Union herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix (EMA/HMPC/113700/2019, Revision 1), adopted 6 May 2020",
+          "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rheum-palmatum-l-and-rheum-officinale-baillon-radix-revision-1_en.pdf",
+          "published_date": "2020-05-06",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EU herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix - Revision 1",
+          "evidence_summary": "Contraindicated in pregnancy (genotoxic risk of anthranoids such as emodin and aloe-emodin), lactation, inflammatory colon disease and children under 12; hypokalaemia potentiates cardiac glycosides, and diuretics, corticosteroids and liquorice enhance potassium loss."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Scientific Opinion on additional scientific data related to the safety of preparations of Rheum palmatum L., Rheum officinale Baill. and their hybrids, Rhamnus purshiana DC., Rhamnus frangula L. and Cassia senna L., submitted pursuant to Article 8(4) of Regulation (EC) No 1925/2006",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny",
+          "evidence_summary": "The tested preparations contained a compound genotoxic in vivo and must be considered of concern for genotoxicity; the safety of Rheum palmatum and Rheum officinale root or rhizome preparations containing hydroxyanthracene derivatives cannot be established."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise; no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Places preparations from the root or rhizome of Rheum palmatum L., Rheum officinale Baillon and their hybrids containing hydroxyanthracene derivatives in Annex III Part C (Union scrutiny) of Regulation (EC) No 1925/2006."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Turkey and Chinese rhubarb root products (e.g. dsld 294519, 291221) matched no safety entry and shipped SAFE. Identity: GSRS G025DAL7CE (CHINESE RHUBARB ROOT, RHEUM PALMATUM); UMLS C1090801 Rheum palmatum; Rheum officinale root (GSRS A47JP5ZG9M) is covered by aliases under the same EU entry. Bare 'rhubarb' is not aliased because it can be the food stalk.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C1090801",
+      "external_ids": {
+        "unii": "G025DAL7CE"
+      },
+      "ban_context": "watchlist",
+      "safety_warning": "Stimulant laxative root meant for short-term use. EFSA could not establish its safety because of genotoxicity concerns. Talk to your doctor before regular use.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Talk to your doctor first.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists rhubarb root (Rheum officinale, R. palmatum or other Rheum species except R. rhaponticum) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
+      "inactive_policy_reviewed_on": "2026-09-25"
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",

@@ -277,7 +277,7 @@ def test_full_file_already_migrated_is_noop():
         (Path(__file__).resolve().parents[1] / "data" / "ingredient_interaction_rules.json").read_text()
     )
     _, counts = migrate_rules(copy.deepcopy(live))
-    assert counts["rules_visited"] == 147
+    assert counts["rules_visited"] == live["_metadata"]["total_entries"] == len(live["interaction_rules"])
     # Already-migrated file: no new gates added on second run
     assert counts["condition_rules"] == 0
     assert counts["drug_class_rules"] == 0

@@ -96,6 +96,7 @@ from form_factor_normalizer import canonicalize_form_factor
 from probiotic_measurements import collect_afu_measurements
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
+    SOURCE_BANNED_RECALLED,
     active_form_duplicate_candidate,
 )
 from serving_frequency import (
@@ -172,6 +173,7 @@ from identity.safety import (
     hold_unapproved_policy_payload,
     safety_flag_from_banned_match,
     safety_jurisdiction_projection,
+    safety_policy_status_for_role,
 )
 
 _RDA_REFERENCE_PROFILE = {
@@ -11578,6 +11580,9 @@ class SupplementEnricherV3:
             # Source section tag set by _evaluate_safety_data wrapper (active vs inactive).
             # Untagged ingredients default to 'active' so legacy callers preserve behavior.
             ing_source_section = ingredient.get('_source_section', 'active')
+            evidence_hits = self._banned_label_evidence_hits(
+                ingredient, ing_name, std_name, ingredients, ing_source_section
+            )
 
             for section_key, banned_item in banned_items_with_category:
                 if not isinstance(banned_item, dict):
@@ -11592,6 +11597,10 @@ class SupplementEnricherV3:
                 match_rules = banned_item.get('match_rules', {}) or {}
                 match_mode = banned_item.get('match_mode') or match_rules.get('match_mode', 'active')
                 if match_mode in ('disabled', 'historical'):
+                    continue
+                # A rule retired for this label role no longer governs it; the
+                # v4 gate ignores its signal, so B0 must never see it either.
+                if safety_policy_status_for_role(banned_item, ing_source_section) == 'retired':
                     continue
 
                 # P0c: Active/inactive role gate (v3.5.2 — per-entry policy).
@@ -11737,6 +11746,24 @@ class SupplementEnricherV3:
                         matched_variant = allowlist_match.get("matched_variant")
                         allowlist_id = allowlist_match.get("allowlist_id")
 
+                # Label evidence beyond name/standardName, resolved by the
+                # same resolver index the v4 gate uses. Identity repair can
+                # rewrite standardName before this runs, so a substance the
+                # label names only in raw_source_text or forms[] must match
+                # here, where the safety pillar and B0 read it. Only US-
+                # applicable rules: the gate treats the rest as a regional
+                # advisory, and B0 has no jurisdiction filter.
+                evidence_term = evidence_hits.get(banned_id)
+                if (
+                    not match_method
+                    and entity_type != 'product'
+                    and evidence_term
+                    and not self._denylist_match(evidence_term, denylist_for)
+                    and safety_jurisdiction_projection(banned_item).get("us_applicable")
+                ):
+                    match_method = "alias"
+                    matched_variant = evidence_term
+
                 if match_method:
                     if banned_item.get("requires_explicit_form_evidence"):
                         evidence = has_explicit_form_evidence(
@@ -11829,6 +11856,58 @@ class SupplementEnricherV3:
                 if isinstance(s, dict) and isinstance(s.get("safety_flag"), dict)
             ],
         }
+
+    def _banned_label_evidence_hits(
+        self,
+        ingredient: Dict[str, Any],
+        ing_name: str,
+        std_name: str,
+        ingredients: List[Dict[str, Any]],
+        role: str,
+    ) -> Dict[str, str]:
+        """banned_recalled rule id -> label term, for raw_source_text and
+        forms[].name/prefix: the extra evidence terms
+        scoring_v4.gate_safety._ingredient_safety_terms feeds the resolver.
+        An inactive row drops terms restating a declared active's form, as the
+        gate does (term-scoped, never the whole row)."""
+        values: List[Any] = [ingredient.get("raw_source_text")]
+        for form in ingredient.get("forms") or []:
+            if isinstance(form, dict):
+                values.extend((form.get("name"), form.get("prefix")))
+            else:
+                values.append(form)
+        seen = {str(v).strip().lower() for v in (ing_name, std_name) if v}
+        terms: List[str] = []
+        for value in values:
+            text = str(value or "").strip()
+            if text and text.lower() not in seen:
+                seen.add(text.lower())
+                terms.append(text)
+        if terms and role == "inactive":
+            active_rows = [
+                row for row in ingredients
+                if row.get("_source_section", "active") == "active"
+            ]
+            if active_rows:
+                terms = [
+                    term for term in terms
+                    if active_form_duplicate_candidate(
+                        self._inactive_ingredient_resolver,
+                        active_ingredients=active_rows,
+                        raw_name=term,
+                    ) is None
+                ]
+        hits: Dict[str, str] = {}
+        for term in terms:
+            resolution = self._inactive_ingredient_resolver.resolve(
+                raw_name=term, role=role
+            )
+            if (
+                resolution.matched_source == SOURCE_BANNED_RECALLED
+                and resolution.matched_rule_id
+            ):
+                hits.setdefault(str(resolution.matched_rule_id), term)
+        return hits
 
     def _banned_form_evidence_values(
         self,
