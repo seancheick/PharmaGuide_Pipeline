@@ -332,3 +332,20 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   recommended" in the absence of sufficient data.
 - No study of rhodiola with sedative drugs found. evidence_level probable → theoretical. Reported to
   Sean: this sub-rule has no supporting evidence and is a candidate for retirement (deletion is his).
+
+## RULE_IQM_SAME — re-sourced (maois)
+
+- Ghost: **PMID 38423354** = "Efficacy and acceptability of S-adenosyl-L-methionine (SAMe) for depressed
+  patients: A systematic review and meta-analysis" (2024). Efficacy only; nothing on MAOIs, serotonin
+  or interactions. Sole source of an avoid / "established" sub-rule.
+- **NCCIH SAMe: In Depth** (https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth): "It's
+  also possible that SAMe might interact with drugs and dietary supplements that increase levels of
+  serotonin ... such as antidepressants, L-tryptophan, and St. John's wort"; SAMe "may worsen
+  symptoms of mania" in bipolar disorder.
+- **PMID 7854515** (Bodner, Neurology 1995): serotonin syndrome "occurs following the use of
+  serotomimetic agents (... S-adenosylmethionine) alone or in combination with monoamine oxidase
+  inhibitors".
+- **PMID 8434674** (Iruela, Am J Psychiatry 1993; letter, no abstract; MeSH clomipramine, drug
+  interactions, s-adenosylmethionine, serotonin): "Toxic interaction of S-adenosylmethionine and
+  clomipramine".
+- No study of SAMe with an MAOI found. evidence_level established → limited.

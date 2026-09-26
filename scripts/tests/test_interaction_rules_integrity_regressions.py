@@ -646,3 +646,17 @@ def test_rhodiola_sedative_rule_no_longer_claims_a_sedative_effect():
                   "add to sedative drowsiness"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+NCCIH_SAME = "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
+
+
+def test_same_maoi_rule_cites_serotonergic_sources_not_an_efficacy_meta_analysis():
+    rule = _rule("RULE_IQM_SAME")
+    maois = _sub_rule(rule, "drug_class_id", "maois")
+
+    # 38423354 is a SAMe-for-depression efficacy meta-analysis.
+    assert maois["sources"] == [NCCIH_SAME, _pmid("7854515"), _pmid("8434674")]
+    assert (maois["severity"], maois["evidence_level"]) == ("avoid", "limited")
+    assert "clomipramine" in maois["mechanism"]
+    assert rule["last_reviewed"] == "2026-04-30"  # agent re-sourcing, not a clinical review

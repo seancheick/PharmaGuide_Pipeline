@@ -146,7 +146,8 @@
       "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES antihypertensives cited an EEG study (PMID 18296328) and an anxiety meta-analysis (PMID 35378276) for 5-8 mmHg blood-pressure reductions neither reports. It now cites the two blood-pressure trials: Yoto 2012 (PMID 23107346: 200 mg blunted stress-induced BP rises) and Rogers 2008 (PMID 17891480: 200 mg antagonised caffeine's BP rise). The sedatives sibling's copy (CNS depressant, mild sedative effects) contradicted its own sources, which report relaxation without drowsiness and no anxiolytic effect over placebo; rewritten. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_GUARANA drug:sedatives cited two weight-loss-product cardiovascular papers (PMIDs 21676849, 15961987), and its alert copy said guarana has sedative effects, the opposite of its mechanism. It now cites a guarana review (PMID 23981847: seeds up to 6% caffeine) and a midazolam-caffeine trial (PMID 11125871: 250 mg caffeine moderately antagonised midazolam sedation, 125 mg did not, zolpidem not antagonised); headline, alert and note now describe a stimulant. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS cited only PMID 19370686 (Cochrane review of huperzine A for vascular dementia). It now cites a huperzine A pharmacology review (PMID 25191267: natural acetylcholinesterase inhibitor) and the ARICEPT prescribing information (7.1: cholinesterase inhibitors may interfere with anticholinergic medications); the unsourced cholinergic-toxidrome claim was removed. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_RHODIOLA_IMMUNE_BP drug:sedatives cited only PMID 26613955 (a CYP2C9 study) for an unsourced claim of unpredictable, dose-dependent sedative interaction, and its alert said rhodiola is mildly sedative. It now cites the EU herbal monograph (EMA/HMPC/24177/2023 Rev.1: no clinically relevant interactions; no sedation among undesirable effects) and says no interaction is established; evidence_level probable -> theoretical. Severity and last_reviewed unchanged; flagged to Sean as a retirement candidate. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_RHODIOLA_IMMUNE_BP drug:sedatives cited only PMID 26613955 (a CYP2C9 study) for an unsourced claim of unpredictable, dose-dependent sedative interaction, and its alert said rhodiola is mildly sedative. It now cites the EU herbal monograph (EMA/HMPC/24177/2023 Rev.1: no clinically relevant interactions; no sedation among undesirable effects) and says no interaction is established; evidence_level probable -> theoretical. Severity and last_reviewed unchanged; flagged to Sean as a retirement candidate. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_SAME drug:maois cited only PMID 38423354 (a SAMe-for-depression efficacy meta-analysis). It now cites NCCIH SAMe (may interact with serotonin-raising drugs such as antidepressants), Bodner 1995 (PMID 7854515: SAMe listed among serotomimetic agents causing serotonin syndrome alone or with MAOIs) and Iruela 1993 (PMID 8434674: toxic SAMe-clomipramine interaction); evidence_level established -> limited (no SAMe-MAOI study). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -24421,11 +24422,13 @@
         {
           "drug_class_id": "maois",
           "severity": "avoid",
-          "evidence_level": "established",
-          "mechanism": "Methyl donor with antidepressant activity; serotonergic potentiation when combined with MAOIs raises serotonin syndrome risk.",
+          "evidence_level": "limited",
+          "mechanism": "SAMe is a methyl donor studied as an antidepressant. It is listed among serotomimetic agents that can cause serotonin syndrome alone or combined with MAO inhibitors, and a toxic interaction with the antidepressant clomipramine has been reported. NCCIH notes SAMe might interact with drugs that raise serotonin, such as antidepressants. No study of SAMe with an MAOI was found; the risk is inferred from these reports.",
           "action": "If you take an MAOI, avoid SAMe unless cleared by your prescriber. Allow washout if switching.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/38423354/"
+            "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth",
+            "https://pubmed.ncbi.nlm.nih.gov/7854515/",
+            "https://pubmed.ncbi.nlm.nih.gov/8434674/"
           ],
           "alert_headline": "Avoid combining with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. SAMe has antidepressant-like activity. Combined with MAO-inhibitor antidepressants, it can raise the risk of serotonin syndrome.",
