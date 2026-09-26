@@ -97,20 +97,14 @@ def test_blend_child_does_not_repeat_a_rule_its_scorable_twin_fired(enricher):
     assert alerts[0]["ingredient_name"] == "Garlic Extract"
 
 
-def test_top_level_non_scorable_row_stays_out(enricher):
-    # A nutrition-panel row such as "Vitamin A 0%" is not a blend child and
-    # does not establish a meaningful amount; D1 covers blend children only.
-    row = {
-        "name": "L-Tryptophan",
-        "raw_source_text": "L-Tryptophan",
-        "standard_name": "L-Tryptophan",
-        "canonical_id": "l_tryptophan",
-        "raw_source_path": "ingredientRows[4]",
-        "cleaner_row_role": "daily_value_no_amount",
-        "skip_reason": "daily_value_no_amount",
-    }
+def test_top_level_np_vitamin_row_reads_as_a_panel_zero(enricher):
+    # "0 NP" on a vitamin or mineral outside a blend is a nutrition-panel zero
+    # until the cleaner keeps a printed 0% DV (Q23).
+    row = _top("Vitamin A", "vitamin_a", 0.0, "NP")
+    row["category"] = "vitamins"
     profile = enricher._collect_interaction_profile(_product([], [row]))
-    assert not _hits(profile, "RULE_IQM_L_TRYPTOPHAN")
+    assert not [a for a in profile["ingredient_alerts"]
+                if (a.get("subject_ref") or {}).get("canonical_id") == "vitamin_a"]
 
 
 def _hit(profile, rule_id, key, target):
@@ -145,3 +139,23 @@ def test_authored_missing_amount_policy_still_wins_over_presence(enricher):
     profile = enricher._collect_interaction_profile(_product([], [child]))
     smoker = _hit(profile, "RULE_IQM_BETA_CAROTENE_LUNG_CANCER", "condition_id", "current_smoker")
     assert smoker is None or smoker["dose_decision"]["consumer_disposition"] == "suppress"
+
+
+def _top(name, canonical_id, quantity, unit, skip="recognized_non_scorable", role="active_scorable"):
+    return {"name": name, "raw_source_text": name, "standard_name": name, "canonical_id": canonical_id,
+            "raw_source_path": "ingredientRows[5]", "cleaner_row_role": role, "skip_reason": skip,
+            "quantity": quantity, "unit": unit}
+
+
+def test_top_level_row_that_shows_presence_is_evaluated(enricher):
+    """D1c (2026-09-26): a top-level row the scorer skipped still counts when the
+    label shows the ingredient: a listing without an amount, or a %DV only."""
+    listed = _top("L-Tryptophan", "l_tryptophan", 0.0, "unspecified")
+    profile = enricher._collect_interaction_profile(_product([], [listed]))
+    assert _hits(profile, "RULE_IQM_L_TRYPTOPHAN")
+
+
+def test_measured_zero_on_the_nutrition_panel_is_not_presence(enricher):
+    zero = _top("Vitamin A", "vitamin_a", 0.0, "mcg")
+    profile = enricher._collect_interaction_profile(_product([], [zero]))
+    assert not [a for a in profile["ingredient_alerts"] if (a.get("subject_ref") or {}).get("canonical_id") == "vitamin_a"]

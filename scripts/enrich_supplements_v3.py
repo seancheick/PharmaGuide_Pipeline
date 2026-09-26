@@ -166,7 +166,11 @@ from match_ledger import (
     METHOD_UNII_FORM_EXACT,
     METHOD_ALTERNATE_NAME,
 )
-from identity.interaction import interaction_subject_refs
+from identity.interaction import (
+    interaction_subject_refs,
+    label_row_establishes_presence,
+    label_row_is_blend_child,
+)
 from identity.safety import (
     has_explicit_form_evidence,
     negative_match_terms_veto,
@@ -17914,20 +17918,20 @@ class SupplementEnricherV3:
         )
 
     @staticmethod
-    def _is_interaction_blend_child(row: Dict) -> bool:
-        """A label row inside a blend whose identity was recognized but not
-        scored. Blend headers, nutrition facts, additives, markers, sources and
-        specification limits keep their own owners."""
-        path = str(row.get("raw_source_path") or row.get("source_path") or "").lower()
-        nested = (
-            row.get("cleaner_row_role") == "nested_display_only"
-            or "nestedrows" in path
-            or "child_ingredients" in path
-        )
-        return nested and row.get("skip_reason") in (
-            SKIP_REASON_NESTED_NON_THERAPEUTIC,
+    def _is_interaction_label_row(row: Dict) -> bool:
+        """A recognized row the scorer skipped that still shows the ingredient
+        is in the product: a blend child, or a top-level row with a positive
+        amount, a printed %DV or no amount stated (D1, D1c). Blend headers,
+        additives, markers, sources, specification limits and measured zeros
+        keep their own owners."""
+        skip = row.get("skip_reason")
+        if label_row_is_blend_child(row):
+            return skip in (SKIP_REASON_NESTED_NON_THERAPEUTIC, SKIP_REASON_RECOGNIZED_NON_SCORABLE)
+        return skip in (
             SKIP_REASON_RECOGNIZED_NON_SCORABLE,
-        )
+            "daily_value_no_amount",  # the cleaner role, passed through by _cleaner_skip_reason
+            SKIP_REASON_NUTRITION_FACT,
+        ) and label_row_establishes_presence(row)
 
     def _derive_interaction_subject_ref(self, ingredient: Dict) -> Optional[Dict[str, str]]:
         canonical_id = str(ingredient.get("canonical_id") or "").strip()
@@ -18968,12 +18972,12 @@ class SupplementEnricherV3:
             # A rule written on a banned, botanical, additive or other-ingredient
             # entry can only match a row that is not scorable, so scanning
             # scorable rows alone silenced every such rule (CBD, yohimbe, red
-            # yeast rice, pennyroyal ...). An identified ingredient inside a
-            # blend keeps its rules too (Sean, D1, 2026-09-26): nesting does not
-            # make it safe. Its dose is its own row's; when that is unknown the
-            # rule's amount-missing policy decides, never the blend total. Other
-            # non-scorable rows (inactives, top-level no-amount nutrition rows)
-            # stay out. One row object can sit in both lists; it is scanned once.
+            # yeast rice, pennyroyal ...). An identified ingredient the label
+            # shows is present keeps its rules too, inside a blend or not (Sean,
+            # D1/D1c, 2026-09-26). Its dose is its own row's; when that is
+            # unknown the rule's amount-missing policy decides, never a blend
+            # total. Measured zeros and inactives stay out. One row object can
+            # sit in both lists; it is scanned once.
             scanned = {id(row) for row in ingredients}
             scanned_keys = {self._interaction_row_key(row) for row in ingredients}
             skipped = []
@@ -18986,19 +18990,19 @@ class SupplementEnricherV3:
                     continue
                 if subject_db != "ingredient_quality_map":
                     skipped.append(row)
-                elif self._is_interaction_blend_child(row):
+                elif self._is_interaction_label_row(row):
                     key = self._interaction_row_key(row)
                     if key not in scanned_keys:
                         scanned_keys.add(key)
                         skipped.append(row)
-            blend_children = {
+            label_rows = {
                 id(row) for row in skipped
                 if (self._derive_interaction_subject_ref(row) or {}).get("db") == "ingredient_quality_map"
             }
         else:
             ingredients = [row for row in raw_ingredients if isinstance(row, dict)]
             skipped = [row for row in raw_skipped if isinstance(row, dict)]
-            blend_children = set()
+            label_rows = set()
 
         rows_to_clear = list(raw_ingredients) + list(raw_skipped) + list(ingredients)
         for ingredient in rows_to_clear:
@@ -19061,19 +19065,19 @@ class SupplementEnricherV3:
                 all_ingredient_rows.append(("ingredients", row))
                 for marker_row in self._derived_marker_interaction_rows(row):
                     all_ingredient_rows.append(("derived_marker", marker_row))
-        # Blend children (and their markers) only add what the product does not
-        # already warn about: a (rule, target) fired at the same or higher
+        # Non-scored label rows (and their markers) only add what the product
+        # does not already warn about: a (rule, target) fired at the same or higher
         # severity by another row is not repeated.
         repeat_checked_rows: set = set()
         fired_targets: Dict[Tuple[Any, str, str], float] = {}
         for row in skipped:
             if isinstance(row, dict):
                 all_ingredient_rows.append(("ingredients_skipped", row))
-                if id(row) in blend_children:
+                if id(row) in label_rows:
                     repeat_checked_rows.add(id(row))
                 for marker_row in self._derived_marker_interaction_rows(row):
                     all_ingredient_rows.append(("derived_marker", marker_row))
-                    if id(row) in blend_children:
+                    if id(row) in label_rows:
                         repeat_checked_rows.add(id(marker_row))
 
         for source_bucket, ingredient in all_ingredient_rows:

@@ -151,6 +151,50 @@ def interaction_subject_ids(canonical_id: Any) -> list[str]:
     return list(dict.fromkeys(ids))
 
 
+# Units that record "no amount given" rather than a measured amount.
+_NO_AMOUNT_UNITS = frozenset({"", "unspecified", "not provided", "unknown", "n/a", "na"})
+# Outside a blend DSLD writes "0 NP" both for a nutrition-panel "0%" line and
+# for an ingredient listed without an amount, and the cleaner drops a printed
+# 0% DV (register Q23). Until it keeps it, a "0 NP" vitamin or mineral is read
+# as a panel zero and any other "0 NP" row as listed (2026-09-22 corpus: 151
+# vitamin/mineral rows such as "Vitamin A 0 NP" vs 25 others such as fish oil).
+_PANEL_NUTRIENT_CATEGORIES = frozenset({"vitamin", "vitamins", "mineral", "minerals"})
+
+
+def label_row_is_blend_child(row: dict) -> bool:
+    """A row listed inside a blend (DSLD nestedRows or form children)."""
+    path = str(row.get("raw_source_path") or row.get("source_path") or "").lower()
+    return (
+        row.get("cleaner_row_role") == "nested_display_only"
+        or "nestedrows" in path
+        or "child_ingredients" in path
+    )
+
+
+def label_row_establishes_presence(row: dict) -> bool:
+    """Whether a label row shows the ingredient is in the product.
+
+    A positive amount, a printed %DV above 0 (the cleaner's
+    daily_value_no_amount role), a listing inside a blend, or a listing with no
+    amount establish it. A measured zero ("Iron 0 mg", "Vitamin D 0 mcg", "0%",
+    "Not Present", a "0 NP" vitamin or mineral) does not. Presence says nothing
+    about the amount: dose rules still read the row's own quantity (Sean,
+    D1/D1c, 2026-09-26).
+    """
+    try:
+        quantity = float(row.get("quantity"))
+    except (TypeError, ValueError):
+        quantity = None
+    unit = str(row.get("unit") or "").strip().lower()
+    if quantity is not None and quantity > 0 and unit not in _NO_AMOUNT_UNITS | {"np"}:
+        return True
+    if row.get("cleaner_row_role") == "daily_value_no_amount" or label_row_is_blend_child(row):
+        return True
+    if unit == "np":
+        return str(row.get("category") or "").strip().lower() not in _PANEL_NUTRIENT_CATEGORIES
+    return unit in _NO_AMOUNT_UNITS
+
+
 def normalize_interaction_canonical_id(value: Any) -> str | None:
     """Return the catalog-facing canonical used for interaction lookup."""
     if value is None:

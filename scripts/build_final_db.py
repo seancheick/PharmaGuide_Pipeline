@@ -84,6 +84,7 @@ from identity.safety import (
 from identity.interaction import (
     interaction_subject_ids,
     interaction_tags_from_text,
+    label_row_establishes_presence,
     normalize_catalog_interaction_tag,
     normalize_interaction_canonical_id,
 )
@@ -8089,8 +8090,12 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
     """Generate compact ingredient fingerprint for stack checking.
 
     Returns JSON-serializable dict with:
-    - nutrients: {name: {amount, unit}}
-    - herbs: [standard_names]
+    - nutrients: {canonical_id: {amount, unit}} for dosed nutrients
+    - herbs: every other identity the label shows is present (botanicals,
+      blend children, enzymes, rows listed without an amount), with its
+      interaction family/twin ids; the app joins curated pairs on these
+      (product_canonical_ids.dart). Measured zeros ("Iron 0 mg") are not
+      present and appear nowhere (label_row_establishes_presence, D1b).
     - categories: [unique categories]
     - pharmacological_flags: {stimulant, sedative, blood_thinner, hormone_modulator}
     """
@@ -8124,6 +8129,8 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
         if not isinstance(ing, dict):
             continue
 
+        if not label_row_establishes_presence(ing):
+            continue
         standard_name = safe_str(ing.get("standard_name")).lower()
         category = safe_str(ing.get("category")).lower()
         canonical_id = safe_str(ing.get("canonical_id") or ing.get("parent_key")).lower()
@@ -8137,11 +8144,13 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
             all_ingredient_names.add(standard_name.replace(" ", "_"))
 
         # Extract nutrients with doses
+        dosed_nutrient = False
         if category in nutrient_categories:
             normalized_amount = ing.get("normalized_amount") or ing.get("quantity")
             normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("unit"))
 
-            if normalized_amount is not None:
+            if safe_float(normalized_amount, 0) > 0:
+                dosed_nutrient = True
                 amount = float(normalized_amount)
                 existing = fingerprint["nutrients"].get(ingredient_id)
                 if existing is None:
@@ -8155,9 +8164,17 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
                     # their total, rather than silently letting the last form win.
                     existing["amount"] = float(existing["amount"]) + amount
 
-        # Track herbs
-        if category in herb_categories:
-            fingerprint["herbs"].append(ingredient_id)
+        # Every other present identity, whatever its category (cranberry and
+        # green tea rows are often "unknown", CoQ10 "enzymes").
+        if not dosed_nutrient:
+            subject_ids = (
+                interaction_subject_ids(normalize_catalog_interaction_tag(canonical_id))
+                if canonical_id
+                else [ingredient_id]
+            )
+            for subject_id in subject_ids:
+                if subject_id not in fingerprint["herbs"]:
+                    fingerprint["herbs"].append(subject_id)
 
         # Track categories
         if category:
