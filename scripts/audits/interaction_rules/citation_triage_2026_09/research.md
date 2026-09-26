@@ -534,3 +534,24 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
     "Platelet aggregation was inhibited 30 and 120 min after ingestion of both doses" (already the
     min_effective_dose source).
   - No human warfarin interaction study found.
+
+## RULE_IQM_5HTP_SEROTONIN — re-sourced (pregnancy, pregnancy_lactation, maois)
+
+- Ghost (not a PMID, so the verifier cannot see it): **NBK548375** = LiverTox "Muscle Relaxants"
+  (NCBI Books esummary; page read in browser: no 5-HTP, serotonin or pregnancy content). It was one
+  of two sources on both pregnancy sub-rules. All 16 NCBI Bookshelf IDs in the rules file were
+  resolved; this is the only mismatch (NBK592340 = ATSDR Toxicological Profile for Vanadium, Health
+  Effects; the rest are the named LactMed/LiverTox/StatPearls chapters).
+- **PMID 16023217** (Turner, Pharmacol Ther 2006): 5-HTP "the serotonin precursor"; safety review of
+  "eosinophilia myalgia syndrome (EMS) and serotonin syndrome". No pregnancy content (kept as the
+  pharmacology source; reviewed entry for the topic heuristic).
+- **Health Canada NHPID monograph: 5-HTP** (https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng),
+  dated August 28, 2024: "All uses (excluding weight management) Ask a health care practitioner ...
+  before use if you are pregnant or breastfeeding"; "Weight management Do not use if you are pregnant";
+  "Do not use if you are taking antidepressants".
+- **MSKCC About Herbs: 5-HTP** (https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01;
+  already the serotonergic_medications source): "Do Not Take if ... You are taking antidepressants or
+  anxiolytics (including tricyclics, MAOIs, and SSRIs)"; "a case report of mania following use of an
+  MAOI with 5-HTP"; "linezolid (Zyvox, an antibiotic MAOI): There is a case report of an interaction
+  with 5-HTP causing serotonin syndrome". Added to maois beside the class review **PMID 31523132**
+  (serotonin syndrome: MAOI plus serotonergic drugs "especially dangerous").

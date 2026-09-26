@@ -845,3 +845,28 @@ def test_quercetin_rules_cite_thyroid_and_warfarin_studies():
     assert "authored" in thyroid["mechanism"]
     assert "63%" in anticoagulants["mechanism"]
     assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review
+
+
+HC_5HTP = "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng"
+MSKCC_5HTP = "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01"
+
+
+def test_5htp_pregnancy_rules_drop_a_muscle_relaxant_bookshelf_chapter():
+    rule = _rule("RULE_IQM_5HTP_SEROTONIN")
+    pregnancy = _sub_rule(rule, "condition_id", "pregnancy")
+    maois = _sub_rule(rule, "drug_class_id", "maois")
+    pregnancy_lactation = rule["pregnancy_lactation"]
+
+    # NBK548375 is LiverTox "Muscle Relaxants"; it never mentions 5-HTP.
+    assert "NBK548375" not in json.dumps(rule)
+    assert pregnancy["sources"] == [HC_5HTP, _pmid("16023217")]
+    assert pregnancy_lactation["sources"] == [HC_5HTP, _pmid("16023217")]
+    assert maois["sources"] == [MSKCC_5HTP, HC_5HTP, _pmid("31523132")]
+    assert (pregnancy["severity"], maois["severity"]) == ("avoid", "contraindicated")
+    assert "Health Canada" in pregnancy["mechanism"]
+    assert "linezolid" in maois["mechanism"]
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+
+
+def test_no_interaction_rule_cites_the_muscle_relaxant_chapter():
+    assert "books/NBK548375" not in json.dumps(RULES)
