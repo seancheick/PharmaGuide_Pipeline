@@ -175,7 +175,10 @@
       "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER ttc and pregnancy_lactation now keep their source's hedge (PMID 16985705: 'in vitro some studies suggest' 5-alpha-reductase inhibition) instead of stating it as settled. Found by fresh-context review. Severities, categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES drug:sedatives action no longer tells people to avoid high doses when driving; its sources report relaxation without drowsiness (PMID 18296328) and no anxiolytic effect over placebo (PMID 35378276). Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_HORNY_GOAT_WEED_HEART condition:heart_disease action no longer states '(extreme hypotension risk)' as a property of horny goat weed; it keeps 'do not combine with nitrates' and says the severe hypotension is documented for sildenafil, with icariin's own effect much weaker and unmeasured. Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL statins, calcium_channel_blockers and antiarrhythmics alert copy said 'talk to your prescriber before using bergamot', weaker than their unchanged avoid severity and action; it now says 'avoid bergamot products unless your prescriber says otherwise'. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL statins, calcium_channel_blockers and antiarrhythmics alert copy said 'talk to your prescriber before using bergamot', weaker than their unchanged avoid severity and action; it now says 'avoid bergamot products unless your prescriber says otherwise'. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_CHONDROITIN drug:anticoagulants copy said a case report showed INR 2.6 to 4.1, a figure no readable source states; it now gives Knudsen & Sokol 2008 (PMID 18363538): 2.3 to 3.9 after escalating to glucosamine 1500 mg / chondroitin 1200 mg twice daily. Two dose floors credited that 1200 mg BID figure to PMID 14986566 (a letter without an abstract); they now cite 18363538. Floor values unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_IQM_BLACK_SEED_OIL_DIABETES dose-floor rationale (7 sub-rules) no longer says the blood-pressure meta-analysis PMID 27512971 also shows glucose/lipid lowering; it reports blood pressure only. Floor value unchanged.",
+      "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL dose-floor rationale (3 sub-rules) no longer attributes a human GLA dose (~300 mg) and bleeding time to PMID 19783511, a rabbit coagulation study; it states what the study shows and that the 3 g/day oil floor is the clinical-team threshold (sign-off 2026-04-24). Floor value unchanged."
     ]
   },
   "interaction_rules": [
@@ -11859,7 +11862,7 @@
             "confidence": "low",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/19783511/",
-            "rationale": "EPO increases bleeding time at supplemental GLA doses (~300 mg GLA ~ 3 g oil; PMID 19783511). Floor on oil basis; capsule doses at/above 3 g fire."
+            "rationale": "In rabbits given 90-360 microlitres/kg for 30-60 days, EPO prolonged clotting tests and lowered platelet count (PMID 19783511); it reports no human dose. The 3 g/day oil floor is the clinical-team threshold on this rule (sign-off 2026-04-24); capsule doses at/above 3 g fire."
           }
         },
         {
@@ -11938,7 +11941,7 @@
             "confidence": "low",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/19783511/",
-            "rationale": "EPO increases bleeding time at supplemental GLA doses (~300 mg GLA ~ 3 g oil; PMID 19783511). Floor on oil basis; capsule doses at/above 3 g fire."
+            "rationale": "In rabbits given 90-360 microlitres/kg for 30-60 days, EPO prolonged clotting tests and lowered platelet count (PMID 19783511); it reports no human dose. The 3 g/day oil floor is the clinical-team threshold on this rule (sign-off 2026-04-24); capsule doses at/above 3 g fire."
           }
         },
         {
@@ -11981,7 +11984,7 @@
             "confidence": "low",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/19783511/",
-            "rationale": "EPO increases bleeding time at supplemental GLA doses (~300 mg GLA ~ 3 g oil; PMID 19783511). Floor on oil basis; capsule doses at/above 3 g fire."
+            "rationale": "In rabbits given 90-360 microlitres/kg for 30-60 days, EPO prolonged clotting tests and lowered platelet count (PMID 19783511); it reports no human dose. The 3 g/day oil floor is the clinical-team threshold on this rule (sign-off 2026-04-24); capsule doses at/above 3 g fire."
           }
         },
         {
@@ -18163,8 +18166,8 @@
             "basis": "per_day",
             "confidence": "medium",
             "confidence_basis": "warfarin_context_dose_related",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/14986566/",
-            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 14986566); warfarin-context, dose-related."
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18363538/",
+            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 18363538); warfarin-context, dose-related."
           }
         }
       ],
@@ -18173,7 +18176,7 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Chondroitin sulfate shares structural similarities with heparin (both are sulfated glycosaminoglycans), and case reports have documented clinically significant INR elevation in warfarin-treated patients taking chondroitin-glucosamine combination products. The exact mechanism may involve inhibition of vitamin K-dependent clotting factors or direct potentiation of antithrombin III activity. One case report documented INR increase from 2.6 to 4.1 associated with glucosamine-chondroitin supplementation.",
+          "mechanism": "Chondroitin sulfate shares structural similarities with heparin (both are sulfated glycosaminoglycans), and case reports have documented clinically significant INR elevation in warfarin-treated patients taking chondroitin-glucosamine combination products. The exact mechanism may involve inhibition of vitamin K-dependent clotting factors or direct potentiation of antithrombin III activity. In one case report, INR rose from 2.3 to 3.9 about three weeks after the patient increased glucosamine to 1500 mg and chondroitin to 1200 mg twice daily (Knudsen & Sokol 2008).",
           "action": "Monitor INR in warfarin-treated patients who initiate chondroitin supplements. Alert prescriber to supplement use. Consider avoiding chondroitin if INR is already at the upper therapeutic range.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/",
@@ -18208,8 +18211,8 @@
             "basis": "per_day",
             "confidence": "medium",
             "confidence_basis": "warfarin_context_dose_related",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/14986566/",
-            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 14986566); warfarin-context, dose-related."
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18363538/",
+            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 18363538); warfarin-context, dose-related."
           }
         }
       ],
@@ -20121,7 +20124,7 @@
             "confidence": "medium",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
+            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -20163,7 +20166,7 @@
             "confidence": "medium",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
+            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -20240,7 +20243,7 @@
             "confidence": "medium",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
+            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -20283,7 +20286,7 @@
             "confidence": "medium",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
+            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -20326,7 +20329,7 @@
             "confidence": "medium",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
+            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -20368,7 +20371,7 @@
             "confidence": "medium",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
+            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -20411,7 +20414,7 @@
             "confidence": "medium",
             "confidence_basis": "documented_effective_dose",
             "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
+            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         }
       ],

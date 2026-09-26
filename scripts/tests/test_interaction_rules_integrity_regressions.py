@@ -1035,3 +1035,52 @@ def test_interaction_rules_ghost_review_entries_are_complete_and_current():
         url = (f"https://www.ncbi.nlm.nih.gov/books/{source_id}/"
                if source_id.startswith("NBK") else _pmid(source_id))
         assert url in _cited(entry["rule_id"], entry["sub_rule"]), key
+
+
+def _min_effective_doses(rule: dict) -> list[dict]:
+    found = []
+    for sub in (rule.get("condition_rules") or []) + (rule.get("drug_class_rules") or []):
+        if isinstance(sub.get("min_effective_dose"), dict):
+            found.append(sub["min_effective_dose"])
+    return found
+
+
+def test_chondroitin_anticoagulant_copy_states_the_cited_inr_values():
+    """Knudsen & Sokol 2008 (PMID 18363538): INR 2.3 before, 3.9 about three weeks
+    after escalating to glucosamine 1500 mg / chondroitin 1200 mg twice a day.
+    No readable source states "2.6 to 4.1" (receipt:
+    scripts/audits/pending_items_20260926/research.md)."""
+    mechanism = _sub_rule(_rule("RULE_IQM_CHONDROITIN"), "drug_class_id", "anticoagulants")["mechanism"]
+    assert "2.6 to 4.1" not in mechanism
+    assert "2.3" in mechanism and "3.9" in mechanism
+
+
+def test_chondroitin_dose_floor_cites_the_case_report_that_states_1200_mg_bid():
+    """"1200 mg BID" is Knudsen & Sokol's figure (PMID 18363538). PMID 14986566
+    is a letter without an abstract, so it cannot carry that number."""
+    for floor in _min_effective_doses(_rule("RULE_IQM_CHONDROITIN")):
+        if "1200 mg BID" in floor["rationale"]:
+            assert floor["source"] == _pmid("18363538"), floor
+            assert "14986566" not in floor["rationale"], floor
+
+
+def test_black_seed_dose_floor_does_not_credit_the_bp_meta_analysis_with_glucose_or_lipids():
+    """PMID 27512971 (Sahebkar 2016) is a blood-pressure-only meta-analysis."""
+    floors = _min_effective_doses(_rule("RULE_IQM_BLACK_SEED_OIL_DIABETES"))
+    assert floors
+    for floor in floors:
+        if "27512971" in floor["source"] + floor["rationale"]:
+            assert "glucose" not in floor["rationale"] and "lipid" not in floor["rationale"], floor
+
+
+def test_evening_primrose_dose_floor_rationale_matches_its_rabbit_source():
+    """PMID 19783511 (Riaz 2009) gave rabbits 90-360 microlitres/kg; it reports no
+    human GLA dose and no bleeding time. The 3 g oil floor is the clinical-team
+    threshold on the rule's dose_thresholds note."""
+    floors = [f for f in _min_effective_doses(_rule("RULE_INGREDIENT_EVENING_PRIMROSE_OIL"))
+              if "19783511" in f["source"]]
+    assert floors
+    for floor in floors:
+        assert "300 mg GLA" not in floor["rationale"], floor
+        assert "bleeding time" not in floor["rationale"], floor
+        assert "rabbit" in floor["rationale"], floor
