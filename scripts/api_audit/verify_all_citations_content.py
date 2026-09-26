@@ -158,8 +158,11 @@ FILE_CONFIGS = [
 ]
 # ── PubMed API ─────────────────────────────────────────────────────────
 
-def fetch_articles(pmids: list[str]) -> dict[str, dict]:
-    """Fetch title + abstract for a batch of PMIDs via efetch."""
+def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[str, dict]:
+    """Fetch title + abstract for a batch of PMIDs via efetch.
+
+    ``abstract_chars=None`` keeps the whole abstract.
+    """
     articles = {}
     for i in range(0, len(pmids), 8):
         batch = pmids[i:i + 8]
@@ -209,7 +212,7 @@ def fetch_articles(pmids: list[str]) -> dict[str, dict]:
 
                 articles[pmid] = {
                     "title": title,
-                    "abstract": abstract[:800],
+                    "abstract": abstract if abstract_chars is None else abstract[:abstract_chars],
                     "mesh_terms": mesh_terms,
                 }
         except Exception as e:
