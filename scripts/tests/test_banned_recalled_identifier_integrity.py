@@ -161,3 +161,26 @@ def test_add_5a_hydroxy_laxogenin_has_its_rxnorm_and_umls_anchors(banned_recalle
         (REPO_ROOT / "scripts" / "data" / "curated_overrides" / "cui_overrides.json").read_text()
     )
     assert overrides["5a-hydroxy laxogenin"]["cui"] == "C4276029"
+
+
+def test_add_5a_hydroxy_laxogenin_cites_live_fda_sources(banned_recalled):
+    """The entry cited "FDA Warning Letter 607248 (Andro Pharma LLC, 2020)"
+    and a generic constituent-updates index. Both URLs returned HTTP 404 on
+    2026-09-26; the Wayback Machine has no capture of any andro-pharma
+    warning-letter URL, and no search found the letter. FDA's May 4, 2022
+    letter to Performax Labs (622337) names "5a-Hydroxy-Laxogenin" and
+    states 5-alpha-hydroxy-laxogenin is not a dietary ingredient; the May 9,
+    2022 constituent update lists it among the cited ingredients."""
+    entry = _find(banned_recalled, "ADD_5A_HYDROXY_LAXOGENIN")
+    urls = [r.get("url") or "" for r in entry["references_structured"]]
+    blob = json.dumps(entry["references_structured"])
+    assert "andro-pharma" not in blob and "607248" not in blob
+    assert "dietary-supplement-products-ingredients/constituent-updates" not in blob
+    assert (
+        "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/"
+        "warning-letters/performax-labs-inc-622337-05042022"
+    ) in urls
+    assert (
+        "https://www.fda.gov/food/hfp-constituent-updates/"
+        "fda-sends-warning-letters-multiple-companies-illegally-selling-adulterated-dietary-supplements"
+    ) in urls
