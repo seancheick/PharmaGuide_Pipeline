@@ -1,11 +1,11 @@
 """v4 Generic Dose dimension — P1.3.2a tests.
 
-Dose 25 has three lines per §6:
+Dose 25 has two lines (§6's multi-form bonus was retired in quality_score
+1.21.0; IQM bio_score owns form quality):
 
     | Item                                  | Cap | Notes                  |
     |---------------------------------------|----:|------------------------|
     | Dose inside the supplemental window   |  22 | NEW framing per §6 line 369 |
-    | Multi-form complex bonus              |   3 | ≥2 premium forms of the same nutrient |
     | B7 dose safety penalty (>150% UL)     |  -3 | up to -3                |
 
 P1.3.2a state: supplemental-window math is implemented as an
@@ -555,105 +555,31 @@ def test_window_proxy_averages_across_nutrients() -> None:
     assert payload["components"]["supplemental_window_proxy"] == 15.4
 
 
-# --- Multi-form bonus ----------------------------------------------------
+# --- Form quality is not a Dose input -----------------------------------
+#
+# IQM forms[].bio_score is the one form-quality owner (matrix concept
+# `ingredient_form_quality`, quality_score 1.7.0). Dose scores the amount
+# against a reference; a count of premium forms is neither.
 
 
-def test_multi_form_bonus_two_premium_mg_forms() -> None:
-    """Mg glycinate + Mg malate (both bio≥12, both standard_name=Magnesium)
-    → +3 multi-form bonus."""
+def test_premium_form_count_earns_no_dose_credit() -> None:
+    """Mg glycinate + Mg malate (both bio_score >= 12, one nutrient family)
+    score exactly like Mg glycinate alone. Complexity creates obligations,
+    not bonuses."""
     from scoring_v4.modules.generic_dose import score_dose
 
-    payload = score_dose(
-        _product(
-            ingredients=[
-                _ingredient(name="Mg Glycinate", standard_name="Magnesium",
-                            canonical_id="mg_glycinate", bio_score=14),
-                _ingredient(name="Mg Malate", standard_name="Magnesium",
-                            canonical_id="mg_malate", bio_score=13),
-            ]
-        )
-    )
-    assert payload["components"]["multi_form_bonus"] == 3.0
+    adequacy = [_adequacy(nutrient="Magnesium", pct_rda=10.0, pct_ul=11.0)]
+    glycinate = _ingredient(name="Mg Glycinate", standard_name="Magnesium",
+                            canonical_id="mg_glycinate", bio_score=14)
+    malate = _ingredient(name="Mg Malate", standard_name="Magnesium",
+                         canonical_id="mg_malate", bio_score=13)
 
+    single = score_dose(_product(ingredients=[glycinate], adequacy_results=adequacy))
+    premium_pair = score_dose(_product(ingredients=[glycinate, malate], adequacy_results=adequacy))
 
-def test_multi_form_bonus_single_premium_form_zero() -> None:
-    """One premium form (no second to stack with) → 0 multi-form bonus."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(_product(ingredients=[_ingredient(bio_score=14)]))
-    assert payload["components"]["multi_form_bonus"] == 0.0
-
-
-def test_multi_form_bonus_premium_plus_non_premium_zero() -> None:
-    """Mg glycinate (bio=14) + Mg oxide (bio=8 < 12 threshold) → 0 multi-form
-    (only one PREMIUM form present)."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(
-        _product(
-            ingredients=[
-                _ingredient(name="Mg Glycinate", standard_name="Magnesium",
-                            canonical_id="mg_glycinate", bio_score=14),
-                _ingredient(name="Mg Oxide", standard_name="Magnesium",
-                            canonical_id="mg_oxide", bio_score=8),
-            ]
-        )
-    )
-    assert payload["components"]["multi_form_bonus"] == 0.0
-
-
-def test_multi_form_bonus_two_different_nutrients_zero() -> None:
-    """Different nutrient families don't stack. Mg glycinate + B12 methyl
-    are both premium but different standard_names → no multi-form bonus."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(
-        _product(
-            ingredients=[
-                _ingredient(name="Mg Glycinate", standard_name="Magnesium",
-                            canonical_id="mg_glycinate", bio_score=14),
-                _ingredient(name="Methyl B12", standard_name="Vitamin B12",
-                            canonical_id="methyl_b12", bio_score=14),
-            ]
-        )
-    )
-    assert payload["components"]["multi_form_bonus"] == 0.0
-
-
-def test_multi_form_bonus_three_premium_mg_still_3_pts() -> None:
-    """3+ premium forms still cap at 3 pts (single bonus, no stacking)."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(
-        _product(
-            ingredients=[
-                _ingredient(name="A", standard_name="Magnesium",
-                            canonical_id="a", bio_score=14),
-                _ingredient(name="B", standard_name="Magnesium",
-                            canonical_id="b", bio_score=13),
-                _ingredient(name="C", standard_name="Magnesium",
-                            canonical_id="c", bio_score=12),
-            ]
-        )
-    )
-    assert payload["components"]["multi_form_bonus"] == 3.0
-
-
-def test_multi_form_bonus_case_insensitive_nutrient_match() -> None:
-    """'magnesium' vs 'Magnesium' must group together — case-insensitive."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(
-        _product(
-            ingredients=[
-                _ingredient(name="Form A", standard_name="magnesium",
-                            canonical_id="a", bio_score=14),
-                _ingredient(name="Form B", standard_name="MAGNESIUM",
-                            canonical_id="b", bio_score=13),
-            ]
-        )
-    )
-    assert payload["components"]["multi_form_bonus"] == 3.0
+    assert premium_pair["score"] == single["score"]
+    assert premium_pair["components"] == single["components"]
+    assert "multi_form_bonus" not in premium_pair["components"]
 
 
 # --- B7 dose safety penalty ---------------------------------------------
@@ -706,7 +632,7 @@ def test_b7_penalty_no_safety_flags_returns_zero() -> None:
 
 
 def test_dimension_score_thorne_canary_22_of_25() -> None:
-    """Thorne Mg Bisglycinate 200mg: window proxy 22 + multi-form 0 - B7 0
+    """Thorne Mg Bisglycinate 200mg: window proxy 22 - B7 0
     = 22/25. Matches §6 line 425 worked example."""
     from scoring_v4.modules.generic_dose import score_dose
 
@@ -718,24 +644,6 @@ def test_dimension_score_thorne_canary_22_of_25() -> None:
     )
     assert payload["score"] == 22.0
     assert payload["max"] == 25.0
-
-
-def test_dimension_score_clamps_to_max_25() -> None:
-    """Window 22 + multi-form 3 = 25. Should not exceed 25."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(
-        _product(
-            adequacy_results=[
-                _adequacy(nutrient="Magnesium", pct_rda=50.0, pct_ul=57.0),
-            ],
-            ingredients=[
-                _ingredient(name="A", standard_name="Magnesium", canonical_id="a", bio_score=14),
-                _ingredient(name="B", standard_name="Magnesium", canonical_id="b", bio_score=13),
-            ],
-        )
-    )
-    assert payload["score"] == 25.0
 
 
 def test_dimension_score_floors_at_zero() -> None:

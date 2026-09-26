@@ -13,7 +13,7 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
                                + immune herb-stack (immune only) + B1 (caps:
                                additives 15, sugar 4) harmful additives
                                + dietary sugar
-    Dose                25     P1.3.2 — supplemental-window 22 + multi-form 3
+    Dose                25     P1.3.2 — supplemental-window 22
                                minus B7 (>150% UL)
     Evidence            20     P1.3.3 — full multiplicative pipeline (study_type
                                * evidence_level * effect_direction * enrollment
