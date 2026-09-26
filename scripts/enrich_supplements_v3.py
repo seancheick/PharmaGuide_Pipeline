@@ -6347,7 +6347,14 @@ class SupplementEnricherV3:
                     and ingredient.get("cleaner_row_role") == "active_scorable"
                     and ingredient.get("score_eligible_by_cleaner") is True
                     and self._has_valid_therapeutic_dose(ingredient)[0]
-                    and self._is_known_therapeutic(ing_name, ing_name, quality_map, botanicals_db)
+                    # The canonical identity owner already resolved this
+                    # exact DSLD active row. A generic standardized name such
+                    # as "Fiber" cannot reclassify that owned identity as a
+                    # Nutrition Facts total. Do not rematch the display name
+                    # here: that would create a second identity decision.
+                    and bool(str(ingredient.get("canonical_id") or "").strip())
+                    and ingredient.get("canonical_source_db")
+                    == "ingredient_quality_map"
                 ):
                     continue
             return exclusion_reason
@@ -17138,8 +17145,10 @@ class SupplementEnricherV3:
         the Flutter side can distinguish "not declared" from "zero".
 
         This is ADDITIVE — it does not replace dietary_sensitivity_data
-        (sugar/sodium). Routing consumes declared protein mass; score math does
-        not treat the remaining summary fields as active-ingredient doses.
+        (sugar/sodium). Routing consumes declared protein mass. Fiber scoring
+        may consume the declared fiber grams only through the typed scoring
+        contract that joins them to the exact DSLD active fiber row; the
+        remaining summary fields are not active-ingredient doses.
         """
         ni = product.get("nutritionalInfo") or {}
 

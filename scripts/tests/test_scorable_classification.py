@@ -3093,18 +3093,20 @@ def test_named_fiber_source_is_not_reclassified_as_nutrition_rollup(enricher, pr
     named = next(row for row in rows if row["name"] in {"Konjac root extract", "Glucomannan"})
     assert named.get("score_exclusion_reason") != "excluded_nutrition_fact"
     assert named.get("canonical_id") == "fiber"
-    if product_id == "259395":
-        assert named.get("scoreable_identity") is True
-        assert scored["quality_score_status"] == "scored"
-    else:
-        # Pending curated PGX alias correction, the owner emits a contradictory
-        # safety recognition. The adapter must not turn it into a numeric score.
-        assert named.get("recognized_entry_id") == "ADD_POLYDEXTROSE"
-        assert named.get("scoreable_identity") is False
-        assert scored["quality_score_status"] == "not_scored"
-        from scoring_input_contract import derive_product_scoring_evidence, required_identity_conflicts
-        assert derive_product_scoring_evidence(enriched) == []
-        assert required_identity_conflicts(enriched)
+    assert named.get("scoreable_identity") is True
+    assert named.get("recognized_entry_id") != "ADD_POLYDEXTROSE"
+    assert scored["quality_score_status"] == "scored"
+
+
+def test_plain_konjac_root_extract_is_not_the_pgx_proprietary_complex(enricher):
+    quality_map = enricher.databases["ingredient_quality_map"]
+    match = enricher._match_quality_map(
+        "Konjac root extract",
+        "Konjac root extract",
+        quality_map,
+        _form_extraction_attempt=True,
+    )
+    assert match is None or match.get("canonical_id") != "pgx_fiber"
 
 
 @pytest.mark.parametrize("name", ["Dietary Fiber", "Unidentified Source"])
