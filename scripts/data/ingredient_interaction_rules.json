@@ -162,7 +162,8 @@
       "2026-09-26: RULE_INGREDIENT_BORAGE_SEED_OIL__SEIZURE seizure_disorder cited only PMID 17764919 (an evening primrose oil paper concluding the GLA-seizure link is spurious) while saying the concern applies to borage. It now also cites a borage case of status epilepticus (PMID 21387119) and MSKCC Borage (the same case; certified pyrrolizidine-alkaloid-free products), and states the EPO conclusion. Unsourced '~24% GLA' and 'neurotoxic' alkaloid claims removed; evidence_level theoretical -> limited. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_BANNED_RED_YEAST_RICE_STATINS condition:high_cholesterol said 'EFSA 2025 concluded no safe daily intake level for monacolins can be established' while citing only the 2018 EFSA ANS opinion (PMID 32626016). It now also cites the 2025 EFSA NDA opinion (PMID 40027377), which reiterates the 3 mg/day concern and finds no safe intake. Text, severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_CHASTEBERRY_PREGNANCY condition:pregnancy mechanism named dopamine D2 receptors and LH/FSH modulation, which neither cited source (NCCIH Chasteberry; PMID 23136064, a systematic review of Vitex RCTs) states. It now says what they state: lower TRH-stimulated prolactin, a normalised luteal phase and higher mid-luteal progesterone in trials, and NCCIH's note that preclinical evidence suggests use in pregnancy or breastfeeding may be unsafe. Sources, severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_CHONDROITIN bleeding_disorders claimed weak in vitro anticoagulant activity with no source; the mechanism now states the documented INR data (Knudsen & Sokol 2008, PMID 18363538: INR 2.3 to 3.9 after escalation to chondroitin 1200 mg twice daily with glucosamine; 20 MedWatch reports) beside the glucosamine-chondroitin warfarin letter (PMID 14986566). Its min_effective_dose credited the 1200 mg BID escalation to 14986566; source corrected to 18363538 (value unchanged). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_CHONDROITIN bleeding_disorders claimed weak in vitro anticoagulant activity with no source; the mechanism now states the documented INR data (Knudsen & Sokol 2008, PMID 18363538: INR 2.3 to 3.9 after escalation to chondroitin 1200 mg twice daily with glucosamine; 20 MedWatch reports) beside the glucosamine-chondroitin warfarin letter (PMID 14986566). Its min_effective_dose credited the 1200 mg BID escalation to 14986566; source corrected to 18363538 (value unchanged). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_GREEN_TEA_HYPERTENSION hypertension and antihypertensives cited only a review (PMID 25312732) whose abstract does not describe the OATP mechanism the rules state. They now also cite the primary trial (PMID 24419562: green tea 700 ml/day for 14 days cut nadolol exposure ~85%, blunted its systolic BP effect, inhibited OATP1A2 uptake); the mechanism no longer attributes the effect to EGCG specifically. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -4973,9 +4974,10 @@
           "condition_id": "hypertension",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Green tea catechins (EGCG) inhibit intestinal OATP transporters, reducing oral bioavailability of nadolol and potentially other beta-blockers, diminishing BP control.",
+          "mechanism": "Green tea inhibits the intestinal uptake transporter OATP1A2, which carries the beta-blocker nadolol into the body. In volunteers, drinking 700 mL of green tea daily for 14 days cut nadolol exposure by about 85% and blunted its systolic blood-pressure-lowering effect. Other beta-blockers may be affected; human data for other cardiovascular drugs are limited.",
           "action": "Avoid taking green tea extract supplements close in time to beta-blockers. Separate doses by several hours.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/24419562/",
             "https://pubmed.ncbi.nlm.nih.gov/25312732/"
           ],
           "alert_headline": "May reduce nadolol absorption",
@@ -5051,9 +5053,10 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "EGCG inhibits OATP transporters, reducing beta-blocker absorption and potentially compromising BP control.",
+          "mechanism": "Green tea inhibits the intestinal uptake transporter OATP1A2; in volunteers, 700 mL daily for 14 days cut nadolol exposure by about 85% and reduced its effect on systolic blood pressure, which can compromise blood-pressure control. Data for other antihypertensives are limited.",
           "action": "Separate green tea extract from beta-blocker dosing by at least 2-3 hours.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/24419562/",
             "https://pubmed.ncbi.nlm.nih.gov/25312732/"
           ],
           "alert_headline": "May affect blood-pressure control",

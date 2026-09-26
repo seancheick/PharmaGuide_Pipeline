@@ -616,3 +616,17 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
 - Sibling not changed (uncertain): the anticoagulants sub-rule says "One case report documented INR
   increase from 2.6 to 4.1"; that figure matches neither readable source (18363538: 2.3 -> 3.9 -> 4.7)
   and 14986566 is unreadable. Reported to Sean.
+
+## RULE_IQM_GREEN_TEA_HYPERTENSION — source added (hypertension, antihypertensives)
+
+- **PMID 25312732** (Curr Pharm Des 2015 review, "Overview of green tea interaction with cardiovascular
+  drugs"): human interaction data "limited so far to warfarin, simvastatin and nadolol"; green tea "may
+  interfere with the oral bioavailability or activity of cardiovascular drugs". On topic (nadolol is
+  a beta-blocker antihypertensive; the verifier's stems miss it) but the abstract does not state the
+  OATP mechanism the rule gives. Kept (reviewed entry).
+- **PMID 24419562** (Misaka, Clin Pharmacol Ther 2014; RCT, n = 10): green tea 700 ml/day for 14 days
+  "markedly decreased the maximum plasma concentration (C(max)) and area under the plasma
+  concentration-time curve (AUC(0-48)) of nadolol by 85.3% and 85.0%"; "The effects of nadolol on
+  systolic blood pressure were significantly reduced by green tea"; green tea inhibited "OATP1A2-
+  mediated nadolol uptake". Added to both sub-rules; mechanism no longer attributes the effect to EGCG
+  specifically (the study used brewed green tea).

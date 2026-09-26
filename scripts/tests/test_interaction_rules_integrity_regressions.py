@@ -924,3 +924,13 @@ def test_chondroitin_bleeding_rule_states_the_documented_inr_data():
     assert bleeding["min_effective_dose"]["source"] == _pmid("18363538")
     assert bleeding["min_effective_dose"]["value"] == 1200
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+def test_green_tea_nadolol_rules_cite_the_primary_trial():
+    rule = _rule("RULE_IQM_GREEN_TEA_HYPERTENSION")
+    for sub in (_sub_rule(rule, "condition_id", "hypertension"),
+                _sub_rule(rule, "drug_class_id", "antihypertensives")):
+        assert sub["sources"] == [_pmid("24419562"), _pmid("25312732")]
+        assert "85%" in sub["mechanism"]
+        assert "OATP1A2" in sub["mechanism"]
+    assert rule["last_reviewed"] == "2026-04-23"  # agent re-sourcing, not a clinical review
