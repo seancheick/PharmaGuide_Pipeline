@@ -366,3 +366,22 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
 - No human pregnancy safety study found. The CYP1A2/CYP2C9 sentence in the pregnancy mechanism had no
   source and no pregnancy relevance; removed. Severity (avoid) / category unchanged; avoidance is
   precautionary. Reported to Sean.
+
+## RULE_INGREDIENT_GENISTEIN__THYROID — re-sourced (thyroid_medications; thyroid_disorder sources)
+
+- **PMID 36017706** ("Peripubertal soy isoflavone consumption leads to subclinical hypothyroidism in male
+  Wistar rats", 2023): soy isoflavone mixture; TSH rose, T3/T4 unchanged. Fits thyroid_disorder as a
+  class (soy isoflavone) source; it does not name genistein and says nothing about levothyroxine, yet
+  it was the only source for "Soy isoflavones can inhibit levothyroxine absorption".
+- **PMID 30132047** (Hüser 2018, PMC6132702; see red clover above): a case report of a soy protein
+  supplement decreasing levothyroxine absorption (Bell and Ovalle 2001); "the administration of 60 mg
+  soy isoflavones did not affect the rate and extent of absorption of the concomitantly applied
+  levothyroxine" (Persiani 2015, n = 12); "isoflavones might exhibit a negative impact on the thyroid
+  hormone system in patients with thyroid dysfunction. The mechanism of the isoflavone interaction
+  with levothyroxine medication is not clear".
+- **PMID 9464451** (Divi 1997): genistein and daidzein inhibit TPO-catalysed reactions (IC50 ~1-10 µM)
+  as alternate substrates. It names genistein; it was cited on red clover but not here.
+- **SYNTHROID prescribing information**, DailyMed setid 1e11ad30-1041-4520-10b0-8f9d30d30fcc, revised
+  2/2024: 7.9 "Soybean flour, cottonseed meal, walnuts, and dietary fiber may bind and decrease the
+  absorption of SYNTHROID"; 2.1 "Administer SYNTHROID at least 4 hours before or after drugs known to
+  interfere with SYNTHROID absorption" (basis for the sub-rule's existing 4-hour action).

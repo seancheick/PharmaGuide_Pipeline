@@ -679,3 +679,23 @@ def test_chinese_skullcap_pregnancy_rule_reports_the_animal_data_it_cites():
     for stale in ("teratogenic signals", "possible teratogenic risk", "cyp1a2"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+
+
+SYNTHROID_LABEL = (
+    "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?"
+    "setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
+)
+
+
+def test_genistein_levothyroxine_rule_cites_levothyroxine_evidence():
+    rule = _rule("RULE_INGREDIENT_GENISTEIN__THYROID")
+    thyroid = _sub_rule(rule, "condition_id", "thyroid_disorder")
+    thyroid_meds = _sub_rule(rule, "drug_class_id", "thyroid_medications")
+
+    # 36017706 is a rat study with no levothyroxine data.
+    assert thyroid_meds["sources"] == [_pmid("30132047"), SYNTHROID_LABEL, _pmid("9464451")]
+    assert thyroid["sources"] == [_pmid("9464451"), _pmid("36017706"), _pmid("30132047")]
+    assert (thyroid["severity"], thyroid_meds["severity"]) == ("monitor", "caution")
+    assert "did not change levothyroxine absorption" in thyroid_meds["mechanism"]
+    assert "rats" in thyroid["mechanism"]
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review

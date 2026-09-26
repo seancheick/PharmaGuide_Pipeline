@@ -148,7 +148,8 @@
       "2026-09-26: RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS cited only PMID 19370686 (Cochrane review of huperzine A for vascular dementia). It now cites a huperzine A pharmacology review (PMID 25191267: natural acetylcholinesterase inhibitor) and the ARICEPT prescribing information (7.1: cholinesterase inhibitors may interfere with anticholinergic medications); the unsourced cholinergic-toxidrome claim was removed. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_RHODIOLA_IMMUNE_BP drug:sedatives cited only PMID 26613955 (a CYP2C9 study) for an unsourced claim of unpredictable, dose-dependent sedative interaction, and its alert said rhodiola is mildly sedative. It now cites the EU herbal monograph (EMA/HMPC/24177/2023 Rev.1: no clinically relevant interactions; no sedation among undesirable effects) and says no interaction is established; evidence_level probable -> theoretical. Severity and last_reviewed unchanged; flagged to Sean as a retirement candidate. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_SAME drug:maois cited only PMID 38423354 (a SAMe-for-depression efficacy meta-analysis). It now cites NCCIH SAMe (may interact with serotonin-raising drugs such as antidepressants), Bodner 1995 (PMID 7854515: SAMe listed among serotomimetic agents causing serotonin syndrome alone or with MAOIs) and Iruela 1993 (PMID 8434674: toxic SAMe-clomipramine interaction); evidence_level established -> limited (no SAMe-MAOI study). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_CHINESE_SKULLCAP_LIVER pregnancy and pregnancy_lactation cited PMID 31236960 (a general Scutellaria baicalensis review) for possible teratogenic risk in animals. The only animal reproductive studies found (PMIDs 26303163, 26033919: a S. baicalensis/Acacia catechu flavonoid composition, no malformations or developmental effects up to 1000 mg/kg/day in rats and rabbits) show the opposite; mechanism and alert copy now say avoidance is precautionary because human data are absent. Severity, category and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_CHINESE_SKULLCAP_LIVER pregnancy and pregnancy_lactation cited PMID 31236960 (a general Scutellaria baicalensis review) for possible teratogenic risk in animals. The only animal reproductive studies found (PMIDs 26303163, 26033919: a S. baicalensis/Acacia catechu flavonoid composition, no malformations or developmental effects up to 1000 mg/kg/day in rats and rabbits) show the opposite; mechanism and alert copy now say avoidance is precautionary because human data are absent. Severity, category and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_INGREDIENT_GENISTEIN__THYROID thyroid_medications cited only PMID 36017706 (soy isoflavones and subclinical hypothyroidism in rats) for a levothyroxine-absorption claim. It now cites the Huser 2018 isoflavone review (PMID 30132047: a soy protein case vs no effect of 60 mg isoflavones on levothyroxine absorption), the SYNTHROID label (soybean flour decreases absorption; 4-hour separation for interfering agents) and Divi 1997 (PMID 9464451: genistein/daidzein TPO inhibition); thyroid_disorder adds 9464451 and 30132047 beside 36017706. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -14031,12 +14032,14 @@
       "condition_rules": [
         {
           "severity": "monitor",
-          "mechanism": "Soy isoflavones including genistein inhibit thyroid peroxidase (TPO), the enzyme required for thyroid hormone synthesis. Peripubertal and high-dose exposure associated with subclinical hypothyroidism via disruption of the hypothalamic-pituitary-thyroid axis.",
+          "mechanism": "Genistein and daidzein inhibit thyroid peroxidase (TPO)-catalysed reactions in vitro (IC50 about 1-10 micromolar) by acting as alternate substrates. In peripubertal male rats, soy isoflavones raised TSH without changing T3 or T4, a pattern of subclinical hypothyroidism. In people with adequate iodine intake, isoflavones are unlikely to harm thyroid function, but limited human data suggest they might adversely affect people with existing thyroid dysfunction.",
           "action": "Individuals with thyroid disorders should discuss soy isoflavone supplementation with their healthcare provider. Monitor thyroid function tests if using high-dose soy isoflavone supplements.",
           "last_reviewed": "2026-04-09",
           "condition_id": "thyroid_disorder",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/36017706/"
+            "https://pubmed.ncbi.nlm.nih.gov/9464451/",
+            "https://pubmed.ncbi.nlm.nih.gov/36017706/",
+            "https://pubmed.ncbi.nlm.nih.gov/30132047/"
           ],
           "evidence_level": "probable",
           "alert_headline": "Isoflavones may affect thyroid balance",
@@ -14067,12 +14070,14 @@
       "drug_class_rules": [
         {
           "severity": "caution",
-          "mechanism": "Soy isoflavones can inhibit levothyroxine absorption when taken simultaneously and may independently suppress thyroid hormone synthesis via TPO inhibition, requiring dose adjustments.",
+          "mechanism": "Levothyroxine prescribing information states that soybean flour and soybeans can decrease levothyroxine absorption, and advises separating it by at least 4 hours from products that interfere with absorption. Evidence for isolated isoflavones is mixed: a case report linked a soy protein supplement to reduced levothyroxine absorption, but 60 mg soy isoflavones did not change levothyroxine absorption in 12 postmenopausal women. Genistein and daidzein also inhibit thyroid peroxidase in vitro, and a safety review concludes isoflavones might adversely affect people with thyroid dysfunction by an unclear mechanism.",
           "action": "Separate soy isoflavone supplements from levothyroxine by at least 4 hours. Monitor TSH levels.",
           "last_reviewed": "2026-04-09",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/36017706/"
+            "https://pubmed.ncbi.nlm.nih.gov/30132047/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc",
+            "https://pubmed.ncbi.nlm.nih.gov/9464451/"
           ],
           "evidence_level": "probable",
           "alert_headline": "May affect thyroid medication",
