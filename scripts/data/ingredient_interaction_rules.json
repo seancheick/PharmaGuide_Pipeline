@@ -178,7 +178,9 @@
       "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL statins, calcium_channel_blockers and antiarrhythmics alert copy said 'talk to your prescriber before using bergamot', weaker than their unchanged avoid severity and action; it now says 'avoid bergamot products unless your prescriber says otherwise'. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_CHONDROITIN drug:anticoagulants copy said a case report showed INR 2.6 to 4.1, a figure no readable source states; it now gives Knudsen & Sokol 2008 (PMID 18363538): 2.3 to 3.9 after escalating to glucosamine 1500 mg / chondroitin 1200 mg twice daily. Two dose floors credited that 1200 mg BID figure to PMID 14986566 (a letter without an abstract); they now cite 18363538. Floor values unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_BLACK_SEED_OIL_DIABETES dose-floor rationale (7 sub-rules) no longer says the blood-pressure meta-analysis PMID 27512971 also shows glucose/lipid lowering; it reports blood pressure only. Floor value unchanged.",
-      "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL dose-floor rationale (3 sub-rules) no longer attributes a human GLA dose (~300 mg) and bleeding time to PMID 19783511, a rabbit coagulation study; it states what the study shows and that the 3 g/day oil floor is the clinical-team threshold (sign-off 2026-04-24). Floor value unchanged."
+      "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL dose-floor rationale (3 sub-rules) no longer attributes a human GLA dose (~300 mg) and bleeding time to PMID 19783511, a rabbit coagulation study; it states what the study shows and that the 3 g/day oil floor is the clinical-team threshold (sign-off 2026-04-24). Floor value unchanged.",
+      "2026-09-26: Unsupported dose floors removed (Sean, D8: remove a floor its source does not establish; never substitute another number). RULE_IQM_CHONDROITIN (bleeding_disorders, surgery_scheduled, anticoagulants): the 1200 mg/day floor cited Knudsen & Sokol 2008 (PMID 18363538), one case plus MedWatch reports attributed to glucosamine or glucosamine-chondroitin, in which the INR was still 4.7 after chondroitin fell to 600 mg/day. RULE_IQM_BLACK_SEED_OIL_DIABETES (7 sub-rules): the 2000 mg/day floor cited PMID 27512971, a blood-pressure meta-analysis reporting no association with dosage; the glucose source PMID 40210172 reports fasting-glucose lowering across trials and HbA1c lowering in a >1 g/day subgroup, and no source gives a warfarin dose. These sub-rules now fire on presence (materiality presence); severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_IQM_SENNA_PREGNANCY pregnancy caution -> avoid (Sean, D5: a pregnancy-profile warning chosen from the exact source wording; the rule was already gated on the pregnant/breastfeeding profile flags, so no one else sees it). The EU herbal monograph on senna leaf and fruit (HMPC, Rev. 1, 2018; 2022 addendum kept it) lists pregnancy and lactation under 4.3 as contraindications on anthranoid genotoxicity data; UKTIS (2026) finds no increased malformation risk in limited human data and uses stimulants after bulk-forming and osmotic laxatives, so pregnancy is avoid, not contraindicated. Lactation stays caution: LactMed (NBK501349) rates usual doses acceptable. LiverTox NBK547922 (a liver page) no longer cited as a pregnancy source. Copy names both views. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interaction_rules": [
@@ -18116,16 +18118,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1200,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "warfarin_context_dose_related",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/18363538/",
-            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 18363538); warfarin-context, dose-related."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "surgery_scheduled",
@@ -18159,16 +18152,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1200,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "warfarin_context_dose_related",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/18363538/",
-            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 18363538); warfarin-context, dose-related."
-          }
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -18204,16 +18188,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1200,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "warfarin_context_dose_related",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/18363538/",
-            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 18363538); warfarin-context, dose-related."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -18891,17 +18866,18 @@
       "condition_rules": [
         {
           "condition_id": "pregnancy",
-          "severity": "caution",
+          "severity": "avoid",
           "evidence_level": "probable",
-          "mechanism": "Sennosides are hydrolyzed by colonic bacteria to rhein/rhein-anthrone, which act as local irritants that stimulate colonic peristalsis (they are minimally absorbed). There has been theoretical concern that stimulant laxatives could provoke uterine contractions, but this has not been observed in pregnant women; senna is regarded as an acceptable second-line laxative in pregnancy after bulk-forming and osmotic agents.",
-          "action": "Prefer bulk-forming or osmotic laxatives first; senna is an acceptable second-line option in pregnancy. Avoid chronic high-dose use and consult an obstetrician for anything beyond occasional short-term relief.",
+          "mechanism": "Sennosides are converted by colonic bacteria to rhein-anthrone, which stimulates the colon. The EU herbal monograph (HMPC, Rev. 1, 2018) contraindicates senna in pregnancy because of experimental data concerning a genotoxic risk of several anthranoids, e.g. emodin and aloe-emodin. UKTIS reports that the limited human data suggest no increased risk of congenital malformations but are insufficient to rule one out; a theoretical concern about uterine contractions has not been observed in pregnant women.",
+          "action": "Avoid starting senna during pregnancy unless your obstetrician recommends it; bulk-forming or osmotic laxatives are used first.",
           "sources": [
-            "https://www.ncbi.nlm.nih.gov/books/NBK547922/",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf",
+            "https://uktis.org/monographs/treatment-of-constipation-in-pregnancy/",
             "https://www.medicinesinpregnancy.org/leaflets-a-z/senna/"
           ],
-          "alert_headline": "Use stimulant laxatives with guidance",
-          "alert_body": "Senna may be used during pregnancy in some cases, but chronic or high-dose use can cause cramping, dehydration, or electrolyte shifts. Use with obstetric guidance.",
-          "informational_note": "Senna has limited pregnancy data \u2014 relevant to people who are pregnant or planning pregnancy.",
+          "alert_headline": "Senna in pregnancy: ask your obstetrician first",
+          "alert_body": "If you are pregnant: EU herbal guidance says not to use senna in pregnancy, while UK pregnancy guidance uses it only after gentler laxatives have not helped. Talk to your obstetrician before using it.",
+          "informational_note": "Relevant only to people who are pregnant or breastfeeding: EU and UK guidance differ on senna in pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -18998,17 +18974,18 @@
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501349/",
-          "https://www.ncbi.nlm.nih.gov/books/NBK547922/",
-          "https://www.medicinesinpregnancy.org/leaflets-a-z/senna/"
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf",
+          "https://uktis.org/monographs/treatment-of-constipation-in-pregnancy/",
+          "https://www.medicinesinpregnancy.org/leaflets-a-z/senna/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK501349/"
         ],
-        "pregnancy_category": "caution",
+        "pregnancy_category": "avoid",
         "lactation_category": "caution",
         "evidence_level": "probable",
-        "notes": "Pregnancy: Prefer bulk-forming or osmotic laxatives first; senna is an acceptable second-line option in pregnancy. Avoid chronic high-dose use and consult an obstetrician for anything beyond occasional short-term relief. Lactation: caution category remains separately tracked.",
-        "alert_headline": "Use stimulant laxatives with guidance",
-        "alert_body": "Senna may be used during pregnancy in some cases, but chronic or high-dose use can cause cramping, dehydration, or electrolyte shifts. Use with obstetric guidance.",
-        "informational_note": "Senna has limited pregnancy data \u2014 relevant to people who are pregnant or planning pregnancy.",
+        "notes": "Pregnancy: the EU herbal monograph (HMPC, Rev. 1, 2018) lists pregnancy as a contraindication for senna because of experimental data concerning a genotoxic risk of several anthranoids, e.g. emodin and aloe-emodin. UKTIS (2026) reports that the limited human data suggest no increased risk of congenital malformations but are insufficient to rule one out, and uses stimulant laxatives after bulk-forming and osmotic laxatives. Avoid starting senna in pregnancy unless your obstetrician recommends it. Lactation: the EU monograph also contraindicates use while breastfeeding because small amounts of rhein pass into breast milk, while LactMed rates usual doses as acceptable during breastfeeding; check with your clinician.",
+        "alert_headline": "Senna in pregnancy: ask your obstetrician first",
+        "alert_body": "If you are pregnant: EU herbal guidance says not to use senna in pregnancy, while UK pregnancy guidance uses it only after gentler laxatives have not helped. Talk to your obstetrician before using it.",
+        "informational_note": "Relevant only to people who are pregnant or breastfeeding: EU and UK guidance differ on senna in pregnancy.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -19731,9 +19708,9 @@
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf",
             "https://www.nccih.nih.gov/health/aloe-vera"
           ],
-          "alert_headline": "Stimulant laxative — not for use in pregnancy",
+          "alert_headline": "Stimulant laxative \u2014 not for use in pregnancy",
           "alert_body": "Aloe latex laxatives are not recommended during pregnancy. If you are pregnant, talk to your obstetrician about a gentler laxative.",
-          "informational_note": "Aloe latex is a stimulant laxative — relevant to anyone pregnant.",
+          "informational_note": "Aloe latex is a stimulant laxative \u2014 relevant to anyone pregnant.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -19766,7 +19743,7 @@
           ],
           "alert_headline": "Electrolyte loss with repeated use",
           "alert_body": "Repeated use of aloe latex laxatives can upset fluid and electrolyte balance. If you have kidney disease, use them only with your clinician's guidance.",
-          "informational_note": "Aloe latex can shift electrolytes — relevant to people with kidney conditions.",
+          "informational_note": "Aloe latex can shift electrolytes \u2014 relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -19800,7 +19777,7 @@
           ],
           "alert_headline": "Rare liver injury reported",
           "alert_body": "Oral aloe has been linked to rare cases of liver injury. If you have liver disease, talk to your clinician before using it.",
-          "informational_note": "Oral aloe has rare liver-injury reports — relevant to people with liver conditions.",
+          "informational_note": "Oral aloe has rare liver-injury reports \u2014 relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -19836,7 +19813,7 @@
           ],
           "alert_headline": "Can raise digoxin toxicity risk",
           "alert_body": "Potassium loss from aloe latex laxatives can make digoxin more toxic. If you take digoxin, talk to your prescriber before using aloe latex.",
-          "informational_note": "Aloe latex can lower potassium — relevant to people taking digoxin or other cardiac glycosides.",
+          "informational_note": "Aloe latex can lower potassium \u2014 relevant to people taking digoxin or other cardiac glycosides.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19869,7 +19846,7 @@
           ],
           "alert_headline": "Low potassium can affect heart-rhythm medicines",
           "alert_body": "Aloe latex laxatives can lower potassium, which matters with heart-rhythm medicines. Talk to your prescriber before using them together.",
-          "informational_note": "Aloe latex can lower potassium — relevant to people on antiarrhythmic medicines.",
+          "informational_note": "Aloe latex can lower potassium \u2014 relevant to people on antiarrhythmic medicines.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19902,7 +19879,7 @@
           ],
           "alert_headline": "Extra potassium loss with diuretics",
           "alert_body": "Aloe latex laxatives and diuretics both lower potassium. Talk to your prescriber before using them together.",
-          "informational_note": "Aloe latex can lower potassium — relevant to people on thiazide diuretics.",
+          "informational_note": "Aloe latex can lower potassium \u2014 relevant to people on thiazide diuretics.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19937,7 +19914,7 @@
         "notes": "Pregnancy: contraindicated by the EU herbal monograph because experimental data show a genotoxic risk for several anthranoids (emodin, aloe-emodin). Lactation: contraindicated because active metabolites of other anthranoids, such as rhein, pass into breast milk in small amounts.",
         "alert_headline": "Not for use in pregnancy or breastfeeding",
         "alert_body": "Aloe latex laxatives are not recommended while pregnant or breastfeeding. Talk to your clinician about a gentler laxative.",
-        "informational_note": "Aloe latex is a stimulant laxative — relevant to anyone pregnant or breastfeeding.",
+        "informational_note": "Aloe latex is a stimulant laxative \u2014 relevant to anyone pregnant or breastfeeding.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -20116,16 +20093,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 2000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "hypertension",
@@ -20158,16 +20126,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 2000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -20235,16 +20194,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 2000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_high_risk",
@@ -20278,16 +20228,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 2000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_lower_risk",
@@ -20321,16 +20262,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 2000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antihypertensives",
@@ -20363,16 +20295,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 2000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -20406,16 +20329,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 2000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
-            "rationale": "Nigella sativa lowers BP from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],

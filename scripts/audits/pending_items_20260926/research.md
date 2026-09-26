@@ -58,3 +58,49 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   inhibits the activity of mitochondrial NADH-ubiquinone oxidoreductase."
 - The source label named a different paper (Folkers K, lovastatin, PNAS 1990) while its URL pointed to
   12392188. The record is already suppressed (citation_review_status needs_revision).
+
+## D10 SARM regulatory terminology (Sean's decision 2026-09-26: a warning letter is not a ban)
+- FDA In Brief 2017-10-31 "FDA warns against using SARMs in body-building products" (live URL 404; Wayback
+  fda.gov/NewsEvents/Newsroom/FDAInBrief/ucm583021.htm, 2017-11-01): products "are not dietary supplements. The
+  products are unapproved drugs". Names no compound; no "ban".
+- Infantry Labs 535333 (2017-10-23, read live): "The Officer (MK-2866)" and "Lieutenant (LGD-4033)" labeled as dietary
+  supplements; excluded under 201(ff)(3)(B)(ii); unapproved new drugs and misbranded. No "ban". Panther 535341 and
+  IronMag 494623 (2017-10-22/23) name ostarine/LGD-4033 only (agent-read).
+- Dynamic Technical Formulations 535717 (2017-12-13): "your Tri-ton product contains ostarine and andarine".
+- Umbrella 612037 (2021-05-18): "GW-501516 Cardarine" among research-labeled products marketed as SARMs.
+- Prime Sports Nutrition 719433 (2025-12-12): "S-23"; research-only labeling; unapproved new drugs (505(a)).
+- TITAN SARMS 719645 (CDER, 2025-12-12, read live): LGD-4033, RAD-140, S-4, YK-11; "unapproved new drugs under section
+  505(a)"; labeled "Research-grade compound"; contains none of "dietary supplement", "recall", "adulterated",
+  "misbranded", "ban". openFDA drug/food recalls: no Titan entry.
+- openFDA recalls: D-0800-2020 (initiated 2019-08-24) "Entropic Labs SARM RAD-140" - "Marketed Without An Approved
+  NDA/ANDA"; D-0910-2016 (2016-03-31) "LGD-Xtreme (ligandrol LGD-4033)" - "Contains an unapproved drug".
+- FDA page "Certain bodybuilding products put consumers at risk..." (content current 2025-12-02): YK-11 confirmed in a
+  product marketed as a supplement; "not dietary supplements... unapproved drugs".
+- SR9009: no fda.gov document found (letters, openFDA recalls, Import Alert 66-41).
+- No statute: SARMs Control Act S.2742 (2018) and S.2895 (2019) were referred to committee and not enacted (govinfo).
+- Not changed (unverified): the DoD "Prohibited for military personnel" rows on ostarine, ligandrol and RAD140
+  (source typed state_statute); opss.org shows the list but not per-compound entries.
+- Corpus: 0 products in the 2026-09-22 cleaned corpus name any SARM, MK-677 or Titan, so no verdict moves today.
+
+## D5 senna pregnancy (Sean's decision: pregnancy-profile warning from the exact source wording)
+- EU herbal monograph Senna alexandrina folium Rev. 1 (EMA/HMPC/625849/2015, 2018; pdftotext): 4.3 "Pregnancy and
+  lactation (see section 4.6 and 5.3)"; 4.6 "The use during pregnancy is contraindicated because experimental data
+  concerning a genotoxic risk of several anthranoids, e.g. emodin and aloe-emodin"; lactation contraindicated (rhein in
+  milk). Fructus Rev. 1 identical; the 2022 addendum (EMA/HMPC/18310/2022) kept it.
+- UKTIS "Treatment of constipation in pregnancy" (v4, March 2026, read live): "The limited available data regarding the
+  use of docusate sodium and senna in pregnancy suggest no increased risk of congenital malformations but are
+  insufficient to conclusively state that there is no increase in risk"; stimulants after bulk-forming and osmotic.
+- LactMed NBK501349 (PMID 30000408): "Usual doses of senna are acceptable to use during breastfeeding."
+- NBK547922 is LiverTox Senna (liver injury), not a pregnancy source.
+- Result: pregnancy caution -> avoid (not contraindicated, given the UK human data); lactation stays caution. Same EU
+  wording also covers cascara (avoid), frangula, rhubarb and Aloe (contraindicated); frangula and rhubarb have no rule.
+
+## D8 unsupported dose floors (Sean's decision: remove, never substitute a number)
+- PMID 18363538 (Knudsen & Sokol 2008, efetch): after glucosamine 750 mg / chondroitin 600 mg per day "a repeat INR done
+  16 days later was 4.7"; MedWatch: "20 reports of glucosamine or glucosamine-chondroitin sulfate use with warfarin";
+  the authors attribute the interaction to glucosamine and say "More information is necessary". No threshold.
+- PMID 27512971 (Sahebkar 2016): "No association was observed between SBP lowering and ... N. sativa dosage".
+- PMID 40210172 (Karimi 2025, 16 RCTs in T2D): FBG -21.43 mg/dL pooled; HbA1c, HOMA and LDL lowered "in higher doses
+  (>1 g/day)" subgroups. Sets no 2000 mg threshold. No source gives a black seed warfarin dose.
+- Corpus (2026-09-22 enriched): chondroitin rule on 130 products, floor suppressed it on 43; black seed on 15, floor
+  suppressed it on 14. These warnings now show to profile-matched users; severities unchanged; no verdict inputs.
