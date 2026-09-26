@@ -246,8 +246,16 @@ def test_cascara_rule_cites_the_eu_monograph_and_drops_unsourced_claims():
         "dialysis",
         "depends on kidney clearance",
         "choose an osmotic agent",
+        # EMA 5.3: genotoxic in vitro, "not proven in in vivo systems"
+        "show a genotoxic risk",
+        # EMA 4.5 ties hypokalaemia to long-term laxative abuse, not any use
+        "long-term stimulant laxative use potentiates",
+        "makes digoxin more toxic",
+        # neither LiverTox nor the EU monograph contraindicates liver disease
+        "do not use cascara sagrada in liver disease",
     ):
         assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
 
 
 def test_laxative_ghost_pmids_are_not_cited_anywhere():
