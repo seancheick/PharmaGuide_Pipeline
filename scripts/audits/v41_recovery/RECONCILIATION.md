@@ -414,3 +414,17 @@ Continue existing generic/fiber Evidence ownership, iron-oxide/non-delivering Do
 botanical exposure/basis and population-reference work, then validate integration
 with fresh representative inputs and export/Flutter consumers. No push, merge,
 release, new worktree, or new public contract was performed for this batch.
+
+## 2026-09-26 continuation: botanical daily exposure
+
+Owner: `serving_frequency.py::resolve_daily_serving_range` supplies daily exposure;
+`scoring_v4/modules/botanical_profile.py::score_botanical_dose` owns its comparison.
+Evidence: `rg "daily|Adequacy exposure" scripts/GLOSSARY.md scripts/serving_frequency.py`.
+Will NOT create: a serving resolver, field, registry or new dose policy.
+
+A failing regression demonstrated that 150 mg twice daily was compared as 150 mg
+against the existing daily reference. The adapter now uses minimum directed daily
+exposure. 50 botanical profile/role tests passed. Stored-input adapter probe of
+1,353 products found 11 payload changes (including metadata-only changes); receipt
+`~/pg_quality/candd/runs/botanical_daily_20260926.json`. Preparation/basis scope still
+requires review; this checkpoint alone does not establish route or release readiness.

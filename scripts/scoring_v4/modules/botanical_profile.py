@@ -786,6 +786,12 @@ def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if rng is None:
         return {"score": BOTANICAL_DOSE_DISCLOSED_NO_REF, "band": "disclosed_no_reference", "metadata": {}}
 
+    from serving_frequency import resolve_daily_serving_range
+
+    # Adequacy uses the minimum directed daily exposure, as in the shared
+    # nutrient and omega contracts. The row amount is per serving.
+    servings_min, _, _ = resolve_daily_serving_range(product)
+    mass *= servings_min
     lo, hi = rng
     meta = {"dose_mg": mass, "range_mg": [lo, hi]}
     if lo <= mass <= hi:

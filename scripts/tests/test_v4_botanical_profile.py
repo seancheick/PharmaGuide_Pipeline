@@ -611,3 +611,16 @@ def test_botanical_formulation_prefers_recognized_anchor_over_unmapped_blend_hea
     assert out["components"]["recognized_botanical_identity"] == 6.0
     assert out["components"]["quantified_dose_present"] == 2.0
     assert out["score"] > 0.0
+
+
+def test_botanical_dose_compares_minimum_daily_exposure_to_daily_reference():
+    # 150 mg twice daily reaches the 250 mg/day lower bound. A range of
+    # one to two servings must not use its maximum to claim adequacy.
+    product = _botanical_product(_botanical_ingredient(quantity=150))
+    product['serving_basis'] = {
+        'min_servings_per_day': 2, 'max_servings_per_day': 2,
+        'servings_per_day_source': 'servingSizes',
+    }
+    assert score_botanical_dose(product)['band'] == 'within_studied_range'
+    product['serving_basis']['min_servings_per_day'] = 1
+    assert score_botanical_dose(product)['band'] == 'below_studied_range'
