@@ -9,6 +9,7 @@ the data file unnoticed.
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from pathlib import Path
 
@@ -1005,6 +1006,18 @@ def _cited(rule_id: str, sub_rule: str) -> list[str]:
     if sub_rule == "pregnancy_lactation":
         return rule["pregnancy_lactation"]["sources"]
     kind, _, key = sub_rule.partition(":")
+    if kind in ("dose_floor", "threshold"):
+        # free-text claims the verifier reads (see collect_claims)
+        if kind == "threshold":
+            text = " ".join(t.get("note") or "" for t in rule.get("dose_thresholds") or []
+                            if t.get("target_id") == key)
+        else:
+            sub = next(x for x in (rule.get("condition_rules") or []) + (rule.get("drug_class_rules") or [])
+                       if key in (x.get("condition_id"), x.get("drug_class_id")))
+            floor = sub.get("min_effective_dose") or {}
+            text = f"{floor.get('source') or ''} {floor.get('rationale') or ''}"
+        ids = re.findall(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID:?\s*(\d+)", text)
+        return [_pmid(a or b) for a, b in ids]
     if kind == "condition":
         return _sub_rule(rule, "condition_id", key)["sources"]
     return _sub_rule(rule, "drug_class_id", key)["sources"]
