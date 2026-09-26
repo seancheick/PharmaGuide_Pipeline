@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.6.0",
-    "last_updated": "2026-09-25",
+    "schema_version": "5.6.1",
+    "last_updated": "2026-09-26",
     "total_entries": 208,
     "changelog": [
+      "5.6.1 (2026-09-26): INGR_WHEY_PROTEIN no longer aliases generic Protein macro declarations, unspecified powders/blends, or rice/hemp sources absent from its cited 49-trial source inventory. Known whey, casein, milk, soy and pea source identities remain. Fresh-enrichment regressions cover two collagen labels and greens coffee; source-free macro recovery is intentionally rejected.",
       "5.6.0 (2026-09-25): Corrected INGR_WHEY_PROTEIN to the source-neutral Protein Supplementation scope supported by its cited 49-RCT, 1,863-participant meta-analysis; the stable ID is retained for stored-artifact compatibility. The reviewed purpose is protein supplementation alongside resistance training; whey, casein, milk, soy, pea, rice, hemp, and disclosed protein blends share the category Evidence owner while source-quality differences remain in Formulation. Corrected the stale 250 enrollment, 488-trial count, and unrelated focus/glycemic endpoint tags. No new study was invented and the two existing verified PubMed sources remain the record's evidence base.",
       "5.5.1 (2026-09-25): INGR_OMEGA3 general-purpose evidence now requires at least 376 mg/day of disclosed EPA+DHA, the lowest exposure in the cited 13-trial cardiovascular meta-analysis (PMID 31567003). Trace-dose gummies no longer inherit the reviewed cardiovascular evidence record. No evidence strength or pillar magnitude changed.",
       "5.5.0 (2026-09-25): INGR_OMEGA3 gains reviewed purpose-specific records. General omega evidence remains positive_weak; triglyceride evidence becomes fully applicable only when the minimum directed EPA+DHA exposure reaches 2 g/day, with graduated applicability from 1-2 g/day. Prenatal 200 mg DHA is intake-guideline evidence only. Preterm-birth, depression and atrial-fibrillation records are retained as non-scoring contexts where a fixed product label cannot establish the required purpose, population or safety owner.",
@@ -20200,11 +20201,6 @@
       "id": "INGR_WHEY_PROTEIN",
       "standard_name": "Protein Supplementation",
       "aliases": [
-        "protein",
-        "dietary protein",
-        "protein supplement",
-        "protein powder",
-        "protein blend",
         "whey protein",
         "whey protein isolate",
         "whey isolate",
@@ -20214,9 +20210,7 @@
         "casein protein",
         "milk protein",
         "soy protein",
-        "pea protein",
-        "rice protein",
-        "hemp protein"
+        "pea protein"
       ],
       "category": "sports_performance",
       "evidence_level": "ingredient-human",
@@ -20236,9 +20230,9 @@
         "Muscle Growth & Recovery",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human systematic reviews support dietary protein supplementation for modest additional gains in lean mass, muscle size, and strength when paired with sustained resistance training. The broad record covers protein supplements as a category; source quality differences remain a Formulation question, and the evidence does not imply further benefit once total daily protein intake is already adequate.",
-      "last_updated": "2026-09-25",
-      "notable_studies": "A 49-study meta-analysis in 1,863 healthy adults found protein supplementation modestly improved resistance-training gains in strength, fat-free mass, and muscle size, with no additional fat-free-mass gain above about 1.62 g/kg/day total protein intake (PMID: 28698222). A whey-specific synthesis in older adults provides additional source-specific context (PMID: 39303495).",
+      "notes": "Human systematic reviews support dietary protein supplementation for modest additional gains in lean mass, muscle size, and strength when paired with sustained resistance training. The reviewed sources include whey, casein, milk, soy, pea, and studied source blends. A generic Protein macro declaration or an unspecified protein powder/blend does not identify one of these sources. Source quality differences remain a Formulation question, and the evidence does not imply further benefit once total daily protein intake is already adequate.",
+      "last_updated": "2026-09-26",
+      "notable_studies": "A 49-study meta-analysis in 1,863 healthy adults found protein supplementation modestly improved resistance-training gains in strength, fat-free mass, and muscle size, with no additional fat-free-mass gain above about 1.62 g/kg/day total protein intake (PMID: 28698222). A whey-specific synthesis in older adults found improved lower-body strength with resistance training, but no significant improvement in handgrip strength, physical performance, or most body-composition outcomes (PMID: 39303495).",
       "references_structured": [
         {
           "type": "pubmed",

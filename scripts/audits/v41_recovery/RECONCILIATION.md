@@ -252,3 +252,30 @@ Detached from `v41-recovery` `4cf582b1`. Not a scoring-policy change. Integrated
 |---|---|---|---|---|
 | `074697a9ffd83db821c01460deb93fdc28216e69` | `generic_trust` replaced a missing, malformed, or empty marine scope with `MARINE_CERTS_FALLBACK` (`ifos`, `friend of the sea`, `msc`, `goed`) | `cert_claim_rules.json` `rules.third_party_programs` via `scoring_v4.cert_evidence.marine_cert_tokens`. An unreadable or structurally incomplete policy is a systemic error; it never invents tokens or silently erases unrelated certification credit | `test_marine_cert_registry_owner.py`; existing generic, multi/prenatal, and probiotic trust tests | Valid registry unchanged: USP sku 8, non-omega IFOS 0, omega IFOS label claim 2, Friend of the Sea still not testing credit. Invalid policy stops scoring with a named configuration error |
 | child of `074697a9` (`ul_display_severity`) | Per-row enrichment, aggregated exposure, the B7 penalty chip, and the consumer warning each repeated `critical if pct >= 200 else warning` (warnings used `high`/`moderate` for the same cut) | `rda_ul_calculator.ul_display_severity`. Export derives from `pct_ul` through that owner; a stored word is compatibility input only when the percentage is unavailable. Consumer copy stays `high`/`moderate` | `test_ul_display_severity_owner.py`; `test_v4_tradeoffs_derivation.py`; `test_ul_verdict_gate.py`; `test_b7_pct_ul_none_failsafe.py` | Successful path unchanged (79 mg zinc warning, 80 mg critical, aggregate 200% critical, export high/moderate). A stale stored `warning` at 250% is corrected to critical/high. 100% confirmed exceedance, 150% score deduction, and the gate's 200% signal name were not moved |
+
+## 2026-09-26: protein Evidence alias containment
+
+Owner: `scripts/data/backed_clinical_studies.json::INGR_WHEY_PROTEIN` through
+`SupplementEnricherV3._clinical_study_match` and existing generic Evidence recovery.
+Evidence: `rg 'INGR_WHEY_PROTEIN|_clinical_study_match|_entry_identity_keys' scripts/`;
+checked source-of-truth matrix and glossary. Will NOT create: second matcher,
+protein whitelist, new evidence field, title-derived ingredient identity.
+
+Reproduced 3 failures through current normalize_product -> enrich_product on public
+DSLD fixtures 299952, 222864 and 204521. Removed generic macro/powder/blend aliases.
+Also removed rice/hemp aliases: the cited review's source inventory identifies
+whey, casein, soy, pea, milk, food and studied blends, not those two isolated sources.
+This is not a claim that rice/hemp lack evidence; this record cannot establish it.
+
+Content verified 2026-09-26 via Europe PMC REST (MED 28698222 and 39303495), plus
+https://doi.org/10.1136/bjsports-2017-097608 source inventory. The former is 49 RCTs,
+1863 participants, protein with sustained resistance training; benefits were modest.
+The latter found lower-body strength benefit with training but many null outcomes;
+entry prose now says so. No clinician review attributed.
+
+77 focused tests pass. Three recovery fixtures now name the actual whey/pea form;
+a separate negative pin rejects recovery from a title plus source-free macro.
+Fresh before/after totals: 299952 89.5 -> 89.5, 222864 73.5 -> 73.2,
+204521 62.6 -> 62.6. All three false protein matches removed; routes, status and
+safety verdicts unchanged. Durable receipts: ~/pg_quality/candd/protein_{before,after}_full.json.
+Broader regression/replay follows at the combined checkpoint; nothing published.
