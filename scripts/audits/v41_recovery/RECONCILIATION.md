@@ -518,3 +518,22 @@ skipped, one stale omega endpoint-average expectation failed before interruption
 It is NOT an acceptance run. The first 1,353-input continuation replay had 153
 changed pillar payloads, 155 readiness payload changes and no route/status/safety
 changes. Those intermediate results require a replacement after this finding.
+
+### Botanical preparation containment and interim test correction
+
+Owner: `botanical_profile.py::_dosing_entry_for` consumes the existing therapeutic
+reference; `_forms_text` retains the row's preparation. A failing whole-herb
+regression showed 500 mg root powder receiving extract-range credit. When a
+reference explicitly names extract and the disclosed row is whole herb/powder
+without extract evidence, it now returns disclosed/no-reference rather than
+inventing equivalence. Will NOT create: an extract conversion ratio or registry.
+
+Content re-verified through Europe PMC MED API on 2026-09-26: PMID 31517876 used
+240 mg/day standardized Shoden extract; PMID 23439798 used 300 mg extract twice
+daily. Neither establishes an equivalent dose of plain root powder.
+Sources: https://pubmed.ncbi.nlm.nih.gov/31517876/ and
+https://pubmed.ncbi.nlm.nih.gov/23439798/. Preparation-specific branded-carrier
+ranges (including phytosome mass versus constituent mass) remain a review gap;
+this narrow correction does not assert full botanical clinical closure.
+59 focused botanical/role/omega-standard checks passed. The stale omega test
+now expects 16.8 at the 1,200 mg minimum, rather than 18.4 endpoint averaging.

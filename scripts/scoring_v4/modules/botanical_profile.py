@@ -688,7 +688,18 @@ def _dosing_entry_for(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     index = _dosing_index()
     for key in _ingredient_identity_keys(row):
         if key in index:
-            return index[key]
+            entry = index[key]
+            forms = _forms_text(row)
+            if (
+                "extract" in _norm(entry.get("standard_name"))
+                and any(token in forms for token in _WHOLE_HERB_TOKENS)
+                and not any(token in forms for token in _EXTRACT_TOKENS)
+            ):
+                # Whole-herb mass is not the extract mass studied by this
+                # reference. Retain disclosure credit without inventing a
+                # concentration ratio or treating it as an ineffective dose.
+                continue
+            return entry
     return None
 
 

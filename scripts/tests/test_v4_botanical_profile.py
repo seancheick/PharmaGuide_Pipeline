@@ -624,3 +624,11 @@ def test_botanical_dose_compares_minimum_daily_exposure_to_daily_reference():
     assert score_botanical_dose(product)['band'] == 'within_studied_range'
     product['serving_basis']['min_servings_per_day'] = 1
     assert score_botanical_dose(product)['band'] == 'below_studied_range'
+
+
+def test_whole_herb_mass_cannot_use_an_extract_dose_reference():
+    row = _botanical_ingredient(name='Ashwagandha Root Powder', standard_name='Ashwagandha',
+                               form='Ashwagandha Root Powder', quantity=500,
+                               matched_form='Ashwagandha Root Powder')
+    product = _botanical_product(row, standardized=False)
+    assert score_botanical_dose(product)['band'] == 'disclosed_no_reference'
