@@ -12,8 +12,9 @@ unscoped rule. Before the split every dandelion or nettle root
 label carried the leaf claims, while a label resolved to the botanical root
 record carried nothing.
 
-A part-scoped rule stays silent only for a label-confirmed form outside its
-scope; an unknown or inferred form still warns (the G1 fail-open doctrine).
+A part-scoped rule (form_scope_match "fail_open") stays silent only for a
+label-confirmed form outside its scope; an unknown or inferred form still warns
+(the G1 fail-open doctrine).
 """
 
 from __future__ import annotations
@@ -138,3 +139,16 @@ def test_dandelion_part_forms_score_like_the_whole_plant_form():
     whole = {field: forms["dandelion extract"].get(field) for field in fields}
     for part in ("dandelion root", "dandelion leaf"):
         assert {field: forms[part].get(field) for field in fields} == whole, part
+
+
+@pytest.mark.parametrize("mode,flagged", [("fail_open", False), ("all", False), ("fail-open", True), ("confirmed", True)])
+def test_the_integrity_check_rejects_an_unknown_form_scope_match(mode, flagged):
+    """A misspelt mode falls back to the default match, which silences an
+    unknown part: the opposite of fail-open."""
+    from db_integrity_sanity_check import check_ingredient_interaction_rules
+
+    rules = json.loads((SCRIPTS / "data" / "ingredient_interaction_rules.json").read_text())
+    rule = next(r for r in rules["interaction_rules"] if r["id"] == NETTLE)
+    findings: list = []
+    check_ingredient_interaction_rules(findings, {"interaction_rules": [dict(rule, form_scope_match=mode)]}, "rules")
+    assert any(f.path.endswith(".form_scope_match") for f in findings) is flagged

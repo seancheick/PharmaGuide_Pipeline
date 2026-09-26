@@ -18054,7 +18054,7 @@ class SupplementEnricherV3:
         # hid the retinyl acetate from the preformed vitamin A pregnancy rule.
         scope = {str(item).strip() for item in form_scope if str(item).strip()}
         row_forms = self._row_form_ids(ingredient)
-        if rule.get("form_scope_match") == "confirmed":
+        if rule.get("form_scope_match") == "fail_open":
             # A plant-part rule (dandelion leaf diuresis) is silent only for a
             # label-confirmed form outside its scope; an unknown or inferred
             # part still warns (G1 fail-open).

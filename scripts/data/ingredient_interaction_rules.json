@@ -191,7 +191,7 @@
       "2026-09-26: RULE_BOTANICAL_LICORICE_ROOT antihypertensives 100 mg/day floor cited PMID 393503, two women on 273-546 mg glycyrrhizin daily, which never mentions 100 mg (confidence_basis inferred_from_dose_range). It now cites af Geijerstam 2024 (PMID 38246526): licorice with 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg in a randomized crossover trial. Value unchanged; confidence_basis documented_effective_dose; the rationale states the floor is compared with the label licorice amount. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_GINKGO_HYPERTENSION pregnancy block raised from caution (no source) to avoid with NCCIH ginkgo (may be unsafe in pregnancy; might cause early labor or extra bleeding during delivery), matching RULE_BOTAN_GINKGO_PREGNANCY (Sean, 2026-09-26: one ginkgo pregnancy verdict). Lactation stays caution (NCCIH: little is known).",
-      "2026-09-26: Plant-part split (Sean, 2026-09-26). RULE_IQM_DANDELION_KIDNEY keeps the diuretic claims (kidney disease, antihypertensives, lithium), now form_scope dandelion leaf + dandelion extract (whole or unstated part): PMID 19678785 is a dandelion leaf trial and the EU monographs give the diuretic indication for the leaf and for root with herb, none for the root alone; the kidney claim now also cites the EU leaf monograph (avoid in renal failure, possible hyperkalemia). Its three hypoglycemic claims moved unchanged to the new RULE_IQM_DANDELION_GLUCOSE, which applies to every dandelion form. RULE_IQM_STINGING_NETTLE_DIABETES is form_scope nettle leaf + unspecified: its glucose evidence is a leaf-extract trial (PMID 24273930) and the EU nettle-root monograph covers only benign prostatic hyperplasia. form_scope_match 'confirmed': a part-scoped rule is silent only for a label-confirmed form outside its scope; unknown or inferred parts still warn.",
+      "2026-09-26: Plant-part split (Sean, 2026-09-26). RULE_IQM_DANDELION_KIDNEY keeps the diuretic claims (kidney disease, antihypertensives, lithium), now form_scope dandelion leaf + dandelion extract (whole or unstated part): PMID 19678785 is a dandelion leaf trial and the EU monographs give the diuretic indication for the leaf and for root with herb, none for the root alone; the kidney claim now also cites the EU leaf monograph (avoid in renal failure, possible hyperkalemia). Its three hypoglycemic claims moved unchanged to the new RULE_IQM_DANDELION_GLUCOSE, which applies to every dandelion form. RULE_IQM_STINGING_NETTLE_DIABETES is form_scope nettle leaf + unspecified: its glucose evidence is a leaf-extract trial (PMID 24273930) and the EU nettle-root monograph covers only benign prostatic hyperplasia. form_scope_match 'fail_open': a part-scoped rule is silent only for a label-confirmed form outside its scope; unknown or inferred parts still warn.",
       "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES keeps only its glucose claims (diabetes, hypoglycemics) under the nettle leaf + unspecified form_scope. Its antihypertensives claim moves unchanged in severity, with the same no-data pregnancy block, to the new unscoped RULE_IQM_STINGING_NETTLE_BLOOD_PRESSURE: the hypotensive evidence covers every part (PMID 35800714) and a root-extract study lowered blood pressure in rats (PMID 12020933), so a root label keeps them. Found by the fresh-context review of the plant-part split."
     ]
   },
@@ -21042,7 +21042,7 @@
         "dandelion leaf",
         "dandelion extract"
       ],
-      "form_scope_match": "confirmed",
+      "form_scope_match": "fail_open",
       "condition_rules": [
         {
           "condition_id": "kidney_disease",
@@ -22178,7 +22178,7 @@
         "stinging nettle leaf extract",
         "stinging nettle (unspecified)"
       ],
-      "form_scope_match": "confirmed",
+      "form_scope_match": "fail_open",
       "condition_rules": [
         {
           "condition_id": "diabetes",
