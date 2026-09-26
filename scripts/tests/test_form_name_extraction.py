@@ -278,3 +278,18 @@ def test_bare_nutrient_names_yield_no_form(normalizer, label):
     The cleaner must not hallucinate a form when the label didn't disclose one.
     """
     assert normalizer._extract_forms_from_ingredient_name(label) == []
+
+
+@pytest.mark.parametrize("label", [
+    "NIAGEN Nicotinamide Riboside",
+    "Nicotinamide-riboside chloride",
+    "Nicotinamide Mononucleotide",
+    "Nicotinamide Adenine Dinucleotide",
+])
+def test_nicotinamide_compound_is_not_free_niacinamide(normalizer, label):
+    assert "niacinamide" not in normalizer._extract_forms_from_ingredient_name(label)
+
+
+@pytest.mark.parametrize("label", ["Nicotinamide", "Niacinamide"])
+def test_free_nicotinamide_retains_niacinamide_form(normalizer, label):
+    assert "niacinamide" in normalizer._extract_forms_from_ingredient_name(label)

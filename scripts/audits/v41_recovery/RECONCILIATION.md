@@ -903,3 +903,14 @@ in the contract leak audit after shared accessor adoption. Removed only
 those obsolete entries. Owner: audit_scoring_contract_leaks.py::ALLOWLIST —
 evidence: test_scoring_contract_leak_audit live-tree failure.
 Will NOT create: new audit exceptions or bypasses.
+
+
+Source review: free nicotinamide extraction no longer matches the compound
+prefix in nicotinamide riboside/mononucleotide/adenine names. Four regressions
+failed first; form extraction suite then 97 passed. Real 182475 clean/enrich/score
+now retains nicotinamide_riboside identity with mapped form status, no invented
+niacinamide token, strict findings empty, score 75.5. No IQM form or alias added.
+Owner: form_vocab.py::extract_forms using data/form_keywords_vocab.json — evidence:
+rg form_vocab/form_keywords/normaliz in matrix/glossary and four red tests.
+Will NOT create: a new identity, registry, clinical mapping, or form fallback.
+Boundary artifact: ~/pg_quality/candd/runs/source_boundary_real_probe.json.
