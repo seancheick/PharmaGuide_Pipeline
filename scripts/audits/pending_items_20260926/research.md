@@ -167,3 +167,16 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   used a hydro-alcoholic extract in ml that cannot be converted to mg. 1500 mg/day is the lowest documented.
 - Floors set to 1500 mg/day (extract). The label amount is compared as reported, so dried-leaf products are held
   to the extract dose.
+
+## Licorice BP floors (RULE_BOTANICAL_LICORICE_ROOT, RULE_IQM_LICORICE_HYPERTENSION)
+- Old floor source PMID 393503 (Takeda R et al. Endocrinol Jpn 1979): two mildly hypertensive women "administered
+  273 to 546 mg glycyrrhizin daily"; no mention of 100 mg.
+- PMID 38246526 (af Geijerstam P et al. Am J Clin Nutr 2024, efetch 2026-09-26): 28 healthy volunteers, nonblinded
+  2x2 crossover, "a daily licorice intake containing 100 mg GA" for 2 weeks; systolic home BP "increased [mean
+  difference: 3.1 mm Hg (95% CI: 0.8, 5.4 mm Hg)" vs -0.3 mm Hg on control, P = 0.018; renin -30%, aldosterone -45%.
+- Conflicting null, smaller: Bernardi 1994 (PMID 8072387, efetch 2026-09-26), 108/217/380/814 mg glycyrrhizin in
+  groups of 6 for 4 weeks, "No significant effects occurred in groups 1 and 2". Regulatory 100 mg/day figures (SCF 2003, JECFA 2005) are tolerated-intake
+  limits, not effect doses.
+- The enricher compares a floor with the ingredient row's label amount (`_evaluate_min_effective_dose`), not with
+  glycyrrhizic acid content; a licorice row is at least its GA content, so the 100 mg floor never suppresses a
+  product supplying 100 mg GA. Value unchanged in both rules; source and rationale replaced.

@@ -1198,3 +1198,16 @@ def test_stinging_nettle_glucose_floor_is_the_trial_dose_not_a_conservative_gues
         assert (floor["value"], floor["unit"], floor["basis"]) == (1500, "mg", "per_day"), target
         assert floor["source"] == _pmid("24273930"), target
         assert floor["confidence_basis"] == "documented_effective_dose", target
+
+
+LICORICE_FLOOR_SOURCE = _pmid("38246526")
+
+
+def test_licorice_root_bp_floor_cites_the_100_mg_glycyrrhizic_acid_trial():
+    """PMID 393503 is two women on 273-546 mg glycyrrhizin; it never mentions
+    100 mg. af Geijerstam 2024 (PMID 38246526) randomized healthy volunteers to
+    licorice with 100 mg glycyrrhizic acid/day: home systolic BP rose 3.1 mmHg."""
+    floor = _sub_rule(_rule("RULE_BOTANICAL_LICORICE_ROOT"), "drug_class_id", "antihypertensives")["min_effective_dose"]
+    assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day")
+    assert floor["source"] == LICORICE_FLOOR_SOURCE
+    assert floor["confidence_basis"] == "documented_effective_dose"
