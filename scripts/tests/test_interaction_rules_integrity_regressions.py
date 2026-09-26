@@ -1126,3 +1126,16 @@ def test_resveratrol_warfarin_note_cites_the_mouse_study_it_describes():
     assert "27040449" not in json.dumps(rule)
     note = next(t for t in rule["dose_thresholds"] if t.get("target_id") == "anticoagulants")["note"]
     assert _pmid("26947597") in note and "0.5%" in note
+
+
+def test_saw_palmetto_bleeding_rules_carry_no_floor_borrowed_from_bph():
+    """The 320 mg floors cited a BPH efficacy review (PMID 16985705). No human
+    source gives a dose for saw palmetto bleeding: the bleeding cases state none
+    (PMID 11489067), and at 320 mg/day perioperative bleeding fell (PMID
+    15195032). Sean, D8: remove a floor its source does not establish."""
+    rule = _rule("RULE_IQM_SAW_PALMETTO_LIVER")
+    for key, target in (("condition_id", "bleeding_disorders"), ("condition_id", "surgery_scheduled"),
+                        ("drug_class_id", "anticoagulants"), ("drug_class_id", "antiplatelets")):
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub, target
+        assert sub["materiality"] == "presence", target

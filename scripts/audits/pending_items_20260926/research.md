@@ -106,3 +106,14 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   "The 0.05% trans-resveratrol did not interact with warfarin". This is the study the note already described.
 - Also on topic, not added: PMID 32985569 (Huang TY et al. Sci Rep 2020, rats, resveratrol 100 mg/kg raised
   S-warfarin AUC and INR). The note's "animal-only" stays true.
+
+## RULE_IQM_SAW_PALMETTO_LIVER: bleeding floors (D8)
+- Floor source PMID 16985705 ("Saw Palmetto Berry as a Treatment for BPH", Rev Urol 2001): BPH efficacy, no
+  bleeding content.
+- PMID 11489067 (J Intern Med 2001): intraoperative haemorrhage case, bleeding time "normalized few days after he
+  stopped the herb"; no dose in the abstract. PMID 20120986: coagulopathy case, no dose.
+- PMID 18090773 (Plast Reconstr Surg 2007): 10 volunteers, saw palmetto "at the manufacturer's recommended dose
+  for 2 weeks"; "In vivo platelet function was not affected" (PFA-100). mg not stated.
+- PMID 15195032 (Minerva Urol Nefrol 2004): 320 mg/day Permixon for at least 8 weeks before TURP; perioperative
+  bleeding "significantly lower than in the control one (respectively 124 vs 287 ml)".
+- No human source documents a dose for a bleeding or platelet effect. Four floors removed; presence.

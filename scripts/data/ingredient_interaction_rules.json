@@ -180,7 +180,8 @@
       "2026-09-26: RULE_IQM_BLACK_SEED_OIL_DIABETES dose-floor rationale (7 sub-rules) no longer says the blood-pressure meta-analysis PMID 27512971 also shows glucose/lipid lowering; it reports blood pressure only. Floor value unchanged.",
       "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL dose-floor rationale (3 sub-rules) no longer attributes a human GLA dose (~300 mg) and bleeding time to PMID 19783511, a rabbit coagulation study; it states what the study shows and that the 3 g/day oil floor is the clinical-team threshold (sign-off 2026-04-24). Floor value unchanged.",
       "2026-09-26: RULE_IQM_NAC_BLEEDING anticoagulants threshold note cited PMID 22467323, a CKD albuminuria study (ghost); it now cites the in vitro NAC platelet study (PMID 21600014) and a 600 mg/day human coagulation study with no significant change (PMID 39881835), and calls >1200 mg/day the authored threshold. The 600 mg/day floors on bleeding_disorders and anticoagulants are removed (Sean, D8: remove a floor its source does not establish): PMID 21600014 is in vitro and states no oral dose. Both sub-rules now fire on presence; severities and thresholds unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
-      "2026-09-26: RULE_IQM_RESVERATROL_BLEEDING anticoagulants threshold note described a mouse study (0.5% dietary resveratrol potentiated warfarin; 10x lower had no effect) but linked PMID 27040449, an ANGPTL3 lipid-metabolism study (ghost). It now links that mouse study, Chiba 2016 (PMID 26947597). Threshold and severities unchanged."
+      "2026-09-26: RULE_IQM_RESVERATROL_BLEEDING anticoagulants threshold note described a mouse study (0.5% dietary resveratrol potentiated warfarin; 10x lower had no effect) but linked PMID 27040449, an ANGPTL3 lipid-metabolism study (ghost). It now links that mouse study, Chiba 2016 (PMID 26947597). Threshold and severities unchanged.",
+      "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER 320 mg/day floors removed on bleeding_disorders, surgery_scheduled, anticoagulants and antiplatelets (Sean, D8: remove a floor its source does not establish). They cited PMID 16985705, a BPH efficacy review with no bleeding content. No human source gives a dose for saw palmetto bleeding: the haemorrhage and coagulopathy case reports state none (PMIDs 11489067, 20120986), platelet function was unchanged at the recommended dose (PMID 18090773), and in a TURP trial 320 mg/day lowered perioperative bleeding (PMID 15195032). These sub-rules now fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interaction_rules": [
@@ -9964,16 +9965,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 320,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/16985705/",
-            "rationale": "Saw palmetto (320 mg liposterolic extract, the standard dose) is linked to bleeding case reports via COX/5-LOX inhibition (PMID 16985705)."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "surgery_scheduled",
@@ -10007,16 +9999,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 320,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/16985705/",
-            "rationale": "Saw palmetto (320 mg liposterolic extract, the standard dose) is linked to bleeding case reports via COX/5-LOX inhibition (PMID 16985705)."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "ttc",
@@ -10123,16 +10106,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 320,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/16985705/",
-            "rationale": "Saw palmetto (320 mg liposterolic extract, the standard dose) is linked to bleeding case reports via COX/5-LOX inhibition (PMID 16985705)."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiplatelets",
@@ -10166,16 +10140,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 320,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/16985705/",
-            "rationale": "Saw palmetto (320 mg liposterolic extract, the standard dose) is linked to bleeding case reports via COX/5-LOX inhibition (PMID 16985705)."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "nsaids",
