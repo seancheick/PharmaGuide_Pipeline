@@ -219,7 +219,8 @@ _MODULE_OWNED_EVIDENCE_CANONICALS = frozenset({
 
 
 def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False,
-                   accepted_matches: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+                   accepted_matches: Optional[List[Dict[str, Any]]] = None,
+                   owner_scoped: bool = False) -> Dict[str, Any]:
     """Compute the generic-module Evidence dimension.
 
     Returns a dimension payload compatible with
@@ -233,26 +234,49 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     if not isinstance(product, dict):
         product = {}
 
-    matches, recovered_matches = resolved_clinical_matches(product)
+    matches, recovered_matches = resolved_clinical_matches(
+        product,
+        owner_scoped=owner_scoped,
+    )
     if accepted_matches is not None:
         # A category may narrow the shared applicability result, never add a
         # match or bypass clinical_applicability's restrictions.
         accepted_ids = {_entry_id(entry) for entry in accepted_matches}
         matches = [entry for entry in matches if _entry_id(entry) in accepted_ids]
         recovered_matches = [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
+    from evidence_resolver import evidence_owner_canonicals
+    owner_canonicals = (
+        evidence_owner_canonicals(product)
+        if owner_scoped
+        else set()
+    )
+    active_canonical_index = _active_canonical_index(product)
     dose_map = _dose_map(product)
     ingredient_points: Dict[str, float] = defaultdict(float)
     matched_entry_ids: set[str] = set()
+    scoped_matches: List[Dict[str, Any]] = []
+    scoped_recovered_matches: List[Dict[str, Any]] = []
     flags: List[str] = []
     sub_clinical_canonicals: set[str] = set()
 
     for entry in matches:
         if not isinstance(entry, dict):
             continue
+        matched_owner = _matched_active_canonical(
+            entry,
+            active_canonical_index,
+            use_structured_identity=owner_scoped,
+        )
+        if owner_canonicals and matched_owner not in owner_canonicals:
+            continue
+
         entry_id = _entry_id(entry)
         if entry_id in matched_entry_ids:
             continue
         matched_entry_ids.add(entry_id)
+        scoped_matches.append(entry)
+        if any(_entry_id(recovered) == entry_id for recovered in recovered_matches):
+            scoped_recovered_matches.append(entry)
 
         raw = _entry_raw_points(entry)
         if raw <= 0:
@@ -293,7 +317,11 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             if scale is not None:
                 raw *= scale
 
-        canonical = _canonical_from_entry(entry)
+        canonical = (
+            matched_owner
+            if owner_scoped and matched_owner
+            else _canonical_from_entry(entry)
+        )
         if canonical:
             ingredient_points[canonical] += raw
 
@@ -308,7 +336,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             break
         pipeline_total += points * TOP_N_WEIGHTS[idx]
 
-    depth_bonus = _depth_bonus(matches)
+    depth_bonus = _depth_bonus(scoped_matches)
 
     # Phase 8 — primary-ingredient evidence floor. The TOP evidence contributor
     # (highest points, excluding sub-clinical) anchors a floor when it is strongly
@@ -319,7 +347,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     nutrition_authority_canonical: Optional[str] = None
     if apply_primary_floor and PRIMARY_FLOOR_ENABLED:
         primary_floor, floor_canonical = _primary_mass_floor(
-            product, matches, sub_clinical_canonicals
+            product, scoped_matches, sub_clinical_canonicals
         )
         # P5: DRI-essential nutrient authority floor. An essential vitamin/mineral
         # with established RDA/AI has evidence of necessity even without a strong
@@ -342,17 +370,45 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     if joint_cap_applied:
         total = joint_cap
 
+    listed_entries = [
+        entry
+        for entry in _safe_list(
+            _safe_dict(product.get("evidence_data")).get("clinical_matches")
+        )
+        if isinstance(entry, dict)
+    ]
     listed_ids = {
         _entry_id(entry)
-        for entry in _safe_list(_safe_dict(product.get("evidence_data")).get("clinical_matches"))
-        if isinstance(entry, dict)
-    } | {_entry_id(entry) for entry in recovered_matches} | {_entry_id(entry) for entry in matches}
+        for entry in listed_entries
+        if not owner_canonicals
+        or _matched_active_canonical(
+            entry,
+            active_canonical_index,
+            use_structured_identity=owner_scoped,
+        ) in owner_canonicals
+    } | {_entry_id(entry) for entry in scoped_matches}
     from studied_formulas import assess_probiotic_component_disposition
     probiotic_component_evidence = assess_probiotic_component_disposition(product)
     evidence_result_state = _evidence_result_state(
-        product, total, listed_ids, matches, probiotic_disposition=probiotic_component_evidence,
-        dose_gated=bool(sub_clinical_canonicals),
+        product, total, listed_ids, scoped_matches, probiotic_disposition=probiotic_component_evidence,
+        dose_gated=bool(sub_clinical_canonicals), owner_scoped=owner_scoped,
     )
+
+    metadata = {
+        "phase": PHASE_MARKER,
+        "ingredient_points": {k: round(v, 4) for k, v in sorted(ingredient_points.items())},
+        "matched_entries": len(matched_entry_ids),
+        "top_n_applied": min(len(capped_scores), len(TOP_N_WEIGHTS)),
+        "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
+        "recovered_matches": [
+            _entry_id(entry)
+            for entry in scoped_recovered_matches
+        ],
+        "evidence_result_state": evidence_result_state,
+        "flags": flags,
+    }
+    if owner_scoped:
+        metadata["evidence_owner_canonicals"] = sorted(owner_canonicals)
 
     components = {
         "clinical_evidence_pipeline": round(pipeline_total, 4),
@@ -372,11 +428,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         "penalties": {},
         "phase": PHASE_MARKER,
         "metadata": {
-            "phase": PHASE_MARKER,
-            "ingredient_points": {k: round(v, 4) for k, v in sorted(ingredient_points.items())},
-            "matched_entries": len(matched_entry_ids),
-            "top_n_applied": min(len(capped_scores), len(TOP_N_WEIGHTS)),
-            "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
+            **metadata,
             "primary_evidence_floor": round(primary_floor, 4),
             "primary_evidence_floor_canonical": floor_canonical,
             # A floor that was COMPUTED is not a floor that DROVE the score.
@@ -398,10 +450,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             "joint_support_evidence_cap": round(joint_cap, 4) if joint_cap is not None else None,
             "nutrition_authority_floor_applied": nutrition_authority_canonical is not None,
             "nutrition_authority_canonical": nutrition_authority_canonical,
-            "recovered_matches": [
-                _entry_id(entry)
-                for entry in recovered_matches
-            ],
             "probiotic_component_evidence": (
                 probiotic_component_evidence
                 if (probiotic_component_evidence and probiotic_component_evidence.get("has_probiotic_component"))
@@ -428,14 +476,19 @@ def _assessable_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, An
     return get_assessable_evidence_ingredients(product)
 
 
-def evidence_completeness_gap(product: Dict[str, Any], prod_res: Any = None) -> Optional[str]:
+def evidence_completeness_gap(
+    product: Dict[str, Any],
+    prod_res: Any = None,
+    *,
+    owner_scoped: bool = False,
+) -> Optional[str]:
     """The coverage-gap state when any assessable active is still non-terminal.
 
     Points are an output of assessment, never proof it finished. Every Evidence
     module asks this before it may report a conclusion; None means complete.
     """
     from evidence_resolver import resolve_product_evidence, EvidenceDisposition
-    prod_res = prod_res or resolve_product_evidence(product)
+    prod_res = prod_res or resolve_product_evidence(product, owner_scoped=owner_scoped)
     if prod_res.is_assessment_complete:
         return None
     if prod_res.overall_disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value:
@@ -452,6 +505,7 @@ def _evidence_result_state(
     accepted: List[Dict[str, Any]],
     probiotic_disposition: Optional[Dict[str, Any]] = None,
     dose_gated: bool = False,
+    owner_scoped: bool = False,
 ) -> str:
     """Why Evidence landed where it did, from the matches that were scored.
 
@@ -463,8 +517,8 @@ def _evidence_result_state(
     # No fallback: a resolver failure must fail loudly, never silently let
     # points stand in for a finished assessment.
     from evidence_resolver import resolve_product_evidence, EvidenceDisposition
-    prod_res = resolve_product_evidence(product)
-    gap = evidence_completeness_gap(product, prod_res)
+    prod_res = resolve_product_evidence(product, owner_scoped=owner_scoped)
+    gap = evidence_completeness_gap(product, prod_res, owner_scoped=owner_scoped)
 
     if total > 0:
         # A product with any assessable active still non-terminal is incomplete
@@ -522,6 +576,8 @@ def _evidence_result_state(
 
 def resolved_clinical_matches(
     product: Dict[str, Any],
+    *,
+    owner_scoped: bool = False,
 ) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     """Return the exact reviewed evidence rows consumed by v4 scoring.
 
@@ -538,8 +594,17 @@ def resolved_clinical_matches(
         )
         if isinstance(entry, dict)
     ]
-    recovered_matches = _recover_contract_evidence_matches(product, matches)
+    recovered_matches = _recover_contract_evidence_matches(
+        product,
+        matches,
+        owner_scoped=owner_scoped,
+    )
     if recovered_matches:
+        recovered_ids = {_entry_id(entry) for entry in recovered_matches}
+        matches = [
+            entry for entry in matches
+            if _entry_id(entry) not in recovered_ids
+        ]
         matches.extend(recovered_matches)
     matches, _ = filter_clinical_matches(product, matches)
     from studied_formulas import formula_clinical_match
@@ -554,6 +619,8 @@ def resolved_clinical_matches(
 def _recover_contract_evidence_matches(
     product: Dict[str, Any],
     matches: List[Any],
+    *,
+    owner_scoped: bool = False,
 ) -> List[Dict[str, Any]]:
     """Recover evidence when the scoring input contract has a clear primary
     identity but enrichment failed to copy the corresponding clinical match.
@@ -580,7 +647,11 @@ def _recover_contract_evidence_matches(
             recovered.append(entry)
             recovered_ids.add(entry_id)
 
-    for entry in _recover_verified_primary_ingredient_matches(product, matches):
+    for entry in _recover_verified_primary_ingredient_matches(
+        product,
+        matches,
+        allow_with_existing_matches=owner_scoped,
+    ):
         entry_id = _entry_id(entry)
         if entry_id and entry_id not in recovered_ids:
             recovered.append(entry)
@@ -644,6 +715,8 @@ def _stamp_recovery_source_ref(entry: Dict[str, Any], row: Dict[str, Any]) -> No
 def _recover_verified_primary_ingredient_matches(
     product: Dict[str, Any],
     matches: List[Any],
+    *,
+    allow_with_existing_matches: bool = False,
 ) -> List[Dict[str, Any]]:
     """Recover exact ingredient-human evidence for the mass-primary active.
 
@@ -659,7 +732,7 @@ def _recover_verified_primary_ingredient_matches(
     - only the clear primary active, so trace/co-active add-ons never borrow
       evidence.
     """
-    if matches:
+    if matches and not allow_with_existing_matches:
         return []
 
     existing_ids = {
@@ -668,6 +741,19 @@ def _recover_verified_primary_ingredient_matches(
         if isinstance(entry, dict)
     }
     existing_identity_keys = _existing_match_identity_keys(matches)
+    active_canonical_index = _active_canonical_index(product)
+    matched_active_canonicals = {
+        canonical
+        for entry in matches
+        if isinstance(entry, dict)
+        and (
+            canonical := _matched_active_canonical(
+                entry,
+                active_canonical_index,
+                use_structured_identity=allow_with_existing_matches,
+            )
+        )
+    }
 
     _, max_mass = _active_mass_index(product)
     if max_mass <= 0.0:
@@ -684,11 +770,28 @@ def _recover_verified_primary_ingredient_matches(
             # Blend totals are product-level/aggregate evidence. They may recover
             # verified product-level branded studies above, but they must not
             # borrow generic per-ingredient human evidence or primary floors.
-            continue
+            # A disclosed BCAA aggregate is different: the reviewed evidence
+            # record itself is for the complete BCAA mixture, and the sports
+            # contract already owns that aggregate identity.
+            from scoring_v4.modules.sports_helpers import BCAA_AGGREGATE_CANONICALS
+            blend_canonical = str(row.get("canonical_id") or "").strip().lower()
+            exact_nested_identity = (
+                allow_with_existing_matches
+                and _norm_text(row.get("reason"))
+                == "identity_bearing_blend_header_mass_from_nested_child"
+            )
+            if (
+                blend_canonical not in BCAA_AGGREGATE_CANONICALS
+                and not (allow_with_existing_matches and blend_canonical == "protein")
+                and not exact_nested_identity
+            ):
+                continue
         mass = _mass_mg(row) or 0.0
         if mass < threshold:
             continue
         row_canonical_id = str(row.get("canonical_id") or "").strip().lower()
+        if row_canonical_id in matched_active_canonicals:
+            continue
         row_keys = _row_identity_keys(row)
         if not row_keys:
             continue
@@ -698,12 +801,17 @@ def _recover_verified_primary_ingredient_matches(
             or _keys_include_module_owned_evidence(row_keys)
         ):
             continue
-        if not _is_clear_primary_recovery_row(product, row_keys):
+        if not _is_clear_primary_recovery_row(
+            product,
+            row_keys,
+            owner_scoped=allow_with_existing_matches,
+        ):
             continue
 
         for entry in _verified_ingredient_human_evidence_entries():
             entry_id = _entry_id(entry)
-            if entry_id in existing_ids:
+            existing_id = entry_id in existing_ids
+            if existing_id and row_canonical_id in matched_active_canonicals:
                 continue
             if _entry_excludes_recovery_context(entry, row, product):
                 continue
@@ -711,7 +819,7 @@ def _recover_verified_primary_ingredient_matches(
             matched_keys = row_keys & entry_keys
             if not matched_keys:
                 continue
-            if existing_identity_keys & entry_keys:
+            if not existing_id and existing_identity_keys & entry_keys:
                 continue
 
             recovered_entry = dict(entry)
@@ -959,7 +1067,12 @@ def _existing_match_identity_keys(matches: List[Any]) -> set[str]:
     return keys
 
 
-def _is_clear_primary_recovery_row(product: Dict[str, Any], row_keys: set[str]) -> bool:
+def _is_clear_primary_recovery_row(
+    product: Dict[str, Any],
+    row_keys: set[str],
+    *,
+    owner_scoped: bool = False,
+) -> bool:
     scorable = [
         ing
         for ing in nutrient_delivering_rows(product)
@@ -967,6 +1080,16 @@ def _is_clear_primary_recovery_row(product: Dict[str, Any], row_keys: set[str]) 
     ]
     if len(scorable) == 1:
         return True
+
+    if owner_scoped:
+        from evidence_resolver import evidence_owner_canonicals
+        owner_canonicals = evidence_owner_canonicals(product)
+        if any(
+            str(row.get("canonical_id") or "").strip().lower() in owner_canonicals
+            and _row_identity_keys(row) == row_keys
+            for row in scorable
+        ):
+            return True
 
     title_text = _canonical_text(
         " ".join(
@@ -1232,8 +1355,18 @@ def _active_canonical_index(product: Dict[str, Any]) -> Dict[str, str]:
     return out
 
 
-def _matched_active_canonical(entry: Dict[str, Any], canon_index: Dict[str, str]) -> str:
+def _matched_active_canonical(
+    entry: Dict[str, Any],
+    canon_index: Dict[str, str],
+    *,
+    use_structured_identity: bool = False,
+) -> str:
     """Raw canonical_id of the active an evidence match links to ('' if unknown)."""
+    if use_structured_identity:
+        for canonical_id in _matched_canonical_ids(entry):
+            direct = str(canonical_id or "").strip().lower()
+            if direct in canon_index.values():
+                return direct
     for tok in (_canonical_from_entry(entry), entry.get("ingredient"),
                 entry.get("standard_name"), entry.get("matched_term")):
         key = _norm_text(tok)

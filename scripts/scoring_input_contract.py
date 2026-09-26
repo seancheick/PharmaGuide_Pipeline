@@ -5709,6 +5709,13 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     # L1 — drives the selected module. A driver is primary even with no
     # disclosed dose; Phase 3 owns the missing-primary-dose cap, so the role
     # must still surface the driver rather than hide it. (WR-02)
+    if (
+        module == "sports"
+        and canonical == "protein"
+        and _norm(row.get("scoring_input_kind")) == "product_level_evidence"
+        and _norm(row.get("evidence_type")) == "sports_primary_dose"
+    ):
+        return out(ROLE_PRIMARY, "drives_module_sports_protein", "router_driver", "high")
     if canonical and canonical in ctx["driver_canonicals"]:
         return out(ROLE_PRIMARY, f"drives_module_{module}", "router_driver", "high")
     if module == "probiotic" and _role_is_probiotic_strain(row):

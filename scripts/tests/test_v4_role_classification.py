@@ -59,6 +59,26 @@ def test_sports_protein_is_primary_flavor_is_adjunct():
     assert roles["sucralose"]["role"] == "adjunct"
 
 
+def test_product_level_protein_projection_is_a_sports_driver():
+    product = _product("100% Whey", "protein_powder", [
+        _row(
+            "protein",
+            "Protein",
+            24,
+            "g",
+            scoring_input_kind="product_level_evidence",
+            evidence_type="sports_primary_dose",
+        ),
+        _row("calcium", "Calcium", 130, "mg"),
+    ])
+
+    roles = _by_canonical(product, module="sports")
+
+    assert roles["protein"]["role"] == "primary"
+    assert roles["protein"]["role_reason"] == "drives_module_sports_protein"
+    assert roles["calcium"]["role"] == "adjunct"
+
+
 def test_botanical_named_in_title_is_claim_prominent():
     product = _product("Organic Ashwagandha Extract", "herbal_botanical", [
         _row("ashwagandha", "Ashwagandha Root Extract", 600, "mg"),

@@ -130,8 +130,9 @@ def test_score_sports_requests_primary_evidence_floor(monkeypatch) -> None:
 
     seen = {}
 
-    def fake_score_evidence(product, *, apply_primary_floor=False):
+    def fake_score_evidence(product, *, apply_primary_floor=False, owner_scoped=False):
         seen["apply_primary_floor"] = apply_primary_floor
+        seen["owner_scoped"] = owner_scoped
         return {"score": 0.0, "components": {}, "penalties": {}, "metadata": {}}
 
     monkeypatch.setattr(sports_module, "score_evidence", fake_score_evidence)
@@ -139,6 +140,7 @@ def test_score_sports_requests_primary_evidence_floor(monkeypatch) -> None:
     score_sports(_sports_product())
 
     assert seen["apply_primary_floor"] is True
+    assert seen["owner_scoped"] is True
 
 
 def test_shadow_dispatch_scores_sports_module() -> None:

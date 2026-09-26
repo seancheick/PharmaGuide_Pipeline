@@ -1084,8 +1084,68 @@ def resolve_evidence_for_row(
     )
 
 
-def resolve_product_evidence(product: Mapping[str, Any]) -> ProductEvidenceResolution:
-    """Resolve all assessable ingredients and compose product-level evidence disposition."""
+def evidence_owner_canonicals(
+    product: Mapping[str, Any],
+    *,
+    module: Optional[str] = None,
+) -> Set[str]:
+    """Return the purpose-owning ingredient identities for Evidence.
+
+    Ingredient roles remain owned by ``scoring_input_contract``.  Evidence
+    consumes that classification with one precedence rule: explicit route or
+    title owners win; otherwise material-major rows own the assessment.  When
+    neither signal exists, retain every assessable identity so an opaque blend
+    cannot silently discard its ingredients.
+    """
+    from scoring_input_contract import (
+        ROLE_CLAIM_PROMINENT,
+        ROLE_MAJOR,
+        ROLE_PRIMARY,
+        classify_ingredient_roles,
+        get_assessable_evidence_ingredients,
+        get_scoring_ingredients,
+    )
+
+    prod_dict = dict(product or {})
+    rows = list(get_scoring_ingredients(prod_dict, strict=True).rows)
+    if not rows:
+        rows = get_assessable_evidence_ingredients(prod_dict)
+    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows)
+
+    def canonicals_for(accepted_roles: Set[str]) -> Set[str]:
+        return {
+            str(row.get("canonical_id") or "").strip().lower()
+            for row, role in zip(rows, roles)
+            if role.get("role") in accepted_roles
+            and str(row.get("canonical_id") or "").strip()
+        }
+
+    explicit = canonicals_for({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT})
+    if explicit:
+        return explicit
+    material = canonicals_for({ROLE_MAJOR})
+    if material:
+        return material
+    return {
+        str(row.get("canonical_id") or "").strip().lower()
+        for row in rows
+        if str(row.get("canonical_id") or "").strip()
+    }
+
+
+def resolve_product_evidence(
+    product: Mapping[str, Any],
+    *,
+    owner_scoped: bool = False,
+    module: Optional[str] = None,
+) -> ProductEvidenceResolution:
+    """Resolve assessable ingredients and compose product-level evidence.
+
+    ``owner_scoped`` limits completeness to the product's purpose-owning
+    ingredients.  Adjuncts remain visible in the label and other assessment
+    ledgers, but their missing literature cannot override the evidence answer
+    for the ingredient the product is actually selling.
+    """
     prod_dict = dict(product)
     dsld_id = str(prod_dict.get("dsld_id") or "")
     prod_name = str(prod_dict.get("product_name") or prod_dict.get("name") or "")
@@ -1099,6 +1159,20 @@ def resolve_product_evidence(product: Mapping[str, Any]) -> ProductEvidenceResol
         for r in prod_dict.get("ingredient_quality_data", {}).get("ingredients", []):
             if r.get("source_section") != "inactive" and not r.get("is_excipient"):
                 assessable_rows.append(r)
+
+    if owner_scoped:
+        owners = evidence_owner_canonicals(prod_dict, module=module)
+        if owners:
+            from scoring_input_contract import get_scoring_ingredients
+            owner_rows = [
+                row
+                for row in get_scoring_ingredients(prod_dict, strict=True).rows
+                if str(row.get("canonical_id") or "").strip().lower() in owners
+            ]
+            assessable_rows = owner_rows or [
+                row for row in assessable_rows
+                if str(row.get("canonical_id") or "").strip().lower() in owners
+            ]
 
     if not assessable_rows:
         return ProductEvidenceResolution(

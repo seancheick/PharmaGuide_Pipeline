@@ -154,6 +154,191 @@ def test_magnesium_style_meta_analysis_scores_6_48() -> None:
     assert payload["metadata"]["ingredient_points"]["magnesium"] == 6.48
 
 
+def test_title_owner_prevents_incidental_ingredient_breadth_from_owning_evidence() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        product_name="Sleep Melatonin",
+        ingredients=[
+            _ingredient(name="Melatonin", canonical_id="melatonin", quantity=5),
+            _ingredient(name="L-Leucine", canonical_id="l_leucine", quantity=100),
+        ],
+        matches=[
+            _match(id="MEL", ingredient="Melatonin", standard_name="Melatonin",
+                   study_type="rct_single", total_enrollment=30),
+            _match(id="LEU", ingredient="L-Leucine", standard_name="L-Leucine",
+                   total_enrollment=8563),
+        ],
+    )
+
+    payload = score_evidence(
+        product,
+        apply_primary_floor=True,
+        owner_scoped=True,
+    )
+
+    assert payload["metadata"]["evidence_owner_canonicals"] == ["melatonin"]
+    assert payload["metadata"]["ingredient_points"] == {"melatonin": 2.16}
+    assert payload["score"] == 2.16
+    assert "primary_evidence_floor" not in payload["components"]
+
+
+def test_owner_gap_does_not_fall_back_to_adjunct_evidence() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        product_name="Novel Protein",
+        ingredients=[
+            _ingredient(name="Novel Protein", canonical_id="novel_protein", quantity=20, unit="g"),
+            _ingredient(name="Calcium", canonical_id="calcium", quantity=80),
+        ],
+        matches=[
+            _match(id="CAL", ingredient="Calcium", standard_name="Calcium"),
+        ],
+    )
+
+    unscoped = score_evidence(product)
+    assert unscoped["metadata"]["recovered_matches"] == []
+    assert "protein" not in unscoped["metadata"]["ingredient_points"]
+
+    payload = score_evidence(product, owner_scoped=True)
+
+    assert payload["metadata"]["evidence_owner_canonicals"] == ["novel_protein"]
+    assert payload["metadata"]["ingredient_points"] == {}
+    assert payload["score"] == 0.0
+
+
+def test_incidental_match_does_not_block_verified_primary_record_recovery() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        product_name="Whey Protein",
+        ingredients=[
+            _ingredient(name="Protein", canonical_id="protein", quantity=20, unit="g"),
+            _ingredient(name="Calcium", canonical_id="calcium", quantity=80),
+        ],
+        matches=[
+            _match(id="CAL", ingredient="Calcium", standard_name="Calcium"),
+        ],
+    )
+
+    unscoped = score_evidence(product)
+    assert unscoped["metadata"]["recovered_matches"] == []
+    assert "protein" not in unscoped["metadata"]["ingredient_points"]
+
+    payload = score_evidence(product, owner_scoped=True)
+
+    assert payload["metadata"]["evidence_owner_canonicals"] == ["protein"]
+    assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+    assert payload["metadata"]["ingredient_points"] == {"protein": 6.48}
+    assert payload["score"] == 6.48
+
+
+def test_stale_protein_match_bound_to_amino_acids_is_rebound_to_protein_owner() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    protein = _ingredient(name="Protein", canonical_id="protein", quantity=60, unit="g")
+    protein.update(
+        scoring_input_kind="product_level_evidence",
+        evidence_type="sports_primary_dose",
+    )
+    product = _product(
+        product_name="Whey Protein",
+        ingredients=[
+            protein,
+            _ingredient(name="L-Leucine", canonical_id="l_leucine", quantity=10, unit="g"),
+        ],
+        matches=[
+            _match(
+                id="INGR_WHEY_PROTEIN",
+                ingredient="L-Leucine",
+                standard_name="Whey Protein",
+                matched_canonical_ids=["l_leucine"],
+            ),
+        ],
+    )
+
+    payload = score_evidence(product, owner_scoped=True)
+
+    assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+    assert payload["metadata"]["ingredient_points"]["protein"] == 6.48
+
+
+def test_exact_protein_projection_can_recover_category_evidence() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    protein = _ingredient(name="Protein", canonical_id="protein", quantity=25, unit="g")
+    protein.update(
+        scoring_input_kind="label_active_projection",
+        evidence_type="blend_anchor_mass",
+    )
+    product = _product(
+        product_name="Pea Protein Isolate",
+        ingredients=[protein, _ingredient(name="Calcium", canonical_id="calcium", quantity=100)],
+        matches=[_match(id="CAL", ingredient="Calcium", standard_name="Calcium")],
+    )
+
+    payload = score_evidence(product, owner_scoped=True)
+
+    assert payload["metadata"]["evidence_owner_canonicals"] == ["protein"]
+    assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+    assert payload["metadata"]["ingredient_points"] == {"protein": 6.48}
+
+
+def test_exact_nested_creatine_identity_can_recover_ingredient_evidence() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    creatine = _ingredient(
+        name="Micronized Creatine Monohydrate",
+        canonical_id="creatine_monohydrate",
+        quantity=5,
+        unit="g",
+    )
+    creatine.update(
+        scoring_input_kind="product_level_evidence",
+        evidence_type="blend_anchor_mass",
+        evidence_scope="blend_level",
+        reason="identity_bearing_blend_header_mass_from_nested_child",
+    )
+    product = _product(
+        product_name="Creatine Matrix",
+        ingredients=[creatine, _ingredient(name="Calcium", canonical_id="calcium", quantity=50)],
+        matches=[_match(id="CAL", ingredient="Calcium", standard_name="Calcium")],
+    )
+
+    payload = score_evidence(product, owner_scoped=True)
+
+    assert payload["metadata"]["evidence_owner_canonicals"] == ["creatine_monohydrate"]
+    assert payload["metadata"]["recovered_matches"] == ["INGR_CREATINE_MONOHYDRATE"]
+    assert payload["metadata"]["ingredient_points"]["creatine_monohydrate"] > 0
+
+
+def test_disclosed_bcaa_aggregate_recovers_its_mixture_evidence() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    bcaa = _ingredient(
+        name="Branched-Chain Amino Acids",
+        canonical_id="branched_chain_amino_acids",
+        quantity=7,
+        unit="g",
+    )
+    bcaa.update(
+        evidence_type="blend_anchor_mass",
+        scoring_input_kind="product_level_evidence",
+    )
+    product = _product(
+        product_name="BCAA 2:1:1",
+        ingredients=[bcaa, _ingredient(name="Calcium", canonical_id="calcium", quantity=65)],
+        matches=[_match(id="CAL", ingredient="Calcium", standard_name="Calcium")],
+    )
+
+    payload = score_evidence(product, owner_scoped=True)
+
+    assert payload["metadata"]["evidence_owner_canonicals"] == ["branched_chain_amino_acids"]
+    assert payload["metadata"]["recovered_matches"] == ["INGR_BRANCHED_CHAIN_AMINO_ACIDS"]
+    assert payload["score"] > 0.0
+
+
 def test_ksm66_branded_rct_scores_3_6_not_zero() -> None:
     """KSM-66 canary: branded-RCT evidence is recognized and not collapsed
     to generic Withania. Calibration can change later; matching must work."""
@@ -386,7 +571,8 @@ def test_top_n_weights_apply_after_per_ingredient_cap() -> None:
                 _match(id="D", ingredient="D", standard_name="D", evidence_level="product-human"),
                 _match(id="E", ingredient="E", standard_name="E", evidence_level="product-human"),
             ]
-        )
+        ),
+        owner_scoped=False,
     )
 
     # Each ingredient caps at 7; top-N weights [1.0, 0.7, 0.5, 0.3],

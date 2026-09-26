@@ -59,7 +59,7 @@ def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
     assert config_version("omega") == "2.0.0-purpose-evidence-2026-09"
-    assert config_version("quality_score") == "1.15.0-parent-relative-probiotic-fairness"
+    assert config_version("quality_score") == "1.16.0-sports-evidence-ownership"
 
 
 def test_all_config_provenance_shape():
