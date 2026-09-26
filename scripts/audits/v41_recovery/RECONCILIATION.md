@@ -353,3 +353,11 @@ and recovers its whey record (22 real/matcher checks). The first broad suite was
 stopped after 2,524 passes when this replay finding required a code correction;
 it was NOT a completed acceptance run. Re-run final frozen comparison before the
 one completed full-fast checkpoint.
+
+Source-list follow-through: existing DSLD protein identities can live in active or
+inactive rows, including a blend's structured forms. Recovery now reads those
+existing source names/groups. Explicit non-protein blend components (e.g. lecithin)
+are not protein sources; unclassified/unknown protein forms must still match.
+Missing provenance blocks the join instead of silently dropping that contributor.
+Each boundary was reproduced in a failing test. Final focused batch: 80 passed.
+No new source vocabulary, persisted fields, score magnitudes or title heuristic.
