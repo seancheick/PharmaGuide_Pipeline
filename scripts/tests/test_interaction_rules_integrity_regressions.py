@@ -444,3 +444,19 @@ def test_kava_pregnancy_and_seizure_rules_say_what_their_sources_say():
     assert "after regular use may produce withdrawal seizures" not in seizure["mechanism"]
     assert pregnancy_lactation["pregnancy_category"] == "contraindicated"
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+NCCIH_COQ10 = "https://www.nccih.nih.gov/health/coenzyme-q10"
+
+
+def test_coq10_heart_rule_cites_q_symbio_for_its_heart_failure_claim():
+    rule = _rule("RULE_IQM_COQ10_HEART_DISEASE_STATINS")
+    heart = _sub_rule(rule, "condition_id", "heart_disease")
+
+    # 17723077 carries only the warfarin caveat; 12083489 has no readable result.
+    assert heart["sources"] == [_pmid("25282031"), NCCIH_COQ10, _pmid("17723077")]
+    assert heart["severity"] == "informational"
+    assert "Q-SYMBIO" in heart["mechanism"]
+    assert "inconclusive" in heart["mechanism"]
+    assert "ejection fraction" not in heart["mechanism"].lower()
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review

@@ -144,3 +144,19 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
     level of the P450 hepatic enzyme system ... and the P-glycoprotein transport system".
   Mechanism rewritten to these (withdrawal limited to heavy use); action keeps "do not stop
   abruptly" scoped to heavy use; evidence_level probable → limited (case-level evidence).
+
+## RULE_IQM_COQ10_HEART_DISEASE_STATINS — re-sourced (heart_disease)
+
+- The sub-rule's heart-failure claim ("improved ejection fraction and symptom class in Q-SYMBIO")
+  cited only warfarin papers: **PMID 17723077** (CAM and warfarin bleeding cohort; CoQ10 OR 3.69 for
+  self-reported bleeding) and **PMID 12083489** (CoQ10/Ginkgo and warfarin dosage RCT, a letter with
+  no abstract, no DOI and no full-text link on PubMed: result unreadable, so dropped).
+- **PMID 25282031** (Q-SYMBIO, JACC Heart Fail 2014): 420 patients, moderate to severe HF, CoQ10
+  100 mg three times daily or placebo for 2 years; "There were no significant changes in short-term
+  endpoints"; MACE "15% of the patients in the CoQ10 group versus 26% in the placebo group";
+  cardiovascular mortality 9% vs 16%, all-cause 10% vs 18%, fewer HF hospital stays; "significant
+  improvement of NYHA class ... after 2 years". No ejection-fraction result reported.
+- **NCCIH Coenzyme Q10** (https://www.nccih.nih.gov/health/coenzyme-q10): "Research on the effects of
+  CoQ10 in heart failure is also inconclusive"; "CoQ10 may interact with the anticoagulant (blood
+  thinner) warfarin".
+- 17723077 stays for the warfarin caveat the sub-rule carries (reviewed entry: topic heuristic miss).
