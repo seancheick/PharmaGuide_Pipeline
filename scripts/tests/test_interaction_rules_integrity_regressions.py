@@ -624,6 +624,14 @@ def test_huperzine_anticholinergic_rule_cites_ache_pharmacology_and_class_label(
     assert anticholinergics["severity"] == "avoid"
     assert "interfere with the activity of anticholinergic" in anticholinergics["mechanism"]
     assert "toxidrome" not in anticholinergics["mechanism"]
+    # Class-level label statement, no huperzine study: not "established".
+    assert anticholinergics["evidence_level"] == "probable"
+    # The label names no example drugs and states no two-way effect.
+    for stale in ("each can blunt the other", "prescribing information for cholinesterase "
+                  "inhibitors such as donepezil states that, because of their mechanism of "
+                  "action, they have the potential to interfere with the activity of "
+                  "anticholinergic medications (for example"):
+        assert stale not in anticholinergics["mechanism"], stale
     assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
 
 
