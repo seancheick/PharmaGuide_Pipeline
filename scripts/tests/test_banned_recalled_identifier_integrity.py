@@ -96,3 +96,18 @@ def test_hm_cadmium_cui_is_canonical_substance(banned_recalled):
         "substance), not C0373557 (Cadmium measurement, a Laboratory "
         "Procedure concept)."
     )
+
+
+def test_add_cascara_sagrada_unii_is_the_bark_not_casanthranol(banned_recalled):
+    """ADD_CASCARA_SAGRADA is cascara sagrada bark, so it carries GSRS
+    4VBP01X99F (FRANGULA PURSHIANA BARK; CASCARA SAGRADA [MI]; CAS
+    8015-89-2), the same UNII as IQM cascara_sagrada. 3SJ3U7J6V2 is
+    Casanthranol, a purified anthranol-glycoside fraction of the bark
+    (CAS 8024-48-4), a different material. Verified in GSRS 2026-09-25."""
+    entry = _find(banned_recalled, "ADD_CASCARA_SAGRADA")
+    iqm = json.loads(
+        (REPO_ROOT / "scripts" / "data" / "ingredient_quality_map.json").read_text()
+    )
+    assert entry["external_ids"]["unii"] == "4VBP01X99F"
+    assert iqm["cascara_sagrada"]["external_ids"]["unii"] == "4VBP01X99F"
+    assert "3SJ3U7J6V2" in json.dumps(entry["review"]["change_log"])

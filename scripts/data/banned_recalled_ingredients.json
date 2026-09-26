@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-21",
+    "last_updated": "2026-09-25",
     "total_entries": 178,
     "data_source_metadata": {
       "sources": [
@@ -15255,12 +15255,17 @@
             "date": "2026-02-18",
             "change": "Moved from botanical_ingredients to harmful_additives. FDA stripped GRASE 2002. EFSA 2018/2024: HADs genotoxic.",
             "by": "online_safety_audit"
+          },
+          {
+            "date": "2026-09-25",
+            "change": "UNII 3SJ3U7J6V2 -> 4VBP01X99F. GSRS: 3SJ3U7J6V2 is Casanthranol, a purified anthranol-glycoside fraction of the bark (CAS 8024-48-4); 4VBP01X99F is FRANGULA PURSHIANA BARK (CASCARA SAGRADA [MI], RHAMNI PURSHIANAE CORTEX; CAS 8015-89-2), the material this entry names and the UNII IQM cascara_sagrada already carries. No DSLD label carries either UNII, so matching is unchanged.",
+            "by": "claude-audit"
           }
         ]
       },
       "cui": "C0205704",
       "external_ids": {
-        "unii": "3SJ3U7J6V2"
+        "unii": "4VBP01X99F"
       },
       "ban_context": "watchlist",
       "safety_warning": "A stimulant laxative intended only for short-term use. Longer or high-dose use carries risks of cramping, diarrhea, electrolyte imbalance, and rare liver injury. Review duration and dose before use.",
