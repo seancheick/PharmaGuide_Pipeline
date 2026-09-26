@@ -781,3 +781,45 @@ in 410.05 seconds (6m50s)**. Log: `~/pg_quality/candd/batched_fast_20260926.log`
 No further broad run is needed for this unchanged code. The guarded candidate
 remains blocked by the snapshot/source findings and pending policy decision.
 No merge, push, release, or worktree deletion occurred.
+
+
+### Independent continuation audit — 2026-09-26; policy stop
+
+Fetched all remotes before inspection. Main and origin/main are 8dbd621b;
+candidate v41-recovery is 00a0c5f9 with a clean tree. `git rev-list
+--left-right --count main...HEAD` reports 145 main-only and 13 candidate-only
+commits. Claude pending-fixes is 786d318b, four commits beyond main; no merge
+performed. No pipeline or pytest process was running at inspection.
+
+Recounted the preserved diagnostic_scoring_contract.log: 1,267 findings contain
+only disclosed_form_unmapped; 19 contain that plus
+identity_disposition_not_scoreable:identity_conflict. Total 1,286. This classifies
+reported gate reasons, not root causes or accepted curation exceptions.
+The snapshot failure JSON contains 14 missing references and 16 drifts; its
+passed list contains only 3 entries (the prior summary says 5 passes). Do not
+use that partial JSON to assert the total number of passing gate checks.
+
+Reproduced both 315334 and 315850 from current GNC enriched batch 3 through
+build_scored_artifact: scored, overall 50.1, Evidence 0/20,
+applicability_unestablished. classify_ingredient_roles marks ashwagandha and
+l_theanine major; digestive_enzymes and protease primary. The current
+Evidence owner set contains only digestive_enzymes and protease. The existing
+explicit-owner precedence excludes the major stress ingredients.
+
+Owner: scripts/evidence_resolver.py::evidence_owner_canonicals and
+scripts/scoring_input_contract.py::classify_ingredient_roles — evidence:
+`rg -n 'evidence_owner_canonicals|classify_ingredient_roles' scripts/evidence_resolver.py
+scripts/scoring_input_contract.py`, matrix scoring_input_contract entry,
+GLOSSARY V4 module/archetype entries, and the real-product probe above.
+Will NOT create: a second scorer/resolver, new field, product whitelist, or
+unapproved mixed-purpose scoring policy.
+
+Stop for Sean's policy decision: should material actives serving another
+explicit product purpose participate in Evidence alongside route drivers,
+or should route-driver precedence remain exclusive? Including them must
+retain form/dose/population applicability and must not automatically restore
+historical 20/20 Evidence. Required by AGENTS autonomy boundary and
+pg-scoring-change step 1. No scoring/data changes, snapshot refresh, test rerun,
+new pipeline rebuild, export promotion, merge, push, release, or worktree
+removal. Existing fast checkpoint is historical evidence, not a new test run.
+Remaining acceptance sequence in the original handoff stays outstanding.
