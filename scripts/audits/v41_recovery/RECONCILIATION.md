@@ -1089,3 +1089,67 @@ Full fast checkpoint at tracked receipt head 7b055d5b: **16,527 passed,
 earlier checkpoint is explained by the current main test inventory and missing
 Node/local-review opt-ins listed in the report; it is not a failing gate.
 Final fresh 12-brand pipeline/export acceptance remains pending.
+
+## 2026-09-26: final raw-label and Nutrition Facts acceptance
+
+The fresh export first reproduced 35 `UNRESOLVED_SCORE_ACTIVE` failures. Raw
+inspection showed 34 nested `Insoluble Fiber` rows and one `Omega-9 Fatty Acid`
+row that the identity analysis had already classified as
+`excluded_nutrition_fact`, while the display ledger still called them scored
+ingredients. `SupplementEnricherV3._enrich_display_ingredients` now projects
+that exact path-owned decision as `display_type=nutrition_fact`,
+`score_included=false`, `display_disposition=label_context`. The strict export
+gate was not weakened. Commit: a54cca7b. Focused export/ledger batch: 491 passed.
+
+The same raw review found the cleaner summary allowed nested fiber and sugar
+children to overwrite their label totals. Product 241368 therefore reported
+3 g insoluble fiber instead of 8 g Dietary Fiber and 0 g Added Sugars instead
+of `<1 g` Total Sugars. `enhanced_normalizer._record_nutrition_fact` now applies
+label-semantic source precedence: Dietary/Total Fiber over generic fiber over
+soluble/insoluble, and Total Sugars over sugar over Added Sugars. Every raw row
+still remains in the canonical display ledger; only the aggregate summary owner
+changed. Commit: e8a0817e. Focused cleaner/scoring batch: 184 passed.
+
+Owner: `scripts/enrich_supplements_v3.py::_enrich_display_ingredients` —
+evidence: exact `raw_source_path` join to `ingredient_quality_analysis` and the
+35-product strict-export reproduction. Owner:
+`scripts/enhanced_normalizer.py::_record_nutrition_fact` /
+`_extract_nutritional_info` — evidence: raw 241368 parent/child hierarchy and
+red aggregate regressions. Owner:
+`scripts/build_final_db.py::_validate_active_count_reconciliation` — evidence:
+the unchanged strict gate now passes. Flutter consumer:
+`lib/features/product_detail/v2/sections/nutrition_section.dart` — evidence:
+canonical nutrition-ledger and `nutrition_detail` focused tests. Will NOT
+create: a second normalizer, nutrition registry, inactive/text inference,
+export field, app scoring rule or weaker reconciliation gate.
+
+Final fresh 12-brand raw -> clean -> enrich -> score replay at
+`~/pg_quality/candd/fresh12_final_e8a0817e` completed all 12 logs with zero error
+lines and 4,617 products at every stage. Status distribution is unchanged:
+4,021 scored, 562 not_scored, 34 suppressed_safety. Against the pre-summary-fix
+candidate, 163 nutrition summaries changed and 18 scores moved. Each movement
+was traced to raw JSON: six are corrected total Dietary Fiber doses; twelve are
+corrected Total Sugars values that nested Added Sugars had overwritten. Five
+fiber corrections cross POOR -> SAFE; one 5 g total-sugar correction crosses
+SAFE -> POOR. No scoring status distribution changed. Full delta artifact:
+`candidate_delta_report.json` in that run root.
+
+Strict export from the final enriched and scored artifacts completed with
+4,054 products, zero errors, zero contract failures and 563 expected review
+queue quarantines. `UNRESOLVED_SCORE_ACTIVE` is absent. Contract sync scanned
+all 4,054 detail blobs: zero required/optional RED fields, zero undeclared
+top-level/active/inactive keys. Products 270961 and 277404 export 4 g and 5 g
+Dietary Fiber as Nutrition Facts; 241368 exports 8 g Dietary Fiber and 1 g
+Total Sugars with its child rows retained; 282948 exports Omega-9 Fatty Acid as
+a Nutrition Fact. Core DB score/status rows agree with the scored artifacts.
+
+Final pipeline checkpoint at e8a0817e: `scripts/test.sh fast` passed **16,657**,
+skipped 137 and failed zero in 448.42 seconds. Flutter focused consumer sweep
+passed 70 tests across the Nutrition Facts card, canonical ledger and connected
+product detail. The app-wide `make test` completed 3,601 tests with seven
+unrelated screenshot/golden failures (nutrient progress, probiotic light/dark,
+unfinished-evidence hero and two reviewer screenshot cases); no nutrition
+contract test failed. Logs: `~/pg_quality/candd/final_fast_e8a0817e.log`,
+`flutter_nutrition_contract_e8a0817e.log`, and `flutter_make_test_e8a0817e.log`.
+This is a verified local candidate only: no merge, push, catalog promotion or
+release was performed.
