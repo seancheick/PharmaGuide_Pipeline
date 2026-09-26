@@ -179,7 +179,8 @@
       "2026-09-26: RULE_IQM_CHONDROITIN drug:anticoagulants copy said a case report showed INR 2.6 to 4.1, a figure no readable source states; it now gives Knudsen & Sokol 2008 (PMID 18363538): 2.3 to 3.9 after escalating to glucosamine 1500 mg / chondroitin 1200 mg twice daily. Two dose floors credited that 1200 mg BID figure to PMID 14986566 (a letter without an abstract); they now cite 18363538. Floor values unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_BLACK_SEED_OIL_DIABETES dose-floor rationale (7 sub-rules) no longer says the blood-pressure meta-analysis PMID 27512971 also shows glucose/lipid lowering; it reports blood pressure only. Floor value unchanged.",
       "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL dose-floor rationale (3 sub-rules) no longer attributes a human GLA dose (~300 mg) and bleeding time to PMID 19783511, a rabbit coagulation study; it states what the study shows and that the 3 g/day oil floor is the clinical-team threshold (sign-off 2026-04-24). Floor value unchanged.",
-      "2026-09-26: RULE_IQM_NAC_BLEEDING anticoagulants threshold note cited PMID 22467323, a CKD albuminuria study (ghost); it now cites the in vitro NAC platelet study (PMID 21600014) and a 600 mg/day human coagulation study with no significant change (PMID 39881835), and calls >1200 mg/day the authored threshold. The 600 mg/day floors on bleeding_disorders and anticoagulants are removed (Sean, D8: remove a floor its source does not establish): PMID 21600014 is in vitro and states no oral dose. Both sub-rules now fire on presence; severities and thresholds unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
+      "2026-09-26: RULE_IQM_NAC_BLEEDING anticoagulants threshold note cited PMID 22467323, a CKD albuminuria study (ghost); it now cites the in vitro NAC platelet study (PMID 21600014) and a 600 mg/day human coagulation study with no significant change (PMID 39881835), and calls >1200 mg/day the authored threshold. The 600 mg/day floors on bleeding_disorders and anticoagulants are removed (Sean, D8: remove a floor its source does not establish): PMID 21600014 is in vitro and states no oral dose. Both sub-rules now fire on presence; severities and thresholds unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_IQM_RESVERATROL_BLEEDING anticoagulants threshold note described a mouse study (0.5% dietary resveratrol potentiated warfarin; 10x lower had no effect) but linked PMID 27040449, an ANGPTL3 lipid-metabolism study (ghost). It now links that mouse study, Chiba 2016 (PMID 26947597). Threshold and severities unchanged."
     ]
   },
   "interaction_rules": [
@@ -23506,7 +23507,7 @@
           "unit": "mg",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor",
-          "note": "Resveratrol-warfarin interaction evidence is animal-only (mouse model at 0.5% of diet potentiated warfarin; 10x lower dose had no effect). Typical supplement doses are 100-250 mg/day. Threshold raised to >500 mg/day to avoid over-alerting on standard supplements. https://pubmed.ncbi.nlm.nih.gov/27040449/",
+          "note": "Resveratrol-warfarin interaction evidence is animal-only (mouse model at 0.5% of diet potentiated warfarin; 10x lower dose had no effect). Typical supplement doses are 100-250 mg/day. Threshold raised to >500 mg/day to avoid over-alerting on standard supplements. https://pubmed.ncbi.nlm.nih.gov/26947597/",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {

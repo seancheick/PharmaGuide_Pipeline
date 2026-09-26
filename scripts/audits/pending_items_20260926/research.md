@@ -97,3 +97,12 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
 - No source found for a 1200 mg cut-off; it stays the authored threshold (escalation only).
 - Decision applied: Sean, D8 (2026-09-26), remove a floor its source does not establish. Floors removed on
   bleeding_disorders and anticoagulants; both now presence, severity monitor unchanged.
+
+## RULE_IQM_RESVERATROL_BLEEDING: threshold citation
+- PMID 27040449 (efetch 2026-09-26): "Effects of angiopoietin-like protein 3 deficiency on postprandial lipid
+  and lipoprotein metabolism." No resveratrol: a ghost in `dose_thresholds[anticoagulants].note`.
+- PMID 26947597 (Chiba T et al. J Atheroscler Thromb 2016, doi 10.5551/jat.31765, efetch 2026-09-26): mice fed
+  0.005-0.5% trans-resveratrol; "0.5% trans-resveratrol enhanced the anticoagulant activity of warfarin" and
+  "The 0.05% trans-resveratrol did not interact with warfarin". This is the study the note already described.
+- Also on topic, not added: PMID 32985569 (Huang TY et al. Sci Rep 2020, rats, resveratrol 100 mg/kg raised
+  S-warfarin AUC and INR). The note's "animal-only" stays true.

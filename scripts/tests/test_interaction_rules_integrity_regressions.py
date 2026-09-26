@@ -1116,3 +1116,13 @@ def test_nac_bleeding_rule_cites_nac_platelet_evidence_and_invents_no_floor():
     note = next(t for t in rule["dose_thresholds"] if t.get("target_id") == "anticoagulants")["note"]
     assert _pmid("21600014") in note and _pmid("39881835") in note
     assert "authored" in note
+
+
+def test_resveratrol_warfarin_note_cites_the_mouse_study_it_describes():
+    """The note describes Chiba 2016 (PMID 26947597): 0.5% dietary
+    trans-resveratrol enhanced warfarin in mice, 0.05% did not. PMID 27040449
+    (ANGPTL3 deficiency and postprandial lipids) was a ghost."""
+    rule = _rule("RULE_IQM_RESVERATROL_BLEEDING")
+    assert "27040449" not in json.dumps(rule)
+    note = next(t for t in rule["dose_thresholds"] if t.get("target_id") == "anticoagulants")["note"]
+    assert _pmid("26947597") in note and "0.5%" in note
