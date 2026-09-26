@@ -184,3 +184,16 @@ def test_add_5a_hydroxy_laxogenin_cites_live_fda_sources(banned_recalled):
         "https://www.fda.gov/food/hfp-constituent-updates/"
         "fda-sends-warning-letters-multiple-companies-illegally-selling-adulterated-dietary-supplements"
     ) in urls
+
+
+def test_banned_ephedra_keeps_c0885298_with_a_note_on_its_name(banned_recalled):
+    """BANNED_EPHEDRA keeps C0885298 (Sean, 2026-09-26). UMLS names it
+    "Ephedra vulgaris preparation", but it is the drug-vocabulary ephedra
+    ingredient concept (VANDF IN "EPHEDRA", MEDCIN "ephedra (medication)",
+    CHV "ephedra herb medicine"). "Ephedra vulgaris" is a MeSH entry term
+    now filed under D029790 Ephedra sinica. The cui_note keeps a later
+    reviewer from reading the preferred name as a single-species claim."""
+    entry = _find(banned_recalled, "BANNED_EPHEDRA")
+    assert entry["cui"] == "C0885298"
+    note = entry.get("cui_note") or ""
+    assert "Ephedra vulgaris" in note and "VANDF" in note

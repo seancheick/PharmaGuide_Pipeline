@@ -3822,6 +3822,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "Added cui_note; CUI C0885298 unchanged. Reviewed because UMLS names it 'Ephedra vulgaris preparation'. Sean kept it over the genus concept C0950030 'Ephedra', 'ma huang extract' C0390643 and a governed null.",
+            "by": "claude-audit"
           }
         ]
       },
@@ -3829,6 +3834,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C0885298",
+      "cui_note": "C0885298 is UMLS's drug-vocabulary ephedra ingredient concept (VANDF IN 'EPHEDRA', MEDCIN 'ephedra (medication)', CHV 'ephedra herb medicine'). Its preferred name 'Ephedra vulgaris preparation' comes from a MeSH entry term now filed under D029790 Ephedra sinica; it does not limit this entry to one species. The entry also covers other Ephedra species, sida cordifolia and the ephedrine alkaloids named in 21 CFR 119.1.",
       "external_ids": {
         "unii": "GN83C131XS"
       },
