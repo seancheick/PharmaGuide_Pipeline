@@ -257,3 +257,83 @@ def test_banned_ibutamoren_cites_a_live_fda_letter_not_the_andro_pharma_ghost(ba
     assert entry["regulatory_date_label"] == "FDA warning letter"
     log = json.dumps(entry["review"]["change_log"])
     assert "607248" in log and "2020-11-10" in log
+
+
+# Sean, 2026-09-26 (D10): an FDA warning letter, recall or advisory is not a
+# ban. FDA never used "ban" for SARMs; it calls them unapproved new drugs (and,
+# when labeled as supplements, excluded from the dietary supplement definition).
+# No statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 were not
+# enacted). Each record now dates and names the FDA document that names the
+# compound. Receipts: scripts/audits/pending_items_20260926/research.md.
+_WL = "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/"
+SARM_PRIMARY_SOURCES = {
+    "SARM_OSTARINE": ("2017-10-23", "FDA warning letter", _WL + "infantry-labs-llc-535333-10232017"),
+    "SARM_LIGANDROL": ("2017-10-23", "FDA warning letter", _WL + "infantry-labs-llc-535333-10232017"),
+    "SARM_ANDARINE": ("2017-12-13", "FDA warning letter", _WL + "dynamic-technical-formulations-535717-12132017"),
+    "SARM_RAD140": ("2019-08-24", "FDA recall initiation date",
+                    'https://api.fda.gov/drug/enforcement.json?search=recall_number:"D-0800-2020"'),
+    "SARM_CARDARINE": ("2021-05-18", "FDA warning letter", _WL + "umbrella-612037-05182021"),
+    "BANNED_S23": ("2025-12-12", "FDA warning letter", _WL + "prime-sports-nutrition-719433-12122025"),
+    "BANNED_YK11": ("2025-12-12", "FDA warning letter", _WL + "titan-sarms-llc-719645-12122025"),
+    "RECALLED_TITAN_SARMS_LLC": ("2025-12-12", "FDA warning letter", _WL + "titan-sarms-llc-719645-12122025"),
+    "BANNED_IBUTAMOREN_MK677": ("2025-12-12", "FDA warning letter",
+                                _WL + "musclepower-enterprise-ltd-dba-monster-king-and-ge-labs-719339-12122025"),
+}
+
+
+@pytest.mark.parametrize("entry_id", sorted(SARM_PRIMARY_SOURCES) + ["BANNED_SR9009"])
+def test_sarm_records_state_what_fda_did_not_a_ban(banned_recalled, entry_id):
+    entry = _find(banned_recalled, entry_id)
+    live = json.dumps({k: v for k, v in entry.items() if k != "review"}).lower()
+    for stale in ("ban effective", "banned in supplements", "fda banned", "fda warning: october 31, 2017",
+                  "adulterated", "state_statute\", \"citation\": \"investigated", "clinical status"):
+        assert stale not in live, (entry_id, stale)
+    us = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "US"]
+    assert len(us) == 1 and us[0]["effective_date"] is None, entry_id
+    if entry_id in SARM_PRIMARY_SOURCES:
+        date, label, url = SARM_PRIMARY_SOURCES[entry_id]
+        assert (entry["regulatory_date"], entry["regulatory_date_label"]) == (date, label)
+        assert url in [r.get("url") for r in entry["references_structured"]]
+        assert us[0]["status"] == "not_lawful" and us[0]["source"]["url"] == url
+        assert entry["policy_verification_status"] == "verified"
+
+
+def test_sr9009_has_no_fda_action_so_its_policy_stays_under_review(banned_recalled):
+    """No fda.gov document names SR9009 (warning letters, recalls, Import Alert
+    66-41 searched 2026-09-26); the 2017-10-31 date had no source."""
+    entry = _find(banned_recalled, "BANNED_SR9009")
+    assert entry["regulatory_date"] is None and entry["regulatory_date_label"] is None
+    [us] = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "US"]
+    assert us["status"] == "under_review"
+    assert entry.get("policy_verification_status") != "verified"
+
+
+def test_titan_sarms_record_is_a_warning_letter_not_a_recall(banned_recalled):
+    """Letter 719645 (CDER, 2025-12-12) calls research-labeled LGD-4033, RAD-140,
+    S-4 and YK-11 unapproved new drugs under 505(a). No recall exists and the
+    letter makes no dietary-supplement, adulteration or misbranding finding."""
+    entry = _find(banned_recalled, "RECALLED_TITAN_SARMS_LLC")
+    assert "recall" not in entry["safety_warning_one_liner"].lower()
+    assert "fda_recall_url" not in json.dumps(entry["references_structured"])
+    assert "unapproved new drugs" in entry["reason"]
+
+
+def test_verified_sarm_policy_blocks_instead_of_quarantining():
+    import sys
+    scripts = REPO_ROOT / "scripts"
+    if str(scripts) not in sys.path:
+        sys.path.insert(0, str(scripts))
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": "TEST_OSTARINE", "fullName": "Ostarine", "status": "active",
+        "form_factor": "capsule", "supplement_type": {"type": "single_nutrient"},
+        "contaminant_data": {"banned_substances": {"found": False, "substances": [], "safety_flags": []}},
+        "activeIngredients": [{"name": "Ostarine", "standardName": "Ostarine", "raw_source_text": "Ostarine",
+                               "forms": [], "mapped": True}],
+        "inactiveIngredients": [],
+        "ingredient_quality_data": {"total_active": 1, "ingredients_scorable": [
+            {"name": "Ostarine", "canonical_id": "ostarine", "mapped": True, "quantity": 20.0, "unit": "mg"}]},
+    }
+    result = evaluate_safety_gate(product)
+    assert result.verdict == "BLOCKED" and result.quarantine_required is False

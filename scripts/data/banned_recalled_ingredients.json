@@ -4426,12 +4426,13 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "fda_warning_letter",
+            "type": "warning_letter",
             "citation": "FDA Warning Letter 719339 (CDER, 2025-12-12): a product marketed as a dietary supplement containing ibutamoren (MK-677) is an unapproved new drug; ibutamoren is excluded from the dietary supplement definition under FD&C Act 201(ff)(3)(B)(ii)",
-            "accessed_date": "2026-09-26"
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/musclepower-enterprise-ltd-dba-monster-king-and-ge-labs-719339-12122025"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
@@ -4478,6 +4479,11 @@
             "date": "2026-09-26",
             "change": "Replaced 'FDA Warning Letter 607248 (Andro Pharma LLC)' (https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020) in references_structured and the US jurisdiction source. The URL returned HTTP 404, the Wayback Machine has no capture of any andro-pharma warning-letter URL or any URL containing 607248, and no search found the letter, so it could not be verified. New source: FDA Warning Letter 719339 to Musclepower Enterprise Ltd. dba MONSTER KING and GE LABS (CDER, 2025-12-12), read live; it is the earliest FDA letter found that places ibutamoren in a dietary-supplement context (2021-2023 letters treat MK-677 only as an unapproved drug sold as a SARM). Dates, as decided by Sean on 2026-09-26: regulatory_date 2020-11-10 'FDA ban effective' -> 2025-12-12 'FDA warning letter'; US jurisdiction effective_date 2020-11-10 -> null, because a warning letter dates FDA's statement, not when the exclusion took effect.",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "US jurisdiction status 'banned' -> 'not_lawful' and source typed warning_letter with its URL (Sean, D10: letter 719339 states an exclusion from the dietary supplement definition, not a ban). Policy marked verified: its fda.gov letter was read live on 2026-09-26."
           }
         ]
       },
@@ -4514,7 +4520,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An investigational growth-hormone secretagogue drug — never approved and not a lawful supplement ingredient. Associated with insulin resistance and fluid retention. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved investigational drug. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved investigational drug. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "BANNED_IGF1",
@@ -5559,7 +5567,7 @@
         "S23 SARM",
         "S-23"
       ],
-      "reason": "S-23 is a synthetic non-steroidal selective androgen receptor modulator (SARM) developed as an investigational male contraceptive candidate; it suppresses LH, FSH, and sperm production at moderate doses. It is not approved by any regulatory agency, not a dietary ingredient, and carries the same risks as other SARMs (endocrine suppression, hepatotoxicity). No NDI notification is on file. WADA prohibits it. Supplement products containing S-23 are adulterated with an unapproved compound whose contraceptive and androgenic effects are not declared on labels.",
+      "reason": "S-23 is a synthetic non-steroidal selective androgen receptor modulator (SARM) developed as an investigational male contraceptive candidate; it suppresses LH, FSH, and sperm production at moderate doses. It is not approved by any regulatory agency, not a dietary ingredient, and carries the same risks as other SARMs (endocrine suppression, hepatotoxicity). No NDI notification is on file. WADA prohibits it. FDA treats S-23 products as unapproved new drugs, and their contraceptive and androgenic effects are not declared on labels.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -5579,31 +5587,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (2017). Unapproved drug.",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Clinical Status",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Investigated as male contraceptive - causes complete testosterone suppression",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 719433 (2025-12-12): S-23 products marketed as SARMs are unapproved new drugs. S-23 is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/prime-sports-nutrition-719433-12122025"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
@@ -5620,15 +5614,16 @@
           "evidence_summary": "S-23 as male contraceptive"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
-          "url": "https://www.fda.gov/consumers/consumer-updates/fda-warns-use-selective-androgen-receptor-modulators-sarms-among-teens-young-adults",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 719433 to Prime Sports Nutrition (2025-12-12)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2025-12-12",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/prime-sports-nutrition-719433-12122025",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Names S-23 among research-labeled products marketed as SARMs; FDA states they are unapproved new drugs under section 505(a)."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -5643,11 +5638,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2025-12-12 'FDA warning letter'. S-23 is not named in FDA's 2017-10-31 material; the first FDA letter found naming it is 719433. Removed the 'Clinical Status' US jurisdiction row (status banned, type state_statute, citation 'Investigated as male contraceptive - causes complete testosterone suppression'): it is not a jurisdiction. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (2017). Unapproved drug.); Clinical Status banned None (state_statute: Investigated as male contraceptive - causes complete testosterone suppression). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2025-12-12",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C0163688",
       "external_ids": {
@@ -5666,7 +5666,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An investigational SARM-class drug — unapproved and not a lawful supplement. Linked to testicular suppression, liver strain, and cardiovascular risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "BANNED_SIBUTRAMINE",
@@ -5827,7 +5829,7 @@
         "sr-9009",
         "SR9009"
       ],
-      "reason": "SR9009 (Stenabolic) is a synthetic Rev-ErbA agonist developed at The Scripps Research Institute to study circadian rhythm and metabolic regulation. It is an unapproved research compound not intended or approved for human use. Important note: animal studies suggest it has near-zero oral bioavailability, meaning supplement products claiming metabolic or endurance benefits are likely fraudulent in addition to selling an unapproved compound. WADA prohibits it. Supplements containing SR9009 are adulterated.",
+      "reason": "SR9009 (Stenabolic) is a synthetic Rev-ErbA agonist developed at The Scripps Research Institute to study circadian rhythm and metabolic regulation. It is an unapproved research compound not intended or approved for human use. Important note: animal studies suggest it has near-zero oral bioavailability, meaning supplement products claiming metabolic or endurance benefits are likely fraudulent in addition to selling an unapproved compound. WADA prohibits it. No FDA action naming SR9009 was found.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -5847,16 +5849,16 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "under_review",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (2017). Unapproved drug. Research chemical.",
-            "accessed_date": "2026-01-08"
+            "type": "regulatory",
+            "citation": "No FDA document naming SR9009 was found (fda.gov warning letters, openFDA recalls and Import Alert 66-41 searched 2026-09-26). It is a synthetic Rev-Erb agonist research compound with no approved use.",
+            "accessed_date": "2026-09-26"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
@@ -5871,16 +5873,6 @@
             "clinical_outcomes"
           ],
           "evidence_summary": "Rev-ErbA agonist effects"
-        },
-        {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
-          "evidence_grade": "R",
-          "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
       "source_category": "sarms_prohibited",
@@ -5895,11 +5887,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10). regulatory_date 2017-10-31 'FDA ban effective' -> null: no FDA document names SR9009, and FDA's 2017-10-31 material names only ostarine and LGD-4033. Removed reference 'FDA Warning: October 31, 2017' (no URL). US jurisdiction 'banned' 2017-10-31 ('FDA banned in supplements (2017)...') -> under_review. Policy stays unverified, so the safety gate routes a match to review. Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C3492460",
       "external_ids": {
@@ -6448,7 +6445,7 @@
         "yk 11",
         "(17α,20E)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
       ],
-      "reason": "YK-11 is a synthetic steroidal SARM/myostatin inhibitor — structurally it is a DHT derivative that acts as a partial agonist of the androgen receptor. Because it has a steroidal structure, it may also qualify as a designer anabolic steroid under the Anabolic Steroid Control Act. It is not FDA-approved, not a lawful dietary ingredient, and no safety data in humans exists. Risks include androgenic side effects, endocrine suppression, and uncharacterized hepatotoxicity. WADA prohibits it. Products containing YK-11 are adulterated.",
+      "reason": "YK-11 is a synthetic steroidal SARM/myostatin inhibitor — structurally it is a DHT derivative that acts as a partial agonist of the androgen receptor. Because it has a steroidal structure, it may also qualify as a designer anabolic steroid under the Anabolic Steroid Control Act. It is not FDA-approved, not a lawful dietary ingredient, and no safety data in humans exists. Risks include androgenic side effects, endocrine suppression, and uncharacterized hepatotoxicity. WADA prohibits it. FDA treats products containing YK-11 as unapproved drugs.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -6468,29 +6465,43 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (2017). Unapproved drug.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 719645 (2025-12-12) and FDA's bodybuilding-products page (2025-12-02): YK-11 products are unapproved drugs, not dietary supplements. YK-11 is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
-          "url": "https://www.fda.gov/consumers/consumer-updates/fda-warns-use-selective-androgen-receptor-modulators-sarms-among-teens-young-adults",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 719645 to TITAN SARMS LLC (CDER, 2025-12-12)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2025-12-12",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Names YK-11 among research-labeled products marketed as SARMs; FDA states they are unapproved new drugs under section 505(a)."
+        },
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Certain bodybuilding products put consumers at risk (content current as of 2025-12-02)",
+          "evidence_grade": "R",
+          "date": "2025-12-02",
+          "url": "https://www.fda.gov/drugs/fraudulent-products/certain-bodybuilding-products-put-consumers-risk-heart-attack-stroke-serious-liver-damage-and-more",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed YK-11, a listed label ingredient, in a product marketed as a dietary supplement; FDA states such products are not dietary supplements but unapproved drugs."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -6505,11 +6516,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2025-12-12 'FDA warning letter'. YK-11 is not named in FDA's 2017-10-31 material; FDA first names it on its bodybuilding-products page (content dated 2025-12-02) and in letter 719645. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (2017). Unapproved drug.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2025-12-12",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this investigational SARM name; null CUI is intentional.",
@@ -6529,7 +6545,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A synthetic steroidal SARM-like compound linked to liver toxicity and hormone suppression. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Steroidal SARM with liver risk. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Steroidal SARM with liver risk. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "HIGH_RISK_CHAPARRAL",
@@ -10976,7 +10994,7 @@
         "titan sarms llc",
         "titan sarms products"
       ],
-      "reason": "TITAN SARMS LLC was subject to FDA enforcement action for illegally marketing products containing selective androgen receptor modulators (SARMs) as dietary supplements. SARMs are unapproved drugs — none have been approved by FDA for any indication. Products were mislabeled to appear as legitimate supplements while containing compounds subject to drug approval requirements. FDA's action emphasized that SARMs in any supplement product make that product an adulterated and misbranded drug.",
+      "reason": "TITAN SARMS LLC received an FDA warning letter (CDER, 2025-12-12) for selling selective androgen receptor modulators (SARMs) LGD-4033, RAD-140, S-4 (andarine) and YK-11. The products were labeled as research-grade compounds while the firm's website claimed muscle growth, strength and recovery benefits. FDA concluded the products are unapproved new drugs under section 505(a) of the FD&C Act. No SARM is FDA-approved for any use.",
       "status": "banned",
       "class_tags": [
         "recalled_supplement_brands",
@@ -10996,44 +11014,31 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2025-12-12",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA warning letter December 12, 2025. Products are 'new drugs' under FD&C Act, not dietary supplemen",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "FDA",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Warning letter - products marketed as supplements are unapproved drugs",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 719645 (CDER, 2025-12-12): the firm's products marketed as SARMs are unapproved new drugs under section 505(a).",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning Letter: TITAN SARMS LLC - December 12, 2025 (719645)",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 719645 to TITAN SARMS LLC (CDER, 2025-12-12)",
           "evidence_grade": "R",
-          "date": "2025",
+          "date": "2025-12-12",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning Letter: TITAN SARMS LLC - December 12, 2025 (719645)",
-          "fda_recall_url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025"
+          "evidence_summary": "LGD-4033, RAD-140, S-4 (andarine) and YK-11 were labeled 'research-grade' while the website claimed muscle growth, strength and recovery; FDA states these are unapproved new drugs under section 505(a). No recall and no dietary-supplement finding."
         }
       ],
       "source_category": "recalled_supplement_brands",
@@ -11048,11 +11053,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2025-12-12 'FDA ban effective' -> 2025-12-12 'FDA warning letter'. The record called this a recall and said FDA found SARMs in supplements adulterated and misbranded; letter 719645 is a warning letter about research-labeled products, and no recall exists (openFDA, searched 2026-09-26). The id RECALLED_TITAN_SARMS_LLC is kept for artifact compatibility. Replaced US jurisdiction entries: US banned 2025-12-12 (fda_action: FDA warning letter December 12, 2025. Products are 'new drugs' under FD&C Act, not dietary supplemen); FDA banned None (state_statute: Warning letter - products marketed as supplements are unapproved drugs). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
       "regulatory_date": "2025-12-12",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "recall_scope": {
         "brand": "TITAN SARMS LLC Products",
@@ -11067,7 +11077,9 @@
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
       "safety_warning": "Recalled products from this brand were marketed as supplements but contained unapproved SARMs in the product — linked to liver injury and hormone suppression. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled products sold SARMs as supplements. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Sold unapproved SARM drugs. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "RISK_BITTER_ORANGE",
@@ -11971,7 +11983,7 @@
         "andarine",
         "S-4"
       ],
-      "reason": "Andarine (S4, GTX-007) is a synthetic selective androgen receptor modulator (SARM) developed as an investigational drug for muscle wasting and osteoporosis. It was never approved for any medical use and is not a lawful dietary supplement ingredient. At doses used in supplements, it has caused reversible visual disturbances — yellow-tinted vision and difficulty adapting to light and dark — as well as androgenic suppression of testosterone. WADA prohibits it. Supplements containing S4 are adulterated.",
+      "reason": "Andarine (S4, GTX-007) is a synthetic selective androgen receptor modulator (SARM) developed as an investigational drug for muscle wasting and osteoporosis. It was never approved for any medical use and is not a lawful dietary supplement ingredient. At doses used in supplements, it has caused reversible visual disturbances — yellow-tinted vision and difficulty adapting to light and dark — as well as androgenic suppression of testosterone. WADA prohibits it. FDA treats supplements containing S4 as unapproved new drugs.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -11991,31 +12003,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Unapproved drug.",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Clinical Status",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Development discontinued due to vision side effects",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 535717 (2017-12-13): a product marketed as a dietary supplement that contained andarine is an unapproved new drug and misbranded. Andarine is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/dynamic-technical-formulations-535717-12132017"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
@@ -12032,14 +12030,16 @@
           "evidence_summary": "Andarine vision effects"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 535717 to Dynamic Technical Formulations (2017-12-13)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2017-12-13",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/dynamic-technical-formulations-535717-12132017",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "FDA laboratory analysis found ostarine and andarine (SARMs) in the Tri-ton product, which was marketed as a dietary supplement; FDA states the product is an unapproved new drug and a misbranded drug."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12054,11 +12054,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2017-12-13 'FDA warning letter'. Andarine is not named in the 2017-10-31 In Brief or its three letters; the first FDA letter found naming it is 535717. Removed the 'Clinical Status' US jurisdiction row (status banned, type state_statute, citation 'Development discontinued due to vision side effects'): it is not a jurisdiction. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug.); Clinical Status banned None (state_statute: Development discontinued due to vision side effects). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2017-12-13",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C1528658",
       "external_ids": {
@@ -12083,7 +12088,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An unapproved investigational SARM. Not a lawful US supplement; linked to vision disturbances and hormonal suppression. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SARM_CARDARINE",
@@ -12095,7 +12102,7 @@
         "cardarine",
         "GW 501516"
       ],
-      "reason": "Cardarine (GW501516) is a synthetic PPAR-delta agonist developed by GlaxoSmithKline. Clinical trials were halted in 2007 after it caused rapid multi-tissue carcinogenesis in animal studies at doses resembling those used in supplements. It is not a dietary ingredient, has never been approved by any regulatory agency, and has no NDI notification. FDA has issued warnings that products containing GW501516 are illegal and potentially unsafe. WADA prohibits it. Any supplement label listing Cardarine or GW-501516 should be treated as a safety alert.",
+      "reason": "Cardarine (GW501516) is a synthetic PPAR-delta agonist developed by GlaxoSmithKline. Clinical trials were halted in 2007 after it caused rapid multi-tissue carcinogenesis in animal studies at doses resembling those used in supplements. It is not a dietary ingredient, has never been approved by any regulatory agency, and has no NDI notification. FDA warning letters (from 2021) treat products selling GW501516 as SARMs as unapproved new drugs. WADA prohibits it. Any supplement label listing Cardarine or GW-501516 should be treated as a safety alert.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -12115,16 +12122,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Clinical trials terminated due to cancer.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 612037 (2021-05-18): GW-501516 (Cardarine) sold as a SARM is an unapproved new drug. Cardarine is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/umbrella-612037-05182021"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
@@ -12141,14 +12149,16 @@
           "evidence_summary": "Cardarine carcinogenicity"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 612037 to Umbrella (2021-05-18)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2021-05-18",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/umbrella-612037-05182021",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Names 'GW-501516 Cardarine' among research-labeled products marketed as SARMs; FDA states they are new drugs under 201(p) with no approved application. No FDA document found names GW501516 in a product labeled as a dietary supplement."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12163,11 +12173,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2021-05-18 'FDA warning letter'. Cardarine is not named in FDA's 2017-10-31 material; the earliest FDA letter found naming it is 612037. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Clinical trials terminated due to cancer.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2021-05-18",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C4740822",
       "external_ids": {
@@ -12192,7 +12207,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An experimental drug whose trials were halted after it caused rapid multi-tissue cancer in animal studies. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Experimental drug linked to animal cancers. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Experimental drug linked to animal cancers. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SARM_LIGANDROL",
@@ -12207,7 +12224,7 @@
         "ligandrol ldg-4033",
         "ligandroll"
       ],
-      "reason": "Ligandrol (LGD-4033, VK5211) is a synthetic selective androgen receptor modulator (SARM) developed by Ligand Pharmaceuticals as an investigational drug for muscle wasting. It is not FDA-approved, not a dietary ingredient, and no NDI notification is on file. Case reports have documented drug-induced liver injury and testosterone suppression in otherwise healthy users taking doses typical of supplement use. WADA prohibits it. Supplements containing LGD-4033 are adulterated and carry serious endocrine and hepatic risks.",
+      "reason": "Ligandrol (LGD-4033, VK5211) is a synthetic selective androgen receptor modulator (SARM) developed by Ligand Pharmaceuticals as an investigational drug for muscle wasting. It is not FDA-approved, not a dietary ingredient, and no NDI notification is on file. Case reports have documented drug-induced liver injury and testosterone suppression in otherwise healthy users taking doses typical of supplement use. WADA prohibits it. FDA treats supplements containing LGD-4033 as unapproved new drugs, and they carry serious endocrine and hepatic risks.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -12227,16 +12244,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Unapproved drug.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 535333 (2017-10-23): LGD-4033 in a product labeled as a dietary supplement is excluded from the dietary supplement definition (201(ff)(3)(B)(ii)); the product is an unapproved new drug and misbranded.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/infantry-labs-llc-535333-10232017"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         },
         {
           "region": "US",
@@ -12268,14 +12286,28 @@
           "evidence_summary": "Ligandrol clinical trial"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 535333 to Infantry Labs, LLC (2017-10-23)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2017-10-23",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/infantry-labs-llc-535333-10232017",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Products labeled as dietary supplements contained LGD-4033 and ostarine; FDA states they are excluded from the dietary supplement definition under FD&C Act 201(ff)(3)(B)(ii), are unapproved new drugs and are misbranded."
+        },
+        {
+          "type": "fda_recall",
+          "title": "FDA drug recall D-0910-2016 (Class II, initiated 2016-03-31): LGD-Xtreme (ligandrol LGD-4033)",
+          "evidence_grade": "R",
+          "date": "2016-03-31",
+          "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:\"D-0910-2016\"",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "Recall reason: 'Marketed Without An Approved NDA/ANDA: Contains an unapproved drug, ligandrol LGD-4033'."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12290,17 +12322,24 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2017-10-23 'FDA warning letter'. Reference 'FDA Warning: October 31, 2017' (no URL) replaced by Infantry Labs letter 535333 and recall D-0910-2016, which name LGD-4033. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2017-10-23",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C4550372",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "An investigational SARM never approved for any medical use. Linked to liver injury and hormonal suppression. Not a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SARM_OSTARINE",
@@ -12316,7 +12355,7 @@
         "ostarine-mk 2866",
         "ostarine mk2866"
       ],
-      "reason": "Ostarine (MK-2866, Enobosarm) is a synthetic selective androgen receptor modulator (SARM) developed by GTx Inc. as an investigational drug for muscle wasting and cancer cachexia. Despite Phase II/III trials, it was never approved. FDA has issued multiple warning letters about supplement products containing it. Documented risks include testosterone and LH suppression, liver enzyme elevation, and cardiovascular effects. WADA prohibits it. Products selling Ostarine as a supplement are adulterated with an unapproved drug compound.",
+      "reason": "Ostarine (MK-2866, Enobosarm) is a synthetic selective androgen receptor modulator (SARM) developed by GTx Inc. as an investigational drug for muscle wasting and cancer cachexia. Despite Phase II/III trials, it was never approved. FDA has issued multiple warning letters about supplement products containing it. Documented risks include testosterone and LH suppression, liver enzyme elevation, and cardiovascular effects. WADA prohibits it. FDA treats products selling ostarine as a supplement as unapproved new drugs.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -12336,16 +12375,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Unapproved drug. Ongoing warning letters.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 535333 (2017-10-23): ostarine in a product labeled as a dietary supplement is excluded from the dietary supplement definition (201(ff)(3)(B)(ii)); the product is an unapproved new drug and misbranded.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/infantry-labs-llc-535333-10232017"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         },
         {
           "region": "US",
@@ -12377,14 +12417,16 @@
           "evidence_summary": "Ostarine hepatotoxicity"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 535333 to Infantry Labs, LLC (2017-10-23)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2017-10-23",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/infantry-labs-llc-535333-10232017",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Products labeled as dietary supplements contained ostarine (MK-2866) and LGD-4033; FDA states they are excluded from the dietary supplement definition under FD&C Act 201(ff)(3)(B)(ii), are unapproved new drugs and are misbranded. Announced with two other letters in FDA In Brief of 2017-10-31."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12399,11 +12441,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2017-10-23 'FDA warning letter'. Reference 'FDA Warning: October 31, 2017' (no URL) replaced by Infantry Labs letter 535333, which names ostarine; the 2017-10-31 In Brief named no compound. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug. Ongoing warning letters.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2017-10-23",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C2742262",
       "external_ids": {
@@ -12429,7 +12476,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An investigational SARM that failed cancer-cachexia trials. Linked to liver injury and hormonal suppression. Not a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SARM_RAD140",
@@ -12440,7 +12489,7 @@
         "RAD140",
         "RAD 140"
       ],
-      "reason": "RAD140 (Testolone) is a synthetic selective androgen receptor modulator (SARM) developed by Radius Health as an investigational drug candidate. It is not approved for any medical use and has not been accepted as a dietary ingredient by FDA. Multiple case reports have linked RAD140 use to severe drug-induced liver injury (DILI) requiring hospitalization. WADA prohibits it. Products selling RAD140 as a supplement are adulterated with an unapproved drug compound, and users cannot assess dose consistency or purity from supplement labeling.",
+      "reason": "RAD140 (Testolone) is a synthetic selective androgen receptor modulator (SARM) developed by Radius Health as an investigational drug candidate. It is not approved for any medical use and has not been accepted as a dietary ingredient by FDA. Multiple case reports have linked RAD140 use to severe drug-induced liver injury (DILI) requiring hospitalization. WADA prohibits it. FDA treats products selling RAD140 as unapproved new drugs, and users cannot assess dose consistency or purity from supplement labeling.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -12460,16 +12509,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Unapproved drug. Multiple warning letters for liver in",
-            "accessed_date": "2026-01-08"
+            "type": "fda_recall",
+            "citation": "FDA drug recall D-0800-2020 (initiated 2019-08-24): RAD-140 capsules marketed without an approved NDA/ANDA; FDA Warning Letter 719645 (2025-12-12) calls RAD-140 products unapproved new drugs. RAD-140 is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:\"D-0800-2020\""
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         },
         {
           "region": "US",
@@ -12501,14 +12551,28 @@
           "evidence_summary": "RAD140 liver injury case report"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_recall",
+          "title": "FDA drug recall D-0800-2020 (Class II, initiated 2019-08-24): Entropic Labs SARM RAD-140 capsules",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2019-08-24",
+          "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:\"D-0800-2020\"",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Recall reason: 'Marketed Without An Approved NDA/ANDA: product contains Selective Androgen Receptor Modulators (SARMs)'."
+        },
+        {
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 719645 to TITAN SARMS LLC (CDER, 2025-12-12)",
+          "evidence_grade": "R",
+          "date": "2025-12-12",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "Names RAD-140 (Testolone) among research-labeled products marketed as SARMs; FDA states they are unapproved new drugs under section 505(a)."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12523,17 +12587,24 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2019-08-24 'FDA recall initiation date'. RAD-140 is not named in FDA's 2017-10-31 material; the earliest FDA document found naming it is recall D-0800-2020. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug. Multiple warning letters for liver in). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2019-08-24",
+      "regulatory_date_label": "FDA recall initiation date",
       "match_mode": "active",
       "cui": "C0601132",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "An investigational SARM linked to liver injury, cardiovascular strain, and hormonal suppression. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver and heart risks. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM with liver and heart risks. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SCHED_AMANITA_MUSCARIA",
