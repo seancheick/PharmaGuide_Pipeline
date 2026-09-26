@@ -801,3 +801,20 @@ def test_phlorizin_cui_is_the_compound_not_a_homeopathic_trituration(iqm):
     entry = iqm["phlorizin"]
     assert entry["cui"] == "C0031562"
     assert "C0885670" in entry["cui_note"]
+
+
+def test_miroestrol_identifiers_are_miroestrol_not_crisnatol_or_hexenol(iqm):
+    """miroestrol carried cui C0056493, which is crisnatol (a chrysene-derived
+    antineoplastic: MSH NM crisnatol, NCI PT Crisnatol), and pubchem_cid
+    5318042, which is (E)-hex-2-en-1-ol (C6H12O). C3491692 is MeSH SCR C571572
+    "miroestrol" ("from tuberous roots of P. candollei var. mirifica"), and a
+    PubChem name search for miroestrol returns only CID 165001 (Miroestrol,
+    C20H22O6, CAS 2618-41-9). banned_recalled RISK_MIROESTROL already uses
+    both. GSRS has no miroestrol record, so there is no UNII. Verified live
+    2026-09-26."""
+    entry = iqm["miroestrol"]
+    assert entry["cui"] == "C3491692"
+    assert entry["external_ids"]["pubchem_cid"] == 165001
+    assert "C0056493" in entry["cui_note"] and "5318042" in entry["cui_note"]
+    # The old note claimed a UNII that does not exist.
+    assert "identified via UNII/PubChem" not in entry["rxcui_note"]
