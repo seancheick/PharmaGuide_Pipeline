@@ -369,3 +369,23 @@ The same verified recovery is available to readiness and scoring after the exist
 clear-primary guard, so their evidence IDs do not drift. Reproduced both boundaries
 before correcting; 138 Evidence, real-enrichment, omega and readiness tests passed.
 The next completed broad test and replay supersede the intermediate measurements.
+
+### Completed-batch gate findings and closure
+
+The first completed full-fast run found 5 failures (16,328 passed, 171 skipped):
+two ownership guards correctly rejected a direct activeIngredients read inside the
+scorer. Moved the source projection/filter into the EXISTING scoring-input contract
+(`declared_protein_source_rows`), leaving Evidence identity decisions in its existing
+owner. No allowlist or audit exemption was added. This is a proper boundary fix.
+Owner Check: `scoring_input_contract.py::_source_tree_rows` and source projections;
+`rg '^def .*source|activeIngredients|inactiveIngredients' scripts/scoring_input_contract.py`.
+Will NOT create a new module, registry, persisted field or alternative normalizer.
+
+The other failures were explicit contract updates: omega now delegates to the
+resolver, magnitudes now have their reviewed config pins, and the failure archetype
+with an unidentified proprietary protein matrix must not earn 15.6 Evidence.
+It now correctly pins 0 Evidence and total 26.8 instead of 42.4. Other pillars and
+safety are untouched. Omega record audit date corrected (metadata only).
+All 210 focused owner, archetype, source, omega and readiness checks passed.
+Source projection equality was checked on all 1,353 frozen products: identical
+before/after the ownership-only extraction, so the final score replay remains valid.

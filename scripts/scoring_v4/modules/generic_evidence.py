@@ -827,20 +827,10 @@ def _recover_verified_primary_ingredient_matches(
                 # identities, never a product title or a generic protein alias.
                 # Every declared protein source must qualify: a whey/collagen
                 # mixture cannot transfer all its protein grams to whey.
+                from scoring_input_contract import declared_protein_source_rows
                 source_keys = []
-                for source in (
-                    _safe_list(product.get("activeIngredients"))
-                    + _safe_list(product.get("inactiveIngredients"))
-                ):
-                    if not isinstance(source, dict):
-                        continue
+                for source in declared_protein_source_rows(product):
                     forms = [f for f in _safe_list(source.get("forms")) if isinstance(f, dict)]
-                    if (
-                        _norm_text(source.get("raw_category")) != "protein"
-                        and _norm_text(source.get("canonical_id")) != "protein"
-                        and not any(_norm_text(f.get("category")) == "protein" for f in forms)
-                    ):
-                        continue
                     # Lecithin/flavour components do not supply the protein
                     # macro. Unclassified forms still have to prove identity.
                     forms = [f for f in forms if _norm_text(f.get("category")) in {"", "protein"}]
