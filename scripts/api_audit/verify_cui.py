@@ -28,6 +28,8 @@ Null-CUI policy:
 Matching order and safety rules:
   - Exact alias and curated override matches are preferred over broad word-search suggestions.
   - Broad search results are informational and are not safe to auto-apply.
+  - A UMLS concept named for a product form the entry does not name (flower essence, homeopathic,
+    allergenic extract) is a MISMATCH for an existing CUI and is never an exact-match suggestion.
   - Entries with an approved `cui_status` and null CUI are treated as intentional nulls unless an exact standard/alias match proves the null should be revisited.
   - `--apply` is intentionally conservative and will not overwrite existing mismatched CUIs.
   - `--apply-mismatches` is the explicit override for reviewed mismatch corrections.
@@ -394,6 +396,17 @@ APPROVED_NULL_CUI_STATUSES = {"no_confirmed_umls_match", "no_single_umls_concept
 NON_INGREDIENT_SEMANTIC_TYPES = {
     "Laboratory Procedure",
 }
+# UMLS names some concepts for a product form (a flower-remedy dilution, a
+# homeopathic preparation, an allergy-test extract) rather than the substance.
+# A name match must not verify one for an entry that does not name that form.
+# Bare "preparation" is deliberately absent: UMLS uses "X preparation" for
+# ordinary herbal-ingredient concepts (VANDF/NDDF), e.g. "Ashwagandha preparation".
+PREPARATION_QUALIFIER_PHRASES = (
+    "flower essence",
+    "homeopathic",
+    "allergenic extract",
+    "allergen patch test",
+)
 BOTANICAL_NARROWING_TOKENS = {
     "extract",
     "oil",
@@ -640,6 +653,17 @@ def _names_match_ignoring_numeral_style(candidate: str | None, names: list[str])
     return any(_numeral_normalized_tokens(name) == candidate_tokens for name in names)
 
 
+def _preparation_qualifiers_missing_from(candidate_name: str | None, names: list) -> list[str]:
+    """Product-form phrases in candidate_name that none of names carries."""
+    candidate = _normalize_match_text(candidate_name)
+    own = [_normalize_match_text(n) for n in names if isinstance(n, str)]
+    return [
+        phrase
+        for phrase in PREPARATION_QUALIFIER_PHRASES
+        if phrase in candidate and not any(phrase in name for name in own)
+    ]
+
+
 def _exact_match_is_safe_for_entry(
     *,
     standard_name: str,
@@ -647,6 +671,8 @@ def _exact_match_is_safe_for_entry(
     matched_term: str,
     latin_name: str | None,
 ) -> bool:
+    if _preparation_qualifiers_missing_from(candidate_name, [standard_name, matched_term, latin_name]):
+        return False
     if not latin_name:
         return True
 
@@ -716,11 +742,20 @@ def verify_cui_for_entry(
         else:
             report["umls_name"] = info["name"]
             semantic_types = set(info.get("semantic_types") or [])
+            preparation_qualifiers = _preparation_qualifiers_missing_from(
+                info["name"], [standard_name, *aliases]
+            )
             if semantic_types & NON_INGREDIENT_SEMANTIC_TYPES:
                 report["status"] = "MISMATCH"
                 report["action"] = (
                     f"CUI {current_cui} maps to '{info['name']}' "
                     f"with disallowed semantic type(s): {', '.join(sorted(semantic_types & NON_INGREDIENT_SEMANTIC_TYPES))}"
+                )
+            elif preparation_qualifiers:
+                report["status"] = "MISMATCH"
+                report["action"] = (
+                    f"CUI {current_cui} maps to '{info['name']}', a product form "
+                    f"({', '.join(preparation_qualifiers)}) the entry does not name"
                 )
             else:
             # Check if the UMLS name reasonably matches

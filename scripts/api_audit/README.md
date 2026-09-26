@@ -112,6 +112,7 @@ Key behavior:
 - `--mode flat` expects a list-style file and uses `--list-key`
 - `--mode iqm` reads the top-level IQM map directly, skips `_metadata`, and treats each ingredient key as the logical entry ID
 - intentional-null entries should carry both `cui_status` and `cui_note`
+- an existing CUI whose UMLS name is a product form the entry does not name (flower essence, homeopathic, allergenic extract, allergen patch test) is reported as MISMATCH, and such concepts are never suggested as exact matches; plain "X preparation" herbal concepts are unaffected
 - `--apply` remains conservative and only writes safe exact-match fills by default
 
 ### `audit_species_alignment.py`

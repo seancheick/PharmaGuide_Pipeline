@@ -389,3 +389,96 @@ def test_verify_cui_for_entry_bridges_roman_and_arabic_numerals():
         "the numeral rescue must be visible in the report, not silently "
         "indistinguishable from a plain name match"
     )
+
+
+class PreparationFormClient:
+    """UMLS shapes seen live on 2026-09-26 for tansy and phlorizin."""
+
+    CONCEPTS = {
+        "C1256219": ("Tanacetum vulgare, flower essence", ["Pharmacologic Substance"]),
+        "C0331409": ("Tanacetum vulgare", ["Plant"]),
+        "C0885670": (
+            "Phlorizinum, trituration of a substance discovered in the fresh bark "
+            "of trees, phlorizin, Homeopathic preparation",
+            ["Pharmacologic Substance"],
+        ),
+        "C0613707": ("Ashwagandha preparation", ["Organic Chemical", "Pharmacologic Substance"]),
+        "C_ESSENCE": ("Rescue Remedy flower essence", ["Pharmacologic Substance"]),
+    }
+    EXACT = {
+        "tansy": "C1256219",
+        "tanacetum vulgare": "C0331409",
+    }
+
+    def lookup_cui(self, cui):
+        name, types = self.CONCEPTS[cui]
+        return {"cui": cui, "name": name, "semantic_types": types}
+
+    def search_exact(self, term):
+        cui = self.EXACT.get(term.lower())
+        if not cui:
+            return None
+        return {"cui": cui, "name": self.CONCEPTS[cui][0], "source": "TEST"}
+
+    def search(self, term, max_results=3):
+        return []
+
+
+def test_verify_cui_for_entry_rejects_flower_essence_cui_for_a_herb_entry():
+    """BANNED_TANSY carried C1256219 "Tanacetum vulgare, flower essence", a
+    flower-remedy preparation. Its alias "tanacetum vulgare" is a substring of
+    that name, so substring containment reported VERIFIED."""
+    report = verify_cui_for_entry(
+        PreparationFormClient(),
+        "BANNED_TANSY",
+        "Tansy",
+        "C1256219",
+        ["tansy", "tanacetum vulgare", "tansy oil"],
+    )
+
+    assert report["status"] == "MISMATCH"
+    assert "flower essence" in report["action"]
+    # The replacement suggestion must not be the same preparation concept,
+    # which an exact search for "Tansy" returns first.
+    assert report["suggested_cui"] == "C0331409"
+    assert report["match_source"] == "exact_alias"
+
+
+def test_verify_cui_for_entry_rejects_homeopathic_cui_for_a_compound_entry():
+    report = verify_cui_for_entry(
+        PreparationFormClient(),
+        "phlorizin",
+        "Phlorizin",
+        "C0885670",
+        ["phloridzin"],
+    )
+
+    assert report["status"] == "MISMATCH"
+    assert "homeopathic" in report["action"]
+
+
+def test_verify_cui_for_entry_keeps_plain_preparation_concepts_verified():
+    """UMLS names ordinary herbal-ingredient concepts "X preparation"
+    (VANDF/NDDF), e.g. ashwagandha, kava, ephedra. Bare "preparation" is not
+    a product-form qualifier."""
+    report = verify_cui_for_entry(
+        PreparationFormClient(),
+        "ashwagandha",
+        "Ashwagandha",
+        "C0613707",
+        ["withania somnifera"],
+    )
+
+    assert report["status"] == "VERIFIED"
+
+
+def test_verify_cui_for_entry_accepts_qualifier_the_entry_itself_names():
+    report = verify_cui_for_entry(
+        PreparationFormClient(),
+        "RESCUE_REMEDY",
+        "Rescue Remedy flower essence",
+        "C_ESSENCE",
+        [],
+    )
+
+    assert report["status"] == "VERIFIED"
