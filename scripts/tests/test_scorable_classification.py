@@ -3078,3 +3078,41 @@ class TestQualityMapPrecedence:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+@pytest.mark.parametrize("product_id", ["252564", "255063", "259395"])
+def test_named_fiber_source_is_not_reclassified_as_nutrition_rollup(enricher, product_id):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / "fixtures" /
+                      f"fiber_evidence_{product_id}_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = enricher.enrich_product(cleaned)
+    scored = build_scored_artifact(enriched)
+    rows = enriched["ingredient_quality_data"]["ingredients"]
+    named = next(row for row in rows if row["name"] in {"Konjac root extract", "Glucomannan"})
+    assert named.get("score_exclusion_reason") != "excluded_nutrition_fact"
+    assert named.get("canonical_id") == "fiber"
+    if product_id == "259395":
+        assert named.get("scoreable_identity") is True
+        assert scored["quality_score_status"] == "scored"
+    else:
+        # Pending curated PGX alias correction, the owner emits a contradictory
+        # safety recognition. The adapter must not turn it into a numeric score.
+        assert named.get("recognized_entry_id") == "ADD_POLYDEXTROSE"
+        assert named.get("scoreable_identity") is False
+        assert scored["quality_score_status"] == "not_scored"
+        from scoring_input_contract import derive_product_scoring_evidence, required_identity_conflicts
+        assert derive_product_scoring_evidence(enriched) == []
+        assert required_identity_conflicts(enriched)
+
+
+@pytest.mark.parametrize("name", ["Dietary Fiber", "Unidentified Source"])
+def test_generic_fiber_parent_cannot_rescue_unverified_or_panel_source(enricher, name):
+    row = {"name": name, "raw_source_text": name, "standardName": "Fiber",
+           "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
+           "quantity": 5, "unit": "g"}
+    assert enricher._should_skip_from_scoring(
+        row, enricher.databases["ingredient_quality_map"],
+        enricher.databases.get("botanical_ingredients", {}),
+    ) == SKIP_REASON_NUTRITION_FACT

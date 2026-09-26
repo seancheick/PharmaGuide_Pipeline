@@ -982,3 +982,17 @@ mapping_coverage_contract, real saved IQD tuple and red tests.
 Will NOT create: new status, safety registry, identity resolver or public field.
 The PGX alias and misleading Polydextrose recognition remain upstream findings;
 this containment does not claim they are clinically corrected.
+
+
+Named fiber source precedence: an approved, dose-bearing active whose own name
+is recognized cannot be excluded solely because standardName becomes generic
+Fiber. Exact source Nutrition Facts exclusions remain authoritative; downstream
+identity/form gates remain active. Fresh raw 259395 resolves scoreable fiber and
+scores 61.8; 252564/255063 retain contradictory PGX/Polydextrose identities and
+are held by the prior containment fix. No aliases or curated entries changed.
+Owner: scripts/enrich_supplements_v3.py::_should_skip_from_scoring — evidence:
+existing source-role ownership, real raw fixtures and named-fiber red regressions.
+Will NOT create: a whitelist, alternative identity resolver or NF evidence type.
+Independent fresh review found no actionable issue in the final combined diff.
+Final fast checkpoint and clean-HEAD replay follow this commit; full fresh
+12-brand acceptance remains incomplete while clinical decisions are pending.

@@ -6330,14 +6330,25 @@ class SupplementEnricherV3:
         if name_norm in BLEND_HEADER_EXACT_NAMES or std_norm in BLEND_HEADER_EXACT_NAMES:
             return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
 
-        # Z2/Z3: Excluded label phrases and nutrition-fact rollups.
-        for text in (ing_name, std_name, raw_source, name_lower, std_lower):
+        # Z2/Z3: Source-label exclusions remain authoritative. A generic
+        # standardized parent name (e.g. Fiber for Glucomannan) must not turn
+        # a cleaner-confirmed, dosed, recognized ingredient into a panel total.
+        for text, source_label in ((ing_name, True), (raw_source, True), (std_name, False)):
             exclusion_reason = self._excluded_text_reason(text)
-            if exclusion_reason and not (
-                cleaner_declared_total
-                and exclusion_reason == SKIP_REASON_NUTRITION_FACT
-            ):
-                return exclusion_reason
+            if not exclusion_reason:
+                continue
+            if exclusion_reason == SKIP_REASON_NUTRITION_FACT:
+                if cleaner_declared_total:
+                    continue
+                if (
+                    not source_label
+                    and ingredient.get("cleaner_row_role") == "active_scorable"
+                    and ingredient.get("score_eligible_by_cleaner") is True
+                    and self._has_valid_therapeutic_dose(ingredient)[0]
+                    and self._is_known_therapeutic(ing_name, ing_name, quality_map, botanicals_db)
+                ):
+                    continue
+            return exclusion_reason
 
         # =================================================================
         # STRUCTURAL BLEND CHECK: Containers with nested children are never
