@@ -248,3 +248,22 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   trials): serious AEs "0.02 per 1000 patients"; nonserious AEs common (GI, skin).
 - Mechanisms rewritten to these; severities (caution/caution) unchanged and reported to Sean as a
   probable over-warning. No study of andrographis with immunosuppressant drugs was found.
+
+## RULE_IQM_BACOPA_THYROID — re-sourced (thyroid_disorder, thyroid_medications, sedatives)
+
+- Ghost: **PMID 27912958** = "A systematic review of the Ayurvedic medicinal herb Bacopa monnieri in
+  child and adolescent populations" (Complement Ther Med 2016). Cognition/behaviour in children;
+  nothing on thyroid, levothyroxine or sedatives. Only source of all three sub-rules.
+- **PMID 12065164** (Kar, J Ethnopharmacol 2002): male mice, B. monnieri leaf extract 200 mg/kg;
+  "T(4) concentration was increased by B. monnieri extract suggesting its thyroid-stimulating role";
+  "B. monnieri could increase T(4) concentration by 41%". No human data found (PubMed `Bacopa AND
+  (thyroid OR thyroxine OR T4)`, 5 hits). The rule's "stimulation of thyroid iodide uptake and
+  thyroglobulin synthesis" has no source and is removed; the thyroid-medication alert said bacopa
+  affects "absorption" and advised dose timing, which fits no source.
+- **PMID 36061899** (Front Nutr 2022, PMC9436272): bacopa "has been used for centuries in Ayurvedic
+  medicine ... as a memory and learning enhancer, sedative, and anti-epileptic"; rodent data on
+  GABAergic neurons.
+- **PMID 18193203** (Prabhakar, Psychopharmacology 2008): in mice bacopa (120 mg/kg) reversed
+  diazepam-induced anterograde amnesia ("antiamnesic effects"). No study of bacopa with sedative
+  drugs was found; the rule's "Animal studies show additive sedative effects when combined with CNS
+  depressants" has no source and is removed.

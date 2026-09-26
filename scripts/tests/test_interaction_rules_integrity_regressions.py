@@ -545,3 +545,31 @@ def test_andrographis_immune_rules_cite_trials_not_antiplatelet_papers():
     for stale in ("upregulating t-cell", "nk cell", "triggering rejection", "may stimulate immune"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review
+
+
+def test_bacopa_rules_drop_a_pediatric_cognition_review():
+    rule = _rule("RULE_IQM_BACOPA_THYROID")
+    thyroid = _sub_rule(rule, "condition_id", "thyroid_disorder")
+    thyroid_meds = _sub_rule(rule, "drug_class_id", "thyroid_medications")
+    sedatives = _sub_rule(rule, "drug_class_id", "sedatives")
+
+    # 27912958 reviews bacopa for cognition in children; it says nothing on
+    # thyroid function or sedation.
+    assert thyroid["sources"] == [_pmid("12065164")]
+    assert thyroid_meds["sources"] == [_pmid("12065164")]
+    assert sedatives["sources"] == [_pmid("36061899"), _pmid("18193203")]
+    assert (thyroid["severity"], thyroid_meds["severity"], sedatives["severity"]) == (
+        "monitor", "caution", "caution",
+    )
+    assert "41%" in thyroid["mechanism"]
+    assert "theoretical" in sedatives["mechanism"]
+    copy = json.dumps([thyroid, thyroid_meds, sedatives]).lower()
+    for stale in (
+        "iodide uptake",
+        "thyroglobulin synthesis",
+        "additive sedative effects when combined",
+        "absorption",
+        "has mild sedative effects",
+    ):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review

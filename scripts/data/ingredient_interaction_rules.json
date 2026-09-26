@@ -141,7 +141,8 @@
       "2026-09-26: RULE_IQM_WHITE_WILLOW_BARK_BLEEDING cited only PMID 25997859 (a willow efficacy review with nothing on bleeding) on all five sub-rules, whose mechanisms described aspirin (irreversible COX-1 acetylation for the platelet lifespan, a 7-10 day pre-op stop, warfarin albumin displacement). They now cite the EU herbal monograph on willow bark (EMA/HMPC/80630/2016: coagulation disorders contraindicated; may increase coumarin anticoagulant effects; not with salicylates/NSAIDs without advice) and the Krivoy 2001 platelet RCT (PMID 11345689: effect far less than aspirin 100 mg). min_effective_dose rationales no longer call the 120 mg salicin floor aspirin-equivalent (value unchanged). surgery_scheduled evidence_level established -> limited. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_BANNED_TANSY_PREGNANCY pregnancy cited only PMID 28472675 (a rat/brine-shrimp thujone toxicity study with no pregnancy data). It now cites the Dosoky 2021 review of maternal reproductive toxicity of essential oils (PMID 33673548: whole tansy can induce miscarriage; tansy oil ~45% beta-thujone, a convulsant) and Conway 1979 (PMID 232204: tansy among plants used as abortifacients). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_YERBA_MATE_CARDIOVASCULAR drug:anticoagulants cited PMID 39708247 (an endothelial-function trial) for a claim that yerba mate's vitamin K opposes warfarin, which no source supports. It now cites a 6-week RCT (PMID 25562195: mate tea lowered thromboxane B2 and blood viscosity) and an in vitro/rat study of a mate-fruit saponin (PMID 23134458: prolonged clotting times, thrombin/FXa and platelet inhibition, no significant bleeding in rats); the action no longer gives vitamin K advice. Severity, evidence_level and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_ANDROGRAPHIS autoimmune and immunosuppressants cited two antiplatelet papers (PMIDs 28745507, 21822619) for an immunostimulation claim neither makes. They now cite a 14-week RA RCT (PMID 19408036), a 12-month RRMS RCT on interferon beta (PMID 27215274) and a safety meta-analysis including autoimmune trials (PMID 33372366); mechanisms say andrographis was tolerated in those trials and that its use with immunosuppressants is unstudied. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_ANDROGRAPHIS autoimmune and immunosuppressants cited two antiplatelet papers (PMIDs 28745507, 21822619) for an immunostimulation claim neither makes. They now cite a 14-week RA RCT (PMID 19408036), a 12-month RRMS RCT on interferon beta (PMID 27215274) and a safety meta-analysis including autoimmune trials (PMID 33372366); mechanisms say andrographis was tolerated in those trials and that its use with immunosuppressants is unstudied. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_BACOPA_THYROID cited only PMID 27912958 (bacopa for cognition in children) on its thyroid, thyroid-medication and sedative sub-rules. Thyroid sub-rules now cite Kar 2002 (PMID 12065164: bacopa raised T4 41% in male mice); sedatives cite a 2022 pharmacology review (PMID 36061899: traditional sedative use, rodent GABAergic data) and a mouse study in which bacopa reversed diazepam-induced amnesia (PMID 18193203). Unsourced claims removed (iodide uptake/thyroglobulin synthesis, additive sedation in animals, effect on levothyroxine absorption). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -20692,10 +20693,10 @@
           "condition_id": "thyroid_disorder",
           "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "Bacopa monnieri has been shown in animal studies to increase thyroid hormone levels (T4 specifically) via stimulation of thyroid iodide uptake and thyroglobulin synthesis. The clinical relevance in humans is uncertain but persons with hyperthyroidism or Graves disease may be at greater risk.",
+          "mechanism": "In male mice, Bacopa monnieri leaf extract (200 mg/kg) raised serum T4 by 41%, which the authors read as a thyroid-stimulating effect. No human data were found, so the clinical relevance for people with thyroid disease, including hyperthyroidism, is unknown.",
           "action": "Use with caution in thyroid disorders, particularly hyperthyroidism. Monitor thyroid function tests (TSH, free T4) periodically during use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/27912958/"
+            "https://pubmed.ncbi.nlm.nih.gov/12065164/"
           ],
           "alert_headline": "Thyroid effects are uncertain",
           "alert_body": "Animal studies suggest bacopa may affect thyroid hormone levels, but human relevance is unclear. If you have thyroid disease, monitor symptoms and labs with your clinician.",
@@ -20727,13 +20728,13 @@
           "drug_class_id": "thyroid_medications",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Bacopa may increase endogenous thyroid hormone levels, potentially altering the equilibrium maintained by levothyroxine replacement therapy and requiring dose adjustment.",
+          "mechanism": "In male mice, bacopa extract raised serum T4 by 41%. If bacopa raises endogenous thyroid hormone in people, it could shift the balance maintained by levothyroxine replacement; no human data were found.",
           "action": "Monitor TSH levels when initiating or discontinuing Bacopa in patients on thyroid hormone replacement. Alert prescriber to supplement use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/27912958/"
+            "https://pubmed.ncbi.nlm.nih.gov/12065164/"
           ],
           "alert_headline": "May affect thyroid medication",
-          "alert_body": "Bacopa can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing bacopa away from your dose.",
+          "alert_body": "Animal studies suggest bacopa may raise thyroid hormone (T4) levels. If you take thyroid medication, ask your clinician whether your thyroid levels should be checked.",
           "informational_note": "Bacopa affects thyroid pathways \u2014 relevant to people on thyroid medication.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -20760,14 +20761,15 @@
           "drug_class_id": "sedatives",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Bacopa has adaptogenic effects and modulates serotonergic and GABA-ergic neurotransmission. Animal studies show additive sedative effects when combined with CNS depressants.",
+          "mechanism": "Bacopa has traditionally been used as a sedative and anti-epileptic, and rodent studies suggest effects on GABAergic neurons. No study has tested bacopa together with sedative medicines; in mice, bacopa counteracted rather than added to diazepam-induced amnesia. An additive sedative effect is theoretical.",
           "action": "Advise caution with concomitant use of sedative-hypnotic medications. Avoid if operating heavy machinery.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/27912958/"
+            "https://pubmed.ncbi.nlm.nih.gov/36061899/",
+            "https://pubmed.ncbi.nlm.nih.gov/18193203/"
           ],
           "alert_headline": "May add to sedative drowsiness",
-          "alert_body": "Bacopa has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding bacopa \u2014 the combination can increase drowsiness.",
-          "informational_note": "Bacopa has sedative activity \u2014 relevant to people on sedatives or sleep medications.",
+          "alert_body": "Bacopa is traditionally used as a mild sedative. If you take a sedative or sleep medication, talk to your prescriber before adding bacopa; the combination has not been studied.",
+          "informational_note": "Bacopa is traditionally used as a sedative \u2014 relevant to people on sedatives or sleep medications.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
