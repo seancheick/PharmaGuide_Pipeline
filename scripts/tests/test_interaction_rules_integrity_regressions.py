@@ -489,6 +489,8 @@ def test_willow_bark_rules_describe_willow_not_aspirin():
     assert subs["surgery_scheduled"]["evidence_level"] == "limited"
     assert "far less than" in subs["bleeding_disorders"]["mechanism"]
     assert "coumarin" in subs["anticoagulants"]["mechanism"]
+    # Only willow vs placebo was randomised in PMID 11345689; aspirin was a separate group.
+    assert "non-randomised group taking 100 mg aspirin" in subs["bleeding_disorders"]["mechanism"]
 
     copy = json.dumps(list(subs.values())).lower()
     for stale in (
