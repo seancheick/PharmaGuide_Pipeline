@@ -4,7 +4,7 @@
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
     "last_updated": "2026-09-26",
-    "total_entries": 64
+    "total_entries": 65
   },
   "reviewed": [
     {
@@ -581,6 +581,15 @@
       "live_title": "HEALTH EFFECTS - Toxicological Profile for Vanadium (ATSDR)",
       "rationale": "ATSDR Toxicological Profile for Vanadium, Health Effects chapter: 'No studies were located regarding developmental effects in humans after oral exposure to vanadium', while gestational exposure in rats and mice to 7.5-8.3 mg vanadium/kg/day as vanadyl sulfate or vanadates caused fetal malformations and delayed ossification - the limited-human-data, animal-signal basis of the avoid categories. The subject phrases list vanadyl/vanadium salts but not bare 'vanadium', hence the subject miss.",
       "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "NBK548634",
+      "rule_id": "RULE_IQM_ALOE_FEROX",
+      "sub_rule": "condition:liver_disease",
+      "live_title": "Aloe Vera - LiverTox: Clinical and Research Information on Drug-Induced Liver Injury",
+      "rationale": "Class-level citation. LiverTox's Aloe Vera record (last update 24 May 2022) states 'Oral forms of aloe vera have been linked to rare instances of clinically apparent liver injury' and gives 'Likelihood score: B (likely but rare cause of clinically apparent liver injury)'; it describes leaf-rind latex products containing anthraquinones but never names Aloe ferox. The sub-rule attributes this point to 'oral aloe' in general, and its Aloe ferox-specific support is the EMA/HMPC monograph cited beside it (Aloe barbadensis and Aloe various species, mainly Aloe ferox). The Aloe vera to Aloe ferox extrapolation is open for clinician review. The chapter title names Aloe vera while the subject phrases carry Aloe ferox / Cape aloe, hence the subject miss.",
+      "reviewed_by": "agent integration review 2026-09-26 (not clinician-reviewed)",
       "reviewed_at": "2026-09-26"
     }
   ]
