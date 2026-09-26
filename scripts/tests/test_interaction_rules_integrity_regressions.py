@@ -386,6 +386,15 @@ def test_saw_palmetto_rules_drop_pancreatitis_and_alopecia_citations():
     assert pregnancy_lactation["lactation_category"] == "avoid"
 
     assert "has not been studied" in ttc["mechanism"]
+    # 16985705 hedges: "in vitro some studies suggest".
+    assert "Some in vitro studies suggest" in ttc["mechanism"]
+    assert "Some in vitro studies suggest" in pregnancy_lactation["mechanism"]
+    pl_review = next(
+        e for e in GHOST_REVIEW["reviewed"]
+        if (e["pmid"], e["rule_id"], e["sub_rule"])
+        == ("16985705", "RULE_IQM_SAW_PALMETTO_LIVER", "pregnancy_lactation")
+    )
+    assert "31002161" not in pl_review["rationale"]  # not a source of this sub-rule
     assert "coagulopathy" in anticoagulants["mechanism"]
     copy = json.dumps(rule).lower()
     for stale in (

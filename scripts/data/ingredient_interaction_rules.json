@@ -165,7 +165,8 @@
       "2026-09-26: RULE_IQM_CHONDROITIN bleeding_disorders claimed weak in vitro anticoagulant activity with no source; the mechanism now states the documented INR data (Knudsen & Sokol 2008, PMID 18363538: INR 2.3 to 3.9 after escalation to chondroitin 1200 mg twice daily with glucosamine; 20 MedWatch reports) beside the glucosamine-chondroitin warfarin letter (PMID 14986566). Its min_effective_dose credited the 1200 mg BID escalation to 14986566; source corrected to 18363538 (value unchanged). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_GREEN_TEA_HYPERTENSION hypertension and antihypertensives cited only a review (PMID 25312732) whose abstract does not describe the OATP mechanism the rules state. They now also cite the primary trial (PMID 24419562: green tea 700 ml/day for 14 days cut nadolol exposure ~85%, blunted its systolic BP effect, inhibited OATP1A2 uptake); the mechanism no longer attributes the effect to EGCG specifically. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS mechanism no longer attributes example drugs or a two-way effect to the ARICEPT label, which says only that cholinesterase inhibitors may interfere with anticholinergic medications; evidence_level established -> probable (class-level label statement, no huperzine-specific study). Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_WHITE_WILLOW_BARK_BLEEDING mechanisms no longer call the aspirin comparison in PMID 11345689 randomised: only willow vs placebo was randomised; the 100 mg aspirin group was a separate cohort. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_WHITE_WILLOW_BARK_BLEEDING mechanisms no longer call the aspirin comparison in PMID 11345689 randomised: only willow vs placebo was randomised; the 100 mg aspirin group was a separate cohort. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER ttc and pregnancy_lactation now keep their source's hedge (PMID 16985705: 'in vitro some studies suggest' 5-alpha-reductase inhibition) instead of stating it as settled. Found by fresh-context review. Severities, categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -10007,7 +10008,7 @@
           "condition_id": "ttc",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Saw palmetto extract inhibits both 5-alpha-reductase isoenzymes in vitro, the enzyme finasteride blocks, but clinical studies have not shown a fall in serum DHT or PSA. Its effect on semen quality or male fertility has not been studied in humans. NCCIH states saw palmetto may be unsafe during pregnancy, which matters for anyone who could conceive while taking it.",
+          "mechanism": "Some in vitro studies suggest saw palmetto extract inhibits both 5-alpha-reductase isoenzymes, the enzyme finasteride blocks, but clinical studies have not shown a fall in serum DHT or PSA. Its effect on semen quality or male fertility has not been studied in humans. NCCIH states saw palmetto may be unsafe during pregnancy, which matters for anyone who could conceive while taking it.",
           "action": "If you are trying to conceive, discuss saw palmetto with your clinician: it may be unsafe in early pregnancy, and its effect on male fertility has not been studied.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/16985705/",
@@ -10238,14 +10239,14 @@
         "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "theoretical",
-        "mechanism": "Saw palmetto extract has antiandrogenic, 5-alpha-reductase-inhibiting activity in vitro, and NCCIH states it may be unsafe during pregnancy or while breastfeeding.",
+        "mechanism": "Some in vitro studies suggest saw palmetto extract has antiandrogenic, 5-alpha-reductase-inhibiting activity, and NCCIH states it may be unsafe during pregnancy or while breastfeeding.",
         "notes": "Not recommended during pregnancy or breastfeeding.",
         "sources": [
           "https://www.nccih.nih.gov/health/saw-palmetto",
           "https://pubmed.ncbi.nlm.nih.gov/16985705/"
         ],
         "alert_headline": "Not recommended in pregnancy or breastfeeding",
-        "alert_body": "Saw palmetto has antiandrogenic activity in lab studies and may be unsafe in pregnancy or breastfeeding. If you are pregnant or breastfeeding, do not use saw palmetto supplements.",
+        "alert_body": "Lab studies suggest saw palmetto has antiandrogenic activity, and it may be unsafe in pregnancy or breastfeeding. If you are pregnant or breastfeeding, do not use saw palmetto supplements.",
         "informational_note": "Saw palmetto is antiandrogenic \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
         "profile_gate": {
           "gate_type": "profile_flag",

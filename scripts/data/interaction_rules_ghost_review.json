@@ -165,7 +165,7 @@
       "rule_id": "RULE_IQM_SAW_PALMETTO_LIVER",
       "sub_rule": "condition:ttc",
       "live_title": "Saw Palmetto Berry as a Treatment for BPH.",
-      "rationale": "Mechanism citation: 'in vitro ... liposterolic extract ... has antiandrogenic effects that inhibit the type 1 and type 2 isoenzymes of 5alpha-reductase; however there are no clinical studies that show any decrease in serum dihydrotestosterone' - the mechanism states both. Pregnancy/fertility statements rest on NCCIH and 31002161 in the same sub-rule.",
+      "rationale": "Mechanism citation: 'in vitro some studies suggest that liposterolic extract of the plant has antiandrogenic effects that inhibit the type 1 and type 2 isoenzymes of 5alpha-reductase; however there are no clinical studies that show any decrease in serum dihydrotestosterone or prostate-specific antigen' - the mechanism states both, with the hedge. The fertility and pregnancy statements rest on 31002161 and NCCIH Saw Palmetto in the same sub-rule.",
       "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
       "reviewed_at": "2026-09-26"
     },
@@ -174,7 +174,7 @@
       "rule_id": "RULE_IQM_SAW_PALMETTO_LIVER",
       "sub_rule": "pregnancy_lactation",
       "live_title": "Saw Palmetto Berry as a Treatment for BPH.",
-      "rationale": "Mechanism citation: 'in vitro ... liposterolic extract ... has antiandrogenic effects that inhibit the type 1 and type 2 isoenzymes of 5alpha-reductase; however there are no clinical studies that show any decrease in serum dihydrotestosterone' - the mechanism states both. Pregnancy/fertility statements rest on NCCIH and 31002161 in the same sub-rule.",
+      "rationale": "Mechanism citation: 'in vitro some studies suggest that liposterolic extract of the plant has antiandrogenic effects that inhibit the type 1 and type 2 isoenzymes of 5alpha-reductase; however there are no clinical studies that show any decrease in serum dihydrotestosterone or prostate-specific antigen' - the mechanism states both, with the hedge. The pregnancy and breastfeeding statement rests on NCCIH Saw Palmetto, the other source in this sub-rule.",
       "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
       "reviewed_at": "2026-09-26"
     },
