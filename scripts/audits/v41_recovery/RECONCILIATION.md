@@ -483,3 +483,18 @@ zero instead of dropping that exposure from its average (vitamin C + oxide 20 ->
 still qualifies for pairing. 163 focused form/absorption/generic/multi tests pass.
 Existing equal-Dose regression was corrected to pin zero contribution rather
 than denominator exclusion. Fresh regeneration is required for these fields.
+
+### Omega exposure and population reference check
+
+Owner: `serving_frequency.py::resolve_daily_serving_range`; the glossary defines
+adequacy as per_day_min and safety as per_day_max. Evidence already uses minimum.
+`omega_dose.py::score_dose` still averaged endpoint scores, yielding 15.0 versus
+12.4 for the same 700 mg minimum dose when the permitted maximum doubled.
+A failing regression preceded alignment to the existing minimum-adequacy contract,
+including prenatal DHA. Interval metadata and maximum-exposure flags are retained.
+Will NOT create: an exposure resolver, reference population or scoring magnitude.
+
+104 focused omega, prenatal, multi and serving-basis tests passed; 20 tests skipped
+because this checkout has no generated catalog yet. Existing prenatal tests verify
+Pregnancy RDA (including iron/iodine) and unchanged adult reference behavior.
+This is a contract alignment with measurable score impact, not a new dose target.

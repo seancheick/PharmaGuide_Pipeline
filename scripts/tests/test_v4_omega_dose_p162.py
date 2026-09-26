@@ -334,13 +334,13 @@ def test_servings_per_day_multiplies_correctly() -> None:
     assert payload["metadata"]["epa_dha_band_label"] == "aha_cvd"
 
 
-def test_variable_servings_uses_midpoint() -> None:
-    """Label '1-2 softgels daily' → midpoint = 1.5 servings → mid dose."""
+def test_variable_servings_retains_interval_metadata() -> None:
+    """The full interval remains visible although adequacy uses its minimum."""
     from scoring_v4.modules.omega_dose import score_dose
 
     product = _omega_product(epa=400, dha=300, daily_servings=(1.0, 2.0))
     payload = score_dose(product)
-    # 700 mg/serving × midpoint 1.5 = 1050 mg/day → aha_cvd
+    # Descriptive midpoint is retained; it does not award adequacy credit.
     assert payload["metadata"]["per_day_min_mg"] == 700.0
     assert payload["metadata"]["per_day_mid_mg"] == 1050.0
     assert payload["metadata"]["per_day_max_mg"] == 1400.0
@@ -599,3 +599,10 @@ def test_dose_rises_monotonically_with_epa_dha() -> None:
     scores = [score_dose(_omega_product(epa=mg / 2, dha=mg / 2))["score"]
               for mg in (0, 90, 150, 300, 700, 850, 999, 1000, 1500, 2000, 4000)]
     assert scores == sorted(scores)
+
+
+def test_omega_adequacy_uses_same_minimum_exposure_as_evidence():
+    from scoring_v4.modules.omega_dose import score_dose
+    fixed = _omega_product(epa=400, dha=300, daily_servings=(1, 1))
+    variable = _omega_product(epa=400, dha=300, daily_servings=(1, 2))
+    assert score_dose(variable)['score'] == score_dose(fixed)['score']
