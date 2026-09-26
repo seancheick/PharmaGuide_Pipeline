@@ -554,6 +554,7 @@ Each rule is keyed by `subject_ref: {db, canonical_id}` linking to one of the 5 
 | `dose_thresholds` | object[] | NO | Dose-dependent severity escalation |
 | `pregnancy_lactation` | object/null | NO | Pregnancy/lactation specific data |
 | `form_scope` | string/null | NO | Form-specific rule (e.g., "preformed" for vitamin A) |
+| `form_scope_match` | string | NO | Absent: any declared row form in scope applies. `all`: every declared form must be in scope. `confirmed`: silent only for a label-confirmed form outside scope; unknown parts still warn (plant-part rules) |
 | `last_reviewed` | string | YES | ISO date |
 | `review_owner` | string | YES | Reviewer identity |
 

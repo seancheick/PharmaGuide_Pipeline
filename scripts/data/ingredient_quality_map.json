@@ -32,8 +32,8 @@
     },
     "statistics": {
       "total_parents": 653,
-      "total_forms": 1444,
-      "total_form_aliases": 12119,
+      "total_forms": 1446,
+      "total_form_aliases": 12122,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -50167,14 +50167,11 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Taraxacum officinale root/leaf extract. Traditional European bitter herb for liver/digestive support and as a mild diuretic. Contains taraxasterol, inulin (prebiotic), and flavonoids. Limited clinical trial data but strong ethnobotanical use history for hepatoprotection and bile flow stimulation.",
+        "notes": "Taraxacum officinale extract of the whole plant, root with leaf, or an unstated part. Traditional European bitter herb for liver/digestive support and as a mild diuretic. Contains taraxasterol, inulin (prebiotic), and flavonoids. Limited clinical trial data but strong ethnobotanical use history for hepatoprotection and bile flow stimulation.",
         "aliases": [
           "dandelion",
-          "dandelion root",
           "taraxacum officinale",
-          "dandelion leaf",
           "dandelion whole plant extract",
-          "dandelion root 4:1 extract",
           "dandelion whole plant/root extract",
           "dandelion 4:1 extract",
           "Dandelion PE",
@@ -50182,6 +50179,50 @@
           "taraxasterol",
           "taraxacum triterpene",
           "dandelion triterpene"
+        ],
+        "absorption_structured": {
+          "value": 0.55,
+          "range_low": 0.5,
+          "range_high": 0.6,
+          "quality": "moderate"
+        },
+        "dosage_importance": 1.0
+      },
+      "dandelion root": {
+        "bio_score": 6,
+        "absorption": "good (~50-60%)",
+        "consumer_note": "Dandelion extract is prepared from Taraxacum species. Its plant-compound profile varies with the plant part and extraction method.",
+        "consumer_note_review": {
+          "by": "Product owner approval",
+          "date": "2026-08-08"
+        },
+        "notes": "Taraxacum officinale root. Traditional European bitter for digestion and bile flow; rich in inulin and sesquiterpene lactones. The EU herbal monographs give a diuretic indication for the leaf and for root with herb, none for the root alone. Split from dandelion extract on 2026-09-26 so interaction rules follow the plant part; scoring fields unchanged.",
+        "aliases": [
+          "dandelion root",
+          "dandelion root extract",
+          "dandelion root 4:1 extract"
+        ],
+        "absorption_structured": {
+          "value": 0.55,
+          "range_low": 0.5,
+          "range_high": 0.6,
+          "quality": "moderate"
+        },
+        "dosage_importance": 1.0
+      },
+      "dandelion leaf": {
+        "bio_score": 6,
+        "absorption": "good (~50-60%)",
+        "consumer_note": "Dandelion extract is prepared from Taraxacum species. Its plant-compound profile varies with the plant part and extraction method.",
+        "consumer_note_review": {
+          "by": "Product owner approval",
+          "date": "2026-08-08"
+        },
+        "notes": "Taraxacum officinale leaf. EU traditional-use monograph (EMA/HMPC/579636/2008): increases the amount of urine to flush the urinary tract; avoid in renal failure, diabetes or heart failure because of possible hyperkalemia. Split from dandelion extract on 2026-09-26 so interaction rules follow the plant part; scoring fields unchanged.",
+        "aliases": [
+          "dandelion leaf",
+          "dandelion leaf extract",
+          "taraxacum officinale leaf"
         ],
         "absorption_structured": {
           "value": 0.55,

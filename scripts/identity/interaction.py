@@ -63,11 +63,10 @@ INTERACTION_SUBJECT_FAMILY: dict[str, str] = {
 # parent (RULE_INGREDIENT_GARLIC is authored on IQM `garlic`, so 320 mg of
 # `garlic_bulb` warned about nothing). Interaction lookup only: scoring keeps
 # the botanical identity. Each pair shares a GSRS UNII or is a species the IQM
-# parent names, and its part is one the rule's evidence covers. Same-species
-# records left out (a marker or nutrient source, another part or preparation,
-# e.g. dandelion and nettle root under leaf-evidence rules) are listed with
-# their reasons in test_botanical_interaction_subjects.py, which requires a
-# decision for every candidate.
+# parent names. Same-species records left out (a marker or nutrient source,
+# another part or preparation) are listed with their reasons in
+# test_botanical_interaction_subjects.py, which requires a decision for every
+# candidate.
 BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "aloe_vera": "aloe_vera",
     "aloe_vera_concentrated_gel": "aloe_vera",
@@ -93,6 +92,7 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "cranberry": "cranberry",
     "cranberry_fruit": "cranberry",
     "dandelion": "dandelion",
+    "dandelion_root": "dandelion",
     "devils_claw_tuber": "devils_claw",
     "dong_quai": "dong_quai",
     "echinacea_angustifolia": "echinacea",
@@ -123,6 +123,7 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "milk_thistle": "milk_thistle",
     "milk_thistle_seed": "milk_thistle",
     "nettle_leaf": "stinging_nettle",
+    "nettle_root": "stinging_nettle",
     "nigella": "black_seed_oil",
     "olive_leaf_powder": "olive_leaf",
     "passion_flower": "passionflower",
@@ -144,6 +145,23 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "yerba_mate_leaf": "yerba_mate",
 }
 
+
+# The IQM form a twin is, for parents whose rules are scoped by plant part
+# (dandelion leaf diuresis, nettle leaf glucose; Sean, 2026-09-26). Every twin
+# of a parent with a form-scoped rule declares one.
+BOTANICAL_INTERACTION_TWIN_FORM: dict[str, str] = {
+    "dandelion": "dandelion extract",
+    "dandelion_root": "dandelion root",
+    "nettle_leaf": "stinging nettle leaf extract",
+    "nettle_root": "stinging nettle root extract",
+}
+
+
+def interaction_twin_form(db: Any, canonical_id: Any) -> str | None:
+    """The IQM form a botanical row stands for when it meets its twin's rules."""
+    if str(db or "").strip() != "botanical_ingredients":
+        return None
+    return BOTANICAL_INTERACTION_TWIN_FORM.get(str(canonical_id or "").strip())
 
 def _family_ids(canonical: str) -> list[str]:
     family = INTERACTION_SUBJECT_FAMILY.get(canonical)

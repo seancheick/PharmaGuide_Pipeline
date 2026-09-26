@@ -4,9 +4,9 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
     "last_updated": "2026-09-26",
-    "total_entries": 148,
+    "total_entries": 149,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 148,
+    "total_rules": 149,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -190,7 +190,8 @@
       "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES glucose floors (diabetes and three hypoglycemic classes) were 1000 mg/day, labelled weak_signal_conservative and cited to a general review (PMID 35800714) that gives no dose. They now cite the documented dose, Kianbakht 2013 (PMID 24273930): leaf extract 500 mg every 8 hours (1500 mg/day) lowered fasting glucose, 2-hour glucose and HbA1c on top of oral antidiabetics. Floor 1000 -> 1500 mg/day (the trial dose; Sean 2026-09-26: use the dose a study documents, never an invented one). Severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_BOTANICAL_LICORICE_ROOT antihypertensives 100 mg/day floor cited PMID 393503, two women on 273-546 mg glycyrrhizin daily, which never mentions 100 mg (confidence_basis inferred_from_dose_range). It now cites af Geijerstam 2024 (PMID 38246526): licorice with 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg in a randomized crossover trial. Value unchanged; confidence_basis documented_effective_dose; the rationale states the floor is compared with the label licorice amount. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md.",
-      "2026-09-26: RULE_IQM_GINKGO_HYPERTENSION pregnancy block raised from caution (no source) to avoid with NCCIH ginkgo (may be unsafe in pregnancy; might cause early labor or extra bleeding during delivery), matching RULE_BOTAN_GINKGO_PREGNANCY (Sean, 2026-09-26: one ginkgo pregnancy verdict). Lactation stays caution (NCCIH: little is known)."
+      "2026-09-26: RULE_IQM_GINKGO_HYPERTENSION pregnancy block raised from caution (no source) to avoid with NCCIH ginkgo (may be unsafe in pregnancy; might cause early labor or extra bleeding during delivery), matching RULE_BOTAN_GINKGO_PREGNANCY (Sean, 2026-09-26: one ginkgo pregnancy verdict). Lactation stays caution (NCCIH: little is known).",
+      "2026-09-26: Plant-part split (Sean, 2026-09-26). RULE_IQM_DANDELION_KIDNEY keeps the diuretic claims (kidney disease, antihypertensives, lithium), now form_scope dandelion leaf + dandelion extract (whole or unstated part): PMID 19678785 is a dandelion leaf trial and the EU monographs give the diuretic indication for the leaf and for root with herb, none for the root alone; the kidney claim now also cites the EU leaf monograph (avoid in renal failure, possible hyperkalemia). Its three hypoglycemic claims moved unchanged to the new RULE_IQM_DANDELION_GLUCOSE, which applies to every dandelion form. RULE_IQM_STINGING_NETTLE_DIABETES is form_scope nettle leaf + unspecified: its glucose evidence is a leaf-extract trial (PMID 24273930) and the EU nettle-root monograph covers only benign prostatic hyperplasia. form_scope_match 'confirmed': a part-scoped rule is silent only for a label-confirmed form outside its scope; unknown or inferred parts still warn."
     ]
   },
   "interaction_rules": [
@@ -21036,19 +21037,25 @@
         "db": "ingredient_quality_map",
         "canonical_id": "dandelion"
       },
+      "form_scope": [
+        "dandelion leaf",
+        "dandelion extract"
+      ],
+      "form_scope_match": "confirmed",
       "condition_rules": [
         {
           "condition_id": "kidney_disease",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "Dandelion (Taraxacum officinale) acts as a natural diuretic, increasing urine output via inhibition of renal tubular sodium reabsorption. In CKD, fluid management is critical; uncontrolled diuresis can precipitate dehydration, acute kidney injury, and electrolyte derangements (hypokalemia or hyperkalemia depending on residual kidney function).",
+          "mechanism": "Dandelion leaf (Taraxacum officinale) is a traditional diuretic: the EU herbal monograph gives it to increase the amount of urine and advises avoiding it in renal failure because of possible hyperkalemia. In CKD, fluid management is critical; uncontrolled diuresis can precipitate dehydration, acute kidney injury, and electrolyte derangements.",
           "action": "Avoid unsupervised dandelion supplementation in kidney disease. Any diuretic effect should be managed in consultation with a nephrologist.",
           "sources": [
-            "https://www.nccih.nih.gov/health/dandelion"
+            "https://www.nccih.nih.gov/health/dandelion",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-taraxacum-officinale-weber-ex-wigg-folium_en.pdf"
           ],
           "alert_headline": "Diuretic herb \u2014 use caution in CKD",
           "alert_body": "Dandelion may have diuretic effects. If you have kidney disease or take diuretics, ask your clinician before using concentrated dandelion supplements.",
-          "informational_note": "Dandelion depends on kidney clearance \u2014 relevant to people with kidney conditions.",
+          "informational_note": "Dandelion leaf is a traditional diuretic \u2014 relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -21106,6 +21113,64 @@
           "materiality": "presence"
         },
         {
+          "drug_class_id": "lithium",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Diuretic effect \u2192 potential lithium concentration via fluid/sodium depletion. Same mechanism family as the established lithium-thiazide warning. Common in 'detox' and 'liver support' supplements.",
+          "action": "If you take lithium, talk to your prescriber before using dandelion extract. Watch for signs of lithium toxicity (tremor, confusion, GI upset).",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/19678785/",
+            "https://www.nccih.nih.gov/health/dandelion"
+          ],
+          "alert_headline": "May raise lithium levels",
+          "alert_body": "Dandelion is a mild diuretic. Like prescription diuretics, it can raise lithium levels. Common in 'detox' and 'liver support' supplements.",
+          "informational_note": "Dandelion's diuretic effect can raise lithium \u2014 relevant to anyone on lithium therapy.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "lithium"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
+        "alert_headline": "Limited safety data",
+        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_DANDELION_GLUCOSE",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "dandelion"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
           "drug_class_id": "hypoglycemics_high_risk",
           "severity": "caution",
           "evidence_level": "theoretical",
@@ -21156,40 +21221,6 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "hypoglycemics_lower_risk"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          },
-          "direction": "harmful",
-          "materiality": "presence"
-        },
-        {
-          "drug_class_id": "lithium",
-          "severity": "monitor",
-          "evidence_level": "probable",
-          "mechanism": "Diuretic effect \u2192 potential lithium concentration via fluid/sodium depletion. Same mechanism family as the established lithium-thiazide warning. Common in 'detox' and 'liver support' supplements.",
-          "action": "If you take lithium, talk to your prescriber before using dandelion extract. Watch for signs of lithium toxicity (tremor, confusion, GI upset).",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/19678785/",
-            "https://www.nccih.nih.gov/health/dandelion"
-          ],
-          "alert_headline": "May raise lithium levels",
-          "alert_body": "Dandelion is a mild diuretic. Like prescription diuretics, it can raise lithium levels. Common in 'detox' and 'liver support' supplements.",
-          "informational_note": "Dandelion's diuretic effect can raise lithium \u2014 relevant to anyone on lithium therapy.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "lithium"
               ],
               "profile_flags_any": []
             },
@@ -22142,6 +22173,11 @@
         "db": "ingredient_quality_map",
         "canonical_id": "stinging_nettle"
       },
+      "form_scope": [
+        "stinging nettle leaf extract",
+        "stinging nettle (unspecified)"
+      ],
+      "form_scope_match": "confirmed",
       "condition_rules": [
         {
           "condition_id": "diabetes",

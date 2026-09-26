@@ -141,14 +141,6 @@ TEA_LEAF = (
 )
 # Same-species candidates that must not inherit the parent's rules.
 REVIEWED_NOT_TWINNED = {
-    # The dandelion rule's diuretic, kidney and lithium claims rest on leaf
-    # evidence (PMID 19678785, Taraxacum officinale folium); its glucose claims
-    # cite root. IQM dandelion's only form already aliases "dandelion root", so
-    # whether root carries the rule is a clinical-policy question.
-    ("dandelion_root", "dandelion"): "part: the rule mixes leaf and root evidence",
-    # The nettle rule's glucose claims cite leaf extract trials; root is a
-    # different preparation (lectins, sterols; BPH use).
-    ("nettle_root", "stinging_nettle"): "part: the rule's glucose evidence is leaf",
     ("elder_blossom", "elderberry"): "part: flower, the rule is on the fruit",
     ("elder_flower", "elderberry"): "part: flower, the rule is on the fruit",
     ("dgl_deglycyrrhizinated_licorice", "licorice"): "preparation: the rule excludes DGL",

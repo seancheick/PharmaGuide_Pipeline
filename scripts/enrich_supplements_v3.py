@@ -168,6 +168,7 @@ from match_ledger import (
 )
 from identity.interaction import (
     interaction_subject_refs,
+    interaction_twin_form,
     label_row_establishes_presence,
     label_row_is_blend_child,
 )
@@ -18030,6 +18031,13 @@ class SupplementEnricherV3:
         # hid the retinyl acetate from the preformed vitamin A pregnancy rule.
         scope = {str(item).strip() for item in form_scope if str(item).strip()}
         row_forms = self._row_form_ids(ingredient)
+        if rule.get("form_scope_match") == "confirmed":
+            # A plant-part rule (dandelion leaf diuresis) is silent only for a
+            # label-confirmed form outside its scope; an unknown or inferred
+            # part still warns (G1 fail-open).
+            if ingredient.get("form_match_status") != "mapped" or not row_forms:
+                return True
+            return bool(row_forms & scope)
         if rule.get("form_scope_match") == "all":
             # The row amount is this form's amount only when every declared
             # form is in scope; a mixed retinyl + beta-carotene row with no
@@ -19099,9 +19107,16 @@ class SupplementEnricherV3:
                 continue
 
             ingredient_name = ingredient.get("raw_source_text") or ingredient.get("name") or ingredient.get("standard_name") or "unknown"
+            # A botanical twin is its declared IQM part (dandelion root) for
+            # rules scoped by plant part.
+            twin_form = interaction_twin_form(subject["db"], subject["canonical_id"])
+            scope_row = (
+                {**ingredient, "form_id": twin_form, "matched_forms": [], "form_match_status": "mapped"}
+                if twin_form else ingredient
+            )
 
             for rule in matched_rules:
-                if not self._interaction_rule_applies(rule, ingredient):
+                if not self._interaction_rule_applies(rule, scope_row):
                     continue
 
                 condition_hits: List[Dict[str, Any]] = []
