@@ -33,6 +33,8 @@ cited for. The subject-only overlap check in verify_interaction_rules_citations.
     to toxic hepatitis."
   - 5.1: cascarosides "are converted by the bacteria of the large intestine into the active
     metabolites (mainly emodin-9-anthrone)". No prostaglandin/nitric-oxide or uterine statement.
+  - 5.3: "several hydroxyl anthracene derivatives were mutagenic and genotoxic in several in vitro
+    test systems, however this was not proven in in vivo systems."
 - **EU herbal monographs, Senna alexandrina Mill., folium** (EMA/HMPC/625849/2015) **and fructus**
   (EMA/HMPC/228761/2016), both Final Rev.1, adopted 25 September 2018. Sections 4.3–4.6, 4.8 and 4.9
   carry the same wording as cascara above (kidney disorders, hypokalaemia potentiates cardiac
@@ -40,11 +42,17 @@ cited for. The subject-only overlap check in verify_interaction_rules_citations.
   - folium: `https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf`
   - fructus: `https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-fructus-revision-1_en.pdf`
 - **NIH LiverTox: Cascara** — NBK548113 (esummary: chapter "Cascara"), last update 23 January 2017.
+  Read through the in-app browser (NCBI answers curl with a captcha page). "Cascara is generally safe
+  and well tolerated, but can cause adverse events including clinically apparent liver injury when
+  used in high doses for longer than recommended periods." "Use of cascara in the recommended doses
+  for a limited period of time has been associated with few side effects, most of which are mild and
+  transient."
   "With longer term use of high doses of cascara, however, adverse events have been described
   including several cases of clinically apparent liver injury." "Liver injury from long term cascara
   use is rare"; "severe cases with acute liver failure and development of ascites and portal
   hypertension have been described." No rodent or hepatocyte data.
-- **LactMed: Cascara Sagrada** — NBK501328 (esummary: "Cascara Sagrada"), last revision 17 May 2021.
+- **LactMed: Cascara Sagrada** — NBK501328 (esummary: "Cascara Sagrada"), last revision 17 May 2021,
+  read through the in-app browser.
   "Maternal cascara intake might cause loose stools in some breastfed infants and should be avoided."
   Cascara "was qualitatively detected in the breastmilk of 5 of 10 women".
 - **LANOXIN (digoxin) tablet label**, DailyMed setid d91e3646-4c63-4512-ab22-db39c085c4dc, effective
@@ -65,7 +73,8 @@ cited for. The subject-only overlap check in verify_interaction_rules_citations.
   use. It states no genotoxicity or tumorigenicity finding.
 - **21 CFR 172.510(b)** (eCFR versioner API, title 21 current to 2026-09-24): lists "Cascara sagrada |
   Rhamnus purshiana DC" as a natural flavoring substance with no limitation; also lists aloe, senna
-  (Alexandria) and rhubarb root.
+  (Alexandria) and rhubarb root. It does not list casanthranol (0 hits), which ADD_CASCARA_SAGRADA
+  still aliases; no raw DSLD label mentions casanthranol.
 
 ## Identity (GSRS full records)
 
