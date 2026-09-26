@@ -197,3 +197,17 @@ def test_banned_ephedra_keeps_c0885298_with_a_note_on_its_name(banned_recalled):
     assert entry["cui"] == "C0885298"
     note = entry.get("cui_note") or ""
     assert "Ephedra vulgaris" in note and "VANDF" in note
+
+
+def test_high_risk_chaparral_cui_is_larrea_tridentata(banned_recalled):
+    """HIGH_RISK_CHAPARRAL's reason names Larrea tridentata, so its CUI is
+    C0697139 'Larrea tridentata' (Plant; NCBI taxid 66636, MSH, NCI).
+    C1050700 is 'Larrea divaricata' (NCBI taxid 108399), the South American
+    L. divaricata Cav. ITIS treats the North American usage "Larrea divaricata
+    auct. non Cav." as a misapplied name for L. tridentata, so the
+    "larrea divaricata" alias stays as a label-matching term. Sean chose the
+    species anchor 2026-09-26; verified in UMLS, NCBI, GBIF and ITIS."""
+    entry = _find(banned_recalled, "HIGH_RISK_CHAPARRAL")
+    assert entry["cui"] == "C0697139"
+    assert "larrea divaricata" in {a.lower() for a in entry["aliases"]}
+    assert "C1050700" in json.dumps(entry["review"]["change_log"])

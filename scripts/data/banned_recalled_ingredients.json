@@ -6606,13 +6606,18 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "CUI C1050700 -> C0697139 (species anchor chosen by Sean). UMLS: C1050700 is 'Larrea divaricata' (NCBI taxid 108399, the South American L. divaricata Cav.); C0697139 is 'Larrea tridentata' (Plant; NCBI taxid 66636, MSH, NCI), the species this entry's reason names. ITIS lists the North American usage 'Larrea divaricata auct. non Cav.' as a misapplied name for L. tridentata, so the 'larrea divaricata' alias stays for label matching. No shipped detail blob or frozen enriched product references this entry.",
+            "by": "claude-audit"
           }
         ]
       },
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "cui": "C1050700",
+      "cui": "C0697139",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A botanical linked to at least 18 reported cases of severe liver injury, including transplants. Not a lawful supplement ingredient; stop and consult a doctor if you have used a product containing it.",
