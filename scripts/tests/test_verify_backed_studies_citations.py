@@ -91,3 +91,17 @@ def test_bcm95_title_heuristic_false_positive_has_entry_scoped_review() -> None:
     item = reviewed[("33516238", "BRAND_LIFE_EXTENSION_SUPER_BIOCURCUMIN")]
     assert "BCM-95" in item["rationale"]
     assert "abstract" in item["rationale"].lower()
+
+
+def test_every_citation_in_backed_studies_is_a_claim() -> None:
+    """purpose_evidence[] and applicability source_pmids, PubMed URLs and PMC
+    links were never collected (6 PMIDs on 2026-09-26); only references and
+    inline "PMID n" text were."""
+    import re
+    from verify_all_citations_content import HISTORY_KEYS, scan_citations
+    payload = json.loads((ROOT / "scripts" / "data" / "backed_clinical_studies.json").read_text())
+    claims = collect_claims(payload["backed_clinical_studies"])
+    for entry in payload["backed_clinical_studies"]:
+        cited = set(scan_citations(entry, HISTORY_KEYS)) | set(re.findall(r"PMID[:\s]+(\d+)", json.dumps(entry)))
+        missing = {p for p in cited if (p, str(entry.get("id"))) not in claims}
+        assert not missing, (entry.get("id"), sorted(missing))

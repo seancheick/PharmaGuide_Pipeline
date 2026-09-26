@@ -56,7 +56,7 @@ if _env.exists():
             k, _, v = line.partition("=")
             os.environ.setdefault(k.strip(), v.strip())
 
-from verify_all_citations_content import fetch_articles  # noqa: E402
+from verify_all_citations_content import HISTORY_KEYS, fetch_articles, scan_citations  # noqa: E402
 
 DATA = REPO / "scripts" / "data" / "backed_clinical_studies.json"
 PMID_INLINE = re.compile(r"PMID[:\s]+(\d+)")
@@ -216,7 +216,9 @@ def collect_claims(entries: list[dict]) -> dict[tuple[str, str], dict]:
             claim["tw"] |= topic_words
             if reference.get("title"):
                 claim["stored"].add(reference["title"])
-        for pmid in PMID_INLINE.findall(json.dumps(entry)):
+        # every other citation in the entry: inline "PMID n", PubMed URLs, PMC
+        # links, purpose_evidence[] / applicability source_pmids
+        for pmid in PMID_INLINE.findall(json.dumps(entry)) + scan_citations(entry, HISTORY_KEYS):
             claim = claims.setdefault(
                 (pmid, entry_id),
                 {"eid": entry_id, "tw": set(), "stored": set()},
