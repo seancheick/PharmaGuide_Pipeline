@@ -996,3 +996,33 @@ Will NOT create: a whitelist, alternative identity resolver or NF evidence type.
 Independent fresh review found no actionable issue in the final combined diff.
 Final fast checkpoint and clean-HEAD replay follow this commit; full fresh
 12-brand acceptance remains incomplete while clinical decisions are pending.
+
+
+Final verification for source batch a0eee3e5: scripts/test.sh fast completed
+16,414 passed, 137 skipped, 1 expected Pillow decompression-bomb test warning,
+1,133.57 seconds. Log: ~/pg_quality/candd/final_fast_fiber_source.log.
+Fresh-context reviewer found no actionable issue. No unchanged suite rerun.
+Clean-HEAD replay captured all 1,353 frozen products, exit 0, source_unchanged=true:
+~/pg_quality/candd/runs/release_candidate_a0eee3e5.jsonl (+ .meta.json).
+Incremental comparison with 97b8a0ed: zero changes in total, status, route,
+all-six-pillar payloads, safety_gate reasons or dose_safety reasons.
+The frozen replay does not re-exercise cleaning/enrichment; fresh four-product
+raw probes are stored in runs/fiber_source_a0eee3e5.json. They confirm
+252564/255063 not_scored/null, 259395 scored/61.8, 228873 not_scored/null with
+5 g retained. The prior 63.0 Konjac projections are invalid diagnostic history.
+
+Pending approval is concrete: remove only the exact alias "Konjac root extract"
+from ingredient_quality_map.json pgx_fiber.forms["PGX fiber"].aliases; retain the
+entry and all evidence, add no replacement alias. Health Canada identifies PGX
+as a glucomannan/xanthan/sodium-alginate complex:
+https://www.canada.ca/content/dam/hc-sc/migration/hc-sc/fn-an/alt_formats/pdf/label-etiquet/claims-reclam/assess-evalu/glucose-complex-polysaccharides-complexe-glycemique-eng.pdf
+No curated deletion performed. Also pending: retain NF-only fiber holds versus
+authorize a typed verified-source fiber contract. Do not infer approval.
+Final fresh 12-brand rebuild, export audits, snapshot acceptance and clinical
+curation remain open. Prior 122 Flutter tests passed, but no fresh final bundle
+was produced. Candidate is NOT release-ready.
+
+Latest fetched observation: main 6767a383, origin/main 6c4a130e; before this
+receipt candidate a0eee3e5 has 160 main-only / 25 candidate-only commits.
+Other agents continue changing main. Combined state unverified; no integration,
+push or release. Preserve the active worktree and partial brand diagnostics.
