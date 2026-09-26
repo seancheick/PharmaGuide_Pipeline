@@ -94,6 +94,36 @@ def test_botanical_row_is_a_botanical_subject(enricher):
     }
 
 
+@pytest.mark.parametrize(
+    "row",
+    [
+        _resolved_row("licorice_root", "botanical_ingredients"),
+        {
+            "name": "CBD",
+            "canonical_id": None,
+            "recognition_source": "banned_recalled_ingredients",
+            "recognized_entry_id": "BANNED_CBD_US",
+            "quantity": 25.0,
+            "unit": "mg",
+        },
+    ],
+)
+def test_a_row_listed_in_two_buckets_is_scanned_once(enricher, row):
+    """The enricher lists one non-scorable row object in both ingredients and
+    ingredients_skipped; scanning both copies doubled every alert."""
+    product = {
+        "dsld_id": "TEST_SCAN_ONCE",
+        "product_name": "test",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients": [row],
+            "ingredients_skipped": [row],
+        },
+    }
+    alerts = enricher._collect_interaction_profile(product)["ingredient_alerts"]
+    assert alerts and len(alerts) == len({alert["rule_id"] for alert in alerts})
+
+
 # ---------------------------------------------------------------------------
 # Botanical twin: a botanical identity that is the same plant and part as an
 # IQM parent answers to the rules authored on that parent. Before the twin,

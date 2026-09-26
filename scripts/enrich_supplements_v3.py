@@ -18916,13 +18916,14 @@ class SupplementEnricherV3:
             # entry can only match a row that is not scorable, so scanning
             # scorable rows alone silenced every such rule (CBD, yohimbe, red
             # yeast rice, pennyroyal ...). Non-scorable rows of scored
-            # ingredients (blend children, inactives) stay out.
+            # ingredients (blend children, inactives) stay out. One row object
+            # can sit in both lists; it is scanned once.
             scanned = {id(row) for row in ingredients}
-            skipped = [
-                row for row in raw_ingredients + raw_skipped
+            skipped = list({
+                id(row): row for row in raw_ingredients + raw_skipped
                 if isinstance(row, dict) and id(row) not in scanned
                 and (self._derive_interaction_subject_ref(row) or {}).get("db") not in (None, "ingredient_quality_map")
-            ]
+            }.values())
         else:
             ingredients = [row for row in raw_ingredients if isinstance(row, dict)]
             skipped = [row for row in raw_skipped if isinstance(row, dict)]
