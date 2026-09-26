@@ -138,3 +138,20 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
 - PMID 34434419 (J Med Cases 2021): one woman on "800 mg capsules of feverfew three times per day" with vaginal
   bleeding and altered coagulation tests, Naranjo probable. A single case cannot set a floor.
 - Floor removed; presence.
+
+## RULE_INGREDIENT_GINSENG: floors (D8)
+- Old floor source PMID 35509826 (Panax ginseng metabolic meta-analysis): doses "ranged from 200 mg to 8 g"; no
+  dose-response reported. Its rationale ("kept for hypertensives") was copied onto glucose, surgery and warfarin
+  sub-rules.
+- Glucose: PMID 8721940 (Sotaniemi EA et al. Diabetes Care 1995, doi 10.2337/diacare.18.10.1373): 36 newly
+  diagnosed NIDDM patients, "ginseng (100 or 200 mg) or placebo" for 8 weeks; ginseng "reduced fasting blood
+  glucose"; "The 200-mg dose of ginseng improved glycated hemoglobin". Dose split from the full text (publisher
+  page behind a bot check) as reported by Derosa G et al. Phytother Res 2022 (PMID 35912631, PMC9804244): "the
+  dose of 100 mg significantly decreased FPG levels (-10.81 mg/dl, -7.20%, p < .05) while that of 200 mg reduced
+  HbA1c". Ginseng type not specified by the authors. Also: PMID 15982990 (Reay 2005), single 200 mg and 400 mg
+  doses of Panax ginseng G115 lowered blood glucose in 30 healthy adults. Glucose floors set to 100 mg/day.
+- Bleeding/warfarin: PMID 15238367 (American ginseng lowered INR; no dose in abstract); PMID 19913311 (Lee 2010,
+  Korean red ginseng 1 g with warfarin after valve replacement, no significant INR change); PMID 23596810 (Kang
+  2013, 1500 mg Korean red ginseng extract for 8 weeks, "Blood analyses for coagulation ... revealed no
+  significant changes"); PMID 18090773 (Asian ginseng at the recommended dose, platelet function unchanged).
+  No human source gives a dose for a bleeding effect: surgery and anticoagulants floors removed; presence.

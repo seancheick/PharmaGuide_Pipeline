@@ -1165,3 +1165,22 @@ def test_feverfew_anticoagulant_rule_carries_no_floor_from_a_general_review():
     sub = _sub_rule(_rule("RULE_IQM_FEVERFEW_PREGNANCY"), "drug_class_id", "anticoagulants")
     assert "min_effective_dose" not in sub
     assert sub["materiality"] == "presence"
+
+
+def test_ginseng_floors_match_the_effect_their_source_measured():
+    """PMID 35509826 (a metabolic meta-analysis, no dose-response) floored every
+    sub-rule at 200 mg with a blood-pressure rationale. Glucose: Sotaniemi 1995
+    (PMID 8721940) found 100 mg/day lowered fasting glucose and 200 mg/day HbA1c,
+    so the glucose floors are 100 mg. Bleeding/warfarin: no human source gives a
+    dose (Korean red ginseng 1 g and 1.5 g were null), so those fire on presence."""
+    rule = _rule("RULE_INGREDIENT_GINSENG")
+    assert "35509826" not in json.dumps(rule)
+    for key, target in (("condition_id", "surgery_scheduled"), ("drug_class_id", "anticoagulants")):
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub and sub["materiality"] == "presence", target
+    for key, target in (("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
+                        ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
+        floor = _sub_rule(rule, key, target)["min_effective_dose"]
+        assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
+        assert floor["source"] == _pmid("8721940"), target
+        assert "hypertensive" not in floor["rationale"], target
