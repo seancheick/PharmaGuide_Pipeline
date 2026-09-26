@@ -289,6 +289,34 @@ def test_senna_kidney_and_digoxin_rules_cite_the_eu_monographs():
     assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
 
 
+UKTIS_CONSTIPATION = "https://uktis.org/monographs/treatment-of-constipation-in-pregnancy/"
+LACTMED_SENNA = "https://www.ncbi.nlm.nih.gov/books/NBK501349/"
+
+
+def test_senna_pregnancy_warning_follows_the_eu_contraindication_and_names_the_uk_view():
+    """Sean, 2026-09-26 (D5): senna gets a pregnancy-specific warning on the
+    pregnancy profile only, chosen from the exact source wording. The EU herbal
+    monograph (HMPC, Rev. 1, 2018) lists pregnancy and lactation under 4.3 as
+    contraindications (genotoxicity data for anthranoids); UKTIS (2026) finds no
+    increased malformation risk in limited data and uses stimulants after
+    bulk-forming and osmotic laxatives; LactMed rates usual doses acceptable while
+    breastfeeding. Pregnancy -> avoid (not contraindicated, given the human data);
+    lactation stays caution. LiverTox (NBK547922) is not a pregnancy source."""
+    rule = _rule("RULE_IQM_SENNA_PREGNANCY")
+    block = rule["pregnancy_lactation"]
+    pregnancy = _sub_rule(rule, "condition_id", "pregnancy")
+
+    assert (block["pregnancy_category"], block["lactation_category"]) == ("avoid", "caution")
+    assert pregnancy["severity"] == "avoid"
+    assert pregnancy["profile_gate"]["requires"]["profile_flags_any"] == ["pregnant"]
+    assert EMA_SENNA_LEAF in pregnancy["sources"] and UKTIS_CONSTIPATION in pregnancy["sources"]
+    assert EMA_SENNA_LEAF in block["sources"] and LACTMED_SENNA in block["sources"]
+    copy = json.dumps([block, pregnancy])
+    assert "NBK547922" not in copy
+    assert "contraindicat" in copy and "UK" in copy
+    assert "acceptable second-line option" not in copy
+
+
 # Citation triage 2026-09 (verify_interaction_rules_citations.py --strict suspects).
 # Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.
 def _pmid(pmid: str) -> str:
@@ -948,9 +976,9 @@ def test_chondroitin_bleeding_rule_states_the_documented_inr_data():
     assert bleeding["sources"] == [_pmid("14986566"), _pmid("18363538")]
     assert "2.3 to 3.9" in bleeding["mechanism"]
     assert "in vitro data suggest" not in bleeding["mechanism"].lower()
-    # The 1200 mg BID escalation is reported in Knudsen & Sokol 2008.
-    assert bleeding["min_effective_dose"]["source"] == _pmid("18363538")
-    assert bleeding["min_effective_dose"]["value"] == 1200
+    # The 1200 mg BID escalation is reported in Knudsen & Sokol 2008; it is not a
+    # threshold, so the rule carries no floor (D8, see the no-floor test below).
+    assert "min_effective_dose" not in bleeding
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
 
 
@@ -1068,22 +1096,43 @@ def test_chondroitin_anticoagulant_copy_states_the_cited_inr_values():
     assert "2.3" in mechanism and "3.9" in mechanism
 
 
-def test_chondroitin_dose_floor_cites_the_case_report_that_states_1200_mg_bid():
-    """"1200 mg BID" is Knudsen & Sokol's figure (PMID 18363538). PMID 14986566
-    is a letter without an abstract, so it cannot carry that number."""
-    for floor in _min_effective_doses(_rule("RULE_IQM_CHONDROITIN")):
-        if "1200 mg BID" in floor["rationale"]:
-            assert floor["source"] == _pmid("18363538"), floor
-            assert "14986566" not in floor["rationale"], floor
+def test_chondroitin_rule_carries_no_dose_floor_its_source_does_not_establish():
+    """Sean, 2026-09-26 (D8): an unsupported floor is removed, never replaced by
+    another number. Knudsen & Sokol 2008 (PMID 18363538) is one case plus MedWatch
+    reports it attributes to glucosamine or glucosamine-chondroitin, and the INR
+    was still 4.7 after chondroitin fell to 600 mg/day, so 1200 mg/day is not a
+    threshold. Every sub-rule fires on presence at its existing severity."""
+    rule = _rule("RULE_IQM_CHONDROITIN")
+    assert _min_effective_doses(rule) == []
+    severities = {}
+    for sub in rule["condition_rules"] + rule["drug_class_rules"]:
+        assert sub["materiality"] == "presence", sub
+        severities[sub.get("condition_id") or sub.get("drug_class_id")] = sub["severity"]
+    assert severities == {
+        "bleeding_disorders": "monitor", "surgery_scheduled": "monitor", "anticoagulants": "caution",
+    }
 
 
-def test_black_seed_dose_floor_does_not_credit_the_bp_meta_analysis_with_glucose_or_lipids():
-    """PMID 27512971 (Sahebkar 2016) is a blood-pressure-only meta-analysis."""
-    floors = _min_effective_doses(_rule("RULE_IQM_BLACK_SEED_OIL_DIABETES"))
-    assert floors
-    for floor in floors:
-        if "27512971" in floor["source"] + floor["rationale"]:
-            assert "glucose" not in floor["rationale"] and "lipid" not in floor["rationale"], floor
+def test_black_seed_rule_carries_no_dose_floor_its_sources_do_not_establish():
+    """Sean, 2026-09-26 (D8). The 2000 mg/day floor cited PMID 27512971, a
+    blood-pressure meta-analysis that found no association with N. sativa dosage.
+    The glucose source (PMID 40210172) reports fasting-glucose lowering across its
+    trials and HbA1c lowering in a >1 g/day subgroup; neither sets 2000 mg, and no
+    source gives a warfarin dose. Every sub-rule fires on presence at its existing
+    severity."""
+    rule = _rule("RULE_IQM_BLACK_SEED_OIL_DIABETES")
+    assert _min_effective_doses(rule) == []
+    severities = {}
+    for sub in rule["condition_rules"] + rule["drug_class_rules"]:
+        assert sub["materiality"] == "presence", sub
+        severities[sub.get("condition_id") or sub.get("drug_class_id")] = sub["severity"]
+    assert severities == {
+        "diabetes": "caution", "hypertension": "monitor", "pregnancy": "avoid",
+        "anticoagulants": "caution", "hypoglycemics_high_risk": "caution",
+        "hypoglycemics_lower_risk": "monitor", "antihypertensives": "caution",
+        "hypoglycemics_unknown": "caution",
+    }
+    assert "2 g oil" not in json.dumps(rule)
 
 
 def test_evening_primrose_dose_floor_rationale_matches_its_rabbit_source():
