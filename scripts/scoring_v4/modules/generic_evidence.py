@@ -353,7 +353,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # with established RDA/AI has evidence of necessity even without a strong
         # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a consensus/branded 18 stays 18).
-        auth_canon = _mass_dominant_essential_canonical(product)
+        auth_canon = _mass_dominant_essential_canonical(
+            product, owner_canonicals=owner_canonicals if owner_scoped else None
+        )
         if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
                 and primary_floor < NUTRITION_AUTHORITY_FLOOR):
             primary_floor = NUTRITION_AUTHORITY_FLOOR
@@ -1403,20 +1405,27 @@ def _matched_active_canonical(
     return ""
 
 
-def _mass_dominant_essential_canonical(product: Dict[str, Any]) -> Optional[str]:
+def _mass_dominant_essential_canonical(
+    product: Dict[str, Any], *, owner_canonicals: Optional[set] = None,
+) -> Optional[str]:
     """Canonical_id of the heaviest active IFF it is a DRI-essential vitamin/mineral
     (established RDA/AI). Anchors the P5 nutrition-authority evidence floor — keyed
     on the mass-dominant active so a trace essential co-ingredient never floats a
-    product, only a product whose PRIMARY ingredient is the essential nutrient."""
+    product, only a product whose PRIMARY ingredient is the essential nutrient.
+    Scoped callers restrict the competitors to their existing purpose owners.
+    """
     best_cid: Optional[str] = None
     best_mass = 0.0
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):
             continue
+        canonical = str(row.get("canonical_id") or "").strip().lower()
+        if owner_canonicals is not None and canonical not in owner_canonicals:
+            continue
         mass = _mass_mg(row) or 0.0
         if mass > best_mass:
             best_mass = mass
-            best_cid = str(row.get("canonical_id") or "").strip().lower()
+            best_cid = canonical
     if best_mass > 0 and best_cid in DRI_ESSENTIAL_NUTRIENTS:
         return best_cid
     return None

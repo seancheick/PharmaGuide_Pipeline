@@ -1386,3 +1386,14 @@ def test_nested_fiber_anchor_cannot_transfer_blend_total_to_psyllium():
     product = _product(product_name='Fiber Fusion', primary_type='fiber_digestive',
                        ingredients=[row], matches=[])
     assert score_evidence(product, owner_scoped=True)['metadata']['recovered_matches'] == []
+
+
+def test_title_nutrient_keeps_authority_floor_beside_heavier_adjunct():
+    from scoring_v4.modules.generic_evidence import score_evidence, NUTRITION_AUTHORITY_FLOOR
+    product = _product(product_name='Folic Acid 800 mcg',
+        ingredients=[_ingredient(name='Folic Acid', canonical_id='vitamin_b9_folate', quantity=800, unit='mcg'),
+                     _ingredient(name='Calcium', canonical_id='calcium', quantity=65)],
+        matches=[])
+    payload = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert payload['metadata']['nutrition_authority_canonical'] == 'vitamin_b9_folate'
+    assert payload['components']['primary_evidence_floor'] == NUTRITION_AUTHORITY_FLOOR

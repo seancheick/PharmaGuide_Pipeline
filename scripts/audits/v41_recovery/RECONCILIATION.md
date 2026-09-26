@@ -615,3 +615,15 @@ Folate1333mcgDFE was a declared nutrient total with a Folic Acid800mcg child.
 The existing essential-nutrient classifier now distinguishes that total from an
 opaque blend; explicitly proprietary rows remain blocked. Regression failed
 before the fix; all46 resolver tests passed afterward. Scoring rescore follows.
+
+Owner: `generic_evidence.py::_mass_dominant_essential_canonical` consumes the
+existing `evidence_owner_canonicals` result — evidence: `rg -n
+'_mass_dominant_essential_canonical|owner_canonicals' scripts/scoring_v4/modules/generic_evidence.py`.
+Will NOT create: a floor magnitude or another owner selector. The same Folic Acid
+label had65mg calcium, so choosing the heaviest nutrient before scope silently
+removed the folate authority floor. Scope now filters the existing competitors
+before selection; non-nutrient purpose competitors still prevent a trace vitamin
+from earning a floor. Regression failed before the fix.203 focused checks passed.
+Real224672 now resolves by authority and earns the existing raw10-point nutrition
+floor (11.1 public), with an assessed explanation rather than false identity debt.
+Its old15.6 points came from calcium and are not restored.
