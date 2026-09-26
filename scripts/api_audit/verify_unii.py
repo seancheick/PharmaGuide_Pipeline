@@ -706,10 +706,16 @@ def _candidate_names(primary_name: str, aliases: list[str] | None = None) -> set
     return {name for name in names if name}
 
 
-def _gsrs_names(substance: dict) -> set[str]:
-    names = {_normalize_name(substance.get("_name"))}
-    for item in substance.get("names", []):
-        names.add(_normalize_name(item.get("name")))
+GSRS_SOURCE_TAG_RE = re.compile(r"(\s+\[[^\[\]]*\])+\s*$")
+
+
+def _gsrs_names(substance: dict, *, strip_source_tags: bool = False) -> set[str]:
+    names = set()
+    for raw in [substance.get("_name")] + [item.get("name") for item in substance.get("names", [])]:
+        if strip_source_tags and raw:
+            # GSRS appends the naming source: "CASCARA SAGRADA [MI]".
+            raw = GSRS_SOURCE_TAG_RE.sub("", raw)
+        names.add(_normalize_name(raw))
     return {name for name in names if name}
 
 
@@ -894,23 +900,40 @@ def _validate_substance_match(
     aliases: list[str] | None = None,
     allowed_cas: set[str] | None = None,
     entry_latin_name: str | None = None,
+    curated_unii: bool = False,
 ) -> tuple[bool, str | None, dict]:
     enrichment = extract_enrichment(substance)
     gsrs_name = enrichment.get("substance_name") or substance.get("_name") or "?"
 
     allowed_names = _candidate_names(primary_name, aliases)
     gsrs_names = _gsrs_names(substance)
-    matched_allowed_name = None
+    # Collect every entry name a GSRS name can match, so set iteration order never
+    # picks which match the preferred-name check below is judged against. An
+    # exact entry name wins, as in _matching_allowed_name.
+    matched_allowed_names = set()
     for gsrs_candidate in gsrs_names:
-        matched_allowed_name = _matching_allowed_name(gsrs_candidate, allowed_names)
-        if matched_allowed_name:
-            if _has_specificity_conflict(gsrs_candidate, matched_allowed_name, primary_name, entry_latin_name):
-                matched_allowed_name = None
-                continue
-            break
-    if not matched_allowed_name:
+        if gsrs_candidate in allowed_names:
+            candidates = {gsrs_candidate}
+        else:
+            candidates = {a for a in allowed_names if _matching_allowed_name(gsrs_candidate, {a})}
+        matched_allowed_names |= {
+            allowed for allowed in candidates
+            if not _has_specificity_conflict(gsrs_candidate, allowed, primary_name, entry_latin_name)
+        }
+    if not matched_allowed_names:
         return False, f"name mismatch: entry={primary_name} GSRS={gsrs_name}", enrichment
-    if _has_specificity_conflict(_normalize_name(gsrs_name), matched_allowed_name, primary_name, entry_latin_name):
+    # A curated UNII whose record GSRS also names with the entry's own name, source
+    # tag aside (FRANGULA PURSHIANA BARK carries "CASCARA SAGRADA [MI]"), is that
+    # entry: the part token in the preferred name is what the name means. It only
+    # waives the part check; one cross-listed name ("DIOSMIN [NDI]" on HESPERIDIN)
+    # never matches a record on its own, and a fill never picks a part this way.
+    named_for_entry = curated_unii and _normalize_name(primary_name) in _gsrs_names(
+        substance, strip_source_tags=True
+    )
+    if not named_for_entry and all(
+        _has_specificity_conflict(_normalize_name(gsrs_name), allowed, primary_name, entry_latin_name)
+        for allowed in matched_allowed_names
+    ):
         return False, f"name mismatch: entry={primary_name} GSRS={gsrs_name}", enrichment
 
     gsrs_cas = enrichment.get("cas")
@@ -1095,6 +1118,7 @@ def verify_flat_file(
                 aliases=aliases,
                 allowed_cas={existing_cas} if existing_cas else set(),
                 entry_latin_name=entry.get("latin_name"),
+                curated_unii=True,
             )
             if not is_valid:
                 results["rejected"].append({
@@ -1211,6 +1235,7 @@ def verify_iqm_file(
                 aliases=aliases,
                 allowed_cas=cas_values,
                 entry_latin_name=entry.get("latin_name"),
+                curated_unii=True,
             )
             if not is_valid:
                 results["rejected"].append({
