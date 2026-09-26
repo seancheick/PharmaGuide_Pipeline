@@ -817,6 +817,25 @@ def _recover_verified_primary_ingredient_matches(
                 continue
             entry_keys = _entry_identity_keys(entry)
             matched_keys = row_keys & entry_keys
+            if (
+                not matched_keys
+                and allow_with_existing_matches
+                and row_canonical_id == "protein"
+                and entry_id == "INGR_WHEY_PROTEIN"
+            ):
+                # Protein grams belong to the macro row; the disclosed source
+                # can live in the separate ingredient list. Reuse exact registry
+                # identities, never a product title or a generic protein alias.
+                # Every declared protein source must qualify: a whey/collagen
+                # mixture cannot transfer all its protein grams to whey.
+                sources = [
+                    source for source in _safe_list(product.get("inactiveIngredients"))
+                    if isinstance(source, dict)
+                    and _norm_text(source.get("raw_category")) == "protein"
+                    and source.get("raw_source_path")
+                ]
+                if sources and all(_row_identity_keys(source) & entry_keys for source in sources):
+                    matched_keys = set().union(*(_row_identity_keys(source) & entry_keys for source in sources))
             if not matched_keys:
                 continue
             if not existing_id and existing_identity_keys & entry_keys:

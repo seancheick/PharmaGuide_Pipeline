@@ -1273,3 +1273,18 @@ def test_protein_title_does_not_recover_evidence_for_source_free_macro():
     payload = score_evidence(product, owner_scoped=True)
     assert payload["metadata"]["recovered_matches"] == []
     assert payload["metadata"]["ingredient_points"] == {}
+
+
+def test_protein_macro_recovers_only_when_all_declared_sources_are_reviewed():
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _product(product_name="Protein Powder", ingredients=[
+        _ingredient(name="Protein", canonical_id="protein", quantity=25, unit="g")
+    ], matches=[])
+    product["inactiveIngredients"] = [{"name": "Whey Protein Isolate",
+        "raw_category": "protein", "source_section": "inactive",
+        "raw_source_path": "otheringredients.ingredients[0]"}]
+    payload = score_evidence(product, owner_scoped=True)
+    assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+    product["inactiveIngredients"].append({"name": "Collagen", "raw_category": "protein",
+        "source_section": "inactive", "raw_source_path": "otheringredients.ingredients[1]"})
+    assert score_evidence(product, owner_scoped=True)["metadata"]["recovered_matches"] == []

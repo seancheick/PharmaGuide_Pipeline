@@ -200,3 +200,17 @@ def test_identified_protein_source_keeps_training_evidence(enricher, term):
     study = next(e for e in enricher.databases["backed_clinical_studies"]["backed_clinical_studies"]
                  if e["id"] == "INGR_WHEY_PROTEIN")
     assert enricher._clinical_study_match([term], study) is not None
+
+
+def test_real_protein_source_in_ingredient_list_keeps_evidence(enricher):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    raw = json.loads((Path(__file__).parent / "fixtures" /
+                      "protein_evidence_294073_raw.json").read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    payload = score_evidence(product, owner_scoped=True)
+    assert "INGR_WHEY_PROTEIN" in payload["metadata"]["recovered_matches"]
+    assert payload["metadata"]["ingredient_points"]["protein"] > 0

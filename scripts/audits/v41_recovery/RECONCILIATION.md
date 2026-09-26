@@ -330,3 +330,26 @@ missing catalog/DB skips). A pre-existing omega fixture supplied 200 mg while ex
 credit despite the existing 376 mg boundary; it now supplies 500 mg, while the exact
 375/376 mg boundary remains separately pinned. No production rule weakened for a test.
 Combined frozen replay/full fast verification is recorded below when complete.
+
+### Protein correction acceptance finding: preserve disclosed source lists
+
+The first 1,353 frozen replay found 72 sports Evidence changes. Inspection of the
+largest movers (218854, 294073) showed genuine whey source rows in
+`inactiveIngredients`, while the quantity-owning active row is simply Protein.
+Narrowing aliases alone therefore caused an avoidable recovery regression.
+
+Owner: `generic_evidence._recover_verified_primary_ingredient_matches` (existing
+scoped recovery; verified by `rg '_recover_verified_primary|_row_identity_keys'`).
+Will NOT create: title-based evidence, a protein-source registry or new payload fields.
+The existing recovery now joins the primary protein macro to explicit protein
+source-list rows using the SAME clinical record identity keys. Every declared
+protein source must match; whey plus collagen cannot transfer the entire macro
+amount to whey. The source list must retain a raw label path. Other-ingredient
+rows do not become independently dosed actives. Missing source remains unproven.
+
+New source-list regression failed first; 70 focused checks then passed. The real
+Pure Encapsulations 294073 fixture passes current normalize -> enrich -> Evidence
+and recovers its whey record (22 real/matcher checks). The first broad suite was
+stopped after 2,524 passes when this replay finding required a code correction;
+it was NOT a completed acceptance run. Re-run final frozen comparison before the
+one completed full-fast checkpoint.
