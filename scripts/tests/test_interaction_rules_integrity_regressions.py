@@ -360,3 +360,41 @@ def test_bergamot_drug_rules_cite_bergamottin_not_an_osteosarcopenia_review():
             assert stale not in copy, (drug_class, stale)
     assert _pmid("39517207") not in json.dumps(rule)
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+NCCIH_SAW_PALMETTO = "https://www.nccih.nih.gov/health/saw-palmetto"
+
+
+def test_saw_palmetto_rules_drop_pancreatitis_and_alopecia_citations():
+    rule = _rule("RULE_IQM_SAW_PALMETTO_LIVER")
+    ttc = _sub_rule(rule, "condition_id", "ttc")
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+    antiplatelets = _sub_rule(rule, "drug_class_id", "antiplatelets")
+    nsaids = _sub_rule(rule, "drug_class_id", "nsaids")
+    pregnancy_lactation = rule["pregnancy_lactation"]
+
+    # 16800417 is a pancreatitis case, 30980598 a hair-loss review, and
+    # 10902065 does not name saw palmetto.
+    assert pregnancy_lactation["sources"] == [NCCIH_SAW_PALMETTO, _pmid("16985705")]
+    assert ttc["sources"] == [_pmid("16985705"), _pmid("31002161"), NCCIH_SAW_PALMETTO]
+    assert anticoagulants["sources"] == [
+        _pmid("11489067"), _pmid("20120986"), _pmid("18090773"), _pmid("19719333"),
+    ]
+    assert ttc["evidence_level"] == "theoretical"
+    assert (ttc["severity"], anticoagulants["severity"]) == ("caution", "monitor")
+    assert pregnancy_lactation["pregnancy_category"] == "avoid"
+    assert pregnancy_lactation["lactation_category"] == "avoid"
+
+    assert "has not been studied" in ttc["mechanism"]
+    assert "coagulopathy" in anticoagulants["mechanism"]
+    copy = json.dumps(rule).lower()
+    for stale in (
+        "can impair semen quality",
+        "may adversely affect semen parameters",
+        "no documented case reports of saw palmetto altering inr",
+        "has mild antiplatelet",
+    ):
+        assert stale not in copy, stale
+    for sub in (antiplatelets, nsaids):
+        assert "platelet tests in volunteers were normal" in sub["alert_body"]
+    assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review

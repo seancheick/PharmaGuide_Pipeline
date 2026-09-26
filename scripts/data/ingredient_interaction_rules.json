@@ -133,7 +133,8 @@
       "2026-09-25: RULE_IQM_CASCARA_SAGRADA_PREGNANCY cited PMID 32876395 (a cascaroside chromatography paper) for every sub-rule. It now cites the EU herbal monograph on cascara (EMA/HMPC/726270/2016 Rev.1), NIH LiverTox and LactMed Cascara, and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state (liver action now matches its caution severity). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-25: RULE_IQM_SENNA_PREGNANCY kidney_disease and cardiac_glycosides cited PMID 36702448 (a Cassiae Semen review: Cassia obtusifolia/tora seeds, not senna). They now cite the EU herbal monographs on senna leaf and pod (EMA/HMPC/625849/2015 and EMA/HMPC/228761/2016, Rev.1) and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-25: RULE_IQM_RED_CLOVER drug:anticoagulants cited PMID 9464451 (a soybean thyroid-peroxidase paper). It now cites Heck 2000 (PMID 10902065, lists red clover), the Hall 2018 subdural-haemorrhage case (PMID 29541484) and MSKCC About Herbs; thyroid_disorder adds the Huser 2018 isoflavone safety review (PMID 30132047) beside 9464451; bleeding_disorders no longer says no bleeding case has been documented. Coumestrol/vitamin K antagonist claims removed. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL drug sub-rules cited PMID 39517207 (bergamot for osteosarcopenic obesity) and, for statins/CCBs, PMID 23184849 (a grapefruit review) as if they showed a bergamot interaction. They now cite bergamot-juice furanocoumarin content (PMID 18830151), the bergamottin-felodipine study (PMID 15592332) and the grapefruit review (PMID 23184849, drug-specific data); mechanisms say the concern is inferred from grapefruit and evidence_level moved from established to limited. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL drug sub-rules cited PMID 39517207 (bergamot for osteosarcopenic obesity) and, for statins/CCBs, PMID 23184849 (a grapefruit review) as if they showed a bergamot interaction. They now cite bergamot-juice furanocoumarin content (PMID 18830151), the bergamottin-felodipine study (PMID 15592332) and the grapefruit review (PMID 23184849, drug-specific data); mechanisms say the concern is inferred from grapefruit and evidence_level moved from established to limited. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER pregnancy_lactation cited PMID 16800417 (a pancreatitis case), ttc cited PMID 30980598 (a hair-loss review) for a semen-impairment claim no saw palmetto study makes, and anticoagulants cited PMID 10902065, which does not name saw palmetto. They now cite NCCIH Saw Palmetto, PMID 16985705 (in vitro 5-alpha-reductase inhibition, no clinical DHT fall), PMID 31002161 (never studied in male infertility) and, for anticoagulants, the bleeding cases (11489067, 20120986), an in vivo platelet study (18090773) and an interaction review (19719333). ttc evidence_level probable -> theoretical; anticoagulant/antiplatelet/NSAID alert copy no longer says saw palmetto has antiplatelet activity. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -9964,11 +9965,12 @@
         {
           "condition_id": "ttc",
           "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Saw palmetto (Serenoa repens) inhibits 5-alpha-reductase (both type 1 and type 2), reducing conversion of testosterone to the more potent dihydrotestosterone (DHT). In males, this mechanism is the basis for its use in benign prostatic hyperplasia and androgenic alopecia. However, 5-alpha-reductase inhibition in men who are TTC can impair semen quality, reduce seminal fluid volume, and potentially reduce sperm motility. Additionally, saw palmetto may have anti-androgenic effects that interfere with male reproductive hormone signaling needed for spermatogenesis.",
-          "action": "Men who are actively trying to conceive should discontinue saw palmetto supplementation. 5-alpha-reductase inhibitors (including saw palmetto) may adversely affect semen parameters and male fertility. Discuss with reproductive urologist if fertility is a concern.",
+          "evidence_level": "theoretical",
+          "mechanism": "Saw palmetto extract inhibits both 5-alpha-reductase isoenzymes in vitro, the enzyme finasteride blocks, but clinical studies have not shown a fall in serum DHT or PSA. Its effect on semen quality or male fertility has not been studied in humans. NCCIH states saw palmetto may be unsafe during pregnancy, which matters for anyone who could conceive while taking it.",
+          "action": "If you are trying to conceive, discuss saw palmetto with your clinician: it may be unsafe in early pregnancy, and its effect on male fertility has not been studied.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30980598/",
+            "https://pubmed.ncbi.nlm.nih.gov/16985705/",
+            "https://pubmed.ncbi.nlm.nih.gov/31002161/",
             "https://www.nccih.nih.gov/health/saw-palmetto"
           ],
           "alert_headline": "Hormone-active \u2014 discuss while TTC",
@@ -10035,14 +10037,16 @@
           "drug_class_id": "anticoagulants",
           "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "Theoretical concern based on the case report of bleeding and proposed COX-mediated antiplatelet activity. No documented case reports of saw palmetto altering INR or warfarin activity. Risk is considered low at standard doses.",
+          "mechanism": "Bleeding concerns rest on case reports: severe intraoperative haemorrhage with a prolonged bleeding time that normalised after saw palmetto was stopped, and hematuria with coagulopathy in another user. In 10 volunteers, 2 weeks of saw palmetto at the recommended dose did not affect platelet function, and a systematic review of herb-drug interactions found none reported for saw palmetto. An additive effect with anticoagulants is theoretical and appears low at standard doses.",
           "action": "Inform your prescriber if taking saw palmetto while on anticoagulant therapy. Monitor for unusual bleeding or bruising.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11489067/",
-            "https://pubmed.ncbi.nlm.nih.gov/10902065/"
+            "https://pubmed.ncbi.nlm.nih.gov/20120986/",
+            "https://pubmed.ncbi.nlm.nih.gov/18090773/",
+            "https://pubmed.ncbi.nlm.nih.gov/19719333/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Saw palmetto has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding saw palmetto and ask about INR or bleeding checks.",
+          "alert_body": "Bleeding has been reported in a few saw palmetto users, though platelet tests in volunteers were normal. If you take an anticoagulant, tell your prescriber and watch for unusual bruising.",
           "informational_note": "Saw palmetto can affect clotting \u2014 relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -10085,7 +10089,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/18090773/"
           ],
           "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "Saw palmetto has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding saw palmetto.",
+          "alert_body": "Bleeding has been reported in a few saw palmetto users, though platelet tests in volunteers were normal. If you take aspirin or clopidogrel, talk to your prescriber before adding it.",
           "informational_note": "Saw palmetto can affect platelet function \u2014 relevant to people on antiplatelets.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -10127,7 +10131,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/18090773/"
           ],
           "alert_headline": "May add to NSAID bleeding risk",
-          "alert_body": "Saw palmetto has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding saw palmetto.",
+          "alert_body": "Bleeding has been reported in a few saw palmetto users, though platelet tests in volunteers were normal. If you take NSAIDs regularly, talk to your prescriber before adding it.",
           "informational_note": "Saw palmetto can affect platelet function \u2014 relevant to people on NSAIDs.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -10193,13 +10197,14 @@
         "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "theoretical",
-        "mechanism": "Saw palmetto has antiandrogenic activity; safety data in pregnancy and lactation are absent.",
+        "mechanism": "Saw palmetto extract has antiandrogenic, 5-alpha-reductase-inhibiting activity in vitro, and NCCIH states it may be unsafe during pregnancy or while breastfeeding.",
         "notes": "Not recommended during pregnancy or breastfeeding.",
         "sources": [
-          "https://pubmed.ncbi.nlm.nih.gov/16800417/"
+          "https://www.nccih.nih.gov/health/saw-palmetto",
+          "https://pubmed.ncbi.nlm.nih.gov/16985705/"
         ],
         "alert_headline": "Not recommended in pregnancy or breastfeeding",
-        "alert_body": "Saw palmetto has antiandrogenic activity with no pregnancy or lactation safety data. If you are pregnant or breastfeeding, do not use saw palmetto supplements.",
+        "alert_body": "Saw palmetto has antiandrogenic activity in lab studies and may be unsafe in pregnancy or breastfeeding. If you are pregnant or breastfeeding, do not use saw palmetto supplements.",
         "informational_note": "Saw palmetto is antiandrogenic \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
         "profile_gate": {
           "gate_type": "profile_flag",

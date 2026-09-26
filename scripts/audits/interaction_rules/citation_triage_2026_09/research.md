@@ -74,3 +74,35 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   "consistent clinical or regulatory backing". Severities unchanged (policy; reported to Sean).
 - Removed as unsourced: "statin AUC 5-15×", "P-gp inhibition" for DOACs, "effect is documented but
   small" for contraceptives, "dramatically raising drug levels".
+
+## RULE_IQM_SAW_PALMETTO_LIVER — re-sourced (pregnancy_lactation, anticoagulants, ttc; sibling alert copy)
+
+- Ghost: **PMID 16800417** = "Saw palmetto-induced pancreatitis" (South Med J 2006), a hepatitis +
+  pancreatitis case; cited for pregnancy_lactation (it stays on liver_disease, where it fits).
+- **NCCIH Saw Palmetto** (https://www.nccih.nih.gov/health/saw-palmetto): "Saw palmetto may be unsafe
+  for use during pregnancy or while breastfeeding"; "Saw palmetto does not appear to affect readings
+  of PSA". Nothing on fertility or bleeding.
+- **PMID 16985705** (Fagelman, Rev Urol 2001): "in vitro some studies suggest that liposterolic
+  extract of the plant has antiandrogenic effects that inhibit the type 1 and type 2 isoenzymes of
+  5alpha-reductase; however there are no clinical studies that show any decrease in serum
+  dihydrotestosterone or prostate-specific antigen".
+- **PMID 31002161** (Cannarella, systematic review 2019): Serenoa repens extracts "has never been
+  investigated for male infertility". (Rat data, PMID 34161166, found increased sperm counts.) The
+  ttc claim that saw palmetto "can impair semen quality, reduce seminal fluid volume ... sperm
+  motility" has no saw palmetto source; it is finasteride extrapolation. PMID 30980598 (herbal
+  alternatives in androgenetic alopecia) was the ttc citation; it supports 5-alpha-reductase
+  inhibition only and is replaced by 16985705. ttc evidence_level probable → theoretical.
+- Ghost for anticoagulants: **PMID 10902065** (Heck 2000) does not list saw palmetto in its abstract
+  (full text not open); dropped as unverifiable for this subject.
+- **PMID 11489067** (Cheema 2001): severe intraoperative haemorrhage; "His bleeding time which was
+  prolonged, normalized few days after he stopped the herb."
+- **PMID 20120986** (Villanueva 2009): "a case of hematuria and coagulopathy in a patient who was
+  using saw palmetto" — contradicts the old text "No documented case reports of saw palmetto
+  altering INR".
+- **PMID 18090773** (Beckert 2007): saw palmetto at the manufacturer's dose for 2 weeks in 10
+  volunteers, PFA-100: "In vivo platelet function was not affected by the administration of any
+  herbal agent". Contradicts the templated alert copy "Saw palmetto has mild antiplatelet
+  activity" on anticoagulants, antiplatelets and nsaids.
+- **PMID 19719333** (Izzo & Ernst systematic review 2009): "No interactions have been reported for
+  saw palmetto (Serenoa repens)."
+- Severities unchanged.
