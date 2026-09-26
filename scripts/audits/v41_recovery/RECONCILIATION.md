@@ -1026,3 +1026,59 @@ Latest fetched observation: main 6767a383, origin/main 6c4a130e; before this
 receipt candidate a0eee3e5 has 160 main-only / 25 candidate-only commits.
 Other agents continue changing main. Combined state unverified; no integration,
 push or release. Preserve the active worktree and partial brand diagnostics.
+
+
+2026-09-26 approved fiber decisions, final implementation at 7cf610e1. Raw DSLD
+inspection established the section contract before code changed:
+`ingredientRows` is the active/Supplement Facts source;
+`otheringredients.ingredients` is the inactive source. Nutrition is a separate
+consumer of the same label ledger, not a second ingredient classifier. The
+typed `declared_active_fiber` projection exists only when `nutrition_summary`
+grams and source amount/unit join to the exact `raw_source_path` of a current
+active row whose cleaner-owned identity is scoreable canonical fiber and whose
+raw DSLD category is fiber. Title, unmatched totals, inactive/other rows and
+non-fiber rows cannot create the projection. Persisted projections are caches:
+the scoring boundary rejects them when the current exact join no longer exists.
+
+The exact `Konjac root extract` alias was removed from the proprietary PGX form;
+no replacement alias or clinical claim was added. PGX remains the documented
+glucomannan/xanthan-gum/sodium-alginate complex. Fresh raw results: DSLD
+178797, 270961, 277404, 305905, 67530 and fixture 228873 move from not_scored to
+scored at 52.0, 58.5, 47.7, 49.4, 61.9 and 60.5 through one mapped
+`declared_active_fiber` row. 252564 and 255063 move from held contradictory PGX
+identity to scoreable generic fiber at 63.0; 259395 remains 61.8 with identical
+pillars. Evidence credit remains zero where no applicable clinical record
+exists. Inactive ingredients supplied no scoring row in every probe.
+
+Nutrition export remains independent and complete: `build_final_db.py` emits
+`nutrition_detail` plus the canonical `display_ingredients` label ledger, and
+Flutter filters all nutrition label rows into its separate Nutrition Facts
+card. Real raw/export probes retained cholesterol, sugars, saturated/trans fat,
+sodium and nested rows as printed; the Flutter card regression passed 9 tests.
+
+Clean-HEAD replay against merge baseline dafdf860 captured the same 1,353 frozen
+inputs in both arms with zero score/status/route/distribution changes; those
+stored enriched inputs did not include the eight freshly re-enriched affected
+labels. Affected raw-label artifacts are
+`~/pg_quality/candd/runs/fiber_affected_{baseline_dafdf860,candidate_7cf610e1}.json`;
+replay artifacts are `fiber_{baseline_dafdf860,candidate_7cf610e1}.jsonl` and
+`fiber_report_7cf610e1.json` in the same directory.
+
+Fresh review found and then verified the fix for one P1 stale-native-evidence
+bypass. Owner removal, inactive ownership, source-path/amount/unit mismatch now
+reject persisted fiber evidence and yield not_scored; a valid updated dose
+replaces the stale row without duplication. Post-merge focused pipeline batch:
+92 passed; stale-evidence batch: 9 passed; IQM integrity batch: 22 passed.
+
+Owner: scripts/scoring_input_contract.py::_derive_declared_active_fiber_evidence
+and _product_scoring_evidence_rows — evidence: matrix concepts
+scoring_input_contract and mapping_coverage_contract plus fresh raw probes.
+Owner: scripts/scoring_v4/route_features.py::MATERIAL_FIBER_CANONICALS — evidence:
+matrix concept fiber_identity and imported canonical set.
+Owner: scripts/enrich_supplements_v3.py::_collect_nutrition_summary and
+scripts/build_final_db.py::build_detail_blob — evidence: exact source-path probe
+and Flutter canonical-ledger consumer.
+Will NOT create: another normalizer, fiber registry, title inference, inactive
+fallback, public/export field, status, verdict or app-side scoring rule.
+Commits: b42b5b39, a40880a9, 7cf610e1. Full fast and final fresh 12-brand
+acceptance remain pending; no push or release.
