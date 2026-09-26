@@ -166,7 +166,7 @@ from match_ledger import (
     METHOD_UNII_FORM_EXACT,
     METHOD_ALTERNATE_NAME,
 )
-from identity.interaction import interaction_subject_ids
+from identity.interaction import interaction_subject_refs
 from identity.safety import (
     has_explicit_form_evidence,
     negative_match_terms_veto,
@@ -344,7 +344,7 @@ IQM_CANONICAL_CROSS_PARENT_ALLOWLIST: Dict[Tuple[str, str], Tuple[str, ...]] = {
         "vitamin k1",
     ),
     # Menaquinones are vitamin K2; interaction rules still reach vitamin K
-    # through interaction_subject_ids.
+    # through the interaction subject family.
     ("vitamin_k", "vitamin_k2"): (
         "menaquinone",
         "menaquinone-4",
@@ -19000,16 +19000,12 @@ class SupplementEnricherV3:
                 continue
 
             # A vitamer also answers to rules authored on its family (vitamin
-            # K1/K2 -> vitamin K); each rule's own form_scope still decides.
+            # K1/K2 -> vitamin K) and a botanical to its IQM twin (garlic bulb
+            # -> garlic); each rule's own form_scope still decides.
             matched_rules = []
             seen_rule_ids: set = set()
-            subject_ids = (
-                interaction_subject_ids(subject["canonical_id"])
-                if subject["db"] == "ingredient_quality_map"
-                else [subject["canonical_id"]]
-            )
-            for subject_id in subject_ids:
-                for candidate in rule_index.get((subject["db"], subject_id), []):
+            for subject_ref in interaction_subject_refs(subject["db"], subject["canonical_id"]):
+                for candidate in rule_index.get(subject_ref, []):
                     if id(candidate) not in seen_rule_ids:
                         seen_rule_ids.add(id(candidate))
                         matched_rules.append(candidate)

@@ -8365,10 +8365,12 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
         canonical_id = normalize_interaction_tag(value)
         if not canonical_id:
             return
+        ingredient_names.add(canonical_id)
         # The app joins curated interactions on these tags, so a vitamer also
-        # carries its family (vitamin K2 -> vitamin_k for the warfarin rule).
+        # carries its family (vitamin K2 -> vitamin_k for the warfarin rule)
+        # and a botanical its IQM twin (garlic_bulb -> garlic). Category flags
+        # read ingredient_names and stay on the label's own identity.
         for subject_id in interaction_subject_ids(canonical_id):
-            ingredient_names.add(subject_id)
             if subject_id not in seen_key_tags:
                 seen_key_tags.add(subject_id)
                 key_tags.append(subject_id)
