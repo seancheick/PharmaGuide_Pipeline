@@ -54,7 +54,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-09-25",
+    "last_updated": "2026-09-26",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -62081,7 +62081,7 @@
         }
       }
     },
-    "cui": "C0885670",
+    "cui": "C0031562",
     "rxcui": "1362735",
     "match_rules": {
       "priority": 0,
@@ -62097,7 +62097,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "",
+    "cui_note": "Corrected 2026-09-26: C0885670 resolves to 'Phlorizinum, trituration of a substance discovered in the fresh bark of trees, phlorizin, Homeopathic preparation' (a homeopathic trituration). C0031562 'phlorhizin' (Organic Chemical, Pharmacologic Substance, Biologically Active Substance; MSH MH Phlorhizin, RXNORM IN, MTHSPL PHLORIZIN) is the compound: UMLS maps this entry's rxcui 1362735 to it, and RxNav 1362735 carries UNII CU9S17279X (anhydrous PHLORIZIN, InChIKey IOUVKUPGCMBWBT-QNDFHXLGSA-N = PubChem CID 6072).",
     "external_ids": {
       "unii": "CU9S17279X"
     },
