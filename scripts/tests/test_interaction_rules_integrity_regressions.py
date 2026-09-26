@@ -281,5 +281,8 @@ def test_senna_kidney_and_digoxin_rules_cite_the_eu_monographs():
         "3.5 to 3.0",
         "binding affinity",
         "depends on kidney clearance",
+        "long-term stimulant laxative use potentiates",
+        "makes digoxin more toxic",
     ):
         assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review

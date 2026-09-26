@@ -131,7 +131,7 @@
       "2026-05-26: Added profile-gated fluoroquinolone mineral timing rules for calcium, iron, magnesium, and zinc; active antibiotic context only.",
       "2026-09-21: RULE_IQM_VITAMIN_K_MK7_FORM_ONLY form_scope named 'menaquinone_7_mk7', a key no IQM form carries, so the rule never fired; it now names the vitamin_k2 MK-7 forms. Vitamin K1/K2 rows reach both vitamin K rules through the interaction subject family (identity/interaction.py) after the 2026-07-28 K1/K2/K3 identity split. Clinical content unchanged.",
       "2026-09-25: RULE_IQM_CASCARA_SAGRADA_PREGNANCY cited PMID 32876395 (a cascaroside chromatography paper) for every sub-rule. It now cites the EU herbal monograph on cascara (EMA/HMPC/726270/2016 Rev.1), NIH LiverTox and LactMed Cascara, and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state (liver action now matches its caution severity). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-25: RULE_IQM_SENNA_PREGNANCY kidney_disease and cardiac_glycosides cited PMID 36702448 (a Cassiae Semen review: Cassia obtusifolia/tora seeds, not senna). They now cite the EU herbal monographs on senna leaf and pod (EMA/HMPC/625849/2015 and EMA/HMPC/228761/2016, Rev.1) and the digoxin prescribing information; mechanisms were rewritten to what those sources state. Severities unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-25: RULE_IQM_SENNA_PREGNANCY kidney_disease and cardiac_glycosides cited PMID 36702448 (a Cassiae Semen review: Cassia obtusifolia/tora seeds, not senna). They now cite the EU herbal monographs on senna leaf and pod (EMA/HMPC/625849/2015 and EMA/HMPC/228761/2016, Rev.1) and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -18875,7 +18875,7 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Hypokalaemia from long-term stimulant laxative use potentiates the action of cardiac glycosides (EU herbal monographs on senna), and hypokalaemia may predispose to digoxin toxicity (digoxin prescribing information).",
+          "mechanism": "Hypokalaemia from long-term laxative abuse potentiates the action of cardiac glycosides (EU herbal monographs on senna), and hypokalaemia may predispose to digoxin toxicity (digoxin prescribing information).",
           "action": "Avoid senna with digoxin or other cardiac glycosides. If a laxative is required, use an osmotic agent and monitor serum potassium and digoxin levels.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf",
@@ -18883,8 +18883,8 @@
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
           "alert_headline": "Can increase digoxin toxicity",
-          "alert_body": "Senna-induced potassium loss makes digoxin more toxic. If you take digoxin or another cardiac glycoside, talk to your prescriber and discuss a gentler laxative instead.",
-          "informational_note": "Senna lowers potassium \u2014 relevant to people on digoxin or other cardiac glycosides.",
+          "alert_body": "Senna-induced potassium loss can make digoxin more toxic. If you take digoxin or another cardiac glycoside, talk to your prescriber and discuss a gentler laxative instead.",
+          "informational_note": "Senna can lower potassium \u2014 relevant to people on digoxin or other cardiac glycosides.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -18943,7 +18943,7 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-09-25",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
