@@ -146,6 +146,22 @@ def safety_rule_governs_role(entry: Dict[str, Any], role: Any) -> bool:
     return not roles or _normalize_safety_enum(role) in roles
 
 
+def safety_policy_status_for_role(entry: Dict[str, Any], role: Any) -> str:
+    """The authored policy state for this label role.
+
+    One chemical identity can have a settled policy as a declared active form
+    and an unsettled policy as an inactive excipient. Role-specific states
+    keep identity matching shared without turning either decision into a
+    blanket rule for the other role.
+    """
+    by_role = entry.get("policy_verification_status_by_role")
+    if isinstance(by_role, dict):
+        role_status = str(by_role.get(role) or "").strip().lower()
+        if role_status:
+            return role_status
+    return str(entry.get("policy_verification_status") or "").strip().lower()
+
+
 def safety_rule_out_of_role_scope(entry: Dict[str, Any], role: Any) -> bool:
     """True when a rule explicitly does not govern this label role at all.
 
