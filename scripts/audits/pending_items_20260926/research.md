@@ -82,3 +82,18 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   2014, PMC4464477) reports 0.5 g capsules "at the high end of the recommended dose range", not a daily
   total. No source found supports ">1000 mg"; it is the authored threshold from e0978c2e (2026-04-27
   dose-gating pass). Value and severities unchanged.
+
+## RULE_IQM_NAC_BLEEDING: threshold citation and floors
+- PMID 22467323 (efetch 2026-09-26): "Albuminuria, proteinuria, and urinary albumin to protein ratio in
+  chronic kidney disease." No NAC: a ghost in `dose_thresholds[anticoagulants].note`.
+- PMID 21600014 (efetch 2026-09-26): "Therapeutic potential of N-acetylcysteine as an antiplatelet agent in
+  patients with type-2 diabetes." Blood from 13 patients incubated with NAC 10-100 micromolar "at
+  concentrations attainable with tolerable oral dosing"; "NAC inhibited thrombin- and ADP-induced platelet
+  aggregation in vitro". No oral mg dose stated, so it cannot establish the 600 mg floor or "~100-1000 mg oral".
+- PMID 39881835 (Oktar S et al. Sovrem Tekhnologii Med 2024, doi 10.17691/stm2024.16.4.06, efetch
+  2026-09-26): patients on NAC 600 mg/day for 7-14 days; D-dimer fell and factor VII rose "but these changes
+  were not significant (p=0.069 and p=0.062)"; "Other coagulation and hemogram values did not change".
+  Platelet aggregation not measured.
+- No source found for a 1200 mg cut-off; it stays the authored threshold (escalation only).
+- Decision applied: Sean, D8 (2026-09-26), remove a floor its source does not establish. Floors removed on
+  bleeding_disorders and anticoagulants; both now presence, severity monitor unchanged.

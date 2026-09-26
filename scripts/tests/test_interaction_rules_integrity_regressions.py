@@ -1099,3 +1099,20 @@ def test_ginseng_warfarin_threshold_cites_the_warfarin_trial_not_a_gastric_cance
     assert _pmid("15238367") in threshold["note"]
     assert "authored" in threshold["note"]
     assert "high-dose ginseng may antagonize" not in threshold["note"]
+
+
+def test_nac_bleeding_rule_cites_nac_platelet_evidence_and_invents_no_floor():
+    """PMID 22467323 is a CKD albuminuria study, not NAC. The NAC platelet source
+    (PMID 21600014) is in vitro at 10-100 micromolar and states no oral dose, so
+    it cannot carry a 600 mg floor (Sean, D8: remove a floor its source does not
+    establish). Patients on 600 mg/day showed no significant coagulation change
+    (PMID 39881835). Receipt: scripts/audits/pending_items_20260926/research.md."""
+    rule = _rule("RULE_IQM_NAC_BLEEDING")
+    assert "22467323" not in json.dumps(rule)
+    for key, target in (("condition_id", "bleeding_disorders"), ("drug_class_id", "anticoagulants")):
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub, target
+        assert sub["materiality"] == "presence", target
+    note = next(t for t in rule["dose_thresholds"] if t.get("target_id") == "anticoagulants")["note"]
+    assert _pmid("21600014") in note and _pmid("39881835") in note
+    assert "authored" in note

@@ -178,7 +178,8 @@
       "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL statins, calcium_channel_blockers and antiarrhythmics alert copy said 'talk to your prescriber before using bergamot', weaker than their unchanged avoid severity and action; it now says 'avoid bergamot products unless your prescriber says otherwise'. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_CHONDROITIN drug:anticoagulants copy said a case report showed INR 2.6 to 4.1, a figure no readable source states; it now gives Knudsen & Sokol 2008 (PMID 18363538): 2.3 to 3.9 after escalating to glucosamine 1500 mg / chondroitin 1200 mg twice daily. Two dose floors credited that 1200 mg BID figure to PMID 14986566 (a letter without an abstract); they now cite 18363538. Floor values unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_BLACK_SEED_OIL_DIABETES dose-floor rationale (7 sub-rules) no longer says the blood-pressure meta-analysis PMID 27512971 also shows glucose/lipid lowering; it reports blood pressure only. Floor value unchanged.",
-      "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL dose-floor rationale (3 sub-rules) no longer attributes a human GLA dose (~300 mg) and bleeding time to PMID 19783511, a rabbit coagulation study; it states what the study shows and that the 3 g/day oil floor is the clinical-team threshold (sign-off 2026-04-24). Floor value unchanged."
+      "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL dose-floor rationale (3 sub-rules) no longer attributes a human GLA dose (~300 mg) and bleeding time to PMID 19783511, a rabbit coagulation study; it states what the study shows and that the 3 g/day oil floor is the clinical-team threshold (sign-off 2026-04-24). Floor value unchanged.",
+      "2026-09-26: RULE_IQM_NAC_BLEEDING anticoagulants threshold note cited PMID 22467323, a CKD albuminuria study (ghost); it now cites the in vitro NAC platelet study (PMID 21600014) and a 600 mg/day human coagulation study with no significant change (PMID 39881835), and calls >1200 mg/day the authored threshold. The 600 mg/day floors on bleeding_disorders and anticoagulants are removed (Sean, D8: remove a floor its source does not establish): PMID 21600014 is in vitro and states no oral dose. Both sub-rules now fire on presence; severities and thresholds unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interaction_rules": [
@@ -19187,16 +19188,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 600,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "low",
-            "confidence_basis": "weak_signal_conservative",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/21600014/",
-            "rationale": "NAC antiplatelet effect maps to ~100-1000 mg oral (in vitro; PMID 21600014); in vivo it did not clearly increase bleeding. Soft signal, conservative 600 mg floor."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -19263,16 +19255,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 600,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "low",
-            "confidence_basis": "weak_signal_conservative",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/21600014/",
-            "rationale": "NAC antiplatelet effect maps to ~100-1000 mg oral (in vitro; PMID 21600014); in vivo it did not clearly increase bleeding. Soft signal, conservative 600 mg floor."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -19356,7 +19339,7 @@
           "unit": "mg",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor",
-          "note": "High-dose NAC (>1.2g/day) may influence platelet aggregation. https://pubmed.ncbi.nlm.nih.gov/22467323/",
+          "note": "NAC inhibited thrombin- and ADP-induced platelet aggregation in vitro at 10-100 micromolar, concentrations the authors call attainable with tolerable oral dosing (https://pubmed.ncbi.nlm.nih.gov/21600014/). In patients taking 600 mg/day for 7-14 days, coagulation and blood-count values did not change significantly (https://pubmed.ncbi.nlm.nih.gov/39881835/). No source gives a 1200 mg cut-off: >1200 mg/day is the authored threshold.",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
