@@ -61,7 +61,7 @@
       "vitamins": 25
     },
     "schema_version": "5.5.6",
-    "last_updated": "2026-09-22",
+    "last_updated": "2026-09-25",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -69651,7 +69651,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Cascara Sagrada (Frangula purshiana bark). Contains cascarosides A-D (anthraquinone glycosides). Stimulant laxative acting on colonic smooth muscle. FDA reclassified as Category III (insufficient data) in 2002 but still legal in supplements. UNII 4VBP01X99F, CAS 8015-89-2. B31 audit 2026-04-25: pre-absorption hydrolysis (PMID:30321134, PMID:22982073). Active at colonic lumen; systemic F low.",
+        "notes": "Cascara Sagrada (Frangula purshiana bark). Contains cascarosides A-D (anthraquinone glycosides). Stimulant laxative acting on colonic smooth muscle. FDA's 2002 final rule (67 FR 31125) deemed cascara not generally recognized as safe and effective (category II) for OTC laxative drug products after requested carcinogenicity data were not submitted; the rule does not address dietary supplements. UNII 4VBP01X99F, CAS 8015-89-2. B31 audit 2026-04-25: pre-absorption hydrolysis (PMID:30321134, PMID:22982073). Active at colonic lumen; systemic F low.",
         "aliases": [
           "cascara sagrada extract",
           "cascara sagrada bark",
