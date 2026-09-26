@@ -168,7 +168,8 @@
       "2026-09-26: RULE_IQM_WHITE_WILLOW_BARK_BLEEDING mechanisms no longer call the aspirin comparison in PMID 11345689 randomised: only willow vs placebo was randomised; the 100 mg aspirin group was a separate cohort. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER ttc and pregnancy_lactation now keep their source's hedge (PMID 16985705: 'in vitro some studies suggest' 5-alpha-reductase inhibition) instead of stating it as settled. Found by fresh-context review. Severities, categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES drug:sedatives action no longer tells people to avoid high doses when driving; its sources report relaxation without drowsiness (PMID 18296328) and no anxiolytic effect over placebo (PMID 35378276). Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_HORNY_GOAT_WEED_HEART condition:heart_disease action no longer states '(extreme hypotension risk)' as a property of horny goat weed; it keeps 'do not combine with nitrates' and says the severe hypotension is documented for sildenafil, with icariin's own effect much weaker and unmeasured. Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_HORNY_GOAT_WEED_HEART condition:heart_disease action no longer states '(extreme hypotension risk)' as a property of horny goat weed; it keeps 'do not combine with nitrates' and says the severe hypotension is documented for sildenafil, with icariin's own effect much weaker and unmeasured. Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL statins, calcium_channel_blockers and antiarrhythmics alert copy said 'talk to your prescriber before using bergamot', weaker than their unchanged avoid severity and action; it now says 'avoid bergamot products unless your prescriber says otherwise'. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -15413,7 +15414,7 @@
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Muscle-toxicity risk with statins",
-          "alert_body": "If you take a statin, talk to your prescriber before using bergamot. Like grapefruit, it contains bergamottin, which can raise some statin levels and the risk of muscle damage.",
+          "alert_body": "If you take a statin, avoid bergamot products unless your prescriber says otherwise. Like grapefruit, bergamot contains bergamottin, which can raise some statin levels and muscle-damage risk.",
           "informational_note": "Grapefruit/bergamot interact with simvastatin and lovastatin \u2014 relevant to anyone on those statins.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -15449,7 +15450,7 @@
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "May lower blood pressure too much",
-          "alert_body": "If you take a calcium channel blocker, talk to your prescriber before using bergamot. Like grapefruit, it contains bergamottin, which can raise felodipine levels.",
+          "alert_body": "If you take a calcium channel blocker, avoid bergamot products unless your prescriber says otherwise. Like grapefruit, bergamot contains bergamottin, which can raise felodipine levels.",
           "informational_note": "Grapefruit/bergamot affect calcium channel blockers \u2014 relevant to anyone on felodipine, nifedipine, or related drugs.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -15521,7 +15522,7 @@
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Heart-rhythm risk with amiodarone",
-          "alert_body": "If you take amiodarone, talk to your prescriber before using bergamot. Like grapefruit, it contains bergamottin, which can raise amiodarone levels and the risk of abnormal heart rhythms.",
+          "alert_body": "If you take amiodarone, avoid bergamot products unless your prescriber says otherwise. Like grapefruit, bergamot contains bergamottin, which can raise amiodarone levels and rhythm risk.",
           "informational_note": "Grapefruit/bergamot stack QT risk with amiodarone.",
           "profile_gate": {
             "gate_type": "drug_class",

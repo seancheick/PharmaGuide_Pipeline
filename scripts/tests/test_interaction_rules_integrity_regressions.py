@@ -359,6 +359,9 @@ def test_bergamot_drug_rules_cite_bergamottin_not_an_osteosarcopenia_review():
                       "documented but small", "mildly"):
             assert stale not in copy, (drug_class, stale)
     assert _pmid("39517207") not in json.dumps(rule)
+    # Alert verb matches the unchanged "avoid" severity.
+    for drug_class in ("statins", "calcium_channel_blockers", "antiarrhythmics"):
+        assert "avoid bergamot products" in _sub_rule(rule, "drug_class_id", drug_class)["alert_body"]
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
 
 
