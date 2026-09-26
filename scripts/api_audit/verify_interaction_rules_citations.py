@@ -74,6 +74,9 @@ TRAILING_PART_WORDS = {
     "root", "leaf", "bark", "seed", "berry", "fruit", "herb", "flower",
     "extract", "powder", "oil", "juice",
 }
+# Ordinary words left by stripping a part word; they name no ingredient.
+GENERIC_HEADS = {"black", "fish", "green", "mate", "olive", "red", "sea", "sweet", "white",
+                 "whole", "wild"}
 
 # Stems matched as word prefixes (a stem with a space is matched as a phrase).
 _BLEEDING = [
@@ -178,14 +181,24 @@ def subject_phrases(subject_ref: dict, entries: dict) -> set[str]:
              entry.get("latin_name"), *(entry.get("aliases") or [])]
     for form_name, form in (entry.get("forms") or {}).items():
         names += [form_name, *((form or {}).get("aliases") or [])]
+    own_name = _norm(entry.get("standard_name"))
     phrases = set()
     for name in names:
         words = _norm(name).split()
-        phrases.add(" ".join(words))
+        phrase = " ".join(words)
+        # A short single word ("age" for AGE, "same" for SAMe, "hip") is usually a
+        # common English word: it counts only with a digit ("b12") or as the
+        # entry's own name.
+        if len(words) > 1 or len(phrase) >= 5 or any(c.isdigit() for c in phrase) or (
+            phrase and phrase == own_name
+        ):
+            phrases.add(phrase)
         while len(words) > 1 and words[-1] in TRAILING_PART_WORDS:
             words = words[:-1]
-            phrases.add(" ".join(words))
-    return {p for p in phrases if len(p) >= 3}
+            head = " ".join(words)
+            if len(words) > 1 or (len(head) >= 4 and head not in GENERIC_HEADS):
+                phrases.add(head)  # "kava root" -> "kava", but not "fish oil" -> "fish"
+    return phrases
 
 
 def _topic_stems(sub_rule: str) -> list[str] | None:

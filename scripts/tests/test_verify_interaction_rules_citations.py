@@ -1,7 +1,8 @@
 """Focused tests for scripts/api_audit/verify_interaction_rules_citations.py.
 
-The two fixtures are the real PubMed records of the ghost citations removed on
-2026-09-25. The old union-of-claims word overlap passed both.
+The two fixtures are excerpts (title, first abstract sentence, MeSH) of the real
+PubMed records of the ghost citations removed on 2026-09-25. The old
+union-of-claims word overlap passed both.
 """
 
 from __future__ import annotations
@@ -121,3 +122,20 @@ def test_strict_mode_passes_only_reviewed_suspects(tmp_path):
          "rationale": "class-level review that names the claim in its full text"},
     ]}))
     assert virc.unreviewed(suspects, virc.reviewed_keys(review)) == []
+
+
+def test_subject_phrases_skip_common_words():
+    """Short aliases and stripped heads such as "age" (garlic AGE), "same"
+    (SAMe), "black" (black seed oil) and "hip"/"rust" (iron) occur in almost
+    any abstract, so they would pass the subject check for every citation."""
+    assert "age" not in _phrases("ingredient_quality_map", "garlic")
+    assert "same" not in _phrases("ingredient_quality_map", "same")
+    assert "black" not in _phrases("ingredient_quality_map", "black_seed_oil")
+    assert {"hip", "rust"}.isdisjoint(_phrases("ingredient_quality_map", "iron"))
+    fish_oil = _phrases("ingredient_quality_map", "fish_oil")
+    assert "fish oil" in fish_oil and "fish" not in fish_oil
+    assert "iron" in _phrases("ingredient_quality_map", "iron")  # the entry's own name
+    # Short names that are real identities stay: a digit, or a plant name left
+    # after stripping a part word ("kava root" -> "kava").
+    assert "b12" in _phrases("ingredient_quality_map", "vitamin_b12_cobalamin")
+    assert "kava" in _phrases("ingredient_quality_map", "kavalactones")
