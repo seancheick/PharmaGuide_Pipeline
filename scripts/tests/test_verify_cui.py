@@ -13,6 +13,7 @@ import pytest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import verify_cui
+from api_audit import verify_cui as verify_cui_impl
 from verify_cui import UMLSClient, should_apply_cui_fix, verify_cui_for_entry
 
 
@@ -470,6 +471,29 @@ def test_verify_cui_for_entry_keeps_plain_preparation_concepts_verified():
     )
 
     assert report["status"] == "VERIFIED"
+
+
+def test_curated_cui_overrides_are_exactly_the_json_file():
+    """cui_overrides.json is the one owner. A hard-coded fallback copy used to
+    load whenever the JSON was missing, corrupt or empty, and it had drifted
+    (nitrites, rhaponticin, PHO keys, e153, 5a-hydroxy laxogenin)."""
+    path = Path(verify_cui_impl.SCRIPTS_ROOT) / "data" / "curated_overrides" / "cui_overrides.json"
+    assert verify_cui_impl.CURATED_CUI_OVERRIDES == json.loads(path.read_text())
+
+
+def test_curated_cui_overrides_missing_file_fails_loudly(monkeypatch, tmp_path):
+    monkeypatch.setattr(verify_cui_impl, "SCRIPTS_ROOT", tmp_path)
+    with pytest.raises(FileNotFoundError):
+        verify_cui_impl._load_curated_cui_overrides()
+
+
+def test_curated_cui_overrides_corrupt_file_fails_loudly(monkeypatch, tmp_path):
+    overrides = tmp_path / "data" / "curated_overrides" / "cui_overrides.json"
+    overrides.parent.mkdir(parents=True)
+    overrides.write_text("{not json")
+    monkeypatch.setattr(verify_cui_impl, "SCRIPTS_ROOT", tmp_path)
+    with pytest.raises(json.JSONDecodeError):
+        verify_cui_impl._load_curated_cui_overrides()
 
 
 def test_verify_cui_for_entry_accepts_qualifier_the_entry_itself_names():
