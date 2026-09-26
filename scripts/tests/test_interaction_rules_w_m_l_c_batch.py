@@ -238,7 +238,8 @@ def test_banned_subjects_default_contraindicated_in_pregnancy(rules):
 
 PREG_PRE_SEEDS = [
     # (canonical_id, expected pregnancy_category)
-    ("ginkgo",                 "caution"),
+    # Sean, 2026-09-26: avoid, one verdict with the ginkgo-leaf rule (NCCIH).
+    ("ginkgo",                 "avoid"),
     ("dong_quai",              "avoid"),
     ("ginseng",                "caution"),
     ("yohimbe",                ("avoid", "contraindicated")),  # accept either

@@ -1284,3 +1284,25 @@ def test_iqm_licorice_bp_floors_cite_the_100_mg_glycyrrhizic_acid_trial():
         assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
         assert floor["source"] == LICORICE_FLOOR_SOURCE, target
         assert floor["confidence_basis"] == "documented_effective_dose", target
+
+
+NCCIH_GINKGO = "https://www.nccih.nih.gov/health/ginkgo"
+
+
+def test_both_ginkgo_rules_give_one_pregnancy_verdict():
+    """Sean, 2026-09-26: ginkgo pregnancy is avoid in both rules. NCCIH: ginkgo may
+    be unsafe in pregnancy and might cause early labor or extra bleeding during
+    delivery. The IQM block said caution with no source while the ginkgo-leaf rule
+    said avoid, so ginkgo-leaf products showed both cards."""
+    iqm = _rule("RULE_IQM_GINKGO_HYPERTENSION")["pregnancy_lactation"]
+    leaf = _rule("RULE_BOTAN_GINKGO_PREGNANCY")["pregnancy_lactation"]
+    assert iqm["pregnancy_category"] == leaf["pregnancy_category"] == "avoid"
+    assert iqm["sources"] == [NCCIH_GINKGO]
+    copy = " ".join(
+        str(iqm.get(key) or "")
+        for key in ("mechanism", "notes", "alert_headline", "alert_body", "informational_note")
+    ).lower()
+    for stale in ("use caution in pregnancy", "isn't enough specific safety data"):
+        assert stale not in copy, stale
+    assert "early labor" in copy
+    assert iqm["lactation_category"] == "caution"  # NCCIH: little is known

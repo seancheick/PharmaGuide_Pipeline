@@ -189,7 +189,8 @@
       "2026-09-26: RULE_INGREDIENT_GINSENG. The anticoagulants threshold note cited PMID 22137021, a gastric-cancer radiotherapy study (ghost); it now cites Yuan 2004 (PMID 15238367, American ginseng lowered INR and warfarin exposure) and calls >1000 mg/day the authored threshold (commit 7a6ce5b4). Six 200 mg/day floors cited PMID 35509826, a metabolic meta-analysis with no dose-response, under a copied blood-pressure rationale. Glucose floors (diabetes, three hypoglycemic classes) now cite Sotaniemi 1995 (PMID 8721940): 100 mg/day lowered fasting glucose, so the floor is 100 mg. Surgery and anticoagulants floors are removed (Sean, D8): no human source gives a dose for a ginseng bleeding or warfarin effect, and Korean red ginseng 1 g and 1.5 g were null (PMIDs 19913311, 23596810). Those two now fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES glucose floors (diabetes and three hypoglycemic classes) were 1000 mg/day, labelled weak_signal_conservative and cited to a general review (PMID 35800714) that gives no dose. They now cite the documented dose, Kianbakht 2013 (PMID 24273930): leaf extract 500 mg every 8 hours (1500 mg/day) lowered fasting glucose, 2-hour glucose and HbA1c on top of oral antidiabetics. Floor 1000 -> 1500 mg/day (the trial dose; Sean 2026-09-26: use the dose a study documents, never an invented one). Severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_BOTANICAL_LICORICE_ROOT antihypertensives 100 mg/day floor cited PMID 393503, two women on 273-546 mg glycyrrhizin daily, which never mentions 100 mg (confidence_basis inferred_from_dose_range). It now cites af Geijerstam 2024 (PMID 38246526): licorice with 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg in a randomized crossover trial. Value unchanged; confidence_basis documented_effective_dose; the rationale states the floor is compared with the label licorice amount. Receipt: scripts/audits/pending_items_20260926/research.md.",
-      "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md."
+      "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_IQM_GINKGO_HYPERTENSION pregnancy block raised from caution (no source) to avoid with NCCIH ginkgo (may be unsafe in pregnancy; might cause early labor or extra bleeding during delivery), matching RULE_BOTAN_GINKGO_PREGNANCY (Sean, 2026-09-26: one ginkgo pregnancy verdict). Lactation stays caution (NCCIH: little is known)."
     ]
   },
   "interaction_rules": [
@@ -4359,14 +4360,17 @@
         }
       ],
       "pregnancy_lactation": {
-        "pregnancy_category": "caution",
-        "evidence_level": "limited",
-        "mechanism": "Antiplatelet activity raises bleeding-risk concerns in pregnancy and labor.",
-        "notes": "Use caution in pregnancy due to bleeding-risk profile, especially around delivery.",
+        "pregnancy_category": "avoid",
+        "evidence_level": "probable",
+        "mechanism": "Ginkgo may be unsafe in pregnancy: it might cause early labor or extra bleeding during delivery if used near that time (NCCIH). Little is known about its safety while breastfeeding.",
+        "notes": "Avoid in pregnancy. Breastfeeding safety is unknown, so lactation stays caution.",
+        "sources": [
+          "https://www.nccih.nih.gov/health/ginkgo"
+        ],
         "lactation_category": "caution",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "alert_headline": "May be unsafe in pregnancy",
+        "alert_body": "Ginkgo might cause early labor or extra bleeding during delivery, so avoid it during pregnancy. Little is known about its safety while breastfeeding; ask your clinician first.",
+        "informational_note": "Ginkgo may be unsafe in pregnancy (early labor, bleeding at delivery); breastfeeding safety is unknown.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
