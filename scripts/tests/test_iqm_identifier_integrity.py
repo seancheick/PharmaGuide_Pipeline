@@ -785,3 +785,19 @@ def test_batch_6_rejects_stale_null_recommendations_for_current_broad_rxcuis(
         "Claude's stale branch recommended null, but live RxNav on current main "
         "confirmed a valid broad ingredient concept."
     )
+
+
+def test_phlorizin_cui_is_the_compound_not_a_homeopathic_trituration(iqm):
+    """phlorizin carried C0885670 "Phlorizinum, trituration of a substance
+    discovered in the fresh bark of trees, phlorizin, Homeopathic preparation"
+    (atoms: MTH, CHV, ALT only). C0031562 "phlorhizin" is the compound (MSH MH
+    Phlorhizin with entry terms Phloridzin/Phlorizin, RXNORM IN, MTHSPL
+    PHLORIZIN). It closes the chain with the entry's other identifiers: RxNav
+    1362735 (this entry's rxcui) carries UNII CU9S17279X, and UMLS maps RXNORM
+    1362735 to C0031562. GSRS CU9S17279X is anhydrous PHLORIZIN (C21H24O10;
+    the dihydrate is CRK54BIJ5D), InChIKey IOUVKUPGCMBWBT-QNDFHXLGSA-N = PubChem
+    CID 6072. other_ingredients NHA_PHLORIDZIN already uses C0031562. Verified
+    live 2026-09-26."""
+    entry = iqm["phlorizin"]
+    assert entry["cui"] == "C0031562"
+    assert "C0885670" in entry["cui_note"]
