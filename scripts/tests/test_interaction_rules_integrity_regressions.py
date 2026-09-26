@@ -169,3 +169,69 @@ def test_holy_basil_pregnancy_rule_aligns_severity_scope_and_evidence():
     assert "https://pubmed.ncbi.nlm.nih.gov/34315377/" in pregnancy_lactation[
         "sources"
     ]
+
+
+# Content-verified sources for the anthranoid stimulant-laxative rules
+# (receipts: scripts/audits/interaction_rules/laxative_resourcing_2026_09/research.md).
+EMA_CASCARA = (
+    "https://www.ema.europa.eu/en/documents/herbal-monograph/"
+    "final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf"
+)
+LIVERTOX_CASCARA = "https://www.ncbi.nlm.nih.gov/books/NBK548113/"
+LACTMED_CASCARA = "https://www.ncbi.nlm.nih.gov/books/NBK501328/"
+DIGOXIN_LABEL = (
+    "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?"
+    "setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
+)
+
+
+def _rule(rule_id: str) -> dict:
+    return next(r for r in RULES if r.get("id") == rule_id)
+
+
+def _sub_rule(rule: dict, key: str, value: str) -> dict:
+    bucket = "condition_rules" if key == "condition_id" else "drug_class_rules"
+    return next(item for item in rule[bucket] if item.get(key) == value)
+
+
+def test_cascara_rule_cites_the_eu_monograph_and_drops_unsourced_claims():
+    rule = _rule("RULE_IQM_CASCARA_SAGRADA_PREGNANCY")
+    pregnancy = _sub_rule(rule, "condition_id", "pregnancy")
+    liver = _sub_rule(rule, "condition_id", "liver_disease")
+    kidney = _sub_rule(rule, "condition_id", "kidney_disease")
+    digoxin = _sub_rule(rule, "drug_class_id", "cardiac_glycosides")
+    pregnancy_lactation = rule["pregnancy_lactation"]
+
+    assert pregnancy["sources"] == [EMA_CASCARA, LACTMED_CASCARA]
+    assert liver["sources"] == [LIVERTOX_CASCARA, EMA_CASCARA]
+    assert kidney["sources"] == [EMA_CASCARA]
+    assert digoxin["sources"] == [EMA_CASCARA, DIGOXIN_LABEL]
+    assert pregnancy_lactation["sources"] == [LACTMED_CASCARA, EMA_CASCARA]
+
+    # Severities are unchanged by the re-sourcing.
+    assert (pregnancy["severity"], liver["severity"], kidney["severity"]) == (
+        "avoid", "caution", "caution",
+    )
+    assert digoxin["severity"] == "avoid"
+    assert pregnancy_lactation["pregnancy_category"] == "avoid"
+    assert pregnancy_lactation["lactation_category"] == "avoid"
+
+    assert "genotoxic" in pregnancy["mechanism"]
+    assert "genotoxic" in pregnancy_lactation["notes"]
+    assert "breast milk" in pregnancy_lactation["notes"]
+    assert "digoxin toxicity" in digoxin["mechanism"]
+
+    copy = json.dumps(rule).lower()
+    for stale in (
+        "prostaglandin",
+        "uterine",
+        "maternal plasma",
+        "partly on safety grounds",
+        "rodent",
+        "hepatocytes",
+        "hypomagnesemia",
+        "dialysis",
+        "depends on kidney clearance",
+        "choose an osmotic agent",
+    ):
+        assert stale not in copy, stale

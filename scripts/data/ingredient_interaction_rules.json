@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.2.4",
-    "last_updated": "2026-09-21",
+    "last_updated": "2026-09-25",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
@@ -129,7 +129,8 @@
     ],
     "migration_notes": [
       "2026-05-26: Added profile-gated fluoroquinolone mineral timing rules for calcium, iron, magnesium, and zinc; active antibiotic context only.",
-      "2026-09-21: RULE_IQM_VITAMIN_K_MK7_FORM_ONLY form_scope named 'menaquinone_7_mk7', a key no IQM form carries, so the rule never fired; it now names the vitamin_k2 MK-7 forms. Vitamin K1/K2 rows reach both vitamin K rules through the interaction subject family (identity/interaction.py) after the 2026-07-28 K1/K2/K3 identity split. Clinical content unchanged."
+      "2026-09-21: RULE_IQM_VITAMIN_K_MK7_FORM_ONLY form_scope named 'menaquinone_7_mk7', a key no IQM form carries, so the rule never fired; it now names the vitamin_k2 MK-7 forms. Vitamin K1/K2 rows reach both vitamin K rules through the interaction subject family (identity/interaction.py) after the 2026-07-28 K1/K2/K3 identity split. Clinical content unchanged.",
+      "2026-09-25: RULE_IQM_CASCARA_SAGRADA_PREGNANCY cited PMID 32876395 (a cascaroside chromatography paper) for every sub-rule. It now cites the EU herbal monograph on cascara (EMA/HMPC/726270/2016 Rev.1), NIH LiverTox and LactMed Cascara, and the digoxin prescribing information; mechanisms were rewritten to what those sources state. Severities unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -19449,10 +19450,11 @@
           "condition_id": "pregnancy",
           "severity": "avoid",
           "evidence_level": "probable",
-          "mechanism": "Cascara sagrada contains anthraquinone glycosides (cascarosides A-D) that stimulate colonic smooth muscle via prostaglandin and nitric oxide pathways. Anthraquinones pass into breast milk and are detectable in maternal plasma; their stimulant effects on smooth muscle may extend to uterine tissue.",
+          "mechanism": "Cascara bark contains anthranoid glycosides (cascarosides) that colonic bacteria convert to active laxative metabolites. The EU herbal monograph contraindicates cascara in pregnancy because experimental data show a genotoxic risk for several anthranoids, such as emodin and aloe-emodin. Cascara has also been detected in breast milk.",
           "action": "Avoid during pregnancy. Select a safer laxative such as polyethylene glycol or psyllium and consult an obstetrician.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/32876395/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf",
+            "https://www.ncbi.nlm.nih.gov/books/NBK501328/"
           ],
           "alert_headline": "Stimulant laxative \u2014 avoid in pregnancy",
           "alert_body": "Cascara sagrada stimulates colonic muscle and passes into breast milk. If you are pregnant, talk to your obstetrician about a gentler laxative instead.",
@@ -19482,10 +19484,11 @@
           "condition_id": "liver_disease",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Chronic use of anthraquinone laxatives including cascara sagrada has been associated with hepatotoxicity; the FDA withdrew OTC cascara sagrada products in 2002 partly on safety grounds. Emodins and aloe-emodins in cascara have demonstrated hepatotoxic effects in rodent models and isolated human hepatocytes.",
+          "mechanism": "Cascara is generally well tolerated at recommended short-term doses, but longer-term use of high doses has been linked to rare cases of clinically apparent liver injury, some severe (NIH LiverTox). The EU herbal monograph notes that chronic overdose of anthranoid laxatives may lead to toxic hepatitis.",
           "action": "Do not use cascara sagrada in liver disease. Use an osmotic laxative instead.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/32876395/"
+            "https://www.ncbi.nlm.nih.gov/books/NBK548113/",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf"
           ],
           "alert_headline": "Chronic use may affect the liver",
           "alert_body": "Chronic or high-dose stimulant laxative use has been linked to liver injury. If you have liver disease, use cascara only with clinician guidance.",
@@ -19515,14 +19518,14 @@
           "condition_id": "kidney_disease",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Anthraquinone-induced electrolyte depletion (hypokalemia, hypomagnesemia) is amplified in CKD where electrolyte homeostasis is already impaired. Hypokalaemia exacerbates the cardiovascular risk profile in dialysis patients and in those on renin-angiotensin-aldosterone system inhibitors.",
-          "action": "Avoid prolonged use in kidney disease. If a laxative is necessary, choose an osmotic agent. Monitor electrolytes with any use.",
+          "mechanism": "Long-term use of stimulant laxatives such as cascara can cause water and electrolyte imbalance, including potassium loss, and may result in albuminuria and haematuria. The EU herbal monograph advises people with kidney disorders to be aware of possible electrolyte imbalance.",
+          "action": "Avoid prolonged use in kidney disease and ask your clinician before any use; electrolytes may need checking.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/32876395/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf"
           ],
           "alert_headline": "Electrolyte loss with chronic use",
           "alert_body": "Chronic or high-dose stimulant laxative use can cause fluid and electrolyte shifts. If you have kidney disease, use only with clinician guidance, especially with diuretics or heart medicines.",
-          "informational_note": "Cascara sagrada depends on kidney clearance \u2014 relevant to people with kidney conditions.",
+          "informational_note": "Cascara sagrada can shift electrolytes \u2014 relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -19550,10 +19553,11 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Anthraquinone-induced hypokalemia increases myocardial sensitivity to digoxin and other cardiac glycosides by enhancing Na+/K+-ATPase inhibition. Potassium depletion lowers the toxic threshold for digoxin significantly.",
+          "mechanism": "Hypokalaemia from long-term stimulant laxative use potentiates the action of cardiac glycosides (EU herbal monograph), and hypokalaemia may predispose to digoxin toxicity (digoxin prescribing information).",
           "action": "Avoid cascara sagrada with cardiac glycosides. If constipation management is required, select a potassium-sparing approach and monitor serum potassium and digoxin levels.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/32876395/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
           "alert_headline": "Can increase digoxin toxicity",
           "alert_body": "Cascara-induced potassium loss makes digoxin more toxic. If you take digoxin or another cardiac glycoside, talk to your prescriber about a gentler laxative.",
@@ -19584,12 +19588,12 @@
       "pregnancy_lactation": {
         "sources": [
           "https://www.ncbi.nlm.nih.gov/books/NBK501328/",
-          "https://pubmed.ncbi.nlm.nih.gov/32876395/"
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf"
         ],
         "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "probable",
-        "notes": "Pregnancy: Avoid during pregnancy. Select a safer laxative such as polyethylene glycol or psyllium and consult an obstetrician. Lactation: avoid category remains separately tracked.",
+        "notes": "Pregnancy: avoid. The EU herbal monograph contraindicates cascara in pregnancy because experimental data show a genotoxic risk for several anthranoids (emodin, aloe-emodin); choose a safer laxative such as polyethylene glycol or psyllium and consult an obstetrician. Lactation: avoid. Cascara has been detected in breast milk and may cause loose stools in breastfed infants (LactMed), and the EU herbal monograph contraindicates use while breastfeeding.",
         "alert_headline": "Stimulant laxative \u2014 avoid in pregnancy",
         "alert_body": "Cascara sagrada stimulates colonic muscle and passes into breast milk. If you are pregnant, talk to your obstetrician about a gentler laxative instead.",
         "informational_note": "Cascara sagrada is a stimulant laxative \u2014 relevant to anyone pregnant.",
@@ -19615,7 +19619,7 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
+      "last_reviewed": "2026-09-25",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
