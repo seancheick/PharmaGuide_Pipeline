@@ -143,3 +143,86 @@ def test_add_cascara_sagrada_unii_is_the_bark_not_casanthranol(banned_recalled):
     assert entry["external_ids"]["unii"] == "4VBP01X99F"
     assert iqm["cascara_sagrada"]["external_ids"]["unii"] == "4VBP01X99F"
     assert "3SJ3U7J6V2" in json.dumps(entry["review"]["change_log"])
+
+
+def test_banned_tansy_cui_is_the_plant_not_a_flower_essence(banned_recalled):
+    """BANNED_TANSY covers tansy herb and oil (Tanacetum vulgare), so its CUI
+    is C0331409 'Tanacetum vulgare' (Plant; NCBI, MSH, SNOMEDCT_US; common
+    name tansy). C1256219 is 'Tanacetum vulgare, flower essence'
+    (Pharmacologic Substance; MTH/CHV/ALT atoms only), a flower-remedy
+    preparation. Botanical siblings anchor to the Plant concept (e.g.
+    BANNED_CALAMUS_ACORUS_CALAMUS, RISK_KRATOM_NATURAL). Verified in UMLS
+    2026-09-26."""
+    entry = _find(banned_recalled, "BANNED_TANSY")
+    assert entry["cui"] == "C0331409"
+    assert "C1256219" in json.dumps(entry["review"]["change_log"])
+
+
+def test_add_5a_hydroxy_laxogenin_has_its_rxnorm_and_umls_anchors(banned_recalled):
+    """5alpha-hydroxy-laxogenin has an RxNorm ingredient and a UMLS concept.
+    RxNav 1801703 is an active IN named "5.alpha.-hydroxy laxogenin"; GSRS
+    844KE20WT5 (this entry's UNII) lists RXCUI 1801703 as its PRIMARY code.
+    UMLS C4276029 "5.alpha.-hydroxy laxogenin" (Organic Chemical,
+    Pharmacologic Substance) holds that RXNORM atom. Searches for
+    "5alpha-hydroxy laxogenin" missed it because UMLS spells the name with
+    dotted ".alpha.". Plain laxogenin is a different concept (C0915797).
+    The annotated null and its curated override were wrong. Verified in
+    RxNav, GSRS and UMLS 2026-09-26."""
+    entry = _find(banned_recalled, "ADD_5A_HYDROXY_LAXOGENIN")
+    assert entry.get("rxcui") == "1801703"
+    assert entry.get("cui") == "C4276029"
+    assert "cui_status" not in entry and "cui_note" not in entry
+    overrides = json.loads(
+        (REPO_ROOT / "scripts" / "data" / "curated_overrides" / "cui_overrides.json").read_text()
+    )
+    assert overrides["5a-hydroxy laxogenin"]["cui"] == "C4276029"
+
+
+def test_add_5a_hydroxy_laxogenin_cites_live_fda_sources(banned_recalled):
+    """The entry cited "FDA Warning Letter 607248 (Andro Pharma LLC, 2020)"
+    and a generic constituent-updates index. Both URLs returned HTTP 404 on
+    2026-09-26; the Wayback Machine has no capture of any andro-pharma
+    warning-letter URL, and no search found the letter. FDA's May 4, 2022
+    letter to Performax Labs (622337) names "5a-Hydroxy-Laxogenin" and
+    states 5-alpha-hydroxy-laxogenin is not a dietary ingredient; the May 9,
+    2022 constituent update lists it among the cited ingredients."""
+    entry = _find(banned_recalled, "ADD_5A_HYDROXY_LAXOGENIN")
+    urls = [r.get("url") or "" for r in entry["references_structured"]]
+    blob = json.dumps(entry["references_structured"])
+    assert "andro-pharma" not in blob and "607248" not in blob
+    assert "dietary-supplement-products-ingredients/constituent-updates" not in blob
+    assert (
+        "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/"
+        "warning-letters/performax-labs-inc-622337-05042022"
+    ) in urls
+    assert (
+        "https://www.fda.gov/food/hfp-constituent-updates/"
+        "fda-sends-warning-letters-multiple-companies-illegally-selling-adulterated-dietary-supplements"
+    ) in urls
+
+
+def test_banned_ephedra_keeps_c0885298_with_a_note_on_its_name(banned_recalled):
+    """BANNED_EPHEDRA keeps C0885298 (Sean, 2026-09-26). UMLS names it
+    "Ephedra vulgaris preparation", but it is the drug-vocabulary ephedra
+    ingredient concept (VANDF IN "EPHEDRA", MEDCIN "ephedra (medication)",
+    CHV "ephedra herb medicine"). "Ephedra vulgaris" is a MeSH entry term
+    now filed under D029790 Ephedra sinica. The cui_note keeps a later
+    reviewer from reading the preferred name as a single-species claim."""
+    entry = _find(banned_recalled, "BANNED_EPHEDRA")
+    assert entry["cui"] == "C0885298"
+    note = entry.get("cui_note") or ""
+    assert "Ephedra vulgaris" in note and "VANDF" in note
+
+
+def test_high_risk_chaparral_cui_is_larrea_tridentata(banned_recalled):
+    """HIGH_RISK_CHAPARRAL's reason names Larrea tridentata, so its CUI is
+    C0697139 'Larrea tridentata' (Plant; NCBI taxid 66636, MSH, NCI).
+    C1050700 is 'Larrea divaricata' (NCBI taxid 108399), the South American
+    L. divaricata Cav. ITIS treats the North American usage "Larrea divaricata
+    auct. non Cav." as a misapplied name for L. tridentata, so the
+    "larrea divaricata" alias stays as a label-matching term. Sean chose the
+    species anchor 2026-09-26; verified in UMLS, NCBI, GBIF and ITIS."""
+    entry = _find(banned_recalled, "HIGH_RISK_CHAPARRAL")
+    assert entry["cui"] == "C0697139"
+    assert "larrea divaricata" in {a.lower() for a in entry["aliases"]}
+    assert "C1050700" in json.dumps(entry["review"]["change_log"])

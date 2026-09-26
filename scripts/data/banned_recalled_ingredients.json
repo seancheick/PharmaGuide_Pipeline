@@ -3822,6 +3822,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "Added cui_note; CUI C0885298 unchanged. Reviewed because UMLS names it 'Ephedra vulgaris preparation'. Sean kept it over the genus concept C0950030 'Ephedra', 'ma huang extract' C0390643 and a governed null.",
+            "by": "claude-audit"
           }
         ]
       },
@@ -3829,6 +3834,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C0885298",
+      "cui_note": "C0885298 is UMLS's drug-vocabulary ephedra ingredient concept (VANDF IN 'EPHEDRA', MEDCIN 'ephedra (medication)', CHV 'ephedra herb medicine'). Its preferred name 'Ephedra vulgaris preparation' comes from a MeSH entry term now filed under D029790 Ephedra sinica; it does not limit this entry to one species. The entry also covers other Ephedra species, sida cordifolia and the ephedrine alkaloids named in 21 CFR 119.1.",
       "external_ids": {
         "unii": "GN83C131XS"
       },
@@ -6600,13 +6606,18 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "CUI C1050700 -> C0697139 (species anchor chosen by Sean). UMLS: C1050700 is 'Larrea divaricata' (NCBI taxid 108399, the South American L. divaricata Cav.); C0697139 is 'Larrea tridentata' (Plant; NCBI taxid 66636, MSH, NCI), the species this entry's reason names. ITIS lists the North American usage 'Larrea divaricata auct. non Cav.' as a misapplied name for L. tridentata, so the 'larrea divaricata' alias stays for label matching. No shipped detail blob or frozen enriched product references this entry.",
+            "by": "claude-audit"
           }
         ]
       },
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "cui": "C1050700",
+      "cui": "C0697139",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A botanical linked to at least 18 reported cases of severe liver injury, including transplants. Not a lawful supplement ingredient; stop and consult a doctor if you have used a product containing it.",
@@ -15102,22 +15113,22 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "FDA Warning Letter 607248 (Andro Pharma LLC, 2020)",
-          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020",
-          "published_date": null,
+          "citation": "FDA Warning Letter 622337 to Performax Labs Inc (May 4, 2022): labels declaring 5a-Hydroxy-Laxogenin (5-alpha-hydroxy-laxogenin) are adulterated; it is not a dietary ingredient and is not GRAS.",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/performax-labs-inc-622337-05042022",
+          "published_date": "2022-05-04",
           "evidence_grade": "R",
           "confidence": "high",
-          "title": "FDA Warning Letter 607248 (Andro Pharma LLC, 2020)"
+          "title": "Performax Labs Inc - 622337 - 05/04/2022"
         },
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "FDA dietary supplement constituent updates (5-alpha-hydroxy-laxogenin)",
-          "url": "https://www.fda.gov/food/dietary-supplement-products-ingredients/constituent-updates",
-          "published_date": null,
+          "citation": "FDA Constituent Update (May 9, 2022): warning letters to multiple companies whose supplements contain 5-alpha-hydroxy-laxogenin, higenamine, hordenine or octopamine.",
+          "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-sends-warning-letters-multiple-companies-illegally-selling-adulterated-dietary-supplements",
+          "published_date": "2022-05-09",
           "evidence_grade": "R",
-          "confidence": "medium",
-          "title": "FDA dietary supplement constituent updates (5-alpha-hydroxy-laxogenin)"
+          "confidence": "high",
+          "title": "FDA Sends Warning Letters to Multiple Companies for Illegally Selling Adulterated Dietary Supplements"
         }
       ],
       "review": {
@@ -15135,14 +15146,24 @@
             "date": "2026-09-26",
             "change": "UNII HT7W184YG4 -> 844KE20WT5. GSRS: HT7W184YG4 is LAXOGENIN (C27H42O4, CAS 1177-71-5), which lacks the 5alpha-hydroxyl; 844KE20WT5 is 5.ALPHA.-HYDROXY LAXOGENIN (LAXOSTERONE; C27H42O5; CAS 56786-63-1; InChIKey HCRGPOQBVFMZFY-PPCFKNSFSA-N = PubChem CID 69906537), the compound this entry names. gsrs block regenerated from the new record. The old UNII passed verify_unii only through the 'laxogenin' alias, which stays as a label-matching term. No DSLD label in the corpus carries either UNII or names laxogenin, so matching is unchanged.",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "rxcui none -> 1801703; cui null (cui_status no_confirmed_umls_match, cui_note 'No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.') -> C4276029. RxNav 1801703 is an active IN '5.alpha.-hydroxy laxogenin'; GSRS 844KE20WT5 lists RXCUI 1801703 as PRIMARY. UMLS C4276029 '5.alpha.-hydroxy laxogenin' (Organic Chemical, Pharmacologic Substance) holds that RXNORM atom; earlier searches spelled '5alpha' and missed UMLS's dotted '.alpha.' form. Plain laxogenin is a separate concept (C0915797). cui_overrides.json '5a-hydroxy laxogenin' null -> C4276029.",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "references_structured: removed 'FDA Warning Letter 607248 (Andro Pharma LLC, 2020)' (https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020) and 'FDA dietary supplement constituent updates (5-alpha-hydroxy-laxogenin)' (https://www.fda.gov/food/dietary-supplement-products-ingredients/constituent-updates). Both returned HTTP 404; the Wayback Machine has no capture of any andro-pharma warning-letter URL and no search found the letter, so it could not be verified. Replaced with FDA Warning Letter 622337 to Performax Labs (2022-05-04), which names 5a-Hydroxy-Laxogenin and states it is not a dietary ingredient, and the FDA Constituent Update of 2022-05-09 listing 5-alpha-hydroxy-laxogenin among the cited ingredients. Both were content-checked live.",
+            "by": "claude-audit"
           }
         ]
       },
-      "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.",
+      "cui": "C4276029",
       "external_ids": {
         "unii": "844KE20WT5"
       },
+      "rxcui": "1801703",
       "gsrs": {
         "substance_name": "5.ALPHA.-HYDROXY LAXOGENIN",
         "substance_class": "chemical",
@@ -19001,12 +19022,17 @@
             "date": "2026-09-18",
             "change": "Added content-verified 21 CFR 172.510 citation (thujone restriction)",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "CUI C1256219 -> C0331409. UMLS: C1256219 is 'Tanacetum vulgare, flower essence' (Pharmacologic Substance; MTH/CHV/ALT atoms only), a flower-remedy preparation, not the herb or oil this entry covers. C0331409 is 'Tanacetum vulgare' (Plant; NCBI, MSH, SNOMEDCT_US; common name tansy), matching the Plant-concept anchoring of the file's other single-species botanicals. No shipped detail blob or frozen enriched product references this entry.",
+            "by": "claude-audit"
           }
         ]
       },
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Neurotoxic / reproductive-toxic botanical — never an excipient",
-      "cui": "C1256219",
+      "cui": "C0331409",
       "source_category": "toxic_botanical",
       "references_structured": [
         {
