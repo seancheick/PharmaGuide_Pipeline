@@ -855,3 +855,16 @@ marker child is_parent_total and reports structural_blend_header despite explici
 non-proprietary/non-blend flags. Generic scoring still awards points; resolver
 reports identity_material_unresolved. Resolve this through existing owners before
 acceptance. Fresh-context review and frozen replay remain pending.
+
+
+Fresh-context review reproduced two parser defects: manufacturing-function text
+could earn Evidence and conjunction splitting lost governing negation. A real-label
+regression failed before the repair. The parser now rejects negated sentences
+before splitting and requires a recognized health indication. The existing
+probiotic indication categorizer moved to evidence_resolver for shared consumption;
+no duplicate map was created. Mood synonyms include relax/relaxation/cortisol.
+Role reasons retain the indication; generic Evidence and resolver match it against
+the clinical record's stated endpoints/goals, never broad notes. A stress record
+cannot substantiate a bone/digestive-only claim. Focused parser/role/probiotic
+batch:95passed2.56s; broader prior batch163passed2.31s. Final resolver alignment
+and full replay remain required.

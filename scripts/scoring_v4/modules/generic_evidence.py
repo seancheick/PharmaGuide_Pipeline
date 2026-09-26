@@ -244,7 +244,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         accepted_ids = {_entry_id(entry) for entry in accepted_matches}
         matches = [entry for entry in matches if _entry_id(entry) in accepted_ids]
         recovered_matches = [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
-    from evidence_resolver import evidence_owner_canonicals
+    from evidence_resolver import evidence_owner_canonicals, _evidence_claim_purposes, _evidence_entry_purposes
+    claim_purposes = _evidence_claim_purposes(product) if owner_scoped else {}
     owner_canonicals = (
         evidence_owner_canonicals(product)
         if owner_scoped
@@ -260,8 +261,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     if owner_scoped:
         from scoring_input_contract import classify_ingredient_roles
         for role in classify_ingredient_roles(product):
-            if role.get("role_reason") == "named_in_label_function_claim":
-                _append_once(flags, "EXPLICIT_LABEL_PURPOSE_OWNER:" + str(role["canonical_id"]))
+            if str(role.get("role_reason", "")).startswith("named_in_label_function_claim:"):
+                _append_once(flags, "EXPLICIT_LABEL_PURPOSE_OWNER:" + str(role["canonical_id"]) + ":" + role["role_reason"].split(":", 1)[1])
     sub_clinical_canonicals: set[str] = set()
 
     for entry in matches:
@@ -273,6 +274,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             use_structured_identity=owner_scoped,
         )
         if owner_canonicals and matched_owner not in owner_canonicals:
+            continue
+        if matched_owner in claim_purposes and not (claim_purposes[matched_owner] & _evidence_entry_purposes(entry)):
+            _append_once(flags, "LABEL_PURPOSE_EVIDENCE_MISMATCH:" + str(matched_owner))
             continue
 
         entry_id = _entry_id(entry)

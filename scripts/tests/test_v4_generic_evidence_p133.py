@@ -1450,3 +1450,27 @@ def test_explicit_function_claim_requires_material_active_and_named_subject():
         if row['canonical_id'] == 'l_theanine':
             row['source_section'] = 'nutrition_facts'
     assert 'l_theanine' not in evidence_owner_canonicals(control, module='fiber_digestive')
+
+
+def test_function_claims_reject_manufacturing_and_governing_negation():
+    import json
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    for notes in [
+        'Ashwagandha helps capsule manufacturing. L-theanine supports tablet stability.',
+        'No evidence that ashwagandha helps stress and l-theanine supports relaxation.',
+        'Ashwagandha supports stress but not l-theanine which supports relaxation.',
+    ]:
+        control = deepcopy(product)
+        control['statements'] = [{'type': 'Formula re: Contains', 'notes': notes}]
+        assert build_scored_artifact(control)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_explicit_claim_cannot_borrow_evidence_for_another_purpose():
+    import json
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    product['statements'] = [{'type': 'Formula re: Contains',
+        'notes': 'Ashwagandha supports bone density. L-theanine supports bowel regularity.'}]
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0

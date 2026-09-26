@@ -5697,7 +5697,7 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     return False
 
 
-def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Optional[str]:
+def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Optional[Tuple[str, str]]:
     """Recognize an explicit label function claim about a substantial active.
 
     This establishes a label role, never clinical efficacy. Restrict promotion
@@ -5738,13 +5738,18 @@ def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Opt
         }:
             continue
         text = str(statement.get("notes") or statement.get("text") or "")
-        for clause_index, clause in enumerate(re.split(r"[.!?;\r\n]+|\band\b", text, flags=re.I)):
-            normalized = re.sub(r"[^a-z0-9]+", " ", clause.lower()).strip()
-            if re.search(r"\b(?:not|no|never|without|may|might)\b", normalized):
+        from evidence_resolver import evidence_indication_categories
+        for sentence_index, sentence in enumerate(re.split(r"[.!?;\r\n]+", text)):
+            # Preserve governing negation across coordinated ingredient claims.
+            if re.search(r"\b(?:not|no|never|without|may|might)\b", sentence, re.I):
                 continue
-            match = pattern.search(normalized)
-            if match and match.group(1).strip():
-                return f"statements[{index}].notes:clause[{clause_index}]"
+            for clause in re.split(r"\band\b", sentence, flags=re.I):
+                normalized = re.sub(r"[^a-z0-9]+", " ", clause.lower()).strip()
+                match = pattern.search(normalized)
+                categories = evidence_indication_categories(match.group(1)) if match else set()
+                if categories:
+                    return (f"statements[{index}].notes:sentence[{sentence_index}]",
+                            ",".join(sorted(categories)))
     return None
 
 
@@ -5814,7 +5819,7 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     # purpose owner alongside the route driver, without awarding Evidence.
     claim_source = _role_function_claim_source(row, ctx)
     if claim_source:
-        return out(ROLE_CLAIM_PROMINENT, "named_in_label_function_claim", claim_source, "high")
+        return out(ROLE_CLAIM_PROMINENT, "named_in_label_function_claim:" + claim_source[1], claim_source[0], "high")
 
     is_blend = _role_is_blend_member(row)
     mass_mg = _role_mass_mg(row)

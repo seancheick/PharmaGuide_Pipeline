@@ -61,6 +61,40 @@ _HARMFUL_ADDITIVES_PATH = _DATA_DIR / "harmful_additives.json"
 _LITERATURE_EVIDENCE_PATH = _DATA_DIR / "literature_evidence_records.json"
 
 
+INDICATION_KEYWORDS: Dict[str, Set[str]] = {
+    "digestive": {
+        "digestive", "digestion", "gut", "bowel", "regularity", "constipation",
+        "diarrhea", "ibs", "irritable", "bloating", "gastro", "colic", "gi",
+    },
+    "immune": {
+        "immune", "immunity", "respiratory", "cold", "allergy", "allergic",
+        "rhinitis", "eczema", "atopic",
+    },
+    "women": {
+        "women", "woman", "womens", "female", "vaginal", "urogenital",
+        "vaginosis", "bv", "urinary", "uti",
+    },
+    "prenatal": {
+        "prenatal", "pregnancy", "pregnant", "maternal", "postnatal",
+        "postpartum",
+    },
+    "infant": {
+        "infant", "infants", "baby", "babies", "pediatric", "children", "child", "kids",
+        "toddler", "toddlers", "preterm", "neonatal", "neonates",
+    },
+    "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
+    "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat"},
+    "mood": {"mood", "stress", "anxiety", "cognition", "psychobiotic", "sleep",
+             "relax", "relaxation", "cortisol"},
+    "bone": {"bone", "density"},
+}
+
+def evidence_indication_categories(text: str) -> Set[str]:
+    """Shared label/clinical indication categories; never proof of efficacy."""
+    words = set(re.sub(r"[^a-z0-9]+", " ", str(text or "").lower()).split())
+    return {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
+
+
 class EvidenceDisposition(str, Enum):
     """Canonical Evidence disposition contract."""
     RESOLVED_BY_AUTHORITY = "resolved_by_authority"
@@ -752,6 +786,18 @@ def resolve_evidence_for_row(
         matched_owners.append("backed_clinical_studies")
         # Check study types, effect directions, and applicability
         valid_studies = [s for s in deduped_studies if _norm(s.get("study_type")) != "reference"]
+        claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
+        if claimed_purposes:
+            valid_studies = [study for study in valid_studies if claimed_purposes & _evidence_entry_purposes(study)]
+            if not valid_studies:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
+                    blocking_reasons=["label_purpose_evidence_mismatch"],
+                )
         owner_facts["backed_clinical_studies"] = {
             "study_count": len(valid_studies),
             "study_types": list({s.get("study_type") for s in valid_studies}),
@@ -1138,6 +1184,27 @@ def evidence_owner_canonicals(
         for row in rows
         if str(row.get("canonical_id") or "").strip()
     }
+
+
+def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] = None) -> Dict[str, Set[str]]:
+    """Read explicit-purpose provenance from the existing role result."""
+    from scoring_input_contract import classify_ingredient_roles
+    purposes: Dict[str, Set[str]] = {}
+    for role in classify_ingredient_roles(dict(product), module=module):
+        reason = str(role.get("role_reason") or "")
+        if reason.startswith("named_in_label_function_claim:"):
+            purposes.setdefault(str(role["canonical_id"]), set()).update(reason.split(":", 1)[1].split(","))
+    return purposes
+
+
+def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
+    """Only stated endpoints/goals describe the record's supported purpose."""
+    parts = [str(entry.get("primary_outcome") or "")]
+    for key in ("health_goals_supported", "endpoint_relevance_tags", "key_endpoints"):
+        values = entry.get(key)
+        if isinstance(values, list):
+            parts.extend(str(value) for value in values)
+    return evidence_indication_categories(" ".join(parts))
 
 
 def resolve_product_evidence(
