@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-21",
+    "last_updated": "2026-09-26",
     "total_entries": 178,
     "data_source_metadata": {
       "sources": [
@@ -15130,23 +15130,34 @@
             "date": "2026-02-23",
             "change": "Added from unmapped P3 prohormone routing pass",
             "by": "caps_tabs_unmapped_laxogenin"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "UNII HT7W184YG4 -> 844KE20WT5. GSRS: HT7W184YG4 is LAXOGENIN (C27H42O4, CAS 1177-71-5), which lacks the 5alpha-hydroxyl; 844KE20WT5 is 5.ALPHA.-HYDROXY LAXOGENIN (LAXOSTERONE; C27H42O5; CAS 56786-63-1; InChIKey HCRGPOQBVFMZFY-PPCFKNSFSA-N = PubChem CID 69906537), the compound this entry names. gsrs block regenerated from the new record. The old UNII passed verify_unii only through the 'laxogenin' alias, which stays as a label-matching term. No DSLD label in the corpus carries either UNII or names laxogenin, so matching is unchanged.",
+            "by": "claude-audit"
           }
         ]
       },
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.",
       "external_ids": {
-        "unii": "HT7W184YG4"
+        "unii": "844KE20WT5"
       },
       "gsrs": {
-        "substance_name": "LAXOGENIN",
+        "substance_name": "5.ALPHA.-HYDROXY LAXOGENIN",
         "substance_class": "chemical",
         "cfr_sections": [],
-        "dsld_count": 5,
-        "dsld_info_raw": "Dietary Supplement Label Database|TBD|Laxogenin | 3987 (Number of products:5)",
+        "dsld_count": null,
+        "dsld_info_raw": null,
         "active_moiety": null,
         "salt_parents": [],
-        "metabolic_relationships": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "ANDROGEN RECEPTOR",
+            "unii": "EJC4C3UYXH"
+          }
+        ],
         "metabolites": []
       },
       "ban_context": "substance",

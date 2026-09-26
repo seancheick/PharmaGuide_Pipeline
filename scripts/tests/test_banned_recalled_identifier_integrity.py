@@ -96,3 +96,17 @@ def test_hm_cadmium_cui_is_canonical_substance(banned_recalled):
         "substance), not C0373557 (Cadmium measurement, a Laboratory "
         "Procedure concept)."
     )
+
+
+def test_add_5a_hydroxy_laxogenin_unii_is_not_plain_laxogenin(banned_recalled):
+    """ADD_5A_HYDROXY_LAXOGENIN names 5alpha-hydroxy-laxogenin, so it carries
+    GSRS 844KE20WT5 (5.ALPHA.-HYDROXY LAXOGENIN; LAXOSTERONE; C27H42O5; CAS
+    56786-63-1; InChIKey HCRGPOQBVFMZFY-PPCFKNSFSA-N = PubChem CID 69906537).
+    HT7W184YG4 is plain LAXOGENIN (C27H42O4; CAS 1177-71-5; CID 10950057),
+    which lacks the 5alpha-hydroxyl. It passed verify_unii only through the
+    "laxogenin" alias. The gsrs block must describe the same record.
+    Verified in GSRS and PubChem 2026-09-26."""
+    entry = _find(banned_recalled, "ADD_5A_HYDROXY_LAXOGENIN")
+    assert entry["external_ids"]["unii"] == "844KE20WT5"
+    assert entry["gsrs"]["substance_name"] == "5.ALPHA.-HYDROXY LAXOGENIN"
+    assert "HT7W184YG4" in json.dumps(entry["review"]["change_log"])
