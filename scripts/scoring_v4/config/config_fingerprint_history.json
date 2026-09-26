@@ -45,6 +45,8 @@
    "1.11.0-omega-semantics-2026-09": "2c15c9bebde09df3",
    "1.12.0-omega-semantics-and-null-no-credit": "15c0bf887de5680f",
    "1.13.0-dose-applicability-gate": "d70f38bb941acd2c",
+   "1.13.1-immune-botanical-stack-config": "66928f4f464b860d",
+   "1.13.2-immune-dose-bands-config": "7cd59a5929f9534f",
    "1.14.0-no-dose-form-count": "d2922eb3ff3775ce",
    "1.15.0-parent-relative-probiotic-fairness": "f75b71cc3554782a",
    "1.16.0-sports-evidence-ownership": "33021d6361d1faaa",
@@ -52,7 +54,8 @@
    "1.18.0-sports-dose-separation": "4abad9a15e7f7eb9",
    "1.19.0-panel-authority-evidence": "5beb13a493939ed2",
    "1.20.0-probiotic-formulation-independence": "0f033bae0d0914f6",
-   "1.21.0-no-dose-form-count": "dd72402f1eca73b5"
+   "1.21.0-no-dose-form-count": "dd72402f1eca73b5",
+   "1.21.1-immune-magnitudes-config": "e6bdbd587bfc4f32"
   }
  }
 }

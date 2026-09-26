@@ -17,7 +17,10 @@ import pytest
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 
+import pytest  # noqa: E402
+
 from score_supplements_v4 import score_product_v4  # noqa: E402
+from scoring_v4.modules import immune_support  # noqa: E402
 
 
 DATA_DIR = SCRIPTS_DIR / "data"
@@ -249,6 +252,93 @@ def test_high_variability_botanical_count_dedupes_duplicate_rows() -> None:
     assert formulation["score"] == pytest.approx(
         sum(formulation["components"].values()) - 3.0
     )
+
+
+def _with_dose(canonical_id: str, amount: float, unit: str | None = None) -> Dict[str, Any]:
+    product = _immune_product()
+    for row in product["ingredient_quality_data"]["ingredients_scorable"]:
+        if row["canonical_id"] == canonical_id:
+            row["quantity"] = amount
+            if unit:
+                row["unit"] = unit
+    return product
+
+
+# (canonical_id, component, low, high, points): below low is linear, the band
+# edges earn full points, anything above the band earns half.
+_DOSE_BANDS = [
+    ("vitamin_c", "vitamin_c_daily_range", 100.0, 1000.0, 3.0),
+    ("vitamin_d3", "vitamin_d_daily_range", 15.0, 50.0, 3.0),
+    ("zinc", "zinc_daily_range", 8.0, 25.0, 3.0),
+    ("copper", "copper_balance", 0.5, 2.0, 1.5),
+    ("selenium", "selenium_daily_range", 45.0, 200.0, 1.5),
+    ("beta_glucan", "beta_glucan_disclosed", 100.0, 250.0, 3.0),
+    ("quercetin", "quercetin_disclosed", 250.0, 1000.0, 2.5),
+    ("elderberry", "elderberry_disclosed", 100.0, 600.0, 2.5),
+]
+
+
+@pytest.mark.parametrize(("canonical_id", "component", "low", "high", "points"), _DOSE_BANDS)
+def test_immune_dose_band_edges(canonical_id, component, low, high, points) -> None:
+    def credit(amount: float) -> float:
+        dose = immune_support.score_immune_support_dose(_with_dose(canonical_id, amount))
+        return dose["components"][component]
+
+    assert credit(low / 2) == points / 2
+    assert credit(low) == points
+    assert credit(high) == points
+    assert credit(high * 1.25) == points / 2
+
+
+@pytest.mark.parametrize(
+    ("canonical_id", "amount", "unit", "flag"),
+    [
+        ("zinc", 40.0, "mg", None),
+        ("zinc", 40.5, "mg", "high_zinc"),
+        ("vitamin_d3", 100.0, "mcg", None),
+        ("vitamin_d3", 100.5, "mcg", "high_vitamin_d"),
+        ("vitamin_d3", 4000, "IU", None),
+        ("vitamin_d3", 4001, "IU", "high_vitamin_d"),
+    ],
+)
+def test_immune_high_dose_thresholds_are_strictly_greater(canonical_id, amount, unit, flag) -> None:
+    product = _with_dose(canonical_id, amount, unit)
+    dose = immune_support.score_immune_support_dose(product)
+
+    assert dose["metadata"]["high_zinc"] is (flag == "high_zinc")
+    assert dose["metadata"]["high_vitamin_d"] is (flag == "high_vitamin_d")
+    assert dose["components"]["daily_use_discipline"] == (0.0 if flag else 2.0)
+    formulation = immune_support.immune_support_formulation_adjustment(product)
+    assert formulation["metadata"]["high_zinc"] is (flag == "high_zinc")
+
+
+def test_immune_all_bands_full_lands_exactly_on_dose_cap() -> None:
+    dose = immune_support.score_immune_support_dose(_immune_product())
+
+    assert sum(dose["components"].values()) == 22.0
+    assert dose["score"] == 22.0 and isinstance(dose["score"], float)
+
+
+def test_immune_dose_reads_every_magnitude_from_config(monkeypatch) -> None:
+    # A literal left beside a matching constant passes the drift guard; this does not.
+    product = _immune_product()
+    with monkeypatch.context() as m:
+        m.setitem(immune_support.IMMUNE_DOSE_BANDS, "vitamin_c_mg", {"low": 600.0, "high": 900.0, "points": 4.0})
+        m.setitem(immune_support.IMMUNE_DOSE_BANDS, "copper_mg", {"low": 0.1, "high": 0.5, "points": 2.0})
+        m.setattr(immune_support, "IMMUNE_DOSE_ABOVE_BAND_FRACTION", 0.25)
+        m.setattr(immune_support, "IMMUNE_DAILY_USE_DISCIPLINE_POINTS", 1.0)
+        m.setattr(immune_support, "IMMUNE_DOSE_CAP", 5.0)
+        dose = immune_support.score_immune_support_dose(product)
+        assert dose["components"]["vitamin_c_daily_range"] == round(500 / 600 * 4.0, 4)
+        assert dose["components"]["copper_balance"] == 0.5
+        assert dose["components"]["daily_use_discipline"] == 1.0
+        assert dose["score"] == 5.0
+    with monkeypatch.context() as m:
+        m.setattr(immune_support, "HIGH_ZINC_THRESHOLD_MG", 10.0)
+        m.setattr(immune_support, "HIGH_VITAMIN_D_THRESHOLD_MCG", 20.0)
+        meta = immune_support.score_immune_support_dose(product)["metadata"]
+        assert meta["high_zinc"] is True and meta["high_vitamin_d"] is True
+        assert immune_support.immune_support_formulation_adjustment(product)["metadata"]["high_zinc"] is True
 
 
 def test_immune_goal_mapping_excludes_broad_lifestyle_clusters() -> None:
