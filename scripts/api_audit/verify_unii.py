@@ -900,17 +900,25 @@ def _validate_substance_match(
 
     allowed_names = _candidate_names(primary_name, aliases)
     gsrs_names = _gsrs_names(substance)
-    matched_allowed_name = None
+    # Collect every entry name a GSRS name can match, so set iteration order never
+    # picks which match the preferred-name check below is judged against. An
+    # exact entry name wins, as in _matching_allowed_name.
+    matched_allowed_names = set()
     for gsrs_candidate in gsrs_names:
-        matched_allowed_name = _matching_allowed_name(gsrs_candidate, allowed_names)
-        if matched_allowed_name:
-            if _has_specificity_conflict(gsrs_candidate, matched_allowed_name, primary_name, entry_latin_name):
-                matched_allowed_name = None
-                continue
-            break
-    if not matched_allowed_name:
+        if gsrs_candidate in allowed_names:
+            candidates = {gsrs_candidate}
+        else:
+            candidates = {a for a in allowed_names if _matching_allowed_name(gsrs_candidate, {a})}
+        matched_allowed_names |= {
+            allowed for allowed in candidates
+            if not _has_specificity_conflict(gsrs_candidate, allowed, primary_name, entry_latin_name)
+        }
+    if not matched_allowed_names:
         return False, f"name mismatch: entry={primary_name} GSRS={gsrs_name}", enrichment
-    if _has_specificity_conflict(_normalize_name(gsrs_name), matched_allowed_name, primary_name, entry_latin_name):
+    if all(
+        _has_specificity_conflict(_normalize_name(gsrs_name), allowed, primary_name, entry_latin_name)
+        for allowed in matched_allowed_names
+    ):
         return False, f"name mismatch: entry={primary_name} GSRS={gsrs_name}", enrichment
 
     gsrs_cas = enrichment.get("cas")

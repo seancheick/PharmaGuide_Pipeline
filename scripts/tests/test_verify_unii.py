@@ -901,3 +901,57 @@ def test_verify_iqm_file_reports_curated_governed_null_without_lookup():
             "reason": "enzyme entry resolves to glutathione in GSRS; keep UNII null rather than collapsing the enzyme to its substrate.",
         }
     ]
+
+
+def test_gsrs_name_iteration_order_does_not_decide_the_verdict(monkeypatch):
+    """BANNED_COMFREY_INTERNAL (UNII M9VVZ08EKQ, COMFREY ROOT) lists the alias
+    "comfrey root", so the "root" in the preferred name is covered. Whether
+    "symphytum officinale" or "comfrey root" came first out of the name set
+    used to flip the verdict with PYTHONHASHSEED."""
+    import api_audit.verify_unii as verify_unii
+
+    substance = _substance(name="COMFREY ROOT", unii="M9VVZ08EKQ", cas=None, rxcui="1343346", dsld=None)
+    substance["substanceClass"] = "structurallyDiverse"
+    aliases = ["symphytum officinale", "comfrey root", "comfrey leaf", "comfrey (internal use)"]
+
+    verdicts = []
+    for order in (["symphytum officinale", "comfrey root"], ["comfrey root", "symphytum officinale"]):
+        monkeypatch.setattr(verify_unii, "_gsrs_names", lambda _substance, order=order: list(order))
+        ok, reason, _ = verify_unii._validate_substance_match(
+            substance, primary_name="Comfrey (Internal Use)", aliases=aliases
+        )
+        verdicts.append((ok, reason))
+
+    assert verdicts == [(True, None), (True, None)]
+
+
+def _named_substance(preferred, names, **kwargs):
+    kwargs.setdefault("rxcui", None)
+    kwargs.setdefault("dsld", None)
+    substance = _substance(name=preferred, **kwargs)
+    substance["names"] += [{"name": name} for name in names]
+    return substance
+
+
+def test_exact_gsrs_name_is_not_credited_with_a_longer_alias():
+    """standardized_botanicals olive_leaf (no UNII) against GSRS MJ95C3OH47
+    OLEA EUROPAEA (OLIVE) LEAF POWDER (names as served 2026-09-25, abridged).
+    "OLIVE LEAF" equals the entry name, so it counts as "olive leaf" only, as
+    _matching_allowed_name has it; crediting it with the alias "olive leaf
+    powder" would cover "powder" without any GSRS name matching that alias."""
+    from api_audit.verify_unii import _validate_substance_match
+
+    substance = _named_substance(
+        "OLEA EUROPAEA (OLIVE) LEAF POWDER",
+        ["OLIVE LEAF", "OLIVE LEAF EXTRACT", "OLEA EUROPAEA LEAF", "OLIVE LEAF [VANDF]"],
+        unii="MJ95C3OH47", cas=None,
+    )
+
+    ok, reason, _ = _validate_substance_match(
+        substance,
+        primary_name="Olive Leaf",
+        aliases=["olea europaea", "olea leaf", "olive leaf extract", "olive leaf powder"],
+    )
+
+    assert not ok
+    assert "name mismatch" in reason
