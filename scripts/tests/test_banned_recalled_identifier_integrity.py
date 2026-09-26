@@ -109,6 +109,9 @@ def test_add_5a_hydroxy_laxogenin_unii_is_not_plain_laxogenin(banned_recalled):
     entry = _find(banned_recalled, "ADD_5A_HYDROXY_LAXOGENIN")
     assert entry["external_ids"]["unii"] == "844KE20WT5"
     assert entry["gsrs"]["substance_name"] == "5.ALPHA.-HYDROXY LAXOGENIN"
+    # The LAXOGENIN record's DSLD code (3987, 5 products) must not survive.
+    assert entry["gsrs"]["dsld_count"] is None
+    assert entry["gsrs"]["dsld_info_raw"] is None
     assert "HT7W184YG4" in json.dumps(entry["review"]["change_log"])
 
 
