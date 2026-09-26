@@ -498,3 +498,23 @@ Will NOT create: an exposure resolver, reference population or scoring magnitude
 because this checkout has no generated catalog yet. Existing prenatal tests verify
 Pregnancy RDA (including iron/iodine) and unchanged adult reference behavior.
 This is a contract alignment with measurable score impact, not a new dose target.
+
+### Frozen replay finding: blend quantity is not an individual dose
+
+Owner: `generic_evidence.py::_recover_verified_primary_ingredient_matches`.
+Evidence: `rg 'exact_nested_identity|identity_bearing_blend_header_mass_from_nested_child' scripts`.
+Will NOT create: an alternate mass owner or blend policy.
+
+The first continuation replay exposed 333746, Fiber Fusion: 3.1 g is the total
+of psyllium, oat bran, guar and further constituents, not a disclosed psyllium
+dose. The prior recovery exception trusted a nested identity as though it owned
+all blend mass. A failing regression preceded removing that exception. Existing
+protein-source and complete BCAA aggregate paths remain; branded formula recovery
+is separate. The old synthetic creatine test lacked dose ownership and now pins
+no recovery. 176 focused Evidence/source/contract/archetype tests pass.
+
+The initial broad run was interrupted for this correction: 7,118 passed, 112
+skipped, one stale omega endpoint-average expectation failed before interruption.
+It is NOT an acceptance run. The first 1,353-input continuation replay had 153
+changed pillar payloads, 155 readiness payload changes and no route/status/safety
+changes. Those intermediate results require a replacement after this finding.

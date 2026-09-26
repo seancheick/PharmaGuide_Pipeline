@@ -288,7 +288,7 @@ def test_exact_protein_projection_can_recover_category_evidence() -> None:
     assert payload["metadata"]["ingredient_points"] == {"protein": 6.48}
 
 
-def test_exact_nested_creatine_identity_can_recover_ingredient_evidence() -> None:
+def test_nested_creatine_identity_alone_cannot_claim_blend_dose() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     creatine = _ingredient(
@@ -312,8 +312,8 @@ def test_exact_nested_creatine_identity_can_recover_ingredient_evidence() -> Non
     payload = score_evidence(product, owner_scoped=True)
 
     assert payload["metadata"]["evidence_owner_canonicals"] == ["creatine_monohydrate"]
-    assert payload["metadata"]["recovered_matches"] == ["INGR_CREATINE_MONOHYDRATE"]
-    assert payload["metadata"]["ingredient_points"]["creatine_monohydrate"] > 0
+    assert payload["metadata"]["recovered_matches"] == []
+    assert "creatine_monohydrate" not in payload["metadata"]["ingredient_points"]
 
 
 def test_disclosed_bcaa_aggregate_recovers_its_mixture_evidence() -> None:
@@ -1374,3 +1374,15 @@ def test_immune_profile_nutrients_are_owners_regardless_of_microgram_mass():
                      _ingredient(name='Vitamin D3', canonical_id='vitamin_d3', quantity=25, unit='mcg'),
                      _ingredient(name='Zinc', canonical_id='zinc', quantity=15)])
     assert evidence_owner_canonicals(product, module='generic') == {'vitamin_c', 'vitamin_d3', 'zinc'}
+
+
+def test_nested_fiber_anchor_cannot_transfer_blend_total_to_psyllium():
+    from scoring_v4.modules.generic_evidence import score_evidence
+    row = _ingredient(name='Psyllium', canonical_id='psyllium', quantity=3.1, unit='g')
+    row.update(scoring_input_kind='product_level_evidence', evidence_type='blend_anchor_mass',
+               evidence_scope='blend_level', raw_source_path='ingredientRows[2]',
+               linked_rows=['ingredientRows[2]', 'ingredientRows[2].nestedRows[0]'],
+               reason='identity_bearing_blend_header_mass_from_nested_child')
+    product = _product(product_name='Fiber Fusion', primary_type='fiber_digestive',
+                       ingredients=[row], matches=[])
+    assert score_evidence(product, owner_scoped=True)['metadata']['recovered_matches'] == []

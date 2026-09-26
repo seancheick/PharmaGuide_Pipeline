@@ -776,15 +776,9 @@ def _recover_verified_primary_ingredient_matches(
             # contract already owns that aggregate identity.
             from scoring_v4.modules.sports_helpers import BCAA_AGGREGATE_CANONICALS
             blend_canonical = str(row.get("canonical_id") or "").strip().lower()
-            exact_nested_identity = (
-                allow_with_existing_matches
-                and _norm_text(row.get("reason"))
-                == "identity_bearing_blend_header_mass_from_nested_child"
-            )
             if (
                 blend_canonical not in BCAA_AGGREGATE_CANONICALS
                 and not (allow_with_existing_matches and blend_canonical == "protein")
-                and not exact_nested_identity
             ):
                 continue
         mass = _mass_mg(row) or 0.0
