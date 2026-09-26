@@ -599,3 +599,20 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
 - The pregnancy mechanism named "pituitary dopamine D2 receptors" and "modulate LH/FSH secretion";
   neither cited source says so (D2 activity is shown in vitro elsewhere, PMID 39519010, not cited
   here). Trimmed to what the two sources state.
+
+## RULE_IQM_CHONDROITIN — mechanism trimmed (bleeding_disorders); dose-floor citation corrected
+
+- **PMID 14986566** (Rozenfeld, AJHP 2004; letter, no abstract, not open): "Possible augmentation of
+  warfarin effect by glucosamine-chondroitin"; MeSH chondroitin sulfates, glucosamine, warfarin,
+  international normalized ratio, drug synergism. Kept (reviewed entry: no abstract, topic heuristic).
+- **PMID 18363538** (Knudsen & Sokol, Pharmacotherapy 2008): warfarin patient stable on glucosamine 500 mg
+  + chondroitin 400 mg twice/day; after increasing to glucosamine 1500 mg and chondroitin 1200 mg twice/day
+  INR rose from 2.3 to 3.9 (then 4.7), normalised after stopping; FDA MedWatch: 20 reports of altered
+  coagulation with glucosamine or glucosamine-chondroitin plus warfarin.
+- The bleeding_disorders mechanism said "In vitro data suggest weak anticoagulant activity at high
+  concentrations" with no source for supplement chondroitin; trimmed. The min_effective_dose credited
+  the "1200 mg BID" escalation to 14986566; that figure is in 18363538 (source corrected, value 1200 mg
+  unchanged).
+- Sibling not changed (uncertain): the anticoagulants sub-rule says "One case report documented INR
+  increase from 2.6 to 4.1"; that figure matches neither readable source (18363538: 2.3 -> 3.9 -> 4.7)
+  and 14986566 is unreadable. Reported to Sean.

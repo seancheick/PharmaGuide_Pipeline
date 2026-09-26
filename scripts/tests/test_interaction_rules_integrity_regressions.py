@@ -911,3 +911,16 @@ def test_chasteberry_pregnancy_mechanism_matches_its_sources():
     for stale in ("D2 receptors", "LH/FSH"):
         assert stale not in pregnancy["mechanism"], stale
     assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
+
+
+def test_chondroitin_bleeding_rule_states_the_documented_inr_data():
+    rule = _rule("RULE_IQM_CHONDROITIN")
+    bleeding = _sub_rule(rule, "condition_id", "bleeding_disorders")
+
+    assert bleeding["sources"] == [_pmid("14986566"), _pmid("18363538")]
+    assert "2.3 to 3.9" in bleeding["mechanism"]
+    assert "in vitro data suggest" not in bleeding["mechanism"].lower()
+    # The 1200 mg BID escalation is reported in Knudsen & Sokol 2008.
+    assert bleeding["min_effective_dose"]["source"] == _pmid("18363538")
+    assert bleeding["min_effective_dose"]["value"] == 1200
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
