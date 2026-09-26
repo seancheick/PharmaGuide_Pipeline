@@ -1283,6 +1283,49 @@ def test_nutrition_fiber_without_active_row_stays_non_scoreable():
     assert get_scoring_ingredients(product, strict=True).rows == []
 
 
+@pytest.mark.parametrize(
+    "mutation",
+    ["remove_owner", "mismatch_nutrition_path", "inactive_owner"],
+)
+def test_persisted_declared_active_fiber_must_still_match_current_active_owner(mutation):
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _declared_active_fiber_product()
+    product["product_scoring_evidence"] = deepcopy(
+        derive_product_scoring_evidence(product)
+    )
+    assert any(
+        row.get("evidence_type") == "declared_active_fiber"
+        for row in product["product_scoring_evidence"]
+    )
+
+    if mutation == "remove_owner":
+        product["activeIngredients"] = []
+        product["ingredient_quality_data"] = {
+            "ingredients": [],
+            "ingredients_scorable": [],
+            "ingredients_skipped": [],
+        }
+    elif mutation == "mismatch_nutrition_path":
+        product["nutrition_summary"]["dietary_fiber_source"][
+            "raw_source_path"
+        ] = "ingredientRows[9]"
+    else:
+        product["activeIngredients"][0]["source_section"] = "inactive"
+        product["ingredient_quality_data"]["ingredients"][0][
+            "source_section"
+        ] = "inactive"
+
+    result = get_scoring_ingredients(product, strict=True)
+    assert result.rows == []
+    assert any(
+        row.reason == "stale_declared_active_fiber_evidence"
+        for row in result.rejected_rows
+    )
+    assert build_scored_artifact(product)["quality_score_status"] == "not_scored"
+
+
 def test_source_corrected_protein_mass_uses_sports_evidence_not_blend_anchor():
     protein = _row(
         name="Protein",

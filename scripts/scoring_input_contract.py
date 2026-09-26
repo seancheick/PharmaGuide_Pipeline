@@ -2385,6 +2385,11 @@ def _product_scoring_evidence_rows(
         )
 
     derived_by_key = {evidence_key(item): item for item in derived_evidence_rows}
+    valid_declared_active_fiber_keys = {
+        evidence_key(item)
+        for item in derived_evidence_rows
+        if _norm(item.get("evidence_type")) == "declared_active_fiber"
+    }
     context_fields = (
         "raw_taxonomy",
         "forms",
@@ -2429,6 +2434,15 @@ def _product_scoring_evidence_rows(
         _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
+        if (
+            evidence_type == "declared_active_fiber"
+            and evidence_key(item) not in valid_declared_active_fiber_keys
+        ):
+            # Persisted projections are caches, not a second owner. Recompute
+            # the active-row/nutrition-path join from the current product and
+            # reject a stored row when that exact join no longer exists.
+            rejected.append(_reject(item, "stale_declared_active_fiber_evidence"))
+            continue
         if (
             evidence_type == "blend_anchor_mass"
             and (is_nutrition_fact_declaration(item)
