@@ -77,6 +77,14 @@ def test_each_vitex_record_names_one_species():
             assert not named or record_id == "vitex" and text == record["notes"], (record_id, text)
 
 
+def test_vitex_does_not_carry_the_agnus_castus_cui():
+    """C0752339 is Vitex agnus castus (NCIt C72243 UMLS_CUI, checked
+    2026-09-26); no V. trifolia concept exists there, so vitex carries none."""
+    records = _records()
+    assert records["chaste_tree"]["cui"] == "C0752339"
+    assert records["vitex"]["cui"] is None
+
+
 def test_milk_thistle_notes_match_its_seed_unii():
     record = _records()["milk_thistle"]
     assert record["external_ids"]["unii"] == "U946SH95EE"

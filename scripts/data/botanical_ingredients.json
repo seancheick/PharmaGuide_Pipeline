@@ -14072,7 +14072,7 @@
       "notes": "Vitex trifolia (Lamiaceae), three-leaf or simpleleaf chastetree. Its dried ripe fruit is Man Jing Zi (Viticis Fructus), from V. trifolia and V. trifolia var. simplicifolia (PMID 37810114, 37282876). Not Vitex agnus-castus (chaste_tree) or Vitex negundo (nirgundi).",
       "last_updated": "2026-09-26",
       "external_ids": {},
-      "cui": "C0752339",
+      "cui": null,
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

@@ -365,7 +365,8 @@ _WAVE_9F3_RERESOLVED_CUI = [
     ('uva_ursi', 'C4724782', 'Arctostaphylos uva-ursi'),
     ('uva_ursi_leaf', 'C4724782', 'Arctostaphylos uva-ursi'),
     ('valerian_root', 'C0993600', 'Valeriana officinalis'),
-    ('vitex', 'C0752339', 'Vitex agnus-castus'),
+    # vitex left 2026-09-26: its latin name was the wrong species (it is V. trifolia);
+    # C0752339 is chaste_tree's V. agnus-castus. See test_botanical_species_records.py.
     ('watermelon', 'C0946607', 'Citrullus lanatus'),
     ('wheat_germ', 'C1123020', 'Triticum aestivum'),
     ('wheatgrass_powder', 'C1123020', 'Triticum aestivum'),
