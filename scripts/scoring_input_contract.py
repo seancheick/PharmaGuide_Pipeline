@@ -5614,6 +5614,13 @@ def role_driver_canonicals(module: str) -> set:
         # EPA/DHA AND the fish-oil/krill/algal parents that route a product to
         # the omega module — a parent-only row is still the module driver. (WR-01)
         return set(_ROUTE_OMEGA_INGREDIENT_CANONICALS) | set(_ROUTE_OMEGA_PARENT_CANONICALS)
+    if module == "fiber_digestive":
+        from scoring_v4.route_features import (
+            FIBER_CANONICALS, DIGESTIVE_ENZYME_CANONICALS,
+            DUAL_USE_ENZYME_CANONICALS, SYSTEMIC_ENZYME_CANONICALS,
+        )
+        return set(FIBER_CANONICALS | DIGESTIVE_ENZYME_CANONICALS
+                   | DUAL_USE_ENZYME_CANONICALS | SYSTEMIC_ENZYME_CANONICALS)
     if module == "sports":
         return (
             set(_ROUTE_SPORTS_PROTEIN_CANONICALS)
@@ -5702,11 +5709,18 @@ def _role_context(
             module = "generic"
         else:
             module = class_for_product(product)
+    drivers = role_driver_canonicals(module)
+    if module == "generic":
+        from scoring_v4.modules.immune_support import is_immune_support_product, _active_id
+        if is_immune_support_product(product):
+            # The existing subtype owner defines this panel; microgram nutrients
+            # must not lose their purpose merely because another row is heavier.
+            drivers.update(_norm(row.get("canonical_id")) for row in rows if _active_id(row))
     masses = [m for m in (_role_mass_mg(r) for r in rows) if m is not None]
     return {
         "module": module,
         "title_norm": _norm(product.get("product_name") or product.get("fullName")),
-        "driver_canonicals": role_driver_canonicals(module),
+        "driver_canonicals": drivers,
         "max_mass_mg": max(masses) if masses else 0.0,
     }
 

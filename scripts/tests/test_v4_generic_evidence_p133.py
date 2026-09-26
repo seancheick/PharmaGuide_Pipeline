@@ -1320,3 +1320,57 @@ def test_named_whey_source_is_not_replaced_by_its_constituent_proteins():
         "forms": [{"name": "Alpha-Lactalbumin", "category": "protein"},
                   {"name": "Lactoferrin", "category": "protein"}]}]
     assert score_evidence(product, owner_scoped=True)["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+
+
+def test_generic_module_uses_existing_purpose_owner_scope():
+    from scoring_v4.modules.generic import score_generic
+    product = _product(
+        product_name='Sleep Melatonin',
+        ingredients=[_ingredient(name='Melatonin', canonical_id='melatonin', quantity=5),
+                     _ingredient(name='L-Leucine', canonical_id='l_leucine', quantity=100)],
+        matches=[_match(id='MEL', ingredient='Melatonin', standard_name='Melatonin',
+                        study_type='rct_single', total_enrollment=30),
+                 _match(id='LEU', ingredient='L-Leucine', standard_name='L-Leucine')],
+    )
+    evidence = score_generic(product).dimensions['evidence']
+    assert evidence.metadata['ingredient_points'] == {'melatonin': 2.16}
+
+
+def test_fiber_module_cannot_borrow_evidence_from_adjunct_mineral():
+    from scoring_v4.modules.fiber_digestive import score_fiber_digestive
+    product = _product(
+        product_name='Daily Digestive', primary_type='fiber_digestive',
+        ingredients=[_ingredient(name='Psyllium', canonical_id='psyllium', quantity=3000),
+                     _ingredient(name='Magnesium', canonical_id='magnesium', quantity=50)],
+        matches=[_match()],
+    )
+    evidence = score_fiber_digestive(product).dimensions['evidence']
+    assert 'magnesium' not in evidence.metadata['ingredient_points']
+
+
+def test_digestive_activity_owner_wins_over_massive_adjunct():
+    from evidence_resolver import evidence_owner_canonicals
+    product = _product(product_name='Daily Digestive', primary_type='fiber_digestive',
+        ingredients=[_ingredient(name='Lactase', canonical_id='lactase', quantity=9000, unit='ALU'),
+                     _ingredient(name='Calcium', canonical_id='calcium', quantity=300)])
+    assert evidence_owner_canonicals(product, module='fiber_digestive') == {'lactase'}
+
+
+def test_digestive_evidence_authority_floor_cannot_escape_owner_scope():
+    from scoring_v4.modules.fiber_digestive import score_fiber_digestive
+    product = _product(product_name='Daily Digestive', primary_type='fiber_digestive',
+        ingredients=[_ingredient(name='Lactase', canonical_id='lactase', quantity=9000, unit='ALU'),
+                     _ingredient(name='Calcium', canonical_id='calcium', quantity=300)],
+        matches=[])
+    evidence = score_fiber_digestive(product).dimensions['evidence']
+    assert evidence.metadata.get('nutrition_authority_canonical') is None
+    assert 'nutrition_authority_floor' not in evidence.components
+
+
+def test_immune_profile_nutrients_are_owners_regardless_of_microgram_mass():
+    from evidence_resolver import evidence_owner_canonicals
+    product = _product(product_name='Daily Immune', primary_type='immune_support',
+        ingredients=[_ingredient(name='Vitamin C', canonical_id='vitamin_c', quantity=500),
+                     _ingredient(name='Vitamin D3', canonical_id='vitamin_d3', quantity=25, unit='mcg'),
+                     _ingredient(name='Zinc', canonical_id='zinc', quantity=15)])
+    assert evidence_owner_canonicals(product, module='generic') == {'vitamin_c', 'vitamin_d3', 'zinc'}

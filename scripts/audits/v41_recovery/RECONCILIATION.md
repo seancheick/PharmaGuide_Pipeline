@@ -446,3 +446,22 @@ still fails this record's current scope. Fresh real-label outputs are recorded i
 `~/pg_quality/candd/runs/protein_source_loss_20260926.json` (62.6 and 32.9 respectively).
 These totals are fresh outputs, not an isolated before/after score measurement.
 Combined fresh validation and broader preservation checks remain pending.
+
+### Generic/fiber Evidence purpose ownership
+
+Owner: `evidence_resolver.py::evidence_owner_canonicals` consumes
+`scoring_input_contract.py::classify_ingredient_roles`; generic Evidence remains
+`generic_evidence.py::score_evidence`. Existing route_features digestive sets and
+immune_support._active_id define their respective purpose ingredients.
+Evidence: `rg 'owner_scoped|role_driver_canonicals|_active_id|FIBER_CANONICALS' scripts`.
+Will NOT create: an owner resolver, identity set, module, registry or public field.
+
+Five failing regressions established adjunct Evidence, activity-unit ownership,
+a nutrition-authority floor bypass, and mass-only exclusion of immune nutrients.
+Generic/fiber callers now opt into the same scope as sports. Authority floors
+must belong to an owner. Digestive roles reuse existing identity sets; immune
+roles reuse the existing profile rather than privileging milligram mass over
+micrograms. 163 focused tests pass. The immune ideal fixture changes 93.0 -> 94.6
+because existing reviewed quercetin/elderberry records are recovered despite
+other pre-existing matches (raw Evidence 11.8881 -> 13.2651); no magnitudes changed.
+Frozen score/route/safety comparison follows at the combined checkpoint.

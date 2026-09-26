@@ -354,7 +354,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a consensus/branded 18 stays 18).
         auth_canon = _mass_dominant_essential_canonical(product)
-        if auth_canon and primary_floor < NUTRITION_AUTHORITY_FLOOR:
+        if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
+                and primary_floor < NUTRITION_AUTHORITY_FLOOR):
             primary_floor = NUTRITION_AUTHORITY_FLOOR
             nutrition_authority_canonical = auth_canon
             if not floor_canonical:
