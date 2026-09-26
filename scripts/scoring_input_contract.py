@@ -5730,6 +5730,8 @@ def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Opt
         r"\b" + re.escape(identity)
         + r"\s+(?:helps?|supports?|promotes?|targets?|maintains?)\s+(.+)"
     )
+    claim_sources = []
+    claim_categories: Set[str] = set()
     for index, statement in enumerate(ctx["statements"]):
         if not isinstance(statement, dict):
             continue
@@ -5743,13 +5745,22 @@ def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Opt
             # Preserve governing negation across coordinated ingredient claims.
             if re.search(r"\b(?:not|no|never|without|may|might)\b", sentence, re.I):
                 continue
-            for clause in re.split(r"\band\b", sentence, flags=re.I):
-                normalized = re.sub(r"[^a-z0-9]+", " ", clause.lower()).strip()
-                match = pattern.search(normalized)
+            normalized = re.sub(r"[^a-z0-9]+", " ", sentence.lower()).strip()
+            # Keep coordinated objects (gut health AND stress management).
+            # Split only when the conjunction introduces a new verb-bearing
+            # subject, so another active's claim cannot leak onto this one.
+            clauses = re.split(
+                r"\band\b(?=\s+(?:(?!and\b)\w+\s+){1,5}(?:helps?|supports?|promotes?|targets?|maintains?)\b)",
+                normalized,
+            )
+            for clause in clauses:
+                match = pattern.search(clause)
                 categories = evidence_indication_categories(match.group(1)) if match else set()
                 if categories:
-                    return (f"statements[{index}].notes:sentence[{sentence_index}]",
-                            ",".join(sorted(categories)))
+                    claim_categories.update(categories)
+                    claim_sources.append(f"statements[{index}].notes:sentence[{sentence_index}]")
+    if claim_categories:
+        return (";".join(dict.fromkeys(claim_sources)), ",".join(sorted(claim_categories)))
     return None
 
 

@@ -757,3 +757,20 @@ def test_resolver_uses_shared_daily_units_and_any_applicable_record(monkeypatch,
     assert er.resolve_evidence_for_row(row, product).applicability_status == 'sub_clinical_dose'
     row['is_proprietary_blend'] = True
     assert er.resolve_evidence_for_row(row, product).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+
+
+def test_literature_resolution_cannot_substitute_another_claimed_purpose(monkeypatch):
+    import json
+    from scoring_input_contract import get_scoring_ingredients
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    row = next(r for r in get_scoring_ingredients(product, strict=True).rows if r.get('canonical_id') == 'l_theanine')
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {})
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'l_theanine': {
+        'verification_result': 'authoritative_pubmed_verified',
+        'verification_provenance': {'all_pmids_verified': True, 'retractions_found': False},
+        'effect_direction': 'positive_strong', 'primary_outcome': 'Improved bowel regularity',
+        'studied_dose_exposure': {'values': [100], 'unit': 'mg'},
+    }})
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.reason_code == 'label_purpose_evidence_mismatch'

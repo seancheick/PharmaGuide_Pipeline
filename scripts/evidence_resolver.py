@@ -91,8 +91,19 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
 
 def evidence_indication_categories(text: str) -> Set[str]:
     """Shared label/clinical indication categories; never proof of efficacy."""
-    words = set(re.sub(r"[^a-z0-9]+", " ", str(text or "").lower()).split())
-    return {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
+    normalized = re.sub(r"[^a-z0-9]+", " ", str(text or "").lower())
+    # Physiological/physical stress is not psychological stress. This shared
+    # categorizer must not transfer antioxidant or manufacturing evidence to
+    # a mood claim merely because both contain the word "stress".
+    normalized = re.sub(r"\b(?:oxidative|cellular|mechanical|thermal|osmotic|endoplasmic reticulum) stress\b", " ", normalized)
+    words = set(normalized.split())
+    categories = {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
+    if "bone" in categories and "bone" not in words:
+        categories.discard("bone")  # density alone may describe a capsule
+    if "metabolic" in categories and not (words & (INDICATION_KEYWORDS["metabolic"] - {"fat"})):
+        if not re.search(r"\b(?:body|visceral) fat\b", normalized):
+            categories.discard("metabolic")
+    return categories
 
 
 class EvidenceDisposition(str, Enum):
@@ -1068,6 +1079,16 @@ def resolve_evidence_for_row(
                     owner_facts=owner_facts,
                     blocking_reasons=blocking_reasons,
                 )
+
+        claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
+        if claimed_purposes and not (claimed_purposes & _evidence_entry_purposes(lit_entry)):
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
+                blocking_reasons=["label_purpose_evidence_mismatch"],
+            )
 
         # Check dose applicability against studied exposure
         studied_dose = lit_entry.get("studied_dose_exposure")

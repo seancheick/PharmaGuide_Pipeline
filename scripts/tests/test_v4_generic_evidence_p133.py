@@ -1474,3 +1474,24 @@ def test_explicit_claim_cannot_borrow_evidence_for_another_purpose():
     product['statements'] = [{'type': 'Formula re: Contains',
         'notes': 'Ashwagandha supports bone density. L-theanine supports bowel regularity.'}]
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
+    import json
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    scores = []
+    for notes in [
+        'Ashwagandha supports gut health. Ashwagandha supports stress management. L-theanine supports relaxation.',
+        'Ashwagandha supports stress management. Ashwagandha supports gut health. L-theanine supports relaxation.',
+        'Ashwagandha supports gut health and stress management. L-theanine supports relaxation.',
+    ]:
+        control = deepcopy(product)
+        control['statements'] = [{'type': 'Formula re: Contains', 'notes': notes}]
+        scores.append(build_scored_artifact(control)['quality_pillars_v4']['evidence']['score'])
+    assert scores[0] == scores[1] == scores[2] > 0
+    for entry in product['evidence_data']['clinical_matches']:
+        entry.update(primary_outcome='Reduced oxidative stress biomarkers',
+            health_goals_supported=[], endpoint_relevance_tags=[], key_endpoints=[])
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0

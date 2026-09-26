@@ -885,3 +885,13 @@ Owner: generic_evidence.py::_dose_map/_converted_product_dose and
 scoring_input_contract.py::_positive_quantity/_row_unit/_role_is_blend_member.
 Evidence: shared-provider calls and failing-then-passing regression batch above.
 Will NOT create: a second conversion, daily-dose policy, or applicability flag.
+
+
+Second adversarial review: union all explicit purposes across statements and
+coordinated objects so label order cannot change scores. Preserve a new subject's
+claim boundary; reject oxidative/physical stress as psychological stress.
+The positive literature-resolution branch now shares the backed-study purpose
+check. Both new regressions failed before fixes. Final focused batch205passed
+3.77s; log ~/pg_quality/candd/multipurpose_review_complete.log. No score pin was
+raised or bypassed; same clinical record still counted once. Final broad/replay
+measurements follow after this batch.
