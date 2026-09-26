@@ -9,6 +9,8 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     get_active_ingredients,
 )
+# Routing owns the fiber canonical identity; the scorer reads the same set.
+from scoring_v4.route_features import FIBER_CANONICALS
 
 
 
