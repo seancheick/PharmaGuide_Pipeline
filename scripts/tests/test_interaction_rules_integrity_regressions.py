@@ -934,3 +934,74 @@ def test_green_tea_nadolol_rules_cite_the_primary_trial():
         assert "85%" in sub["mechanism"]
         assert "OATP1A2" in sub["mechanism"]
     assert rule["last_reviewed"] == "2026-04-23"  # agent re-sourcing, not a clinical review
+
+
+# Wrong-topic citations removed by the 2026-09 triage: (PMID, rule, sub-rule).
+# They must not return to that sub-rule, and must never be exempted instead.
+TRIAGE_GHOSTS = (
+    ("9464451", "RULE_IQM_RED_CLOVER", "drug:anticoagulants"),
+    ("39517207", "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL", "drug:statins"),
+    ("16800417", "RULE_IQM_SAW_PALMETTO_LIVER", "pregnancy_lactation"),
+    ("30980598", "RULE_IQM_SAW_PALMETTO_LIVER", "condition:ttc"),
+    ("10902065", "RULE_IQM_SAW_PALMETTO_LIVER", "drug:anticoagulants"),
+    ("18431248", "RULE_IQM_VALERIAN_LIVER", "pregnancy_lactation"),
+    ("27092496", "RULE_IQM_KAVALACTONES_LIVER", "pregnancy_lactation"),
+    ("12083489", "RULE_IQM_COQ10_HEART_DISEASE_STATINS", "condition:heart_disease"),
+    ("25997859", "RULE_IQM_WHITE_WILLOW_BARK_BLEEDING", "condition:bleeding_disorders"),
+    ("28472675", "RULE_BANNED_TANSY_PREGNANCY", "condition:pregnancy"),
+    ("39708247", "RULE_IQM_YERBA_MATE_CARDIOVASCULAR", "drug:anticoagulants"),
+    ("28745507", "RULE_IQM_ANDROGRAPHIS", "condition:autoimmune"),
+    ("21822619", "RULE_IQM_ANDROGRAPHIS", "condition:autoimmune"),
+    ("27912958", "RULE_IQM_BACOPA_THYROID", "condition:thyroid_disorder"),
+    ("18296328", "RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES", "drug:antihypertensives"),
+    ("15961987", "RULE_IQM_GUARANA", "drug:sedatives"),
+    ("21676849", "RULE_IQM_GUARANA", "drug:sedatives"),
+    ("19370686", "RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS", "drug:anticholinergics"),
+    ("26613955", "RULE_IQM_RHODIOLA_IMMUNE_BP", "drug:sedatives"),
+    ("38423354", "RULE_IQM_SAME", "drug:maois"),
+    ("31236960", "RULE_IQM_CHINESE_SKULLCAP_LIVER", "condition:pregnancy"),
+    ("10902065", "RULE_INGREDIENT_CAT_S_CLAW", "drug:anticoagulants"),
+    ("10902065", "RULE_INGREDIENT_EVENING_PRIMROSE_OIL", "drug:anticoagulants"),
+    ("10902065", "RULE_INGREDIENT_OMEGA_3", "drug:nsaids"),
+    ("35800714", "RULE_IQM_STINGING_NETTLE_DIABETES", "condition:diabetes"),
+    ("37958659", "RULE_IQM_VANADIUM_DIABETES", "condition:diabetes"),
+    ("29127724", "RULE_IQM_QUERCETIN_THYROID", "condition:thyroid_disorder"),
+    ("29127724", "RULE_IQM_QUERCETIN_THYROID", "drug:anticoagulants"),
+    ("36017706", "RULE_INGREDIENT_GENISTEIN__THYROID", "drug:thyroid_medications"),
+    ("15546831", "RULE_IQM_HORNY_GOAT_WEED_HEART", "drug:antihypertensives"),
+)
+GHOST_REVIEW = json.loads((DATA / "interaction_rules_ghost_review.json").read_text())
+
+
+def _cited(rule_id: str, sub_rule: str) -> list[str]:
+    rule = _rule(rule_id)
+    if sub_rule == "pregnancy_lactation":
+        return rule["pregnancy_lactation"]["sources"]
+    kind, _, key = sub_rule.partition(":")
+    if kind == "condition":
+        return _sub_rule(rule, "condition_id", key)["sources"]
+    return _sub_rule(rule, "drug_class_id", key)["sources"]
+
+
+def test_triage_ghost_citations_stay_gone_and_are_never_exempted():
+    exempted = {(e["pmid"], e["rule_id"], e["sub_rule"]) for e in GHOST_REVIEW["reviewed"]}
+    for pmid, rule_id, sub_rule in TRIAGE_GHOSTS:
+        assert _pmid(pmid) not in _cited(rule_id, sub_rule), (pmid, rule_id, sub_rule)
+        assert (pmid, rule_id, sub_rule) not in exempted, (pmid, rule_id, sub_rule)
+
+
+def test_interaction_rules_ghost_review_entries_are_complete_and_current():
+    meta = GHOST_REVIEW["_metadata"]
+    reviewed = GHOST_REVIEW["reviewed"]
+    assert meta["total_entries"] == len(reviewed)
+    keys = [(e["pmid"], e["rule_id"], e["sub_rule"]) for e in reviewed]
+    assert len(keys) == len(set(keys))
+    for entry in reviewed:
+        key = (entry["pmid"], entry["rule_id"], entry["sub_rule"])
+        for field in ("live_title", "rationale", "reviewed_by", "reviewed_at"):
+            assert entry.get(field), (key, field)
+        assert len(entry["rationale"]) >= 80, key
+        # Agent triage must not read as a clinician or owner review.
+        assert "not clinician-reviewed" in entry["reviewed_by"], key
+        # A stale exemption (citation since removed) must be deleted with it.
+        assert _pmid(entry["pmid"]) in _cited(entry["rule_id"], entry["sub_rule"]), key

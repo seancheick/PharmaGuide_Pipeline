@@ -1,0 +1,569 @@
+{
+  "_metadata": {
+    "purpose": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict",
+    "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
+    "schema_version": "5.0.0",
+    "last_updated": "2026-09-26",
+    "total_entries": 62
+  },
+  "reviewed": [
+    {
+      "pmid": "393503",
+      "rule_id": "RULE_BOTANICAL_LICORICE_ROOT",
+      "sub_rule": "condition:kidney_disease",
+      "live_title": "Prolonged pseudoaldosteronism induced by glycyrrhizin.",
+      "rationale": "Constituent citation: glycyrrhizin, licorice's active constituent, caused prolonged pseudoaldosteronism - aggravated hypertension, hypokalaemia and sodium-dependent fluid retention - the effects the kidney mechanism names; 31605160 in the same sub-rule covers liquorice pseudoaldosteronism.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "8510458",
+      "rule_id": "RULE_INGREDIENT_CURCUMIN",
+      "sub_rule": "drug:nsaids",
+      "live_title": "Mechanism of antiinflammatory actions of curcumine and boswellic acids.",
+      "rationale": "Misspelling: the record says 'curcumine' (from Curcuma longa), which the subject match misses. It shows curcumin inhibits 5-lipoxygenase and platelet cyclooxygenase and 12-lipoxygenase, the COX/5-LOX and platelet mechanism the sub-rule states.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "9464451",
+      "rule_id": "RULE_IQM_RED_CLOVER",
+      "sub_rule": "condition:thyroid_disorder",
+      "live_title": "Anti-thyroid isoflavones from soybean: isolation, characterization, and mechanisms of action.",
+      "rationale": "Constituent citation: genistein and daidzein, which red clover contains (30132047 in the same sub-rule), inhibit TPO-catalysed reactions as alternate substrates with IC50 about 1-10 microM - exactly what the mechanism states.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "11125871",
+      "rule_id": "RULE_IQM_GUARANA",
+      "sub_rule": "drug:sedatives",
+      "live_title": "Midazolam 12 mg is moderately counteracted by 250 mg caffeine in man.",
+      "rationale": "Class (caffeine) citation read in full: caffeine 250 mg moderately antagonised midazolam 12 mg sedation, 125 mg did not, zolpidem was not antagonised. The trial used caffeine, not guarana; 23981847 in the same sub-rule shows guarana seeds contain up to 6% caffeine. The subject check fails only because guarana is not named.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "12383029",
+      "rule_id": "RULE_IQM_KAVALACTONES_LIVER",
+      "sub_rule": "condition:seizure_disorder",
+      "live_title": "Therapeutic potential of kava in the treatment of anxiety disorders.",
+      "rationale": "On topic: the abstract reports kavalactones' anticonvulsant properties, GABA-A binding and sodium-channel blockade, which is what the seizure mechanism cites it for. The verifier's seizure stems (seizur/epilep/convuls) do not match 'anticonvulsant'. Its withdrawal sentence concerns conventional anxiolytics; kava withdrawal now rests on 38829029.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "12622602",
+      "rule_id": "RULE_IQM_COQ10_HEART_DISEASE_STATINS",
+      "sub_rule": "condition:high_cholesterol",
+      "live_title": "Risk for myopathy with statin therapy in high-risk patients.",
+      "rationale": "Class-level background: statin myopathy is dose related and increased by co-administered agents; the sub-rule uses it for the statin-myopathy context, while the CoQ10 depletion statement rests on 19528564 (statin myopathy review listing CoQ10 supplementation) in the same sub-rule. CoQ10 is not named, hence the subject miss.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "12622602",
+      "rule_id": "RULE_BANNED_RED_YEAST_RICE_STATINS",
+      "sub_rule": "drug:statins",
+      "live_title": "Risk for myopathy with statin therapy in high-risk patients.",
+      "rationale": "Class-level: statin myopathy 'is dose related and is increased when statins are used in combination with agents that share common metabolic pathways'. Red yeast rice monacolin K is lovastatin (EFSA opinions and FDA page cited in this rule), so stacking it on a statin raises total statin exposure. Red yeast rice is not named, hence the subject miss.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "14986566",
+      "rule_id": "RULE_IQM_CHONDROITIN",
+      "sub_rule": "condition:bleeding_disorders",
+      "live_title": "Possible augmentation of warfarin effect by glucosamine-chondroitin.",
+      "rationale": "Letter with no abstract; title and MeSH (chondroitin sulfates, glucosamine, warfarin, international normalized ratio, drug synergism) report augmentation of warfarin's effect by glucosamine-chondroitin, the INR signal the mechanism describes. The topic check fails because there is no abstract and MeSH spells out 'international normalized ratio'. The dose-dependent case detail is from 18363538.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "15546831",
+      "rule_id": "RULE_IQM_HORNY_GOAT_WEED_HEART",
+      "sub_rule": "condition:heart_disease",
+      "live_title": "Tachyarrhythmia and hypomania with horny goat weed.",
+      "rationale": "Letter with no abstract: 'Tachyarrhythmia and hypomania with horny goat weed'. Horny goat weed (Epimedium) is the source of this rule's subject icariin, whose subject list lacks the common name. MSKCC Epimedium (same sub-rule) summarises it as new arrhythmia in a 66-year-old man with congestive heart failure; the heart_disease mechanism states this.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "15592332",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:statins",
+      "live_title": "Bergamottin contribution to the grapefruit juice-felodipine interaction and disposition in humans.",
+      "rationale": "Constituent citation read in full: 12 mg bergamottin raised felodipine AUC 37% in volunteers (grapefruit juice 54%), showing bergamot's furanocoumarin inhibits CYP3A4 in vivo. Bergamottin is named, not bergamot (18830151 in the same sub-rule gives 18.2 mg/L in bergamot juice). The consequence for statins (simvastatin 3.3-7x AUC; pravastatin/rosuvastatin/fluvastatin unaffected) comes from 23184849; the mechanism says the concern is inferred from grapefruit.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "15592332",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:calcium_channel_blockers",
+      "live_title": "Bergamottin contribution to the grapefruit juice-felodipine interaction and disposition in humans.",
+      "rationale": "Constituent citation read in full: 12 mg bergamottin raised felodipine AUC 37% in volunteers (grapefruit juice 54%), showing bergamot's furanocoumarin inhibits CYP3A4 in vivo. Bergamottin is named, not bergamot (18830151 in the same sub-rule gives 18.2 mg/L in bergamot juice). The consequence for calcium channel blockers (felodipine 3-5x; nifedipine) comes from 23184849; the mechanism says the concern is inferred from grapefruit.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "15592332",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:immunosuppressants",
+      "live_title": "Bergamottin contribution to the grapefruit juice-felodipine interaction and disposition in humans.",
+      "rationale": "Constituent citation read in full: 12 mg bergamottin raised felodipine AUC 37% in volunteers (grapefruit juice 54%), showing bergamot's furanocoumarin inhibits CYP3A4 in vivo. Bergamottin is named, not bergamot (18830151 in the same sub-rule gives 18.2 mg/L in bergamot juice). The consequence for immunosuppressants (cyclosporine 162%; tacrolimus 10x trough) comes from 23184849; the mechanism says the concern is inferred from grapefruit.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "15592332",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:antiarrhythmics",
+      "live_title": "Bergamottin contribution to the grapefruit juice-felodipine interaction and disposition in humans.",
+      "rationale": "Constituent citation read in full: 12 mg bergamottin raised felodipine AUC 37% in volunteers (grapefruit juice 54%), showing bergamot's furanocoumarin inhibits CYP3A4 in vivo. Bergamottin is named, not bergamot (18830151 in the same sub-rule gives 18.2 mg/L in bergamot juice). The consequence for amiodarone (AUC 150%, QT prolongation, torsade de pointes) comes from 23184849; the mechanism says the concern is inferred from grapefruit.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "15592332",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:anticoagulants",
+      "live_title": "Bergamottin contribution to the grapefruit juice-felodipine interaction and disposition in humans.",
+      "rationale": "Constituent citation read in full: 12 mg bergamottin raised felodipine AUC 37% in volunteers (grapefruit juice 54%), showing bergamot's furanocoumarin inhibits CYP3A4 in vivo. Bergamottin is named, not bergamot (18830151 in the same sub-rule gives 18.2 mg/L in bergamot juice). The consequence for DOACs (rivaroxaban and apixaban listed with GI bleeding) comes from 23184849; the mechanism says the concern is inferred from grapefruit.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "15592332",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:oral_contraceptives",
+      "live_title": "Bergamottin contribution to the grapefruit juice-felodipine interaction and disposition in humans.",
+      "rationale": "Constituent citation read in full: 12 mg bergamottin raised felodipine AUC 37% in volunteers (grapefruit juice 54%), showing bergamot's furanocoumarin inhibits CYP3A4 in vivo. Bergamottin is named, not bergamot (18830151 in the same sub-rule gives 18.2 mg/L in bergamot juice). The consequence for estrogens (ethinylestradiol and 17-beta-estradiol bioavailability) comes from 23184849; the mechanism says the concern is inferred from grapefruit.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "16023217",
+      "rule_id": "RULE_IQM_5HTP_SEROTONIN",
+      "sub_rule": "condition:pregnancy",
+      "live_title": "Serotonin a la carte: supplementation with the serotonin precursor 5-hydroxytryptophan.",
+      "rationale": "Pharmacology citation: 5-HTP as the serotonin precursor and its safety profile (eosinophilia-myalgia syndrome, serotonin syndrome). It has no pregnancy data; the pregnancy/breastfeeding advice is sourced to the Health Canada NHPID 5-HTP monograph in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "16023217",
+      "rule_id": "RULE_IQM_5HTP_SEROTONIN",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "Serotonin a la carte: supplementation with the serotonin precursor 5-hydroxytryptophan.",
+      "rationale": "Pharmacology citation: 5-HTP as the serotonin precursor and its safety profile (eosinophilia-myalgia syndrome, serotonin syndrome). It has no pregnancy data; the pregnancy/breastfeeding advice is sourced to the Health Canada NHPID 5-HTP monograph in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "16985705",
+      "rule_id": "RULE_IQM_SAW_PALMETTO_LIVER",
+      "sub_rule": "condition:ttc",
+      "live_title": "Saw Palmetto Berry as a Treatment for BPH.",
+      "rationale": "Mechanism citation: 'in vitro ... liposterolic extract ... has antiandrogenic effects that inhibit the type 1 and type 2 isoenzymes of 5alpha-reductase; however there are no clinical studies that show any decrease in serum dihydrotestosterone' - the mechanism states both. Pregnancy/fertility statements rest on NCCIH and 31002161 in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "16985705",
+      "rule_id": "RULE_IQM_SAW_PALMETTO_LIVER",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "Saw Palmetto Berry as a Treatment for BPH.",
+      "rationale": "Mechanism citation: 'in vitro ... liposterolic extract ... has antiandrogenic effects that inhibit the type 1 and type 2 isoenzymes of 5alpha-reductase; however there are no clinical studies that show any decrease in serum dihydrotestosterone' - the mechanism states both. Pregnancy/fertility statements rest on NCCIH and 31002161 in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "17723077",
+      "rule_id": "RULE_IQM_COQ10_HEART_DISEASE_STATINS",
+      "sub_rule": "condition:heart_disease",
+      "live_title": "Risk of warfarin-related bleeding events and supratherapeutic international normalized ratios associated with complementary and alternative medicine: a longitudinal analysis.",
+      "rationale": "Carries the warfarin caveat in the heart_disease mechanism: CoQ10 use was independently associated with self-reported bleeding in warfarin users (OR 3.69). The heart-failure statement rests on Q-SYMBIO (25282031). The abstract has no cardiac words, hence the topic miss.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "17764919",
+      "rule_id": "RULE_INGREDIENT_BORAGE_SEED_OIL__SEIZURE",
+      "sub_rule": "condition:seizure_disorder",
+      "live_title": "The safety of evening primrose oil in epilepsy.",
+      "rationale": "GLA-class counterpoint: this evening primrose oil paper concludes the old GLA-seizure association is spurious, and the borage mechanism cites it for exactly that. Borage-specific evidence is the status epilepticus case 21387119 and MSKCC Borage in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "18778098",
+      "rule_id": "RULE_IQM_HORNY_GOAT_WEED_HEART",
+      "sub_rule": "condition:heart_disease",
+      "live_title": "Potent inhibition of human phosphodiesterase-5 by icariin derivatives.",
+      "rationale": "Mechanism citation: icariin inhibits PDE5A1 with IC50 5.9 microM (a synthetic derivative matched sildenafil), the basis of the PDE5 statement; the abstract has no cardiovascular or blood-pressure words. Clinical framing comes from MSKCC Epimedium and the VIAGRA label in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "18778098",
+      "rule_id": "RULE_IQM_HORNY_GOAT_WEED_HEART",
+      "sub_rule": "drug:antihypertensives",
+      "live_title": "Potent inhibition of human phosphodiesterase-5 by icariin derivatives.",
+      "rationale": "Mechanism citation: icariin inhibits PDE5A1 with IC50 5.9 microM (a synthetic derivative matched sildenafil), the basis of the PDE5 statement; the abstract has no cardiovascular or blood-pressure words. Clinical framing comes from MSKCC Epimedium and the VIAGRA label in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "18830151",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:statins",
+      "live_title": "Evaluation of flavonoids and furanocoumarins from Citrus bergamia (Bergamot) juice and identification of new compounds.",
+      "rationale": "Composition citation: bergamot juice contains bergamottin (18.2 mg/L) and bergapten (9.0 mg/L), the bridge from bergamot to grapefruit's furanocoumarin CYP3A4 mechanism. It has no drug data (topic miss); the consequence for statins (simvastatin 3.3-7x AUC; pravastatin/rosuvastatin/fluvastatin unaffected) comes from 23184849 and the in vivo bergamottin effect from 15592332.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "18830151",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:calcium_channel_blockers",
+      "live_title": "Evaluation of flavonoids and furanocoumarins from Citrus bergamia (Bergamot) juice and identification of new compounds.",
+      "rationale": "Composition citation: bergamot juice contains bergamottin (18.2 mg/L) and bergapten (9.0 mg/L), the bridge from bergamot to grapefruit's furanocoumarin CYP3A4 mechanism. It has no drug data (topic miss); the consequence for calcium channel blockers (felodipine 3-5x; nifedipine) comes from 23184849 and the in vivo bergamottin effect from 15592332.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "18830151",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:immunosuppressants",
+      "live_title": "Evaluation of flavonoids and furanocoumarins from Citrus bergamia (Bergamot) juice and identification of new compounds.",
+      "rationale": "Composition citation: bergamot juice contains bergamottin (18.2 mg/L) and bergapten (9.0 mg/L), the bridge from bergamot to grapefruit's furanocoumarin CYP3A4 mechanism. It has no drug data (topic miss); the consequence for immunosuppressants (cyclosporine 162%; tacrolimus 10x trough) comes from 23184849 and the in vivo bergamottin effect from 15592332.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "18830151",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:antiarrhythmics",
+      "live_title": "Evaluation of flavonoids and furanocoumarins from Citrus bergamia (Bergamot) juice and identification of new compounds.",
+      "rationale": "Composition citation: bergamot juice contains bergamottin (18.2 mg/L) and bergapten (9.0 mg/L), the bridge from bergamot to grapefruit's furanocoumarin CYP3A4 mechanism. It has no drug data (topic miss); the consequence for amiodarone (AUC 150%, QT prolongation, torsade de pointes) comes from 23184849 and the in vivo bergamottin effect from 15592332.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "18830151",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:oral_contraceptives",
+      "live_title": "Evaluation of flavonoids and furanocoumarins from Citrus bergamia (Bergamot) juice and identification of new compounds.",
+      "rationale": "Composition citation: bergamot juice contains bergamottin (18.2 mg/L) and bergapten (9.0 mg/L), the bridge from bergamot to grapefruit's furanocoumarin CYP3A4 mechanism. It has no drug data (topic miss); the consequence for estrogens (ethinylestradiol and 17-beta-estradiol bioavailability) comes from 23184849 and the in vivo bergamottin effect from 15592332.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23136064",
+      "rule_id": "RULE_IQM_CHASTEBERRY_PREGNANCY",
+      "sub_rule": "condition:pregnancy",
+      "live_title": "Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.",
+      "rationale": "Mechanism citation: systematic review of Vitex RCTs - lower TRH-stimulated prolactin, a normalised short luteal phase and higher mid-luteal progesterone, the hormonal effects the mechanism names. It has no pregnancy data; the pregnancy/breastfeeding caution is sourced to NCCIH Chasteberry in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23136064",
+      "rule_id": "RULE_IQM_CHASTEBERRY_PREGNANCY",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.",
+      "rationale": "Mechanism citation: systematic review of Vitex RCTs - lower TRH-stimulated prolactin, a normalised short luteal phase and higher mid-luteal progesterone, the hormonal effects the mechanism names. It has no pregnancy data; the pregnancy/breastfeeding caution is sourced to NCCIH Chasteberry in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23184849",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:statins",
+      "live_title": "Grapefruit-medication interactions: forbidden fruit or avoidable consequences?",
+      "rationale": "Grapefruit (class) citation; no PubMed abstract, full text read at PMC3589309: furanocoumarins irreversibly inactivate intestinal CYP3A4, and the data for statins (simvastatin 3.3-7x AUC; pravastatin/rosuvastatin/fluvastatin unaffected) are quoted in the mechanism. It does not name bergamot, which is why the mechanism says the concern is inferred from grapefruit and cites 18830151 and 15592332 for bergamot's furanocoumarins.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23184849",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:calcium_channel_blockers",
+      "live_title": "Grapefruit-medication interactions: forbidden fruit or avoidable consequences?",
+      "rationale": "Grapefruit (class) citation; no PubMed abstract, full text read at PMC3589309: furanocoumarins irreversibly inactivate intestinal CYP3A4, and the data for calcium channel blockers (felodipine 3-5x; nifedipine) are quoted in the mechanism. It does not name bergamot, which is why the mechanism says the concern is inferred from grapefruit and cites 18830151 and 15592332 for bergamot's furanocoumarins.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23184849",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:immunosuppressants",
+      "live_title": "Grapefruit-medication interactions: forbidden fruit or avoidable consequences?",
+      "rationale": "Grapefruit (class) citation; no PubMed abstract, full text read at PMC3589309: furanocoumarins irreversibly inactivate intestinal CYP3A4, and the data for immunosuppressants (cyclosporine 162%; tacrolimus 10x trough) are quoted in the mechanism. It does not name bergamot, which is why the mechanism says the concern is inferred from grapefruit and cites 18830151 and 15592332 for bergamot's furanocoumarins.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23184849",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:antiarrhythmics",
+      "live_title": "Grapefruit-medication interactions: forbidden fruit or avoidable consequences?",
+      "rationale": "Grapefruit (class) citation; no PubMed abstract, full text read at PMC3589309: furanocoumarins irreversibly inactivate intestinal CYP3A4, and the data for amiodarone (AUC 150%, QT prolongation, torsade de pointes) are quoted in the mechanism. It does not name bergamot, which is why the mechanism says the concern is inferred from grapefruit and cites 18830151 and 15592332 for bergamot's furanocoumarins.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23184849",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:anticoagulants",
+      "live_title": "Grapefruit-medication interactions: forbidden fruit or avoidable consequences?",
+      "rationale": "Grapefruit (class) citation; no PubMed abstract, full text read at PMC3589309: furanocoumarins irreversibly inactivate intestinal CYP3A4, and the data for DOACs (rivaroxaban and apixaban listed with GI bleeding) are quoted in the mechanism. It does not name bergamot, which is why the mechanism says the concern is inferred from grapefruit and cites 18830151 and 15592332 for bergamot's furanocoumarins.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23184849",
+      "rule_id": "RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL",
+      "sub_rule": "drug:oral_contraceptives",
+      "live_title": "Grapefruit-medication interactions: forbidden fruit or avoidable consequences?",
+      "rationale": "Grapefruit (class) citation; no PubMed abstract, full text read at PMC3589309: furanocoumarins irreversibly inactivate intestinal CYP3A4, and the data for estrogens (ethinylestradiol and 17-beta-estradiol bioavailability) are quoted in the mechanism. It does not name bergamot, which is why the mechanism says the concern is inferred from grapefruit and cites 18830151 and 15592332 for bergamot's furanocoumarins.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23946031",
+      "rule_id": "RULE_INGREDIENT_GLUCOSAMINE",
+      "sub_rule": "drug:anticoagulants",
+      "live_title": "Warfarin: its highs and lows.",
+      "rationale": "No PubMed abstract; full text read at PMC3743701: a teaching case in which INR rose to 3.9 after the patient started a glucosamine-chondroitin supplement, which was then stopped. MeSH lists glucosamine, chondroitin, warfarin and INR; the subject check fails only because there is no abstract.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "23981847",
+      "rule_id": "RULE_IQM_GUARANA",
+      "sub_rule": "drug:sedatives",
+      "live_title": "Guarana: revisiting a highly caffeinated plant from the Amazon.",
+      "rationale": "Establishes guarana seeds contain up to 6% caffeine, the basis of the stimulant mechanism; it has no sedative-drug data (topic miss). The caffeine-benzodiazepine effect is 11125871 in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "24131672",
+      "rule_id": "RULE_BOTAN_SCHISANDRA_BERRY_CYP3A4",
+      "sub_rule": "condition:liver_disease",
+      "live_title": "Deoxyschizandrin, a naturally occurring lignan, is a specific probe substrate of human cytochrome P450 3A.",
+      "rationale": "Constituent citation: deoxyschizandrin, 'the most abundant lignan in Fructus Schisandrae', is a CYP3A4/5 substrate that competes with midazolam and testosterone in human liver microsomes, supporting the CYP3A involvement the mechanism states. The subject list lacks the Latin/constituent names used.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "25312732",
+      "rule_id": "RULE_IQM_GREEN_TEA_HYPERTENSION",
+      "sub_rule": "condition:hypertension",
+      "live_title": "Overview of green tea interaction with cardiovascular drugs.",
+      "rationale": "Review of green tea interactions with cardiovascular drugs; human data include nadolol, a beta-blocker antihypertensive, which the verifier's topic stems do not cover. The primary nadolol/OATP1A2 trial (24419562) is cited beside it for the numbers and mechanism.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "25312732",
+      "rule_id": "RULE_IQM_GREEN_TEA_HYPERTENSION",
+      "sub_rule": "drug:antihypertensives",
+      "live_title": "Overview of green tea interaction with cardiovascular drugs.",
+      "rationale": "Review of green tea interactions with cardiovascular drugs; human data include nadolol, a beta-blocker antihypertensive, which the verifier's topic stems do not cover. The primary nadolol/OATP1A2 trial (24419562) is cited beside it for the numbers and mechanism.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "25864370",
+      "rule_id": "RULE_IQM_MAGNESIUM_HYPERTENSION",
+      "sub_rule": "condition:heart_disease",
+      "live_title": "Magnesium and Dialysis: The Neglected Cation.",
+      "rationale": "Review of magnesium disorders in dialysis (hypermagnesemia with reduced renal function; MeSH torsades de pointes), supporting the renal-impairment accumulation clause. Cardiac effects of magnesium toxicity (irregular heartbeat, cardiac arrest; higher risk with impaired renal function) are in the ODS fact sheet in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "27215274",
+      "rule_id": "RULE_IQM_ANDROGRAPHIS",
+      "sub_rule": "drug:immunosuppressants",
+      "live_title": "Andrographis paniculata decreases fatigue in patients with relapsing-remitting multiple sclerosis: a 12-month double-blind placebo-controlled pilot study.",
+      "rationale": "12-month RRMS RCT with andrographis added to interferon beta: well tolerated, no change in relapse rate or EDSS. The immunosuppressants mechanism cites it for that and states no study with immunosuppressant drugs exists; topic stems ('immun', 'transplant') are absent from the abstract.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "30132047",
+      "rule_id": "RULE_INGREDIENT_GENISTEIN__THYROID",
+      "sub_rule": "condition:thyroid_disorder",
+      "live_title": "Effects of isoflavones on breast tissue and the thyroid hormone system in humans: a comprehensive safety evaluation.",
+      "rationale": "Class citation (soy and red clover isoflavones, genistein among them); full text read at PMC6132702: iodine-adequate humans unlikely affected, possible negative effect in thyroid dysfunction, a soy protein levothyroxine-absorption case versus no effect of 60 mg isoflavones. The abstract does not name genistein.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "30132047",
+      "rule_id": "RULE_INGREDIENT_GENISTEIN__THYROID",
+      "sub_rule": "drug:thyroid_medications",
+      "live_title": "Effects of isoflavones on breast tissue and the thyroid hormone system in humans: a comprehensive safety evaluation.",
+      "rationale": "Class citation (soy and red clover isoflavones, genistein among them); full text read at PMC6132702: iodine-adequate humans unlikely affected, possible negative effect in thyroid dysfunction, a soy protein levothyroxine-absorption case versus no effect of 60 mg isoflavones. The abstract does not name genistein.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "31523132",
+      "rule_id": "RULE_IQM_5HTP_SEROTONIN",
+      "sub_rule": "drug:maois",
+      "live_title": "Serotonin Syndrome: Pathophysiology, Clinical Features, Management, and Potential Future Directions.",
+      "rationale": "Class citation: serotonin syndrome review stating that an MAOI with serotonergic drugs is 'especially dangerous'. 5-HTP is not named (subject miss); 5-HTP-specific MAOI evidence is MSKCC 5-HTP and the Health Canada monograph in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "32250458",
+      "rule_id": "RULE_BOTAN_SCHISANDRA_BERRY_CYP3A4",
+      "sub_rule": "drug:sedatives",
+      "live_title": "Potential for pharmacokinetic interactions between Schisandra sphenanthera and bosutinib, but not imatinib: in vitro metabolism study combined with a physiologically-based pharmacokinetic modelling approach.",
+      "rationale": "Read in full: Schisandra (sphenanthera) lignans inhibit CYP3A4 and co-administration roughly doubled midazolam and tacrolimus exposure in PBPK/clinical comparison, supporting the benzodiazepine (midazolam) clause; the sedative stems miss 'midazolam'. Species note: S. sphenanthera, whose schisandrol B and schisantherin A also occur in S. chinensis.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "32626016",
+      "rule_id": "RULE_BANNED_RED_YEAST_RICE_STATINS",
+      "sub_rule": "condition:high_cholesterol",
+      "live_title": "Scientific opinion on the safety of monacolins in red yeast rice.",
+      "rationale": "EFSA 2018 opinion: monacolin K is identical to lovastatin, a treatment for hypercholesterolaemia, with severe musculoskeletal and liver effects reported at 3 mg/day. On topic; the verifier's 'cholester' stem does not match 'hypercholesterolaemia'. The 2025 opinion (40027377) is cited beside it.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "33372366",
+      "rule_id": "RULE_IQM_ANDROGRAPHIS",
+      "sub_rule": "drug:immunosuppressants",
+      "live_title": "Safety of Andrographis paniculata: A systematic review and meta-analysis.",
+      "rationale": "Safety meta-analysis of andrographis (including autoimmune-disease trials): serious AEs 0.02 per 1000. Cited for 'serious adverse events were very rare across trials'; the abstract has no immunosuppressant words (topic miss).",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "33673548",
+      "rule_id": "RULE_BANNED_TANSY_PREGNANCY",
+      "sub_rule": "condition:pregnancy",
+      "live_title": "Maternal Reproductive Toxicity of Some Essential Oils and Their Constituents.",
+      "rationale": "Full text read at PMC7956842: 'the whole plants of savin, pennyroyal, tansy, and rue can induce miscarriage'; tansy oil is 45.2% beta-thujone, a GABA-A-blocking convulsant. The abstract names thujone but not tansy, hence the subject miss.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34073784",
+      "rule_id": "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+      "sub_rule": "condition:diabetes",
+      "live_title": "Black Cumin (Nigella sativa L.): A Comprehensive Review on Phytochemistry, Health Benefits, Molecular Pharmacology, and Safety.",
+      "rationale": "Full text read at PMC8225153: thymoquinone raised plasma glibenclamide 13.4% (single) and 21.8% (multiple doses) in rats with a synergistic glucose effect - the additive-effect statement. The human glucose data are 40210172 in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34073784",
+      "rule_id": "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+      "sub_rule": "condition:pregnancy",
+      "live_title": "Black Cumin (Nigella sativa L.): A Comprehensive Review on Phytochemistry, Health Benefits, Molecular Pharmacology, and Safety.",
+      "rationale": "Full text read at PMC8225153: in pregnant rats thymoquinone i.p. at 35-50 mg/kg caused maternal and embryonic toxicity and fetal resorption, while 15 mg/kg and intravaginal black seed oil did not - stated in the mechanism/alert.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34073784",
+      "rule_id": "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+      "sub_rule": "drug:anticoagulants",
+      "live_title": "Black Cumin (Nigella sativa L.): A Comprehensive Review on Phytochemistry, Health Benefits, Molecular Pharmacology, and Safety.",
+      "rationale": "Full text read at PMC8225153: in a fluorescence assay thymoquinone was a moderate CYP2C9 inhibitor, the only claim this sub-rule makes (pharmacokinetic interaction theoretical, no clinical study).",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34073784",
+      "rule_id": "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+      "sub_rule": "drug:hypoglycemics_high_risk",
+      "live_title": "Black Cumin (Nigella sativa L.): A Comprehensive Review on Phytochemistry, Health Benefits, Molecular Pharmacology, and Safety.",
+      "rationale": "Full text read at PMC8225153: thymoquinone raised plasma glibenclamide (a sulfonylurea) 13.4-21.8% in rats with a synergistic glucose effect, the drug-specific statement; human glucose data are 40210172 in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34073784",
+      "rule_id": "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+      "sub_rule": "drug:hypoglycemics_lower_risk",
+      "live_title": "Black Cumin (Nigella sativa L.): A Comprehensive Review on Phytochemistry, Health Benefits, Molecular Pharmacology, and Safety.",
+      "rationale": "Full text read at PMC8225153: thymoquinone raised plasma glibenclamide (a sulfonylurea) 13.4-21.8% in rats with a synergistic glucose effect, the drug-specific statement; human glucose data are 40210172 in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34073784",
+      "rule_id": "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+      "sub_rule": "drug:hypoglycemics_unknown",
+      "live_title": "Black Cumin (Nigella sativa L.): A Comprehensive Review on Phytochemistry, Health Benefits, Molecular Pharmacology, and Safety.",
+      "rationale": "Full text read at PMC8225153: thymoquinone raised plasma glibenclamide (a sulfonylurea) 13.4-21.8% in rats with a synergistic glucose effect, the drug-specific statement; human glucose data are 40210172 in the same sub-rule.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34073784",
+      "rule_id": "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "Black Cumin (Nigella sativa L.): A Comprehensive Review on Phytochemistry, Health Benefits, Molecular Pharmacology, and Safety.",
+      "rationale": "Full text read at PMC8225153: in pregnant rats thymoquinone i.p. at 35-50 mg/kg caused maternal and embryonic toxicity and fetal resorption, while 15 mg/kg and intravaginal black seed oil did not - stated in the mechanism/alert.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34315377",
+      "rule_id": "RULE_IQM_HOLY_BASIL_PREGNANCY",
+      "sub_rule": "condition:pregnancy",
+      "live_title": "The Safety and Efficacy of Botanicals with Nootropic Effects.",
+      "rationale": "Full text read at PMC8762178: 'Due to a lack of data for pediatric use, traditional use as an abortifacient, and conflicting reports on embryotoxicity of O. tenuiflorum L., it is not recommended for use by children or women who are pregnant and/or lactating, at doses exceeding expected daily intake via the diet' - the rule's claim and its culinary carve-out.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "34315377",
+      "rule_id": "RULE_IQM_HOLY_BASIL_PREGNANCY",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "The Safety and Efficacy of Botanicals with Nootropic Effects.",
+      "rationale": "Full text read at PMC8762178: 'Due to a lack of data for pediatric use, traditional use as an abortifacient, and conflicting reports on embryotoxicity of O. tenuiflorum L., it is not recommended for use by children or women who are pregnant and/or lactating, at doses exceeding expected daily intake via the diet' - the rule's claim and its culinary carve-out.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "36017706",
+      "rule_id": "RULE_INGREDIENT_GENISTEIN__THYROID",
+      "sub_rule": "condition:thyroid_disorder",
+      "live_title": "Peripubertal soy isoflavone consumption leads to subclinical hypothyroidism in male Wistar rats.",
+      "rationale": "Soy isoflavone mixture (genistein is a major soy isoflavone) in peripubertal rats raised TSH without T3/T4 change; the mechanism states this rat finding. The abstract says 'soy isoflavones', not genistein, hence the subject miss.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "38440178",
+      "rule_id": "RULE_IQM_MACA_PREGNANCY",
+      "sub_rule": "condition:pregnancy",
+      "live_title": "Exploring the chemical and pharmacological variability of Lepidium meyenii: a comprehensive review of the effects of maca.",
+      "rationale": "Full text read at PMC10910417: a teratogenicity study of 1 g/kg/day aqueous maca extract showed no alterations in embryonic development, and 'Studies on maca toxicity in humans are limited' - supports 'Human pregnancy safety data are sparse'.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "38440178",
+      "rule_id": "RULE_IQM_MACA_PREGNANCY",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "Exploring the chemical and pharmacological variability of Lepidium meyenii: a comprehensive review of the effects of maca.",
+      "rationale": "Full text read at PMC10910417: a teratogenicity study of 1 g/kg/day aqueous maca extract showed no alterations in embryonic development, and 'Studies on maca toxicity in humans are limited' - supports 'Human pregnancy safety data are sparse'.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    }
+  ]
+}
