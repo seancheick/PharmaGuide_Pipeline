@@ -237,7 +237,9 @@ def test_every_pmid_in_the_rules_file_is_collected():
     _metadata changelog names removed ghosts; it is history, not a claim."""
     rules = json.loads(virc.RULES.read_text())["interaction_rules"]
     text = json.dumps(rules)
-    cited = {a or b for a, b in re.findall(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID:?\s*(\d+)", text)}
+    cited = {a or b or c for a, b, c in re.findall(
+        r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID:?\s*(\d+)"
+        r"|(?:ncbi\.nlm\.nih\.gov/pmc/articles|pmc\.ncbi\.nlm\.nih\.gov/articles)/(PMC\d+)", text)}
     cited |= set(virc.BOOK_RE.findall(text))
     collected = set(virc.collect_claims(rules, virc.load_subject_entries()))
     assert cited - collected == set()

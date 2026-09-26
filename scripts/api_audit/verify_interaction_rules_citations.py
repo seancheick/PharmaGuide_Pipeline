@@ -75,9 +75,10 @@ from verify_all_citations_content import RATE_LIMIT, SSL_CTX, fetch_articles  # 
 DATA = REPO / "scripts" / "data"
 RULES = DATA / "ingredient_interaction_rules.json"
 REVIEW_PATH = DATA / "interaction_rules_ghost_review.json"
-PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
+PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|(?:ncbi\.nlm\.nih\.gov/pmc/articles|pmc\.ncbi\.nlm\.nih\.gov/articles)/(PMC\d+)")
 # free text also cites as "PMID 12345"
-TEXT_PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID:?\s*(\d+)")
+TEXT_PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID:?\s*(\d+)"
+                          r"|(?:ncbi\.nlm\.nih\.gov/pmc/articles|pmc\.ncbi\.nlm\.nih\.gov/articles)/(PMC\d+)")
 BOOK_RE = re.compile(r"ncbi\.nlm\.nih\.gov/books/(NBK\d+)")
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 
@@ -292,7 +293,7 @@ def fetch_book_chapters(nbk_ids: list[str]) -> dict[str, dict]:
 
 def _text_ids(text: str) -> list[str]:
     """Every PubMed and Bookshelf id cited in free text, in order, once each."""
-    ids = [a or b for a, b in TEXT_PMID_RE.findall(text)] + BOOK_RE.findall(text)
+    ids = [a or b or c for a, b, c in TEXT_PMID_RE.findall(text)] + BOOK_RE.findall(text)
     return list(dict.fromkeys(ids))
 
 
@@ -313,7 +314,7 @@ def collect_claims(rules: list[dict], entries: dict) -> dict[str, list[tuple]]:
             for source in sub_rule.get("sources") or []:
                 match = PMID_RE.search(str(source)) or BOOK_RE.search(str(source))
                 if match:
-                    cite(match.group(1), label)
+                    cite(next(g for g in match.groups() if g), label)
             floor = sub_rule.get("min_effective_dose")
             if isinstance(floor, dict):
                 for source_id in _text_ids(f"{floor.get('source') or ''} {floor.get('rationale') or ''}"):

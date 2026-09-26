@@ -1073,8 +1073,9 @@ def test_interaction_rules_ghost_review_entries_are_complete_and_current():
         assert "not clinician-reviewed" in entry["reviewed_by"], key
         # A stale exemption (citation since removed) must be deleted with it.
         source_id = entry["pmid"]
-        url = (f"https://www.ncbi.nlm.nih.gov/books/{source_id}/"
-               if source_id.startswith("NBK") else _pmid(source_id))
+        url = (f"https://www.ncbi.nlm.nih.gov/books/{source_id}/" if source_id.startswith("NBK")
+               else f"https://pmc.ncbi.nlm.nih.gov/articles/{source_id}/" if source_id.startswith("PMC")
+               else _pmid(source_id))
         assert url in _cited(entry["rule_id"], entry["sub_rule"]), key
 
 

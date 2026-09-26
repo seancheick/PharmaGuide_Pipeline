@@ -4,7 +4,7 @@
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
     "last_updated": "2026-09-26",
-    "total_entries": 70
+    "total_entries": 72
   },
   "reviewed": [
     {
@@ -634,6 +634,24 @@
       "sub_rule": "dose_floor:hypoglycemics_unknown",
       "live_title": "The role of selected nutraceuticals in management of prediabetes and diabetes: An updated review of the literature.",
       "rationale": "Full-text citation, secondary to the floor's own source. The floor cites Sotaniemi 1995 (PMID 8721940, on topic); its rationale cites this review only for the dose split the Sotaniemi abstract omits. The review body (PMC9804244) states: 'the dose of 100 mg significantly decreased FPG levels (-10.81 mg/dl, -7.20%, p < .05) while that of 200 mg reduced HbA1c'. The abstract covers many nutraceuticals and does not name ginseng, hence the subject miss.",
+      "reviewed_by": "agent data-fix review 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "PMC7583039",
+      "rule_id": "RULE_BOTAN_MUGWORT_PREGNANCY",
+      "sub_rule": "condition:pregnancy",
+      "live_title": "Significance of Artemisia Vulgaris L. (Common Mugwort) in the History of Medicine and Its Possible Contemporary Applications Substantiated by Phytochemical and Pharmacological Studies.",
+      "rationale": "Full-text citation (PMC7583039 = PMID 32992959, Molecules 2020; read via Europe PMC 2026-09-26). The abstract does not mention pregnancy, but the body states that A. vulgaris is traditionally 'recommended for relieving hypertension and inducing labor or miscarriage', that 'When consumed in large doses, A. vulgaris may cause miscarriage', and discusses its alpha-thujone content. That supports the abortifacient and thujone claims. The mechanism's 'Animal studies demonstrate uterotonic effects' is not in this source (register Q5).",
+      "reviewed_by": "agent data-fix review 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "PMC7583039",
+      "rule_id": "RULE_BOTAN_MUGWORT_PREGNANCY",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "Significance of Artemisia Vulgaris L. (Common Mugwort) in the History of Medicine and Its Possible Contemporary Applications Substantiated by Phytochemical and Pharmacological Studies.",
+      "rationale": "Full-text citation (PMC7583039 = PMID 32992959, Molecules 2020; read via Europe PMC 2026-09-26). The abstract does not mention pregnancy, but the body states that A. vulgaris is traditionally 'recommended for relieving hypertension and inducing labor or miscarriage', that 'When consumed in large doses, A. vulgaris may cause miscarriage', and discusses its alpha-thujone content. That supports the abortifacient and thujone claims. The mechanism's 'Animal studies demonstrate uterotonic effects' is not in this source (register Q5).",
       "reviewed_by": "agent data-fix review 2026-09-26 (not clinician-reviewed)",
       "reviewed_at": "2026-09-26"
     }
