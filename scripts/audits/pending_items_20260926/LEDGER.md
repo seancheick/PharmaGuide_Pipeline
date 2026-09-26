@@ -52,6 +52,7 @@ Close an item by editing this file in the commit that resolves it.
 | Q10 | Submissions: 60-product development/holdout set not assembled; 178392 label_mismatch correction unverified. | memory project_submission_foundations_batch1, project_submission_batch_2026_09_11. |
 | Q11 | Phase 4 follow-up: pregnancy/caffeine materiality is still presence. | memory project_phase4_reconciliation_authoring. |
 | Q12 | Metformin/B12 softened consumer copy stays parked until a B1 delta re-review. | memory project_batch01_metformin_softening_parked. |
+| Q13 | Unlanded July/August work that survived only as unreachable git objects, now pinned by local tags (not pushed): `archive/unlanded-label-trust-nested-nutrients-02f4686f` (07-20, build_final_db nested nutrient components + 4 tests; 0 of the 4 tests and 4 of 5 helpers are absent on main, which ships display_ingredients / label_ledger_* instead, so it may be superseded), `archive/stash-pre-label-hierarchy-scoring-2b45bf72` (07-20 stash), `archive/stash-bcaa-evidence-wip-153d63af` (08-06 stash: backed_clinical_studies, enricher, generic_evidence). Review each against main; delete the tag once decided. | `git fsck --unreachable` 2026-09-26. |
 
 ## Codex lane (v41-recovery, active)
 
@@ -60,12 +61,14 @@ Close an item by editing this file in the commit that resolves it.
 | C1 | v41-recovery is ahead of main and must merge main 8dbd621b. Expected conflicts: quality_score.json version, fingerprint history, test_v4_config_registry; take a version above 1.21.2 and keep every ledger entry. Codex's handoff still says main is unpushed. |
 | C2 | 14 protein products lost unsupported Evidence credit; source-family evidence review before any release. |
 | C3 | Older v41 notes: botanical dosing basis (extract vs marker ranges; curcumin phytosome, milk thistle) and folic-acid prenatals without a folate evidence match. Verify in the Codex lane. |
+| C4 | 245 unreachable commits include Codex WIP stashes from 2026-09-22 to 09-25 on v41-recovery and codex/product-quality-redesign. Git prunes unreachable objects after its expiry window; Codex should confirm none holds unapplied work. |
 
 ## App repo
 
 | # | Item |
 |---|---|
 | A1 | 7 golden tests fail from glyph rasterization drift on this machine (0.06-0.07% of pixels, text edges only, layout identical): nutrient_progress_bar x2, hero_section, probiotic_section x2, med_nutrient_reviewer x2. Regenerate in the canonical Flutter environment. |
+| A2 | Two app stashes of other owners: stash@{0} "codex batch1 frozen submission docs" (2026-08-25), stash@{1} "pre-existing local changes before label hierarchy integration" (2026-07-20, 6 files). Owner decides keep or drop. |
 
 ## Release-time (only with a release)
 
@@ -85,3 +88,4 @@ policy-filtered concerns; Codex's Candidate D calibration through 69c08dbc; PRs 
 This branch: cascara rxcui 66869 and miroestrol class (e69e1223); chondroitin, black seed and evening
 primrose copy (a70e057d); garlic-warfarin ghost PMID (f7a10389); CoQ10 source label (786d318b); matrix
 consumers (ff1793cb). App: med-nutrient parity pin repinned to the bundled artifact (4c5ff2b).
+Sessions: finished and stale PharmaGuide sessions archived; kept: the blend-child decision (D1), "Product quality redesign implementation" and the running "Audit Gemini and leftover work".
