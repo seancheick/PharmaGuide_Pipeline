@@ -1,0 +1,72 @@
+[
+  {
+    "kind": "creatine",
+    "per_serving_g": 1.5,
+    "servings": [
+      2.0,
+      2.0,
+      false
+    ],
+    "raw_dose": 8.0,
+    "public_dose": 6.4,
+    "metadata": {
+      "phase": "P1.7_sports_dose_v1",
+      "method": "sports_active_dose_bands_v1",
+      "primary_identity": "creatine",
+      "dose_basis": "creatine_under_2_g"
+    }
+  },
+  {
+    "kind": "creatine",
+    "per_serving_g": 3,
+    "servings": [
+      1.0,
+      1.0,
+      false
+    ],
+    "raw_dose": 25.0,
+    "public_dose": 20.0,
+    "metadata": {
+      "phase": "P1.7_sports_dose_v1",
+      "method": "sports_active_dose_bands_v1",
+      "primary_identity": "creatine",
+      "dose_basis": "creatine_3_to_10_g"
+    }
+  },
+  {
+    "kind": "fiber",
+    "per_serving_g": 3,
+    "servings": [
+      2.0,
+      2.0,
+      false
+    ],
+    "raw_dose": 16.0,
+    "public_dose": 12.8,
+    "metadata": {
+      "phase": "P1.8_fiber_digestive_dose_v1",
+      "method": "fiber_effective_dose_v1",
+      "fiber_dose_source": "ingredient_rows",
+      "fiber_grams_per_serving": 3.0,
+      "fiber_rows_evaluated": 1
+    }
+  },
+  {
+    "kind": "fiber",
+    "per_serving_g": 6,
+    "servings": [
+      1.0,
+      1.0,
+      false
+    ],
+    "raw_dose": 21.0,
+    "public_dose": 16.8,
+    "metadata": {
+      "phase": "P1.8_fiber_digestive_dose_v1",
+      "method": "fiber_effective_dose_v1",
+      "fiber_dose_source": "ingredient_rows",
+      "fiber_grams_per_serving": 6.0,
+      "fiber_rows_evaluated": 1
+    }
+  }
+]

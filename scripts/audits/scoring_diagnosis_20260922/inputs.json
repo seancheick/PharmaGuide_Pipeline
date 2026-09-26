@@ -1,0 +1,292 @@
+[
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Airborne_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "95a718726d7c64a4e08a15e1bc37ca33493ab6bbc7f27a39f7a321b438b78008",
+    "count": 91
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "48b6a93de70368e245eac1bcfe66049f373fbf08240e9794117bcc39f7723c24",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "fa4a2b04e69f8eadc20278b223a62443a2626fa90553372f4d05685729439b48",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_3.json",
+    "sha256": "89201bdaa9360fb032ed8457e1e87a74d72ff909c364a30cc26df1d228dffd6e",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_4.json",
+    "sha256": "fd3ca2f288a349a6ca01c5084cbff8f426e2ed5fc268b8e54f797f1591a4a502",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_5.json",
+    "sha256": "1bc5ab593329ff623246060fc0493868255ac9ebb6b17bf1bef3fc9332e1540a",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_6.json",
+    "sha256": "97aeb0fca2a98eb2b1ba13baf41248eb8bf0d3c443c303a69566d2c58a26c3be",
+    "count": 499
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_7.json",
+    "sha256": "8d3546c64eca3cdde821a30b0714a7d9abba7120f73f5649b79f6f28faba19e4",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_8.json",
+    "sha256": "70e934a5d8d76f10040bc66fe176421ee555907eed53b055248cbcc710528cf9",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_BulkSupplements_enriched/enriched/enriched_cleaned_batch_9.json",
+    "sha256": "e158e1095c45ace2dc3d0bfb51f559d38d6031356d273cb7a8813dd2541c00b2",
+    "count": 50
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_CVS_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "9222889599c360c3112a487e5ccd9958820317461b5a0e711cc8e6ba2f90b6b6",
+    "count": 240
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Centrum_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "adc414f03d891b7876b120b5487aeeb51f7fec6c646dca4355cc83b2e5de96ca",
+    "count": 197
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Culturelle_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "8b5c453cb4c16645c371dc731a2b61cff59b665e4c0b4e10138dce5ef61377f8",
+    "count": 61
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Doctors_Best_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "4a40147bdf6164acb010c7fc2362325439c60bb39a029a8c4173d693465afff3",
+    "count": 349
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Double_Wood_Supplements_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "4537acecb427ce055acd9e0d23963cd3cc7a556ece81451c96a7ad5a7f70ab54",
+    "count": 140
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Emergen_C_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "6da50814d7da3b077ae77dd3d1047489b66495f7ea1d5f342f5e5aeaf24149f4",
+    "count": 133
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Equate_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "e195ecb0b965002cb2649c340a75cc0586236b30e5997f11a7ab008591f8dce5",
+    "count": 124
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_GNC_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "84612e4f670a020c73a9eeb990e09c4f3e9e019f68bc591a388e95679d0d5e8e",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_GNC_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "4db00e7c057520fbb17ac19a27512dbd29fa8e0ea7b8f93e1e1602c40828175b",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_GNC_enriched/enriched/enriched_cleaned_batch_3.json",
+    "sha256": "dd27ec74ef13ee2cc42ad6853cfca651c494a3b24f17e959f3c31d614eec6080",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_GNC_enriched/enriched/enriched_cleaned_batch_4.json",
+    "sha256": "90402546265ff7291da0a8a3f20de7f1593585eb84aa4f31e8eebf0d3a974328",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_GNC_enriched/enriched/enriched_cleaned_batch_5.json",
+    "sha256": "14318ebb39b296f0c4e3a477cc414b4a21a4d65d9ecbae5accd14781fb4bc9d8",
+    "count": 214
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Garden_of_life_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "97fbfb5efdaa8766c71ad99cf062041207b47795c8394c496d541d3716aeb9fc",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Garden_of_life_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "d21ef588904a6712a35bbb18696f6f8477fdd631b4106e6d81eb0da0337a3eb7",
+    "count": 115
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Goli_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "7d55adc1a0d5c6eec5462a15431b3f4a0238d4eff4b9484d0fc257ac0b4064ff",
+    "count": 10
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Hum_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "11dec8fb92ec229d224b3b8907c8fc158d3fc665ead58f632d63cbf773b0d118",
+    "count": 22
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Jarrow_Formulas_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "37155c9c8da168e0737d08d6643bec9cac8b5e69273ab3fc1b9f25ea186a2b33",
+    "count": 217
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Kirkland_Signature_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "2de1ed87333e528665cb10e123679e00ec77709ff205964bed217139730bb0c2",
+    "count": 44
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Legion_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "b7c9b1d0d4d8c40d83e43366d03a3b9b21ef20927fedb39e1479b5a1649dc89f",
+    "count": 26
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Life_Extension_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "7693695ff2c6c1523689c46c41d8a09b2c4753cc47dc0b3c674cd3ddf8764600",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Life_Extension_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "a3b82fa70ed06a27516a26d94e474a59622a88458c8069a3258251a5c400acdd",
+    "count": 339
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_MegaFood_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "8edbecc138d7897c40cd0a2bdcba614c48054d8686312bb5ceb701c3d4739f02",
+    "count": 278
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Members_Mark_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "3dba191cda23c43531e48d9ff692917cf5db5d1bd78cc6a47513b4c1fc298a77",
+    "count": 102
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Nature_Made_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "b55c9e2668480d9486beb2fe89dc52a392f43ff4dc3fbe208b5aec33d7ea9271",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Nature_Made_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "0a3698176fb086ada5ccc3e493b38ef444bd10aef02d57a70e9f97394acbefa4",
+    "count": 153
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Natures_Bounty_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "6e3eebaf3b4aeaecb1060da23dae97834c672c1927e93b3c50b93188669a9d93",
+    "count": 485
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Natures_Way_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "4b9884240c529585d92db3e6cde0fcddd99d168bd044ca116b677937725e0d6f",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Natures_Way_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "53e0a43dff267ffac0fcc0fadda51a4ba73a059e7d07a9c304617a8beabf77ff",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Natures_Way_enriched/enriched/enriched_cleaned_batch_3.json",
+    "sha256": "5404def054fb6fa75bc55678d46096ff3c74c8422d69c8db34a7aa37362c5a26",
+    "count": 73
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Nutricost_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "3848cc21ce4aeab726094be297a04e0d253fcd112a6a8ee970c325a05b900705",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Nutricost_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "a8e809894756ce3db3dbabc7ab6ad1d5528e82319b2742de028a3d88b0e4cd34",
+    "count": 63
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Olly_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "d0e8de4eb2bf1a0965431529902b8cbb1bca0719eed0529b84fec54ed6c9679f",
+    "count": 108
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_One_A_Day_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "e191d01264d588c6512f2fd92e163672d68d9f4f6560d7b3acfdd0ab7be70ebe",
+    "count": 116
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Ora_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "f24da74ff2630d62fc4c8d884f3df93d9cfcc3e600f42bcc04cbdf1755f8bb8c",
+    "count": 44
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Product_Submissions_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "695134ef8d13c3dbdfd972cbdadd37889f6a379fa61ddbed8c07b0eb2897701d",
+    "count": 9
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Pure_Encapsulations_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "57c2c7c01abb98847128be59daa004383d136f41fac28eced2e0941b4113030e",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Pure_Encapsulations_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "c980fd473c1161dd39d2b2eb370363c2ba41f36e035513b2da7150280b0e7e7b",
+    "count": 294
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Ritual_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "93678838ba1d22ca069b439a227c410603f8be2ea0cc7060b771bd93a1c64779",
+    "count": 3
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Solgar_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "e38625c43c1a5e8dfac2071e52f6574ae7e74985f83e108eef2aadb31c7a9cd1",
+    "count": 500
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Solgar_enriched/enriched/enriched_cleaned_batch_2.json",
+    "sha256": "a68cdcdd658764f5090dbc2d3c8b2b99a9fb352102db3e12ed5311d52f1de6d5",
+    "count": 130
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Sports_Research_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "df78d3a5474758c9075ac10615498d84c4c7a9dd093f22c8a82fb73bc90e0892",
+    "count": 126
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Spring_Valley_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "f06ccd69e50351a3fef2678553fd324ed921bb1cf0a7e3fc12196d35ee515e01",
+    "count": 340
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Thorne_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "d1f91a62dd5dad692378c0598bf54f926a2ae98f0f0de2ca690cd3fe1f8c6543",
+    "count": 196
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Transparent_Labs_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "e169a1b28da48d35715b1b891f78bdc15579696e03112bbde0052f001788ee14",
+    "count": 9
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Up_and_Up_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "2c02f1f2b4c69413776e92bb0dd10d1da5caf9c010d391c4c962f844710aef00",
+    "count": 197
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_Vitafusion_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "105d38d4c04b54e5eff842e4cbb581741a5df98d4f1a2f58f448a113c86e8c61",
+    "count": 147
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_nordic-naturals_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "318a6cb82d159839ecb80a885e9439d6e70b7b070840a4d01c836cdd07e89711",
+    "count": 167
+  },
+  {
+    "path": "/Users/seancheick/Downloads/dsld_clean/scripts/products/output_paradise-earth-blend_enriched/enriched/enriched_cleaned_batch_1.json",
+    "sha256": "698e8165c4800f6926f38a75c41eeacda1994d97ec971ed290c98e5b797bce2d",
+    "count": 10
+  }
+]

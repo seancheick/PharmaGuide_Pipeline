@@ -1,0 +1,258 @@
+{
+  "probiotic_1_strain_adequacy": {
+    "v3_points": 3.0,
+    "strain_contributions": [
+      {
+        "tier": "excellent",
+        "clinical_id": null,
+        "source_row_ref": null,
+        "cfu_per_day": 10000000000.0,
+        "maximum_cfu_per_day": null,
+        "exposure_basis": "minimum_daily_servings",
+        "points": 3.0
+      }
+    ]
+  },
+  "probiotic_2_strain_adequacy": {
+    "v3_points": 5.0,
+    "strain_contributions": [
+      {
+        "tier": "excellent",
+        "clinical_id": null,
+        "source_row_ref": null,
+        "cfu_per_day": 10000000000.0,
+        "maximum_cfu_per_day": null,
+        "exposure_basis": "minimum_daily_servings",
+        "points": 3.0
+      },
+      {
+        "tier": "excellent",
+        "clinical_id": null,
+        "source_row_ref": null,
+        "cfu_per_day": 10000000000.0,
+        "maximum_cfu_per_day": null,
+        "exposure_basis": "minimum_daily_servings",
+        "points": 3.0
+      }
+    ]
+  },
+  "multi_bio_0": {
+    "raw": 9.2,
+    "public": 13.1,
+    "metadata": {
+      "phase": "P3.1_multi_prenatal_formulation",
+      "avg_bio_score": 0.0,
+      "smoothed_bio_score": 9.0,
+      "dose_coverage": 1.0,
+      "presence_floor": {
+        "target": 2.0,
+        "pre_floor_score": 9.2,
+        "applied": false
+      },
+      "dietary_sugar": {
+        "penalty": 0.0,
+        "reason": null,
+        "canonical_finds_no_sugar": false,
+        "level": "",
+        "contains_sugar": false,
+        "has_added_sugar": false,
+        "sugar_sources": [],
+        "high_glycemic_sweeteners": [],
+        "sugar_alcohols": [],
+        "syrup_sources": []
+      },
+      "inactive_penalty_details": []
+    }
+  },
+  "multi_bio_5": {
+    "raw": 9.2,
+    "public": 13.1,
+    "metadata": {
+      "phase": "P3.1_multi_prenatal_formulation",
+      "avg_bio_score": 5.0,
+      "smoothed_bio_score": 9.0,
+      "dose_coverage": 1.0,
+      "presence_floor": {
+        "target": 2.0,
+        "pre_floor_score": 9.2,
+        "applied": false
+      },
+      "dietary_sugar": {
+        "penalty": 0.0,
+        "reason": null,
+        "canonical_finds_no_sugar": false,
+        "level": "",
+        "contains_sugar": false,
+        "has_added_sugar": false,
+        "sugar_sources": [],
+        "high_glycemic_sweeteners": [],
+        "sugar_alcohols": [],
+        "syrup_sources": []
+      },
+      "inactive_penalty_details": []
+    }
+  },
+  "multi_bio_9": {
+    "raw": 9.2,
+    "public": 13.1,
+    "metadata": {
+      "phase": "P3.1_multi_prenatal_formulation",
+      "avg_bio_score": 9.0,
+      "smoothed_bio_score": 9.0,
+      "dose_coverage": 1.0,
+      "presence_floor": {
+        "target": 2.0,
+        "pre_floor_score": 9.2,
+        "applied": false
+      },
+      "dietary_sugar": {
+        "penalty": 0.0,
+        "reason": null,
+        "canonical_finds_no_sugar": false,
+        "level": "",
+        "contains_sugar": false,
+        "has_added_sugar": false,
+        "sugar_sources": [],
+        "high_glycemic_sweeteners": [],
+        "sugar_alcohols": [],
+        "syrup_sources": []
+      },
+      "inactive_penalty_details": []
+    }
+  },
+  "multi_bio_12": {
+    "raw": 11.6,
+    "public": 16.6,
+    "metadata": {
+      "phase": "P3.1_multi_prenatal_formulation",
+      "avg_bio_score": 12.0,
+      "smoothed_bio_score": 12.0,
+      "dose_coverage": 1.0,
+      "presence_floor": {
+        "target": 2.0,
+        "pre_floor_score": 11.6,
+        "applied": false
+      },
+      "dietary_sugar": {
+        "penalty": 0.0,
+        "reason": null,
+        "canonical_finds_no_sugar": false,
+        "level": "",
+        "contains_sugar": false,
+        "has_added_sugar": false,
+        "sugar_sources": [],
+        "high_glycemic_sweeteners": [],
+        "sugar_alcohols": [],
+        "syrup_sources": []
+      },
+      "inactive_penalty_details": []
+    }
+  },
+  "multi_bio_15": {
+    "raw": 14.0,
+    "public": 20.0,
+    "metadata": {
+      "phase": "P3.1_multi_prenatal_formulation",
+      "avg_bio_score": 15.0,
+      "smoothed_bio_score": 15.0,
+      "dose_coverage": 1.0,
+      "presence_floor": {
+        "target": 2.0,
+        "pre_floor_score": 14.0,
+        "applied": false
+      },
+      "dietary_sugar": {
+        "penalty": 0.0,
+        "reason": null,
+        "canonical_finds_no_sugar": false,
+        "level": "",
+        "contains_sugar": false,
+        "has_added_sugar": false,
+        "sugar_sources": [],
+        "high_glycemic_sweeteners": [],
+        "sugar_alcohols": [],
+        "syrup_sources": []
+      },
+      "inactive_penalty_details": []
+    }
+  },
+  "probiotic_arms_1000000000.0": [
+    "EXACT_TESTED_DOSE",
+    "matches_tested_daily_dose"
+  ],
+  "probiotic_arms_5000000000.0": [
+    "OUTSIDE_TESTED_RANGE",
+    "outside_tested_daily_doses"
+  ],
+  "probiotic_arms_10000000000.0": [
+    "EXACT_TESTED_DOSE",
+    "matches_tested_daily_dose"
+  ],
+  "dose_credit_25": {
+    "multi": 0.5,
+    "b_complex": 0.5
+  },
+  "dose_credit_49.99": {
+    "multi": 0.8498600000000001,
+    "b_complex": 0.8498600000000001
+  },
+  "dose_credit_50": {
+    "multi": 1.0,
+    "b_complex": 1.0
+  },
+  "dose_credit_100": {
+    "multi": 1.0,
+    "b_complex": 1.0
+  },
+  "verification_unknown": {
+    "score": 6.0,
+    "max": 15,
+    "reason": "No third-party testing on file \u2014 treated as unknown, not penalized.",
+    "components": {
+      "cert": 0.0,
+      "coa_batch": 0.0,
+      "gmp": 0.0,
+      "gmp_basis": null,
+      "brand_testing": 0.0,
+      "brand_only_cert": 0.0,
+      "reputation": 0.0,
+      "tier": "unknown",
+      "fail_open_neutral": true,
+      "quality_system_violation_penalty": 0.0
+    }
+  },
+  "verification_gmp_only": {
+    "score": 8.0,
+    "max": 15,
+    "reason": "Manufacturing verified; no independent product testing verified on file \u2014 manufacturer is listed in an audited GMP facility registry.",
+    "components": {
+      "cert": 0.0,
+      "coa_batch": 0.0,
+      "gmp": 2.0,
+      "gmp_basis": "manufacturer_facility",
+      "brand_testing": 0.0,
+      "brand_only_cert": 0.0,
+      "reputation": 0.0,
+      "tier": "manufacturing",
+      "fail_open_neutral": false,
+      "quality_system_violation_penalty": 0.0
+    }
+  },
+  "verification_gmp_with_claims": {
+    "score": 10.0,
+    "max": 15,
+    "reason": "Manufacturing verified; no independent product testing verified on file \u2014 label provides COA or batch-lookup information, manufacturer is listed in an audited GMP facility registry, does its own purity testing.",
+    "components": {
+      "cert": 0.0,
+      "coa_batch": 5.0,
+      "gmp": 2.0,
+      "gmp_basis": "manufacturer_facility",
+      "brand_testing": 2.0,
+      "brand_only_cert": 0.0,
+      "reputation": 0.0,
+      "tier": "manufacturing",
+      "fail_open_neutral": false,
+      "quality_system_violation_penalty": 0.0
+    }
+  }
+}
