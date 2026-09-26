@@ -1635,6 +1635,38 @@ def test_any_other_strict_contract_finding_still_blocks():
     assert any("strict scoring contract" in issue for issue in _gate_issues(enriched, scored))
 
 
+@pytest.mark.parametrize("verdict, decision", [
+    ("BLOCKED", _CONFIRMED_BAN),
+    ("UNSAFE", _CONFIRMED_RECALL),
+])
+def test_confirmed_safety_warning_ships_despite_unmapped_form(verdict, decision):
+    scored = _base_scored(
+        verdict=verdict, display_100="N/A", safety_decision=decision,
+        strict_scoring_contract={"passed": False, "findings": ["disclosed_form_unmapped"]},
+    )
+    assert not any("strict scoring contract" in issue
+                   for issue in validate_export_contract(_base_enriched(), scored))
+
+
+@pytest.mark.parametrize("overrides", [
+    {"quality_score_v4_100": 75},
+    {"score_100_equivalent": 75},
+    {"display_100": "75/100"},
+    {"quality_score_status": "scored"},
+    {"safety_decision": {**_CONFIRMED_BAN, "match_resolution": "likely"}},
+    {"strict_scoring_contract": {"passed": False, "findings": [
+        "disclosed_form_unmapped", "missing_iqd_ingredients_scorable_list"]}},
+])
+def test_unmapped_form_warning_exception_still_requires_verified_null_score(overrides):
+    values = dict(
+        verdict="BLOCKED", display_100="N/A", safety_decision=_CONFIRMED_BAN,
+        strict_scoring_contract={"passed": False, "findings": ["disclosed_form_unmapped"]},
+    )
+    values.update(overrides)
+    assert any("strict scoring contract" in issue for issue in
+               validate_export_contract(_base_enriched(), _base_scored(**values)))
+
+
 def test_a_display_defect_on_a_banned_row_still_blocks():
     row = _safety_only_row(identity_disposition="missing_display_label")
     enriched, scored = _safety_only_product(row)

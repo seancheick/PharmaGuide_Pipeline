@@ -681,8 +681,7 @@ Testing workflow correction requested by Sean: batch related fixes; use focused
 regressions; one broad fast checkpoint; stop on an early failure, but after roughly60–70%
 let the run finish and collect failures. Repair related failures together before restarting. Do not run a broad suite per
 individual fix, or automatically add release/full-suite runs to a provisional
-candidate. The already-running final fast checkpoint is being watched for its
-first failure; its completed progress is retained.
+candidate. No broad suite is running; finish the collected export findings before another checkpoint.
 
 ### Test-cost defect found by the final checkpoint
 
@@ -704,3 +703,81 @@ The35fast label/form tests passed together (0.77seconds). The full-corpus red
 yeast rice check passed under the existing600-second artifact/slow budget;
 178791 was absent and explicitly skipped (1passed,1skipped,32.42seconds).
 No scorer or clinical data changed; another pipeline rebuild is unnecessary.
+
+
+### Export checkpoint and batched follow-up (2026-09-26)
+
+The guarded candidate export stopped at the existing scoring snapshot gate:
+30 failures, 5 passes. Of the failures, 14 require brands outside this 12-brand
+sample; 16 differ from the saved score/status expectations. The source matrix,
+IQM, cleaner, enrichment, clinical drift, and RDA/UL stamp gates passed first.
+The snapshot manifest is dated 2026-09-08. No snapshots were refreshed, no gate
+was weakened, and no candidate was promoted.
+
+Diagnostics: `/Users/seancheick/pg_quality/candd/runs/export_snapshot_failures.json`.
+The two score-withheld cases were reproduced through the current input owner:
+
+- 182730 Athletic Pure Pack: `disclosed_form_unmapped`; vitamin E retains an
+  unresolved `Tocopherol` token beside its matched succinate form; vanadium's
+  `Bis-Glycinato OxoVanadium` form is unresolved. This needs form provenance/
+  curation review, not an automatic restoration of the old 79-point score.
+- 323080 Catalyte: IQD excludes sodium/chloride from its form-scoring rows;
+  `get_scoring_ingredients` adds label-active projections, and the sodium
+  projection carries its three disclosed salts as unmapped. The strict input
+  gate therefore withholds the score. Whether the projection should inherit
+  the exclusion needs owner-level review before changing this behavior.
+
+Owner: `scripts/scoring_input_contract.py::get_scoring_ingredients` and
+`derive_product_scoring_evidence`; form status is owned by
+`scripts/enrich_supplements_v3.py::_row_form_match_status`.
+Evidence: direct probes of enriched/scored 182730 and 323080, plus
+`rg -n 'DISCLOSED_FORM_UNMAPPED_FINDING|identity_bearing_active_anchor_mass'
+scripts/scoring_input_contract.py`.
+Will NOT create: a second form policy, product exceptions, or replacement
+snapshot expectations without reviewing the differences.
+
+A separate strict diagnostic build uses the canonical builder and an explicit
+output directory, `/Users/seancheick/pg_quality/candd/diagnostic_export_20260926`.
+It is not a validated release candidate. All 16 snapshot score/status drifts
+were already present in the first-pass fresh run at 674a2ec9; none was introduced
+by the later nutrient fixes.
+
+
+The diagnostic build exported 6,114 products, quarantined 1,298, and reported
+zero builder errors. Its field-completeness audit passed with no undeclared
+blob keys, and identity containment passed. The separate strict scoring source
+audit failed with 1,286 findings, so release acceptance remains blocked.
+Direct comparison of all 6,114 exported score/status/verdict triples to the
+scored inputs found zero differences after applying the existing
+`quality_score.py::shipped_whole_score` rounding rule.
+
+**Export defect found and fixed as a batch:** three BLOCKED GNC products
+(220094, 220098, 220101) were excluded solely by `disclosed_form_unmapped`,
+hiding their confirmed ban warning. The existing `validate_export_contract`
+owner now permits that finding only for a confirmed ban/recall with
+`suppressed_safety`, null numeric scores and `N/A` display. Other contract
+findings and identity/display defects remain blocked. This implements the
+existing AGENTS safety-visibility requirement; no new clinical policy or
+public field was introduced.
+
+Owner: `scripts/build_final_db.py::validate_export_contract`; confirmation is
+reused from `scripts/release_catalog_artifact.py::is_confirmed_ban_or_recall`.
+Evidence: `rg -n 'validate_export_contract|is_confirmed_ban_or_recall'
+scripts/build_final_db.py scripts/release_catalog_artifact.py` and the real
+three-product export probe. Will NOT create: a second safety decision or any
+numeric score for suppressed products.
+
+The new regression batch reproduced two expected failures before the fix.
+Afterward, the two export test files passed together: **340 passed in 11.87s**.
+A strict canonical build of the three real inputs exported all three with
+BLOCKED, suppressed_safety, null score, and banned flag true; zero errors or
+quarantines. Artifact: `~/pg_quality/candd/safety_export_regression_20260926`.
+The earlier full diagnostic output is preserved as pre-fix evidence; it was
+not silently patched or presented as the fixed candidate. Source scores and
+verdicts were unchanged by this export-only fix.
+
+One broad fast checkpoint completed for the batch: **16,390 passed, 137 skipped
+in 410.05 seconds (6m50s)**. Log: `~/pg_quality/candd/batched_fast_20260926.log`.
+No further broad run is needed for this unchanged code. The guarded candidate
+remains blocked by the snapshot/source findings and pending policy decision.
+No merge, push, release, or worktree deletion occurred.
