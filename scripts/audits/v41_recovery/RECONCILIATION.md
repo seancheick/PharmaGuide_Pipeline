@@ -895,3 +895,11 @@ check. Both new regressions failed before fixes. Final focused batch205passed
 3.77s; log ~/pg_quality/candd/multipurpose_review_complete.log. No score pin was
 raised or bypassed; same clinical record still counted once. Final broad/replay
 measurements follow after this batch.
+
+
+Broad checkpoint at 220c4e5e: 16,399 passed, 137 skipped, one failed in
+420.40s. The sole failure was two stale raw quantity/unit read exceptions
+in the contract leak audit after shared accessor adoption. Removed only
+those obsolete entries. Owner: audit_scoring_contract_leaks.py::ALLOWLIST —
+evidence: test_scoring_contract_leak_audit live-tree failure.
+Will NOT create: new audit exceptions or bypasses.
