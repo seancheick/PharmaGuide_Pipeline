@@ -17906,8 +17906,13 @@ class SupplementEnricherV3:
     def _derive_interaction_subject_ref(self, ingredient: Dict) -> Optional[Dict[str, str]]:
         canonical_id = str(ingredient.get("canonical_id") or "").strip()
         if canonical_id:
+            # A recognized botanical or other ingredient keeps its registry, so
+            # it meets the rules authored there; rows without a routable
+            # registry (probiotic, standardized botanical) stay IQM subjects.
             return {
-                "db": "ingredient_quality_map",
+                "db": self._normalize_interaction_db_key(
+                    ingredient.get("canonical_source_db")
+                ) or "ingredient_quality_map",
                 "canonical_id": canonical_id,
             }
 
