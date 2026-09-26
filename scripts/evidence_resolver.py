@@ -496,6 +496,18 @@ def resolve_evidence_for_canonical(
     return resolve_evidence_for_row(row, product=None)
 
 
+def _reviewed_row_dose(row: Mapping[str, Any], product: Optional[Mapping[str, Any]], record: Mapping[str, Any]) -> Optional[float]:
+    """Use the scorer's unit/daily exposure owner, bounded to this exact row."""
+    from scoring_v4.modules.generic_evidence import _dose_map, _converted_product_dose
+    entry = dict(record)
+    entry["matched_canonical_id"] = row.get("canonical_id")
+    entry["ingredient"] = row.get("name") or row.get("canonical_id")
+    ref = row.get("raw_source_path") or row.get("source_row_ref")
+    entry["matched_source_row_refs"] = [ref] if ref else []
+    dose, _ = _converted_product_dose(entry, _dose_map(dict(product or {}), rows=[dict(row)]))
+    return dose
+
+
 def resolve_evidence_for_row(
     row: Mapping[str, Any],
     product: Optional[Mapping[str, Any]] = None,
@@ -589,10 +601,8 @@ def resolve_evidence_for_row(
             blocking_reasons=["silica_provenance_ambiguous"],
         )
 
-    if row_dict.get("is_proprietary_blend") or (
-        row_dict.get("is_parent_total")
-        and not is_essential_dietary_nutrient(canonical, name)
-    ):
+    from scoring_input_contract import _role_is_blend_member
+    if _role_is_blend_member(row_dict):
         return EvidenceResolution(
             canonical_id=canonical,
             ingredient_name=name,
@@ -806,20 +816,27 @@ def resolve_evidence_for_row(
         }
 
         # Check applicability: dose and form exclusions
-        dose_val = _as_float(row_dict.get("amount") or row_dict.get("dose_value"))
         form_val = _canonical_text(matched_form)
-
-        is_form_excluded = False
-        is_sub_clinical = False
-
-        for s in valid_studies:
-            excluded_forms = [_canonical_text(f) for f in s.get("exclude_aliases", [])]
-            if form_val and any(ef in form_val for ef in excluded_forms):
-                is_form_excluded = True
-
-            min_dose = _as_float(s.get("min_clinical_dose"))
-            if min_dose is not None and dose_val is not None and dose_val < min_dose:
-                is_sub_clinical = True
+        record_states = []
+        for study in valid_studies:
+            excluded_forms = [_canonical_text(f) for f in study.get("exclude_aliases", [])]
+            if form_val and any(ef and ef in form_val for ef in excluded_forms):
+                record_states.append("form_mismatch")
+                continue
+            dose = _reviewed_row_dose(row_dict, product, study)
+            minimum = _as_float(study.get("min_clinical_dose"))
+            if dose is None and product is not None:
+                record_states.append("dose_undisclosed")
+            elif minimum is not None and dose is not None and dose < minimum:
+                record_states.append("sub_clinical_dose")
+            else:
+                record_states.append("applicable")
+        # A second record's higher dose or different form cannot veto an
+        # applicable record. The scorer assesses each clinical record too.
+        has_applicable = "applicable" in record_states
+        is_form_excluded = bool(record_states) and all(state == "form_mismatch" for state in record_states)
+        is_sub_clinical = not has_applicable and "sub_clinical_dose" in record_states
+        dose_missing = not has_applicable and not is_sub_clinical
 
         if is_form_excluded:
             blocking_reasons.append("form_mismatch_with_clinical_trials")
@@ -835,7 +852,7 @@ def resolve_evidence_for_row(
                 blocking_reasons=blocking_reasons,
             )
 
-        if dose_val is None and product is not None:
+        if dose_missing and product is not None:
             return EvidenceResolution(
                 canonical_id=canonical,
                 ingredient_name=name,
@@ -1053,8 +1070,11 @@ def resolve_evidence_for_row(
                 )
 
         # Check dose applicability against studied exposure
-        dose_val = _as_float(row_dict.get("amount") or row_dict.get("dose_value"))
         studied_dose = lit_entry.get("studied_dose_exposure")
+        dose_record = dict(lit_entry)
+        if isinstance(studied_dose, dict):
+            dose_record["dose_unit"] = studied_dose.get("unit") or lit_entry.get("dose_unit") or "mg"
+        dose_val = _reviewed_row_dose(row_dict, product, dose_record)
         if isinstance(studied_dose, dict):
             min_dose = min(studied_dose.get("values", [])) if studied_dose.get("values") else None
         elif isinstance(studied_dose, list) and studied_dose:

@@ -868,3 +868,20 @@ the clinical record's stated endpoints/goals, never broad notes. A stress record
 cannot substantiate a bone/digestive-only claim. Focused parser/role/probiotic
 batch:95passed2.56s; broader prior batch163passed2.31s. Final resolver alignment
 and full replay remain required.
+
+
+Resolver row-contract correction: four regressions failed before the fix.
+The resolver now uses generic_evidence's existing dose-map/conversion path,
+restricted to the exact row, for unit and directed daily exposure. A study with
+an unmet higher threshold no longer vetoes an independently applicable record.
+Explicit blend flags remain blocking; parenthood alone does not make a disclosed
+standardized extract an undisclosed blend. No registry or dose policy was added.
+Focused resolver/generic/readiness batch:170passed2.87s;
+~/pg_quality/candd/resolver_row_contract_{red,green}.log. Tests cover the real
+extract/theanine rows, equivalent mg/g/mcg, two daily servings, sibling dose
+non-borrowing, multiple study minima and true blends. Whole frozen replay pending.
+
+Owner: generic_evidence.py::_dose_map/_converted_product_dose and
+scoring_input_contract.py::_positive_quantity/_row_unit/_role_is_blend_member.
+Evidence: shared-provider calls and failing-then-passing regression batch above.
+Will NOT create: a second conversion, daily-dose policy, or applicability flag.

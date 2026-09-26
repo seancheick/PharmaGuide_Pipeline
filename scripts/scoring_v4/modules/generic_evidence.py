@@ -1621,15 +1621,16 @@ def _enrollment_multiplier(enrollment: float) -> float:
     return ENROLLMENT_DEFAULT_MULTIPLIER
 
 
-def _dose_map(product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
+def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, Tuple[float, str]]:
+    from scoring_input_contract import _positive_quantity, _row_unit
     doses: Dict[str, Tuple[float, str]] = {}
     daily_multiplier = _daily_serving_multiplier(product)
-    for ing in nutrient_delivering_rows(product):
-        quantity = _as_float(ing.get("quantity"), None)
+    for ing in nutrient_delivering_rows(product) if rows is None else rows:
+        quantity = _positive_quantity(ing)
         if quantity is None:
             continue
         quantity *= daily_multiplier
-        unit = _norm_text(ing.get("unit_normalized") or ing.get("unit"))
+        unit = _norm_text(ing.get("unit_normalized") or _row_unit(ing))
         source_ref = ing.get("raw_source_path") or ing.get("source_row_ref")
         if source_ref:
             doses[f"source:{source_ref}"] = (quantity, unit)

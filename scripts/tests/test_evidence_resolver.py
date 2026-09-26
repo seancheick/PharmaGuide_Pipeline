@@ -725,3 +725,35 @@ def test_declared_nutrient_total_is_not_an_undisclosed_blend():
     assert result.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
     row['is_proprietary_blend'] = True
     assert er.resolve_evidence_for_row(row).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+
+
+def test_real_disclosed_extract_and_theanine_are_not_missing_or_blend():
+    import json
+    from scoring_input_contract import get_scoring_ingredients
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    rows = get_scoring_ingredients(product, strict=True).rows
+    for row in rows:
+        if row.get('raw_source_path') in {'ingredientRows[0]', 'ingredientRows[1]'}:
+            result = er.resolve_evidence_for_row(row, product)
+            assert result.applicability_status not in {'blend_header_undisclosed', 'dose_undisclosed'}
+            assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+
+
+@pytest.mark.parametrize('quantity,unit', [(200, 'mg'), (0.2, 'g'), (200000, 'mcg')])
+def test_resolver_uses_shared_daily_units_and_any_applicable_record(monkeypatch, quantity, unit):
+    studies = [
+        {'id': 'LOW', 'study_type': 'rct_multiple', 'min_clinical_dose': 400, 'dose_unit': 'mg'},
+        {'id': 'HIGH', 'study_type': 'rct_multiple', 'min_clinical_dose': 800, 'dose_unit': 'mg'},
+    ]
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'l_theanine': studies})
+    row = {'canonical_id': 'l_theanine', 'name': 'L-Theanine', 'quantity': quantity,
+           'unit': unit, 'raw_source_path': 'ingredientRows[0]'}
+    product = {'serving_basis': {'min_servings_per_day': 2, 'max_servings_per_day': 2},
+        'ingredient_quality_data': {'ingredients_scorable': [row,
+            dict(row, quantity=quantity * 10, raw_source_path='ingredientRows[1]')]}}
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    row['quantity'] = quantity / 10
+    assert er.resolve_evidence_for_row(row, product).applicability_status == 'sub_clinical_dose'
+    row['is_proprietary_blend'] = True
+    assert er.resolve_evidence_for_row(row, product).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
