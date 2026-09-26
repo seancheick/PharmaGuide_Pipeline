@@ -460,3 +460,44 @@ def test_coq10_heart_rule_cites_q_symbio_for_its_heart_failure_claim():
     assert "inconclusive" in heart["mechanism"]
     assert "ejection fraction" not in heart["mechanism"].lower()
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+EMA_SALIX = (
+    "https://www.ema.europa.eu/en/documents/herbal-monograph/"
+    "final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-"
+    "s-daphnoides-vill-s-fragilis-l-cortex_en.pdf"
+)
+
+
+def test_willow_bark_rules_describe_willow_not_aspirin():
+    rule = _rule("RULE_IQM_WHITE_WILLOW_BARK_BLEEDING")
+    subs = {
+        "bleeding_disorders": _sub_rule(rule, "condition_id", "bleeding_disorders"),
+        "surgery_scheduled": _sub_rule(rule, "condition_id", "surgery_scheduled"),
+        "anticoagulants": _sub_rule(rule, "drug_class_id", "anticoagulants"),
+        "antiplatelets": _sub_rule(rule, "drug_class_id", "antiplatelets"),
+        "nsaids": _sub_rule(rule, "drug_class_id", "nsaids"),
+    }
+    severities = {
+        "bleeding_disorders": "caution", "surgery_scheduled": "avoid",
+        "anticoagulants": "caution", "antiplatelets": "caution", "nsaids": "avoid",
+    }
+    for key, sub in subs.items():
+        # 25997859 is an efficacy review that says nothing about bleeding.
+        assert sub["sources"] == [EMA_SALIX, _pmid("11345689")], key
+        assert sub["severity"] == severities[key], key
+    assert subs["surgery_scheduled"]["evidence_level"] == "limited"
+    assert "far less than" in subs["bleeding_disorders"]["mechanism"]
+    assert "coumarin" in subs["anticoagulants"]["mechanism"]
+
+    copy = json.dumps(list(subs.values())).lower()
+    for stale in (
+        "irreversibl",
+        "lifespan of the platelet",
+        "7-10 days",
+        "displaces warfarin",
+        "treat similarly to aspirin",
+        "aspirin-like",
+    ):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review

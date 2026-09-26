@@ -160,3 +160,36 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   CoQ10 in heart failure is also inconclusive"; "CoQ10 may interact with the anticoagulant (blood
   thinner) warfarin".
 - 17723077 stays for the warfarin caveat the sub-rule carries (reviewed entry: topic heuristic miss).
+
+## RULE_IQM_WHITE_WILLOW_BARK_BLEEDING — re-sourced (all five sub-rules)
+
+- Ghost: **PMID 25997859** = "Efficacy and Safety of White Willow Bark (Salix alba) Extracts"
+  (Phytother Res 2015). Efficacy review; says "Adverse effects appear to be minimal as compared to
+  non-steroidal anti-inflammatory drugs including aspirin"; nothing on platelets, bleeding, warfarin
+  or surgery. It was the only source for all five sub-rules. The verifier flagged three; antiplatelets
+  and nsaids passed on the words "aspirin"/"non-steroidal".
+- The mechanisms described aspirin, not willow: "Salicylates irreversibly acetylate
+  cyclooxygenase-1 ... for the lifespan of the platelet (8-10 days)", "stopping willow bark 7-10 days
+  pre-operatively is necessary", "displaces warfarin from albumin binding sites", "Additive
+  irreversible COX-1 inhibition". None has a source; the sources below contradict the aspirin
+  equivalence.
+- **PMID 11345689** (Krivoy, Planta Med 2001; RCT): willow bark extract 240 mg salicin/day vs placebo
+  vs 100 mg aspirin; mean maximal arachidonic-acid-induced aggregation "61%, 78% and 13%";
+  willow vs placebo significant for AA (p = 0.04) and ADP (p = 0.01); "affects platelet
+  aggregation to a far lesser extent than acetylsalicylate. Further investigation needs to clarify
+  if this finding is of clinical relevance".
+- **EU herbal monograph, Salix [various species], cortex** — EMA/HMPC/80630/2016, last revision
+  31 January 2017.
+  `https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf`
+  4.3 contraindications include "Active peptic ulcer disease", "Severe liver or renal dysfunction",
+  "Coagulation disorders", "Third trimester of pregnancy"; 4.4 "Concomitant use with salicylates and
+  other NSAIDs is not recommended without medical advice"; 4.5 "Willow bark may increase the effects
+  of anticoagulants such as coumarin derivatives"; 4.6 first/second trimester and lactation "not
+  recommended", "Salicylates cross the placenta and appear in breast milk"; 5.2 240 mg salicin →
+  salicylic acid AUC "equivalent to that expected from an intake of 87 mg acetylsalicylic acid".
+- surgery_scheduled evidence_level established → limited (no regulatory statement on surgery; one
+  RCT with a modest platelet effect of uncertain clinical relevance). The "7-10 days" stop interval
+  rested on irreversible COX-1 acetylation and is removed; action defers timing to the surgical team.
+- Not changed, reported to Sean: pregnancy_lactation says limited data (no sources) while the EU
+  monograph contraindicates willow bark in the third trimester and does not recommend it in
+  lactation — a category/policy decision.

@@ -137,7 +137,8 @@
       "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER pregnancy_lactation cited PMID 16800417 (a pancreatitis case), ttc cited PMID 30980598 (a hair-loss review) for a semen-impairment claim no saw palmetto study makes, and anticoagulants cited PMID 10902065, which does not name saw palmetto. They now cite NCCIH Saw Palmetto, PMID 16985705 (in vitro 5-alpha-reductase inhibition, no clinical DHT fall), PMID 31002161 (never studied in male infertility) and, for anticoagulants, the bleeding cases (11489067, 20120986), an in vivo platelet study (18090773) and an interaction review (19719333). ttc evidence_level probable -> theoretical; anticoagulant/antiplatelet/NSAID alert copy no longer says saw palmetto has antiplatelet activity. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_VALERIAN_LIVER pregnancy_lactation cited PMID 18431248 (a valerian hepatotoxicity case). It now cites the EU herbal monograph on valerian root (EMA/HMPC/150848/2015: pregnancy/lactation safety not established, use not recommended) and LactMed Valerian (no data in nursing mothers; valepotriates and baldrinals cytotoxic and mutagenic in vitro). Categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_KAVALACTONES_LIVER pregnancy_lactation cited PMID 27092496 (a kava/kratom/khat hepatotoxicity review); it now cites NCCIH Kava (special risks in pregnancy and breastfeeding from pyrone constituents; rare serious liver injury). seizure_disorder claimed withdrawal seizures after regular use on the strength of PMID 12383029, whose withdrawal sentence is about conventional anxiolytics; it now also cites PMID 38829029 (kava withdrawal delirium in a heavy user; seizure-like events in a case series of heavy users; none after low controlled doses) and PMID 22062945 (herbs used in epilepsy incl. kava: proconvulsant effects, P450/P-gp interactions), plus NCCIH. evidence_level probable -> limited. Severities, categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_COQ10_HEART_DISEASE_STATINS heart_disease claimed improved ejection fraction in Q-SYMBIO while citing only warfarin papers (PMIDs 17723077, 12083489). It now cites Q-SYMBIO itself (PMID 25282031: no short-term change; fewer MACE, deaths and HF hospitalisations and better NYHA class at 2 years; no ejection-fraction result) and NCCIH (heart-failure evidence inconclusive; may interact with warfarin); 17723077 stays for the warfarin caveat and 12083489 (no readable result) was dropped. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_COQ10_HEART_DISEASE_STATINS heart_disease claimed improved ejection fraction in Q-SYMBIO while citing only warfarin papers (PMIDs 17723077, 12083489). It now cites Q-SYMBIO itself (PMID 25282031: no short-term change; fewer MACE, deaths and HF hospitalisations and better NYHA class at 2 years; no ejection-fraction result) and NCCIH (heart-failure evidence inconclusive; may interact with warfarin); 17723077 stays for the warfarin caveat and 12083489 (no readable result) was dropped. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_WHITE_WILLOW_BARK_BLEEDING cited only PMID 25997859 (a willow efficacy review with nothing on bleeding) on all five sub-rules, whose mechanisms described aspirin (irreversible COX-1 acetylation for the platelet lifespan, a 7-10 day pre-op stop, warfarin albumin displacement). They now cite the EU herbal monograph on willow bark (EMA/HMPC/80630/2016: coagulation disorders contraindicated; may increase coumarin anticoagulant effects; not with salicylates/NSAIDs without advice) and the Krivoy 2001 platelet RCT (PMID 11345689: effect far less than aspirin 100 mg). min_effective_dose rationales no longer call the 120 mg salicin floor aspirin-equivalent (value unchanged). surgery_scheduled evidence_level established -> limited. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -21252,14 +21253,15 @@
           "condition_id": "bleeding_disorders",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "White willow bark contains salicin, which is metabolised in the gut and liver to salicylate and salicylic acid \u2014 pharmacologically similar to aspirin. Salicylates irreversibly acetylate cyclooxygenase-1 in platelets, blocking thromboxane A2 synthesis and impairing platelet aggregation for the lifespan of the platelet (8-10 days).",
-          "action": "Avoid in bleeding disorders. Treat similarly to aspirin from a bleeding risk perspective.",
+          "mechanism": "The EU herbal monograph contraindicates willow bark in coagulation disorders. Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised trial, willow bark extract with 240 mg salicin daily reduced arachidonic-acid- and ADP-induced platelet aggregation compared with placebo, but far less than 100 mg aspirin; its clinical relevance is uncertain.",
+          "action": "Avoid in bleeding disorders; the EU herbal monograph lists coagulation disorders as a contraindication.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/11345689/"
           ],
           "alert_headline": "Salicylate \u2014 raises bleeding risk",
           "alert_body": "White willow bark contains salicylate-like compounds. If you have a bleeding disorder or use blood thinners, avoid unless your clinician specifically recommends it.",
-          "informational_note": "White willow bark is aspirin-like \u2014 relevant to people with bleeding disorders.",
+          "informational_note": "White willow bark is a source of salicylates \u2014 relevant to people with bleeding disorders.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -21287,21 +21289,22 @@
             "confidence": "low",
             "confidence_basis": "aspirin_like_conservative",
             "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
-            "rationale": "Willow bark salicin is aspirin-like and inhibits platelet aggregation (documented at 240 mg salicin; PMID 11345689). Conservative 120 mg floor (salicin basis) given aspirin-equivalent risk."
+            "rationale": "Willow bark extract with 240 mg salicin/day reduced platelet aggregation, though far less than 100 mg aspirin (PMID 11345689). The 120 mg salicin floor is a conservative margin below that tested dose."
           }
         },
         {
           "condition_id": "surgery_scheduled",
           "severity": "avoid",
-          "evidence_level": "established",
-          "mechanism": "Salicylates from white willow bark irreversibly inhibit platelet cyclooxygenase-1 (COX-1). Because platelet COX-1 inhibition lasts the platelet lifespan (~10 days), stopping willow bark 7-10 days pre-operatively is necessary to restore normal platelet function.",
-          "action": "Discontinue white willow bark at least 7-10 days before any elective surgical procedure. Inform the surgical and anaesthesia team.",
+          "evidence_level": "limited",
+          "mechanism": "Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised trial, willow bark extract with 240 mg salicin daily reduced arachidonic-acid- and ADP-induced platelet aggregation compared with placebo, but far less than 100 mg aspirin; its clinical relevance is uncertain. The EU herbal monograph contraindicates willow bark in coagulation disorders and says it may increase the effects of anticoagulants. No study defines how long before surgery it should be stopped.",
+          "action": "Tell your surgical and anaesthesia team that you take white willow bark, and stop it before elective surgery as they advise.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/11345689/"
           ],
           "alert_headline": "Salicylate-like \u2014 stop before surgery",
           "alert_body": "White willow bark contains salicylate-like compounds that may affect platelet function. If surgery is scheduled, ask your surgical team when to stop it.",
-          "informational_note": "White willow bark is aspirin-like \u2014 relevant to anyone preparing for surgery.",
+          "informational_note": "White willow bark is a source of salicylates \u2014 relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -21329,14 +21332,15 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Salicylate from white willow bark inhibits platelet aggregation (antiplatelet) AND displaces warfarin from albumin binding sites, potentially elevating free warfarin plasma concentrations and raising INR. The combination significantly increases haemorrhagic risk.",
+          "mechanism": "The EU herbal monograph states that willow bark may increase the effects of anticoagulants such as coumarin derivatives (warfarin). Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised trial, willow bark extract with 240 mg salicin daily reduced arachidonic-acid- and ADP-induced platelet aggregation compared with placebo, but far less than 100 mg aspirin; its clinical relevance is uncertain.",
           "action": "Avoid white willow bark with anticoagulants. If analgesic is needed, consult prescriber about alternatives.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/11345689/"
           ],
           "alert_headline": "Can add to blood-thinner effect",
-          "alert_body": "White willow bark adds to warfarin's effect and raises bleeding risk. If you take an anticoagulant, talk to your prescriber about a different pain option.",
-          "informational_note": "White willow bark is aspirin-like \u2014 relevant to people on anticoagulants.",
+          "alert_body": "White willow bark may increase the effect of warfarin-type anticoagulants and raise bleeding risk. If you take an anticoagulant, talk to your prescriber about a different pain option.",
+          "informational_note": "White willow bark is a source of salicylates \u2014 relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -21364,21 +21368,22 @@
             "confidence": "low",
             "confidence_basis": "aspirin_like_conservative",
             "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
-            "rationale": "Willow bark salicin is aspirin-like and inhibits platelet aggregation (documented at 240 mg salicin; PMID 11345689). Conservative 120 mg floor (salicin basis) given aspirin-equivalent risk."
+            "rationale": "Willow bark extract with 240 mg salicin/day reduced platelet aggregation, though far less than 100 mg aspirin (PMID 11345689). The 120 mg salicin floor is a conservative margin below that tested dose."
           }
         },
         {
           "drug_class_id": "antiplatelets",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Additive irreversible COX-1 inhibition. White willow bark combined with aspirin or clopidogrel produces dual antiplatelet inhibition beyond standard cardioprotective dosing.",
+          "mechanism": "Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised trial, willow bark extract with 240 mg salicin daily reduced arachidonic-acid- and ADP-induced platelet aggregation compared with placebo, but far less than 100 mg aspirin; its clinical relevance is uncertain. An additive effect with aspirin or clopidogrel is therefore possible; the EU herbal monograph advises against combining willow bark with salicylates such as aspirin without medical advice.",
           "action": "Do not combine with antiplatelet therapy. Consult prescriber if analgesic is needed.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/11345689/"
           ],
           "alert_headline": "Do not combine with antiplatelet medications",
-          "alert_body": "White willow bark adds to aspirin and clopidogrel platelet effects. If you take antiplatelet therapy, do not combine \u2014 talk to your prescriber for alternatives.",
-          "informational_note": "White willow bark is aspirin-like \u2014 relevant to people on antiplatelet medications.",
+          "alert_body": "White willow bark mildly reduces platelet clumping and may add to aspirin or clopidogrel. If you take antiplatelet therapy, do not combine without talking to your prescriber.",
+          "informational_note": "White willow bark is a source of salicylates \u2014 relevant to people on antiplatelet medications.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -21406,21 +21411,22 @@
             "confidence": "low",
             "confidence_basis": "aspirin_like_conservative",
             "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
-            "rationale": "Willow bark salicin is aspirin-like and inhibits platelet aggregation (documented at 240 mg salicin; PMID 11345689). Conservative 120 mg floor (salicin basis) given aspirin-equivalent risk."
+            "rationale": "Willow bark extract with 240 mg salicin/day reduced platelet aggregation, though far less than 100 mg aspirin (PMID 11345689). The 120 mg salicin floor is a conservative margin below that tested dose."
           }
         },
         {
           "drug_class_id": "nsaids",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Concurrent salicylate from white willow bark and NSAID use creates additive COX-1/COX-2 inhibition, increasing gastrointestinal bleeding risk and nephrotoxicity. Comparable to aspirin-NSAID co-administration.",
+          "mechanism": "The EU herbal monograph advises against combining willow bark with salicylates and other NSAIDs without medical advice, and contraindicates it in active peptic ulcer disease and severe renal dysfunction. Its salicin is converted mainly to salicylic acid; 240 mg salicin gives salicylate exposure comparable to 87 mg aspirin.",
           "action": "Do not combine white willow bark with NSAIDs. Select an alternative analgesic in consultation with prescriber.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/11345689/"
           ],
           "alert_headline": "Can add to NSAID side-effect risk",
-          "alert_body": "White willow bark combined with NSAIDs increases GI bleeding and kidney strain. If you take NSAIDs regularly, talk to your prescriber about a safer pain option.",
-          "informational_note": "White willow bark is aspirin-like \u2014 relevant to people on NSAIDs.",
+          "alert_body": "White willow bark is a salicylate source, and the EU monograph advises against combining it with NSAIDs without medical advice. If you take NSAIDs regularly, talk to your prescriber first.",
+          "informational_note": "White willow bark is a source of salicylates \u2014 relevant to people on NSAIDs.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
