@@ -735,3 +735,18 @@ def test_evening_primrose_anticoagulant_rule_cites_mskcc_not_heck():
     for stale in ("clinical pharmacology references", "pge1"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review
+
+
+def test_omega3_nsaid_rule_reports_the_aspirin_bleeding_data():
+    rule = _rule("RULE_INGREDIENT_OMEGA_3")
+    nsaids = _sub_rule(rule, "drug_class_id", "nsaids")
+
+    # 10902065 is a warfarin review; it says nothing on NSAIDs or fish oil.
+    assert nsaids["sources"] == [_pmid("18841286"), _pmid("26280541"), _pmid("17368277")]
+    assert (nsaids["severity"], nsaids["evidence_level"]) == ("monitor", "theoretical")
+    assert "did not raise" in nsaids["mechanism"]
+    copy = json.dumps(nsaids).lower()
+    for stale in ("may modestly increase gi bleeding", "can add to nsaid bleeding risk",
+                  "may add to nsaid bleeding risk"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review

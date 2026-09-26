@@ -151,7 +151,8 @@
       "2026-09-26: RULE_IQM_CHINESE_SKULLCAP_LIVER pregnancy and pregnancy_lactation cited PMID 31236960 (a general Scutellaria baicalensis review) for possible teratogenic risk in animals. The only animal reproductive studies found (PMIDs 26303163, 26033919: a S. baicalensis/Acacia catechu flavonoid composition, no malformations or developmental effects up to 1000 mg/kg/day in rats and rabbits) show the opposite; mechanism and alert copy now say avoidance is precautionary because human data are absent. Severity, category and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_INGREDIENT_GENISTEIN__THYROID thyroid_medications cited only PMID 36017706 (soy isoflavones and subclinical hypothyroidism in rats) for a levothyroxine-absorption claim. It now cites the Huser 2018 isoflavone review (PMID 30132047: a soy protein case vs no effect of 60 mg isoflavones on levothyroxine absorption), the SYNTHROID label (soybean flour decreases absorption; 4-hour separation for interfering agents) and Divi 1997 (PMID 9464451: genistein/daidzein TPO inhibition); thyroid_disorder adds 9464451 and 30132047 beside 36017706. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_INGREDIENT_CAT_S_CLAW drug:anticoagulants cited PMID 10902065 (Heck 2000), whose abstract does not name cat's claw, and said the herb is documented there. It now cites the in vitro study (PMID 33091497: slight antiplatelet activity, thrombin inhibition) and NCCIH Cat's Claw (may slow clotting; theoretical interaction with anticoagulants); evidence_level probable -> theoretical. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL drug:anticoagulants cited PMID 10902065 (Heck 2000), whose abstract does not name evening primrose oil, as a clinical pharmacology listing. It now cites the rabbit coagulation study (PMID 19783511) and MSKCC About Herbs (in vitro platelet inhibition, likely via lower thromboxane B2; additive bleeding risk with anticoagulants; bleeding time rose in 9 of 12 people on months of GLA). The unsourced PGE1 attribution was removed. Severity, evidence_level and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_INGREDIENT_EVENING_PRIMROSE_OIL drug:anticoagulants cited PMID 10902065 (Heck 2000), whose abstract does not name evening primrose oil, as a clinical pharmacology listing. It now cites the rabbit coagulation study (PMID 19783511) and MSKCC About Herbs (in vitro platelet inhibition, likely via lower thromboxane B2; additive bleeding risk with anticoagulants; bleeding time rose in 9 of 12 people on months of GLA). The unsourced PGE1 attribution was removed. Severity, evidence_level and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_INGREDIENT_OMEGA_3 drug:nsaids cited only PMID 10902065 (a warfarin review silent on NSAIDs and fish oil) for a claim that omega-3 plus NSAIDs may increase GI bleeding. It now cites the evidence found: prescription omega-3 enhanced aspirin's platelet inhibition without inhibiting platelets alone (PMID 18841286), no rise in upper-GI complications with low-dose aspirin plus omega-3 (PMID 26280541), and no increased bleeding in trials with aspirin or warfarin (PMID 17368277). evidence_level probable -> theoretical; headline and alert no longer claim added bleeding risk. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -10731,14 +10732,16 @@
         {
           "drug_class_id": "nsaids",
           "severity": "monitor",
-          "evidence_level": "probable",
-          "mechanism": "Both omega-3 fatty acids and NSAIDs affect prostaglandin synthesis through COX pathway modulation. The additive reduction in thromboxane production and potential combined effect on GI mucosal prostaglandins may modestly increase GI bleeding risk when used together.",
+          "evidence_level": "theoretical",
+          "mechanism": "Omega-3 fatty acids have mild antiplatelet effects: in healthy volunteers a prescription omega-3 product did not inhibit platelet aggregation on its own but enhanced aspirin's effect. Clinical data have not shown more bleeding when omega-3 is combined with aspirin or warfarin, and in patients on low-dose aspirin, adding omega-3 did not raise upper gastrointestinal complications. No study with other NSAIDs was found, so an additive gastrointestinal bleeding risk is theoretical.",
           "action": "Monitor for GI symptoms (stomach pain, dark stools) when combining fish oil with NSAIDs. Take NSAIDs with food.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/10902065/"
+            "https://pubmed.ncbi.nlm.nih.gov/18841286/",
+            "https://pubmed.ncbi.nlm.nih.gov/26280541/",
+            "https://pubmed.ncbi.nlm.nih.gov/17368277/"
           ],
-          "alert_headline": "May add to NSAID bleeding risk",
-          "alert_body": "Omega-3 has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Omega-3.",
+          "alert_headline": "Mild platelet effect with NSAIDs",
+          "alert_body": "Omega-3 has mild antiplatelet effects, though studies with aspirin found no added bleeding. If you take NSAIDs regularly, mention omega-3 to your prescriber.",
           "informational_note": "Omega-3 can affect platelet function \u2014 relevant to people on NSAIDs.",
           "profile_gate": {
             "gate_type": "drug_class",
