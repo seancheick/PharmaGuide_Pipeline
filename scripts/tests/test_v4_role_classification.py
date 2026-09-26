@@ -8,7 +8,7 @@ Design spec: docs/superpowers/specs/2026-05-31-v4-role-classification-design.md
 Level -> role map (user-approved Option 1):
   L1 drives module        -> primary
   L2 named in title       -> claim_prominent  (role_source=product_name)
-  L3 front-label claim    -> INERT (no data source; never emit a claim reason)
+  L3 explicit function claim -> claim_prominent (material active; statement provenance)
   L4 required for subtype -> major  (multi micronutrient panel)
   L5 high comparable mass -> major
   L6 otherwise            -> adjunct

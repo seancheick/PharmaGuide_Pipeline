@@ -227,3 +227,5 @@ All tests run through `scripts/test.sh`. `fast` is the development profile;
 part of the supported operator contract.
 
 **Omega purpose evidence:** outcome-specific source records inside the existing INGR_OMEGA3 clinical entry. These describe research scope, not scores. The shared quality-score configuration owns numerical credit and operational exposure cutoffs; the existing evidence resolver joins them by record ID. Intake guidance, triglyceride outcomes, cardiovascular events, prenatal outcomes and safety context are distinct.
+
+**Explicit label function claim (ingredient role):** a preserved affirmative formulation statement naming a substantial active and its function. The existing role classifier records `named_in_label_function_claim` with the statement location; the Evidence resolver includes that role alongside route drivers. It is label-purpose provenance, not proof of efficacy: all clinical applicability gates still apply. Titles, incidental nutrients, Nutrition Facts, warnings, and trace adjuncts do not establish this additional role.

@@ -5521,7 +5521,7 @@ def build_scoring_classification(
 # Level -> role precedence (first match wins); user-approved Option 1:
 #   L1 drives selected module    -> primary         (router driver canonical)
 #   L2 named in product title    -> claim_prominent (role_source=product_name)
-#   L3 front-label claim         -> INERT (no data source today; never emitted)
+#   L3 explicit label function  -> claim_prominent (traceable statement source)
 #   L4 required for subtype       -> major          (multi micronutrient panel)
 #   L5 high comparable-unit mass  -> major
 #   L6 otherwise                  -> adjunct
@@ -5697,6 +5697,57 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     return False
 
 
+def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Optional[str]:
+    """Recognize an explicit label function claim about a substantial active.
+
+    This establishes a label role, never clinical efficacy. Restrict promotion
+    to material, non-nutrition rows and a named subject immediately followed by
+    an affirmative function verb. Titles, ingredient lists, warnings and
+    trademark copy cannot establish this additional purpose.
+    """
+    canonical = _norm(row.get("canonical_id"))
+    mass = _role_mass_mg(row)
+    if (
+        not canonical or canonical.startswith("vitamin_")
+        or canonical in _CLASSIFICATION_MINERAL_CANONICALS
+        or is_nutrition_fact_declaration(row)
+        or _role_is_blend_member(row)
+        or mass is None or ctx["max_mass_mg"] <= 0
+        or mass < _ROLE_MASS_MAJOR_FRACTION * ctx["max_mass_mg"]
+        or row.get("scoreable_identity") is False
+        or row.get("score_eligible_by_cleaner") is False
+        or _norm(row.get("source_section")) == "inactive"
+    ):
+        return None
+    # Use complete identity phrases, not loose title-token matching. A marker
+    # row sharing its parent's canonical ID must itself name that identity.
+    identity = re.sub(r"[^a-z0-9]+", " ", canonical).strip()
+    names = [re.sub(r"[^a-z0-9]+", " ", _norm(row.get(key))).strip()
+             for key in ("name", "standard_name", "standardName")]
+    if not any(re.search(r"\b" + re.escape(identity) + r"\b", name) for name in names):
+        return None
+    pattern = re.compile(
+        r"\b" + re.escape(identity)
+        + r"\s+(?:helps?|supports?|promotes?|targets?|maintains?)\s+(.+)"
+    )
+    for index, statement in enumerate(ctx["statements"]):
+        if not isinstance(statement, dict):
+            continue
+        if _norm(statement.get("type")) not in {
+            "formula re: contains", "formulation re: other", "formula re: type",
+        }:
+            continue
+        text = str(statement.get("notes") or statement.get("text") or "")
+        for clause_index, clause in enumerate(re.split(r"[.!?;\r\n]+|\band\b", text, flags=re.I)):
+            normalized = re.sub(r"[^a-z0-9]+", " ", clause.lower()).strip()
+            if re.search(r"\b(?:not|no|never|without|may|might)\b", normalized):
+                continue
+            match = pattern.search(normalized)
+            if match and match.group(1).strip():
+                return f"statements[{index}].notes:clause[{clause_index}]"
+    return None
+
+
 def _role_context(
     product: Dict[str, Any],
     module: Optional[str],
@@ -5719,6 +5770,7 @@ def _role_context(
     masses = [m for m in (_role_mass_mg(r) for r in rows) if m is not None]
     return {
         "module": module,
+        "statements": _safe_list(product.get("statements")),
         "title_norm": _norm(product.get("product_name") or product.get("fullName")),
         "driver_canonicals": drivers,
         "max_mass_mg": max(masses) if masses else 0.0,
@@ -5754,10 +5806,15 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     if module == "probiotic" and _role_is_probiotic_strain(row):
         return out(ROLE_PRIMARY, "drives_module_probiotic", "router_driver", "high")
 
-    # L2 — named in the product title. (L3 front-label-claim has no data source
-    # today and is intentionally NOT emitted — no fabricated claim provenance.)
+    # L2 — named in the product title.
     if _named_in_title(row, ctx["title_norm"]):
         return out(ROLE_CLAIM_PROMINENT, "named_in_product_title", "product_name", "high")
+
+    # L3 — explicit function claim preserved on the label. This adds a
+    # purpose owner alongside the route driver, without awarding Evidence.
+    claim_source = _role_function_claim_source(row, ctx)
+    if claim_source:
+        return out(ROLE_CLAIM_PROMINENT, "named_in_label_function_claim", claim_source, "high")
 
     is_blend = _role_is_blend_member(row)
     mass_mg = _role_mass_mg(row)

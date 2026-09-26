@@ -257,6 +257,11 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     scoped_matches: List[Dict[str, Any]] = []
     scoped_recovered_matches: List[Dict[str, Any]] = []
     flags: List[str] = []
+    if owner_scoped:
+        from scoring_input_contract import classify_ingredient_roles
+        for role in classify_ingredient_roles(product):
+            if role.get("role_reason") == "named_in_label_function_claim":
+                _append_once(flags, "EXPLICIT_LABEL_PURPOSE_OWNER:" + str(role["canonical_id"]))
     sub_clinical_canonicals: set[str] = set()
 
     for entry in matches:

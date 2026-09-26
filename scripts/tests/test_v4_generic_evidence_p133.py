@@ -1397,3 +1397,56 @@ def test_title_nutrient_keeps_authority_floor_beside_heavier_adjunct():
     payload = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
     assert payload['metadata']['nutrition_authority_canonical'] == 'vitamin_b9_folate'
     assert payload['components']['primary_evidence_floor'] == NUTRITION_AUTHORITY_FLOOR
+
+
+def test_real_stress_gut_labels_assess_both_explicit_purposes():
+    import json
+    from evidence_resolver import evidence_owner_canonicals
+    from scoring_input_contract import classify_ingredient_roles
+    from scoring_v4.scored_artifact import build_scored_artifact
+    products = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())
+    assert {str(p['id']) for p in products} == {'315334', '315850'}
+    for product in products:
+        owners = evidence_owner_canonicals(product, module='fiber_digestive')
+        assert {'ashwagandha', 'l_theanine', 'digestive_enzymes', 'protease'} <= owners
+        roles = classify_ingredient_roles(product, module='fiber_digestive')
+        assert any(r['canonical_id'] == 'l_theanine' and r['role_source'].startswith('statements[') for r in roles)
+        artifact = build_scored_artifact(product)
+        assert artifact['quality_score_status'] == 'scored'
+        assert 0 < artifact['quality_pillars_v4']['evidence']['score'] <= 20
+        from copy import deepcopy
+        duplicate = deepcopy(product)
+        duplicate['statements'] += deepcopy(product['statements'])
+        duplicate['evidence_data']['clinical_matches'] *= 2
+        repeated = build_scored_artifact(duplicate)
+        assert repeated['quality_pillars_v4']['evidence']['score'] == artifact['quality_pillars_v4']['evidence']['score']
+        without_claims = deepcopy(product)
+        without_claims['statements'] = []
+        assert build_scored_artifact(without_claims)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_explicit_function_claim_requires_material_active_and_named_subject():
+    from evidence_resolver import evidence_owner_canonicals
+    from copy import deepcopy
+    product = _product(product_name='Stress & Gut Health', primary_type='fiber_digestive',
+        ingredients=[_ingredient(name='Lactase', canonical_id='lactase', quantity=9000, unit='ALU'),
+                     _ingredient(name='L-Theanine', canonical_id='l_theanine', quantity=200),
+                     _ingredient(name='Calcium', canonical_id='calcium', quantity=300),
+                     _ingredient(name='Black Pepper', canonical_id='black_pepper', quantity=5)],
+        statements=[{'type':'Formula re: Contains', 'notes':'L-theanine helps you relax. Calcium supports bones. Black pepper supports digestion.'}])
+    assert evidence_owner_canonicals(product, module='fiber_digestive') == {'lactase', 'l_theanine'}
+    for notes in ['Supports stress and gut health.', 'Contains L-theanine.',
+                  'L-theanine does not help relaxation.',
+                  'L-theanine and calcium are included. Lactase helps digestion.']:
+        control = deepcopy(product)
+        control['statements'][0]['notes'] = notes
+        assert evidence_owner_canonicals(control, module='fiber_digestive') == {'lactase'}
+    for kind in ['Precautions re: All Other', 'Brand IP Statement(s) re: (c), (TM), (SM)']:
+        control = deepcopy(product)
+        control['statements'][0]['type'] = kind
+        assert evidence_owner_canonicals(control, module='fiber_digestive') == {'lactase'}
+    control = deepcopy(product)
+    for row in control['ingredient_quality_data']['ingredients_scorable']:
+        if row['canonical_id'] == 'l_theanine':
+            row['source_section'] = 'nutrition_facts'
+    assert 'l_theanine' not in evidence_owner_canonicals(control, module='fiber_digestive')

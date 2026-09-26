@@ -823,3 +823,35 @@ pg-scoring-change step 1. No scoring/data changes, snapshot refresh, test rerun,
 new pipeline rebuild, export promotion, merge, push, release, or worktree
 removal. Existing fast checkpoint is historical evidence, not a new test run.
 Remaining acceptance sequence in the original handoff stays outstanding.
+
+
+### Approved multi-purpose policy implementation — 2026-09-26 (measurement pending)
+
+Sean approved assessing substantial explicitly purpose-driving actives alongside
+route drivers, retaining every clinical/identity/source gate and the 20-point cap.
+The existing role classifier now recognizes affirmative formulation statements
+that name a material non-nutrient active as the subject of a function claim.
+Statement locations are retained in role_source; role_reason is
+named_in_label_function_claim. Generic Evidence retains its shared owner selection
+and clinical-record-ID deduplication and emits explicit-label-owner flags.
+No clinical registry or scoring magnitudes changed.
+
+Owner: scoring_input_contract.py::classify_ingredient_roles and
+evidence_resolver.py::evidence_owner_canonicals — evidence: current symbol search,
+matrix scoring_input_contract entry, and two real-label regressions.
+Will NOT create: a purpose registry, alternate scorer, whitelist or public field.
+
+Two new regressions failed before implementation. Focused batch: 148 passed
+in 2.43s, log ~/pg_quality/candd/multipurpose_focused.log. Both real labels
+315334/315850 move 50.1 to 70.1, Evidence 0 to 20, via ashwagandha and
+L-theanine. Duplicating statements/clinical records does not add points;
+removing statements restores Evidence 0. These are measured provisional results,
+not release acceptance. New real enriched fixtures preserve original provenance.
+
+Additional reproduced pre-existing resolver inconsistency: projected scoring rows
+carry quantity, while resolve_evidence_for_row reads amount/dose_value, so disclosed
+L-theanine200mg reports dose_undisclosed. Ashwagandha240mg with a standardized
+marker child is_parent_total and reports structural_blend_header despite explicit
+non-proprietary/non-blend flags. Generic scoring still awards points; resolver
+reports identity_material_unresolved. Resolve this through existing owners before
+acceptance. Fresh-context review and frozen replay remain pending.
