@@ -19109,7 +19109,9 @@ class SupplementEnricherV3:
             ingredient_name = ingredient.get("raw_source_text") or ingredient.get("name") or ingredient.get("standard_name") or "unknown"
             # A botanical twin is its declared IQM part (dandelion root) for
             # rules scoped by plant part.
-            twin_form = interaction_twin_form(subject["db"], subject["canonical_id"])
+            twin_form = interaction_twin_form(
+                ingredient.get("canonical_source_db"), subject["canonical_id"]
+            )
             scope_row = (
                 {**ingredient, "form_id": twin_form, "matched_forms": [], "form_match_status": "mapped"}
                 if twin_form else ingredient

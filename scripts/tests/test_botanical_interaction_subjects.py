@@ -147,6 +147,15 @@ REVIEWED_NOT_TWINNED = {
     ("bergamot_essential_oil", "citrus_bergamot"): "preparation: essential oil, not fruit extract",
     ("chamomile_essential_oil", "chamomile"): "preparation: essential oil, not flower extract",
     ("vitex", "chasteberry"): "species: aliases name V. negundo and V. trifolia",
+    ("cinnamon_bark_essential_oil", "cinnamon"): "preparation: essential oil, not bark extract",
+    ("olive_fruit", "olive_leaf"): "part: fruit, the rule's evidence is leaf extract",
+    ("coleus_forskohlii", "forskolin"): MARKER_OR_SOURCE,
+    ("barberry_root", "berberine_supplement"): MARKER_OR_SOURCE,
+    ("triphala_powder", "chromium"): MARKER_OR_SOURCE,
+    ("wheat_barley_grass_blend", "vitamin_e"): MARKER_OR_SOURCE,
+    # The record's UNII is CI 75300 (curcumin) but TurmiPure Gold is a turmeric
+    # extract with unknown markers; the record needs correcting first.
+    ("turmipure_gold", "curcumin"): "identity: record UNII is curcumin, brand is a turmeric extract",
     ("amla_fruit", "chromium"): MARKER_OR_SOURCE,
     ("coleus_forskohlii_root", "forskolin"): MARKER_OR_SOURCE,
     ("japanese_knotweed", "resveratrol"): MARKER_OR_SOURCE,
@@ -171,6 +180,32 @@ REVIEWED_NOT_TWINNED = {
 def _botanicals() -> dict:
     rows = json.loads((DATA / "botanical_ingredients.json").read_text())["botanical_ingredients"]
     return {row["id"]: row for row in rows}
+
+
+def _standardized() -> dict:
+    rows = json.loads((DATA / "standardized_botanicals.json").read_text())["standardized_botanicals"]
+    return {row["id"]: row for row in rows}
+
+
+def _record_species(row: dict, known: set) -> set:
+    """A botanical record's species: its latin name, else the known binomials its
+    own name, aliases and notes spell (standardized records carry no latin name)."""
+    binomial = _binomial(row.get("latin_name"))
+    if binomial:
+        return {binomial}
+    text = " ".join(
+        str(part) for part in [row.get("standard_name"), row.get("notes"), *(row.get("aliases") or [])] if part
+    ).lower()
+    return {name for name in known if re.search(r"\b" + re.escape(name) + r"\b", text)}
+
+
+def _twin_records() -> tuple[dict, dict]:
+    """Every botanical and standardized record by registry, and the known binomials."""
+    registries = {"botanical_ingredients": _botanicals(), "standardized_botanicals": _standardized()}
+    known = {
+        _binomial(row.get("latin_name")) for row in registries["botanical_ingredients"].values()
+    } - {None}
+    return registries, known
 
 
 def _iqm() -> dict:
@@ -247,28 +282,35 @@ def test_twin_ids_answer_to_their_iqm_parent():
 
 
 def test_every_twin_is_a_verified_same_plant_pair():
-    """Same substance by GSRS UNII, or a species the IQM parent itself names."""
+    """Same substance by UNII, or a species the IQM parent itself names, in every
+    registry (botanical, standardized) that holds the twin's id."""
     from identity.interaction import BOTANICAL_INTERACTION_TWIN
 
-    botanicals, iqm = _botanicals(), _iqm()
-    for botanical_id, iqm_id in BOTANICAL_INTERACTION_TWIN.items():
-        assert botanical_id in botanicals, botanical_id
+    registries, known = _twin_records()
+    iqm = _iqm()
+    for twin_id, iqm_id in BOTANICAL_INTERACTION_TWIN.items():
+        records = [rows[twin_id] for rows in registries.values() if twin_id in rows]
+        assert records, twin_id
         assert iqm_id in iqm and not iqm_id.startswith("_"), iqm_id
         # Catalog tags carry no registry, so a renamed twin must not be an IQM id.
-        assert botanical_id == iqm_id or botanical_id not in iqm, botanical_id
-        row, parent = botanicals[botanical_id], iqm[iqm_id]
-        binomial = _binomial(row.get("latin_name"))
-        shared_unii = _unii(row) and _unii(row) == _unii(parent)
-        assert shared_unii or (binomial and _names_species(parent, binomial)), botanical_id
+        assert twin_id == iqm_id or twin_id not in iqm, twin_id
+        parent = iqm[iqm_id]
+        for row in records:
+            shared_unii = _unii(row) and _unii(row) == _unii(parent)
+            named = any(_names_species(parent, name) for name in _record_species(row, known))
+            assert shared_unii or named, twin_id
     for pair in REVIEWED_NOT_TWINNED:
         assert BOTANICAL_INTERACTION_TWIN.get(pair[0]) != pair[1], pair
 
 
 def test_every_botanical_record_of_a_ruled_iqm_parent_is_reviewed():
-    """A botanical sharing the id, UNII or species of a parent with rules needs a decision."""
+    """A botanical or standardized record sharing the id, UNII or species of a
+    parent with rules needs a decision (a standardized id that is itself an IQM
+    id already meets that parent's rules)."""
     from identity.interaction import BOTANICAL_INTERACTION_TWIN
 
-    botanicals, iqm = _botanicals(), _iqm()
+    registries, known = _twin_records()
+    iqm = _iqm()
     ruled = {
         rule["subject_ref"]["canonical_id"]
         for rule in _rules()
@@ -277,20 +319,53 @@ def test_every_botanical_record_of_a_ruled_iqm_parent_is_reviewed():
     unreviewed = []
     for iqm_id in sorted(ruled):
         parent = iqm.get(iqm_id) or {}
-        twin_species = {
-            _binomial(botanicals[b].get("latin_name"))
+        twin_species = set().union(*(
+            _record_species(rows[b], known)
+            for rows in registries.values()
             for b, target in BOTANICAL_INTERACTION_TWIN.items()
-            if target == iqm_id
-        } - {None}
-        for botanical_id, row in botanicals.items():
-            binomial = _binomial(row.get("latin_name"))
-            candidate = (
-                botanical_id == iqm_id
-                or (_unii(parent) and _unii(row) == _unii(parent))
-                or (binomial and (binomial in twin_species or _names_species(parent, binomial)))
-            )
-            if not candidate or BOTANICAL_INTERACTION_TWIN.get(botanical_id) == iqm_id:
-                continue
-            if (botanical_id, iqm_id) not in REVIEWED_NOT_TWINNED:
-                unreviewed.append((botanical_id, iqm_id))
+            if target == iqm_id and b in rows
+        ))
+        for registry, rows in registries.items():
+            for record_id, row in rows.items():
+                if registry == "standardized_botanicals" and record_id in iqm:
+                    continue
+                species = _record_species(row, known)
+                candidate = (
+                    record_id == iqm_id
+                    or (_unii(parent) and _unii(row) == _unii(parent))
+                    or bool(species & twin_species)
+                    or any(_names_species(parent, name) for name in species)
+                )
+                if not candidate or BOTANICAL_INTERACTION_TWIN.get(record_id) == iqm_id:
+                    continue
+                if (record_id, iqm_id) not in REVIEWED_NOT_TWINNED:
+                    unreviewed.append((registry, record_id, iqm_id))
     assert unreviewed == []
+
+
+# ---------------------------------------------------------------------------
+# Standardized botanicals. A standardized_botanicals row is not a routable
+# interaction registry, so it keeps an IQM subject; an identity that is an IQM
+# id already meets its rules. One whose id differs from its IQM parent
+# (ginger_extract, garlic_std) met nothing: 231794 Life Extension Optimized
+# Garlic (1200 mg garlic extract) carried no garlic warning.
+
+
+@pytest.mark.parametrize(
+    "pid,rule_id,parent_tag",
+    [
+        (16374, "RULE_IQM_GINGER_BLEEDING", "ginger"),  # GNC Total Cleanser, ginger root extract
+        (231794, "RULE_INGREDIENT_GARLIC", "garlic"),  # Life Extension Optimized Garlic
+        (201405, "RULE_IQM_STINGING_NETTLE_DIABETES", "stinging_nettle"),  # Solgar Male Multiple
+    ],
+)
+def test_standardized_label_carries_its_iqm_twin_rule(pid, rule_id, parent_tag):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from build_final_db import classify_product_categories
+
+    raw = json.loads((FIXTURES / f"standardized_twin_{pid}_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    fired = [a for a in enriched["interaction_profile"]["ingredient_alerts"] if a["rule_id"] == rule_id]
+    assert len(fired) == 1, f"{pid}: {len(fired)} {rule_id} alerts"
+    assert parent_tag in classify_product_categories(enriched)["key_ingredient_tags"]
