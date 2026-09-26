@@ -82,6 +82,7 @@ from identity.safety import (
     top_safety_flag as _canonical_top_safety_flag,
 )
 from identity.interaction import (
+    interaction_identity,
     interaction_subject_ids,
     interaction_tags_from_text,
     label_row_establishes_presence,
@@ -3541,9 +3542,16 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
     display_mode = safe_str(w.get("display_mode_default")).casefold()
     # One hazard, one card: the rule is the subject. Keying on the label
     # spelling first showed 287 duplicate cards on 270 products
-    # ("Yohimbe" + "Yohimbe bark extract" under RISK_YOHIMBE).
+    # ("Yohimbe" + "Yohimbe bark extract" under RISK_YOHIMBE). An interaction
+    # card's subject is its plant or nutrient, so two label rows of one plant
+    # (raw powder + extract, a botanical and its IQM twin) show one card.
+    interaction_subject = (
+        interaction_identity(w.get("ingredient_canonical_id"))
+        if w.get("source") == "interaction_rules" and not w.get("matched_rule_id")
+        else None
+    )
     subject = safe_str(
-        w.get("matched_rule_id") or w.get("ingredient_name")
+        w.get("matched_rule_id") or interaction_subject or w.get("ingredient_name")
     ).casefold()
     if subject and (
         display_mode == "critical"
@@ -3569,7 +3577,7 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
         _norm(w.get("condition_id") or w.get("condition_ids")),
         _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
         _norm(w.get("source")),
-        _norm(w.get("matched_rule_id") or w.get("ingredient_name")),
+        _norm(w.get("matched_rule_id") or interaction_subject or w.get("ingredient_name")),
     )
 
 

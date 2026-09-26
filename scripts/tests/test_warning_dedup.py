@@ -250,3 +250,36 @@ def test_dedup_preserves_relative_order_of_distinct_warnings() -> None:
     # First survivor must still be the "critical" entry (index 0 originally)
     assert out[0]["canonical_id"] == "a"
     assert out[1]["canonical_id"] == "b"
+
+
+# ---------------------------------------------------------------------------
+# One plant, one interaction card. Two label rows of one plant (raw powder and
+# standardized extract; a botanical record and its IQM twin) surfaced the same
+# rule and target twice because the key used the label spelling.
+# ---------------------------------------------------------------------------
+
+def _interaction_card(name: str, canonical_id: str, severity: str = "avoid") -> dict:
+    return {
+        "type": "drug_interaction", "severity": severity, "drug_class_id": "doacs",
+        "source": "interaction_rules", "source_rule_id": "RULE_INGREDIENT_ST_JOHNS_WORT",
+        "ingredient_name": name, "ingredient_canonical_id": canonical_id,
+    }
+
+
+@pytest.mark.parametrize("severity", ["avoid", "caution"])
+def test_one_plant_on_two_rows_shows_one_interaction_card(severity) -> None:
+    raw = _interaction_card("raw St. John's Wort powder", "st_john_s_wort", severity)
+    extract = _interaction_card("standardized St. John's Wort extract", "st_johns_wort", severity)
+    assert len(_dedup_warnings([raw, extract])) == 1
+
+
+def test_two_plants_keep_their_own_interaction_cards() -> None:
+    garlic = _interaction_card("Garlic extract", "garlic")
+    ginkgo = _interaction_card("Ginkgo leaf", "ginkgo_biloba_leaf")
+    assert len(_dedup_warnings([garlic, ginkgo])) == 2
+
+
+def test_one_plant_different_severities_stay_separate() -> None:
+    avoid = _interaction_card("raw St. John's Wort powder", "st_john_s_wort", "caution")
+    monitor = _interaction_card("standardized St. John's Wort extract", "st_johns_wort", "monitor")
+    assert len(_dedup_warnings([avoid, monitor])) == 2

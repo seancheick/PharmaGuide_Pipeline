@@ -270,6 +270,12 @@ def label_row_establishes_presence(row: dict) -> bool:
     return unit in _NO_AMOUNT_UNITS
 
 
+def interaction_identity(canonical_id: Any) -> str | None:
+    """The broadest subject an identity answers to (garlic_bulb -> garlic,
+    vitamin_k2 -> vitamin_k): one plant or nutrient, one interaction card."""
+    ids = interaction_subject_ids(canonical_id)
+    return ids[-1] if ids else None
+
 def normalize_interaction_canonical_id(value: Any) -> str | None:
     """Return the catalog-facing canonical used for interaction lookup."""
     if value is None:
