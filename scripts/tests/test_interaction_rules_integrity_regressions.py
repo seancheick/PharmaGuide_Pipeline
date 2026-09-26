@@ -183,6 +183,19 @@ DIGOXIN_LABEL = (
     "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?"
     "setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
 )
+EMA_SENNA_LEAF = (
+    "https://www.ema.europa.eu/en/documents/herbal-monograph/"
+    "final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-"
+    "cassia-angustifolia-vahl-folium-revision-1_en.pdf"
+)
+EMA_SENNA_POD = (
+    "https://www.ema.europa.eu/en/documents/herbal-monograph/"
+    "final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-"
+    "cassia-angustifolia-vahl-fructus-revision-1_en.pdf"
+)
+# Wrong-topic PMIDs once cited by the cascara and senna rules: a cascaroside
+# chromatography paper and a Cassiae Semen (Cassia obtusifolia/tora seed) review.
+LAXATIVE_GHOST_PMIDS = ("32876395", "36702448")
 
 
 def _rule(rule_id: str) -> dict:
@@ -233,5 +246,32 @@ def test_cascara_rule_cites_the_eu_monograph_and_drops_unsourced_claims():
         "dialysis",
         "depends on kidney clearance",
         "choose an osmotic agent",
+    ):
+        assert stale not in copy, stale
+
+
+def test_laxative_ghost_pmids_are_not_cited_anywhere():
+    text = json.dumps(RULES)
+    for pmid in LAXATIVE_GHOST_PMIDS:
+        assert f"pubmed.ncbi.nlm.nih.gov/{pmid}" not in text
+
+
+def test_senna_kidney_and_digoxin_rules_cite_the_eu_monographs():
+    rule = _rule("RULE_IQM_SENNA_PREGNANCY")
+    kidney = _sub_rule(rule, "condition_id", "kidney_disease")
+    digoxin = _sub_rule(rule, "drug_class_id", "cardiac_glycosides")
+
+    assert kidney["sources"] == [EMA_SENNA_LEAF, EMA_SENNA_POD]
+    assert digoxin["sources"] == [EMA_SENNA_LEAF, EMA_SENNA_POD, DIGOXIN_LABEL]
+    assert (kidney["severity"], digoxin["severity"]) == ("caution", "avoid")
+    assert "digoxin toxicity" in digoxin["mechanism"]
+
+    copy = json.dumps([kidney, digoxin]).lower()
+    for stale in (
+        "hyperkalemia rebound",
+        "hyponatremia",
+        "3.5 to 3.0",
+        "binding affinity",
+        "depends on kidney clearance",
     ):
         assert stale not in copy, stale

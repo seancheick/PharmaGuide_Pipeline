@@ -130,7 +130,8 @@
     "migration_notes": [
       "2026-05-26: Added profile-gated fluoroquinolone mineral timing rules for calcium, iron, magnesium, and zinc; active antibiotic context only.",
       "2026-09-21: RULE_IQM_VITAMIN_K_MK7_FORM_ONLY form_scope named 'menaquinone_7_mk7', a key no IQM form carries, so the rule never fired; it now names the vitamin_k2 MK-7 forms. Vitamin K1/K2 rows reach both vitamin K rules through the interaction subject family (identity/interaction.py) after the 2026-07-28 K1/K2/K3 identity split. Clinical content unchanged.",
-      "2026-09-25: RULE_IQM_CASCARA_SAGRADA_PREGNANCY cited PMID 32876395 (a cascaroside chromatography paper) for every sub-rule. It now cites the EU herbal monograph on cascara (EMA/HMPC/726270/2016 Rev.1), NIH LiverTox and LactMed Cascara, and the digoxin prescribing information; mechanisms were rewritten to what those sources state. Severities unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-25: RULE_IQM_CASCARA_SAGRADA_PREGNANCY cited PMID 32876395 (a cascaroside chromatography paper) for every sub-rule. It now cites the EU herbal monograph on cascara (EMA/HMPC/726270/2016 Rev.1), NIH LiverTox and LactMed Cascara, and the digoxin prescribing information; mechanisms were rewritten to what those sources state. Severities unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-25: RULE_IQM_SENNA_PREGNANCY kidney_disease and cardiac_glycosides cited PMID 36702448 (a Cassiae Semen review: Cassia obtusifolia/tora seeds, not senna). They now cite the EU herbal monographs on senna leaf and pod (EMA/HMPC/625849/2015 and EMA/HMPC/228761/2016, Rev.1) and the digoxin prescribing information; mechanisms were rewritten to what those sources state. Severities unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -18838,14 +18839,15 @@
           "condition_id": "kidney_disease",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Chronic anthraquinone laxative use can cause electrolyte depletion (hypokalemia, hyponatremia) which is poorly tolerated in chronic kidney disease. Potassium wasting compounds the risk of dangerous hyperkalemia rebound and cardiac arrhythmia in CKD patients on renin-angiotensin-aldosterone system blockers.",
+          "mechanism": "Long-term use of stimulant laxatives such as senna can cause water and electrolyte imbalance, including potassium loss, and may result in albuminuria and haematuria. The EU herbal monographs on senna leaf and pod advise people with kidney disorders to be aware of possible electrolyte imbalance.",
           "action": "Use senna only short-term in kidney disease. Monitor serum electrolytes with any repeated use; avoid long-term use without nephrologist oversight.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/36702448/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-fructus-revision-1_en.pdf"
           ],
           "alert_headline": "Electrolyte loss with chronic use",
           "alert_body": "Chronic or high-dose stimulant laxative use can cause fluid and electrolyte shifts. If you have kidney disease, use only with clinician guidance, especially with diuretics or heart medicines.",
-          "informational_note": "Senna depends on kidney clearance \u2014 relevant to people with kidney conditions.",
+          "informational_note": "Senna can shift electrolytes \u2014 relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -18873,10 +18875,12 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Senna-induced hypokalemia potentiates digoxin toxicity by increasing cardiac glycoside binding affinity at the Na+/K+-ATPase pump. Even modest decreases in serum potassium (e.g., from 3.5 to 3.0 mEq/L) can shift digoxin into the toxic range.",
+          "mechanism": "Hypokalaemia from long-term stimulant laxative use potentiates the action of cardiac glycosides (EU herbal monographs on senna), and hypokalaemia may predispose to digoxin toxicity (digoxin prescribing information).",
           "action": "Avoid senna with digoxin or other cardiac glycosides. If a laxative is required, use an osmotic agent and monitor serum potassium and digoxin levels.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/36702448/"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-fructus-revision-1_en.pdf",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
           "alert_headline": "Can increase digoxin toxicity",
           "alert_body": "Senna-induced potassium loss makes digoxin more toxic. If you take digoxin or another cardiac glycoside, talk to your prescriber and discuss a gentler laxative instead.",
@@ -18939,7 +18943,7 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
+      "last_reviewed": "2026-09-25",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
