@@ -817,6 +817,39 @@ def _recover_verified_primary_ingredient_matches(
                 continue
             entry_keys = _entry_identity_keys(entry)
             matched_keys = row_keys & entry_keys
+            if (
+                not matched_keys
+                and row_canonical_id == "protein"
+                and entry_id == "INGR_WHEY_PROTEIN"
+            ):
+                # Protein grams belong to the macro row; the disclosed source
+                # can live in the separate ingredient list. Reuse exact registry
+                # identities, never a product title or a generic protein alias.
+                # Every declared protein source must qualify: a whey/collagen
+                # mixture cannot transfer all its protein grams to whey.
+                from scoring_input_contract import declared_protein_source_rows
+                source_keys = []
+                for source in declared_protein_source_rows(product):
+                    forms = [f for f in _safe_list(source.get("forms")) if isinstance(f, dict)]
+                    # Lecithin/flavour components do not supply the protein
+                    # macro. Unclassified forms still have to prove identity.
+                    forms = [f for f in forms if _norm_text(f.get("category")) in {"", "protein"}]
+                    if not forms and _row_identity_keys(source) == {"protein"}:
+                        continue  # The macro itself cannot establish its source.
+                    if _row_identity_keys(source) & entry_keys:
+                        # An explicitly identified source remains whey/casein,
+                        # even when DSLD also lists its constituent proteins.
+                        forms = []
+                    for identity in forms or [source]:
+                        # Cleaner retains DSLD source identity using camel-case
+                        # names/groups; do not discard that existing provenance.
+                        keys = _row_identity_keys(identity) | {
+                            _canonical_text(identity.get("standardName")),
+                            _canonical_text(identity.get("ingredientGroup")),
+                        }
+                        source_keys.append(keys if source.get("raw_source_path") else set())
+                if source_keys and all(keys & entry_keys for keys in source_keys):
+                    matched_keys = set().union(*(keys & entry_keys for keys in source_keys))
             if not matched_keys:
                 continue
             if not existing_id and existing_identity_keys & entry_keys:

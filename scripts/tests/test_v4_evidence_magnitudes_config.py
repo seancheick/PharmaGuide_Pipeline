@@ -69,13 +69,25 @@ EXPECTED = {
         ),
     },
     "multi_prenatal": {"cap_evidence": 20.0, "generic_cap_evidence": 20.0},
-    "omega": {"cap_evidence": 20.0},
+    "omega": {
+        "cap_evidence": 20.0,
+        "purpose_standards": {
+            "omega_reviewed_weak": {"pillar_score": 10.4, "minimum_daily_epa_dha_mg": 376},
+            "triglyceride_strong": {"pillar_score": 20.0, "minimum_daily_epa_dha_mg": 2000,
+                                   "graduated_from_daily_epa_dha_mg": 1000},
+            "prenatal_dha_intake_authority": {"pillar_score": 11.1, "minimum_daily_dha_mg": 200},
+            "prenatal_preterm_birth_outcome": {"score_eligible": False},
+            "epa_predominant_depression": {"score_eligible": False},
+            "high_dose_atrial_fibrillation_context": {"score_eligible": False,
+                                                    "minimum_daily_epa_dha_mg": 1000},
+        },
+    },
 }
 
 
 def test_config_matches_reviewed_evidence_magnitudes():
     for mod, vals in EXPECTED.items():
-        assert EM[mod] == vals, f"evidence_magnitudes.{mod} drifted from reviewed values"
+        assert {key: value for key, value in EM[mod].items() if key != "_doc"} == vals, f"evidence_magnitudes.{mod} drifted from reviewed values"
 
 
 def test_runtime_constants_read_from_config_no_drift():

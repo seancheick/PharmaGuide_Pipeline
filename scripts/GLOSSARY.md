@@ -225,3 +225,5 @@ The retired scorer's config is not a production version authority.
 All tests run through `scripts/test.sh`. `fast` is the development profile;
 `release` and `full` are pre-ship profiles. Direct raw pytest commands are not
 part of the supported operator contract.
+
+**Omega purpose evidence:** outcome-specific source records inside the existing INGR_OMEGA3 clinical entry. These describe research scope, not scores. The shared quality-score configuration owns numerical credit and operational exposure cutoffs; the existing evidence resolver joins them by record ID. Intake guidance, triglyceride outcomes, cardiovascular events, prenatal outcomes and safety context are distinct.

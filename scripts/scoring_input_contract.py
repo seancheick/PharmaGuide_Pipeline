@@ -2537,6 +2537,25 @@ def _source_tree_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     return source_rows
 
 
+def declared_protein_source_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    """Project cleaner-owned source declarations, never independent doses.
+
+    A protein macro can name its source in either ingredient list or structured
+    forms. Keep unknown sources and missing provenance visible so Evidence can
+    reject incomplete joins. This does not promote inactive rows to actives.
+    """
+    rows = []
+    for row in _safe_list(product.get("activeIngredients")) + _safe_list(product.get("inactiveIngredients")):
+        if not isinstance(row, dict):
+            continue
+        forms = [form for form in _safe_list(row.get("forms")) if isinstance(form, dict)]
+        if (_norm(row.get("raw_category")) == "protein"
+                or _norm(row.get("canonical_id")) == "protein"
+                or any(_norm(form.get("category")) == "protein" for form in forms)):
+            rows.append(row)
+    return rows
+
+
 def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     """Keep required conflicts and invalid identity projections in coverage.
 

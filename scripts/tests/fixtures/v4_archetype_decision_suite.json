@@ -1591,7 +1591,7 @@
         "proprietary_blends": [{"name": "Proprietary Protein Matrix", "disclosure_level": "partial"}],
         "proprietary_data": {"blends": [{"name": "Proprietary Protein Matrix", "disclosure_level": "partial"}], "total_active_ingredients": 3}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_protein", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 42.4, "quality_tier": "Poor", "v4_confidence": "moderate", "normalization_references": {"formulation": 29.0, "dose": 25.0, "evidence": 18.0}, "pillars": {"formulation": 0.0, "dose": 8.0, "evidence": 15.6, "transparency": 6.8, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 0.0, "dose": 10.0, "evidence": 14.0, "transparency": 4.5}}
+      "expected": {"v4_module": "sports", "archetype": "sports_protein", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 26.8, "quality_tier": "Poor", "v4_confidence": "moderate", "normalization_references": {"formulation": 29.0, "dose": 25.0, "evidence": 18.0}, "pillars": {"formulation": 0.0, "dose": 8.0, "evidence": 0.0, "transparency": 6.8, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 0.0, "dose": 10.0, "evidence": 0.0, "transparency": 4.5}}
     },
     {
       "id": "sports_bcaa_eaa__ideal",

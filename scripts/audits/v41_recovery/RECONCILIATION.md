@@ -252,3 +252,165 @@ Detached from `v41-recovery` `4cf582b1`. Not a scoring-policy change. Integrated
 |---|---|---|---|---|
 | `074697a9ffd83db821c01460deb93fdc28216e69` | `generic_trust` replaced a missing, malformed, or empty marine scope with `MARINE_CERTS_FALLBACK` (`ifos`, `friend of the sea`, `msc`, `goed`) | `cert_claim_rules.json` `rules.third_party_programs` via `scoring_v4.cert_evidence.marine_cert_tokens`. An unreadable or structurally incomplete policy is a systemic error; it never invents tokens or silently erases unrelated certification credit | `test_marine_cert_registry_owner.py`; existing generic, multi/prenatal, and probiotic trust tests | Valid registry unchanged: USP sku 8, non-omega IFOS 0, omega IFOS label claim 2, Friend of the Sea still not testing credit. Invalid policy stops scoring with a named configuration error |
 | child of `074697a9` (`ul_display_severity`) | Per-row enrichment, aggregated exposure, the B7 penalty chip, and the consumer warning each repeated `critical if pct >= 200 else warning` (warnings used `high`/`moderate` for the same cut) | `rda_ul_calculator.ul_display_severity`. Export derives from `pct_ul` through that owner; a stored word is compatibility input only when the percentage is unavailable. Consumer copy stays `high`/`moderate` | `test_ul_display_severity_owner.py`; `test_v4_tradeoffs_derivation.py`; `test_ul_verdict_gate.py`; `test_b7_pct_ul_none_failsafe.py` | Successful path unchanged (79 mg zinc warning, 80 mg critical, aggregate 200% critical, export high/moderate). A stale stored `warning` at 250% is corrected to critical/high. 100% confirmed exceedance, 150% score deduction, and the gate's 200% signal name were not moved |
+
+## 2026-09-26: protein Evidence alias containment
+
+Owner: `scripts/data/backed_clinical_studies.json::INGR_WHEY_PROTEIN` through
+`SupplementEnricherV3._clinical_study_match` and existing generic Evidence recovery.
+Evidence: `rg 'INGR_WHEY_PROTEIN|_clinical_study_match|_entry_identity_keys' scripts/`;
+checked source-of-truth matrix and glossary. Will NOT create: second matcher,
+protein whitelist, new evidence field, title-derived ingredient identity.
+
+Reproduced 3 failures through current normalize_product -> enrich_product on public
+DSLD fixtures 299952, 222864 and 204521. Removed generic macro/powder/blend aliases.
+Also removed rice/hemp aliases: the cited review's source inventory identifies
+whey, casein, soy, pea, milk, food and studied blends, not those two isolated sources.
+This is not a claim that rice/hemp lack evidence; this record cannot establish it.
+
+Content verified 2026-09-26 via Europe PMC REST (MED 28698222 and 39303495), plus
+https://doi.org/10.1136/bjsports-2017-097608 source inventory. The former is 49 RCTs,
+1863 participants, protein with sustained resistance training; benefits were modest.
+The latter found lower-body strength benefit with training but many null outcomes;
+entry prose now says so. No clinician review attributed.
+
+77 focused tests pass. Three recovery fixtures now name the actual whey/pea form;
+a separate negative pin rejects recovery from a title plus source-free macro.
+Fresh before/after totals: 299952 89.5 -> 89.5, 222864 73.5 -> 73.2,
+204521 62.6 -> 62.6. All three false protein matches removed; routes, status and
+safety verdicts unchanged. Durable receipts: ~/pg_quality/candd/protein_{before,after}_full.json.
+Broader regression/replay follows at the combined checkpoint; nothing published.
+
+## 2026-09-26: omega clinical/config ownership reconciliation
+
+Owner: `scripts/evidence_resolver.py::resolve_omega_evidence_standard` joins
+`backed_clinical_studies.json::INGR_OMEGA3.purpose_evidence` (source facts) to
+`quality_score.json::evidence_magnitudes.omega.purpose_standards` (editorial policy).
+Evidence: `rg 'purpose_evidence|pillar_score|resolve_omega_evidence_standard' scripts/`,
+matrix `quality_pillars_v4_contract`, DATABASE_SCHEMA and GLOSSARY.
+Will NOT create: a second scorer, clinical registry, public field, status or approval queue.
+
+Sean explicitly delegated source reconciliation on 2026-09-26. This is source
+verification and engineering review, NOT an assertion of Dr Pham's approval.
+Moved all omega point values, operational cutoffs, interpolation and eligibility
+switches to the existing config. Retained current numeric behavior; version/fingerprint
+bumped. Existing factual purpose records are now documented in schema/glossary/matrix.
+Removed the module's stale generic-plus-prenatal-bonus description.
+
+Source verification, live Europe PMC REST MED records, 2026-09-26:
+- PMID 31567003, full text PMC6806028: 376-4000 mg/day is the range of included
+  interventions. 376 is NOT a demonstrated efficacy threshold. The scoring floor
+  is explicitly a conservative editorial applicability choice.
+- PMID 32951855: coronary-event benefits, but not overall cardiovascular events;
+  neither it nor the preceding review justifies universal cardiovascular protection.
+- PMID 37264945: 90 RCTs, dose-responsive triglycerides, stronger above 2 g/day in
+  hyperlipidemia/overweight populations. EFSA's primary statement:
+  https://www.efsa.europa.eu/en/press/news/120727 (2-4 g/day claimed triglyceride effects).
+- PMID 31422671: AHA prescription 4 g/day advisory, not OTC equivalence or proof
+  that 2 g supplements treat every patient. No such claim is added.
+- PMID 32114706: verified 2020 Cochrane update replaces PMID 30521670 as the cited
+  triglyceride review; high-certainty dose-dependent triglyceride reduction,
+  only limited/outcome-specific coronary benefit.
+- PMID 18184094: average total intake >=200 mg DHA during pregnancy/lactation;
+  intake guidance is not proof of a 200 mg supplement preventing preterm birth.
+- PMIDs 34308309 / 34959801: ADORE primary trial / mechanistic analysis, not two
+  independent efficacy trials. PMID 31509674: ORIP null early-preterm result.
+  PMID 30480773: favorable broader review, with population/regimen applicability
+  still material. Outcome credit remains disabled for fixed product quality.
+- PMIDs 31383846 / 31480057: depression-specific EPA-predominant scope, not generic
+  omega evidence. PMID 34612056: dose-related atrial-fibrillation association in
+  cardiovascular-outcome trials; contextual safety remains a separate owner.
+
+10.4/20/11.1 and the 1-2 g interpolation are editorial allocations, not numbers
+proved by a paper. Scientific verification does not make those exact allocations
+uniquely correct. They are retained for measurement, not increased to force 95s.
+The 376 mg cutoff's abrupt boundary is an explicit calibration tradeoff.
+
+Reproduced two failing ownership tests, then passed 62 focused tests (12 expected
+missing catalog/DB skips). A pre-existing omega fixture supplied 200 mg while expecting
+credit despite the existing 376 mg boundary; it now supplies 500 mg, while the exact
+375/376 mg boundary remains separately pinned. No production rule weakened for a test.
+Combined frozen replay/full fast verification is recorded below when complete.
+
+### Protein correction acceptance finding: preserve disclosed source lists
+
+The first 1,353 frozen replay found 72 sports Evidence changes. Inspection of the
+largest movers (218854, 294073) showed genuine whey source rows in
+`inactiveIngredients`, while the quantity-owning active row is simply Protein.
+Narrowing aliases alone therefore caused an avoidable recovery regression.
+
+Owner: `generic_evidence._recover_verified_primary_ingredient_matches` (existing
+scoped recovery; verified by `rg '_recover_verified_primary|_row_identity_keys'`).
+Will NOT create: title-based evidence, a protein-source registry or new payload fields.
+The existing recovery now joins the primary protein macro to explicit protein
+source-list rows using the SAME clinical record identity keys. Every declared
+protein source must match; whey plus collagen cannot transfer the entire macro
+amount to whey. The source list must retain a raw label path. Other-ingredient
+rows do not become independently dosed actives. Missing source remains unproven.
+
+New source-list regression failed first; 70 focused checks then passed. The real
+Pure Encapsulations 294073 fixture passes current normalize -> enrich -> Evidence
+and recovers its whey record (22 real/matcher checks). The first broad suite was
+stopped after 2,524 passes when this replay finding required a code correction;
+it was NOT a completed acceptance run. Re-run final frozen comparison before the
+one completed full-fast checkpoint.
+
+Source-list follow-through: existing DSLD protein identities can live in active or
+inactive rows, including a blend's structured forms. Recovery now reads those
+existing source names/groups. Explicit non-protein blend components (e.g. lecithin)
+are not protein sources; unclassified/unknown protein forms must still match.
+Missing provenance blocks the join instead of silently dropping that contributor.
+Each boundary was reproduced in a failing test. Final focused batch: 80 passed.
+No new source vocabulary, persisted fields, score magnitudes or title heuristic.
+
+Final source boundary checks: an explicitly named whey ingredient remains whey
+when its nested fields describe constituent proteins (alpha-lactalbumin, etc.);
+those are not separate supplement sources requiring individual outcome records.
+The same verified recovery is available to readiness and scoring after the existing
+clear-primary guard, so their evidence IDs do not drift. Reproduced both boundaries
+before correcting; 138 Evidence, real-enrichment, omega and readiness tests passed.
+The next completed broad test and replay supersede the intermediate measurements.
+
+### Completed-batch gate findings and closure
+
+The first completed full-fast run found 5 failures (16,328 passed, 171 skipped):
+two ownership guards correctly rejected a direct activeIngredients read inside the
+scorer. Moved the source projection/filter into the EXISTING scoring-input contract
+(`declared_protein_source_rows`), leaving Evidence identity decisions in its existing
+owner. No allowlist or audit exemption was added. This is a proper boundary fix.
+Owner Check: `scoring_input_contract.py::_source_tree_rows` and source projections;
+`rg '^def .*source|activeIngredients|inactiveIngredients' scripts/scoring_input_contract.py`.
+Will NOT create a new module, registry, persisted field or alternative normalizer.
+
+The other failures were explicit contract updates: omega now delegates to the
+resolver, magnitudes now have their reviewed config pins, and the failure archetype
+with an unidentified proprietary protein matrix must not earn 15.6 Evidence.
+It now correctly pins 0 Evidence and total 26.8 instead of 42.4. Other pillars and
+safety are untouched. Omega record audit date corrected (metadata only).
+All 210 focused owner, archetype, source, omega and readiness checks passed.
+Source projection equality was checked on all 1,353 frozen products: identical
+before/after the ownership-only extraction, so the final score replay remains valid.
+
+### Final acceptance — requested items 1 and 2 (2026-09-26)
+
+Code checkpoint: `2b9a0454`, existing `v41-recovery` branch.
+`scripts/test.sh fast`: **16,333 passed, 171 skipped, 0 failed**, 432.96 seconds.
+Log: `~/pg_quality/candd/final_ownership_fast.log`. This supersedes the failed
+intermediate gate; no code changed during this successful run.
+
+Final fixed-input comparison: 1,353 products; exactly 14 sports Evidence changes,
+no other pillar changes, no omega score changes, and no changes to route, status,
+safety, completeness or readiness. Receipt:
+`~/pg_quality/candd/runs/protein_omega_verified_diff_20260926.json`.
+The final ownership extraction was additionally equal on all 1,353 inputs.
+These are sample/stored-input results, not a full fresh-corpus release validation.
+
+The 14 reductions require source-family evidence review before release: three
+egg-containing blends, two hemp/rice, seven plant/alternative-source products,
+and two whey labels without usable source declarations in these inputs. Do not
+restore generic protein aliases or create product exceptions to hide those gaps.
+
+Items 1/2 are implemented and verified; the overall calibration is not complete.
+Continue existing generic/fiber Evidence ownership, iron-oxide/non-delivering Dose,
+botanical exposure/basis and population-reference work, then validate integration
+with fresh representative inputs and export/Flutter consumers. No push, merge,
+release, new worktree, or new public contract was performed for this batch.

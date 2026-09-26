@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.21.1-immune-magnitudes-config",
+    "version": "1.21.2-omega-evidence-ownership",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-26",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). POOR is the verdict of the lowest shipped tier; the module raw score never decides it (1.9.0). Omega label ownership is enforced in 1.10.0. v4 is the production catalog scoring contract as of export schema 2.2.0.",
@@ -204,7 +204,35 @@
       "_context_policy_doc": "1.15.0 (2026-09-25): native study contexts remain research records until an attributable clinical approval names the reviewer, review time, and identity-dose-outcome applicability scope. Source-verified pending contexts never score. Discrete trial arms are points, not continuous dose windows: only an exact tested daily arm can earn applicability credit. Start/end viable-count measurements describe stability and do not establish an efficacy dose. Combination and species-level contexts never earn individual-strain applicability. The strongest applicable exact-strain record owns clinical support; adding strains does not manufacture Evidence credit, and one strong record at its reviewed exact dose can reach the 20-point Evidence cap."
     },
     "multi_prenatal": { "cap_evidence": 20.0, "generic_cap_evidence": 20.0 },
-    "omega": { "cap_evidence": 20.0 }
+    "omega": {
+      "cap_evidence": 20.0,
+      "_doc": "Editorial mapping, not study-derived point values. Clinical facts and source identifiers live in INGR_OMEGA3.purpose_evidence. The 376 mg floor is a conservative studied-range boundary, not a proven efficacy threshold. The 1000-2000 mg interpolation and 10.4/20/11.1 allocations are rubric choices. No prescription-equivalence, universal cardiovascular protection or preterm-birth efficacy claim is made. Personal baseline status does not change product quality. Safety remains outside this pillar.",
+      "purpose_standards": {
+        "omega_reviewed_weak": {
+          "pillar_score": 10.4,
+          "minimum_daily_epa_dha_mg": 376
+        },
+        "triglyceride_strong": {
+          "pillar_score": 20.0,
+          "minimum_daily_epa_dha_mg": 2000,
+          "graduated_from_daily_epa_dha_mg": 1000
+        },
+        "prenatal_dha_intake_authority": {
+          "pillar_score": 11.1,
+          "minimum_daily_dha_mg": 200
+        },
+        "prenatal_preterm_birth_outcome": {
+          "score_eligible": false
+        },
+        "epa_predominant_depression": {
+          "score_eligible": false
+        },
+        "high_dose_atrial_fibrillation_context": {
+          "minimum_daily_epa_dha_mg": 1000,
+          "score_eligible": false
+        }
+      }
+    }
   },
   "verification_magnitudes": {
     "_doc": "Trust/verification point values, cert-scope points, and manufacturer D1-D5 + violation caps per module — hoisted from the trust/manufacturer/brand-testing/verification-bonus modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_trust / score_manufacturer_trust / score_manufacturer_violations / score_brand_testing_posture / score_verification_bonus). Structural cert-name sets stay in code; CLASS_I_LOOKBACK_DAYS (3*365) stays in code as a documented window. Drift-guarded by test_v4_verification_magnitudes_config.",

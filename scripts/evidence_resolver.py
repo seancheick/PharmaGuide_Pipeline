@@ -177,7 +177,8 @@ class ProductEvidenceResolution:
 def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Resolve the reviewed omega purpose record against directed exposure.
 
-    The evidence registry owns the available records and their scores.  The
+    The evidence registry owns clinical facts; quality_score.json owns points
+    and operational applicability policy. The
     shared serving-frequency contract owns the daily interval.  This function
     only joins those facts; it does not award Dose credit or infer EPA/DHA from
     carrier-oil mass.
@@ -187,6 +188,7 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         epa_dha_amounts_per_serving,
     )
     from serving_frequency import resolve_daily_serving_range
+    from scoring_v4.quality_score_config import block
 
     prod = dict(product or {})
     record = next(
@@ -203,7 +205,8 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         "triglyceride_strong",
         "prenatal_dha_intake_authority",
     }
-    missing = sorted(required - standards.keys())
+    policy = block("evidence_magnitudes", "omega")["omega"]["purpose_standards"]
+    missing = sorted((required - standards.keys()) | (required - policy.keys()))
     if missing:
         raise ValueError(f"INGR_OMEGA3 purpose evidence is incomplete: {missing}")
 
@@ -219,16 +222,17 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     )
     prenatal = bool(PRENATAL_TITLE_RE.search(title))
 
-    weak = standards["omega_reviewed_weak"]
-    strong = standards["triglyceride_strong"]
-    prenatal_intake = standards["prenatal_dha_intake_authority"]
+    # Read magnitudes only from the shared config, never from clinical data.
+    weak = policy["omega_reviewed_weak"]
+    strong = policy["triglyceride_strong"]
+    prenatal_intake = policy["prenatal_dha_intake_authority"]
     weak_score = float(weak["pillar_score"])
     weak_minimum = float(weak["minimum_daily_epa_dha_mg"])
     strong_score = float(strong["pillar_score"])
     strong_minimum = float(strong["minimum_daily_epa_dha_mg"])
     graduated_minimum = float(strong["graduated_from_daily_epa_dha_mg"])
 
-    selected = weak
+    selected = standards["omega_reviewed_weak"]
     score = weak_score if minimum >= weak_minimum else 0.0
     # The weak record starts at the lowest exposure represented in its cited
     # trials. A disclosed trace amount cannot inherit that evidence. Defaulted
@@ -237,15 +241,15 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     qualified = bool(minimum >= weak_minimum)
     if prenatal:
         if dha_minimum >= float(prenatal_intake["minimum_daily_dha_mg"]):
-            selected = prenatal_intake
+            selected = standards["prenatal_dha_intake_authority"]
             score = float(prenatal_intake["pillar_score"])
         else:
             score = 0.0
     elif minimum >= strong_minimum:
-        selected = strong
+        selected = standards["triglyceride_strong"]
         score = strong_score
     elif minimum >= graduated_minimum:
-        selected = strong
+        selected = standards["triglyceride_strong"]
         fraction = (minimum - graduated_minimum) / (strong_minimum - graduated_minimum)
         score = weak_score + fraction * (strong_score - weak_score)
         qualified = True

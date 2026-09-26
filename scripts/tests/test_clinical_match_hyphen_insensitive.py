@@ -178,3 +178,39 @@ def test_row_level_active_projection_reaches_exact_generic_evidence(enricher):
 
     assert "INGR_GARLIC" in matches
     assert matches["INGR_GARLIC"]["matched_canonical_ids"] == ["garlic"]
+
+
+@pytest.mark.parametrize("product_id", ["299952", "222864", "204521"])
+def test_incidental_protein_does_not_inherit_resistance_training_evidence(enricher, product_id):
+    """Actual collagen/greens labels must traverse current cleaning and enrichment."""
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((Path(__file__).parent / "fixtures" /
+                      f"protein_evidence_{product_id}_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = enricher.enrich_product(cleaned)
+    matches = enriched["evidence_data"]["clinical_matches"]
+    assert "INGR_WHEY_PROTEIN" not in {m["id"] for m in matches}
+
+
+@pytest.mark.parametrize("term", ["whey protein", "casein", "soy protein", "pea protein"])
+def test_identified_protein_source_keeps_training_evidence(enricher, term):
+    study = next(e for e in enricher.databases["backed_clinical_studies"]["backed_clinical_studies"]
+                 if e["id"] == "INGR_WHEY_PROTEIN")
+    assert enricher._clinical_study_match([term], study) is not None
+
+
+def test_real_protein_source_in_ingredient_list_keeps_evidence(enricher):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    raw = json.loads((Path(__file__).parent / "fixtures" /
+                      "protein_evidence_294073_raw.json").read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    payload = score_evidence(product, owner_scoped=True)
+    assert "INGR_WHEY_PROTEIN" in payload["metadata"]["recovered_matches"]
+    assert payload["metadata"]["ingredient_points"]["protein"] > 0

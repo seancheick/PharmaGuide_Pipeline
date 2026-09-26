@@ -2,10 +2,12 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.6.0",
-    "last_updated": "2026-09-25",
+    "schema_version": "5.6.2",
+    "last_updated": "2026-09-26",
     "total_entries": 208,
     "changelog": [
+      "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
+      "5.6.1 (2026-09-26): INGR_WHEY_PROTEIN no longer aliases generic Protein macro declarations, unspecified powders/blends, or rice/hemp sources absent from its cited 49-trial source inventory. Known whey, casein, milk, soy and pea source identities remain. Fresh-enrichment regressions cover two collagen labels and greens coffee; source-free macro recovery is intentionally rejected.",
       "5.6.0 (2026-09-25): Corrected INGR_WHEY_PROTEIN to the source-neutral Protein Supplementation scope supported by its cited 49-RCT, 1,863-participant meta-analysis; the stable ID is retained for stored-artifact compatibility. The reviewed purpose is protein supplementation alongside resistance training; whey, casein, milk, soy, pea, rice, hemp, and disclosed protein blends share the category Evidence owner while source-quality differences remain in Formulation. Corrected the stale 250 enrollment, 488-trial count, and unrelated focus/glycemic endpoint tags. No new study was invented and the two existing verified PubMed sources remain the record's evidence base.",
       "5.5.1 (2026-09-25): INGR_OMEGA3 general-purpose evidence now requires at least 376 mg/day of disclosed EPA+DHA, the lowest exposure in the cited 13-trial cardiovascular meta-analysis (PMID 31567003). Trace-dose gummies no longer inherit the reviewed cardiovascular evidence record. No evidence strength or pillar magnitude changed.",
       "5.5.0 (2026-09-25): INGR_OMEGA3 gains reviewed purpose-specific records. General omega evidence remains positive_weak; triglyceride evidence becomes fully applicable only when the minimum directed EPA+DHA exposure reaches 2 g/day, with graduated applicability from 1-2 g/day. Prenatal 200 mg DHA is intake-guideline evidence only. Preterm-birth, depression and atrial-fibrillation records are retained as non-scoring contexts where a fixed product label cannot establish the required purpose, population or safety owner.",
@@ -7209,7 +7211,7 @@
       "notes": "Extensive systematic review evidence supports omega-3 for cardiovascular health, triglyceride reduction, and mood. High-dose EPA particularly effective for CV risk reduction. Quality and formulation affect bioavailability.",
       "notable_studies": "Hu et al. (2019, PMID 31567003) meta-analysis of 13 RCTs found marine omega-3 supplementation reduced CHD death, MI, and total CHD events. Abdelhamid et al. (2020) Cochrane also reported modest benefit for some long-chain omega-3 cardiovascular outcomes.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-09-26",
       "references_structured": [
         {
           "type": "pubmed",
@@ -7267,55 +7269,46 @@
           "id": "omega_reviewed_weak",
           "purpose": "general_omega_3",
           "effect_direction": "positive_weak",
-          "pillar_score": 10.4,
-          "minimum_daily_epa_dha_mg": 376,
           "source_pmids": [
             "31567003",
             "32951855"
           ],
-          "rationale": "Broad supplement evidence supports modest cardiovascular effects, while several major 1 g/day outcome trials were null. PMID 31567003 studied 376-4000 mg/day, so the record does not apply below 376 mg/day of disclosed EPA+DHA. This record establishes reviewed evidence without claiming a strong treatment effect."
+          "rationale": "Cardiovascular outcome evidence is mixed across reviews and trials. PMID 31567003 reports studied doses of 376-4000 mg/day; 376 mg is the lowest included exposure, not a demonstrated efficacy cutoff. PMID 32951855 reports reduced risks for several coronary outcomes, but not the overall cardiovascular-event composite. Applicability boundaries and numerical credit are editorial policy in quality_score.json."
         },
         {
           "id": "triglyceride_strong",
           "purpose": "triglyceride_lowering",
           "effect_direction": "positive_strong",
-          "pillar_score": 20.0,
-          "minimum_daily_epa_dha_mg": 2000,
-          "graduated_from_daily_epa_dha_mg": 1000,
           "source_pmids": [
             "31422671",
             "37264945",
-            "30521670"
+            "32114706"
           ],
-          "rationale": "EFSA identifies 2-4 g/day EPA+DHA for triglyceride effects; the reviewed meta-analytic evidence is dose responsive. Full applicability requires the minimum directed daily exposure to reach 2 g."
+          "rationale": "EFSA identifies 2-4 g/day EPA+DHA for maintenance of triglyceride levels. PMID 37264945 supports a dose-responsive triglyceride effect, more evident above 2 g/day in hyperlipidemia/overweight populations. PMID 31422671 concerns prescription therapy at 4 g/day and does not establish OTC equivalence or a 2 g treatment guarantee. The updated Cochrane review PMID 32114706 finds high-certainty triglyceride reduction and at most small, outcome-specific coronary benefits; this does not establish universal cardiovascular protection. Full-credit thresholds and interpolation belong to quality_score.json."
         },
         {
           "id": "prenatal_dha_intake_authority",
           "purpose": "prenatal_dha_intake",
-          "pillar_score": 11.1,
-          "minimum_daily_dha_mg": 200,
           "source_pmids": [
             "18184094"
           ],
-          "rationale": "At least 200 mg/day DHA establishes prenatal intake-guideline applicability. It does not establish a preterm-birth treatment effect."
+          "rationale": "PMID 18184094 recommends an average daily intake of at least 200 mg DHA for pregnant and lactating women. This is total intake guidance, not proof of preterm-birth prevention from a 200 mg supplement. Numerical credit is editorial policy in quality_score.json."
         },
         {
           "id": "prenatal_preterm_birth_outcome",
           "purpose": "prenatal_preterm_birth",
-          "score_eligible": false,
           "source_pmids": [
             "30480773",
             "34308309",
             "34959801",
             "31509674"
           ],
-          "rationale": "The broad review is favorable, but higher-dose benefit varies with baseline DHA status and a large 900 mg trial in a well-nourished population was null. Baseline status is personal fit and cannot change a fixed product-quality score."
+          "rationale": "The broad review is favorable, but higher-dose benefit varies with baseline DHA status and a large 900 mg trial in a well-nourished population was null. Baseline status is personal fit and cannot change a fixed product-quality score. PMID 34959801 is a mechanistic analysis of the ADORE trial, not an independent replication."
         },
         {
           "id": "epa_predominant_depression",
           "purpose": "depression",
           "effect_direction": "positive_weak",
-          "score_eligible": false,
           "source_pmids": [
             "31383846",
             "31480057"
@@ -7325,8 +7318,6 @@
         {
           "id": "high_dose_atrial_fibrillation_context",
           "purpose": "safety_context",
-          "score_eligible": false,
-          "minimum_daily_epa_dha_mg": 1000,
           "source_pmids": [
             "34612056"
           ],
@@ -20200,11 +20191,6 @@
       "id": "INGR_WHEY_PROTEIN",
       "standard_name": "Protein Supplementation",
       "aliases": [
-        "protein",
-        "dietary protein",
-        "protein supplement",
-        "protein powder",
-        "protein blend",
         "whey protein",
         "whey protein isolate",
         "whey isolate",
@@ -20214,9 +20200,7 @@
         "casein protein",
         "milk protein",
         "soy protein",
-        "pea protein",
-        "rice protein",
-        "hemp protein"
+        "pea protein"
       ],
       "category": "sports_performance",
       "evidence_level": "ingredient-human",
@@ -20236,9 +20220,9 @@
         "Muscle Growth & Recovery",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human systematic reviews support dietary protein supplementation for modest additional gains in lean mass, muscle size, and strength when paired with sustained resistance training. The broad record covers protein supplements as a category; source quality differences remain a Formulation question, and the evidence does not imply further benefit once total daily protein intake is already adequate.",
-      "last_updated": "2026-09-25",
-      "notable_studies": "A 49-study meta-analysis in 1,863 healthy adults found protein supplementation modestly improved resistance-training gains in strength, fat-free mass, and muscle size, with no additional fat-free-mass gain above about 1.62 g/kg/day total protein intake (PMID: 28698222). A whey-specific synthesis in older adults provides additional source-specific context (PMID: 39303495).",
+      "notes": "Human systematic reviews support dietary protein supplementation for modest additional gains in lean mass, muscle size, and strength when paired with sustained resistance training. The reviewed sources include whey, casein, milk, soy, pea, and studied source blends. A generic Protein macro declaration or an unspecified protein powder/blend does not identify one of these sources. Source quality differences remain a Formulation question, and the evidence does not imply further benefit once total daily protein intake is already adequate.",
+      "last_updated": "2026-09-26",
+      "notable_studies": "A 49-study meta-analysis in 1,863 healthy adults found protein supplementation modestly improved resistance-training gains in strength, fat-free mass, and muscle size, with no additional fat-free-mass gain above about 1.62 g/kg/day total protein intake (PMID: 28698222). A whey-specific synthesis in older adults found improved lower-body strength with resistance training, but no significant improvement in handgrip strength, physical performance, or most body-composition outcomes (PMID: 39303495).",
       "references_structured": [
         {
           "type": "pubmed",

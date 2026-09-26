@@ -89,7 +89,13 @@ def test_omega_pillars_read_the_public_owner_only():
     modules = Path(__file__).resolve().parents[1] / 'scoring_v4' / 'modules'
     for name in ('omega_dose', 'omega_evidence', 'omega_formulation'):
         text = (modules / f'{name}.py').read_text()
-        assert 'epa_dha_amounts_per_serving' in text
+        if name == 'omega_evidence':
+            assert 'resolve_omega_evidence_standard(product)' in text
+            from evidence_resolver import resolve_omega_evidence_standard
+            import inspect
+            assert 'epa_dha_amounts_per_serving(prod)' in inspect.getsource(resolve_omega_evidence_standard)
+        else:
+            assert 'epa_dha_amounts_per_serving' in text
         assert not re.search(r'from scoring_v4\.modules\.omega_\w+ import \(?\s*_', text), name
         assert '_trustworthy_epa_dha_row' not in text and 'EPA_DHA_SOURCE_RE' not in text, name
 

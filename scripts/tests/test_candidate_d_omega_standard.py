@@ -117,3 +117,28 @@ def test_dose_scores_directed_interval_not_midpoint_dose() -> None:
     assert payload["metadata"]["per_day_max_mg"] == 2400.0
     assert payload["metadata"]["interval_crosses_band"] is True
     assert payload["score"] == pytest.approx(18.4)
+
+
+def test_omega_registry_keeps_clinical_facts_not_scoring_magnitudes():
+    from evidence_resolver import _load_backed_studies
+    record = next(r for r in _load_backed_studies() if r["id"] == "INGR_OMEGA3")
+    for standard in record["purpose_evidence"]:
+        assert "pillar_score" not in standard
+        assert "graduated_from_daily_epa_dha_mg" not in standard
+
+
+def test_omega_points_are_read_from_shared_scoring_config(monkeypatch):
+    from copy import deepcopy
+    from scoring_v4 import quality_score_config
+    from scoring_v4.modules.omega_evidence import score_evidence
+    original = quality_score_config.block
+
+    def configured(name, sentinel):
+        result = deepcopy(original(name, sentinel))
+        if name == "evidence_magnitudes":
+            result["omega"].setdefault("purpose_standards", {}).setdefault(
+                "omega_reviewed_weak", {})["pillar_score"] = 7.0
+        return result
+
+    monkeypatch.setattr(quality_score_config, "block", configured)
+    assert score_evidence(_product(epa=300, dha=200))["score"] == 7.0
