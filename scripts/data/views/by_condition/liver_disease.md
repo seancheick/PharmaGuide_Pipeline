@@ -2,15 +2,16 @@
 
 # Liver Disease (liver_disease)
 
-**20 rules.** Category: hepatic
+**21 rules.** Category: hepatic
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
 | `BANNED_CBD_US` | banned_recalled_ingredients | avoid | established | CBD may raise liver enzymes | CBD is extensively metabolized by CYP3A4 and CYP2C19 in the liver. FDA drug labels for multiple medications warn that concomitant CBD causes ALT/AST elevation. In patients with pr… |
+| `aloe_ferox` | ingredient_quality_map | caution | probable | Rare liver injury reported | Oral aloe is a likely but rare cause of clinically apparent hepatocellular liver injury (LiverTox likelihood B), and chronic overdose of anthranoid laxatives may lead to toxic hep… |
 | `andrographis` | ingredient_quality_map | monitor | probable | Rare liver injury reports | Despite hepatoprotective activity documented in some animal models, clinical case reports and DILI network databases document rare but real cases of drug-induced liver injury (DIL… |
 | `black_cohosh` | ingredient_quality_map | avoid | probable | Linked to rare liver injury | Cimicifuga racemosa (black cohosh) causes idiosyncratic hepatitis via two overlapping mechanisms: (1) oxidative stress generating 4-hydroxynonenal (4HNE) protein adducts in hepato… |
 | `butterbur` | ingredient_quality_map | contraindicated | established | PA-containing butterbur can injure liver | Pyrrolizidine alkaloids in non-PA-free butterbur are direct hepatotoxins that cause sinusoidal obstruction syndrome (veno-occlusive disease). Even PA-certified-free products carry… |
-| `cascara_sagrada` | ingredient_quality_map | caution | probable | Chronic use may affect the liver | Chronic use of anthraquinone laxatives including cascara sagrada has been associated with hepatotoxicity; the FDA withdrew OTC cascara sagrada products in 2002 partly on safety gr… |
+| `cascara_sagrada` | ingredient_quality_map | caution | probable | Chronic use may affect the liver | Cascara is generally well tolerated at recommended short-term doses, but longer-term use of high doses has been linked to rare cases of clinically apparent liver injury, some seve… |
 | `chinese_skullcap` | ingredient_quality_map | caution | probable | Linked to herb-induced liver injury | Scutellaria species have been linked to herb-induced liver injury (HILI) in published case series. Proposed mechanisms include flavone-mediated mitochondrial dysfunction and idios… |
 | `copper` | ingredient_quality_map | caution | established | Copper handling depends on the liver | Copper homeostasis depends on hepatic biliary excretion as the primary elimination route. In Wilson's disease, ATP7B mutations block copper export into bile, causing pathological … |
 | `gotu_kola` | ingredient_quality_map | monitor | probable | Rare liver injury reports | Centella asiatica triterpenoids (asiaticoside, madecassoside) have been associated with idiosyncratic hepatotoxicity in case reports. Three cases of jaundice with markedly elevate… |

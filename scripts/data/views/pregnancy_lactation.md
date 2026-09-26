@@ -2,11 +2,11 @@
 
 # Pregnancy & Lactation block
 
-**145 rules** with an authored `pregnancy_lactation` block.
+**150 rules** with an authored `pregnancy_lactation` block.
 
 | canonical_id | preg_category | lact_category | evidence | mechanism |
 |---|---|---|---|---|
-| `5_htp` | no_data | no_data | no_data |  |
+| `5_htp` | avoid | no_data | theoretical |  |
 | `ADD_HORDENINE` | contraindicated | avoid | moderate |  |
 | `ADD_PROPYLENE_GLYCOL` | no_data | no_data | no_data |  |
 | `ADD_TYRAMINE_RICH_EXTRACT` | caution | caution | limited |  |
@@ -21,6 +21,7 @@
 | `RISK_BITTER_ORANGE` | contraindicated | avoid | moderate |  |
 | `RISK_YOHIMBE` | contraindicated | avoid | probable | Safety data are limited and stimulant effects are concerning. |
 | `acetyl_l_carnitine` | no_data | no_data | no_data |  |
+| `aloe_ferox` | contraindicated | contraindicated | probable |  |
 | `aloe_vera` | avoid | avoid | established | NCCIH indicates oral aloe may be unsafe in pregnancy and breastfeeding. |
 | `alpha_gpc` | no_data | no_data | no_data |  |
 | `alpha_lipoic_acid` | no_data | no_data | no_data |  |
@@ -29,22 +30,23 @@
 | `astragalus` | no_data | no_data | no_data |  |
 | `bacopa` | no_data | no_data | no_data |  |
 | `berberine_supplement` | avoid | avoid | established | Berberine (as in goldenseal) has documented neonatal bilirubin/kernicterus risk concerns. |
+| `beta_carotene` | informational | informational | established | Unlike preformed vitamin A (retinol), beta-carotene is not known to be teratogenic or to cause reproductive toxicity (NIH ODS). |
 | `bitter_melon` | avoid | avoid | probable | Animal studies suggest abortifacient and embryotoxic effects. |
 | `black_cohosh` | avoid | caution | probable | Pregnancy safety is uncertain and potential adverse effects are described in safety guidance. |
-| `black_seed_oil` | no_data | no_data | no_data |  |
+| `black_seed_oil` | avoid | no_data | probable |  |
 | `blue_cohosh` | contraindicated | avoid | established | Uterotonic glycosides (caulosaponin) and nicotinic alkaloids (methylcytisine) pose direct fetal risk including cardiac toxicity and CNS injury. |
 | `borage_seed_oil` | no_data | no_data | no_data |  |
 | `boswellia` | no_data | no_data | no_data |  |
 | `bromelain` | no_data | no_data | no_data |  |
 | `bupleurum_root` | caution | no_data | limited | Emmenagogue activity in TCM literature; limited modern safety data in pregnancy. Lactation safety data absent. |
-| `butterbur` | no_data | no_data | no_data |  |
+| `butterbur` | contraindicated | no_data | probable |  |
 | `caffeine` | monitor | caution | established | High caffeine exposure can affect maternal-fetal and infant outcomes. |
 | `calcium` | monitor | monitor | limited |  |
-| `cascara_sagrada` | no_data | avoid | probable |  |
+| `cascara_sagrada` | avoid | avoid | probable |  |
 | `cat_s_claw` | no_data | no_data | no_data |  |
 | `chamomile` | no_data | no_data | no_data |  |
-| `chasteberry` | no_data | avoid | probable |  |
-| `chinese_skullcap` | no_data | no_data | no_data |  |
+| `chasteberry` | avoid | avoid | probable |  |
+| `chinese_skullcap` | avoid | no_data | theoretical |  |
 | `chondroitin` | no_data | no_data | no_data |  |
 | `chromium` | monitor | monitor | limited |  |
 | `cinnamon` | no_data | no_data | no_data |  |
@@ -54,7 +56,8 @@
 | `cordyceps` | no_data | no_data | no_data |  |
 | `cranberry` | no_data | no_data | no_data |  |
 | `creatine_monohydrate` | no_data | no_data | no_data |  |
-| `curcumin` | no_data | no_data | no_data |  |
+| `curcumin` | caution | no_data | theoretical |  |
+| `dandelion` | no_data | no_data | no_data |  |
 | `dandelion` | no_data | no_data | no_data |  |
 | `devils_claw` | no_data | no_data | no_data |  |
 | `dha` | no_data | no_data | no_data |  |
@@ -67,15 +70,14 @@
 | `fenugreek` | avoid | caution | probable | Traditional concern for uterotonic effects. May also lower blood sugar in pregnant women on glucose management. |
 | `feverfew` | contraindicated | avoid | established | Parthenolide crosses biological membranes and has uterotonic and anti-platelet effects. No safety data in lactation. |
 | `fiber` | no_data | no_data | no_data |  |
-| `fish_oil` | no_data | no_data | no_data |  |
 | `fish_oil` | monitor | monitor | established |  |
 | `flaxseed` | no_data | no_data | no_data |  |
 | `forskolin` | no_data | no_data | no_data |  |
 | `garlic` | no_data | no_data | no_data |  |
 | `genistein` | no_data | no_data | no_data |  |
 | `ginger` | no_data | no_data | no_data |  |
-| `ginkgo` | caution | caution | limited | Antiplatelet activity raises bleeding-risk concerns in pregnancy and labor. |
-| `ginkgo_biloba_leaf` | no_data | no_data | no_data |  |
+| `ginkgo` | avoid | caution | probable | Ginkgo may be unsafe in pregnancy: it might cause early labor or extra bleeding during delivery if used near that time (NCCIH). Little is known about its safety while breastfeedin… |
+| `ginkgo_biloba_leaf` | avoid | no_data | probable |  |
 | `ginseng` | caution | caution | probable | Pregnancy/lactation safety data are limited and concerns are noted in safety reviews. |
 | `glucosamine` | no_data | no_data | no_data |  |
 | `goldenseal` | avoid | avoid | established | NCCIH safety summary advises against use in pregnancy and breastfeeding. |
@@ -84,13 +86,13 @@
 | `guarana` | monitor | caution | established | Guarana's caffeine content carries the same pregnancy risk as dietary caffeine. Caffeine crosses the placenta; fetal caffeine clearance is slow due to immature cytochrome P450 1A2… |
 | `gymnema_sylvestre` | no_data | no_data | no_data |  |
 | `hawthorn` | no_data | no_data | no_data |  |
-| `holy_basil` | no_data | no_data | no_data |  |
+| `holy_basil` | caution | no_data | limited |  |
 | `huperzine_a` | no_data | no_data | no_data |  |
 | `icariin` | no_data | no_data | no_data |  |
 | `inositol` | monitor | monitor | probable | Myo-inositol is a naturally occurring compound and generally considered safe in pregnancy. Some evidence supports its use to reduce gestational diabetes risk in PCOS pregnancies. … |
 | `iodine` | monitor | monitor | established | Both deficiency and excess can be harmful; UL and recommended intake should guide use. |
 | `iron` | no_data | no_data | no_data |  |
-| `kavalactones` | contraindicated | contraindicated | probable | Kava has CNS-active constituents and documented hepatotoxic potential. No safe dose in pregnancy or lactation has been established. |
+| `kavalactones` | contraindicated | contraindicated | probable | NCCIH states kava may have special risks during pregnancy or breastfeeding because of harmful pyrone constituents. Kava products have also been linked to rare but sometimes seriou… |
 | `l_arginine` | no_data | no_data | no_data |  |
 | `l_carnitine` | no_data | no_data | no_data |  |
 | `l_theanine` | no_data | no_data | no_data |  |
@@ -99,7 +101,7 @@
 | `licorice` | avoid | caution | established | Glycyrrhizin inhibits placental 11-beta-HSD2, allowing excess maternal cortisol to reach the fetus. Finnish cohort studies documented >2-fold preterm delivery risk and neurodevelo… |
 | `licorice_root` | avoid | caution | established | Glycyrrhizin inhibits placental 11β-HSD2, allowing excess maternal cortisol to cross to the fetus. Finnish cohort data document >2-fold increased preterm delivery and neurodevelop… |
 | `lions_mane` | no_data | no_data | no_data |  |
-| `maca` | no_data | no_data | no_data |  |
+| `maca` | informational | no_data | theoretical |  |
 | `magnesium` | monitor | monitor | limited |  |
 | `manganese` | monitor | monitor | limited |  |
 | `melatonin` | no_data | no_data | no_data |  |
@@ -107,6 +109,7 @@
 | `milk_thistle` | no_data | no_data | no_data |  |
 | `mugwort` | contraindicated | avoid | probable | Thujone-containing Artemisia species have documented emmenagogue activity. Traditional abortifacient use is well-described historically. |
 | `nac` | monitor | monitor | limited |  |
+| `nattokinase` | no_data | no_data | no_data |  |
 | `olive_leaf` | no_data | no_data | no_data |  |
 | `omega_3` | no_data | no_data | no_data |  |
 | `passionflower` | no_data | no_data | no_data |  |
@@ -118,23 +121,25 @@
 | `quercetin` | no_data | no_data | no_data |  |
 | `red_clover` | avoid | avoid | probable | Red clover isoflavones are phytoestrogens with ERα/ERβ agonist activity. Estrogenic stimulation during organogenesis and fetal development is a recognized safety concern. Animal s… |
 | `reishi` | no_data | no_data | no_data |  |
-| `resveratrol` | no_data | no_data | no_data |  |
+| `resveratrol` | monitor | no_data | theoretical |  |
 | `rhodiola` | no_data | no_data | no_data |  |
 | `rue` | contraindicated | avoid | probable | Ruta alkaloids cause uterine smooth muscle contraction and have embryotoxic effects demonstrated in animal models. |
 | `sage` | avoid | caution | probable | Sage contains thujone and other terpenes with potential uterotonic effects (avoid in pregnancy). During lactation, may suppress milk production via antilactogenic mechanisms. |
 | `same` | no_data | no_data | no_data |  |
-| `saw_palmetto` | avoid | avoid | theoretical | Saw palmetto has antiandrogenic activity; safety data in pregnancy and lactation are absent. |
+| `saw_palmetto` | avoid | avoid | theoretical | Some in vitro studies suggest saw palmetto extract has antiandrogenic, 5-alpha-reductase-inhibiting activity, and NCCIH states it may be unsafe during pregnancy or while breastfee… |
 | `schisandra_berry` | no_data | no_data | no_data |  |
 | `selenium` | monitor | monitor | limited |  |
-| `senna` | no_data | caution | probable |  |
+| `senna` | avoid | caution | probable |  |
 | `sodium` | no_data | no_data | no_data |  |
 | `st_johns_wort` | avoid | caution | probable | Potential fetal risk and broad CYP/P-gp interactions. |
 | `stinging_nettle` | no_data | no_data | no_data |  |
+| `stinging_nettle` | no_data | no_data | no_data |  |
 | `tribulus` | no_data | no_data | no_data |  |
 | `turmeric` | no_data | no_data | no_data |  |
-| `valerian` | avoid | avoid | theoretical | Insufficient safety data for use during pregnancy and lactation; valerian's valepotriates have shown cytotoxic potential in vitro. |
+| `valerian` | avoid | avoid | theoretical | The EU herbal monograph states that safety during pregnancy and lactation has not been established and, in the absence of sufficient data, use is not recommended. LactMed reports … |
 | `vanadyl_sulfate` | avoid | avoid | probable | Limited safety data and insulin-mimetic activity present risk concerns. |
 | `vitamin_a` | caution | monitor | established | Dose and form dependent risk is primarily tied to preformed retinoids. |
+| `vitamin_a` | informational | informational | established | Unlike preformed vitamin A (retinol), beta-carotene is not known to be teratogenic or to cause reproductive toxicity (NIH ODS). |
 | `vitamin_b12_cobalamin` | monitor | monitor | established | B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomo… |
 | `vitamin_b3_niacin` | no_data | no_data | no_data |  |
 | `vitamin_b6_pyridoxine` | monitor | caution | probable | Normal doses of B6 are essential in pregnancy. High pharmacologic doses during lactation may suppress milk production via dopaminergic inhibition of prolactin. |

@@ -6,7 +6,7 @@
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
-| `5_htp` | ingredient_quality_map | contraindicated | established | Do not combine with MAOIs | Serotonin precursor combined with MAOI inhibition → serotonin syndrome. |
+| `5_htp` | ingredient_quality_map | contraindicated | established | Do not combine with MAOIs | 5-HTP is converted to serotonin. Combining an MAO inhibitor with a serotonergic agent can cause the most severe form of serotonin syndrome. Mania has been reported after an MAOI w… |
 | `ADD_HORDENINE` | banned_recalled_ingredients | contraindicated | established | Do not combine with MAOIs | Hordenine is a β-PEA analog and direct MAO substrate. Often combined with PEA in pre-workout / fat-burner stacks, compounding the risk. |
 | `ADD_TYRAMINE_RICH_EXTRACT` | harmful_additives | contraindicated | established | Do not combine with MAOIs | Tyramine is a sympathomimetic biogenic amine and MAO substrate. With MAO-inhibitor medication, ingested tyramine cannot be metabolized normally, producing massive norepinephrine r… |
 | `berberine_supplement` | ingredient_quality_map | avoid | probable | Potential interaction with MAOI antidepressants | Berberine inhibits MAO-A and MAO-B activity in vitro, producing additive monoamine oxidase inhibition when combined with MAOI antidepressants (phenelzine, tranylcypromine, selegil… |
@@ -14,6 +14,6 @@
 | `l_tryptophan` | ingredient_quality_map | contraindicated | established | Do not combine with MAOIs | Serotonin precursor combined with MAOI inhibition → serotonin syndrome. |
 | `l_tyrosine` | ingredient_quality_map | contraindicated | established | Do not combine with MAOIs | L-tyrosine is converted to tyramine in the gut. Tyramine is normally metabolised by MAO-A in the gut wall and liver (first-pass). MAO inhibitors block this pathway, leading to tyr… |
 | `phenylethylamine` | ingredient_quality_map | contraindicated | established | Do not combine with MAOIs | PEA is a direct MAO substrate; combination with MAOIs causes hypertensive crisis. |
-| `same` | ingredient_quality_map | avoid | established | Avoid combining with MAOIs | Methyl donor with antidepressant activity; serotonergic potentiation when combined with MAOIs raises serotonin syndrome risk. |
+| `same` | ingredient_quality_map | avoid | limited | Avoid combining with MAOIs | SAMe is a methyl donor studied as an antidepressant. It is listed among serotomimetic agents that can cause serotonin syndrome alone or combined with MAO inhibitors, and a toxic i… |
 | `st_johns_wort` | ingredient_quality_map | contraindicated | established | Do not combine with MAOIs | Hypericin has weak MAO-A inhibition; combination duplicates mechanism → serotonin syndrome and hypertensive risk. |
 | `yohimbe` | ingredient_quality_map | contraindicated | established | Do not combine with MAOIs | Alpha-2 antagonist increases norepinephrine release; combined with MAO inhibition → severe hypertension. Common in pre-workout and male-enhancement stacks where users may not conn… |

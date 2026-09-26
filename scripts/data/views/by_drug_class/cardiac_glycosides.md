@@ -2,9 +2,10 @@
 
 # Cardiac Glycosides (Digoxin) (cardiac_glycosides)
 
-**2 rules.** Category: cardiology
+**3 rules.** Category: cardiology
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
-| `cascara_sagrada` | ingredient_quality_map | avoid | established | Can increase digoxin toxicity | Anthraquinone-induced hypokalemia increases myocardial sensitivity to digoxin and other cardiac glycosides by enhancing Na+/K+-ATPase inhibition. Potassium depletion lowers the to… |
-| `senna` | ingredient_quality_map | avoid | established | Can increase digoxin toxicity | Senna-induced hypokalemia potentiates digoxin toxicity by increasing cardiac glycoside binding affinity at the Na+/K+-ATPase pump. Even modest decreases in serum potassium (e.g., … |
+| `aloe_ferox` | ingredient_quality_map | avoid | established | Can raise digoxin toxicity risk | Potassium loss from stimulant laxative use potentiates the action of cardiac glycosides such as digoxin and raises the risk of toxicity. |
+| `cascara_sagrada` | ingredient_quality_map | avoid | established | Can increase digoxin toxicity | Hypokalaemia from long-term laxative abuse potentiates the action of cardiac glycosides (EU herbal monograph), and hypokalaemia may predispose to digoxin toxicity (digoxin prescri… |
+| `senna` | ingredient_quality_map | avoid | established | Can increase digoxin toxicity | Hypokalaemia from long-term laxative abuse potentiates the action of cardiac glycosides (EU herbal monographs on senna), and hypokalaemia may predispose to digoxin toxicity (digox… |

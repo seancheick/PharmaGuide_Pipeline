@@ -2,26 +2,28 @@
 
 # Pregnancy (pregnancy)
 
-**40 rules.** Category: reproductive
+**42 rules.** Category: reproductive
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
-| `5_htp` | ingredient_quality_map | avoid | theoretical | Pregnancy safety is unclear | 5-HTP is a direct precursor to serotonin and has serotonergic pharmacology. Human pregnancy safety data are absent, so use is precautionary rather than evidence-driven; conservati… |
+| `5_htp` | ingredient_quality_map | avoid | theoretical | Pregnancy safety is unclear | 5-HTP is the direct precursor of serotonin, and its safety concerns include eosinophilia-myalgia syndrome and serotonin syndrome. Health Canada's monograph advises asking a health… |
 | `BANNED_7_KETO_DHEA` | banned_recalled_ingredients | contraindicated | probable | Hormone-active — avoid in pregnancy | 7-Keto DHEA has hormonal activity concerns and is not established as safe during pregnancy. |
 | `BANNED_BITTER_ORANGE` | banned_recalled_ingredients | avoid | probable | Stimulant — avoid in pregnancy | Synephrine is a sympathomimetic; pregnancy is not the place for stimulant-driven cardiovascular stress. |
 | `BANNED_CBD_US` | banned_recalled_ingredients | avoid | probable | FDA advises against use in pregnancy | FDA strongly advises against CBD use during pregnancy. Animal studies show potential risks to the developing fetus. No adequate human safety data exists for CBD during pregnancy. |
 | `BANNED_EPHEDRA` | banned_recalled_ingredients | contraindicated | established | Do not use during pregnancy | Ephedra has serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. |
 | `BANNED_PENNYROYAL` | banned_recalled_ingredients | contraindicated | established | Unsafe during pregnancy | Pennyroyal contains pulegone and related hepatotoxic constituents; pregnancy use is unsafe because of toxicity and abortifacient concern. |
-| `BANNED_TANSY` | banned_recalled_ingredients | contraindicated | established | Unsafe during pregnancy | Tansy contains thujone and other toxic constituents; pregnancy exposure is not clinically acceptable. |
+| `BANNED_TANSY` | banned_recalled_ingredients | contraindicated | established | Unsafe during pregnancy | Whole tansy plants can induce miscarriage, and tansy has traditionally been used as an abortifacient and emmenagogue. Tansy oil is rich in beta-thujone (about 45%), which blocks G… |
+| `RISK_YOHIMBE` | banned_recalled_ingredients | contraindicated | probable | Do not use during pregnancy | Stimulant profile and hemodynamic effects present maternal-fetal risk concerns. |
+| `aloe_ferox` | ingredient_quality_map | contraindicated | probable | Stimulant laxative — not for use in pregnancy | Cape aloe latex contains anthranoid laxatives, including emodin and aloe-emodin, that showed genotoxic potential in experimental studies, so the EU herbal monograph contraindicate… |
 | `aloe_vera` | ingredient_quality_map | avoid | established | Oral aloe not recommended in pregnancy | Oral aloe (gel/latex/whole leaf extract) has safety concerns and may be unsafe in pregnancy. |
 | `black_cohosh` | ingredient_quality_map | avoid | probable | May affect uterine activity | Black cohosh may have uterotonic/hormonal effects and is not considered safe in pregnancy. |
-| `black_seed_oil` | ingredient_quality_map | avoid | probable | Pregnancy safety is unclear | Black seed oil (Nigella sativa) has limited human pregnancy safety data, and preclinical (animal) studies have signaled uterine-effect activity at high doses. Human pregnancy effe… |
+| `black_seed_oil` | ingredient_quality_map | avoid | probable | Pregnancy safety is unclear | Human pregnancy safety data are lacking. In pregnant rats, injected thymoquinone at 35-50 mg/kg caused maternal and embryonic toxicity and fetal resorption, while 15 mg/kg and int… |
 | `blue_cohosh` | botanical_ingredients | contraindicated | established | Do not use during pregnancy | Caulophyllum thalictroides contains caulosaponin and methylcytisine, which stimulate uterine contractions. Case reports document neonatal stroke, heart failure, and multi-organ in… |
 | `butterbur` | ingredient_quality_map | contraindicated | probable | PA-containing butterbur is unsafe | Raw or non-PA-free butterbur (Petasites hybridus) contains pyrrolizidine alkaloids (senkirkine, senecionine) that are hepatotoxic and genotoxic — fetal exposure is unacceptable. M… |
 | `caffeine` | ingredient_quality_map | monitor | established | Caffeine adds up — watch total intake | Caffeine crosses the placenta and higher daily intake is associated with pregnancy risk concerns. |
-| `cascara_sagrada` | ingredient_quality_map | avoid | probable | Stimulant laxative — avoid in pregnancy | Cascara sagrada contains anthraquinone glycosides (cascarosides A-D) that stimulate colonic smooth muscle via prostaglandin and nitric oxide pathways. Anthraquinones pass into bre… |
-| `chasteberry` | ingredient_quality_map | avoid | probable | Hormone-active — avoid in pregnancy | Chasteberry (Vitex agnus-castus) acts on pituitary dopamine D2 receptors to suppress prolactin and modulate LH/FSH secretion. These hormonal effects on the hypothalamic-pituitary … |
-| `chinese_skullcap` | ingredient_quality_map | avoid | theoretical | Pregnancy safety is unclear | Chinese skullcap (Scutellaria baicalensis) contains baicalin and baicalein which inhibit CYP1A2 and CYP2C9. Animal data suggest possible teratogenic risk at high doses; human safe… |
+| `cascara_sagrada` | ingredient_quality_map | avoid | probable | Stimulant laxative — avoid in pregnancy | Cascara bark contains anthranoid glycosides (cascarosides) that colonic bacteria convert to active laxative metabolites. The EU herbal monograph contraindicates cascara in pregnan… |
+| `chasteberry` | ingredient_quality_map | avoid | probable | Hormone-active — avoid in pregnancy | Chasteberry (Vitex agnus-castus) is hormonally active: in randomised trials, extracts lowered TRH-stimulated prolactin secretion, normalised a shortened luteal phase and raised mi… |
+| `chinese_skullcap` | ingredient_quality_map | avoid | theoretical | Pregnancy safety is unclear | In rats and rabbits, a standardised flavonoid composition from Scutellaria baicalensis root and Acacia catechu heartwood caused no malformations, embryo-fetal deaths or pre- and p… |
 | `curcumin` | ingredient_quality_map | caution | theoretical | High doses may be a concern | Culinary turmeric is different from gram-level curcumin extracts; high-dose supplements may affect platelet and GI biology and have limited pregnancy data. |
 | `dhea` | ingredient_quality_map | avoid | established | Not recommended in pregnancy | DHEA is a steroid precursor with potential fetal endocrine effects. |
 | `dong_quai` | ingredient_quality_map | avoid | probable | May affect uterine activity | Dong quai is traditionally associated with uterine and hormone-active effects; pregnancy safety is not established. |
@@ -29,7 +31,7 @@
 | `ginkgo_biloba_leaf` | botanical_ingredients | avoid | probable | May raise bleeding risk | Antiplatelet effects make peripartum bleeding the main concern. |
 | `ginseng` | ingredient_quality_map | caution | probable | Limited pregnancy safety data | NCCIH reports some evidence of pregnancy safety concerns and expert caution for use. |
 | `goldenseal` | ingredient_quality_map | avoid | established | Newborn bilirubin risk near term | Goldenseal (berberine-containing) safety concern includes newborn bilirubin/kernicterus risk and should not be used in pregnancy. |
-| `holy_basil` | ingredient_quality_map | informational | theoretical | Not well studied in pregnancy | Pregnancy data are limited and animal data raise endocrine and uterotonic uncertainty. |
+| `holy_basil` | ingredient_quality_map | caution | limited | Avoid holy basil extracts in pregnancy | Human pregnancy safety data are insufficient, and nonclinical reproductive and developmental findings are conflicting. |
 | `iodine` | ingredient_quality_map | monitor | established | Keep iodine within prenatal range | Iodine is essential in pregnancy, but excessive intake can adversely affect maternal/fetal thyroid function. |
 | `licorice` | ingredient_quality_map | avoid | established | Not recommended in pregnancy | High glycyrrhizin intake inhibits placental 11β-HSD2 and has been associated with shorter gestation and higher preterm risk. |
 | `maca` | ingredient_quality_map | informational | theoretical | Pregnancy safety is unclear | Human pregnancy safety data are sparse. |
@@ -38,7 +40,7 @@
 | `resveratrol` | ingredient_quality_map | monitor | theoretical | Limited pregnancy safety data | Limited human pregnancy data; animal work suggests developmental effects at some exposures. |
 | `rue` | botanical_ingredients | contraindicated | probable | Do not use during pregnancy | Ruta graveolens contains furanoquinoline alkaloids (dictamnine, skimmianine) and furanocoumarins with established abortifacient activity. Animal studies confirm embryotoxic and te… |
 | `saw_palmetto` | ingredient_quality_map | avoid | probable | Not well studied in pregnancy | Anti-androgenic and hormonal concern combined with absent pregnancy safety data. |
-| `senna` | ingredient_quality_map | caution | probable | Use stimulant laxatives with guidance | Sennosides stimulate myenteric plexus nerve endings and increase colonic peristalsis via prostaglandin release. Chronic or high-dose use may trigger uterine smooth muscle contract… |
+| `senna` | ingredient_quality_map | avoid | probable | Senna in pregnancy: ask your obstetrician first | Sennosides are converted by colonic bacteria to rhein-anthrone, which stimulates the colon. The EU herbal monograph (HMPC, Rev. 1, 2018) contraindicates senna in pregnancy because… |
 | `st_johns_wort` | ingredient_quality_map | avoid | probable | Birth-defect signal — avoid in pregnancy | NCCIH notes potential increased birth-defect risk and major drug interaction potential. |
 | `vitamin_a` | ingredient_quality_map | caution | established | Keep preformed vitamin A within prenatal range | Excess preformed vitamin A intake in pregnancy is associated with teratogenic risk. |
 | `vitamin_c` | ingredient_quality_map | monitor | established | Keep vitamin C within prenatal range | Vitamin C is essential, but excessive supplemental intake above UL is not recommended in pregnancy. |

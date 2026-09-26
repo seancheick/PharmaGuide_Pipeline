@@ -2,16 +2,17 @@
 
 # Kidney Disease (kidney_disease)
 
-**9 rules.** Category: renal
+**10 rules.** Category: renal
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
 | `ADD_PROPYLENE_GLYCOL` | harmful_additives | caution | probable | High exposure may matter in CKD | Propylene glycol is metabolized to lactic acid via alcohol dehydrogenase and ~40-50% is renally excreted. Renal impairment reduces clearance, leading to accumulation and lactic ac… |
-| `cascara_sagrada` | ingredient_quality_map | caution | probable | Electrolyte loss with chronic use | Anthraquinone-induced electrolyte depletion (hypokalemia, hypomagnesemia) is amplified in CKD where electrolyte homeostasis is already impaired. Hypokalaemia exacerbates the cardi… |
+| `aloe_ferox` | ingredient_quality_map | caution | probable | Electrolyte loss with repeated use | Long-term stimulant laxative use can cause water and electrolyte imbalance, including potassium loss, and has been linked to albuminuria and haematuria; people with kidney disorde… |
+| `cascara_sagrada` | ingredient_quality_map | caution | probable | Electrolyte loss with chronic use | Long-term use of stimulant laxatives such as cascara can cause water and electrolyte imbalance, including potassium loss, and may result in albuminuria and haematuria. The EU herb… |
 | `creatine_monohydrate` | ingredient_quality_map | caution | probable | May affect creatinine lab results | Creatine is metabolised to creatinine and excreted renally. Supplemental creatine reliably elevates serum creatinine, which can spuriously worsen estimated GFR calculations (eGFR … |
-| `dandelion` | ingredient_quality_map | caution | limited | Diuretic herb — use caution in CKD | Dandelion (Taraxacum officinale) acts as a natural diuretic, increasing urine output via inhibition of renal tubular sodium reabsorption. In CKD, fluid management is critical; unc… |
+| `dandelion` | ingredient_quality_map | caution | limited | Diuretic herb — use caution in CKD | Dandelion leaf (Taraxacum officinale) is a traditional diuretic: the EU herbal monograph gives it to increase the amount of urine and advises avoiding it in renal failure because … |
 | `licorice_root` | botanical_ingredients | caution | probable | May affect fluid and potassium balance | Glycyrrhizin-induced sodium and water retention can worsen fluid overload in patients with impaired renal function, potentially accelerating decline in glomerular filtration rate … |
 | `magnesium` | ingredient_quality_map | avoid | established | Magnesium can accumulate in CKD | Impaired renal magnesium excretion in CKD (especially eGFR <30) leads to hypermagnesemia accumulation. Supplemental magnesium doses safe in healthy adults can cause life-threateni… |
 | `potassium` | ingredient_quality_map | avoid | established | Hyperkalemia risk in CKD | Impaired renal potassium excretion greatly increases hyperkalemia risk with supplemental potassium. |
-| `senna` | ingredient_quality_map | caution | probable | Electrolyte loss with chronic use | Chronic anthraquinone laxative use can cause electrolyte depletion (hypokalemia, hyponatremia) which is poorly tolerated in chronic kidney disease. Potassium wasting compounds the… |
+| `senna` | ingredient_quality_map | caution | probable | Electrolyte loss with chronic use | Long-term use of stimulant laxatives such as senna can cause water and electrolyte imbalance, including potassium loss, and may result in albuminuria and haematuria. The EU herbal… |
 | `tribulus` | ingredient_quality_map | monitor | theoretical | Kidney safety data are limited | Tribulus terrestris-induced severe nephrotoxicity was documented in a clinical case report (markedly elevated creatinine, resolved on discontinuation). Patients with pre-existing … |

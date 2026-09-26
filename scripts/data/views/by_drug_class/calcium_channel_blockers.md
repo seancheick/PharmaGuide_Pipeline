@@ -6,4 +6,4 @@
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
-| `citrus_bergamot` | ingredient_quality_map | avoid | established | May lower blood pressure too much | Same CYP3A4 inhibition mechanism. Increased exposure to felodipine and nifedipine raises hypotension and edema risk. |
+| `citrus_bergamot` | ingredient_quality_map | avoid | limited | May lower blood pressure too much | Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effec… |

@@ -2,8 +2,9 @@
 
 # Antiarrhythmics (antiarrhythmics)
 
-**1 rules.** Category: cardiovascular
+**2 rules.** Category: cardiovascular
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
-| `citrus_bergamot` | ingredient_quality_map | avoid | established | Heart-rhythm risk with amiodarone | CYP3A4 inhibition combined with amiodarone's intrinsic QT-prolongation amplifies torsades de pointes risk. Documented cases. |
+| `aloe_ferox` | ingredient_quality_map | caution | probable | Low potassium can affect heart-rhythm medicines | Laxative-induced hypokalaemia interacts with antiarrhythmic medicines, and low potassium can raise the risk of arrhythmia. |
+| `citrus_bergamot` | ingredient_quality_map | avoid | limited | Heart-rhythm risk with amiodarone | Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effec… |

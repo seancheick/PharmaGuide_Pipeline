@@ -2,15 +2,16 @@
 
 # Trying to Conceive (ttc)
 
-**9 rules.** Category: reproductive
+**10 rules.** Category: reproductive
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
+| `caffeine` | ingredient_quality_map | informational | limited | Consider moderating caffeine when trying to conceive | Fertility-specific evidence flags decreased fertility only at high intake (~500 mg/day; ASRM, OR 1.45). Moderate intake (1-2 cups, ~200 mg/day) has no apparent adverse effect on f… |
 | `chasteberry` | ingredient_quality_map | caution | probable | Hormone-active — discuss while TTC | Chasteberry has been studied for luteal phase defect and hyperprolactinemia-related infertility, showing possible benefit in some trials. However, it alters LH pulsatility and pro… |
 | `coq10` | ingredient_quality_map | informational | probable | Discuss CoQ10 with fertility clinician | CoQ10 is an essential mitochondrial antioxidant. Oocyte quality declines with age partly due to reduced mitochondrial CoQ10 availability and impaired ATP production. Ben-Meir et a… |
-| `dhea` | ingredient_quality_map | caution | probable | DHEA — fertility clinician only | DHEA (dehydroepiandrosterone) supplementation at 75 mg/day for ≥12 weeks has been studied in women with diminished ovarian reserve (DOR) undergoing IVF. The DITTO RCT protocol tar… |
 | `inositol` | ingredient_quality_map | informational | probable | May support PCOS-related fertility | Myo-inositol (the primary isomer in supplements) is a second messenger in insulin signaling and plays a critical role in ovarian follicle maturation. In PCOS, insulin resistance d… |
-| `saw_palmetto` | ingredient_quality_map | caution | probable | Hormone-active — discuss while TTC | Saw palmetto (Serenoa repens) inhibits 5-alpha-reductase (both type 1 and type 2), reducing conversion of testosterone to the more potent dihydrotestosterone (DHT). In males, this… |
+| `saw_palmetto` | ingredient_quality_map | caution | theoretical | Hormone-active — discuss while TTC | Some in vitro studies suggest saw palmetto extract inhibits both 5-alpha-reductase isoenzymes, the enzyme finasteride blocks, but clinical studies have not shown a fall in serum D… |
+| `vitamin_a` | ingredient_quality_map | caution | established | Keep preformed vitamin A moderate when trying to conceive | Preformed vitamin A (retinol/retinyl esters) is teratogenic in early pregnancy, which can occur before conception is confirmed; the apparent threshold is ~10,000 IU/day (Rothman 1… |
 | `vitamin_b12_cobalamin` | ingredient_quality_map | informational | established | B12 is recommended preconception | Vitamin B12 (cobalamin) is essential for DNA synthesis, cell division, and one-carbon metabolism. B12 deficiency elevates homocysteine via impaired methionine synthase activity, a… |
 | `vitamin_b9_folate` | ingredient_quality_map | informational | established | Folic acid is recommended preconception | Periconceptional folic acid/folate supplementation reduces neural tube defect (NTD) risk by 69% (RR 0.31, 95% CI 0.17–0.58) in Cochrane meta-analysis of 5 RCTs (6708 births). The … |
 | `vitamin_d` | ingredient_quality_map | monitor | probable | Use labs to guide vitamin D | Vitamin D receptors (VDR) are expressed in ovarian granulosa cells, endometrium, and placenta. A 2017 review (Voulgaris et al., Hormones) summarized strong associations between vi… |

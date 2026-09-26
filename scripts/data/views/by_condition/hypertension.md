@@ -2,20 +2,21 @@
 
 # High Blood Pressure (hypertension)
 
-**17 rules.** Category: cardiovascular
+**18 rules.** Category: cardiovascular
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
 | `RISK_BITTER_ORANGE` | banned_recalled_ingredients | avoid | probable | Stimulant — may raise blood pressure | Synephrine is structurally similar to ephedrine, acts on adrenergic receptors, and significantly increases systolic and diastolic blood pressure, especially when combined with caf… |
-| `black_seed_oil` | ingredient_quality_map | monitor | probable | May modestly lower blood pressure | Thymoquinone inhibits voltage-gated calcium channels and increases endothelial nitric oxide synthase (eNOS) activity, reducing peripheral vascular resistance. Reductions of 5-10 m… |
+| `RISK_YOHIMBE` | banned_recalled_ingredients | contraindicated | established | Not recommended with high blood pressure | Adrenergic stimulation can raise blood pressure and heart rate. |
+| `black_seed_oil` | ingredient_quality_map | monitor | probable | May modestly lower blood pressure | A meta-analysis of 11 randomised trials (860 people, about 8 weeks) found black seed lowered systolic blood pressure by about 3.3 mmHg and diastolic by 2.8 mmHg compared with cont… |
 | `caffeine` | ingredient_quality_map | caution | established | Caffeine may raise blood pressure | Caffeine causes acute blood pressure elevation (3-15 mmHg systolic) through adenosine receptor antagonism and sympathetic stimulation. |
 | `garlic` | ingredient_quality_map | monitor | probable | May modestly lower blood pressure | Garlic lowers blood pressure via hydrogen sulfide-mediated vasodilation and ACE inhibition (8-10 mmHg systolic). Additive effect with antihypertensives may cause symptomatic hypot… |
 | `ginkgo` | ingredient_quality_map | monitor | probable | May affect some BP medications | Ginkgo biloba increases hepatic CYP450 activity, accelerating metabolism of calcium channel blockers (nicardipine studied) and reducing their antihypertensive effect. |
-| `green_tea_extract` | ingredient_quality_map | monitor | probable | May reduce nadolol absorption | Green tea catechins (EGCG) inhibit intestinal OATP transporters, reducing oral bioavailability of nadolol and potentially other beta-blockers, diminishing BP control. |
+| `green_tea_extract` | ingredient_quality_map | monitor | probable | May reduce nadolol absorption | Green tea inhibits the intestinal uptake transporter OATP1A2, which carries the beta-blocker nadolol into the body. In volunteers, drinking 700 mL of green tea daily for 14 days c… |
 | `guarana` | ingredient_quality_map | caution | established | Stimulant source — may raise BP | Guarana (Paullinia cupana) seeds contain 2-4.5% caffeine by dry weight — substantially higher than coffee beans (~1-2%). Caffeine causes acute blood pressure elevation (3-15 mmHg … |
 | `hawthorn` | ingredient_quality_map | monitor | probable | May add to BP-medication effects | Hawthorn extract has mild antihypertensive properties via endothelium-dependent vasodilation and mild ACE-inhibitory activity. |
 | `l_arginine` | ingredient_quality_map | monitor | probable | May modestly lower blood pressure | L-arginine increases nitric oxide production, causing vasodilation and BP reduction (5-7 mmHg systolic). Additive effect with antihypertensives risks excessive hypotension. |
-| `licorice` | ingredient_quality_map | avoid | established | Licorice may raise blood pressure | Glycyrrhizin can increase sodium retention and blood pressure. NOTE: DGL (deglycyrrhizinated licorice) has glycyrrhizin removed and does NOT have this interaction. This rule appli… |
+| `licorice` | ingredient_quality_map | caution | established | Licorice may raise blood pressure | Glycyrrhizin can increase sodium retention and blood pressure. NOTE: DGL (deglycyrrhizinated licorice) has glycyrrhizin removed and does NOT have this interaction. This rule appli… |
 | `magnesium` | ingredient_quality_map | monitor | probable | May modestly lower blood pressure | Magnesium acts as a natural calcium channel blocker, producing modest BP reductions (2-4 mmHg systolic). Additive effect with pharmaceutical calcium channel blockers may enhance h… |
 | `potassium` | ingredient_quality_map | caution | established | May raise potassium with some BP meds | Potassium supplements combined with ACE inhibitors, ARBs, or potassium-sparing diuretics can cause life-threatening hyperkalemia. |
 | `rhodiola` | ingredient_quality_map | monitor | theoretical | Blood-pressure evidence is limited | Rhodiola water extract has been shown to lower systolic blood pressure in spontaneously hypertensive rats via beta-endorphin release and opioid mu-receptor activation. Human evide… |
