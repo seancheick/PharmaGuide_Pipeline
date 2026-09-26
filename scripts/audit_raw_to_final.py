@@ -570,7 +570,7 @@ def _check_v1_5_0_contract(rec: ProductRecord, blob: dict) -> None:
 
 def _check_canonical_id_on_mapped(rec: ProductRecord, blob: dict) -> None:
     for ing in blob.get("ingredients") or []:
-        is_mapped = bool(ing.get("is_mapped") or ing.get("mapped"))
+        is_mapped = bool(ing.get("is_mapped"))
         cid = ing.get("canonical_id") or ing.get("normalized_key") or ing.get("parent_key")
         if is_mapped and not cid:
             rec.add("CANONICAL_ID_MISSING_ON_MAPPED",
@@ -853,7 +853,7 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
         n = (ing.get("name") or "").lower()
         unit = (ing.get("dosage_unit") or ing.get("unit") or "").upper()
         normalized_unit = (ing.get("normalized_unit") or "").upper()
-        normalized_value = ing.get("normalized_value")
+        normalized_value = ing.get("normalized_amount")
         if unit == "IU" and ("vitamin a" in n or "retinyl" in n or "carotene" in n):
             # Need a normalized RAE value AND form-aware factor.
             if normalized_value is None or normalized_unit not in ("MCG RAE", "MCG", "UG RAE", "UG"):

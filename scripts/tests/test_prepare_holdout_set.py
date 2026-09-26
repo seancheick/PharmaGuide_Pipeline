@@ -433,8 +433,8 @@ def _panel_record(root: Path, dsld_id: str) -> Path:
                          "forms": [], "raw_source_path": "ingredientRows[0]",
                          "dailyValue": 48.0}],
         "display_ingredients": panel,
-        "inactive_ingredients": [{"label_display": "Vegetable cellulose"},
-                                 {"label_display": "rice flour"}],
+        "inactive_ingredients": [{"display_label": "Vegetable cellulose"},
+                                 {"display_label": "rice flour"}],
     }), encoding="utf-8")
     return blobs
 

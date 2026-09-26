@@ -46,7 +46,6 @@ ACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "dosage":              {"required": False, "type": "number?",  "is_enum": False},
     "dosage_unit":         {"required": False, "type": "string?",  "is_enum": False},
     "bio_score":           {"required": False, "type": "number?",  "is_enum": False},
-    "score":               {"required": False, "type": "number?",  "is_enum": False, "deprecated": True},
     "form":                {"required": False, "type": "string?",  "is_enum": False, "deprecated": True},
     "is_harmful":          {"required": False, "type": "bool?",    "is_enum": False, "deprecated": True},
     # v1.5.0 canonical fields (PROMISED in doc):
@@ -67,6 +66,57 @@ ACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "standardization_note": {"required": False, "type": "string?",  "is_enum": False},
     "display_badge":        {"required": False, "type": "string?",  "is_enum": False},
     "identifiers":          {"required": False, "type": "object?",  "is_enum": False},
+    # Rest of the shipped row shape (row-key census, 2026-09-25). Together with
+    # the fields above this is the whole active row: a row key missing here
+    # fails the gate, so a second name for an existing value cannot ship
+    # unreviewed. required=True marks fields non-null on every shipped row.
+    "raw_source_path":      {"required": False, "type": "string?",  "is_enum": False},
+    "forms":                {"required": True,  "type": "array",    "is_enum": False,
+                             "note": "label-parsed forms; extracted_forms is the IQM extraction"},
+    "dailyValue":           {"required": False, "type": "number?",  "is_enum": False},
+    "dose_data_quality":    {"required": False, "type": "object?",  "is_enum": False},
+    "matched_form":         {"required": True,  "type": "string",   "is_enum": False},
+    "matched_forms":        {"required": True,  "type": "array",    "is_enum": False},
+    "extracted_forms":      {"required": True,  "type": "array",    "is_enum": False},
+    "category":             {"required": True,  "type": "string",   "is_enum": False},
+    "below_clinical_dose":  {"required": True,  "type": "bool",     "is_enum": False},
+    "notes":                {"required": True,  "type": "string",   "is_enum": False},
+    "form_note":            {"required": False, "type": "string?",  "is_enum": False},
+    "form_note_preview":    {"required": False, "type": "string?",  "is_enum": False},
+    "form_evidence":        {"required": False, "type": "object",   "is_enum": False,
+                             "note": "conditional: only when the IQM form carries reviewed evidence"},
+    "safety_flags":         {"required": True,  "type": "array",    "is_enum": False},
+    "normalized_amount":    {"required": False, "type": "number?",  "is_enum": False},
+    "normalized_unit":      {"required": True,  "type": "string",   "is_enum": False},
+    "conversion_evidence":  {"required": False, "type": "object?",  "is_enum": False},
+    "role":                 {"required": True,  "type": "string",   "is_enum": False},
+    "parent_key":           {"required": True,  "type": "string",   "is_enum": False},
+    "is_mapped":            {"required": True,  "type": "bool",     "is_enum": False},
+    "nutrient_group_id":    {"required": False, "type": "string?",  "is_enum": False},
+    "harmful_severity":     {"required": False, "type": "string?",  "is_enum": False},
+    "is_banned":            {"required": True,  "type": "bool",     "is_enum": False},
+    "safety_reason":        {"required": False, "type": "string?",  "is_enum": False},
+    "matched_source":       {"required": False, "type": "string?",  "is_enum": False},
+    "matched_rule_id":      {"required": False, "type": "string?",  "is_enum": False},
+    "us_applicable":        {"required": False, "type": "bool?",    "is_enum": False},
+    "jurisdictions":        {"required": True,  "type": "array",    "is_enum": False},
+    "jurisdiction_scope":   {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "safety_warning_one_liner": {"required": False, "type": "string?", "is_enum": False},
+    "safety_warning":       {"required": False, "type": "string?",  "is_enum": False},
+    "is_allergen":          {"required": True,  "type": "bool",     "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "source_label_key":     {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "source_label_name":    {"required": False, "type": "string?",  "is_enum": False},
+    "source_label_form":    {"required": False, "type": "string?",  "is_enum": False},
+    "label_display_name":   {"required": False, "type": "string?",  "is_enum": False},
+    "label_display_form":   {"required": False, "type": "string?",  "is_enum": False},
+    "identity_disposition": {"required": False, "type": "string?",  "is_enum": False},
+    "identity_resolution_rationale": {"required": False, "type": "string?", "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "canonical_id_before":  {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "adequacy_tier":        {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "clinical_support_level": {"required": False, "type": "string?", "is_enum": False},
+    "cfu_confidence":       {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "dose_basis":           {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "ui_copy_hint":         {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
 }
 
 
@@ -93,6 +143,32 @@ INACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
                             "values": ["green", "light_orange", "dark_orange", "red"],
                             "note": "penalty-aware Other Ingredient tone from the v4 scorer ledger"},
     "is_safety_concern":   {"required": True,  "type": "bool",     "is_enum": False, "v1_5_0": True},
+    # Rest of the shipped row shape (row-key census, 2026-09-25); see the note
+    # in ACTIVE_CONTRACT.
+    "forms":               {"required": True,  "type": "array",    "is_enum": False},
+    "category":            {"required": True,  "type": "string",   "is_enum": False},
+    "safety_flags":        {"required": True,  "type": "array",    "is_enum": False},
+    "notes":               {"required": True,  "type": "string",   "is_enum": False},
+    "mechanism_of_harm":   {"required": True,  "type": "string",   "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "common_uses":         {"required": True,  "type": "array",    "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "population_warnings": {"required": True,  "type": "array",    "is_enum": False},
+    "harmful_severity":    {"required": False, "type": "string?",  "is_enum": False},
+    "resolved_display_label": {"required": True, "type": "string", "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "label_row_disposition": {"required": True, "type": "string",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "is_label_descriptor": {"required": True,  "type": "bool",     "is_enum": False},
+    "is_active_only":      {"required": True,  "type": "bool",     "is_enum": False},
+    "is_banned":           {"required": True,  "type": "bool",     "is_enum": False},
+    "safety_reason":       {"required": False, "type": "string?",  "is_enum": False},
+    "matched_source":      {"required": False, "type": "string?",  "is_enum": False},
+    "matched_rule_id":     {"required": False, "type": "string?",  "is_enum": False},
+    "regulatory_status":   {"required": False, "type": "string?",  "is_enum": False},
+    "us_applicable":       {"required": False, "type": "bool?",    "is_enum": False},
+    "jurisdictions":       {"required": True,  "type": "array",    "is_enum": False},
+    "jurisdiction_scope":  {"required": False, "type": "string?",  "is_enum": False, "note": "no reader found (row-key census 2026-09-25)"},
+    "inactive_policy":     {"required": False, "type": "string?",  "is_enum": False},
+    "safety_display_name": {"required": False, "type": "string?",  "is_enum": False},
+    "safety_warning_one_liner": {"required": False, "type": "string?", "is_enum": False},
+    "safety_warning":      {"required": False, "type": "string?",  "is_enum": False},
 }
 
 
@@ -214,6 +290,7 @@ def _audit_ingredient_contract(
 ) -> dict[str, Any]:
     total_ingredients = 0
     presence_count: collections.Counter[str] = collections.Counter()
+    undeclared: set[str] = set()
     enum_value_counts: dict[str, collections.Counter[str]] = {
         k: collections.Counter() for k, v in contract.items() if v.get("is_enum")
     }
@@ -222,6 +299,7 @@ def _audit_ingredient_contract(
             if not isinstance(ing, dict):
                 continue
             total_ingredients += 1
+            undeclared.update(key for key in ing if key not in contract)
             for field in contract:
                 if _present(ing, field):
                     presence_count[field] += 1
@@ -233,6 +311,7 @@ def _audit_ingredient_contract(
     result: dict[str, Any] = {
         "_total_ingredients": total_ingredients,
         "_total_blobs": len(blobs),
+        "undeclared": sorted(undeclared),
         "fields": {},
     }
     for field, spec in contract.items():
@@ -301,6 +380,8 @@ def _summarize(report: dict[str, Any]) -> dict[str, Any]:
         "inactive_RED_optional_zero_emit": [],
         "top_level_RED": [],
         "top_level_undeclared": sorted(report["blob_top_level_undeclared"]),
+        "active_undeclared": report["active_ingredient_contract"]["undeclared"],
+        "inactive_undeclared": report["inactive_ingredient_contract"]["undeclared"],
         "v1_5_0_fields_absent": [],
     }
     for layer_key, summary_key_req, summary_key_opt in [
@@ -375,10 +456,13 @@ def main() -> int:
     print(f"inactive fields RED (opt):    {len(s['inactive_RED_optional_zero_emit'])} {s['inactive_RED_optional_zero_emit']}")
     print(f"top-level fields RED:         {len(s['top_level_RED'])} {s['top_level_RED']}")
     print(f"top-level keys undeclared:    {len(s['top_level_undeclared'])} {s['top_level_undeclared']}")
+    print(f"active row keys undeclared:   {len(s['active_undeclared'])} {s['active_undeclared']}")
+    print(f"inactive row keys undeclared: {len(s['inactive_undeclared'])} {s['inactive_undeclared']}")
     print(f"v1.5.0 fields <50% emitted:   {len(s['v1_5_0_fields_absent'])} {s['v1_5_0_fields_absent']}")
     return 1 if (
         s["active_RED_required"] or s["inactive_RED_required"]
         or s["top_level_RED"] or s["top_level_undeclared"]
+        or s["active_undeclared"] or s["inactive_undeclared"]
     ) else 0
 
 

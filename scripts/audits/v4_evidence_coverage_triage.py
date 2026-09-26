@@ -572,7 +572,6 @@ def _detail_identity_names(product: dict[str, Any]) -> set[str]:
         for field in (
             "canonical_id",
             "standard_name",
-            "standardName",
             "name",
             "source_label_name",
         ):

@@ -29,7 +29,6 @@ from build_final_db import (
     CORE_COLUMN_COUNT,
     EXPORT_REQUIRED_IQD_FIELDS,
     build_core_row,
-    build_combined_safety_hits,
     build_detail_blob,
     build_top_warnings,
     derive_blocking_reason,
@@ -41,55 +40,8 @@ from build_final_db import (
     classify_product_categories,
     write_audit_report,
 )
+from audit_contract_sync import ACTIVE_CONTRACT, INACTIVE_CONTRACT
 from core_export_model import PRODUCTS_CORE_COLUMNS
-
-
-def test_nested_interaction_safety_hits_ship_compact_dose_provenance_only():
-    full_decision = {
-        "clinical_severity": "caution",
-        "evaluation_status": "below_threshold",
-        "consumer_disposition": "suppress",
-        "release_blocking": False,
-        "decision_rule": {
-            "basis": "per_day",
-            "comparator": ">=",
-            "threshold": 1000,
-            "threshold_unit": "mg",
-            "consumer_disposition_if_met": "review",
-            "consumer_disposition_if_not_met": "suppress",
-        },
-        "dose_evaluation": {
-            "observed_amount": 20,
-            "observed_unit": "mg",
-            "serving_multiplier": 1,
-            "converted_amount": 20,
-            "threshold": 1000,
-            "threshold_unit": "mg",
-            "comparator": ">=",
-            "conversion_method": "identity",
-        },
-        "thresholds_checked": [{"internal_only": True}],
-    }
-    hits = build_combined_safety_hits(
-        [{
-            "rule_id": "niacin_statins",
-            "condition_hits": [],
-            "drug_class_hits": [{
-                "drug_class_id": "statins",
-                "dose_threshold_evaluation": {"internal_only": True},
-                "dose_decision": full_decision,
-            }],
-        }],
-        [],
-        [],
-        None,
-    )
-
-    emitted = hits[0]["drug_class_hits"][0]
-    assert "dose_threshold_evaluation" not in emitted
-    assert "thresholds_checked" not in emitted["dose_decision"]
-    assert "dose_evaluation" not in emitted["dose_decision"]
-    assert emitted["dose_decision"]["evaluated_daily_amount"] == 20.0
 
 
 # ─── Fixture Factories ───
@@ -714,28 +666,24 @@ class TestSafetyCategoryRouting:
 # 4. Detail Blob Contract
 # ═══════════════════════════════════════════════════════════════
 
-FLUTTER_INGREDIENT_KEYS = {
-    "raw_source_text", "name", "standardName", "normalized_key", "forms",
-    "quantity", "unit", "standard_name", "matched_form",
-    "matched_forms", "extracted_forms", "category", "bio_score",
-    "notes", "mapped", "safety_hits",
-    "normalized_amount", "normalized_unit", "role", "parent_key",
-    "dosage", "dosage_unit", "normalized_value",
-    "is_mapped", "harmful_severity", "harmful_notes",
-    "is_banned", "is_allergen",
-    # v1.5.x canonical contract — replaces legacy `form` + `is_harmful`.
-    "display_form_label", "form_status", "form_match_status",
-    "is_safety_concern",
-}
-
-
 class TestDetailBlobContract:
 
-    def test_ingredient_keys_match_flutter_contract(self):
-        blob = build_detail_blob(_base_enriched(), _base_scored())
-        ingredient = blob["ingredients"][0]
-        missing = FLUTTER_INGREDIENT_KEYS - set(ingredient.keys())
-        assert not missing, f"Missing keys in detail blob ingredient: {missing}"
+    def test_ingredient_rows_match_the_declared_row_contract(self):
+        # One declaration of the row shape: audit_contract_sync. A row key it
+        # does not declare fails here, before a build reaches the gate.
+        e = _base_enriched()
+        e["inactiveIngredients"] = [{"name": "Gelatin", "raw_source_text": "Gelatin"}]
+        blob = build_detail_blob(e, _base_scored())
+        for section, contract in (
+            ("ingredients", ACTIVE_CONTRACT),
+            ("inactive_ingredients", INACTIVE_CONTRACT),
+        ):
+            row = blob[section][0]
+            undeclared = set(row) - set(contract)
+            assert not undeclared, f"undeclared {section}[] keys: {sorted(undeclared)}"
+            required = {key for key, spec in contract.items() if spec.get("required")}
+            missing = required - set(row)
+            assert not missing, f"{section}[] rows lack required keys: {sorted(missing)}"
 
     def test_blob_has_required_top_level_keys(self):
         blob = build_detail_blob(_base_enriched(), _base_scored())

@@ -785,7 +785,7 @@ def _inactive_identity_name_for_export(
     can project safety flags and warning metadata. Those safety sources do
     not own identity fields. If the resolver match came from banned/recalled
     or harmful-additives, preserve the label identity instead of exporting a
-    safety table's standard_name as standardName/standard_name.
+    safety table's standard_name as the row's standard_name.
     """
     if matched_source in _SAFETY_ONLY_IDENTITY_SOURCES:
         return name or upstream_standard_name or resolver_standard_name
@@ -808,7 +808,7 @@ def _active_identity_name_for_export(
 
     If an active ingredient is not canonically mapped and the only pressure to
     standardize the name comes from a safety flag, keep the label identity in
-    `standardName`/`standard_name`. The safety fact still ships in
+    `standard_name`. The safety fact still ships in
     `safety_flags`; it just cannot overwrite identity.
     """
     if canonical_id:
@@ -2196,78 +2196,6 @@ def resolve_harmful_reference(hit: Optional[Dict]) -> Dict:
         if term in index:
             return index[term]
     return {}
-
-
-def build_combined_safety_hits(
-    base_hits: Any,
-    contaminant_hits: List[Dict],
-    allergen_hits: List[Dict],
-    harmful_hit: Optional[Dict],
-) -> List[Dict]:
-    combined = []
-    for hit in safe_list(base_hits):
-        if isinstance(hit, dict):
-            projected = dict(hit)
-            # Interaction safety hits are also attached to ingredient rows.
-            # Keep their consumer/audit context, but never duplicate the full
-            # evaluator trace into the shipped blob through this secondary
-            # route. Full traces remain in enriched build artifacts.
-            for bucket_name in ("condition_hits", "drug_class_hits"):
-                compact_hits = []
-                for nested in safe_list(projected.get(bucket_name)):
-                    if not isinstance(nested, dict):
-                        continue
-                    compact_nested = dict(nested)
-                    raw_decision = compact_nested.get("dose_decision")
-                    compact_nested.pop("dose_threshold_evaluation", None)
-                    if raw_decision:
-                        compact_nested["dose_decision"] = compact_dose_decision(
-                            raw_decision
-                        )
-                    compact_hits.append(compact_nested)
-                if bucket_name in projected:
-                    projected[bucket_name] = compact_hits
-            combined.append(projected)
-
-    for hit in contaminant_hits:
-        combined.append({
-            "kind": "contaminant",
-            "status": safe_str(hit.get("status")),
-            "severity_level": safe_str(hit.get("severity_level")),
-            "ingredient": safe_str(hit.get("ingredient") or hit.get("banned_name") or hit.get("name")),
-            "reason": safe_str(hit.get("reason")),
-            "match_type": safe_str(hit.get("match_type") or hit.get("match_method")),
-        })
-
-    for hit in allergen_hits:
-        combined.append({
-            "kind": "allergen",
-            "allergen_id": safe_str(hit.get("allergen_id")),
-            "allergen_name": safe_str(hit.get("allergen_name")),
-            "presence_type": safe_str(hit.get("presence_type")),
-            "severity_level": safe_str(hit.get("severity_level")),
-            "evidence": safe_str(hit.get("evidence")),
-        })
-
-    if harmful_hit:
-        harmful_ref = resolve_harmful_reference(harmful_hit)
-        combined.append({
-            "kind": "harmful_additive",
-            "standard_name": safe_str(
-                harmful_ref.get("standard_name")
-                or harmful_hit.get("canonical_name")
-                or harmful_hit.get("additive_name")
-                or harmful_hit.get("ingredient")
-            ),
-            "severity_level": safe_str(harmful_hit.get("severity_level")),
-            "category": safe_str(harmful_hit.get("category")),
-            "notes": safe_str(harmful_hit.get("notes") or harmful_ref.get("notes")),
-            "mechanism_of_harm": safe_str(harmful_hit.get("mechanism_of_harm") or harmful_ref.get("mechanism_of_harm")),
-            "population_warnings": safe_list(harmful_hit.get("population_warnings") or harmful_ref.get("population_warnings")),
-            "classification_evidence": safe_str(harmful_hit.get("classification_evidence")),
-        })
-
-    return combined
 
 
 # ─── Schema Creation ───
@@ -4152,8 +4080,7 @@ def _ingredient_export_dedup_key(ingredient: Dict[str, Any]) -> str:
     if canonical_id:
         return f"canonical:{canonical_id}"
     name = (
-        safe_str(ingredient.get("standardName"))
-        or safe_str(ingredient.get("standard_name"))
+        safe_str(ingredient.get("standard_name"))
         or safe_str(ingredient.get("name"))
         or safe_str(ingredient.get("raw_source_text"))
     ).lower()
@@ -4185,8 +4112,8 @@ def _is_zero_dose_placeholder_duplicate(
         return False
 
     # Never drop a row that carries a product-safety concern. Informational
-    # safety_hits are canonical-level payloads and remain attached to the
-    # retained positive-dose duplicate for the same canonical.
+    # safety context is canonical-level and stays on the retained
+    # positive-dose duplicate for the same canonical.
     if ingredient.get("is_safety_concern") or ingredient.get("is_banned"):
         return False
     if safe_list(ingredient.get("safety_flags")):
@@ -6203,7 +6130,6 @@ def _ingredient_anchor_key(ingredient: Dict[str, Any]) -> str:
         ingredient.get("canonical_id"),
         ingredient.get("nutrient_group_id"),
         ingredient.get("standard_name"),
-        ingredient.get("standardName"),
         ingredient.get("name"),
         ingredient.get("display_label"),
         ingredient.get("raw_source_text"),
@@ -6261,8 +6187,6 @@ def _anchor_amount(ingredients: List[Dict], anchor: Dict[str, Any]) -> Tuple[Opt
         raw_amount = (
             ingredient.get("normalized_amount")
             if ingredient.get("normalized_amount") is not None
-            else ingredient.get("normalized_value")
-            if ingredient.get("normalized_value") is not None
             else ingredient.get("quantity")
             if ingredient.get("quantity") is not None
             else ingredient.get("dosage")
@@ -6666,12 +6590,6 @@ def build_detail_blob(
             if harmful_hit:
                 break
         harmful_ref = resolve_harmful_reference(harmful_hit)
-        combined_safety_hits = build_combined_safety_hits(
-            m.get("safety_hits"),
-            ingredient_hits,
-            allergen_hits,
-            harmful_hit,
-        )
 
         qty = ing.get("quantity")
         # Source ownership disambiguates repeated marketing names such as HOWARU.
@@ -6724,7 +6642,6 @@ def build_detail_blob(
                 ing.get("raw_source_path") or m.get("raw_source_path")
             ),
             "name": name,
-            "standardName": standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "quantity": safe_float(qty),
@@ -6753,8 +6670,6 @@ def build_detail_blob(
                 if form_evidence is not None
                 else {}
             ),
-            "mapped": is_mapped,
-            "safety_hits": combined_safety_hits,
             "safety_flags": projected_safety_flags,
             "normalized_amount": safe_float(ne.get("normalized_amount")),
             "normalized_unit": safe_str(ne.get("normalized_unit")),
@@ -6763,7 +6678,6 @@ def build_detail_blob(
             "parent_key": safe_str(m.get("parent_key") or ing.get("normalized_key")),
             "dosage": safe_float(qty),
             "dosage_unit": safe_str(ing.get("unit")),
-            "normalized_value": safe_float(ne.get("normalized_amount")),
             "is_mapped": is_mapped,
             # canonical_id — foundational identifier for interactions, stack
             # logic, evidence routing, biomarker scoring, dedup, and analytics.
@@ -6804,12 +6718,6 @@ def build_detail_blob(
             # didn't fire on a banned-recalled hit.
             "safety_warning_one_liner": active_safety_contract.get("safety_warning_one_liner"),
             "safety_warning": active_safety_contract.get("safety_warning"),
-            "harmful_notes": (
-                safe_str(harmful_ref.get("mechanism_of_harm"))
-                or safe_str(harmful_ref.get("notes"))
-                or safe_str(harmful_hit.get("classification_evidence"))
-                or safe_str(harmful_hit.get("category"))
-            ) if harmful_hit else None,
             "is_allergen": bool(allergen_hits),
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
@@ -6985,8 +6893,6 @@ def build_detail_blob(
         inactive.append({
             "raw_source_text": raw,
             "name": name,
-            "label_display": inactive_display_label,
-            "standardName": inactive_standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "category": res.category or safe_str(ing.get("category")),
@@ -7003,7 +6909,6 @@ def build_detail_blob(
             "common_uses": res.common_uses,
             "population_warnings": res.population_warnings,
             "harmful_severity": res.harmful_severity,
-            "harmful_notes": res.harmful_notes,
             "identifiers": res.identifiers or {},
             # Canonical inactive contract (v1.5.0+) — Flutter renders
             # these directly without local inference.

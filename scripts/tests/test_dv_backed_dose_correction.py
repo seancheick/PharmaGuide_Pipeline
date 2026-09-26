@@ -553,7 +553,7 @@ def test_corrected_vitamin_d_flows_to_rda_and_final_display_without_false_ul_fla
     assert vitamin_d_rows[0]["original_unit"] == "mcg"
 
     blob = build_detail_blob(enriched, _minimal_scored())
-    vitamin_d = next(row for row in blob["ingredients"] if row["standardName"] == "Vitamin D")
+    vitamin_d = next(row for row in blob["ingredients"] if row["standard_name"] == "Vitamin D")
     assert vitamin_d["display_dose_label"] == "50 mcg"
     assert vitamin_d["dose_data_quality"]["status"] == "corrected"
 

@@ -140,10 +140,6 @@ def project_detail_blob(
     projected = copy.deepcopy(blob)
     projected["blob_version"] = 3
 
-    for ingredient in _safe_list(projected.get("ingredients")):
-        if isinstance(ingredient, dict):
-            ingredient.pop("safety_hits", None)
-
     rda_ul_data = projected.get("rda_ul_data")
     if isinstance(rda_ul_data, dict):
         _strip_schema3_rda_duplicates(rda_ul_data)

@@ -100,7 +100,6 @@ def _new_family_report() -> dict[str, dict[str, int]]:
     return {
         name: {"occurrences": 0, "bytes": 0}
         for name in (
-            "ingredient_safety_hits",
             "rda_duplicates",
             "interaction_warning_prose",
             "warnings_profile_gated_duplicate",
@@ -128,17 +127,6 @@ def _account_removed_families(
     projected: dict[str, Any],
     families: dict[str, dict[str, int]],
 ) -> None:
-    ingredients = blob.get("ingredients")
-    if isinstance(ingredients, list):
-        for row in ingredients:
-            if isinstance(row, dict) and "safety_hits" in row:
-                _add_family(
-                    families,
-                    "ingredient_safety_hits",
-                    "safety_hits",
-                    row["safety_hits"],
-                )
-
     rda = blob.get("rda_ul_data")
     if isinstance(rda, dict):
         for key in ("ingredients_with_rda", "adequacy_results"):
