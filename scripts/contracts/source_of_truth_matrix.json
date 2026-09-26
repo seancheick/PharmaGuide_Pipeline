@@ -51,7 +51,11 @@
     "enriched_inactive_safety_contract",
     "interaction_profile_contract",
     "enrichment_fallback_policy",
-    "display_ingredient_contract"
+    "display_ingredient_contract",
+    "ingredient_form_quality",
+    "probiotic_row_identity",
+    "prebiotic_identity",
+    "certification_evidence"
   ],
   "concepts": [
     {
@@ -546,6 +550,58 @@
       "fallback_class": "flutter_backward_compat",
       "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
       "tests": ["scripts/tests/test_label_fidelity_contract.py", "scripts/tests/test_source_of_truth_contract.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "ingredient_form_quality",
+      "owner": "scripts/scoring_v4/modules/generic_helpers.py",
+      "first_created_stage": "enriched",
+      "field_kind": "enriched",
+      "source_data_files": ["scripts/data/ingredient_quality_map.json"],
+      "consumers": ["scripts/scoring_v4/modules/generic_formulation.py", "scripts/scoring_v4/modules/multi_prenatal_formulation.py", "scripts/scoring_v4/modules/b_complex.py", "scripts/scoring_v4/modules/generic_dose.py", "scripts/scoring_v4/modules/botanical_profile.py"],
+      "forbidden_recomputation": ["IQM forms[].bio_score is the one form-quality fact; scoring reads it through generic_helpers.bio_score_of, and no pillar may re-rank form quality with premium-form counts, preferred-form name tables or bio_score dose multipliers (quality_score 1.7.0; docs/adr/0003-iqm-owns-form-quality.md)"],
+      "fallback_class": "old_batch_compatibility",
+      "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
+      "tests": ["scripts/tests/test_vitamin_form_ownership.py", "scripts/tests/test_v4_generic_formulation_p131.py", "scripts/tests/test_v4_multi_prenatal_formulation_p31.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "probiotic_row_identity",
+      "owner": "scripts/probiotic_measurements.py",
+      "first_created_stage": "enriched",
+      "field_kind": "derived",
+      "source_data_files": ["scripts/data/ingredient_quality_map.json", "scripts/data/other_ingredients.json"],
+      "consumers": ["scripts/enrich_supplements_v3.py", "scripts/scoring_input_contract.py", "scripts/supplement_taxonomy.py", "scripts/scoring_v4/route_features.py", "scripts/scoring_v4/modules/probiotic_formulation.py", "scripts/scoring_v4/modules/probiotic_evidence.py", "scripts/build_final_db.py"],
+      "forbidden_recomputation": ["whether a row is a live probiotic organism, a probiotic source header, or a fiber/prebiotic support companion is decided only by probiotic_measurements (is_probiotic_source_identity, is_probiotic_source_header, is_probiotic_support_source, has_probiotic_identity_text); no other module keeps its own probiotic name regex or category test, and a resolved IQM identity outside 'probiotics' or any other_ingredients record outranks DSLD category evidence"],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
+      "tests": ["scripts/tests/test_probiotic_identity_single_owner.py", "scripts/tests/test_microbial_derivative_identity.py", "scripts/tests/test_p05_probiotic_prebiotic_consistency.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "prebiotic_identity",
+      "owner": "scripts/prebiotic_catalog.py",
+      "first_created_stage": "enriched",
+      "field_kind": "derived",
+      "source_data_files": ["scripts/data/clinically_relevant_strains.json"],
+      "consumers": ["scripts/probiotic_measurements.py", "scripts/enrich_supplements_v3.py", "scripts/scoring_v4/modules/probiotic_formulation.py"],
+      "forbidden_recomputation": ["prebiotic identity used for probiotic support and probiotic Formulation comes only from prebiotic_catalog.match_prebiotic over the registry's prebiotics.ingredients; the fiber-supplement routing term lists (route_features, fiber_digestive_*, supplement_taxonomy) are a separate policy and must not be used to credit probiotic prebiotic support"],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
+      "tests": ["scripts/tests/test_prebiotic_catalog_matcher.py", "scripts/tests/test_p05_probiotic_prebiotic_consistency.py"],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "certification_evidence",
+      "owner": "scripts/scoring_v4/cert_evidence.py",
+      "first_created_stage": "enriched",
+      "field_kind": "derived",
+      "source_data_files": ["scripts/data/cert_registry.json", "scripts/data/curated_overrides/cert_verification_overrides.json", "scripts/data/cert_claim_rules.json"],
+      "consumers": ["scripts/scoring_v4/modules/generic_trust.py", "scripts/scoring_v4/modules/omega_trust.py", "scripts/scoring_v4/modules/generic_manufacturer.py", "scripts/scoring_v4/quality_score.py", "scripts/scoring_v4/confidence.py", "scripts/build_final_db.py", "Flutter app"],
+      "forbidden_recomputation": ["cert_resolver.py (called by enrichment) alone matches registry rows to a product; cert_evidence.py alone decides what those rows verify: brand match, verified vs claimed programs, GMP implied by a verified cert, audited-facility GMP; scorer modules, export and the app consume its results and never re-match brands, re-read the registry, or treat a label claim as verification"],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
+      "tests": ["scripts/tests/test_cert_claimed_vs_verified.py", "scripts/tests/test_gmp_one_owner.py", "scripts/tests/test_certification_quality_flag_semantics.py"],
       "retirement_status": "active"
     }
   ]

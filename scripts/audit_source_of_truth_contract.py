@@ -110,6 +110,10 @@ REQUIRED_CONCEPTS = {
     "interaction_profile_contract",
     "enrichment_fallback_policy",
     "display_ingredient_contract",
+    "ingredient_form_quality",
+    "probiotic_row_identity",
+    "prebiotic_identity",
+    "certification_evidence",
 }
 
 SCORABLE_BLOCKED_ROLES = CLEANER_NON_SCORABLE_ROLES
