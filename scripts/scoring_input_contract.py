@@ -65,6 +65,7 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "probiotic_cfu": ["probiotic_dose_adequacy"],
     "enzyme_activity": ["enzyme_activity_identity"],
     "sports_primary_dose": ["sports_primary_dose"],
+    "declared_active_fiber": ["fiber_identity", "fiber_dose_adequacy"],
     "omega_epa_dha_aggregate": ["omega_dose_adequacy", "omega_transparency"],
     "blend_anchor_mass": ["generic_blend_anchor_mass"],
     "percent_dv_dose": ["generic_percent_dv_dose"],
@@ -1153,6 +1154,72 @@ def _derive_declared_nutrition_protein_evidence(
     ]
 
 
+def _derive_declared_active_fiber_evidence(
+    product: Dict[str, Any],
+    active_rows: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Join a declared fiber total to its exact DSLD active fiber row.
+
+    Nutrition Facts owns the grams; it does not independently establish an
+    efficacy-bearing ingredient. DSLD's active section owns the ingredient
+    identity. A typed projection is valid only when both owners point to the
+    same source row and DSLD classifies that row as fiber. Other/inactive rows,
+    title inference, and unmatched nutrition totals cannot satisfy the join.
+    """
+    if _primary_type(product) != "fiber_digestive":
+        return []
+
+    summary = _safe_dict(product.get("nutrition_summary"))
+    grams = _as_float(summary.get("dietary_fiber_g"), None)
+    source = _safe_dict(summary.get("dietary_fiber_source"))
+    source_amount = _as_float(source.get("amount"), None)
+    source_unit = _norm(source.get("unit")).replace(" ", "")
+    source_path = str(source.get("raw_source_path") or "").strip()
+    if (
+        grams is None
+        or grams <= 0
+        or source_amount != grams
+        or source_unit not in {"g", "gram", "grams", "gram(s)"}
+        or not source_path
+    ):
+        return []
+
+    owner = next(
+        (
+            row
+            for row in active_rows
+            if str(row.get("raw_source_path") or "").strip() == source_path
+            and _norm(row.get("source_section")) == "active"
+            and _norm(row.get("canonical_id")) in MATERIAL_FIBER_CANONICALS
+            and _norm(_safe_dict(row.get("raw_taxonomy")).get("category")) == "fiber"
+            and _norm(row.get("cleaner_row_role")) == "active_scorable"
+            and row.get("score_eligible_by_cleaner") is True
+            and row.get("identity_disposition") is not None
+            and is_identity_scoreable(row.get("identity_disposition"))
+        ),
+        None,
+    )
+    if owner is None:
+        return []
+
+    canonical = _norm(owner.get("canonical_id"))
+    return [
+        _evidence_base(
+            row=owner,
+            evidence_type="declared_active_fiber",
+            canonical_id=canonical,
+            clean_identity_id=canonical,
+            scoring_parent_id=canonical,
+            dose_value=grams,
+            dose_unit="g",
+            evidence_scope="row_level",
+            confidence="high",
+            reason="nutrition_amount_joined_to_active_fiber_identity",
+            name=owner.get("name") or owner.get("raw_source_text") or "Dietary Fiber",
+        )
+    ]
+
+
 def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:
     unit = _norm(row.get("activity_unit") or row.get("unit"))
     value = _as_float(row.get("activity_quantity"), None)
@@ -1789,6 +1856,12 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         active_rows,
         scorable_paths,
     ):
+        special_evidence_paths.update(
+            str(path) for path in _safe_list(item.get("linked_rows")) if path
+        )
+        evidence.append(item)
+
+    for item in _derive_declared_active_fiber_evidence(product, active_rows):
         special_evidence_paths.update(
             str(path) for path in _safe_list(item.get("linked_rows")) if path
         )

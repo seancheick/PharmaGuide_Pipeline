@@ -1177,6 +1177,112 @@ def test_declared_nutrition_protein_mass_emits_typed_sports_evidence():
     assert result.mapped_coverage == 1.0
 
 
+def _declared_active_fiber_product(
+    *,
+    source_section="active",
+    nutrition_path="ingredientRows[1].nestedRows[0]",
+    source_path="ingredientRows[1].nestedRows[0]",
+    category="fiber",
+):
+    row = {
+        "name": "Dietary Fiber",
+        "raw_source_text": "Dietary Fiber",
+        "canonical_id": "fiber",
+        "canonical_id_after": "fiber",
+        "canonical_source_db": "ingredient_quality_map",
+        "standard_name": "Fiber",
+        "quantity": 5.0,
+        "unit": "Gram(s)",
+        "source_section": source_section,
+        "raw_source_path": source_path,
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "score_exclusion_reason": "excluded_nutrition_fact",
+        "role_classification": "inactive_non_scorable",
+        "scoreable_identity": False,
+        "identity_disposition": "clean",
+        "raw_taxonomy": {
+            "category": category,
+            "ingredientGroup": "Fiber (unspecified)",
+            "parentBlend": "Total Carbohydrates",
+            "quantityVariants": [{"quantity": 5.0, "unit": "Gram(s)", "operator": "="}],
+        },
+    }
+    return {
+        "id": "fiber-contract-fixture",
+        "product_name": "Fiber Gummies",
+        "status": "active",
+        "form_factor": "gummy",
+        "primary_type": "fiber_digestive",
+        "supplement_taxonomy": {
+            "primary_type": "fiber_digestive",
+            "percentile_category": "fiber_digestive",
+        },
+        "nutrition_summary": {
+            "dietary_fiber_g": 5.0,
+            "dietary_fiber_source": {
+                "amount": 5.0,
+                "unit": "Gram(s)",
+                "raw_source_path": nutrition_path,
+                "quantityVariants": [{"quantity": 5.0, "unit": "Gram(s)", "operator": "="}],
+            },
+        },
+        "activeIngredients": [row],
+        "ingredient_quality_data": {
+            "ingredients": [row],
+            "ingredients_scorable": [],
+            "ingredients_skipped": [row],
+            "total_active": 1,
+        },
+    }
+
+
+def test_declared_active_fiber_uses_nutrition_amount_with_active_identity():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _declared_active_fiber_product()
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert len(result.rows) == 1
+    row = result.rows[0]
+    assert row["evidence_type"] == "declared_active_fiber"
+    assert row["canonical_id"] == "fiber"
+    assert row["quantity"] == 5.0
+    assert row["unit"] == "g"
+    assert row["raw_source_path"] == "ingredientRows[1].nestedRows[0]"
+    assert row["source"] == "active"
+    assert row["linked_rows"] == ["ingredientRows[1].nestedRows[0]"]
+    assert result.mapped_count == 1
+    assert result.unmapped_count == 0
+    scored = build_scored_artifact(product)
+    assert scored["quality_score_status"] == "scored"
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"source_section": "inactive"},
+        {"source_section": "other"},
+        {"nutrition_path": "ingredientRows[9]"},
+        {"category": "carbohydrate"},
+    ],
+)
+def test_declared_active_fiber_rejects_other_rows_and_unjoined_totals(overrides):
+    product = _declared_active_fiber_product(**overrides)
+    evidence = derive_product_scoring_evidence(product)
+    assert not any(row.get("evidence_type") == "declared_active_fiber" for row in evidence)
+
+
+def test_nutrition_fiber_without_active_row_stays_non_scoreable():
+    product = _declared_active_fiber_product()
+    product["activeIngredients"] = []
+    product["ingredient_quality_data"] = {
+        "ingredients": [], "ingredients_scorable": [], "ingredients_skipped": []
+    }
+    assert derive_product_scoring_evidence(product) == []
+    assert get_scoring_ingredients(product, strict=True).rows == []
+
+
 def test_source_corrected_protein_mass_uses_sports_evidence_not_blend_anchor():
     protein = _row(
         name="Protein",
