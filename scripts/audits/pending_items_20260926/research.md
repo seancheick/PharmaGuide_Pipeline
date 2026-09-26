@@ -155,3 +155,15 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   2013, 1500 mg Korean red ginseng extract for 8 weeks, "Blood analyses for coagulation ... revealed no
   significant changes"); PMID 18090773 (Asian ginseng at the recommended dose, platelet function unchanged).
   No human source gives a dose for a bleeding effect: surgery and anticoagulants floors removed; presence.
+
+## RULE_IQM_STINGING_NETTLE_DIABETES: glucose floors
+- Old floor: 1000 mg/day, confidence_basis weak_signal_conservative, cited to PMID 35800714 (a general nettle
+  review, no dose). The number had no source.
+- PMID 24273930 (Kianbakht S et al. Clin Lab 2013, doi 10.7754/clin.lab.2012.121019, efetch 2026-09-26): RCT,
+  46 vs 46 patients with advanced T2DM needing insulin, "nettle leaf extract (one 500 mg capsule every 8 hours
+  for 3 months) combined with the conventional oral anti-hyperglycemic drugs"; fasting glucose, 2-h glucose and
+  HbA1c fell significantly (p < 0.001, 0.009, 0.006).
+- Other nettle trials: meta-analyses (PMIDs 31802554, 34587883) give no doses in their abstracts; PMID 28078249
+  used a hydro-alcoholic extract in ml that cannot be converted to mg. 1500 mg/day is the lowest documented.
+- Floors set to 1500 mg/day (extract). The label amount is compared as reported, so dried-leaf products are held
+  to the extract dose.

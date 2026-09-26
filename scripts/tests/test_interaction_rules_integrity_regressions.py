@@ -1184,3 +1184,17 @@ def test_ginseng_floors_match_the_effect_their_source_measured():
         assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
         assert floor["source"] == _pmid("8721940"), target
         assert "hypertensive" not in floor["rationale"], target
+
+
+def test_stinging_nettle_glucose_floor_is_the_trial_dose_not_a_conservative_guess():
+    """The 1000 mg floor was labelled weak_signal_conservative and cited a
+    general review (PMID 35800714). The documented dose is Kianbakht 2013 (PMID
+    24273930): leaf extract 500 mg every 8 hours (1500 mg/day) lowered glucose
+    and HbA1c on top of oral antidiabetics."""
+    rule = _rule("RULE_IQM_STINGING_NETTLE_DIABETES")
+    for key, target in (("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
+                        ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
+        floor = _sub_rule(rule, key, target)["min_effective_dose"]
+        assert (floor["value"], floor["unit"], floor["basis"]) == (1500, "mg", "per_day"), target
+        assert floor["source"] == _pmid("24273930"), target
+        assert floor["confidence_basis"] == "documented_effective_dose", target
