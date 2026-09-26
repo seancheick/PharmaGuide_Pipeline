@@ -507,3 +507,30 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
   more effective than oil.
 - anticoagulant alert said "Black seed oil has mild antiplatelet or anticoagulant activity" with no
   source; rewritten to the CYP2C9 finding.
+
+## RULE_IQM_QUERCETIN_THYROID — re-sourced (thyroid_disorder, anticoagulants)
+
+- **PMID 29127724** (Andres, "Safety Aspects of the Use of Quercetin as a Dietary Supplement", Mol Nutr
+  Food Res 2018; not in PMC) was the only source for both sub-rules. Abstract: rare mild adverse
+  effects; possible nephrotoxicity in predamaged kidney; "interactions between quercetin and certain
+  drugs leading to altered drug bioavailability". Nothing on thyroid, TPO, warfarin, CYP2C9 or
+  platelets; full text not readable.
+- Thyroid:
+  - **PMID 8924586** (Divi & Doerge, Chem Res Toxicol 1996): 13 flavonoids, "IC50 values ranging from 0.6
+    to 41 microM"; "Inhibition by the more potent compounds, fisetin, kaempferol, naringenin, and
+    quercetin ... was consistent with mechanism-based inactivation of TPO".
+  - **PMID 24447974** (Giuliani, Food Chem Toxicol 2014): quercetin decreases TSH receptor, TPO and
+    thyroglobulin gene expression; rat radioiodine uptake "significantly decreased after 14 days";
+    "caution is needed in its supplemental and therapeutic use".
+  - **PMID 39456456** (Giuliani, Antioxidants 2024 review): thyroid disruptor in vitro and in rodents;
+    inhibits 5'-deiodinase type 1; "caution is required in the use of high doses".
+  - No human thyroid study found. The rule's ">500 mg/day" is the authored dose threshold (its
+    dose_thresholds note says "per authored action"), not an evidence figure; the mechanism says so.
+- Anticoagulants:
+  - **PMID 36239716** (Ahmad, Curr Drug Saf 2023; rats): quercetin pretreatment for 14 days raised
+    warfarin "Cmax ... by 30.43%, AUC0-∞ by 62.94%" and cut clearance 41.35%; background: quercetin
+    inhibits "CYP3A4, CYP2C8, CYP2C9, CYP1A2, and Pglycoprotein".
+  - **PMID 15613018** (Hubbard, J Thromb Haemost 2004; humans): 150 or 300 mg quercetin-4'-O-glucoside;
+    "Platelet aggregation was inhibited 30 and 120 min after ingestion of both doses" (already the
+    min_effective_dose source).
+  - No human warfarin interaction study found.

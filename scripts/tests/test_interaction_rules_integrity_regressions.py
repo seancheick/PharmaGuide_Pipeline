@@ -831,3 +831,17 @@ def test_black_seed_rules_cite_meta_analyses_and_drop_unsourced_numbers():
                   "thromboxane b2", "uterine-effect", "mild antiplatelet"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+
+
+def test_quercetin_rules_cite_thyroid_and_warfarin_studies():
+    rule = _rule("RULE_IQM_QUERCETIN_THYROID")
+    thyroid = _sub_rule(rule, "condition_id", "thyroid_disorder")
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+
+    # 29127724's abstract says nothing about thyroid function or warfarin.
+    assert thyroid["sources"] == [_pmid("8924586"), _pmid("24447974"), _pmid("39456456")]
+    assert anticoagulants["sources"] == [_pmid("36239716"), _pmid("15613018")]
+    assert (thyroid["severity"], anticoagulants["severity"]) == ("monitor", "caution")
+    assert "authored" in thyroid["mechanism"]
+    assert "63%" in anticoagulants["mechanism"]
+    assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review
