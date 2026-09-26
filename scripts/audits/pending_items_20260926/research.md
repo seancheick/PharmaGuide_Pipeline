@@ -117,3 +117,15 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
 - PMID 15195032 (Minerva Urol Nefrol 2004): 320 mg/day Permixon for at least 8 weeks before TURP; perioperative
   bleeding "significantly lower than in the control one (respectively 124 vs 287 ml)".
 - No human source documents a dose for a bleeding or platelet effect. Four floors removed; presence.
+
+## RULE_INGREDIENT_BOSWELLIA: bleeding floors (D8) and a false mechanism sentence
+- Floor source PMID 18667054 (Arthritis Res Ther 2008): 5-Loxin 100 or 250 mg/day for knee osteoarthritis;
+  efficacy only, no platelet or bleeding outcome.
+- Mechanism sources (17945191, 1602379, 8510458) are in vitro; no human platelet or bleeding study states a dose.
+- PMID 21274401 (Italian surveillance of natural health products, Evid Based Complement Alternat Med 2011;
+  full text PMC3025393, Table 2 "Reports of INR increase", read 2026-09-26): F 73, "Boswellia serrata dry
+  extract (D E) 95%, 1500 mg/day; osteoarthritis", warfarin, INR increase, Naranjo "Probable [6]", recovered
+  after withdrawal; F 64, "Boswellia serrata DE 95%, 1200 mg/day", warfarin, same outcome; a third
+  multi-product case rated "Possible [4]". This contradicts the old "No clinical case reports" sentence.
+- Case reports show the event can occur at those doses; they cannot show safety below them, so no floor.
+  Three floors removed; presence. evidence_level stays theoretical ("limited direct human evidence").

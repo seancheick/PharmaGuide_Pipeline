@@ -1139,3 +1139,20 @@ def test_saw_palmetto_bleeding_rules_carry_no_floor_borrowed_from_bph():
         sub = _sub_rule(rule, key, target)
         assert "min_effective_dose" not in sub, target
         assert sub["materiality"] == "presence", target
+
+
+def test_boswellia_bleeding_rules_carry_no_floor_and_state_the_warfarin_reports():
+    """The 100 mg floors cited a 5-Loxin osteoarthritis trial (PMID 18667054).
+    No controlled human study gives a dose for a platelet or bleeding effect.
+    Italian spontaneous reports (PMID 21274401, Table 2) describe raised INR in
+    two warfarin users on B. serrata extract 1200 and 1500 mg/day, so the old
+    "No clinical case reports" sentence was false."""
+    rule = _rule("RULE_INGREDIENT_BOSWELLIA")
+    for key, target in (("condition_id", "bleeding_disorders"), ("drug_class_id", "anticoagulants"),
+                        ("drug_class_id", "antiplatelets")):
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub, target
+        assert sub["materiality"] == "presence", target
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+    assert "No clinical case reports" not in anticoagulants["mechanism"]
+    assert _pmid("21274401") in anticoagulants["sources"]
