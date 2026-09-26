@@ -15217,12 +15217,12 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "Federal Register 67 FR 31125 - FDA strips GRASE status from cascara sagrada",
+          "citation": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)",
           "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
           "published_date": "2002-05-09",
           "evidence_grade": "A",
           "confidence": "high",
-          "title": "Federal Register 67 FR 31125 - FDA strips GRASE status from cascara sagrada"
+          "title": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)"
         },
         {
           "type": "monograph",
@@ -15263,7 +15263,7 @@
           },
           {
             "date": "2026-09-25",
-            "change": "inactive_policy penalize_anyway -> excipient_acceptable. The 2026-05-12 decision rested on 'no plausible trace-excipient use', but eCFR 21 CFR 172.510(b) lists Cascara sagrada (Rhamnus purshiana DC) as a natural flavoring substance with no limitation; aloe, senna and rhubarb root follow the same rule. Measured: 0 of 15,414 raw DSLD labels list cascara under other ingredients, so no shipped verdict moves.",
+            "change": "inactive_policy penalize_anyway -> excipient_acceptable. The 2026-05-12 decision rested on 'no plausible trace-excipient use', but eCFR 21 CFR 172.510(b) lists Cascara sagrada (Rhamnus purshiana DC) as a natural flavoring substance with no limitation. Measured: 0 of 15,414 raw DSLD labels list cascara under other ingredients, so no shipped verdict moves.",
             "by": "claude-audit"
           }
         ]
@@ -15276,7 +15276,7 @@
       "safety_warning": "A stimulant laxative intended only for short-term use. Longer or high-dose use carries risks of cramping, diarrhea, electrolyte imbalance, and rare liver injury. Review duration and dose before use.",
       "safety_warning_one_liner": "Longer or high-dose use raises safety concerns.",
       "inactive_policy": "excipient_acceptable",
-      "inactive_policy_reason": "21 CFR 172.510 lists Cascara sagrada (Rhamnus purshiana DC) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose. As an active, cascara still drives this entry's caution. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
+      "inactive_policy_reason": "21 CFR 172.510 lists Cascara sagrada (Rhamnus purshiana DC) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose. 172.510 does not list the casanthranol alias (a purified USP laxative fraction), and no DSLD label (0 of 15,414) names it. As an active, cascara still drives this entry's caution. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
       "inactive_policy_reviewed_on": "2026-09-25"
     },
     {

@@ -377,3 +377,8 @@ def test_cascara_inactive_policy_reason_matches_21_cfr_172_510():
     assert "21 CFR 172.510" in cascara["inactive_policy_reason"]
     assert "no plausible trace-excipient use" not in cascara["inactive_policy_reason"]
     assert cascara["inactive_policy_reviewed_on"] == "2026-09-25"
+    # 172.510 does not list casanthranol (a purified USP laxative fraction),
+    # which the entry still aliases; the reason must say so, not imply it.
+    assert "casanthranol" in cascara["inactive_policy_reason"]
+    titles = [r["title"] for r in cascara["references_structured"]]
+    assert not any("strips GRASE" in t for t in titles)
