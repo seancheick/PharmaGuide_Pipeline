@@ -67,7 +67,11 @@ def _primary(product) -> tuple:
 # --- alpha-GPC (moderate) ---------------------------------------------------
 
 def test_alpha_gpc_600mg_full_credit() -> None:
-    assert _primary(_product(_row("alpha_gpc", 600, "mg"))) == (18.0, "alpha_gpc_at_least_600_mg")
+    product = _product(_row("alpha_gpc", 600, "mg"))
+    assert _primary(product) == (20.0, "alpha_gpc_at_least_600_mg")
+    payload = score_dose(product)
+    assert payload["components"]["sports_focused_single_completion"] == 5.0
+    assert payload["score"] == 25.0
 
 
 def test_alpha_gpc_300mg_moderate_credit() -> None:
@@ -143,9 +147,9 @@ def test_onlist_underdosed_active_is_not_rescued_by_proxy() -> None:
 # --- real Thorne Pre-Workout Elite shape: best disclosed primary wins -------
 
 def test_thorne_preworkout_alpha_gpc_atp_takes_alpha_gpc_primary() -> None:
-    # 323126: alpha-GPC 600 (-> 18) + ATP 450 (-> 12); best primary = alpha-GPC 18.
+    # 323126: alpha-GPC 600 (-> 20) + ATP 450 (-> 12); best primary = alpha-GPC.
     primary, basis = _primary(
         _product(_row("alpha_gpc", 600, "mg"), _row("adenosine_triphosphate", 450, "mg"))
     )
-    assert primary == 18.0
+    assert primary == 20.0
     assert basis == "alpha_gpc_at_least_600_mg"

@@ -354,6 +354,19 @@ def test_citrulline_malate_six_grams_is_conservative_partial_credit() -> None:
     assert payload["metadata"]["dose_basis"] == "citrulline_malate_6_to_8_g"
 
 
+def test_focused_citrulline_at_reviewed_top_band_reaches_full_dose() -> None:
+    payload = score_dose(
+        _product(
+            _row("l_citrulline", 8000, "mg", name="L-Citrulline Malate"),
+            name="Citrulline Malate",
+        )
+    )
+
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_focused_single_completion"] == pytest.approx(5.0)
+    assert payload["score"] == pytest.approx(25.0)
+
+
 def test_bcaa_2_1_1_ratio_scores_high_with_completeness_credit() -> None:
     payload = score_dose(
         _product(
@@ -364,10 +377,10 @@ def test_bcaa_2_1_1_ratio_scores_high_with_completeness_credit() -> None:
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(18.0)
-    assert payload["components"]["sports_focused_single_completion"] == pytest.approx(0.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_focused_single_completion"] == pytest.approx(5.0)
     assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(2.0)
-    assert payload["score"] == pytest.approx(20.0)
+    assert payload["score"] == pytest.approx(25.0)
     assert payload["metadata"]["primary_identity"] == "bcaa"
 
 
@@ -406,9 +419,10 @@ def test_eaa_all_nine_with_eight_grams_scores_high_with_completeness_credit() ->
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(18.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_focused_single_completion"] == pytest.approx(5.0)
     assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(2.0)
-    assert payload["score"] == pytest.approx(20.0)
+    assert payload["score"] == pytest.approx(25.0)
     assert payload["metadata"]["primary_identity"] == "eaa"
 
 
@@ -432,7 +446,7 @@ def test_explicit_complete_eaa_aggregate_scores_one_combined_dose() -> None:
 
     payload = score_dose(_product(aggregate, name="EAA"))
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(18.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
     assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(2.0)
     assert payload["metadata"]["primary_identity"] == "eaa"
     assert payload["metadata"]["dose_basis"] == "eaa_complete_aggregate_at_least_8_g"

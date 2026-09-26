@@ -147,7 +147,7 @@ def test_ideal_fixtures_reach_their_evidence_reference() -> None:
     assert b_complex["pillars"]["evidence"] == 20.0
 
 
-def test_category_fixtures_reach_their_references() -> None:
+def test_category_fixture_contracts() -> None:
     validation = _validation_module()
     suite = validation.load_fixture_suite()
 
@@ -157,18 +157,16 @@ def test_category_fixtures_reach_their_references() -> None:
         suite.by_id("prenatal_multi__ideal")
     ).actual
 
-    # The probiotic ideal fixture uses source-owned row CFU plus an explicit
-    # one-per-day serving basis. Raw dose maxes out on industry potency bands
-    # (/25 raw module scale) and clamps to the public 20.0. This bounded
-    # identity correction does not change the existing Dose reference or
-    # manufacture dose-applicable research; Evidence remains 8.0.
-    assert probiotic["raw_dimensions"]["dose"] == 25.0
-    assert probiotic["pillars"]["dose"] == 20.0
+    # Probiotic Dose no longer rewards strain count. This fixture's disclosed
+    # potency earns 20 raw points and one strong strain can carry Evidence;
+    # neither pillar manufactures breadth from additional strains.
+    assert probiotic["raw_dimensions"]["dose"] == 20.0
+    assert probiotic["pillars"]["dose"] == 18.2
     assert probiotic["normalization_references"]["dose"] == 22.0
     assert probiotic["raw_dimensions"]["formulation"] == 15.25
     assert probiotic["normalization_references"]["formulation"] == 16.0
     assert probiotic["pillars"]["formulation"] == 19.1
-    assert probiotic["raw_dimensions"]["evidence"] == 8.0
+    assert probiotic["raw_dimensions"]["evidence"] == 12.0
     # Omega raw dose tops out at 20 now that the EPA:DHA ratio bonus is gone
     # (quality_score 1.2.0); the reference equals that ceiling because the rubric
     # gives full band credit at 2 g/day. Prenatal evidence normalizes against the

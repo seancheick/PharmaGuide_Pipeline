@@ -218,12 +218,12 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
                 return _partial(grams, 6.0, 14.0), "citrulline_malate_under_6_g"
             if grams < 8:
                 return 14.0, "citrulline_malate_6_to_8_g"
-            return 18.0, "citrulline_malate_8_to_12_g"
+            return 20.0, "citrulline_malate_8_to_12_g"
         if grams < 3:
             return _partial(grams, 3.0, 16.0), "l_citrulline_under_3_g"
         if grams < 6:
             return 16.0, "l_citrulline_3_to_6_g"
-        return 18.0, "l_citrulline_6_to_8_g"
+        return 20.0, "l_citrulline_6_to_8_g"
 
     if identity == "hmb":
         grams = _max_benchmark_amount(product, rows, HMB_CANONICALS, basis="daily", unit="g")
@@ -257,7 +257,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         if total < 5:
             return 12.0, "bcaa_3_to_5_g"
         if _bcaa_ratio_is_close(grouped.get("ratio")):
-            return 18.0, "bcaa_at_least_5_g_ratio_complete"
+            return 20.0, "bcaa_at_least_5_g_ratio_complete"
         return 14.0, "bcaa_at_least_5_g_ratio_incomplete"
 
     if identity == "eaa":
@@ -281,7 +281,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
                 if aggregate_total is not None
                 else "eaa_5_to_8_g"
             )
-        return 18.0, (
+        return 20.0, (
             "eaa_complete_aggregate_at_least_8_g"
             if aggregate_total is not None
             else "eaa_complete_at_least_8_g"
@@ -295,8 +295,9 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
             return _partial(mg, 300.0, 8.0), "alpha_gpc_under_300_mg"
         if mg < 600:
             return 14.0, "alpha_gpc_300_to_600_mg"
-        # 600 mg single dose for peak force/power (Ziegenfuss 2008, JISSN; moderate).
-        return 18.0, "alpha_gpc_at_least_600_mg"
+        # 600 mg is the reviewed top dose band. Evidence certainty is scored in
+        # Evidence, so it does not reduce otherwise adequate Dose credit here.
+        return 20.0, "alpha_gpc_at_least_600_mg"
 
     if identity == "atp":
         mg = _max_mg(rows, ATP_CANONICALS)
@@ -421,6 +422,8 @@ def _score_focused_single_completion(
         groups.add("citrulline")
     if canons & HMB_CANONICALS:
         groups.add("hmb")
+    if canons & ALPHA_GPC_CANONICALS:
+        groups.add("alpha_gpc")
     if canons and canons.issubset(BCAA_CANONICALS):
         groups.add("bcaa")
     elif canons and canons.issubset(EAA_CANONICALS | EAA_AGGREGATE_CANONICALS):
