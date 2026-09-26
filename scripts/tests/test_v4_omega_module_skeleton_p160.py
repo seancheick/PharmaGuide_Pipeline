@@ -1074,18 +1074,13 @@ def test_omega_rubric_config_present_and_well_formed() -> None:
     assert sum(rubric["dimension_caps"].values()) == 83  # transparency 15 -> 13, oxidation retired
 
 
-def test_omega_rubric_form_tier_table_locked() -> None:
-    """Form tier values are deliberate clinical-tier choices, not knobs."""
+def test_omega_rubric_delegates_form_values_to_iqm() -> None:
+    """Omega owns only the component allocation; IQM owns form values."""
     rubric = json.loads((SCRIPTS_ROOT / "data" / "omega_rubric.json").read_text())
-    form_tier = rubric["formulation"]["form_tier"]
+    formulation = rubric["formulation"]
 
-    # Locked weights per scientific bioavailability tiering; spread compressed
-    # 2026-09-18 so an undisclosed form is neutral rather than worst-case.
-    assert form_tier["tg"] == 8     # natural triglyceride: top tier
-    assert form_tier["rtg"] == 8    # re-esterified triglyceride: premium concentrate
-    assert form_tier["pl"] == 7     # phospholipid (krill)
-    assert form_tier["ee"] == 6     # ethyl ester: the commodity baseline (NIH ODS: all forms raise EPA/DHA)
-    assert form_tier["undefined"] == 6  # not established, not known-inferior
+    assert formulation["form_quality"]["cap"] == 8
+    assert "form_tier" not in formulation
 
 
 def test_omega_rubric_dose_bands_match_configured_thresholds() -> None:

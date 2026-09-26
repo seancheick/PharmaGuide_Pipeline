@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "version": "2.0.1-disclosure-owned-transparency",
-    "description": "P1.6 omega/fish-oil rubric. Reviewed purpose evidence is resolved from INGR_OMEGA3 through evidence_resolver against the shared directed daily-exposure interval; the 250 mg Evidence floor and prenatal additive bonus are retired. Dose scores both interval endpoints. Molecular-form quality is being migrated to IQM as the sole form-quality owner. Optional free-from and dietary-preference claims are validated but earn no Transparency points.",
+    "version": "2.1.0-iqm-form-quality",
+    "description": "P1.6 omega/fish-oil rubric. Reviewed purpose evidence is resolved from INGR_OMEGA3 through evidence_resolver against the shared directed daily-exposure interval; the 250 mg Evidence floor and prenatal additive bonus are retired. Dose scores both interval endpoints. Molecular-form quality comes only from IQM. Optional free-from and dietary-preference claims are validated but earn no Transparency points.",
     "purpose": "scoring_v4_omega_module_rubric",
     "last_updated": "2026-09-25",
     "owners": [
@@ -20,14 +20,10 @@
     "transparency": 13
   },
   "formulation": {
-    "_doc": "Form tier + EPA/DHA concentration (+ marine sustainability cert, 0 points). 2026-09-18: Formulation reads material facts only. Source disclosure and molecular-form disclosure are Transparency's, which already scores both; the premium-form carry paid a second time for the form the tier already scores. Oxidation testing is Verification's.",
-    "form_tier": {
-      "_doc": "Molecular form of EPA/DHA in the product. Spread compressed 2026-09-18 against NIH ODS: re-esterified TG, natural TG and free fatty acids are 'somewhat higher' in bioavailability than ethyl esters, and consumption of ALL forms significantly increases plasma EPA and DHA (REDUCE-IT used an ethyl ester). TG/rTG keep a real but modest advantage; PL evidence is mixed; EE is the commodity baseline. undefined = the label does not disclose the form, which is 'not established', not 'known inferior' — it sits at the commodity baseline and loses its points in Transparency instead.",
-      "tg": 8,
-      "pl": 7,
-      "rtg": 8,
-      "ee": 6,
-      "undefined": 6
+    "_doc": "IQM form quality + EPA/DHA concentration (+ marine sustainability cert, 0 points). Formulation reads material facts only. Source and molecular-form disclosure are Transparency's; oxidation testing is Verification's.",
+    "form_quality": {
+      "_doc": "Component allocation only. IQM bio_score and its parent-relative resolver own every form value; omega keeps no parallel TG/rTG/PL/EE table.",
+      "cap": 8
     },
     "source_disclosed": {
       "_doc": "RETIRED 2026-09-18 (0 points). Naming the marine source is a disclosure fact and Transparency scores it (+3). Detection is kept so the metadata can explain the label, but it earns no Formulation credit.",

@@ -281,7 +281,8 @@ def test_edge_pure_epa_synthetic_canary() -> None:
         "ingredient_quality_data": {
             "ingredients_scorable": [
                 {"name": "EPA", "canonical_id": "epa", "mapped": True,
-                 "quantity": 1000, "unit": "mg"},
+                 "quantity": 1000, "unit": "mg",
+                 "matched_form": "EPA fish oil ethyl ester", "bio_score": 9.0},
             ]
         },
     }
@@ -358,8 +359,12 @@ def test_edge_rtg_explicit_form_canary() -> None:
         "supplement_type": {"type": "targeted"},
         "ingredient_quality_data": {
             "ingredients_scorable": [
-                {"name": "EPA", "canonical_id": "epa", "quantity": 650, "unit": "mg"},
-                {"name": "DHA", "canonical_id": "dha", "quantity": 450, "unit": "mg"},
+                {"name": "EPA", "canonical_id": "epa", "mapped": True,
+                 "quantity": 650, "unit": "mg", "matched_form": "EPA fish oil rTG",
+                 "bio_score": 14.0},
+                {"name": "DHA", "canonical_id": "dha", "mapped": True,
+                 "quantity": 450, "unit": "mg", "matched_form": "DHA fish oil rTG",
+                 "bio_score": 14.0},
             ]
         },
     }

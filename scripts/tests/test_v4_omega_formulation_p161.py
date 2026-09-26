@@ -43,9 +43,11 @@ def _epa_dha_product(
     """Build a minimal omega-class product for formulation tests."""
     ingredients = [
         {"name": "Eicosapentaenoic Acid", "canonical_id": "epa",
-         "mapped": True, "quantity": epa, "unit": "mg"},
+         "mapped": True, "quantity": epa, "unit": "mg",
+         "matched_form": "epa (unspecified)", "bio_score": 8.0},
         {"name": "Docosahexaenoic Acid", "canonical_id": "dha",
-         "mapped": True, "quantity": dha, "unit": "mg"},
+         "mapped": True, "quantity": dha, "unit": "mg",
+         "matched_form": "dha (unspecified)", "bio_score": 8.0},
     ]
     if extra_ingredients:
         ingredients.extend(extra_ingredients)
@@ -61,6 +63,16 @@ def _epa_dha_product(
     }
     if certification_data:
         product["certification_data"] = certification_data
+    return product
+
+
+def _set_epa_dha_iqm_form(product: dict, form_label: str, bio_score: float) -> dict:
+    """Set the enriched IQM result; label text alone never sets quality."""
+    for row in product["ingredient_quality_data"]["ingredients_scorable"]:
+        canonical = row.get("canonical_id")
+        if canonical in {"epa", "dha"}:
+            row["matched_form"] = f"{canonical} {form_label}"
+            row["bio_score"] = bio_score
     return product
 
 
@@ -153,7 +165,7 @@ def test_form_tier_tg_explicit_keyword_in_name() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Omega-3 Natural Triglycerides 1000 mg"
     ))
-    assert payload["components"]["form_tier"] == 8.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "tg"
 
 
@@ -170,7 +182,7 @@ def test_form_tier_tg_via_ingredient_row_name() -> None:
         ],
     )
     payload = score_formulation(product)
-    assert payload["components"]["form_tier"] == 8.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "tg"
 
 
@@ -180,7 +192,7 @@ def test_form_tier_rtg_re_esterified_match() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Triple Strength Omega-3 Re-esterified"
     ))
-    assert payload["components"]["form_tier"] == 8.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "rtg"
 
 
@@ -190,7 +202,7 @@ def test_form_tier_ee_ethyl_ester_match() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Fish Oil Ethyl Esters EPA 500 DHA 200"
     ))
-    assert payload["components"]["form_tier"] == 6.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "ee"
 
 
@@ -208,7 +220,7 @@ def test_form_tier_detected_from_label_text_statement() -> None:
     }
     payload = score_formulation(product)
     assert payload["metadata"]["form_detected"] == "tg"
-    assert payload["components"]["form_tier"] == 8.0
+    assert payload["components"]["form_tier"] == 4.5714
 
 
 def test_form_tier_detected_from_statements_notes() -> None:
@@ -246,7 +258,7 @@ def test_form_tier_pl_krill_implies_phospholipid() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Antarctic Krill Oil EPA+DHA"
     ))
-    assert payload["components"]["form_tier"] == 7.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "pl"
 
 
@@ -256,7 +268,7 @@ def test_form_tier_pl_explicit_phospholipid_keyword() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Phospholipid Omega-3 Complex"
     ))
-    assert payload["components"]["form_tier"] == 7.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "pl"
 
 
@@ -269,7 +281,7 @@ def test_form_tier_undefined_bare_fish_oil_no_form_keyword() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Fish Oil 1000 mg Softgels"
     ))
-    assert payload["components"]["form_tier"] == 6.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "undefined"
 
 
@@ -289,9 +301,9 @@ def test_certification_cannot_manufacture_omega_formulation_credit() -> None:
         dha=650,
     ))
 
-    assert certified["score"] == uncertified["score"] == 6.0
+    assert certified["score"] == uncertified["score"] == 4.57
     assert certified["components"] == uncertified["components"]
-    assert certified["components"]["form_tier"] == 6.0
+    assert certified["components"]["form_tier"] == 4.5714
     assert "source_disclosed" not in certified["components"]
     assert "premium_form_a2_carry" not in certified["components"]
     assert certified["metadata"]["form_detected"] == "undefined"
@@ -308,7 +320,7 @@ def test_undefined_form_high_dose_without_verified_quality_stays_label_only() ->
         dha=650,
     ))
 
-    assert payload["score"] == 6.0
+    assert payload["score"] == 4.57
 
 
 def test_form_tier_does_not_treat_mct_carrier_as_omega_tg_form() -> None:
@@ -325,7 +337,7 @@ def test_form_tier_does_not_treat_mct_carrier_as_omega_tg_form() -> None:
         ],
     )
     payload = score_formulation(product)
-    assert payload["components"]["form_tier"] == 6.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "undefined"
     assert "premium_form_a2_carry" not in payload["components"]
 
@@ -343,7 +355,7 @@ def test_form_tier_does_not_treat_caprylic_capric_triglycerides_as_omega_tg() ->
         ],
     )
     payload = score_formulation(product)
-    assert payload["components"]["form_tier"] == 6.0
+    assert payload["components"]["form_tier"] == 4.5714
     assert payload["metadata"]["form_detected"] == "undefined"
     assert "premium_form_a2_carry" not in payload["components"]
 
@@ -489,7 +501,8 @@ def test_concentration_credit_high_potency_fish_oil() -> None:
         epa=500,
         dha=250,
         extra_ingredients=[
-            {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg"}
+            {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg",
+             "mapped": True, "matched_form": "triglyceride (rTG) form", "bio_score": 14.0}
         ],
     )
     payload = score_formulation(product)
@@ -639,7 +652,8 @@ def test_maximum_reachable_score_is_12() -> None:
     product = _epa_dha_product(
         name="Premium Natural Triglyceride Fish Oil",
         extra_ingredients=[
-            {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg"}
+            {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg",
+             "mapped": True, "matched_form": "triglyceride (rTG) form", "bio_score": 14.0}
         ],
         certification_data=_verified_sustainability("Friend of the Sea"),
     )
@@ -664,7 +678,9 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
     """Sports Research Omega-3 1055mg Fish Oil (DSLD 327776) has TG form
     (via ingredient panel 'Triglycerides' row), source disclosed
     (Fish Oil Concentrate), and Friend of the Sea rules_db verified.
-    Expected: 12/25 (max reachable today: form 8 + concentration 4)."""
+    The frozen enrichment rates its parent-oil row at 10/14 of the IQM parent
+    ceiling, so the label-text TG detector explains disclosure but does not
+    override IQM quality."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     # Synthesize the canary blob shape from the field audit.
@@ -700,7 +716,7 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
         }
     }
     payload = score_formulation(product)
-    assert payload["score"] == 12.0
+    assert payload["score"] == 9.71
     assert payload["metadata"]["form_detected"] == "tg"
     assert payload["metadata"]["sustainability_cert_program"] == "Friend of the Sea"
 
@@ -724,10 +740,14 @@ def test_canary_nordic_naturals_ultimate_omega_undefined_form() -> None:
         "ingredient_quality_data": {
             "ingredients_scorable": [
                 {"name": "Eicosapentaenoic Acid", "canonical_id": "epa",
-                 "quantity": 650, "unit": "mg"},
+                 "quantity": 650, "unit": "mg", "mapped": True,
+                 "matched_form": "epa (unspecified)", "bio_score": 8.0},
                 {"name": "Docosahexaenoic Acid", "canonical_id": "dha",
-                 "quantity": 450, "unit": "mg"},
-                    {"name": "purified deep sea Fish Oil", "canonical_id": "fish_oil", "quantity": 1100, "unit": "mg"},
+                 "quantity": 450, "unit": "mg", "mapped": True,
+                 "matched_form": "dha (unspecified)", "bio_score": 8.0},
+                {"name": "purified deep sea Fish Oil", "canonical_id": "fish_oil",
+                 "quantity": 1100, "unit": "mg", "mapped": True,
+                 "matched_form": "fish oil (unspecified)", "bio_score": 8.0},
             ],
         },
         "certification_data": {
@@ -741,7 +761,7 @@ def test_canary_nordic_naturals_ultimate_omega_undefined_form() -> None:
         }
     }
     payload = score_formulation(product)
-    assert payload["score"] == 10.0
+    assert payload["score"] == 8.57
     assert payload["metadata"]["form_detected"] == "undefined"
     assert "premium_form_a2_carry" not in payload["components"]
 
@@ -767,6 +787,8 @@ def test_omega_formulation_dimension_score_populated_in_breakdown() -> None:
         "product_name": "Krill Oil 500 mg",
         "ingredient_quality_data": {
             "ingredients_scorable": [
+                {"name": "Krill Oil", "canonical_id": "krill_oil", "quantity": 500,
+                 "mapped": True, "matched_form": "standard krill oil", "bio_score": 13.0},
                 {"name": "EPA", "canonical_id": "epa", "quantity": 200},
                 {"name": "DHA", "canonical_id": "dha", "quantity": 100},
             ],
@@ -813,11 +835,8 @@ def test_formulation_weights_match_rubric_config() -> None:
     rubric = _load_rubric()
     f = rubric["formulation"]
 
-    assert f["form_tier"]["tg"] == 8
-    assert f["form_tier"]["pl"] == 7
-    assert f["form_tier"]["rtg"] == 8
-    assert f["form_tier"]["ee"] == 6
-    assert f["form_tier"]["undefined"] == 6
+    assert f["form_quality"]["cap"] == 8
+    assert "form_tier" not in f
     assert f["source_disclosed"]["score"] == 0  # retired 2026-09-18
     assert f["premium_form_a2_carry"]["score"] == 0  # retired 2026-09-18
     assert f["sustainability_cert"]["score"] == 0
@@ -830,28 +849,35 @@ def test_formulation_weights_match_rubric_config() -> None:
 # concentration. Disclosure is Transparency's job and is not paid twice.
 
 
-def test_unknown_form_is_not_scored_below_a_disclosed_ethyl_ester() -> None:
-    """An undisclosed form is "not established", not "known inferior".
-
-    NIH ODS: re-esterified TG, natural TG and free fatty acids are "somewhat
-    higher" in bioavailability than ethyl esters, and every form significantly
-    raises plasma EPA and DHA. REDUCE-IT used an ethyl ester."""
+def test_unknown_form_uses_iqm_nondisclosure_value_below_ethyl_ester() -> None:
+    """IQM owns the authored one-point nondisclosure deduction."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     unknown = score_formulation(_epa_dha_product(name="Fish Oil 1000 mg"))
-    ethyl_ester = score_formulation(_epa_dha_product(name="Fish Oil Ethyl Esters EPA 500 DHA 200"))
+    ethyl_ester = score_formulation(_set_epa_dha_iqm_form(
+        _epa_dha_product(name="Fish Oil Ethyl Esters EPA 500 DHA 200"),
+        "fish oil ethyl ester", 9.0,
+    ))
 
-    assert unknown["components"]["form_tier"] == ethyl_ester["components"]["form_tier"] == 6.0
+    assert unknown["components"]["form_tier"] < ethyl_ester["components"]["form_tier"]
+    assert unknown["components"]["form_tier"] == 4.5714
+    assert ethyl_ester["components"]["form_tier"] == 5.1429
 
 
 def test_triglyceride_still_outranks_ethyl_ester() -> None:
     from scoring_v4.modules.omega_formulation import score_formulation
 
-    triglyceride = score_formulation(_epa_dha_product(name="Natural Triglyceride Fish Oil"))
-    ethyl_ester = score_formulation(_epa_dha_product(name="Fish Oil Ethyl Esters EPA 500 DHA 200"))
+    triglyceride = score_formulation(_set_epa_dha_iqm_form(
+        _epa_dha_product(name="Natural Triglyceride Fish Oil"),
+        "fish oil triglyceride", 11.0,
+    ))
+    ethyl_ester = score_formulation(_set_epa_dha_iqm_form(
+        _epa_dha_product(name="Fish Oil Ethyl Esters EPA 500 DHA 200"),
+        "fish oil ethyl ester", 9.0,
+    ))
 
     assert triglyceride["components"]["form_tier"] > ethyl_ester["components"]["form_tier"]
-    assert triglyceride["components"]["form_tier"] == 8.0
+    assert triglyceride["components"]["form_tier"] == 6.2857
 
 
 def test_disclosing_the_form_earns_no_second_formulation_credit() -> None:

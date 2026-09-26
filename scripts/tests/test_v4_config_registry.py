@@ -58,7 +58,7 @@ def test_config_fingerprint_is_stable_hex():
 def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
-    assert config_version("omega") == "2.0.1-disclosure-owned-transparency"
+    assert config_version("omega") == "2.1.0-iqm-form-quality"
     assert config_version("quality_score") == "1.18.0-sports-dose-separation"
 
 

@@ -170,6 +170,9 @@ def _fish_oil_formulation_breakdown(*, disclosed_form: str | None = None) -> dic
                 {
                     "name": "Fish Oil",
                     "canonical_id": "fish_oil",
+                    "mapped": True,
+                    "matched_form": "fish oil (unspecified)",
+                    "bio_score": 8.0,
                     "quantity": 2400,
                     "unit": "mg",
                 },
@@ -206,8 +209,8 @@ def test_fish_oil_parent_identity_does_not_imply_molecular_form() -> None:
     ))
     formulation = out["quality_pillars_v4"]["formulation"]
 
-    assert formulation["score"] == 11.7  # 7/12*20; omega formulation reference 12 since 1.3.0
-    assert formulation["components"]["raw_formulation"] == 7.0
+    assert formulation["score"] == 9.3  # 5.57/12*20; IQM unspecified form + concentration
+    assert formulation["components"]["raw_formulation"] == 5.57
     assert "molecular form is not disclosed" in formulation["reason"].lower()
     assert "basic" not in formulation["reason"].lower()
     assert "low-cost" not in formulation["reason"].lower()

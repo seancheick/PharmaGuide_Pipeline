@@ -974,9 +974,9 @@
         "servingSizes": [{"minDailyServings": 1, "maxDailyServings": 1}],
         "ingredient_quality_data": {
           "ingredients_scorable": [
-            {"name": "Wild Fish Oil Concentrate Triglyceride Form", "standard_name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 2500, "dose": 2500, "unit": "mg", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
-            {"name": "EPA", "standard_name": "EPA", "canonical_id": "epa", "quantity": 1200, "dose": 1200, "unit": "mg", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
-            {"name": "DHA", "standard_name": "DHA", "canonical_id": "dha", "quantity": 800, "dose": 800, "unit": "mg", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"}
+            {"name": "Wild Fish Oil Concentrate Triglyceride Form", "standard_name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 2500, "dose": 2500, "unit": "mg", "bio_score": 14, "matched_form": "triglyceride (rTG) form", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
+            {"name": "EPA", "standard_name": "EPA", "canonical_id": "epa", "quantity": 1200, "dose": 1200, "unit": "mg", "bio_score": 14, "matched_form": "EPA fish oil rTG", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
+            {"name": "DHA", "standard_name": "DHA", "canonical_id": "dha", "quantity": 800, "dose": 800, "unit": "mg", "bio_score": 14, "matched_form": "DHA fish oil rTG", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"}
           ]
         },
         "evidence_data": {
@@ -1042,9 +1042,9 @@
         "servingSizes": [{"minDailyServings": 1, "maxDailyServings": 1}],
         "ingredient_quality_data": {
           "ingredients_scorable": [
-            {"name": "Fish Oil", "standard_name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "dose": 1000, "unit": "mg", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
-            {"name": "EPA", "standard_name": "EPA", "canonical_id": "epa", "quantity": 50, "dose": 50, "unit": "mg", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
-            {"name": "DHA", "standard_name": "DHA", "canonical_id": "dha", "quantity": 20, "dose": 20, "unit": "mg", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"}
+            {"name": "Fish Oil", "standard_name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "dose": 1000, "unit": "mg", "bio_score": 8, "matched_form": "fish oil (unspecified)", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
+            {"name": "EPA", "standard_name": "EPA", "canonical_id": "epa", "quantity": 50, "dose": 50, "unit": "mg", "bio_score": 8, "matched_form": "epa (unspecified)", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
+            {"name": "DHA", "standard_name": "DHA", "canonical_id": "dha", "quantity": 20, "dose": 20, "unit": "mg", "bio_score": 8, "matched_form": "dha (unspecified)", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"}
           ]
         },
         "evidence_data": {"clinical_matches": []},
@@ -1059,7 +1059,7 @@
         "archetype": "omega",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 24.5,
+        "quality_score_v4_100": 22.1,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -1068,7 +1068,7 @@
           "evidence": 20.0
         },
         "pillars": {
-          "formulation": 3.3,
+          "formulation": 0.9,
           "dose": 0.0,
           "evidence": 0.0,
           "transparency": 9.2,
@@ -1076,7 +1076,7 @@
           "safety_hygiene": 6.0
         },
         "raw_dimensions": {
-          "formulation": 2.0,
+          "formulation": 0.57,
           "dose": 0.0,
           "evidence": 0.0,
           "transparency": 8.0

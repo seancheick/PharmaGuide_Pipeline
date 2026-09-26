@@ -12,7 +12,7 @@ import re
 import string
 import unicodedata
 from functools import lru_cache
-from typing import Optional, Tuple
+from typing import Iterable, Optional, Tuple
 
 VERSION = "1.0.0"
 
@@ -40,6 +40,83 @@ FOLATE_FORM_METHYLFOLATE = "methylfolate"
 FOLATE_FORM_FOLINIC = "folinic"
 FOLATE_FORM_FOOD = "food_folate"
 FOLATE_FORM_UNKNOWN = "unknown"
+
+
+_OMEGA_MOLECULAR_FORM_PATTERNS = (
+    ("phospholipid", re.compile(r"\b(phospholipid[s]?|phosphatidyl)\b", re.IGNORECASE)),
+    ("re-esterified triglyceride", re.compile(
+        r"\b(re[\s-]?esterified|reesterified|rtg|r-tg)\b",
+        re.IGNORECASE,
+    )),
+    ("ethyl ester", re.compile(
+        r"\b(ethyl\s+ester[s]?|fatty\s+acid\s+ethyl\s+ester[s]?|ee\s+form)\b",
+        re.IGNORECASE,
+    )),
+    ("triglyceride", re.compile(
+        r"\b(natural[\s-]?triglyceride[s]?|triglyceride[s]?|tg\s+form|"
+        r"triglyceride\s+form)\b",
+        re.IGNORECASE,
+    )),
+)
+_OMEGA_MCT_CONTEXT = re.compile(
+    r"\b(?:mct|medium[\s-]?chain|middle[\s-]?chain|caprylic|capric|c8|c10|"
+    r"coconut)\b.{0,48}\btriglyceride[s]?\b|"
+    r"\btriglyceride[s]?\b.{0,48}\b(?:mct|medium[\s-]?chain|"
+    r"middle[\s-]?chain|caprylic|capric|c8|c10|coconut)\b",
+    re.IGNORECASE,
+)
+_OMEGA_TRIGLYCERIDE_HEALTH_CLAIM = re.compile(
+    r"\b(?:healthy|normal|blood|serum|plasma|support(?:s|ing)?|maintain(?:s|ing)?|"
+    r"already\s+within)\b.{0,64}\btriglyceride[s]?\s+level[s]?\b|"
+    r"\btriglyceride[s]?\s+level[s]?\b.{0,64}\b(?:healthy|normal|range|blood|serum|"
+    r"plasma|support(?:s|ing)?|maintain(?:s|ing)?|already\s+within)\b",
+    re.IGNORECASE,
+)
+
+
+def omega_molecular_form_disclosures(surfaces: Iterable[str]) -> Tuple[str, ...]:
+    """Return distinct molecular-form tokens disclosed by label text.
+
+    This is the shared label-language decision used by enrichment and by
+    presentation metadata. It does not assign quality points. Enrichment still
+    resolves the returned token inside each already-known IQM parent, and IQM
+    remains the sole owner of form quality.
+
+    MCT carrier wording and blood-lipid claims are not fish-oil
+    molecular-form evidence. The singular wrapper below fails closed when
+    these tokens describe more than one global form.
+    """
+    detected = set()
+    for raw_surface in surfaces:
+        surface = str(raw_surface or "")
+        if not surface:
+            continue
+        for token, pattern in _OMEGA_MOLECULAR_FORM_PATTERNS:
+            if token == "triglyceride" and _OMEGA_MCT_CONTEXT.search(surface):
+                continue
+            if token == "triglyceride" and _OMEGA_TRIGLYCERIDE_HEALTH_CLAIM.search(surface):
+                continue
+            if pattern.search(surface):
+                detected.add(token)
+    return tuple(
+        token for token, _ in _OMEGA_MOLECULAR_FORM_PATTERNS if token in detected
+    )
+
+
+def omega_molecular_form_disclosure(surfaces: Iterable[str]) -> Optional[str]:
+    """Return the disclosure only when the label proves one global form.
+
+    Enrichment uses this singular contract so a mixed-form label cannot stamp
+    one form onto every omega row. Presentation code may inspect the ordered
+    plural result without assigning quality from it.
+    """
+    detected = omega_molecular_form_disclosures(surfaces)
+    # rTG is a specific kind of triglyceride, and labels commonly print both
+    # in one phrase ("Triglyceride Form [TG as rTG]"). That is one form, not a
+    # conflicting mixed-form disclosure.
+    if set(detected) == {"re-esterified triglyceride", "triglyceride"}:
+        return "re-esterified triglyceride"
+    return detected[0] if len(detected) == 1 else None
 
 
 @lru_cache(maxsize=128)

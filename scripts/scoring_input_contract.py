@@ -5589,7 +5589,7 @@ def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
     return None
 
 
-def _role_driver_canonicals(module: str) -> set:
+def role_driver_canonicals(module: str) -> set:
     """Module driver canonical IDs from the scoring classification contract."""
     if module == "omega":
         # EPA/DHA AND the fish-oil/krill/algal parents that route a product to
@@ -5687,7 +5687,7 @@ def _role_context(
     return {
         "module": module,
         "title_norm": _norm(product.get("product_name") or product.get("fullName")),
-        "driver_canonicals": _role_driver_canonicals(module),
+        "driver_canonicals": role_driver_canonicals(module),
         "max_mass_mg": max(masses) if masses else 0.0,
     }
 

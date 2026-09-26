@@ -5281,6 +5281,27 @@ class SupplementEnricherV3:
                     skip_reason=SKIP_REASON_RECOGNIZED_NON_SCORABLE,
                 )
 
+        # A molecular form can be disclosed in a product-level statement
+        # rather than repeated on each EPA/DHA row. Resolve that label fact
+        # through the existing IQM matcher before any downstream consumer sees
+        # the quality rows. This repairs the form owner; scoring does not infer
+        # or maintain a second TG/rTG/EE/PL quality table.
+        self._apply_product_level_omega_form_disclosure(
+            product,
+            {
+                "ingredients": all_quality_data,
+                "ingredients_scorable": ingredients_scorable,
+            },
+        )
+        premium_form_count = sum(
+            1
+            for row in ingredients_scorable
+            if isinstance(row, dict)
+            and row.get("mapped") is True
+            and isinstance(row.get("bio_score"), (int, float))
+            and float(row["bio_score"]) > 12.0
+        )
+
         # =================================================================
         # CURCUMIN C3 COMPLEX + BIOPERINE PAIRING UPGRADE
         # =================================================================
@@ -5400,6 +5421,107 @@ class SupplementEnricherV3:
             # Carried for audit; Flutter can surface them as info chips.
             "demoted_absorption_enhancers": demoted_enhancers,
         }
+
+    def _apply_product_level_omega_form_disclosure(
+        self,
+        product: Dict,
+        ingredient_quality_data: Dict,
+    ) -> int:
+        """Attach one explicit product-level omega form to unspecified rows.
+
+        Some DSLD labels put "all fish oils are in triglyceride form" in a
+        formulation statement while their ingredient rows list only EPA and
+        DHA. The ingredient identity is already mapped; this post-pass merely
+        resolves that disclosed form inside each row's existing IQM parent.
+
+        Named forms and curation-held unmapped forms are never overwritten.
+        Conflicting or false-positive label wording returns no disclosure from
+        the shared normalizer and therefore changes nothing.
+        """
+        surfaces: List[str] = []
+        for key in ("product_name", "fullName", "brand_name", "brandName"):
+            if product.get(key):
+                surfaces.append(str(product[key]))
+        label_text = product.get("labelText")
+        if isinstance(label_text, dict):
+            if label_text.get("raw"):
+                surfaces.append(str(label_text["raw"]))
+        elif label_text:
+            surfaces.append(str(label_text))
+        for statement in product.get("statements") or []:
+            if not isinstance(statement, dict):
+                continue
+            text = statement.get("notes") or statement.get("text")
+            if text:
+                surfaces.append(str(text))
+
+        disclosure = norm_module.omega_molecular_form_disclosure(surfaces)
+        if not disclosure:
+            return 0
+
+        quality_map = self.databases.get("ingredient_quality_map") or {}
+        seen = set()
+        changed = 0
+        for bucket in ("ingredients", "ingredients_scorable"):
+            for row in ingredient_quality_data.get(bucket) or []:
+                if not isinstance(row, dict) or id(row) in seen:
+                    continue
+                seen.add(id(row))
+                canonical_id = str(row.get("canonical_id") or "").strip().lower()
+                if canonical_id not in {"epa", "dha", "epa_dha", "fish_oil"}:
+                    continue
+                if row.get("mapped") is False or row.get("form_match_status") == "unmapped":
+                    continue
+                current = str(row.get("form_id") or row.get("matched_form") or "").lower()
+                if current and "unspecified" not in current:
+                    continue
+
+                match = self._match_quality_map(
+                    disclosure,
+                    disclosure,
+                    quality_map,
+                    _form_extraction_attempt=True,
+                    preferred_parent=canonical_id,
+                    cleaner_canonical_id=canonical_id,
+                )
+                if (
+                    not isinstance(match, dict)
+                    or match.get("fallback_form_selected")
+                    or str(match.get("canonical_id") or "").strip().lower() != canonical_id
+                    or not self._is_specific_form_match(match, quality_map)
+                ):
+                    continue
+
+                row.update({
+                    "matched_form": match.get("form_name"),
+                    "form_id": match.get("form_id"),
+                    "match_tier": match.get("match_tier"),
+                    "matched_alias": match.get("matched_alias"),
+                    "matched_target": match.get("matched_target"),
+                    "bio_score": match.get("bio_score"),
+                    "absorption": match.get("absorption"),
+                    "notes": match.get("notes"),
+                    "dosage_importance": match.get("dosage_importance", row.get("dosage_importance", 1.0)),
+                    "form_match_status": "mapped",
+                    "form_source": "product_label_disclosure",
+                    "form_extraction_used": True,
+                    "original_label": disclosure,
+                    "matched_forms": [{
+                        "form_key": match.get("form_id"),
+                        "canonical_id": canonical_id,
+                        "bio_score": match.get("bio_score"),
+                        "match_method": match.get("match_tier"),
+                        "percent_share": 1.0,
+                        "raw_form_text": disclosure,
+                        "matched_candidate": disclosure,
+                    }],
+                    "unmapped_forms": [],
+                    "aggregation_method": "single",
+                    "final_form_bio_score": match.get("bio_score"),
+                    "additional_forms": [],
+                })
+                changed += 1
+        return changed
 
     def _product_context_iqm_match_reason(self, ingredient: Dict, ing_name: str, std_name: str) -> Optional[str]:
         """Narrow product-label marker disambiguation for generic source rows."""

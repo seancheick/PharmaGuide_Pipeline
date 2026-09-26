@@ -4,11 +4,10 @@ Scores omega/fish-oil formulation quality against the 25-point rubric in
 SCORING_V4_PROPOSAL §9 + scripts/data/omega_rubric.json.
 
 Components:
-    form_tier            — molecular form (TG 8 / rTG 8 / PL 7 / EE 6 /
-                           undefined 6). An undisclosed form is "not
-                           established", not "known inferior", so it sits at the
-                           commodity baseline; Transparency is where a label
-                           loses points for not saying.
+    form_tier            — IQM-owned parent-relative form quality, scaled to
+                           the omega component's 8-point allocation. The name
+                           stays stable for breakdown consumers; the old
+                           omega-only TG/rTG/PL/EE point table is retired.
     source_disclosed     — RETIRED 2026-09-18 (0 points). Naming the marine
                            source is a disclosure fact; Transparency scores it.
     premium_form_a2_carry — RETIRED 2026-09-18 (0 points). It paid a second
@@ -31,11 +30,9 @@ Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). v3's A2 premium-form carry was retired here on
 2026-09-18: it re-paid for the molecular form that form_tier already scores.
 
-Conservative discipline: form is credited ONLY when the label or
-ingredient panel explicitly says "triglyceride", "ethyl ester",
-"phospholipid", "re-esterified", or names a phospholipid-form source
-like krill. Bare "fish oil" does NOT imply TG — many commodity fish oils
-are sold as natural TG but processing is opaque without label disclosure.
+Conservative discipline: form quality is credited only from mapped IQM rows.
+The label-text detector remains explanatory metadata for Transparency and
+reason copy; it cannot override or manufacture an enriched form rating.
 """
 
 from __future__ import annotations
@@ -43,9 +40,11 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional
 
+from normalization import omega_molecular_form_disclosures
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
-from scoring_v4.modules.generic_helpers import get_active_ingredients
-from scoring_input_contract import epa_dha_amounts_per_serving
+from scoring_v4.modules.generic_helpers import bio_score_of, get_active_ingredients
+from scoring_input_contract import epa_dha_amounts_per_serving, role_driver_canonicals
+from scoring_reference_resolver import parent_relative_form_quality
 
 
 PHASE_MARKER = "P1.6.1_omega_formulation"
@@ -55,57 +54,7 @@ _FVM = _cfg_block("formulation_variant_magnitudes", "omega")["omega"]
 
 
 CAP_FORMULATION = _FVM["cap_formulation"]
-
-
-# Form-detection regex — order matters (most-specific first). Each
-# pattern uses word boundaries to avoid false-positives (e.g. "triglyceride"
-# matches but "diglyceride" does not).
-#
-# Why "krill" maps to PL: krill omega-3 is naturally bound as
-# phosphatidylcholine (phospholipid form). This is well-established
-# clinical biochemistry — krill = PL by default unless the label says
-# otherwise. Other sources (fish/algae/cod liver) require explicit
-# "triglyceride"/"ester"/"phospholipid" disclosure to credit form.
-_FORM_PATTERNS = [
-    ("pl", re.compile(
-        r"\b(phospholipid[s]?|phosphatidyl|krill\s+oil|krill)\b",
-        re.IGNORECASE,
-    )),
-    ("rtg", re.compile(
-        r"\b(re[\s-]?esterified|reesterified|rtg|r-tg)\b",
-        re.IGNORECASE,
-    )),
-    ("ee", re.compile(
-        r"\b(ethyl\s+ester[s]?|fatty\s+acid\s+ethyl\s+ester[s]?|"
-        r"ee\s+form)\b",
-        re.IGNORECASE,
-    )),
-    ("tg", re.compile(
-        r"\b(natural[\s-]?triglyceride[s]?|triglyceride[s]?|tg\s+form|"
-        r"triglyceride\s+form)\b",
-        re.IGNORECASE,
-    )),
-]
-
-
-# Carrier MCT wording is not an omega-3 molecular-form disclosure. These
-# phrases appear in real mixed fatty-acid products and must not unlock TG
-# form credit or the premium-form carry.
-_MCT_TRIGLYCERIDE_PATTERN = re.compile(
-    r"\b(?:mct|medium[\s-]?chain|middle[\s-]?chain|caprylic|capric|c8|c10|"
-    r"coconut)\b.{0,48}\btriglyceride[s]?\b|"
-    r"\btriglyceride[s]?\b.{0,48}\b(?:mct|medium[\s-]?chain|"
-    r"middle[\s-]?chain|caprylic|capric|c8|c10|coconut)\b",
-    re.IGNORECASE,
-)
-
-_TRIGLYCERIDE_HEALTH_CLAIM_PATTERN = re.compile(
-    r"\b(?:healthy|normal|blood|serum|plasma|support(?:s|ing)?|maintain(?:s|ing)?|"
-    r"already\s+within)\b.{0,64}\btriglyceride[s]?\s+level[s]?\b|"
-    r"\btriglyceride[s]?\s+level[s]?\b.{0,64}\b(?:healthy|normal|range|blood|serum|"
-    r"plasma|support(?:s|ing)?|maintain(?:s|ing)?|already\s+within)\b",
-    re.IGNORECASE,
-)
+BIO_SCORE_MAX = 15.0
 
 
 # Source-detection regex — any marine source keyword counts.
@@ -190,14 +139,37 @@ def _detect_form(product: Dict[str, Any]) -> str:
     multi-ingredient stacks.
     """
     surfaces = _gather_text_surfaces(product)
-    for form_label, pattern in _FORM_PATTERNS:
-        for surface in surfaces:
-            if form_label == "tg" and _MCT_TRIGLYCERIDE_PATTERN.search(surface):
-                continue
-            if form_label == "tg" and _TRIGLYCERIDE_HEALTH_CLAIM_PATTERN.search(surface):
-                continue
-            if pattern.search(surface):
-                return form_label
+    # Krill oil names its phospholipid-bound carrier by identity. This remains
+    # explanatory metadata; IQM owns the actual quality value. Preserve the
+    # existing precedence for a mixed krill + triglyceride label.
+    if any(re.search(r"\bkrill(?:\s+oil)?\b", surface, re.IGNORECASE) for surface in surfaces):
+        return "pl"
+
+    tokens = omega_molecular_form_disclosures(surfaces)
+    if tokens:
+        token = tokens[0]
+        return {
+            "phospholipid": "pl",
+            "re-esterified triglyceride": "rtg",
+            "ethyl ester": "ee",
+            "triglyceride": "tg",
+        }[token]
+
+    # A mapped IQM row can prove molecular form even when the original label
+    # surface is unavailable to a scorer-only replay. This is presentation
+    # metadata only; quality itself is calculated from the same IQM row below.
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict) or row.get("mapped") is False:
+            continue
+        form = str(row.get("matched_form") or row.get("form_id") or "").lower()
+        if "phospholipid" in form or "phosphatidyl" in form:
+            return "pl"
+        if "re-esterified" in form or "reesterified" in form or "rtg" in form:
+            return "rtg"
+        if "ethyl ester" in form:
+            return "ee"
+        if "triglyceride" in form and "unspecified" not in form:
+            return "tg"
     return "undefined"
 
 
@@ -236,9 +208,8 @@ _UNIT_TO_MG: Dict[str, float] = {
 def _has_omega_signal(product: Dict[str, Any]) -> bool:
     """True when the product carries any omega signal — EPA/DHA/fish_oil
     canonical in the ingredient panel, or a marine source keyword in the
-    name/ingredient text. Used to gate the form_tier=undefined baseline
-    (2 pts) so empty / non-omega products score 0 instead of inheriting
-    the omega-class undefined-form credit."""
+    name/ingredient text. Used to keep direct calls on empty/non-omega inputs
+    from emitting an omega form component."""
     if _source_disclosed(product):
         return True
     for ing in get_active_ingredients(product):
@@ -248,6 +219,48 @@ def _has_omega_signal(product: Dict[str, Any]) -> bool:
         if canon in _OMEGA_INGREDIENT_CANONICALS:
             return True
     return False
+
+
+def _score_iqm_form_quality(product: Dict[str, Any], cap: float) -> Dict[str, Any]:
+    """Score molecular-form quality from enriched IQM rows only.
+
+    Parent-oil rows are the most specific owner when present (for example,
+    ``krill_oil`` or ``fish_oil``). Otherwise EPA/DHA rows carry the form.
+    When several qualifying rows remain and their proportions are unknown, the
+    weakest reviewed form wins, matching the shared multi-form policy.
+    """
+    drivers = role_driver_canonicals("omega")
+    parent_ids = drivers - {"epa", "dha", "epa_dha"}
+    candidates: List[Dict[str, Any]] = []
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict) or row.get("mapped") is False:
+            continue
+        canonical = str(row.get("canonical_id") or "").strip().lower()
+        if canonical not in drivers:
+            continue
+        raw = bio_score_of(row)
+        relative = parent_relative_form_quality(canonical, raw)
+        if relative is None:
+            continue
+        candidates.append({
+            "canonical_id": canonical,
+            "matched_form": row.get("matched_form"),
+            "raw_bio_score": round(float(raw), 4),
+            "parent_relative_quality": round(float(relative), 4),
+        })
+
+    parent_rows = [row for row in candidates if row["canonical_id"] in parent_ids]
+    selected = parent_rows or candidates
+    if not selected:
+        return {"score": 0.0, "status": "iqm_form_quality_unavailable", "rows": []}
+
+    quality = min(row["parent_relative_quality"] for row in selected)
+    return {
+        "score": round(quality / BIO_SCORE_MAX * cap, 4),
+        "status": "scored_from_iqm_parent_rows" if parent_rows else "scored_from_iqm_epa_dha_rows",
+        "quality_0_15": round(quality, 4),
+        "rows": selected,
+    }
 
 
 def _to_mg(quantity: Any, unit: Any) -> Optional[float]:
@@ -418,23 +431,17 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
     rubric = _load_rubric()
     form_cfg = rubric["formulation"]
-    form_tier_table = form_cfg["form_tier"]
+    form_quality_cap = float(_safe_dict(form_cfg.get("form_quality")).get("cap", 8.0))
     sustainability_pts = float(form_cfg["sustainability_cert"]["score"])
     concentration_cfg = _safe_dict(form_cfg.get("epa_dha_concentration"))
 
     form_detected = _detect_form(product)
     has_omega = _has_omega_signal(product)
-    form_score = float(form_tier_table.get(form_detected, form_tier_table["undefined"]))
+    form_quality = _score_iqm_form_quality(product, form_quality_cap)
 
     components: Dict[str, float] = {}
-    # form_tier=undefined (2 pts) is the "labeled the active, not the form"
-    # baseline — only awarded when the product actually carries an omega
-    # signal. A truly empty / non-omega product scores 0 here. Real-world
-    # impact: zero (completeness gate already rejects non-omega input);
-    # this branch protects audit/test surfaces that call score_formulation
-    # directly.
-    if form_detected != "undefined" or has_omega:
-        components["form_tier"] = form_score
+    if has_omega and form_quality["score"] > 0:
+        components["form_tier"] = form_quality["score"]
 
     # Source disclosure and the premium-form carry were retired 2026-09-18.
     # Naming the marine source is a disclosure fact that Transparency scores,
@@ -462,12 +469,14 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "pre_penalty_score": round(pre_penalty_score, 4),
         "cap_applied": raw_score > CAP_FORMULATION,
         "form_detected": form_detected,
+        "form_quality_source": "ingredient_quality_map",
+        "iqm_form_quality": form_quality,
         "source_disclosed": _source_disclosed(product),
         "epa_dha_concentration": concentration,
         "sustainability_cert_program": sustainability_match,
         "max_reachable_in_p161": 12.0,
         "_max_reachable_note": (
-            "Current sub-components sum to 12/25 maximum: molecular form 8 + EPA/DHA "
+            "Current sub-components sum to 12/25 maximum: IQM molecular form 8 + EPA/DHA "
             "concentration 4. Source disclosure and the premium-form carry were retired "
             "2026-09-18 (Transparency owns disclosure); sustainability certification is an "
             "attribute worth 0 points. Do not interpret a 12/25 score as a cap-applied event."
