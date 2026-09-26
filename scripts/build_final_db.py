@@ -6188,14 +6188,8 @@ def _anchor_amount(ingredients: List[Dict], anchor: Dict[str, Any]) -> Tuple[Opt
             ingredient.get("normalized_amount")
             if ingredient.get("normalized_amount") is not None
             else ingredient.get("quantity")
-            if ingredient.get("quantity") is not None
-            else ingredient.get("dosage")
         )
-        raw_unit = (
-            ingredient.get("normalized_unit")
-            or ingredient.get("dosage_unit")
-            or ingredient.get("unit")
-        )
+        raw_unit = ingredient.get("normalized_unit") or ingredient.get("unit")
         converted = _amount_in_unit(raw_amount, raw_unit, safe_str(anchor.get("unit")))
         if converted is None:
             continue
@@ -6583,7 +6577,6 @@ def build_detail_blob(
             identity_mapped=safe_bool(m.get("mapped", ing.get("mapped"))),
         )
         ingredient_hits = matching_contaminant_hits(contaminant_lookup, raw, name)
-        allergen_hits = matching_allergen_hits(allergen_patterns, raw, name)
         harmful_hit = None
         for term in collect_match_terms(raw, name):
             harmful_hit = harmful_lookup.get(term)
@@ -6676,8 +6669,6 @@ def build_detail_blob(
             "conversion_evidence": safe_dict(ne.get("conversion_evidence")) or None,
             "role": "active",
             "parent_key": safe_str(m.get("parent_key") or ing.get("normalized_key")),
-            "dosage": safe_float(qty),
-            "dosage_unit": safe_str(ing.get("unit")),
             "is_mapped": is_mapped,
             # canonical_id — foundational identifier for interactions, stack
             # logic, evidence routing, biomarker scoring, dedup, and analytics.
@@ -6712,27 +6703,23 @@ def build_detail_blob(
             "matched_rule_id": active_safety_contract["matched_rule_id"],
             "us_applicable": active_policy_projection.get("us_applicable"),
             "jurisdictions": safe_list(active_policy_projection.get("jurisdictions")),
-            "jurisdiction_scope": active_policy_projection.get("jurisdiction_scope"),
             # Sprint E1.1.4 / 2026-05-13 — pass authored Dr Pham copy
             # through to the warning emitter. None when the safety contract
             # didn't fire on a banned-recalled hit.
             "safety_warning_one_liner": active_safety_contract.get("safety_warning_one_liner"),
             "safety_warning": active_safety_contract.get("safety_warning"),
-            "is_allergen": bool(allergen_hits),
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
             ),
-            # Label-native identity audit trail (label-first export). Sourced
-            # from the IQD identity stamp so the blob carries how the display was
-            # derived and what canonical was supplied before any repair.
-            "source_label_key": safe_str(m.get("source_label_key")) or None,
+            # Label-native identity (label-first export), sourced from the IQD
+            # identity stamp. The rest of the audit trail (source_label_key,
+            # rationale, canonical-before-repair) stays on the enriched IQD row,
+            # where audit_identity_integrity reads it.
             "source_label_name": m.get("source_label_name"),
             "source_label_form": m.get("source_label_form"),
             "label_display_name": m.get("label_display_name"),
             "label_display_form": m.get("label_display_form"),
             "identity_disposition": safe_str(m.get("identity_disposition")) or None,
-            "identity_resolution_rationale": m.get("identity_resolution_rationale"),
-            "canonical_id_before": m.get("canonical_id_before"),
             # Sprint E1.2.2.a — pre-computed Flutter display label
             "display_label": _compute_display_label(ing, m),
             # Sprint E1.2.2.b — pre-computed Flutter dose label.
@@ -6753,19 +6740,12 @@ def build_detail_blob(
                 "notes": m.get("notes") or ing.get("notes"),
                 "raw_source_text": ing.get("raw_source_text"),
             }),
-            # Sprint E1.3.2 — per-strain adequacy (None when not a
+            # Sprint E1.3.2 — per-strain clinical support (None when not a
             # matched clinical strain OR when per-strain CFU isn't
             # knowable e.g. multi-strain blend).
-            "adequacy_tier": _strain_adequacy.get("adequacy_tier"),
             "clinical_support_level": _strain_adequacy.get("clinical_support_level"),
-            # Sprint E1.3.2.b — hybrid confidence descriptors (controlled
-            # enums; None on non-probiotic ingredients so this stays off
-            # generic ingredient surfaces).
-            "cfu_confidence": _strain_adequacy.get("cfu_confidence"),
-            "dose_basis": _strain_adequacy.get("dose_basis"),
-            "ui_copy_hint": _strain_adequacy.get("ui_copy_hint"),
-            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative).
-            # Reads adequacy_tier above, so must come AFTER the E1.3.2 fields.
+            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative),
+            # from the same per-strain adequacy tier.
             "display_badge": _compute_display_badge({**ing, "adequacy_tier": _strain_adequacy.get("adequacy_tier")}),
         })
     ingredients = _suppress_zero_dose_duplicate_active_rows(ingredients)
@@ -6853,22 +6833,15 @@ def build_detail_blob(
 
         # Label fidelity contract (2026-06-15): inactive_ingredients[] is
         # the user-visible "Other Ingredients" surface, so resolver flags
-        # must not delete rows that appeared on the label. Keep the row and
-        # expose disposition metadata for scoring / secondary UI decisions.
-        if res.is_label_descriptor:
-            label_row_disposition = "label_descriptor"
-        elif res.is_active_only:
-            label_row_disposition = "active_only"
-        else:
-            label_row_disposition = "standard"
+        # must not delete rows that appeared on the label. The row keeps
+        # is_label_descriptor / is_active_only for scoring and secondary UI.
         inactive_standard_name = _inactive_identity_name_for_export(
             name=name,
             upstream_standard_name=std_name_ing,
             resolver_standard_name=safe_str(res.standard_name),
             matched_source=safe_str(res.matched_source),
         )
-        resolved_display_label = safe_str(res.display_label)
-        inactive_display_label = name or raw or resolved_display_label
+        inactive_display_label = name or raw or safe_str(res.display_label)
         inactive_contract = {
             "is_safety_concern": res.is_safety_concern,
             "is_banned": res.is_banned,
@@ -6905,15 +6878,12 @@ def build_detail_blob(
                 or _safety_flags_from_contract(inactive_contract)
             ),
             "notes": res.notes,
-            "mechanism_of_harm": res.mechanism_of_harm or "",
-            "common_uses": res.common_uses,
             "population_warnings": res.population_warnings,
             "harmful_severity": res.harmful_severity,
             "identifiers": res.identifiers or {},
             # Canonical inactive contract (v1.5.0+) — Flutter renders
             # these directly without local inference.
             "display_label": inactive_display_label,
-            "resolved_display_label": resolved_display_label,
             "display_role_label": res.display_role_label,
             "severity_status": res.severity_status,
             # Penalty-aware dot tone (green/light_orange/dark_orange/red): reflects
@@ -6932,7 +6902,6 @@ def build_detail_blob(
                 else None
             ),
             "is_safety_concern": inactive_contract["is_safety_concern"],
-            "label_row_disposition": label_row_disposition,
             "is_label_descriptor": res.is_label_descriptor,
             "is_active_only": res.is_active_only,
             # v1.6.0+ unified contract additions:
@@ -6943,7 +6912,6 @@ def build_detail_blob(
             "regulatory_status": res.regulatory_status,
             "us_applicable": inactive_policy_projection.get("us_applicable"),
             "jurisdictions": safe_list(inactive_policy_projection.get("jurisdictions")),
-            "jurisdiction_scope": inactive_policy_projection.get("jurisdiction_scope"),
             "inactive_policy": res.inactive_policy,
             "safety_display_name": (
                 safe_str(res.standard_name)
@@ -8170,8 +8138,8 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
 
         # Extract nutrients with doses
         if category in nutrient_categories:
-            normalized_amount = ing.get("normalized_amount") or ing.get("dosage") or ing.get("quantity")
-            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit") or ing.get("unit"))
+            normalized_amount = ing.get("normalized_amount") or ing.get("quantity")
+            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("unit"))
 
             if normalized_amount is not None:
                 amount = float(normalized_amount)
@@ -8243,10 +8211,9 @@ def generate_key_nutrients_summary(enriched: Dict) -> List[Dict]:
         if category not in ["vitamins", "minerals", "amino_acids", "fatty_acids", "fiber", "fibers"]:
             continue
 
-        normalized_amount = ing.get("normalized_amount") or ing.get("dosage") or ing.get("quantity")
+        normalized_amount = ing.get("normalized_amount") or ing.get("quantity")
         normalized_unit = safe_str(
             ing.get("normalized_unit")
-            or ing.get("dosage_unit")
             or ing.get("unit_normalized")
             or ing.get("unit")
         )

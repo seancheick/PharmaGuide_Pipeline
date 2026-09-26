@@ -339,7 +339,7 @@ class InactiveResolution:
     blob builder / the audit script don't have to null-check.
 
     Fields with default values:
-      - functional_roles, population_warnings, common_uses → []
+      - functional_roles, population_warnings → []
       - identifiers, notes_dict → {}
       - All Optional[str] fields → None
     """
@@ -362,10 +362,8 @@ class InactiveResolution:
     safety_reason: Optional[str]
     # Harmful-additive metadata (when sourced from harmful_additives.json)
     harmful_severity: Optional[str]
-    mechanism_of_harm: Optional[str]
     population_warnings: list[str]
     # Other-ingredient metadata
-    common_uses: list[str]
     is_additive: bool
     is_label_descriptor: bool
     is_active_only: bool
@@ -967,9 +965,7 @@ class InactiveIngredientResolver:
             is_banned=is_banned,
             safety_reason=str(safety_reason)[:500] if safety_reason else None,
             harmful_severity=(entry.get("clinical_risk_enum") or None),
-            mechanism_of_harm=None,
             population_warnings=list(entry.get("population_warnings") or []),
-            common_uses=[],
             is_additive=False,
             is_label_descriptor=False,
             is_active_only=False,
@@ -1033,9 +1029,7 @@ class InactiveIngredientResolver:
             is_banned=False,
             safety_reason=entry.get("safety_summary_one_liner") or entry.get("safety_summary"),
             harmful_severity=entry.get("severity_level"),
-            mechanism_of_harm=entry.get("mechanism_of_harm"),
             population_warnings=list(entry.get("population_warnings") or []),
-            common_uses=[],
             is_additive=True,
             is_label_descriptor=False,
             is_active_only=False,
@@ -1084,9 +1078,7 @@ class InactiveIngredientResolver:
             is_banned=False,
             safety_reason=None,
             harmful_severity=None,
-            mechanism_of_harm=None,
             population_warnings=[],
-            common_uses=list(entry.get("common_uses") or []),
             is_additive=bool(entry.get("is_additive")),
             is_label_descriptor=bool(entry.get("is_label_descriptor")),
             is_active_only=bool(entry.get("is_active_only")),
@@ -1120,9 +1112,7 @@ class InactiveIngredientResolver:
             is_banned=False,
             safety_reason=None,
             harmful_severity=None,
-            mechanism_of_harm=None,
             population_warnings=[],
-            common_uses=[],
             is_additive=False,
             is_label_descriptor=False,
             is_active_only=True,
@@ -1149,9 +1139,7 @@ class InactiveIngredientResolver:
             is_banned=False,
             safety_reason=None,
             harmful_severity=None,
-            mechanism_of_harm=None,
             population_warnings=[],
-            common_uses=[],
             is_additive=False,
             is_label_descriptor=False,
             is_active_only=False,

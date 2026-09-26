@@ -157,10 +157,10 @@ def test_vitamin_a_mcg_label_not_flagged_by_audit() -> None:
     # The audit checks the blob entry directly, not the normalizer return.
     blob_ing_mcg = {
         "name": "Vitamin A",
-        "dosage": 600.0,
-        "dosage_unit": "mcg",
+        "quantity": 600.0,
+        "unit": "mcg",
         "normalized_unit": "mcg",
-        "normalized_value": 600.0,
+        "normalized_amount": 600.0,
     }
     assert _audit_check_vitamin_a(blob_ing_mcg) is False
 
@@ -276,28 +276,13 @@ def test_non_vitamin_a_nutrient_unaffected_by_fix() -> None:
 # ---------------------------------------------------------------------------
 
 def _audit_check_vitamin_a(blob_ing: dict) -> bool:
-    """Mimic audit_raw_to_final._check_unsafe_unit_conversion for one ingredient.
-    Returns True when the audit would flag UNSAFE_UNIT_CONVERSION."""
-    n = (blob_ing.get("name") or "").lower()
-    unit = (blob_ing.get("dosage_unit") or blob_ing.get("unit") or "").upper()
-    nu = (blob_ing.get("normalized_unit") or "").upper()
-    nv = blob_ing.get("normalized_value")
-    ev = blob_ing.get("conversion_evidence") or {}
-    warnings = " ".join(str(w) for w in (ev.get("warnings") or []))
-    explicit_unknown = (
-        ev.get("conversion_rule_id") == "vitamin_a_unknown"
-        and ev.get("form_detection_source") == "no_conversion_possible"
-        and str(ev.get("confidence") or "").lower() == "low"
-        and (
-            "retinol vs beta-carotene" in warnings.lower()
-            or ("form" in warnings.lower() and "unknown" in warnings.lower())
-        )
-    )
-    if unit == "IU" and ("vitamin a" in n or "retinyl" in n or "carotene" in n):
-        if explicit_unknown:
-            return False
-        return nv is None or nu not in ("MCG RAE", "MCG", "UG RAE", "UG")
-    return False
+    """Run audit_raw_to_final._check_unsafe_unit_conversion on one ingredient.
+    Returns True when the audit flags UNSAFE_UNIT_CONVERSION."""
+    from scripts.audit_raw_to_final import ProductRecord, _check_unsafe_unit_conversion
+
+    rec = ProductRecord(dsld_id="test", archetype=None, product_name=None, upc=None)
+    _check_unsafe_unit_conversion(rec, {"ingredients": [blob_ing]})
+    return any(f.code == "UNSAFE_UNIT_CONVERSION" for f in rec.findings)
 
 
 def test_audit_flags_pre_fix_blob_shape() -> None:
@@ -305,10 +290,10 @@ def test_audit_flags_pre_fix_blob_shape() -> None:
     be flagged by the audit. This locks in the canary signature."""
     blob_ing = {
         "name": "Vitamin A",
-        "dosage": 5000.0,
-        "dosage_unit": "IU",
+        "quantity": 5000.0,
+        "unit": "IU",
         "normalized_unit": "IU",     # pre-fix shape
-        "normalized_value": 5000.0,
+        "normalized_amount": 5000.0,
     }
     assert _audit_check_vitamin_a(blob_ing) is True
 
@@ -318,10 +303,10 @@ def test_audit_is_silent_on_post_fix_blob_shape() -> None:
     normalized_unit='mcg RAE' and the audit no longer flags."""
     blob_ing = {
         "name": "Vitamin A",
-        "dosage": 5000.0,
-        "dosage_unit": "IU",
+        "quantity": 5000.0,
+        "unit": "IU",
         "normalized_unit": "mcg RAE",
-        "normalized_value": 500.0,
+        "normalized_amount": 500.0,
     }
     assert _audit_check_vitamin_a(blob_ing) is False
 
@@ -329,10 +314,10 @@ def test_audit_is_silent_on_post_fix_blob_shape() -> None:
 def test_audit_silent_when_label_already_in_mcg() -> None:
     blob_ing = {
         "name": "Vitamin A",
-        "dosage": 600.0,
-        "dosage_unit": "mcg",
+        "quantity": 600.0,
+        "unit": "mcg",
         "normalized_unit": "mcg",
-        "normalized_value": 600.0,
+        "normalized_amount": 600.0,
     }
     assert _audit_check_vitamin_a(blob_ing) is False
 
@@ -343,10 +328,10 @@ def test_audit_silent_on_unknown_form_with_explicit_conversion_warning() -> None
     explicit low-confidence no-conversion evidence."""
     blob_ing = {
         "name": "Vitamin A",
-        "dosage": 1000.0,
-        "dosage_unit": "IU",
+        "quantity": 1000.0,
+        "unit": "IU",
         "normalized_unit": "IU",
-        "normalized_value": 1000.0,
+        "normalized_amount": 1000.0,
         "conversion_evidence": {
             "conversion_rule_id": "vitamin_a_unknown",
             "form_detection_source": "no_conversion_possible",

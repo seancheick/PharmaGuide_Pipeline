@@ -59,7 +59,6 @@ def _build_minimal_inactive_blob_row(ing_dict, harmful_ref=None, other_ref=None)
             or other_ref.get("functional_roles")
             or harmful_ref.get("functional_roles")
         ),
-        "common_uses": safe_list(other_ref.get("common_uses")),
         "notes": safe_str(other_ref.get("notes")),
     }
 

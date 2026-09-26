@@ -851,7 +851,7 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
 
     for ing in blob.get("ingredients") or []:
         n = (ing.get("name") or "").lower()
-        unit = (ing.get("dosage_unit") or ing.get("unit") or "").upper()
+        unit = (ing.get("unit") or "").upper()
         normalized_unit = (ing.get("normalized_unit") or "").upper()
         normalized_value = ing.get("normalized_amount")
         if unit == "IU" and ("vitamin a" in n or "retinyl" in n or "carotene" in n):
@@ -860,7 +860,7 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
                 if has_explicit_unknown_vitamin_a_evidence(ing):
                     continue
                 rec.add("UNSAFE_UNIT_CONVERSION",
-                        f"Vitamin A in IU ({ing.get('dosage')}) without form-aware normalization to mcg RAE",
+                        f"Vitamin A in IU ({ing.get('quantity')}) without form-aware normalization to mcg RAE",
                         ingredient=ing.get("name"))
         if unit == "IU" and "vitamin e" in n:
             if normalized_value is None:
