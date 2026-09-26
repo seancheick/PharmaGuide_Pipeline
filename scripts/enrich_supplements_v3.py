@@ -11273,8 +11273,8 @@ class SupplementEnricherV3:
                 #     inactive use; appearing in the inactive panel is a
                 #     labeling defect or hidden-active risk and must penalize.
                 #
-                #   inactive_policy='review_required' (Cascara, synthetic
-                #     food acids):
+                #   inactive_policy='review_required' (e.g. sodium
+                #     tetraborate):
                 #     SKIP for now — borderline classification; do not
                 #     penalize until a human reviewer decides. Warning still
                 #     visible via the build-layer resolver.

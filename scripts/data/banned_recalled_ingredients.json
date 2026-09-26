@@ -15260,6 +15260,11 @@
             "date": "2026-09-25",
             "change": "UNII 3SJ3U7J6V2 -> 4VBP01X99F. GSRS: 3SJ3U7J6V2 is Casanthranol, a purified anthranol-glycoside fraction of the bark (CAS 8024-48-4); 4VBP01X99F is FRANGULA PURSHIANA BARK (CASCARA SAGRADA [MI], RHAMNI PURSHIANAE CORTEX; CAS 8015-89-2), the material this entry names and the UNII IQM cascara_sagrada already carries. No DSLD label carries either UNII, so matching is unchanged.",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-25",
+            "change": "inactive_policy penalize_anyway -> excipient_acceptable. The 2026-05-12 decision rested on 'no plausible trace-excipient use', but eCFR 21 CFR 172.510(b) lists Cascara sagrada (Rhamnus purshiana DC) as a natural flavoring substance with no limitation; aloe, senna and rhubarb root follow the same rule. Measured: 0 of 15,414 raw DSLD labels list cascara under other ingredients, so no shipped verdict moves.",
+            "by": "claude-audit"
           }
         ]
       },
@@ -15270,9 +15275,9 @@
       "ban_context": "watchlist",
       "safety_warning": "A stimulant laxative intended only for short-term use. Longer or high-dose use carries risks of cramping, diarrhea, electrolyte imbalance, and rare liver injury. Review duration and dose before use.",
       "safety_warning_one_liner": "Longer or high-dose use raises safety concerns.",
-      "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "NIH LiverTox documents duration- and dose-related adverse effects plus rare liver injury. Cascara's active compounds are stimulant-laxative hydroxyanthracene derivatives, so there is no plausible trace-excipient use. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
-      "inactive_policy_reviewed_on": "2026-05-12"
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists Cascara sagrada (Rhamnus purshiana DC) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose. As an active, cascara still drives this entry's caution. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
+      "inactive_policy_reviewed_on": "2026-09-25"
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",

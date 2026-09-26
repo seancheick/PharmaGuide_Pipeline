@@ -24,7 +24,7 @@ ARCHITECTURAL GAP (documented, not yet fixed):
     (b) substances that should NEVER appear as inactives without raising
         a flag (heavy metals: As/Pb/Hg/Cd, prohormones: 7-Keto-DHEA,
         hepatotoxic botanicals: Chaparral/Germander/Pennyroyal, controlled
-        substances: Δ8-THC, Formaldehyde, Cascara Sagrada, Diiodothyronine,
+        substances: Δ8-THC, Formaldehyde, Diiodothyronine,
         Kava, Yohimbe, Bitter Orange, Tansy).
 
   Suppressing class (b) is incorrect — appearing in the inactive panel is
@@ -123,6 +123,10 @@ EXCIPIENT_ACCEPTABLE_CASES = [
     ("Titanium Dioxide (E171)", "BANNED_ADD_TITANIUM_DIOXIDE"),
     ("Talc",                    "BANNED_ADD_TALC"),
     ("Docusate Sodium",         "ADD_DOCUSATE_SODIUM"),
+    # 2026-09-25: 21 CFR 172.510(b) lists Cascara sagrada (Rhamnus purshiana
+    # DC) as a natural flavoring substance, so a trace inactive listing is
+    # plausible; same rule as aloe/senna/rhubarb. Active cascara still fires.
+    ("Cascara Sagrada",         "ADD_CASCARA_SAGRADA"),
 ]
 
 
@@ -190,11 +194,6 @@ NEVER_ACCEPTABLE_INACTIVE_CASES = [
     ("Bitter Orange",          "RISK_BITTER_ORANGE"),
     ("Formaldehyde",           "BANNED_ADD_FORMALDEHYDE"),
     ("Delta-8 THC",            "BANNED_DELTA8_THC"),
-    # v5.4.1 (2026-05-12): Cascara Sagrada promoted from review_required
-    # to penalize_anyway after clinical review. Evidence (already in entry):
-    # FDA stripped GRASE status 2002 (67 FR 31125), EFSA HAD genotoxicity
-    # finding, NIH LiverTox acute liver failure documentation.
-    ("Cascara Sagrada",        "ADD_CASCARA_SAGRADA"),
 ]
 
 
@@ -259,8 +258,9 @@ def test_watchlist_inactive_fires_b0_watchlist_5pt(enricher, ing_name, expected_
 
 # ---------------------------------------------------------------------------
 # v5.4.1 (2026-05-12): zero review_required entries remain after clinical
-# review. Cascara Sagrada → penalize_anyway (FDA/EFSA/LiverTox evidence
-# in entry). BANNED_ADD_SYNTHETIC_FOOD_ACIDS → excipient_acceptable
+# review. Cascara Sagrada → penalize_anyway (moved to excipient_acceptable
+# on 2026-09-25: 21 CFR 172.510 lists it as a natural flavoring).
+# BANNED_ADD_SYNTHETIC_FOOD_ACIDS → excipient_acceptable
 # (aliases fumaric/adipic/citric are FDA GRAS pH-buffer excipients).
 #
 # This test pins the FOOD-ACIDS classification so a future revisit of the
@@ -360,3 +360,20 @@ def _load_enriched_1007():
     return None
 
 
+
+
+def test_cascara_inactive_policy_reason_matches_21_cfr_172_510():
+    """ADD_CASCARA_SAGRADA once said cascara had "no plausible trace-excipient
+    use". eCFR 21 CFR 172.510(b) (current to 2026-09-24) lists Cascara
+    sagrada, Rhamnus purshiana DC, as a natural flavoring substance with no
+    limitation, so the reason and the policy that rested on it changed."""
+    import json
+
+    entries = json.loads(
+        (ROOT / "scripts" / "data" / "banned_recalled_ingredients.json").read_text()
+    )["ingredients"]
+    cascara = next(e for e in entries if e["id"] == "ADD_CASCARA_SAGRADA")
+    assert cascara["inactive_policy"] == "excipient_acceptable"
+    assert "21 CFR 172.510" in cascara["inactive_policy_reason"]
+    assert "no plausible trace-excipient use" not in cascara["inactive_policy_reason"]
+    assert cascara["inactive_policy_reviewed_on"] == "2026-09-25"
