@@ -6,7 +6,9 @@ Sean, 2026-09-26: split the rules by plant part. The dandelion diuretic claims
 diuretic indication for the leaf and for root with herb, none for root alone.
 The nettle glucose claims rest on a nettle leaf trial (PMID 24273930) and the
 EU nettle-leaf monograph is the diuretic one; the root monograph covers only
-benign prostatic hyperplasia. Before the split every dandelion or nettle root
+benign prostatic hyperplasia. The nettle blood-pressure claim covers every part
+(PMID 35800714; root extract in rats, PMID 12020933), so it has its own
+unscoped rule. Before the split every dandelion or nettle root
 label carried the leaf claims, while a label resolved to the botanical root
 record carried nothing.
 
@@ -30,6 +32,7 @@ FIXTURES = Path(__file__).parent / "fixtures"
 DANDELION_DIURETIC = "RULE_IQM_DANDELION_KIDNEY"
 DANDELION_GLUCOSE = "RULE_IQM_DANDELION_GLUCOSE"
 NETTLE = "RULE_IQM_STINGING_NETTLE_DIABETES"
+NETTLE_BP = "RULE_IQM_STINGING_NETTLE_BLOOD_PRESSURE"
 
 
 @pytest.fixture(scope="module")
@@ -67,10 +70,11 @@ def _fired(enricher, normalizer, pid: int) -> set:
         (228932, {DANDELION_GLUCOSE}),
         # OLLY Beat The Bloat: "Dandelion Leaf Extract"
         (315977, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
-        # BulkSupplements Stinging Nettle Root Extract 1000 mg
-        (330073, set()),
+        # BulkSupplements Stinging Nettle Root Extract 1000 mg: the blood-pressure
+        # evidence covers the root (PMID 12020933), the glucose trial does not
+        (330073, {NETTLE_BP}),
         # GNC Mega Men Staminol: "Nettle leaf powder" (botanical nettle_leaf)
-        (228119, {NETTLE}),
+        (228119, {NETTLE, NETTLE_BP}),
     ],
 )
 def test_claims_follow_the_labelled_plant_part(enricher, normalizer, pid, expected):
