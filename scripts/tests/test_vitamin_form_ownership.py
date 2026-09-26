@@ -320,8 +320,8 @@ def test_unnecessary_complexity_variant_never_adds_formulation_points(case_id: s
 
 
 @pytest.mark.parametrize("case_id", [PRENATAL, B_COMPLEX])
-def test_incomplete_review_variant_does_not_keep_positive_evidence(case_id: str) -> None:
+def test_unrelated_clinical_review_state_does_not_erase_nutrient_authority(case_id: str) -> None:
     base = _score(_fixture(case_id))
     variant = _score(_incomplete_review(_fixture(case_id)))
 
-    assert _pillars(variant)["evidence"] < _pillars(base)["evidence"]
+    assert _pillars(variant)["evidence"] == _pillars(base)["evidence"]

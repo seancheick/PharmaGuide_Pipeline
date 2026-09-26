@@ -139,11 +139,10 @@ def test_ideal_fixtures_reach_their_evidence_reference() -> None:
     assert generic["raw_dimensions"]["evidence"] == 18.0
     assert generic["normalization_references"]["evidence"] == 18.0
     assert generic["pillars"]["evidence"] == 20.0
-    # b_complex keeps PR6's reference of 14: its authority floor lifts raw
-    # evidence to 15 for most products, which clamps at 20; raising the
-    # reference would only lower the b-complexes below the floor.
-    assert b_complex["raw_dimensions"]["evidence"] == 15.0
-    assert b_complex["normalization_references"]["evidence"] == 14.0
+    # Complete B panels earn the native 20-point authority score; no
+    # denominator compression is needed to manufacture attainability.
+    assert b_complex["raw_dimensions"]["evidence"] == 20.0
+    assert b_complex["normalization_references"]["evidence"] == 20.0
     assert b_complex["pillars"]["evidence"] == 20.0
 
 
@@ -169,13 +168,13 @@ def test_category_fixture_contracts() -> None:
     assert probiotic["raw_dimensions"]["evidence"] == 12.0
     # Omega raw dose tops out at 20 now that the EPA:DHA ratio bonus is gone
     # (quality_score 1.2.0); the reference equals that ceiling because the rubric
-    # gives full band credit at 2 g/day. Prenatal evidence normalizes against the
-    # 18 its engine reaches.
+    # gives full band credit at 2 g/day. A complete prenatal essential-nutrient
+    # panel has a native 20-point authority ceiling.
     assert omega["raw_dimensions"]["dose"] == 20.0
     assert omega["normalization_references"]["dose"] == 20.0
     assert omega["pillars"]["dose"] == 20.0
-    assert prenatal["raw_dimensions"]["evidence"] == 18.0
-    assert prenatal["normalization_references"]["evidence"] == 18.0
+    assert prenatal["raw_dimensions"]["evidence"] == 20.0
+    assert prenatal["normalization_references"]["evidence"] == 20.0
     assert prenatal["pillars"]["evidence"] == 20.0
 
 

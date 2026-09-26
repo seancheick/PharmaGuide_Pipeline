@@ -388,7 +388,7 @@
         "normalization_references": {
           "formulation": 23.0,
           "dose": 25.0,
-          "evidence": 14.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 19.8,
@@ -401,7 +401,7 @@
         "raw_dimensions": {
           "formulation": 22.7238,
           "dose": 23.875,
-          "evidence": 15.0,
+          "evidence": 20.0,
           "transparency": 10.0
         }
       }
@@ -474,18 +474,18 @@
         "archetype": "b_complex",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 58.4,
+        "quality_score_v4_100": 59.8,
         "quality_tier": "Needs improvement",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 23.0,
           "dose": 25.0,
-          "evidence": 14.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 11.4,
           "dose": 6.9,
-          "evidence": 16.1,
+          "evidence": 17.5,
           "transparency": 15.0,
           "verification": 6.0,
           "safety_hygiene": 3.0
@@ -493,7 +493,7 @@
         "raw_dimensions": {
           "formulation": 13.0858,
           "dose": 8.6,
-          "evidence": 11.25,
+          "evidence": 17.5,
           "transparency": 10.0
         }
       }
@@ -1168,7 +1168,7 @@
         "normalization_references": {
           "formulation": 14.0,
           "dose": 23.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 19.3,
@@ -1181,7 +1181,7 @@
         "raw_dimensions": {
           "formulation": 13.54,
           "dose": 23.8517,
-          "evidence": 18.0,
+          "evidence": 20.0,
           "transparency": 15.0
         }
       }
@@ -1242,18 +1242,18 @@
         "archetype": "prenatal_multi",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 42.6,
-        "quality_tier": "Poor",
+        "quality_score_v4_100": 62.6,
+        "quality_tier": "Needs improvement",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 14.0,
           "dose": 23.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 7.4,
           "dose": 10.2,
-          "evidence": 0.0,
+          "evidence": 20.0,
           "transparency": 15.0,
           "verification": 6.0,
           "safety_hygiene": 4.0
@@ -1261,7 +1261,7 @@
         "raw_dimensions": {
           "formulation": 5.2,
           "dose": 11.6921,
-          "evidence": 0.0,
+          "evidence": 20.0,
           "transparency": 15.0
         }
       }

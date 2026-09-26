@@ -31,7 +31,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 import sys
 
@@ -1246,6 +1246,64 @@ def resolve_product_evidence(
         unresolved_blockers=list(set(all_blockers)),
         owner_contributions=owner_counts,
     )
+
+
+def resolve_authority_panel_evidence(
+    product: Mapping[str, Any],
+    *,
+    expected_keys: Sequence[str],
+    row_key: Callable[[Mapping[str, Any]], str],
+    full_score: float = 20.0,
+    full_count: Optional[int] = None,
+) -> Dict[str, Any]:
+    """Score an essential-nutrient panel from the canonical evidence resolver.
+
+    Category modules own which nutrients define their purpose.  This resolver
+    owns the evidence decision for each matching label row.  Unrelated actives
+    remain visible to the product, but cannot manufacture panel Evidence through
+    ingredient count or generic top-N breadth.
+    """
+    expected = tuple(dict.fromkeys(str(key).strip() for key in expected_keys if str(key).strip()))
+    required = int(full_count or len(expected))
+    if not expected or required <= 0 or not isinstance(product, Mapping):
+        return {
+            "score": 0.0,
+            "covered_keys": [],
+            "expected_keys": list(expected),
+            "unresolved_keys": [],
+            "resolution_reasons": {},
+        }
+
+    from scoring_input_contract import get_assessable_evidence_ingredients
+
+    expected_set = set(expected)
+    covered: Set[str] = set()
+    seen: Set[str] = set()
+    reasons: Dict[str, str] = {}
+    for row in get_assessable_evidence_ingredients(dict(product)):
+        if not isinstance(row, Mapping):
+            continue
+        key = str(row_key(row) or "").strip()
+        if key not in expected_set:
+            continue
+        seen.add(key)
+        resolution = resolve_evidence_for_row(row, product)
+        reasons[key] = resolution.reason_code
+        if resolution.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
+            covered.add(key)
+
+    unresolved = expected_set - covered
+    for key in unresolved - seen:
+        reasons[key] = "essential_panel_nutrient_not_disclosed"
+
+    score = min(float(full_score), (len(covered) / required) * float(full_score))
+    return {
+        "score": round(score, 4),
+        "covered_keys": sorted(covered),
+        "expected_keys": list(expected),
+        "unresolved_keys": sorted(unresolved),
+        "resolution_reasons": dict(sorted(reasons.items())),
+    }
 
 
 def _as_float(val: Any) -> Optional[float]:

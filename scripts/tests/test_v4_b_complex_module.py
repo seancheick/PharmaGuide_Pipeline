@@ -188,6 +188,25 @@ def test_b_complex_form_quality_uses_parent_relative_iqm_scale() -> None:
     assert average_bio == 10.0
 
 
+def test_b_complex_evidence_tracks_core_authority_panel_not_generic_breadth() -> None:
+    from scoring_v4.modules.b_complex import _score_evidence
+
+    complete = _score_evidence(_ideal_b_complex())
+    one_row = _ideal_b_complex()
+    one_row["ingredient_quality_data"]["ingredients_scorable"] = [
+        one_row["ingredient_quality_data"]["ingredients_scorable"][0]
+    ]
+    one_row["ingredient_quality_data"]["ingredients"] = list(
+        one_row["ingredient_quality_data"]["ingredients_scorable"]
+    )
+    partial = _score_evidence(one_row)
+
+    assert complete["score"] == 20.0
+    assert complete["metadata"]["authority_covered_count"] == 8
+    assert partial["score"] == 2.5
+    assert partial["metadata"]["authority_covered_count"] == 1
+
+
 def test_over_ul_b_complex_carries_dose_and_safety_hygiene_penalty() -> None:
     scored = score_product_v4(_megadose_b_complex())
 
@@ -197,4 +216,4 @@ def test_over_ul_b_complex_carries_dose_and_safety_hygiene_penalty() -> None:
     assert scored["v4_module"] == "b_complex"
     assert dose["penalties"]["B7_dose_safety"] < 0
     assert safety["score"] < safety["max"]
-    assert scored["quality_score_v4_100"] < 70.0
+    assert scored["quality_score_v4_100"] < 75.0

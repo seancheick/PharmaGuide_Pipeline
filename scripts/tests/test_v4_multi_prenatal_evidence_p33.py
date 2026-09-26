@@ -77,33 +77,31 @@ def test_evidence_payload_shape_and_phase() -> None:
     assert payload["metadata"]["phase"] == "P3.3_multi_prenatal_evidence"
 
 
-def test_multivitamin_evidence_uses_generic_pipeline_under_shared_20_point_cap() -> None:
-    from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
-    from scoring_v4.modules.multi_prenatal_evidence import score_evidence
-
-    product = _product(
-        ingredients=[_ingredient("vitamin_d", name="Vitamin D")],
-        matches=[_match("Vitamin D")],
-    )
-    generic = score_generic_evidence(product)
-    multi = score_evidence(product)
-
-    assert generic["score"] == 4.5
-    assert multi["components"]["class_adjusted_clinical_evidence"] == 4.5
-    assert multi["score"] == 4.5
-    assert multi["metadata"]["generic_evidence_score"] == 4.5
-
-
-def test_high_evidence_panel_uses_shared_20_point_cap() -> None:
+def test_complete_multivitamin_panel_earns_full_authority_evidence() -> None:
     from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 
     product = _product(
         ingredients=[
+            _ingredient("vitamin_a", name="Vitamin A"),
+            _ingredient("vitamin_c", name="Vitamin C"),
             _ingredient("vitamin_d", name="Vitamin D"),
-            _ingredient("folate", name="Folate"),
-            _ingredient("iron", name="Iron"),
-            _ingredient("vitamin_b12", name="Vitamin B12"),
+            _ingredient("vitamin_b9_folate", name="Folate"),
+            _ingredient("vitamin_b12_cobalamin", name="Vitamin B12"),
+            _ingredient("zinc", name="Zinc"),
         ],
+    )
+    multi = score_evidence(product)
+
+    assert multi["score"] == 20.0
+    assert multi["components"]["essential_panel_authority"] == 20.0
+    assert multi["metadata"]["authority_covered_count"] == 6
+
+
+def test_incidental_clinical_breadth_cannot_raise_panel_evidence() -> None:
+    from scoring_v4.modules.multi_prenatal_evidence import score_evidence
+
+    product = _product(
+        ingredients=[_ingredient("vitamin_d", name="Vitamin D")],
         matches=[
             _match("Vitamin D", study_type="systematic_review_meta", evidence_level="product-human", enrollment=1500, study_id="vitd"),
             _match("Folate", study_type="systematic_review_meta", evidence_level="product-human", enrollment=1500, study_id="folate"),
@@ -114,46 +112,50 @@ def test_high_evidence_panel_uses_shared_20_point_cap() -> None:
 
     payload = score_evidence(product)
 
-    assert payload["metadata"]["generic_evidence_score"] == 18.0
-    assert payload["score"] == 18.0
-    assert payload["score"] <= 20.0
+    assert payload["score"] == round(20.0 / 6.0, 4)
+    assert payload["metadata"]["authority_covered_count"] == 1
+    assert payload["metadata"]["authority_resolution_reasons"]["vitamin_a"] == (
+        "essential_panel_nutrient_not_disclosed"
+    )
 
 
-def test_top_n_dampening_is_preserved_from_generic_pipeline() -> None:
+def test_clinical_matches_without_panel_nutrients_do_not_create_evidence() -> None:
     from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 
     matches = [_match(f"Nutrient {i}", study_id=str(i)) for i in range(6)]
     payload = score_evidence(_product(matches=matches))
 
-    assert payload["metadata"]["generic_evidence_metadata"]["top_n_applied"] == 4
-    assert payload["metadata"]["dampening_policy"] == "generic_top_n_shared_20_point_cap"
-
-
-def test_negative_effect_direction_contributes_zero() -> None:
-    from scoring_v4.modules.multi_prenatal_evidence import score_evidence
-
-    payload = score_evidence(_product(matches=[
-        _match("Vitamin D", effect_direction="negative"),
-    ]))
-
     assert payload["score"] == 0.0
-    assert payload["components"]["class_adjusted_clinical_evidence"] == 0.0
+    assert payload["metadata"]["authority_covered_count"] == 0
 
 
-def test_depth_bonus_is_rescaled_with_pipeline_not_added_separately() -> None:
-    from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
+def test_authority_evidence_is_independent_of_unrelated_negative_match() -> None:
     from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 
-    product = _product(matches=[
-        _match("Vitamin D", published_studies=50),
+    payload = score_evidence(_product(
+        ingredients=[_ingredient("vitamin_d", name="Vitamin D")],
+        matches=[_match("Unrelated adjunct", effect_direction="negative")],
+    ))
+
+    assert payload["score"] == round(20.0 / 6.0, 4)
+
+
+def test_prenatal_uses_prenatal_authority_panel() -> None:
+    from scoring_v4.modules.multi_prenatal_evidence import score_evidence
+
+    product = _product(ingredients=[
+        _ingredient("vitamin_b9_folate", name="Folate"),
+        _ingredient("iron", name="Iron"),
+        _ingredient("iodine", name="Iodine"),
+        _ingredient("vitamin_d", name="Vitamin D"),
+        _ingredient("vitamin_b12_cobalamin", name="Vitamin B12"),
     ])
+    product["product_name"] = "Complete Prenatal"
 
-    generic = score_generic_evidence(product)
-    multi = score_evidence(product)
+    payload = score_evidence(product)
 
-    assert generic["components"]["depth_bonus"] == 0.5
-    assert multi["metadata"]["generic_evidence_components"]["depth_bonus"] == 0.5
-    assert multi["score"] == generic["score"]
+    assert payload["score"] == 20.0
+    assert payload["metadata"]["panel_mode"] == "prenatal"
 
 
 def test_empty_or_malformed_product_scores_zero() -> None:
@@ -162,7 +164,7 @@ def test_empty_or_malformed_product_scores_zero() -> None:
     for bad in (None, {}, {"evidence_data": None}, "oops", 12):
         payload = score_evidence(bad)  # type: ignore[arg-type]
         assert payload["score"] == 0.0
-        assert payload["components"]["class_adjusted_clinical_evidence"] == 0.0
+        assert payload["components"]["essential_panel_authority"] == 0.0
 
 
 def test_score_multi_prenatal_wires_evidence_dimension() -> None:

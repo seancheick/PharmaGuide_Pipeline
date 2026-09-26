@@ -18,7 +18,7 @@ from typing import Any, Dict, Optional
 
 from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
-from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
+from evidence_resolver import resolve_authority_panel_evidence
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import (
     _as_float,
@@ -294,24 +294,29 @@ def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _score_evidence(product: Dict[str, Any]) -> Dict[str, Any]:
-    generic = score_generic_evidence(product)
-    generic_score = _as_float(generic.get("score"), 0.0) or 0.0
-    core_count = len(set(_b_rows(product)) & set(B_CORE))
-    nutrition_authority = 6.0 + (core_count / len(B_CORE)) * 6.0 if core_count else 0.0
-    adjusted = _round(_clamp(0.0, EVIDENCE_CAP, max(min(generic_score, 15.0), nutrition_authority)))
+    authority = resolve_authority_panel_evidence(
+        product,
+        expected_keys=B_CORE,
+        row_key=lambda row: _row_b_key(dict(row)),
+        full_score=EVIDENCE_CAP,
+    )
+    adjusted = _round(authority["score"])
     return {
         "score": adjusted,
         "max": EVIDENCE_CAP,
         "components": {
-            "b_nutrient_authority_floor": _round(nutrition_authority),
-            "generic_evidence_signal": _round(generic_score),
+            "b_nutrient_authority_panel": adjusted,
         },
         "penalties": {},
         "metadata": {
             "phase": PHASE_MARKER,
-            "method": "essential_b_nutrient_authority_floor_with_generic_evidence_cap",
-            "core_b_count": core_count,
-            "generic_evidence_metadata": dict(_safe_dict(generic.get("metadata"))),
+            "method": "essential_b_nutrient_authority_panel_coverage",
+            "authority_covered_count": len(authority["covered_keys"]),
+            "authority_full_count": len(B_CORE),
+            "authority_covered_keys": authority["covered_keys"],
+            "authority_expected_keys": authority["expected_keys"],
+            "authority_unresolved_keys": authority["unresolved_keys"],
+            "authority_resolution_reasons": authority["resolution_reasons"],
         },
     }
 
