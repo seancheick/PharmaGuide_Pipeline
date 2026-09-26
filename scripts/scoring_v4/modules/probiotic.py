@@ -5,8 +5,8 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
 
     Core dimension      Cap     Subsequent slice that fills it
     ------------------  ----    -------------------------------
-    Formulation         16     total potency disclosure 4 + exact label identity
-                               completeness 8 + delivery 3 + prebiotic 1
+    Formulation         15     total potency disclosure 4 + exact label identity
+                               completeness 8 + delivery 3
     Dose                25     P2.2 — per-strain CFU disclosed 10 + adequacy 15
                                (source-owned daily potency; aggregate presence
                                 does not manufacture strain-level doses)
@@ -16,7 +16,7 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
     Transparency        15     P2.5 — strain identities 8 + per-strain CFU 7;
                                minus B2 allergen + B5 opacity (class-aware
                                probiotic 0.4x) + B6 marketing; B3 claims +4
-    Core subtotal       76
+    Core subtotal       75
 
 Plus separate adjustments before the raw-score clamp:
 

@@ -162,9 +162,9 @@ def test_category_fixture_contracts() -> None:
     assert probiotic["raw_dimensions"]["dose"] == 20.0
     assert probiotic["pillars"]["dose"] == 18.2
     assert probiotic["normalization_references"]["dose"] == 22.0
-    assert probiotic["raw_dimensions"]["formulation"] == 15.25
-    assert probiotic["normalization_references"]["formulation"] == 16.0
-    assert probiotic["pillars"]["formulation"] == 19.1
+    assert probiotic["raw_dimensions"]["formulation"] == 15.0
+    assert probiotic["normalization_references"]["formulation"] == 15.0
+    assert probiotic["pillars"]["formulation"] == 20.0
     assert probiotic["raw_dimensions"]["evidence"] == 12.0
     # Omega raw dose tops out at 20 now that the EPA:DHA ratio bonus is gone
     # (quality_score 1.2.0); the reference equals that ceiling because the rubric

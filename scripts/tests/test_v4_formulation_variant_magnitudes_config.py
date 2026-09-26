@@ -24,9 +24,9 @@ ORIGINAL = {
         "bio_score_max": 15.0,
     },
     "omega": {"cap_formulation": 25.0},
-    "probiotic": {"cap_formulation": 16.0, "cap_total_potency_disclosure": 4.0,
-                  "cap_exact_identity_completeness": 8.0, "cap_delivery_survivability": 3.0,
-                  "cap_prebiotic_complement": 1.0},
+    # 1.20.0: optional prebiotics no longer manufacture probiotic form quality.
+    "probiotic": {"cap_formulation": 15.0, "cap_total_potency_disclosure": 4.0,
+                  "cap_exact_identity_completeness": 8.0, "cap_delivery_survivability": 3.0},
     "sports": {"dimension_cap": 30.0},
     "fiber_digestive": {"dimension_cap": 30.0},
     "botanical": {
@@ -49,7 +49,7 @@ def test_runtime_constants_read_from_config_no_drift():
     assert multi_prenatal_formulation.CAP_FORMULATION == 14.0
     assert multi_prenatal_formulation.PANEL_FORM_NEUTRAL_FLOOR == 9.0
     assert omega_formulation.CAP_FORMULATION == 25.0
-    assert probiotic_formulation.CAP_FORMULATION == 16.0
+    assert probiotic_formulation.CAP_FORMULATION == 15.0
     assert sports_formulation.DIMENSION_CAP == 30.0
     assert fiber_digestive_formulation.DIMENSION_CAP == 30.0
     assert botanical_profile.BOTANICAL_FORMULATION_CAP == 15.0

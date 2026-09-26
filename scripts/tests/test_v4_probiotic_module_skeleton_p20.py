@@ -10,11 +10,11 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 + §6 (probiotic rubric):
 
     | Dimension          | Probiotic |
     |--------------------|----------:|
-    | Formulation        |    16     |
+    | Formulation        |    15     |
     | Dose               |    25     |
     | Evidence           |    20     |
     | Transparency       |    15     |
-    | (4-dimension sum)  |    76     |
+    | (4-dimension sum)  |    75     |
 
 Plus separate adjustments:
 
@@ -41,7 +41,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 
 EXPECTED_DIMENSION_CAPS = {
-    "formulation": 16,
+    "formulation": 15,
     "dose": 25,
     "evidence": 20,
     "transparency": 15,

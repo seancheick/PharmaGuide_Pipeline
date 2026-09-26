@@ -81,8 +81,8 @@ def test_formula_is_not_exempt_from_formulation_potency_ablation():
     source["formulation"]["components"] = {
         "native_potency_disclosed": 4, "studied_formula_potency": 5,
         "studied_formula_strain_identity": 8, "named_species_diversity": 2,
-        "delivery_survivability": 3, "prebiotic_complement": 1}
-    assert alter(source, "form_no_size_diversity")["formulation"]["score"] == 16
+        "delivery_survivability": 3}
+    assert alter(source, "form_no_size_diversity")["formulation"]["score"] == 15
 
 
 def test_unknown_shadow_never_silently_uses_baseline():

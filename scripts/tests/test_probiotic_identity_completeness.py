@@ -40,7 +40,7 @@ def test_complete_single_and_five_strains_receive_same_formulation():
     single = score_formulation(product_with_identities(1))
     five = score_formulation(product_with_identities(5))
     assert single["score"] == five["score"] == 15
-    assert single["max"] == five["max"] == 16
+    assert single["max"] == five["max"] == 15
     assert single["components"]["exact_identity_completeness"] == 8
     assert five["components"]["exact_identity_completeness"] == 8
     assert "cfu_amount" not in single["components"]
@@ -167,8 +167,8 @@ def test_invalid_total_cfu_does_not_receive_potency_disclosure(amount):
     assert score_formulation(product)["components"]["total_cfu_disclosed"] == 0
 
 
-@pytest.mark.parametrize("exact,unknown,expected", [(1, 0, 18.8), (5, 0, 18.8), (2, 2, 13.8), (0, 1, 8.8)])
-def test_public_formulation_uses_16_point_reference(exact, unknown, expected):
+@pytest.mark.parametrize("exact,unknown,expected", [(1, 0, 20.0), (5, 0, 20.0), (2, 2, 14.7), (0, 1, 9.3)])
+def test_public_formulation_uses_15_point_reference(exact, unknown, expected):
     from scoring_v4.modules.probiotic import score_probiotic
     from scoring_v4.quality_score import assemble_quality_score
     product = product_with_identities(exact, unknown)
@@ -179,15 +179,20 @@ def test_public_formulation_uses_16_point_reference(exact, unknown, expected):
     assert public["quality_pillars_v4"]["formulation"]["max"] == 20
 
 
-def test_existing_full_prebiotic_complement_reaches_public_formulation_max():
+def test_optional_prebiotic_does_not_change_public_formulation():
     from scoring_v4.modules.probiotic import score_probiotic
     from scoring_v4.quality_score import assemble_quality_score
     product = product_with_identities(1)
     product["probiotic_data"].update(prebiotic_present=True, prebiotic_dose_g=3)
-    module = score_probiotic(product).to_breakdown()
-    public = assemble_quality_score({"v4_module": "probiotic", "v4_verdict": "SAFE", "raw_score_v4_100": 50,
-                                    "v4_breakdown": {"module": module}})
-    assert public["quality_pillars_v4"]["formulation"]["score"] == 20
+    with_prebiotic = score_probiotic(product).to_breakdown()
+    product["probiotic_data"].update(prebiotic_present=False, prebiotic_dose_g=None)
+    without_prebiotic = score_probiotic(product).to_breakdown()
+    with_public = assemble_quality_score({"v4_module": "probiotic", "v4_verdict": "SAFE", "raw_score_v4_100": 50,
+                                         "v4_breakdown": {"module": with_prebiotic}})
+    without_public = assemble_quality_score({"v4_module": "probiotic", "v4_verdict": "SAFE", "raw_score_v4_100": 50,
+                                            "v4_breakdown": {"module": without_prebiotic}})
+    assert with_public["quality_pillars_v4"]["formulation"] == without_public["quality_pillars_v4"]["formulation"]
+    assert with_public["quality_pillars_v4"]["formulation"]["score"] == 20
 
 
 def test_registered_alias_dedup_does_not_require_clinical_projection():

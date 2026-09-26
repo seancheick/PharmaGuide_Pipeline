@@ -863,16 +863,16 @@
         "archetype": "probiotic",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 89.3,
-        "quality_tier": "Very good",
+        "quality_score_v4_100": 90.2,
+        "quality_tier": "Excellent",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 16.0,
+          "formulation": 15.0,
           "dose": 22.0,
           "evidence": 20.0
         },
         "pillars": {
-          "formulation": 19.1,
+          "formulation": 20.0,
           "dose": 18.2,
           "evidence": 12.0,
           "transparency": 15.0,
@@ -880,7 +880,7 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 15.25,
+          "formulation": 15.0,
           "dose": 20.0,
           "evidence": 12.0,
           "transparency": 15.0
@@ -938,7 +938,7 @@
         "quality_tier": "Poor",
         "v4_confidence": "low",
         "normalization_references": {
-          "formulation": 16.0,
+          "formulation": 15.0,
           "dose": 22.0,
           "evidence": 20.0
         },

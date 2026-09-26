@@ -1,6 +1,6 @@
 """v4 Probiotic Formulation dimension — P2.1.
 
-Scores probiotic-specific formulation quality against a 16-point
+Scores probiotic-specific formulation quality against a 15-point
 raw rubric. This module is intentionally focused
 on formulation signals only; per-strain CFU adequacy belongs to P2.2
 Dose and strain-clinical evidence belongs to P2.3 Evidence.
@@ -11,8 +11,6 @@ from __future__ import annotations
 import math
 from typing import Any, Dict
 
-from scoring_input_contract import get_scoring_ingredients
-from prebiotic_catalog import prebiotic_summary
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from probiotic_measurements import declared_total_cfu, probiotic_label_identity_summary
 
@@ -27,7 +25,6 @@ CAP_FORMULATION = _FVM["cap_formulation"]
 CAP_TOTAL_POTENCY_DISCLOSURE = _FVM["cap_total_potency_disclosure"]
 CAP_EXACT_IDENTITY_COMPLETENESS = _FVM["cap_exact_identity_completeness"]
 CAP_DELIVERY_SURVIVABILITY = _FVM["cap_delivery_survivability"]
-CAP_PREBIOTIC_COMPLEMENT = _FVM["cap_prebiotic_complement"]
 
 
 def _safe_dict(value: Any) -> Dict[str, Any]:
@@ -55,7 +52,6 @@ def score_formulation(product: Any) -> Dict[str, Any]:
       - total CFU disclosed: 4
       - exact label-owned identity completeness: 8 * exact / total
       - delivery/survivability: 3
-      - prebiotic complement: 1
 
     An exact reviewed whole-formula AFU assessment uses these same component
     budgets for native potency, studied strain identity and delivery. It does
@@ -73,7 +69,6 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "total_cfu_disclosed": _score_total_cfu_disclosed(total_billion),
         "exact_identity_completeness": CAP_EXACT_IDENTITY_COMPLETENESS * identity_count / strain_count if strain_count else 0.0,
         "delivery_survivability": _score_delivery_survivability(product, pdata),
-        "prebiotic_complement": _score_prebiotic_complement(product, pdata),
     }
     from studied_formulas import assess_studied_formula
     formula = assess_studied_formula(product)
@@ -85,8 +80,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         components.pop("exact_identity_completeness")
         components.update(native_potency_disclosed=CAP_TOTAL_POTENCY_DISCLOSURE,
                           studied_formula_strain_identity=CAP_EXACT_IDENTITY_COMPLETENESS,
-                          delivery_survivability=CAP_DELIVERY_SURVIVABILITY,
-                          prebiotic_complement=CAP_PREBIOTIC_COMPLEMENT)
+                          delivery_survivability=CAP_DELIVERY_SURVIVABILITY)
     shared_penalties = shared_formulation_penalty_detail(product)
     penalties = dict(shared_penalties["penalties"])
     penalty_magnitude = sum(abs(float(value or 0.0)) for value in penalties.values())
@@ -130,47 +124,6 @@ def _score_delivery_survivability(product: Dict[str, Any], pdata: Dict[str, Any]
         tier = _safe_dict(product.get("delivery_data")).get("highest_tier")
     tier_int = _as_int(tier, 0)
     return {1: CAP_DELIVERY_SURVIVABILITY, 2: 2.5, 3: 1.5}.get(tier_int, 0.0)
-
-
-def _score_prebiotic_complement(product: Dict[str, Any], pdata: Dict[str, Any]) -> float:
-    """Dose-aware scoring for the 1-point prebiotic complement component.
-
-    Presence alone is a weak formulation signal. Full credit requires a disclosed
-    multi-gram prebiotic amount, so tiny excipient-level fiber does not score the
-    same as a purposefully formulated synbiotic.
-    """
-    if not pdata.get("prebiotic_present"):
-        return 0.0
-
-    dose_g = _prebiotic_dose_g(product, pdata)
-    if dose_g is None:
-        return 0.25
-    if dose_g >= 3.0:
-        return CAP_PREBIOTIC_COMPLEMENT
-    if dose_g >= 1.0:
-        return 0.5
-    if dose_g > 0.0:
-        return 0.25
-    return 0.0
-
-
-def _prebiotic_dose_g(product: Dict[str, Any], pdata: Dict[str, Any]) -> float | None:
-    for key in ("prebiotic_dose_g", "prebiotic_grams", "prebiotic_amount_g"):
-        value = _as_float(pdata.get(key), None)
-        if value is not None and value > 0:
-            return value
-
-    return prebiotic_summary(_ingredient_rows(product))[2]
-
-
-def _ingredient_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:
-    try:
-        return [
-            row for row in get_scoring_ingredients(product or {}, strict=True).rows
-            if isinstance(row, dict)
-        ]
-    except Exception:
-        return []
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:

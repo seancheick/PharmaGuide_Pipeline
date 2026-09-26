@@ -121,9 +121,9 @@ def test_formula_formulation_recognizes_native_potency_without_cfu_tiers():
     result = score_formulation(seed_label())
     assert result["components"]["native_potency_disclosed"] == 4
     assert "studied_formula_potency" not in result["components"]
-    assert result["score"] == result["max"] == 16
+    assert result["score"] == result["max"] == 15
     assert result["components"]["studied_formula_strain_identity"] == 8
-    assert result["components"]["prebiotic_complement"] == 1
+    assert "prebiotic_complement" not in result["components"]
     assert result["components"]["delivery_survivability"] == 3
     assert result["metadata"]["total_billion_count"] == 0
     assert "cfu_amount" not in result["components"]

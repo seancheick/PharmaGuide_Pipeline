@@ -101,18 +101,17 @@ def _product(
     return product
 
 
-def test_probiotic_formulation_scores_full_16_point_contract() -> None:
+def test_clean_exact_probiotic_reaches_full_formulation_without_optional_prebiotic() -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
-    payload = score_formulation(_product())
+    payload = score_formulation(_product(prebiotic_present=False))
 
-    assert payload["score"] == 16.0
-    assert payload["max"] == 16.0
+    assert payload["score"] == 15.0
+    assert payload["max"] == 15.0
     assert payload["components"] == {
         "total_cfu_disclosed": 4.0,
         "exact_identity_completeness": 8.0,
         "delivery_survivability": 3.0,
-        "prebiotic_complement": 1.0,
     }
     assert payload["metadata"]["phase"] == "P2.1_probiotic_formulation"
 
@@ -185,44 +184,13 @@ def test_delivery_survivability_uses_enriched_survivability_then_delivery_tier(
     assert payload["components"]["delivery_survivability"] == expected
 
 
-def test_prebiotic_complement_requires_meaningful_dose_for_full_credit() -> None:
+def test_optional_prebiotic_does_not_change_probiotic_formulation_quality() -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
     with_prebiotic = score_formulation(_product(prebiotic_present=True))
     without_prebiotic = score_formulation(_product(prebiotic_present=False))
-    unknown_dose_product = _product(prebiotic_present=True)
-    unknown_dose_product["ingredient_quality_data"]["ingredients_scorable"] = [
-        row
-        for row in unknown_dose_product["ingredient_quality_data"]["ingredients_scorable"]
-        if row["canonical_id"] != "inulin"
-    ]
-    unknown_prebiotic = score_formulation(unknown_dose_product)
 
-    assert with_prebiotic["components"]["prebiotic_complement"] == 1.0
-    assert unknown_prebiotic["components"]["prebiotic_complement"] == 0.25
-    assert without_prebiotic["components"]["prebiotic_complement"] == 0.0
-
-
-@pytest.mark.parametrize(
-    ("quantity", "unit", "expected"),
-    [
-        (500, "mg", 0.25),
-        (2, "g", 0.5),
-        (3, "g", 1.0),
-    ],
-)
-def test_prebiotic_complement_is_dose_aware(quantity: float, unit: str, expected: float) -> None:
-    from scoring_v4.modules.probiotic_formulation import score_formulation
-
-    product = _product(prebiotic_present=True)
-    for row in product["ingredient_quality_data"]["ingredients_scorable"]:
-        if row["canonical_id"] == "inulin":
-            row["quantity"] = quantity
-            row["unit"] = unit
-
-    payload = score_formulation(product)
-
-    assert payload["components"]["prebiotic_complement"] == expected
+    assert with_prebiotic == without_prebiotic
 
 
 def test_probiotic_formulation_accepts_final_blob_probiotic_detail_alias() -> None:
@@ -233,7 +201,7 @@ def test_probiotic_formulation_accepts_final_blob_probiotic_detail_alias() -> No
 
     payload = score_formulation(product)
 
-    assert payload["score"] == 16.0
+    assert payload["score"] == 15.0
     assert payload["metadata"]["total_billion_count"] == 50.0
 
 
@@ -256,8 +224,8 @@ def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() ->
     breakdown = score_probiotic(_product()).to_breakdown()
     formulation = breakdown["dimensions"]["formulation"]
 
-    assert formulation["score"] == 16.0
-    assert formulation["max"] == 16.0
+    assert formulation["score"] == 15.0
+    assert formulation["max"] == 15.0
     assert formulation["metadata"]["phase"] == "P2.1_probiotic_formulation"
     assert breakdown["dimensions"]["dose"]["score"] is not None
     # Module-level phase rolls forward as each P2.x slice lands.
@@ -272,4 +240,4 @@ def test_probiotic_formulation_resilient_to_malformed_input() -> None:
     for bad in (None, {}, {"probiotic_data": None}, 42, "oops"):
         payload = score_formulation(bad)  # type: ignore[arg-type]
         assert payload["score"] == 0.0
-        assert payload["max"] == 16.0
+        assert payload["max"] == 15.0

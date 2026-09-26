@@ -99,43 +99,6 @@ def test_row_quantity_g_units():
     assert row_quantity_g({"quantity": None}) is None
 
 
-# ---- scorer: full credit for any catalog prebiotic at >= 3 g, not only the old regex subset
-def _scorer_product(rows):
-    from test_v4_probiotic_formulation_p21 import _product
-    product = _product(prebiotic_present=True)
-    product["ingredient_quality_data"]["ingredients_scorable"] = [
-        {"name": "Lactobacillus rhamnosus", "canonical_id": "lacto", "mapped": True, "has_dose": True},
-        *rows,
-    ]
-    return product
-
-
-@pytest.mark.parametrize("name", [
-    "Partially Hydrolyzed Guar Gum", "Resistant Starch", "Citrus Pectin", "Xylooligosaccharides",
-    "Polydextrose", "Lactulose", "Oat Beta-Glucan", "2'-Fucosyllactose",
-])
-def test_scorer_gives_full_credit_to_every_catalog_prebiotic_at_three_grams(name):
-    from scoring_v4.modules.probiotic_formulation import score_formulation
-    product = _scorer_product([{"name": name, "canonical_id": "x", "mapped": True, "has_dose": True, "quantity": 3.0, "unit": "g"}])
-    assert score_formulation(product)["components"]["prebiotic_complement"] == 1.0
-
-
-def test_scorer_does_not_count_generic_fiber_grams_as_prebiotic_dose():
-    from scoring_v4.modules.probiotic_formulation import score_formulation
-    product = _scorer_product([
-        {"name": "Inulin", "canonical_id": "inulin", "mapped": True, "has_dose": True, "quantity": 100, "unit": "mg"},
-        {"name": "Psyllium Husk Fiber", "canonical_id": "psyllium", "mapped": True, "has_dose": True, "quantity": 5.0, "unit": "g"},
-    ])
-    assert score_formulation(product)["components"]["prebiotic_complement"] == 0.25
-
-
-def test_scorer_prefers_the_enricher_dose_when_present():
-    from scoring_v4.modules.probiotic_formulation import score_formulation
-    product = _scorer_product([])
-    product["probiotic_data"]["prebiotic_dose_g"] = 3.0
-    assert score_formulation(product)["components"]["prebiotic_complement"] == 1.0
-
-
 # ---- enricher: same matcher, and the dose now travels in probiotic_data
 @pytest.fixture
 def enricher():
