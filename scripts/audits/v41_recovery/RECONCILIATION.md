@@ -598,3 +598,20 @@ uses the same recovery mode for the three owner-scoped scoring modules.
 115 focused readiness/Evidence checks passed. The preceding stable code checkpoint
 at a4cc5c6b passed 16,347 fast tests, 171 skipped (372.01 s); that checkpoint
 predates this final readiness alignment and is not its complete-suite proof.
+
+### Fresh 12-brand run and nutrient-total correction
+
+All 7,412 raw labels completed Clean/Enrich/Score at674a2ec9 across Culturelle,
+GNC, Garden_of_life, Life_Extension, Nature_Made, Natures_Way, Ora,
+Pure_Encapsulations, Solgar, Sports_Research, Thorne and nordic-naturals.
+Pipeline-only log: `~/pg_quality/candd/fresh_12brands_20260926.log`.
+First-pass records preserved: `runs/fresh12_firstpass_674a2ec9.jsonl`.
+
+Owner: `evidence_resolver.py::resolve_evidence_for_row` and
+`is_essential_dietary_nutrient` — evidence: `rg -n 'is_parent_total|is_essential'
+scripts/evidence_resolver.py`. Will NOT create: a nutrient identity list or a
+new evidence state. Fresh GNC224672 reproduced a false undisclosed-blend finding:
+Folate1333mcgDFE was a declared nutrient total with a Folic Acid800mcg child.
+The existing essential-nutrient classifier now distinguishes that total from an
+opaque blend; explicitly proprietary rows remain blocked. Regression failed
+before the fix; all46 resolver tests passed afterward. Scoring rescore follows.

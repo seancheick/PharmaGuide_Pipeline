@@ -555,7 +555,10 @@ def resolve_evidence_for_row(
             blocking_reasons=["silica_provenance_ambiguous"],
         )
 
-    if row_dict.get("is_proprietary_blend") or row_dict.get("is_parent_total"):
+    if row_dict.get("is_proprietary_blend") or (
+        row_dict.get("is_parent_total")
+        and not is_essential_dietary_nutrient(canonical, name)
+    ):
         return EvidenceResolution(
             canonical_id=canonical,
             ingredient_name=name,

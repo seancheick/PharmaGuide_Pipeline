@@ -715,3 +715,13 @@ def test_phase4_final_sweep_standardized_clinical_botanicals():
 
 
 
+
+
+def test_declared_nutrient_total_is_not_an_undisclosed_blend():
+    row = {'canonical_id': 'vitamin_b9_folate', 'name': 'Folate',
+           'quantity': 1333, 'unit': 'mcg DFE', 'is_parent_total': True,
+           'is_proprietary_blend': False}
+    result = er.resolve_evidence_for_row(row)
+    assert result.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+    row['is_proprietary_blend'] = True
+    assert er.resolve_evidence_for_row(row).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
