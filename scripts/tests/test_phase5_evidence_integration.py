@@ -75,7 +75,7 @@ def test_resolver_failure_is_loud_not_a_silent_complete(monkeypatch):
     import evidence_resolver
     from scoring_v4.modules.generic_evidence import _evidence_result_state
 
-    def boom(product):
+    def boom(product, **kwargs):
         raise RuntimeError("resolver down")
 
     monkeypatch.setattr(evidence_resolver, "resolve_product_evidence", boom)

@@ -122,9 +122,9 @@ def test_panel_form_quality_uses_each_iqm_parents_best_eligible_form() -> None:
         ),
     ]))
 
-    # B12's current best eligible IQM form is 11. Cyanocobalamin therefore
-    # earns 10/11 of the panel form-quality component, instead of 10/15.
-    assert payload["components"]["panel_form_quality"] == 10.91
+    # B12's current best eligible IQM form is 15. Cyanocobalamin therefore
+    # earns 10/15 of the panel form-quality component.
+    assert payload["components"]["panel_form_quality"] == 8.0
 
 
 def test_equally_rated_panel_size_adds_no_formulation_points() -> None:

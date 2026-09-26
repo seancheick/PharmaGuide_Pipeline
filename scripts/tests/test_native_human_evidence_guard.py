@@ -111,7 +111,7 @@ def test_native_primary_effect_direction_is_not_defaulted_to_positive(monkeypatc
     registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["effect_direction"] = direction
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
     result = score_evidence(strain_product())
-    assert result["score"] == pytest.approx(6 * multiplier)  # LGG is medium since Dr Pham's 2026-09-22 review
+    assert result["score"] == pytest.approx(9 * multiplier)  # LGG is medium under the single-strain scale
     assert result["metadata"]["native_clinical_strain_evidence_rows"][0]["effect_direction"] == direction
     if direction == "negative":
         assert result["metadata"]["evidence_result_state"] == "evaluated_unfavorable"

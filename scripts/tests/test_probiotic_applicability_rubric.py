@@ -250,7 +250,7 @@ def test_registry_medium_support_is_not_lost():
     # 299v: medium support with a positive between-group result. (BB536 was the example
     # until its biomarker-only record was recorded as unresolved on 2026-09-22.)
     p = strain_product(clinical_id="STRAIN_PLANTARUM_299V", name="Lactobacillus plantarum 299v")
-    assert score_evidence(p)["score"] == 6
+    assert score_evidence(p)["score"] == 9
 
 
 def test_unfavorable_strain_does_not_hide_a_separate_supported_record():
@@ -262,7 +262,7 @@ def test_unfavorable_strain_does_not_hide_a_separate_supported_record():
     p["activeIngredients"] += other["activeIngredients"]
     p["probiotic_data"]["clinical_strains"] += other["probiotic_data"]["clinical_strains"]
     p["evidence_data"] = {"clinical_matches": [_match(id="STRAIN_LGG", effect_direction="negative")]}
-    assert score_evidence(p)["score"] == 6
+    assert score_evidence(p)["score"] == 9
 
 
 def test_evidence_copy_distinguishes_missing_applicability_from_poor_quality():

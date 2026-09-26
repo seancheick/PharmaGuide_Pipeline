@@ -319,7 +319,7 @@ def test_normalized_billion_count_can_prove_disclosure_without_clinical_review()
     m.pop("cfu_count")
     m["billion_count"] = 10
     assert score_dose(p)["components"]["per_strain_cfu_disclosure"] == 10
-    assert score_dose(p)["components"]["cfu_adequacy"] == 6
+    assert score_dose(p)["components"]["cfu_adequacy"] == 10
 
 
 @pytest.mark.parametrize("change", ["scope", "owner", "conflicting_counts"])

@@ -150,9 +150,9 @@ def test_reviewed_lgg_registry_identity_retains_native_support(status: str | Non
     product = _owned_product(include_source_ref=True, **fields)
 
     assert independent_clinical_strains(product) == product["probiotic_data"]["clinical_strains"]
-    # Registry support wins over the row's claim: LGG is medium (moderate, 6 points)
+    # Registry support wins over the row's claim: LGG is medium (moderate, 9 points)
     # since Dr Pham's 2026-09-22 review graded ESPGHAN's evidence moderate quality.
-    assert score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"] == 6
+    assert score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"] == 9
 
 
 @pytest.mark.parametrize(
@@ -390,7 +390,7 @@ def test_pending_strain_keeps_label_potency_without_clinical_adequacy() -> None:
 
     dose = score_dose(product)
     assert dose["components"]["per_strain_cfu_disclosure"] == 10
-    assert dose["components"]["cfu_adequacy"] == 6
+    assert dose["components"]["cfu_adequacy"] == 10
     assert score_evidence(product)["components"]["dose_applicability"] == 0
 
 

@@ -12,6 +12,8 @@ import sys
 from pathlib import Path
 from typing import Any, Dict
 
+import pytest
+
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 
@@ -243,7 +245,10 @@ def test_high_variability_botanical_count_dedupes_duplicate_rows() -> None:
 
     assert immune_meta["high_variability_botanical_count"] == 5
     assert "immune_high_variability_botanical_stack" in formulation["penalties"]
-    assert formulation["score"] < 4.0
+    assert formulation["penalties"]["immune_high_variability_botanical_stack"] == -3.0
+    assert formulation["score"] == pytest.approx(
+        sum(formulation["components"].values()) - 3.0
+    )
 
 
 def test_immune_goal_mapping_excludes_broad_lifestyle_clusters() -> None:
