@@ -764,3 +764,17 @@ def test_nettle_glucose_rules_cite_human_trials():
         assert "18 mg/dL" in sub["mechanism"]
     assert [s["severity"] for s in subs] == ["caution", "caution", "monitor", "caution"]
     assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+
+
+def test_vanadium_glucose_rules_cite_vanadyl_sulfate_trials():
+    rule = _rule("RULE_IQM_VANADIUM_DIABETES")
+    subs = [_sub_rule(rule, "condition_id", "diabetes")] + [
+        _sub_rule(rule, "drug_class_id", dc)
+        for dc in ("hypoglycemics_high_risk", "hypoglycemics_lower_risk", "hypoglycemics_unknown")
+    ]
+    for sub in subs:
+        assert sub["sources"] == [_pmid("11238540"), _pmid("10726921")]
+        assert "150 mg/day" in sub["mechanism"]
+        assert "PTP-1B" not in sub["mechanism"]
+    assert [s["severity"] for s in subs] == ["caution", "caution", "monitor", "caution"]
+    assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review

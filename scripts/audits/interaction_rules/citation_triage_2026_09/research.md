@@ -445,3 +445,20 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
   leaves "have insulin secretagogue, PPARgamma agonistic, and alpha-glucosidase inhibitory effects".
 - **PMID 31802554** (Ziaei, Phytother Res 2020; SR/MA, 8 RCTs, n = 401): fasting blood sugar WMD
   -18.01 mg/dl (95% CI -30.04 to -5.97); insulin, HOMA-IR and HbA1c not significantly reduced.
+
+## RULE_IQM_VANADIUM_DIABETES — re-sourced (diabetes, three hypoglycemic drug classes)
+
+- **PMID 37958659** ("Vanadium Compounds with Antidiabetic Potential", IJMS 2023; PMC10650557): review of
+  vanadium compounds; the abstract never names vanadyl sulfate (verifier subject miss). Full text:
+  vanadium "seems to avoid the risk of hypoglycemia" alone, "vanadyl compounds can enhance the
+  effectiveness of administered insulin", and human vanadyl sulfate trials (30-150 mg/day) were small
+  and short with "ambiguous" relevance. It does not carry "Clinical studies showed FBG and HbA1c
+  reductions at 150 mg/day" or "inhibits PTP-1B" for vanadyl sulfate. Replaced by the trials:
+- **PMID 11238540** (Cusi, JCEM 2001; n = 11 T2DM): vanadyl sulfate 150 mg/day for 6 weeks; "fasting plasma
+  glucose (FPG) decreased from 194 +/- 16 to 155 +/- 15 mg/dL, hemoglobin A(1c) decreased from 8.1 +/-
+  0.4 to 7.6 +/- 0.4%"; endogenous glucose production reduced ~20%; "liver, rather than muscle, is the
+  primary target".
+- **PMID 10726921** (Goldfine, Metabolism 2000; n = 16 T2DM, 75/150/300 mg/day for 6 weeks): "Fasting
+  glucose and hemoglobin A1c (HbA1c) decreased significantly in the 150- and 300-mg VOSO4 groups";
+  "The 150- and 300-mg vanadyl doses caused some gastrointestinal intolerance"; "it does not
+  dramatically improve insulin sensitivity or glycemic control".
