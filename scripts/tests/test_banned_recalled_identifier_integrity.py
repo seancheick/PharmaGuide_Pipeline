@@ -141,3 +141,23 @@ def test_banned_tansy_cui_is_the_plant_not_a_flower_essence(banned_recalled):
     entry = _find(banned_recalled, "BANNED_TANSY")
     assert entry["cui"] == "C0331409"
     assert "C1256219" in json.dumps(entry["review"]["change_log"])
+
+
+def test_add_5a_hydroxy_laxogenin_has_its_rxnorm_and_umls_anchors(banned_recalled):
+    """5alpha-hydroxy-laxogenin has an RxNorm ingredient and a UMLS concept.
+    RxNav 1801703 is an active IN named "5.alpha.-hydroxy laxogenin"; GSRS
+    844KE20WT5 (this entry's UNII) lists RXCUI 1801703 as its PRIMARY code.
+    UMLS C4276029 "5.alpha.-hydroxy laxogenin" (Organic Chemical,
+    Pharmacologic Substance) holds that RXNORM atom. Searches for
+    "5alpha-hydroxy laxogenin" missed it because UMLS spells the name with
+    dotted ".alpha.". Plain laxogenin is a different concept (C0915797).
+    The annotated null and its curated override were wrong. Verified in
+    RxNav, GSRS and UMLS 2026-09-26."""
+    entry = _find(banned_recalled, "ADD_5A_HYDROXY_LAXOGENIN")
+    assert entry.get("rxcui") == "1801703"
+    assert entry.get("cui") == "C4276029"
+    assert "cui_status" not in entry and "cui_note" not in entry
+    overrides = json.loads(
+        (REPO_ROOT / "scripts" / "data" / "curated_overrides" / "cui_overrides.json").read_text()
+    )
+    assert overrides["5a-hydroxy laxogenin"]["cui"] == "C4276029"

@@ -15135,14 +15135,19 @@
             "date": "2026-09-26",
             "change": "UNII HT7W184YG4 -> 844KE20WT5. GSRS: HT7W184YG4 is LAXOGENIN (C27H42O4, CAS 1177-71-5), which lacks the 5alpha-hydroxyl; 844KE20WT5 is 5.ALPHA.-HYDROXY LAXOGENIN (LAXOSTERONE; C27H42O5; CAS 56786-63-1; InChIKey HCRGPOQBVFMZFY-PPCFKNSFSA-N = PubChem CID 69906537), the compound this entry names. gsrs block regenerated from the new record. The old UNII passed verify_unii only through the 'laxogenin' alias, which stays as a label-matching term. No DSLD label in the corpus carries either UNII or names laxogenin, so matching is unchanged.",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "rxcui none -> 1801703; cui null (cui_status no_confirmed_umls_match, cui_note 'No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.') -> C4276029. RxNav 1801703 is an active IN '5.alpha.-hydroxy laxogenin'; GSRS 844KE20WT5 lists RXCUI 1801703 as PRIMARY. UMLS C4276029 '5.alpha.-hydroxy laxogenin' (Organic Chemical, Pharmacologic Substance) holds that RXNORM atom; earlier searches spelled '5alpha' and missed UMLS's dotted '.alpha.' form. Plain laxogenin is a separate concept (C0915797). cui_overrides.json '5a-hydroxy laxogenin' null -> C4276029.",
+            "by": "claude-audit"
           }
         ]
       },
-      "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.",
+      "cui": "C4276029",
       "external_ids": {
         "unii": "844KE20WT5"
       },
+      "rxcui": "1801703",
       "gsrs": {
         "substance_name": "5.ALPHA.-HYDROXY LAXOGENIN",
         "substance_class": "chemical",
