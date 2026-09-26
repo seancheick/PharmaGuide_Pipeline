@@ -870,3 +870,20 @@ def test_5htp_pregnancy_rules_drop_a_muscle_relaxant_bookshelf_chapter():
 
 def test_no_interaction_rule_cites_the_muscle_relaxant_chapter():
     assert "books/NBK548375" not in json.dumps(RULES)
+
+
+MSKCC_BORAGE = "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/borage"
+
+
+def test_borage_seizure_rule_cites_the_borage_case_and_the_epo_counterpoint():
+    rule = _rule("RULE_INGREDIENT_BORAGE_SEED_OIL__SEIZURE")
+    seizure = _sub_rule(rule, "condition_id", "seizure_disorder")
+
+    assert seizure["sources"] == [_pmid("21387119"), MSKCC_BORAGE, _pmid("17764919")]
+    assert (seizure["severity"], seizure["evidence_level"]) == ("monitor", "limited")
+    assert "status epilepticus" in seizure["mechanism"].lower()
+    assert "spurious" in seizure["mechanism"]
+    copy = json.dumps(seizure).lower()
+    for stale in ("~24%", "neurotoxic risk", "applies similarly to borage"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review

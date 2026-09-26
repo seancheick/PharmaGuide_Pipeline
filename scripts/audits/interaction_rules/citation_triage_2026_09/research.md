@@ -555,3 +555,17 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
   MAOI with 5-HTP"; "linezolid (Zyvox, an antibiotic MAOI): There is a case report of an interaction
   with 5-HTP causing serotonin syndrome". Added to maois beside the class review **PMID 31523132**
   (serotonin syndrome: MAOI plus serotonergic drugs "especially dangerous").
+
+## RULE_INGREDIENT_BORAGE_SEED_OIL__SEIZURE — re-sourced (seizure_disorder)
+
+- **PMID 17764919** (Puri, "The safety of evening primrose oil in epilepsy", 2007) was the only source. It
+  is about evening primrose oil, not borage, and concludes the old GLA-seizure association "is shown
+  to be spurious" — yet the rule said the concern "applies similarly to borage" and advised avoiding
+  high doses. It stays as the GLA-class counterpoint (reviewed entry: subject heuristic).
+- **PMID 21387119** (Al-Khamees, J Med Toxicol 2011): "We report a case of status epilepticus in a patient
+  who consumed borage oil for one week"; borage oil is "an abundant source of gamma-linolenic acid".
+- **MSKCC About Herbs: Borage**: case "Continuous seizure activity: In an otherwise previously healthy
+  41-year-old woman, with short-term use (1 week) of borage oil"; "Borage oil products should be
+  certified free of toxic compounds called unsaturated pyrrolizidine alkaloids (UPAs)"; UPAs cause
+  "toxic liver effects". Removed as unsourced: "GLA, ~24%" and PAs "pose additional neurotoxic risk".
+  evidence_level theoretical → limited (one human case).
