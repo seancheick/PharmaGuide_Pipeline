@@ -102,7 +102,9 @@ def test_whole_plant_labels_not_falsely_rejected(enricher):
         ("Ashwagandha Root Extract", "ashwagandha"),
         ("Pumpkin Seed Extract", "pumpkin"),
         ("Grape Seed Extract", "grape_seed"),
-        ("Rhubarb Root Extract", "rhubarb"),
+        # The root, never the leaf: since a66c71bb the root is the watchlist
+        # entry WATCH_RHUBARB_ROOT (anthraquinone laxative), which owns its safety.
+        ("Rhubarb Root Extract", "WATCH_RHUBARB_ROOT"),
     ]:
         r = enricher._is_recognized_non_scorable(label, label)
         assert r is not None and r.get("matched_entry_id") == expect, (

@@ -28,14 +28,11 @@ paths:
 - Safety verdicts (BLOCKED/UNSAFE) are separate from quality. Never let a quality change hide or
   soften a safety verdict.
 
-**Measuring a change** (never re-run the ~45-min full pipeline just to measure)
+**Changing a score:** follow the `/pg-scoring-change` skill. It covers the Owner Check, the
+one-product probe, a failing test, the brand probe, `shadow-diff` before/after on stored inputs,
+and a fresh-context review. Never re-run the ~45-minute full pipeline just to measure, and never run
+a pipeline while the tree has uncommitted scoring edits; its outputs are invalid.
 
-1. Owner Check (AGENTS.md), then a failing regression test.
-2. Probe one real product at the scored layer, printing the driver field, before and after.
-3. Targeted brand probe on a few brands that exercise the path.
-4. For enricher-side changes, measure through `enrich_product`. Calling `_collect_*` directly
-   invents regressions.
-5. Before claiming a routing or scoring fix: a before/after rescore of stored inputs from a clean
-   HEAD worktree, the full-corpus route/score diff, and an explanation of the top movers.
-   Synthetic tests alone hide over-promotion.
-6. Never run a pipeline while the tree has uncommitted scoring edits; its outputs are invalid.
+**Owners in the matrix:** `ingredient_form_quality` (ADR-0003), `quality_score_v4_contract` and
+`scoring_input_contract` (ADR-0002), `probiotic_row_identity`, `prebiotic_identity`,
+`certification_evidence`.

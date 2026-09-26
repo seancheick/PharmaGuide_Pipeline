@@ -54,7 +54,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-09-25",
+    "last_updated": "2026-09-26",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1744,7 +1744,9 @@
         "changes": [
           "Defined bio_score as a within-parent 0-15 form-quality scale; the best evidence-supported eligible form or tied forms receive 15.",
           "Aligned six disclosed oral/sublingual B12 forms at 15 because reviewed evidence does not establish meaningful absorption or efficacy superiority at equivalent supplemental doses.",
-          "Set B12 unspecified to 14 under the existing lowest-eligible-minus-one nondisclosure rule and removed conflicting methyl/MTHFR and sublingual-premium copy."
+          "Set B12 unspecified to 14 under the existing lowest-eligible-minus-one nondisclosure rule and removed conflicting methyl/MTHFR and sublingual-premium copy.",
+          "2026-09-26: cascara_sagrada gains rxcui 66869 (RxNorm IN 'cascara sagrada', ATC A06AB07); its note had said no RxNorm concept existed. Receipt: scripts/audits/pending_items_20260926/research.md.",
+          "2026-09-26: miroestrol description no longer calls it a coumestan: PubChem CID 165001 (C20H22O6) is a pentacyclic phytoestrogen, while the coumestan skeleton is [1]benzofuro[3,2-c]chromen-6-one (CID 638309). Receipt: scripts/audits/pending_items_20260926/research.md."
         ],
         "regression_tests": "scripts/tests/test_iqm_b12_sublingual_integrity.py, scripts/tests/test_b35_dr_pham_signoff_integrity.py, scripts/tests/test_ingredient_matching_regression.py"
       },
@@ -35326,7 +35328,8 @@
   "miroestrol": {
     "standard_name": "Miroestrol",
     "category": "herbs",
-    "cui": "C0056493",
+    "cui": "C3491692",
+    "cui_note": "Corrected 2026-09-26: C0056493 resolves to 'crisnatol' (a chrysene-derived antineoplastic; MSH NM crisnatol, NCI PT Crisnatol), and pubchem_cid 5318042 was (E)-hex-2-en-1-ol (C6H12O). C3491692 is MeSH SCR C571572 'miroestrol' ('from tuberous roots of P. candollei var. mirifica'); PubChem name search for miroestrol returns only CID 165001 (Miroestrol, C20H22O6, CAS 2618-41-9, InChIKey RJKLDOLOCIQYFS-PRTISISMSA-N). banned_recalled RISK_MIROESTROL uses the same CUI and CID. GSRS has no miroestrol record.",
     "forms": {
       "miroestrol (unspecified)": {
         "bio_score": 3.0,
@@ -35363,7 +35366,7 @@
       "research_status": "validated"
     },
     "external_ids": {
-      "pubchem_cid": 5318042
+      "pubchem_cid": 165001
     },
     "gsrs": {
       "substance_name": "Miroestrol",
@@ -35379,11 +35382,11 @@
     "aliases": [
       "Miroestrol"
     ],
-    "description": "Estrogenic coumestan constituent of Pueraria mirifica, used as a standardization marker for kwao krua root extracts.",
+    "description": "Estrogenic constituent of Pueraria mirifica, used as a standardization marker for kwao krua root extracts.",
     "dosage_importance": 0.3,
     "source": "quarantine_remediation_2026_09_19_clinical_signoff",
     "priority": 1,
-    "rxcui_note": "No RxNorm concept exists for this standardization constituent; identified via UNII/PubChem instead."
+    "rxcui_note": "No RxNorm concept exists for this standardization constituent; identified via PubChem CID 165001 and UMLS C3491692 instead (GSRS has no miroestrol record, so there is no UNII)."
   },
   "isothiocyanates": {
     "standard_name": "Isothiocyanates",
@@ -62081,7 +62084,7 @@
         }
       }
     },
-    "cui": "C0885670",
+    "cui": "C0031562",
     "rxcui": "1362735",
     "match_rules": {
       "priority": 0,
@@ -62097,7 +62100,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "",
+    "cui_note": "Corrected 2026-09-26: C0885670 resolves to 'Phlorizinum, trituration of a substance discovered in the fresh bark of trees, phlorizin, Homeopathic preparation' (a homeopathic trituration). C0031562 'phlorhizin' (Organic Chemical, Pharmacologic Substance, Biologically Active Substance; MSH MH Phlorhizin, RXNORM IN, MTHSPL PHLORIZIN) is the compound: UMLS maps this entry's rxcui 1362735 to it, and RxNav 1362735 carries UNII CU9S17279X (anhydrous PHLORIZIN, InChIKey IOUVKUPGCMBWBT-QNDFHXLGSA-N = PubChem CID 6072).",
     "external_ids": {
       "unii": "CU9S17279X"
     },
@@ -67333,6 +67336,7 @@
     "category": "herbs",
     "category_enum": "herbs",
     "cui": "C0205704",
+    "rxcui": "66869",
     "aliases": [
       "cascara",
       "rhamnus purshiana",
@@ -67358,7 +67362,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Cascara Sagrada (Frangula purshiana bark). Contains cascarosides A-D (anthraquinone glycosides). Stimulant laxative acting on colonic smooth muscle. FDA reclassified as Category III (insufficient data) in 2002 but still legal in supplements. UNII 4VBP01X99F, CAS 8015-89-2. B31 audit 2026-04-25: pre-absorption hydrolysis (PMID:30321134, PMID:22982073). Active at colonic lumen; systemic F low.",
+        "notes": "Cascara Sagrada (Frangula purshiana bark). Contains cascarosides A-F (anthraquinone glycosides). Stimulant laxative acting on colonic smooth muscle. FDA's 2002 final rule (67 FR 31125) deemed cascara not generally recognized as safe and effective (category II) for OTC laxative drug products after requested carcinogenicity data were not submitted; the rule does not address dietary supplements. UNII 4VBP01X99F, CAS 8015-89-2. B31 audit 2026-04-25: pre-absorption hydrolysis (PMID:30321134, PMID:22982073). Active at colonic lumen; systemic F low.",
         "aliases": [
           "cascara sagrada extract",
           "cascara sagrada bark",
@@ -67383,7 +67387,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Whole Cascara Sagrada bark powder. Lower potency than standardized extract; cascarosides A-D not concentrated. D2.9.2 (2026-04-20): added to prevent 'Cascara Sagrada bark powder' labels falling to extract form, which overstates absorption. B31 audit 2026-04-25: cascara class baseline.",
+        "notes": "Whole Cascara Sagrada bark powder. Lower potency than standardized extract; cascarosides A-F not concentrated. D2.9.2 (2026-04-20): added to prevent 'Cascara Sagrada bark powder' labels falling to extract form, which overstates absorption. B31 audit 2026-04-25: cascara class baseline.",
         "aliases": [
           "cascara sagrada powder",
           "cascara sagrada bark powder",
@@ -67408,7 +67412,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "RxCUI 66869 is the RxNorm ingredient 'cascara sagrada' (tty IN, ATC A06AB07); 1350209 'Frangula purshiana bark extract' is the narrower extract concept. Verified on RxNav 2026-09-26."
   },
   "blue_flag": {
     "standard_name": "Blue Flag",

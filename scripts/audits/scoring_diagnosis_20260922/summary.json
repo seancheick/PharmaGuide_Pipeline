@@ -1,0 +1,6786 @@
+{
+  "count": 15421,
+  "unique_ids": 15421,
+  "errors": [],
+  "statuses": {
+    "scored": 15244,
+    "suppressed_safety": 70,
+    "not_scored": 107
+  },
+  "routes": {
+    "b_complex": {
+      "n": 146,
+      "max": 97.1,
+      "pillars": {
+        "formulation": {
+          "mean": 13.96,
+          "median": 14.0,
+          "max": 17.5,
+          "common": [
+            [
+              14.5,
+              11
+            ],
+            [
+              13.2,
+              9
+            ],
+            [
+              12.9,
+              9
+            ],
+            [
+              13.6,
+              8
+            ],
+            [
+              14.0,
+              7
+            ]
+          ]
+        },
+        "dose": {
+          "mean": 15.52,
+          "median": 16.9,
+          "max": 19.9,
+          "common": [
+            [
+              12.2,
+              22
+            ],
+            [
+              19.0,
+              19
+            ],
+            [
+              17.3,
+              11
+            ],
+            [
+              18.0,
+              8
+            ],
+            [
+              18.7,
+              7
+            ]
+          ]
+        },
+        "evidence": {
+          "mean": 19.87,
+          "median": 20.0,
+          "max": 20.0,
+          "common": [
+            [
+              20.0,
+              131
+            ],
+            [
+              18.9,
+              7
+            ],
+            [
+              19.1,
+              3
+            ],
+            [
+              19.6,
+              3
+            ],
+            [
+              16.5,
+              1
+            ]
+          ]
+        },
+        "transparency": {
+          "mean": 12.76,
+          "median": 13.5,
+          "max": 15.0,
+          "common": [
+            [
+              15.0,
+              68
+            ],
+            [
+              13.5,
+              41
+            ],
+            [
+              12.5,
+              7
+            ],
+            [
+              0.0,
+              4
+            ],
+            [
+              5.7,
+              3
+            ]
+          ]
+        },
+        "verification": {
+          "mean": 9.49,
+          "median": 10.0,
+          "max": 15.0,
+          "common": [
+            [
+              10.0,
+              44
+            ],
+            [
+              6.0,
+              37
+            ],
+            [
+              8.0,
+              33
+            ],
+            [
+              15.0,
+              30
+            ],
+            [
+              5.5,
+              1
+            ]
+          ]
+        },
+        "safety_hygiene": {
+          "mean": 8.88,
+          "median": 9.0,
+          "max": 10.0,
+          "common": [
+            [
+              10.0,
+              68
+            ],
+            [
+              8.0,
+              47
+            ],
+            [
+              9.0,
+              15
+            ],
+            [
+              7.0,
+              13
+            ],
+            [
+              6.0,
+              1
+            ]
+          ]
+        }
+      },
+      "top": [
+        {
+          "id": "209616",
+          "name": "Super B Energy Complex",
+          "score": 97.1,
+          "pillars": {
+            "formulation": 17.2,
+            "dose": 19.9,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "8721",
+          "name": "Super B-Complex Supplement With Vitamin C",
+          "score": 93.5,
+          "pillars": {
+            "formulation": 14.5,
+            "dose": 19.0,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "8795",
+          "name": "Super B-Complex Supplement With Vitamin C",
+          "score": 93.5,
+          "pillars": {
+            "formulation": 14.5,
+            "dose": 19.0,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        }
+      ]
+    },
+    "fiber_digestive": {
+      "n": 411,
+      "max": 97.8,
+      "pillars": {
+        "formulation": {
+          "mean": 14.58,
+          "median": 14.6,
+          "max": 20.0,
+          "common": [
+            [
+              12.0,
+              59
+            ],
+            [
+              20.0,
+              53
+            ],
+            [
+              16.4,
+              35
+            ],
+            [
+              19.3,
+              23
+            ],
+            [
+              17.9,
+              22
+            ]
+          ]
+        },
+        "dose": {
+          "mean": 10.83,
+          "median": 12.0,
+          "max": 20.0,
+          "common": [
+            [
+              12.8,
+              139
+            ],
+            [
+              7.2,
+              123
+            ],
+            [
+              12.0,
+              32
+            ],
+            [
+              16.0,
+              32
+            ],
+            [
+              8.0,
+              25
+            ]
+          ]
+        },
+        "evidence": {
+          "mean": 6.86,
+          "median": 6.6,
+          "max": 20.0,
+          "common": [
+            [
+              0.0,
+              164
+            ],
+            [
+              15.6,
+              44
+            ],
+            [
+              7.2,
+              44
+            ],
+            [
+              12.2,
+              42
+            ],
+            [
+              20.0,
+              23
+            ]
+          ]
+        },
+        "transparency": {
+          "mean": 10.17,
+          "median": 13.5,
+          "max": 15.0,
+          "common": [
+            [
+              15.0,
+              169
+            ],
+            [
+              13.5,
+              46
+            ],
+            [
+              0.0,
+              39
+            ],
+            [
+              7.5,
+              17
+            ],
+            [
+              10.5,
+              12
+            ]
+          ]
+        },
+        "verification": {
+          "mean": 8.43,
+          "median": 8.0,
+          "max": 15.0,
+          "common": [
+            [
+              8.0,
+              134
+            ],
+            [
+              10.0,
+              127
+            ],
+            [
+              6.0,
+              124
+            ],
+            [
+              15.0,
+              25
+            ],
+            [
+              5.5,
+              1
+            ]
+          ]
+        },
+        "safety_hygiene": {
+          "mean": 9.17,
+          "median": 10.0,
+          "max": 10.0,
+          "common": [
+            [
+              10.0,
+              297
+            ],
+            [
+              6.0,
+              46
+            ],
+            [
+              9.0,
+              29
+            ],
+            [
+              8.0,
+              25
+            ],
+            [
+              7.0,
+              8
+            ]
+          ]
+        }
+      },
+      "top": [
+        {
+          "id": "336306",
+          "name": "FiberMend",
+          "score": 97.8,
+          "pillars": {
+            "formulation": 18.6,
+            "dose": 19.2,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "77220",
+          "name": "Psyllium Husk 5g",
+          "score": 89.8,
+          "pillars": {
+            "formulation": 20.0,
+            "dose": 16.8,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 8.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "227960",
+          "name": "Fortify Daily Prebiotic Fiber Raspberry Lemonade Flavored",
+          "score": 88.5,
+          "pillars": {
+            "formulation": 17.7,
+            "dose": 16.8,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 10.0,
+            "safety_hygiene": 9.0
+          }
+        }
+      ]
+    },
+    "generic": {
+      "n": 10466,
+      "max": 100.0,
+      "pillars": {
+        "formulation": {
+          "mean": 12.42,
+          "median": 13.0,
+          "max": 20.0,
+          "common": [
+            [
+              16.0,
+              1604
+            ],
+            [
+              13.3,
+              1171
+            ],
+            [
+              10.7,
+              916
+            ],
+            [
+              12.0,
+              739
+            ],
+            [
+              14.7,
+              474
+            ]
+          ]
+        },
+        "dose": {
+          "mean": 14.3,
+          "median": 14.5,
+          "max": 20.0,
+          "common": [
+            [
+              20.0,
+              2910
+            ],
+            [
+              14.5,
+              2136
+            ],
+            [
+              11.4,
+              2016
+            ],
+            [
+              9.5,
+              1514
+            ],
+            [
+              18.2,
+              236
+            ]
+          ]
+        },
+        "evidence": {
+          "mean": 8.02,
+          "median": 10.4,
+          "max": 20.0,
+          "common": [
+            [
+              0.0,
+              3901
+            ],
+            [
+              15.6,
+              2252
+            ],
+            [
+              11.1,
+              951
+            ],
+            [
+              10.4,
+              637
+            ],
+            [
+              7.3,
+              553
+            ]
+          ]
+        },
+        "transparency": {
+          "mean": 14.09,
+          "median": 15.0,
+          "max": 15.0,
+          "common": [
+            [
+              15.0,
+              8472
+            ],
+            [
+              13.5,
+              885
+            ],
+            [
+              10.5,
+              156
+            ],
+            [
+              9.0,
+              125
+            ],
+            [
+              12.0,
+              72
+            ]
+          ]
+        },
+        "verification": {
+          "mean": 7.81,
+          "median": 8.0,
+          "max": 15.0,
+          "common": [
+            [
+              6.0,
+              4652
+            ],
+            [
+              8.0,
+              2727
+            ],
+            [
+              10.0,
+              2486
+            ],
+            [
+              15.0,
+              408
+            ],
+            [
+              5.5,
+              175
+            ]
+          ]
+        },
+        "safety_hygiene": {
+          "mean": 9.39,
+          "median": 10.0,
+          "max": 10.0,
+          "common": [
+            [
+              10.0,
+              8373
+            ],
+            [
+              8.0,
+              696
+            ],
+            [
+              9.0,
+              569
+            ],
+            [
+              7.0,
+              305
+            ],
+            [
+              0.0,
+              227
+            ]
+          ]
+        }
+      },
+      "top": [
+        {
+          "id": "284239",
+          "name": "Curcumin Phytosome 1000 mg",
+          "score": 100.0,
+          "pillars": {
+            "formulation": 20.0,
+            "dose": 20.0,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "298077",
+          "name": "Curcumin Phytosome 1000 mg",
+          "score": 100.0,
+          "pillars": {
+            "formulation": 20.0,
+            "dose": 20.0,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "298078",
+          "name": "Curcumin Phytosome 1000 mg",
+          "score": 100.0,
+          "pillars": {
+            "formulation": 20.0,
+            "dose": 20.0,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        }
+      ]
+    },
+    "multi_or_prenatal": {
+      "n": 2063,
+      "max": 91.0,
+      "pillars": {
+        "formulation": {
+          "mean": 8.79,
+          "median": 9.6,
+          "max": 16.8,
+          "common": [
+            [
+              2.9,
+              309
+            ],
+            [
+              13.1,
+              153
+            ],
+            [
+              9.6,
+              120
+            ],
+            [
+              6.7,
+              83
+            ],
+            [
+              5.3,
+              69
+            ]
+          ]
+        },
+        "dose": {
+          "mean": 15.15,
+          "median": 15.8,
+          "max": 20.0,
+          "common": [
+            [
+              17.5,
+              53
+            ],
+            [
+              17.8,
+              52
+            ],
+            [
+              16.6,
+              46
+            ],
+            [
+              16.1,
+              42
+            ],
+            [
+              15.4,
+              39
+            ]
+          ]
+        },
+        "evidence": {
+          "mean": 17.84,
+          "median": 18.4,
+          "max": 19.1,
+          "common": [
+            [
+              18.6,
+              902
+            ],
+            [
+              17.9,
+              205
+            ],
+            [
+              18.4,
+              130
+            ],
+            [
+              19.1,
+              93
+            ],
+            [
+              17.2,
+              88
+            ]
+          ]
+        },
+        "transparency": {
+          "mean": 10.77,
+          "median": 11.0,
+          "max": 15.0,
+          "common": [
+            [
+              14.0,
+              402
+            ],
+            [
+              11.0,
+              369
+            ],
+            [
+              12.0,
+              233
+            ],
+            [
+              9.0,
+              138
+            ],
+            [
+              15.0,
+              127
+            ]
+          ]
+        },
+        "verification": {
+          "mean": 8.28,
+          "median": 8.0,
+          "max": 15.0,
+          "common": [
+            [
+              8.0,
+              963
+            ],
+            [
+              10.0,
+              539
+            ],
+            [
+              6.0,
+              479
+            ],
+            [
+              15.0,
+              70
+            ],
+            [
+              5.5,
+              10
+            ]
+          ]
+        },
+        "safety_hygiene": {
+          "mean": 7.71,
+          "median": 8.0,
+          "max": 10.0,
+          "common": [
+            [
+              10.0,
+              577
+            ],
+            [
+              7.0,
+              358
+            ],
+            [
+              8.0,
+              343
+            ],
+            [
+              5.0,
+              255
+            ],
+            [
+              6.0,
+              232
+            ]
+          ]
+        }
+      },
+      "top": [
+        {
+          "id": "328830",
+          "name": "Basic Prenatal",
+          "score": 91.0,
+          "pillars": {
+            "formulation": 15.2,
+            "dose": 18.2,
+            "evidence": 18.6,
+            "transparency": 14.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "241703",
+          "name": "Prenatal Multi + DHA 200 mg",
+          "score": 88.2,
+          "pillars": {
+            "formulation": 13.2,
+            "dose": 19.6,
+            "evidence": 18.4,
+            "transparency": 12.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "266767",
+          "name": "Prenatal Multi + DHA 200mg",
+          "score": 88.2,
+          "pillars": {
+            "formulation": 13.2,
+            "dose": 19.6,
+            "evidence": 18.4,
+            "transparency": 12.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        }
+      ]
+    },
+    "omega": {
+      "n": 713,
+      "max": 90.4,
+      "pillars": {
+        "formulation": {
+          "mean": 12.96,
+          "median": 13.3,
+          "max": 20.0,
+          "common": [
+            [
+              15.0,
+              150
+            ],
+            [
+              13.3,
+              126
+            ],
+            [
+              11.7,
+              103
+            ],
+            [
+              16.7,
+              51
+            ],
+            [
+              10.0,
+              46
+            ]
+          ]
+        },
+        "dose": {
+          "mean": 11.26,
+          "median": 12.0,
+          "max": 20.0,
+          "common": [
+            [
+              0.0,
+              108
+            ],
+            [
+              20.0,
+              68
+            ],
+            [
+              14.8,
+              50
+            ],
+            [
+              10.0,
+              47
+            ],
+            [
+              16.0,
+              47
+            ]
+          ]
+        },
+        "evidence": {
+          "mean": 9.5,
+          "median": 10.0,
+          "max": 15.0,
+          "common": [
+            [
+              10.0,
+              514
+            ],
+            [
+              5.5,
+              93
+            ],
+            [
+              7.4,
+              24
+            ],
+            [
+              15.0,
+              20
+            ],
+            [
+              9.8,
+              16
+            ]
+          ]
+        },
+        "transparency": {
+          "mean": 10.89,
+          "median": 10.4,
+          "max": 15.0,
+          "common": [
+            [
+              10.4,
+              186
+            ],
+            [
+              15.0,
+              121
+            ],
+            [
+              12.7,
+              87
+            ],
+            [
+              9.2,
+              84
+            ],
+            [
+              13.8,
+              81
+            ]
+          ]
+        },
+        "verification": {
+          "mean": 9.17,
+          "median": 8.0,
+          "max": 15.0,
+          "common": [
+            [
+              10.0,
+              276
+            ],
+            [
+              8.0,
+              227
+            ],
+            [
+              6.0,
+              128
+            ],
+            [
+              15.0,
+              78
+            ],
+            [
+              5.5,
+              4
+            ]
+          ]
+        },
+        "safety_hygiene": {
+          "mean": 9.53,
+          "median": 10.0,
+          "max": 10.0,
+          "common": [
+            [
+              10.0,
+              558
+            ],
+            [
+              8.0,
+              54
+            ],
+            [
+              9.0,
+              52
+            ],
+            [
+              6.0,
+              27
+            ],
+            [
+              7.0,
+              21
+            ]
+          ]
+        }
+      },
+      "top": [
+        {
+          "id": "297694",
+          "name": "Prenatal DHA 550 mg",
+          "score": 90.4,
+          "pillars": {
+            "formulation": 20.0,
+            "dose": 20.0,
+            "evidence": 15.0,
+            "transparency": 10.4,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "221683",
+          "name": "Prenatal DHA",
+          "score": 88.3,
+          "pillars": {
+            "formulation": 18.3,
+            "dose": 20.0,
+            "evidence": 15.0,
+            "transparency": 15.0,
+            "verification": 10.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "74124",
+          "name": "Prenatal DHA Unflavored Formula",
+          "score": 88.3,
+          "pillars": {
+            "formulation": 18.3,
+            "dose": 20.0,
+            "evidence": 15.0,
+            "transparency": 15.0,
+            "verification": 10.0,
+            "safety_hygiene": 10.0
+          }
+        }
+      ]
+    },
+    "probiotic": {
+      "n": 537,
+      "max": 80.2,
+      "pillars": {
+        "formulation": {
+          "mean": 11.6,
+          "median": 13.1,
+          "max": 20.0,
+          "common": [
+            [
+              13.8,
+              46
+            ],
+            [
+              13.4,
+              29
+            ],
+            [
+              13.1,
+              29
+            ],
+            [
+              14.7,
+              18
+            ],
+            [
+              7.2,
+              18
+            ]
+          ]
+        },
+        "dose": {
+          "mean": 5.21,
+          "median": 3.3,
+          "max": 20.0,
+          "common": [
+            [
+              3.1,
+              170
+            ],
+            [
+              3.6,
+              115
+            ],
+            [
+              9.1,
+              57
+            ],
+            [
+              1.5,
+              37
+            ],
+            [
+              3.3,
+              26
+            ]
+          ]
+        },
+        "evidence": {
+          "mean": 3.69,
+          "median": 5.0,
+          "max": 11.9,
+          "common": [
+            [
+              0.0,
+              190
+            ],
+            [
+              6.0,
+              116
+            ],
+            [
+              8.0,
+              50
+            ],
+            [
+              3.6,
+              49
+            ],
+            [
+              5.1,
+              35
+            ]
+          ]
+        },
+        "transparency": {
+          "mean": 13.16,
+          "median": 14.0,
+          "max": 15.0,
+          "common": [
+            [
+              15.0,
+              241
+            ],
+            [
+              14.0,
+              62
+            ],
+            [
+              11.0,
+              43
+            ],
+            [
+              13.0,
+              30
+            ],
+            [
+              12.0,
+              30
+            ]
+          ]
+        },
+        "verification": {
+          "mean": 8.85,
+          "median": 8.0,
+          "max": 15.0,
+          "common": [
+            [
+              10.0,
+              237
+            ],
+            [
+              8.0,
+              174
+            ],
+            [
+              6.0,
+              78
+            ],
+            [
+              15.0,
+              27
+            ],
+            [
+              5.5,
+              21
+            ]
+          ]
+        },
+        "safety_hygiene": {
+          "mean": 9.46,
+          "median": 10.0,
+          "max": 10.0,
+          "common": [
+            [
+              10.0,
+              344
+            ],
+            [
+              9.0,
+              129
+            ],
+            [
+              8.0,
+              36
+            ],
+            [
+              7.0,
+              22
+            ],
+            [
+              6.0,
+              6
+            ]
+          ]
+        }
+      },
+      "top": [
+        {
+          "id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+          "name": "DS-01 Daily Synbiotic",
+          "score": 80.2,
+          "pillars": {
+            "formulation": 20.0,
+            "dose": 20.0,
+            "evidence": 10.2,
+            "transparency": 12.0,
+            "verification": 8.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "328090",
+          "name": "Women's 3-in-1 Probiotic Gummy Orange Flavored",
+          "score": 76.6,
+          "pillars": {
+            "formulation": 15.3,
+            "dose": 11.4,
+            "evidence": 11.9,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 8.0
+          }
+        },
+        {
+          "id": "332954",
+          "name": "Women's 3-in-1 Probiotic Gummy Orange Flavored",
+          "score": 76.6,
+          "pillars": {
+            "formulation": 15.3,
+            "dose": 11.4,
+            "evidence": 11.9,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 8.0
+          }
+        }
+      ]
+    },
+    "sports": {
+      "n": 908,
+      "max": 98.7,
+      "pillars": {
+        "formulation": {
+          "mean": 11.49,
+          "median": 11.4,
+          "max": 20.0,
+          "common": [
+            [
+              18.7,
+              74
+            ],
+            [
+              9.3,
+              53
+            ],
+            [
+              17.8,
+              41
+            ],
+            [
+              11.4,
+              32
+            ],
+            [
+              10.7,
+              30
+            ]
+          ]
+        },
+        "dose": {
+          "mean": 15.92,
+          "median": 17.6,
+          "max": 20.0,
+          "common": [
+            [
+              20.0,
+              436
+            ],
+            [
+              12.8,
+              105
+            ],
+            [
+              16.0,
+              84
+            ],
+            [
+              6.4,
+              60
+            ],
+            [
+              17.6,
+              44
+            ]
+          ]
+        },
+        "evidence": {
+          "mean": 12.83,
+          "median": 14.1,
+          "max": 20.0,
+          "common": [
+            [
+              12.2,
+              188
+            ],
+            [
+              20.0,
+              114
+            ],
+            [
+              0.0,
+              96
+            ],
+            [
+              7.2,
+              67
+            ],
+            [
+              17.0,
+              52
+            ]
+          ]
+        },
+        "transparency": {
+          "mean": 10.67,
+          "median": 13.5,
+          "max": 15.0,
+          "common": [
+            [
+              15.0,
+              367
+            ],
+            [
+              13.5,
+              105
+            ],
+            [
+              10.5,
+              98
+            ],
+            [
+              0.0,
+              71
+            ],
+            [
+              9.0,
+              70
+            ]
+          ]
+        },
+        "verification": {
+          "mean": 9.22,
+          "median": 8.0,
+          "max": 15.0,
+          "common": [
+            [
+              8.0,
+              424
+            ],
+            [
+              6.0,
+              176
+            ],
+            [
+              15.0,
+              170
+            ],
+            [
+              10.0,
+              136
+            ],
+            [
+              5.5,
+              2
+            ]
+          ]
+        },
+        "safety_hygiene": {
+          "mean": 7.87,
+          "median": 8.0,
+          "max": 10.0,
+          "common": [
+            [
+              10.0,
+              343
+            ],
+            [
+              6.0,
+              278
+            ],
+            [
+              8.0,
+              169
+            ],
+            [
+              7.0,
+              48
+            ],
+            [
+              5.0,
+              39
+            ]
+          ]
+        }
+      },
+      "top": [
+        {
+          "id": "175321",
+          "name": "Creatine Monohydrate 5000 mg",
+          "score": 98.7,
+          "pillars": {
+            "formulation": 18.7,
+            "dose": 20.0,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "183513",
+          "name": "Creatine Monohydrate 5000 mg Unflavored",
+          "score": 98.7,
+          "pillars": {
+            "formulation": 18.7,
+            "dose": 20.0,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        },
+        {
+          "id": "2698",
+          "name": "Creatine Monohydrate Unflavored",
+          "score": 98.7,
+          "pillars": {
+            "formulation": 18.7,
+            "dose": 20.0,
+            "evidence": 20.0,
+            "transparency": 15.0,
+            "verification": 15.0,
+            "safety_hygiene": 10.0
+          }
+        }
+      ]
+    }
+  },
+  "evidence_states": {
+    "b_complex": {
+      "(False, 'evaluated_applicable')": 146
+    },
+    "fiber_digestive": {
+      "(True, 'no_assessable_actives')": 52,
+      "(False, 'evaluated_applicable')": 247,
+      "(True, 'applicability_unestablished')": 93,
+      "(True, 'no_qualifying_human_evidence')": 9,
+      "(True, 'research_present_applicability_unestablished')": 7,
+      "(True, 'evaluated_authority')": 2,
+      "(True, 'evaluated_null')": 1
+    },
+    "generic": {
+      "(False, 'evaluated_applicable')": 6565,
+      "(True, 'evaluated_authority')": 49,
+      "(True, 'no_qualifying_human_evidence')": 368,
+      "(True, 'applicability_unestablished')": 2712,
+      "(True, 'no_assessable_actives')": 502,
+      "(True, 'evaluated_null')": 260,
+      "(True, 'research_present_applicability_unestablished')": 9,
+      "(True, 'identity_material_unresolved')": 1
+    },
+    "multi_or_prenatal": {
+      "(False, 'evaluated_applicable')": 2063
+    },
+    "omega": {
+      "(False, 'evaluated_applicable')": 709,
+      "(True, 'applicability_unestablished')": 4
+    },
+    "probiotic": {
+      "(False, 'research_present_applicability_unestablished')": 343,
+      "(True, 'research_present_applicability_unestablished')": 104,
+      "(False, 'evaluated_applicable')": 4,
+      "(True, 'applicability_unestablished')": 2,
+      "(True, 'no_qualifying_human_evidence')": 51,
+      "(True, 'evaluated_null')": 33
+    },
+    "sports": {
+      "(False, 'evaluated_applicable')": 812,
+      "(True, 'applicability_unestablished')": 59,
+      "(True, 'evaluated_authority')": 29,
+      "(True, 'research_present_applicability_unestablished')": 6,
+      "(True, 'no_assessable_actives')": 2
+    }
+  },
+  "deltas": [
+    {
+      "id": "252404",
+      "name": "BCAA 2:1:1",
+      "before": 57,
+      "after": 56.1,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "252409",
+      "name": "BCAA 3:1:2",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "252414",
+      "name": "BCAA 2:1:1",
+      "before": 57,
+      "after": 55.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "252590",
+      "name": "L-Arginine Base 500 mg",
+      "before": 60,
+      "after": 58.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "253383",
+      "name": "BCAA 2:1:1",
+      "before": 57,
+      "after": 56.1,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "253390",
+      "name": "BCAA 2:1:1",
+      "before": 57,
+      "after": 56.1,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "253409",
+      "name": "BCAA 2:1:1",
+      "before": 57,
+      "after": 56.1,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "253415",
+      "name": "BCAA 3:1:2",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "253419",
+      "name": "BCAA 3:1:2",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "253423",
+      "name": "BCAA 3:1:2",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "253425",
+      "name": "BCAA 2:1:1",
+      "before": 57,
+      "after": 55.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "295062",
+      "name": "BCAA 2:1:1",
+      "before": 58,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "295063",
+      "name": "BCAA 2:1:1",
+      "before": 58,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "295064",
+      "name": "BCAA 2:1:1",
+      "before": 57,
+      "after": 55.3,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "295065",
+      "name": "BCAA 2:1:1",
+      "before": 58,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "295066",
+      "name": "BCAA 2:1:1",
+      "before": 57,
+      "after": 55.3,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "310664",
+      "name": "BCAA 2:1:1 1000 mg",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "310727",
+      "name": "ALCAR 600 mg",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "310965",
+      "name": "BCAA 2:1:1",
+      "before": 58,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "310966",
+      "name": "BCAA 2:1:1",
+      "before": 58,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "310967",
+      "name": "BCAA 3:1:2",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "310968",
+      "name": "BCAA 3:1:2",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "310969",
+      "name": "BCAA 3:1:2",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "310970",
+      "name": "BCAA 3:1:2",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "330319",
+      "name": "BCAA 3:1:2 Powder 1500 mg",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "330320",
+      "name": "BCAA 3:1:2 Powder 1500 mg",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "330321",
+      "name": "BCAA 3:1:2 Powder 1500 mg",
+      "before": 55,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "200928",
+      "name": "Centrum Multi + Probiotics Adults 50+",
+      "before": 51,
+      "after": 74.5,
+      "pillars_delta": {
+        "formulation": 7.5,
+        "dose": 10.4,
+        "evidence": 9.9,
+        "transparency": -4.0
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "218073",
+      "name": "Advanced Care",
+      "before": 63,
+      "after": 60.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "218139",
+      "name": "Health & Wellness",
+      "before": 64,
+      "after": 61.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "218190",
+      "name": "Baby Calm + Comfort",
+      "before": 65,
+      "after": 63.2,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "218195",
+      "name": "Baby Probiotic Drops",
+      "before": 48,
+      "after": 45.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "218199",
+      "name": "Baby Calm + Comfort",
+      "before": 65,
+      "after": 63.2,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "229974",
+      "name": "Probiotic + Multivitamin Gummies Mixed Berry",
+      "before": 59,
+      "after": 77.8,
+      "pillars_delta": {
+        "formulation": -1.3,
+        "dose": 13.7,
+        "evidence": 7.7,
+        "transparency": -1.7
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "246008",
+      "name": "Grow + Thrive Unflavored",
+      "before": 53,
+      "after": 50.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "246009",
+      "name": "Baby Calm + Comfort",
+      "before": 71,
+      "after": 70.5,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "246011",
+      "name": "Baby Grow + Thrive",
+      "before": 62,
+      "after": 60.0,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "246012",
+      "name": "Baby Grow + Thrive",
+      "before": 62,
+      "after": 60.0,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250619",
+      "name": "Strong Beginning",
+      "before": 46,
+      "after": 43.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250636",
+      "name": "Prenatal Wellness Probiotic Mixed Fruit Flavor",
+      "before": 46,
+      "after": 43.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250846",
+      "name": "Digestive Daily Probiotic",
+      "before": 65,
+      "after": 64.0,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250851",
+      "name": "Digestive Daily Probiotic",
+      "before": 75,
+      "after": 74.6,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250853",
+      "name": "Digestive Daily Probiotic",
+      "before": 75,
+      "after": 74.6,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250856",
+      "name": "Digestive Daily Probiotic",
+      "before": 75,
+      "after": 74.6,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250859",
+      "name": "Digestive Daily Probiotic",
+      "before": 75,
+      "after": 74.6,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250862",
+      "name": "Digestive Daily Probiotic",
+      "before": 75,
+      "after": 74.6,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250864",
+      "name": "Digestive Daily Probiotic",
+      "before": 75,
+      "after": 74.6,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250866",
+      "name": "Purely Probiotics Packets No Flavor Added",
+      "before": 67,
+      "after": 64.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250868",
+      "name": "Purely Probiotics Packets No Flavor Added",
+      "before": 67,
+      "after": 64.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250870",
+      "name": "Purely Probiotics Packets No Flavor Added",
+      "before": 67,
+      "after": 64.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250872",
+      "name": "Multivitamin + Probiotic Natural Fruit Punch Flavor!",
+      "before": 62,
+      "after": 70.3,
+      "pillars_delta": {
+        "formulation": -2.5,
+        "dose": 4.5,
+        "evidence": 7.3,
+        "transparency": -1.0
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "250874",
+      "name": "Ultimate Balance for Antiobiotics Fresh Orange Flavor!",
+      "before": 70,
+      "after": 67.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250881",
+      "name": "Ultimate Strength Probiotic",
+      "before": 70,
+      "after": 69.0,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250886",
+      "name": "Ultimate Strength Probiotic",
+      "before": 70,
+      "after": 69.0,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250901",
+      "name": "Health & Wellness",
+      "before": 70,
+      "after": 67.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250910",
+      "name": "Probiotic + Fiber Regularity Packets",
+      "before": 68,
+      "after": 65.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250912",
+      "name": "Purely Probiotics Chewables Bursting Berry Flavor!",
+      "before": 67,
+      "after": 64.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250916",
+      "name": "Purely Probiotics Chewables Bursting Berry Flavor!",
+      "before": 67,
+      "after": 64.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250917",
+      "name": "Purely Probiotics Daily Chewables Bursting Berry Flavor!",
+      "before": 66,
+      "after": 63.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250919",
+      "name": "Probiotic + Multivitamin Chewables Natural Fruit Punch Flavor!",
+      "before": 62,
+      "after": 70.3,
+      "pillars_delta": {
+        "formulation": -2.5,
+        "dose": 4.5,
+        "evidence": 7.3,
+        "transparency": -1.0
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "250929",
+      "name": "Purely Probiotics Packets No Flavor Added",
+      "before": 67,
+      "after": 64.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "250953",
+      "name": "Probiotic + Fiber Regularity Packets",
+      "before": 68,
+      "after": 65.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267554",
+      "name": "Digestive Daily Probiotic Chewables Fresh Orange Flavor",
+      "before": 68,
+      "after": 65.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267563",
+      "name": "Health & Wellness",
+      "before": 70,
+      "after": 67.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267564",
+      "name": "Health & Wellness",
+      "before": 70,
+      "after": 67.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267569",
+      "name": "Ultimate Balance for Antibiotics",
+      "before": 47,
+      "after": 46.3,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267571",
+      "name": "Women's Healthy Balance",
+      "before": 59,
+      "after": 57.2,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267602",
+      "name": "Total Balance",
+      "before": 53,
+      "after": 51.2,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "273846",
+      "name": "Pro Strength Digestive Daily Probiotic",
+      "before": 70,
+      "after": 69.6,
+      "pillars_delta": {
+        "evidence": -0.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "269621",
+      "name": "Digestive Probiotic 20 Billion",
+      "before": 46,
+      "after": 49.2,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "59952",
+      "name": "BCAA Capsules",
+      "before": 51,
+      "after": 49.3,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "60214",
+      "name": "L-Carnitine Fumarate 855 mg",
+      "before": 62,
+      "after": 61.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "63960",
+      "name": "Fast Melt Immune Probiotic 3 Billion With Bifodan",
+      "before": 64,
+      "after": 61.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "81737",
+      "name": "L-Carnitine Fumarate With Biosint Carnitines 855 mg",
+      "before": 62,
+      "after": 61.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "82415",
+      "name": "Probiotic 2 Billion With LactoSpore",
+      "before": 74,
+      "after": 71.8,
+      "pillars_delta": {
+        "evidence": -2.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "15919",
+      "name": "Multi Vitamin+ Apricot-Mango",
+      "before": 39,
+      "after": 39.0,
+      "pillars_delta": {
+        "evidence": -0.3
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "15923",
+      "name": "Multi Vitamin+ Cherry-Pomegranate",
+      "before": 39,
+      "after": 39.0,
+      "pillars_delta": {
+        "evidence": -0.3
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "178595",
+      "name": "Digestive Health Probiotic",
+      "before": 50,
+      "after": 48.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "211458",
+      "name": "Probiotic Gummies",
+      "before": 60,
+      "after": 58.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "176044",
+      "name": "Amplified Wheybolic Extreme 60 Original Natural Chocolate",
+      "before": 72,
+      "after": 71.4,
+      "pillars_delta": {
+        "evidence": -0.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "18382",
+      "name": "Milk Thistle Sport",
+      "before": 73,
+      "after": 72.8,
+      "pillars_delta": {
+        "formulation": -0.1
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "1840",
+      "name": "Multi-Enzyme Formula",
+      "before": 54,
+      "after": 54.2,
+      "pillars_delta": {
+        "formulation": -0.2
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "1841",
+      "name": "Multi-Enzyme Formula",
+      "before": 54,
+      "after": 54.2,
+      "pillars_delta": {
+        "formulation": -0.2
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "191085",
+      "name": "Nitric Oxide Maximizer",
+      "before": 65,
+      "after": 65.0,
+      "pillars_delta": {
+        "evidence": -0.4
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "212443",
+      "name": "Probiotic Complex Extra Strength 100 Billion CFUs",
+      "before": 57,
+      "after": 54.6,
+      "pillars_delta": {
+        "evidence": -2.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "213586",
+      "name": "Maca Man",
+      "before": 43,
+      "after": 42.5,
+      "pillars_delta": {
+        "evidence": -0.6
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "214405",
+      "name": "Probiotic Solutions Prenatal 20 Billion CFUs",
+      "before": 59,
+      "after": 57.0,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "224675",
+      "name": "L-Arginine 1000 mg",
+      "before": 59,
+      "after": 57.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "224678",
+      "name": "L-Arginine 1000 mg",
+      "before": 58,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "224689",
+      "name": "L-Arginine 1000 mg",
+      "before": 58,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "227837",
+      "name": "Acetyl L-Carnitine 500 mg",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "227864",
+      "name": "L-Carnitine 500 mg",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "227866",
+      "name": "L-Carnitine 500 mg",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "229379",
+      "name": "L-Carnitine",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "242997",
+      "name": "Acetyl-L-Carnitine Alpha-Lipoic Acid 500 mg/200 mg",
+      "before": 61,
+      "after": 60.4,
+      "pillars_delta": {
+        "evidence": -0.4
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "259818",
+      "name": "Circulatory Health",
+      "before": 54,
+      "after": 53.3,
+      "pillars_delta": {
+        "evidence": -0.4
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "2715",
+      "name": "Amino Complex 4400",
+      "before": 72,
+      "after": 71.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "2723",
+      "name": "RapidDrive Post-Workout Amino Complex Fruit Punch",
+      "before": 64,
+      "after": 63.5,
+      "pillars_delta": {
+        "evidence": -0.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "27461",
+      "name": "Carnitine 500",
+      "before": 66,
+      "after": 64.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "27804",
+      "name": "Amplified Recover Fruit Punch",
+      "before": 66,
+      "after": 65.6,
+      "pillars_delta": {
+        "evidence": -0.5
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "297219",
+      "name": "L-Carnitine",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "304445",
+      "name": "Probiotic Solutions Adults 50 Plus 55 Billion CFUs",
+      "before": 52,
+      "after": 50.0,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "304635",
+      "name": "Carnitine",
+      "before": 64,
+      "after": 62.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "30570",
+      "name": "Nighttime Restore",
+      "before": 73,
+      "after": 71.9,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "309076",
+      "name": "BCAA 1800 mg",
+      "before": 60,
+      "after": 59.4,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "315303",
+      "name": "Maca Man",
+      "before": 47,
+      "after": 46.7,
+      "pillars_delta": {
+        "evidence": -0.5
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "315320",
+      "name": "BCAA 1800 mg",
+      "before": 60,
+      "after": 59.4,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "315333",
+      "name": "One Daily Multivitamin plus Probiotics",
+      "before": 52,
+      "after": 75.6,
+      "pillars_delta": {
+        "formulation": -1.4,
+        "dose": 16.1,
+        "evidence": 10.6,
+        "transparency": -1.7
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "315841",
+      "name": "Circulatory Health",
+      "before": 55,
+      "after": 54.7,
+      "pillars_delta": {
+        "evidence": -0.4
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "315849",
+      "name": "Muscle Recovery & Support",
+      "before": 54,
+      "after": 53.8,
+      "pillars_delta": {
+        "evidence": -0.6
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "31999",
+      "name": "Digestive Enzymes",
+      "before": 53,
+      "after": 52.3,
+      "pillars_delta": {
+        "formulation": -0.3
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "331494",
+      "name": "Fatty Acid Metabolizer",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "33554",
+      "name": "L-Arginine",
+      "before": 61,
+      "after": 59.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "33607",
+      "name": "DHEA+ Prostate & Virility Formula",
+      "before": 39,
+      "after": 38.5,
+      "pillars_delta": {
+        "evidence": -0.4
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "33684",
+      "name": "Carnitine 500",
+      "before": 66,
+      "after": 64.8,
+      "pillars_delta": {
+        "evidence": -1.5
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "42240",
+      "name": "Canitine 500",
+      "before": 67,
+      "after": 66.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "42260",
+      "name": "Super Digestive Enzymes",
+      "before": 56,
+      "after": 55.3,
+      "pillars_delta": {
+        "formulation": -0.3
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "45115",
+      "name": "Muscle Function Formula",
+      "before": 73,
+      "after": 71.9,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "4797",
+      "name": "Amplified Wheybolic Extreme 60 Fruit Punch",
+      "before": 50,
+      "after": 49.9,
+      "pillars_delta": {
+        "evidence": -0.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "5880",
+      "name": "L-Arginine",
+      "before": 61,
+      "after": 59.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "63771",
+      "name": "mTOR Matrix",
+      "before": 51,
+      "after": 50.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "65755",
+      "name": "Muscle Function Complex",
+      "before": 56,
+      "after": 54.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "65944",
+      "name": "L-Carnitine",
+      "before": 66,
+      "after": 65.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "66427",
+      "name": "DHEA Prostate & Virility",
+      "before": 45,
+      "after": 44.5,
+      "pillars_delta": {
+        "evidence": -0.4
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "66983",
+      "name": "Amplified Wheybolic Extreme 60 Original Chocolate",
+      "before": 66,
+      "after": 65.5,
+      "pillars_delta": {
+        "evidence": -0.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "69270",
+      "name": "DHEA Prostate & Virility",
+      "before": 45,
+      "after": 44.5,
+      "pillars_delta": {
+        "evidence": -0.4
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "69393",
+      "name": "L-Carnitine 500 mg",
+      "before": 66,
+      "after": 65.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "69536",
+      "name": "Carnitine",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "69664",
+      "name": "Fatty Acid Metabolizer",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "74808",
+      "name": "Amino Burst 3000",
+      "before": 44,
+      "after": 43.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "74828",
+      "name": "BCAA Complex Chew Tropical Punch",
+      "before": 46,
+      "after": 45.1,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "74854",
+      "name": "BCAA 1800",
+      "before": 60,
+      "after": 59.4,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "76803",
+      "name": "Probiotic Solutions Prenatal 20 Billion CFUs",
+      "before": 49,
+      "after": 47.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "77147",
+      "name": "Probiotic Solutions Multi Strain 25 Billion CFUs",
+      "before": 55,
+      "after": 52.3,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "79147",
+      "name": "Carnitine",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "79168",
+      "name": "Advanced Collagen Formula",
+      "before": 57,
+      "after": 56.6,
+      "pillars_delta": {
+        "evidence": -0.6
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "233029",
+      "name": "Daily Care 25 Billion CFU Guaranteed",
+      "before": 53,
+      "after": 56.7,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "233043",
+      "name": "Mood Daily Care 40 Billion CFU Guaranteed",
+      "before": 61,
+      "after": 57.9,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "233050",
+      "name": "Prenatal Daily Care 20 Billion CFU Guaranteed",
+      "before": 61,
+      "after": 58.5,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "233085",
+      "name": "Women's Daily Care 40 Billion CFU Guaranteed",
+      "before": 53,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "233091",
+      "name": "Critical Care 80 Billion CFU Guaranteed",
+      "before": 55,
+      "after": 52.4,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "241331",
+      "name": "Paleo Defense Women",
+      "before": 45,
+      "after": 42.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "242637",
+      "name": "Ultra Probiotic Formula",
+      "before": 47,
+      "after": 44.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "242654",
+      "name": "Ultra Probiotic Formula",
+      "before": 47,
+      "after": 44.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "242657",
+      "name": "Platinum Series Immune+",
+      "before": 52,
+      "after": 50.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "242658",
+      "name": "Platinum Series Liver Health+",
+      "before": 49,
+      "after": 46.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "243324",
+      "name": "Apple Cider Vinegar Probiotic Gummies",
+      "before": 41,
+      "after": 40.5,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "243976",
+      "name": "Once Daily Prenatal",
+      "before": 59,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "256941",
+      "name": "Platinum Series Iron Absorb+",
+      "before": 47,
+      "after": 45.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267340",
+      "name": "100 Billion Probiotic",
+      "before": 51,
+      "after": 48.1,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "274081",
+      "name": "Once Daily Prenatal",
+      "before": 59,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "274352",
+      "name": "Kids Probiotic Formula Yummy Banana Taste",
+      "before": 51,
+      "after": 49.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "274671",
+      "name": "Ultra Probiotic Formula",
+      "before": 47,
+      "after": 44.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "28479",
+      "name": "Acid Defense",
+      "before": 57,
+      "after": 56.7,
+      "pillars_delta": {
+        "formulation": -0.3
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "28963",
+      "name": "Kids Probiotic Formula Natural Banana Flavor",
+      "before": 50,
+      "after": 47.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "297603",
+      "name": "Kids Probiotic 3 Billion CFU",
+      "before": 54,
+      "after": 52.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "297668",
+      "name": "Probiotics 30 Billion",
+      "before": 53,
+      "after": 50.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "297693",
+      "name": "Gas & Bloating Daily Care",
+      "before": 55,
+      "after": 53.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "297695",
+      "name": "HSO Probiotic Formula",
+      "before": 57,
+      "after": 50.8,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "297696",
+      "name": "HSO Probiotic Formula",
+      "before": 57,
+      "after": 50.8,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "297697",
+      "name": "HSO Probiotic Formula",
+      "before": 56,
+      "after": 50.3,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "297698",
+      "name": "HSO Probiotic Formula",
+      "before": 57,
+      "after": 50.8,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "321379",
+      "name": "Ultra Ultimate Probiotic Formula",
+      "before": 47,
+      "after": 44.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "322603",
+      "name": "Ultra Ultimate Probiotic Formula",
+      "before": 47,
+      "after": 44.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "322604",
+      "name": "Ultra Ultimate Probiotic Formula",
+      "before": 47,
+      "after": 44.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "326762",
+      "name": "Probiotics 100 Billion",
+      "before": 54,
+      "after": 51.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "326763",
+      "name": "Probiotics Calm 50 Billion",
+      "before": 53,
+      "after": 51.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "326764",
+      "name": "Probiotics Gas & Bloating 50 Billion",
+      "before": 60,
+      "after": 58.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "326765",
+      "name": "Probiotics Immune 50 Billion",
+      "before": 60,
+      "after": 58.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "326766",
+      "name": "Probiotics Women's pH 50 Billion",
+      "before": 53,
+      "after": 51.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "327408",
+      "name": "Probiotic 4 Billion CFU",
+      "before": 55,
+      "after": 52.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "334127",
+      "name": "Probiotics Kids 5 Billion Strawberry Flavor",
+      "before": 54,
+      "after": 54.2,
+      "pillars_delta": {
+        "evidence": -0.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "64676",
+      "name": "Kids Probiotic Formula",
+      "before": 51,
+      "after": 49.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "241676",
+      "name": "Collagen Love",
+      "before": 60,
+      "after": 59.3,
+      "pillars_delta": {
+        "evidence": -0.4
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "241707",
+      "name": "Skin Squad Pre + Probiotic",
+      "before": 43,
+      "after": 40.1,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "276704",
+      "name": "Skin Heroes Pre+Probiotic",
+      "before": 43,
+      "after": 40.1,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307557",
+      "name": "Jarro-Dophilus Baby",
+      "before": 51,
+      "after": 48.9,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307569",
+      "name": "Buffered Vitamin C + Citrus Bioflavonoids",
+      "before": 64,
+      "after": 63.1,
+      "pillars_delta": {
+        "formulation": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "307586",
+      "name": "Fem Dophilus",
+      "before": 55,
+      "after": 46.7,
+      "pillars_delta": {
+        "evidence": -8.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307587",
+      "name": "Fem Dophilus 5 Billion CFU",
+      "before": 55,
+      "after": 46.7,
+      "pillars_delta": {
+        "evidence": -8.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307588",
+      "name": "Fem Dophilus 1 Billion CFU",
+      "before": 55,
+      "after": 46.7,
+      "pillars_delta": {
+        "evidence": -8.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307589",
+      "name": "Fem Dophilus 1 Billion CFU",
+      "before": 55,
+      "after": 46.7,
+      "pillars_delta": {
+        "evidence": -8.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307621",
+      "name": "Ideal Bowel Support 10 Billion CFU",
+      "before": 67,
+      "after": 64.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307624",
+      "name": "Jarro-Dophilus plus FOS 3.4 Billion CFU",
+      "before": 51,
+      "after": 48.6,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307625",
+      "name": "Jarro-Dophilus plus FOS 3.4 Billion CFU",
+      "before": 51,
+      "after": 50.4,
+      "pillars_delta": {
+        "evidence": -0.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307627",
+      "name": "Jarro-Dophilus EPS 10 Billion CFU",
+      "before": 55,
+      "after": 48.8,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307628",
+      "name": "Jarro-Dophilus EPS 10 Billion CFU",
+      "before": 55,
+      "after": 48.8,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307629",
+      "name": "Jarro-Dophilus Ultra 50 Billion CFU",
+      "before": 55,
+      "after": 52.4,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307630",
+      "name": "Jarro-Dophilus plus FOS 3.4 Billion CFU",
+      "before": 51,
+      "after": 50.4,
+      "pillars_delta": {
+        "evidence": -0.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307632",
+      "name": "Jarro-Dophilus EPS 25 Billion CFU",
+      "before": 55,
+      "after": 48.8,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307727",
+      "name": "Saccharomyces Boulardii + MOS 5 Billion CFU",
+      "before": 56,
+      "after": 53.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "307728",
+      "name": "Saccharomyces boulardii + MOS 5 Billion CFU",
+      "before": 56,
+      "after": 53.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "323063",
+      "name": "Jarro-Dophilus EPS 5 Billion CFU",
+      "before": 50,
+      "after": 44.1,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "182174",
+      "name": "FLORASSIST Balance",
+      "before": 52,
+      "after": 49.7,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "182421",
+      "name": "FLORASSIST GI with Phage Technology",
+      "before": 51,
+      "after": 48.1,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "231773",
+      "name": "Branched Chain Amino Acids (Free Form)",
+      "before": 62,
+      "after": 60.6,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "231960",
+      "name": "L-Carnitine 500 mg",
+      "before": 67,
+      "after": 66.2,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "232042",
+      "name": "Balance",
+      "before": 52,
+      "after": 49.7,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "232059",
+      "name": "Bifido GI Balance",
+      "before": 46,
+      "after": 44.5,
+      "pillars_delta": {
+        "evidence": -1.5
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "232325",
+      "name": "Oral Hygiene",
+      "before": 64,
+      "after": 63.4,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "232334",
+      "name": "GI with Phage Technology",
+      "before": 51,
+      "after": 48.1,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "232618",
+      "name": "Acetyl-L-Carnitine Arginate",
+      "before": 69,
+      "after": 68.2,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "232728",
+      "name": "Immune & Nasal Defense",
+      "before": 57,
+      "after": 59.0,
+      "pillars_delta": {
+        "evidence": 1.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "328274",
+      "name": "Acetyl-L-Carnitine Arginate",
+      "before": 71,
+      "after": 69.7,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "328302",
+      "name": "Branched Chain Amino Acids (Free Form)",
+      "before": 63,
+      "after": 62.1,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "328476",
+      "name": "FLORASSIST Immune & Nasal Defense",
+      "before": 57,
+      "after": 59.0,
+      "pillars_delta": {
+        "evidence": 1.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "328509",
+      "name": "L-Arginine Caps 700 mg",
+      "before": 60,
+      "after": 59.4,
+      "pillars_delta": {
+        "evidence": -0.7
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "328510",
+      "name": "L-Carnitine 500 mg",
+      "before": 68,
+      "after": 67.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "328805",
+      "name": "Immune & Nasal Defense",
+      "before": 57,
+      "after": 59.0,
+      "pillars_delta": {
+        "evidence": 1.8
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "59709",
+      "name": "Acetyl-L-Carnitine Arginate",
+      "before": 70,
+      "after": 69.5,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "60560",
+      "name": "FlorAssist",
+      "before": 48,
+      "after": 51.4,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "63294",
+      "name": "FLORASSIST Oral Hygeine",
+      "before": 52,
+      "after": 50.9,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "64800",
+      "name": "Acetyl-L-Carnitine Arginate",
+      "before": 70,
+      "after": 68.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "65064",
+      "name": "FLORASSIST Oral Hygiene",
+      "before": 64,
+      "after": 63.1,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "256995",
+      "name": "MegaFlora Kids Probiotic",
+      "before": 49,
+      "after": 52.4,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "256996",
+      "name": "MegaFlora Kids Probiotic",
+      "before": 50,
+      "after": 53.2,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "256999",
+      "name": "MegaFlora Probiotic",
+      "before": 52,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "257008",
+      "name": "MegaFlora Women's Probiotic",
+      "before": 60,
+      "after": 58.7,
+      "pillars_delta": {
+        "evidence": -1.5
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "257009",
+      "name": "MegaFlora Plus",
+      "before": 52,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "257018",
+      "name": "MegaFlora Probiotic",
+      "before": 52,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "273553",
+      "name": "MegaFlora Women's Probiotic",
+      "before": 60,
+      "after": 58.0,
+      "pillars_delta": {
+        "evidence": -1.5
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "285213",
+      "name": "MegaFlora 200 Billion",
+      "before": 52,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "287474",
+      "name": "MegaFlora Kids Probiotic",
+      "before": 52,
+      "after": 55.2,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "287475",
+      "name": "MegaFlora Plus",
+      "before": 52,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "287476",
+      "name": "MegaFlora Probiotic",
+      "before": 52,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "333190",
+      "name": "Baby & Me 2 Prenatal Probiotic + Prebiotic",
+      "before": 71,
+      "after": 68.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "333195",
+      "name": "Digestive Probiotic Ultra Strength",
+      "before": 59,
+      "after": 56.0,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "43649",
+      "name": "MegaZymes",
+      "before": 71,
+      "after": 70.9,
+      "pillars_delta": {
+        "formulation": -0.3
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "43650",
+      "name": "MegaZymes",
+      "before": 71,
+      "after": 70.9,
+      "pillars_delta": {
+        "formulation": -0.3
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "240067",
+      "name": "Probiotic + Prebiotic Gummies",
+      "before": 46,
+      "after": 45.1,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "287361",
+      "name": "10 Strain Probiotic",
+      "before": 54,
+      "after": 51.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "47256",
+      "name": "Probiotic Plus Prebiotic Natural Berry Flavor",
+      "before": 47,
+      "after": 44.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "62007",
+      "name": "5X Probiotic Digestive Care Supplement",
+      "before": 46,
+      "after": 44.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "62008",
+      "name": "5X Probiotic Digestive Care Supplement",
+      "before": 46,
+      "after": 44.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "180289",
+      "name": "Digestive Probiotics Advanced Dual Action",
+      "before": 73,
+      "after": 71.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "180290",
+      "name": "Digestive Probiotics Advanced Dual Action",
+      "before": 73,
+      "after": 71.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "180293",
+      "name": "Digestive Probiotics + Multivitamins Women's Dual Action",
+      "before": 68,
+      "after": 79.1,
+      "pillars_delta": {
+        "formulation": -1.8,
+        "dose": 5.4,
+        "evidence": 10.6,
+        "transparency": -3.0
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "180336",
+      "name": "Digestive Probiotics Daily Balance 10 Billion",
+      "before": 72,
+      "after": 69.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "180385",
+      "name": "Digestive Probiotics + Energy B12 Dual Action",
+      "before": 62,
+      "after": 60.6,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "19067",
+      "name": "Digestive Health Probiotic",
+      "before": 72,
+      "after": 69.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "231416",
+      "name": "Fish Oil Pearls",
+      "before": 79,
+      "after": 70.0,
+      "pillars_delta": {
+        "formulation": -1.7,
+        "dose": -7.7
+      },
+      "route": [
+        "omega",
+        "omega"
+      ]
+    },
+    {
+      "id": "240117",
+      "name": "Probiotic 10",
+      "before": 64,
+      "after": 62.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "242572",
+      "name": "Probiotic GX",
+      "before": 67,
+      "after": 65.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "253081",
+      "name": "Probiotic Gummies",
+      "before": 64,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "277025",
+      "name": "Probiotic Gummies",
+      "before": 65,
+      "after": 64.6,
+      "pillars_delta": {
+        "evidence": -0.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "29295",
+      "name": "Intensive Strength Digest 13",
+      "before": 62,
+      "after": 61.9,
+      "pillars_delta": {
+        "formulation": -0.2
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "49563",
+      "name": "Enzyme 13",
+      "before": 62,
+      "after": 61.9,
+      "pillars_delta": {
+        "formulation": -0.2
+      },
+      "route": [
+        "fiber_digestive",
+        "fiber_digestive"
+      ]
+    },
+    {
+      "id": "62743",
+      "name": "Probiotic 10",
+      "before": 64,
+      "after": 62.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "62845",
+      "name": "Probiotic Gummies",
+      "before": 62,
+      "after": 61.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "64458",
+      "name": "Probiotic Gummies",
+      "before": 62,
+      "after": 61.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "64459",
+      "name": "Probiotic Gummies",
+      "before": 62,
+      "after": 61.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "65691",
+      "name": "Probiotic Gummies",
+      "before": 62,
+      "after": 61.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "73305",
+      "name": "Probiotics Gummies",
+      "before": 64,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "74446",
+      "name": "Probiotic Gummies",
+      "before": 64,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "183977",
+      "name": "Primadophilus Reuteri Pearls",
+      "before": 54,
+      "after": 48.2,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "184000",
+      "name": "Primadophilus Reuteri Pearls",
+      "before": 54,
+      "after": 48.2,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "184397",
+      "name": "Probiotic Pearls Adult 50+",
+      "before": 59,
+      "after": 56.5,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "184402",
+      "name": "Probiotic Pearls Adult 50+",
+      "before": 59,
+      "after": 56.5,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "199521",
+      "name": "Fortify Gummy Probiotic 6 Billion Berry Flavored",
+      "before": 69,
+      "after": 67.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "201941",
+      "name": "Fortify Dual Action Urinary Health 20 Billion",
+      "before": 60,
+      "after": 58.4,
+      "pillars_delta": {
+        "evidence": -1.5
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "205129",
+      "name": "Fortify Optima Probiotic Intensive 200 Billion",
+      "before": 55,
+      "after": 58.1,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "205138",
+      "name": "Fortify Women's Probiotic 50 Billion",
+      "before": 64,
+      "after": 62.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "205141",
+      "name": "Fortify Age 50+ Probiotic 50 Billion",
+      "before": 62,
+      "after": 60.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "212413",
+      "name": "Fortify Women's Probiotic 30 Billion",
+      "before": 62,
+      "after": 60.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "212425",
+      "name": "Fortify Daily Probiotic 50 Billion",
+      "before": 62,
+      "after": 59.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "212977",
+      "name": "Cognitive Focus",
+      "before": 76,
+      "after": 75.0,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "213643",
+      "name": "Fortify Digestive & Heart Health",
+      "before": 64,
+      "after": 62.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "230023",
+      "name": "Fortify Optima Women's Probiotic 50 Billion",
+      "before": 53,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "230028",
+      "name": "Fortify Optima Daily Probiotic 50 Billion",
+      "before": 54,
+      "after": 58.0,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "230033",
+      "name": "Fortify Optima Adult 50+ Probiotic 50 Billion",
+      "before": 53,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "242461",
+      "name": "Fortify Digestive Complete",
+      "before": 50,
+      "after": 53.1,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "251908",
+      "name": "Fortify Gummy Probiotic 6 Billion Berry Flavored",
+      "before": 69,
+      "after": 67.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "259484",
+      "name": "Omega-3 Extra Strength EPA 1500 mg Zesty Lemon Flavored",
+      "before": 36,
+      "after": 72.5,
+      "pillars_delta": {
+        "formulation": 3.3,
+        "dose": 20.0,
+        "evidence": 4.5,
+        "transparency": 8.4
+      },
+      "route": [
+        "omega",
+        "omega"
+      ]
+    },
+    {
+      "id": "267641",
+      "name": "Probiotic Pearls Acidophilus",
+      "before": 59,
+      "after": 52.5,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267894",
+      "name": "Probiotic Pearls Immune",
+      "before": 58,
+      "after": 57.8,
+      "pillars_delta": {
+        "evidence": -0.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267898",
+      "name": "Probiotic Pearls Max Potency",
+      "before": 58,
+      "after": 55.5,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267947",
+      "name": "Probiotic Pearls Complete",
+      "before": 57,
+      "after": 54.7,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "268078",
+      "name": "Probiotic Pearls Complete",
+      "before": 57,
+      "after": 54.5,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "268081",
+      "name": "Probiotic Pearls Complete",
+      "before": 58,
+      "after": 55.5,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "273394",
+      "name": "Fortify Age 50+ Probiotic + Prebiotics 50 Billion",
+      "before": 63,
+      "after": 60.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "273399",
+      "name": "Fortify Daily Probiotic 50 Billion",
+      "before": 63,
+      "after": 60.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "288699",
+      "name": "Fortify Optima Daily Probiotic 60 Billion",
+      "before": 61,
+      "after": 58.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "293282",
+      "name": "Fortify Optima Daily Probiotic + Prebiotics",
+      "before": 64,
+      "after": 61.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "293402",
+      "name": "Probiotic Pearls Acidophilus",
+      "before": 55,
+      "after": 48.8,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "317030",
+      "name": "Fortify Adult Daily Probiotic 30 Billion",
+      "before": 62,
+      "after": 59.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "317036",
+      "name": "Acidophilus Probiotic Pearls 1 Billion",
+      "before": 59,
+      "after": 52.5,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "317109",
+      "name": "Fortify Adults 50+ Daily Probiotic 30 Billion",
+      "before": 59,
+      "after": 57.2,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "317110",
+      "name": "Fortify Women's Daily Probiotic 30 Billion",
+      "before": 62,
+      "after": 60.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "317120",
+      "name": "Probiotic Pearls Acidophilus",
+      "before": 55,
+      "after": 48.8,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "327963",
+      "name": "Fortify Adult Probiotic 50 Billion Extra-Strength",
+      "before": 61,
+      "after": 59.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "327965",
+      "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+      "before": 63,
+      "after": 61.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "327966",
+      "name": "Fortify 50+ Optima Probiotic 50 Billion",
+      "before": 54,
+      "after": 57.2,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "327967",
+      "name": "Fortify Women's Probiotic 50 Billion",
+      "before": 63,
+      "after": 61.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "328033",
+      "name": "Primadophilus Reuteri Probiotic Pearls",
+      "before": 59,
+      "after": 52.5,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "328090",
+      "name": "Women's 3-in-1 Probiotic Gummy Orange Flavored",
+      "before": 79,
+      "after": 76.6,
+      "pillars_delta": {
+        "evidence": -2.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "332922",
+      "name": "Fortify Optima Probiotic 35 Billion",
+      "before": 62,
+      "after": 60.0,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "332947",
+      "name": "Primadophilus Reuteri Probiotic Pearls",
+      "before": 59,
+      "after": 52.5,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "332954",
+      "name": "Women's 3-in-1 Probiotic Gummy Orange Flavored",
+      "before": 79,
+      "after": 76.6,
+      "pillars_delta": {
+        "evidence": -2.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "333747",
+      "name": "Fortify Adults 50+ Probiotic Extra Strength 50 Billion",
+      "before": 61,
+      "after": 58.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "333748",
+      "name": "Fortify Optima Daily Probiotic 50 Billion",
+      "before": 52,
+      "after": 55.4,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "333749",
+      "name": "Fortify Optima Women's Probiotic 50 Billion",
+      "before": 55,
+      "after": 58.3,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "333914",
+      "name": "Fortify Optima 50+ Probiotic 90 Billion",
+      "before": 59,
+      "after": 56.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "333915",
+      "name": "Fortify Optima Probiotic 35 Billion",
+      "before": 63,
+      "after": 60.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "333924",
+      "name": "Acidophilus Probiotic Pearls 1 Billion Cultures",
+      "before": 59,
+      "after": 52.5,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "334428",
+      "name": "Elite Extra Strength Probiotic Pearls 5 Billion Cultures",
+      "before": 57,
+      "after": 54.1,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "334429",
+      "name": "Adult 50+ Probiotic Pearls 1 Billion",
+      "before": 51,
+      "after": 44.5,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "334431",
+      "name": "Complete Probiotic Pearls 1 Billion",
+      "before": 54,
+      "after": 51.3,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "334433",
+      "name": "Complete Probiotic Pearls 1 Billion",
+      "before": 54,
+      "after": 51.3,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "334440",
+      "name": "Max Potency Probiotic Pearls 5 Billion",
+      "before": 59,
+      "after": 56.1,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "66386",
+      "name": "Primadophilus Fortify Women's Probiotic",
+      "before": 49,
+      "after": 52.2,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "78296",
+      "name": "Primadophilus Fortify Gummy Probiotic Berry Flavored",
+      "before": 68,
+      "after": 67.4,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "269270",
+      "name": "Acetyl L-Carnitine 500 mg",
+      "before": 65,
+      "after": 64.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "269317",
+      "name": "BCAA 1000 mg",
+      "before": 56,
+      "after": 54.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "270513",
+      "name": "L-Arginine 1,000 mg",
+      "before": 60,
+      "after": 58.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "306062",
+      "name": "BCAA 1000 mg",
+      "before": 56,
+      "after": 54.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "306239",
+      "name": "L-Arginine + L-Ornithine 750 mg",
+      "before": 61,
+      "after": 60.2,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "306241",
+      "name": "L-Arginine 500 mg",
+      "before": 60,
+      "after": 59.5,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "306383",
+      "name": "Probiotic Complex >50 Billion CFU",
+      "before": 49,
+      "after": 47.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "201151",
+      "name": "Quick Melt Probiotic Sticks Crisp Apple",
+      "before": 56,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "201154",
+      "name": "Quick Melt Probiotic Sticks Juicy Blueberry",
+      "before": 56,
+      "after": 53.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "201158",
+      "name": "Kids Quick Melt Probiotic Sticks Wacky Watermelon",
+      "before": 55,
+      "after": 52.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "230118",
+      "name": "Multi + Probiotic Tropical Twist",
+      "before": 63,
+      "after": 70.8,
+      "pillars_delta": {
+        "formulation": -3.9,
+        "dose": 6.1,
+        "evidence": 9.2,
+        "transparency": -4.0
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "230149",
+      "name": "Extra Strength Probiotic Juicy Apple",
+      "before": 71,
+      "after": 69.8,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "230231",
+      "name": "Kids Probiotic + Prebiotic Just Peach",
+      "before": 60,
+      "after": 59.1,
+      "pillars_delta": {
+        "evidence": -0.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "230251",
+      "name": "Probiotic + Prebiotic Peachy Peach",
+      "before": 62,
+      "after": 60.6,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "267662",
+      "name": "Happy Hoo-Ha",
+      "before": 58,
+      "after": 55.3,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "273197",
+      "name": "Kids Multi + Probiotic Yum Berry Punch",
+      "before": 57,
+      "after": 66.3,
+      "pillars_delta": {
+        "formulation": 0.1,
+        "dose": 5.6,
+        "evidence": 7.3,
+        "transparency": -4.0
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "273629",
+      "name": "Lil'Ollys Kids' Multi + Probiotic Yum Berry Punch",
+      "before": 41,
+      "after": 60.5,
+      "pillars_delta": {
+        "formulation": 10.0,
+        "dose": 5.9,
+        "evidence": 7.3,
+        "transparency": -4.0
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "273631",
+      "name": "Probiotic Tropical Mango",
+      "before": 52,
+      "after": 51.4,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "291224",
+      "name": "Kids Multi + Probiotic Yum Berry Punch",
+      "before": 57,
+      "after": 66.3,
+      "pillars_delta": {
+        "formulation": 0.1,
+        "dose": 5.6,
+        "evidence": 7.3,
+        "transparency": -4.0
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "291259",
+      "name": "Probiotic + Prebiotic Peachy Peach",
+      "before": 45,
+      "after": 44.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "335681",
+      "name": "Multi + Probiotic Tropical Twist",
+      "before": 52,
+      "after": 69.6,
+      "pillars_delta": {
+        "formulation": -4.0,
+        "dose": 14.4,
+        "evidence": 9.2,
+        "transparency": -1.7
+      },
+      "route": [
+        "probiotic",
+        "multi_or_prenatal"
+      ]
+    },
+    {
+      "id": "178450",
+      "name": "TruBiotics",
+      "before": 48,
+      "after": 46.9,
+      "pillars_delta": {
+        "evidence": -1.2
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "180820",
+      "name": "Wish You Well. Mango & Pineapple Flavor",
+      "before": 44,
+      "after": 42.0,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "184373",
+      "name": "Wish You Well. Mango & Pineapple Flavor",
+      "before": 44,
+      "after": 42.0,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "184468",
+      "name": "Wish You Well. Mango & Pineapple Flavor",
+      "before": 44,
+      "after": 42.0,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "229176",
+      "name": "Wish You Well. Mango & Pineapple Flavor",
+      "before": 44,
+      "after": 42.0,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "259890",
+      "name": "Lady Bugs",
+      "before": 54,
+      "after": 52.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "PG_SUB_4ACB39B94D394C19815F63B0A783EF08",
+      "name": "Women's Dual Action",
+      "before": 51,
+      "after": 48.4,
+      "pillars_delta": {
+        "evidence": -2.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "184308",
+      "name": "BCAA Capsules",
+      "before": 60,
+      "after": 58.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "184320",
+      "name": "BCAA Capsules",
+      "before": 60,
+      "after": 58.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "184322",
+      "name": "BCAA Powder",
+      "before": 65,
+      "after": 64.0,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "184730",
+      "name": "Probiotic 123",
+      "before": 52,
+      "after": 55.7,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "187545",
+      "name": "Ribo Carnitine-Q10",
+      "before": 70,
+      "after": 68.8,
+      "pillars_delta": {
+        "evidence": -1.1
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "188755",
+      "name": "Probiotic EasySticks",
+      "before": 54,
+      "after": 57.3,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "219289",
+      "name": "Synbiotic GG",
+      "before": 70,
+      "after": 67.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "247319",
+      "name": "Saccharomyces Boulardii",
+      "before": 62,
+      "after": 59.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "261618",
+      "name": "PureBi-Ome Intensive",
+      "before": 59,
+      "after": 56.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "261713",
+      "name": "BCAA Capsules",
+      "before": 60,
+      "after": 58.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "261856",
+      "name": "PureGG 25B",
+      "before": 72,
+      "after": 69.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "261861",
+      "name": "Probiotic Chewables Natural Berry-Cherry Flavor",
+      "before": 57,
+      "after": 54.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "278251",
+      "name": "Probiotic 123",
+      "before": 52,
+      "after": 55.7,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "278257",
+      "name": "Probiotic IMM",
+      "before": 58,
+      "after": 55.1,
+      "pillars_delta": {
+        "evidence": -2.4
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "287473",
+      "name": "Probiotic 123",
+      "before": 58,
+      "after": 55.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "293876",
+      "name": "Acetyl-L-Carnitine 250 mg",
+      "before": 69,
+      "after": 68.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "293899",
+      "name": "BCAA Capsules",
+      "before": 60,
+      "after": 58.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "294040",
+      "name": "Probiotic 50B",
+      "before": 55,
+      "after": 58.5,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "294041",
+      "name": "Probiotic G.I.",
+      "before": 53,
+      "after": 56.7,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "294042",
+      "name": "Probiotic-5",
+      "before": 53,
+      "after": 56.7,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "294046",
+      "name": "PureGG 25B",
+      "before": 72,
+      "after": 69.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "295498",
+      "name": "BCAA Capsules",
+      "before": 60,
+      "after": 58.2,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "295532",
+      "name": "Probiotic G.I.",
+      "before": 53,
+      "after": 56.7,
+      "pillars_delta": {
+        "evidence": 3.6
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "299033",
+      "name": "BCAA Powder",
+      "before": 65,
+      "after": 64.0,
+      "pillars_delta": {
+        "evidence": -1.3
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "317963",
+      "name": "Energy Xtra",
+      "before": 76,
+      "after": 75.0,
+      "pillars_delta": {
+        "evidence": -0.7
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "318247",
+      "name": "Energy Xtra",
+      "before": 76,
+      "after": 75.0,
+      "pillars_delta": {
+        "evidence": -0.7
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "318249",
+      "name": "Energy Xtra",
+      "before": 76,
+      "after": 75.0,
+      "pillars_delta": {
+        "evidence": -0.7
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "299239",
+      "name": "Synbiotic+",
+      "before": 56,
+      "after": 53.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "213912",
+      "name": "Advanced Acetyl-L-Carnitine",
+      "before": 66,
+      "after": 65.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "213939",
+      "name": "L-Carnitine 250 mg",
+      "before": 69,
+      "after": 68.3,
+      "pillars_delta": {
+        "evidence": -0.6
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "213976",
+      "name": "Megasorb CoQ-10 L-Carnitine 50 mg/250 mg",
+      "before": 76,
+      "after": 75.8,
+      "pillars_delta": {
+        "evidence": -0.5
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "214664",
+      "name": "Multi-Acidophilus Powder",
+      "before": 61,
+      "after": 58.8,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "214792",
+      "name": "Pomegranate Complex",
+      "before": 63,
+      "after": 62.4,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "217182",
+      "name": "ABC Dophilus Powder",
+      "before": 65,
+      "after": 62.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "241240",
+      "name": "Advanced Acidophilus Plus",
+      "before": 61,
+      "after": 59.4,
+      "pillars_delta": {
+        "evidence": -1.2
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "263873",
+      "name": "Probi 20",
+      "before": 63,
+      "after": 60.7,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "264106",
+      "name": "Advanced Acidophilus Plus",
+      "before": 61,
+      "after": 59.4,
+      "pillars_delta": {
+        "evidence": -1.2
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "264115",
+      "name": "Advanced 40+ Acidophilus",
+      "before": 63,
+      "after": 60.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "264116",
+      "name": "Advanced Multi-Billion Dophilus",
+      "before": 74,
+      "after": 71.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "44161",
+      "name": "Advanced Acidophilus Plus",
+      "before": 62,
+      "after": 60.7,
+      "pillars_delta": {
+        "evidence": -1.2
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "44163",
+      "name": "Advanced Acidophilus Plus",
+      "before": 62,
+      "after": 60.7,
+      "pillars_delta": {
+        "evidence": -1.2
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "44247",
+      "name": "Advanced 40+ Acidophilus",
+      "before": 56,
+      "after": 53.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "45194",
+      "name": "Probi 20 Billion",
+      "before": 74,
+      "after": 71.6,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "71680",
+      "name": "BCAA Plus Branched Chain Amino Acids",
+      "before": 60,
+      "after": 58.7,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "sports",
+        "sports"
+      ]
+    },
+    {
+      "id": "79324",
+      "name": "Advanced Multi-Billion Dophilus",
+      "before": 74,
+      "after": 72.4,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "80971",
+      "name": "Advanced 40+ Acidophilus",
+      "before": 64,
+      "after": 61.9,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "81368",
+      "name": "Advanced Acidophilus",
+      "before": 53,
+      "after": 47.3,
+      "pillars_delta": {
+        "evidence": -6.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "326252",
+      "name": "Daily Probiotics",
+      "before": 55,
+      "after": 52.5,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "326268",
+      "name": "Multi Collagen 1600 mg",
+      "before": 53,
+      "after": 52.2,
+      "pillars_delta": {
+        "evidence": -0.7
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "12147",
+      "name": "L-Carnitine 500 mg",
+      "before": 60,
+      "after": 59.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "178387",
+      "name": "L-Carnitine",
+      "before": 60,
+      "after": 59.5,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "178389",
+      "name": "L-Arginine",
+      "before": 55,
+      "after": 54.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "178402",
+      "name": "L-Carnitine",
+      "before": 60,
+      "after": 59.5,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "178404",
+      "name": "L-Arginine",
+      "before": 55,
+      "after": 54.3,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "178562",
+      "name": "Children's Probiotic Gummies",
+      "before": 66,
+      "after": 65.4,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "178713",
+      "name": "Probiotic Gummies",
+      "before": 60,
+      "after": 59.1,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "331641",
+      "name": "Daily Probiotic",
+      "before": 45,
+      "after": 43.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "298072",
+      "name": "L-Carnitine",
+      "before": 69,
+      "after": 67.7,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "generic",
+        "generic"
+      ]
+    },
+    {
+      "id": "306291",
+      "name": "Sacro-B",
+      "before": 55,
+      "after": 53.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "323130",
+      "name": "Sacro-B",
+      "before": 55,
+      "after": 53.3,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "337852",
+      "name": "Bacillus Coagulans",
+      "before": 67,
+      "after": 66.1,
+      "pillars_delta": {
+        "evidence": -0.9
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "337873",
+      "name": "Sacro-B",
+      "before": 57,
+      "after": 62.4,
+      "pillars_delta": {
+        "evidence": 5.1
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    },
+    {
+      "id": "240347",
+      "name": "Children's Probiotic Packets",
+      "before": 48,
+      "after": 46.1,
+      "pillars_delta": {
+        "evidence": -2.0
+      },
+      "route": [
+        "probiotic",
+        "probiotic"
+      ]
+    }
+  ]
+}

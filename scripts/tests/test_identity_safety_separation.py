@@ -356,7 +356,6 @@ def test_standardname_safety_audit_rejects_standardname_only_safety_evidence(tmp
         "name": "Chromium",
         "raw_source_text": "Chromium",
         "standard_name": "Chromium (VI) — Hexavalent Chromium",
-        "standardName": "Chromium (VI) — Hexavalent Chromium",
         "canonical_source_db": "ingredient_quality_map",
         "safety_flags": [{
           "entry_id": "HM_CHROMIUM_HEXAVALENT",
@@ -386,7 +385,6 @@ def test_standardname_safety_audit_rejects_safety_source_identity(tmp_path):
         "name": "Chromium",
         "raw_source_text": "Chromium",
         "standard_name": "Chromium",
-        "standardName": "Chromium",
         "canonical_source_db": "banned_recalled_ingredients",
         "safety_flags": []
       }]
@@ -426,7 +424,7 @@ def test_standardname_safety_audit_rejects_safety_sourced_standardname(tmp_path)
       "ingredients": [{
         "name": "Hexadrone",
         "raw_source_text": "Hexadrone",
-        "standardName": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)",
+        "standard_name": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)",
         "canonical_source_db": "unmapped",
         "safety_flags": []
       }]
@@ -461,7 +459,6 @@ def test_standardname_safety_audit_rejects_legacy_rule_without_matching_flag(tmp
         "name": "Chromium",
         "raw_source_text": "Chromium",
         "standard_name": "Chromium",
-        "standardName": "Chromium",
         "matched_source": "banned_recalled",
         "matched_rule_id": "HM_CHROMIUM_HEXAVALENT",
         "safety_flags": [{

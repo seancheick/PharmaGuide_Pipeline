@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-21",
-    "total_entries": 178,
+    "last_updated": "2026-09-26",
+    "total_entries": 182,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -3822,6 +3822,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "Added cui_note; CUI C0885298 unchanged. Reviewed because UMLS names it 'Ephedra vulgaris preparation'. Sean kept it over the genus concept C0950030 'Ephedra', 'ma huang extract' C0390643 and a governed null.",
+            "by": "claude-audit"
           }
         ]
       },
@@ -3829,6 +3834,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C0885298",
+      "cui_note": "C0885298 is UMLS's drug-vocabulary ephedra ingredient concept (VANDF IN 'EPHEDRA', MEDCIN 'ephedra (medication)', CHV 'ephedra herb medicine'). Its preferred name 'Ephedra vulgaris preparation' comes from a MeSH entry term now filed under D029790 Ephedra sinica; it does not limit this entry to one species. The entry also covers other Ephedra species, sida cordifolia and the ephedrine alkaloids named in 21 CFR 119.1.",
       "external_ids": {
         "unii": "GN83C131XS"
       },
@@ -4420,29 +4426,30 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2020-11-10",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_warning_letter",
-            "citation": "FDA Warning Letter 607248: products containing ibutamoren (MK-677) are unapproved new drugs and unlawful in supplements",
-            "accessed_date": "2026-02-23"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 719339 (CDER, 2025-12-12): a product marketed as a dietary supplement containing ibutamoren (MK-677) is an unapproved new drug; ibutamoren is excluded from the dietary supplement definition under FD&C Act 201(ff)(3)(B)(ii)",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/musclepower-enterprise-ltd-dba-monster-king-and-ge-labs-719339-12122025"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-02-23"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
         {
           "type": "fda_warning_letter",
-          "title": "FDA Warning Letter 607248 (Andro Pharma LLC)",
+          "title": "Musclepower Enterprise Ltd. dba MONSTER KING and GE LABS - 719339 - 12/12/2025",
           "evidence_grade": "R",
-          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/musclepower-enterprise-ltd-dba-monster-king-and-ge-labs-719339-12122025",
           "supports_claims": [
             "regulatory_action",
             "legal_status"
           ],
-          "evidence_summary": "Identifies ibutamoren (MK-677) products as unapproved new drugs."
+          "evidence_summary": "States that 'GE Labs MK 677' is marketed as a dietary supplement containing ibutamoren, that FDA has concluded ibutamoren is excluded from the dietary supplement definition under 201(ff)(3)(B)(ii) (authorized for investigation as a new drug before any supplement marketing), and that the products are unapproved new drugs."
         },
         {
           "type": "wada_list",
@@ -4467,11 +4474,21 @@
             "date": "2026-02-23",
             "change": "Added MK-677/Ibutamoren unlawful supplement ingredient mapping from P3 regulatory audit",
             "by": "codex"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "Replaced 'FDA Warning Letter 607248 (Andro Pharma LLC)' (https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020) in references_structured and the US jurisdiction source. The URL returned HTTP 404, the Wayback Machine has no capture of any andro-pharma warning-letter URL or any URL containing 607248, and no search found the letter, so it could not be verified. New source: FDA Warning Letter 719339 to Musclepower Enterprise Ltd. dba MONSTER KING and GE LABS (CDER, 2025-12-12), read live; it is the earliest FDA letter found that places ibutamoren in a dietary-supplement context (2021-2023 letters treat MK-677 only as an unapproved drug sold as a SARM). Dates, as decided by Sean on 2026-09-26: regulatory_date 2020-11-10 'FDA ban effective' -> 2025-12-12 'FDA warning letter'; US jurisdiction effective_date 2020-11-10 -> null, because a warning letter dates FDA's statement, not when the exclusion took effect.",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "US jurisdiction status 'banned' -> 'not_lawful' and source typed warning_letter with its URL (Sean, D10: letter 719339 states an exclusion from the dietary supplement definition, not a ban). Policy marked verified: its fda.gov letter was read live on 2026-09-26."
           }
         ]
       },
-      "regulatory_date": "2020-11-10",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2025-12-12",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C0528358",
       "external_ids": {
@@ -4503,7 +4520,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An investigational growth-hormone secretagogue drug — never approved and not a lawful supplement ingredient. Associated with insulin resistance and fluid retention. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved investigational drug. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved investigational drug. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "BANNED_IGF1",
@@ -5548,7 +5567,7 @@
         "S23 SARM",
         "S-23"
       ],
-      "reason": "S-23 is a synthetic non-steroidal selective androgen receptor modulator (SARM) developed as an investigational male contraceptive candidate; it suppresses LH, FSH, and sperm production at moderate doses. It is not approved by any regulatory agency, not a dietary ingredient, and carries the same risks as other SARMs (endocrine suppression, hepatotoxicity). No NDI notification is on file. WADA prohibits it. Supplement products containing S-23 are adulterated with an unapproved compound whose contraceptive and androgenic effects are not declared on labels.",
+      "reason": "S-23 is a synthetic non-steroidal selective androgen receptor modulator (SARM) developed as an investigational male contraceptive candidate; it suppresses LH, FSH, and sperm production at moderate doses. It is not approved by any regulatory agency, not a dietary ingredient, and carries the same risks as other SARMs (endocrine suppression, hepatotoxicity). No NDI notification is on file. WADA prohibits it. FDA treats S-23 products as unapproved new drugs, and their contraceptive and androgenic effects are not declared on labels.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -5568,31 +5587,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (2017). Unapproved drug.",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Clinical Status",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Investigated as male contraceptive - causes complete testosterone suppression",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 719433 (2025-12-12): S-23 products marketed as SARMs are unapproved new drugs. S-23 is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/prime-sports-nutrition-719433-12122025"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
@@ -5609,15 +5614,16 @@
           "evidence_summary": "S-23 as male contraceptive"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
-          "url": "https://www.fda.gov/consumers/consumer-updates/fda-warns-use-selective-androgen-receptor-modulators-sarms-among-teens-young-adults",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 719433 to Prime Sports Nutrition (2025-12-12)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2025-12-12",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/prime-sports-nutrition-719433-12122025",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Names S-23 among research-labeled products marketed as SARMs; FDA states they are unapproved new drugs under section 505(a)."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -5632,11 +5638,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2025-12-12 'FDA warning letter'. S-23 is not named in FDA's 2017-10-31 material; the first FDA letter found naming it is 719433. Removed the 'Clinical Status' US jurisdiction row (status banned, type state_statute, citation 'Investigated as male contraceptive - causes complete testosterone suppression'): it is not a jurisdiction. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (2017). Unapproved drug.); Clinical Status banned None (state_statute: Investigated as male contraceptive - causes complete testosterone suppression). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2025-12-12",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C0163688",
       "external_ids": {
@@ -5655,7 +5666,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An investigational SARM-class drug — unapproved and not a lawful supplement. Linked to testicular suppression, liver strain, and cardiovascular risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "BANNED_SIBUTRAMINE",
@@ -5816,7 +5829,7 @@
         "sr-9009",
         "SR9009"
       ],
-      "reason": "SR9009 (Stenabolic) is a synthetic Rev-ErbA agonist developed at The Scripps Research Institute to study circadian rhythm and metabolic regulation. It is an unapproved research compound not intended or approved for human use. Important note: animal studies suggest it has near-zero oral bioavailability, meaning supplement products claiming metabolic or endurance benefits are likely fraudulent in addition to selling an unapproved compound. WADA prohibits it. Supplements containing SR9009 are adulterated.",
+      "reason": "SR9009 (Stenabolic) is a synthetic Rev-ErbA agonist developed at The Scripps Research Institute to study circadian rhythm and metabolic regulation. It is an unapproved research compound not intended or approved for human use. Important note: animal studies suggest it has near-zero oral bioavailability, meaning supplement products claiming metabolic or endurance benefits are likely fraudulent in addition to selling an unapproved compound. WADA prohibits it. No FDA action naming SR9009 was found.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -5836,16 +5849,16 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "under_review",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (2017). Unapproved drug. Research chemical.",
-            "accessed_date": "2026-01-08"
+            "type": "regulatory",
+            "citation": "No FDA document naming SR9009 was found (fda.gov warning letters, openFDA recalls and Import Alert 66-41 searched 2026-09-26). It is a synthetic Rev-Erb agonist research compound with no approved use.",
+            "accessed_date": "2026-09-26"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
@@ -5860,16 +5873,6 @@
             "clinical_outcomes"
           ],
           "evidence_summary": "Rev-ErbA agonist effects"
-        },
-        {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
-          "evidence_grade": "R",
-          "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
       "source_category": "sarms_prohibited",
@@ -5884,11 +5887,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10). regulatory_date 2017-10-31 'FDA ban effective' -> null: no FDA document names SR9009, and FDA's 2017-10-31 material names only ostarine and LGD-4033. Removed reference 'FDA Warning: October 31, 2017' (no URL). US jurisdiction 'banned' 2017-10-31 ('FDA banned in supplements (2017)...') -> under_review. Policy stays unverified, so the safety gate routes a match to review. Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C3492460",
       "external_ids": {
@@ -6437,7 +6445,7 @@
         "yk 11",
         "(17α,20E)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
       ],
-      "reason": "YK-11 is a synthetic steroidal SARM/myostatin inhibitor — structurally it is a DHT derivative that acts as a partial agonist of the androgen receptor. Because it has a steroidal structure, it may also qualify as a designer anabolic steroid under the Anabolic Steroid Control Act. It is not FDA-approved, not a lawful dietary ingredient, and no safety data in humans exists. Risks include androgenic side effects, endocrine suppression, and uncharacterized hepatotoxicity. WADA prohibits it. Products containing YK-11 are adulterated.",
+      "reason": "YK-11 is a synthetic steroidal SARM/myostatin inhibitor — structurally it is a DHT derivative that acts as a partial agonist of the androgen receptor. Because it has a steroidal structure, it may also qualify as a designer anabolic steroid under the Anabolic Steroid Control Act. It is not FDA-approved, not a lawful dietary ingredient, and no safety data in humans exists. Risks include androgenic side effects, endocrine suppression, and uncharacterized hepatotoxicity. WADA prohibits it. FDA treats products containing YK-11 as unapproved drugs.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -6457,29 +6465,43 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (2017). Unapproved drug.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 719645 (2025-12-12) and FDA's bodybuilding-products page (2025-12-02): YK-11 products are unapproved drugs, not dietary supplements. YK-11 is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
-          "url": "https://www.fda.gov/consumers/consumer-updates/fda-warns-use-selective-androgen-receptor-modulators-sarms-among-teens-young-adults",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 719645 to TITAN SARMS LLC (CDER, 2025-12-12)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2025-12-12",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Names YK-11 among research-labeled products marketed as SARMs; FDA states they are unapproved new drugs under section 505(a)."
+        },
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Certain bodybuilding products put consumers at risk (content current as of 2025-12-02)",
+          "evidence_grade": "R",
+          "date": "2025-12-02",
+          "url": "https://www.fda.gov/drugs/fraudulent-products/certain-bodybuilding-products-put-consumers-risk-heart-attack-stroke-serious-liver-damage-and-more",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed YK-11, a listed label ingredient, in a product marketed as a dietary supplement; FDA states such products are not dietary supplements but unapproved drugs."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -6494,11 +6516,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2025-12-12 'FDA warning letter'. YK-11 is not named in FDA's 2017-10-31 material; FDA first names it on its bodybuilding-products page (content dated 2025-12-02) and in letter 719645. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (2017). Unapproved drug.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2025-12-12",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this investigational SARM name; null CUI is intentional.",
@@ -6518,7 +6545,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A synthetic steroidal SARM-like compound linked to liver toxicity and hormone suppression. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Steroidal SARM with liver risk. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Steroidal SARM with liver risk. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "HIGH_RISK_CHAPARRAL",
@@ -6600,13 +6629,18 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "CUI C1050700 -> C0697139 (species anchor chosen by Sean). UMLS: C1050700 is 'Larrea divaricata' (NCBI taxid 108399, the South American L. divaricata Cav.); C0697139 is 'Larrea tridentata' (Plant; NCBI taxid 66636, MSH, NCI), the species this entry's reason names. ITIS lists the North American usage 'Larrea divaricata auct. non Cav.' as a misapplied name for L. tridentata, so the 'larrea divaricata' alias stays for label matching. No shipped detail blob or frozen enriched product references this entry.",
+            "by": "claude-audit"
           }
         ]
       },
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "cui": "C1050700",
+      "cui": "C0697139",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A botanical linked to at least 18 reported cases of severe liver injury, including transplants. Not a lawful supplement ingredient; stop and consult a doctor if you have used a product containing it.",
@@ -10960,7 +10994,7 @@
         "titan sarms llc",
         "titan sarms products"
       ],
-      "reason": "TITAN SARMS LLC was subject to FDA enforcement action for illegally marketing products containing selective androgen receptor modulators (SARMs) as dietary supplements. SARMs are unapproved drugs — none have been approved by FDA for any indication. Products were mislabeled to appear as legitimate supplements while containing compounds subject to drug approval requirements. FDA's action emphasized that SARMs in any supplement product make that product an adulterated and misbranded drug.",
+      "reason": "TITAN SARMS LLC received an FDA warning letter (CDER, 2025-12-12) for selling selective androgen receptor modulators (SARMs) LGD-4033, RAD-140, S-4 (andarine) and YK-11. The products were labeled as research-grade compounds while the firm's website claimed muscle growth, strength and recovery benefits. FDA concluded the products are unapproved new drugs under section 505(a) of the FD&C Act. No SARM is FDA-approved for any use.",
       "status": "banned",
       "class_tags": [
         "recalled_supplement_brands",
@@ -10980,44 +11014,31 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2025-12-12",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA warning letter December 12, 2025. Products are 'new drugs' under FD&C Act, not dietary supplemen",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "FDA",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Warning letter - products marketed as supplements are unapproved drugs",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 719645 (CDER, 2025-12-12): the firm's products marketed as SARMs are unapproved new drugs under section 505(a).",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning Letter: TITAN SARMS LLC - December 12, 2025 (719645)",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 719645 to TITAN SARMS LLC (CDER, 2025-12-12)",
           "evidence_grade": "R",
-          "date": "2025",
+          "date": "2025-12-12",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning Letter: TITAN SARMS LLC - December 12, 2025 (719645)",
-          "fda_recall_url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025"
+          "evidence_summary": "LGD-4033, RAD-140, S-4 (andarine) and YK-11 were labeled 'research-grade' while the website claimed muscle growth, strength and recovery; FDA states these are unapproved new drugs under section 505(a). No recall and no dietary-supplement finding."
         }
       ],
       "source_category": "recalled_supplement_brands",
@@ -11032,11 +11053,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2025-12-12 'FDA ban effective' -> 2025-12-12 'FDA warning letter'. The record called this a recall and said FDA found SARMs in supplements adulterated and misbranded; letter 719645 is a warning letter about research-labeled products, and no recall exists (openFDA, searched 2026-09-26). The id RECALLED_TITAN_SARMS_LLC is kept for artifact compatibility. Replaced US jurisdiction entries: US banned 2025-12-12 (fda_action: FDA warning letter December 12, 2025. Products are 'new drugs' under FD&C Act, not dietary supplemen); FDA banned None (state_statute: Warning letter - products marketed as supplements are unapproved drugs). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
       "regulatory_date": "2025-12-12",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "recall_scope": {
         "brand": "TITAN SARMS LLC Products",
@@ -11051,7 +11077,9 @@
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
       "safety_warning": "Recalled products from this brand were marketed as supplements but contained unapproved SARMs in the product — linked to liver injury and hormone suppression. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled products sold SARMs as supplements. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Sold unapproved SARM drugs. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "RISK_BITTER_ORANGE",
@@ -11955,7 +11983,7 @@
         "andarine",
         "S-4"
       ],
-      "reason": "Andarine (S4, GTX-007) is a synthetic selective androgen receptor modulator (SARM) developed as an investigational drug for muscle wasting and osteoporosis. It was never approved for any medical use and is not a lawful dietary supplement ingredient. At doses used in supplements, it has caused reversible visual disturbances — yellow-tinted vision and difficulty adapting to light and dark — as well as androgenic suppression of testosterone. WADA prohibits it. Supplements containing S4 are adulterated.",
+      "reason": "Andarine (S4, GTX-007) is a synthetic selective androgen receptor modulator (SARM) developed as an investigational drug for muscle wasting and osteoporosis. It was never approved for any medical use and is not a lawful dietary supplement ingredient. At doses used in supplements, it has caused reversible visual disturbances — yellow-tinted vision and difficulty adapting to light and dark — as well as androgenic suppression of testosterone. WADA prohibits it. FDA treats supplements containing S4 as unapproved new drugs.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -11975,31 +12003,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Unapproved drug.",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Clinical Status",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Development discontinued due to vision side effects",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 535717 (2017-12-13): a product marketed as a dietary supplement that contained andarine is an unapproved new drug and misbranded. Andarine is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/dynamic-technical-formulations-535717-12132017"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
@@ -12016,14 +12030,16 @@
           "evidence_summary": "Andarine vision effects"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 535717 to Dynamic Technical Formulations (2017-12-13)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2017-12-13",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/dynamic-technical-formulations-535717-12132017",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "FDA laboratory analysis found ostarine and andarine (SARMs) in the Tri-ton product, which was marketed as a dietary supplement; FDA states the product is an unapproved new drug and a misbranded drug."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12038,11 +12054,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2017-12-13 'FDA warning letter'. Andarine is not named in the 2017-10-31 In Brief or its three letters; the first FDA letter found naming it is 535717. Removed the 'Clinical Status' US jurisdiction row (status banned, type state_statute, citation 'Development discontinued due to vision side effects'): it is not a jurisdiction. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug.); Clinical Status banned None (state_statute: Development discontinued due to vision side effects). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2017-12-13",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C1528658",
       "external_ids": {
@@ -12067,7 +12088,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An unapproved investigational SARM. Not a lawful US supplement; linked to vision disturbances and hormonal suppression. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SARM_CARDARINE",
@@ -12079,7 +12102,7 @@
         "cardarine",
         "GW 501516"
       ],
-      "reason": "Cardarine (GW501516) is a synthetic PPAR-delta agonist developed by GlaxoSmithKline. Clinical trials were halted in 2007 after it caused rapid multi-tissue carcinogenesis in animal studies at doses resembling those used in supplements. It is not a dietary ingredient, has never been approved by any regulatory agency, and has no NDI notification. FDA has issued warnings that products containing GW501516 are illegal and potentially unsafe. WADA prohibits it. Any supplement label listing Cardarine or GW-501516 should be treated as a safety alert.",
+      "reason": "Cardarine (GW501516) is a synthetic PPAR-delta agonist developed by GlaxoSmithKline. Clinical trials were halted in 2007 after it caused rapid multi-tissue carcinogenesis in animal studies at doses resembling those used in supplements. It is not a dietary ingredient, has never been approved by any regulatory agency, and has no NDI notification. FDA warning letters (from 2021) treat products selling GW501516 as SARMs as unapproved new drugs. WADA prohibits it. Any supplement label listing Cardarine or GW-501516 should be treated as a safety alert.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -12099,16 +12122,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Clinical trials terminated due to cancer.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 612037 (2021-05-18): GW-501516 (Cardarine) sold as a SARM is an unapproved new drug. Cardarine is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/umbrella-612037-05182021"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         }
       ],
       "references_structured": [
@@ -12125,14 +12149,16 @@
           "evidence_summary": "Cardarine carcinogenicity"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 612037 to Umbrella (2021-05-18)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2021-05-18",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/umbrella-612037-05182021",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Names 'GW-501516 Cardarine' among research-labeled products marketed as SARMs; FDA states they are new drugs under 201(p) with no approved application. No FDA document found names GW501516 in a product labeled as a dietary supplement."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12147,11 +12173,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2021-05-18 'FDA warning letter'. Cardarine is not named in FDA's 2017-10-31 material; the earliest FDA letter found naming it is 612037. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Clinical trials terminated due to cancer.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2021-05-18",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C4740822",
       "external_ids": {
@@ -12176,7 +12207,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An experimental drug whose trials were halted after it caused rapid multi-tissue cancer in animal studies. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Experimental drug linked to animal cancers. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Experimental drug linked to animal cancers. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SARM_LIGANDROL",
@@ -12191,7 +12224,7 @@
         "ligandrol ldg-4033",
         "ligandroll"
       ],
-      "reason": "Ligandrol (LGD-4033, VK5211) is a synthetic selective androgen receptor modulator (SARM) developed by Ligand Pharmaceuticals as an investigational drug for muscle wasting. It is not FDA-approved, not a dietary ingredient, and no NDI notification is on file. Case reports have documented drug-induced liver injury and testosterone suppression in otherwise healthy users taking doses typical of supplement use. WADA prohibits it. Supplements containing LGD-4033 are adulterated and carry serious endocrine and hepatic risks.",
+      "reason": "Ligandrol (LGD-4033, VK5211) is a synthetic selective androgen receptor modulator (SARM) developed by Ligand Pharmaceuticals as an investigational drug for muscle wasting. It is not FDA-approved, not a dietary ingredient, and no NDI notification is on file. Case reports have documented drug-induced liver injury and testosterone suppression in otherwise healthy users taking doses typical of supplement use. WADA prohibits it. FDA treats supplements containing LGD-4033 as unapproved new drugs, and they carry serious endocrine and hepatic risks.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -12211,16 +12244,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Unapproved drug.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 535333 (2017-10-23): LGD-4033 in a product labeled as a dietary supplement is excluded from the dietary supplement definition (201(ff)(3)(B)(ii)); the product is an unapproved new drug and misbranded.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/infantry-labs-llc-535333-10232017"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         },
         {
           "region": "US",
@@ -12252,14 +12286,28 @@
           "evidence_summary": "Ligandrol clinical trial"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 535333 to Infantry Labs, LLC (2017-10-23)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2017-10-23",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/infantry-labs-llc-535333-10232017",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Products labeled as dietary supplements contained LGD-4033 and ostarine; FDA states they are excluded from the dietary supplement definition under FD&C Act 201(ff)(3)(B)(ii), are unapproved new drugs and are misbranded."
+        },
+        {
+          "type": "fda_recall",
+          "title": "FDA drug recall D-0910-2016 (Class II, initiated 2016-03-31): LGD-Xtreme (ligandrol LGD-4033)",
+          "evidence_grade": "R",
+          "date": "2016-03-31",
+          "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:\"D-0910-2016\"",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "Recall reason: 'Marketed Without An Approved NDA/ANDA: Contains an unapproved drug, ligandrol LGD-4033'."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12274,17 +12322,24 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2017-10-23 'FDA warning letter'. Reference 'FDA Warning: October 31, 2017' (no URL) replaced by Infantry Labs letter 535333 and recall D-0910-2016, which name LGD-4033. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2017-10-23",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C4550372",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "An investigational SARM never approved for any medical use. Linked to liver injury and hormonal suppression. Not a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SARM_OSTARINE",
@@ -12300,7 +12355,7 @@
         "ostarine-mk 2866",
         "ostarine mk2866"
       ],
-      "reason": "Ostarine (MK-2866, Enobosarm) is a synthetic selective androgen receptor modulator (SARM) developed by GTx Inc. as an investigational drug for muscle wasting and cancer cachexia. Despite Phase II/III trials, it was never approved. FDA has issued multiple warning letters about supplement products containing it. Documented risks include testosterone and LH suppression, liver enzyme elevation, and cardiovascular effects. WADA prohibits it. Products selling Ostarine as a supplement are adulterated with an unapproved drug compound.",
+      "reason": "Ostarine (MK-2866, Enobosarm) is a synthetic selective androgen receptor modulator (SARM) developed by GTx Inc. as an investigational drug for muscle wasting and cancer cachexia. Despite Phase II/III trials, it was never approved. FDA has issued multiple warning letters about supplement products containing it. Documented risks include testosterone and LH suppression, liver enzyme elevation, and cardiovascular effects. WADA prohibits it. FDA treats products selling ostarine as a supplement as unapproved new drugs.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -12320,16 +12375,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Unapproved drug. Ongoing warning letters.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA Warning Letter 535333 (2017-10-23): ostarine in a product labeled as a dietary supplement is excluded from the dietary supplement definition (201(ff)(3)(B)(ii)); the product is an unapproved new drug and misbranded.",
+            "accessed_date": "2026-09-26",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/infantry-labs-llc-535333-10232017"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         },
         {
           "region": "US",
@@ -12361,14 +12417,16 @@
           "evidence_summary": "Ostarine hepatotoxicity"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 535333 to Infantry Labs, LLC (2017-10-23)",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2017-10-23",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/infantry-labs-llc-535333-10232017",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Products labeled as dietary supplements contained ostarine (MK-2866) and LGD-4033; FDA states they are excluded from the dietary supplement definition under FD&C Act 201(ff)(3)(B)(ii), are unapproved new drugs and are misbranded. Announced with two other letters in FDA In Brief of 2017-10-31."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12383,11 +12441,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2017-10-23 'FDA warning letter'. Reference 'FDA Warning: October 31, 2017' (no URL) replaced by Infantry Labs letter 535333, which names ostarine; the 2017-10-31 In Brief named no compound. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug. Ongoing warning letters.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2017-10-23",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C2742262",
       "external_ids": {
@@ -12413,7 +12476,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An investigational SARM that failed cancer-cachexia trials. Linked to liver injury and hormonal suppression. Not a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SARM_RAD140",
@@ -12424,7 +12489,7 @@
         "RAD140",
         "RAD 140"
       ],
-      "reason": "RAD140 (Testolone) is a synthetic selective androgen receptor modulator (SARM) developed by Radius Health as an investigational drug candidate. It is not approved for any medical use and has not been accepted as a dietary ingredient by FDA. Multiple case reports have linked RAD140 use to severe drug-induced liver injury (DILI) requiring hospitalization. WADA prohibits it. Products selling RAD140 as a supplement are adulterated with an unapproved drug compound, and users cannot assess dose consistency or purity from supplement labeling.",
+      "reason": "RAD140 (Testolone) is a synthetic selective androgen receptor modulator (SARM) developed by Radius Health as an investigational drug candidate. It is not approved for any medical use and has not been accepted as a dietary ingredient by FDA. Multiple case reports have linked RAD140 use to severe drug-induced liver injury (DILI) requiring hospitalization. WADA prohibits it. FDA treats products selling RAD140 as unapproved new drugs, and users cannot assess dose consistency or purity from supplement labeling.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -12444,16 +12509,17 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2017-10-31",
+          "status": "not_lawful",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA banned in supplements (October 31, 2017). Unapproved drug. Multiple warning letters for liver in",
-            "accessed_date": "2026-01-08"
+            "type": "fda_recall",
+            "citation": "FDA drug recall D-0800-2020 (initiated 2019-08-24): RAD-140 capsules marketed without an approved NDA/ANDA; FDA Warning Letter 719645 (2025-12-12) calls RAD-140 products unapproved new drugs. RAD-140 is not named in FDA's 2017-10-31 material.",
+            "accessed_date": "2026-09-26",
+            "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:\"D-0800-2020\""
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-09-26"
         },
         {
           "region": "US",
@@ -12485,14 +12551,28 @@
           "evidence_summary": "RAD140 liver injury case report"
         },
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning: October 31, 2017",
+          "type": "fda_recall",
+          "title": "FDA drug recall D-0800-2020 (Class II, initiated 2019-08-24): Entropic Labs SARM RAD-140 capsules",
           "evidence_grade": "R",
-          "date": "2017",
+          "date": "2019-08-24",
+          "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:\"D-0800-2020\"",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "legal_status"
           ],
-          "evidence_summary": "FDA Warning: October 31, 2017"
+          "evidence_summary": "Recall reason: 'Marketed Without An Approved NDA/ANDA: product contains Selective Androgen Receptor Modulators (SARMs)'."
+        },
+        {
+          "type": "fda_warning_letter",
+          "title": "FDA Warning Letter 719645 to TITAN SARMS LLC (CDER, 2025-12-12)",
+          "evidence_grade": "R",
+          "date": "2025-12-12",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "Names RAD-140 (Testolone) among research-labeled products marketed as SARMs; FDA states they are unapproved new drugs under section 505(a)."
         }
       ],
       "source_category": "sarms_prohibited",
@@ -12507,17 +12587,24 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-26",
+            "by": "claude-audit",
+            "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2019-08-24 'FDA recall initiation date'. RAD-140 is not named in FDA's 2017-10-31 material; the earliest FDA document found naming it is recall D-0800-2020. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug. Multiple warning letters for liver in). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
           }
         ]
       },
-      "regulatory_date": "2017-10-31",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2019-08-24",
+      "regulatory_date_label": "FDA recall initiation date",
       "match_mode": "active",
       "cui": "C0601132",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "An investigational SARM linked to liver injury, cardiovascular strain, and hormonal suppression. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver and heart risks. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved SARM with liver and heart risks. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-26"
     },
     {
       "id": "SCHED_AMANITA_MUSCARIA",
@@ -15102,22 +15189,22 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "FDA Warning Letter 607248 (Andro Pharma LLC, 2020)",
-          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020",
-          "published_date": null,
+          "citation": "FDA Warning Letter 622337 to Performax Labs Inc (May 4, 2022): labels declaring 5a-Hydroxy-Laxogenin (5-alpha-hydroxy-laxogenin) are adulterated; it is not a dietary ingredient and is not GRAS.",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/performax-labs-inc-622337-05042022",
+          "published_date": "2022-05-04",
           "evidence_grade": "R",
           "confidence": "high",
-          "title": "FDA Warning Letter 607248 (Andro Pharma LLC, 2020)"
+          "title": "Performax Labs Inc - 622337 - 05/04/2022"
         },
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "FDA dietary supplement constituent updates (5-alpha-hydroxy-laxogenin)",
-          "url": "https://www.fda.gov/food/dietary-supplement-products-ingredients/constituent-updates",
-          "published_date": null,
+          "citation": "FDA Constituent Update (May 9, 2022): warning letters to multiple companies whose supplements contain 5-alpha-hydroxy-laxogenin, higenamine, hordenine or octopamine.",
+          "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-sends-warning-letters-multiple-companies-illegally-selling-adulterated-dietary-supplements",
+          "published_date": "2022-05-09",
           "evidence_grade": "R",
-          "confidence": "medium",
-          "title": "FDA dietary supplement constituent updates (5-alpha-hydroxy-laxogenin)"
+          "confidence": "high",
+          "title": "FDA Sends Warning Letters to Multiple Companies for Illegally Selling Adulterated Dietary Supplements"
         }
       ],
       "review": {
@@ -15130,23 +15217,44 @@
             "date": "2026-02-23",
             "change": "Added from unmapped P3 prohormone routing pass",
             "by": "caps_tabs_unmapped_laxogenin"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "UNII HT7W184YG4 -> 844KE20WT5. GSRS: HT7W184YG4 is LAXOGENIN (C27H42O4, CAS 1177-71-5), which lacks the 5alpha-hydroxyl; 844KE20WT5 is 5.ALPHA.-HYDROXY LAXOGENIN (LAXOSTERONE; C27H42O5; CAS 56786-63-1; InChIKey HCRGPOQBVFMZFY-PPCFKNSFSA-N = PubChem CID 69906537), the compound this entry names. gsrs block regenerated from the new record. The old UNII passed verify_unii only through the 'laxogenin' alias, which stays as a label-matching term. No DSLD label in the corpus carries either UNII or names laxogenin, so matching is unchanged.",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "rxcui none -> 1801703; cui null (cui_status no_confirmed_umls_match, cui_note 'No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.') -> C4276029. RxNav 1801703 is an active IN '5.alpha.-hydroxy laxogenin'; GSRS 844KE20WT5 lists RXCUI 1801703 as PRIMARY. UMLS C4276029 '5.alpha.-hydroxy laxogenin' (Organic Chemical, Pharmacologic Substance) holds that RXNORM atom; earlier searches spelled '5alpha' and missed UMLS's dotted '.alpha.' form. Plain laxogenin is a separate concept (C0915797). cui_overrides.json '5a-hydroxy laxogenin' null -> C4276029.",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "references_structured: removed 'FDA Warning Letter 607248 (Andro Pharma LLC, 2020)' (https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020) and 'FDA dietary supplement constituent updates (5-alpha-hydroxy-laxogenin)' (https://www.fda.gov/food/dietary-supplement-products-ingredients/constituent-updates). Both returned HTTP 404; the Wayback Machine has no capture of any andro-pharma warning-letter URL and no search found the letter, so it could not be verified. Replaced with FDA Warning Letter 622337 to Performax Labs (2022-05-04), which names 5a-Hydroxy-Laxogenin and states it is not a dietary ingredient, and the FDA Constituent Update of 2022-05-09 listing 5-alpha-hydroxy-laxogenin among the cited ingredients. Both were content-checked live.",
+            "by": "claude-audit"
           }
         ]
       },
-      "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.",
+      "cui": "C4276029",
       "external_ids": {
-        "unii": "HT7W184YG4"
+        "unii": "844KE20WT5"
       },
+      "rxcui": "1801703",
       "gsrs": {
-        "substance_name": "LAXOGENIN",
+        "substance_name": "5.ALPHA.-HYDROXY LAXOGENIN",
         "substance_class": "chemical",
         "cfr_sections": [],
-        "dsld_count": 5,
-        "dsld_info_raw": "Dietary Supplement Label Database|TBD|Laxogenin | 3987 (Number of products:5)",
+        "dsld_count": null,
+        "dsld_info_raw": null,
         "active_moiety": null,
         "salt_parents": [],
-        "metabolic_relationships": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "ANDROGEN RECEPTOR",
+            "unii": "EJC4C3UYXH"
+          }
+        ],
         "metabolites": []
       },
       "ban_context": "substance",
@@ -15217,12 +15325,12 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "Federal Register 67 FR 31125 - FDA strips GRASE status from cascara sagrada",
+          "citation": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)",
           "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
           "published_date": "2002-05-09",
           "evidence_grade": "A",
           "confidence": "high",
-          "title": "Federal Register 67 FR 31125 - FDA strips GRASE status from cascara sagrada"
+          "title": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)"
         },
         {
           "type": "monograph",
@@ -15255,19 +15363,661 @@
             "date": "2026-02-18",
             "change": "Moved from botanical_ingredients to harmful_additives. FDA stripped GRASE 2002. EFSA 2018/2024: HADs genotoxic.",
             "by": "online_safety_audit"
+          },
+          {
+            "date": "2026-09-25",
+            "change": "UNII 3SJ3U7J6V2 -> 4VBP01X99F. GSRS: 3SJ3U7J6V2 is Casanthranol, a purified anthranol-glycoside fraction of the bark (CAS 8024-48-4); 4VBP01X99F is FRANGULA PURSHIANA BARK (CASCARA SAGRADA [MI], RHAMNI PURSHIANAE CORTEX; CAS 8015-89-2), the material this entry names and the UNII IQM cascara_sagrada already carries. No DSLD label carries either UNII, so matching is unchanged.",
+            "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-25",
+            "change": "inactive_policy penalize_anyway -> excipient_acceptable. The 2026-05-12 decision rested on 'no plausible trace-excipient use', but eCFR 21 CFR 172.510(b) lists Cascara sagrada (Rhamnus purshiana DC) as a natural flavoring substance with no limitation. Measured: 0 of 15,414 raw DSLD labels list cascara under other ingredients, so no shipped verdict moves.",
+            "by": "claude-audit"
           }
         ]
       },
       "cui": "C0205704",
       "external_ids": {
-        "unii": "3SJ3U7J6V2"
+        "unii": "4VBP01X99F"
       },
       "ban_context": "watchlist",
       "safety_warning": "A stimulant laxative intended only for short-term use. Longer or high-dose use carries risks of cramping, diarrhea, electrolyte imbalance, and rare liver injury. Review duration and dose before use.",
       "safety_warning_one_liner": "Longer or high-dose use raises safety concerns.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists Cascara sagrada (Rhamnus purshiana DC) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose. 172.510 does not list the casanthranol alias (a purified USP laxative fraction), and no DSLD label (0 of 15,414) names it. As an active, cascara still drives this entry's caution. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "RISK_ALOE_LATEX",
+      "standard_name": "Aloe Latex",
+      "aliases": [
+        "aloe latex",
+        "aloe leaf latex",
+        "aloe vera latex",
+        "aloe leaf inspissated juice",
+        "aloes",
+        "aloe ferox",
+        "aloe ferox mill.",
+        "aloe ferox leaf",
+        "aloe ferox leaf extract",
+        "aloe ferox leaf exudate",
+        "aloe ferox leaf juice",
+        "aloe ferox leaf juice extract",
+        "aloe ferox leaf juice powder",
+        "aloe ferox leaf powder",
+        "aloe ferox dry leaf juice",
+        "cape aloe",
+        "cape aloes",
+        "cape aloe leaf",
+        "aloe capensis",
+        "aloe cape",
+        "bitter aloe",
+        "non-decolorized aloe vera whole leaf extract"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "high_risk",
+      "reason": "FDA's 2002 final rule (67 FR 31125) deemed aloe stimulant-laxative ingredients not generally recognized as safe and effective for OTC use because the requested carcinogenicity data were never submitted; it is not a blanket US dietary-supplement ban. EFSA (2018) concluded that aloe extracts are genotoxic in vitro and whole-leaf aloe extract is carcinogenic, and could not set a safe daily intake for hydroxyanthracene derivatives. Regulation (EU) 2021/468 listed preparations from the leaf of Aloe species containing hydroxyanthracene derivatives as prohibited in food; the EU General Court annulled that listing on 13 November 2024 (T-189/21), the Commission's appeal (C-38/25 P) is pending, and aloe-emodin and preparations containing it remain prohibited. NIH LiverTox rates oral aloe a likely but rare cause of clinically apparent liver injury. The US catalog therefore treats a confirmed supplement match as a clinical caution, not a legal block. Decolorized inner-leaf aloe vera gel, from which these derivatives are removed, is out of scope.",
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Aloe Latex",
+        "negative_match_terms": [
+          "aloe ferox gel",
+          "leaf gel",
+          "inner leaf",
+          "inner-leaf",
+          "inner fillet",
+          "acemannan",
+          "polysaccharide",
+          "polymax"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2022-05-24",
+          "source": {
+            "type": "nih_livertox",
+            "citation": "NIH LiverTox: Aloe Vera",
+            "url": "https://www.ncbi.nlm.nih.gov/books/NBK548634/",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "court_ruling",
+            "citation": "General Court judgment of 13 November 2024, Case T-189/21 Aloe Vera of Europe v Commission (ECLI:EU:T:2024:802), under appeal in Case C-38/25 P",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021TJ0189",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Regulation (EU) 2021/468 (in force 2021-04-08) added preparations from the leaf of Aloe species containing hydroxyanthracene derivatives to Annex III Part A (prohibited) of Regulation (EC) No 1925/2006. The General Court annulled that entry on 2024-11-13 (T-189/21). The Commission appealed (C-38/25 P, lodged 2025-01-22, pending; Advocate General opinion 2026-09-10); under Article 60 of the Court's Statute the annulment of a regulation takes effect only if the appeal is dismissed. Aloe-emodin and all preparations containing it remain in Part A.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)",
+          "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
+          "published_date": "2002-05-09",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients (aloe, cascara sagrada)",
+          "evidence_summary": "Final rule (PubMed 12001972): aloe, including aloe extract and aloe flower extract, in OTC laxative drug products is not generally recognized as safe and effective, because the carcinogenicity data FDA requested were not submitted."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Aloe extracts were genotoxic in vitro, aloe-emodin was genotoxic in vivo and whole-leaf aloe extract was carcinogenic; hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise, and no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Adds aloe-emodin, emodin, danthron and preparations from the leaf of Aloe species containing hydroxyanthracene derivatives to Annex III Part A (prohibited) of Regulation (EC) No 1925/2006. The Aloe-leaf entry was annulled by the General Court in T-189/21 (under appeal)."
+        },
+        {
+          "type": "court_ruling",
+          "authority": "General Court of the European Union",
+          "citation": "Judgment of 13 November 2024, Case T-189/21 Aloe Vera of Europe v Commission, ECLI:EU:T:2024:802",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021TJ0189",
+          "published_date": "2024-11-13",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "General Court T-189/21 - annulment of the Aloe-leaf entry in Regulation (EU) 2021/468",
+          "evidence_summary": "Annuls the third entry in Article 1(1) of Regulation (EU) 2021/468, which had placed preparations from the leaf of Aloe species containing hydroxyanthracene derivatives in Annex III Part A. The Commission's appeal, Case C-38/25 P, is pending."
+        },
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Aloe Vera",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548634/",
+          "published_date": "2022-05-24",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "LiverTox: Aloe Vera",
+          "evidence_summary": "Likelihood score B: oral aloe is a likely but rare cause of clinically apparent hepatocellular liver injury, usually at high doses taken for constipation, dyspepsia or weight loss; leaf-rind latex supplies the laxative anthraquinones."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Cape aloe (Aloe ferox) and aloe latex matched no safety entry, so dsld 267819, 273379 and 337239 shipped SAFE while cascara, under the same FDA rule, shipped CAUTION. Identity: GSRS V5VD430YW9 (ALOE [USP], leaf latex of A. vera or A. ferox); UMLS C4760748 Cape Aloes.",
+            "by": "claude_anthraquinone_laxative_pass"
+          },
+          {
+            "date": "2026-09-25",
+            "change": "EU status corrected from banned to under_review: the General Court annulled the Aloe-leaf entry of Regulation (EU) 2021/468 on 2024-11-13 (T-189/21) and the appeal C-38/25 P is pending. Consumer copy no longer claims an EU prohibition.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C4760748",
+      "cui_note": "UMLS C4760748 Cape Aloes (DrugBank Aloe Capensis / Aloes (Aloe ferox)) is the concept every corpus match resolves to (Aloe ferox). The USP-level concept spanning both species' latex is C0304554 (RxNorm 91263), whose preferred name 'aloe extract' is too generic to use as an alias.",
+      "external_ids": {
+        "unii": "V5VD430YW9"
+      },
+      "ban_context": "substance",
+      "safety_warning": "Stimulant laxative for short-term use only. EFSA found aloe extracts genotoxic and whole-leaf aloe extract carcinogenic. Avoid regular use; it is linked to rare liver injury.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Avoid and talk to your doctor.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists aloe (Aloe perryi, A. barbadensis, A. ferox) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "WATCH_SENNA",
+      "standard_name": "Senna",
+      "aliases": [
+        "senna",
+        "senna leaf",
+        "senna leaves",
+        "senna leaf extract",
+        "senna extract",
+        "senna pod",
+        "senna fruit",
+        "sennosides",
+        "sennosides a and b",
+        "senna glycoside",
+        "senna alexandrina",
+        "senna alexandrina leaf",
+        "senna alexandrina leaf extract",
+        "cassia senna",
+        "cassia angustifolia",
+        "cassia acutifolia",
+        "alexandrian senna",
+        "indian senna",
+        "senokot"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "watchlist",
+      "reason": "FDA moved senna (including sennosides A and B) from OTC laxative category I to category III (more data needed) in 1998 and later received the carcinogenicity data it requested; unlike aloe and cascara, senna was not ruled not generally recognized as safe and effective in 2002 (67 FR 31125) and remains an OTC stimulant laxative. EFSA (2018) concluded that hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless shown otherwise, and in 2024 found that the safety of Cassia senna leaf or fruit preparations containing them cannot be established. The EU keeps these preparations under Union scrutiny (Regulation (EU) 2021/468, Annex III Part C). NIH LiverTox calls senna generally safe for short-term use but a possible rare cause of liver injury with high-dose, prolonged use. The catalog flags a confirmed supplement match for caution.",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Senna",
+        "negative_match_terms": [
+          "coffee senna",
+          "occidentalis",
+          "obtusifolia",
+          "senna tora",
+          "cassia tora"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2020-04-01",
+          "source": {
+            "type": "nih_livertox",
+            "citation": "NIH LiverTox: Senna",
+            "url": "https://www.ncbi.nlm.nih.gov/books/NBK547922/",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part C (Union scrutiny) to Regulation (EC) No 1925/2006: preparations from the leaf or fruit of Cassia senna L. containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Under Union scrutiny since 2021-04-08. EFSA's 2024 opinion on the data submitted during scrutiny found that safety cannot be established. The General Court judgment in T-189/21 annulled only the Aloe-leaf Part A entry, not this Part C entry.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients",
+          "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
+          "published_date": "2002-05-09",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Federal Register 67 FR 31125 - Status of certain additional over-the-counter drug category II and III active ingredients",
+          "evidence_summary": "Recounts FDA's 1998 reclassification of senna, including sennosides A and B, from category I to category III (more data needed) and FDA's request for senna carcinogenicity data, which it received; unlike aloe and cascara, senna was not ruled not generally recognized as safe and effective."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise; no safe daily intake could be set."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Scientific Opinion on additional scientific data related to the safety of preparations of Rheum palmatum L., Rheum officinale Baill. and their hybrids, Rhamnus purshiana DC., Rhamnus frangula L. and Cassia senna L., submitted pursuant to Article 8(4) of Regulation (EC) No 1925/2006",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny",
+          "evidence_summary": "The submitted genotoxicity studies were negative, but the tested preparations were not sufficiently characterised and contained a compound genotoxic in vivo, so they must be considered of concern for genotoxicity; the safety of Cassia senna leaf or fruit preparations containing hydroxyanthracene derivatives cannot be established."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Places preparations from the leaf or fruit of Cassia senna L. containing hydroxyanthracene derivatives in Annex III Part C (Union scrutiny) of Regulation (EC) No 1925/2006."
+        },
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Senna",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547922/",
+          "published_date": "2020-04-01",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "LiverTox: Senna",
+          "evidence_summary": "Likelihood score D: generally safe and well tolerated for short-term use (under one week); cramps and electrolyte imbalance are side effects, and high-dose use beyond recommended periods has caused clinically apparent liver injury."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Moved from harmful_additives (ADD_SENNA, deleted) with Sean's approval so senna has one safety owner. There it took B1 -3 in Formulation and -3 in Safety with an empty explanation ledger while the 15 senna products shipped SAFE or POOR. Identity: GSRS AK7JF626KX (SENNA ALEXANDRINA LEAF); UMLS C0330722 Senna alexandrina. No RxCUI: RxNav 237929 returns an empty record.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C0330722",
+      "external_ids": {
+        "unii": "AK7JF626KX"
+      },
+      "ban_context": "watchlist",
+      "safety_warning": "Stimulant laxative for short-term use (under a week). Long or high-dose use is linked to cramping, electrolyte loss and rare liver injury. Talk to your doctor before regular use.",
+      "safety_warning_one_liner": "Stimulant laxative for short-term use. Talk to your doctor before regular use.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists Senna, Alexandria (Cassia acutifolia) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "WATCH_FRANGULA",
+      "standard_name": "Frangula Bark",
+      "aliases": [
+        "frangula",
+        "frangula bark",
+        "frangula bark extract",
+        "frangula bark powder",
+        "frangula alnus",
+        "frangula alnus bark",
+        "frangula alnus bark extract",
+        "rhamnus frangula",
+        "rhamnus frangula bark",
+        "frangulae cortex",
+        "alder buckthorn",
+        "alder buckthorn bark",
+        "glossy buckthorn bark",
+        "european alder buckthorn bark"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "watchlist",
+      "reason": "Frangula bark is a stimulant laxative containing hydroxyanthracene derivatives (glucofrangulins). The EU keeps Rhamnus frangula bark preparations containing them under Union scrutiny (Regulation (EU) 2021/468, Annex III Part C), and EFSA (2024) found that their safety cannot be established because the tested preparations contained a compound genotoxic in vivo. EFSA (2018) concluded that hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless shown otherwise. The EU herbal monograph limits use to one week and contraindicates it in pregnancy, breastfeeding and children under 12. The catalog flags a confirmed supplement match for caution.",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Frangula Bark",
+        "negative_match_terms": [
+          "sea buckthorn",
+          "hippophae"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2019-09-25",
+          "source": {
+            "type": "ema_monograph",
+            "citation": "European Union herbal monograph on Rhamnus frangula L., cortex (EMA/HMPC/726261/2016, Revision 1)",
+            "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/european-union-herbal-monograph-rhamnus-frangula-l-cortex-revision-1_en.pdf",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part C (Union scrutiny) to Regulation (EC) No 1925/2006: preparations from the bark of Rhamnus frangula L. containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Under Union scrutiny since 2021-04-08. EFSA's 2024 opinion on the data submitted during scrutiny found that safety cannot be established. The General Court judgment in T-189/21 annulled only the Aloe-leaf Part A entry, not this Part C entry.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EMA",
+          "citation": "European Union herbal monograph on Rhamnus frangula L., cortex (EMA/HMPC/726261/2016, Revision 1), adopted 25 September 2019",
+          "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/european-union-herbal-monograph-rhamnus-frangula-l-cortex-revision-1_en.pdf",
+          "published_date": "2019-09-25",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EU herbal monograph on Rhamnus frangula L., cortex - Revision 1",
+          "evidence_summary": "Short-term use for occasional constipation, not for more than one week; contraindicated in pregnancy (genotoxic risk of anthranoids such as emodin and frangulin), lactation, children under 12 and inflammatory bowel disease; hypokalaemia potentiates cardiac glycosides, and diuretics, corticosteroids and liquorice enhance potassium loss."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Scientific Opinion on additional scientific data related to the safety of preparations of Rheum palmatum L., Rheum officinale Baill. and their hybrids, Rhamnus purshiana DC., Rhamnus frangula L. and Cassia senna L., submitted pursuant to Article 8(4) of Regulation (EC) No 1925/2006",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny",
+          "evidence_summary": "The tested preparations contained a compound genotoxic in vivo and must be considered of concern for genotoxicity; the safety of Rhamnus frangula bark preparations containing hydroxyanthracene derivatives cannot be established."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise; no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Places preparations from the bark of Rhamnus frangula L. containing hydroxyanthracene derivatives in Annex III Part C (Union scrutiny) of Regulation (EC) No 1925/2006."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Frangula bark products (e.g. dsld 311187, whose label names Frangula alnus bark extract) matched no safety entry and shipped SAFE. Identity: GSRS S2D77IH61R (FRANGULA ALNUS BARK); UMLS C0080354 Frangula. Bare 'buckthorn' labels are not aliased: GSRS lists buckthorn as a Frangula alnus synonym, the botanical file maps it to Rhamnus cathartica, and sea buckthorn is unrelated.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C0080354",
+      "external_ids": {
+        "unii": "S2D77IH61R"
+      },
+      "ban_context": "watchlist",
+      "safety_warning": "Stimulant laxative for short-term use (up to a week). EFSA could not establish its safety because of genotoxicity concerns. Talk to your doctor before regular use.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Talk to your doctor first.",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "NIH LiverTox documents duration- and dose-related adverse effects plus rare liver injury. Cascara's active compounds are stimulant-laxative hydroxyanthracene derivatives, so there is no plausible trace-excipient use. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
-      "inactive_policy_reviewed_on": "2026-05-12"
+      "inactive_policy_reason": "21 CFR 172.510 does not list frangula or buckthorn as a natural flavoring substance, and frangula bark is a stimulant laxative, so an inactive-panel listing is a hidden active.",
+      "inactive_policy_reviewed_on": "2026-09-25"
+    },
+    {
+      "id": "WATCH_RHUBARB_ROOT",
+      "standard_name": "Rhubarb Root (Rheum palmatum / Rheum officinale)",
+      "aliases": [
+        "turkey rhubarb",
+        "turkey rhubarb root",
+        "turkey rhubarb extract",
+        "turkey rhubarb root extract",
+        "chinese rhubarb",
+        "chinese rhubarb root",
+        "chinese rhubarb root extract",
+        "rhubarb root",
+        "rhubarb root extract",
+        "rhubarb root powder",
+        "rheum palmatum",
+        "rheum palmatum root",
+        "rheum palmatum root extract",
+        "rheum palmatum rhizome",
+        "rheum officinale",
+        "rheum officinale root",
+        "da huang",
+        "dahuang",
+        "rhei radix",
+        "rhei radix et rhizoma"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "watchlist",
+      "reason": "Rhubarb root (Rheum palmatum, Rheum officinale and their hybrids) is a stimulant laxative containing hydroxyanthracene derivatives. The EU keeps root or rhizome preparations containing them under Union scrutiny (Regulation (EU) 2021/468, Annex III Part C), and EFSA (2024) found that their safety cannot be established because the tested preparations contained a compound genotoxic in vivo. EFSA (2018) concluded that hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless shown otherwise. The EU herbal monograph contraindicates rhubarb root in pregnancy, breastfeeding, inflammatory colon disease and children under 12. Siberian rhubarb (Rheum rhaponticum, e.g. ERr 731) is a different species outside this entry. The catalog flags a confirmed supplement match for caution.",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-25",
+      "display_mode_default": "informational",
+      "source_category": "stimulant_laxative",
+      "class_tags": [],
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Rhubarb Root",
+        "negative_match_terms": [
+          "rhaponticum",
+          "siberian rhubarb",
+          "err 731",
+          "garden rhubarb",
+          "rhubarb leaf",
+          "rhubarb stalk"
+        ]
+      },
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2020-05-06",
+          "source": {
+            "type": "ema_monograph",
+            "citation": "European Union herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix (EMA/HMPC/113700/2019, Revision 1)",
+            "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rheum-palmatum-l-and-rheum-officinale-baillon-radix-revision-1_en.pdf",
+            "accessed_date": "2026-09-25"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-25"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "under_review",
+          "effective_date": "2021-04-08",
+          "source": {
+            "type": "regulation",
+            "citation": "Commission Regulation (EU) 2021/468, Annex III Part C (Union scrutiny) to Regulation (EC) No 1925/2006: preparations from the root or rhizome of Rheum palmatum L., Rheum officinale Baillon and their hybrids containing hydroxyanthracene derivatives",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+            "accessed_date": "2026-09-25"
+          },
+          "notes": "Under Union scrutiny since 2021-04-08. EFSA's 2024 opinion on the data submitted during scrutiny found that safety cannot be established. The General Court judgment in T-189/21 annulled only the Aloe-leaf Part A entry, not this Part C entry.",
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-09-25"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EMA",
+          "citation": "European Union herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix (EMA/HMPC/113700/2019, Revision 1), adopted 6 May 2020",
+          "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rheum-palmatum-l-and-rheum-officinale-baillon-radix-revision-1_en.pdf",
+          "published_date": "2020-05-06",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EU herbal monograph on Rheum palmatum L. and Rheum officinale Baillon, radix - Revision 1",
+          "evidence_summary": "Contraindicated in pregnancy (genotoxic risk of anthranoids such as emodin and aloe-emodin), lactation, inflammatory colon disease and children under 12; hypokalaemia potentiates cardiac glycosides, and diuretics, corticosteroids and liquorice enhance potassium loss."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Scientific Opinion on additional scientific data related to the safety of preparations of Rheum palmatum L., Rheum officinale Baill. and their hybrids, Rhamnus purshiana DC., Rhamnus frangula L. and Cassia senna L., submitted pursuant to Article 8(4) of Regulation (EC) No 1925/2006",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny",
+          "evidence_summary": "The tested preparations contained a compound genotoxic in vivo and must be considered of concern for genotoxicity; the safety of Rheum palmatum and Rheum officinale root or rhizome preparations containing hydroxyanthracene derivatives cannot be established."
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "evidence_summary": "Hydroxyanthracene derivatives should be considered genotoxic and carcinogenic unless specific data show otherwise; no safe daily intake could be set."
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "European Commission",
+          "citation": "Commission Regulation (EU) 2021/468 of 18 March 2021 (OJ L 96, 19.3.2021, p. 6)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0468",
+          "published_date": "2021-03-19",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Commission Regulation (EU) 2021/468 - botanical species containing hydroxyanthracene derivatives",
+          "evidence_summary": "Places preparations from the root or rhizome of Rheum palmatum L., Rheum officinale Baillon and their hybrids containing hydroxyanthracene derivatives in Annex III Part C (Union scrutiny) of Regulation (EC) No 1925/2006."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-25",
+        "reviewed_by": "claude_anthraquinone_laxative_pass",
+        "next_review_due": "2027-03-25",
+        "change_log": [
+          {
+            "date": "2026-09-25",
+            "change": "Added. Turkey and Chinese rhubarb root products (e.g. dsld 294519, 291221) matched no safety entry and shipped SAFE. Identity: GSRS G025DAL7CE (CHINESE RHUBARB ROOT, RHEUM PALMATUM); UMLS C1090801 Rheum palmatum; Rheum officinale root (GSRS A47JP5ZG9M) is covered by aliases under the same EU entry. Bare 'rhubarb' is not aliased because it can be the food stalk.",
+            "by": "claude_anthraquinone_laxative_pass"
+          }
+        ]
+      },
+      "cui": "C1090801",
+      "external_ids": {
+        "unii": "G025DAL7CE"
+      },
+      "ban_context": "watchlist",
+      "safety_warning": "Stimulant laxative root meant for short-term use. EFSA could not establish its safety because of genotoxicity concerns. Talk to your doctor before regular use.",
+      "safety_warning_one_liner": "Stimulant laxative with genotoxicity concerns. Talk to your doctor first.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "21 CFR 172.510 lists rhubarb root (Rheum officinale, R. palmatum or other Rheum species except R. rhaponticum) as a natural flavoring substance permitted in food, so a trace flavoring use in the inactive panel is not a laxative dose.",
+      "inactive_policy_reviewed_on": "2026-09-25"
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
@@ -15703,7 +16453,6 @@
         "eria jarensis extract",
         "eria jarensis",
         "n-phenethyldimethylamine",
-        "2-(dimethylamino)-1-phenylethanone",
         "n-phenethyl dimethylamine citrate",
         "n-phenethyl dimethylamine hydrochloride",
         "n,n-dimethylphenethylamine citrate",
@@ -15758,13 +16507,18 @@
             "date": "2026-02-23",
             "change": "Normalized legacy partial record to schema-complete harmful entry",
             "by": "schema_integrity_p3"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "UNII G8WX4UG544 -> I4C10U12C8; alias '2-(dimethylamino)-1-phenylethanone' removed. GSRS: G8WX4UG544 is 2-(Dimethylamino)-1-phenylethanone (alpha-dimethylaminoacetophenone; C10H13NO; CAS 3319-03-7; PubChem CID 137890), a beta-keto compound with no DSLD code. I4C10U12C8 is N,N-DIMETHYL-2-PHENETHYLAMINE (N-PHENETHYL DIMETHYLAMINE; C10H15N; CAS 1126-71-2; InChIKey TXOFSCODFRHERQ-UHFFFAOYSA-N = PubChem CID 25125; DSLD 'Dimethyl phenethylamine', 15 products), the compound this entry names. The removed alias named the ketone and is how the wrong UNII passed verify_unii. No DSLD label in the corpus carries either UNII or names either compound, so matching is unchanged.",
+            "by": "claude-audit"
           }
         ]
       },
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional.",
       "external_ids": {
-        "unii": "G8WX4UG544"
+        "unii": "I4C10U12C8"
       },
       "ban_context": "substance",
       "safety_warning": "A designer phenethylamine-class stimulant found in weight-loss and pre-workout products. Associated with cardiovascular strain; not a lawful supplement ingredient. Stop using and talk to your doctor.",
@@ -18344,12 +19098,17 @@
             "date": "2026-09-18",
             "change": "Added content-verified 21 CFR 172.510 citation (thujone restriction)",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "CUI C1256219 -> C0331409. UMLS: C1256219 is 'Tanacetum vulgare, flower essence' (Pharmacologic Substance; MTH/CHV/ALT atoms only), a flower-remedy preparation, not the herb or oil this entry covers. C0331409 is 'Tanacetum vulgare' (Plant; NCBI, MSH, SNOMEDCT_US; common name tansy), matching the Plant-concept anchoring of the file's other single-species botanicals. No shipped detail blob or frozen enriched product references this entry.",
+            "by": "claude-audit"
           }
         ]
       },
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Neurotoxic / reproductive-toxic botanical — never an excipient",
-      "cui": "C1256219",
+      "cui": "C0331409",
       "source_category": "toxic_botanical",
       "references_structured": [
         {

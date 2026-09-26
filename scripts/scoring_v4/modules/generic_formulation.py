@@ -34,6 +34,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
+from scoring_v4.gate_safety import resolve_safety_gate
 from scoring_v4.modules.immune_support import immune_support_formulation_adjustment
 from scoring_reference_resolver import parent_relative_form_quality
 
@@ -275,28 +276,19 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _penalty_b0_moderate_watchlist(product: Dict[str, Any]) -> float:
-    """Moderate/high-risk/watchlist safety signals that are not
-    short-circuit verdicts. Only exact/alias matches score here; fuzzy
-    review items stay non-scoring until reviewed."""
-    substances = _safe_list(
-        _safe_dict(_safe_dict((product or {}).get("contaminant_data")).get("banned_substances")).get("substances")
-    )
+    """Moderate/high-risk/watchlist concerns that survived the safety gate's
+    policy (US jurisdiction, role-retired rules, role scope, excipient
+    warnings) and are not short-circuit verdicts. Only confirmed matches
+    score here; likely and review items stay non-scoring until reviewed."""
     total = 0.0
-    for substance in substances:
-        if not isinstance(substance, dict):
+    for signal in resolve_safety_gate(product).ingredient_concerns:
+        if signal.match_resolution != "confirmed":
             continue
-        match_type = _normalize_match_type(
-            substance.get("match_type") or substance.get("match_method")
-        )
-        if match_type not in {"exact", "alias"}:
-            continue
-        status = _norm_text(substance.get("status"))
-        severity = _norm_text(substance.get("severity_level") or substance.get("severity"))
-        if status == "high_risk":
+        if signal.status == "high_risk":
             total += B0_HIGH_RISK_PENALTY
-        elif status == "watchlist":
+        elif signal.status == "watchlist":
             total += B0_WATCHLIST_PENALTY
-        elif severity == "moderate":
+        elif signal.severity == "moderate":
             total += B0_MODERATE_PENALTY
     return _clamp(0.0, B0_CAP, total)
 
@@ -565,19 +557,6 @@ def _has_mapped_formulation_active(product: Dict[str, Any]) -> bool:
         if bool(ing.get("mapped", False)) or canonical_key(ing):
             return True
     return False
-
-
-def _normalize_match_type(value: Any) -> str:
-    text = _norm_text(value)
-    if text in {"exact", "alias", "token_bounded"}:
-        return text
-    if text.startswith("exact"):
-        return "exact"
-    if "alias" in text:
-        return "alias"
-    if "token" in text:
-        return "token_bounded"
-    return text
 
 
 def _sum_penalty_magnitudes(penalties: Dict[str, float]) -> float:

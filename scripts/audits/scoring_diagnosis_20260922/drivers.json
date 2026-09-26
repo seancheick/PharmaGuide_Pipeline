@@ -1,0 +1,239 @@
+{
+  "generic": {
+    "n": 10466,
+    "counts": {
+      "evidence_state:evaluated_applicable": 6565,
+      "floor_decisive": 5194,
+      "evidence_zero": 3901,
+      "evidence_state:evaluated_authority": 49,
+      "unrated_form": 1406,
+      "evidence_state:no_qualifying_human_evidence": 368,
+      "evidence_state:applicability_unestablished": 2712,
+      "evidence_state:no_assessable_actives": 502,
+      "evidence_state:evaluated_null": 260,
+      "joint_cap": 93,
+      "evidence_state:research_present_applicability_unestablished": 9,
+      "evidence_state:identity_material_unresolved": 1,
+      "immune_cap": 2
+    },
+    "means": {
+      "raw_formulation_penalty": 1.106,
+      "public_safety_loss": 0.613
+    },
+    "examples": {
+      "floor_decisive": {
+        "id": "261812",
+        "name": "Airborne Elderberry Chewable Tablets",
+        "score": 60.5
+      },
+      "evidence_zero": {
+        "id": "252349",
+        "name": "Bamboo Extract",
+        "score": 55.7
+      },
+      "unrated_form": {
+        "id": "252355",
+        "name": "Galla Chinensis Extract",
+        "score": 53.8
+      },
+      "joint_cap": {
+        "id": "311060",
+        "name": "MSM",
+        "score": 79.5
+      },
+      "immune_cap": {
+        "id": "181881",
+        "name": "Arthro-Immune",
+        "score": 84.4
+      }
+    }
+  },
+  "multi_or_prenatal": {
+    "n": 2063,
+    "counts": {
+      "multi_neutral_floor": 1082,
+      "evidence_state:evaluated_applicable": 2063
+    },
+    "means": {
+      "raw_formulation_penalty": 3.83,
+      "public_safety_loss": 2.286
+    },
+    "examples": {
+      "multi_neutral_floor": {
+        "id": "178352",
+        "name": "Beta-Immune Booster Zesty Orange",
+        "score": 58.1
+      }
+    }
+  },
+  "b_complex": {
+    "n": 146,
+    "counts": {
+      "evidence_state:evaluated_applicable": 146
+    },
+    "means": {
+      "raw_formulation_penalty": 1.966,
+      "public_safety_loss": 1.123
+    },
+    "examples": {}
+  },
+  "omega": {
+    "n": 713,
+    "counts": {
+      "evidence_state:evaluated_applicable": 709,
+      "omega_class_floor": 559,
+      "omega_prenatal_bonus": 24,
+      "evidence_zero": 4,
+      "evidence_state:applicability_unestablished": 4
+    },
+    "means": {
+      "raw_formulation_penalty": 0.669,
+      "public_safety_loss": 0.471
+    },
+    "examples": {
+      "omega_class_floor": {
+        "id": "252500",
+        "name": "Fish Oil Softgel 1000 mg",
+        "score": 77.0
+      },
+      "omega_prenatal_bonus": {
+        "id": "82381",
+        "name": "Purely Prenatal DHA 200 mg",
+        "score": 65.1
+      },
+      "evidence_zero": {
+        "id": "220343",
+        "name": "Nordic Omega-3 Gummies Tangerine",
+        "score": 38.7
+      }
+    }
+  },
+  "probiotic": {
+    "n": 537,
+    "counts": {
+      "evidence_state:research_present_applicability_unestablished": 447,
+      "dose_basis:no_cfu_adequacy_credit": 66,
+      "strain_count:1": 132,
+      "strain_status:strain_context_not_applicable": 105,
+      "evidence_zero": 190,
+      "dose_basis:aggregate_cfu_disclosed_only": 383,
+      "strain_count:10": 24,
+      "strain_count:7": 19,
+      "strain_count:2": 70,
+      "strain_count:4": 71,
+      "strain_count:8": 14,
+      "dose_basis:per_strain_cfu_disclosed": 85,
+      "strain_status:strain_dose_unknown": 840,
+      "strain_count:5": 31,
+      "strain_status:strain_reviewed_no_qualifying_human_evidence": 869,
+      "dose_basis:direct_strain_mass_no_cfu_floor": 2,
+      "strain_count:3": 36,
+      "strain_count:6": 30,
+      "evidence_state:evaluated_applicable": 4,
+      "applicability_paid": 4,
+      "strain_status:strain_dose_applicable": 3,
+      "evidence_state:applicability_unestablished": 2,
+      "evidence_state:no_qualifying_human_evidence": 51,
+      "strain_count:9": 5,
+      "strain_count:16": 16,
+      "strain_count:15": 20,
+      "evidence_state:evaluated_null": 33,
+      "strain_count:34": 3,
+      "strain_count:14": 18,
+      "strain_count:33": 4,
+      "strain_count:32": 4,
+      "strain_count:12": 15,
+      "strain_count:13": 6,
+      "strain_count:11": 11,
+      "strain_count:38": 3,
+      "strain_count:30": 1,
+      "strain_count:36": 1,
+      "strain_count:31": 1,
+      "strain_count:18": 1,
+      "strain_status:strain_dose_reference_unreviewed": 3,
+      "dose_basis:studied_formula_native_afu": 1,
+      "strain_count:None": 1
+    },
+    "means": {
+      "raw_formulation_penalty": 1.27,
+      "public_safety_loss": 0.542
+    },
+    "examples": {
+      "evidence_zero": {
+        "id": "18174",
+        "name": "Adult 50+ Probiotic",
+        "score": 35.9
+      }
+    }
+  },
+  "sports": {
+    "n": 908,
+    "counts": {
+      "floor_decisive": 220,
+      "evidence_state:evaluated_applicable": 812,
+      "evidence_zero": 96,
+      "evidence_state:applicability_unestablished": 59,
+      "unrated_form": 10,
+      "evidence_state:evaluated_authority": 29,
+      "evidence_state:research_present_applicability_unestablished": 6,
+      "evidence_state:no_assessable_actives": 2
+    },
+    "means": {
+      "raw_formulation_penalty": 4.897,
+      "public_safety_loss": 2.134
+    },
+    "examples": {
+      "floor_decisive": {
+        "id": "223147",
+        "name": "Creatine HCl",
+        "score": 72.1
+      },
+      "evidence_zero": {
+        "id": "252404",
+        "name": "BCAA 2:1:1",
+        "score": 56.1
+      },
+      "unrated_form": {
+        "id": "312441",
+        "name": "EAA",
+        "score": 44.0
+      }
+    }
+  },
+  "fiber_digestive": {
+    "n": 411,
+    "counts": {
+      "evidence_zero": 164,
+      "evidence_state:no_assessable_actives": 52,
+      "floor_decisive": 101,
+      "evidence_state:evaluated_applicable": 247,
+      "evidence_state:applicability_unestablished": 93,
+      "evidence_state:no_qualifying_human_evidence": 9,
+      "unrated_form": 41,
+      "evidence_state:research_present_applicability_unestablished": 7,
+      "evidence_state:evaluated_authority": 2,
+      "evidence_state:evaluated_null": 1
+    },
+    "means": {
+      "raw_formulation_penalty": 1.534,
+      "public_safety_loss": 0.832
+    },
+    "examples": {
+      "evidence_zero": {
+        "id": "252542",
+        "name": "Guar Gum",
+        "score": 63.8
+      },
+      "floor_decisive": {
+        "id": "252551",
+        "name": "Inulin",
+        "score": 73.1
+      },
+      "unrated_form": {
+        "id": "209440",
+        "name": "Digestive Enzymes",
+        "score": 45.7
+      }
+    }
+  }
+}

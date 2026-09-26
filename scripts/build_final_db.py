@@ -785,7 +785,7 @@ def _inactive_identity_name_for_export(
     can project safety flags and warning metadata. Those safety sources do
     not own identity fields. If the resolver match came from banned/recalled
     or harmful-additives, preserve the label identity instead of exporting a
-    safety table's standard_name as standardName/standard_name.
+    safety table's standard_name as the row's standard_name.
     """
     if matched_source in _SAFETY_ONLY_IDENTITY_SOURCES:
         return name or upstream_standard_name or resolver_standard_name
@@ -808,7 +808,7 @@ def _active_identity_name_for_export(
 
     If an active ingredient is not canonically mapped and the only pressure to
     standardize the name comes from a safety flag, keep the label identity in
-    `standardName`/`standard_name`. The safety fact still ships in
+    `standard_name`. The safety fact still ships in
     `safety_flags`; it just cannot overwrite identity.
     """
     if canonical_id:
@@ -2206,78 +2206,6 @@ def resolve_harmful_reference(hit: Optional[Dict]) -> Dict:
         if term in index:
             return index[term]
     return {}
-
-
-def build_combined_safety_hits(
-    base_hits: Any,
-    contaminant_hits: List[Dict],
-    allergen_hits: List[Dict],
-    harmful_hit: Optional[Dict],
-) -> List[Dict]:
-    combined = []
-    for hit in safe_list(base_hits):
-        if isinstance(hit, dict):
-            projected = dict(hit)
-            # Interaction safety hits are also attached to ingredient rows.
-            # Keep their consumer/audit context, but never duplicate the full
-            # evaluator trace into the shipped blob through this secondary
-            # route. Full traces remain in enriched build artifacts.
-            for bucket_name in ("condition_hits", "drug_class_hits"):
-                compact_hits = []
-                for nested in safe_list(projected.get(bucket_name)):
-                    if not isinstance(nested, dict):
-                        continue
-                    compact_nested = dict(nested)
-                    raw_decision = compact_nested.get("dose_decision")
-                    compact_nested.pop("dose_threshold_evaluation", None)
-                    if raw_decision:
-                        compact_nested["dose_decision"] = compact_dose_decision(
-                            raw_decision
-                        )
-                    compact_hits.append(compact_nested)
-                if bucket_name in projected:
-                    projected[bucket_name] = compact_hits
-            combined.append(projected)
-
-    for hit in contaminant_hits:
-        combined.append({
-            "kind": "contaminant",
-            "status": safe_str(hit.get("status")),
-            "severity_level": safe_str(hit.get("severity_level")),
-            "ingredient": safe_str(hit.get("ingredient") or hit.get("banned_name") or hit.get("name")),
-            "reason": safe_str(hit.get("reason")),
-            "match_type": safe_str(hit.get("match_type") or hit.get("match_method")),
-        })
-
-    for hit in allergen_hits:
-        combined.append({
-            "kind": "allergen",
-            "allergen_id": safe_str(hit.get("allergen_id")),
-            "allergen_name": safe_str(hit.get("allergen_name")),
-            "presence_type": safe_str(hit.get("presence_type")),
-            "severity_level": safe_str(hit.get("severity_level")),
-            "evidence": safe_str(hit.get("evidence")),
-        })
-
-    if harmful_hit:
-        harmful_ref = resolve_harmful_reference(harmful_hit)
-        combined.append({
-            "kind": "harmful_additive",
-            "standard_name": safe_str(
-                harmful_ref.get("standard_name")
-                or harmful_hit.get("canonical_name")
-                or harmful_hit.get("additive_name")
-                or harmful_hit.get("ingredient")
-            ),
-            "severity_level": safe_str(harmful_hit.get("severity_level")),
-            "category": safe_str(harmful_hit.get("category")),
-            "notes": safe_str(harmful_hit.get("notes") or harmful_ref.get("notes")),
-            "mechanism_of_harm": safe_str(harmful_hit.get("mechanism_of_harm") or harmful_ref.get("mechanism_of_harm")),
-            "population_warnings": safe_list(harmful_hit.get("population_warnings") or harmful_ref.get("population_warnings")),
-            "classification_evidence": safe_str(harmful_hit.get("classification_evidence")),
-        })
-
-    return combined
 
 
 # ─── Schema Creation ───
@@ -4162,8 +4090,7 @@ def _ingredient_export_dedup_key(ingredient: Dict[str, Any]) -> str:
     if canonical_id:
         return f"canonical:{canonical_id}"
     name = (
-        safe_str(ingredient.get("standardName"))
-        or safe_str(ingredient.get("standard_name"))
+        safe_str(ingredient.get("standard_name"))
         or safe_str(ingredient.get("name"))
         or safe_str(ingredient.get("raw_source_text"))
     ).lower()
@@ -4195,8 +4122,8 @@ def _is_zero_dose_placeholder_duplicate(
         return False
 
     # Never drop a row that carries a product-safety concern. Informational
-    # safety_hits are canonical-level payloads and remain attached to the
-    # retained positive-dose duplicate for the same canonical.
+    # safety context is canonical-level and stays on the retained
+    # positive-dose duplicate for the same canonical.
     if ingredient.get("is_safety_concern") or ingredient.get("is_banned"):
         return False
     if safe_list(ingredient.get("safety_flags")):
@@ -6213,7 +6140,6 @@ def _ingredient_anchor_key(ingredient: Dict[str, Any]) -> str:
         ingredient.get("canonical_id"),
         ingredient.get("nutrient_group_id"),
         ingredient.get("standard_name"),
-        ingredient.get("standardName"),
         ingredient.get("name"),
         ingredient.get("display_label"),
         ingredient.get("raw_source_text"),
@@ -6271,17 +6197,9 @@ def _anchor_amount(ingredients: List[Dict], anchor: Dict[str, Any]) -> Tuple[Opt
         raw_amount = (
             ingredient.get("normalized_amount")
             if ingredient.get("normalized_amount") is not None
-            else ingredient.get("normalized_value")
-            if ingredient.get("normalized_value") is not None
             else ingredient.get("quantity")
-            if ingredient.get("quantity") is not None
-            else ingredient.get("dosage")
         )
-        raw_unit = (
-            ingredient.get("normalized_unit")
-            or ingredient.get("dosage_unit")
-            or ingredient.get("unit")
-        )
+        raw_unit = ingredient.get("normalized_unit") or ingredient.get("unit")
         converted = _amount_in_unit(raw_amount, raw_unit, safe_str(anchor.get("unit")))
         if converted is None:
             continue
@@ -6669,19 +6587,12 @@ def build_detail_blob(
             identity_mapped=safe_bool(m.get("mapped", ing.get("mapped"))),
         )
         ingredient_hits = matching_contaminant_hits(contaminant_lookup, raw, name)
-        allergen_hits = matching_allergen_hits(allergen_patterns, raw, name)
         harmful_hit = None
         for term in collect_match_terms(raw, name):
             harmful_hit = harmful_lookup.get(term)
             if harmful_hit:
                 break
         harmful_ref = resolve_harmful_reference(harmful_hit)
-        combined_safety_hits = build_combined_safety_hits(
-            m.get("safety_hits"),
-            ingredient_hits,
-            allergen_hits,
-            harmful_hit,
-        )
 
         qty = ing.get("quantity")
         # Source ownership disambiguates repeated marketing names such as HOWARU.
@@ -6734,7 +6645,6 @@ def build_detail_blob(
                 ing.get("raw_source_path") or m.get("raw_source_path")
             ),
             "name": name,
-            "standardName": standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "quantity": safe_float(qty),
@@ -6763,17 +6673,12 @@ def build_detail_blob(
                 if form_evidence is not None
                 else {}
             ),
-            "mapped": is_mapped,
-            "safety_hits": combined_safety_hits,
             "safety_flags": projected_safety_flags,
             "normalized_amount": safe_float(ne.get("normalized_amount")),
             "normalized_unit": safe_str(ne.get("normalized_unit")),
             "conversion_evidence": safe_dict(ne.get("conversion_evidence")) or None,
             "role": "active",
             "parent_key": safe_str(m.get("parent_key") or ing.get("normalized_key")),
-            "dosage": safe_float(qty),
-            "dosage_unit": safe_str(ing.get("unit")),
-            "normalized_value": safe_float(ne.get("normalized_amount")),
             "is_mapped": is_mapped,
             # canonical_id — foundational identifier for interactions, stack
             # logic, evidence routing, biomarker scoring, dedup, and analytics.
@@ -6808,33 +6713,23 @@ def build_detail_blob(
             "matched_rule_id": active_safety_contract["matched_rule_id"],
             "us_applicable": active_policy_projection.get("us_applicable"),
             "jurisdictions": safe_list(active_policy_projection.get("jurisdictions")),
-            "jurisdiction_scope": active_policy_projection.get("jurisdiction_scope"),
             # Sprint E1.1.4 / 2026-05-13 — pass authored Dr Pham copy
             # through to the warning emitter. None when the safety contract
             # didn't fire on a banned-recalled hit.
             "safety_warning_one_liner": active_safety_contract.get("safety_warning_one_liner"),
             "safety_warning": active_safety_contract.get("safety_warning"),
-            "harmful_notes": (
-                safe_str(harmful_ref.get("mechanism_of_harm"))
-                or safe_str(harmful_ref.get("notes"))
-                or safe_str(harmful_hit.get("classification_evidence"))
-                or safe_str(harmful_hit.get("category"))
-            ) if harmful_hit else None,
-            "is_allergen": bool(allergen_hits),
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
             ),
-            # Label-native identity audit trail (label-first export). Sourced
-            # from the IQD identity stamp so the blob carries how the display was
-            # derived and what canonical was supplied before any repair.
-            "source_label_key": safe_str(m.get("source_label_key")) or None,
+            # Label-native identity (label-first export), sourced from the IQD
+            # identity stamp. The rest of the audit trail (source_label_key,
+            # rationale, canonical-before-repair) stays on the enriched IQD row,
+            # where audit_identity_integrity reads it.
             "source_label_name": m.get("source_label_name"),
             "source_label_form": m.get("source_label_form"),
             "label_display_name": m.get("label_display_name"),
             "label_display_form": m.get("label_display_form"),
             "identity_disposition": safe_str(m.get("identity_disposition")) or None,
-            "identity_resolution_rationale": m.get("identity_resolution_rationale"),
-            "canonical_id_before": m.get("canonical_id_before"),
             # Sprint E1.2.2.a — pre-computed Flutter display label
             "display_label": _compute_display_label(ing, m),
             # Sprint E1.2.2.b — pre-computed Flutter dose label.
@@ -6855,19 +6750,12 @@ def build_detail_blob(
                 "notes": m.get("notes") or ing.get("notes"),
                 "raw_source_text": ing.get("raw_source_text"),
             }),
-            # Sprint E1.3.2 — per-strain adequacy (None when not a
+            # Sprint E1.3.2 — per-strain clinical support (None when not a
             # matched clinical strain OR when per-strain CFU isn't
             # knowable e.g. multi-strain blend).
-            "adequacy_tier": _strain_adequacy.get("adequacy_tier"),
             "clinical_support_level": _strain_adequacy.get("clinical_support_level"),
-            # Sprint E1.3.2.b — hybrid confidence descriptors (controlled
-            # enums; None on non-probiotic ingredients so this stays off
-            # generic ingredient surfaces).
-            "cfu_confidence": _strain_adequacy.get("cfu_confidence"),
-            "dose_basis": _strain_adequacy.get("dose_basis"),
-            "ui_copy_hint": _strain_adequacy.get("ui_copy_hint"),
-            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative).
-            # Reads adequacy_tier above, so must come AFTER the E1.3.2 fields.
+            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative),
+            # from the same per-strain adequacy tier.
             "display_badge": _compute_display_badge({**ing, "adequacy_tier": _strain_adequacy.get("adequacy_tier")}),
         })
     ingredients = _suppress_zero_dose_duplicate_active_rows(ingredients)
@@ -6955,22 +6843,15 @@ def build_detail_blob(
 
         # Label fidelity contract (2026-06-15): inactive_ingredients[] is
         # the user-visible "Other Ingredients" surface, so resolver flags
-        # must not delete rows that appeared on the label. Keep the row and
-        # expose disposition metadata for scoring / secondary UI decisions.
-        if res.is_label_descriptor:
-            label_row_disposition = "label_descriptor"
-        elif res.is_active_only:
-            label_row_disposition = "active_only"
-        else:
-            label_row_disposition = "standard"
+        # must not delete rows that appeared on the label. The row keeps
+        # is_label_descriptor / is_active_only for scoring and secondary UI.
         inactive_standard_name = _inactive_identity_name_for_export(
             name=name,
             upstream_standard_name=std_name_ing,
             resolver_standard_name=safe_str(res.standard_name),
             matched_source=safe_str(res.matched_source),
         )
-        resolved_display_label = safe_str(res.display_label)
-        inactive_display_label = name or raw or resolved_display_label
+        inactive_display_label = name or raw or safe_str(res.display_label)
         inactive_contract = {
             "is_safety_concern": res.is_safety_concern,
             "is_banned": res.is_banned,
@@ -6995,8 +6876,6 @@ def build_detail_blob(
         inactive.append({
             "raw_source_text": raw,
             "name": name,
-            "label_display": inactive_display_label,
-            "standardName": inactive_standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "category": res.category or safe_str(ing.get("category")),
@@ -7009,16 +6888,12 @@ def build_detail_blob(
                 or _safety_flags_from_contract(inactive_contract)
             ),
             "notes": res.notes,
-            "mechanism_of_harm": res.mechanism_of_harm or "",
-            "common_uses": res.common_uses,
             "population_warnings": res.population_warnings,
             "harmful_severity": res.harmful_severity,
-            "harmful_notes": res.harmful_notes,
             "identifiers": res.identifiers or {},
             # Canonical inactive contract (v1.5.0+) — Flutter renders
             # these directly without local inference.
             "display_label": inactive_display_label,
-            "resolved_display_label": resolved_display_label,
             "display_role_label": res.display_role_label,
             "severity_status": res.severity_status,
             # Penalty-aware dot tone (green/light_orange/dark_orange/red): reflects
@@ -7037,7 +6912,6 @@ def build_detail_blob(
                 else None
             ),
             "is_safety_concern": inactive_contract["is_safety_concern"],
-            "label_row_disposition": label_row_disposition,
             "is_label_descriptor": res.is_label_descriptor,
             "is_active_only": res.is_active_only,
             # v1.6.0+ unified contract additions:
@@ -7048,7 +6922,6 @@ def build_detail_blob(
             "regulatory_status": res.regulatory_status,
             "us_applicable": inactive_policy_projection.get("us_applicable"),
             "jurisdictions": safe_list(inactive_policy_projection.get("jurisdictions")),
-            "jurisdiction_scope": inactive_policy_projection.get("jurisdiction_scope"),
             "inactive_policy": res.inactive_policy,
             "safety_display_name": (
                 safe_str(res.standard_name)
@@ -8275,8 +8148,8 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
 
         # Extract nutrients with doses
         if category in nutrient_categories:
-            normalized_amount = ing.get("normalized_amount") or ing.get("dosage") or ing.get("quantity")
-            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit") or ing.get("unit"))
+            normalized_amount = ing.get("normalized_amount") or ing.get("quantity")
+            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("unit"))
 
             if normalized_amount is not None:
                 amount = float(normalized_amount)
@@ -8348,10 +8221,9 @@ def generate_key_nutrients_summary(enriched: Dict) -> List[Dict]:
         if category not in ["vitamins", "minerals", "amino_acids", "fatty_acids", "fiber", "fibers"]:
             continue
 
-        normalized_amount = ing.get("normalized_amount") or ing.get("dosage") or ing.get("quantity")
+        normalized_amount = ing.get("normalized_amount") or ing.get("quantity")
         normalized_unit = safe_str(
             ing.get("normalized_unit")
-            or ing.get("dosage_unit")
             or ing.get("unit_normalized")
             or ing.get("unit")
         )
@@ -8503,10 +8375,12 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
         canonical_id = normalize_interaction_tag(value)
         if not canonical_id:
             return
+        ingredient_names.add(canonical_id)
         # The app joins curated interactions on these tags, so a vitamer also
-        # carries its family (vitamin K2 -> vitamin_k for the warfarin rule).
+        # carries its family (vitamin K2 -> vitamin_k for the warfarin rule)
+        # and a botanical its IQM twin (garlic_bulb -> garlic). Category flags
+        # read ingredient_names and stay on the label's own identity.
         for subject_id in interaction_subject_ids(canonical_id):
-            ingredient_names.add(subject_id)
             if subject_id not in seen_key_tags:
                 seen_key_tags.add(subject_id)
                 key_tags.append(subject_id)

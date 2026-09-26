@@ -1398,7 +1398,6 @@ def test_safety_source_inactive_does_not_export_safety_standard_name_as_identity
     blob = build_detail_blob(enriched, make_scored())
     inactive = blob["inactive_ingredients"][0]
 
-    assert inactive["standardName"] == "Titanium Dioxide"
     assert inactive["standard_name"] == "Titanium Dioxide"
     assert inactive["display_label"] == "Titanium Dioxide"
     assert inactive["matched_rule_id"] == "BANNED_ADD_TITANIUM_DIOXIDE"
@@ -1423,11 +1422,10 @@ def test_inactive_display_label_preserves_label_wording_with_resolved_identity_m
 
     assert inactive["name"] == "Ascorbyl Palmitate"
     assert inactive["display_label"] == "Ascorbyl Palmitate"
-    assert inactive["label_display"] == "Ascorbyl Palmitate"
-    assert inactive["resolved_display_label"] == "Natural Preservatives"
-    assert inactive["standardName"] == "Natural Preservatives"
+    assert inactive["standard_name"] == "Natural Preservatives"
     assert inactive["display_role_label"] == "Preservative natural"
-    assert inactive["label_row_disposition"] == "standard"
+    assert inactive["is_label_descriptor"] is False
+    assert inactive["is_active_only"] is False
 
 
 def test_inactive_display_tone_uses_public_scoring_penalty_outcome():
@@ -1497,11 +1495,8 @@ def test_label_descriptor_inactive_row_stays_visible_but_marked_nonstandard():
 
     assert inactive["name"] == "Phospholipids"
     assert inactive["display_label"] == "Phospholipids"
-    assert inactive["label_display"] == "Phospholipids"
-    assert inactive["standardName"] == "Phospholipid Descriptor"
-    assert inactive["resolved_display_label"] == "Phospholipid Descriptor"
+    assert inactive["standard_name"] == "Phospholipid Descriptor"
     assert inactive["matched_rule_id"] == "PII_PHOSPHOLIPID_DESCRIPTOR"
-    assert inactive["label_row_disposition"] == "label_descriptor"
     assert inactive["is_label_descriptor"] is True
     assert inactive["functional_roles"] == []
 
@@ -1534,7 +1529,6 @@ def test_safety_source_active_without_canonical_keeps_label_identity():
 
     ingredient = build_detail_blob(enriched, make_scored())["ingredients"][0]
 
-    assert ingredient["standardName"] == "Bitter Orange Citrus Bioflavonoids"
     assert ingredient["standard_name"] == "Bitter Orange Citrus Bioflavonoids"
     assert ingredient["matched_rule_id"] == "RISK_BITTER_ORANGE"
     assert ingredient["safety_flags"][0]["entry_id"] == "RISK_BITTER_ORANGE"
@@ -1559,7 +1553,6 @@ def test_inactive_form_terms_emit_banned_preflight_detail():
     blob = build_detail_blob(enriched, make_scored())
     inactive = blob["inactive_ingredients"][0]
 
-    assert inactive["standardName"] == "Creamer"
     assert inactive["standard_name"] == "Creamer"
     assert inactive["matched_rule_id"] == "BANNED_PHO"
     assert inactive["is_banned"] is True
@@ -1800,14 +1793,13 @@ def test_detail_blob_excludes_gate_ineligible_exposure_rows_from_consumer_rda_su
     assert blob["rda_ul_data"]["count"] == 1
 
 
-def test_detail_blob_preserves_real_upstream_field_names_for_active_ingredients():
+def test_detail_blob_active_rows_carry_one_name_per_value():
     blob = build_detail_blob(make_enriched(), make_scored())
     ingredient = blob["ingredients"][0]
 
     expected_keys = {
         "raw_source_text",
         "name",
-        "standardName",
         "normalized_key",
         "forms",
         "quantity",
@@ -1824,12 +1816,41 @@ def test_detail_blob_preserves_real_upstream_field_names_for_active_ingredients(
         "bio_score",
         "notes",
         "category",
-        "mapped",
-        "safety_hits",
+        "is_mapped",
+        "normalized_amount",
     }
     assert expected_keys.issubset(set(ingredient.keys()))
-    assert not {"natural", "score"} & set(ingredient.keys())
-    assert ingredient["standardName"] == "Retinyl Palmitate"
+    assert ingredient["bio_score"] == 14.0
+    assert (ingredient["quantity"], ingredient["unit"]) == (2000.0, "IU")
+    assert ingredient["standard_name"] == "Retinyl Palmitate"
+    # Retired twins (row-key census 2026-09-25): each duplicated a value that
+    # ships under the name kept above, or had no reader at all.
+    for retired in (
+        "standardName", "mapped", "normalized_value", "safety_hits", "harmful_notes",
+        "dosage", "dosage_unit",
+        "score",
+        "natural",
+        "is_allergen",
+        "source_label_key", "identity_resolution_rationale", "canonical_id_before",
+        "adequacy_tier", "cfu_confidence", "dose_basis", "ui_copy_hint",
+        "jurisdiction_scope",
+    ):
+        assert retired not in ingredient
+
+
+def test_detail_blob_inactive_rows_carry_one_name_per_value():
+    blob = build_detail_blob(make_enriched(), make_scored())
+    inactive = blob["inactive_ingredients"][0]
+
+    assert {"standard_name", "display_label"}.issubset(inactive)
+    for retired in (
+        "standardName", "label_display", "harmful_notes",
+        "mechanism_of_harm", "common_uses",
+        "jurisdiction_scope",
+        "label_row_disposition",
+        "resolved_display_label",
+    ):
+        assert retired not in inactive
 
 
 def test_detail_blob_does_not_mark_active_mapped_without_canonical_id():
@@ -1861,7 +1882,6 @@ def test_detail_blob_does_not_mark_active_mapped_without_canonical_id():
     ingredient = build_detail_blob(enriched, make_scored())["ingredients"][0]
 
     assert ingredient["canonical_id"] == ""
-    assert ingredient["mapped"] is False
     assert ingredient["is_mapped"] is False
 
 
@@ -1886,7 +1906,6 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
     blob = build_detail_blob(enriched, make_scored())
     by_name = {ingredient["name"]: ingredient for ingredient in blob["ingredients"]}
     vitamin_a = by_name["Vitamin A Palmitate"]
-    soy = by_name["Soy Lecithin"]
 
     # v1.5.x: is_harmful retired in favor of is_safety_concern (semantic)
     # + harmful_severity (raw enum). Vitamin A Palmitate is high severity
@@ -1894,9 +1913,9 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
     assert vitamin_a["is_safety_concern"] is True
     assert vitamin_a["harmful_severity"] == "high"
     assert vitamin_a["is_banned"] is True
-    assert soy["is_allergen"] is True
-    assert any(hit["status"] == "banned" for hit in vitamin_a["safety_hits"])
-    assert any(hit["kind"] == "allergen" for hit in soy["safety_hits"])
+    # Allergens ship on the blob-level `allergens` list the app reads.
+    assert "Soy Lecithin" in by_name
+    assert [a["allergen_id"] for a in blob["allergens"]] == ["ALLERGEN_SOY"]
 
 
 def test_detail_blob_warnings_cover_banned_interaction_dietary_and_status_not_allergens():
@@ -2011,8 +2030,8 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
             "parent_key": "potassium",
             "category": "mineral",
             "mapped": True,
-            "dosage": 99,
-            "dosage_unit": "mg",
+            "quantity": 99,
+            "unit": "mg",
         },
         {
             "name": "Potassium Gluconate",
@@ -2021,8 +2040,8 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
             "parent_key": "potassium_gluconate",
             "category": "mineral",
             "mapped": True,
-            "dosage": 595,
-            "dosage_unit": "mg",
+            "quantity": 595,
+            "unit": "mg",
         },
         {
             "name": "Magnesium",
@@ -2031,8 +2050,8 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
             "parent_key": "magnesium",
             "category": "mineral",
             "mapped": True,
-            "dosage": 100,
-            "dosage_unit": "mg",
+            "quantity": 100,
+            "unit": "mg",
         },
     ]
 
@@ -2436,8 +2455,8 @@ def test_key_ingredient_tags_merge_iqm_and_active_canonicals_without_dropping_cl
             "parent_key": "coq10",
             "category": "antioxidants",
             "mapped": True,
-            "dosage": 100,
-            "dosage_unit": "mg",
+            "quantity": 100,
+            "unit": "mg",
         }
     ]
 
@@ -2734,7 +2753,6 @@ def test_detail_blob_flag_fields_are_real_json_booleans():
     # Row-level flags — same field must not ship mixed int/bool across products.
     for row in blob["ingredients"]:
         flag_values[f"ingredients[].is_mapped:{row['name']}"] = row["is_mapped"]
-        flag_values[f"ingredients[].mapped:{row['name']}"] = row["mapped"]
     for row in blob["inactive_ingredients"]:
         flag_values[f"inactive[].is_additive:{row['name']}"] = row["is_additive"]
 
@@ -4271,14 +4289,14 @@ def test_label_identity_display_form_prefers_label_display_form():
     assert ingredient["form_status"] == "known"
 
 
-def test_label_identity_emits_audit_trail_fields():
+def test_label_identity_emits_label_native_fields():
     ingredient = build_detail_blob(_enriched_with_label_identity(), make_scored())["ingredients"][0]
     assert ingredient["identity_disposition"] == "repaired"
-    assert ingredient["canonical_id_before"] == "dha"
-    assert ingredient["source_label_key"] == "epa|as ethyl esters"
     assert ingredient["label_display_name"] == "EPA"
     assert ingredient["label_display_form"] == "as Ethyl Esters"
-    assert ingredient["identity_resolution_rationale"]
+    # The repair trail stays on the enriched IQD row (audit_identity_integrity).
+    for enriched_only in ("canonical_id_before", "source_label_key", "identity_resolution_rationale"):
+        assert enriched_only not in ingredient
 
 
 def test_label_identity_179681_locks_epa_display_with_epa_canonical():

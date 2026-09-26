@@ -246,9 +246,8 @@
     "name": "thyrotropin alfa"
   },
   "5a-hydroxy laxogenin": {
-    "cui": null,
-    "name": null,
-    "note": "Curated override: supplement-market derivative name does not have a confirmed exact UMLS concept distinct from broader laxogenin entries."
+    "cui": "C4276029",
+    "name": "5.alpha.-hydroxy laxogenin"
   },
   "igf-1 lr3": {
     "cui": null,

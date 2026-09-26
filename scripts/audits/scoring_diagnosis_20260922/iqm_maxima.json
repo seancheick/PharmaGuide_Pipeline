@@ -1,0 +1,78 @@
+{
+  "vitamin_a": [
+    15,
+    "retinol"
+  ],
+  "vitamin_b1_thiamine": [
+    14,
+    "thiamine tetrahydrofurfuryl disulfide (TTFD)"
+  ],
+  "vitamin_b2_riboflavin": [
+    10,
+    "riboflavin-5-phosphate"
+  ],
+  "vitamin_b3_niacin": [
+    11,
+    "niacinamide"
+  ],
+  "vitamin_b5_pantothenic": [
+    12,
+    "pantethine"
+  ],
+  "vitamin_b6_pyridoxine": [
+    10,
+    "pyridoxamine"
+  ],
+  "vitamin_b7_biotin": [
+    12,
+    "d-biotin"
+  ],
+  "vitamin_b9_folate": [
+    14,
+    "5-methyltetrahydrofolate (5-MTHF)"
+  ],
+  "vitamin_b12_cobalamin": [
+    11,
+    "methylcobalamin sublingual"
+  ],
+  "vitamin_c": [
+    15,
+    "liposomal vitamin C"
+  ],
+  "vitamin_d": [
+    14,
+    "calcidiol (25-hydroxy D3)"
+  ],
+  "vitamin_e": [
+    12,
+    "mixed tocopherols"
+  ],
+  "vitamin_k": [
+    6,
+    "vitamin k (unspecified)"
+  ],
+  "iodine": [
+    12,
+    "potassium iodide"
+  ],
+  "iron": [
+    13,
+    "iron bisglycinate"
+  ],
+  "zinc": [
+    13,
+    "zinc picolinate"
+  ],
+  "magnesium": [
+    14,
+    "magnesium citrate"
+  ],
+  "calcium": [
+    14,
+    "calcium citrate malate"
+  ],
+  "choline": [
+    12,
+    "alpha-GPC"
+  ]
+}

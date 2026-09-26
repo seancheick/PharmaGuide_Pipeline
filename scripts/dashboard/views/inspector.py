@@ -193,7 +193,7 @@ def render_drill_down(dsld_id, data):
             active_df = pd.DataFrame(blob.get("ingredients", []))
             if not active_df.empty:
                 # Column selection and styling
-                cols = ["name", "bio_score", "form", "dosage", "flags"]
+                cols = ["name", "bio_score", "form", "quantity", "unit", "flags"]
                 available_cols = [c for c in cols if c in active_df.columns]
                 st.dataframe(arrow_safe(active_df[available_cols]), width="stretch")
             else:

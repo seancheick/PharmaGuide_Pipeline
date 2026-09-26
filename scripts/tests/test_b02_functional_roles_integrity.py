@@ -62,13 +62,14 @@ EXPECTED_ROLES = {
 
 DEFERRED_EMPTY = {
     "ADD_NICKEL":  "contaminant",
-    "ADD_SENNA":   "Phase 4 move-to-actives (laxative drug)",
 }
+# ADD_SENNA left harmful_additives on 2026-09-25: the planned "move-to-actives
+# (laxative drug)" landed as banned_recalled WATCH_SENNA.
 
 
 def test_batch_2_scope_complete(by_id):
     in_scope = set(EXPECTED_ROLES) | set(DEFERRED_EMPTY)
-    assert len(in_scope) == 41
+    assert len(in_scope) == 40
     missing = in_scope - set(by_id)
     assert not missing, f"missing: {missing}"
 

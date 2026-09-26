@@ -552,3 +552,20 @@ above. Acceptance criteria for each phase passed before commit; the
 - **Operator tasks:** Supabase Pro upgrade before 2026-05-25 storage cutoff; verify-bundle CI secrets; iPhone product-detail smoke test post-cleanup.
 - **Deferred:** drop `dist_dir` parameter from `compute_protected_blob_set` after one clean release cycle observed end-to-end with P3.6b.
 - **P5/P6:** still deferred until post-TestFlight per the original ADR.
+
+### Amendment 2026-09-25 — the interaction hydration pin is part of the bundle (I4, I5)
+
+The app hydrates `interaction_db.sqlite` at build time from the GitHub Release asset named by
+its pin, `tool/interaction_db.release.json`, and refuses a pin that disagrees with the bundled
+manifest. The train committed the new manifest without moving the pin twice (1.0.11 on
+2026-09-12, 1.0.12 on 2026-09-22), and each time app CI and every `make run`/`build-*` failed at
+hydration until someone published the asset and repinned by hand.
+
+Decision: when a run will commit the bundle, `release_full.sh` runs
+`release_interaction_artifact.py --publish-flutter-pin` after the preflight gates and before
+Supabase. It reuses the non-draft `clinical-db-*` release whose asset carries the staged digest,
+or publishes the next `clinical-db-YYYY.MM.DD.N`; it downloads the asset, checks its sha256, and
+rewrites only the pin's identity fields. After the import, the app's own
+`tool/fetch_interaction_db.sh` runs as a strict gate, and the pin is committed with the bundle.
+Publishing the asset is part of the operator-invoked release, like the Supabase upload; it stays
+inert until the Flutter commit is pushed, and that push remains manual.

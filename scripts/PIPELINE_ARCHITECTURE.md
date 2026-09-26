@@ -247,11 +247,17 @@ rebuild, but only when freshness/parity checks require it.
 6. Rebuild the interaction DB when its rule inputs changed.
 7. Run cleaner, enrichment, clinical, interaction, freshness, manifest, export,
    RDA/UL Flutter parity, and scoring snapshot gates.
-8. Sync Supabase unless skipped/dry-run.
-9. Import and verify the Flutter bundle unless skipped.
-10. Prune local `.previous` backups.
-11. Commit the Flutter bundle locally, then perform aligned recoverable storage
-    cleanup; push remains manual.
+8. When the run commits the bundle and the app's hydration pin
+   (`tool/interaction_db.release.json`) names another artifact, publish the
+   staged interaction DB as a `clinical-db-*` GitHub Release asset (or reuse the
+   release that already carries it), verify the download, and move the pin
+   (`release_interaction_artifact.py --publish-flutter-pin`).
+9. Sync Supabase unless skipped/dry-run.
+10. Import and verify the Flutter bundle unless skipped, including the app's own
+    hydration verifier (`tool/fetch_interaction_db.sh`).
+11. Prune local `.previous` backups.
+12. Commit the Flutter bundle and hydration pin locally, then perform aligned
+    recoverable storage cleanup; push remains manual.
 
 If a preceding snapshot just produced a fresh matched pair, release steps 2–3
 auto-skip. This is why running snapshot and then release is not a duplicate
@@ -275,7 +281,9 @@ scripts/dist/
 ```
 
 The Flutter app bundles the catalog and interaction database under its
-`assets/db/` directory and reads the SQLite catalog locally first. Supabase is
+`assets/db/` directory and reads the SQLite catalog locally first. The
+interaction SQLite itself is not committed there: the app hydrates it at build
+time from the pinned `clinical-db-*` GitHub Release asset. Supabase is
 the remote distribution/hydration path, not the phone's only source of data.
 
 ## 9. Failure semantics

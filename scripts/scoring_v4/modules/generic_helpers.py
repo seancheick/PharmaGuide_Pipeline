@@ -245,8 +245,8 @@ def bio_score_of(ingredient: Dict[str, Any]) -> Optional[float]:
 
 
 def canonical_key(ingredient: Dict[str, Any]) -> str:
-    """Stable identity key for de-duplication in A2 premium-form counting.
-    Prefers canonical_id, falls back to standard_name then raw name."""
+    """Stable identity key for an ingredient row: canonical_id, then
+    standard_name, then raw name (normalized); "" when none is present."""
     for field in ("canonical_id", "standard_name", "name"):
         value = ingredient.get(field) if isinstance(ingredient, dict) else None
         if value:

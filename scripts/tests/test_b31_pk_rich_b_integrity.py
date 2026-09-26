@@ -119,6 +119,18 @@ def test_cascara_pre_absorption_hydrolysis_documented(iqm):
         )
 
 
+def test_cascara_notes_state_the_2002_fda_rule_correctly(iqm):
+    """67 FR 31125 (2002) moved cascara to category II (not GRASE) for OTC
+    laxative drug products; category III (more data needed) was the 1998
+    step. Rule text read 2026-09-25."""
+    notes = iqm['cascara_sagrada']['forms']['cascara sagrada bark extract']['notes']
+    assert 'Category III (insufficient data) in 2002' not in notes
+    assert '67 FR 31125' in notes
+    # EU monograph 5.1 and GSRS both list cascarosides A-F, not A-D.
+    for form in iqm['cascara_sagrada']['forms'].values():
+        assert 'cascarosides A-D' not in form['notes']
+
+
 def test_cordycepsprime_crominex_relapse_documented(iqm):
     """Cordycepsprime must document Crominex relapse + Lee 2019 metabolite-
     only mechanism.

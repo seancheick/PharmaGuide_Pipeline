@@ -45,3 +45,17 @@ def test_suppression_does_not_relabel_a_ghost_as_supporting_evidence(entries):
         assert "content mismatch" in (source.get("label") or "").lower() or (
             entries[entry_id].get("citation_review_status") == "needs_revision"
         )
+
+
+def test_betablocker_coq10_source_label_names_the_paper_its_url_points_to(entries):
+    """The label named Folkers' 1990 lovastatin paper while the URL is PMID
+    12392188, Cocco 2002 "The antihypertensive drug carvedilol inhibits the
+    activity of mitochondrial NADH-ubiquinone oxidoreductase" (verified
+    2026-09-26). The record stays suppressed."""
+    entry = entries["DEP_BETABLOCKERS_COQ10"]
+    sources = [s for s in entry["sources"] if "12392188" in s.get("url", "")]
+    assert sources
+    for source in sources:
+        assert "lovastatin" not in source["label"].lower()
+        assert "carvedilol" in source["label"].lower()
+    assert entry["citation_review_status"] == "needs_revision"

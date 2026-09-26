@@ -90,6 +90,8 @@ MINERAL_CANONICALS = frozenset({
     "molybdenum",
 })
 
+# The one fiber canonical identity (matrix concept fiber_identity); the fiber
+# scorer imports it through fiber_digestive_helpers instead of keeping a copy.
 FIBER_CANONICALS = frozenset({
     "fiber",
     "psyllium",

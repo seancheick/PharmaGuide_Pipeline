@@ -96,6 +96,7 @@ from form_factor_normalizer import canonicalize_form_factor
 from probiotic_measurements import collect_afu_measurements
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
+    SOURCE_BANNED_RECALLED,
     active_form_duplicate_candidate,
 )
 from serving_frequency import (
@@ -166,13 +167,14 @@ from match_ledger import (
     METHOD_UNII_FORM_EXACT,
     METHOD_ALTERNATE_NAME,
 )
-from identity.interaction import interaction_subject_ids
+from identity.interaction import interaction_subject_refs
 from identity.safety import (
     has_explicit_form_evidence,
     negative_match_terms_veto,
     hold_unapproved_policy_payload,
     safety_flag_from_banned_match,
     safety_jurisdiction_projection,
+    safety_policy_status_for_role,
 )
 
 _RDA_REFERENCE_PROFILE = {
@@ -343,7 +345,7 @@ IQM_CANONICAL_CROSS_PARENT_ALLOWLIST: Dict[Tuple[str, str], Tuple[str, ...]] = {
         "vitamin k1",
     ),
     # Menaquinones are vitamin K2; interaction rules still reach vitamin K
-    # through interaction_subject_ids.
+    # through the interaction subject family.
     ("vitamin_k", "vitamin_k2"): (
         "menaquinone",
         "menaquinone-4",
@@ -11606,6 +11608,9 @@ class SupplementEnricherV3:
             # Source section tag set by _evaluate_safety_data wrapper (active vs inactive).
             # Untagged ingredients default to 'active' so legacy callers preserve behavior.
             ing_source_section = ingredient.get('_source_section', 'active')
+            evidence_hits = self._banned_label_evidence_hits(
+                ingredient, ing_name, std_name, ingredients, ing_source_section
+            )
 
             for section_key, banned_item in banned_items_with_category:
                 if not isinstance(banned_item, dict):
@@ -11620,6 +11625,10 @@ class SupplementEnricherV3:
                 match_rules = banned_item.get('match_rules', {}) or {}
                 match_mode = banned_item.get('match_mode') or match_rules.get('match_mode', 'active')
                 if match_mode in ('disabled', 'historical'):
+                    continue
+                # A rule retired for this label role no longer governs it; the
+                # v4 gate ignores its signal, so B0 must never see it either.
+                if safety_policy_status_for_role(banned_item, ing_source_section) == 'retired':
                     continue
 
                 # P0c: Active/inactive role gate (v3.5.2 — per-entry policy).
@@ -11638,8 +11647,8 @@ class SupplementEnricherV3:
                 #     inactive use; appearing in the inactive panel is a
                 #     labeling defect or hidden-active risk and must penalize.
                 #
-                #   inactive_policy='review_required' (Cascara, synthetic
-                #     food acids):
+                #   inactive_policy='review_required' (e.g. sodium
+                #     tetraborate):
                 #     SKIP for now — borderline classification; do not
                 #     penalize until a human reviewer decides. Warning still
                 #     visible via the build-layer resolver.
@@ -11765,6 +11774,24 @@ class SupplementEnricherV3:
                         matched_variant = allowlist_match.get("matched_variant")
                         allowlist_id = allowlist_match.get("allowlist_id")
 
+                # Label evidence beyond name/standardName, resolved by the
+                # same resolver index the v4 gate uses. Identity repair can
+                # rewrite standardName before this runs, so a substance the
+                # label names only in raw_source_text or forms[] must match
+                # here, where the safety pillar and B0 read it. Only US-
+                # applicable rules: the gate treats the rest as a regional
+                # advisory, and B0 has no jurisdiction filter.
+                evidence_term = evidence_hits.get(banned_id)
+                if (
+                    not match_method
+                    and entity_type != 'product'
+                    and evidence_term
+                    and not self._denylist_match(evidence_term, denylist_for)
+                    and safety_jurisdiction_projection(banned_item).get("us_applicable")
+                ):
+                    match_method = "alias"
+                    matched_variant = evidence_term
+
                 if match_method:
                     if banned_item.get("requires_explicit_form_evidence"):
                         evidence = has_explicit_form_evidence(
@@ -11857,6 +11884,58 @@ class SupplementEnricherV3:
                 if isinstance(s, dict) and isinstance(s.get("safety_flag"), dict)
             ],
         }
+
+    def _banned_label_evidence_hits(
+        self,
+        ingredient: Dict[str, Any],
+        ing_name: str,
+        std_name: str,
+        ingredients: List[Dict[str, Any]],
+        role: str,
+    ) -> Dict[str, str]:
+        """banned_recalled rule id -> label term, for raw_source_text and
+        forms[].name/prefix: the extra evidence terms
+        scoring_v4.gate_safety._ingredient_safety_terms feeds the resolver.
+        An inactive row drops terms restating a declared active's form, as the
+        gate does (term-scoped, never the whole row)."""
+        values: List[Any] = [ingredient.get("raw_source_text")]
+        for form in ingredient.get("forms") or []:
+            if isinstance(form, dict):
+                values.extend((form.get("name"), form.get("prefix")))
+            else:
+                values.append(form)
+        seen = {str(v).strip().lower() for v in (ing_name, std_name) if v}
+        terms: List[str] = []
+        for value in values:
+            text = str(value or "").strip()
+            if text and text.lower() not in seen:
+                seen.add(text.lower())
+                terms.append(text)
+        if terms and role == "inactive":
+            active_rows = [
+                row for row in ingredients
+                if row.get("_source_section", "active") == "active"
+            ]
+            if active_rows:
+                terms = [
+                    term for term in terms
+                    if active_form_duplicate_candidate(
+                        self._inactive_ingredient_resolver,
+                        active_ingredients=active_rows,
+                        raw_name=term,
+                    ) is None
+                ]
+        hits: Dict[str, str] = {}
+        for term in terms:
+            resolution = self._inactive_ingredient_resolver.resolve(
+                raw_name=term, role=role
+            )
+            if (
+                resolution.matched_source == SOURCE_BANNED_RECALLED
+                and resolution.matched_rule_id
+            ):
+                hits.setdefault(str(resolution.matched_rule_id), term)
+        return hits
 
     def _banned_form_evidence_values(
         self,
@@ -17852,11 +17931,42 @@ class SupplementEnricherV3:
         }
         return db_key if db_key in valid else None
 
+    @staticmethod
+    def _interaction_row_key(row: Dict) -> Tuple[str, str, str]:
+        """One label row across the scorable/all/skipped lists, which are
+        separate objects once an artifact is reloaded from JSON."""
+        return (
+            str(row.get("raw_source_path") or row.get("source_path") or ""),
+            str(row.get("raw_source_text") or row.get("name") or ""),
+            str(row.get("canonical_id") or ""),
+        )
+
+    @staticmethod
+    def _is_interaction_blend_child(row: Dict) -> bool:
+        """A label row inside a blend whose identity was recognized but not
+        scored. Blend headers, nutrition facts, additives, markers, sources and
+        specification limits keep their own owners."""
+        path = str(row.get("raw_source_path") or row.get("source_path") or "").lower()
+        nested = (
+            row.get("cleaner_row_role") == "nested_display_only"
+            or "nestedrows" in path
+            or "child_ingredients" in path
+        )
+        return nested and row.get("skip_reason") in (
+            SKIP_REASON_NESTED_NON_THERAPEUTIC,
+            SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+        )
+
     def _derive_interaction_subject_ref(self, ingredient: Dict) -> Optional[Dict[str, str]]:
         canonical_id = str(ingredient.get("canonical_id") or "").strip()
         if canonical_id:
+            # A recognized botanical or other ingredient keeps its registry, so
+            # it meets the rules authored there; rows without a routable
+            # registry (probiotic, standardized botanical) stay IQM subjects.
             return {
-                "db": "ingredient_quality_map",
+                "db": self._normalize_interaction_db_key(
+                    ingredient.get("canonical_source_db")
+                ) or "ingredient_quality_map",
                 "canonical_id": canonical_id,
             }
 
@@ -18859,17 +18969,37 @@ class SupplementEnricherV3:
             # A rule written on a banned, botanical, additive or other-ingredient
             # entry can only match a row that is not scorable, so scanning
             # scorable rows alone silenced every such rule (CBD, yohimbe, red
-            # yeast rice, pennyroyal ...). Non-scorable rows of scored
-            # ingredients (blend children, inactives) stay out.
+            # yeast rice, pennyroyal ...). An identified ingredient inside a
+            # blend keeps its rules too (Sean, D1, 2026-09-26): nesting does not
+            # make it safe. Its dose is its own row's; when that is unknown the
+            # rule's amount-missing policy decides, never the blend total. Other
+            # non-scorable rows (inactives, top-level no-amount nutrition rows)
+            # stay out. One row object can sit in both lists; it is scanned once.
             scanned = {id(row) for row in ingredients}
-            skipped = [
-                row for row in raw_ingredients + raw_skipped
-                if isinstance(row, dict) and id(row) not in scanned
-                and (self._derive_interaction_subject_ref(row) or {}).get("db") not in (None, "ingredient_quality_map")
-            ]
+            scanned_keys = {self._interaction_row_key(row) for row in ingredients}
+            skipped = []
+            for row in raw_ingredients + raw_skipped:
+                if not isinstance(row, dict) or id(row) in scanned:
+                    continue
+                scanned.add(id(row))
+                subject_db = (self._derive_interaction_subject_ref(row) or {}).get("db")
+                if subject_db is None:
+                    continue
+                if subject_db != "ingredient_quality_map":
+                    skipped.append(row)
+                elif self._is_interaction_blend_child(row):
+                    key = self._interaction_row_key(row)
+                    if key not in scanned_keys:
+                        scanned_keys.add(key)
+                        skipped.append(row)
+            blend_children = {
+                id(row) for row in skipped
+                if (self._derive_interaction_subject_ref(row) or {}).get("db") == "ingredient_quality_map"
+            }
         else:
             ingredients = [row for row in raw_ingredients if isinstance(row, dict)]
             skipped = [row for row in raw_skipped if isinstance(row, dict)]
+            blend_children = set()
 
         rows_to_clear = list(raw_ingredients) + list(raw_skipped) + list(ingredients)
         for ingredient in rows_to_clear:
@@ -18932,11 +19062,20 @@ class SupplementEnricherV3:
                 all_ingredient_rows.append(("ingredients", row))
                 for marker_row in self._derived_marker_interaction_rows(row):
                     all_ingredient_rows.append(("derived_marker", marker_row))
+        # Blend children (and their markers) only add what the product does not
+        # already warn about: a (rule, target) fired at the same or higher
+        # severity by another row is not repeated.
+        repeat_checked_rows: set = set()
+        fired_targets: Dict[Tuple[Any, str, str], float] = {}
         for row in skipped:
             if isinstance(row, dict):
                 all_ingredient_rows.append(("ingredients_skipped", row))
+                if id(row) in blend_children:
+                    repeat_checked_rows.add(id(row))
                 for marker_row in self._derived_marker_interaction_rows(row):
                     all_ingredient_rows.append(("derived_marker", marker_row))
+                    if id(row) in blend_children:
+                        repeat_checked_rows.add(id(marker_row))
 
         for source_bucket, ingredient in all_ingredient_rows:
             subject = self._derive_interaction_subject_ref(ingredient)
@@ -18944,16 +19083,12 @@ class SupplementEnricherV3:
                 continue
 
             # A vitamer also answers to rules authored on its family (vitamin
-            # K1/K2 -> vitamin K); each rule's own form_scope still decides.
+            # K1/K2 -> vitamin K) and a botanical to its IQM twin (garlic bulb
+            # -> garlic); each rule's own form_scope still decides.
             matched_rules = []
             seen_rule_ids: set = set()
-            subject_ids = (
-                interaction_subject_ids(subject["canonical_id"])
-                if subject["db"] == "ingredient_quality_map"
-                else [subject["canonical_id"]]
-            )
-            for subject_id in subject_ids:
-                for candidate in rule_index.get((subject["db"], subject_id), []):
+            for subject_ref in interaction_subject_refs(subject["db"], subject["canonical_id"]):
+                for candidate in rule_index.get(subject_ref, []):
                     if id(candidate) not in seen_rule_ids:
                         seen_rule_ids.add(id(candidate))
                         matched_rules.append(candidate)
@@ -19133,8 +19268,36 @@ class SupplementEnricherV3:
                         "profile_gate": threshold.get("profile_gate"),
                     })
 
-                if not condition_hits and not drug_hits and not dose_hits and not pregnancy_block:
+                rule_key = rule.get("id")
+                if id(ingredient) in repeat_checked_rows:
+                    def _new(kind: str, target: str, severity: Any) -> bool:
+                        weight = severity_weights.get(str(severity or ""), 0.0)
+                        return fired_targets.get((rule_key, kind, target), -1.0) < weight
+
+                    condition_hits = [
+                        h for h in condition_hits
+                        if _new("condition", h["condition_id"], h.get("severity"))
+                    ]
+                    drug_hits = [
+                        h for h in drug_hits
+                        if _new("drug_class", h["drug_class_id"], h.get("severity"))
+                    ]
+                    dose_hits = [h for h in dose_hits if _new("dose", "", h.get("severity"))]
+                    if not condition_hits and not drug_hits and not dose_hits:
+                        continue
+                elif not condition_hits and not drug_hits and not dose_hits and not pregnancy_block:
                     continue
+                for kind, target_key, hits in (
+                    ("condition", "condition_id", condition_hits),
+                    ("drug_class", "drug_class_id", drug_hits),
+                    ("dose", None, dose_hits),
+                ):
+                    for hit in hits:
+                        fired_key = (rule_key, kind, hit[target_key] if target_key else "")
+                        fired_targets[fired_key] = max(
+                            fired_targets.get(fired_key, -1.0),
+                            severity_weights.get(str(hit.get("severity") or ""), 0.0),
+                        )
 
                 safety_hit = {
                     "rule_id": rule.get("id"),

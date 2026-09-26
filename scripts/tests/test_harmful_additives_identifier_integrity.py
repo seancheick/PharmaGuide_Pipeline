@@ -69,21 +69,6 @@ def test_add_polysorbate_80_uses_the_actual_ema_polysorbates_review(
     assert "human organoid data confirms" not in serialized
 
 
-def test_add_senna_rxcui_cleared_to_null(harmful_additives):
-    """ADD_SENNA must not carry rxcui '237929' — that RxCUI returns no
-    record from RxNav (/REST/rxcui/237929/properties.json → 404 on
-    2026-05-28). Cleared to null with rxcui_note documenting the
-    deprecation. cui (C0330722) and unii (AK7JF626KX) remain valid and
-    untouched."""
-    entry = _find(harmful_additives, "ADD_SENNA")
-    assert entry.get("rxcui") is None, (
-        "ADD_SENNA.rxcui must be null (RxNav 404 on 237929)."
-    )
-    assert entry.get("rxcui_note"), (
-        "ADD_SENNA must have an rxcui_note explaining the deprecation."
-    )
-
-
 def test_add_tyramine_rich_extract_cui_backfilled(harmful_additives):
     """ADD_TYRAMINE_RICH_EXTRACT must use cui C0041479 ('tyramine' —
     Organic Chemical / Pharmacologic Substance / Biologically Active

@@ -58,7 +58,7 @@ from scoring_v4.dose_safety import (
     evaluate_dose_safety,
 )
 from scoring_v4.gate_completeness import evaluate_completeness_gate
-from scoring_v4.gate_safety import evaluate_safety_gate
+from scoring_v4.gate_safety import evaluate_safety_gate, safety_gate_scope
 from scoring_v4.modules.b_complex import score_b_complex
 from scoring_v4.modules.fiber_digestive import score_fiber_digestive
 from scoring_v4.modules.generic import _assemble_score, score_generic
@@ -393,7 +393,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     scorer = scorers.get(module)
     if scorer is None:
         raise RuntimeError(f"no v4 scorer registered for module route {module!r}")
-    with dose_safety_scope(dose_safety):
+    with dose_safety_scope(dose_safety), safety_gate_scope(safety):
         module_result = scorer(enriched_product)
     apply_universal_dose_safety(module_result, dose_safety)
     if apply_penalty_registry(module_result):

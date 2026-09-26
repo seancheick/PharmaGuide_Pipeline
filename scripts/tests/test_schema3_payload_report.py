@@ -84,7 +84,7 @@ def _fixture(tmp_path: Path) -> tuple[Path, Path]:
             {
                 "dsld_id": "p1",
                 "ingredients": [
-                    {"canonical_id": "magnesium", "safety_hits": [{"x": 1}]}
+                    {"canonical_id": "magnesium"}
                 ],
                 "warnings": [_warning()],
                 "warnings_profile_gated": [_warning()],
@@ -138,7 +138,6 @@ def test_report_accounts_bytes_and_proves_warning_equivalence(tmp_path: Path) ->
     }
     assert report["bytes"]["schema2"] > report["bytes"]["schema3"]
     assert report["bytes"]["saved"] > 0
-    assert report["removed_families"]["ingredient_safety_hits"]["bytes"] > 0
     assert report["removed_families"]["rda_duplicates"]["bytes"] > 0
     assert report["removed_families"]["row_ledger_diagnostics"]["bytes"] > 0
     assert len(report["input_fingerprint_sha256"]) == 64

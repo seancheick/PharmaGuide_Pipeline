@@ -69,8 +69,14 @@ modified.
         --min-interactions 15 \\
         --print-json
 
+    # Publish the staged release and point the app's hydration pin at it
+    # (release_full.sh runs this; see publish_flutter_pin):
+    python3 scripts/release_interaction_artifact.py \\
+        --output-dir scripts/dist \\
+        --publish-flutter-pin "/Users/seancheick/PharmaGuide ai"
+
 Exit codes:
-    0   release staged successfully
+    0   release staged (or published and pinned) successfully
     1   validation failed
     2   unexpected runtime error
 """
@@ -80,12 +86,16 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
+import re
 import shutil
 import sqlite3
+import subprocess
 import sys
-from datetime import datetime, timezone
+import urllib.request
+from datetime import date, datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 
 DB_FILENAME = "interaction_db.sqlite"
@@ -534,6 +544,170 @@ def stage_release(
 
 
 # --------------------------------------------------------------------------- #
+# Publication: the release asset the Flutter app hydrates from
+# --------------------------------------------------------------------------- #
+#
+# The app does not commit interaction_db.sqlite. Its tool/fetch_interaction_db.sh
+# hydrates the file at build time from the GitHub Release asset named by the pin
+# tool/interaction_db.release.json, and refuses when that pin disagrees with the
+# staged manifest. The Flutter importer moves only the manifest, so a pin left
+# behind fails every app build and CI run at hydration (1.0.11 on 2026-09-12,
+# 1.0.12 on 2026-09-22). The release train publishes the staged asset and moves
+# the pin with the bundle.
+
+FLUTTER_PIN_RELPATH = Path("tool") / "interaction_db.release.json"
+RELEASE_TAG_PREFIX = "clinical-db-"
+
+
+def pin_names_manifest(pin: dict[str, Any], manifest: dict[str, Any]) -> bool:
+    """The identity keys the app's hydration script compares, pin vs manifest."""
+    return (
+        pin.get("sha256") == strip_sha256_prefix(manifest.get("checksum_sha256"))
+        and pin.get("interaction_db_version") == manifest.get("interaction_db_version")
+        and pin.get("schema_version") == manifest.get("schema_version")
+    )
+
+
+def next_release_tag(existing_tags: list[str], day: str) -> str:
+    base = f"{RELEASE_TAG_PREFIX}{day}"
+    taken = [
+        int(tag[len(base) + 1 :])
+        for tag in existing_tags
+        if tag.startswith(base + ".") and tag[len(base) + 1 :].isdigit()
+    ]
+    return f"{base}.{max(taken, default=0) + 1}"
+
+
+def _gh(args: list[str]) -> str:
+    result = subprocess.run(["gh", *args], capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"gh {' '.join(args[:2])} failed: {result.stderr.strip()}")
+    return result.stdout
+
+
+def _download_sha256(url: str) -> str:
+    h = hashlib.sha256()
+    with urllib.request.urlopen(url, timeout=300) as response:
+        for chunk in iter(lambda: response.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _pipeline_head() -> tuple[str, bool]:
+    """HEAD of this checkout, and whether a remote-tracking branch contains it."""
+
+    def git(*args: str) -> str:
+        return subprocess.run(
+            ["git", *args],
+            check=True,
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).resolve().parent,
+        ).stdout.strip()
+
+    head = git("rev-parse", "HEAD")
+    return head, bool(git("branch", "-r", "--contains", head))
+
+
+def publish_flutter_pin(
+    *,
+    dist_dir: Path,
+    flutter_repo: Path,
+    gh: Callable[[list[str]], str] = _gh,
+    download_sha256: Callable[[str], str] = _download_sha256,
+    pipeline_head: Callable[[], tuple[str, bool]] = _pipeline_head,
+    today: str | None = None,
+) -> dict[str, str]:
+    """Make the app's hydration pin name the staged interaction DB.
+
+    A no-op without network access when it already does. Otherwise reuse the
+    clinical-db release whose asset carries the staged digest, or publish the
+    next clinical-db-YYYY.MM.DD.N; download the asset and check its sha256; then
+    rewrite only the pin's artifact-identity fields. Any failure leaves the pin
+    untouched.
+    """
+    pin_path = flutter_repo / FLUTTER_PIN_RELPATH
+    pin = json.loads(pin_path.read_text(encoding="utf-8"))
+    manifest_path = dist_dir / MANIFEST_FILENAME
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    checksum = strip_sha256_prefix(manifest.get("checksum_sha256"))
+    _require(
+        bool(checksum and re.fullmatch(r"[0-9a-f]{64}", checksum)),
+        f"{manifest_path} carries no checksum_sha256",
+    )
+    if pin_names_manifest(pin, manifest):
+        return {"action": "current", "tag": str(pin.get("tag"))}
+
+    db_path = dist_dir / DB_FILENAME
+    _require(
+        compute_sha256(db_path) == checksum,
+        f"{db_path} does not match its manifest checksum {checksum}",
+    )
+    repo = pin["repo"]
+    releases = [
+        release
+        for release in json.loads(gh(["api", f"repos/{repo}/releases?per_page=100"]))
+        if release["tag_name"].startswith(RELEASE_TAG_PREFIX)
+    ]
+    carrying = next(
+        (
+            release
+            for release in releases
+            # A draft's assets are not publicly downloadable.
+            if not release.get("draft")
+            and any(
+                asset.get("name") == DB_FILENAME
+                and asset.get("digest") == f"sha256:{checksum}"
+                for asset in release.get("assets", [])
+            )
+        ),
+        None,
+    )
+    if carrying is not None:
+        tag = carrying["tag_name"]
+        target = str(carrying.get("target_commitish", ""))
+        commit = target if re.fullmatch(r"[0-9a-f]{40}", target) else pipeline_head()[0]
+        action = "reused"
+    else:
+        commit, pushed = pipeline_head()
+        tag = next_release_tag(
+            [release["tag_name"] for release in releases],
+            today or date.today().strftime("%Y.%m.%d"),
+        )
+        create = [
+            "release", "create", tag,
+            "--repo", repo,
+            "--title", f"Clinical interaction DB {tag[len(RELEASE_TAG_PREFIX):]}",
+            "--notes-file", str(dist_dir / RELEASE_NOTES_FILENAME),
+        ]
+        if pushed:
+            create += ["--target", commit]
+        gh([*create, str(db_path), str(manifest_path)])
+        action = "published"
+
+    url = f"https://github.com/{repo}/releases/download/{tag}/{DB_FILENAME}"
+    downloaded = download_sha256(url)
+    _require(
+        downloaded == checksum,
+        f"downloaded {url} hashes to {downloaded}, not the staged {checksum}",
+    )
+
+    pin.update(
+        tag=tag,
+        url=url,
+        sha256=checksum,
+        size_bytes=db_path.stat().st_size,
+        pipeline_commit=commit,
+        interaction_db_version=manifest.get("interaction_db_version"),
+        schema_version=manifest.get("schema_version"),
+    )
+    tmp_path = pin_path.with_name(pin_path.name + ".tmp")
+    tmp_path.write_text(json.dumps(pin, indent=2) + "\n", encoding="utf-8")
+    os.replace(tmp_path, pin_path)
+    return {"action": action, "tag": tag}
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 
@@ -566,6 +740,15 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Print the staging result as JSON on stdout.",
     )
+    p.add_argument(
+        "--publish-flutter-pin",
+        metavar="FLUTTER_REPO",
+        help=(
+            "Instead of staging: publish the release in --output-dir as a "
+            "clinical-db GitHub Release asset (reused when one already carries "
+            "it) and point FLUTTER_REPO's tool/interaction_db.release.json at it."
+        ),
+    )
     return p.parse_args(argv)
 
 
@@ -573,6 +756,31 @@ def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     input_dir = Path(args.input_dir).resolve()
     output_dir = Path(args.output_dir).resolve()
+
+    if args.publish_flutter_pin:
+        flutter_repo = Path(args.publish_flutter_pin).resolve()
+        try:
+            result = publish_flutter_pin(dist_dir=output_dir, flutter_repo=flutter_repo)
+        except ReleaseValidationError as exc:
+            print(f"[interaction-release] PUBLICATION REFUSED: {exc}", file=sys.stderr)
+            return 1
+        except Exception as exc:  # noqa: BLE001
+            print(
+                f"[interaction-release] UNEXPECTED ERROR during publication: {exc}",
+                file=sys.stderr,
+            )
+            return 2
+        if result["action"] == "current":
+            print(
+                "[interaction-release] hydration pin already names the staged "
+                f"interaction DB ({result['tag']})"
+            )
+        else:
+            print(
+                f"[interaction-release] {result['action']} {result['tag']}; "
+                f"hydration pin → {flutter_repo / FLUTTER_PIN_RELPATH}"
+            )
+        return 0
 
     try:
         validation = validate_release_candidate(

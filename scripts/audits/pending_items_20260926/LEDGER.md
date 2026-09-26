@@ -1,0 +1,132 @@
+# Pending items register, 2026-09-26
+
+One register for every open item found by the 2026-09-26 integration: the 25 lane handoffs (archived
+under `~/claude-attic/2026-09-26/worktree-state/`), the memory open-work index, Codex's v41 handoff and
+live API checks. Duplicates are merged. Every row was re-checked against pipeline main 8dbd621b and
+app main af472e5 on 2026-09-26; nothing here is carried forward from a handoff unverified.
+Evidence receipts for the data fixes: `research.md` in this folder.
+Second pass, 2026-09-26 evening: Sean decided D1, D5 (senna), D8 and D10; the "Audit Gemini and leftover work"
+session's final findings and the Codex RECONCILIATION remainder are folded in below. Resolved rows keep their
+text and gain a "Resolved" note with the commit.
+
+Close an item by editing this file in the commit that resolves it.
+
+## P1: safety
+
+| # | Item | Evidence | Owner / next |
+|---|---|---|---|
+| P1 | Botanical identities silence the IQM twin's interaction rules: ~94 shipped products under-warned (garlic_bulb/black_garlic 24 of 31, lion_s_mane 30/30, boswellia_serrata_resin 12/12, reishi_mushroom 8/8, dandelion_root 7/7, 13 more with 1-3). | Census over `scripts/final_db_output/detail_blobs` (catalog 2026.09.22.201915); 184004 has an active 320 mg garlic bulb row and 0 garlic warnings. `_collect_interaction_profile` keys rules by (db, canonical_id); `identity/interaction.py::interaction_subject_ids` expands only IQM subjects. | Spawned task task_b9ea39ba: verify each pair (species + part), extend `identity/interaction.py`, measure through `enrich_product`, Sean decides landing. Independent of D1. **Landed on origin/main by the cloud session (0e18c9bc, 49f53e8c, 6c4a130e):** rows keep their own registry as interaction subject; `identity/interaction.py::BOTANICAL_INTERACTION_TWIN` maps 48 botanical ids to an IQM twin (34 share a GSRS UNII, 14 checked by species and part); dandelion_root deliberately left out (its kidney rule rests on leaf evidence); a row in both lists is scanned once. D1 was rebased onto it (one conflict in the row-selection block, resolved by keeping both). **Measured by the integrator** (re-enriching the 3,819 cleaned 2026-09-22 products with non-IQM registry rows, da77c456 vs 6c4a130e): 223 products gain a new or stronger warning for matching users (3 contraindicated, 74 avoid), 0 lose one. By product: schisandra 48, lion's mane 27, garlic 27, cranberry 25, wild yam 19, boswellia 12, saw palmetto 10, ginkgo 9, turmeric 8, chamomile 8, licorice 6+6, reishi 6, valerian 6. Contraindicated: St John's wort herb extract x5 drug classes (18219, 74615); bergamot essential oil x immunosuppressants (222867, questionable, Q18). Dandelion root stays unmapped by design (its 7 products keep no dandelion rule; the rule's kidney claims rest on leaf evidence). Twin spot-check by the integrator: Ceylon cinnamon (glucose rule, not coumarin), American ginseng (an IQM ginseng form) and whole-herb dandelion (includes the leaf) hold. **Resolved.** |
+
+## Decisions for Sean (evidence recorded, nothing changed)
+
+| # | Decision | Current data (verified 2026-09-26) |
+|---|---|---|
+| D1 | Should IQM interaction rules fire on non-scorable (blend-child) IQM rows? Options A keep / B all non-scorable label rows / C blend children / D presence-only. | Census copied to `~/claude-attic/2026-09-26/worktree-state/objective-bhabha-0235e6/blend_child_interaction_census/`. **Resolved (Sean, 2026-09-26): C, blend children.** Landed 7863d0f2 on top of P1. Measured by re-enriching the 2026-09-22 cleaned corpus with the landed code, blend children off vs on: 1,405 products gain a new or stronger alert; 981 would show a matching user a new or stronger warning (50 with a new contraindicated hit: L-tryptophan and L-tyrosine x MAOIs, yohimbe, Cape aloe; 564 with a new avoid hit: garlic before surgery, echinacea/astragalus with immunosuppressants, green tea, goldenseal ...); 0 products lose an alert; no score or verdict moves (the scorer does not read interaction alerts). Dose rules on children without an amount follow their amount-missing policy (suppressed). Questionable identities surfaced (IQM aliases, also hit scorable rows): "Bionectria ochroleuca" -> cordyceps (3 products), "Fermented Soybean Powder" -> nattokinase (2). Follow-ups D1b, D1c, Q18. |
+| D1b | `key_ingredient_tags` (the app's join for curated drug-supplement pairs) still excludes blend children. Its consumers are quick check, stack safety, stack helpers, better-alternatives ranking and timing evaluation, so extending it changes more than alerts. | `build_final_db.py` key-tag loop via `_active_row_allowed_for_primary_export`; app `lib/features/quick_check/quick_check_logic.dart`, `lib/services/recommendations/better_alternatives_ranker.dart`. |
+| D1c | Top-level non-scorable rows (option B's extra ~528 products) stay out of interaction evaluation: they include nutrition-panel rows such as "Vitamin A 0 NP" that do not establish an amount. Admit only rows with a positive amount? | Census `summary.txt` x_other_nonscorable_active_only; frozen_v41 role census 2026-09-26. |
+| D2 | Buckthorn identity: Rhamnus cathartica vs Frangula for labels DSLD groups as Frangula (17192, Laxaherb 241318/275837). | Report: `~/claude-attic/2026-09-26/worktree-state/elegant-proskuriakova-54f9b7/.claude/state/buckthorn_identity_report.md`. |
+| D3 | banned_recalled identity anchors: BANNED_EPHEDRA UNII GN83C131XS (ephedrine) vs plant; RISK_KAVA W1ES06373M (kavain) vs root; RISK_GARCINIA_CAMBOGIA 8W94T9026R (HCA, shared with IQM) vs fruit; BANNED_ACONITE QU71159N2W (one species) vs governed null. BANNED_PENNYROYAL, BANNED_TANSY, HIGH_RISK_CHAPARRAL have no UNII and no unii_status, so `verify_unii --apply` would write oil UNIIs. | Options with GSRS names: archived handoff `banned-unii-alias-only-matches`. |
+| D4 | Laxogenin: bare "laxogenin" and "laxogenin acetate" are still aliases of ADD_5A_HYDROXY_LAXOGENIN; its reason says "A steroidal plant compound" while inactive_policy_reason says "Synthetic anabolic". | FDA WL 622337 and the 2022-05-09 constituent update call it not a dietary ingredient; neither calls it plant-derived. |
+| D5 | **Senna part resolved (Sean, 2026-09-26; 7efba904): pregnancy caution -> avoid on the pregnancy profile, lactation stays caution; receipts in research.md.** Still open: anthraquinone laxative class: senna pregnancy/lactation is caution/caution while EU monographs contraindicate; senna and cascara cardiac_glycosides are avoid/established while EMA 4.4 says consult a doctor; split casanthranol (3SJ3U7J6V2) out of ADD_CASCARA_SAGRADA; approve the cascara inactive-policy reversal and softened liver action. | `RULE_IQM_SENNA_PREGNANCY`, `RULE_IQM_CASCARA_SAGRADA_PREGNANCY`, `ADD_CASCARA_SAGRADA`. |
+| D6 | Wire `verify_interaction_rules_citations.py --strict` into `scripts/test.sh release` and `release_full.sh` (lanes recommend yes). | `--strict` PASS on main: 233 PMIDs + 16 Bookshelf chapters, 65 reviewed, 0 not found. |
+| D7 | Severities resting on weak or extrapolated evidence: bergamot avoid/contraindicated, andrographis autoimmune caution, rhodiola sedatives, L-theanine sedatives, willow surgery avoid. Possible under-warning: willow bark pregnancy/lactation is no_data/no_data while the EU monograph contraindicates third-trimester use. | Triage receipts: `scripts/audits/interaction_rules/citation_triage_2026_09/research.md`. |
+| D8 | **Resolved (Sean, 2026-09-26; 7efba904): both floors removed, sub-rules fire on presence at unchanged severities (43 chondroitin, 14 black seed products newly show them to profile-matched users).** Was: Dose floors their cited abstract does not support: RULE_IQM_CHONDROITIN 1200 mg/day while the source escalated to 1200 mg twice daily; RULE_IQM_BLACK_SEED_OIL_DIABETES 2000 mg/day labelled documented_effective_dose while the meta-analysis reports no dose association. | `research.md` in this folder. |
+| D9 | RULE_IQM_ALOE_FEROX liver sub-rule cites LiverTox's Aloe vera record for Aloe ferox (agent-reviewed class-level citation, 2d086156). | `interaction_rules_ghost_review.json`. |
+| D10 | **Resolved (Sean, 2026-09-26; 8599c3fb): all nine SARM-class records plus MK-677 cite the FDA document that names the compound; no "ban"; SR9009 has none and stays under review. Follow-up Q15.** Was: SARM_ANDARINE, SARM_CARDARINE, SARM_LIGANDROL, SARM_OSTARINE, SARM_RAD140 (2017-10-31) and RECALLED_TITAN_SARMS_LLC (2025-12-12) label a warning-letter date "FDA ban effective", the pattern rejected for MK-677. | `banned_recalled_ingredients.json` regulatory_date_label. |
+| D11 | IQM miroestrol carries a hand-authored gsrs block although GSRS has no record (search: 0 results). | `research.md`. |
+| D12 | Scoring policy: product-level penalties at equal public points in every rubric; sugar gram thresholds and basis; B1 active-row charges absent from inactive_penalty_details; one B0 charge per rule across rows (b0 lane); shared Dose/Formulation fiber-type classifier (moves 34 products); 9 never-emitted FIBER_CANONICALS; mixed-purpose ownership (Codex). | Archived handoffs magical-carson, b0-policy-signals, priceless-elgamal; Codex v41 handoff. |
+| D13 | verify_cui IQM mode ignores forms[].aliases: 13 of 15 IQM MISMATCHes are false positives, but widening would accept loose matches. common_bean_extract C4321296 and brown_kelp C0022980 verified correct anchors today. | Archived handoff iqm-phlorizin-cui. |
+| D14 | Export schema 3: drop the legacy NULL columns and the score_100_equivalent mirrors (cross-repo contract). | `core_export_model.py::_SCHEMA3_REMOVED_COLUMNS`. |
+| D15 | Reviewer benchmark v7: treatment of PHAM's 23 exposed rows; ratify AMENDMENT_1.1.1. | `scripts/audits/v4_reviewer_benchmark/pending_v7/`. |
+| D16 | B-complex Formulation structure (panel 10 + form + focus + disclosure, cap 23). | `b_complex.py`. |
+| D17 | Vinpocetine approval is recorded as the project owner's, not a named clinician's; confirm that suffices. BANNED_HIGENAMINE reason wording unverified. | `test_cross_db_overlap_guard.py` (d217c765). |
+| D18 | Egg protein inside multi-source protein blends (C2): Morton 2018 (PMID 28698222) counts "blends containing multiple protein sources (eg, whey, casein, soy and egg)". Should an egg-containing blend whose other sources are covered inherit INGR_WHEY_PROTEIN evidence? Affects 25694, 259796, 317624, 42289. | `generic_evidence.py::_recover_verified_primary_ingredient_matches` requires every declared source to be covered. Whether an egg-predominant trial is among the 49 is unverified. |
+
+## Queued work with an owner (agent work, not started)
+
+| # | Item | Evidence / owner |
+|---|---|---|
+| Q1 | 75 IQM parents carry "No RxNorm concept found via GSRS lookup"; RxNav name search matches 22 of them, many to a different concept (yohimbe -> yohimbine, colostrum -> human colostrum, senna -> sennosides USP). One-entry review each via /data-fix; never bulk-fill. | Probe 2026-09-26; cascara fixed (e69e1223). |
+| Q2 | Safety matcher findings: duplicate bitter-orange entries; limit-spec forms ("<1 ppm" in prefix or notes) match in gate and export; enricher row-level negative veto vs resolver term-level veto. | Archived handoff elegant-proskuriakova. |
+| Q3 | Fiber/sports formulation: sugar+sweetener copies of the shared owner (~456 products), fiber detox counted twice, laxative up to 4x, fiber component literals not in config. Coordinate with Codex, who is working generic/fiber Evidence and Dose. | Archived handoffs magical-carson, heuristic-blackburn. |
+| Q4 | Cassia seed (C. obtusifolia / C. tora) anthraquinones not reviewed. | Archived handoff anthraquinone-laxative-curation. |
+| Q5 | Unsourced mechanism sentences: DSI_WAR_GARLIC "mild CYP2C9 inhibition"; RULE_IQM_CHONDROITIN anticoagulant "vitamin K-dependent clotting factors or antithrombin III". | `research.md`. |
+| Q6 | 11 partial citation matches from `verify_all_citations_content.py` (ingredient-correct, adjacent topic; DEP_BETABLOCKERS_COQ10 stays suppressed). None is a wrong-ingredient citation. | Report: 491 match, 0 mismatch. |
+| Q7 | Med-nutrient: 29 needs_revision records (4 strong ones suppressed on procedure, 6 never reviewed, ~19 evidence defects) incl. DEP_ANTICONVULSANTS_BIOTIN; sections 05 and 06 lack research.md; verified -> publication_ready enum migration deferred. | memory project_b1_suppressed_records_triage, project_med_nutrient_section_audits. |
+| Q8 | Label facts shipping empty or thin: NCFM strain cites a mouse study (clinical review), "Labdoor Certified" unmatched, black_pepper_extract has no piperine crosswalk, cleaner still parses allergenFree lists. | memory project_silent_empty_fields_2026_09_16. |
+| Q9 | Smart flagging phases 5-6 (timing rollup, co-formulation grouping) and D3/D4 (missing-serving fail-open; summaries ignoring dose_floor_status). | memory project_smart_flagging_rework. |
+| Q10 | Submissions: 60-product development/holdout set not assembled; 178392 label_mismatch correction unverified. | memory project_submission_foundations_batch1, project_submission_batch_2026_09_11. |
+| Q11 | Phase 4 follow-up: pregnancy/caffeine materiality is still presence. | memory project_phase4_reconciliation_authoring. |
+| Q12 | Metformin/B12 softened consumer copy stays parked until a B1 delta re-review. | memory project_batch01_metformin_softening_parked. |
+| Q13 | Unlanded July/August work that survived only as unreachable git objects, now pinned by local tags (not pushed): `archive/unlanded-label-trust-nested-nutrients-02f4686f` (07-20, build_final_db nested nutrient components + 4 tests; 0 of the 4 tests and 4 of 5 helpers are absent on main, which ships display_ingredients / label_ledger_* instead, so it may be superseded), `archive/stash-pre-label-hierarchy-scoring-2b45bf72` (07-20 stash), `archive/stash-bcaa-evidence-wip-153d63af` (08-06 stash: backed_clinical_studies, enricher, generic_evidence). Review each against main; delete the tag once decided. | `git fsck --unreachable` 2026-09-26. |
+| Q14 | Frangula and rhubarb root carry no pregnancy/lactation rule, while their EU monographs (Rev. 1, 2019/2020) contraindicate both, as for senna and cascara. Needs identity work first (D2 buckthorn). | research.md D5; EMA/HMPC/726261/2016, EMA/HMPC/113700/2019. |
+| Q15 | 36 other banned_recalled entries carry regulatory_date_label "FDA ban effective"; check each against its primary source, one at a time (D10 standard). The DoD "Prohibited for military personnel" rows on SARM_OSTARINE, SARM_LIGANDROL and SARM_RAD140 are typed state_statute and unverified per compound. | `jq` census 2026-09-26; opss.org list has no per-compound page. |
+| Q16 | The submission-transcription tooling (prompt plus 10 scripts, 2026-09-21) survives only in `~/claude-attic/2026-09-26/main-checkout-untracked/scripts/audits/submission_transcription_20260921/`. Commit it as a skill or tooling with Q10, or drop it. | Gemini-audit session 2026-09-23 note. |
+| Q17 | Scoring diagnosis #5 (Verification bands) and #7 (generic subroute caps) were not re-verified after 2026-09-22; they sit inside D12 and Codex's generic Evidence work. | `scripts/audits/scoring_diagnosis_20260922/`; Gemini-audit session final report. |
+| Q18 | Identities that name a different organism or preparation: "Bionectria ochroleuca" under cordyceps militaris (a different fungus), "fermented soybean powder" under nattokinase; flavoring essential oils ("Essence of organic Bergamot (fruit) oil", "Essence of organic Chamomile (leaf) oil") meeting extract rules (bergamot x immunosuppressants is contraindicated). IQM `dandelion` includes root forms, so root products already get the leaf-based kidney rule. D1/P1 made these visible on more rows. One /data-fix entry each. | D1 and P1 measurements 2026-09-26. |
+
+## Codex lane (v41-recovery, active)
+
+| # | Item |
+|---|---|
+| C1 | Update 2026-09-26 evening: v41-recovery is 22 commits ahead (97b8a0ed) and still does not contain main (da77c456 or later). A trial merge (`git merge-tree`) conflicts only in `scripts/tests/test_v4_botanical_profile.py`, where both sides append tests: keep both. The 22 are Codex's in-progress calibration continuation (purpose-scoped Evidence, daily-exposure Dose, cleaner blend sources, export safety warnings across form gaps); none is superseded by main. Classify again when Codex declares the lane done. Was: v41-recovery is ahead of main and must merge main 8dbd621b. Expected conflicts: quality_score.json version, fingerprint history, test_v4_config_registry; take a version above 1.21.2 and keep every ledger entry. Codex's handoff still says main is unpushed. |
+| C2 | 14 protein products lost unsupported Evidence credit; source-family evidence review before any release. Review 2026-09-26 (table below): restore 1 (42306: whey inside a skipped "Proprietary Blend" header; fixed by ae2d4ae1 on v41-recovery, needs a fresh re-clean after C1); keep 9 at 0 (rice, hemp, fava, barley or undeclared sources are not in the cited inventory); 4 egg-blend products go to D18. Still a release blocker until C1 lands and 42306 is re-verified. |
+| C3 | Older v41 notes: botanical dosing basis (extract vs marker ranges; curcumin phytosome, milk thistle) and folic-acid prenatals without a folate evidence match. Verify in the Codex lane. |
+| C4 | 245 unreachable commits include Codex WIP stashes from 2026-09-22 to 09-25 on v41-recovery and codex/product-quality-redesign. Git prunes unreachable objects after its expiry window; Codex should confirm none holds unapplied work. |
+| C5 | The rest of Codex's `scripts/audits/v41_recovery/RECONCILIATION.md` is owned there, not copied here. Classification 2026-09-26: queued engineering in progress on v41 = generic/fiber Evidence ownership, iron-oxide/non-delivering Dose, botanical exposure/basis; needs Sean after Codex's calibration report = §C1 parent-relative IQM denominator and §C2 activity equivalence (need an authored per-parent reference), §C3 population-reference benchmarks, §C4 UL excess bands, §C5 Evidence tiers/single-strain fairness/omega floors, §C6 Transparency one-deduction owner, §C9 IQM bio_score corrections (team approval); owner-approved data waiting on the probiotic replay = §C7 299v outcome split and §C8 LGG arms; held for clinical review = §P1-P8. None is superseded. | RECONCILIATION.md sections C, P, "Tracked follow-ups". |
+
+## App repo
+
+| # | Item |
+|---|---|
+| A1 | 7 golden tests fail from glyph rasterization drift on this machine (0.06-0.07% of pixels, text edges only, layout identical): nutrient_progress_bar x2, hero_section, probiotic_section x2, med_nutrient_reviewer x2. Regenerate in the canonical Flutter environment. |
+| A2 | Two app stashes of other owners: stash@{0} "codex batch1 frozen submission docs" (2026-08-25), stash@{1} "pre-existing local changes before label hierarchy integration" (2026-07-20, 6 files). Owner decides keep or drop. |
+
+## Release-time (only with a release)
+
+| # | Item |
+|---|---|
+| R1 | Full-corpus re-enrichment (data edits trip the freshness gate), then `scripts/test.sh release`, the laxative verdict probes, and roll `reports/baseline_pre_e1_2_2` forward for the retired row keys. Added 2026-09-26: the interaction-rule edits (senna, chondroitin, black seed, ginseng lane, D1 row selection) change the interaction DB, so rebuild and publish it and bump the app's pin; inspect safety/verdict deltas; C2 must be closed first. `scripts/dist/RELEASE_NOTES.md` still reads db_version 2026.09.22.201915: nothing since has reached users. Rebuild the local canaries too: `reports/canary_rebuild/306237.json` (gitignored, 2026-09-22) predates the retired row copies (ae38d859), so `test_non_probiotic_canary_does_not_get_confidence_fields` fails in the main checkout on da77c456 and on today's main alike. |
+
+## Closed on 2026-09-26
+
+Landed on main 8dbd621b and pushed: multi-form Dose bonus retired; fiber identity matrix entry;
+row twins and zero-reader row keys retired with the row-shape gate (app readers removed, af472e5);
+immune magnitudes in config; interaction DB published and app pin 1.0.12 (af472e5); cascara/senna ghost
+PMIDs and 32 re-sourced rules with the strict citation gate; verify_unii and verify_cui fixes;
+laxogenin, NPDMA, tansy, ephedra, chaparral, mk677, phlorizin and miroestrol identifiers; anthraquinone
+laxatives in banned_recalled with enricher/gate parity; B0 and Safety/Hygiene on the gate's
+policy-filtered concerns; Codex's Candidate D calibration through 69c08dbc; PRs #58, #59, #60.
+This branch: cascara rxcui 66869 and miroestrol class (e69e1223); chondroitin, black seed and evening
+primrose copy (a70e057d); garlic-warfarin ghost PMID (f7a10389); CoQ10 source label (786d318b); matrix
+consumers (ff1793cb). App: med-nutrient parity pin repinned to the bundled artifact (4c5ff2b).
+Sessions: finished and stale PharmaGuide sessions archived; kept: the blend-child decision (D1), "Product quality redesign implementation" and the running "Audit Gemini and leftover work".
+Second pass (2026-09-26 evening): D1 implemented (pending landing), D5 senna and D8 (7efba904), D10 (8599c3fb), C2 reviewed.
+"Audit Gemini and leftover work" finished; its findings are C1, C2, C5, Q16, Q17 and R1 above, then it was archived.
+
+## C2 protein source-family review (2026-09-26)
+
+Every product's previous Evidence owner was INGR_WHEY_PROTEIN, recovered from the "Protein" macro row through
+the generic alias "protein" (removed in e769134a). The record's current aliases cover whey, casein, milk,
+soy and pea; its source inventory is Morton 2018 (PMID 28698222, PMC5867436): whey 23, casein 3, soy 6,
+pea 1, milk 10, food 7, multi-source blends 13; rice, hemp, fava and barley are not mentioned.
+
+| Product | Declared protein source | Proposed family owner | Decision |
+|---|---|---|---|
+| 42306 100% Whey Protein Chocolate Supreme | whey concentrate + isolate inside "Proprietary Blend" | INGR_WHEY_PROTEIN (whey) | Restore, via cleaner fix ae2d4ae1 (v41) and a fresh re-clean |
+| 25694 Protein Advance XR | casein, milk, soy, whey + egg albumen | INGR_WHEY_PROTEIN except egg | Hold at 0; D18 |
+| 259796 Sustained Protein Blend Coconut Caramel | casein, whey + egg white | same except egg | Hold at 0; D18 |
+| 317624 Sustained Protein Blend Fruity Crisps | casein, whey + egg white | same except egg | Hold at 0; D18 |
+| 42289 Whey Protein Complex | casein, soy, whey + egg albumen | same except egg | Hold at 0; D18 |
+| 180692 Way Better Than Whey | pea, rice, flax, hemp, quinoa, sacha inchi, amaranth | none (only pea covered) | Do not restore |
+| 264831 Plant Isolate Vanilla Cookie | fava, brown rice | none | Do not restore |
+| 273676 MD Protein Fit | fava, sprouted barley, rice | none | Do not restore |
+| 273685 MD Protein Plant-Based | fava, sprouted barley, rice | none | Do not restore |
+| 273696 MD Protein Salmon Vanilla | fava, pea, salmon protein | none (fava uncovered) | Do not restore |
+| 277517 MD Protein Salmon Chocolate | fava, pea, salmon protein | none (fava uncovered) | Do not restore |
+| 29098 Raw Protein Cacao | brown rice + grains, legumes, seeds | none | Do not restore |
+| 330181 Organic Hemp Seed Protein | hemp | none | Do not restore |
+| 330187 Organic Rice Protein | rice | none | Do not restore |
+
+Found en route (not decided here): in 273696 and 277517 the salmon protein row carries canonical_id
+pea_protein because DSLD groups it as "Pea protein".

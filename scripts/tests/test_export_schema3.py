@@ -126,7 +126,6 @@ def _schema2_blob() -> dict:
         "ingredients": [
             {
                 "canonical_id": "magnesium",
-                "safety_hits": [{"rule_id": RULE["id"], "payload": "large"}],
             }
         ],
         "warnings": [
@@ -221,7 +220,6 @@ def test_schema_3_removes_only_redundant_consumer_payloads() -> None:
         "has_any_proprietary_blend": True,
         "blends": [{"name": "Test Blend"}],
     }
-    assert "safety_hits" not in projected["ingredients"][0]
     assert "ingredients_with_rda" not in projected["rda_ul_data"]
     assert "adequacy_results" not in projected["rda_ul_data"]
     assert "data_by_group" not in projected["rda_ul_data"]["analyzed_ingredients"][0]

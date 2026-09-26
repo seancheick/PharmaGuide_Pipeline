@@ -28,6 +28,8 @@ Null-CUI policy:
 Matching order and safety rules:
   - Exact alias and curated override matches are preferred over broad word-search suggestions.
   - Broad search results are informational and are not safe to auto-apply.
+  - A UMLS concept named for a product form the entry does not name (flower essence, homeopathic,
+    allergenic extract) is a MISMATCH for an existing CUI and is never an exact-match suggestion.
   - Entries with an approved `cui_status` and null CUI are treated as intentional nulls unless an exact standard/alias match proves the null should be revisited.
   - `--apply` is intentionally conservative and will not overwrite existing mismatched CUIs.
   - `--apply-mismatches` is the explicit override for reviewed mismatch corrections.
@@ -102,298 +104,33 @@ VERIFY_CUI_HELP_EPILOG = """Examples:
 """
 
 def _load_curated_cui_overrides() -> dict:
-    """Load CUI overrides from JSON file, falling back to empty dict."""
+    """Load CUI overrides from cui_overrides.json, the only owner.
+
+    A missing or corrupt file raises: a silent fallback would verify CUIs
+    against the wrong override set.
+    """
     path = SCRIPTS_ROOT / "data" / "curated_overrides" / "cui_overrides.json"
-    if path.exists():
-        try:
-            return json.loads(path.read_text())
-        except (json.JSONDecodeError, OSError):
-            pass
-    return {}
+    return json.loads(path.read_text())
 
 
-CURATED_CUI_OVERRIDES = _load_curated_cui_overrides() or {
-    "policy watchlist: synthetic food acids": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: policy/class entry spans multiple synthetic food acids, so no single ingredient-level UMLS concept is appropriate.",
-    },
-    "synthetic food acids": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: policy/class entry spans multiple synthetic food acids, so no single ingredient-level UMLS concept is appropriate.",
-    },
-    "antimony & antimony compounds": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: grouped contaminant entry spans elemental antimony plus multiple compounds, not one exact ingredient-level concept.",
-    },
-    "tapioca filler": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: formulation/filler concern should not be auto-collapsed into the cassava plant concept alone.",
-    },
-    "nitrites": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: umbrella nitrites record routes to atomic child salts and should not resolve to one preservative compound.",
-    },
-    "sodium nitrite/nitrate": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: umbrella nitrites record routes to atomic child salts and should not resolve to one preservative compound.",
-    },
-    "synthetic antioxidants": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: umbrella antioxidant record routes to BHA/BHT/TBHQ child entries and should not resolve to one compound like ethoxyquin.",
-    },
-    "synthetic vitamins": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: grouped synthetic-vitamin record spans many vitamin compounds and should not resolve to one example such as alpha tocopherol.",
-    },
-    "synthetic b vitamins": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: grouped B-vitamin record spans many compounds and should not resolve to one ingredient-level concept.",
-    },
-    "pqq (pyrroloquinoline quinone)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: generic PQQ entry should stay null unless a reviewed ingredient-level UMLS concept is chosen; current exact hits skew to cofactor or salt concepts.",
-    },
-    "pyrroloquinoline quinone": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: generic PQQ entry should stay null unless a reviewed ingredient-level UMLS concept is chosen; current exact hits skew to cofactor or salt concepts.",
-    },
-    "organ extracts": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: organ extract entry spans multiple glandular and organ-source substances, not one exact ingredient-level concept.",
-    },
-    "organ extracts (glandulars)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: organ extract entry spans multiple glandular and organ-source substances, not one exact ingredient-level concept.",
-    },
-    "quassinoids": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: quassinoids are a class of related compounds and should not be collapsed to the narrower quassin concept.",
-    },
-    "rhaponticin": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: rhaponticin should not be auto-collapsed into rhapontin without explicit manual review.",
-    },
-    "syrups": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: syrup record is a formulation class and should not be collapsed to one specific syrup concept such as corn syrup.",
-    },
-    "sugar syrups": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: syrup record is a formulation class and should not be collapsed to one specific syrup concept such as corn syrup.",
-    },
-    "unspecified colors": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: disclosure-quality category should not be mapped to one symptom or dye concept.",
-    },
-    "tapioca (refined starch filler)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: filler formulation concern should not be auto-collapsed into the cassava plant concept alone.",
-    },
-    "7-keto dhea": {"cui": "C0525091", "name": "7-keto-dehydroepiandrosterone"},
-    "7-keto dhea (7-oxodehydroepiandrosterone)": {"cui": "C0525091", "name": "7-keto-dehydroepiandrosterone"},
-    "bmpea": {"cui": "C4041589", "name": "beta-methylphenyl-ethylamine"},
-    "beta-methylphenyl-ethylamine": {"cui": "C4041589", "name": "beta-methylphenyl-ethylamine"},
-    "contaminated glp-1 compounds": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: contamination watchlist entry spans multiple GLP-1 compounds and quality defects, not one ingredient concept.",
-    },
-    "metal fiber contamination": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: contamination category covers multiple metal fiber/particle variants, not one ingredient-level concept.",
-    },
-    "fluoride supplements (children)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: pediatric fluoride supplement entry spans multiple product forms and salts, not one ingredient-level concept.",
-    },
-    "pediatric fluoride supplements": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: pediatric fluoride supplement entry spans multiple product forms and salts, not one ingredient-level concept.",
-    },
-    "partially hydrogenated oils (phos)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: partially hydrogenated oils are a class entry and the PHO abbreviation collides with unrelated UMLS concepts.",
-    },
-    "partially hydrogenated oils": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: partially hydrogenated oils are a class entry and should not resolve to one unrelated PHO concept.",
-    },
-    "pho": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: PHO is ambiguous and should not be auto-mapped without a specific oil/salt concept.",
-    },
-    "phos": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: PHOs are a class entry and should not be auto-mapped to a single unrelated concept.",
-    },
-    "dmaa": {"cui": "C3492032", "name": "1,3-dimethylamylamine"},
-    "1,3-dimethylamylamine": {"cui": "C3492032", "name": "1,3-dimethylamylamine"},
-    "dmba": {"cui": "C4076845", "name": "1,3-dimethylbutylamine"},
-    "1,3-dimethylbutylamine": {"cui": "C4076845", "name": "1,3-dimethylbutylamine"},
-    "dmsa (succimer)": {"cui": "C0012384", "name": "Succimer"},
-    "succimer": {"cui": "C0012384", "name": "Succimer"},
-    "sildenafil": {"cui": "C0529793", "name": "Sildenafil"},
-    "sildenafil citrate": {"cui": "C0529793", "name": "Sildenafil"},
-    "tb-500 (thymosin beta-4)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: TB-500 is marketed as a peptide analogue/brand term and should not be auto-collapsed into thymosin beta-4 without explicit review.",
-    },
-    "tb500": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: TB-500 is marketed as a peptide analogue/brand term and should not be auto-collapsed into thymosin beta-4 without explicit review.",
-    },
-    "germanium (inorganic)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: inorganic germanium entry spans multiple salts and oxides, not one exact ingredient-level UMLS concept.",
-    },
-    "green tea extract (high dose)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: dose-conditioned green tea extract risk entry is broader than a single UMLS ingredient concept.",
-    },
-    "amanita muscaria / muscimol": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: entry combines mushroom species and active constituents, so no single UMLS concept is exact.",
-    },
-    "policy watchlist: cardarine derivatives": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: derivative watchlist spans multiple analogues, not one ingredient-level UMLS concept.",
-    },
-    "policy watchlist: synthetic anabolic steroids": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: steroid watchlist spans many different compounds, not one ingredient-level UMLS concept.",
-    },
-    "synthetic anabolic steroids": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: steroid watchlist spans many different compounds, not one ingredient-level UMLS concept.",
-    },
-    "policy watchlist: tianeptine analogues": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: analogue watchlist spans multiple compounds, not one ingredient-level UMLS concept.",
-    },
-    "policy watchlist: dmaa analogs": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: stimulant analogue watchlist spans multiple compounds, not one ingredient-level UMLS concept.",
-    },
-    "dmaa analogs": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: stimulant analogue watchlist spans multiple compounds, not one ingredient-level UMLS concept.",
-    },
-    "cannabis/thc": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: combined cannabis/THC policy entry should not be forced into a single plant or constituent concept.",
-    },
-    "thyrogen (thyrotropin alfa)": {"cui": "C2587204", "name": "thyrotropin alfa"},
-    "thyrotropin alfa": {"cui": "C2587204", "name": "thyrotropin alfa"},
-    "5a-hydroxy laxogenin": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: supplement-market derivative name does not have a confirmed exact UMLS concept distinct from broader laxogenin entries.",
-    },
-    "igf-1 lr3": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the marketed peptide analogue name IGF-1 LR3.",
-    },
-    "igf-1 lr3 (long r3 insulin-like growth factor 1)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the marketed peptide analogue name IGF-1 LR3.",
-    },
-    "yk-11": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the investigational SARM name YK-11.",
-    },
-    "flmodafinil": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the research-chemical nootropic name flmodafinil.",
-    },
-    "chloropretadalafil": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the undeclared PDE-5 analogue chloropretadalafil.",
-    },
-    "7-methylkratom": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the kratom-derived analogue 7-methylkratom.",
-    },
-    "propoxyphenylsildenafil": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the undeclared PDE-5 analogue propoxyphenylsildenafil.",
-    },
-    "n-phenethyl dimethylamine": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the stimulant analogue N-phenethyl dimethylamine.",
-    },
-    "hexadrone (6-chloro-androst-4-ene-3-one-17b-ol)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept was found for the designer steroid name Hexadrone.",
-    },
-    "carob color (e153 / vegetable carbon)": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: food-color entry maps to a formulation/coloring class and should not be auto-collapsed into generic carbon black.",
-    },
-    "dmha": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept for the supplement stimulant synonym DMHA/2-aminoisoheptane.",
-    },
-    "2-aminoisoheptane": {
-        "cui": None,
-        "name": None,
-        "note": "Curated override: no confirmed exact UMLS concept for the supplement stimulant synonym DMHA/2-aminoisoheptane.",
-    },
-}
+CURATED_CUI_OVERRIDES = _load_curated_cui_overrides()
 
 DEFAULT_FILE = SCRIPTS_ROOT / "data" / "harmful_additives.json"
 APPROVED_NULL_CUI_STATUSES = {"no_confirmed_umls_match", "no_single_umls_concept"}
 NON_INGREDIENT_SEMANTIC_TYPES = {
     "Laboratory Procedure",
 }
+# UMLS names some concepts for a product form (a flower-remedy dilution, a
+# homeopathic preparation, an allergy-test extract) rather than the substance.
+# A name match must not verify one for an entry that does not name that form.
+# Bare "preparation" is deliberately absent: UMLS uses "X preparation" for
+# ordinary herbal-ingredient concepts (VANDF/NDDF), e.g. "Ashwagandha preparation".
+PREPARATION_QUALIFIER_PHRASES = (
+    "flower essence",
+    "homeopathic",
+    "allergenic extract",
+    "allergen patch test",
+)
 BOTANICAL_NARROWING_TOKENS = {
     "extract",
     "oil",
@@ -640,6 +377,17 @@ def _names_match_ignoring_numeral_style(candidate: str | None, names: list[str])
     return any(_numeral_normalized_tokens(name) == candidate_tokens for name in names)
 
 
+def _preparation_qualifiers_missing_from(candidate_name: str | None, names: list) -> list[str]:
+    """Product-form phrases in candidate_name that none of names carries."""
+    candidate = _normalize_match_text(candidate_name)
+    own = [_normalize_match_text(n) for n in names if isinstance(n, str)]
+    return [
+        phrase
+        for phrase in PREPARATION_QUALIFIER_PHRASES
+        if phrase in candidate and not any(phrase in name for name in own)
+    ]
+
+
 def _exact_match_is_safe_for_entry(
     *,
     standard_name: str,
@@ -647,6 +395,8 @@ def _exact_match_is_safe_for_entry(
     matched_term: str,
     latin_name: str | None,
 ) -> bool:
+    if _preparation_qualifiers_missing_from(candidate_name, [standard_name, matched_term, latin_name]):
+        return False
     if not latin_name:
         return True
 
@@ -716,11 +466,20 @@ def verify_cui_for_entry(
         else:
             report["umls_name"] = info["name"]
             semantic_types = set(info.get("semantic_types") or [])
+            preparation_qualifiers = _preparation_qualifiers_missing_from(
+                info["name"], [standard_name, *aliases]
+            )
             if semantic_types & NON_INGREDIENT_SEMANTIC_TYPES:
                 report["status"] = "MISMATCH"
                 report["action"] = (
                     f"CUI {current_cui} maps to '{info['name']}' "
                     f"with disallowed semantic type(s): {', '.join(sorted(semantic_types & NON_INGREDIENT_SEMANTIC_TYPES))}"
+                )
+            elif preparation_qualifiers:
+                report["status"] = "MISMATCH"
+                report["action"] = (
+                    f"CUI {current_cui} maps to '{info['name']}', a product form "
+                    f"({', '.join(preparation_qualifiers)}) the entry does not name"
                 )
             else:
             # Check if the UMLS name reasonably matches

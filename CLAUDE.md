@@ -22,6 +22,7 @@ AGENTS.md; this file holds only Claude-specific material. Don't grow it into a s
 |---|---|
 | `/catalog-release` | the release train; wraps `scripts/release_full.sh` |
 | `/data-fix` | curated-data corrections, one entry at a time |
+| `/pg-scoring-change` | any change that can move a score, pillar, route or verdict |
 | `/verify-data` | live-API identifier verification |
 | `/fda-weekly-sync` | FDA recall/ban sync |
 | `/prepare-product-submissions` | submission extraction queue |

@@ -65,6 +65,7 @@ committed outcome after a lost response without borrowing another attempt's resu
 | **Printed name** | Full ingredient name as printed on the label. It is retained even when a verified branded token is extracted. |
 | **Branded token** | Separately stored verified brand marker; it never replaces the printed name. |
 | **Marker contribution** | A bioactive delivered by a source ingredient. The source keeps its identity; the marker is not promoted into a duplicate active row. |
+| **Interaction subject** | The (registry, canonical ID) an interaction rule is authored on. A row answers to its own subject, its IQM family (vitamin K2 → vitamin K) and, for a botanical, its verified IQM twin (garlic bulb → garlic). Owner: `identity/interaction.py`. It never changes identity or score. |
 | **Same-identity alias** | A reviewed exact printed-name alias that identifies the IQM parent itself. It may override a broader structured source/group identity only through `alias_identity_scope="same_identity"` or the form's explicit `same_identity_aliases`. |
 | **Source-preparation alias** | A source, carrier, brand preparation, or botanical-to-marker clue that may select a form only after primary parent identity is established. It never creates primary identity by itself. |
 | **Parent-total row** | A declared nutrient total that groups subforms. It is preserved for label fidelity but excluded from duplicate scoring when its children carry the form detail. |

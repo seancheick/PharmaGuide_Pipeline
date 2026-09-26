@@ -508,7 +508,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
 {
   "raw_source_text": "Vitamin A Palmitate",
   "name": "Vitamin A Palmitate",
-  "standardName": "Retinyl Palmitate",
   "normalized_key": "vitamin_a",
   "forms": [{"name": "Palmitate"}],
   "quantity": 2000.0,
@@ -523,8 +522,6 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   "form_match_status": "mapped",
   "category": "vitamins",
   "bio_score": 14,
-  "natural": false,
-  "score": 14,
   "form_evidence": {
     "evidence_level": "moderate",
     "references_structured": [{
@@ -539,22 +536,15 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   },
   "_score_note": "Ingredients carry `bio_score` (0-15, form quality) only. The legacy `score` and `natural` fields were removed (IQM 5.6.0) and are not exported. Sourcing is not scored in v4.",
   "notes": "The most common preformed Vitamin A in supplements...",
-  "mapped": true,
-  "safety_hits": [...],
   "normalized_amount": null,
   "normalized_unit": null,
   "role": "active",
   "parent_key": "vitamin_a",
-  "dosage": 2000.0,
-  "dosage_unit": "IU",
-  "normalized_value": null,
   "is_mapped": true,
   "is_harmful": false,
   "harmful_severity": null,
   "is_safety_concern": false,
-  "harmful_notes": null,
   "is_banned": false,
-  "is_allergen": false,
   "identifiers": {"cui": "C0042839", "unii": "81G40H8B0T"},
   "display_label": "Vitamin A (Palmitate)",
   "display_dose_label": "2000 IU",
@@ -593,7 +583,6 @@ per concern.
 {
   "raw_source_text": "Silicon Dioxide",
   "name": "Silicon Dioxide",
-  "standardName": "Silicon Dioxide (E551)",
   "normalized_key": "silicon_dioxide",
   "forms": [],
   "category": "flow_agent_anticaking",
@@ -605,12 +594,9 @@ per concern.
   "match_method": "alias",
   "matched_alias": "silicon dioxide",
   "notes": "Amorphous silicon dioxide used as anti-caking agent...",
-  "mechanism_of_harm": "FDA GRAS at <2% w/w...",
-  "common_uses": ["flow agent", "anti-caking", "tablet glidant"],
   "population_warnings": ["No specific population concerns at <2% w/w"],
   "is_harmful": true,
   "harmful_severity": "low",
-  "harmful_notes": "FDA GRAS, EFSA 2018 data gap (precautionary, not finding of harm)...",
   "identifiers": {
     "cui": "C0037098",
     "cas": "7631-86-9",
@@ -813,6 +799,33 @@ delete commit per field, with a regression test pin).
 | `matched_alias`  | move to `_debug` subkey      | Same — internal pipeline diagnostics           |
 | `is_harmful`     | `is_safety_concern` + `severity_status` | Flutter migrates routing logic        |
 
+**Row keys retired (row-key census, 2026-09-25):** `standardName` (active and
+inactive; same value as `standard_name`), `normalized_value` (same value as
+`normalized_amount`), `mapped` (same value as `is_mapped`), inactive
+`label_display` (same value as `display_label`), and `safety_hits` and
+`harmful_notes` (no reader). `audit_contract_sync.ACTIVE_CONTRACT` and
+`INACTIVE_CONTRACT` declare the whole row shape; a row key they do not declare
+fails the snapshot gate, as an undeclared top-level key already did.
+
+Retired in the same-day follow-up (no reader, or a second name for a shipped
+value):
+- `dosage` / `dosage_unit`: same values as `quantity` / `unit`.
+- `score`: the v3.6.0 alias of `bio_score`; read `bio_score` (range 0-15).
+- active `natural`: no reader; sourcing is not scored since v3.6.0.
+- active `is_allergen`: no reader; allergens ship on the blob-level `allergens` list.
+- active `source_label_key`, `identity_resolution_rationale`, `canonical_id_before`:
+  the identity repair trail stays on the enriched IQD row, where
+  `audit_identity_integrity` reads it.
+- active `adequacy_tier`, `cfu_confidence`, `dose_basis`, `ui_copy_hint`: they ship on
+  `probiotic_detail.clinical_strains`, linked to the row by `source_row_ref`.
+- inactive `mechanism_of_harm`, `common_uses`: no reader; harmful-additive warnings
+  still carry `mechanism_of_harm`.
+- `jurisdiction_scope` (both lists): derived from `us_applicable` + `jurisdictions`;
+  warnings keep their own.
+- inactive `label_row_disposition`: derived from `is_label_descriptor` / `is_active_only`.
+- inactive `resolved_display_label`: the resolver's name, which `display_label` showed
+  until it switched to the label's wording on 2026-06-15.
+
 **Top-level sections with no reader (closure field census, 2026-09-21):**
 `brand_name_raw`, `brand_family`, `product_role_evidence`, `row_ledger_summary`,
 `gluten_free_validated`, `compliance_detail`, `dietary_sensitivity_detail`,
@@ -825,7 +838,7 @@ pipeline module starts reading one.
 
 **Empty-string defaults:** several inactive fields (`category`,
 `additive_type`, `severity_level`, `match_method`, `matched_alias`,
-`notes`, `mechanism_of_harm`) currently emit `""` when unpopulated.
+`notes`) currently emit `""` when unpopulated.
 Convert to `null` once Flutter handles both — eliminates the empty-vs-null
 ambiguity.
 
@@ -833,8 +846,8 @@ ambiguity.
 
 - Active ingredient `notes` come from IQM form notes. These are polished educational text.
 - Inactive ingredient `notes` now come from `other_ingredients.json` reference data.
-  `additive_type` and `common_uses` are reliable. If the ingredient matched
-  `harmful_additives.json`, safety-specific `notes` and `mechanism_of_harm` take priority.
+  `additive_type` is reliable. If the ingredient matched `harmful_additives.json`,
+  safety-specific `notes` take priority.
 - `evidence_data` is included when enrichment produced clinical match output for the product.
 - `rda_ul_data` is included when enrichment emitted an RDA/UL analysis block. It may still
   contain `collection_enabled: false` with a reason. When absent entirely, the app treats it

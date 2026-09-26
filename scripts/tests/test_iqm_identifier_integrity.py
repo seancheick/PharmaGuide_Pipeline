@@ -785,3 +785,54 @@ def test_batch_6_rejects_stale_null_recommendations_for_current_broad_rxcuis(
         "Claude's stale branch recommended null, but live RxNav on current main "
         "confirmed a valid broad ingredient concept."
     )
+
+
+def test_phlorizin_cui_is_the_compound_not_a_homeopathic_trituration(iqm):
+    """phlorizin carried C0885670 "Phlorizinum, trituration of a substance
+    discovered in the fresh bark of trees, phlorizin, Homeopathic preparation"
+    (atoms: MTH, CHV, ALT only). C0031562 "phlorhizin" is the compound (MSH MH
+    Phlorhizin with entry terms Phloridzin/Phlorizin, RXNORM IN, MTHSPL
+    PHLORIZIN). It closes the chain with the entry's other identifiers: RxNav
+    1362735 (this entry's rxcui) carries UNII CU9S17279X, and UMLS maps RXNORM
+    1362735 to C0031562. GSRS CU9S17279X is anhydrous PHLORIZIN (C21H24O10;
+    the dihydrate is CRK54BIJ5D), InChIKey IOUVKUPGCMBWBT-QNDFHXLGSA-N = PubChem
+    CID 6072. other_ingredients NHA_PHLORIDZIN already uses C0031562. Verified
+    live 2026-09-26."""
+    entry = iqm["phlorizin"]
+    assert entry["cui"] == "C0031562"
+    assert "C0885670" in entry["cui_note"]
+
+
+def test_miroestrol_identifiers_are_miroestrol_not_crisnatol_or_hexenol(iqm):
+    """miroestrol carried cui C0056493, which is crisnatol (a chrysene-derived
+    antineoplastic: MSH NM crisnatol, NCI PT Crisnatol), and pubchem_cid
+    5318042, which is (E)-hex-2-en-1-ol (C6H12O). C3491692 is MeSH SCR C571572
+    "miroestrol" ("from tuberous roots of P. candollei var. mirifica"), and a
+    PubChem name search for miroestrol returns only CID 165001 (Miroestrol,
+    C20H22O6, CAS 2618-41-9). banned_recalled RISK_MIROESTROL already uses
+    both. GSRS has no miroestrol record, so there is no UNII. Verified live
+    2026-09-26."""
+    entry = iqm["miroestrol"]
+    assert entry["cui"] == "C3491692"
+    assert entry["external_ids"]["pubchem_cid"] == 165001
+    assert "C0056493" in entry["cui_note"] and "5318042" in entry["cui_note"]
+    # The old note claimed a UNII that does not exist.
+    assert "identified via UNII/PubChem" not in entry["rxcui_note"]
+
+
+def test_cascara_sagrada_rxcui_is_the_rxnorm_ingredient(iqm):
+    """cascara_sagrada said "No RxNorm concept found via GSRS lookup", but
+    RxNorm has the ingredient: RxCUI 66869 "cascara sagrada" (tty IN, ATC
+    A06AB07, SNOMEDCT 23888001); 1350209 is the narrower "Frangula purshiana
+    bark extract". Verified on RxNav 2026-09-26
+    (scripts/audits/pending_items_20260926/research.md)."""
+    entry = iqm["cascara_sagrada"]
+    assert entry["rxcui"] == "66869"
+    assert "No RxNorm concept" not in (entry.get("rxcui_note") or "")
+
+
+def test_miroestrol_description_does_not_call_it_a_coumestan(iqm):
+    """PubChem CID 165001 miroestrol (C20H22O6) is a pentacyclic phytoestrogen;
+    a coumestan has the [1]benzofuro[3,2-c]chromen-6-one skeleton (CID 638309,
+    C15H8O3). Verified 2026-09-26."""
+    assert "coumestan" not in iqm["miroestrol"]["description"].lower()

@@ -55,7 +55,8 @@ EXPECTED = {
     # BP batch
     "hawthorn": (160, "mg", {"hypertension"}),
     "l_arginine": (4000, "mg", {"antihypertensives"}),
-    "black_seed_oil": (2000, "mg", {"diabetes", "hypertension"}),
+    # black_seed_oil: floor removed (Sean, D8, 2026-09-26); its sources set no
+    # threshold, so its sub-rules are presence (test_interaction_rules_integrity_regressions).
     "st_johns_wort": (900, "mg", {"antihypertensives"}),
     # vitamin D high-dose-only
     "vitamin_d": (10000, "IU", {"anticoagulants"}),

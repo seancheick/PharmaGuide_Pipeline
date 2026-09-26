@@ -76,3 +76,21 @@ def test_interaction_rebuild_regenerates_the_derived_suppai_feed() -> None:
     assert '"$SUPPAI_DIR/meta.json"' in release_source
     assert '"$SUPPAI_DIR/paper_metadata.json"' in release_source
     assert '"$SUPPAI_DIR/sentence_dict.json"' in release_source
+
+
+def test_release_moves_the_app_hydration_pin_with_the_bundle() -> None:
+    source = SCRIPT.read_text()
+    publish = '--publish-flutter-pin "$FLUTTER_REPO"'
+    verify = 'bash "$FLUTTER_REPO/tool/fetch_interaction_db.sh"'
+    pin = "tool/interaction_db.release.json"
+
+    # Published after every preflight gate, before anything reaches Supabase.
+    assert source.index('run_strict_gate "Flutter import preflight"') < source.index(publish)
+    assert source.index(publish) < source.index("# Step 5: Sync to Supabase")
+    # The app's own hydration verifier checks pin, manifest and DB before the commit.
+    assert source.index('run_strict_gate "Flutter bundle parity"') < source.index(verify)
+    add_line = next(l for l in source.splitlines() if 'git -C "$FLUTTER_REPO" add' in l)
+    status_line = next(l for l in source.splitlines() if "status --porcelain -- assets/db" in l)
+    assert source.index(verify) < source.index(add_line)
+    assert pin in add_line
+    assert pin in status_line

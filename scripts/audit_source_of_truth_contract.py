@@ -99,6 +99,7 @@ REQUIRED_CONCEPTS = {
     "scoring_fallback_policy",
     "scored_artifact_compatibility_outputs",
     "product_level_scoring_evidence",
+    "fiber_identity",
     "nutrition_only_scoring_class",
     "final_db_export",
     "flutter_bundled_assets",
@@ -110,6 +111,10 @@ REQUIRED_CONCEPTS = {
     "interaction_profile_contract",
     "enrichment_fallback_policy",
     "display_ingredient_contract",
+    "ingredient_form_quality",
+    "probiotic_row_identity",
+    "prebiotic_identity",
+    "certification_evidence",
 }
 
 SCORABLE_BLOCKED_ROLES = CLEANER_NON_SCORABLE_ROLES

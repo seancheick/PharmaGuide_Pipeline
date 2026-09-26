@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.2.5",
-    "last_updated": "2026-09-21",
+    "last_updated": "2026-09-26",
     "total_entries": 92,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -29,7 +29,8 @@
       "2026-07-29: Retired 12 unsupported, duplicated, or mis-layered consumer rules. Chronic medication-nutrient monitoring now remains solely in the pharmacist-reviewed depletion corpus; neutral benefit hypotheses no longer ship as safety interactions; and the broad high-dose vitamin E/anticoagulant rule was removed rather than implying a safe cutoff. Narrowed calcium/fluoroquinolone to ciprofloxacin RxCUI 2551 because moxifloxacin labeling reports no significant calcium effect; retained the class-wide zinc interaction without a universal timing interval because product labels differ. Also narrowed melatonin to fluvoxamine RxCUI 42355, corrected MAOI washout copy, and made zinc/copper dose-dependent at its explicitly disclosed 25 mg/day review floor.",
       "2026-08-08: Corrected the vitamin E/warfarin and chromium/diabetes-medication guidance. Vitamin E copy now limits the bleeding-risk statement to large supplemental doses and preserves the uncertain clinically significant amount. Chromium is reclassified from Moderate to Minor/background monitoring, and its 200 mcg/day screening threshold is explicitly documented as inferred from studied dose ranges rather than a guideline cutoff.",
       "2026-09-11: Corrected DSI_ANTICOAG_VINPOCETINE evidence to preclinical/low confidence after reviewing PMID 28930203 and original human study PMID 2272713. Retained the Moderate precautionary warning, clarified management wording, and recorded project-owner confirmation of prior approval.",
-      "2026-09-21: One owner per fact. DSI_DIURETICS_POTASSIUM mixed a chronic depletion fact (loop/thiazide diuretics lower potassium) with the supplement-safety fact; it now carries only the hyperkalemia warning and is scoped to class:potassium_sparing_diuretics (amiloride, canrenone, eplerenone, finerenone, spironolactone, triamterene), re-checked against the NIH ODS potassium fact sheet (Interactions with Medications). The loop/thiazide depletion fact belongs to DEP_DIURETICS_POTASSIUM in the depletion corpus. Retired DSI_BETABLOCK_MELATONIN: a neutral physiology/benefit statement, not a supplement-safety interaction; the beta-blocker/melatonin relationship is owned by DEP_BETABLOCKERS_MELATONIN."
+      "2026-09-21: One owner per fact. DSI_DIURETICS_POTASSIUM mixed a chronic depletion fact (loop/thiazide diuretics lower potassium) with the supplement-safety fact; it now carries only the hyperkalemia warning and is scoped to class:potassium_sparing_diuretics (amiloride, canrenone, eplerenone, finerenone, spironolactone, triamterene), re-checked against the NIH ODS potassium fact sheet (Interactions with Medications). The loop/thiazide depletion fact belongs to DEP_DIURETICS_POTASSIUM in the depletion corpus. Retired DSI_BETABLOCK_MELATONIN: a neutral physiology/benefit statement, not a supplement-safety interaction; the beta-blocker/melatonin relationship is owned by DEP_BETABLOCKERS_MELATONIN.",
+      "2026-09-26: DSI_WAR_GARLIC no longer cites PMID 10594976 (Ankri & Mirelman 1999, antimicrobial properties of allicin): right ingredient, no warfarin or bleeding content. The NCCIH garlic page it keeps states the bleeding risk with anticoagulants. Severity, mechanism and dose threshold unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interactions": [
@@ -165,12 +166,9 @@
       "mechanism": "Garlic (Allium sativum) inhibits platelet aggregation via ajoene and other sulfur compounds. Combined with warfarin, it increases antiplatelet burden and may elevate bleeding risk. Some evidence of mild CYP2C9 inhibition.",
       "management": "Use garlic supplements cautiously with warfarin. Culinary amounts are generally safe. High-dose garlic supplements (>600 mg/day) warrant INR monitoring. Report any unusual bruising.",
       "source_urls": [
-        "https://nccih.nih.gov/health/garlic/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/10594976/"
+        "https://nccih.nih.gov/health/garlic/ataglance.htm"
       ],
-      "source_pmids": [
-        "10594976"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",

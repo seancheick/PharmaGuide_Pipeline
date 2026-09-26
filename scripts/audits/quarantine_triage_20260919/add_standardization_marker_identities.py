@@ -41,7 +41,8 @@ ENTRIES: dict[str, dict] = {
     "miroestrol": {
         "standard_name": "Miroestrol",
         "category": "herbs",
-        "cui": "C0056493",
+        # C0056493 (crisnatol) until 2026-09-26; see the IQM entry's cui_note.
+        "cui": "C3491692",
         "forms": {
             "miroestrol (unspecified)": {
                 "bio_score": 3.0,
@@ -82,7 +83,8 @@ ENTRIES: dict[str, dict] = {
         "rxcui": None,
         "rxcui_note": (
             "No RxNorm concept exists for this standardization constituent; "
-            "identified via UNII/PubChem instead."
+            "identified via PubChem CID 165001 and UMLS C3491692 instead (GSRS "
+            "has no miroestrol record, so there is no UNII)."
         ),
         "data_quality": {
             "review_status": "validated",
@@ -91,7 +93,8 @@ ENTRIES: dict[str, dict] = {
             "research_status": "validated",
         },
         "external_ids": {
-            "pubchem_cid": 5318042,
+            # 5318042 ((E)-hex-2-en-1-ol) until 2026-09-26.
+            "pubchem_cid": 165001,
         },
         "gsrs": {
             "substance_name": "Miroestrol",

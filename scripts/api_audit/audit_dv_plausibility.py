@@ -131,12 +131,12 @@ def _classify_row(
         }
 
     target_unit = _normalize_unit(nutrient_record.get("unit"))
-    row_unit = _normalize_unit(row.get("unit") or row.get("dosage_unit"))
+    row_unit = _normalize_unit(row.get("unit"))
     if target_unit != "mcg" or row_unit != "mg":
         return None
 
     try:
-        amount = float(row.get("quantity") if row.get("quantity") is not None else row.get("dosage"))
+        amount = float(row.get("quantity"))
     except (TypeError, ValueError):
         return None
     if amount <= 0:
@@ -211,8 +211,8 @@ def audit(input_path: Path, output_path: Path, daily_values_path: Path = DAILY_V
                 "nutrient_key": nutrient_key,
                 "ingredient_name": row.get("name") or row.get("raw_source_text"),
                 "standard_name": row.get("standardName") or row.get("standard_name"),
-                "quantity": row.get("quantity") if row.get("quantity") is not None else row.get("dosage"),
-                "unit": row.get("unit") or row.get("dosage_unit"),
+                "quantity": row.get("quantity"),
+                "unit": row.get("unit"),
                 "daily_value": row.get("dailyValue") or row.get("daily_value") or row.get("percent_daily_value"),
                 "daily_value_target_group": classification.get("daily_value_target_group"),
                 "daily_value_reference_amount": classification.get("daily_value_reference_amount"),

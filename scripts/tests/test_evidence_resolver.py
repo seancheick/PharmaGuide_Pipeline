@@ -280,6 +280,27 @@ def test_garcinia_cambogia_null_unfavorable():
     assert res.points_eligible is False
 
 
+def test_aloe_ferox_record_states_the_fda_rule_basis():
+    """67 FR 31125 (PMID 12001972) deemed OTC aloe laxatives not GRASE because
+    the carcinogenicity data FDA requested were never submitted. It made no
+    genotoxicity or tumorigenicity finding, so the record and its generator
+    must not say it did."""
+    import json
+
+    records = json.loads(
+        (SCRIPTS_ROOT / "data" / "literature_evidence_records.json").read_text()
+    )["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == "aloe_ferox")
+    study = record["qualifying_human_studies"][0]
+    assert study["pmid"] == "12001972"
+    assert "carcinogenicity data" in record["applicability_decision"]
+    assert "carcinogenicity data" in study["outcome"]
+    generator = (SCRIPTS_ROOT / "audits" / "build_final_sweep_records.py").read_text()
+    for stale in ("genotoxicity/tumorigenicity", "potential carcinogenicity"):
+        assert stale not in json.dumps(record)
+        assert stale not in generator
+
+
 def test_false_transfer_canary_citrus_bioflavonoids():
     """Crude citrus bioflavonoids must NOT transfer pharma MPFF (Daflon) clinical evidence."""
     res = er.resolve_evidence_for_canonical("citrus_bioflavonoids", dose_value=500.0, dose_unit="mg")
@@ -603,7 +624,7 @@ def test_phase4_batch5_standardized_clinical_botanicals():
 
 def test_phase4_final_sweep_reviewed_null_unfavorable():
     """Final sweep reviewed-null and safety contraindications."""
-    null_cids = ["artemisinin", "PII_ARTEMISININ", "aloe_ferox", "kavalactones"]
+    null_cids = ["artemisinin", "PII_ARTEMISININ", "kavalactones"]
     for cid in null_cids:
         res = er.resolve_evidence_for_canonical(cid)
         assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value, (
@@ -611,6 +632,14 @@ def test_phase4_final_sweep_reviewed_null_unfavorable():
         )
         assert res.applicability_status == "reviewed_null_evidence"
         assert res.points_eligible is False
+
+    # Cape aloe latex is a high_risk banned_recalled entry (RISK_ALOE_LATEX,
+    # 7dc19997), so aloe_ferox now stops at the safety boundary like cascara,
+    # yohimbe and red yeast rice. It still earns no Evidence points.
+    res = er.resolve_evidence_for_canonical("aloe_ferox")
+    assert res.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
+    assert res.applicability_status == "safety_disqualified"
+    assert res.points_eligible is False
 
 
 def test_phase4_final_sweep_identity_debt_handling():

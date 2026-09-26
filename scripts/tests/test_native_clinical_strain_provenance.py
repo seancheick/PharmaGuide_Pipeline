@@ -487,7 +487,7 @@ def test_producer_cannot_export_a_badge_for_a_different_strain(
     assert blob["probiotic_detail"]["clinical_strains"] == []
     assert blob["probiotic_detail"]["clinical_strain_count"] == 0
     assert len(blob["ingredients"]) == 1
-    assert blob["ingredients"][0]["adequacy_tier"] is None
+    assert "adequacy_tier" not in blob["ingredients"][0]
     assert blob["ingredients"][0]["clinical_support_level"] is None
     assert blob["ingredients"][0]["display_badge"] == "no_data"
     assert product["probiotic_data"]["total_strain_count"] == 1

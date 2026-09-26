@@ -395,3 +395,223 @@ def test_print_json_mode_prints_result(tmp_path, capsys):
     assert "db_path" in payload
     assert "checksum_sha256" in payload
     assert payload["interaction_db_version"] == "v2026.04.11.000000"
+
+
+# --------------------------------------------------------------------------- #
+# Publication: the GitHub Release asset and the app's hydration pin
+# --------------------------------------------------------------------------- #
+
+
+PIPELINE_REPO = "seancheick/PharmaGuide_Pipeline"
+HEAD_SHA = "3f593737083bb3c0fcfd62822b078bdd914d82c4"
+
+
+def _staged_dist_and_pin(tmp_path: Path, *, pin_current: bool = False):
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    db = dist / ria.DB_FILENAME
+    db.write_bytes(b"SQLite format 3\x00staged interaction db")
+    sha = _sha256(db)
+    (dist / ria.MANIFEST_FILENAME).write_text(
+        json.dumps(
+            {
+                "checksum": f"sha256:{sha}",
+                "checksum_sha256": sha,
+                "interaction_db_version": "1.0.12",
+                "schema_version": "2.0.0",
+            }
+        )
+    )
+    (dist / ria.RELEASE_NOTES_FILENAME).write_text("# notes\n")
+
+    pin = {
+        "_comment": "hydration pin — kept verbatim",
+        "repo": PIPELINE_REPO,
+        "tag": "clinical-db-2026.09.12.1",
+        "filename": ria.DB_FILENAME,
+        "url": "https://example.invalid/old",
+        "sha256": sha if pin_current else "0" * 64,
+        "size_bytes": 1,
+        "min_size_bytes": 1048576,
+        "pipeline_commit": "old",
+        "interaction_db_version": "1.0.12" if pin_current else "1.0.11",
+        "schema_version": "2.0.0",
+        "clinical_content_hash": "sha256:kept",
+        "runtime_contract": 1,
+    }
+    flutter = tmp_path / "flutter"
+    pin_path = flutter / ria.FLUTTER_PIN_RELPATH
+    pin_path.parent.mkdir(parents=True)
+    pin_path.write_text(json.dumps(pin, indent=2) + "\n")
+    return dist, flutter, pin_path, sha
+
+
+class _FakeGh:
+    def __init__(self, releases: list[dict]):
+        self.releases = releases
+        self.calls: list[list[str]] = []
+
+    def __call__(self, args: list[str]) -> str:
+        self.calls.append(args)
+        if args[0] == "api":
+            return json.dumps(self.releases)
+        if args[:2] == ["release", "create"]:
+            return ""
+        raise AssertionError(f"unexpected gh call {args}")
+
+    def creates(self) -> list[list[str]]:
+        return [c for c in self.calls if c[:2] == ["release", "create"]]
+
+
+def _asset(sha: str) -> dict:
+    return {"name": ria.DB_FILENAME, "digest": f"sha256:{sha}"}
+
+
+def _publish(dist, flutter, gh, *, downloaded_sha, pushed=True):
+    return ria.publish_flutter_pin(
+        dist_dir=dist,
+        flutter_repo=flutter,
+        gh=gh,
+        download_sha256=lambda url: downloaded_sha,
+        pipeline_head=lambda: (HEAD_SHA, pushed),
+        today="2026.09.25",
+    )
+
+
+def test_publish_is_a_no_op_when_the_pin_names_the_staged_artifact(tmp_path):
+    dist, flutter, pin_path, _ = _staged_dist_and_pin(tmp_path, pin_current=True)
+    before = pin_path.read_bytes()
+
+    def forbidden(*_args, **_kwargs):
+        raise AssertionError("a current pin must not touch the network or git")
+
+    result = ria.publish_flutter_pin(
+        dist_dir=dist,
+        flutter_repo=flutter,
+        gh=forbidden,
+        download_sha256=forbidden,
+        pipeline_head=forbidden,
+        today="2026.09.25",
+    )
+
+    assert result["action"] == "current"
+    assert pin_path.read_bytes() == before
+
+
+def test_publish_creates_the_next_dated_release_and_moves_the_pin(tmp_path):
+    dist, flutter, pin_path, sha = _staged_dist_and_pin(tmp_path)
+    gh = _FakeGh(
+        [
+            {"tag_name": "clinical-db-2026.09.25.1", "assets": [_asset("f" * 64)]},
+            {"tag_name": "clinical-db-2026.07.24", "assets": [_asset("e" * 64)]},
+            {"tag_name": "v1.0.0", "assets": []},
+        ]
+    )
+
+    result = _publish(dist, flutter, gh, downloaded_sha=sha)
+
+    tag = "clinical-db-2026.09.25.2"
+    assert result == {"action": "published", "tag": tag}
+    (create,) = gh.creates()
+    assert create[2] == tag
+    assert create[create.index("--repo") + 1] == PIPELINE_REPO
+    assert create[create.index("--target") + 1] == HEAD_SHA
+    assert create[create.index("--notes-file") + 1] == str(dist / ria.RELEASE_NOTES_FILENAME)
+    assert create[-2:] == [str(dist / ria.DB_FILENAME), str(dist / ria.MANIFEST_FILENAME)]
+
+    pin = json.loads(pin_path.read_text())
+    assert pin["tag"] == tag
+    assert pin["url"] == (
+        f"https://github.com/{PIPELINE_REPO}/releases/download/{tag}/{ria.DB_FILENAME}"
+    )
+    assert pin["sha256"] == sha
+    assert pin["size_bytes"] == (dist / ria.DB_FILENAME).stat().st_size
+    assert pin["pipeline_commit"] == HEAD_SHA
+    assert pin["interaction_db_version"] == "1.0.12"
+    assert pin["schema_version"] == "2.0.0"
+    # Fields the release does not own stay exactly as the app wrote them.
+    assert pin["_comment"] == "hydration pin — kept verbatim"
+    assert pin["min_size_bytes"] == 1048576
+    assert pin["clinical_content_hash"] == "sha256:kept"
+    assert pin["runtime_contract"] == 1
+    assert list(pin)[:3] == ["_comment", "repo", "tag"]
+    assert "\\u2014" in pin_path.read_text()
+
+
+def test_publish_reuses_a_release_that_already_carries_the_asset(tmp_path):
+    dist, flutter, pin_path, sha = _staged_dist_and_pin(tmp_path)
+    release_commit = "315e59c0ffa84106de3e7b19e59efa485199f245"
+    gh = _FakeGh(
+        [
+            {
+                "tag_name": "clinical-db-2026.09.25.1",
+                "target_commitish": release_commit,
+                "assets": [_asset(sha)],
+            }
+        ]
+    )
+
+    result = _publish(dist, flutter, gh, downloaded_sha=sha)
+
+    assert result == {"action": "reused", "tag": "clinical-db-2026.09.25.1"}
+    assert gh.creates() == []
+    pin = json.loads(pin_path.read_text())
+    assert pin["tag"] == "clinical-db-2026.09.25.1"
+    # The pin records the commit the published asset is tagged at, not today's HEAD.
+    assert pin["pipeline_commit"] == release_commit
+
+
+def test_publish_never_pins_a_draft_release(tmp_path):
+    # A draft's assets are not publicly downloadable, so CI could not hydrate it.
+    dist, flutter, pin_path, sha = _staged_dist_and_pin(tmp_path)
+    gh = _FakeGh(
+        [{"tag_name": "clinical-db-2026.09.25.1", "draft": True, "assets": [_asset(sha)]}]
+    )
+
+    result = _publish(dist, flutter, gh, downloaded_sha=sha)
+
+    assert result == {"action": "published", "tag": "clinical-db-2026.09.25.2"}
+    assert json.loads(pin_path.read_text())["tag"] == "clinical-db-2026.09.25.2"
+
+def test_publish_omits_the_target_when_the_commit_is_not_on_the_remote(tmp_path):
+    dist, flutter, pin_path, sha = _staged_dist_and_pin(tmp_path)
+    gh = _FakeGh([])
+
+    _publish(dist, flutter, gh, downloaded_sha=sha, pushed=False)
+
+    (create,) = gh.creates()
+    assert create[2] == "clinical-db-2026.09.25.1"
+    assert "--target" not in create
+    assert json.loads(pin_path.read_text())["pipeline_commit"] == HEAD_SHA
+
+
+def test_publish_refuses_a_download_that_does_not_match(tmp_path):
+    dist, flutter, pin_path, _ = _staged_dist_and_pin(tmp_path)
+    before = pin_path.read_bytes()
+
+    with pytest.raises(ria.ReleaseValidationError, match="downloaded"):
+        _publish(dist, flutter, _FakeGh([]), downloaded_sha="a" * 64)
+
+    assert pin_path.read_bytes() == before
+
+
+def test_publish_refuses_a_staged_db_that_does_not_match_its_manifest(tmp_path):
+    dist, flutter, pin_path, _ = _staged_dist_and_pin(tmp_path)
+    (dist / ria.DB_FILENAME).write_bytes(b"SQLite format 3\x00tampered")
+    gh = _FakeGh([])
+    before = pin_path.read_bytes()
+
+    with pytest.raises(ria.ReleaseValidationError, match="manifest"):
+        _publish(dist, flutter, gh, downloaded_sha="a" * 64)
+
+    assert gh.calls == []
+    assert pin_path.read_bytes() == before
+
+
+def test_publish_flag_is_wired_into_the_cli(tmp_path, capsys):
+    dist, flutter, _, _ = _staged_dist_and_pin(tmp_path, pin_current=True)
+
+    rc = ria.main(["--output-dir", str(dist), "--publish-flutter-pin", str(flutter)])
+
+    assert rc == 0
+    assert "already names" in capsys.readouterr().out
