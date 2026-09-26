@@ -6525,6 +6525,7 @@ class EnhancedDSLDNormalizer:
     def _extract_nutritional_info(self, ingredient_rows: List[Dict]) -> Dict[str, Any]:
         """Extract nutritional information (Calories, Carbs, Sugar, etc.) from ingredients"""
         nutritional_info = {}
+        fiber_panel_pattern = r"(?:total\s+)?(?:(?:dietary|soluble|insoluble)\s+)?fib(?:er|re)"
 
         for row_index, ing in enumerate(ingredient_rows):
             if not isinstance(ing, dict):
@@ -6560,11 +6561,11 @@ class EnhancedDSLDNormalizer:
                 self._record_nutrition_fact(nutritional_info, "transFat", quantity, unit, "g")
             elif re.fullmatch(r"cholesterol", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "cholesterol", quantity, unit, "mg")
-            elif "protein" in name:
+            elif re.fullmatch(r"(?:total\s+)?protein", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "protein", quantity, unit, "g")
             elif re.fullmatch(r"sodium(?:\s*\([^)]*\))?", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "sodium", quantity, unit, "mg")
-            elif "fiber" in name or "dietary fiber" in name:
+            elif re.fullmatch(fiber_panel_pattern, nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "dietaryFiber", quantity, unit, "g")
                 if nutritional_info["dietaryFiber"].get("amount") == quantity and nutritional_info["dietaryFiber"].get("unit") == unit:
                     nutritional_info["dietaryFiber"].update({
@@ -6597,7 +6598,7 @@ class EnhancedDSLDNormalizer:
                     logger.debug(f"Extracted sugar from nested row: {nested_qty}{nested_unit or 'g'}")
 
                 # Extract fiber from nested row (only if not already found at top level)
-                if ("fiber" in nested_name or "dietary fiber" in nested_name) and "dietaryFiber" not in nutritional_info:
+                if re.fullmatch(fiber_panel_pattern, nested_name.strip()) and "dietaryFiber" not in nutritional_info:
                     nutritional_info["dietaryFiber"] = {
                         "amount": nested_qty,
                         "unit": nested_unit or "g",

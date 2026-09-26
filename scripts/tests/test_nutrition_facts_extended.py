@@ -306,3 +306,30 @@ class TestFormulationSugarFatLowSeverity:
             f"severity_level='low' so they receive a small B1 penalty (not "
             f"the full harmful-additive hammer). Got: {not_low}"
         )
+
+
+@pytest.mark.parametrize("source", ["Sunfiber", "Partially Hydrolyzed Guar Fiber"])
+def test_fiber_source_does_not_replace_panel_total(normalizer, source):
+    result = normalizer._extract_nutritional_info([
+        {"name": "Dietary Fiber", "quantity": 5, "unit": "g", "raw_source_path": "ingredientRows[0]"},
+        {"name": source, "quantity": 0, "unit": "NP", "raw_source_path": "ingredientRows[1]"},
+    ])
+    assert result["dietaryFiber"]["amount"] == 5
+    assert result["dietaryFiber"]["raw_source_path"] == "ingredientRows[0]"
+
+
+def test_protein_source_does_not_replace_panel_total(normalizer):
+    result = normalizer._extract_nutritional_info([
+        {"name": "Protein", "quantity": 24, "unit": "g"},
+        {"name": "Whey Protein Isolate", "quantity": 30, "unit": "g"},
+    ])
+    assert result["protein"]["amount"] == 24
+
+
+def test_real_sunfiber_label_retains_disclosed_parent_fiber(normalizer):
+    raw = json.loads((Path(__file__).parent / "fixtures" / "fiber_evidence_228873_raw.json").read_text())
+    cleaned = normalizer.normalize_product(raw)
+    info = cleaned["nutritionalInfo"]["dietaryFiber"]
+    assert info["amount"] == 5
+    assert info["unit"] in {"g", "Gram(s)"}
+    assert info["raw_source_path"] == "ingredientRows[1].nestedRows[0]"

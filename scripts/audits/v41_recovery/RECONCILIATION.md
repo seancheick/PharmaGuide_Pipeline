@@ -946,3 +946,24 @@ _derive_declared_nutrition_protein_evidence / is_nutrition_fact_declaration.
 Will NOT create: a generic Nutrition Facts exception or protein evidence alias.
 Focused source/clinical/Evidence batch: 164 passed (see protein_typed_projection_green.log).
 Flutter consumer checks: 122 passed, app HEAD 4c5ff2b7, no app changes.
+
+
+2026-09-26 nutrition capture correction: source ingredient names containing
+"fiber" or "protein" could overwrite the panel total. Bind capture to the panel
+name; retain exact fiber source paths. Real Sunfiber 228873 now retains 5 g
+from ingredientRows[1].nestedRows[0], replacing the incorrect 0 NP child value.
+It remains not_scored; this change does not introduce a fiber scoring policy.
+Four capture regressions failed before correction; combined focused source batch
+passed 262 tests in 34.48s (~/pg_quality/candd/fiber_source_green.log).
+Owner: scripts/enhanced_normalizer.py::_extract_nutritional_info — evidence:
+matrix/glossary searches, real raw 228873 and source-versus-panel regressions.
+Will NOT create: a new normalizer, evidence type, clinical alias or public field.
+
+97b8a0ed checkpoint: 16,408 passed, 137 skipped, 458.47s. Frozen 1,353-input
+replay completed unchanged with no errors; 154 totals, 86 statuses and 5 routes
+changed versus continuation_final_6bdffe33. No safety_gate or dose_safety reason
+changes. The 12-brand diagnostic was intentionally stopped after 7 completed
+brands when source defects surfaced; preserve fresh12_release_97b8a0ed.
+Not final acceptance. Two named-konjac products currently expose a separate
+PGX alias/identity-projection defect; their numeric 63.0 results are NOT accepted.
+A single curated alias removal and NF-only fiber policy decision await Sean.
