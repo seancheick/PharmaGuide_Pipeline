@@ -15714,7 +15714,6 @@
         "eria jarensis extract",
         "eria jarensis",
         "n-phenethyldimethylamine",
-        "2-(dimethylamino)-1-phenylethanone",
         "n-phenethyl dimethylamine citrate",
         "n-phenethyl dimethylamine hydrochloride",
         "n,n-dimethylphenethylamine citrate",
@@ -15769,13 +15768,18 @@
             "date": "2026-02-23",
             "change": "Normalized legacy partial record to schema-complete harmful entry",
             "by": "schema_integrity_p3"
+          },
+          {
+            "date": "2026-09-26",
+            "change": "UNII G8WX4UG544 -> I4C10U12C8; alias '2-(dimethylamino)-1-phenylethanone' removed. GSRS: G8WX4UG544 is 2-(Dimethylamino)-1-phenylethanone (alpha-dimethylaminoacetophenone; C10H13NO; CAS 3319-03-7; PubChem CID 137890), a beta-keto compound with no DSLD code. I4C10U12C8 is N,N-DIMETHYL-2-PHENETHYLAMINE (N-PHENETHYL DIMETHYLAMINE; C10H15N; CAS 1126-71-2; InChIKey TXOFSCODFRHERQ-UHFFFAOYSA-N = PubChem CID 25125; DSLD 'Dimethyl phenethylamine', 15 products), the compound this entry names. The removed alias named the ketone and is how the wrong UNII passed verify_unii. No DSLD label in the corpus carries either UNII or names either compound, so matching is unchanged.",
+            "by": "claude-audit"
           }
         ]
       },
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional.",
       "external_ids": {
-        "unii": "G8WX4UG544"
+        "unii": "I4C10U12C8"
       },
       "ban_context": "substance",
       "safety_warning": "A designer phenethylamine-class stimulant found in weight-loss and pre-workout products. Associated with cardiovascular strain; not a lawful supplement ingredient. Stop using and talk to your doctor.",

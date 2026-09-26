@@ -110,3 +110,18 @@ def test_add_5a_hydroxy_laxogenin_unii_is_not_plain_laxogenin(banned_recalled):
     assert entry["external_ids"]["unii"] == "844KE20WT5"
     assert entry["gsrs"]["substance_name"] == "5.ALPHA.-HYDROXY LAXOGENIN"
     assert "HT7W184YG4" in json.dumps(entry["review"]["change_log"])
+
+
+def test_add_n_phenethyl_dimethylamine_unii_is_the_amine_not_the_ketone(banned_recalled):
+    """ADD_N_PHENETHYL_DIMETHYLAMINE is N,N-dimethylphenethylamine, so it
+    carries GSRS I4C10U12C8 (N,N-DIMETHYL-2-PHENETHYLAMINE; N-PHENETHYL
+    DIMETHYLAMINE; C10H15N; CAS 1126-71-2; InChIKey
+    TXOFSCODFRHERQ-UHFFFAOYSA-N = PubChem CID 25125). G8WX4UG544 is
+    2-(dimethylamino)-1-phenylethanone (C10H13NO; CAS 3319-03-7; CID 137890),
+    a beta-keto compound. That name was also an alias here, which is how the
+    wrong UNII passed verify_unii. Verified in GSRS and PubChem 2026-09-26."""
+    entry = _find(banned_recalled, "ADD_N_PHENETHYL_DIMETHYLAMINE")
+    assert entry["external_ids"]["unii"] == "I4C10U12C8"
+    aliases = {a.lower() for a in entry["aliases"]}
+    assert "2-(dimethylamino)-1-phenylethanone" not in aliases
+    assert "G8WX4UG544" in json.dumps(entry["review"]["change_log"])
