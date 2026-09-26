@@ -597,6 +597,8 @@ def test_l_theanine_rules_say_what_the_blood_pressure_and_eeg_studies_say():
     assert (antihypertensives["severity"], sedatives["severity"]) == ("caution", "caution")
     assert "caffeine" in antihypertensives["mechanism"]
     assert "without inducing drowsiness" in sedatives["mechanism"]
+    # The action must not assert a driving impairment its sources contradict.
+    assert "driving" not in sedatives["action"]
     copy = json.dumps([antihypertensives, sedatives]).lower()
     for stale in ("5-8 mmhg", "cns depressant", "glycine", "has mild sedative effects",
                   "has sedative activity"):

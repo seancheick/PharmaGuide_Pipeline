@@ -166,7 +166,8 @@
       "2026-09-26: RULE_IQM_GREEN_TEA_HYPERTENSION hypertension and antihypertensives cited only a review (PMID 25312732) whose abstract does not describe the OATP mechanism the rules state. They now also cite the primary trial (PMID 24419562: green tea 700 ml/day for 14 days cut nadolol exposure ~85%, blunted its systolic BP effect, inhibited OATP1A2 uptake); the mechanism no longer attributes the effect to EGCG specifically. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS mechanism no longer attributes example drugs or a two-way effect to the ARICEPT label, which says only that cholinesterase inhibitors may interfere with anticholinergic medications; evidence_level established -> probable (class-level label statement, no huperzine-specific study). Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_WHITE_WILLOW_BARK_BLEEDING mechanisms no longer call the aspirin comparison in PMID 11345689 randomised: only willow vs placebo was randomised; the 100 mg aspirin group was a separate cohort. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER ttc and pregnancy_lactation now keep their source's hedge (PMID 16985705: 'in vitro some studies suggest' 5-alpha-reductase inhibition) instead of stating it as settled. Found by fresh-context review. Severities, categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER ttc and pregnancy_lactation now keep their source's hedge (PMID 16985705: 'in vitro some studies suggest' 5-alpha-reductase inhibition) instead of stating it as settled. Found by fresh-context review. Severities, categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES drug:sedatives action no longer tells people to avoid high doses when driving; its sources report relaxation without drowsiness (PMID 18296328) and no anxiolytic effect over placebo (PMID 35378276). Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -20684,7 +20685,7 @@
           "severity": "caution",
           "evidence_level": "theoretical",
           "mechanism": "At a dietary dose (50 mg), L-theanine increased EEG alpha activity, which the authors describe as relaxing the mind without inducing drowsiness. In a network meta-analysis of herbal treatments for anxiety, L-theanine did not outperform placebo. It has not been studied with benzodiazepines, z-drugs or other sedatives, so an additive sedative effect is theoretical.",
-          "action": "Advise patients on sedative-hypnotic medications of potential additive sedation. Avoid high doses of L-theanine if operating machinery or driving.",
+          "action": "Mention L-theanine to your prescriber if you take sedative-hypnotic medication; an additive sedative effect has not been shown.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18296328/",
             "https://pubmed.ncbi.nlm.nih.gov/35378276/"
