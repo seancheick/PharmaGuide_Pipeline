@@ -152,3 +152,23 @@ def test_the_integrity_check_rejects_an_unknown_form_scope_match(mode, flagged):
     findings: list = []
     check_ingredient_interaction_rules(findings, {"interaction_rules": [dict(rule, form_scope_match=mode)]}, "rules")
     assert any(f.path.endswith(".form_scope_match") for f in findings) is flagged
+
+
+def test_a_bare_species_name_never_confirms_a_plant_part(enricher):
+    """A twin part record forces its part onto the row. "Urtica dioica" or
+    "Taraxacum officinale" names no part, so it must not reach a part record:
+    a nettle-root or dandelion-root identity would silence the leaf claims."""
+    from identity.interaction import BOTANICAL_INTERACTION_TWIN_FORM, interaction_twin_form
+
+    records = {
+        row["id"]: row
+        for row in json.loads((SCRIPTS / "data" / "botanical_ingredients.json").read_text())["botanical_ingredients"]
+    }
+    for record_id, form in BOTANICAL_INTERACTION_TWIN_FORM.items():
+        if record_id in records and ("root" in form or "leaf" in form):
+            species = records[record_id]["latin_name"].casefold()
+            assert species not in {alias.casefold() for alias in records[record_id]["aliases"]}, record_id
+    for species in ("Urtica dioica", "Taraxacum officinale"):
+        found = enricher._is_recognized_non_scorable(species, species) or {}
+        form = interaction_twin_form(found.get("recognition_source"), found.get("matched_entry_id"))
+        assert form is None or not ("root" in form or "leaf" in form), (species, found.get("matched_entry_id"))
