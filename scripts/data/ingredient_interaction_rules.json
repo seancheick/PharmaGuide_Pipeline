@@ -182,7 +182,8 @@
       "2026-09-26: RULE_IQM_NAC_BLEEDING anticoagulants threshold note cited PMID 22467323, a CKD albuminuria study (ghost); it now cites the in vitro NAC platelet study (PMID 21600014) and a 600 mg/day human coagulation study with no significant change (PMID 39881835), and calls >1200 mg/day the authored threshold. The 600 mg/day floors on bleeding_disorders and anticoagulants are removed (Sean, D8: remove a floor its source does not establish): PMID 21600014 is in vitro and states no oral dose. Both sub-rules now fire on presence; severities and thresholds unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_RESVERATROL_BLEEDING anticoagulants threshold note described a mouse study (0.5% dietary resveratrol potentiated warfarin; 10x lower had no effect) but linked PMID 27040449, an ANGPTL3 lipid-metabolism study (ghost). It now links that mouse study, Chiba 2016 (PMID 26947597). Threshold and severities unchanged.",
       "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER 320 mg/day floors removed on bleeding_disorders, surgery_scheduled, anticoagulants and antiplatelets (Sean, D8: remove a floor its source does not establish). They cited PMID 16985705, a BPH efficacy review with no bleeding content. No human source gives a dose for saw palmetto bleeding: the haemorrhage and coagulopathy case reports state none (PMIDs 11489067, 20120986), platelet function was unchanged at the recommended dose (PMID 18090773), and in a TURP trial 320 mg/day lowered perioperative bleeding (PMID 15195032). These sub-rules now fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
-      "2026-09-26: RULE_INGREDIENT_BOSWELLIA 100 mg/day floors removed on bleeding_disorders, anticoagulants and antiplatelets (Sean, D8: remove a floor its source does not establish). They cited PMID 18667054, a 5-Loxin osteoarthritis efficacy trial. No controlled human study gives a dose for a boswellia platelet or bleeding effect. The anticoagulants mechanism said no warfarin case reports exist; Italian spontaneous reports (PMID 21274401, Table 2) describe raised INR in two warfarin users on B. serrata dry extract 1200 and 1500 mg/day (Naranjo probable), now stated and cited. Case reports cannot set a floor. These sub-rules now fire on presence; severities and evidence levels unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
+      "2026-09-26: RULE_INGREDIENT_BOSWELLIA 100 mg/day floors removed on bleeding_disorders, anticoagulants and antiplatelets (Sean, D8: remove a floor its source does not establish). They cited PMID 18667054, a 5-Loxin osteoarthritis efficacy trial. No controlled human study gives a dose for a boswellia platelet or bleeding effect. The anticoagulants mechanism said no warfarin case reports exist; Italian spontaneous reports (PMID 21274401, Table 2) describe raised INR in two warfarin users on B. serrata dry extract 1200 and 1500 mg/day (Naranjo probable), now stated and cited. Case reports cannot set a floor. These sub-rules now fire on presence; severities and evidence levels unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_IQM_FEVERFEW_PREGNANCY anticoagulants 100 mg/day floor removed (Sean, D8: remove a floor its source does not establish). It cited PMID 22096324, a general feverfew review whose abstract has no platelet content or dose. No human study gives an oral dose for a feverfew platelet effect; the only dose tied to bleeding is one case at 800 mg three times a day (PMID 34434419, Naranjo probable), which cannot set a floor. The sub-rule now fires on presence; severity unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interaction_rules": [
@@ -3145,16 +3146,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/22096324/",
-            "rationale": "Feverfew inhibits platelet activity via parthenolide at standard extract doses (~100 mg/day, 0.2-0.4% parthenolide; PMID 22096324); below this sub-therapeutic."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],

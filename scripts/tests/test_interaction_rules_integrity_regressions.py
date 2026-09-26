@@ -1156,3 +1156,12 @@ def test_boswellia_bleeding_rules_carry_no_floor_and_state_the_warfarin_reports(
     anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
     assert "No clinical case reports" not in anticoagulants["mechanism"]
     assert _pmid("21274401") in anticoagulants["sources"]
+
+
+def test_feverfew_anticoagulant_rule_carries_no_floor_from_a_general_review():
+    """The 100 mg floor cited a general feverfew review (PMID 22096324) that
+    gives no platelet dose. The only dose tied to bleeding is one case at
+    800 mg three times a day (PMID 34434419), which cannot set a floor."""
+    sub = _sub_rule(_rule("RULE_IQM_FEVERFEW_PREGNANCY"), "drug_class_id", "anticoagulants")
+    assert "min_effective_dose" not in sub
+    assert sub["materiality"] == "presence"

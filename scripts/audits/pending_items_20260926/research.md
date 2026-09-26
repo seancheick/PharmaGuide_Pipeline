@@ -129,3 +129,12 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   multi-product case rated "Possible [4]". This contradicts the old "No clinical case reports" sentence.
 - Case reports show the event can occur at those doses; they cannot show safety below them, so no floor.
   Three floors removed; presence. evidence_level stays theoretical ("limited direct human evidence").
+
+## RULE_IQM_FEVERFEW_PREGNANCY: anticoagulant floor (D8)
+- Floor source PMID 22096324 ("Feverfew (Tanacetum parthenium L.): A systematic review", Pharmacogn Rev 2011):
+  abstract has no platelet content and no dose (efetch 2026-09-26).
+- Human platelet data: Biggs 1982 (PMID 6125851, Lancet letter, no abstract) as summarised in that review:
+  users' platelets aggregated normally to ADP and thrombin, less to serotonin; no dose stated.
+- PMID 34434419 (J Med Cases 2021): one woman on "800 mg capsules of feverfew three times per day" with vaginal
+  bleeding and altered coagulation tests, Naranjo probable. A single case cannot set a floor.
+- Floor removed; presence.
