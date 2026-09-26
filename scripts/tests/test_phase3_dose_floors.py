@@ -47,9 +47,11 @@ EXPECTED = {
     "white_mulberry": (125, "mg", {"diabetes"}),
     "psyllium": (3000, "mg", {"hypoglycemics_high_risk"}),
     # bleeding batch
-    "feverfew": (100, "mg", {"bleeding_disorders", "anticoagulants"}),
+    # feverfew: 100 mg floor removed 2026-09-26 (Sean, D8); no human study gives an
+    # oral dose for a feverfew platelet effect.
     "quercetin": (150, "mg", {"anticoagulants"}),
-    "saw_palmetto": (320, "mg", {"anticoagulants"}),
+    # saw_palmetto: 320 mg floor removed 2026-09-26 (Sean, D8); no source gives a
+    # dose for saw palmetto bleeding, so its bleeding sub-rules fire on presence.
     "glucosamine": (1500, "mg", {"anticoagulants"}),
     "white_willow_bark": (120, "mg", {"bleeding_disorders"}),
     # BP batch

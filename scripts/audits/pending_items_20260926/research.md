@@ -104,3 +104,125 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   (>1 g/day)" subgroups. Sets no 2000 mg threshold. No source gives a black seed warfarin dose.
 - Corpus (2026-09-22 enriched): chondroitin rule on 130 products, floor suppressed it on 43; black seed on 15, floor
   suppressed it on 14. These warnings now show to profile-matched users; severities unchanged; no verdict inputs.
+
+## RULE_INGREDIENT_GINSENG: anticoagulant dose-threshold citation
+- PMID 22137021 (efetch 2026-09-26): "Intensity-modulated radiation therapy with concurrent
+  chemotherapy as preoperative treatment for localized gastric adenocarcinoma." No ginseng, no
+  warfarin: a ghost reference in `dose_thresholds[anticoagulants].note`.
+- PMID 15238367 (Yuan CS et al. Ann Intern Med 2004;141(1):23-7, DOI 10.7326/0003-4819-141-1-200407060-00011,
+  efetch 2026-09-26): randomized, double-blind, placebo-controlled; 20 healthy volunteers; American
+  ginseng from week 2; "The peak INR statistically significantly decreased after 2 weeks of ginseng
+  administration"; INR AUC, peak plasma warfarin and warfarin AUC also reduced. MeSH: Panax,
+  Warfarin, International Normalized Ratio.
+- Applicability: IQM `ginseng` includes the form "american ginseng (panax quinquefolius)". Panax
+  ginseng studies found no warfarin effect (Jiang X et al. Br J Clin Pharmacol 2004;57(5):592-9,
+  healthy subjects; Lee YH et al. Int J Cardiol 2010;145(2):275-6, Korean red ginseng after valve
+  replacement), as tabulated in Choi S et al. PLoS One 2017 (PMC5552262). The rule's mechanism
+  already calls the evidence mixed.
+- Species limit, from the article's online correspondence (acpjournals.org page opened by Sean
+  2026-09-26): Plotnikoff et al. (21 Jul 2004) note P. quinquefolius data are not applicable to other
+  Panax species; Yuan's reply (8 Sep 2004): "We did not extrapolate our data on American ginseng to
+  other species" and "Whether Asian ginseng interacts with warfarin remains to be tested." The note
+  names American ginseng for that reason; the threshold still gates every IQM ginseng form.
+- Dose: the abstract gives none. The publisher page is behind a bot check. A secondary review (EXCLI J
+  2014, PMC4464477) reports 0.5 g capsules "at the high end of the recommended dose range", not a daily
+  total. No source found supports ">1000 mg"; it is the authored threshold from e0978c2e (2026-04-27
+  dose-gating pass). Value and severities unchanged.
+
+## RULE_IQM_NAC_BLEEDING: threshold citation and floors
+- PMID 22467323 (efetch 2026-09-26): "Albuminuria, proteinuria, and urinary albumin to protein ratio in
+  chronic kidney disease." No NAC: a ghost in `dose_thresholds[anticoagulants].note`.
+- PMID 21600014 (efetch 2026-09-26): "Therapeutic potential of N-acetylcysteine as an antiplatelet agent in
+  patients with type-2 diabetes." Blood from 13 patients incubated with NAC 10-100 micromolar "at
+  concentrations attainable with tolerable oral dosing"; "NAC inhibited thrombin- and ADP-induced platelet
+  aggregation in vitro". No oral mg dose stated, so it cannot establish the 600 mg floor or "~100-1000 mg oral".
+- PMID 39881835 (Oktar S et al. Sovrem Tekhnologii Med 2024, doi 10.17691/stm2024.16.4.06, efetch
+  2026-09-26): patients on NAC 600 mg/day for 7-14 days; D-dimer fell and factor VII rose "but these changes
+  were not significant (p=0.069 and p=0.062)"; "Other coagulation and hemogram values did not change".
+  Platelet aggregation not measured.
+- No source found for a 1200 mg cut-off; it stays the authored threshold (escalation only).
+- Decision applied: Sean, D8 (2026-09-26), remove a floor its source does not establish. Floors removed on
+  bleeding_disorders and anticoagulants; both now presence, severity monitor unchanged.
+
+## RULE_IQM_RESVERATROL_BLEEDING: threshold citation
+- PMID 27040449 (efetch 2026-09-26): "Effects of angiopoietin-like protein 3 deficiency on postprandial lipid
+  and lipoprotein metabolism." No resveratrol: a ghost in `dose_thresholds[anticoagulants].note`.
+- PMID 26947597 (Chiba T et al. J Atheroscler Thromb 2016, doi 10.5551/jat.31765, efetch 2026-09-26): mice fed
+  0.005-0.5% trans-resveratrol; "0.5% trans-resveratrol enhanced the anticoagulant activity of warfarin" and
+  "The 0.05% trans-resveratrol did not interact with warfarin". This is the study the note already described.
+- Also on topic, not added: PMID 32985569 (Huang TY et al. Sci Rep 2020, rats, resveratrol 100 mg/kg raised
+  S-warfarin AUC and INR). The note's "animal-only" stays true.
+
+## RULE_IQM_SAW_PALMETTO_LIVER: bleeding floors (D8)
+- Floor source PMID 16985705 ("Saw Palmetto Berry as a Treatment for BPH", Rev Urol 2001): BPH efficacy, no
+  bleeding content.
+- PMID 11489067 (J Intern Med 2001): intraoperative haemorrhage case, bleeding time "normalized few days after he
+  stopped the herb"; no dose in the abstract. PMID 20120986: coagulopathy case, no dose.
+- PMID 18090773 (Plast Reconstr Surg 2007): 10 volunteers, saw palmetto "at the manufacturer's recommended dose
+  for 2 weeks"; "In vivo platelet function was not affected" (PFA-100). mg not stated.
+- PMID 15195032 (Minerva Urol Nefrol 2004): 320 mg/day Permixon for at least 8 weeks before TURP; perioperative
+  bleeding "significantly lower than in the control one (respectively 124 vs 287 ml)".
+- No human source documents a dose for a bleeding or platelet effect. Four floors removed; presence.
+
+## RULE_INGREDIENT_BOSWELLIA: bleeding floors (D8) and a false mechanism sentence
+- Floor source PMID 18667054 (Arthritis Res Ther 2008): 5-Loxin 100 or 250 mg/day for knee osteoarthritis;
+  efficacy only, no platelet or bleeding outcome.
+- Mechanism sources (17945191, 1602379, 8510458) are in vitro; no human platelet or bleeding study states a dose.
+- PMID 21274401 (Italian surveillance of natural health products, Evid Based Complement Alternat Med 2011;
+  full text PMC3025393, Table 2 "Reports of INR increase", read 2026-09-26): F 73, "Boswellia serrata dry
+  extract (D E) 95%, 1500 mg/day; osteoarthritis", warfarin, INR increase, Naranjo "Probable [6]", recovered
+  after withdrawal; F 64, "Boswellia serrata DE 95%, 1200 mg/day", warfarin, same outcome; a third
+  multi-product case rated "Possible [4]". This contradicts the old "No clinical case reports" sentence.
+- Case reports show the event can occur at those doses; they cannot show safety below them, so no floor.
+  Three floors removed; presence. evidence_level stays theoretical ("limited direct human evidence").
+
+## RULE_IQM_FEVERFEW_PREGNANCY: anticoagulant floor (D8)
+- Floor source PMID 22096324 ("Feverfew (Tanacetum parthenium L.): A systematic review", Pharmacogn Rev 2011):
+  abstract has no platelet content and no dose (efetch 2026-09-26).
+- Human platelet data: Biggs 1982 (PMID 6125851, Lancet letter, no abstract) as summarised in that review:
+  users' platelets aggregated normally to ADP and thrombin, less to serotonin; no dose stated.
+- PMID 34434419 (J Med Cases 2021): one woman on "800 mg capsules of feverfew three times per day" with vaginal
+  bleeding and altered coagulation tests, Naranjo probable. A single case cannot set a floor.
+- Floor removed; presence.
+
+## RULE_INGREDIENT_GINSENG: floors (D8)
+- Old floor source PMID 35509826 (Panax ginseng metabolic meta-analysis): doses "ranged from 200 mg to 8 g"; no
+  dose-response reported. Its rationale ("kept for hypertensives") was copied onto glucose, surgery and warfarin
+  sub-rules.
+- Glucose: PMID 8721940 (Sotaniemi EA et al. Diabetes Care 1995, doi 10.2337/diacare.18.10.1373): 36 newly
+  diagnosed NIDDM patients, "ginseng (100 or 200 mg) or placebo" for 8 weeks; ginseng "reduced fasting blood
+  glucose"; "The 200-mg dose of ginseng improved glycated hemoglobin". Dose split from the full text (publisher
+  page behind a bot check) as reported by Derosa G et al. Phytother Res 2022 (PMID 35912631, PMC9804244): "the
+  dose of 100 mg significantly decreased FPG levels (-10.81 mg/dl, -7.20%, p < .05) while that of 200 mg reduced
+  HbA1c". Ginseng type not specified by the authors. Also: PMID 15982990 (Reay 2005), single 200 mg and 400 mg
+  doses of Panax ginseng G115 lowered blood glucose in 30 healthy adults. Glucose floors set to 100 mg/day.
+- Bleeding/warfarin: PMID 15238367 (American ginseng lowered INR; no dose in abstract); PMID 19913311 (Lee 2010,
+  Korean red ginseng 1 g with warfarin after valve replacement, no significant INR change); PMID 23596810 (Kang
+  2013, 1500 mg Korean red ginseng extract for 8 weeks, "Blood analyses for coagulation ... revealed no
+  significant changes"); PMID 18090773 (Asian ginseng at the recommended dose, platelet function unchanged).
+  No human source gives a dose for a bleeding effect: surgery and anticoagulants floors removed; presence.
+
+## RULE_IQM_STINGING_NETTLE_DIABETES: glucose floors
+- Old floor: 1000 mg/day, confidence_basis weak_signal_conservative, cited to PMID 35800714 (a general nettle
+  review, no dose). The number had no source.
+- PMID 24273930 (Kianbakht S et al. Clin Lab 2013, doi 10.7754/clin.lab.2012.121019, efetch 2026-09-26): RCT,
+  46 vs 46 patients with advanced T2DM needing insulin, "nettle leaf extract (one 500 mg capsule every 8 hours
+  for 3 months) combined with the conventional oral anti-hyperglycemic drugs"; fasting glucose, 2-h glucose and
+  HbA1c fell significantly (p < 0.001, 0.009, 0.006).
+- Other nettle trials: meta-analyses (PMIDs 31802554, 34587883) give no doses in their abstracts; PMID 28078249
+  used a hydro-alcoholic extract in ml that cannot be converted to mg. 1500 mg/day is the lowest documented.
+- Floors set to 1500 mg/day (extract). The label amount is compared as reported, so dried-leaf products are held
+  to the extract dose.
+
+## Licorice BP floors (RULE_BOTANICAL_LICORICE_ROOT, RULE_IQM_LICORICE_HYPERTENSION)
+- Old floor source PMID 393503 (Takeda R et al. Endocrinol Jpn 1979): two mildly hypertensive women "administered
+  273 to 546 mg glycyrrhizin daily"; no mention of 100 mg.
+- PMID 38246526 (af Geijerstam P et al. Am J Clin Nutr 2024, efetch 2026-09-26): 28 healthy volunteers, nonblinded
+  2x2 crossover, "a daily licorice intake containing 100 mg GA" for 2 weeks; systolic home BP "increased [mean
+  difference: 3.1 mm Hg (95% CI: 0.8, 5.4 mm Hg)" vs -0.3 mm Hg on control, P = 0.018; renin -30%, aldosterone -45%.
+- Conflicting null, smaller: Bernardi 1994 (PMID 8072387, efetch 2026-09-26), 108/217/380/814 mg glycyrrhizin in
+  groups of 6 for 4 weeks, "No significant effects occurred in groups 1 and 2". Regulatory 100 mg/day figures (SCF 2003, JECFA 2005) are tolerated-intake
+  limits, not effect doses.
+- The enricher compares a floor with the ingredient row's label amount (`_evaluate_min_effective_dose`), not with
+  glycyrrhizic acid content; a licorice row is at least its GA content, so the 100 mg floor never suppresses a
+  product supplying 100 mg GA. Value unchanged in both rules; source and rationale replaced.

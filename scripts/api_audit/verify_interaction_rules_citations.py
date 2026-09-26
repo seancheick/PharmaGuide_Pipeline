@@ -6,6 +6,11 @@ this file: its PMIDs live nested under interaction_rules[].condition_rules[] /
 drug_class_rules[] / pregnancy_lactation.sources[], not a flat array. That gap
 left ~200 clinical PMIDs unchecked against the live PubMed API.
 
+Free text cites too: each sub-rule's min_effective_dose (source, rationale) is
+checked as "dose_floor:<target>" and each dose_thresholds[].note as
+"threshold:<target>". Reading only sources[] passed PMID 22137021, a gastric
+cancer radiotherapy paper cited in the ginseng x warfarin threshold note.
+
 This walks the nested structure, fetches each cited PMID live (reusing
 verify_all_citations_content.fetch_articles, whole abstracts), and checks it
 against every sub-rule that cites it:
@@ -71,6 +76,8 @@ DATA = REPO / "scripts" / "data"
 RULES = DATA / "ingredient_interaction_rules.json"
 REVIEW_PATH = DATA / "interaction_rules_ghost_review.json"
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
+# free text also cites as "PMID 12345"
+TEXT_PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID:?\s*(\d+)")
 BOOK_RE = re.compile(r"ncbi\.nlm\.nih\.gov/books/(NBK\d+)")
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 
@@ -283,11 +290,21 @@ def fetch_book_chapters(nbk_ids: list[str]) -> dict[str, dict]:
     return chapters
 
 
+def _text_ids(text: str) -> list[str]:
+    """Every PubMed and Bookshelf id cited in free text, in order, once each."""
+    ids = [a or b for a, b in TEXT_PMID_RE.findall(text)] + BOOK_RE.findall(text)
+    return list(dict.fromkeys(ids))
+
+
 def collect_claims(rules: list[dict], entries: dict) -> dict[str, list[tuple]]:
     """PMID or NBK id -> [(rule_id, sub_rule, subject phrases)]"""
     claims: dict[str, list[tuple]] = {}
     for rule in rules:
         phrases = subject_phrases(rule.get("subject_ref") or {}, entries)
+
+        def cite(source_id: str, label: str) -> None:
+            claims.setdefault(source_id, []).append((rule.get("id", "?"), label, phrases))
+
         sub_rules = [(f"condition:{c.get('condition_id')}", c) for c in rule.get("condition_rules") or []]
         sub_rules += [(f"drug:{d.get('drug_class_id')}", d) for d in rule.get("drug_class_rules") or []]
         if isinstance(rule.get("pregnancy_lactation"), dict):
@@ -296,7 +313,14 @@ def collect_claims(rules: list[dict], entries: dict) -> dict[str, list[tuple]]:
             for source in sub_rule.get("sources") or []:
                 match = PMID_RE.search(str(source)) or BOOK_RE.search(str(source))
                 if match:
-                    claims.setdefault(match.group(1), []).append((rule.get("id", "?"), label, phrases))
+                    cite(match.group(1), label)
+            floor = sub_rule.get("min_effective_dose")
+            if isinstance(floor, dict):
+                for source_id in _text_ids(f"{floor.get('source') or ''} {floor.get('rationale') or ''}"):
+                    cite(source_id, f"dose_floor:{label.partition(':')[2] or label}")
+        for threshold in rule.get("dose_thresholds") or []:
+            for source_id in _text_ids(str(threshold.get("note") or "")):
+                cite(source_id, f"threshold:{threshold.get('target_id')}")
     return claims
 
 

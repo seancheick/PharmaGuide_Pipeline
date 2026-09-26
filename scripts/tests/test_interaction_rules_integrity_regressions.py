@@ -9,6 +9,7 @@ the data file unnoticed.
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from pathlib import Path
 
@@ -1033,6 +1034,18 @@ def _cited(rule_id: str, sub_rule: str) -> list[str]:
     if sub_rule == "pregnancy_lactation":
         return rule["pregnancy_lactation"]["sources"]
     kind, _, key = sub_rule.partition(":")
+    if kind in ("dose_floor", "threshold"):
+        # free-text claims the verifier reads (see collect_claims)
+        if kind == "threshold":
+            text = " ".join(t.get("note") or "" for t in rule.get("dose_thresholds") or []
+                            if t.get("target_id") == key)
+        else:
+            sub = next(x for x in (rule.get("condition_rules") or []) + (rule.get("drug_class_rules") or [])
+                       if key in (x.get("condition_id"), x.get("drug_class_id")))
+            floor = sub.get("min_effective_dose") or {}
+            text = f"{floor.get('source') or ''} {floor.get('rationale') or ''}"
+        ids = re.findall(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID:?\s*(\d+)", text)
+        return [_pmid(a or b) for a, b in ids]
     if kind == "condition":
         return _sub_rule(rule, "condition_id", key)["sources"]
     return _sub_rule(rule, "drug_class_id", key)["sources"]
@@ -1133,3 +1146,140 @@ def test_evening_primrose_dose_floor_rationale_matches_its_rabbit_source():
         assert "300 mg GLA" not in floor["rationale"], floor
         assert "bleeding time" not in floor["rationale"], floor
         assert "rabbit" in floor["rationale"], floor
+
+
+def test_ginseng_warfarin_threshold_cites_the_warfarin_trial_not_a_gastric_cancer_paper():
+    """PMID 22137021 is a preoperative IMRT study in gastric adenocarcinoma: no
+    ginseng, no warfarin. Yuan 2004 (PMID 15238367), an RCT of American ginseng
+    and warfarin, replaces it. The trial does not test a 1000 mg cut-off, so the
+    note must call that figure the authored threshold (receipt:
+    scripts/audits/pending_items_20260926/research.md)."""
+    assert "22137021" not in json.dumps(_rule("RULE_INGREDIENT_GINSENG"))
+    threshold = next(t for t in _rule("RULE_INGREDIENT_GINSENG")["dose_thresholds"]
+                     if t.get("target_id") == "anticoagulants")
+    assert threshold["value"] == 1000 and threshold["unit"] == "mg"
+    assert _pmid("15238367") in threshold["note"]
+    assert "authored" in threshold["note"]
+    assert "high-dose ginseng may antagonize" not in threshold["note"]
+
+
+def test_nac_bleeding_rule_cites_nac_platelet_evidence_and_invents_no_floor():
+    """PMID 22467323 is a CKD albuminuria study, not NAC. The NAC platelet source
+    (PMID 21600014) is in vitro at 10-100 micromolar and states no oral dose, so
+    it cannot carry a 600 mg floor (Sean, D8: remove a floor its source does not
+    establish). Patients on 600 mg/day showed no significant coagulation change
+    (PMID 39881835). Receipt: scripts/audits/pending_items_20260926/research.md."""
+    rule = _rule("RULE_IQM_NAC_BLEEDING")
+    assert "22467323" not in json.dumps(rule)
+    for key, target in (("condition_id", "bleeding_disorders"), ("drug_class_id", "anticoagulants")):
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub, target
+        assert sub["materiality"] == "presence", target
+    note = next(t for t in rule["dose_thresholds"] if t.get("target_id") == "anticoagulants")["note"]
+    assert _pmid("21600014") in note and _pmid("39881835") in note
+    assert "authored" in note
+
+
+def test_resveratrol_warfarin_note_cites_the_mouse_study_it_describes():
+    """The note describes Chiba 2016 (PMID 26947597): 0.5% dietary
+    trans-resveratrol enhanced warfarin in mice, 0.05% did not. PMID 27040449
+    (ANGPTL3 deficiency and postprandial lipids) was a ghost."""
+    rule = _rule("RULE_IQM_RESVERATROL_BLEEDING")
+    assert "27040449" not in json.dumps(rule)
+    note = next(t for t in rule["dose_thresholds"] if t.get("target_id") == "anticoagulants")["note"]
+    assert _pmid("26947597") in note and "0.5%" in note
+
+
+def test_saw_palmetto_bleeding_rules_carry_no_floor_borrowed_from_bph():
+    """The 320 mg floors cited a BPH efficacy review (PMID 16985705). No human
+    source gives a dose for saw palmetto bleeding: the bleeding cases state none
+    (PMID 11489067), and at 320 mg/day perioperative bleeding fell (PMID
+    15195032). Sean, D8: remove a floor its source does not establish."""
+    rule = _rule("RULE_IQM_SAW_PALMETTO_LIVER")
+    for key, target in (("condition_id", "bleeding_disorders"), ("condition_id", "surgery_scheduled"),
+                        ("drug_class_id", "anticoagulants"), ("drug_class_id", "antiplatelets")):
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub, target
+        assert sub["materiality"] == "presence", target
+
+
+def test_boswellia_bleeding_rules_carry_no_floor_and_state_the_warfarin_reports():
+    """The 100 mg floors cited a 5-Loxin osteoarthritis trial (PMID 18667054).
+    No controlled human study gives a dose for a platelet or bleeding effect.
+    Italian spontaneous reports (PMID 21274401, Table 2) describe raised INR in
+    two warfarin users on B. serrata extract 1200 and 1500 mg/day, so the old
+    "No clinical case reports" sentence was false."""
+    rule = _rule("RULE_INGREDIENT_BOSWELLIA")
+    for key, target in (("condition_id", "bleeding_disorders"), ("drug_class_id", "anticoagulants"),
+                        ("drug_class_id", "antiplatelets")):
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub, target
+        assert sub["materiality"] == "presence", target
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+    assert "No clinical case reports" not in anticoagulants["mechanism"]
+    assert _pmid("21274401") in anticoagulants["sources"]
+
+
+def test_feverfew_anticoagulant_rule_carries_no_floor_from_a_general_review():
+    """The 100 mg floor cited a general feverfew review (PMID 22096324) that
+    gives no platelet dose. The only dose tied to bleeding is one case at
+    800 mg three times a day (PMID 34434419), which cannot set a floor."""
+    sub = _sub_rule(_rule("RULE_IQM_FEVERFEW_PREGNANCY"), "drug_class_id", "anticoagulants")
+    assert "min_effective_dose" not in sub
+    assert sub["materiality"] == "presence"
+
+
+def test_ginseng_floors_match_the_effect_their_source_measured():
+    """PMID 35509826 (a metabolic meta-analysis, no dose-response) floored every
+    sub-rule at 200 mg with a blood-pressure rationale. Glucose: Sotaniemi 1995
+    (PMID 8721940) found 100 mg/day lowered fasting glucose and 200 mg/day HbA1c,
+    so the glucose floors are 100 mg. Bleeding/warfarin: no human source gives a
+    dose (Korean red ginseng 1 g and 1.5 g were null), so those fire on presence."""
+    rule = _rule("RULE_INGREDIENT_GINSENG")
+    assert "35509826" not in json.dumps(rule)
+    for key, target in (("condition_id", "surgery_scheduled"), ("drug_class_id", "anticoagulants")):
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub and sub["materiality"] == "presence", target
+    for key, target in (("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
+                        ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
+        floor = _sub_rule(rule, key, target)["min_effective_dose"]
+        assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
+        assert floor["source"] == _pmid("8721940"), target
+        assert "hypertensive" not in floor["rationale"], target
+
+
+def test_stinging_nettle_glucose_floor_is_the_trial_dose_not_a_conservative_guess():
+    """The 1000 mg floor was labelled weak_signal_conservative and cited a
+    general review (PMID 35800714). The documented dose is Kianbakht 2013 (PMID
+    24273930): leaf extract 500 mg every 8 hours (1500 mg/day) lowered glucose
+    and HbA1c on top of oral antidiabetics."""
+    rule = _rule("RULE_IQM_STINGING_NETTLE_DIABETES")
+    for key, target in (("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
+                        ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
+        floor = _sub_rule(rule, key, target)["min_effective_dose"]
+        assert (floor["value"], floor["unit"], floor["basis"]) == (1500, "mg", "per_day"), target
+        assert floor["source"] == _pmid("24273930"), target
+        assert floor["confidence_basis"] == "documented_effective_dose", target
+
+
+LICORICE_FLOOR_SOURCE = _pmid("38246526")
+
+
+def test_licorice_root_bp_floor_cites_the_100_mg_glycyrrhizic_acid_trial():
+    """PMID 393503 is two women on 273-546 mg glycyrrhizin; it never mentions
+    100 mg. af Geijerstam 2024 (PMID 38246526) randomized healthy volunteers to
+    licorice with 100 mg glycyrrhizic acid/day: home systolic BP rose 3.1 mmHg."""
+    floor = _sub_rule(_rule("RULE_BOTANICAL_LICORICE_ROOT"), "drug_class_id", "antihypertensives")["min_effective_dose"]
+    assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day")
+    assert floor["source"] == LICORICE_FLOOR_SOURCE
+    assert floor["confidence_basis"] == "documented_effective_dose"
+
+
+def test_iqm_licorice_bp_floors_cite_the_100_mg_glycyrrhizic_acid_trial():
+    """Same defect as the licorice root rule: PMID 393503 never mentions 100 mg."""
+    rule = _rule("RULE_IQM_LICORICE_HYPERTENSION")
+    for key, target in (("condition_id", "hypertension"), ("drug_class_id", "antihypertensives")):
+        floor = _sub_rule(rule, key, target)["min_effective_dose"]
+        assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
+        assert floor["source"] == LICORICE_FLOOR_SOURCE, target
+        assert floor["confidence_basis"] == "documented_effective_dose", target
