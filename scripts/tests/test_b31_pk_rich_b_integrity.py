@@ -126,6 +126,9 @@ def test_cascara_notes_state_the_2002_fda_rule_correctly(iqm):
     notes = iqm['cascara_sagrada']['forms']['cascara sagrada bark extract']['notes']
     assert 'Category III (insufficient data) in 2002' not in notes
     assert '67 FR 31125' in notes
+    # EU monograph 5.1 and GSRS both list cascarosides A-F, not A-D.
+    for form in iqm['cascara_sagrada']['forms'].values():
+        assert 'cascarosides A-D' not in form['notes']
 
 
 def test_cordycepsprime_crominex_relapse_documented(iqm):
