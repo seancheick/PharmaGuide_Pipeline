@@ -820,6 +820,9 @@ def test_horny_goat_weed_rules_say_what_the_pde5_and_case_sources_say():
     assert antihypertensives["sources"] == [MSKCC_EPIMEDIUM, _pmid("18778098"), VIAGRA_LABEL]
     assert (heart["severity"], antihypertensives["severity"]) == ("caution", "caution")
     assert "tachyarrhythmia" in heart["mechanism"]
+    # The nitrate risk is sildenafil's; icariin's own effect is unmeasured.
+    assert "extreme hypotension risk" not in heart["action"]
+    assert "nitrates" in heart["action"]
     copy = json.dumps([heart, antihypertensives]).lower()
     for stale in ("pde4", "estrogen receptor agonist", "producing additive hypotension"):
         assert stale not in copy, stale

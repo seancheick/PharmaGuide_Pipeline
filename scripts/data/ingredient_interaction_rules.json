@@ -167,7 +167,8 @@
       "2026-09-26: RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS mechanism no longer attributes example drugs or a two-way effect to the ARICEPT label, which says only that cholinesterase inhibitors may interfere with anticholinergic medications; evidence_level established -> probable (class-level label statement, no huperzine-specific study). Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_WHITE_WILLOW_BARK_BLEEDING mechanisms no longer call the aspirin comparison in PMID 11345689 randomised: only willow vs placebo was randomised; the 100 mg aspirin group was a separate cohort. Found by fresh-context review. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_SAW_PALMETTO_LIVER ttc and pregnancy_lactation now keep their source's hedge (PMID 16985705: 'in vitro some studies suggest' 5-alpha-reductase inhibition) instead of stating it as settled. Found by fresh-context review. Severities, categories and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES drug:sedatives action no longer tells people to avoid high doses when driving; its sources report relaxation without drowsiness (PMID 18296328) and no anxiolytic effect over placebo (PMID 35378276). Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES drug:sedatives action no longer tells people to avoid high doses when driving; its sources report relaxation without drowsiness (PMID 18296328) and no anxiolytic effect over placebo (PMID 35378276). Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_HORNY_GOAT_WEED_HEART condition:heart_disease action no longer states '(extreme hypotension risk)' as a property of horny goat weed; it keeps 'do not combine with nitrates' and says the severe hypotension is documented for sildenafil, with icariin's own effect much weaker and unmeasured. Found by fresh-context review. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -21972,7 +21973,7 @@
           "severity": "caution",
           "evidence_level": "theoretical",
           "mechanism": "Icariin, the main flavonoid in horny goat weed (Epimedium), mildly inhibits phosphodiesterase-5 in vitro (IC50 5.9 micromolar, about 80 times weaker than sildenafil). Sildenafil potentiates the hypotensive effect of nitrates and is contraindicated with them, so icariin taken with nitrates is a theoretical concern. Separately, a man with congestive heart failure developed tachyarrhythmia and hypomania after taking horny goat weed, and MSKCC advises people with heart disease not to take it.",
-          "action": "Use with caution in established heart disease. Do not combine with nitrates (extreme hypotension risk). Alert cardiologist to supplement use.",
+          "action": "Use with caution in established heart disease. Do not combine with nitrates: PDE5 inhibitors such as sildenafil cause severe hypotension with nitrates, and icariin's own effect, though much weaker, has not been measured. Alert cardiologist to supplement use.",
           "sources": [
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/epimedium",
             "https://pubmed.ncbi.nlm.nih.gov/18778098/",
