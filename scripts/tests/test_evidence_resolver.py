@@ -603,7 +603,7 @@ def test_phase4_batch5_standardized_clinical_botanicals():
 
 def test_phase4_final_sweep_reviewed_null_unfavorable():
     """Final sweep reviewed-null and safety contraindications."""
-    null_cids = ["artemisinin", "PII_ARTEMISININ", "aloe_ferox", "kavalactones"]
+    null_cids = ["artemisinin", "PII_ARTEMISININ", "kavalactones"]
     for cid in null_cids:
         res = er.resolve_evidence_for_canonical(cid)
         assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value, (
@@ -611,6 +611,14 @@ def test_phase4_final_sweep_reviewed_null_unfavorable():
         )
         assert res.applicability_status == "reviewed_null_evidence"
         assert res.points_eligible is False
+
+    # Cape aloe latex is a high_risk banned_recalled entry (RISK_ALOE_LATEX,
+    # 7dc19997), so aloe_ferox now stops at the safety boundary like cascara,
+    # yohimbe and red yeast rice. It still earns no Evidence points.
+    res = er.resolve_evidence_for_canonical("aloe_ferox")
+    assert res.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
+    assert res.applicability_status == "safety_disqualified"
+    assert res.points_eligible is False
 
 
 def test_phase4_final_sweep_identity_debt_handling():
