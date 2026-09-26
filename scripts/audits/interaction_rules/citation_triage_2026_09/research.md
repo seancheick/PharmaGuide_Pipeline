@@ -193,3 +193,18 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
 - Not changed, reported to Sean: pregnancy_lactation says limited data (no sources) while the EU
   monograph contraindicates willow bark in the third trimester and does not recommend it in
   lactation — a category/policy decision.
+
+## RULE_BANNED_TANSY_PREGNANCY — re-sourced (pregnancy)
+
+- Ghost: **PMID 28472675** = "Toxic essential oils. Part V: Behaviour modulating and toxic properties
+  of thujones and thujone-containing essential oils of Salvia officinalis L., Artemisia absinthium
+  L., Thuja occidentalis L. and Tanacetum vulgare L." (Food Chem Toxicol 2017). Rat open-field /
+  diazepam-sleep tests and brine shrimp toxicity; no pregnancy content. Only source of a
+  contraindicated pregnancy sub-rule.
+- **PMID 33673548** (Dosoky & Setzer, "Maternal Reproductive Toxicity of Some Essential Oils and Their
+  Constituents", Int J Mol Sci 2021; PMC7956842): "the whole plants of savin, pennyroyal, tansy, and
+  rue can induce miscarriage and their oils were on the list of abortifacient oils"; "(R)-β-Thujone
+  is found in ... tansy (Tanacetum vulgare L.) (45.2%)"; "thujone can affect the CNS and cause
+  convulsions"; thujone inhibits GABA-A receptor currents.
+- **PMID 232204** (Conway & Slocumb, J Ethnopharmacol 1979): plants used as abortifacients and
+  emmenagogues by Spanish New Mexicans; "Other plants used are ... ponso or tanse-tansy".
