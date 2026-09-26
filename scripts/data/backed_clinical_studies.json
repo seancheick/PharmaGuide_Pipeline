@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.6.1",
+    "schema_version": "5.6.2",
     "last_updated": "2026-09-26",
     "total_entries": 208,
     "changelog": [
+      "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
       "5.6.1 (2026-09-26): INGR_WHEY_PROTEIN no longer aliases generic Protein macro declarations, unspecified powders/blends, or rice/hemp sources absent from its cited 49-trial source inventory. Known whey, casein, milk, soy and pea source identities remain. Fresh-enrichment regressions cover two collagen labels and greens coffee; source-free macro recovery is intentionally rejected.",
       "5.6.0 (2026-09-25): Corrected INGR_WHEY_PROTEIN to the source-neutral Protein Supplementation scope supported by its cited 49-RCT, 1,863-participant meta-analysis; the stable ID is retained for stored-artifact compatibility. The reviewed purpose is protein supplementation alongside resistance training; whey, casein, milk, soy, pea, rice, hemp, and disclosed protein blends share the category Evidence owner while source-quality differences remain in Formulation. Corrected the stale 250 enrollment, 488-trial count, and unrelated focus/glycemic endpoint tags. No new study was invented and the two existing verified PubMed sources remain the record's evidence base.",
       "5.5.1 (2026-09-25): INGR_OMEGA3 general-purpose evidence now requires at least 376 mg/day of disclosed EPA+DHA, the lowest exposure in the cited 13-trial cardiovascular meta-analysis (PMID 31567003). Trace-dose gummies no longer inherit the reviewed cardiovascular evidence record. No evidence strength or pillar magnitude changed.",
@@ -7268,55 +7269,46 @@
           "id": "omega_reviewed_weak",
           "purpose": "general_omega_3",
           "effect_direction": "positive_weak",
-          "pillar_score": 10.4,
-          "minimum_daily_epa_dha_mg": 376,
           "source_pmids": [
             "31567003",
             "32951855"
           ],
-          "rationale": "Broad supplement evidence supports modest cardiovascular effects, while several major 1 g/day outcome trials were null. PMID 31567003 studied 376-4000 mg/day, so the record does not apply below 376 mg/day of disclosed EPA+DHA. This record establishes reviewed evidence without claiming a strong treatment effect."
+          "rationale": "Cardiovascular outcome evidence is mixed across reviews and trials. PMID 31567003 reports studied doses of 376-4000 mg/day; 376 mg is the lowest included exposure, not a demonstrated efficacy cutoff. PMID 32951855 reports reduced risks for several coronary outcomes, but not the overall cardiovascular-event composite. Applicability boundaries and numerical credit are editorial policy in quality_score.json."
         },
         {
           "id": "triglyceride_strong",
           "purpose": "triglyceride_lowering",
           "effect_direction": "positive_strong",
-          "pillar_score": 20.0,
-          "minimum_daily_epa_dha_mg": 2000,
-          "graduated_from_daily_epa_dha_mg": 1000,
           "source_pmids": [
             "31422671",
             "37264945",
-            "30521670"
+            "32114706"
           ],
-          "rationale": "EFSA identifies 2-4 g/day EPA+DHA for triglyceride effects; the reviewed meta-analytic evidence is dose responsive. Full applicability requires the minimum directed daily exposure to reach 2 g."
+          "rationale": "EFSA identifies 2-4 g/day EPA+DHA for maintenance of triglyceride levels. PMID 37264945 supports a dose-responsive triglyceride effect, more evident above 2 g/day in hyperlipidemia/overweight populations. PMID 31422671 concerns prescription therapy at 4 g/day and does not establish OTC equivalence or a 2 g treatment guarantee. The updated Cochrane review PMID 32114706 finds high-certainty triglyceride reduction and at most small, outcome-specific coronary benefits; this does not establish universal cardiovascular protection. Full-credit thresholds and interpolation belong to quality_score.json."
         },
         {
           "id": "prenatal_dha_intake_authority",
           "purpose": "prenatal_dha_intake",
-          "pillar_score": 11.1,
-          "minimum_daily_dha_mg": 200,
           "source_pmids": [
             "18184094"
           ],
-          "rationale": "At least 200 mg/day DHA establishes prenatal intake-guideline applicability. It does not establish a preterm-birth treatment effect."
+          "rationale": "PMID 18184094 recommends an average daily intake of at least 200 mg DHA for pregnant and lactating women. This is total intake guidance, not proof of preterm-birth prevention from a 200 mg supplement. Numerical credit is editorial policy in quality_score.json."
         },
         {
           "id": "prenatal_preterm_birth_outcome",
           "purpose": "prenatal_preterm_birth",
-          "score_eligible": false,
           "source_pmids": [
             "30480773",
             "34308309",
             "34959801",
             "31509674"
           ],
-          "rationale": "The broad review is favorable, but higher-dose benefit varies with baseline DHA status and a large 900 mg trial in a well-nourished population was null. Baseline status is personal fit and cannot change a fixed product-quality score."
+          "rationale": "The broad review is favorable, but higher-dose benefit varies with baseline DHA status and a large 900 mg trial in a well-nourished population was null. Baseline status is personal fit and cannot change a fixed product-quality score. PMID 34959801 is a mechanistic analysis of the ADORE trial, not an independent replication."
         },
         {
           "id": "epa_predominant_depression",
           "purpose": "depression",
           "effect_direction": "positive_weak",
-          "score_eligible": false,
           "source_pmids": [
             "31383846",
             "31480057"
@@ -7326,8 +7318,6 @@
         {
           "id": "high_dose_atrial_fibrillation_context",
           "purpose": "safety_context",
-          "score_eligible": false,
-          "minimum_daily_epa_dha_mg": 1000,
           "source_pmids": [
             "34612056"
           ],

@@ -178,6 +178,7 @@ Primary key: `backed_clinical_studies` (array)
 | `exclude_aliases` | string[] | NO | Explicitly denied aliases for matching safety |
 | `exclude_alias_match_mode` | string | NO | Optional deny-list matching mode. `bounded_phrase` blocks an excluded identity embedded in a longer branded/form label; omitted means exact alias matching. |
 | `evidence_group_id` | string | NO | Shared scoring identity for multiple evidence records about the same active ingredient; prevents brand and generic records from creating false multi-ingredient breadth. |
+| `purpose_evidence` | object[] | NO | Outcome-specific clinical facts within the same ingredient record: `id`, `purpose`, optional `effect_direction`, `source_pmids`, and `rationale`. No point values, interpolation, eligibility switches or operational dose cutoffs. Those belong to `quality_score.json::evidence_magnitudes.omega.purpose_standards`, joined by `id` in `evidence_resolver.resolve_omega_evidence_standard`. |
 | `aggregate_canonical_ids` | string[] | NO | Complete set of disclosed canonical ingredient identities required for one aggregate evidence record. Enrichment emits the record once only when the full set is present; scoring sums their convertible daily doses and declines dose-scope credit when any required component is missing. |
 
 Clinical evidence notes:

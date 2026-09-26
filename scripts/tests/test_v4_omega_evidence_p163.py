@@ -1,21 +1,4 @@
-"""v4 Omega Evidence dimension — P1.6.3 tests.
-
-Locks the Evidence sub-component math:
-
-    clinical_evidence    /15  Generic evidence pipeline output capped
-                              at total_cap - indication_score (= 15)
-    indication_relevance /5   +5 when EPA+DHA per_day >= 1000 mg/day
-                              (AHA CVD threshold), 0 below
-
-Total cap: 20.
-
-Per Sean's 'do not invent fields' rule: indication relevance is computed
-from the SAME EPA+DHA per_day arithmetic as P1.6.2 Dose. No manual
-marketed-indication text matching — if the dose hits the threshold, the
-product is delivering evidence-aligned dosing regardless of marketing.
-
-Per §13 architecture lock — no v3 imports.
-"""
+"""Omega Evidence contracts: directed exposure, purpose scope and stable output."""
 
 from __future__ import annotations
 
@@ -204,7 +187,7 @@ def test_reviewed_record_is_resolved_without_enrichment_match() -> None:
 def test_reviewed_weak_record_applies_below_efsa_dose_zone() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
-    product = _epa_dha_product(epa=100, dha=100)  # 200 mg/day
+    product = _epa_dha_product(epa=300, dha=200)  # 500 mg/day, within reviewed range
     payload = score_evidence(product)
 
     assert payload["components"]["clinical_evidence"] == 10.4

@@ -279,3 +279,54 @@ Fresh before/after totals: 299952 89.5 -> 89.5, 222864 73.5 -> 73.2,
 204521 62.6 -> 62.6. All three false protein matches removed; routes, status and
 safety verdicts unchanged. Durable receipts: ~/pg_quality/candd/protein_{before,after}_full.json.
 Broader regression/replay follows at the combined checkpoint; nothing published.
+
+## 2026-09-26: omega clinical/config ownership reconciliation
+
+Owner: `scripts/evidence_resolver.py::resolve_omega_evidence_standard` joins
+`backed_clinical_studies.json::INGR_OMEGA3.purpose_evidence` (source facts) to
+`quality_score.json::evidence_magnitudes.omega.purpose_standards` (editorial policy).
+Evidence: `rg 'purpose_evidence|pillar_score|resolve_omega_evidence_standard' scripts/`,
+matrix `quality_pillars_v4_contract`, DATABASE_SCHEMA and GLOSSARY.
+Will NOT create: a second scorer, clinical registry, public field, status or approval queue.
+
+Sean explicitly delegated source reconciliation on 2026-09-26. This is source
+verification and engineering review, NOT an assertion of Dr Pham's approval.
+Moved all omega point values, operational cutoffs, interpolation and eligibility
+switches to the existing config. Retained current numeric behavior; version/fingerprint
+bumped. Existing factual purpose records are now documented in schema/glossary/matrix.
+Removed the module's stale generic-plus-prenatal-bonus description.
+
+Source verification, live Europe PMC REST MED records, 2026-09-26:
+- PMID 31567003, full text PMC6806028: 376-4000 mg/day is the range of included
+  interventions. 376 is NOT a demonstrated efficacy threshold. The scoring floor
+  is explicitly a conservative editorial applicability choice.
+- PMID 32951855: coronary-event benefits, but not overall cardiovascular events;
+  neither it nor the preceding review justifies universal cardiovascular protection.
+- PMID 37264945: 90 RCTs, dose-responsive triglycerides, stronger above 2 g/day in
+  hyperlipidemia/overweight populations. EFSA's primary statement:
+  https://www.efsa.europa.eu/en/press/news/120727 (2-4 g/day claimed triglyceride effects).
+- PMID 31422671: AHA prescription 4 g/day advisory, not OTC equivalence or proof
+  that 2 g supplements treat every patient. No such claim is added.
+- PMID 32114706: verified 2020 Cochrane update replaces PMID 30521670 as the cited
+  triglyceride review; high-certainty dose-dependent triglyceride reduction,
+  only limited/outcome-specific coronary benefit.
+- PMID 18184094: average total intake >=200 mg DHA during pregnancy/lactation;
+  intake guidance is not proof of a 200 mg supplement preventing preterm birth.
+- PMIDs 34308309 / 34959801: ADORE primary trial / mechanistic analysis, not two
+  independent efficacy trials. PMID 31509674: ORIP null early-preterm result.
+  PMID 30480773: favorable broader review, with population/regimen applicability
+  still material. Outcome credit remains disabled for fixed product quality.
+- PMIDs 31383846 / 31480057: depression-specific EPA-predominant scope, not generic
+  omega evidence. PMID 34612056: dose-related atrial-fibrillation association in
+  cardiovascular-outcome trials; contextual safety remains a separate owner.
+
+10.4/20/11.1 and the 1-2 g interpolation are editorial allocations, not numbers
+proved by a paper. Scientific verification does not make those exact allocations
+uniquely correct. They are retained for measurement, not increased to force 95s.
+The 376 mg cutoff's abrupt boundary is an explicit calibration tradeoff.
+
+Reproduced two failing ownership tests, then passed 62 focused tests (12 expected
+missing catalog/DB skips). A pre-existing omega fixture supplied 200 mg while expecting
+credit despite the existing 376 mg boundary; it now supplies 500 mg, while the exact
+375/376 mg boundary remains separately pinned. No production rule weakened for a test.
+Combined frozen replay/full fast verification is recorded below when complete.
