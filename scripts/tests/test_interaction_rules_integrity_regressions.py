@@ -716,3 +716,22 @@ def test_cats_claw_anticoagulant_rule_drops_an_unverifiable_heck_citation():
     assert "Heck" not in anticoagulants["mechanism"]
     assert "slow blood clotting" in anticoagulants["mechanism"]
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+MSKCC_EPO = "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/evening-primrose-oil"
+
+
+def test_evening_primrose_anticoagulant_rule_cites_mskcc_not_heck():
+    rule = _rule("RULE_INGREDIENT_EVENING_PRIMROSE_OIL")
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+
+    # 10902065's abstract does not name evening primrose oil.
+    assert anticoagulants["sources"] == [_pmid("19783511"), MSKCC_EPO]
+    assert (anticoagulants["severity"], anticoagulants["evidence_level"]) == (
+        "caution", "probable",
+    )
+    assert "9 of 12" in anticoagulants["mechanism"]
+    copy = anticoagulants["mechanism"].lower()
+    for stale in ("clinical pharmacology references", "pge1"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review
