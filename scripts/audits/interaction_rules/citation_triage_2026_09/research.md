@@ -630,3 +630,16 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
   systolic blood pressure were significantly reduced by green tea"; green tea inhibited "OATP1A2-
   mediated nadolol uptake". Added to both sub-rules; mechanism no longer attributes the effect to EGCG
   specifically (the study used brewed green tea).
+
+## NCBI Bookshelf suspects (verifier d9ae0687, subject-in-chapter/book-title check) — reviewed
+
+- **NBK501829** LactMed "Aloe" (last revision November 15, 2024) on RULE_INGREDIENT_ALOE_VERA /
+  pregnancy_lactation: "Aloe vera gel consists of the clear gel from the center of fresh leaves of Aloe
+  vera"; "Aloe latex should not be used during breastfeeding". Subject miss: chapter title "Aloe" vs
+  subject phrase "aloe vera".
+- **NBK592340** ATSDR Toxicological Profile for Vanadium, "HEALTH EFFECTS", on RULE_IQM_VANADIUM_DIABETES /
+  pregnancy_lactation: "No studies were located regarding developmental effects in humans after oral
+  exposure to vanadium"; gestational exposure to "7.5–8.3 mg vanadium/kg/day as vanadyl sulfate, sodium
+  metavanadate, or sodium orthovanadate" caused facial hemorrhages, hematomas and delayed ossification
+  in rats and mice. Subject miss: phrases list vanadyl/vanadium salts, not bare "vanadium".
+- NBK548375 (LiverTox "Muscle Relaxants") no longer cited (ea8aa079).

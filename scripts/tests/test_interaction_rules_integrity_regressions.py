@@ -1004,4 +1004,7 @@ def test_interaction_rules_ghost_review_entries_are_complete_and_current():
         # Agent triage must not read as a clinician or owner review.
         assert "not clinician-reviewed" in entry["reviewed_by"], key
         # A stale exemption (citation since removed) must be deleted with it.
-        assert _pmid(entry["pmid"]) in _cited(entry["rule_id"], entry["sub_rule"]), key
+        source_id = entry["pmid"]
+        url = (f"https://www.ncbi.nlm.nih.gov/books/{source_id}/"
+               if source_id.startswith("NBK") else _pmid(source_id))
+        assert url in _cited(entry["rule_id"], entry["sub_rule"]), key

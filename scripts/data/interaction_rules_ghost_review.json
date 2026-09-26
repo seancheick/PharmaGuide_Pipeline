@@ -4,7 +4,7 @@
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
     "last_updated": "2026-09-26",
-    "total_entries": 62
+    "total_entries": 64
   },
   "reviewed": [
     {
@@ -562,6 +562,24 @@
       "sub_rule": "pregnancy_lactation",
       "live_title": "Exploring the chemical and pharmacological variability of Lepidium meyenii: a comprehensive review of the effects of maca.",
       "rationale": "Full text read at PMC10910417: a teratogenicity study of 1 g/kg/day aqueous maca extract showed no alterations in embryonic development, and 'Studies on maca toxicity in humans are limited' - supports 'Human pregnancy safety data are sparse'.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "NBK501829",
+      "rule_id": "RULE_INGREDIENT_ALOE_VERA",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "Aloe - Drugs and Lactation Database (LactMed®)",
+      "rationale": "LactMed's aloe chapter (last revision 15 Nov 2024) is the Aloe vera monograph: it opens 'Aloe vera gel consists of the clear gel from the center of fresh leaves of Aloe vera' and states 'Aloe latex should not be used during breastfeeding', supporting the lactation half of this oral-aloe rule (NCCIH covers pregnancy in the same block). The chapter title is 'Aloe' while the subject phrases carry 'aloe vera', hence the subject miss.",
+      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
+      "reviewed_at": "2026-09-26"
+    },
+    {
+      "pmid": "NBK592340",
+      "rule_id": "RULE_IQM_VANADIUM_DIABETES",
+      "sub_rule": "pregnancy_lactation",
+      "live_title": "HEALTH EFFECTS - Toxicological Profile for Vanadium (ATSDR)",
+      "rationale": "ATSDR Toxicological Profile for Vanadium, Health Effects chapter: 'No studies were located regarding developmental effects in humans after oral exposure to vanadium', while gestational exposure in rats and mice to 7.5-8.3 mg vanadium/kg/day as vanadyl sulfate or vanadates caused fetal malformations and delayed ossification - the limited-human-data, animal-signal basis of the avoid categories. The subject phrases list vanadyl/vanadium salts but not bare 'vanadium', hence the subject miss.",
       "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
       "reviewed_at": "2026-09-26"
     }
