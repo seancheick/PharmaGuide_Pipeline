@@ -385,3 +385,50 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   2/2024: 7.9 "Soybean flour, cottonseed meal, walnuts, and dietary fiber may bind and decrease the
   absorption of SYNTHROID"; 2.1 "Administer SYNTHROID at least 4 hours before or after drugs known to
   interfere with SYNTHROID absorption" (basis for the sub-rule's existing 4-hour action).
+
+## PMID 10902065 (Heck, AJHP 2000) on herbs its abstract does not name
+
+The abstract lists the herbs it covers (angelica ... willow bark; documented: coenzyme Q10, danshen,
+devil's claw, dong quai, ginseng, green tea, papain, vitamin E). Cat's claw, evening primrose oil,
+saw palmetto and fish oil/omega-3 are not in it, and the full text is not open, so it cannot carry
+those rules. (It stays on chamomile, devil's claw and red clover, which it names.)
+
+### RULE_INGREDIENT_CAT_S_CLAW — re-sourced (anticoagulants)
+- The mechanism said cat's claw "is documented in the Heck et al. 2000 AJHP review" — not verifiable.
+- **PMID 33091497** (Kolodziejczyk-Czepas, J Ethnopharmacol 2021; in vitro/in silico): U. tomentosa
+  extracts "demonstrated slight antiplatelet activity. The thrombin time was slightly prolonged";
+  thrombin inhibition (IC50 5.86 µg/ml, ethanolic leaf fraction); procyanidins B2 and C1 bound
+  thrombin with the highest affinity in silico.
+- **NCCIH Cat's Claw** (https://www.nccih.nih.gov/health/cats-claw): "Cat's claw may slow blood clotting";
+  "There are theoretical reasons to suspect that cat's claw might interact with anticoagulant,
+  antiplatelet, and blood pressure drugs". evidence_level probable → theoretical.
+
+### RULE_INGREDIENT_EVENING_PRIMROSE_OIL — re-sourced (anticoagulants)
+- The mechanism said EPO is "Listed among herbs with potential warfarin potentiation in clinical
+  pharmacology references" (the Heck citation) and attributed the effect to "GLA-derived PGE1".
+- **PMID 19783511** (Riaz, Pak J Pharm Sci 2009; rabbits, 30-60 days): "significant increase in all
+  assays except Fibrinogen time"; "significantly decreased platelet count".
+- **MSKCC About Herbs: Evening Primrose Oil**: "In vitro, evening primrose oil ... inhibits platelet
+  aggregation"; "Antiplatelet and anticoagulant effects are likely related to decreased thromboxane
+  B2 synthesis"; "Anticoagulants/Antiplatelets: May have additive effects and increase bleeding
+  risk"; "In a small study of humans on several months of supplementation with GLA from evening
+  primrose oil, a significant increase in bleeding time was observed in 9 of 12 patients"; "Evening
+  primrose oil is about 10% GLA".
+- Not changed: the sub-rule's min_effective_dose rationale attributes "~300 mg GLA ~ 3 g oil" to PMID
+  19783511 (a rabbit study dosed in µl/kg); that figure matches the MSKCC human data, not 19783511.
+  Dose-floor source attribution reported to Sean.
+
+### RULE_INGREDIENT_OMEGA_3 — re-sourced (nsaids)
+- 10902065 was the only source; it is a warfarin review and says nothing on NSAIDs or fish oil. The
+  mechanism said the combination "may modestly increase GI bleeding risk".
+- **PMID 18841286** (Larson, Thromb Haemost 2008; n = 10): prescription omega-3 "alone did not inhibit
+  platelet aggregation, but did (with two agonists) when combined with aspirin. Since previous
+  studies have not reported a clinically significant risk for bleeding in subjects on combined
+  therapy, P-OM3 may safely enhance the anti-platelet effect of aspirin."
+- **PMID 26280541** (Roberto, Basic Clin Pharmacol Toxicol 2016; nested case-control): low-dose aspirin
+  plus omega-3 "does not affect the UGIC risk" (current users OR 0.66, 95% CI 0.44-1.00).
+- **PMID 17368277** (Bays, Am J Cardiol 2007): "clinical trial evidence has not supported increased
+  bleeding with omega-3 fatty acid intake, even when combined with other agents that might also
+  increase bleeding (such as aspirin and warfarin)".
+- No study with non-aspirin NSAIDs found. evidence_level probable → theoretical; headline and alert no
+  longer say omega-3 adds to NSAID bleeding risk.

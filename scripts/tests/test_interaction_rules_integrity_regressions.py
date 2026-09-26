@@ -699,3 +699,20 @@ def test_genistein_levothyroxine_rule_cites_levothyroxine_evidence():
     assert "did not change levothyroxine absorption" in thyroid_meds["mechanism"]
     assert "rats" in thyroid["mechanism"]
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+NCCIH_CATS_CLAW = "https://www.nccih.nih.gov/health/cats-claw"
+
+
+def test_cats_claw_anticoagulant_rule_drops_an_unverifiable_heck_citation():
+    rule = _rule("RULE_INGREDIENT_CAT_S_CLAW")
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+
+    # 10902065's abstract does not name cat's claw.
+    assert anticoagulants["sources"] == [_pmid("33091497"), NCCIH_CATS_CLAW]
+    assert (anticoagulants["severity"], anticoagulants["evidence_level"]) == (
+        "caution", "theoretical",
+    )
+    assert "Heck" not in anticoagulants["mechanism"]
+    assert "slow blood clotting" in anticoagulants["mechanism"]
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
