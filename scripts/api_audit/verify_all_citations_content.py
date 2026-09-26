@@ -5,6 +5,13 @@ Goes beyond existence checks — fetches the actual article title and abstract
 from PubMed, then checks whether the cited paper actually mentions the
 ingredients/drugs/nutrients claimed in the data entry.
 
+Every citation field is read: configured sources, plus (``scan_all``) every
+PubMed URL, "PMID n" and PMC link anywhere in an entry except the history keys
+in HISTORY_KEYS. Citations in ingredient_interaction_rules.json and
+backed_clinical_studies.json have their own verifiers.
+test_every_citation_in_the_data_folder_is_read_by_a_content_verifier fails on
+any citation in scripts/data that no verifier reads.
+
 Usage:
     # Full content verification (hits PubMed API)
     python3 scripts/api_audit/verify_all_citations_content.py
@@ -39,6 +46,14 @@ if str(SCRIPTS_ROOT) not in sys.path:
 from api_audit.pubmed_xml import element_text  # noqa: E402
 
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
+# Free text cites as a PubMed URL, "PMID 123" or a PMC article link; a PMC id is
+# resolved to its PMID when fetched (resolve_pmc_ids).
+TEXT_CITATION_RE = re.compile(
+    r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID[:\s#]*(\d{4,9})"
+    r"|(?:ncbi\.nlm\.nih\.gov/pmc/articles|pmc\.ncbi\.nlm\.nih\.gov/articles)/(PMC\d+)",
+    re.I,
+)
+PMC_IDCONV = "https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/"
 RATE_LIMIT = 0.35  # seconds between API calls
 
 # SSL context — prefer verified; fall back to unverified if system certs are unavailable
@@ -70,6 +85,34 @@ def _context_topic_texts(context: dict) -> list[str]:
         if isinstance(limitations, list) else ""
     return [context.get("condition", ""), population_description, outcome_names, limitation_text]
 
+IDENTITY_KEYS = ("standard_name", "name", "latin_name", "aliases", "canonical_id", "canonical_ids",
+                 "ingredients", "set_canonical_id", "raw_ingredient_text", "_key")
+
+
+def _identity_texts(entry: dict) -> list:
+    """Names an entry is about: its own name fields plus IQM form names/aliases."""
+    texts = []
+    for key in IDENTITY_KEYS:
+        value = entry.get(key)
+        texts += value if isinstance(value, list) else [value]
+    for form_name, form in (entry.get("forms") or {}).items():
+        texts.append(form_name)
+        texts += list((form or {}).get("aliases") or [])
+    return [t.replace("_", " ") if isinstance(t, str) else t for t in texts]
+
+
+def _scan_all(**config) -> dict:
+    """Config for a file whose citations sit in free text across each entry:
+    every string is read except the history/audit keys in HISTORY_KEYS."""
+    return {"id_field": "id", "topic_extractor": _identity_texts, "scan_all": True,
+            "sources_field": "__none__", **config}
+
+
+# History and audit fields: they name PMIDs that were screened, rejected,
+# replaced or re-checked, so they are not claims. Everything else is read.
+HISTORY_KEYS = {"change_log", "previous_citation", "swap_reason", "literature_review",
+                "citation_review_note", "top_pubmed_pmids", "verification"}
+
 FILE_CONFIGS = [
     {
         "file": "timing_rules.json",
@@ -88,6 +131,7 @@ FILE_CONFIGS = [
             e.get("mechanism", ""),
         ],
         "sources_field": "sources",
+        "scan_all": True,  # watch_basis, source labels
     },
     {
         "file": "curated_interactions/curated_interactions_v1.json",
@@ -96,6 +140,16 @@ FILE_CONFIGS = [
         "topic_fields": ["agent1_name", "agent2_name", "mechanism"],
         "sources_field": "source_urls",
         "source_format": "url_list",  # list of URL strings, not dicts
+        "scan_all": True,  # dose_threshold.source, mechanism text
+    },
+    {
+        "file": "curated_interactions/batch_critical_2026_05.json",
+        "array_key": "interactions",
+        "id_field": "id",
+        "topic_fields": ["agent1_name", "agent2_name", "mechanism"],
+        "sources_field": "source_urls",
+        "source_format": "url_list",
+        "scan_all": True,
     },
     {
         "file": "curated_interactions/med_med_pairs_v1.json",
@@ -154,16 +208,51 @@ FILE_CONFIGS = [
         ),
         "source_format": "nested_cfu_evidence_pmids",
         "context_topic_extractor": _context_topic_texts,
+        "scan_all": True,  # identity_verification, dose provenance, secondary indications
     },
+    _scan_all(file="ingredient_quality_map.json", map_key=""),
+    _scan_all(file="botanical_ingredients.json", array_key="botanical_ingredients"),
+    _scan_all(file="standardized_botanicals.json", array_key="standardized_botanicals"),
+    _scan_all(file="harmful_additives.json", array_key="harmful_additives"),
+    _scan_all(file="banned_recalled_ingredients.json", array_key="ingredients"),
+    _scan_all(file="other_ingredients.json", array_key="other_ingredients"),
+    _scan_all(file="synergy_cluster.json", array_key="synergy_clusters"),
+    _scan_all(file="botanical_marker_contributions.json", map_key="botanicals"),
+    _scan_all(file="branded_blend_anchor_overrides.json", array_key="anchors"),
+    _scan_all(file="absorption_enhancers.json", array_key="absorption_enhancers"),
+    _scan_all(file="enhanced_delivery.json", map_key=""),
+    _scan_all(file="interaction_orphan_allowlist.json", array_key="allowlist"),
+    _scan_all(file="curated_overrides/product_context_canonical_overrides.json", map_key="overrides"),
 ]
 # ── PubMed API ─────────────────────────────────────────────────────────
+
+def resolve_pmc_ids(pmc_ids: list[str]) -> dict[str, str]:
+    """PMC id -> PMID through NCBI's PMC ID converter (unresolved ids are left out)."""
+    resolved = {}
+    for i in range(0, len(pmc_ids), 100):
+        url = f"{PMC_IDCONV}?ids={','.join(pmc_ids[i:i + 100])}&format=json&tool=pharmaguide-audit"
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
+            with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
+                for record in json.loads(resp.read().decode("utf-8")).get("records", []):
+                    if record.get("pmcid") and record.get("pmid"):
+                        resolved[record["pmcid"].upper()] = str(record["pmid"])
+        except Exception as e:
+            print(f"  PMC ID converter error: {e}", file=sys.stderr)
+        time.sleep(RATE_LIMIT)
+    return resolved
+
 
 def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[str, dict]:
     """Fetch title + abstract for a batch of PMIDs via efetch.
 
-    ``abstract_chars=None`` keeps the whole abstract.
+    ``abstract_chars=None`` keeps the whole abstract. A PMC id ("PMC123") is
+    resolved to its PMID first and its article is returned under both ids.
     """
     articles = {}
+    pmc_ids = sorted({p for p in pmids if str(p).upper().startswith("PMC")})
+    pmc_to_pmid = resolve_pmc_ids(pmc_ids) if pmc_ids else {}
+    pmids = list(dict.fromkeys([p for p in pmids if p not in pmc_ids] + list(pmc_to_pmid.values())))
     for i in range(0, len(pmids), 8):
         batch = pmids[i:i + 8]
         ids_str = ",".join(batch)
@@ -220,6 +309,9 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
 
         time.sleep(RATE_LIMIT)
 
+    for pmc_id, pmid in pmc_to_pmid.items():
+        if pmid in articles:
+            articles[pmc_id] = articles[pmid]
     return articles
 
 
@@ -344,6 +436,39 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
 
 # ── Extract PMIDs from entries ─────────────────────────────────────────
 
+def scan_citations(value, exempt: set, key: str = "") -> list[str]:
+    """Every PubMed/PMC citation in a nested value, skipping ``exempt`` keys.
+
+    Strings are read for PubMed URLs, "PMID 123" and PMC links; a bare number
+    counts only under a key naming a PMID ("pmid", "source_pmids").
+    """
+    found = []
+    if isinstance(value, dict):
+        for k, v in value.items():
+            if k != "_metadata" and k not in exempt:
+                found += scan_citations(v, exempt, k)
+    elif isinstance(value, list):
+        for v in value:
+            found += scan_citations(v, exempt, key)
+    elif isinstance(value, (str, int)) and not isinstance(value, bool):
+        text = str(value)
+        here = [a or b or c.upper() for a, b, c in TEXT_CITATION_RE.findall(text)]
+        if not here and "pmid" in key.lower() and re.fullmatch(r"\s*(?:PMID:?\s*)?\d{4,9}\s*", text, re.I):
+            here = [re.sub(r"\D", "", text)]
+        found += here
+    return found
+
+
+def entries_of(data: dict, config: dict) -> list[dict]:
+    """A file's entries: a list under ``array_key`` or a map under ``map_key``
+    ("" for a top-level map), each map value tagged with its key as ``_key``."""
+    if "map_key" in config:
+        container = data.get(config["map_key"]) if config["map_key"] else data
+        return [{**value, "_key": key} for key, value in (container or {}).items()
+                if key != "_metadata" and isinstance(value, dict)]
+    return data.get(config["array_key"], [])
+
+
 def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
     """Extract PMID citations from an entry."""
     results = []
@@ -373,10 +498,10 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
             pmid = re.sub(r"[^0-9]", "", str(candidate or ""))
             if pmid:
                 add_pmid(pmid)
-        return results
+        sources = []
 
     if not isinstance(sources, list):
-        return results
+        sources = []
 
     for s in sources:
         url = ""
@@ -391,8 +516,8 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
         else:
             if not isinstance(s, dict):
                 continue
-            if s.get("source_type") != "pubmed":
-                continue
+            # The URL is the ground truth, whatever the source_type label says
+            # (15 depletion sources labelled "reference" were never read).
             url = s.get("url", "")
 
         m = PMID_RE.search(url)
@@ -408,6 +533,10 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
         if pmid:
             add_pmid(pmid)
 
+    if config.get("scan_all"):
+        for citation in scan_citations(entry, HISTORY_KEYS):
+            add_pmid(citation)
+
     return results
 
 
@@ -422,13 +551,13 @@ def verify_file(config: dict) -> dict:
     with open(filepath) as f:
         data = json.load(f)
 
-    entries = data.get(config["array_key"], [])
+    entries = entries_of(data, config)
     results = []
     all_pmids = {}  # pmid → list of entry contexts
 
     # Collect all PMIDs
     for entry in entries:
-        entry_id = entry.get(config["id_field"], "unknown")
+        entry_id = entry.get(config["id_field"]) or entry.get("_key", "unknown")
         topic_words = extract_topic_words(entry, config)
         pmid_refs = extract_pmids_from_entry(entry, config)
 
