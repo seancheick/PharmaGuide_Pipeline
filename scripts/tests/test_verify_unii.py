@@ -955,3 +955,282 @@ def test_exact_gsrs_name_is_not_credited_with_a_longer_alias():
 
     assert not ok
     assert "name mismatch" in reason
+
+
+def _cascara_bark_substance():
+    """GSRS 4VBP01X99F as served 2026-09-25 (names abridged)."""
+    substance = _substance(
+        name="FRANGULA PURSHIANA BARK",
+        unii="4VBP01X99F",
+        cas="8015-89-2",
+        rxcui="1350209",
+        dsld=None,
+    )
+    substance["substanceClass"] = "structurallyDiverse"
+    substance["names"] += [
+        {"name": "CASCARA SAGRADA [MI]"},
+        {"name": "CASCARA SAGRADA [DSC]"},
+        {"name": "RHAMNI PURSHIANAE CORTEX"},
+        {"name": "RHAMNUS PURSHIANA"},
+        {"name": "RHAMNUS PURSHIANA BARK"},
+        {"name": "Frangula purshiana bark [WHO-DD]"},
+    ]
+    return substance
+
+
+def test_verify_flat_file_keeps_bark_unii_named_for_the_entry_by_gsrs():
+    """ADD_CASCARA_SAGRADA carries 4VBP01X99F. GSRS names that bark record
+    "CASCARA SAGRADA [MI]", so the "bark" in its preferred name is not a
+    specificity conflict, and --apply must not clear the UNII."""
+    from api_audit.verify_unii import verify_flat_file
+
+    substance = _cascara_bark_substance()
+
+    class FakeClient:
+        def get_full_substance(self, unii):
+            assert unii == "4VBP01X99F"
+            return substance
+
+        def search_substance(self, *_args, **_kwargs):
+            raise AssertionError("existing UNII should be resolved directly")
+
+    entry = {
+        "id": "ADD_CASCARA_SAGRADA",
+        "standard_name": "Cascara Sagrada",
+        "aliases": [
+            "cascara sagrada", "cascara", "rhamnus purshiana", "frangula purshiana",
+            "cascara sagrada bark", "cascara bark", "casanthranol", "cascara extract",
+            "Cascara Sagrada P.E.", "cascara sagrada pe",
+        ],
+        "external_ids": {"unii": "4VBP01X99F"},
+    }
+
+    report = verify_flat_file({"ingredients": [entry]}, "ingredients", FakeClient(), apply=True)
+
+    assert report["rejected"] == []
+    assert [r["id"] for r in report["verified"]] == ["ADD_CASCARA_SAGRADA"]
+    assert entry["external_ids"]["unii"] == "4VBP01X99F"
+
+
+def test_alias_name_on_gsrs_record_does_not_excuse_a_part_specific_preferred_name():
+    """Only the entry's own name bypasses the preferred-name specificity check.
+    A generic entry that reaches a bark record through an alias stays rejected,
+    even for a curated UNII."""
+    from api_audit.verify_unii import _validate_substance_match
+
+    ok, reason, _ = _validate_substance_match(
+        _cascara_bark_substance(),
+        primary_name="Buckthorn",
+        aliases=["rhamnus purshiana"],
+        curated_unii=True,
+    )
+
+    assert not ok
+    assert "name mismatch" in reason
+
+
+def test_true_mismatches_stay_rejected_after_gsrs_source_tags_are_stripped():
+    """GSRS records the searches return for three banned_recalled entries
+    (names as served 2026-09-25, abridged). Each is a different substance, so
+    each stays rejected even if a curator had assigned its UNII."""
+    from api_audit.verify_unii import _validate_substance_match
+
+    cases = [
+        (
+            _named_substance(
+                "SOYBEAN OIL",
+                ["SOYA OIL", "SOYBEAN OIL [MI]", "SOYBEAN OIL [USP MONOGRAPH]", "GLYCINE MAX SEED OIL"],
+                unii="241ATL177A", cas="8001-22-7", rxcui="9949",
+            ),
+            "Brominated Vegetable Oil",
+            ["BVO", "E443", "brominated soybean oil", "brominated vegetable oil", "brominated oil"],
+        ),
+        (
+            _named_substance(
+                "INSULIN-LIKE GROWTH FACTOR 1 RECEPTOR",
+                ["IGF-1R", "IGF-I RECEPTOR", "INSULIN-LIKE GROWTH FACTOR I RECEPTOR"],
+                unii="DK7PL4F3TT", cas=None,
+            ),
+            "IGF-1 (Insulin-like Growth Factor 1)",
+            ["igf-1", "igf1", "insulin-like growth factor 1", "somatomedin c"],
+        ),
+        (
+            _named_substance(
+                "PHENYLPIRACETAM HYDRAZIDE",
+                ["FONTURACETAM HYDRAZIDE", "PHENYLPIRACETAM HYDRAZIDE, (±)-"],
+                unii="289199VKN4", cas="77472-71-0",
+            ),
+            "Phenylpiracetam",
+            ["phenotropil", "carphedon", "phenylpiracetam"],
+        ),
+    ]
+
+    for substance, primary_name, aliases in cases:
+        ok, reason, _ = _validate_substance_match(
+            substance, primary_name=primary_name, aliases=aliases, curated_unii=True
+        )
+        assert not ok, primary_name
+        assert "name mismatch" in reason
+
+
+def test_curated_unii_is_not_confirmed_by_one_cross_listed_gsrs_name():
+    """A curated UNII still needs an ordinary name match. botanical_ingredients
+    marigold is Tagetes erecta; GSRS 18E7415PXQ CALENDULA OFFICINALIS FLOWERING
+    TOP also carries "MARIGOLD [EMA HERBAL SUBSTANCE]" (names as served
+    2026-09-25, abridged). That one name must not verify the wrong genus."""
+    from api_audit.verify_unii import verify_flat_file
+
+    substance = _named_substance(
+        "CALENDULA OFFICINALIS FLOWERING TOP",
+        ["CALENDULA OFFICINALIS", "MARIGOLD [EMA HERBAL SUBSTANCE]", "POT MARIGOLD FLOWERING TOP"],
+        unii="18E7415PXQ", cas=None, rxcui="1309775",
+    )
+
+    class FakeClient:
+        def get_full_substance(self, unii):
+            return substance
+
+    entry = {
+        "id": "marigold",
+        "standard_name": "Marigold",
+        "latin_name": "Tagetes erecta",
+        "aliases": ["marigold flower extract", "marigold extract", "tagetes erecta extract", "aztec marigold extract"],
+        "external_ids": {"unii": "18E7415PXQ"},
+    }
+
+    report = verify_flat_file({"botanical_ingredients": [entry]}, "botanical_ingredients", FakeClient(), apply=False)
+
+    assert report["verified"] == []
+    assert [r["id"] for r in report["rejected"]] == ["marigold"]
+
+
+def test_verify_iqm_file_checks_curated_unii_by_the_same_rule():
+    """IQM cascara_sagrada carries 4VBP01X99F and is confirmed like the flat
+    entry. A wrong curated UNII for IQM diosmin, GSRS E750O06Y6O HESPERIDIN,
+    which carries "DIOSMIN [NDI]" (names as served 2026-09-25, abridged), is
+    still rejected: no ordinary name on that record matches diosmin."""
+    from api_audit.verify_unii import verify_iqm_file
+
+    hesperidin = _named_substance(
+        "HESPERIDIN",
+        ["HESPERIDIN [MI]", "HESPERETIN 7-RUTINOSIDE", "DIOSMIN [NDI]", "CIRANTIN"],
+        unii="E750O06Y6O", cas="520-26-3", rxcui="5281",
+    )
+    records = {"4VBP01X99F": _cascara_bark_substance(), "E750O06Y6O": hesperidin}
+
+    class FakeClient:
+        def get_full_substance(self, unii):
+            return records[unii]
+
+        def search_substance(self, *_args, **_kwargs):
+            raise AssertionError("existing UNII should be resolved directly")
+
+    data = {
+        "_metadata": {},
+        "cascara_sagrada": {
+            "standard_name": "Cascara Sagrada",
+            "aliases": ["cascara", "rhamnus purshiana", "cascara sagrada bark"],
+            "external_ids": {"unii": "4VBP01X99F"},
+            "forms": {},
+        },
+        "diosmin": {
+            "standard_name": "Diosmin",
+            "aliases": [],
+            "external_ids": {"unii": "E750O06Y6O"},
+            "forms": {},
+        },
+    }
+
+    report = verify_iqm_file(data, FakeClient(), apply=False)
+
+    assert [r["key"] for r in report["verified"]] == ["cascara_sagrada"]
+    assert [r["key"] for r in report["rejected"]] == ["diosmin"]
+
+
+def test_search_fill_does_not_pick_a_plant_part_from_the_entry_name_alone():
+    """HIGH_RISK_CHAPARRAL has no UNII. The name search returns GSRS PK0TXD049P
+    LARREA TRIDENTATA LEAF, which carries "CHAPARRAL [MART.]" (names as served
+    2026-09-25, abridged). Choosing the leaf for a generic entry is a curation
+    call, so the fill path keeps the part check and --apply writes nothing."""
+    from api_audit.verify_unii import verify_flat_file
+
+    substance = _named_substance(
+        "LARREA TRIDENTATA LEAF",
+        ["CHAPARRAL LEAF", "CHAPARRAL [MART.]", "CREOSOTE BUSH LEAF", "LARREA TRIDENTATA TOP"],
+        unii="PK0TXD049P", cas=None, rxcui="1311133",
+    )
+    substance["substanceClass"] = "structurallyDiverse"
+
+    class FakeClient:
+        def search_substance(self, name, cas=None):
+            return substance if name == "Chaparral" else None
+
+    entry = {
+        "id": "HIGH_RISK_CHAPARRAL",
+        "standard_name": "Chaparral",
+        "aliases": [
+            "larrea tridentata", "larrea divaricata", "creosote bush", "greasewood",
+            "chaparral extract", "chaparral tea", "chaparral",
+        ],
+        "external_ids": {},
+    }
+
+    report = verify_flat_file({"ingredients": [entry]}, "ingredients", FakeClient(), apply=True)
+
+    assert report["filled"] == []
+    assert [r["id"] for r in report["rejected"]] == ["HIGH_RISK_CHAPARRAL"]
+    assert "unii" not in entry["external_ids"]
+
+
+def test_search_fill_ignores_source_tagged_vernacular_names():
+    """standardized_botanicals prickly_pear (alias "nopal") has no UNII. GSRS
+    54JK3DR14O OPUNTIA ENGELMANNII WHOLE carries "nopal [HOC]" (names as served
+    2026-09-25, abridged). Picking one Opuntia species for a generic entry is a
+    curation call: source-tagged names only confirm a curated UNII, never fill one."""
+    from api_audit.verify_unii import _validate_substance_match
+
+    substance = _named_substance(
+        "OPUNTIA ENGELMANNII WHOLE",
+        ["ENGELMANN'S PRICKLY PEAR WHOLE", "nopal [HOC]", "prickly pear (Opuntia engelmannii) [HOC]"],
+        unii="54JK3DR14O", cas=None,
+    )
+
+    ok, reason, _ = _validate_substance_match(
+        substance,
+        primary_name="Prickly Pear",
+        aliases=["nopal", "opuntia", "opuntia fruit", "prickly pear extract"],
+    )
+
+    assert not ok
+    assert "name mismatch" in reason
+
+
+def test_verify_iqm_search_fill_keeps_the_part_check():
+    """The IQM search path, like the flat one, never uses the curated-UNII rule:
+    a generic entry is not filled with the leaf record GSRS names "CHAPARRAL [MART.]"."""
+    from api_audit.verify_unii import verify_iqm_file
+
+    substance = _named_substance(
+        "LARREA TRIDENTATA LEAF",
+        ["CHAPARRAL LEAF", "CHAPARRAL [MART.]", "CREOSOTE BUSH LEAF", "LARREA TRIDENTATA TOP"],
+        unii="PK0TXD049P", cas=None, rxcui="1311133",
+    )
+
+    class FakeClient:
+        def search_substance(self, *_args, **_kwargs):
+            return substance
+
+    data = {
+        "_metadata": {},
+        "chaparral": {
+            "standard_name": "Chaparral",
+            "aliases": ["larrea tridentata", "creosote bush"],
+            "forms": {},
+        },
+    }
+
+    report = verify_iqm_file(data, FakeClient(), apply=True)
+
+    assert report["filled"] == []
+    assert [r["key"] for r in report["rejected"]] == ["chaparral"]
+    assert (data["chaparral"].get("external_ids") or {}).get("unii") is None
