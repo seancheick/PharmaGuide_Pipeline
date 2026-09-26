@@ -1073,6 +1073,15 @@ def _derive_declared_nutrition_protein_evidence(
     ):
         return []
 
+    nutrition_protein_paths = {
+        str(row.get("raw_source_path") or "").strip()
+        for row in active_rows
+        if _norm(row.get("canonical_id")) == "protein"
+        and is_nutrition_fact_declaration(row)
+        and _positive_quantity(row) is not None
+        and _unit_is_mass(_row_unit(row))
+        and str(row.get("raw_source_path") or "").strip()
+    }
     corrected_protein_paths = {
         str(row.get("raw_source_path") or "").strip()
         for row in active_rows
@@ -1098,7 +1107,7 @@ def _derive_declared_nutrition_protein_evidence(
                 or (
                     _norm(row.get("display_type")) == "mapped_ingredient"
                     and str(row.get("raw_source_path") or "").strip()
-                    in corrected_protein_paths
+                    in (corrected_protein_paths | nutrition_protein_paths)
                 )
             )
             and _norm(row.get("source_section")) == "activeingredients"
@@ -2859,6 +2868,17 @@ def is_nutrition_fact_declaration(row: Mapping[str, Any]) -> bool:
     NEVER on hardcoded nutrient name string matching.
     """
     if not isinstance(row, Mapping):
+        return False
+
+    # A validated typed protein projection carries Nutrition Facts provenance,
+    # but its eligibility belongs to the separate declared-protein contract.
+    # The original source row remains excluded; clinical source qualification
+    # still runs before this dose can recover any evidence.
+    if (
+        _norm(row.get("scoring_input_kind")) == "product_level_evidence"
+        and _norm(row.get("evidence_type")) == "sports_primary_dose"
+        and _norm(row.get("canonical_id")) == "protein"
+    ):
         return False
 
     # 1. Canonical cleaner / enricher skip & score exclusion reasons

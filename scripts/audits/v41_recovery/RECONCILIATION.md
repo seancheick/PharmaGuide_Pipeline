@@ -928,3 +928,21 @@ derive_product_scoring_evidence / _product_scoring_evidence_rows using
 is_nutrition_fact_declaration — evidence: real 323080 boundary and red tests.
 Will NOT create: new Nutrition Facts policy, public fields, score exceptions.
 Full checkpoint and clean-HEAD measurement remain pending.
+
+
+Follow-up checkpoint stopped on one early protein regression: 8,417 passed,
+87 skipped, one failed at interruption (253.92s). Real 42306 previously relied
+on a generic anchor because its display ledger called Protein mapped_ingredient
+while IQD correctly marked the source Nutrition Facts. Extend the existing typed
+protein projection to accept that exact source-path match; keep title intent,
+gram-validated nutrition summary and exact Protein ledger requirements. Normalized
+product-level sports-primary protein evidence is distinct from its excluded source
+row. Clinical recovery still requires complete qualifying source identities.
+The paired real 42306/42289 regression now asserts typed protein evidence and
+removes ingredient-list sources to verify that macro/title alone earns no recovery.
+Fresh reviewer verified the containment; original NF rows and sodium/chloride
+anchors remain excluded. Owner: scoring_input_contract.py::
+_derive_declared_nutrition_protein_evidence / is_nutrition_fact_declaration.
+Will NOT create: a generic Nutrition Facts exception or protein evidence alias.
+Focused source/clinical/Evidence batch: 164 passed (see protein_typed_projection_green.log).
+Flutter consumer checks: 122 passed, app HEAD 4c5ff2b7, no app changes.
