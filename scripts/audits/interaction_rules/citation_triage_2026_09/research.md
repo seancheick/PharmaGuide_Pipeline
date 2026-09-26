@@ -285,3 +285,19 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   "relaxes the mind without inducing drowsiness"; 35378276 found no anxiolytic effect over placebo.
   Mechanism, headline, alert and note rewritten; "increases GABA, glycine, and serotonin" and "CNS
   depressant effects" had no source. Severity (caution) unchanged; reported as a likely over-warning.
+
+## RULE_IQM_GUARANA — re-sourced (sedatives; alert copy inverted)
+
+- Ghosts for sedatives: **PMID 15961987** ("Short-term metabolic and hemodynamic effects of ephedra and
+  guarana combinations") and **PMID 21676849** ("Hypertensive Urgency Associated With Xenadrine EFX
+  Use"). Both are cardiovascular effects of multi-ingredient weight-loss products; neither mentions
+  sedatives. (They stay on the hypertension/heart sub-rules, where they fit.)
+- The sub-rule's mechanism (stimulant opposes sedatives) contradicted its own alert copy: headline
+  "May add to sedative drowsiness", body "Guarana has mild sedative effects", note "Guarana has
+  sedative activity".
+- **PMID 23981847** (Schimpl, J Ethnopharmacol 2013): guarana "is valued mainly for its stimulant
+  property because of its high content of caffeine, which can be up to 6% in the seeds".
+- **PMID 11125871** (Mattila, Int J Clin Pharmacol Ther 2000; n = 108 parallel + 6 crossover):
+  "sedative effects of Mid 12 mg were only moderately antagonized by Caf 250 mg but not by Caf 125
+  mg"; "the effects of zolpidem ... were not antagonized by Caf"; "Caf 300 mg increased plasma Mid at
+  45 min". The old "rebound stimulation that disrupts sleep architecture" had no source; removed.

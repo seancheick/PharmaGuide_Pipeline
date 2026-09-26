@@ -143,7 +143,8 @@
       "2026-09-26: RULE_IQM_YERBA_MATE_CARDIOVASCULAR drug:anticoagulants cited PMID 39708247 (an endothelial-function trial) for a claim that yerba mate's vitamin K opposes warfarin, which no source supports. It now cites a 6-week RCT (PMID 25562195: mate tea lowered thromboxane B2 and blood viscosity) and an in vitro/rat study of a mate-fruit saponin (PMID 23134458: prolonged clotting times, thrombin/FXa and platelet inhibition, no significant bleeding in rats); the action no longer gives vitamin K advice. Severity, evidence_level and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_ANDROGRAPHIS autoimmune and immunosuppressants cited two antiplatelet papers (PMIDs 28745507, 21822619) for an immunostimulation claim neither makes. They now cite a 14-week RA RCT (PMID 19408036), a 12-month RRMS RCT on interferon beta (PMID 27215274) and a safety meta-analysis including autoimmune trials (PMID 33372366); mechanisms say andrographis was tolerated in those trials and that its use with immunosuppressants is unstudied. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_BACOPA_THYROID cited only PMID 27912958 (bacopa for cognition in children) on its thyroid, thyroid-medication and sedative sub-rules. Thyroid sub-rules now cite Kar 2002 (PMID 12065164: bacopa raised T4 41% in male mice); sedatives cite a 2022 pharmacology review (PMID 36061899: traditional sedative use, rodent GABAergic data) and a mouse study in which bacopa reversed diazepam-induced amnesia (PMID 18193203). Unsourced claims removed (iodide uptake/thyroglobulin synthesis, additive sedation in animals, effect on levothyroxine absorption). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES antihypertensives cited an EEG study (PMID 18296328) and an anxiety meta-analysis (PMID 35378276) for 5-8 mmHg blood-pressure reductions neither reports. It now cites the two blood-pressure trials: Yoto 2012 (PMID 23107346: 200 mg blunted stress-induced BP rises) and Rogers 2008 (PMID 17891480: 200 mg antagonised caffeine's BP rise). The sedatives sibling's copy (CNS depressant, mild sedative effects) contradicted its own sources, which report relaxation without drowsiness and no anxiolytic effect over placebo; rewritten. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES antihypertensives cited an EEG study (PMID 18296328) and an anxiety meta-analysis (PMID 35378276) for 5-8 mmHg blood-pressure reductions neither reports. It now cites the two blood-pressure trials: Yoto 2012 (PMID 23107346: 200 mg blunted stress-induced BP rises) and Rogers 2008 (PMID 17891480: 200 mg antagonised caffeine's BP rise). The sedatives sibling's copy (CNS depressant, mild sedative effects) contradicted its own sources, which report relaxation without drowsiness and no anxiolytic effect over placebo; rewritten. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_GUARANA drug:sedatives cited two weight-loss-product cardiovascular papers (PMIDs 21676849, 15961987), and its alert copy said guarana has sedative effects, the opposite of its mechanism. It now cites a guarana review (PMID 23981847: seeds up to 6% caffeine) and a midazolam-caffeine trial (PMID 11125871: 250 mg caffeine moderately antagonised midazolam sedation, 125 mg did not, zolpidem not antagonised); headline, alert and note now describe a stimulant. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -18313,15 +18314,15 @@
           "drug_class_id": "sedatives",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Guarana's CNS stimulant effects (primarily via caffeine) pharmacodynamically oppose the action of sedative medications (benzodiazepines, barbiturates, non-benzodiazepine sleep aids, antihistamines with sedative properties). Combined use may impair the therapeutic efficacy of sedatives or, in opposite sequence, cause rebound stimulation that disrupts sleep architecture.",
+          "mechanism": "Guarana is valued as a stimulant because its seeds contain up to 6% caffeine. Caffeine counteracts benzodiazepine sedation only partly: in healthy volunteers, 250 mg caffeine moderately antagonised the sedation of midazolam 12 mg, 125 mg did not, and caffeine did not antagonise zolpidem; caffeine also raised plasma midazolam. Guarana taken with sedatives may therefore blunt the intended effect of some sedative medicines, depending on the caffeine dose.",
           "action": "Avoid combining guarana supplements with sedative medications. If sedatives are prescribed for a medical reason, guarana and other high-caffeine supplements should be discontinued.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/21676849/",
-            "https://pubmed.ncbi.nlm.nih.gov/15961987/"
+            "https://pubmed.ncbi.nlm.nih.gov/23981847/",
+            "https://pubmed.ncbi.nlm.nih.gov/11125871/"
           ],
-          "alert_headline": "May add to sedative drowsiness",
-          "alert_body": "Guarana has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding guarana \u2014 the combination can increase drowsiness.",
-          "informational_note": "Guarana has sedative activity \u2014 relevant to people on sedatives or sleep medications.",
+          "alert_headline": "Stimulant may work against sedatives",
+          "alert_body": "Guarana is a caffeine-rich stimulant that can work against some sedative medicines. If you take a sedative or sleep medication, talk to your prescriber before using guarana.",
+          "informational_note": "Guarana is a caffeine-rich stimulant \u2014 relevant to people on sedatives or sleep medications.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {

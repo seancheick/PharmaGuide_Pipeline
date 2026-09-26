@@ -591,3 +591,19 @@ def test_l_theanine_rules_say_what_the_blood_pressure_and_eeg_studies_say():
                   "has sedative activity"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+
+
+def test_guarana_sedative_rule_treats_guarana_as_a_stimulant():
+    rule = _rule("RULE_IQM_GUARANA")
+    sedatives = _sub_rule(rule, "drug_class_id", "sedatives")
+
+    # 15961987 and 21676849 are weight-loss-product cardiovascular papers.
+    assert sedatives["sources"] == [_pmid("23981847"), _pmid("11125871")]
+    assert sedatives["severity"] == "caution"
+    assert "midazolam" in sedatives["mechanism"]
+    copy = json.dumps(sedatives).lower()
+    for stale in ("has mild sedative effects", "sedative activity",
+                  "add to sedative drowsiness", "sleep architecture"):
+        assert stale not in copy, stale
+    assert "stimulant" in sedatives["alert_body"].lower()
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
