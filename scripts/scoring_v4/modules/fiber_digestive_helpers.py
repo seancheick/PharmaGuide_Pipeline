@@ -9,8 +9,6 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     get_active_ingredients,
 )
-# Routing owns the fiber canonical identity; the scorer reads the same set.
-from scoring_v4.route_features import FIBER_CANONICALS
 
 
 
@@ -30,6 +28,7 @@ FIBER_TERMS = (
     "prebiotic",
 )
 
+# Routing owns the fiber canonical identity; the scorer reads the same set.
 from scoring_v4.route_features import (
     FIBER_CANONICALS, PHGG_CANONICALS, GUAR_CANONICALS,
     COMPATIBLE_GUAR_CANONICALS, PHGG_ROW_TERMS,
