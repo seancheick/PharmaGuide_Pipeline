@@ -1929,3 +1929,29 @@ def test_a_named_oil_row_never_owns_epa_dha_however_it_is_spelled() -> None:
     ])
 
     assert _omega_aggregate_evidence(product) == []
+
+
+@pytest.mark.parametrize("canonical,quantity,path", [
+    ("sodium", 485, "ingredientRows[14]"),
+    ("chloride", 80, "ingredientRows[13]"),
+])
+def test_nutrition_fact_identity_exclusion_survives_active_projection(canonical, quantity, path):
+    # Catalyte 323080: cleaner active row precedes enrichment exclusion.
+    active = _row(name=canonical.title(), canonical_id=canonical,
+                  quantity=quantity, raw_source_path=path)
+    excluded = {**active, "score_exclusion_reason": "excluded_nutrition_fact",
+                "skip_reason": "excluded_nutrition_fact", "mapped": False,
+                "scoreable_identity": False}
+    product = _product([], activeIngredients=[active], ingredient_quality_data={
+        "ingredients": [excluded], "ingredients_scorable": [],
+        "ingredients_skipped": [excluded],
+    })
+    assert not derive_product_scoring_evidence(product)
+    # Contain an already persisted generic projection as well as fresh output.
+    old_product = _product([], activeIngredients=[active])
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(old_product)
+    assert product["product_scoring_evidence"]
+    result = get_scoring_ingredients(product, strict=True)
+    assert not result.rows
+    assert any(r.reason == "excluded_nutrition_fact" for r in result.rejected_rows)
+    assert product["activeIngredients"][0]["quantity"] == quantity

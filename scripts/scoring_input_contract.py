@@ -1699,6 +1699,8 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 # The shared required-conflict ledger retains this exposure
                 # for coverage/readiness; it cannot become scoring evidence.
                 continue
+            if is_nutrition_fact_declaration(identity_row):
+                active_row["score_exclusion_reason"] = "excluded_nutrition_fact"
             if identity_row.get("identity_disposition") is not None:
                 active_row["identity_disposition"] = identity_row["identity_disposition"]
             canonical_id = identity_row.get("canonical_id_after")
@@ -1893,6 +1895,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
 
         if (
             cleaner_role in {"blend_header_total", "active_scorable"}
+            and not is_nutrition_fact_declaration(row)
             and quantity is not None
             and _unit_is_mass(unit)
             and anchor_canonical
@@ -2312,6 +2315,12 @@ def _product_scoring_evidence_rows(
                 item[field] = deepcopy(derived_item.get(field))
 
     evidence_rows = native_evidence_rows + derived_evidence_rows
+    nutrition_fact_paths = {
+        str(row["raw_source_path"])
+        for row in _safe_list(_safe_dict(product.get("ingredient_quality_data")).get("ingredients"))
+        if isinstance(row, dict) and row.get("raw_source_path")
+        and is_nutrition_fact_declaration(row)
+    }
 
     rows: List[Dict[str, Any]] = []
     rejected: List[RejectedScoringRow] = []
@@ -2323,6 +2332,16 @@ def _product_scoring_evidence_rows(
         _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
+        if (
+            evidence_type == "blend_anchor_mass"
+            and (is_nutrition_fact_declaration(item)
+                 or str(item.get("raw_source_path") or "") in nutrition_fact_paths)
+        ):
+            # Older artifacts may retain a generic active projection after the
+            # identity owner excluded its source Nutrition Facts declaration.
+            # Typed protein/omega evidence retains its own applicability rules.
+            rejected.append(_reject(item, "excluded_nutrition_fact"))
+            continue
         if (
             evidence_type == "omega_epa_dha_aggregate"
             and item.get("reason") == "omega_epa_dha_aggregate_from_label_row"

@@ -914,3 +914,17 @@ Owner: form_vocab.py::extract_forms using data/form_keywords_vocab.json — evid
 rg form_vocab/form_keywords/normaliz in matrix/glossary and four red tests.
 Will NOT create: a new identity, registry, clinical mapping, or form fallback.
 Boundary artifact: ~/pg_quality/candd/runs/source_boundary_real_probe.json.
+
+
+Catalyte 323080: propagate the existing IQD Nutrition Facts exclusion into generic
+active projections and contain old native generic anchors by the same source path.
+Keep typed protein/omega recovery and original dose/safety inputs. Sodium 485 mg
+and chloride 80 mg remain in IQD/RDA records; neither becomes a generic anchor.
+Real fresh clean/enrich/score: 72.4, scored, strict findings empty. Two regressions
+failed before correction. Combined source/contract batch: 168 passed in 2.02s.
+Fresh independent reviewer found no actionable regression and verified RDA
+records and unchanged input. Owner: scoring_input_contract.py::
+derive_product_scoring_evidence / _product_scoring_evidence_rows using
+is_nutrition_fact_declaration — evidence: real 323080 boundary and red tests.
+Will NOT create: new Nutrition Facts policy, public fields, score exceptions.
+Full checkpoint and clean-HEAD measurement remain pending.
