@@ -79,8 +79,6 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/modules/generic_evidence.py|_dose_map|get|unit_normalized|320965a122ab": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_evidence.py|_dose_map|get|unit|44abae5cc7d8": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_evidence.py|_dose_map|get|raw_source_text|0fe1043d3c32": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/generic_formulation.py|_penalty_b0_moderate_watchlist|get|match_type|c4b5077cd8a7": "pass_a_known_pending_native_safety_signal_contract",
-    "scripts/scoring_v4/modules/generic_formulation.py|_penalty_b0_moderate_watchlist|get|match_method|dbf3af2e35bf": "pass_a_known_pending_native_safety_signal_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|quantity|3fd4e11ae842": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|unit_normalized|dcf5fcc7cc91": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|unit|30c24beac47d": "pass_a_known_pending_native_evidence_contract",
