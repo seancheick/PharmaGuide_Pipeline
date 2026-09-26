@@ -61,7 +61,7 @@
       "vitamins": 25
     },
     "schema_version": "5.5.6",
-    "last_updated": "2026-09-22",
+    "last_updated": "2026-09-26",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -36430,7 +36430,8 @@
   "miroestrol": {
     "standard_name": "Miroestrol",
     "category": "herbs",
-    "cui": "C0056493",
+    "cui": "C3491692",
+    "cui_note": "Corrected 2026-09-26: C0056493 resolves to 'crisnatol' (a chrysene-derived antineoplastic; MSH NM crisnatol, NCI PT Crisnatol), and pubchem_cid 5318042 was (E)-hex-2-en-1-ol (C6H12O). C3491692 is MeSH SCR C571572 'miroestrol' ('from tuberous roots of P. candollei var. mirifica'); PubChem name search for miroestrol returns only CID 165001 (Miroestrol, C20H22O6, CAS 2618-41-9, InChIKey RJKLDOLOCIQYFS-PRTISISMSA-N). banned_recalled RISK_MIROESTROL uses the same CUI and CID. GSRS has no miroestrol record.",
     "forms": {
       "miroestrol (unspecified)": {
         "bio_score": 3.0,
@@ -36469,7 +36470,7 @@
       "research_status": "validated"
     },
     "external_ids": {
-      "pubchem_cid": 5318042
+      "pubchem_cid": 165001
     },
     "gsrs": {
       "substance_name": "Miroestrol",
@@ -36489,7 +36490,7 @@
     "dosage_importance": 0.3,
     "source": "quarantine_remediation_2026_09_19_clinical_signoff",
     "priority": 1,
-    "rxcui_note": "No RxNorm concept exists for this standardization constituent; identified via UNII/PubChem instead."
+    "rxcui_note": "No RxNorm concept exists for this standardization constituent; identified via PubChem CID 165001 and UMLS C3491692 instead (GSRS has no miroestrol record, so there is no UNII)."
   },
   "isothiocyanates": {
     "standard_name": "Isothiocyanates",
