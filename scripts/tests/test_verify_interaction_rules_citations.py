@@ -139,3 +139,51 @@ def test_subject_phrases_skip_common_words():
     # after stripping a part word ("kava root" -> "kava").
     assert "b12" in _phrases("ingredient_quality_map", "vitamin_b12_cobalamin")
     assert "kava" in _phrases("ingredient_quality_map", "kavalactones")
+
+
+def test_bookshelf_sources_are_collected_per_sub_rule():
+    rules = [{
+        "id": "RULE_X",
+        "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "5_htp"},
+        "drug_class_rules": [{"drug_class_id": "maois", "sources": [
+            "https://www.ncbi.nlm.nih.gov/books/NBK548375/",
+            "https://pubmed.ncbi.nlm.nih.gov/31523132/",
+        ]}],
+    }]
+    claims = virc.collect_claims(rules, virc.load_subject_entries())
+    assert {key: [(rid, label) for rid, label, _ in value] for key, value in claims.items()} == {
+        "NBK548375": [("RULE_X", "drug:maois")],
+        "31523132": [("RULE_X", "drug:maois")],
+    }
+
+
+def test_bookshelf_chapter_must_name_the_subject():
+    """NBK548375 is LiverTox "Muscle Relaxants"; it was cited for 5-HTP. A
+    Bookshelf chapter is a per-drug monograph, so only the subject is checked,
+    against the chapter and book titles."""
+    htp = _phrases("ingredient_quality_map", "5_htp")
+    livertox = "LiverTox: Clinical and Research Information on Drug-Induced Liver Injury"
+    assert virc.check_book_chapter({"title": "Muscle Relaxants", "books": [livertox]}, htp) == ["subject"]
+    cascara = _phrases("ingredient_quality_map", "cascara_sagrada")
+    assert virc.check_book_chapter({"title": "Cascara", "books": [livertox]}, cascara) == []
+    fish_oil = _phrases("ingredient_quality_map", "fish_oil")
+    assert virc.check_book_chapter(
+        {"title": "HEALTH EFFECTS", "books": ["Toxicological Profile for Fish Oil"]}, fish_oil
+    ) == []
+
+
+def test_bookshelf_record_parses_book_titles():
+    record = {
+        "rid": "NBK592340",
+        "title": "HEALTH EFFECTS",
+        "bookinfo": (
+            '<Info><Path><Parent id="tpvanadium" role="source" type="book" uid="5466422">'
+            "<Title>Toxicological Profile for Vanadium</Title></Parent>"
+            '<Self id="ch3" role="document" type="chapter" uid="5466550">'
+            "<Title>HEALTH EFFECTS</Title></Self></Path></Info>"
+        ),
+    }
+    assert virc.book_chapter(record) == {
+        "title": "HEALTH EFFECTS",
+        "books": ["Toxicological Profile for Vanadium"],
+    }

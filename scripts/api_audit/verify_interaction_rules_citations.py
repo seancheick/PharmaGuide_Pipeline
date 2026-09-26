@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Content-verify every PubMed citation in ingredient_interaction_rules.json.
+"""Content-verify every PubMed and NCBI Bookshelf citation in ingredient_interaction_rules.json.
 
 The mandated content verifier (verify_all_citations_content.py) does NOT cover
 this file: its PMIDs live nested under interaction_rules[].condition_rules[] /
@@ -17,6 +17,12 @@ against every sub-rule that cites it:
            Cassia seed papers.
   TOPIC    a stem for the sub-rule's condition or drug class (TOPIC_STEMS)
            appears in the live title, abstract or MeSH.
+
+NCBI Bookshelf sources (www.ncbi.nlm.nih.gov/books/NBK...) are per-drug
+monographs such as LiverTox and LactMed, so they get the SUBJECT check only,
+against the chapter title and its book titles (resolved through E-utilities;
+the pages answer scripts with a captcha). NBK548375, LiverTox "Muscle
+Relaxants", was once cited for senna and later for 5-HTP.
 
 The previous check pooled topic words from every claim a PMID supported,
 including the subject's own name, so any on-subject paper passed. It passed
@@ -41,6 +47,9 @@ import json
 import os
 import re
 import sys
+import time
+import urllib.request
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -56,12 +65,14 @@ if _env.exists():
             k, _, v = line.partition("=")
             os.environ.setdefault(k.strip(), v.strip())
 
-from verify_all_citations_content import fetch_articles  # noqa: E402
+from verify_all_citations_content import RATE_LIMIT, SSL_CTX, fetch_articles  # noqa: E402
 
 DATA = REPO / "scripts" / "data"
 RULES = DATA / "ingredient_interaction_rules.json"
 REVIEW_PATH = DATA / "interaction_rules_ghost_review.json"
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
+BOOK_RE = re.compile(r"ncbi\.nlm\.nih\.gov/books/(NBK\d+)")
+EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 
 # subject_ref.db -> list key; the IQM is a top-level map keyed by canonical id
 SUBJECT_LISTS = {
@@ -207,11 +218,15 @@ def _topic_stems(sub_rule: str) -> list[str] | None:
     return TOPIC_STEMS.get(sub_rule.partition(":")[2])
 
 
+def _names_subject(text: str, phrases: set[str]) -> bool:
+    return any(f" {p} " in f" {text} " for p in phrases)
+
+
 def check_citation(article: dict, phrases: set[str], sub_rule: str) -> list[str]:
     """Return the failed checks ("subject", "topic") for one cited sub-rule."""
     failed = []
     title_abstract = f" {_norm(article.get('title'))} {_norm(article.get('abstract'))} "
-    if not any(f" {p} " in title_abstract for p in phrases):
+    if not _names_subject(title_abstract, phrases):
         failed.append("subject")
     everything = title_abstract + " ".join(_norm(m) for m in article.get("mesh_terms") or [])
     tokens = everything.split()
@@ -224,8 +239,49 @@ def check_citation(article: dict, phrases: set[str], sub_rule: str) -> list[str]
     return failed
 
 
+def check_book_chapter(chapter: dict, phrases: set[str]) -> list[str]:
+    """A Bookshelf chapter must name the subject in its own or its book's title."""
+    titles = " ".join(_norm(t) for t in [chapter.get("title"), *chapter.get("books", [])])
+    return [] if _names_subject(titles, phrases) else ["subject"]
+
+
+def book_chapter(record: dict) -> dict:
+    """Chapter title plus parent book titles from an esummary db=books record."""
+    books = []
+    if record.get("bookinfo"):
+        books = [el.findtext("Title") or "" for el in ET.fromstring(record["bookinfo"]).iter("Parent")]
+    return {"title": record.get("title", ""), "books": books}
+
+
+def _get_json(url: str) -> dict:
+    request = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
+    with urllib.request.urlopen(request, timeout=30, context=SSL_CTX) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def fetch_book_chapters(nbk_ids: list[str]) -> dict[str, dict]:
+    """NBK id -> chapter via E-utilities (esearch, then esummary, db=books)."""
+    key = os.environ.get("NCBI_API_KEY") or os.environ.get("PUBMED_API_KEY", "")
+    suffix = f"&api_key={key}" if key else ""
+    chapters = {}
+    for nbk in nbk_ids:
+        try:
+            uids = _get_json(f"{EUTILS}esearch.fcgi?db=books&retmode=json&retmax=100&term={nbk}{suffix}")[
+                "esearchresult"]["idlist"]
+            time.sleep(RATE_LIMIT)
+            if uids:
+                result = _get_json(f"{EUTILS}esummary.fcgi?db=books&retmode=json&id={','.join(uids)}{suffix}")["result"]
+                for uid in result.get("uids", []):
+                    if result[uid].get("rid") == nbk:
+                        chapters[nbk] = book_chapter(result[uid])
+        except Exception as error:  # an unresolved NBK is reported as not found
+            print(f"  Bookshelf error {nbk}: {error}", file=sys.stderr)
+        time.sleep(RATE_LIMIT)
+    return chapters
+
+
 def collect_claims(rules: list[dict], entries: dict) -> dict[str, list[tuple]]:
-    """pmid -> [(rule_id, sub_rule, subject phrases)]"""
+    """PMID or NBK id -> [(rule_id, sub_rule, subject phrases)]"""
     claims: dict[str, list[tuple]] = {}
     for rule in rules:
         phrases = subject_phrases(rule.get("subject_ref") or {}, entries)
@@ -235,7 +291,7 @@ def collect_claims(rules: list[dict], entries: dict) -> dict[str, list[tuple]]:
             sub_rules.append(("pregnancy_lactation", rule["pregnancy_lactation"]))
         for label, sub_rule in sub_rules:
             for source in sub_rule.get("sources") or []:
-                match = PMID_RE.search(str(source))
+                match = PMID_RE.search(str(source)) or BOOK_RE.search(str(source))
                 if match:
                     claims.setdefault(match.group(1), []).append((rule.get("id", "?"), label, phrases))
     return claims
@@ -260,44 +316,50 @@ def unreviewed(suspects: list[tuple], keys: set[str]) -> list[tuple]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--strict", action="store_true",
-                        help="exit 1 on an unreviewed suspect or an unresolved PMID")
+                        help="exit 1 on an unreviewed suspect or an unresolved source")
     parser.add_argument("--rules", type=Path, default=RULES, help="rules file to check")
     args = parser.parse_args()
 
     rules = json.loads(args.rules.read_text()).get("interaction_rules") or []
     claims = collect_claims(rules, load_subject_entries())
-    pmids = sorted(claims)
-    print(f"Rules: {len(rules)} | distinct PubMed PMIDs: {len(pmids)} | "
-          f"cited sub-rules: {sum(len(c) for c in claims.values())}\n")
-    if not pmids:
-        print("No PubMed PMIDs cited in this file.")
+    pmids = sorted(k for k in claims if not k.startswith("NBK"))
+    nbk_ids = sorted(k for k in claims if k.startswith("NBK"))
+    print(f"Rules: {len(rules)} | distinct PubMed PMIDs: {len(pmids)} | Bookshelf chapters: "
+          f"{len(nbk_ids)} | cited sub-rules: {sum(len(c) for c in claims.values())}\n")
+    if not claims:
+        print("No PubMed or Bookshelf sources cited in this file.")
         return 0
 
-    print(f"Fetching {len(pmids)} PMIDs live from PubMed efetch...\n")
-    articles = fetch_articles(pmids, abstract_chars=None)
+    print(f"Fetching {len(pmids)} PMIDs (efetch) and {len(nbk_ids)} Bookshelf chapters (esummary)...\n")
+    articles = fetch_articles(pmids, abstract_chars=None) if pmids else {}
+    chapters = fetch_book_chapters(nbk_ids)
 
     notfound, suspects = [], []
-    for pmid in pmids:
-        article = articles.get(pmid)
-        if not article:
-            notfound.append(pmid)
+    for source_id in pmids + nbk_ids:
+        record = articles.get(source_id) if source_id in articles else chapters.get(source_id)
+        if not record:
+            notfound.append(source_id)
             continue
-        for rule_id, sub_rule, phrases in claims[pmid]:
-            failed = check_citation(article, phrases, sub_rule)
+        for rule_id, sub_rule, phrases in claims[source_id]:
+            if source_id.startswith("NBK"):
+                failed, title = check_book_chapter(record, phrases), " / ".join([record["title"], *record["books"]])
+            else:
+                failed, title = check_citation(record, phrases, sub_rule), record.get("title", "")
             if failed:
-                suspects.append((pmid, rule_id, sub_rule, failed, article.get("title", "")))
+                suspects.append((source_id, rule_id, sub_rule, failed, title))
 
     ok = sum(len(c) for c in claims.values()) - len(suspects) - sum(len(claims[p]) for p in notfound)
     print(f"RESULT: on-topic={ok}  GHOST-SUSPECT={len(suspects)} "
-          f"({len({s[0] for s in suspects})} PMIDs)  not-found={len(notfound)}\n")
-    for pmid in notfound:
-        cites = "; ".join(f"{rid}/{label}" for rid, label, _ in claims[pmid])
-        print(f"  NOT FOUND {pmid}   cited by: {cites}")
+          f"({len({s[0] for s in suspects})} sources)  not-found={len(notfound)}\n")
+    for source_id in notfound:
+        cites = "; ".join(f"{rid}/{label}" for rid, label, _ in claims[source_id])
+        print(f"  NOT FOUND {source_id}   cited by: {cites}")
     if suspects:
         print("=== GHOST-SUSPECT (MANUAL REVIEW each; subject = identity absent from "
-              "title/abstract, topic = claim topic absent) ===")
-        for pmid, rule_id, sub_rule, failed, title in suspects:
-            print(f"  PMID {pmid} [{'+'.join(failed)}] {rule_id}/{sub_rule}")
+              "title/abstract or Bookshelf chapter/book title, topic = claim topic absent) ===")
+        for source_id, rule_id, sub_rule, failed, title in suspects:
+            label = source_id if source_id.startswith("NBK") else f"PMID {source_id}"
+            print(f"  {label} [{'+'.join(failed)}] {rule_id}/{sub_rule}")
             print(f"    real title : {title[:110]}")
 
     if not args.strict:
@@ -305,7 +367,7 @@ def main() -> int:
     blocking = unreviewed(suspects, reviewed_keys())
     if blocking or notfound:
         print(f"\nSTRICT: FAIL - {len(blocking)} unreviewed suspect(s), "
-              f"{len(notfound)} unresolved PMID(s). Fix the citation or record a "
+              f"{len(notfound)} unresolved source(s). Fix the citation or record a "
               f"reviewed rationale in {REVIEW_PATH.relative_to(REPO)}.")
         return 1
     print("\nSTRICT: PASS")
