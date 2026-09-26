@@ -398,3 +398,24 @@ def test_saw_palmetto_rules_drop_pancreatitis_and_alopecia_citations():
     for sub in (antiplatelets, nsaids):
         assert "platelet tests in volunteers were normal" in sub["alert_body"]
     assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
+
+
+EMA_VALERIAN = (
+    "https://www.ema.europa.eu/en/documents/herbal-monograph/"
+    "final-european-union-herbal-monograph-valeriana-officinalis-l-radix_en.pdf"
+)
+LACTMED_VALERIAN = "https://www.ncbi.nlm.nih.gov/books/NBK501815/"
+
+
+def test_valerian_pregnancy_rule_cites_the_eu_monograph_not_a_liver_case():
+    rule = _rule("RULE_IQM_VALERIAN_LIVER")
+    pregnancy_lactation = rule["pregnancy_lactation"]
+    liver = _sub_rule(rule, "condition_id", "liver_disease")
+
+    assert pregnancy_lactation["sources"] == [EMA_VALERIAN, LACTMED_VALERIAN]
+    assert _pmid("18431248") in liver["sources"]  # the liver case stays where it fits
+    assert pregnancy_lactation["pregnancy_category"] == "avoid"
+    assert pregnancy_lactation["lactation_category"] == "avoid"
+    assert "has not been established" in pregnancy_lactation["mechanism"]
+    assert "baldrinals" in pregnancy_lactation["mechanism"]
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review

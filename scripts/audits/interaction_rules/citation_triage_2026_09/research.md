@@ -106,3 +106,17 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
 - **PMID 19719333** (Izzo & Ernst systematic review 2009): "No interactions have been reported for
   saw palmetto (Serenoa repens)."
 - Severities unchanged.
+
+## RULE_IQM_VALERIAN_LIVER — re-sourced (pregnancy_lactation)
+
+- Ghost: **PMID 18431248** = "A case of valerian-associated hepatotoxicity" (J Clin Gastroenterol
+  2008; no abstract). A liver case cited for pregnancy/lactation; it stays on liver_disease.
+- **EU herbal monograph, Valeriana officinalis L., radix** — EMA/HMPC/150848/2015 Corr.1, adopted
+  2 February 2016.
+  `https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-valeriana-officinalis-l-radix_en.pdf`
+  4.6: "Safety during pregnancy and lactation has not been established. In the absence of sufficient
+  data, the use during pregnancy and lactation is not recommended." 4.5: interactions "None reported".
+- **LactMed: Valerian** — NBK501815, last revision 17 May 2021: "No data exist on the safety and
+  efficacy of valerian in nursing mothers or infants"; "Valerian is often not recommended during
+  lactation because of the theoretical concerns over its valepotriates and baldrinals which have
+  been shown to be cytotoxic and mutagenic in vitro."
