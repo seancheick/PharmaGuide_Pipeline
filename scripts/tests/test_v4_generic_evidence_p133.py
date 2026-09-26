@@ -1285,6 +1285,7 @@ def test_protein_macro_recovers_only_when_all_declared_sources_are_reviewed():
         "raw_source_path": "otheringredients.ingredients[0]"}]
     payload = score_evidence(product, owner_scoped=True)
     assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+    assert score_evidence(product)["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
     product["inactiveIngredients"].append({"name": "Collagen", "raw_category": "protein",
         "source_section": "inactive", "raw_source_path": "otheringredients.ingredients[1]"})
     assert score_evidence(product, owner_scoped=True)["metadata"]["recovered_matches"] == []
@@ -1307,3 +1308,15 @@ def test_protein_source_forms_preserve_provenance_and_all_source_scope():
     source["forms"].pop()
     source.pop("raw_source_path")
     assert score_evidence(product, owner_scoped=True)["metadata"]["recovered_matches"] == []
+
+
+def test_named_whey_source_is_not_replaced_by_its_constituent_proteins():
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _product(product_name="Protein Powder", ingredients=[
+        _ingredient(name="Protein", canonical_id="protein", quantity=25, unit="g")
+    ], matches=[])
+    product["inactiveIngredients"] = [{"name": "Whey Protein Isolate",
+        "raw_category": "protein", "raw_source_path": "otheringredients.ingredients[0]",
+        "forms": [{"name": "Alpha-Lactalbumin", "category": "protein"},
+                  {"name": "Lactoferrin", "category": "protein"}]}]
+    assert score_evidence(product, owner_scoped=True)["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]

@@ -819,7 +819,6 @@ def _recover_verified_primary_ingredient_matches(
             matched_keys = row_keys & entry_keys
             if (
                 not matched_keys
-                and allow_with_existing_matches
                 and row_canonical_id == "protein"
                 and entry_id == "INGR_WHEY_PROTEIN"
             ):
@@ -847,6 +846,10 @@ def _recover_verified_primary_ingredient_matches(
                     forms = [f for f in forms if _norm_text(f.get("category")) in {"", "protein"}]
                     if not forms and _row_identity_keys(source) == {"protein"}:
                         continue  # The macro itself cannot establish its source.
+                    if _row_identity_keys(source) & entry_keys:
+                        # An explicitly identified source remains whey/casein,
+                        # even when DSLD also lists its constituent proteins.
+                        forms = []
                     for identity in forms or [source]:
                         # Cleaner retains DSLD source identity using camel-case
                         # names/groups; do not discard that existing provenance.

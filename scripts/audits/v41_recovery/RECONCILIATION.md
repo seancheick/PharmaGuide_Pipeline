@@ -361,3 +361,11 @@ are not protein sources; unclassified/unknown protein forms must still match.
 Missing provenance blocks the join instead of silently dropping that contributor.
 Each boundary was reproduced in a failing test. Final focused batch: 80 passed.
 No new source vocabulary, persisted fields, score magnitudes or title heuristic.
+
+Final source boundary checks: an explicitly named whey ingredient remains whey
+when its nested fields describe constituent proteins (alpha-lactalbumin, etc.);
+those are not separate supplement sources requiring individual outcome records.
+The same verified recovery is available to readiness and scoring after the existing
+clear-primary guard, so their evidence IDs do not drift. Reproduced both boundaries
+before correcting; 138 Evidence, real-enrichment, omega and readiness tests passed.
+The next completed broad test and replay supersede the intermediate measurements.
