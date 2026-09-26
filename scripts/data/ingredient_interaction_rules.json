@@ -147,7 +147,8 @@
       "2026-09-26: RULE_IQM_GUARANA drug:sedatives cited two weight-loss-product cardiovascular papers (PMIDs 21676849, 15961987), and its alert copy said guarana has sedative effects, the opposite of its mechanism. It now cites a guarana review (PMID 23981847: seeds up to 6% caffeine) and a midazolam-caffeine trial (PMID 11125871: 250 mg caffeine moderately antagonised midazolam sedation, 125 mg did not, zolpidem not antagonised); headline, alert and note now describe a stimulant. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS cited only PMID 19370686 (Cochrane review of huperzine A for vascular dementia). It now cites a huperzine A pharmacology review (PMID 25191267: natural acetylcholinesterase inhibitor) and the ARICEPT prescribing information (7.1: cholinesterase inhibitors may interfere with anticholinergic medications); the unsourced cholinergic-toxidrome claim was removed. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_RHODIOLA_IMMUNE_BP drug:sedatives cited only PMID 26613955 (a CYP2C9 study) for an unsourced claim of unpredictable, dose-dependent sedative interaction, and its alert said rhodiola is mildly sedative. It now cites the EU herbal monograph (EMA/HMPC/24177/2023 Rev.1: no clinically relevant interactions; no sedation among undesirable effects) and says no interaction is established; evidence_level probable -> theoretical. Severity and last_reviewed unchanged; flagged to Sean as a retirement candidate. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_SAME drug:maois cited only PMID 38423354 (a SAMe-for-depression efficacy meta-analysis). It now cites NCCIH SAMe (may interact with serotonin-raising drugs such as antidepressants), Bodner 1995 (PMID 7854515: SAMe listed among serotomimetic agents causing serotonin syndrome alone or with MAOIs) and Iruela 1993 (PMID 8434674: toxic SAMe-clomipramine interaction); evidence_level established -> limited (no SAMe-MAOI study). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_SAME drug:maois cited only PMID 38423354 (a SAMe-for-depression efficacy meta-analysis). It now cites NCCIH SAMe (may interact with serotonin-raising drugs such as antidepressants), Bodner 1995 (PMID 7854515: SAMe listed among serotomimetic agents causing serotonin syndrome alone or with MAOIs) and Iruela 1993 (PMID 8434674: toxic SAMe-clomipramine interaction); evidence_level established -> limited (no SAMe-MAOI study). Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_CHINESE_SKULLCAP_LIVER pregnancy and pregnancy_lactation cited PMID 31236960 (a general Scutellaria baicalensis review) for possible teratogenic risk in animals. The only animal reproductive studies found (PMIDs 26303163, 26033919: a S. baicalensis/Acacia catechu flavonoid composition, no malformations or developmental effects up to 1000 mg/kg/day in rats and rabbits) show the opposite; mechanism and alert copy now say avoidance is precautionary because human data are absent. Severity, category and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -19677,13 +19678,14 @@
           "condition_id": "pregnancy",
           "severity": "avoid",
           "evidence_level": "theoretical",
-          "mechanism": "Chinese skullcap (Scutellaria baicalensis) contains baicalin and baicalein which inhibit CYP1A2 and CYP2C9. Animal data suggest possible teratogenic risk at high doses; human safety data in pregnancy are absent.",
+          "mechanism": "In rats and rabbits, a standardised flavonoid composition from Scutellaria baicalensis root and Acacia catechu heartwood caused no malformations, embryo-fetal deaths or pre- and postnatal developmental effects at up to 1000 mg/kg/day. No human pregnancy safety data were found, so avoidance in pregnancy is precautionary.",
           "action": "Avoid during pregnancy due to absent safety data. Inform obstetrician of any prior use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/31236960/"
+            "https://pubmed.ncbi.nlm.nih.gov/26303163/",
+            "https://pubmed.ncbi.nlm.nih.gov/26033919/"
           ],
           "alert_headline": "Pregnancy safety is unclear",
-          "alert_body": "Chinese skullcap lacks human pregnancy safety data and animal studies suggest teratogenic signals. If you are pregnant, talk to your obstetrician before any use.",
+          "alert_body": "Chinese skullcap has no human pregnancy safety data; animal studies of a skullcap flavonoid blend found no birth defects. If you are pregnant, talk to your obstetrician before use.",
           "informational_note": "Chinese skullcap lacks pregnancy safety data \u2014 relevant to anyone pregnant or planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -19748,12 +19750,13 @@
         "evidence_level": "theoretical",
         "notes": "Pregnancy: Avoid during pregnancy due to absent safety data. Inform obstetrician of any prior use. Lactation: no_data category remains separately tracked.",
         "alert_headline": "Pregnancy safety is unclear",
-        "alert_body": "Chinese skullcap lacks human pregnancy safety data and animal studies suggest teratogenic signals. If you are pregnant, talk to your obstetrician before any use. Breastfeeding safety data are limited; ask your clinician before use.",
+        "alert_body": "Chinese skullcap has no human pregnancy safety data; animal studies of a skullcap flavonoid blend found no birth defects. If you are pregnant, talk to your obstetrician before use. Breastfeeding safety data are limited; ask your clinician before use.",
         "informational_note": "Chinese skullcap lacks pregnancy safety data \u2014 relevant to anyone pregnant or planning pregnancy.",
         "direction": "harmful",
         "materiality": "presence",
         "sources": [
-          "https://pubmed.ncbi.nlm.nih.gov/31236960/"
+          "https://pubmed.ncbi.nlm.nih.gov/26303163/",
+          "https://pubmed.ncbi.nlm.nih.gov/26033919/"
         ],
         "profile_gate": {
           "gate_type": "profile_flag",

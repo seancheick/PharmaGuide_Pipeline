@@ -660,3 +660,22 @@ def test_same_maoi_rule_cites_serotonergic_sources_not_an_efficacy_meta_analysis
     assert (maois["severity"], maois["evidence_level"]) == ("avoid", "limited")
     assert "clomipramine" in maois["mechanism"]
     assert rule["last_reviewed"] == "2026-04-30"  # agent re-sourcing, not a clinical review
+
+
+def test_chinese_skullcap_pregnancy_rule_reports_the_animal_data_it_cites():
+    rule = _rule("RULE_IQM_CHINESE_SKULLCAP_LIVER")
+    pregnancy = _sub_rule(rule, "condition_id", "pregnancy")
+    pregnancy_lactation = rule["pregnancy_lactation"]
+
+    # 31236960 is a general review; the reproductive-toxicity studies found no
+    # teratogenicity, the opposite of the old "teratogenic signals" copy.
+    expected = [_pmid("26303163"), _pmid("26033919")]
+    assert pregnancy["sources"] == expected
+    assert pregnancy_lactation["sources"] == expected
+    assert pregnancy["severity"] == "avoid"
+    assert pregnancy_lactation["pregnancy_category"] == "avoid"
+    assert "precautionary" in pregnancy["mechanism"]
+    copy = json.dumps([pregnancy, pregnancy_lactation]).lower()
+    for stale in ("teratogenic signals", "possible teratogenic risk", "cyp1a2"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review

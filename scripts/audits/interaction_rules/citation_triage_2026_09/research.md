@@ -349,3 +349,20 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   interactions, s-adenosylmethionine, serotonin): "Toxic interaction of S-adenosylmethionine and
   clomipramine".
 - No study of SAMe with an MAOI found. evidence_level established → limited.
+
+## RULE_IQM_CHINESE_SKULLCAP_LIVER — re-sourced (pregnancy, pregnancy_lactation)
+
+- Ghost: **PMID 31236960** = "Scutellaria baicalensis Georgi. (Lamiaceae): a review of its traditional
+  uses, botany, phytochemistry, pharmacology and toxicology" (J Pharm Pharmacol 2019; not in PMC).
+  Abstract has no pregnancy, reproductive or teratogenicity content. Cited for "Animal data suggest
+  possible teratogenic risk at high doses".
+- The only animal reproductive data found contradict that claim:
+  - **PMID 26303163** (Yimam, Birth Defects Res B 2015, Part I): UP446, "a standardized bioflavonoid
+    composition from the roots of Scutellaria baicalensis and the heartwoods of Acacia catechu", 250–
+    1000 mg/kg/day orally during organogenesis in rabbits and rats; "no statistically significant
+    differences in implantation, congenital malformation, embryo-fetal mortalities"; NOAEL > 1000 mg/kg.
+  - **PMID 26033919** (Part II, rats): "No treatment-related prenatal or postnatal in-life or necropsy
+    abnormalities were observed"; NOAEL > 1000 mg/kg.
+- No human pregnancy safety study found. The CYP1A2/CYP2C9 sentence in the pregnancy mechanism had no
+  source and no pregnancy relevance; removed. Severity (avoid) / category unchanged; avoidance is
+  precautionary. Reported to Sean.
