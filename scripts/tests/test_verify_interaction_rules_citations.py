@@ -8,6 +8,7 @@ union-of-claims word overlap passed both.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -187,3 +188,56 @@ def test_bookshelf_record_parses_book_titles():
         "title": "HEALTH EFFECTS",
         "books": ["Toxicological Profile for Vanadium"],
     }
+
+
+# PMID 22137021: cited for ginseng x warfarin in a dose_thresholds note, which
+# the verifier never read, so --strict passed it until 2026-09-26.
+GASTRIC_IMRT = {
+    "title": (
+        "Intensity-modulated radiation therapy with concurrent chemotherapy as "
+        "preoperative treatment for localized gastric adenocarcinoma."
+    ),
+    "abstract": (
+        "The goal of this study was to evaluate dosimetric parameters, acute "
+        "toxicity, pathologic response, and local control in patients treated with "
+        "preoperative intensity-modulated radiation therapy (IMRT) and concurrent "
+        "chemotherapy for localized gastric adenocarcinoma."
+    ),
+    "mesh_terms": ["adenocarcinoma", "chemoradiotherapy", "gastrectomy", "stomach neoplasms"],
+}
+
+
+def test_dose_threshold_notes_and_dose_floors_are_collected():
+    rules = [{
+        "id": "RULE_X",
+        "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "ginseng"},
+        "drug_class_rules": [{"drug_class_id": "anticoagulants", "sources": [],
+                              "min_effective_dose": {
+                                  "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+                                  "rationale": "From ~200 mg/day (PMID 35509826; see PMID 15238367)."}}],
+        "dose_thresholds": [{"scope": "drug_class", "target_id": "anticoagulants",
+                             "note": "Ghost. https://pubmed.ncbi.nlm.nih.gov/22137021/"}],
+    }]
+    claims = virc.collect_claims(rules, virc.load_subject_entries())
+    assert {key: [(rid, label) for rid, label, _ in value] for key, value in claims.items()} == {
+        "35509826": [("RULE_X", "dose_floor:anticoagulants")],
+        "15238367": [("RULE_X", "dose_floor:anticoagulants")],
+        "22137021": [("RULE_X", "threshold:anticoagulants")],
+    }
+
+
+def test_ghost_in_a_dose_threshold_note_fails_both_checks():
+    phrases = _phrases("ingredient_quality_map", "ginseng")
+    assert virc.check_citation(GASTRIC_IMRT, phrases, "threshold:anticoagulants") == ["subject", "topic"]
+    assert virc.check_citation(FISH_OIL_WARFARIN, {"fish oil"}, "threshold:anticoagulants") == []
+
+
+def test_every_pmid_in_the_rules_file_is_collected():
+    """No PubMed or Bookshelf id in any rule escapes the content check. The
+    _metadata changelog names removed ghosts; it is history, not a claim."""
+    rules = json.loads(virc.RULES.read_text())["interaction_rules"]
+    text = json.dumps(rules)
+    cited = {a or b for a, b in re.findall(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID:?\s*(\d+)", text)}
+    cited |= set(virc.BOOK_RE.findall(text))
+    collected = set(virc.collect_claims(rules, virc.load_subject_entries()))
+    assert cited - collected == set()
