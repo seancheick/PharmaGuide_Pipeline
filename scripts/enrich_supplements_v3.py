@@ -15306,12 +15306,22 @@ class SupplementEnricherV3:
         }
 
     def _enrich_display_ingredients(self, enriched: Dict) -> List[Dict]:
-        """Attach canonical references to display rows without changing scoring behavior."""
+        """Project the final enrichment decision onto the label display rows."""
         display_rows = enriched.get("display_ingredients")
         if not isinstance(display_rows, list):
             return display_rows or []
 
         ingredient_lookup: Dict[str, Dict[str, str]] = {}
+        analysis_by_path: Dict[str, Dict] = {
+            str(row.get("raw_source_path") or "").strip(): row
+            for row in (
+                enriched.get("ingredient_quality_data", {}).get("ingredients", [])
+                if isinstance(enriched.get("ingredient_quality_data"), dict)
+                else []
+            )
+            if isinstance(row, dict)
+            and str(row.get("raw_source_path") or "").strip()
+        }
 
         def _register_lookup(ingredient: Dict, source_key: str) -> None:
             raw_text = ingredient.get("raw_source_text") or ingredient.get("name")
@@ -15342,6 +15352,30 @@ class SupplementEnricherV3:
                 annotated_rows.append(row)
                 continue
             row_copy = dict(row)
+            source_path = str(row_copy.get("raw_source_path") or "").strip()
+            analysis_row = analysis_by_path.get(source_path)
+            exclusion_reason = str(
+                (analysis_row or {}).get("score_exclusion_reason")
+                or (analysis_row or {}).get("skip_reason")
+                or (analysis_row or {}).get("identity_decision_reason")
+                or ""
+            ).strip()
+            # The cleaner's display ledger is assembled before enrichment
+            # decides whether a row participates in scoring. Preserve the
+            # exact source row, but project the final nutrition classification
+            # instead of leaving a rejected Nutrition Facts row marked as
+            # ``scored``. This is a display-only projection of the existing
+            # enrichment decision; it does not infer identity or change score
+            # inputs.
+            if exclusion_reason == SKIP_REASON_NUTRITION_FACT:
+                row_copy.update({
+                    "display_type": "nutrition_fact",
+                    "resolution_type": "display_only",
+                    "score_included": False,
+                    "display_disposition": "label_context",
+                    "is_label_context": True,
+                    "form_display_state": "not_applicable",
+                })
             if row_copy.get("display_type") in ("mapped_ingredient", "inactive_ingredient"):
                 raw_text = row_copy.get("raw_source_text")
                 mapped_target = ingredient_lookup.get(raw_text)

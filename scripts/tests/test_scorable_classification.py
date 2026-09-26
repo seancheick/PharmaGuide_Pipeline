@@ -3118,3 +3118,51 @@ def test_generic_fiber_parent_cannot_rescue_unverified_or_panel_source(enricher,
         row, enricher.databases["ingredient_quality_map"],
         enricher.databases.get("botanical_ingredients", {}),
     ) == SKIP_REASON_NUTRITION_FACT
+
+
+def test_excluded_nutrition_row_cannot_remain_scored_in_display_ledger(enricher):
+    source_path = "ingredientRows[3].nestedRows[0].nestedRows[1]"
+    enriched = {
+        "activeIngredients": [
+            {
+                "name": "Insoluble Fiber",
+                "raw_source_text": "Insoluble Fiber",
+                "raw_source_path": source_path,
+            }
+        ],
+        "inactiveIngredients": [],
+        "ingredient_quality_data": {
+            "ingredients": [
+                {
+                    "name": "Insoluble Fiber",
+                    "raw_source_text": "Insoluble Fiber",
+                    "raw_source_path": source_path,
+                    "role_classification": "inactive_non_scorable",
+                    "scoreable_identity": False,
+                    "score_exclusion_reason": "excluded_nutrition_fact",
+                }
+            ]
+        },
+        "display_ingredients": [
+            {
+                "raw_source_text": "Insoluble Fiber",
+                "raw_source_path": source_path,
+                "source_section": "activeIngredients",
+                "display_type": "mapped_ingredient",
+                "resolution_type": "direct_mapped",
+                "score_included": True,
+                "display_disposition": "scored",
+                "is_label_context": False,
+                "form_display_state": "not_disclosed",
+            }
+        ],
+    }
+
+    [row] = enricher._enrich_display_ingredients(enriched)
+
+    assert row["display_type"] == "nutrition_fact"
+    assert row["resolution_type"] == "display_only"
+    assert row["score_included"] is False
+    assert row["display_disposition"] == "label_context"
+    assert row["is_label_context"] is True
+    assert row["form_display_state"] == "not_applicable"
