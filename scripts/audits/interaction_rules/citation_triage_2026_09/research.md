@@ -39,3 +39,38 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   "present in red clover at significant concentrations"; "competitively inhibit TPO at
   nutritional concentrations"; bleeding_disorders "no direct clinical evidence of red
   clover-induced bleeding has been documented" (contradicted by the case reports above).
+
+## RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL — re-sourced (six drug-class sub-rules)
+
+- Ghost: **PMID 39517207** = "Bergamot (Citrus bergamia), a (Poly)Phenol-Rich Source for Improving
+  Osteosarcopenic Obesity: A Systematic Review" (Foods 2024). Names bergamot; says nothing about
+  CYP3A4 or any drug. Was cited on all six drug sub-rules.
+- **PMID 23184849** (Bailey, CMAJ 2013; no PubMed abstract; full text read at PMC3589309):
+  furanocoumarins are "metabolized by CYP3A4 to reactive intermediates that bond covalently ...
+  causing irreversible inactivation"; "Seville oranges ... limes and pomelos also produce this
+  interaction"; simvastatin AUC "700%" (400 mL 3x/d) and "330%" (200 mL/d); pravastatin no
+  interaction, rosuvastatin eliminated unchanged, fluvastatin via CYP2C9; felodipine "3-fold"
+  (one serving), "5 times" (repeated); Table 1 lists nifedipine (hypotension, peripheral edema),
+  apixaban and rivaroxaban ("GI bleeding"); cyclosporine bioavailability "162%" (one patient
+  670%); tacrolimus "1000% higher trough"; amiodarone Cmax "180%", AUC "150%", QT prolongation and
+  torsade de pointes; "increased oral bioavailability of estrogens (ethinylestradiol and
+  17-β-estradiol)"; Table 2 venous thrombosis with ethinylestradiol after "1 fruit/d ... for
+  preceding 3 d". Kept as the grapefruit (class) source; it does not name bergamot.
+- **PMID 18830151** (Gardana, Molecules 2008): bergamot juice — "Bergapten and bergamottin were the
+  primary furanocoumarins in BJ and their amounts were 9.0+/-0.4 and 18.2+/-0.5 mg/L".
+- **PMID 15592332** (Goosen, Clin Pharmacol Ther 2004): bergamottin capsules with felodipine in 11
+  volunteers; "with 12 mg bergamottin, felodipine C max increased by 40% ... and AUC increased by
+  37%"; grapefruit juice (1.7 mg bergamottin) raised AUC 54%; "Bergamottin ... may cause a
+  clinically relevant drug interaction in susceptible individuals. Grapefruit juice-drug
+  interactions likely also involve other furanocoumarins".
+- **FDA consumer update** "Grapefruit Juice and Some Drugs Don't Mix": grapefruit interacts with some
+  statins (simvastatin, atorvastatin), nifedipine, cyclosporine, amiodarone; names Seville
+  oranges, pomelos and tangelos, not bergamot, and no DOAC or contraceptive. Kept only on the four
+  sub-rules whose drugs it names.
+- No clinical study of a bergamot supplement with any of these drugs was found
+  (PubMed: `(Citrus bergamia[tiab] OR bergamot[tiab]) AND (CYP3A4 OR cytochrome OR drug
+  interaction OR furanocoumarin* OR bergamottin)`, 20 hits, none a bergamot-drug study).
+  evidence_level "established" → "limited" on all six: the vocabulary reserves "established" for
+  "consistent clinical or regulatory backing". Severities unchanged (policy; reported to Sean).
+- Removed as unsourced: "statin AUC 5-15×", "P-gp inhibition" for DOACs, "effect is documented but
+  small" for contraceptives, "dramatically raising drug levels".

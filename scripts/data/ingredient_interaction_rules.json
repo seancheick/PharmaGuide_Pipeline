@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.2.4",
-    "last_updated": "2026-09-25",
+    "last_updated": "2026-09-26",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
@@ -132,7 +132,8 @@
       "2026-09-21: RULE_IQM_VITAMIN_K_MK7_FORM_ONLY form_scope named 'menaquinone_7_mk7', a key no IQM form carries, so the rule never fired; it now names the vitamin_k2 MK-7 forms. Vitamin K1/K2 rows reach both vitamin K rules through the interaction subject family (identity/interaction.py) after the 2026-07-28 K1/K2/K3 identity split. Clinical content unchanged.",
       "2026-09-25: RULE_IQM_CASCARA_SAGRADA_PREGNANCY cited PMID 32876395 (a cascaroside chromatography paper) for every sub-rule. It now cites the EU herbal monograph on cascara (EMA/HMPC/726270/2016 Rev.1), NIH LiverTox and LactMed Cascara, and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state (liver action now matches its caution severity). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-25: RULE_IQM_SENNA_PREGNANCY kidney_disease and cardiac_glycosides cited PMID 36702448 (a Cassiae Semen review: Cassia obtusifolia/tora seeds, not senna). They now cite the EU herbal monographs on senna leaf and pod (EMA/HMPC/625849/2015 and EMA/HMPC/228761/2016, Rev.1) and the digoxin prescribing information; mechanisms and copy were rewritten to what those sources state. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-25: RULE_IQM_RED_CLOVER drug:anticoagulants cited PMID 9464451 (a soybean thyroid-peroxidase paper). It now cites Heck 2000 (PMID 10902065, lists red clover), the Hall 2018 subdural-haemorrhage case (PMID 29541484) and MSKCC About Herbs; thyroid_disorder adds the Huser 2018 isoflavone safety review (PMID 30132047) beside 9464451; bleeding_disorders no longer says no bleeding case has been documented. Coumestrol/vitamin K antagonist claims removed. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-25: RULE_IQM_RED_CLOVER drug:anticoagulants cited PMID 9464451 (a soybean thyroid-peroxidase paper). It now cites Heck 2000 (PMID 10902065, lists red clover), the Hall 2018 subdural-haemorrhage case (PMID 29541484) and MSKCC About Herbs; thyroid_disorder adds the Huser 2018 isoflavone safety review (PMID 30132047) beside 9464451; bleeding_disorders no longer says no bleeding case has been documented. Coumestrol/vitamin K antagonist claims removed. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL drug sub-rules cited PMID 39517207 (bergamot for osteosarcopenic obesity) and, for statins/CCBs, PMID 23184849 (a grapefruit review) as if they showed a bergamot interaction. They now cite bergamot-juice furanocoumarin content (PMID 18830151), the bergamottin-felodipine study (PMID 15592332) and the grapefruit review (PMID 23184849, drug-specific data); mechanisms say the concern is inferred from grapefruit and evidence_level moved from established to limited. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -15343,16 +15344,17 @@
         {
           "drug_class_id": "statins",
           "severity": "avoid",
-          "evidence_level": "established",
-          "mechanism": "Furanocoumarins inhibit intestinal CYP3A4 \u2192 \u2191 statin AUC 5-15\u00d7 \u2192 rhabdomyolysis risk. Affects simvastatin and lovastatin most; atorvastatin smaller effect; pravastatin and rosuvastatin minimal.",
+          "evidence_level": "limited",
+          "mechanism": "Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effect than grapefruit juice, whose other furanocoumarins also irreversibly inactivate intestinal CYP3A4. No clinical study of a bergamot supplement with statins was found; the concern is inferred from grapefruit, which raised simvastatin exposure 3.3-fold with 200 mL daily and 7-fold with high volumes and has been linked to rhabdomyolysis. Simvastatin and lovastatin carry the highest risk and atorvastatin less; pravastatin, rosuvastatin and fluvastatin are not expected to be affected.",
           "action": "If you take simvastatin or lovastatin, avoid grapefruit and bergamot products. Pravastatin or rosuvastatin are safer alternatives if grapefruit cannot be eliminated.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/18830151/",
+            "https://pubmed.ncbi.nlm.nih.gov/15592332/",
             "https://pubmed.ncbi.nlm.nih.gov/23184849/",
-            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Muscle-toxicity risk with statins",
-          "alert_body": "If you take statins, do not combine with this product. Grapefruit and bergamot block an enzyme that breaks down certain statins, dramatically raising drug levels and the risk of muscle damage.",
+          "alert_body": "If you take a statin, talk to your prescriber before using bergamot. Like grapefruit, it contains bergamottin, which can raise some statin levels and the risk of muscle damage.",
           "informational_note": "Grapefruit/bergamot interact with simvastatin and lovastatin \u2014 relevant to anyone on those statins.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -15378,16 +15380,17 @@
         {
           "drug_class_id": "calcium_channel_blockers",
           "severity": "avoid",
-          "evidence_level": "established",
-          "mechanism": "Same CYP3A4 inhibition mechanism. Increased exposure to felodipine and nifedipine raises hypotension and edema risk.",
+          "evidence_level": "limited",
+          "mechanism": "Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effect than grapefruit juice, whose other furanocoumarins also irreversibly inactivate intestinal CYP3A4. No clinical study of a bergamot supplement with calcium channel blockers was found; the concern is inferred from grapefruit, which raised felodipine exposure about 3-fold after one serving and 5-fold with repeated servings; nifedipine is also affected. Excess exposure can cause hypotension and peripheral oedema.",
           "action": "If you take a calcium channel blocker, avoid grapefruit and bergamot products. Talk to your prescriber.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/18830151/",
+            "https://pubmed.ncbi.nlm.nih.gov/15592332/",
             "https://pubmed.ncbi.nlm.nih.gov/23184849/",
-            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "May lower blood pressure too much",
-          "alert_body": "If you take calcium channel blockers, do not combine with this product. Grapefruit and bergamot can boost levels of calcium channel blockers, leading to dangerously low blood pressure or swelling.",
+          "alert_body": "If you take a calcium channel blocker, talk to your prescriber before using bergamot. Like grapefruit, it contains bergamottin, which can raise felodipine levels.",
           "informational_note": "Grapefruit/bergamot affect calcium channel blockers \u2014 relevant to anyone on felodipine, nifedipine, or related drugs.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -15413,15 +15416,17 @@
         {
           "drug_class_id": "immunosuppressants",
           "severity": "contraindicated",
-          "evidence_level": "established",
-          "mechanism": "Same CYP3A4 mechanism. Tacrolimus and cyclosporine have narrow therapeutic indices; toxic levels cause nephrotoxicity.",
+          "evidence_level": "limited",
+          "mechanism": "Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effect than grapefruit juice, whose other furanocoumarins also irreversibly inactivate intestinal CYP3A4. No clinical study of a bergamot supplement with tacrolimus or cyclosporine was found; the concern is inferred from grapefruit, which raised cyclosporine oral bioavailability to 162% on average (670% in one patient) and tacrolimus trough concentration 10-fold in a liver-transplant recipient. Both drugs have narrow therapeutic ranges and are nephrotoxic at high concentrations.",
           "action": "If you take tacrolimus or cyclosporine, do not consume grapefruit or bergamot products. This is a strict contraindication.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
+            "https://pubmed.ncbi.nlm.nih.gov/18830151/",
+            "https://pubmed.ncbi.nlm.nih.gov/15592332/",
+            "https://pubmed.ncbi.nlm.nih.gov/23184849/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Do not combine with transplant drugs",
-          "alert_body": "If you take immunosuppressants, do not combine with this product. Grapefruit and bergamot can push tacrolimus and cyclosporine to toxic levels, damaging the kidneys. Strict avoidance is required.",
+          "alert_body": "If you take tacrolimus or cyclosporine, do not combine with bergamot products. Like grapefruit, bergamot contains bergamottin, which can push these drugs to levels that harm the kidneys.",
           "informational_note": "Grapefruit/bergamot are contraindicated with transplant immunosuppressants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -15447,15 +15452,17 @@
         {
           "drug_class_id": "antiarrhythmics",
           "severity": "avoid",
-          "evidence_level": "established",
-          "mechanism": "CYP3A4 inhibition combined with amiodarone's intrinsic QT-prolongation amplifies torsades de pointes risk. Documented cases.",
+          "evidence_level": "limited",
+          "mechanism": "Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effect than grapefruit juice, whose other furanocoumarins also irreversibly inactivate intestinal CYP3A4. No clinical study of a bergamot supplement with amiodarone was found; the concern is inferred from grapefruit, which raised amiodarone peak concentration to 180% and AUC to 150%; the combination has been reported to prolong the QT interval and cause torsade de pointes.",
           "action": "If you take amiodarone, avoid grapefruit and bergamot products.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
+            "https://pubmed.ncbi.nlm.nih.gov/18830151/",
+            "https://pubmed.ncbi.nlm.nih.gov/15592332/",
+            "https://pubmed.ncbi.nlm.nih.gov/23184849/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Heart-rhythm risk with amiodarone",
-          "alert_body": "If you take antiarrhythmics, do not combine with this product. Grapefruit and bergamot raise amiodarone levels and increase the risk of dangerous heart rhythms.",
+          "alert_body": "If you take amiodarone, talk to your prescriber before using bergamot. Like grapefruit, it contains bergamottin, which can raise amiodarone levels and the risk of abnormal heart rhythms.",
           "informational_note": "Grapefruit/bergamot stack QT risk with amiodarone.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -15481,16 +15488,17 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "CYP3A4 + P-gp inhibition increases DOAC (apixaban, rivaroxaban) exposure \u2192 bleeding risk.",
+          "evidence_level": "limited",
+          "mechanism": "Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effect than grapefruit juice, whose other furanocoumarins also irreversibly inactivate intestinal CYP3A4. No clinical study of a bergamot supplement with an anticoagulant was found; the concern is inferred from grapefruit, which is predicted to raise exposure to rivaroxaban and apixaban, with gastrointestinal bleeding as the adverse effect of concern.",
           "action": "If you take apixaban or rivaroxaban, talk to your prescriber before using grapefruit or bergamot products.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
-            "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
+            "https://pubmed.ncbi.nlm.nih.gov/18830151/",
+            "https://pubmed.ncbi.nlm.nih.gov/15592332/",
+            "https://pubmed.ncbi.nlm.nih.gov/23184849/"
           ],
           "alert_headline": "May increase bleeding risk",
-          "alert_body": "Grapefruit and bergamot can raise levels of newer blood thinners like apixaban and rivaroxaban, increasing bleeding risk.",
-          "informational_note": "Grapefruit/bergamot affect DOACs through CYP3A4 and P-gp.",
+          "alert_body": "Bergamot contains bergamottin, a grapefruit compound predicted to raise rivaroxaban and apixaban levels. If you take one of these, talk to your prescriber before using bergamot.",
+          "informational_note": "Bergamot shares a grapefruit compound that may raise DOAC levels through CYP3A4.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -15515,16 +15523,17 @@
         {
           "drug_class_id": "oral_contraceptives",
           "severity": "monitor",
-          "evidence_level": "established",
-          "mechanism": "CYP3A4 inhibition may modestly increase ethinyl estradiol exposure. Effect is documented but small.",
+          "evidence_level": "limited",
+          "mechanism": "Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effect than grapefruit juice, whose other furanocoumarins also irreversibly inactivate intestinal CYP3A4. No clinical study of a bergamot supplement with an oral contraceptive was found; the concern is inferred from grapefruit, which increases the oral bioavailability of ethinylestradiol and 17-beta-estradiol; a venous thrombosis in an ethinylestradiol user followed eating one grapefruit a day for three days.",
           "action": "If you take oral contraceptives, mention regular grapefruit or bergamot intake to your prescriber.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
-            "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
+            "https://pubmed.ncbi.nlm.nih.gov/18830151/",
+            "https://pubmed.ncbi.nlm.nih.gov/15592332/",
+            "https://pubmed.ncbi.nlm.nih.gov/23184849/"
           ],
-          "alert_headline": "Mildly raises hormone levels",
-          "alert_body": "Grapefruit and bergamot can mildly increase estrogen levels from birth-control pills. Effect is small but documented.",
-          "informational_note": "Grapefruit/bergamot mildly raise oral contraceptive levels.",
+          "alert_headline": "May raise contraceptive hormone levels",
+          "alert_body": "Bergamot contains bergamottin, a grapefruit compound. Grapefruit raises estrogen levels from birth-control pills; if you take one, mention regular bergamot use to your prescriber.",
+          "informational_note": "Bergamot shares a grapefruit compound that may raise oral contraceptive levels.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {

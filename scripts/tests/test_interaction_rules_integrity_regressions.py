@@ -327,3 +327,36 @@ def test_red_clover_anticoagulant_rule_no_longer_cites_a_soy_thyroid_paper():
     ):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-24"  # agent re-sourcing, not a clinical review
+
+
+FDA_GRAPEFRUIT = (
+    "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
+)
+
+
+def test_bergamot_drug_rules_cite_bergamottin_not_an_osteosarcopenia_review():
+    rule = _rule("RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL")
+    bridge = [_pmid("18830151"), _pmid("15592332"), _pmid("23184849")]
+    expected = {
+        "statins": ("avoid", bridge + [FDA_GRAPEFRUIT]),
+        "calcium_channel_blockers": ("avoid", bridge + [FDA_GRAPEFRUIT]),
+        "immunosuppressants": ("contraindicated", bridge + [FDA_GRAPEFRUIT]),
+        "antiarrhythmics": ("avoid", bridge + [FDA_GRAPEFRUIT]),
+        "anticoagulants": ("caution", bridge),
+        "oral_contraceptives": ("monitor", bridge),
+    }
+    for drug_class, (severity, sources) in expected.items():
+        sub = _sub_rule(rule, "drug_class_id", drug_class)
+        assert sub["sources"] == sources, drug_class
+        assert sub["severity"] == severity, drug_class
+        # Bergamot evidence is a constituent (bergamottin) plus grapefruit
+        # extrapolation, not an established bergamot-drug interaction.
+        assert sub["evidence_level"] == "limited", drug_class
+        assert "bergamottin" in sub["mechanism"], drug_class
+        assert "inferred from grapefruit" in sub["mechanism"], drug_class
+        copy = json.dumps(sub).lower()
+        for stale in ("5-15", "p-gp", "dramatically", "small but documented",
+                      "documented but small", "mildly"):
+            assert stale not in copy, (drug_class, stale)
+    assert _pmid("39517207") not in json.dumps(rule)
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
