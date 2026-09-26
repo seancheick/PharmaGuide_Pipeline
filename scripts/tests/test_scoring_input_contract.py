@@ -1955,3 +1955,39 @@ def test_nutrition_fact_identity_exclusion_survives_active_projection(canonical,
     assert not result.rows
     assert any(r.reason == "excluded_nutrition_fact" for r in result.rejected_rows)
     assert product["activeIngredients"][0]["quantity"] == quantity
+
+
+@pytest.mark.parametrize("with_peer", [False, True])
+def test_conflicting_safety_recognition_cannot_survive_as_native_anchor(with_peer):
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    source = _row(name="Konjac root extract", raw_source_text="Konjac root extract",
+                  canonical_id="fiber", canonical_source_db="ingredient_quality_map",
+                  quantity=2, unit="g")
+    identity = {**source, "canonical_id_after": "fiber", "standard_name": "Fiber",
+                "identity_disposition": "repaired"}
+    product = _product([], activeIngredients=[source], ingredient_quality_data={
+        "ingredients": [identity], "ingredients_scorable": [], "ingredients_skipped": [],
+    })
+    # Persist the formerly affirmative projection, then supply the contradictory
+    # owner decision from the real Konjac failure. Stored anchors must not win.
+    product["product_scoring_evidence"] = deepcopy(derive_product_scoring_evidence(product))
+    assert product["product_scoring_evidence"]
+    identity.update({
+        "scoreable_identity": False, "recognized_non_scorable": True,
+        "recognition_source": "harmful_additives", "recognized_entry_id": "ADD_POLYDEXTROSE",
+        "identity_decision_reason": "safety_identity_excluded_from_scoring",
+        "role_classification": "recognized_non_scorable",
+        "score_exclusion_reason": "recognized_non_scorable",
+    })
+    if with_peer:
+        peer = _row(raw_source_path="ingredientRows[1]")
+        product["ingredient_quality_data"]["ingredients"].append(peer)
+        product["ingredient_quality_data"]["ingredients_scorable"].append(peer)
+    result = get_scoring_ingredients(product, strict=True)
+    assert all(row.get("raw_source_path") != source["raw_source_path"] for row in result.rows)
+    assert result.unmapped_count == 1
+    assert result.mapped_count == int(with_peer)
+    assert "identity_projection_inconsistent:recognized_entry_id" in result.contract_findings
+    assert build_scored_artifact(product)["quality_score_status"] == "not_scored"

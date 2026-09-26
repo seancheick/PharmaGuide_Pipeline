@@ -967,3 +967,18 @@ brands when source defects surfaced; preserve fresh12_release_97b8a0ed.
 Not final acceptance. Two named-konjac products currently expose a separate
 PGX alias/identity-projection defect; their numeric 63.0 results are NOT accepted.
 A single curated alias removal and NF-only fiber policy decision await Sean.
+
+
+Konjac projection containment: required repaired identities that explicitly
+exclude scoring under a different safety-recognition tuple now enter the existing
+identity conflict ledger. This blocks derived and persisted native generic
+anchors without globally rejecting recognized preparations or taxonomy flags.
+Real 252564/255063 regressions failed first (scored instead of not_scored);
+228 focused tests then passed. Persisted-anchor tests with and without a valid
+peer passed (2), retaining one unresolved exposure and blocking numeric scoring.
+Owner: scripts/scoring_input_contract.py::_identity_projection_rejection_reason
+and required_identity_conflicts — evidence: matrix scoring_input_contract and
+mapping_coverage_contract, real saved IQD tuple and red tests.
+Will NOT create: new status, safety registry, identity resolver or public field.
+The PGX alias and misleading Polydextrose recognition remain upstream findings;
+this containment does not claim they are clinically corrected.

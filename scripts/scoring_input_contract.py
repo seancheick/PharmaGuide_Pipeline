@@ -1639,6 +1639,21 @@ def _identity_projection_rejection_reason(
         recognition_source = identity_row.get("recognition_source")
         if (
             identity_row.get("recognized_non_scorable") is True
+            and identity_row.get("scoreable_identity") is False
+            and identity_row.get("identity_decision_reason") == "safety_identity_excluded_from_scoring"
+            and recognition_source in {"banned_recalled_ingredients", "harmful_additives"}
+            and identity_row.get("recognized_entry_id")
+            and (canonical_id, source_db) != (
+                identity_row.get("recognized_entry_id"), recognition_source
+            )
+        ):
+            # A repaired scoring identity cannot override its owner's explicit
+            # exclusion under a different safety identity. Retain this required
+            # exposure in the existing conflict ledger instead of minting an
+            # affirmative generic anchor from the cleaner row.
+            return "identity_projection_inconsistent:recognized_entry_id"
+        if (
+            identity_row.get("recognized_non_scorable") is True
             and identity_row.get("recognized_entry_id") == canonical_id
             and recognition_source not in {None, "banned_recalled_ingredients", "harmful_additives"}
         ):
