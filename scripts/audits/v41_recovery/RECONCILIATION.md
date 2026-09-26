@@ -428,3 +428,21 @@ exposure. 50 botanical profile/role tests passed. Stored-input adapter probe of
 1,353 products found 11 payload changes (including metadata-only changes); receipt
 `~/pg_quality/candd/runs/botanical_daily_20260926.json`. Preparation/basis scope still
 requires review; this checkpoint alone does not establish route or release readiness.
+
+### Protein source loss in skipped inactive blend headers
+
+Owner: `enhanced_normalizer.py::_process_ingredients_sequential` preserves source
+forms through its existing header expansion; `scoring_input_contract.py::declared_protein_source_rows`
+projects the resulting rows. Evidence: `rg 'structural_form_container|should_skip_inactive|declared_protein_source_rows' scripts`.
+Will NOT create: a source parser, registry, public field or product exception.
+
+Both 42306 and 42289 disclose sources in raw Other Ingredients; the skip-list
+path discarded their proprietary headers with their forms. Two failing cleaner
+regressions preceded the expansion fix. A failing real-label Evidence regression
+then exposed that expanded rows use `category`, not `raw_category`; the projection
+now accepts that existing field. 80 focused cleaner/matcher/Evidence tests pass.
+42306 recovers whey evidence; 42289 preserves its casein/egg/soy/whey sources but
+still fails this record's current scope. Fresh real-label outputs are recorded in
+`~/pg_quality/candd/runs/protein_source_loss_20260926.json` (62.6 and 32.9 respectively).
+These totals are fresh outputs, not an isolated before/after score measurement.
+Combined fresh validation and broader preservation checks remain pending.

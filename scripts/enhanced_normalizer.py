@@ -8154,7 +8154,11 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
-            if self._is_structural_form_container(name, is_active=False):
+            if self._is_structural_form_container(name, is_active=False) or (
+                ing.get("forms")
+                and self._is_proprietary_blend_name(name)
+                and self._should_skip_inactive_ingredient(name)
+            ):
                 forms = ing.get("forms", []) or []
                 self._queue_display_ingredient(
                     raw_source_text=name,

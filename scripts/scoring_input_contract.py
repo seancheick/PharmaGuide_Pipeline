@@ -2549,7 +2549,7 @@ def declared_protein_source_rows(product: Mapping[str, Any]) -> List[Dict[str, A
         if not isinstance(row, dict):
             continue
         forms = [form for form in _safe_list(row.get("forms")) if isinstance(form, dict)]
-        if (_norm(row.get("raw_category")) == "protein"
+        if (_norm(row.get("raw_category") or row.get("category")) == "protein"
                 or _norm(row.get("canonical_id")) == "protein"
                 or any(_norm(form.get("category")) == "protein" for form in forms)):
             rows.append(row)
