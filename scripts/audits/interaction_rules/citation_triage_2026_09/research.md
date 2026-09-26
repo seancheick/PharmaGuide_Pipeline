@@ -586,3 +586,16 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
 - statins: **PMID 12622602** (Arch Intern Med 2003) — statin myopathy "is dose related and is increased
   when statins are used in combination with agents that share common metabolic pathways". Class-level
   support for stacking a lovastatin-equivalent on a statin (reviewed entry).
+
+## RULE_IQM_CHASTEBERRY_PREGNANCY — mechanism trimmed (pregnancy); reviewed (pregnancy, pregnancy_lactation)
+
+- **PMID 23136064** (van Die, Planta Med 2013; systematic review of RCTs): in latent hyperprolactinaemia
+  Vitex reduced "TRH-stimulated prolactin secretion, normalising a shortened luteal phase, increasing
+  mid-luteal progesterone and 17β-oestradiol levels"; comparable to bromocriptine. No pregnancy data
+  (topic heuristic miss); supports the hormonal mechanism.
+- **NCCIH Chasteberry** (https://www.nccih.nih.gov/health/chasteberry): "Some preclinical evidence states
+  that the use of chasteberry during pregnancy or while breastfeeding may be unsafe"; "chasteberry
+  may be unsafe during pregnancy".
+- The pregnancy mechanism named "pituitary dopamine D2 receptors" and "modulate LH/FSH secretion";
+  neither cited source says so (D2 activity is shown in vitro elsewhere, PMID 39519010, not cited
+  here). Trimmed to what the two sources state.

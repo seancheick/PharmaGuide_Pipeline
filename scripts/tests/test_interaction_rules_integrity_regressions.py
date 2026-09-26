@@ -897,3 +897,17 @@ def test_red_yeast_rice_efsa_2025_sentence_cites_the_2025_opinion():
     assert _pmid("40027377") in high_cholesterol["sources"]  # EFSA NDA 2025
     assert _pmid("32626016") in high_cholesterol["sources"]  # EFSA ANS 2018
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+
+
+def test_chasteberry_pregnancy_mechanism_matches_its_sources():
+    rule = _rule("RULE_IQM_CHASTEBERRY_PREGNANCY")
+    pregnancy = _sub_rule(rule, "condition_id", "pregnancy")
+
+    assert pregnancy["sources"] == [
+        "https://www.nccih.nih.gov/health/chasteberry", _pmid("23136064"),
+    ]
+    assert "prolactin" in pregnancy["mechanism"]
+    assert "NCCIH" in pregnancy["mechanism"]
+    for stale in ("D2 receptors", "LH/FSH"):
+        assert stale not in pregnancy["mechanism"], stale
+    assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
