@@ -571,6 +571,20 @@ def test_total_fat_above_five_grams_uses_the_one_gram_rounding_bound() -> None:
     assert at_five["metadata"]["epa_dha_concentration"]["oil_mg"] == 5500.0
 
 
+def test_impossible_total_fat_bound_does_not_create_over_100_percent_concentration() -> None:
+    """A rounded Total Fat bound below EPA+DHA is inconsistent label data,
+    not proof of a concentration above 100%."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_with_total_fat(
+        _epa_dha_product(name="Advanced Omega", epa=700, dha=590), 0.5,
+    ))
+    concentration = payload["metadata"]["epa_dha_concentration"]
+    assert concentration["status"] == "inconsistent_oil_mass_below_epa_dha"
+    assert "ratio" not in concentration
+    assert "epa_dha_concentration" not in payload["components"]
+
+
 def test_declared_oil_mass_wins_over_total_fat() -> None:
     from scoring_v4.modules.omega_formulation import score_formulation
 

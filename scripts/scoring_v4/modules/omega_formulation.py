@@ -353,6 +353,13 @@ def _score_epa_dha_concentration(product: Dict[str, Any], cfg: Dict[str, Any]) -
     if oil_mg <= 0:
         payload["status"] = "missing_oil_mass"
         return payload
+    if oil_mg + 1e-6 < epa_dha_mg:
+        # EPA and DHA are constituents of the omega oil, so their combined
+        # mass cannot exceed the declared parent-oil mass (or a Total Fat upper
+        # bound). Treat inconsistent label data as unassessable instead of
+        # displaying an impossible >100% concentration or awarding full credit.
+        payload["status"] = "inconsistent_oil_mass_below_epa_dha"
+        return payload
 
     ratio = epa_dha_mg / oil_mg
     payload["ratio"] = round(ratio, 4)
