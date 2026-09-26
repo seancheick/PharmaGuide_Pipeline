@@ -246,3 +246,99 @@ def test_no_banned_active_ships_with_severity_status_na() -> None:
         "actives matching banned_recalled (banned/high_risk/recalled) "
         f"missing is_safety_concern=true. First 5: {violations}"
     )
+
+
+def test_no_corpus_red_yeast_rice_label_is_unmatched() -> None:
+    """Fail if any enriched label naming red yeast rice resolves to nothing.
+
+    Detection is a plain substring scan, independent of the alias list under
+    test, so a newly-observed variant fails here instead of shipping unflagged.
+    """
+    import glob
+    import json
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    RISK_RULE = "RISK_RED_YEAST_RICE"
+    BANNED_RULE = "BANNED_RED_YEAST_RICE"
+
+    files = sorted(glob.glob("scripts/products/output_*_enriched/enriched/*.json"))
+    files = [f for f in files if not f.endswith(".stage_manifest.json")]
+    if not files:
+        pytest.skip("enriched corpus not present")
+
+    resolver = InactiveIngredientResolver()
+    needles = ("yeast rice", "monascus", "monacolin", "red koji")
+    unmatched: set[str] = set()
+    for path in files:
+        try:
+            payload = json.loads(Path(path).read_text())
+        except Exception:
+            continue
+        rows = payload if isinstance(payload, list) else (
+            payload.get("products") or payload.get("items")
+            or payload.get("data") or [payload]
+        )
+        for product in rows:
+            if not isinstance(product, dict):
+                continue
+            for key in ("activeIngredients", "inactiveIngredients"):
+                for ing in product.get(key) or []:
+                    if not isinstance(ing, dict):
+                        continue
+                    texts = [ing.get("name"), ing.get("standardName"),
+                             ing.get("raw_source_text")]
+                    for form in ing.get("forms") or []:
+                        if isinstance(form, dict):
+                            texts += [form.get("name"), form.get("prefix")]
+                    for text in texts:
+                        value = str(text or "")
+                        if not any(n in value.lower() for n in needles):
+                            continue
+                        if resolver.resolve(raw_name=value).matched_rule_id not in {
+                            RISK_RULE, BANNED_RULE
+                        }:
+                            unmatched.add(value)
+    assert not unmatched, (
+        "red yeast rice label strings that resolve to no rule: "
+        f"{sorted(unmatched)}"
+    )
+
+
+def test_corpus_canary_178791_flags_its_film_coating_additives() -> None:
+    """Women's Multivitamin: Talc + Titanium Dioxide inside `Film Coating`."""
+    import glob
+    import json
+    from scoring_v4.gate_safety import _iter_resolver_clean_label_hits
+
+    files = sorted(glob.glob("scripts/products/output_*_enriched/enriched/*.json"))
+    files = [f for f in files if not f.endswith(".stage_manifest.json")]
+    if not files:
+        pytest.skip("enriched corpus not present")
+
+    product = None
+    for path in files:
+        try:
+            raw = Path(path).read_text()
+            if "178791" not in raw:
+                continue
+            payload = json.loads(raw)
+        except Exception:
+            continue
+        rows = payload if isinstance(payload, list) else (
+            payload.get("products") or payload.get("items")
+            or payload.get("data") or [payload]
+        )
+        for candidate in rows:
+            if isinstance(candidate, dict) and str(
+                candidate.get("id") or candidate.get("dsld_id") or candidate.get("dsldId") or ""
+            ) == "178791":
+                product = candidate
+                break
+        if product:
+            break
+    if product is None:
+        pytest.skip("178791 not present in the enriched corpus")
+
+    assert "BANNED_ADD_TITANIUM_DIOXIDE" in {
+        hit.get("matched_rule_id") for hit in _iter_resolver_clean_label_hits(product)
+    }

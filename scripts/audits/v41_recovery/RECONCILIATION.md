@@ -627,3 +627,80 @@ from earning a floor. Regression failed before the fix.203 focused checks passed
 Real224672 now resolves by authority and earns the existing raw10-point nutrition
 floor (11.1 public), with an assessed explanation rather than false identity debt.
 Its old15.6 points came from calcium and are not restored.
+
+### Continuation measurements at6bdffe33 — provisional policy, not release approval
+
+Owner: the existing scorer, `evidence_resolver`, `scoring_input_contract`, IQM,
+`serving_frequency`, and their current export/Flutter consumers. Evidence: the
+11 local commits after69c08dbc and the recorded boundary regressions. Will NOT
+create: a second scorer, source registry, product exception, or public field.
+
+- Fresh Clean/Enrich/Score:7,412 labels across12brands; all stages succeeded.
+  After the two nutrient fixes, every brand was rescored successfully at6bdffe33.
+- Coverage:generic4,528; multi/prenatal1,063; sports598; omega528;
+  probiotic398; fiber/digestive215; B-complex82. Statuses:6,077scored,
+  1,294not_scored,41suppressed_safety.
+- Isolated frozen replay:1,353inputs,119score changes (111Evidence,8Dose).
+  Zero route/status/safety/dose-safety/completeness changes.258readiness payloads
+  differ (Evidence258,Dose details81,shadow dimensions52); eligibility unchanged.
+  Source unchanged during replay; SHA256
+  315df72aeafbf11a60de6fde92f4bb5b3123dcac98dff238a8baf61b6ccc17af.
+- Fresh/frozen join:798overlapping labels,149pillar movers,194readiness changes;
+  no compared route/status/safety/dose-safety/completeness differences.22IQD
+  projections changed, all disclosed omega form recovery. This projection covers
+  source path, identity and matched form; the inactive protein-source boundary is
+  covered separately by the two real-label regressions.
+- First-pass/final fresh nutrient correction:91score/conclusion changes; maximum
+  absolute11.1. Zero safety, route, eligibility, exposure, or quarantine changes.
+  GNC224672 ends57.6overall with11.1Evidence, rather than borrowing calcium credit.
+- Route leaders inspected:337856Curcumin Phytosome100 (preparation-basis gap,
+  not clinical approval);328090probiotic81.4;328830prenatal96.5;
+  218637psyllium93;59360omega91.5;175321creatine100;209616B-complex98.6.
+  Numerical leaders are diagnostic examples, not an endorsement or a90+target.
+- Flutter:59focused score/pillar/projection/detail-blob/tradeoff checks passed.
+  No Flutter source edited. Exported-candidate validation remains a separate gate.
+
+Artifacts under `~/pg_quality/candd/runs/`: `continuation_final_6bdffe33.jsonl`
+(and metadata), `continuation_final_diff_6bdffe33.json`,
+`fresh12_firstpass_674a2ec9.jsonl`, `fresh12_final_6bdffe33.jsonl`,
+`fresh12_nutrient_fix_diff.json`, `fresh12_vs_frozen.json`,
+`fresh12_identity_diff.json`, `fresh12_coverage.json`.
+
+**Unresolved acceptance decisions:** strict digestive ownership sends315334 and
+315850Stress & Gut Health Evidence20→0 by excluding substantial stress actives.
+Sean's mixed-purpose ownership decision is pending; this candidate is provisional.
+Conditional mixed-egg source applicability and alternative-source curation remain
+open. Preparation-specific carrier/extract references also remain a clinical
+review gap. Do not describe those gaps as fixed or all14protein scores restored.
+
+Main was fetched at a5bc92b7 and includes separate clinical/scoring changes in19
+production/data files relative to69c08dbc. The combined main+continuation result
+has not been tested. No merge, push, release or worktree deletion occurred.
+
+Testing workflow correction requested by Sean: batch related fixes; use focused
+regressions; one broad fast checkpoint; stop on an early failure, but after roughly60–70%
+let the run finish and collect failures. Repair related failures together before restarting. Do not run a broad suite per
+individual fix, or automatically add release/full-suite runs to a provisional
+candidate. The already-running final fast checkpoint is being watched for its
+first failure; its completed progress is retained.
+
+### Test-cost defect found by the final checkpoint
+
+The broad fast run was interrupted at its first reported failure under Sean's
+then-current instruction:11,951passed,111skipped,1timeout in762.20seconds.
+`test_no_corpus_red_yeast_rice_label_is_unmatched` timed out decoding the full
+corpus at120seconds; it did not report an unmatched safety label. Sean then
+refined the workflow: after60–70% allow completion and batch the failures.
+
+Owner: `test_profiles.py::RELEASE_TEST_FILES/ARTIFACT_TEST_FILES` already owns
+`test_active_banned_recalled_parity.py`. Evidence: `rg -n
+'ARTIFACT_TEST_FILES|RELEASE_TEST_FILES|test_active_banned_recalled_parity'
+scripts/test_profiles.py`. Will NOT create: a second profile or bypass a safety
+assertion. The two whole-corpus tests were moved from fast unit-test files into
+that existing artifact/release file. The178791 lookup also reads the real enriched
+`id` key and avoids decoding batches that do not contain that ID.
+
+The35fast label/form tests passed together (0.77seconds). The full-corpus red
+yeast rice check passed under the existing600-second artifact/slow budget;
+178791 was absent and explicitly skipped (1passed,1skipped,32.42seconds).
+No scorer or clinical data changed; another pipeline rebuild is unnecessary.
