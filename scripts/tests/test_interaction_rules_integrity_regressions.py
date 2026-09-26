@@ -803,3 +803,31 @@ def test_horny_goat_weed_rules_say_what_the_pde5_and_case_sources_say():
     for stale in ("pde4", "estrogen receptor agonist", "producing additive hypotension"):
         assert stale not in copy, stale
     assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+
+
+def test_black_seed_rules_cite_meta_analyses_and_drop_unsourced_numbers():
+    rule = _rule("RULE_IQM_BLACK_SEED_OIL_DIABETES")
+    review, glucose_ma, bp_ma = _pmid("34073784"), _pmid("40210172"), _pmid("27512971")
+    glucose = [_sub_rule(rule, "condition_id", "diabetes")] + [
+        _sub_rule(rule, "drug_class_id", dc)
+        for dc in ("hypoglycemics_high_risk", "hypoglycemics_lower_risk", "hypoglycemics_unknown")
+    ]
+    for sub in glucose:
+        assert sub["sources"] == [glucose_ma, review]
+        assert "21 mg/dL" in sub["mechanism"]
+    for sub in (_sub_rule(rule, "condition_id", "hypertension"),
+                _sub_rule(rule, "drug_class_id", "antihypertensives")):
+        assert sub["sources"] == [bp_ma]
+        assert "3.3 mmHg" in sub["mechanism"]
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+    pregnancy = _sub_rule(rule, "condition_id", "pregnancy")
+    assert anticoagulants["sources"] == [review]
+    assert "CYP2C9" in anticoagulants["mechanism"]
+    assert pregnancy["sources"] == [review] == rule["pregnancy_lactation"]["sources"]
+    assert "fetal resorption" in pregnancy["mechanism"]
+
+    copy = json.dumps(rule).lower()
+    for stale in ("ppar-gamma", "15-20 mg/dl", "5-10 mmhg", "calcium channel",
+                  "thromboxane b2", "uterine-effect", "mild antiplatelet"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review

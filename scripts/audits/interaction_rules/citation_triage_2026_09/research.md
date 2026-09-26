@@ -481,3 +481,29 @@ those rules. (It stays on chamomile, devil's claw and red clover, which it names
   Class reference for the PDE5 extrapolation; no icariin-nitrate case found.
 - Removed as unsourced: PDE4 inhibition, "weak estrogen receptor agonist activity" of icariin,
   "producing additive hypotension".
+
+## RULE_IQM_BLACK_SEED_OIL_DIABETES — re-sourced (all nine sub-rules)
+
+- **PMID 34073784** ("Black Cumin (Nigella sativa L.): A Comprehensive Review ...", Nutrients 2021;
+  PMC8225153) was the only source for all nine sub-rules. Its abstract names no drug, pregnancy or
+  blood-pressure effect. Full text (read 2026-09-25):
+  - herb-drug table: "TQ Glibenclamide (GBC) Rat PO 10 mg/kg Plasma concentration of GBC increased by
+    13.4% (Single dose) and 21.8% (multiple doses) with TQ Synergistic effect on glucose level"; TQ
+    "Moderate inhibitors of the CYP2C9" (fluorescence assay).
+  - toxicity: pregnant rats given TQ i.p. on gestation days 11 and 14 — 15 mg/kg "no adverse effect",
+    35 mg/kg "maternal and embryonic toxicities", 50 mg/kg "complete fetal resorption"; intravaginal
+    black cumin oil in pregnant rats "did not cause any adverse effect".
+  - hypertension: one RCT in elderly hypertensives "slight but insignificant reduction"; another
+    positive; angiotensin II rat model positive.
+  - Not in the review: "PPAR-gamma activation" as the glucose mechanism, "fasting glucose reductions of
+    15-20 mg/dL", "voltage-gated calcium channels ... eNOS", "Reductions of 5-10 mmHg systolic",
+    "inhibits thromboxane B2 synthesis and platelet aggregation", "uterine-effect activity". Removed.
+  It stays (reviewed) on diabetes, the three hypoglycemic classes (glibenclamide), anticoagulants
+  (CYP2C9) and pregnancy / pregnancy_lactation (rat data).
+- **PMID 40210172** (Karimi, Complement Ther Med 2025; MA of 16 RCTs in T2DM): FBG "MD: -21.43 mg/dL";
+  HbA1c "MD: -0.44"; no significant effect on fasting insulin or 2-h postprandial glucose.
+- **PMID 27512971** (Sahebkar, J Hypertens 2016; MA of 11 RCTs, n = 860; already the dose-floor source):
+  SBP "-3.26 (-5.10, -1.42)" and DBP "-2.80 (-4.28, -1.32)" mmHg vs control over ~8.3 weeks; powder
+  more effective than oil.
+- anticoagulant alert said "Black seed oil has mild antiplatelet or anticoagulant activity" with no
+  source; rewritten to the CYP2C9 finding.

@@ -155,7 +155,8 @@
       "2026-09-26: RULE_INGREDIENT_OMEGA_3 drug:nsaids cited only PMID 10902065 (a warfarin review silent on NSAIDs and fish oil) for a claim that omega-3 plus NSAIDs may increase GI bleeding. It now cites the evidence found: prescription omega-3 enhanced aspirin's platelet inhibition without inhibiting platelets alone (PMID 18841286), no rise in upper-GI complications with low-dose aspirin plus omega-3 (PMID 26280541), and no increased bleeding in trials with aspirin or warfarin (PMID 17368277). evidence_level probable -> theoretical; headline and alert no longer claim added bleeding risk. Severity and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES diabetes and hypoglycemic drug sub-rules cited only PMID 35800714 (a general nettle review with no glucose data in its abstract and none in humans). They now cite a 3-month RCT of nettle leaf added to oral antidiabetic drugs (PMID 24273930: lower fasting/post-meal glucose and HbA1c) and a meta-analysis of 8 RCTs (PMID 31802554: fasting glucose -18 mg/dL, HbA1c not significant). 35800714 remains the min_effective_dose source. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
       "2026-09-26: RULE_IQM_VANADIUM_DIABETES cited only PMID 37958659 (a review of vanadium compounds that does not name vanadyl sulfate in its abstract and calls human trials ambiguous) for FBG/HbA1c reductions at 150 mg/day and PTP-1B inhibition. It now cites the vanadyl sulfate trials themselves: Cusi 2001 (PMID 11238540: 150 mg/day, FPG 194 to 155 mg/dL, HbA1c 8.1 to 7.6%, ~20% lower hepatic glucose production) and Goldfine 2000 (PMID 10726921: FPG and HbA1c fell at 150-300 mg/day with GI intolerance). Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
-      "2026-09-26: RULE_IQM_HORNY_GOAT_WEED_HEART mechanisms claimed PDE4 inhibition, estrogen-receptor agonism and additive hypotension that no cited source states, and cited the horny goat weed tachyarrhythmia case (PMID 15546831) for antihypertensives. Mechanisms now say what MSKCC, the icariin PDE5 study (PMID 18778098: IC50 5.9 microM) and the case report say, with the nitrate concern tied to the sildenafil label (potentiates nitrate hypotension); 15546831 was removed from antihypertensives. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
+      "2026-09-26: RULE_IQM_HORNY_GOAT_WEED_HEART mechanisms claimed PDE4 inhibition, estrogen-receptor agonism and additive hypotension that no cited source states, and cited the horny goat weed tachyarrhythmia case (PMID 15546831) for antihypertensives. Mechanisms now say what MSKCC, the icariin PDE5 study (PMID 18778098: IC50 5.9 microM) and the case report say, with the nitrate concern tied to the sildenafil label (potentiates nitrate hypotension); 15546831 was removed from antihypertensives. Severities and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed.",
+      "2026-09-26: RULE_IQM_BLACK_SEED_OIL_DIABETES cited only PMID 34073784 (a broad black cumin review) on all nine sub-rules, with numbers and mechanisms the review does not contain (15-20 mg/dL, 5-10 mmHg, PPAR-gamma, calcium channels/eNOS, thromboxane B2, uterine effects). Glucose sub-rules now cite a meta-analysis of 16 RCTs in T2DM (PMID 40210172: FBG -21 mg/dL, HbA1c -0.44) plus the review (thymoquinone raised glibenclamide in rats); blood-pressure sub-rules cite the 11-RCT meta-analysis already used for dose floors (PMID 27512971: SBP -3.3, DBP -2.8 mmHg); anticoagulants (in vitro CYP2C9 inhibition) and pregnancy (rat thymoquinone embryotoxicity at 35-50 mg/kg i.p.) keep the review with mechanisms rewritten to its full text. Severities, evidence levels and last_reviewed unchanged. Agent re-sourcing, not clinician-reviewed."
     ]
   },
   "interaction_rules": [
@@ -19809,9 +19810,10 @@
           "condition_id": "diabetes",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Thymoquinone (the primary active constituent of black seed oil/Nigella sativa) stimulates insulin secretion from pancreatic beta cells and increases peripheral glucose uptake via PPAR-gamma activation. Multiple small RCTs demonstrate fasting glucose reductions of 15-20 mg/dL, creating additive hypoglycemia risk with antidiabetic agents.",
+          "mechanism": "In a meta-analysis of 16 randomised trials in type 2 diabetes, black seed lowered fasting glucose by about 21 mg/dL and HbA1c by 0.44 percentage points, without changing fasting insulin. In rats, thymoquinone, its main active compound, raised plasma glibenclamide by 13-22%. These effects could add to antidiabetic drugs.",
           "action": "Monitor blood glucose closely when starting or stopping black seed oil in patients on diabetes medications. Warn of additive hypoglycemia risk.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/40210172/",
             "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May lower blood sugar",
@@ -19851,10 +19853,10 @@
           "condition_id": "hypertension",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Thymoquinone inhibits voltage-gated calcium channels and increases endothelial nitric oxide synthase (eNOS) activity, reducing peripheral vascular resistance. Reductions of 5-10 mmHg systolic have been reported in small trials, creating additive hypotension risk with antihypertensive therapy.",
+          "mechanism": "A meta-analysis of 11 randomised trials (860 people, about 8 weeks) found black seed lowered systolic blood pressure by about 3.3 mmHg and diastolic by 2.8 mmHg compared with control, with powder more effective than oil. The effect could add modestly to blood-pressure-lowering treatment.",
           "action": "Monitor blood pressure when combining with antihypertensive medications. Alert prescriber to use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
+            "https://pubmed.ncbi.nlm.nih.gov/27512971/"
           ],
           "alert_headline": "May modestly lower blood pressure",
           "alert_body": "Black seed oil may modestly lower blood pressure. If you take blood pressure medication, monitor for dizziness or low BP symptoms and mention it to your clinician.",
@@ -19893,13 +19895,13 @@
           "condition_id": "pregnancy",
           "severity": "avoid",
           "evidence_level": "probable",
-          "mechanism": "Black seed oil (Nigella sativa) has limited human pregnancy safety data, and preclinical (animal) studies have signaled uterine-effect activity at high doses. Human pregnancy effects are not established; conservative practice is to avoid until data exist.",
+          "mechanism": "Human pregnancy safety data are lacking. In pregnant rats, injected thymoquinone at 35-50 mg/kg caused maternal and embryonic toxicity and fetal resorption, while 15 mg/kg and intravaginal black seed oil caused no adverse effects. Avoidance in pregnancy is precautionary.",
           "action": "Avoid black seed oil during pregnancy unless your obstetric clinician specifically recommends it. Use is precautionary because human pregnancy data are lacking.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "Pregnancy safety is unclear",
-          "alert_body": "Black seed oil has limited pregnancy safety data and animal studies have flagged uterine-effect signals. If you are pregnant, talk to your obstetrician before use.",
+          "alert_body": "Black seed oil has no human pregnancy safety data, and high injected doses of its main compound harmed pregnancies in rats. If you are pregnant, talk to your obstetrician before use.",
           "informational_note": "Black seed oil pregnancy data are limited \u2014 relevant to anyone pregnant.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -19928,14 +19930,14 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Thymoquinone inhibits thromboxane B2 synthesis and platelet aggregation, and in vitro data suggest weak inhibition of CYP2C9 which is the primary metabolic pathway for warfarin S-enantiomer. A combined antiplatelet and potential pharmacokinetic interaction may increase bleeding risk.",
+          "mechanism": "In an in vitro assay, thymoquinone moderately inhibited CYP2C9, the main enzyme that clears S-warfarin. No clinical study of black seed with warfarin or other anticoagulants was found, so a pharmacokinetic interaction is theoretical.",
           "action": "Monitor INR if combining black seed oil with warfarin or other anticoagulants. Alert prescriber to use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Black seed oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding black seed oil and ask about INR or bleeding checks.",
-          "informational_note": "Black seed oil can affect clotting \u2014 relevant to people on anticoagulants.",
+          "alert_body": "Lab data suggest black seed oil may slow warfarin breakdown. If you take an anticoagulant, talk to your prescriber before adding black seed oil and ask about INR checks.",
+          "informational_note": "Black seed oil may affect warfarin metabolism \u2014 relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19970,9 +19972,10 @@
           "drug_class_id": "hypoglycemics_high_risk",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Additive glucose-lowering via PPAR-gamma activation and beta-cell stimulation. Risk of symptomatic hypoglycemia particularly with sulfonylureas and insulin.",
+          "mechanism": "Black seed lowered fasting glucose by about 21 mg/dL and HbA1c by 0.44 points in a meta-analysis of 16 randomised trials in type 2 diabetes, and thymoquinone raised plasma glibenclamide by 13-22% in rats. Additive glucose lowering is possible, particularly with sulfonylureas and insulin.",
           "action": "Monitor blood glucose more frequently. Avoid unsupervised combinations with insulin or sulfonylureas.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/40210172/",
             "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May add to diabetes-med effects",
@@ -20012,9 +20015,10 @@
           "drug_class_id": "hypoglycemics_lower_risk",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Additive glucose-lowering via PPAR-gamma activation and beta-cell stimulation. Risk of symptomatic hypoglycemia particularly with sulfonylureas and insulin.",
+          "mechanism": "Black seed lowered fasting glucose by about 21 mg/dL and HbA1c by 0.44 points in a meta-analysis of 16 randomised trials in type 2 diabetes, and thymoquinone raised plasma glibenclamide by 13-22% in rats. Additive glucose lowering is possible, particularly with sulfonylureas and insulin.",
           "action": "Monitor blood glucose more frequently. Avoid unsupervised combinations with insulin or sulfonylureas.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/40210172/",
             "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May add to diabetes-med effects",
@@ -20054,10 +20058,10 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Additive blood pressure-lowering via calcium channel inhibition and increased nitric oxide production may cause symptomatic hypotension, particularly with calcium channel blockers and ACE inhibitors.",
+          "mechanism": "A meta-analysis of 11 randomised trials (860 people, about 8 weeks) found black seed lowered systolic blood pressure by about 3.3 mmHg and diastolic by 2.8 mmHg compared with control, with powder more effective than oil. A small additive effect with antihypertensive drugs is possible; no interaction study was found.",
           "action": "Monitor blood pressure. Alert prescriber to black seed oil use if on antihypertensive therapy.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
+            "https://pubmed.ncbi.nlm.nih.gov/27512971/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Black seed oil can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding black seed oil.",
@@ -20096,9 +20100,10 @@
           "drug_class_id": "hypoglycemics_unknown",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Additive glucose-lowering via PPAR-gamma activation and beta-cell stimulation. Risk of symptomatic hypoglycemia particularly with sulfonylureas and insulin.",
+          "mechanism": "Black seed lowered fasting glucose by about 21 mg/dL and HbA1c by 0.44 points in a meta-analysis of 16 randomised trials in type 2 diabetes, and thymoquinone raised plasma glibenclamide by 13-22% in rats. Additive glucose lowering is possible, particularly with sulfonylureas and insulin.",
           "action": "Monitor blood glucose more frequently. Avoid unsupervised combinations with insulin or sulfonylureas.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/40210172/",
             "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May add to diabetes-med effects",
@@ -20142,7 +20147,7 @@
         "evidence_level": "probable",
         "notes": "Pregnancy: Avoid black seed oil during pregnancy unless your obstetric clinician specifically recommends it. Use is precautionary because human pregnancy data are lacking. Lactation: no_data category remains separately tracked.",
         "alert_headline": "Pregnancy safety is unclear",
-        "alert_body": "Black seed oil has limited pregnancy safety data and animal studies have flagged uterine-effect signals. If you are pregnant, talk to your obstetrician before use. Breastfeeding safety data are limited; ask your clinician before use.",
+        "alert_body": "Black seed oil has no human pregnancy safety data, and high injected doses of its main compound harmed pregnancies in rats. If you are pregnant, talk to your obstetrician before use. Breastfeeding safety data are limited; ask your clinician before use.",
         "informational_note": "Black seed oil pregnancy data are limited \u2014 relevant to anyone pregnant.",
         "direction": "harmful",
         "materiality": "presence",
