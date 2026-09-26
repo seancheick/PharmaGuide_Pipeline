@@ -208,3 +208,23 @@ recorded in `scripts/data/interaction_rules_ghost_review.json`).
   convulsions"; thujone inhibits GABA-A receptor currents.
 - **PMID 232204** (Conway & Slocumb, J Ethnopharmacol 1979): plants used as abortifacients and
   emmenagogues by Spanish New Mexicans; "Other plants used are ... ponso or tanse-tansy".
+
+## RULE_IQM_YERBA_MATE_CARDIOVASCULAR — re-sourced (anticoagulants)
+
+- Ghost: **PMID 39708247** = "The Acute Ingestion of Yerba Mate (Ilex paraguariensis) Infusion Does Not
+  Modify Endothelial Function, Hemodynamics, or Heart Rate Variability" (Plant Foods Hum Nutr 2024).
+  Nothing on coagulation, vitamin K or warfarin. (It stays on hypertension/antihypertensives, whose
+  mechanisms already state its null BP result.)
+- The anticoagulant mechanism claimed yerba mate "contains vitamin K (phylloquinone) which may
+  oppose" warfarin. No source found (PubMed: `(Ilex paraguariensis OR yerba mate OR mate tea) AND
+  (warfarin OR vitamin K OR phylloquinone OR anticoagul* OR platelet* OR coagulation OR INR)`, 4 hits,
+  none on vitamin K). It also contradicted the rule's own alert copy ("mild antiplatelet or
+  anticoagulant activity").
+- **PMID 25562195** (Yu, Exp Gerontol 2015; RCT, n = 142, high blood viscosity): yerba mate tea 5 g/day
+  for 6 weeks; "the vasodilator 6-keto PGF1α increased while the thromboxane TXB2 decreased";
+  whole-blood and plasma viscosity decreased.
+- **PMID 23134458** (Dahmer, J Med Food 2012): chikusetsusaponin IVa from the fruit of Ilex
+  paraguariensis "prolongs the recalcification time, prothrombin time, activated partial
+  thromboplastin time, and thrombin time", inhibits thrombin, factor Xa and platelet aggregation in
+  vitro; antithrombotic in rats "although it did not induce a significant bleeding effect".
+- No clinical interaction study with anticoagulants found; evidence_level stays theoretical.

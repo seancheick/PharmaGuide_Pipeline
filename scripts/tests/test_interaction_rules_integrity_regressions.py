@@ -513,3 +513,19 @@ def test_tansy_pregnancy_rule_cites_reproductive_sources():
     assert "miscarriage" in pregnancy["mechanism"]
     assert "thujone" in pregnancy["mechanism"]
     assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
+
+
+def test_yerba_mate_anticoagulant_rule_drops_the_unsourced_vitamin_k_claim():
+    rule = _rule("RULE_IQM_YERBA_MATE_CARDIOVASCULAR")
+    anticoagulants = _sub_rule(rule, "drug_class_id", "anticoagulants")
+
+    # 39708247 is an endothelial-function trial; no source says mate carries vitamin K.
+    assert anticoagulants["sources"] == [_pmid("25562195"), _pmid("23134458")]
+    assert (anticoagulants["severity"], anticoagulants["evidence_level"]) == (
+        "caution", "theoretical",
+    )
+    assert "thromboxane" in anticoagulants["mechanism"]
+    copy = json.dumps(anticoagulants).lower()
+    for stale in ("vitamin k", "phylloquinone", "consistent intake"):
+        assert stale not in copy, stale
+    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
