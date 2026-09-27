@@ -353,6 +353,77 @@ def test_scoring_gate_accepts_dose_hold_but_not_inferred_or_unrelated_failures(g
     assert any(f.code == "SCORING_STRICT_CONTRACT_FAILED" for f in audit_scoring(args))
 
 
+def test_scoring_gate_contains_verified_unmapped_form_backlog(good_release_dir):
+    from audit_source_of_truth_contract import audit_scoring
+    from test_scoring_source_of_truth_audit import _args, _scored, _write
+
+    _identity_quarantine(
+        good_release_dir,
+        issue="review_queue: export cannot ship score with failed strict scoring contract.",
+    )
+    audit_path = good_release_dir / "export_audit_report.json"
+    audit = json.loads(audit_path.read_text())
+    audit["contract_quarantines"][0]["issues"].append(
+        "review_queue: NOT_SCORED verdict (reason=blocked_by_completeness_gate; "
+        "incomplete_dimensions=identity) — product excluded from the live "
+        "catalog pending remediation."
+    )
+    audit_path.write_text(json.dumps(audit))
+    product = _scored(
+        dsld_id="HELD",
+        verdict="NOT_SCORED",
+        quality_score_status="not_scored",
+        quality_score_v4_100=None,
+        score_100_equivalent=None,
+        score_unavailable_reason="blocked_by_completeness_gate",
+        strict_scoring_contract={
+            "passed": False,
+            "findings": ["disclosed_form_unmapped"],
+        },
+        _v4_completeness_gate={
+            "is_live_eligible": False,
+            "verdict": "NOT_SCORED",
+        },
+    )
+    product["assessment_readiness"]["is_live_ready"] = False
+    product["assessment_readiness"]["unavailable_reasons"] = [
+        "identity_assessment_readiness"
+    ]
+    product["assessment_readiness"]["identity"]["readiness"] = "incomplete"
+    product["assessment_readiness"]["identity"]["contract_findings"] = [
+        "disclosed_form_unmapped"
+    ]
+    path = good_release_dir.parent / "held-form-scored.json"
+    args = _args(path)
+    args.dist_dir = str(good_release_dir)
+    _write(path, product)
+
+    assert audit_scoring(args) == []
+
+    product["strict_scoring_contract"]["findings"].append("unrelated_failure")
+    _write(path, product)
+    assert any(
+        finding.code == "SCORING_STRICT_CONTRACT_FAILED"
+        for finding in audit_scoring(args)
+    )
+
+    product["strict_scoring_contract"]["findings"] = ["disclosed_form_unmapped"]
+    product["quality_score_v4_100"] = 50.0
+    _write(path, product)
+    assert any(
+        finding.code == "SCORING_STRICT_CONTRACT_FAILED"
+        for finding in audit_scoring(args)
+    )
+
+    product["quality_score_v4_100"] = None
+    args.dist_dir = None
+    _write(path, product)
+    assert any(
+        finding.code == "SCORING_STRICT_CONTRACT_FAILED"
+        for finding in audit_scoring(args)
+    )
+
+
 def _warning_only_candidate(directory, *, verdict="BLOCKED", status="suppressed_safety", score=None):
     db = directory / "pharmaguide_core.db"
     with sqlite3.connect(db) as conn:
@@ -439,6 +510,39 @@ def test_scoring_gate_accepts_verified_warning_only_export(good_release_dir):
     product["assessment_readiness"]["dose"]["readiness"] = "incomplete"
     _write(path, product)
     assert any(f.code == "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" for f in audit_scoring(args))
+
+
+def test_scoring_gate_accepts_confirmed_warning_with_unmapped_form(good_release_dir):
+    from audit_source_of_truth_contract import audit_scoring
+    from test_export_gate import _CONFIRMED_BAN
+    from test_scoring_source_of_truth_audit import _args, _scored, _write
+
+    _warning_only_candidate(good_release_dir)
+    product = _scored(
+        dsld_id="ID00000",
+        quality_score_status="suppressed_safety",
+        verdict="BLOCKED",
+        quality_score_v4_100=None,
+        score_100_equivalent=None,
+        safety_decision=_CONFIRMED_BAN,
+        strict_scoring_contract={
+            "passed": False,
+            "findings": ["disclosed_form_unmapped"],
+        },
+    )
+    path = good_release_dir.parent / "warning-form-scored.json"
+    _write(path, product)
+    args = _args(path)
+    args.dist_dir = str(good_release_dir)
+
+    assert audit_scoring(args) == []
+
+    product["strict_scoring_contract"]["findings"].append("unrelated_failure")
+    _write(path, product)
+    assert any(
+        finding.code == "SCORING_STRICT_CONTRACT_FAILED"
+        for finding in audit_scoring(args)
+    )
 
 
 @pytest.mark.parametrize("surface", ["catalog", "index", "blob"])

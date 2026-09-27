@@ -940,17 +940,46 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 and typed_suppressed_dose_failure
                 and SUPPRESSED_SAFETY_DOSE_QUARANTINE in quarantines.get(pid, ())
             )
-            if identity_contained or warning_contained or dose_contained:
+            strict_reasons = strict_contract.get("findings")
+            form_backlog_contained = (
+                quality_status == "not_scored"
+                and verdict == "NOT_SCORED"
+                and product.get("quality_score_v4_100") is None
+                and product.get("score_100_equivalent") is None
+                and strict_contract.get("passed") is False
+                and strict_reasons == ["disclosed_form_unmapped"]
+                and (
+                    "review_queue: export cannot ship score with failed "
+                    "strict scoring contract."
+                ) in quarantines.get(pid, ())
+                and any(
+                    issue.startswith("review_queue: NOT_SCORED verdict (")
+                    for issue in quarantines.get(pid, ())
+                )
+            )
+            if (
+                identity_contained
+                or warning_contained
+                or dose_contained
+                or form_backlog_contained
+            ):
                 contained_codes = set()
                 if (identity_contained or dose_contained) and typed_suppressed_dose_failure:
                     contained_codes.add("SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE")
-                strict_reasons = strict_contract.get("findings")
                 if (
                     strict_contract.get("passed") is False
                     and isinstance(strict_reasons, list)
                     and bool(strict_reasons)
                     and all(reason == "identity_disposition_not_scoreable:identity_conflict"
                             for reason in strict_reasons)
+                ):
+                    contained_codes.add("SCORING_STRICT_CONTRACT_FAILED")
+                if form_backlog_contained:
+                    contained_codes.add("SCORING_STRICT_CONTRACT_FAILED")
+                if (
+                    warning_contained
+                    and is_confirmed_ban_or_recall(product)
+                    and strict_reasons == ["disclosed_form_unmapped"]
                 ):
                     contained_codes.add("SCORING_STRICT_CONTRACT_FAILED")
                 findings[finding_start:] = [
