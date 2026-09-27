@@ -10,6 +10,7 @@ field confirmations and the approval stay the reviewer's clicks in the console.
     sheet  S01             every cited region as one image, to check the boxes
     record S01 --model M   file the agent's reading.json as a draft
     save   S01             save label.json as the review, after checks
+    verify S01             read back what the server holds; READY or NOT ready
 
 Work lives in ``$PG_SUBMISSION_WORKDIR`` (default /tmp/pg_submissions/<alias>).
 Output names aliases only; submission ids, user ids and URLs are never printed.
@@ -451,6 +452,41 @@ def cmd_save(api: Reviewer, alias: str) -> int:
     return 0
 
 
+def cmd_verify(api: Reviewer, alias: str, model: str | None) -> int:
+    """Read back what the server holds and say whether it is ready for the reviewer."""
+    alias = alias.upper()
+    submission_id = _resolve(alias)
+    review = api.call("load_review", submission_id=submission_id).get("review") or {}
+    saved = review.get("draft") or {}
+    submission = api.submission(submission_id)
+    latest = (submission.get("extractions") or [{}])[0]
+    local_path = WORK / alias / "label.json"
+    checks = {
+        "saved review matches label.json": bool(saved.get("payload")) and local_path.exists()
+            and saved["payload"] == json.loads(local_path.read_text()),
+        "saved review is current (not superseded)": saved.get("superseded") is False,
+        "server diagnostics: 0": bool(saved.get("payload")) and not (
+            api.call("validate_label", payload=saved["payload"]).get("diagnostics") or []),
+        "no field ticked for the reviewer": not any(
+            entry.get("live") for entry in review.get("verifications") or []),
+        "latest draft is the agent's, at this revision": latest.get("provider") == PROVIDER
+            and latest.get("evidence_revision") == submission.get("evidence_revision")
+            and (model is None or latest.get("model") == model),
+    }
+    for label, passed in checks.items():
+        print(f"  {'ok  ' if passed else 'FAIL'} {label}")
+    findings = (latest.get("draft_payload") or {}).get("discrepancies") or []
+    for finding in findings:
+        print(f"  note finding {finding['severity']}: {finding['code']}")
+    print(f"  status {submission.get('review_status')}; barcode check "
+          f"{'recorded' if review.get('identity_check') else 'not yet run'}; "
+          f"catalog picture {'chosen' if review.get('product_image') else 'not yet chosen'} "
+          f"(the console does both when the reviewer opens it)")
+    ready = all(checks.values())
+    print(f"{alias}: {'READY for the reviewer' if ready else 'NOT ready'}")
+    return 0 if ready else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -464,6 +500,9 @@ def main(argv: list[str] | None = None) -> int:
     record.add_argument("--model", required=True, help="the reading model, e.g. claude-opus-5-5")
     save = sub.add_parser("save")
     save.add_argument("alias")
+    verify = sub.add_parser("verify")
+    verify.add_argument("alias")
+    verify.add_argument("--model", help="also require the latest draft to be this model's")
     args = parser.parse_args(argv)
     if args.command == "sheet":
         cmd_sheet(args.alias)  # local only: no account needed
@@ -479,6 +518,8 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         if args.command == "record":
             return cmd_record(api, args.alias, args.model)
+        if args.command == "verify":
+            return cmd_verify(api, args.alias, args.model)
         return cmd_save(api, args.alias)
     except (AgentError, bounded_http.TransportError) as error:
         print(f"error: {error}", file=sys.stderr)

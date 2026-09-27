@@ -161,6 +161,14 @@ $R save S18
 
 It checks the label against the reading, the catalog importer and the server
 validator, then saves the review. Zero diagnostics or it does not save.
+Then read back what the server holds:
+
+```bash
+$R verify S18 --model <your model id>   # must end "READY for the reviewer"
+```
+
+A submission is done only when `verify` says READY. Paste its output in your
+report.
 
 ### 8. Hand over
 
