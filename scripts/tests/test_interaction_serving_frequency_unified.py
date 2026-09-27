@@ -154,6 +154,13 @@ def test_dosing_instruction_uses_the_adult_row_not_serving_sizes_zero() -> None:
 
     record = {
         "form_factor_canonical": "liquid",
+        "serving_basis": {
+            "basis_count": 10.0,
+            "basis_unit": "mL",
+            "min_servings_per_day": 1,
+            "max_servings_per_day": 4,
+            "servings_per_day_source": "adult_serving_row",
+        },
         "servingSizes": [
             {"minQuantity": 5.0, "maxQuantity": 5.0, "unit": "mL",
              "minDailyServings": 1, "maxDailyServings": 3},
