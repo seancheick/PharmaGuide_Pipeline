@@ -942,6 +942,10 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     # re-deriving it from a number that cannot tell the two kinds of zero apart.
     result_state = metadata.get("evidence_result_state") or (
         metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
+    if result_state == "evaluated_authority":
+        # Result-state ownership outranks generic floor copy: when established
+        # nutrition authority set the Evidence result, say so at any score.
+        reason = _EVIDENCE_ZERO_REASON["evaluated_authority"]
     if val > 0 and evidence_display_state(result_state) == "not_yet_reviewed":
         # Credit already earned cannot finish the assessment while other
         # research on the label is still under review.

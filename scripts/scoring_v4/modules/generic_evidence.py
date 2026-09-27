@@ -401,9 +401,13 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     } | {_entry_id(entry) for entry in scoped_matches}
     from studied_formulas import assess_probiotic_component_disposition
     probiotic_component_evidence = assess_probiotic_component_disposition(product)
+    primary_floor_decisive = bool(primary_floor > pipeline_total + depth_bonus)
     evidence_result_state = _evidence_result_state(
         product, total, listed_ids, scoped_matches, probiotic_disposition=probiotic_component_evidence,
         dose_gated=bool(sub_clinical_canonicals), owner_scoped=owner_scoped,
+        authority_floor_decisive=bool(
+            nutrition_authority_canonical and primary_floor_decisive
+        ),
     )
 
     metadata = {
@@ -448,9 +452,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             # result when it strictly exceeds the pipeline; equality means the
             # pipeline already earned that number on its own. The explanation
             # owner reads this instead of re-deriving the comparison.
-            "primary_evidence_floor_decisive": bool(
-                primary_floor > pipeline_total + depth_bonus
-            ),
+            "primary_evidence_floor_decisive": primary_floor_decisive,
             # Compatibility fields remain explicit so old clients distinguish
             # a deliberately retired proxy from missing metadata. Ingredient
             # presence or dose can never manufacture Evidence credit.
@@ -518,6 +520,7 @@ def _evidence_result_state(
     probiotic_disposition: Optional[Dict[str, Any]] = None,
     dose_gated: bool = False,
     owner_scoped: bool = False,
+    authority_floor_decisive: bool = False,
 ) -> str:
     """Why Evidence landed where it did, from the matches that were scored.
 
@@ -535,7 +538,15 @@ def _evidence_result_state(
     if total > 0:
         # A product with any assessable active still non-terminal is incomplete
         # even when another active's reviewed evidence already earned points.
-        return gap or "evaluated_applicable"
+        if gap:
+            return gap
+        # The state names the evidence source that actually set the score. A
+        # nutrition-authority floor can be decisive even when a secondary
+        # component has separate research details; those details remain on the
+        # ingredient and cannot replace the product headline owner.
+        if authority_floor_decisive:
+            return "evaluated_authority"
+        return "evaluated_applicable"
     if not _assessable_active_ingredients(product):
         return "no_assessable_actives"
 

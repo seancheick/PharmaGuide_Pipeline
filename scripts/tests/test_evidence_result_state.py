@@ -66,16 +66,17 @@ def test_authority_owner_remains_headline_when_secondary_research_does_not_apply
 
     evidence = score_evidence(
         product,
-        apply_primary_floor=False,
+        apply_primary_floor=True,
     )
     authority_only = score_evidence(
         _product(product_name="Zinc", ingredients=[zinc], matches=[]),
-        apply_primary_floor=False,
+        apply_primary_floor=True,
     )
 
-    # This test isolates result ownership, so it deliberately disables the
-    # nutrition floor: changing the headline must not manufacture score.
-    assert evidence["score"] == authority_only["score"] == 0.0
+    # The same nutrition-authority floor sets both scores; the secondary
+    # applicability detail cannot change either the number or its headline.
+    assert evidence["score"] == authority_only["score"] == 10.0
+    assert evidence["metadata"]["primary_evidence_floor_decisive"] is True
     assert evidence["metadata"]["evidence_result_state"] == "evaluated_authority"
 
     component = evidence["metadata"]["probiotic_component_evidence"]
@@ -93,7 +94,7 @@ def test_authority_owner_remains_headline_when_secondary_research_does_not_apply
     )
 
     pillar = _pillar_evidence(evidence, 20, "generic_single_molecule", _config())
-    assert pillar["score"] == 0.0
+    assert pillar["score"] == 11.1
     assert pillar["reason"] == (
         "Established nutritional authority recognizes the physiological necessity of these "
         "essential nutrients."
