@@ -2,7 +2,7 @@
  "_metadata": {
   "purpose": "Known citation-content backlog for verify_all_citations_content.py --baseline",
   "description": "Citations the first full-coverage run (2026-09-26) flagged: 'mismatch' means the live PubMed record shares no identity word with its entry (a heuristic; many are wrong papers, some are naming misses), 'not_found' means the PMID does not resolve. The release gate fails on any not_found and on any mismatch NOT listed here, so a new bad citation cannot hide in this backlog. Fix entries one at a time via /data-fix and delete each from this list in the same commit (register Q22). The 10 medication_depletions items are needs_revision records the app suppresses.",
-  "schema_version": "1.0.0",
+  "schema_version": "5.0.0",
   "last_updated": "2026-09-26",
   "total_entries": 234,
   "source_run": "verify_all_citations_content.py --report (after e349a2b7: every citation in scripts/data read)",
