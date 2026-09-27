@@ -207,12 +207,13 @@ def _pillars(pipeline, raw):
 
 def test_a_form_that_delivers_none_of_its_nutrient_earns_no_dose_or_evidence(pipeline):
     # IQM parent_relationship not_a_nutrient_source: iron oxide supplies no
-    # iron. A label listing it beside vitamin C scores Dose and Evidence
-    # exactly as vitamin C alone; iron bisglycinate still earns iron's Dose.
+    # iron. It contributes zero adequacy to Dose rather than disappearing
+    # from the average; it contributes no Evidence as iron.
     _, c_only = _pillars(pipeline, _label(46, [_row(1, *VITAMIN_C)]))
     _, with_oxide = _pillars(pipeline, _label(47, [_row(1, *VITAMIN_C), _iron('Iron Oxide')]))
     _, with_glycinate = _pillars(pipeline, _label(48, [_row(1, *VITAMIN_C), _iron('Ferrous Bisglycinate')]))
-    assert (with_oxide['dose'], with_oxide['evidence']) == (c_only['dose'], c_only['evidence'])
+    assert with_oxide['dose'] == c_only['dose'] / 2
+    assert with_oxide['evidence'] == c_only['evidence']
     assert with_glycinate['dose'] != c_only['dose']
 
 
@@ -271,3 +272,17 @@ def test_epa_under_an_omega3_total_is_a_component_not_a_form(pipeline):
                  'dsld_ingredient_group': 'EPA (Eicosapentaenoic Acid)'}
     assert enricher._form_token_context(form_data, {'fish oil'}, 'fish_oil', 'Omega-3 Fatty Acids') == 'component'
     assert enricher._form_token_context(form_data, {'vitamin c'}, 'vitamin_c', 'Vitamin C') is None
+
+
+def test_non_delivering_iron_does_not_earn_absorption_pair_bonus(pipeline):
+    oxide = _run(pipeline, _label(51, [_row(1, *VITAMIN_C), _iron('Iron Oxide')]))[0]
+    glycinate = _run(pipeline, _label(52, [_row(1, *VITAMIN_C), _iron('Ferrous Bisglycinate')]))[0]
+    assert oxide['absorption_data']['qualifies_for_bonus'] is False
+    assert glycinate['absorption_data']['qualifies_for_bonus'] is True
+
+
+def test_non_delivering_iron_is_zero_adequacy_not_missing_reference(pipeline):
+    enriched = _run(pipeline, _label(53, [_row(1, *VITAMIN_C), _iron('Iron Oxide')]))[0]
+    iron = next(row for row in enriched['rda_ul_data']['adequacy_results'] if row['canonical_id'] == 'iron')
+    assert iron['pct_rda'] == 0.0
+    assert iron['pct_ul'] is not None

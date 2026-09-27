@@ -6505,7 +6505,9 @@ class EnhancedDSLDNormalizer:
         quantity: Any,
         unit: Any,
         default_unit: str,
-    ) -> None:
+        *,
+        source_priority: int = 0,
+    ) -> bool:
         """Record one Nutrition-Facts panel field (single source of truth).
 
         C6: a quantity-less row is processed to ``(0.0, 'unspecified')``; it must
@@ -6514,17 +6516,40 @@ class EnhancedDSLDNormalizer:
         second bare "Sodium" zeroing a real 140 mg. A real value may still
         upgrade a previously-stored placeholder.
         """
+        priorities = info.setdefault("_source_priorities", {})
+        existing_priority = priorities.get(key, 0)
         incoming_is_real = bool(unit) and unit != "unspecified"
         existing = info.get(key)
+        if existing is not None and source_priority < existing_priority:
+            return False
         if existing is not None and not incoming_is_real:
             existing_unit = existing.get("unit")
             if bool(existing_unit) and existing_unit != "unspecified":
-                return  # keep the real value; don't let a placeholder erase it
+                return False  # keep the real value; don't let a placeholder erase it
         info[key] = {"amount": quantity, "unit": unit or default_unit}
+        priorities[key] = source_priority
+        return True
 
     def _extract_nutritional_info(self, ingredient_rows: List[Dict]) -> Dict[str, Any]:
         """Extract nutritional information (Calories, Carbs, Sugar, etc.) from ingredients"""
         nutritional_info = {}
+        fiber_panel_pattern = r"(?:total\s+)?(?:(?:dietary|soluble|insoluble)\s+)?fib(?:er|re)"
+
+        def _fiber_summary_priority(label: str) -> int:
+            normalized = re.sub(r"\s+", " ", label).strip()
+            if normalized in {"dietary fiber", "total dietary fiber", "total fiber"}:
+                return 3
+            if normalized in {"fiber", "fibre"}:
+                return 2
+            return 1
+
+        def _sugar_summary_priority(label: str) -> int:
+            normalized = re.sub(r"\s+", " ", label).strip()
+            if normalized == "total sugars":
+                return 3
+            if normalized in {"sugar", "sugars"}:
+                return 2
+            return 1
 
         for row_index, ing in enumerate(ingredient_rows):
             if not isinstance(ing, dict):
@@ -6551,7 +6576,10 @@ class EnhancedDSLDNormalizer:
             elif "total carbohydrate" in name or "carbohydrates" in name:
                 self._record_nutrition_fact(nutritional_info, "totalCarbohydrates", quantity, unit, "g")
             elif re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nutrient_name):
-                self._record_nutrition_fact(nutritional_info, "sugars", quantity, unit, "g")
+                self._record_nutrition_fact(
+                    nutritional_info, "sugars", quantity, unit, "g",
+                    source_priority=_sugar_summary_priority(nutrient_name),
+                )
             elif re.fullmatch(r"(?:total\s+)?fat", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "totalFat", quantity, unit, "g")
             elif re.fullmatch(r"saturated\s+fat", nutrient_name):
@@ -6560,13 +6588,16 @@ class EnhancedDSLDNormalizer:
                 self._record_nutrition_fact(nutritional_info, "transFat", quantity, unit, "g")
             elif re.fullmatch(r"cholesterol", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "cholesterol", quantity, unit, "mg")
-            elif "protein" in name:
+            elif re.fullmatch(r"(?:total\s+)?protein", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "protein", quantity, unit, "g")
             elif re.fullmatch(r"sodium(?:\s*\([^)]*\))?", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "sodium", quantity, unit, "mg")
-            elif "fiber" in name or "dietary fiber" in name:
-                self._record_nutrition_fact(nutritional_info, "dietaryFiber", quantity, unit, "g")
-                if nutritional_info["dietaryFiber"].get("amount") == quantity and nutritional_info["dietaryFiber"].get("unit") == unit:
+            elif re.fullmatch(fiber_panel_pattern, nutrient_name):
+                accepted = self._record_nutrition_fact(
+                    nutritional_info, "dietaryFiber", quantity, unit, "g",
+                    source_priority=_fiber_summary_priority(nutrient_name),
+                )
+                if accepted:
                     nutritional_info["dietaryFiber"].update({
                         "quantityVariants": quantity_variants,
                         "raw_source_path": ing.get("raw_source_path") or f"ingredientRows[{row_index}]",
@@ -6589,23 +6620,29 @@ class EnhancedDSLDNormalizer:
                 nested_qty, nested_unit, _, nested_variants = self._process_quantity(nested_qty_data)
 
                 # Extract sugar from nested row (only if not already found at top level)
-                if (nested_name == "sugar" or "sugars" in nested_name) and "sugars" not in nutritional_info:
-                    nutritional_info["sugars"] = {
-                        "amount": nested_qty,
-                        "unit": nested_unit or "g"
-                    }
-                    logger.debug(f"Extracted sugar from nested row: {nested_qty}{nested_unit or 'g'}")
+                if nested_name == "sugar" or "sugars" in nested_name:
+                    accepted = self._record_nutrition_fact(
+                        nutritional_info, "sugars", nested_qty, nested_unit, "g",
+                        source_priority=_sugar_summary_priority(nested_name),
+                    )
+                    if accepted:
+                        logger.debug(f"Extracted sugar from nested row: {nested_qty}{nested_unit or 'g'}")
 
-                # Extract fiber from nested row (only if not already found at top level)
-                if ("fiber" in nested_name or "dietary fiber" in nested_name) and "dietaryFiber" not in nutritional_info:
-                    nutritional_info["dietaryFiber"] = {
-                        "amount": nested_qty,
-                        "unit": nested_unit or "g",
-                        "quantityVariants": nested_variants,
-                        "raw_source_path": nested.get("raw_source_path") or f"ingredientRows[{row_index}].nestedRows[{nested_index}]",
-                    }
-                    logger.debug(f"Extracted fiber from nested row: {nested_qty}{nested_unit or 'g'}")
+                # Aggregate fiber owns the summary; subtype rows remain in the
+                # label ledger without replacing Dietary Fiber's total.
+                if re.fullmatch(fiber_panel_pattern, nested_name.strip()):
+                    accepted = self._record_nutrition_fact(
+                        nutritional_info, "dietaryFiber", nested_qty, nested_unit, "g",
+                        source_priority=_fiber_summary_priority(nested_name),
+                    )
+                    if accepted:
+                        nutritional_info["dietaryFiber"].update({
+                            "quantityVariants": nested_variants,
+                            "raw_source_path": nested.get("raw_source_path") or f"ingredientRows[{row_index}].nestedRows[{nested_index}]",
+                        })
+                        logger.debug(f"Extracted fiber from nested row: {nested_qty}{nested_unit or 'g'}")
 
+        nutritional_info.pop("_source_priorities", None)
         return nutritional_info
 
     def _process_ingredients_enhanced(self, ingredient_rows: List[Dict], is_active: bool = True) -> List[Dict]:
@@ -8154,7 +8191,11 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
-            if self._is_structural_form_container(name, is_active=False):
+            if self._is_structural_form_container(name, is_active=False) or (
+                ing.get("forms")
+                and self._is_proprietary_blend_name(name)
+                and self._should_skip_inactive_ingredient(name)
+            ):
                 forms = ing.get("forms", []) or []
                 self._queue_display_ingredient(
                     raw_source_text=name,

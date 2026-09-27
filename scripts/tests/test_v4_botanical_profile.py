@@ -614,6 +614,25 @@ def test_botanical_formulation_prefers_recognized_anchor_over_unmapped_blend_hea
     assert out["score"] > 0.0
 
 
+def test_botanical_dose_compares_minimum_daily_exposure_to_daily_reference():
+    # 150 mg twice daily reaches the 250 mg/day lower bound. A range of
+    # one to two servings must not use its maximum to claim adequacy.
+    product = _botanical_product(_botanical_ingredient(quantity=150))
+    product['serving_basis'] = {
+        'min_servings_per_day': 2, 'max_servings_per_day': 2,
+        'servings_per_day_source': 'servingSizes',
+    }
+    assert score_botanical_dose(product)['band'] == 'within_studied_range'
+    product['serving_basis']['min_servings_per_day'] = 1
+    assert score_botanical_dose(product)['band'] == 'below_studied_range'
+
+
+def test_whole_herb_mass_cannot_use_an_extract_dose_reference():
+    row = _botanical_ingredient(name='Ashwagandha Root Powder', standard_name='Ashwagandha',
+                               form='Ashwagandha Root Powder', quantity=500,
+                               matched_form='Ashwagandha Root Powder')
+    product = _botanical_product(row, standardized=False)
+    assert score_botanical_dose(product)['band'] == 'disclosed_no_reference'
 def test_primary_botanical_tie_break_reads_form_quality_through_its_owner():
     """Equal mass, both recognized: the last tie-break is form quality, read
     through generic_helpers.bio_score_of (the one owner). bio_score is the only

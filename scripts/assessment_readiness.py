@@ -350,7 +350,9 @@ def evaluate_evidence_assessment(
     )
     rows = list(scoring_input.rows)
     roles = classify_ingredient_roles(dict(product), module=module, rows=rows)
-    matches, recovered_matches = resolved_clinical_matches(dict(product))
+    matches, recovered_matches = resolved_clinical_matches(
+        dict(product), owner_scoped=module in {"generic", "fiber_digestive", "sports"}
+    )
     indexed_matches = [
         (match, _match_identity_keys(match))
         for match in matches

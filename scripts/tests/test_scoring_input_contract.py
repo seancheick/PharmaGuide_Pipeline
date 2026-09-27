@@ -1177,6 +1177,155 @@ def test_declared_nutrition_protein_mass_emits_typed_sports_evidence():
     assert result.mapped_coverage == 1.0
 
 
+def _declared_active_fiber_product(
+    *,
+    source_section="active",
+    nutrition_path="ingredientRows[1].nestedRows[0]",
+    source_path="ingredientRows[1].nestedRows[0]",
+    category="fiber",
+):
+    row = {
+        "name": "Dietary Fiber",
+        "raw_source_text": "Dietary Fiber",
+        "canonical_id": "fiber",
+        "canonical_id_after": "fiber",
+        "canonical_source_db": "ingredient_quality_map",
+        "standard_name": "Fiber",
+        "quantity": 5.0,
+        "unit": "Gram(s)",
+        "source_section": source_section,
+        "raw_source_path": source_path,
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "score_exclusion_reason": "excluded_nutrition_fact",
+        "role_classification": "inactive_non_scorable",
+        "scoreable_identity": False,
+        "identity_disposition": "clean",
+        "raw_taxonomy": {
+            "category": category,
+            "ingredientGroup": "Fiber (unspecified)",
+            "parentBlend": "Total Carbohydrates",
+            "quantityVariants": [{"quantity": 5.0, "unit": "Gram(s)", "operator": "="}],
+        },
+    }
+    return {
+        "id": "fiber-contract-fixture",
+        "product_name": "Fiber Gummies",
+        "status": "active",
+        "form_factor": "gummy",
+        "primary_type": "fiber_digestive",
+        "supplement_taxonomy": {
+            "primary_type": "fiber_digestive",
+            "percentile_category": "fiber_digestive",
+        },
+        "nutrition_summary": {
+            "dietary_fiber_g": 5.0,
+            "dietary_fiber_source": {
+                "amount": 5.0,
+                "unit": "Gram(s)",
+                "raw_source_path": nutrition_path,
+                "quantityVariants": [{"quantity": 5.0, "unit": "Gram(s)", "operator": "="}],
+            },
+        },
+        "activeIngredients": [row],
+        "ingredient_quality_data": {
+            "ingredients": [row],
+            "ingredients_scorable": [],
+            "ingredients_skipped": [row],
+            "total_active": 1,
+        },
+    }
+
+
+def test_declared_active_fiber_uses_nutrition_amount_with_active_identity():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _declared_active_fiber_product()
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert len(result.rows) == 1
+    row = result.rows[0]
+    assert row["evidence_type"] == "declared_active_fiber"
+    assert row["canonical_id"] == "fiber"
+    assert row["quantity"] == 5.0
+    assert row["unit"] == "g"
+    assert row["raw_source_path"] == "ingredientRows[1].nestedRows[0]"
+    assert row["source"] == "active"
+    assert row["linked_rows"] == ["ingredientRows[1].nestedRows[0]"]
+    assert result.mapped_count == 1
+    assert result.unmapped_count == 0
+    scored = build_scored_artifact(product)
+    assert scored["quality_score_status"] == "scored"
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"source_section": "inactive"},
+        {"source_section": "other"},
+        {"nutrition_path": "ingredientRows[9]"},
+        {"category": "carbohydrate"},
+    ],
+)
+def test_declared_active_fiber_rejects_other_rows_and_unjoined_totals(overrides):
+    product = _declared_active_fiber_product(**overrides)
+    evidence = derive_product_scoring_evidence(product)
+    assert not any(row.get("evidence_type") == "declared_active_fiber" for row in evidence)
+
+
+def test_nutrition_fiber_without_active_row_stays_non_scoreable():
+    product = _declared_active_fiber_product()
+    product["activeIngredients"] = []
+    product["ingredient_quality_data"] = {
+        "ingredients": [], "ingredients_scorable": [], "ingredients_skipped": []
+    }
+    assert derive_product_scoring_evidence(product) == []
+    assert get_scoring_ingredients(product, strict=True).rows == []
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    ["remove_owner", "mismatch_nutrition_path", "inactive_owner"],
+)
+def test_persisted_declared_active_fiber_must_still_match_current_active_owner(mutation):
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _declared_active_fiber_product()
+    product["product_scoring_evidence"] = deepcopy(
+        derive_product_scoring_evidence(product)
+    )
+    assert any(
+        row.get("evidence_type") == "declared_active_fiber"
+        for row in product["product_scoring_evidence"]
+    )
+
+    if mutation == "remove_owner":
+        product["activeIngredients"] = []
+        product["ingredient_quality_data"] = {
+            "ingredients": [],
+            "ingredients_scorable": [],
+            "ingredients_skipped": [],
+        }
+    elif mutation == "mismatch_nutrition_path":
+        product["nutrition_summary"]["dietary_fiber_source"][
+            "raw_source_path"
+        ] = "ingredientRows[9]"
+    else:
+        product["activeIngredients"][0]["source_section"] = "inactive"
+        product["ingredient_quality_data"]["ingredients"][0][
+            "source_section"
+        ] = "inactive"
+
+    result = get_scoring_ingredients(product, strict=True)
+    assert result.rows == []
+    assert any(
+        row.reason == "stale_declared_active_fiber_evidence"
+        for row in result.rejected_rows
+    )
+    assert build_scored_artifact(product)["quality_score_status"] == "not_scored"
+
+
 def test_source_corrected_protein_mass_uses_sports_evidence_not_blend_anchor():
     protein = _row(
         name="Protein",
@@ -1929,3 +2078,65 @@ def test_a_named_oil_row_never_owns_epa_dha_however_it_is_spelled() -> None:
     ])
 
     assert _omega_aggregate_evidence(product) == []
+
+
+@pytest.mark.parametrize("canonical,quantity,path", [
+    ("sodium", 485, "ingredientRows[14]"),
+    ("chloride", 80, "ingredientRows[13]"),
+])
+def test_nutrition_fact_identity_exclusion_survives_active_projection(canonical, quantity, path):
+    # Catalyte 323080: cleaner active row precedes enrichment exclusion.
+    active = _row(name=canonical.title(), canonical_id=canonical,
+                  quantity=quantity, raw_source_path=path)
+    excluded = {**active, "score_exclusion_reason": "excluded_nutrition_fact",
+                "skip_reason": "excluded_nutrition_fact", "mapped": False,
+                "scoreable_identity": False}
+    product = _product([], activeIngredients=[active], ingredient_quality_data={
+        "ingredients": [excluded], "ingredients_scorable": [],
+        "ingredients_skipped": [excluded],
+    })
+    assert not derive_product_scoring_evidence(product)
+    # Contain an already persisted generic projection as well as fresh output.
+    old_product = _product([], activeIngredients=[active])
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(old_product)
+    assert product["product_scoring_evidence"]
+    result = get_scoring_ingredients(product, strict=True)
+    assert not result.rows
+    assert any(r.reason == "excluded_nutrition_fact" for r in result.rejected_rows)
+    assert product["activeIngredients"][0]["quantity"] == quantity
+
+
+@pytest.mark.parametrize("with_peer", [False, True])
+def test_conflicting_safety_recognition_cannot_survive_as_native_anchor(with_peer):
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    source = _row(name="Konjac root extract", raw_source_text="Konjac root extract",
+                  canonical_id="fiber", canonical_source_db="ingredient_quality_map",
+                  quantity=2, unit="g")
+    identity = {**source, "canonical_id_after": "fiber", "standard_name": "Fiber",
+                "identity_disposition": "repaired"}
+    product = _product([], activeIngredients=[source], ingredient_quality_data={
+        "ingredients": [identity], "ingredients_scorable": [], "ingredients_skipped": [],
+    })
+    # Persist the formerly affirmative projection, then supply the contradictory
+    # owner decision from the real Konjac failure. Stored anchors must not win.
+    product["product_scoring_evidence"] = deepcopy(derive_product_scoring_evidence(product))
+    assert product["product_scoring_evidence"]
+    identity.update({
+        "scoreable_identity": False, "recognized_non_scorable": True,
+        "recognition_source": "harmful_additives", "recognized_entry_id": "ADD_POLYDEXTROSE",
+        "identity_decision_reason": "safety_identity_excluded_from_scoring",
+        "role_classification": "recognized_non_scorable",
+        "score_exclusion_reason": "recognized_non_scorable",
+    })
+    if with_peer:
+        peer = _row(raw_source_path="ingredientRows[1]")
+        product["ingredient_quality_data"]["ingredients"].append(peer)
+        product["ingredient_quality_data"]["ingredients_scorable"].append(peer)
+    result = get_scoring_ingredients(product, strict=True)
+    assert all(row.get("raw_source_path") != source["raw_source_path"] for row in result.rows)
+    assert result.unmapped_count == 1
+    assert result.mapped_count == int(with_peer)
+    assert "identity_projection_inconsistent:recognized_entry_id" in result.contract_findings
+    assert build_scored_artifact(product)["quality_score_status"] == "not_scored"

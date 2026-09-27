@@ -65,6 +65,7 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "probiotic_cfu": ["probiotic_dose_adequacy"],
     "enzyme_activity": ["enzyme_activity_identity"],
     "sports_primary_dose": ["sports_primary_dose"],
+    "declared_active_fiber": ["fiber_identity", "fiber_dose_adequacy"],
     "omega_epa_dha_aggregate": ["omega_dose_adequacy", "omega_transparency"],
     "blend_anchor_mass": ["generic_blend_anchor_mass"],
     "percent_dv_dose": ["generic_percent_dv_dose"],
@@ -1073,6 +1074,15 @@ def _derive_declared_nutrition_protein_evidence(
     ):
         return []
 
+    nutrition_protein_paths = {
+        str(row.get("raw_source_path") or "").strip()
+        for row in active_rows
+        if _norm(row.get("canonical_id")) == "protein"
+        and is_nutrition_fact_declaration(row)
+        and _positive_quantity(row) is not None
+        and _unit_is_mass(_row_unit(row))
+        and str(row.get("raw_source_path") or "").strip()
+    }
     corrected_protein_paths = {
         str(row.get("raw_source_path") or "").strip()
         for row in active_rows
@@ -1098,7 +1108,7 @@ def _derive_declared_nutrition_protein_evidence(
                 or (
                     _norm(row.get("display_type")) == "mapped_ingredient"
                     and str(row.get("raw_source_path") or "").strip()
-                    in corrected_protein_paths
+                    in (corrected_protein_paths | nutrition_protein_paths)
                 )
             )
             and _norm(row.get("source_section")) == "activeingredients"
@@ -1140,6 +1150,72 @@ def _derive_declared_nutrition_protein_evidence(
             confidence="high",
             reason="declared_nutrition_protein_mass",
             name="Protein",
+        )
+    ]
+
+
+def _derive_declared_active_fiber_evidence(
+    product: Dict[str, Any],
+    active_rows: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Join a declared fiber total to its exact DSLD active fiber row.
+
+    Nutrition Facts owns the grams; it does not independently establish an
+    efficacy-bearing ingredient. DSLD's active section owns the ingredient
+    identity. A typed projection is valid only when both owners point to the
+    same source row and DSLD classifies that row as fiber. Other/inactive rows,
+    title inference, and unmatched nutrition totals cannot satisfy the join.
+    """
+    if _primary_type(product) != "fiber_digestive":
+        return []
+
+    summary = _safe_dict(product.get("nutrition_summary"))
+    grams = _as_float(summary.get("dietary_fiber_g"), None)
+    source = _safe_dict(summary.get("dietary_fiber_source"))
+    source_amount = _as_float(source.get("amount"), None)
+    source_unit = _norm(source.get("unit")).replace(" ", "")
+    source_path = str(source.get("raw_source_path") or "").strip()
+    if (
+        grams is None
+        or grams <= 0
+        or source_amount != grams
+        or source_unit not in {"g", "gram", "grams", "gram(s)"}
+        or not source_path
+    ):
+        return []
+
+    owner = next(
+        (
+            row
+            for row in active_rows
+            if str(row.get("raw_source_path") or "").strip() == source_path
+            and _norm(row.get("source_section")) == "active"
+            and _norm(row.get("canonical_id")) in MATERIAL_FIBER_CANONICALS
+            and _norm(_safe_dict(row.get("raw_taxonomy")).get("category")) == "fiber"
+            and _norm(row.get("cleaner_row_role")) == "active_scorable"
+            and row.get("score_eligible_by_cleaner") is True
+            and row.get("identity_disposition") is not None
+            and is_identity_scoreable(row.get("identity_disposition"))
+        ),
+        None,
+    )
+    if owner is None:
+        return []
+
+    canonical = _norm(owner.get("canonical_id"))
+    return [
+        _evidence_base(
+            row=owner,
+            evidence_type="declared_active_fiber",
+            canonical_id=canonical,
+            clean_identity_id=canonical,
+            scoring_parent_id=canonical,
+            dose_value=grams,
+            dose_unit="g",
+            evidence_scope="row_level",
+            confidence="high",
+            reason="nutrition_amount_joined_to_active_fiber_identity",
+            name=owner.get("name") or owner.get("raw_source_text") or "Dietary Fiber",
         )
     ]
 
@@ -1630,6 +1706,21 @@ def _identity_projection_rejection_reason(
         recognition_source = identity_row.get("recognition_source")
         if (
             identity_row.get("recognized_non_scorable") is True
+            and identity_row.get("scoreable_identity") is False
+            and identity_row.get("identity_decision_reason") == "safety_identity_excluded_from_scoring"
+            and recognition_source in {"banned_recalled_ingredients", "harmful_additives"}
+            and identity_row.get("recognized_entry_id")
+            and (canonical_id, source_db) != (
+                identity_row.get("recognized_entry_id"), recognition_source
+            )
+        ):
+            # A repaired scoring identity cannot override its owner's explicit
+            # exclusion under a different safety identity. Retain this required
+            # exposure in the existing conflict ledger instead of minting an
+            # affirmative generic anchor from the cleaner row.
+            return "identity_projection_inconsistent:recognized_entry_id"
+        if (
+            identity_row.get("recognized_non_scorable") is True
             and identity_row.get("recognized_entry_id") == canonical_id
             and recognition_source not in {None, "banned_recalled_ingredients", "harmful_additives"}
         ):
@@ -1699,6 +1790,8 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 # The shared required-conflict ledger retains this exposure
                 # for coverage/readiness; it cannot become scoring evidence.
                 continue
+            if is_nutrition_fact_declaration(identity_row):
+                active_row["score_exclusion_reason"] = "excluded_nutrition_fact"
             if identity_row.get("identity_disposition") is not None:
                 active_row["identity_disposition"] = identity_row["identity_disposition"]
             canonical_id = identity_row.get("canonical_id_after")
@@ -1763,6 +1856,12 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         active_rows,
         scorable_paths,
     ):
+        special_evidence_paths.update(
+            str(path) for path in _safe_list(item.get("linked_rows")) if path
+        )
+        evidence.append(item)
+
+    for item in _derive_declared_active_fiber_evidence(product, active_rows):
         special_evidence_paths.update(
             str(path) for path in _safe_list(item.get("linked_rows")) if path
         )
@@ -1893,6 +1992,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
 
         if (
             cleaner_role in {"blend_header_total", "active_scorable"}
+            and not is_nutrition_fact_declaration(row)
             and quantity is not None
             and _unit_is_mass(unit)
             and anchor_canonical
@@ -2285,6 +2385,11 @@ def _product_scoring_evidence_rows(
         )
 
     derived_by_key = {evidence_key(item): item for item in derived_evidence_rows}
+    valid_declared_active_fiber_keys = {
+        evidence_key(item)
+        for item in derived_evidence_rows
+        if _norm(item.get("evidence_type")) == "declared_active_fiber"
+    }
     context_fields = (
         "raw_taxonomy",
         "forms",
@@ -2312,6 +2417,12 @@ def _product_scoring_evidence_rows(
                 item[field] = deepcopy(derived_item.get(field))
 
     evidence_rows = native_evidence_rows + derived_evidence_rows
+    nutrition_fact_paths = {
+        str(row["raw_source_path"])
+        for row in _safe_list(_safe_dict(product.get("ingredient_quality_data")).get("ingredients"))
+        if isinstance(row, dict) and row.get("raw_source_path")
+        and is_nutrition_fact_declaration(row)
+    }
 
     rows: List[Dict[str, Any]] = []
     rejected: List[RejectedScoringRow] = []
@@ -2323,6 +2434,25 @@ def _product_scoring_evidence_rows(
         _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
+        if (
+            evidence_type == "declared_active_fiber"
+            and evidence_key(item) not in valid_declared_active_fiber_keys
+        ):
+            # Persisted projections are caches, not a second owner. Recompute
+            # the active-row/nutrition-path join from the current product and
+            # reject a stored row when that exact join no longer exists.
+            rejected.append(_reject(item, "stale_declared_active_fiber_evidence"))
+            continue
+        if (
+            evidence_type == "blend_anchor_mass"
+            and (is_nutrition_fact_declaration(item)
+                 or str(item.get("raw_source_path") or "") in nutrition_fact_paths)
+        ):
+            # Older artifacts may retain a generic active projection after the
+            # identity owner excluded its source Nutrition Facts declaration.
+            # Typed protein/omega evidence retains its own applicability rules.
+            rejected.append(_reject(item, "excluded_nutrition_fact"))
+            continue
         if (
             evidence_type == "omega_epa_dha_aggregate"
             and item.get("reason") == "omega_epa_dha_aggregate_from_label_row"
@@ -2549,7 +2679,7 @@ def declared_protein_source_rows(product: Mapping[str, Any]) -> List[Dict[str, A
         if not isinstance(row, dict):
             continue
         forms = [form for form in _safe_list(row.get("forms")) if isinstance(form, dict)]
-        if (_norm(row.get("raw_category")) == "protein"
+        if (_norm(row.get("raw_category") or row.get("category")) == "protein"
                 or _norm(row.get("canonical_id")) == "protein"
                 or any(_norm(form.get("category")) == "protein" for form in forms)):
             rows.append(row)
@@ -2840,6 +2970,17 @@ def is_nutrition_fact_declaration(row: Mapping[str, Any]) -> bool:
     NEVER on hardcoded nutrient name string matching.
     """
     if not isinstance(row, Mapping):
+        return False
+
+    # A validated typed protein projection carries Nutrition Facts provenance,
+    # but its eligibility belongs to the separate declared-protein contract.
+    # The original source row remains excluded; clinical source qualification
+    # still runs before this dose can recover any evidence.
+    if (
+        _norm(row.get("scoring_input_kind")) == "product_level_evidence"
+        and _norm(row.get("evidence_type")) == "sports_primary_dose"
+        and _norm(row.get("canonical_id")) == "protein"
+    ):
         return False
 
     # 1. Canonical cleaner / enricher skip & score exclusion reasons
@@ -5521,7 +5662,7 @@ def build_scoring_classification(
 # Level -> role precedence (first match wins); user-approved Option 1:
 #   L1 drives selected module    -> primary         (router driver canonical)
 #   L2 named in product title    -> claim_prominent (role_source=product_name)
-#   L3 front-label claim         -> INERT (no data source today; never emitted)
+#   L3 explicit label function  -> claim_prominent (traceable statement source)
 #   L4 required for subtype       -> major          (multi micronutrient panel)
 #   L5 high comparable-unit mass  -> major
 #   L6 otherwise                  -> adjunct
@@ -5614,6 +5755,13 @@ def role_driver_canonicals(module: str) -> set:
         # EPA/DHA AND the fish-oil/krill/algal parents that route a product to
         # the omega module — a parent-only row is still the module driver. (WR-01)
         return set(_ROUTE_OMEGA_INGREDIENT_CANONICALS) | set(_ROUTE_OMEGA_PARENT_CANONICALS)
+    if module == "fiber_digestive":
+        from scoring_v4.route_features import (
+            FIBER_CANONICALS, DIGESTIVE_ENZYME_CANONICALS,
+            DUAL_USE_ENZYME_CANONICALS, SYSTEMIC_ENZYME_CANONICALS,
+        )
+        return set(FIBER_CANONICALS | DIGESTIVE_ENZYME_CANONICALS
+                   | DUAL_USE_ENZYME_CANONICALS | SYSTEMIC_ENZYME_CANONICALS)
     if module == "sports":
         return (
             set(_ROUTE_SPORTS_PROTEIN_CANONICALS)
@@ -5690,6 +5838,73 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     return False
 
 
+def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Optional[Tuple[str, str]]:
+    """Recognize an explicit label function claim about a substantial active.
+
+    This establishes a label role, never clinical efficacy. Restrict promotion
+    to material, non-nutrition rows and a named subject immediately followed by
+    an affirmative function verb. Titles, ingredient lists, warnings and
+    trademark copy cannot establish this additional purpose.
+    """
+    canonical = _norm(row.get("canonical_id"))
+    mass = _role_mass_mg(row)
+    if (
+        not canonical or canonical.startswith("vitamin_")
+        or canonical in _CLASSIFICATION_MINERAL_CANONICALS
+        or is_nutrition_fact_declaration(row)
+        or _role_is_blend_member(row)
+        or mass is None or ctx["max_mass_mg"] <= 0
+        or mass < _ROLE_MASS_MAJOR_FRACTION * ctx["max_mass_mg"]
+        or row.get("scoreable_identity") is False
+        or row.get("score_eligible_by_cleaner") is False
+        or _norm(row.get("source_section")) == "inactive"
+    ):
+        return None
+    # Use complete identity phrases, not loose title-token matching. A marker
+    # row sharing its parent's canonical ID must itself name that identity.
+    identity = re.sub(r"[^a-z0-9]+", " ", canonical).strip()
+    names = [re.sub(r"[^a-z0-9]+", " ", _norm(row.get(key))).strip()
+             for key in ("name", "standard_name", "standardName")]
+    if not any(re.search(r"\b" + re.escape(identity) + r"\b", name) for name in names):
+        return None
+    pattern = re.compile(
+        r"\b" + re.escape(identity)
+        + r"\s+(?:helps?|supports?|promotes?|targets?|maintains?)\s+(.+)"
+    )
+    claim_sources = []
+    claim_categories: Set[str] = set()
+    for index, statement in enumerate(ctx["statements"]):
+        if not isinstance(statement, dict):
+            continue
+        if _norm(statement.get("type")) not in {
+            "formula re: contains", "formulation re: other", "formula re: type",
+        }:
+            continue
+        text = str(statement.get("notes") or statement.get("text") or "")
+        from evidence_resolver import evidence_indication_categories
+        for sentence_index, sentence in enumerate(re.split(r"[.!?;\r\n]+", text)):
+            # Preserve governing negation across coordinated ingredient claims.
+            if re.search(r"\b(?:not|no|never|without|may|might)\b", sentence, re.I):
+                continue
+            normalized = re.sub(r"[^a-z0-9]+", " ", sentence.lower()).strip()
+            # Keep coordinated objects (gut health AND stress management).
+            # Split only when the conjunction introduces a new verb-bearing
+            # subject, so another active's claim cannot leak onto this one.
+            clauses = re.split(
+                r"\band\b(?=\s+(?:(?!and\b)\w+\s+){1,5}(?:helps?|supports?|promotes?|targets?|maintains?)\b)",
+                normalized,
+            )
+            for clause in clauses:
+                match = pattern.search(clause)
+                categories = evidence_indication_categories(match.group(1)) if match else set()
+                if categories:
+                    claim_categories.update(categories)
+                    claim_sources.append(f"statements[{index}].notes:sentence[{sentence_index}]")
+    if claim_categories:
+        return (";".join(dict.fromkeys(claim_sources)), ",".join(sorted(claim_categories)))
+    return None
+
+
 def _role_context(
     product: Dict[str, Any],
     module: Optional[str],
@@ -5702,11 +5917,19 @@ def _role_context(
             module = "generic"
         else:
             module = class_for_product(product)
+    drivers = role_driver_canonicals(module)
+    if module == "generic":
+        from scoring_v4.modules.immune_support import is_immune_support_product, _active_id
+        if is_immune_support_product(product):
+            # The existing subtype owner defines this panel; microgram nutrients
+            # must not lose their purpose merely because another row is heavier.
+            drivers.update(_norm(row.get("canonical_id")) for row in rows if _active_id(row))
     masses = [m for m in (_role_mass_mg(r) for r in rows) if m is not None]
     return {
         "module": module,
+        "statements": _safe_list(product.get("statements")),
         "title_norm": _norm(product.get("product_name") or product.get("fullName")),
-        "driver_canonicals": role_driver_canonicals(module),
+        "driver_canonicals": drivers,
         "max_mass_mg": max(masses) if masses else 0.0,
     }
 
@@ -5740,10 +5963,15 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     if module == "probiotic" and _role_is_probiotic_strain(row):
         return out(ROLE_PRIMARY, "drives_module_probiotic", "router_driver", "high")
 
-    # L2 — named in the product title. (L3 front-label-claim has no data source
-    # today and is intentionally NOT emitted — no fabricated claim provenance.)
+    # L2 — named in the product title.
     if _named_in_title(row, ctx["title_norm"]):
         return out(ROLE_CLAIM_PROMINENT, "named_in_product_title", "product_name", "high")
+
+    # L3 — explicit function claim preserved on the label. This adds a
+    # purpose owner alongside the route driver, without awarding Evidence.
+    claim_source = _role_function_claim_source(row, ctx)
+    if claim_source:
+        return out(ROLE_CLAIM_PROMINENT, "named_in_label_function_claim:" + claim_source[1], claim_source[0], "high")
 
     is_blend = _role_is_blend_member(row)
     mass_mg = _role_mass_mg(row)

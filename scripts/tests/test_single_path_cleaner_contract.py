@@ -43,3 +43,17 @@ def test_cleaner_uses_same_functional_group_path_for_every_list_size(
     ]
 
     assert names == ["Citrus Oils (Orange, Lemon)", "Beet Root", "Cellulose"]
+
+
+@pytest.mark.parametrize('name', ['Proprietary Blend', 'Proprietary Protein Blend'])
+def test_skipped_inactive_blend_preserves_disclosed_source_forms(name):
+    normalizer = EnhancedDSLDNormalizer()
+    raw = {'ingredients': [{
+        'name': name, 'raw_source_path': 'otheringredients.ingredients[0]',
+        'category': 'protein', 'ingredientGroup': 'Whey Protein',
+        'forms': [{'name': 'Whey Protein Isolate', 'category': 'protein',
+                   'ingredientGroup': 'Whey Protein'}],
+    }]}
+    rows = normalizer._process_other_ingredients_enhanced(raw)
+    assert [row['name'] for row in rows] == ['Whey Protein Isolate']
+    assert rows[0]['raw_source_path'] == 'otheringredients.ingredients[0].forms[0]'

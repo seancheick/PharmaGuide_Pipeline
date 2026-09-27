@@ -1247,3 +1247,18 @@ def test_verification_explicit_state_readiness_must_agree(state, readiness):
     assert result['state'] == 'not_evaluated'
     assert result['readiness'] == 'incomplete'
     assert result['reason_code'] == 'invalid_verification_assessment_contract'
+
+
+def test_readiness_includes_owner_recovery_alongside_existing_matches():
+    from assessment_readiness import evaluate_evidence_assessment
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+
+    product = _product(
+        _row('N-Acetylcysteine', 'nac', quantity=600),
+        matches=[{'id': 'INCIDENTAL', 'ingredient': 'Calcium',
+                  'standard_name': 'Calcium', 'study_type': 'rct_single'}],
+    )
+    _, recovered = resolved_clinical_matches(product, owner_scoped=True)
+    assert any(match['id'] == 'INGR_NAC' for match in recovered)
+    assessment = evaluate_evidence_assessment(product, module='generic')
+    assert 'INGR_NAC' in assessment['ingredient_assessments'][0]['evidence_ids']

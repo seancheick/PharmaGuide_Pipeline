@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 653,
       "total_forms": 1443,
-      "total_form_aliases": 12107,
+      "total_form_aliases": 12106,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -52426,13 +52426,12 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Proprietary highly viscous polysaccharide complex (konjac glucomannan, sodium alginate, xanthan gum). Clinically studied for glycemic control and satiety. B34 audit 2026-04-25: bulk class-application (default fallback) \u2014 mechanical mapping from absorption + bio_score.",
+        "notes": "Proprietary highly viscous polysaccharide complex (konjac glucomannan, sodium alginate, xanthan gum). Clinically studied for glycemic control and satiety. B34 audit 2026-04-25: bulk class-application (default fallback) \u2014 mechanical mapping from absorption + bio_score. Product-owner correction 2026-09-26: plain Konjac root extract is not an alias of this proprietary three-polysaccharide complex.",
         "aliases": [
           "pgx",
           "polyglycoplex",
           "poly glycoplex",
           "pgx daily",
-          "Konjac root extract",
           "Glucomanann"
         ],
         "dosage_importance": 1.0,

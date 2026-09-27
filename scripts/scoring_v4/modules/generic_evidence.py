@@ -244,7 +244,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         accepted_ids = {_entry_id(entry) for entry in accepted_matches}
         matches = [entry for entry in matches if _entry_id(entry) in accepted_ids]
         recovered_matches = [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
-    from evidence_resolver import evidence_owner_canonicals
+    from evidence_resolver import evidence_owner_canonicals, _evidence_claim_purposes, _evidence_entry_purposes
+    claim_purposes = _evidence_claim_purposes(product) if owner_scoped else {}
     owner_canonicals = (
         evidence_owner_canonicals(product)
         if owner_scoped
@@ -257,6 +258,11 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     scoped_matches: List[Dict[str, Any]] = []
     scoped_recovered_matches: List[Dict[str, Any]] = []
     flags: List[str] = []
+    if owner_scoped:
+        from scoring_input_contract import classify_ingredient_roles
+        for role in classify_ingredient_roles(product):
+            if str(role.get("role_reason", "")).startswith("named_in_label_function_claim:"):
+                _append_once(flags, "EXPLICIT_LABEL_PURPOSE_OWNER:" + str(role["canonical_id"]) + ":" + role["role_reason"].split(":", 1)[1])
     sub_clinical_canonicals: set[str] = set()
 
     for entry in matches:
@@ -268,6 +274,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             use_structured_identity=owner_scoped,
         )
         if owner_canonicals and matched_owner not in owner_canonicals:
+            continue
+        if matched_owner in claim_purposes and not (claim_purposes[matched_owner] & _evidence_entry_purposes(entry)):
+            _append_once(flags, "LABEL_PURPOSE_EVIDENCE_MISMATCH:" + str(matched_owner))
             continue
 
         entry_id = _entry_id(entry)
@@ -353,8 +362,11 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # with established RDA/AI has evidence of necessity even without a strong
         # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a consensus/branded 18 stays 18).
-        auth_canon = _mass_dominant_essential_canonical(product)
-        if auth_canon and primary_floor < NUTRITION_AUTHORITY_FLOOR:
+        auth_canon = _mass_dominant_essential_canonical(
+            product, owner_canonicals=owner_canonicals if owner_scoped else None
+        )
+        if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
+                and primary_floor < NUTRITION_AUTHORITY_FLOOR):
             primary_floor = NUTRITION_AUTHORITY_FLOOR
             nutrition_authority_canonical = auth_canon
             if not floor_canonical:
@@ -775,15 +787,9 @@ def _recover_verified_primary_ingredient_matches(
             # contract already owns that aggregate identity.
             from scoring_v4.modules.sports_helpers import BCAA_AGGREGATE_CANONICALS
             blend_canonical = str(row.get("canonical_id") or "").strip().lower()
-            exact_nested_identity = (
-                allow_with_existing_matches
-                and _norm_text(row.get("reason"))
-                == "identity_bearing_blend_header_mass_from_nested_child"
-            )
             if (
                 blend_canonical not in BCAA_AGGREGATE_CANONICALS
                 and not (allow_with_existing_matches and blend_canonical == "protein")
-                and not exact_nested_identity
             ):
                 continue
         mass = _mass_mg(row) or 0.0
@@ -1408,20 +1414,27 @@ def _matched_active_canonical(
     return ""
 
 
-def _mass_dominant_essential_canonical(product: Dict[str, Any]) -> Optional[str]:
+def _mass_dominant_essential_canonical(
+    product: Dict[str, Any], *, owner_canonicals: Optional[set] = None,
+) -> Optional[str]:
     """Canonical_id of the heaviest active IFF it is a DRI-essential vitamin/mineral
     (established RDA/AI). Anchors the P5 nutrition-authority evidence floor — keyed
     on the mass-dominant active so a trace essential co-ingredient never floats a
-    product, only a product whose PRIMARY ingredient is the essential nutrient."""
+    product, only a product whose PRIMARY ingredient is the essential nutrient.
+    Scoped callers restrict the competitors to their existing purpose owners.
+    """
     best_cid: Optional[str] = None
     best_mass = 0.0
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):
             continue
+        canonical = str(row.get("canonical_id") or "").strip().lower()
+        if owner_canonicals is not None and canonical not in owner_canonicals:
+            continue
         mass = _mass_mg(row) or 0.0
         if mass > best_mass:
             best_mass = mass
-            best_cid = str(row.get("canonical_id") or "").strip().lower()
+            best_cid = canonical
     if best_mass > 0 and best_cid in DRI_ESSENTIAL_NUTRIENTS:
         return best_cid
     return None
@@ -1608,15 +1621,16 @@ def _enrollment_multiplier(enrollment: float) -> float:
     return ENROLLMENT_DEFAULT_MULTIPLIER
 
 
-def _dose_map(product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
+def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, Tuple[float, str]]:
+    from scoring_input_contract import _positive_quantity, _row_unit
     doses: Dict[str, Tuple[float, str]] = {}
     daily_multiplier = _daily_serving_multiplier(product)
-    for ing in nutrient_delivering_rows(product):
-        quantity = _as_float(ing.get("quantity"), None)
+    for ing in nutrient_delivering_rows(product) if rows is None else rows:
+        quantity = _positive_quantity(ing)
         if quantity is None:
             continue
         quantity *= daily_multiplier
-        unit = _norm_text(ing.get("unit_normalized") or ing.get("unit"))
+        unit = _norm_text(ing.get("unit_normalized") or _row_unit(ing))
         source_ref = ing.get("raw_source_path") or ing.get("source_row_ref")
         if source_ref:
             doses[f"source:{source_ref}"] = (quantity, unit)

@@ -111,6 +111,7 @@ from scoring_input_contract import (
     derive_product_scoring_evidence,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
+    source_linked_rows,
 )
 from scoring_reference_resolver import (
     IDENTITY_MISMATCH_RELATIONSHIPS,
@@ -6338,14 +6339,32 @@ class SupplementEnricherV3:
         if name_norm in BLEND_HEADER_EXACT_NAMES or std_norm in BLEND_HEADER_EXACT_NAMES:
             return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
 
-        # Z2/Z3: Excluded label phrases and nutrition-fact rollups.
-        for text in (ing_name, std_name, raw_source, name_lower, std_lower):
+        # Z2/Z3: Source-label exclusions remain authoritative. A generic
+        # standardized parent name (e.g. Fiber for Glucomannan) must not turn
+        # a cleaner-confirmed, dosed, recognized ingredient into a panel total.
+        for text, source_label in ((ing_name, True), (raw_source, True), (std_name, False)):
             exclusion_reason = self._excluded_text_reason(text)
-            if exclusion_reason and not (
-                cleaner_declared_total
-                and exclusion_reason == SKIP_REASON_NUTRITION_FACT
-            ):
-                return exclusion_reason
+            if not exclusion_reason:
+                continue
+            if exclusion_reason == SKIP_REASON_NUTRITION_FACT:
+                if cleaner_declared_total:
+                    continue
+                if (
+                    not source_label
+                    and ingredient.get("cleaner_row_role") == "active_scorable"
+                    and ingredient.get("score_eligible_by_cleaner") is True
+                    and self._has_valid_therapeutic_dose(ingredient)[0]
+                    # The canonical identity owner already resolved this
+                    # exact DSLD active row. A generic standardized name such
+                    # as "Fiber" cannot reclassify that owned identity as a
+                    # Nutrition Facts total. Do not rematch the display name
+                    # here: that would create a second identity decision.
+                    and bool(str(ingredient.get("canonical_id") or "").strip())
+                    and ingredient.get("canonical_source_db")
+                    == "ingredient_quality_map"
+                ):
+                    continue
+            return exclusion_reason
 
         # =================================================================
         # STRUCTURAL BLEND CHECK: Containers with nested children are never
@@ -10423,6 +10442,22 @@ class SupplementEnricherV3:
         # v3.0 scoring contract: enhancer pairing is ACTIVE-ONLY and must
         # follow the same primary-active contract used by Section A scoring.
         all_ingredients = self._primary_active_ingredients_for_enrichment(product)
+        quality_rows = product.get("ingredient_quality_data", {}).get("ingredients", [])
+        quality_row_ids = {id(row) for row in quality_rows if isinstance(row, dict)}
+        delivering_ingredients = []
+        for ingredient in all_ingredients:
+            linked_quality = [row for row in source_linked_rows(product, ingredient, quality_rows)
+                              if id(row) in quality_row_ids]
+            if linked_quality and not any(
+                delivers_parent_nutrient(
+                    row.get("canonical_id"),
+                    [row.get("form_id")] + [m.get("form_key") for m in row.get("matched_forms") or []
+                                            if isinstance(m, dict)],
+                ) for row in linked_quality
+            ):
+                continue
+            delivering_ingredients.append(ingredient)
+        all_ingredients = delivering_ingredients
 
         # Build ingredient name set for quick lookup
         ingredient_names = set()
@@ -15281,12 +15316,22 @@ class SupplementEnricherV3:
         }
 
     def _enrich_display_ingredients(self, enriched: Dict) -> List[Dict]:
-        """Attach canonical references to display rows without changing scoring behavior."""
+        """Project the final enrichment decision onto the label display rows."""
         display_rows = enriched.get("display_ingredients")
         if not isinstance(display_rows, list):
             return display_rows or []
 
         ingredient_lookup: Dict[str, Dict[str, str]] = {}
+        analysis_by_path: Dict[str, Dict] = {
+            str(row.get("raw_source_path") or "").strip(): row
+            for row in (
+                enriched.get("ingredient_quality_data", {}).get("ingredients", [])
+                if isinstance(enriched.get("ingredient_quality_data"), dict)
+                else []
+            )
+            if isinstance(row, dict)
+            and str(row.get("raw_source_path") or "").strip()
+        }
 
         def _register_lookup(ingredient: Dict, source_key: str) -> None:
             raw_text = ingredient.get("raw_source_text") or ingredient.get("name")
@@ -15317,6 +15362,30 @@ class SupplementEnricherV3:
                 annotated_rows.append(row)
                 continue
             row_copy = dict(row)
+            source_path = str(row_copy.get("raw_source_path") or "").strip()
+            analysis_row = analysis_by_path.get(source_path)
+            exclusion_reason = str(
+                (analysis_row or {}).get("score_exclusion_reason")
+                or (analysis_row or {}).get("skip_reason")
+                or (analysis_row or {}).get("identity_decision_reason")
+                or ""
+            ).strip()
+            # The cleaner's display ledger is assembled before enrichment
+            # decides whether a row participates in scoring. Preserve the
+            # exact source row, but project the final nutrition classification
+            # instead of leaving a rejected Nutrition Facts row marked as
+            # ``scored``. This is a display-only projection of the existing
+            # enrichment decision; it does not infer identity or change score
+            # inputs.
+            if exclusion_reason == SKIP_REASON_NUTRITION_FACT:
+                row_copy.update({
+                    "display_type": "nutrition_fact",
+                    "resolution_type": "display_only",
+                    "score_included": False,
+                    "display_disposition": "label_context",
+                    "is_label_context": True,
+                    "form_display_state": "not_applicable",
+                })
             if row_copy.get("display_type") in ("mapped_ingredient", "inactive_ingredient"):
                 raw_text = row_copy.get("raw_source_text")
                 mapped_target = ingredient_lookup.get(raw_text)
@@ -17120,8 +17189,10 @@ class SupplementEnricherV3:
         the Flutter side can distinguish "not declared" from "zero".
 
         This is ADDITIVE — it does not replace dietary_sensitivity_data
-        (sugar/sodium). Routing consumes declared protein mass; score math does
-        not treat the remaining summary fields as active-ingredient doses.
+        (sugar/sodium). Routing consumes declared protein mass. Fiber scoring
+        may consume the declared fiber grams only through the typed scoring
+        contract that joins them to the exact DSLD active fiber row; the
+        remaining summary fields are not active-ingredient doses.
         """
         ni = product.get("nutritionalInfo") or {}
 
@@ -21828,7 +21899,7 @@ class SupplementEnricherV3:
                         # IQM parent_relationship: this nutrient in a form that
                         # delivers none of it (iron oxide, a degradation
                         # product). No adequacy credit; the UL check stands.
-                        adequacy_dict.update({"pct_rda": None, "scoring_eligible": False,
+                        adequacy_dict.update({"pct_rda": 0.0, "scoring_eligible": False,
                                               "point_recommendation": 0})
                     adequacy_results.append(adequacy_dict)
 
