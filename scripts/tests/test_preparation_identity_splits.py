@@ -192,4 +192,9 @@ def test_clinical_followups_use_routable_fields_and_one_policy_owner():
         "liver_disease",
     }
     assert dandelion["pregnancy_lactation"]["pregnancy_category"] == "avoid"
-    assert "pregnancy_lactation" not in by_id["RULE_IQM_DANDELION_GLUCOSE"]
+    assert "RULE_IQM_DANDELION_GLUCOSE" not in by_id
+    assert {row["drug_class_id"] for row in dandelion["drug_class_rules"]} >= {
+        "hypoglycemics_high_risk",
+        "hypoglycemics_lower_risk",
+        "hypoglycemics_unknown",
+    }
