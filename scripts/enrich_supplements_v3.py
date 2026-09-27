@@ -4584,12 +4584,15 @@ class SupplementEnricherV3:
             is_structural_parent_total = (
                 id(source_ingredient) in structural_parent_total_row_ids
             )
-            if product_activity_text or is_structural_parent_total:
+            sole_active_row = len(active_ingredients) == 1
+            if product_activity_text or is_structural_parent_total or sole_active_row:
                 ingredient = dict(ingredient)
             if product_activity_text:
                 ingredient.setdefault("_product_activity_text", product_activity_text)
             if is_structural_parent_total:
                 ingredient["_structural_parent_total"] = True
+            if sole_active_row:
+                ingredient["_sole_active_row"] = True
             # Use branded_token_extracted for matching if present AND it differs from name.
             # When branded_token_extracted == name the clean stage collapsed the full label
             # to just the brand prefix (e.g. "Albion" from "Albion Magnesium Bisglycinate Chelate").
@@ -6072,14 +6075,15 @@ class SupplementEnricherV3:
                 row["identity_decision_reason"] = "safety_identity_excluded_from_scoring"
             elif (
                 recognition_source == "harmful_additives"
-                and not row.get("is_excipient")
                 and self._is_low_severity_additive(matched_entry_id)
+                and (not row.get("is_excipient") or ingredient.get("_sole_active_row"))
             ):
                 # A low-severity additive declared as the active (BulkSupplements
                 # Mannitol, Litesse polydextrose) is a known substance, not a
                 # safety finding: its additive record is its unscored identity,
                 # so the product ships instead of failing on an unresolved row
-                # (Sean, 2026-09-27).
+                # (Sean, 2026-09-27). A flagged excipient qualifies only as the
+                # product's sole active; beside a real active it stays filler.
                 row.update({
                     "canonical_id": matched_entry_id,
                     "canonical_id_after": matched_entry_id,
