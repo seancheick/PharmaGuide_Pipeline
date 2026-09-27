@@ -21,7 +21,8 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = REPO_ROOT / "scripts" / "data"
-DOCS = ("README.md", "AGENTS.md", "CLAUDE.md")
+DOCS = ("README.md", "AGENTS.md", "CLAUDE.md", "scripts/DATABASE_SCHEMA.md",
+        "scripts/FINAL_EXPORT_SCHEMA_V1.md")
 
 # A markdown table row whose cell immediately after the `<name>.json` cell is a
 # bare integer -- the exact shape that rotted in README's reference table.
@@ -80,4 +81,21 @@ def test_no_stale_corpus_file_count(doc_name):
     assert not offenders, (
         f"{doc_name} claims {offenders} curated JSON databases; {DATA_DIR.name}/ holds "
         f"{actual}. Describe the corpus without a number."
+    )
+
+
+# The per-file header shape that rotted in DATABASE_SCHEMA.md ("**Entries:** 143"
+# against 185 in _metadata, 2026-09-27); the doc now says "read _metadata.total_entries".
+ENTRIES_FIELD = re.compile(r"\*\*Entries:\*\*\s*[\d,]+")
+
+
+@pytest.mark.parametrize("doc_name", DOCS)
+def test_no_hand_copied_entries_field(doc_name):
+    doc = REPO_ROOT / doc_name
+    if not doc.is_file():
+        pytest.skip(f"{doc_name} not present")
+    found = ENTRIES_FIELD.findall(doc.read_text())
+    assert not found, (
+        f"{doc_name} hand-copies entry counts {found[:5]}: write "
+        "\"**Entries:** read `_metadata.total_entries`\" instead."
     )
