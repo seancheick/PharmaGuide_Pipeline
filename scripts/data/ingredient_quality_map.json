@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1454,
-      "total_form_aliases": 12132,
+      "total_form_aliases": 12133,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -44505,12 +44505,12 @@
       },
       "silicon dioxide (as silicon source)": {
         "bio_score": 8,
-        "absorption": "unknown",
+        "absorption": "unknown (material-specific; no value transferred from other silicon preparations)",
         "absorption_structured": {
-          "value": 0.35,
-          "range_low": 0.27,
-          "range_high": 0.44,
-          "quality": "moderate"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         },
         "consumer_note": "Silicon dioxide is the silicon source named on this label. It is the same chemical identity owned by the silica record and is represented here only as a Silicon source form.",
         "consumer_note_review": {
@@ -44519,7 +44519,9 @@
         },
         "notes": "DSLD label 12012 declares Silicon as Silicon Dioxide (UNII ETJ7Z6XBU4). The silica owner supplies the chemistry and quality value; this parent-scoped source form lets the Silicon nutrient row preserve that disclosure.",
         "dosage_importance": 1.0,
-        "aliases": []
+        "aliases": [
+          "silicon from silicon dioxide"
+        ]
       }
     },
     "match_rules": {
@@ -63967,7 +63969,13 @@
           "yohimbe extract 2% yohimbine alkaloids",
           "yohimbe standardized to yohimbine"
         ],
-        "dosage_importance": 1.5
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
+        }
       }
     },
     "standard_name": "Yohimbe",
@@ -71648,12 +71656,12 @@
       },
       "nickel sulfate": {
         "bio_score": 7.0,
-        "absorption": "moderate (parent baseline; no form-specific supplement advantage established)",
+        "absorption": "unknown (no reviewed form-specific oral absorption value)",
         "absorption_structured": {
-          "quality": "moderate",
-          "value": 0.5,
-          "range_low": 0.4,
-          "range_high": 0.6
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         },
         "consumer_note": "Nickel sulfate is the nickel salt named on this label. The form is identified for label accuracy; no nickel daily requirement or form-specific supplement benefit is established.",
         "consumer_note_review": {
@@ -71732,12 +71740,12 @@
       },
       "stannous chloride": {
         "bio_score": 7.0,
-        "absorption": "moderate (parent baseline; no form-specific supplement advantage established)",
+        "absorption": "unknown (no reviewed form-specific oral absorption value)",
         "absorption_structured": {
-          "quality": "moderate",
-          "value": 0.5,
-          "range_low": 0.4,
-          "range_high": 0.6
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         },
         "consumer_note": "Stannous chloride is the tin salt named on this label. The form is identified for label accuracy; no tin daily requirement or form-specific supplement benefit is established.",
         "consumer_note_review": {
