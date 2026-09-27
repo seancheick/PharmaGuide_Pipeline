@@ -109,12 +109,14 @@ def test_verified_us_hard_rules_have_source_complete_decisions(name: str, role: 
     assert _official_urls(result.safety_decision), result.safety_decision.to_dict()
 
 
+# The Iron Legion steroids (methyldiazinol, dimethandrostenol, norethandriol)
+# were this example until each got its own verified entry (2026-09-27) and
+# now block: see test_designer_steroid_products_ship_blocked.py.
 @pytest.mark.parametrize(
     "name",
     [
-        "3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol",
-        "2, 17a-Dimethyl-17b-Hydroxy-5a-Androst-2-Ene",
-        "17a-Ethyl-Estr-5(6)-Ene-3B-Diol",
+        "Arimistane",
+        "Androsta-3,5-diene-7,17-dione",
     ],
 )
 def test_confirmed_but_unsettled_us_policy_quarantines_instead_of_hard_blocking(name: str) -> None:
@@ -218,7 +220,7 @@ def test_unverified_hard_signal_defaults_to_quarantine(monkeypatch: pytest.Monke
 def test_safety_policy_quarantine_becomes_not_scored_with_actionable_reason() -> None:
     from score_supplements_v4 import score_product_v4
 
-    result = score_product_v4(_active_product("3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol"))
+    result = score_product_v4(_active_product("Arimistane"))
 
     assert result["v4_verdict"] == "NOT_SCORED"
     assert result["score_unavailable_reason"] == "safety_policy_review_required"

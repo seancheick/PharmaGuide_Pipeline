@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-26",
-    "total_entries": 182,
+    "last_updated": "2026-09-27",
+    "total_entries": 185,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -12965,16 +12965,7 @@
         "dimethazine",
         "designer steroids",
         "prohormones",
-        "methylstenbolone",
-        "3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol",
-        "3,3-azo-17a-methyl-5a-androstan-17b-ol",
-        "methyldiazirinol",
-        "2, 17a-Dimethyl-17b-Hydroxy-5a-Androst-2-Ene",
-        "2,17a-dimethyl-17b-hydroxy-5a-androst-2-ene",
-        "dimethandrostenol",
-        "17a-Ethyl-Estr-5(6)-Ene-3B-Diol",
-        "17a-ethyl-estr-5(6)-ene-3b-diol",
-        "norethandriol"
+        "methylstenbolone"
       ],
       "reason": "FDA warns that some bodybuilding products marketed as dietary supplements illegally contain anabolic steroids or steroid-like substances and can cause serious harm. This class record contains many chemical and marketing aliases, but the exact identity and federal legal status of each declared compound have not been verified individually. A class match therefore requires identity and policy review instead of an automatic hard block.",
       "status": "high_risk",
@@ -13050,6 +13041,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-09-27",
+            "by": "claude-audit",
+            "change": "Methyldiazinol, dimethandrostenol and norethandriol aliases moved to their own verified entries (BANNED_METHYLDIAZINOL, BANNED_DIMETHANDROSTENOL, BANNED_NORETHANDRIOL)."
           }
         ]
       },
@@ -13064,6 +13060,295 @@
       "ban_context": "watchlist",
       "safety_warning": "FDA warns that some bodybuilding products contain illegal steroids or steroid-like substances. Avoid use until this exact declared compound receives identity and policy review.",
       "safety_warning_one_liner": "Steroid-like compound requires exact identity and policy review."
+    },
+    {
+      "id": "BANNED_METHYLDIAZINOL",
+      "standard_name": "Methyldiazinol (3,3-azo-17alpha-methyl-5alpha-androstan-17beta-ol)",
+      "aliases": [
+        "methyldiazinol",
+        "methyldiazirinol",
+        "3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol",
+        "3,3-azo-17a-methyl-5a-androstan-17b-ol",
+        "3,3-azo-17alpha-methyl-5alpha-androstan-17beta-ol"
+      ],
+      "reason": "Methyldiazinol is a synthetic 17alpha-methylated anabolic-androgenic steroid, the 3-diazirine analog of mestanolone (UNII 7AA03AP597, PubChem CID 112500385). It is not a dietary ingredient: FDA states that bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances, with risks including serious liver injury, heart attack, stroke and blood clots. Its skeleton is shared with Schedule III steroids (methasterone); no FDA or DEA action names methyldiazinol itself.",
+      "status": "banned",
+      "class_tags": [
+        "steroid"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "not_lawful_as_supplement",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "not_lawful",
+          "effective_date": null,
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA consumer update (last updated 2024-09-20): bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances. A synthetic steroid is not a dietary ingredient. No FDA or DEA action names this compound.",
+            "accessed_date": "2026-09-27",
+            "url": "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-27"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA Consumer Update: Caution: Bodybuilding Products Can Be Risky (last updated 2024-09-20)",
+          "evidence_grade": "R",
+          "date": "2024-09-20",
+          "url": "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis."
+        },
+        {
+          "type": "regulatory",
+          "title": "DEA final rule: prostanozol and methasterone classified as Schedule III anabolic steroids (77 FR 44456, 2012-07-30)",
+          "evidence_grade": "R",
+          "date": "2012-07-30",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/22844688/",
+          "supports_claims": [
+            "legal_status"
+          ],
+          "evidence_summary": "Methasterone (2alpha,17alpha-dimethyl-5alpha-androstan-17beta-ol-3-one) is Schedule III; the 17alpha-methyl-5alpha-androstan-17beta-ol skeleton this compound shares is a controlled class."
+        }
+      ],
+      "source_category": "anabolic_steroid_prohormone",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-27",
+        "next_review_due": "2027-03-27",
+        "reviewed_by": "claude-audit (not clinician-reviewed)",
+        "change_log": [
+          {
+            "date": "2026-09-27",
+            "by": "claude-audit",
+            "change": "Split from SPIKE_ANABOLIC_STEROIDS after individual identity and status verification (Sean, 2026-09-27: verify each; a banned ingredient ships the product blocked with its reason). Moved this compound's aliases from the class record."
+          }
+        ]
+      },
+      "regulatory_date": "2024-09-20",
+      "regulatory_date_label": "FDA advisory",
+      "match_mode": "active",
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "UMLS lookup unavailable in the verifying environment; identity rests on UNII 7AA03AP597 and PubChem CID 112500385.",
+      "external_ids": {
+        "unii": "7AA03AP597",
+        "cas": "2429-17-6",
+        "pubchem_cid": 112500385
+      },
+      "ban_context": "substance",
+      "safety_warning": "A synthetic anabolic steroid sold as a supplement, which is not lawful. Steroids like it are linked to liver injury, heart attack, stroke and blood clots. Stop using it and talk to your doctor.",
+      "safety_warning_one_liner": "Synthetic steroid, not a lawful supplement. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-27"
+    },
+    {
+      "id": "BANNED_DIMETHANDROSTENOL",
+      "standard_name": "Dimethandrostenol (2,17alpha-dimethyl-5alpha-androst-2-en-17beta-ol)",
+      "aliases": [
+        "dimethandrostenol",
+        "2, 17a-Dimethyl-17b-Hydroxy-5a-Androst-2-Ene",
+        "2,17a-dimethyl-17b-hydroxy-5a-androst-2-ene",
+        "2,17alpha-dimethyl-5alpha-androst-2-en-17beta-ol"
+      ],
+      "reason": "Dimethandrostenol (2,17alpha-dimethyl-5alpha-androst-2-en-17beta-ol, PubChem CID 17311, CAS 2527-18-6) is a synthetic 17alpha-methylated anabolic-androgenic steroid: the 2-methyl analog of desoxymethyltestosterone, which DEA placed in Schedule III. It is not a dietary ingredient: FDA states that bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances, with risks including serious liver injury, heart attack, stroke and blood clots. No FDA or DEA action names this compound itself.",
+      "status": "banned",
+      "class_tags": [
+        "steroid"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "not_lawful_as_supplement",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "not_lawful",
+          "effective_date": null,
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA consumer update (last updated 2024-09-20): bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances. A synthetic steroid is not a dietary ingredient. No FDA or DEA action names this compound.",
+            "accessed_date": "2026-09-27",
+            "url": "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-27"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA Consumer Update: Caution: Bodybuilding Products Can Be Risky (last updated 2024-09-20)",
+          "evidence_grade": "R",
+          "date": "2024-09-20",
+          "url": "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis."
+        },
+        {
+          "type": "regulatory",
+          "title": "DEA final rule: boldione, desoxymethyltestosterone and 19-nor-4,9(10)-androstadienedione classified as Schedule III anabolic steroids (74 FR 63603, 2009-12-04)",
+          "evidence_grade": "R",
+          "date": "2009-12-04",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20169675/",
+          "supports_claims": [
+            "legal_status"
+          ],
+          "evidence_summary": "Desoxymethyltestosterone (17alpha-methyl-5alpha-androst-2-en-17beta-ol) is Schedule III; this compound is its 2-methyl analog."
+        }
+      ],
+      "source_category": "anabolic_steroid_prohormone",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-27",
+        "next_review_due": "2027-03-27",
+        "reviewed_by": "claude-audit (not clinician-reviewed)",
+        "change_log": [
+          {
+            "date": "2026-09-27",
+            "by": "claude-audit",
+            "change": "Split from SPIKE_ANABOLIC_STEROIDS after individual identity and status verification (Sean, 2026-09-27: verify each; a banned ingredient ships the product blocked with its reason). Moved this compound's aliases from the class record."
+          }
+        ]
+      },
+      "regulatory_date": "2024-09-20",
+      "regulatory_date_label": "FDA advisory",
+      "match_mode": "active",
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "UMLS lookup unavailable in the verifying environment; identity rests on PubChem CID 17311 (CAS 2527-18-6).",
+      "external_ids": {
+        "cas": "2527-18-6",
+        "pubchem_cid": 17311
+      },
+      "ban_context": "substance",
+      "safety_warning": "A synthetic anabolic steroid sold as a supplement, which is not lawful. Steroids like it are linked to liver injury, heart attack, stroke and blood clots. Stop using it and talk to your doctor.",
+      "safety_warning_one_liner": "Synthetic steroid, not a lawful supplement. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-27"
+    },
+    {
+      "id": "BANNED_NORETHANDRIOL",
+      "standard_name": "Norethandriol (17alpha-ethyl-estr-5-ene-3beta,17beta-diol)",
+      "aliases": [
+        "norethandriol",
+        "17a-Ethyl-Estr-5(6)-Ene-3B-Diol",
+        "17a-ethyl-estr-5(6)-ene-3b-diol",
+        "17alpha-ethyl-estr-5-ene-3beta,17beta-diol"
+      ],
+      "reason": "Norethandriol (17alpha-ethyl-estr-5-ene-3beta,17beta-diol) is a synthetic anabolic steroid prohormone: the 17alpha-ethyl analog of 19-nor-5-androstenediol and a precursor of norethandrolone, both listed anabolic steroids (21 CFR 1300.01). It is not a dietary ingredient: FDA states that bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances, with risks including serious liver injury, heart attack, stroke and blood clots. No FDA or DEA action names this compound itself, and PubChem holds no record of it.",
+      "status": "banned",
+      "class_tags": [
+        "steroid"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "not_lawful_as_supplement",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "not_lawful",
+          "effective_date": null,
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA consumer update (last updated 2024-09-20): bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances. A synthetic steroid is not a dietary ingredient. No FDA or DEA action names this compound.",
+            "accessed_date": "2026-09-27",
+            "url": "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-27"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA Consumer Update: Caution: Bodybuilding Products Can Be Risky (last updated 2024-09-20)",
+          "evidence_grade": "R",
+          "date": "2024-09-20",
+          "url": "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis."
+        },
+        {
+          "type": "regulatory",
+          "title": "21 CFR 1300.01: definition of anabolic steroid (norethandrolone; 19-nor-5-androstenediol)",
+          "evidence_grade": "R",
+          "url": "https://www.ecfr.gov/current/title-21/chapter-II/part-1300/section-1300.01",
+          "supports_claims": [
+            "legal_status"
+          ],
+          "evidence_summary": "Norethandrolone (17alpha-ethyl-17beta-hydroxyestr-4-en-3-one) and 19-nor-5-androstenediol (estr-5-ene-3beta,17beta-diol) are listed anabolic steroids; this compound is the 17alpha-ethyl analog of the latter."
+        }
+      ],
+      "source_category": "anabolic_steroid_prohormone",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-27",
+        "next_review_due": "2027-03-27",
+        "reviewed_by": "claude-audit (not clinician-reviewed)",
+        "change_log": [
+          {
+            "date": "2026-09-27",
+            "by": "claude-audit",
+            "change": "Split from SPIKE_ANABOLIC_STEROIDS after individual identity and status verification (Sean, 2026-09-27: verify each; a banned ingredient ships the product blocked with its reason). Moved this compound's aliases from the class record."
+          }
+        ]
+      },
+      "regulatory_date": "2024-09-20",
+      "regulatory_date_label": "FDA advisory",
+      "match_mode": "active",
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No PubChem, UNII or UMLS record exists for this designer steroid; identity rests on the printed chemical name.",
+      "external_ids": {},
+      "ban_context": "substance",
+      "safety_warning": "A synthetic anabolic steroid sold as a supplement, which is not lawful. Steroids like it are linked to liver injury, heart attack, stroke and blood clots. Stop using it and talk to your doctor.",
+      "safety_warning_one_liner": "Synthetic steroid, not a lawful supplement. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-09-27"
     },
     {
       "id": "SPIKE_CHLOROPRETADALAFIL",
