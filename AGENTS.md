@@ -29,6 +29,18 @@ scripts/test.sh full           # post-pipeline backstop, never alongside a pipel
 Pick the rung by what changed and say which rung ran. Docs/config-only changes need no pytest.
 "Done" without output from the rung that covers the change is not done.
 
+**Fix loop: the cheapest check that can fail runs first; the corpus runs once, last.**
+1. Classify every finding first; write a failing test per class, with the edge cases existing
+   policy implies.
+2. After a fix, run the tests that name each changed file:
+   `scripts/test.sh fast $(git grep -l -w -e <module> -e <data file> -- 'scripts/tests/test_*.py')`.
+3. Check the fix on the affected labels plus unaffected controls with
+   `scripts/audits/quality_redesign/replay.py` (freeze-raw, snapshot, compare), never by
+   rerunning whole brands.
+4. `scripts/test.sh fast` once. If it fails, fix the whole set, confirm with `--lf`, rerun once.
+5. After the last code change and the merge of main: one corpus pass from the earliest changed
+   stage, then the release rung. Its preflight refuses output built by other data or code.
+
 ## Pipeline map
 
 | Stage | Entry point |
