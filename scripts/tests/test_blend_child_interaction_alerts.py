@@ -98,10 +98,10 @@ def test_blend_child_does_not_repeat_a_rule_its_scorable_twin_fired(enricher):
 
 
 def test_top_level_np_vitamin_row_reads_as_a_panel_zero(enricher):
-    # "0 NP" on a vitamin or mineral outside a blend is a nutrition-panel zero
-    # until the cleaner keeps a printed 0% DV (Q23).
+    # "Vitamin A 0 NP" printed as 0% DV outside a blend is a nutrition-panel
+    # zero (Q23: the cleaner keeps dailyValue 0.0).
     row = _top("Vitamin A", "vitamin_a", 0.0, "NP")
-    row["category"] = "vitamins"
+    row["dailyValue"] = 0.0
     profile = enricher._collect_interaction_profile(_product([], [row]))
     assert not [a for a in profile["ingredient_alerts"]
                 if (a.get("subject_ref") or {}).get("canonical_id") == "vitamin_a"]

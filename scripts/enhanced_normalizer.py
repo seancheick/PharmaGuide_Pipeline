@@ -9331,7 +9331,10 @@ class EnhancedDSLDNormalizer:
             dv_groups = quantities.get("dailyValueTargetGroup", [])
             if dv_groups and isinstance(dv_groups, list):
                 first_dv_group = dv_groups[0]
-                daily_value = self._safe_float(first_dv_group.get("percent", 0))
+                # A printed 0% is kept (0.0); no printed percent stays None.
+                # They differ: "Vitamin A 0%" is a panel zero, a row with no
+                # percent is listed without an amount (register Q23).
+                daily_value = self._safe_float(first_dv_group.get("percent"), "daily_value", None)
                 daily_value_target_group = self._daily_value_target_group_from_dv_group(first_dv_group)
 
             # Build variant with context
@@ -9349,7 +9352,7 @@ class EnhancedDSLDNormalizer:
                 variant["serving_size_quantity"] = quantities["servingSizeQuantity"]
             if quantities.get("servingSizeUnit") is not None:
                 variant["serving_size_unit"] = quantities["servingSizeUnit"]
-            if daily_value:
+            if daily_value is not None:
                 variant["daily_value"] = daily_value
             if daily_value_target_group:
                 variant["daily_value_target_group"] = daily_value_target_group
@@ -9373,7 +9376,7 @@ class EnhancedDSLDNormalizer:
                     dv_groups = q.get("dailyValueTargetGroup", [])
                     if dv_groups and isinstance(dv_groups, list):
                         first_dv_group = dv_groups[0]
-                        dv = self._safe_float(first_dv_group.get("percent", 0))
+                        dv = self._safe_float(first_dv_group.get("percent"), "daily_value", None)
                         daily_value_target_group = self._daily_value_target_group_from_dv_group(first_dv_group)
 
                     variant = {
@@ -9389,7 +9392,7 @@ class EnhancedDSLDNormalizer:
                         variant["serving_size_quantity"] = q["servingSizeQuantity"]
                     if q.get("servingSizeUnit") is not None:
                         variant["serving_size_unit"] = q["servingSizeUnit"]
-                    if dv:
+                    if dv is not None:
                         variant["daily_value"] = dv
                     if daily_value_target_group:
                         variant["daily_value_target_group"] = daily_value_target_group
