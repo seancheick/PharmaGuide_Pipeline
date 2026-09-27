@@ -137,6 +137,25 @@ def is_probiotic_source_identity(ingredient: Mapping) -> bool:
         # A wrong/broad category cannot defeat a resolved ingredient identity.
         # ``other_ingredients`` is separately pinned to contain no live
         # probiotic identity, including unquantified processing-aid carriers.
+        # A nested row that enrichment has already classified as part of a
+        # non-therapeutic food blend is likewise source material, not a live
+        # probiotic active.  This covers nutritional/brewer's yeast rows such
+        # as S. cerevisiae inside MegaFood's Nourishing Food Blend while
+        # preserving unquantified organisms in actual probiotic blends.
+        if (
+            (
+                ingredient.get("role_classification") == "inactive_non_scorable"
+                and ingredient.get("identity_decision_reason")
+                == "nested_under_non_therapeutic_parent"
+            )
+            or (
+                ingredient.get("score_eligible_by_cleaner") is False
+                and ingredient.get("cleaner_row_role") == "nested_display_only"
+                and ingredient.get("isNestedIngredient") is True
+                and not _has_probiotic_viability_evidence(ingredient)
+            )
+        ):
+            return False
         source_db = str(ingredient.get("canonical_source_db") or "").strip().lower()
         if not printed_identity or source_db == "other_ingredients":
             return False

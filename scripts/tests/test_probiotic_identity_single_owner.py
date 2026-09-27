@@ -159,6 +159,24 @@ def test_unquantified_printed_organism_remains_a_named_blend_member():
     assert owner.is_probiotic_source_identity(row) is True
 
 
+def test_nontherapeutic_food_blend_yeast_is_not_a_probiotic_active():
+    row = {
+        "name": "S. cerevisiae",
+        "standard_name": "Saccharomyces cerevisiae (yeast)",
+        "canonical_id": "brewers_yeast",
+        "canonical_source_db": "ingredient_quality_map",
+        "category": "probiotics",
+        "quantity": 0,
+        "unit": "NP",
+        "cleaner_row_role": "nested_display_only",
+        "score_eligible_by_cleaner": False,
+        "isNestedIngredient": True,
+        "parentBlend": "Nourishing Food Blend",
+    }
+
+    assert owner.is_probiotic_source_identity(row) is False
+
+
 @pytest.mark.parametrize("unit", ["CFU", "Billion CFU", "AFU"])
 def test_resolved_yeast_identity_requires_and_accepts_viability_units(unit):
     row = {
