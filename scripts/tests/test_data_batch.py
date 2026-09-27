@@ -139,3 +139,11 @@ def test_landed_flags_missing_unexpected_and_count_drift():
     assert "METADATA total_entries is 2, entries give 3" in lines
     lines, problems = db.landed("x.json", None, after, None)
     assert problems == 1 and lines[0] == "added    items/A"
+
+
+def test_at_ref_distinguishes_a_missing_file_from_a_bad_ref():
+    missing = db.REPO / "scripts" / "data" / "__not_a_data_file__.json"
+    assert db.at_ref("HEAD", missing) is None
+    assert db.at_ref("HEAD", DATA / "daily_values.json")["_metadata"]
+    with pytest.raises(ValueError, match="failed"):
+        db.at_ref("no-such-ref-7f3a", DATA / "daily_values.json")

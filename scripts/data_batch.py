@@ -244,11 +244,17 @@ def save(path: Path, blob: dict) -> dict[str, tuple[Any, Any]]:
 
 
 def at_ref(ref: str, path: Path) -> Any:
-    """The file's parsed content at a git ref, or None when it did not exist."""
+    """The file's parsed content at a git ref, or None when the file did not
+    exist there. A ref git cannot resolve raises: a typo must not turn every
+    entry into an "added" one."""
     rel = Path(path).resolve().relative_to(REPO).as_posix()
     proc = subprocess.run(["git", "show", f"{ref}:{rel}"], cwd=REPO,
                           capture_output=True, text=True)
-    return json.loads(proc.stdout) if proc.returncode == 0 else None
+    if proc.returncode == 0:
+        return json.loads(proc.stdout)
+    if "does not exist in" in proc.stderr or "exists on disk, but not in" in proc.stderr:
+        return None
+    raise ValueError(f"git show {ref}:{rel} failed: {proc.stderr.strip()}")
 
 
 def landed(name: str, before: Optional[dict], after: dict,
