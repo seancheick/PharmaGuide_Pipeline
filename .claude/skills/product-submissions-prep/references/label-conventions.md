@@ -33,8 +33,13 @@ A **field** is:
   you can read), `unreadable` (printed but you cannot read it), `not_present`
   (the label does not print it). Only `read`/`partial` carry a `value` and
   sources; the other two have `value: null`, `sources: []`.
-- `supporting_text`: the characters as printed, including case and
-  punctuation. It is what grounding looks for and what the reviewer reads.
+- `supporting_text`: the characters as printed, including case, punctuation
+  and marks like ™. It is what the reviewer reads next to the crop, and what
+  the OCR grounding check looks for (which misses symbols and curved print;
+  that is the checker's limit, not a reason to change the quote).
+- `value`: the same words in plain form. Display capitals may be written in
+  normal case (`CREATINE Hydrochloride` → `Creatine Hydrochloride`); nothing
+  else changes.
 - `region`: normalized to the photo as displayed (0–1; x/y top-left, w/h
   size). Draw it around the printed text with a little margin. It becomes the
   crop beside the reviewer's tick, so a wrong or lazy box costs review time.
@@ -110,8 +115,10 @@ names, never change a reading value (fix the reading and record again).
   `{"minQuantity": 1, "maxQuantity": 1, "unit": "Tablet(s)", "order": 1}` from
   what is printed. Add `minDailyServings`/`maxDailyServings` **only when the
   directions print a daily amount** ("Take one tablet daily" → 1/1; "1 to 2
-  daily" → 1/2). It feeds the maximum-exposure safety math, so flag it in
-  your report either way.
+  daily" → 1/2). When the label prints a ceiling ("not to exceed 5 servings
+  per day"), the ceiling is the maximum: it is the most a user is told they
+  may take, and this number multiplies every interaction dose threshold, so
+  under-stating it under-warns. Flag the choice in your report either way.
 - **statements[].type**: replace `Label statement` with the DSLD type that
   fits; the pipeline parses some types (allergens read "Formula re:
   Contains"):

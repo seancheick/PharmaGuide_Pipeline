@@ -45,7 +45,8 @@ R="$PG_PYTHON scripts/submission_review/extraction/agent_reader.py"
 ```
 
 `.env` must hold `SUPABASE_URL`, the anon/publishable key and the service-role
-key. Requests run as `PG_REVIEWER_EMAIL` until a machine reviewer account
+key. It is gitignored, so a fresh worktree has none: symlink the main
+checkout's (`ln -s <main checkout>/.env .env`). Requests run as `PG_REVIEWER_EMAIL` until a machine reviewer account
 exists. Work files go to `/tmp/pg_submissions/<alias>/`
 (`PG_SUBMISSION_WORKDIR` overrides).
 
@@ -105,6 +106,18 @@ before your first submission. The essentials:
 - one row per printed line; a printed "(as X)" goes into `form_text`; only a
   blend header has children (`parent_index`).
 
+Then check every box you drew:
+
+```bash
+$R sheet S18        # writes regions_sheet.png: one labelled crop per cited region
+```
+
+Open the sheet and look at each crop. Each one becomes the image beside the
+reviewer's tick; a box that shows the neighbouring line, or clips the start of
+a sentence, makes a correct value look unsupported. Redraw and re-run until
+every crop shows exactly its text. (On the first live run this caught two of
+twenty boxes.)
+
 ### 5. Record the draft
 
 ```bash
@@ -116,10 +129,17 @@ defects (a printed "(as X)" with no `form_text`, a %DV read as an amount).
 Then it runs the deterministic checks and an **independent OCR grounding**
 pass, records the draft, and writes `label.json` + `unresolved.json`.
 
-Every `re-read <field>` line means independent OCR could not find your text
-on your cited photo. Often that is OCR missing fine print, but each one is a
-field to look at again, zoomed. Fix `reading.json` and `record` again if you
-change anything; a new record replaces the old draft.
+Every `re-read <field>` line means independent OCR could not find your quote
+on your cited photo. Expect many on curved, glossy bottles: on the first live
+run the checker read three lines off a perfectly legible Supplement Facts
+panel, and it drops printed symbols such as ™ (so `NORTH STAR LABS™` never
+matches `NORTH STAR LABS`). So a low score is not proof you are wrong, and a
+high one is not proof you are right. What it demands is that you re-open
+each listed field zoomed, confirm it character by character (tesseract on the
+crop is a good second opinion), and report the grounded count honestly.
+Never trim or bend a quote to make the checker pass: the quote is what the
+label prints. Fix `reading.json` and `record` again only if the photo shows
+you were wrong; a new record replaces the old draft.
 
 ### 6. Complete `label.json`
 

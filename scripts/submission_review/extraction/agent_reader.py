@@ -7,6 +7,7 @@ prepared bytes). What it writes is a draft and a reviewer draft; the five
 field confirmations and the approval stay the reviewer's clicks in the console.
 
     fetch  S01 [S02 ...]   photos + an OCR lead reading for each submission
+    sheet  S01             every cited region as one image, to check the boxes
     record S01 --model M   file the agent's reading.json as a draft
     save   S01             save label.json as the review, after checks
 
@@ -309,6 +310,59 @@ def cmd_fetch(api: Reviewer, alias: str) -> None:
         print(f"    {entry['photo']}  {', '.join(entry['categories']) or 'uncategorised'}")
 
 
+def cmd_sheet(alias: str) -> None:
+    """One image of every cited region, labelled by field.
+
+    Each region becomes the crop beside the reviewer's tick, so a box that
+    frames the wrong text wastes their time or, worse, looks like support for
+    a value it does not show. Look at the sheet before recording.
+    """
+    from PIL import Image, ImageDraw
+
+    alias = alias.upper()
+    directory = WORK / alias
+    reading = json.loads((directory / "reading.json").read_text())
+    files = {entry["photo_id"]: entry["file"]
+             for entry in json.loads((directory / "photos.json").read_text())}
+    tiles: list[tuple[str, Any]] = []
+
+    def walk(value: Any, path: str) -> None:
+        if isinstance(value, dict):
+            for source in value.get("sources") or []:
+                region = source.get("region")
+                if region and source.get("photo_id") in files:
+                    with Image.open(files[source["photo_id"]]) as image:
+                        width, height = image.size
+                        tile = image.convert("RGB").crop((
+                            int(region["x"] * width), int(region["y"] * height),
+                            int((region["x"] + region["w"]) * width),
+                            int((region["y"] + region["h"]) * height)))
+                    tile.thumbnail((900, 220))
+                    tiles.append((path, tile))
+            for key, item in value.items():
+                if key != "sources":
+                    walk(item, f"{path}.{key}")
+        elif isinstance(value, list):
+            for index, item in enumerate(value):
+                walk(item, f"{path}[{index}]")
+
+    for key in ("identity", "serving", "ingredient_rows", "other_ingredients", "statements"):
+        walk(reading.get(key), key)
+    if not tiles:
+        print(f"{alias}: no regions in reading.json")
+        return
+    sheet = Image.new("RGB", (920, sum(tile.height + 28 for _, tile in tiles)), "white")
+    draw = ImageDraw.Draw(sheet)
+    top = 0
+    for path, tile in tiles:
+        draw.text((6, top + 6), path, fill="black")
+        sheet.paste(tile, (6, top + 24))
+        top += tile.height + 28
+    target = directory / "regions_sheet.png"
+    sheet.save(target)
+    print(f"{alias}: {len(tiles)} region(s) -> {target}")
+
+
 def cmd_record(api: Reviewer, alias: str, model: str) -> int:
     from submission_review.extraction.adapters.rapidocr_reader import RapidOcrReader
 
@@ -403,12 +457,17 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("list")
     fetch = sub.add_parser("fetch")
     fetch.add_argument("aliases", nargs="+")
+    sheet = sub.add_parser("sheet")
+    sheet.add_argument("alias")
     record = sub.add_parser("record")
     record.add_argument("alias")
     record.add_argument("--model", required=True, help="the reading model, e.g. claude-opus-5-5")
     save = sub.add_parser("save")
     save.add_argument("alias")
     args = parser.parse_args(argv)
+    if args.command == "sheet":
+        cmd_sheet(args.alias)  # local only: no account needed
+        return 0
     try:
         api = Reviewer()
         if args.command == "list":
