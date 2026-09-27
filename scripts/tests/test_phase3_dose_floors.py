@@ -38,7 +38,8 @@ EXPECTED = {
     "turmeric": (1000, "mg", {"bleeding_disorders", "anticoagulants", "antiplatelets"}),
     "curcumin": (1000, "mg", {"bleeding_disorders", "anticoagulants", "antiplatelets"}),
     "caffeine": (200, "mg", {"hypertension"}),
-    "licorice": (100, "mg", {"hypertension", "antihypertensives"}),
+    # licorice: 100 mg floors removed 2026-09-26 (Sean, D8); 100 mg/day glycyrrhizic acid
+    # is a tolerable-intake/effect dose, not a floor for people with hypertension.
     # glucose batch
     "berberine_supplement": (500, "mg", {"diabetes", "hypoglycemics_high_risk"}),
     "gymnema_sylvestre": (400, "mg", {"diabetes"}),

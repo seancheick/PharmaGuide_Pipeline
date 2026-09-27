@@ -1269,24 +1269,31 @@ def test_stinging_nettle_glucose_rules_carry_no_floor():
 LICORICE_FLOOR_SOURCE = _pmid("38246526")
 
 
-def test_licorice_root_bp_floor_cites_the_100_mg_glycyrrhizic_acid_trial():
-    """PMID 393503 is two women on 273-546 mg glycyrrhizin; it never mentions
-    100 mg. af Geijerstam 2024 (PMID 38246526) randomized healthy volunteers to
-    licorice with 100 mg glycyrrhizic acid/day: home systolic BP rose 3.1 mmHg."""
-    floor = _sub_rule(_rule("RULE_BOTANICAL_LICORICE_ROOT"), "drug_class_id", "antihypertensives")["min_effective_dose"]
-    assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day")
-    assert floor["source"] == LICORICE_FLOOR_SOURCE
-    assert floor["confidence_basis"] == "documented_effective_dose"
+def _assert_licorice_bp_presence(rule_id: str, targets: tuple) -> None:
+    rule = _rule(rule_id)
+    for key, target in targets:
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub and sub["materiality"] == "presence", (rule_id, target)
+        assert LICORICE_FLOOR_SOURCE in sub["sources"] and _pmid("12574791") in sub["sources"], (rule_id, target)
+        assert "100 mg/day glycyrrhizic acid" in sub["mechanism"], (rule_id, target)
 
 
-def test_iqm_licorice_bp_floors_cite_the_100_mg_glycyrrhizic_acid_trial():
-    """Same defect as the licorice root rule: PMID 393503 never mentions 100 mg."""
-    rule = _rule("RULE_IQM_LICORICE_HYPERTENSION")
-    for key, target in (("condition_id", "hypertension"), ("drug_class_id", "antihypertensives")):
-        floor = _sub_rule(rule, key, target)["min_effective_dose"]
-        assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
-        assert floor["source"] == LICORICE_FLOOR_SOURCE, target
-        assert floor["confidence_basis"] == "documented_effective_dose", target
+def test_licorice_root_bp_rule_fires_on_presence():
+    """Sean, D8 (2026-09-26): 100 mg/day glycyrrhizic acid is a level WHO calls
+    unlikely to harm most adults and the dose that raised BP in healthy adults
+    (PMID 38246526), not a floor for people with hypertension, who respond more
+    strongly (PMID 12574791). The floor was also compared with licorice mass,
+    not glycyrrhizic acid. Presence, with 100 mg kept as dose context."""
+    _assert_licorice_bp_presence("RULE_BOTANICAL_LICORICE_ROOT", (("drug_class_id", "antihypertensives"),))
+
+
+def test_iqm_licorice_bp_rules_fire_on_presence_and_the_threshold_note_claims_no_safe_floor():
+    _assert_licorice_bp_presence("RULE_IQM_LICORICE_HYPERTENSION",
+                                 (("condition_id", "hypertension"), ("drug_class_id", "antihypertensives")))
+    note = next(t for t in _rule("RULE_IQM_LICORICE_HYPERTENSION")["dose_thresholds"]
+                if t.get("target_id") == "hypertension")["note"]
+    assert "the threshold above which BP elevation becomes clinically significant" not in note
+    assert _pmid("12574791") in note
 
 
 def test_green_tea_liver_warning_treats_800_mg_as_an_observed_risk_dose_not_a_safe_limit():

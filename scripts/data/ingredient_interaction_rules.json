@@ -191,7 +191,8 @@
       "2026-09-26: RULE_BOTANICAL_LICORICE_ROOT antihypertensives 100 mg/day floor cited PMID 393503, two women on 273-546 mg glycyrrhizin daily, which never mentions 100 mg (confidence_basis inferred_from_dose_range). It now cites af Geijerstam 2024 (PMID 38246526): licorice with 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg in a randomized crossover trial. Value unchanged; confidence_basis documented_effective_dose; the rationale states the floor is compared with the label licorice amount. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_GREEN_TEA_HYPERTENSION liver_disease (Sean, Q24): 800 mg EGCG/day is an observed risk dose, not a safe limit. The tier no longer lowers the warning to monitor (and hidden) below 800 mg; it stays avoid at any amount, including an unstated one, and >= 800 mg adds dose-specific copy. Sources now EFSA 2018 (PMID 32625874: >= 800 mg raised transaminases; no safe dose identified), USP 2020 (PMID 32140423) and LiverTox NBK547925. Removed unsourced copy: first-pass 'saturation' at 800 mg, liver disease 'lowers the threshold for injury', and a '>= 400 mg/dose' cut-off. Receipt: scripts/audits/pending_items_20260926/research.md.",
-      "2026-09-26: RULE_INGREDIENT_GINSENG and RULE_IQM_STINGING_NETTLE_DIABETES glucose floors removed (Sean, D8 follow-up: a studied dose is not a warning threshold; a numeric floor needs threshold evidence such as a dose-response study, multiple doses separating no effect from effect, or a monograph/regulatory threshold). Ginseng's 100 mg/day (Sotaniemi 1995, PMID 8721940) and nettle's 1500 mg/day (Kianbakht 2013, PMID 24273930) are observed-effect doses from single studies that tested nothing lower. Both doses are now stated in the eight glucose mechanisms and cited in their sources (nettle's regimen was previously stated only in its diabetes mechanism). All eight sub-rules fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
+      "2026-09-26: RULE_INGREDIENT_GINSENG and RULE_IQM_STINGING_NETTLE_DIABETES glucose floors removed (Sean, D8 follow-up: a studied dose is not a warning threshold; a numeric floor needs threshold evidence such as a dose-response study, multiple doses separating no effect from effect, or a monograph/regulatory threshold). Ginseng's 100 mg/day (Sotaniemi 1995, PMID 8721940) and nettle's 1500 mg/day (Kianbakht 2013, PMID 24273930) are observed-effect doses from single studies that tested nothing lower. Both doses are now stated in the eight glucose mechanisms and cited in their sources (nettle's regimen was previously stated only in its diabetes mechanism). All eight sub-rules fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: Licorice blood-pressure floors removed (Sean, D8): RULE_BOTANICAL_LICORICE_ROOT antihypertensives and RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives. 100 mg/day glycyrrhizic acid is a level WHO has suggested is unlikely to harm most adults and the dose that raised home systolic BP in healthy adults (PMID 38246526); it is not a floor for people with hypertension, who respond more strongly (PMID 12574791, 15.3 vs 3.5 mmHg at 150 mg glycyrrhetinic acid/day). The floors were also compared with licorice mass, not glycyrrhizic acid. The three sub-rules fire on presence; the 100 mg figure stays as dose context in their mechanisms and sources, and the IQM hypertension threshold note (>= 2000 mg extract escalates to avoid) no longer calls it the point where BP elevation becomes clinically significant. Severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interaction_rules": [
@@ -6067,10 +6068,12 @@
           "condition_id": "hypertension",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Glycyrrhizin can increase sodium retention and blood pressure. NOTE: DGL (deglycyrrhizinated licorice) has glycyrrhizin removed and does NOT have this interaction. This rule applies only to whole/standard licorice extract containing glycyrrhizin.",
+          "mechanism": "Glycyrrhizin can increase sodium retention and blood pressure. NOTE: DGL (deglycyrrhizinated licorice) has glycyrrhizin removed and does NOT have this interaction. This rule applies only to whole/standard licorice extract containing glycyrrhizin. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
           "action": "Avoid in uncontrolled blood pressure unless deglycyrrhizinated form is confirmed.",
           "sources": [
-            "https://www.nccih.nih.gov/health/licorice-root"
+            "https://www.nccih.nih.gov/health/licorice-root",
+            "https://pubmed.ncbi.nlm.nih.gov/38246526/",
+            "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
           "form_exclusion": "DGL (deglycyrrhizinated licorice)",
           "alert_headline": "Licorice may raise blood pressure",
@@ -6095,16 +6098,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/38246526/",
-            "rationale": "Licorice supplying 100 mg/day glycyrrhizic acid for 2 weeks raised home systolic blood pressure by 3.1 mmHg and suppressed renin and aldosterone in healthy volunteers (randomized crossover trial, PMID 38246526). The floor is compared with the licorice amount on the label, which is at least its glycyrrhizic acid content, so it never suppresses a product supplying 100 mg glycyrrhizic acid. DGL has the glycyrrhizin removed."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -6146,10 +6140,12 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "May blunt blood pressure control from antihypertensive therapy. Does not apply to DGL (deglycyrrhizinated) licorice.",
+          "mechanism": "May blunt blood pressure control from antihypertensive therapy. Does not apply to DGL (deglycyrrhizinated) licorice. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
           "action": "Monitor blood pressure and review supplement use with clinician.",
           "sources": [
-            "https://www.nccih.nih.gov/health/licorice-root"
+            "https://www.nccih.nih.gov/health/licorice-root",
+            "https://pubmed.ncbi.nlm.nih.gov/38246526/",
+            "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Licorice can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding licorice.",
@@ -6173,16 +6169,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/38246526/",
-            "rationale": "Licorice supplying 100 mg/day glycyrrhizic acid for 2 weeks raised home systolic blood pressure by 3.1 mmHg and suppressed renin and aldosterone in healthy volunteers (randomized crossover trial, PMID 38246526). The floor is compared with the licorice amount on the label, which is at least its glycyrrhizic acid content, so it never suppresses a product supplying 100 mg glycyrrhizic acid. DGL has the glycyrrhizin removed."
-          }
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -6266,7 +6253,7 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "monitor",
-          "note": "2000 mg of typical commercial licorice extract (4-5% glycyrrhizin) \u2248 100 mg glycyrrhizic acid, the threshold above which BP elevation becomes clinically significant. DGL is exempt. https://www.nccih.nih.gov/health/licorice-root",
+          "note": "2000 mg of typical commercial licorice extract (4-5% glycyrrhizin) \u2248 100 mg glycyrrhizic acid/day, the dose that raised blood pressure in healthy adults (https://pubmed.ncbi.nlm.nih.gov/38246526/); at or above it the warning escalates to avoid. It is not a safe floor: people with hypertension respond more strongly (https://pubmed.ncbi.nlm.nih.gov/12574791/). DGL is exempt. https://www.nccih.nih.gov/health/licorice-root",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -17313,10 +17300,12 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Glycyrrhizin causes sodium retention and blood pressure elevation via pseudoaldosteronism, directly opposing the pharmacodynamic effect of all antihypertensive drug classes (ACE inhibitors, ARBs, calcium channel blockers, diuretics, beta-blockers). Clinical case series have documented failed BP control in patients consuming licorice while on antihypertensive therapy.",
+          "mechanism": "Glycyrrhizin causes sodium retention and blood pressure elevation via pseudoaldosteronism, directly opposing the pharmacodynamic effect of all antihypertensive drug classes (ACE inhibitors, ARBs, calcium channel blockers, diuretics, beta-blockers). Clinical case series have documented failed BP control in patients consuming licorice while on antihypertensive therapy. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
           "action": "Discontinue licorice root supplements in patients on antihypertensive therapy. DGL (deglycyrrhizinated licorice) does not carry this interaction. Inform prescriber of any licorice supplement use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/31605160/"
+            "https://pubmed.ncbi.nlm.nih.gov/31605160/",
+            "https://pubmed.ncbi.nlm.nih.gov/38246526/",
+            "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
           "alert_headline": "May reduce blood-pressure medication effect",
           "alert_body": "Licorice's sodium-retaining effect works against antihypertensive therapy. If you take a blood-pressure medication, talk to your prescriber; DGL licorice is unaffected.",
@@ -17340,16 +17329,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/38246526/",
-            "rationale": "Licorice supplying 100 mg/day glycyrrhizic acid for 2 weeks raised home systolic blood pressure by 3.1 mmHg and suppressed renin and aldosterone in healthy volunteers (randomized crossover trial, PMID 38246526). The floor is compared with the licorice amount on the label, which is at least its glycyrrhizic acid content, so it never suppresses a product supplying 100 mg glycyrrhizic acid. DGL has the glycyrrhizin removed."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [

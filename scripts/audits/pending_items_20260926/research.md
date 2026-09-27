@@ -298,3 +298,21 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   PI2-standardized potato extract; the abstract does not name the Slendesta brand.
 - Other human PI2 trials seen: PMID 20644555 (Peters 2011, 30 mg PI2 minidrink), PMID 32161479 (Flechtner-Mors
   2020, 150 mg PI2 twice daily during weight reduction). Citation only; the bonus depends on the brand on the label.
+
+## Licorice blood-pressure floors removed (D8, Sean 2026-09-26)
+- PMID 38246526 (af Geijerstam 2024, efetch): "The World Health Organization has suggested that 100 mg GA/d would
+  be unlikely to cause adverse effects"; in 28 healthy adults (median age 24) licorice with 100 mg GA/day raised home
+  systolic BP by 3.1 mmHg (95% CI 0.8-5.4) over 2 weeks. A tolerable-intake level for most adults and one studied
+  dose, not a floor.
+- PMID 12574791 (Sigurjonsdottir 2003, efetch 2026-09-26): 100 g liquorice/day (150 mg glycyrrhetinic acid) for 4
+  weeks raised office systolic BP 15.3 mmHg in essential hypertension vs 3.5 mmHg in normotensives (p=0.004).
+- The floors compared a 100 mg value with the licorice ingredient's label mass (`_evaluate_min_effective_dose`),
+  not glycyrrhizic acid content.
+- Removed on RULE_BOTANICAL_LICORICE_ROOT antihypertensives and RULE_IQM_LICORICE_HYPERTENSION hypertension and
+  antihypertensives; both sources added and the 100 mg figure stated as context in each mechanism. The IQM
+  hypertension threshold (>= 2000 mg extract -> avoid, below -> monitor) stays; its note no longer calls 100 mg GA the
+  point where BP elevation "becomes clinically significant".
+- Impact, catalog 2026.09.22: 10 products newly show the IQM licorice hypertension warning (label licorice 1.5-80 mg);
+  drug-class sub-rules are not in detail blobs. None hidden.
+- Not verified here and not cited: the JECFA/WHO wording on susceptible subgroups and the WHO monograph
+  contraindications quoted in Sean's pasted review.
