@@ -1230,37 +1230,40 @@ def test_feverfew_anticoagulant_rule_carries_no_floor_from_a_general_review():
     assert sub["materiality"] == "presence"
 
 
-def test_ginseng_floors_match_the_effect_their_source_measured():
+def test_ginseng_carries_no_floor_and_keeps_its_studied_glucose_dose_as_evidence():
     """PMID 35509826 (a metabolic meta-analysis, no dose-response) floored every
-    sub-rule at 200 mg with a blood-pressure rationale. Glucose: Sotaniemi 1995
-    (PMID 8721940) found 100 mg/day lowered fasting glucose and 200 mg/day HbA1c,
-    so the glucose floors are 100 mg. Bleeding/warfarin: no human source gives a
-    dose (Korean red ginseng 1 g and 1.5 g were null), so those fire on presence."""
+    sub-rule at 200 mg. Sean, D8 (2026-09-26): a studied dose is not a warning
+    threshold. Sotaniemi 1995 (PMID 8721940) found 100 mg/day lowered fasting
+    glucose, an observed-effect dose, but tested nothing lower, so the glucose
+    sub-rules fire on presence and keep that dose as cited evidence. No human
+    source gives a bleeding or warfarin dose either."""
     rule = _rule("RULE_INGREDIENT_GINSENG")
     assert "35509826" not in json.dumps(rule)
-    for key, target in (("condition_id", "surgery_scheduled"), ("drug_class_id", "anticoagulants")):
+    for key, target in (("condition_id", "surgery_scheduled"), ("drug_class_id", "anticoagulants"),
+                        ("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
+                        ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
         sub = _sub_rule(rule, key, target)
         assert "min_effective_dose" not in sub and sub["materiality"] == "presence", target
     for key, target in (("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
                         ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
-        floor = _sub_rule(rule, key, target)["min_effective_dose"]
-        assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
-        assert floor["source"] == _pmid("8721940"), target
-        assert "hypertensive" not in floor["rationale"], target
+        sub = _sub_rule(rule, key, target)
+        assert _pmid("8721940") in sub["sources"], target
+        assert "100 mg/day" in sub["mechanism"], target
 
 
-def test_stinging_nettle_glucose_floor_is_the_trial_dose_not_a_conservative_guess():
-    """The 1000 mg floor was labelled weak_signal_conservative and cited a
-    general review (PMID 35800714). The documented dose is Kianbakht 2013 (PMID
-    24273930): leaf extract 500 mg every 8 hours (1500 mg/day) lowered glucose
-    and HbA1c on top of oral antidiabetics."""
+def test_stinging_nettle_glucose_rules_carry_no_floor():
+    """The 1000 mg floor was weak_signal_conservative on a general review. The
+    only documented dose, Kianbakht 2013 (PMID 24273930, 500 mg every 8 hours),
+    is one studied regimen, not a threshold (Sean, D8 2026-09-26), so the
+    glucose sub-rules fire on presence; the regimen stays in the mechanism and
+    sources."""
     rule = _rule("RULE_IQM_STINGING_NETTLE_DIABETES")
     for key, target in (("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
                         ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
-        floor = _sub_rule(rule, key, target)["min_effective_dose"]
-        assert (floor["value"], floor["unit"], floor["basis"]) == (1500, "mg", "per_day"), target
-        assert floor["source"] == _pmid("24273930"), target
-        assert floor["confidence_basis"] == "documented_effective_dose", target
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub and sub["materiality"] == "presence", target
+        assert _pmid("24273930") in sub["sources"], target
+        assert "500 mg" in sub["mechanism"], target
 
 
 LICORICE_FLOOR_SOURCE = _pmid("38246526")

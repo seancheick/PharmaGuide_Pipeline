@@ -4,7 +4,7 @@
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
     "last_updated": "2026-09-26",
-    "total_entries": 72
+    "total_entries": 68
   },
   "reviewed": [
     {
@@ -598,42 +598,6 @@
       "sub_rule": "drug:anticoagulants",
       "live_title": "Interactions between Natural Health Products and Oral Anticoagulants: Spontaneous Reports in the Italian Surveillance System of Natural Health Products.",
       "rationale": "Full-text citation. The abstract reports 5 cases of INR increase with warfarin across 8 herbal products without naming them; the full text (PMC3025393, Table 2 'Reports of INR increase associated with use of natural remedies') lists 'Boswellia serrata dry extract (D E) 95%, 1500 mg/day' and 'Boswellia serrata DE 95%, 1200 mg/day', both with warfarin, INR increase, Naranjo 'Probable [6]'. The mechanism states exactly these two reports. Boswellia is absent from the title and abstract, hence the subject miss.",
-      "reviewed_by": "agent data-fix review 2026-09-26 (not clinician-reviewed)",
-      "reviewed_at": "2026-09-26"
-    },
-    {
-      "pmid": "35912631",
-      "rule_id": "RULE_INGREDIENT_GINSENG",
-      "sub_rule": "dose_floor:diabetes",
-      "live_title": "The role of selected nutraceuticals in management of prediabetes and diabetes: An updated review of the literature.",
-      "rationale": "Full-text citation, secondary to the floor's own source. The floor cites Sotaniemi 1995 (PMID 8721940, on topic); its rationale cites this review only for the dose split the Sotaniemi abstract omits. The review body (PMC9804244) states: 'the dose of 100 mg significantly decreased FPG levels (-10.81 mg/dl, -7.20%, p < .05) while that of 200 mg reduced HbA1c'. The abstract covers many nutraceuticals and does not name ginseng, hence the subject miss.",
-      "reviewed_by": "agent data-fix review 2026-09-26 (not clinician-reviewed)",
-      "reviewed_at": "2026-09-26"
-    },
-    {
-      "pmid": "35912631",
-      "rule_id": "RULE_INGREDIENT_GINSENG",
-      "sub_rule": "dose_floor:hypoglycemics_high_risk",
-      "live_title": "The role of selected nutraceuticals in management of prediabetes and diabetes: An updated review of the literature.",
-      "rationale": "Full-text citation, secondary to the floor's own source. The floor cites Sotaniemi 1995 (PMID 8721940, on topic); its rationale cites this review only for the dose split the Sotaniemi abstract omits. The review body (PMC9804244) states: 'the dose of 100 mg significantly decreased FPG levels (-10.81 mg/dl, -7.20%, p < .05) while that of 200 mg reduced HbA1c'. The abstract covers many nutraceuticals and does not name ginseng, hence the subject miss.",
-      "reviewed_by": "agent data-fix review 2026-09-26 (not clinician-reviewed)",
-      "reviewed_at": "2026-09-26"
-    },
-    {
-      "pmid": "35912631",
-      "rule_id": "RULE_INGREDIENT_GINSENG",
-      "sub_rule": "dose_floor:hypoglycemics_lower_risk",
-      "live_title": "The role of selected nutraceuticals in management of prediabetes and diabetes: An updated review of the literature.",
-      "rationale": "Full-text citation, secondary to the floor's own source. The floor cites Sotaniemi 1995 (PMID 8721940, on topic); its rationale cites this review only for the dose split the Sotaniemi abstract omits. The review body (PMC9804244) states: 'the dose of 100 mg significantly decreased FPG levels (-10.81 mg/dl, -7.20%, p < .05) while that of 200 mg reduced HbA1c'. The abstract covers many nutraceuticals and does not name ginseng, hence the subject miss.",
-      "reviewed_by": "agent data-fix review 2026-09-26 (not clinician-reviewed)",
-      "reviewed_at": "2026-09-26"
-    },
-    {
-      "pmid": "35912631",
-      "rule_id": "RULE_INGREDIENT_GINSENG",
-      "sub_rule": "dose_floor:hypoglycemics_unknown",
-      "live_title": "The role of selected nutraceuticals in management of prediabetes and diabetes: An updated review of the literature.",
-      "rationale": "Full-text citation, secondary to the floor's own source. The floor cites Sotaniemi 1995 (PMID 8721940, on topic); its rationale cites this review only for the dose split the Sotaniemi abstract omits. The review body (PMC9804244) states: 'the dose of 100 mg significantly decreased FPG levels (-10.81 mg/dl, -7.20%, p < .05) while that of 200 mg reduced HbA1c'. The abstract covers many nutraceuticals and does not name ginseng, hence the subject miss.",
       "reviewed_by": "agent data-fix review 2026-09-26 (not clinician-reviewed)",
       "reviewed_at": "2026-09-26"
     },

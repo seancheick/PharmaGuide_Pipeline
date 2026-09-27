@@ -226,3 +226,15 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
 - The enricher compares a floor with the ingredient row's label amount (`_evaluate_min_effective_dose`), not with
   glycyrrhizic acid content; a licorice row is at least its GA content, so the 100 mg floor never suppresses a
   product supplying 100 mg GA. Value unchanged in both rules; source and rationale replaced.
+
+## D8 follow-up (Sean, 2026-09-26): a studied dose is not a warning threshold
+- Ruling: a numeric floor needs threshold evidence (a dose-response study, multiple doses separating no effect
+  from effect, or a monograph/regulatory threshold). A dose at which one study saw an effect is an observed-effect
+  dose; it does not show that lower doses are inert.
+- RULE_INGREDIENT_GINSENG glucose sub-rules: Sotaniemi 1995 (PMID 8721940) tested 100 and 200 mg/day only; the
+  100 mg arm lowered fasting glucose (Derosa 2022, PMID 35912631). Floors removed; the 100 mg/day result is now
+  stated in the four glucose mechanisms and 8721940 is in their sources. The four ghost-review entries for
+  35912631 (which only the removed floor rationale cited) are deleted.
+- RULE_IQM_STINGING_NETTLE_DIABETES: Kianbakht 2013 (PMID 24273930) is one regimen (500 mg every 8 hours); the
+  diabetes mechanism stated it, the three hypoglycemic mechanisms now do too; all four cite it. Floors removed.
+- Both rules now fire on presence at unchanged severities.

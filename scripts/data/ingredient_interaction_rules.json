@@ -189,7 +189,8 @@
       "2026-09-26: RULE_INGREDIENT_GINSENG. The anticoagulants threshold note cited PMID 22137021, a gastric-cancer radiotherapy study (ghost); it now cites Yuan 2004 (PMID 15238367, American ginseng lowered INR and warfarin exposure) and calls >1000 mg/day the authored threshold (commit 7a6ce5b4). Six 200 mg/day floors cited PMID 35509826, a metabolic meta-analysis with no dose-response, under a copied blood-pressure rationale. Glucose floors (diabetes, three hypoglycemic classes) now cite Sotaniemi 1995 (PMID 8721940): 100 mg/day lowered fasting glucose, so the floor is 100 mg. Surgery and anticoagulants floors are removed (Sean, D8): no human source gives a dose for a ginseng bleeding or warfarin effect, and Korean red ginseng 1 g and 1.5 g were null (PMIDs 19913311, 23596810). Those two now fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES glucose floors (diabetes and three hypoglycemic classes) were 1000 mg/day, labelled weak_signal_conservative and cited to a general review (PMID 35800714) that gives no dose. They now cite the documented dose, Kianbakht 2013 (PMID 24273930): leaf extract 500 mg every 8 hours (1500 mg/day) lowered fasting glucose, 2-hour glucose and HbA1c on top of oral antidiabetics. Floor 1000 -> 1500 mg/day (the trial dose; Sean 2026-09-26: use the dose a study documents, never an invented one). Severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_BOTANICAL_LICORICE_ROOT antihypertensives 100 mg/day floor cited PMID 393503, two women on 273-546 mg glycyrrhizin daily, which never mentions 100 mg (confidence_basis inferred_from_dose_range). It now cites af Geijerstam 2024 (PMID 38246526): licorice with 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg in a randomized crossover trial. Value unchanged; confidence_basis documented_effective_dose; the rationale states the floor is compared with the label licorice amount. Receipt: scripts/audits/pending_items_20260926/research.md.",
-      "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md."
+      "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_INGREDIENT_GINSENG and RULE_IQM_STINGING_NETTLE_DIABETES glucose floors removed (Sean, D8 follow-up: a studied dose is not a warning threshold; a numeric floor needs threshold evidence such as a dose-response study, multiple doses separating no effect from effect, or a monograph/regulatory threshold). Ginseng's 100 mg/day (Sotaniemi 1995, PMID 8721940) and nettle's 1500 mg/day (Kianbakht 2013, PMID 24273930) are observed-effect doses from single studies that tested nothing lower. Both doses are now stated in the eight glucose mechanisms and cited in their sources (nettle's regimen was previously stated only in its diabetes mechanism). All eight sub-rules fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interaction_rules": [
@@ -4474,10 +4475,11 @@
           "condition_id": "diabetes",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Ginsenosides improve insulin sensitivity and increase pancreatic beta-cell insulin secretion. RCTs show significant postprandial glucose reduction.",
+          "mechanism": "Ginsenosides improve insulin sensitivity and increase pancreatic beta-cell insulin secretion. RCTs show significant postprandial glucose reduction. In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting glucose versus placebo; lower doses were not studied.",
           "action": "Monitor glucose levels when combining with diabetes medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know",
+            "https://pubmed.ncbi.nlm.nih.gov/8721940/"
           ],
           "alert_headline": "May modestly lower blood sugar",
           "alert_body": "Ginseng can lower blood sugar. If you have diabetes, talk to your clinician before adding ginseng and monitor your glucose, especially in the first weeks.",
@@ -4501,16 +4503,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/8721940/",
-            "rationale": "In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting blood glucose versus placebo and 200 mg/day also lowered HbA1c (PMID 8721940; dose split from the full text as reported in PMID 35912631). 100 mg/day is the lowest dose with a documented glucose effect."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "surgery_scheduled",
@@ -4551,10 +4544,11 @@
           "drug_class_id": "hypoglycemics_high_risk",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Mild additive glucose-lowering effect.",
+          "mechanism": "Mild additive glucose-lowering effect. In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting glucose versus placebo; lower doses were not studied.",
           "action": "Monitor for hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/asian-ginseng"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://pubmed.ncbi.nlm.nih.gov/8721940/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
@@ -4578,25 +4572,17 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/8721940/",
-            "rationale": "In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting blood glucose versus placebo and 200 mg/day also lowered HbA1c (PMID 8721940; dose split from the full text as reported in PMID 35912631). 100 mg/day is the lowest dose with a documented glucose effect."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_lower_risk",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Mild additive glucose-lowering effect.",
+          "mechanism": "Mild additive glucose-lowering effect. In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting glucose versus placebo; lower doses were not studied.",
           "action": "Monitor for hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/asian-ginseng"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://pubmed.ncbi.nlm.nih.gov/8721940/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
@@ -4620,16 +4606,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/8721940/",
-            "rationale": "In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting blood glucose versus placebo and 200 mg/day also lowered HbA1c (PMID 8721940; dose split from the full text as reported in PMID 35912631). 100 mg/day is the lowest dose with a documented glucose effect."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "anticoagulants",
@@ -4701,10 +4678,11 @@
           "drug_class_id": "hypoglycemics_unknown",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Mild additive glucose-lowering effect.",
+          "mechanism": "Mild additive glucose-lowering effect. In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting glucose versus placebo; lower doses were not studied.",
           "action": "Monitor for hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/asian-ginseng"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://pubmed.ncbi.nlm.nih.gov/8721940/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
@@ -4728,16 +4706,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/8721940/",
-            "rationale": "In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting blood glucose versus placebo and 200 mg/day also lowered HbA1c (PMID 8721940; dose split from the full text as reported in PMID 35912631). 100 mg/day is the lowest dose with a documented glucose effect."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -22171,16 +22140,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1500,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/24273930/",
-            "rationale": "Nettle leaf extract 500 mg every 8 hours (1500 mg/day) for 3 months, added to oral antidiabetics in advanced type 2 diabetes, lowered fasting glucose, 2-hour glucose and HbA1c versus placebo (RCT, PMID 24273930). No lower mg dose with a glucose effect is documented."
-          }
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -22221,7 +22181,7 @@
           "drug_class_id": "hypoglycemics_high_risk",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Nettle leaf extract added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
+          "mechanism": "Nettle leaf extract (500 mg every 8 hours) added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24273930/",
@@ -22249,22 +22209,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1500,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/24273930/",
-            "rationale": "Nettle leaf extract 500 mg every 8 hours (1500 mg/day) for 3 months, added to oral antidiabetics in advanced type 2 diabetes, lowered fasting glucose, 2-hour glucose and HbA1c versus placebo (RCT, PMID 24273930). No lower mg dose with a glucose effect is documented."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_lower_risk",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Nettle leaf extract added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
+          "mechanism": "Nettle leaf extract (500 mg every 8 hours) added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24273930/",
@@ -22292,22 +22243,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1500,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/24273930/",
-            "rationale": "Nettle leaf extract 500 mg every 8 hours (1500 mg/day) for 3 months, added to oral antidiabetics in advanced type 2 diabetes, lowered fasting glucose, 2-hour glucose and HbA1c versus placebo (RCT, PMID 24273930). No lower mg dose with a glucose effect is documented."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Nettle leaf extract added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
+          "mechanism": "Nettle leaf extract (500 mg every 8 hours) added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24273930/",
@@ -22335,16 +22277,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1500,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/24273930/",
-            "rationale": "Nettle leaf extract 500 mg every 8 hours (1500 mg/day) for 3 months, added to oral antidiabetics in advanced type 2 diabetes, lowered fasting glucose, 2-hour glucose and HbA1c versus placebo (RCT, PMID 24273930). No lower mg dose with a glucose effect is documented."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
