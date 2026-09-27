@@ -230,7 +230,7 @@ REPO = Path(os.environ.get("REPO_ROOT", "."))
 FLUTTER = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
 sys.path.insert(0, str(REPO / "scripts"))
 
-from pipeline_freshness import enrichment_reference_freshness_issues
+from pipeline_freshness import RERUN_STAGES, STAGES, stage_freshness_issues
 
 
 def newest(paths):
@@ -251,25 +251,29 @@ def warn(layer, action, command):
 
 stale = []
 
-# Layer 1: scripts/data content vs the input fingerprint stamped by enrichment.
-# Filesystem timestamps are deliberately irrelevant: git checkout, iCloud, and
-# `touch` can change mtime without changing the bytes that produced the output.
+# Layer 1: every stage manifest vs the reference data and stage code it was
+# built from (pipeline_freshness). Content, not timestamps: git checkout,
+# iCloud and `touch` change mtimes without changing what produced the output.
 enriched = glob.glob(str(REPO / "scripts/products/output_*_enriched/enriched/*.json"))
-reference_issues = enrichment_reference_freshness_issues(REPO)
-if reference_issues:
-    warn(
-        "reference-data contents differ from per-brand enrichment inputs",
-        "scripts/data/ JSON content has not propagated through every enriched output",
-        "bash batch_run_all_datasets.sh --stages enrich,score   # refresh all brands",
+stage_issues = stage_freshness_issues(REPO)
+if stage_issues:
+    earliest = next(
+        stage for stage in STAGES
+        if any(issue.startswith(f"{stage}: ") for issue in stage_issues)
     )
-    for issue in reference_issues[:10]:
+    warn(
+        "stage outputs were built from other reference data or pipeline code",
+        f"the {earliest} stage and every later one predate the current scripts/data or stage code",
+        f"SKIP_RELEASE=1 bash batch_run_all_datasets.sh --stages {RERUN_STAGES[earliest]}   # all brands + Product Submissions; publishes nothing",
+    )
+    for issue in stage_issues[:10]:
         print(f"  manifest: {issue}", file=sys.stderr)
-    if len(reference_issues) > 10:
+    if len(stage_issues) > 10:
         print(
-            f"  ... and {len(reference_issues) - 10} more manifest(s)",
+            f"  ... and {len(stage_issues) - 10} more manifest(s)",
             file=sys.stderr,
         )
-    stale.append("data_vs_enriched")
+    stale.append("inputs_vs_outputs")
 
 # Layer 2: enriched vs scored
 scored = glob.glob(str(REPO / "scripts/products/output_*_scored/scored/*.json"))

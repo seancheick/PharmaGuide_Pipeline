@@ -25,7 +25,7 @@ committed outcome after a lost response without borrowing another attempt's resu
 | **Targeted run** | A batch run with `--targets`. It is pipeline-only by default; downstream snapshot/release work requires explicit `--release`. |
 | **Pipeline-only** | Clean/Enrich/Score work without rebuilding or publishing the catalog. Selected explicitly with `--pipeline-only`; also the safe default for targeted runs. |
 | **Strict release gates** | Fail-closed pre-score validation selected by `--strict-release-gates`. Batch runs always enable it. Contract, coverage, or stage-ownership failures stop that brand before scoring completes. |
-| **Stage manifest** | `.stage_manifest.json`, the checksum-bearing ownership record for one successful Clean, Enrich, or Score run. It is a control file, never a product. |
+| **Stage manifest** | `.stage_manifest.json`, the checksum-bearing ownership record for one successful Clean, Enrich, or Score run, with the fingerprints of the reference data and stage code it ran (`pipeline_freshness.py`). It is a control file, never a product. |
 | **Owned output** | A product JSON named and hashed by the current stage manifest. Unowned, missing, changed, or stale JSON is rejected in strict mode. |
 | **Run ID** | Path-safe identifier shared across enrichment, gates, scoring, and reports for one operational run. |
 | **Snapshot** | The paired catalog artifacts in `scripts/final_db_output/` and `scripts/dist/`, built from all current per-brand Enrich/Score outputs. |

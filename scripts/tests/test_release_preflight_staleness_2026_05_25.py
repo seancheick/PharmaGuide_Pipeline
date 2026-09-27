@@ -2,9 +2,10 @@
 an actionable staleness preflight check.
 
 The preflight detects 4 stale-pipeline layers and emits a clear "fix:"
-command for each, then exits non-zero. Layer 1 compares the content fingerprint
-stamped by enrichment, so an iCloud/git mtime change cannot falsely block a
-release; layers 2-4 retain their downstream artifact timestamp checks.
+command for each, then exits non-zero. Layer 1 compares the reference-data and
+stage-code fingerprints every stage manifest records, so an iCloud/git mtime
+change cannot falsely block a release; layers 2-4 retain their downstream
+artifact timestamp checks.
 
 Tests use synthetic tmpdir layouts with controlled content and mtimes — no real
 artifact is touched.
@@ -26,33 +27,29 @@ SCRIPTS_DIR = REPO_ROOT / "scripts"
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from pipeline_freshness import (
-    REFERENCE_FINGERPRINT_KEY,
-    enrichment_reference_fingerprint,
-)
+from pipeline_freshness import STAGES, stage_input_fingerprints
 from stage_manifest import write_stage_manifest
 
 
-def _stamp_reference_inputs(repo_dir: Path) -> None:
-    fingerprint = enrichment_reference_fingerprint(repo_dir)
-    for output in repo_dir.glob(
-        "scripts/products/output_*_enriched/enriched/*.json"
-    ):
-        manifest = output.parent / ".stage_manifest.json"
-        if manifest.exists():
-            continue
-        write_stage_manifest(
-            output.parent,
-            "enrich",
-            [output],
-            input_fingerprints={REFERENCE_FINGERPRINT_KEY: fingerprint},
-        )
+def _stamp_stage_inputs(repo_dir: Path) -> None:
+    for stage in ("enrich", "score"):
+        for pattern in STAGES[stage]["outputs"]:
+            for output in (repo_dir / "scripts" / "products").glob(pattern):
+                manifest = output.parent / ".stage_manifest.json"
+                if manifest.exists():
+                    continue
+                write_stage_manifest(
+                    output.parent,
+                    stage,
+                    [output],
+                    input_fingerprints=stage_input_fingerprints(repo_dir, stage),
+                )
 
 
 def _run_preflight(repo_dir: Path, flutter_dir: Path) -> tuple[int, str, str]:
     """Invoke the preflight logic (mirrors scripts/test.sh).
     Returns (exit_code, stdout, stderr)."""
-    _stamp_reference_inputs(repo_dir)
+    _stamp_stage_inputs(repo_dir)
     py = r'''
 import sys, os, glob
 from pathlib import Path
@@ -61,7 +58,7 @@ REPO = Path(os.environ.get("REPO_ROOT", "."))
 FLUTTER = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
 sys.path.insert(0, os.environ["PIPELINE_SCRIPTS"])
 
-from pipeline_freshness import enrichment_reference_freshness_issues
+from pipeline_freshness import stage_freshness_issues
 
 def newest(paths):
     mtimes = [Path(p).stat().st_mtime for p in paths if Path(p).exists()]
@@ -70,9 +67,9 @@ def newest(paths):
 stale = []
 
 enriched = glob.glob(str(REPO / "scripts/products/output_*_enriched/enriched/*.json"))
-if enrichment_reference_freshness_issues(REPO):
-    print("STALE: data_vs_enriched", file=sys.stderr)
-    stale.append("data_vs_enriched")
+if stage_freshness_issues(REPO):
+    print("STALE: inputs_vs_outputs", file=sys.stderr)
+    stale.append("inputs_vs_outputs")
 
 scored = glob.glob(str(REPO / "scripts/products/output_*_scored/scored/*.json"))
 if enriched and scored:
@@ -124,6 +121,8 @@ def tmplayout(tmp_path):
     (repo / "scripts/products/output_Test_enriched/enriched").mkdir(parents=True)
     (repo / "scripts/products/output_Test_scored/scored").mkdir(parents=True)
     (flutter / "assets/db").mkdir(parents=True)
+    for spec in STAGES.values():
+        (repo / "scripts" / spec["entry"]).write_text("VALUE = 1\n")
     return repo, flutter
 
 
@@ -145,7 +144,7 @@ def test_data_content_change_after_enrichment_flags_layer1(tmplayout):
     t = 1000000.0
     _touch(repo / "scripts/data/x.json", t)
     _touch(repo / "scripts/products/output_Test_enriched/enriched/y.json", t)
-    _stamp_reference_inputs(repo)
+    _stamp_stage_inputs(repo)
     _touch(repo / "scripts/data/x.json", t + 100)
     (repo / "scripts/data/x.json").write_text('{"changed": true}')
     _touch(repo / "scripts/products/output_Test_scored/scored/z.json", t)
@@ -153,7 +152,7 @@ def test_data_content_change_after_enrichment_flags_layer1(tmplayout):
     _touch(flutter / "assets/db/pharmaguide_core.db", t)
     code, _, err = _run_preflight(repo, flutter)
     assert code == 1
-    assert "data_vs_enriched" in err
+    assert "inputs_vs_outputs" in err
 
 
 def test_data_mtime_only_change_does_not_flag_layer1(tmplayout):
@@ -162,7 +161,7 @@ def test_data_mtime_only_change_does_not_flag_layer1(tmplayout):
     data_file = repo / "scripts/data/x.json"
     _touch(data_file, t)
     _touch(repo / "scripts/products/output_Test_enriched/enriched/y.json", t + 10)
-    _stamp_reference_inputs(repo)
+    _stamp_stage_inputs(repo)
     os.utime(data_file, (t + 100, t + 100))
     _touch(repo / "scripts/products/output_Test_scored/scored/z.json", t + 20)
     _touch(repo / "scripts/dist/pharmaguide_core.db", t + 30)
@@ -218,7 +217,7 @@ def test_multiple_stale_layers_reported_together(tmplayout):
     # Layers 1, 2, 3 all stale simultaneously
     _touch(repo / "scripts/data/x.json", t)
     _touch(repo / "scripts/products/output_Test_enriched/enriched/y.json", t + 50)
-    _stamp_reference_inputs(repo)
+    _stamp_stage_inputs(repo)
     (repo / "scripts/data/x.json").write_text('{"changed": true}')
     os.utime(repo / "scripts/data/x.json", (t + 100, t + 100))
     _touch(repo / "scripts/products/output_Test_scored/scored/z.json", t)
@@ -226,7 +225,7 @@ def test_multiple_stale_layers_reported_together(tmplayout):
     _touch(flutter / "assets/db/pharmaguide_core.db", t + 200)
     code, _, err = _run_preflight(repo, flutter)
     assert code == 1
-    assert "data_vs_enriched" in err
+    assert "inputs_vs_outputs" in err
     # Note: depending on values, enriched_vs_scored may or may not fire
     # because data_files newest > enriched newest doesn't mean enriched > scored.
     # Test layer 1 fires; broader detection covered by individual tests.

@@ -25,10 +25,12 @@ Stop and ask if the tree is dirty in `scripts/` — a release off uncommitted da
 bash scripts/test.sh release
 ```
 
-Runs the enrichment freshness check, release-profile pytest and the release artifact gates,
+Runs the stage freshness check (every brand's clean, enrich and score output must come from the
+current `scripts/data` and pipeline code), release-profile pytest and the release artifact gates,
 including the three citation verifiers (backed studies `--strict`, interaction rules
 `--strict`, all citations `--baseline`). **Must be green before proceeding.** A stale corpus
-means a full re-clean/re-enrichment first (`batch_run_all_datasets.sh`, see AGENTS.md).
+means one corpus pass first, from the stage the preflight names (`SKIP_RELEASE=1 bash
+batch_run_all_datasets.sh --stages …`: every brand plus Product Submissions, no publish).
 
 ## 2. Run the train
 

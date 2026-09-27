@@ -206,7 +206,7 @@ def test_full_batch_refreshes_stale_product_submissions_before_snapshot(tmp_path
     )
     (scripts_dir / "pipeline_freshness.py").write_text(
         "import sys\n"
-        "assert sys.argv[1] == 'check-enrichment-manifest'\n"
+        "assert sys.argv[1] == 'check-stage-manifests'\n"
         "print('content mismatch', file=sys.stderr)\n"
         "raise SystemExit(1)\n",
         encoding="utf-8",
@@ -245,7 +245,7 @@ def test_full_batch_refreshes_stale_product_submissions_before_snapshot(tmp_path
     assert "output_ExampleBrand" in calls[0]
     assert f"--raw-dir {submission_dir}" in calls[1]
     assert "--output-prefix products/output_Product_Submissions" in calls[1]
-    assert "--stages enrich,score" in calls[1]
+    assert "--stages clean,enrich,score" in calls[1]
     assert combined_output.index("Product Submissions") < combined_output.index(
         "snapshot-ok"
     )

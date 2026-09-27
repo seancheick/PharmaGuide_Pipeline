@@ -1157,7 +1157,7 @@ def test_release_train_refreshes_submissions_after_reference_data_change():
         )
     ]
     assert "pipeline_freshness.py" in freshness_function
-    assert "check-enrichment-manifest" in freshness_function
+    assert "check-stage-manifests" in freshness_function
     assert 'SUBMISSION_ENRICH_MANIFEST=' in release
 
 

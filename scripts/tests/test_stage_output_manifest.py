@@ -6,9 +6,12 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from batch_processor import BatchProcessor
+from batch_processor import REPO_ROOT, BatchProcessor
+from pipeline_freshness import CODE_FINGERPRINT_KEY, stage_input_fingerprints
 from stage_manifest import (
     StageManifestError,
     select_stage_input_files,
@@ -57,6 +60,32 @@ def test_stage_manifest_lists_only_current_materialized_outputs(tmp_path: Path) 
     assert manifest["processing_complete"] is True
     assert manifest["owned_files"] == ["cleaned_batch_1.json"]
     assert manifest_path.name == ".stage_manifest.json"
+    assert manifest["input_fingerprints"] == stage_input_fingerprints(REPO_ROOT, "clean")
+
+
+def test_clean_manifest_refuses_inputs_that_changed_during_the_run(
+    tmp_path: Path,
+) -> None:
+    processor = BatchProcessor(_config(tmp_path))
+    (processor.output_dir / "cleaned" / "cleaned_batch_1.json").write_text("[]", encoding="utf-8")
+    started = processor._clean_stage_inputs()
+    processor._stage_inputs = dict(started, **{CODE_FINGERPRINT_KEY: "0" * 64})
+
+    with pytest.raises(StageManifestError, match="changed during the run"):
+        processor._write_stage_manifest({"processing_complete": True})
+
+    assert not (processor.output_dir / "cleaned" / ".stage_manifest.json").exists()
+
+
+def test_resume_checksum_covers_cleaning_code_and_reference_data(
+    tmp_path: Path,
+) -> None:
+    processor = BatchProcessor(_config(tmp_path))
+    before = processor._get_config_checksum()
+
+    processor._stage_inputs = dict(processor._clean_stage_inputs(), **{CODE_FINGERPRINT_KEY: "0" * 64})
+
+    assert processor._get_config_checksum() != before
 
 
 def test_successful_stage_manifest_discards_completed_run_quarantine(
