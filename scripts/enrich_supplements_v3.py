@@ -205,8 +205,8 @@ _VITAMIN_E_NATURAL_MG_PER_IU = 0.67
 # RDA/UL. These remain valid label quantities; they are not conversion errors.
 _NON_UL_ACTIVITY_UNITS = {
     "agu", "alu", "bgu", "cu", "dp", "du", "endo-pg", "fccpu", "fip",
-    "fu", "gaiu", "galu", "gdu", "hcu", "hut", "pc", "pu", "sapu", "su",
-    "tg", "unit(s)", "usp", "usp unit(s)",
+    "fu", "gaiu", "galu", "gdu", "hcu", "hut", "pc", "pu", "sapu", "spu", "su",
+    "tg", "unit(s)", "usp", "usp unit(s)", "xu",
 }
 _ACTIVITY_UNIT_CANONICALS = {
     "alpha_amylase",
@@ -216,12 +216,16 @@ _ACTIVITY_UNIT_CANONICALS = {
     "bromelain",
     "cellulase",
     "digestive_enzymes",
+    "beta_glucanase",
+    "hemicellulase",
+    "invertase",
     "lactase",
     "lipase",
     "lysozyme",
     "nattokinase",
     "pancreatin",
     "papain",
+    "pectinase",
     "protease",
     "serrapeptase",
     "superoxide dismutase",
@@ -21368,6 +21372,19 @@ class SupplementEnricherV3:
                                 raw_canonical_key in _ACTIVITY_UNIT_CANONICALS
                                 and raw_unit_key
                                 in _NON_UL_ACTIVITY_UNITS | {"u", "iu"}
+                            )
+                            or (
+                                ingredient.get("isNestedIngredient") is True
+                                and raw_unit_key in {"%", "percent"}
+                                and raw_canonical_key.startswith((
+                                    "bacillus_",
+                                    "bifidobacterium_",
+                                    "lactobacillus_",
+                                    "lacticaseibacillus_",
+                                    "limosilactobacillus_",
+                                    "saccharomyces_",
+                                    "streptococcus_",
+                                ))
                             )
                         ):
                             skip_ul_reason = "not_ul_applicable"

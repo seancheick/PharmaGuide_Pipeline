@@ -287,6 +287,39 @@ class UnitConverter:
         ):
             from_unit_lower = 'mcg rae'
 
+        # DSLD sometimes omits the RAE/DFE qualifier while retaining the
+        # parent Supplement Facts heading.  The parent amount is already the
+        # declared nutrient-equivalent amount; only its mass scale changes.
+        # Keep standalone beta-carotene and identified folate forms on their
+        # form-specific conversion rules.
+        label_equivalent_target = None
+        if (
+            rule_id == 'vitamin_a_beta_carotene_supplement'
+            and from_unit_lower in {'g', 'mg', 'mcg'}
+            and re.match(r'^vitamin\s+a\b', ingredient_text, re.IGNORECASE)
+        ):
+            label_equivalent_target = 'mcg RAE'
+        if label_equivalent_target is not None:
+            mass_result = self.convert_mass(amount, from_unit, 'mcg')
+            if mass_result.success:
+                return ConversionResult(
+                    success=True,
+                    original_value=amount,
+                    original_unit=from_unit,
+                    converted_value=mass_result.converted_value,
+                    converted_unit=label_equivalent_target,
+                    conversion_rule_id=rule_id,
+                    conversion_factor=mass_result.conversion_factor,
+                    nutrient_detected=nutrient,
+                    form_detected=rule_data.get('standard_name'),
+                    form_detection_source='parent_label_equivalent_unit',
+                    confidence='high',
+                    notes=[
+                        'Parent Supplement Facts nutrient amount retains its '
+                        f'{label_equivalent_target.split()[-1]} basis.'
+                    ],
+                )
+
         # Get conversion factor
         if conversions is None:
             warnings = []
@@ -389,7 +422,6 @@ class UnitConverter:
             and target_key == 'mcg_rae'
         ):
             factor = conversions.get('mcg_carotenoid_to_mcg_rae')
-
         if factor is None:
             # Try mass conversion as fallback
             mass_result = self.convert_mass(amount, from_unit, target_unit)

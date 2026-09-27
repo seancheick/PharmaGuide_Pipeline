@@ -404,6 +404,46 @@ def test_product_scoped_correction_repairs_verified_quantity_unit(normalizer):
     }
 
 
+def test_product_scoped_correction_repairs_one_bad_unit_variant(normalizer):
+    raw_product = _make_raw_product(25712, [])
+    raw_product["fullName"] = (
+        "Amplified Wheybolic Extreme 60 Power Chocolate Fudge"
+    )
+    raw_product["brandName"] = "GNC Pro Performance"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row(
+                "Testofen(R) Fenugreek extract",
+                category="botanical",
+            ),
+            "ingredientGroup": "Fenugreek",
+            "quantity": [
+                {"quantity": 200, "unit": "mg"},
+                {"quantity": 400, "unit": "mg"},
+                {"quantity": 600, "unit": "mg AT"},
+            ],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+    active = normalized["activeIngredients"][0]
+
+    assert active["quantity"] == 200
+    assert active["unit"] == "mg"
+    assert [variant["unit"] for variant in active["quantityVariants"]] == [
+        "mg",
+        "mg",
+        "mg",
+    ]
+    assert active["source_correction"] == {
+        "provenance_tag": "official_label_unit_correction",
+        "original_quantity_unit": "mg AT",
+        "corrected_quantity_unit": "mg",
+    }
+
+
 def test_product_scoped_correction_repairs_verified_quantity_and_unit(normalizer):
     raw_product = _make_raw_product(302650, [])
     raw_product["fullName"] = "Comprehensive Prostate Formula"

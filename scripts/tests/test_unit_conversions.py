@@ -106,6 +106,30 @@ def test_vitamin_a_declaration_with_beta_carotene_form_is_already_rae() -> None:
     assert result.conversion_factor == pytest.approx(1.0)
 
 
+@pytest.mark.parametrize(
+    ("amount", "label_unit", "expected_rae"),
+    [(7.5, "mg", 7500.0), (0.0075, "g", 7500.0)],
+)
+def test_vitamin_a_mass_declaration_with_beta_carotene_form_is_already_rae(
+    amount: float,
+    label_unit: str,
+    expected_rae: float,
+) -> None:
+    """DSLD may omit RAE from a Vitamin A parent row's mass unit."""
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Beta-Carotene",
+        amount=amount,
+        from_unit=label_unit,
+        ingredient_name="Vitamin A (as Beta-Carotene)",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(expected_rae)
+    assert result.converted_unit == "mcg RAE"
+
+
 @pytest.mark.parametrize("label_unit", ["U", "UI"])
 def test_vitamin_d_international_unit_aliases_are_scoped(label_unit: str) -> None:
     converter = UnitConverter()

@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-09-24",
-    "total_entries": 56,
+    "last_updated": "2026-09-27",
+    "total_entries": 57,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -329,6 +329,26 @@
       ],
       "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
       "review_date": "2026-08-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "25712": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+      "raw_ingredient_text": "Testofen(R) Fenugreek extract",
+      "corrected_ingredient_text": "Testofen(R) Fenugreek extract",
+      "raw_quantity_unit": "mg AT",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD JSON record carries three serving variants for the same Testofen Fenugreek row: 200 mg at 1 scoop, 400 mg at 2 scoops, and 600 'mg AT' at 3 scoops. The official DSLD label image prints 200 mg, 400 mg, and 600 mg in those three columns and separately highlights '600mg Testofen Fenugreek'. This product-scoped correction removes only the erroneous AT suffix from the 600 mg variant; the amount, botanical identity, and other variants are unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/25712",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/25712.pdf"
+      ],
+      "reviewer": "Codex engineering data-integrity review (raw JSON and official label image checked)",
+      "review_date": "2026-09-27",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
     },

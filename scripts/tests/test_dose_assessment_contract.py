@@ -167,6 +167,32 @@ def test_transglucosidase_tg_is_typed_non_ul_activity_not_conversion_failure(
     assert assessment["readiness"] == "not_applicable"
 
 
+@pytest.mark.parametrize(
+    ("name", "canonical_id", "unit"),
+    [
+        ("Invertase", "invertase", "SU"),
+        ("Hemicellulase", "hemicellulase", "HCU"),
+        ("Hemicellulase", "hemicellulase", "XU"),
+        ("Beta-Glucanase", "beta_glucanase", "BGU"),
+        ("Pectinase", "pectinase", "Endo-PG"),
+        ("Serrapeptase Enzyme", "serrapeptase", "SPU"),
+    ],
+)
+def test_declared_enzyme_activity_units_are_not_conversion_failures(
+    enricher, name, canonical_id, unit,
+) -> None:
+    row = _row(name, canonical_id, 100, unit)
+    row["dose_class"] = "enzyme_activity"
+
+    result = _collect(enricher, row)
+
+    exported = result["analyzed_ingredients"][0]
+    assessment = result["dose_assessments"][0]
+    assert exported["skip_ul_reason"] == "not_ul_applicable"
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["readiness"] == "not_applicable"
+
+
 def test_probiotic_percentage_children_are_composition_not_distinct_exposure(
     enricher,
 ) -> None:
@@ -209,6 +235,36 @@ def test_probiotic_percentage_children_are_composition_not_distinct_exposure(
         "composition_share_of_declared_total"
     )
     assert child_assessment["ul_assessment_status"] == "not_distinct_exposure"
+    assert child_assessment["readiness"] == "not_applicable"
+
+
+def test_probiotic_percentage_child_without_quantified_parent_is_not_ul_applicable(
+    enricher,
+) -> None:
+    """A strain share remains a composition value when the blend total is NP."""
+    parent = _row("Probiotic Complex Blend", "probiotics", 0, "NP")
+    parent["raw_source_path"] = "ingredientRows[0]"
+    child = _row(
+        "Lactobacillus acidophilus",
+        "lactobacillus_acidophilus",
+        40,
+        "%",
+    )
+    child.update({
+        "raw_source_path": "ingredientRows[0].nestedRows[0]",
+        "isNestedIngredient": True,
+        "parentBlend": "Probiotic Complex Blend",
+    })
+
+    result = _collect(enricher, parent, child)
+    child_assessment = {
+        row["source_path"]: row for row in result["dose_assessments"]
+    }["ingredientRows[0].nestedRows[0]"]
+
+    assert child_assessment["source_value"] == 40
+    assert child_assessment["source_unit"] == "%"
+    assert child_assessment["normalized_value"] is None
+    assert child_assessment["ul_assessment_status"] == "no_ul_applicable"
     assert child_assessment["readiness"] == "not_applicable"
 
 

@@ -594,7 +594,9 @@ class CoverageGate:
                 # participate in nutrient RDA/UL mass conversion.
                 if ing.get("skip_ul_reason") in {
                     "amount_not_declared",
+                    "beta_carotene_no_established_ul",
                     "not_ul_applicable",
+                    "provitamin_a_carotenoid_no_established_ul",
                     "unknown_folate_form_lineage",
                 }:
                     continue
