@@ -31,9 +31,9 @@
       }
     },
     "statistics": {
-      "total_parents": 656,
-      "total_forms": 1449,
-      "total_form_aliases": 12146,
+      "total_parents": 655,
+      "total_forms": 1448,
+      "total_form_aliases": 12137,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -1818,7 +1818,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 656,
+    "total_entries": 655,
     "total_ingredients": 13882,
     "data_quality": {
       "review_status": "stub"
@@ -7654,7 +7654,6 @@
         },
         "notes": "The supplement label does not specify which calcium form is used. This matters significantly \u2014 calcium citrate and bisglycinate are far better absorbed than calcium carbonate, especially without food. Budget supplements overwhelmingly use the cheapest form (carbonate or phosphate). B27 audit 2026-04-25: Ca class baseline (PMID:11444420).",
         "aliases": [
-          "calcium silicate",
           "Calcium",
           "calcium aspartate",
           "Calcium, Natural",
@@ -19295,8 +19294,6 @@
         },
         "notes": "Acetylated L-carnitine identity. Direct oral bioavailability for ALCAR has not been established; L-carnitine supplement bioavailability and plasma acetylcarnitine after oral L-carnitine must not be presented as an ALCAR head-to-head absorption result (PMID 15591001; PMID 19178874). The numerical absorption band is a low-confidence class estimate retained to avoid an unreviewed formulation-calibration change. Clinical outcome evidence is mixed and condition-specific; it is curated separately in backed_clinical_studies.json. B42 structural merge 2026-06-06: exact acetyl-L-carnitine/ALCAR aliases and existing ALCAR UNII moved here from deprecated acetyl_l_carnitine parent so new labels route through the canonical l_carnitine parent.",
         "aliases": [
-          "acetyl-l-carnitine arginate dihydrochloride",
-          "acetyl-l-carnitine arginate",
           "ALC",
           "n-acetyl-l-carnitine",
           "acetyl carnitine",
@@ -34030,10 +34027,6 @@
         },
         "notes": "Generic dietary fiber without type specification. Fiber acts via luminal mechanisms (viscosity, fermentation to SCFAs, bile acid sequestration) not systemic absorption. Efficacy is type-dependent: soluble viscous fibers (glucomannan, psyllium) have strongest lipid/glycemic evidence. See konjac glucomannan form for specific clinical data. B25 audit 2026-04-25: 7TH CATEGORY ERROR \u2014 fiber luminal mechanism (PMID:14983741).",
         "aliases": [
-          "polydextrose",
-          "litesse polydextrose",
-          "litesse polydextrose fiber",
-          "litesse",
           "fiber",
           "dietary fiber",
           "soluble fiber",
@@ -72518,50 +72511,6 @@
       "beta-glucanase"
     ],
     "external_ids": {}
-  },
-  "mannitol": {
-    "standard_name": "Mannitol",
-    "category": "other",
-    "forms": {
-      "mannitol (unspecified)": {
-        "bio_score": 7.0,
-        "absorption": "moderate",
-        "absorption_structured": {
-          "quality": "moderate",
-          "value": 0.5,
-          "range_low": 0.4,
-          "range_high": 0.6
-        },
-        "notes": "Mannitol, a sugar alcohol sold as a bulk powder; ADD_SUGAR_ALCOHOLS keeps its additive record. Canonical identity added so a label row matched only by a safety record resolves and the product is scored (Sean, 2026-09-27: anything not banned or recalled is scored and ships with its warning). No RDA/UL, so dose adequacy is not assessed; bio_score follows the identity-only precedent (nickel/tin, quarantine remediation 2026-09-19) and asserts no absorption advantage.",
-        "dosage_importance": 0.5,
-        "aliases": [
-          "Mannitol",
-          "d-mannitol"
-        ]
-      }
-    },
-    "match_rules": {
-      "priority": 1,
-      "match_mode": "exact",
-      "exclusions": []
-    },
-    "category_enum": "other",
-    "data_quality": {
-      "review_status": "validated",
-      "completeness": 0.7,
-      "last_reviewed_at": "2026-09-27",
-      "research_status": "validated"
-    },
-    "external_ids": {
-      "unii": "3OWL53L36A",
-      "cas": "69-65-8",
-      "pubchem_cid": 6251
-    },
-    "cui": null,
-    "cui_status": "no_confirmed_umls_match",
-    "cui_note": "UMLS was not reachable when this identity was added (2026-09-27); identity rests on the UNII and PubChem CID.",
-    "rxcui": "6628",
-    "aliases": []
   },
   "germanium": {
     "standard_name": "Germanium",

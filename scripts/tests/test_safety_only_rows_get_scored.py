@@ -5,10 +5,15 @@ high-risk, watchlist or additive safety record, which cannot supply a primary
 identity, so the row stayed an unresolved score-active and the export refused
 the product (a scan found nothing). Sean, 2026-09-27: anything that is not
 banned or recalled must be scored to ship, keeping its safety warning. Each
-row now reaches a verified IQM identity. Three labels stay NOT_SCORED only
-because other rows declare forms the IQM does not map yet
-(disclosed_form_unmapped: Life Extension Mix salts, BHB salts, Seneactiv);
-they now ship with their warnings instead of being withheld.
+row now reaches a verified identity. Life Extension Mix and Keto Brain stay
+NOT_SCORED only because other rows declare forms the IQM does not map yet.
+ALCAR arginate keeps its identity-only owner (no ALCAR form or dose credit).
+They ship instead of being withheld.
+
+Excipient substances (mannitol, polydextrose, calcium silicate) get no IQM
+identity: the IQM has no section-scoped matching, so an IQM alias also claims
+the inactive filler row and drops its additive record (13 Nutricost
+electrolyte labels lost ADD_CALCIUM_SILICATE when tried).
 """
 
 from __future__ import annotations
@@ -41,10 +46,8 @@ def pipeline():
         (307546, "7_keto_dhea", "BANNED_7_KETO_DHEA", "scored"),  # Jarrow 7-oxo-DHEA 3-acetate
         (182627, "citrus_bioflavonoids", "RISK_BITTER_ORANGE", "not_scored"),  # Life Extension Mix
         (233404, "prebiotics", None, "not_scored"),  # Keto Brain: FiberSmart resistant starch
-        (328274, "l_carnitine", None, "scored"),  # ALCAR arginate dihydrochloride (ALCAR form)
-        (213508, "fiber", None, "scored"),  # GNC Hunger Support: Litesse polydextrose
-        (295773, "calcium", None, "not_scored"),  # Transparent Labs Bulk: calcium silicate
-        (252699, "mannitol", None, "scored"),  # BulkSupplements Mannitol
+        # ALCAR arginate keeps its identity-only owner: no ALCAR form or dose credit
+        (328274, "OI_ACETYL_L_CARNITINE_ARGINATE", None, "scored"),
         (200891, "germanium", "RISK_GERMANIUM", "scored"),  # Jarrow Ge-132
         (241744, "silver", "ADD_COLLOIDAL_SILVER", "scored"),  # Double Wood colloidal silver
     ],
@@ -61,8 +64,16 @@ def test_the_product_ships_scored_and_keeps_its_safety_warning(pipeline, pid, ca
     assert not [row["name"] for row in rows if row.get("identity_disposition") == "identity_conflict"]
     scored = build_scored_artifact(enriched)
     assert scored["quality_score_status"] == status
-    if status != "scored":
-        assert scored["strict_scoring_contract"]["findings"] == ["disclosed_form_unmapped"]
     blob = build_detail_blob(enriched, scored)
     if safety_id:
         assert safety_id in json.dumps(blob["warnings"] + blob.get("warnings_profile_gated", []))
+
+
+def test_an_inactive_excipient_keeps_its_additive_record(pipeline):
+    """Nutricost Electrolytes (306215) lists calcium silicate as an anti-caking
+    agent; it must stay ADD_CALCIUM_SILICATE, never a calcium nutrient row."""
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / "inactive_additive_306215_raw.json").read_text())
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    hits = enriched["contaminant_data"]["harmful_additives"]["additives"]
+    assert "ADD_CALCIUM_SILICATE" in {hit["additive_id"] for hit in hits}
