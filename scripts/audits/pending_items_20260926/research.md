@@ -397,3 +397,19 @@ dietary supplements"); Melanotan II consumer update (Wayback 2008-12-19 capture)
   (phenylpiracetam), DMBA, DMHA, sunifiram. Retyped from state_statute to the list (type regulatory, agency scope).
 - Corpus: none of the 36 records matches a product in the 2026-09-22 enriched corpus, so no verdict moves today.
   Gate probe: a DMAA product went from quarantine (policy unverified) to BLOCKED; piracetam stays in review.
+
+## Q21/Q29 botanical interaction closure (2026-09-27)
+- Eleuthero: the EMA community monograph for *Eleutherococcus senticosus* reports no interactions and says pregnancy/lactation safety is not established, so use is not recommended. The associated assessment report says the old hypertension contraindication was removed because the literature did not justify it. The existing `siberian_ginseng` identity therefore gets only a pregnancy/lactation rule; no Panax, drug-class, or blood-pressure claims were transferred.
+- Dandelion root: the EMA EU monograph for *Taraxacum officinale* root says use is not recommended during pregnancy/lactation and with bile-duct obstruction, cholangitis, liver disease, gallstones, or other biliary disease because of possible bile-secretion stimulation. These statements now live on the existing dandelion interaction owner.
+- DGL: the codebase already had `botanical_ingredients.dgl_deglycyrrhizinated_licorice` and explicitly prohibited twinning it to IQM licorice. DGL/GutGard aliases were removed from the ordinary licorice identities and routed to that owner. The unread `form_exclusion` field was deleted.
+- Validation: focused identity/interaction regressions passed; strict citation verification passed with 152 rules, 258 PubMed IDs, 16 Bookshelf chapters, and zero unresolved sources.
+
+## Q30 omega transparency closure (2026-09-27)
+- Owner: `scripts/scoring_v4/quality_score.py` with magnitudes in `scripts/scoring_v4/config/quality_score.json`; omega disclosure components live in `scripts/scoring_v4/modules/omega_transparency.py`. Lot-level oxidation evidence stays with Verification/certification evidence.
+- Removed the retired zero-point `oxidation_disclosed` execution branch and corrected the omega-native transparency cap from 13 to the live component sum of 11.
+- Projected against `release_candidate_a0eee3e5.jsonl`: 76 scored omega products; 68 score changes, range +0.6 to +2.3, mean +1.85; 13 tier shifts; no status, safety, or route changes. This is a cap-only projection because the retired signal was absent from the cohort.
+
+## Final combined fast-suite receipt (2026-09-27)
+- Corrected branch HEAD `d173ca14`: `scripts/test.sh fast` passed 16,759 tests, skipped 170, exit 0 in 434.51 seconds.
+- The first combined run exposed stale omega cap fixtures, a second dandelion rule owner, and one raw-serving fallback test. Those contracts were corrected before this passing run; none was waived.
+- Owner Check: Evidence headline `scripts/scoring_v4/modules/generic_evidence.py::_evidence_result_state`; omega score magnitudes `scripts/scoring_v4/config/quality_score.json`; interaction policy `scripts/data/ingredient_interaction_rules.json`; export brand/serving `scripts/build_final_db.py::resolve_catalog_brand` and `generate_dosing_summary`. Evidence: source-of-truth matrix plus focused `rg` traces recorded in the commits above. Will NOT create another evidence state, scorer, interaction registry, brand resolver, serving owner, or export field.
