@@ -253,7 +253,11 @@ def test_generic_tocopherol_is_curated_without_claiming_a_specific_isomer(enrich
     assert match['canonical_id'] == 'vitamin_e'
     assert match['form_id'] == 'd-alpha-tocopheryl succinate'
     assert match.get('unmapped_forms') == []
-    assert match['final_form_bio_score'] < 10
+    assert [m['form_key'] for m in match['matched_forms']] == [
+        'd-alpha-tocopheryl succinate'
+    ]
+    assert match['unmatched_percent_total'] == 0.5
+    assert match['final_form_bio_score'] == 7.5
 
 
 def test_a_disclosed_form_the_iqm_lacks_is_unmapped_and_held(enricher):
