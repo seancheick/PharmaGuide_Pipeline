@@ -56,7 +56,7 @@
     },
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.1",
-    "last_updated": "2026-09-04",
+    "last_updated": "2026-09-26",
     "total_entries": 180,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
@@ -2712,14 +2712,14 @@
       "sources": [
         "NCCIH Ginger overview: https://www.nccih.nih.gov/health/ginger",
         "NIH ODS Ginger fact sheet: https://ods.od.nih.gov/factsheets/list-all/",
-        "Marx et al. 2017 systematic review on ginger for chemotherapy-induced nausea (PMID 28200047)",
+        "Marx W et al. 2017, review of ginger's mechanism of action (gingerols, shogaols) in chemotherapy-induced nausea and vomiting, Crit Rev Food Sci Nutr (PMID 25848702)",
         "USP-NF Ginger monograph (Zingiber officinale rhizome, identification + standardization to gingerols by HPLC)"
       ],
       "priority": "high",
       "standardization": "5% total gingerols",
       "category": "root",
       "min_threshold": 5,
-      "last_updated": "2026-05-22",
+      "last_updated": "2026-09-26",
       "id": "ginger_extract",
       "notes": "Ginger (Zingiber officinale, Zingiberaceae) rhizome. UNII C5529G5JPQ. Digestive, antiemetic and anti-inflammatory botanical standardized for gingerols (typically 5%, ranging 5-20% in concentrated extracts) plus shogaols (formed during drying/heating). SB-6 \u00a78.5 / v6 annotation 2026-05-22: refined standard_name to include species; added v6 contract fields (bonus_eligible, standardization_basis, marker_compounds, bonus_rationale, sources); added marker-explicit alias phrasings for direct matching. The audit's reported '5 distinct UNIIs in aliases' resolved to marker-compound UNIIs (V2ZD052TS1, SAS9Z1SVUK, 925QK2Z900) and generic registry term (UL302SFN7L), all describing the same species (Z. officinale, UNII C5529G5JPQ) \u2014 not cross-species misplacement.",
       "external_ids": {

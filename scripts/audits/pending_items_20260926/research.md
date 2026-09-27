@@ -278,3 +278,13 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
 - RULE_IQM_STINGING_NETTLE_DIABETES: Kianbakht 2013 (PMID 24273930) is one regimen (500 mg every 8 hours); the
   diabetes mechanism stated it, the three hypoglycemic mechanisms now do too; all four cite it. Floors removed.
 - Both rules now fire on presence at unchanged severities.
+
+## standardized_botanicals ginger_extract: nonexistent PMID (Q22)
+- PMID 28200047: esummary "cannot get document summary" (2026-09-26); it does not exist.
+- The source line named "Marx et al. 2017 systematic review on ginger for chemotherapy-induced nausea". PubMed
+  (esummary/efetch 2026-09-26): PMID 25848702, Marx W, Ried K, McCarthy AL, Crit Rev Food Sci Nutr 2017 Jan 2,
+  "Ginger-Mechanism of action in chemotherapy-induced nausea and vomiting: A review" (publication type Review,
+  not systematic); abstract: "Bioactive compounds within the rhizome of ginger, particularly the gingerol and
+  shogaol class of compounds". The 2013 systematic review by the same group is PMID 23550785 (Nutr Rev).
+- Source line now names 25848702 as a review. Citation only: the +1 standardized-botanical bonus depends on the
+  label's gingerol claim, not on this source.
