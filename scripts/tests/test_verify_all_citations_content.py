@@ -212,3 +212,16 @@ def test_committed_backlog_is_well_formed() -> None:
     assert len({(i["file"], i["entry_id"], i["pmid"]) for i in items}) == len(items)
     configured = {c["file"] for c in vac.FILE_CONFIGS}
     assert {i["file"] for i in items} <= configured
+
+
+def test_changed_entry_ids_are_added_and_modified_entries_only(tmp_path, monkeypatch):
+    """--changed-since checks a batch's entries; a formatting-only change is not one."""
+    import data_batch
+
+    before = {"_metadata": {}, "items": [{"id": "A", "n": 1}, {"id": "B", "n": 1}, {"id": "C", "n": 1}]}
+    after = {"_metadata": {}, "items": [{"id": "A", "n": 1}, {"id": "B", "n": 2}, {"id": "D", "n": 1}]}
+    (tmp_path / "x.json").write_text(json.dumps(after))
+    monkeypatch.setattr(vac, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(data_batch, "at_ref", lambda ref, path: before)
+    config = {"file": "x.json", "array_key": "items", "id_field": "id"}
+    assert vac.changed_entry_ids(config, "origin/main") == {"B", "D"}

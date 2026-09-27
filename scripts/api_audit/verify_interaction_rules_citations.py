@@ -41,9 +41,9 @@ constituent names). Flagged PMIDs are for MANUAL review, never auto-edited.
 fails until it is reviewed in scripts/data/interaction_rules_ghost_review.json
 with a rationale, the same contract as verify_backed_studies_citations.py.
 
-Usage:
-    python3 scripts/api_audit/verify_interaction_rules_citations.py
-    python3 scripts/api_audit/verify_interaction_rules_citations.py --strict
+Usage (source scripts/python_env.sh first):
+    $PG_PYTHON scripts/api_audit/verify_interaction_rules_citations.py --strict
+    $PG_PYTHON scripts/api_audit/verify_interaction_rules_citations.py --strict --changed-since origin/main
 """
 from __future__ import annotations
 
@@ -60,6 +60,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO = SCRIPT_DIR.parent.parent
 sys.path.insert(0, str(SCRIPT_DIR))
+sys.path.insert(0, str(SCRIPT_DIR.parent))
 
 # load .env (PUBMED_API_KEY) the same way the audit tools do
 _env = REPO / ".env"
@@ -346,9 +347,19 @@ def main() -> int:
     parser.add_argument("--strict", action="store_true",
                         help="exit 1 on an unreviewed suspect or an unresolved source")
     parser.add_argument("--rules", type=Path, default=RULES, help="rules file to check")
+    parser.add_argument("--changed-since", metavar="REF",
+                        help="check only rules added or changed since this git ref (e.g. origin/main)")
     args = parser.parse_args()
 
     rules = json.loads(args.rules.read_text()).get("interaction_rules") or []
+    if args.changed_since:
+        from data_batch import at_ref, changed_keys
+
+        before = (at_ref(args.changed_since, args.rules) or {}).get("interaction_rules") or []
+        added, _removed, modified = changed_keys({r["id"]: r for r in before}, {r["id"]: r for r in rules})
+        changed = set(added) | set(modified)
+        rules = [r for r in rules if r["id"] in changed]
+        print(f"Changed since {args.changed_since}: {len(rules)} rule(s) {sorted(changed)}")
     claims = collect_claims(rules, load_subject_entries())
     pmids = sorted(k for k in claims if not k.startswith("NBK"))
     nbk_ids = sorted(k for k in claims if k.startswith("NBK"))

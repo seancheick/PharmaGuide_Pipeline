@@ -12,15 +12,16 @@ backed_clinical_studies.json have their own verifiers.
 test_every_citation_in_the_data_folder_is_read_by_a_content_verifier fails on
 any citation in scripts/data that no verifier reads.
 
-Usage:
-    # Full content verification (hits PubMed API)
-    python3 scripts/api_audit/verify_all_citations_content.py
+Usage (source scripts/python_env.sh first; every run hits the PubMed API):
+    # Release gate: every citation, failing only on new mismatches or unresolved PMIDs
+    $PG_PYTHON scripts/api_audit/verify_all_citations_content.py --baseline scripts/data/citation_content_backlog.json
 
-    # Verify a single file
-    python3 scripts/api_audit/verify_all_citations_content.py --file timing_rules.json
+    # A curated-data batch: only entries changed since a ref, one line per citation
+    $PG_PYTHON scripts/api_audit/verify_all_citations_content.py --changed-since origin/main
 
-    # Output JSON report
-    python3 scripts/api_audit/verify_all_citations_content.py --report scripts/reports/citation_content_audit.json
+    # One file, or a JSON report
+    $PG_PYTHON scripts/api_audit/verify_all_citations_content.py --file timing_rules.json
+    $PG_PYTHON scripts/api_audit/verify_all_citations_content.py --report scripts/reports/citation_content_audit.json
 """
 
 from __future__ import annotations
@@ -544,8 +545,26 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
 
 # ── Main verification ──────────────────────────────────────────────────
 
-def verify_file(config: dict) -> dict:
-    """Verify all PubMed citations in one data file."""
+def entry_id_of(entry: dict, config: dict) -> str:
+    return str(entry.get(config["id_field"]) or entry.get("_key", "unknown"))
+
+
+def changed_entry_ids(config: dict, ref: str) -> set[str]:
+    """Ids of the entries in ``config``'s file added or changed since git ``ref``."""
+    from data_batch import at_ref, changed_keys
+
+    filepath = DATA_DIR / config["file"]
+    if not filepath.exists():
+        return set()
+    with open(filepath) as f:
+        now = json.load(f)
+    by_id = lambda blob: {entry_id_of(e, config): e for e in entries_of(blob or {}, config)}  # noqa: E731
+    added, _removed, modified = changed_keys(by_id(at_ref(ref, filepath)), by_id(now))
+    return set(added) | set(modified)
+
+
+def verify_file(config: dict, only_ids: set[str] | None = None) -> dict:
+    """Verify the PubMed citations in one data file (only ``only_ids`` when given)."""
     filepath = DATA_DIR / config["file"]
     if not filepath.exists():
         return {"file": config["file"], "status": "not_found", "entries": []}
@@ -554,12 +573,14 @@ def verify_file(config: dict) -> dict:
         data = json.load(f)
 
     entries = entries_of(data, config)
+    if only_ids is not None:
+        entries = [e for e in entries if entry_id_of(e, config) in only_ids]
     results = []
     all_pmids = {}  # pmid → list of entry contexts
 
     # Collect all PMIDs
     for entry in entries:
-        entry_id = entry.get(config["id_field"]) or entry.get("_key", "unknown")
+        entry_id = entry_id_of(entry, config)
         topic_words = extract_topic_words(entry, config)
         pmid_refs = extract_pmids_from_entry(entry, config)
 
@@ -655,6 +676,9 @@ def main():
     parser.add_argument("--baseline", type=Path,
                         help="known backlog (scripts/data/citation_content_backlog.json): fail only on "
                              "an unresolved citation or a mismatch not listed there")
+    parser.add_argument("--changed-since", metavar="REF",
+                        help="check only entries added or changed since this git ref (e.g. origin/main), "
+                             "printing one result line per citation; for curated-data batches")
     args = parser.parse_args()
 
     # Load env
@@ -680,7 +704,10 @@ def main():
     total_mismatch = 0
 
     for config in configs:
-        result = verify_file(config)
+        only_ids = changed_entry_ids(config, args.changed_since) if args.changed_since else None
+        if only_ids is not None and not only_ids:
+            continue
+        result = verify_file(config, only_ids)
         all_results.append(result)
         total_match += result.get("match", 0)
         total_mismatch += result.get("mismatch", 0)
@@ -692,9 +719,12 @@ def main():
         print(f"    ❌ Mismatch: {result.get('mismatch', 0)}")
         print(f"    Pass rate: {result.get('pass_rate', 'N/A')}")
 
-        # Print mismatches
+        # Print mismatches (every citation when checking a batch)
         for entry in result.get("entries", []):
-            if entry["status"] == "mismatch":
+            if only_ids is not None:
+                print(f"    {entry['status'].upper():<9} {entry['entry_id']} PMID {entry['pmid']}: "
+                      f"{entry['article_title'][:100]}")
+            elif entry["status"] == "mismatch":
                 print(f"    ❌ {entry['entry_id']} PMID {entry['pmid']}: {entry['article_title']}")
 
     print(f"\n{'=' * 60}")
