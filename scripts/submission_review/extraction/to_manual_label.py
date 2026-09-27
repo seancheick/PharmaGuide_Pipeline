@@ -24,6 +24,10 @@ UNREADABLE = "the photograph could not be read here"
 NOT_PRESENT = "the label does not print this"
 NO_TARGET_FIELD = "the catalog has nowhere to record this; decide from the photograph"
 FREE_TEXT_ONLY = "printed as text; enter the numbers the catalog needs"
+NO_DRAFT_FIELD = "a draft cannot carry this; enter the nutrient or botanical the row names"
+
+#: The console's default statement type (static/app.js ``addStatement``).
+STATEMENT_TYPE = "Label statement"
 
 
 @dataclass
@@ -151,8 +155,10 @@ def to_manual_label(draft: Mapping[str, Any]) -> ManualLabelSkeleton:
     else:
         missing("otherIngredientsDisclosure", UNREADABLE, text)
 
+    # The printed words are the statement; the type is the console's own
+    # neutral default (app.js addStatement) until a reviewer picks one.
     statements = [
-        {"type": value}
+        {"type": STATEMENT_TYPE, "notes": value}
         for value in (_text(entry) for entry in draft.get("statements") or [])
         if value
     ]
@@ -186,6 +192,9 @@ def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
         }
         if name is None:
             missing(f"{path}.name", UNREADABLE)
+        # The enricher matches on this identity, so it is a reader's decision,
+        # never derived here from the printed name.
+        missing(f"{path}.ingredientGroup", NO_DRAFT_FIELD, name)
 
         amount = _amount(row.get("amount"))
         printed_amount = _printed_source(row.get("amount"))

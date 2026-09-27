@@ -238,3 +238,30 @@ def test_a_nested_row_keeps_its_own_form() -> None:
     child = skeleton.payload["ingredientRows"][0]["nestedRows"][0]
     assert child["forms"] == [{"name": "glycinate"}]
     assert child["quantity"] == [{"quantity": 200.0, "unit": "mg"}]
+
+
+def test_a_statement_crosses_as_its_printed_text_under_the_console_type() -> None:
+    skeleton = to_manual_label(_draft(statements=[
+        _f("Keep out of reach of children."),
+        _f(None, status="unreadable"),
+    ]))
+
+    # manual_label_v1 needs both keys; the printed words are the notes, and the
+    # type is the console's own neutral default until a reviewer picks one.
+    assert skeleton.payload["statements"] == [
+        {"type": "Label statement", "notes": "Keep out of reach of children."},
+    ]
+
+
+def test_every_row_names_its_missing_ingredient_group() -> None:
+    skeleton = to_manual_label(_draft(ingredient_rows=[
+        _row("Proprietary Blend", is_blend_header=True),
+        _row("Ginger", parent_index=0, amount=_f({"value": 50, "unit_text": "mg"})),
+    ]))
+
+    # A draft has no field for the identity the enricher matches on, so the
+    # gap is named for each row rather than left for the validator to find.
+    paths = {entry["path"] for entry in skeleton.unresolved}
+    assert {"ingredientRows[0].ingredientGroup",
+            "ingredientRows[1].ingredientGroup"} <= paths
+    assert "ingredientGroup" not in skeleton.payload["ingredientRows"][0]

@@ -452,7 +452,7 @@ def test_validated_range_reaches_the_single_mapper_without_a_numeric_default():
     assert skeleton.payload['ingredientRows'][0]['quantity'] == []
     assert skeleton.payload['ingredientRows'][0]['forms'] == []
     assert any(e.get('printed') == printed for e in skeleton.unresolved)
-    assert skeleton.payload['statements'] == [{'type': printed}]
+    assert skeleton.payload['statements'] == [{'type': 'Label statement', 'notes': printed}]
 
 
 @pytest.mark.parametrize(('unit', 'status', 'invalid'), [
