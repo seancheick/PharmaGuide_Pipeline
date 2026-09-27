@@ -65,7 +65,7 @@ INTERACTION_SUBJECT_FAMILY: dict[str, str] = {
 # the botanical identity. Each pair shares a GSRS UNII or is a species the IQM
 # parent names, and its part is one the rule's evidence covers. Same-species
 # records left out (a marker or nutrient source, another part or preparation,
-# e.g. dandelion and nettle root under leaf-evidence rules) are listed with
+# e.g. nettle root under a leaf-evidence rule) are listed with
 # their reasons in test_botanical_interaction_subjects.py, which requires a
 # decision for every candidate.
 BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
@@ -93,6 +93,9 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "cranberry": "cranberry",
     "cranberry_fruit": "cranberry",
     "dandelion": "dandelion",
+    # EU root monograph EMA/HMPC/475726/2020: traditional diuretic use and a
+    # fluid-restriction warning, the premise of the dandelion kidney rule (Q18).
+    "dandelion_root": "dandelion",
     "devils_claw_tuber": "devils_claw",
     "dong_quai": "dong_quai",
     "echinacea_angustifolia": "echinacea",

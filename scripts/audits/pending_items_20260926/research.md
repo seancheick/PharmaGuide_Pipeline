@@ -316,3 +316,38 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   drug-class sub-rules are not in detail blobs. None hidden.
 - Not verified here and not cited: the JECFA/WHO wording on susceptible subgroups and the WHO monograph
   contraindications quoted in Sean's pasted review.
+
+## Q18 wrong-organism and wrong-preparation identities (Sean 2026-09-26: take care of Q18)
+- Bionectria ochroleuca: NCBI Taxonomy 29856 (efetch 2026-09-26) is Clonostachys rosea, lineage Hypocreales;
+  Bionectriaceae; synonyms include "Bionectria ochroleuca". UMLS C1002888 "Clonostachys rosea" (atoms: MSH/NCBI
+  "Bionectria ochroleuca"). Cordyceps militaris is Cordycipitaceae. Raw DSLD rows (Garden of Life RM-10 297676/297677/
+  321368/326697, mykind Vegan D3 233695/243404/274574) name only "Bionectria ochroleuca" inside mushroom blends, NP.
+- Fermented soybean powder: IQM nattokinase listed it as a same-identity alias. Nattokinase is an isolated fibrinolytic
+  enzyme sold by activity (FU); a soybean powder label states no enzyme activity. Rows (78306 5.61 mg, 31148 NP) now
+  resolve to IQM soybean. EstroSoy 229950 "Fermented Soy extract" (670 mg, form Isoflavones) keeps IQM soybean through
+  an explicit alias (it would otherwise fall to the other_ingredients fermented-soy descriptor).
+- Essential oils: the cleaner already matched bergamot_essential_oil (GSRS 39W1PKE3JI "BERGAMOT OIL") and
+  chamomile_essential_oil (GSRS SA8AR2W4ER "MATRICARIA CHAMOMILLA FLOWERING TOP OIL"); `identity_integrity.resolve_identity`
+  replaced them with the DSLD group identity (citrus_bergamot, chamomile) because no parent relationship was
+  registered. P1 had already ruled oils are not twinned ("preparation: essential oil, not fruit/flower extract").
+- Dandelion root: EU herbal monograph on Taraxacum officinale F.H. Wigg., radix, EMA/HMPC/475726/2020, final
+  2021-11-24 (read in full): indication 3 "Traditional herbal medicinal product to increase the amount of urine to
+  achieve flushing of the urinary tract"; 4.4 "dandelion root is not recommended for patients with conditions where
+  reduced fluid intake is advised by a medical doctor"; 4.4 not recommended in bile-duct obstruction, cholangitis,
+  liver disease, gallstones; 4.5 "None reported"; 4.6 use in pregnancy and lactation "not recommended".
+- Measured (raw -> clean -> enrich -> score, worktree vs origin/main a3abb199): 7 Bionectria products lose
+  RULE_IQM_CORDYCEPS_AUTOIMMUNE; 31148 and 78306 lose RULE_IQM_NATTOKINASE_BLEEDING; 222867 loses the bergamot rule
+  and 232878/232905/232942 the chamomile rule; 7 dandelion_root products gain RULE_IQM_DANDELION_KIDNEY. No score or
+  status changes.
+
+## Q25 matcha split from green tea extract (Sean 2026-09-26: take care of Q25)
+- IQM green_tea_extract carried a "matcha powder" form (bio 8) and five matcha aliases under its unspecified form;
+  standardized_botanicals green_tea (extract bonus registry) carried "matcha". Botanical matcha_tea_powder already
+  existed. All 18 matcha products in the cleaned corpus now resolve there; DSLD groups every one under "Green Tea".
+- Nadolol evidence is brewed tea and EGCG: Misaka 2014 (PMID 24419562, efetch): green tea 700 mL/day for 14 days cut
+  nadolol Cmax and AUC by 85.3% and 85.0% and reduced its systolic BP effect; Abe 2018 (PMID 29480324): single-dose
+  EGCG-rich extract AUC ratios 0.72 and 0.60; EGCG inhibits OATP1A2 nadolol uptake. Carried to matcha as
+  RULE_BOTAN_MATCHA_BETA_BLOCKERS (avoid, presence), not the liver sub-rule (EFSA 2018: traditional infusions generally
+  safe; the concern is concentrated extracts).
+- Measured: 13 matcha products lose the extract liver warning and keep the beta-blocker warning; scores 330026-330029
+  53.1 -> 51.2, 335679 62.4 -> 64.4, 326246 54.5 -> 58.8, others unchanged; statuses unchanged.

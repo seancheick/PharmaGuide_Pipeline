@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-08-25",
-    "total_entries": 551,
+    "last_updated": "2026-09-26",
+    "total_entries": 552,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -1343,6 +1343,25 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "bionectria_ochroleuca",
+      "standard_name": "Bionectria ochroleuca",
+      "latin_name": "Clonostachys rosea (syn. Bionectria ochroleuca)",
+      "aliases": [
+        "bionectria ochroleuca",
+        "organic bionectria ochroleuca",
+        "clonostachys rosea"
+      ],
+      "category": "mushroom",
+      "notes": "Clonostachys rosea (Bionectriaceae, Hypocreales), teleomorph name Bionectria ochroleuca: NCBI Taxonomy 29856 lists Bionectria ochroleuca as a synonym; UMLS C1002888. A different fungus from Cordyceps (Cordycipitaceae), so Cordyceps evidence and interaction rules do not apply. Named in Garden of Life fermented mushroom blends (RM-10, mykind Organics). Was an alias of IQM cordyceps militaris until 2026-09-26 (register Q18).",
+      "last_updated": "2026-09-26",
+      "external_ids": {},
+      "cui": "C1002888",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
       }
     },
     {
@@ -6614,11 +6633,12 @@
         "camellia sinensis leaf",
         "green tea powder",
         "organic green tea (camellia sinensis) (leaf) aqueous extract",
-        "Camellia sinensis"
+        "Camellia sinensis",
+        "whole leaf green tea"
       ],
       "category": "leaf",
       "notes": "Camellia sinensis (Theaceae) whole unoxidized leaf. Same species as green_tea; covers leaf-specific labels. Contains catechins (EGCG), caffeine, and L-theanine. Botanical leaf powder form.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "W2ZU1RY8B0"
       },
@@ -9270,11 +9290,20 @@
         "camellia sinensis powder",
         "matcha",
         "ceremonial matcha",
-        "Camellia sinensis"
+        "Camellia sinensis",
+        "matcha green tea",
+        "organic matcha",
+        "organic matcha green tea",
+        "organic matcha green tea leaf powder",
+        "ground matcha",
+        "pure matcha powder",
+        "traditional matcha",
+        "stone-ground green tea",
+        "matcha, powder"
       ],
       "category": "leaf",
       "notes": "Camellia sinensis (Theaceae) stone-ground shade-grown leaf. Higher L-theanine and EGCG than standard green tea due to shade cultivation. Whole-leaf consumption provides more catechins than infusion.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-09-26",
       "external_ids": {},
       "cui": "C0039400",
       "functional_roles": [],

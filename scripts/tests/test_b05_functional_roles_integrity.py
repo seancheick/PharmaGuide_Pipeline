@@ -128,4 +128,6 @@ def test_botanical_total_count_unchanged(botanicals):
     # 551 after the source/marker separation closure: pineapple,
     # siberian_rhubarb, and apple_fruit retain their printed source identity
     # without promoting the full source mass into a marker-compound dose.
-    assert len(botanicals) == 551
+    # 552 after register Q18 (2026-09-26): bionectria_ochroleuca (Clonostachys rosea,
+    # C1002888) left IQM cordyceps, a different fungal family.
+    assert len(botanicals) == 552
