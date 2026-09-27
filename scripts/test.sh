@@ -371,6 +371,14 @@ run_release_artifact_gates() {
     # returned 0, so wiring it before --strict would have added a check that
     # could not fire.
     "$PG_PYTHON" scripts/api_audit/verify_backed_studies_citations.py --strict
+    # Interaction-rule citations are safety claims (Sean, D6 2026-09-26): an
+    # unresolved, unrelated or unreviewed citation fails. Mirrors release_full.sh.
+    "$PG_PYTHON" scripts/api_audit/verify_interaction_rules_citations.py --strict
+    # Every other citation in scripts/data: the triaged backlog is reported; an
+    # unresolved PMID or a mismatch outside the backlog fails.
+    "$PG_PYTHON" scripts/api_audit/verify_all_citations_content.py \
+      --baseline scripts/data/citation_content_backlog.json \
+      --report scripts/reports/citation_content_audit.json
   fi
 }
 

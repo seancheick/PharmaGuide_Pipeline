@@ -614,6 +614,18 @@ else
     "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live
   run_strict_gate "backed clinical studies PMID content (PubMed)" \
     "$PG_PYTHON" scripts/api_audit/verify_backed_studies_citations.py --strict
+  # Interaction-rule citations are safety claims (Sean, D6 2026-09-26): an
+  # unresolved, unrelated or unreviewed citation, including one in a dose
+  # floor or threshold note, fails the release.
+  run_strict_gate "interaction-rule citation content (PubMed)" \
+    "$PG_PYTHON" scripts/api_audit/verify_interaction_rules_citations.py --strict
+  # Every other citation in scripts/data. The triaged backlog (register Q22) is
+  # reported, not blocking; an unresolved PMID or a mismatch outside it fails,
+  # so a new bad citation cannot hide in the backlog.
+  run_strict_gate "data-file citation content vs triaged backlog (PubMed)" \
+    "$PG_PYTHON" scripts/api_audit/verify_all_citations_content.py \
+      --baseline "$REPO_ROOT/scripts/data/citation_content_backlog.json" \
+      --report "$REPO_ROOT/scripts/reports/citation_content_audit.json"
   # AGENTS.md and api_audit/README.md called this "the release gate for
   # banned/recalled data" since it was written, but it was never actually
   # invoked here — the docs wrote a check the release train never cashed.

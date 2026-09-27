@@ -243,3 +243,12 @@ def test_every_pmid_in_the_rules_file_is_collected():
     cited |= set(virc.BOOK_RE.findall(text))
     collected = set(virc.collect_claims(rules, virc.load_subject_entries()))
     assert cited - collected == set()
+
+
+def test_both_release_paths_run_the_citation_gates():
+    """Sean, D6 (2026-09-26): interaction-rule citations gate the release, and
+    every other data citation gates it against the triaged backlog."""
+    for script in ("release_full.sh", "test.sh"):
+        text = (ROOT / script).read_text()
+        assert "verify_interaction_rules_citations.py --strict" in text, script
+        assert re.search(r"verify_all_citations_content\.py \\\s+--baseline \S*citation_content_backlog\.json", text), script

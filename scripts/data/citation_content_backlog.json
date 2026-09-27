@@ -1,154 +1,156 @@
 {
  "_metadata": {
-  "generated": "2026-09-26",
-  "command": "verify_all_citations_content.py --report (after e349a2b7: every citation in scripts/data read)",
-  "meaning": "mismatch = the live PubMed title/abstract/MeSH shares no identity word with the entry; a heuristic. Many are wrong papers, some are naming misses (e.g. caramel color cited to a 4-methylimidazole report). Review one entry at a time with /data-fix; never bulk-edit.",
-  "depletion_note": "The 10 medication_depletions mismatches are all citation_review_status needs_revision, which the app suppresses (verify_medication_depletion_identifiers.py); their labels name real papers while the URLs point at other PMIDs.",
-  "not_found_recheck": "esummary 2026-09-26: 28200047 (ginger_extract) and 22647284 (slendesta) return 'cannot get document summary', so they do not exist in PubMed; 29144655 (lutemax_2020) resolves to a record with an empty title (pubdate 2015 Jun 25)."
+  "purpose": "Known citation-content backlog for verify_all_citations_content.py --baseline",
+  "description": "Citations the first full-coverage run (2026-09-26) flagged: 'mismatch' means the live PubMed record shares no identity word with its entry (a heuristic; many are wrong papers, some are naming misses), 'not_found' means the PMID does not resolve. The release gate fails on any not_found and on any mismatch NOT listed here, so a new bad citation cannot hide in this backlog. Fix entries one at a time via /data-fix and delete each from this list in the same commit (register Q22). The 10 medication_depletions items are needs_revision records the app suppresses.",
+  "schema_version": "1.0.0",
+  "last_updated": "2026-09-26",
+  "total_entries": 234,
+  "source_run": "verify_all_citations_content.py --report (after e349a2b7: every citation in scripts/data read)",
+  "summary_by_file": {
+   "timing_rules.json": {
+    "total_citations": 16,
+    "match": 16,
+    "partial": 0,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "medication_depletions.json": {
+    "total_citations": 77,
+    "match": 66,
+    "partial": 1,
+    "mismatch": 10,
+    "not_found": 0
+   },
+   "curated_interactions/curated_interactions_v1.json": {
+    "total_citations": 70,
+    "match": 67,
+    "partial": 3,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "curated_interactions/batch_critical_2026_05.json": {
+    "total_citations": 5,
+    "match": 5,
+    "partial": 0,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "curated_interactions/med_med_pairs_v1.json": {
+    "total_citations": 6,
+    "match": 6,
+    "partial": 0,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "rda_therapeutic_dosing.json": {
+    "total_citations": 71,
+    "match": 67,
+    "partial": 4,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "rda_optimal_uls.json": {
+    "total_citations": 74,
+    "match": 71,
+    "partial": 3,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "clinically_relevant_strains.json": {
+    "total_citations": 425,
+    "match": 397,
+    "partial": 22,
+    "mismatch": 6,
+    "not_found": 0
+   },
+   "ingredient_quality_map.json": {
+    "total_citations": 706,
+    "match": 454,
+    "partial": 107,
+    "mismatch": 145,
+    "not_found": 0
+   },
+   "botanical_ingredients.json": {
+    "total_citations": 56,
+    "match": 31,
+    "partial": 5,
+    "mismatch": 20,
+    "not_found": 0
+   },
+   "standardized_botanicals.json": {
+    "total_citations": 55,
+    "match": 9,
+    "partial": 2,
+    "mismatch": 41,
+    "not_found": 3
+   },
+   "harmful_additives.json": {
+    "total_citations": 36,
+    "match": 24,
+    "partial": 6,
+    "mismatch": 6,
+    "not_found": 0
+   },
+   "banned_recalled_ingredients.json": {
+    "total_citations": 14,
+    "match": 9,
+    "partial": 4,
+    "mismatch": 1,
+    "not_found": 0
+   },
+   "other_ingredients.json": {
+    "total_citations": 6,
+    "match": 5,
+    "partial": 1,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "synergy_cluster.json": {
+    "total_citations": 11,
+    "match": 10,
+    "partial": 0,
+    "mismatch": 1,
+    "not_found": 0
+   },
+   "botanical_marker_contributions.json": {
+    "total_citations": 9,
+    "match": 3,
+    "partial": 5,
+    "mismatch": 1,
+    "not_found": 0
+   },
+   "branded_blend_anchor_overrides.json": {
+    "total_citations": 6,
+    "match": 5,
+    "partial": 1,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "absorption_enhancers.json": {
+    "total_citations": 2,
+    "match": 2,
+    "partial": 0,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "interaction_orphan_allowlist.json": {
+    "total_citations": 2,
+    "match": 0,
+    "partial": 2,
+    "mismatch": 0,
+    "not_found": 0
+   },
+   "curated_overrides/product_context_canonical_overrides.json": {
+    "total_citations": 1,
+    "match": 1,
+    "partial": 0,
+    "mismatch": 0,
+    "not_found": 0
+   }
+  },
+  "not_found_recheck": "esummary 2026-09-26: 28200047 (ginger_extract) and 22647284 (slendesta) do not exist in PubMed. 29144655 (lutemax_2020) is a PubmedBookArticle, an IQWiG dulaglutide dossier, read as not found until 05c3e5ad; listed as mismatch."
  },
- "summary": {
-  "timing_rules.json": {
-   "total_citations": 16,
-   "match": 16,
-   "partial": 0,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "medication_depletions.json": {
-   "total_citations": 77,
-   "match": 66,
-   "partial": 1,
-   "mismatch": 10,
-   "not_found": 0
-  },
-  "curated_interactions/curated_interactions_v1.json": {
-   "total_citations": 70,
-   "match": 67,
-   "partial": 3,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "curated_interactions/batch_critical_2026_05.json": {
-   "total_citations": 5,
-   "match": 5,
-   "partial": 0,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "curated_interactions/med_med_pairs_v1.json": {
-   "total_citations": 6,
-   "match": 6,
-   "partial": 0,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "rda_therapeutic_dosing.json": {
-   "total_citations": 71,
-   "match": 67,
-   "partial": 4,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "rda_optimal_uls.json": {
-   "total_citations": 74,
-   "match": 71,
-   "partial": 3,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "clinically_relevant_strains.json": {
-   "total_citations": 425,
-   "match": 397,
-   "partial": 22,
-   "mismatch": 6,
-   "not_found": 0
-  },
-  "ingredient_quality_map.json": {
-   "total_citations": 706,
-   "match": 454,
-   "partial": 107,
-   "mismatch": 145,
-   "not_found": 0
-  },
-  "botanical_ingredients.json": {
-   "total_citations": 56,
-   "match": 31,
-   "partial": 5,
-   "mismatch": 20,
-   "not_found": 0
-  },
-  "standardized_botanicals.json": {
-   "total_citations": 55,
-   "match": 9,
-   "partial": 2,
-   "mismatch": 41,
-   "not_found": 3
-  },
-  "harmful_additives.json": {
-   "total_citations": 36,
-   "match": 24,
-   "partial": 6,
-   "mismatch": 6,
-   "not_found": 0
-  },
-  "banned_recalled_ingredients.json": {
-   "total_citations": 14,
-   "match": 9,
-   "partial": 4,
-   "mismatch": 1,
-   "not_found": 0
-  },
-  "other_ingredients.json": {
-   "total_citations": 6,
-   "match": 5,
-   "partial": 1,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "synergy_cluster.json": {
-   "total_citations": 11,
-   "match": 10,
-   "partial": 0,
-   "mismatch": 1,
-   "not_found": 0
-  },
-  "botanical_marker_contributions.json": {
-   "total_citations": 9,
-   "match": 3,
-   "partial": 5,
-   "mismatch": 1,
-   "not_found": 0
-  },
-  "branded_blend_anchor_overrides.json": {
-   "total_citations": 6,
-   "match": 5,
-   "partial": 1,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "absorption_enhancers.json": {
-   "total_citations": 2,
-   "match": 2,
-   "partial": 0,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "interaction_orphan_allowlist.json": {
-   "total_citations": 2,
-   "match": 0,
-   "partial": 2,
-   "mismatch": 0,
-   "not_found": 0
-  },
-  "curated_overrides/product_context_canonical_overrides.json": {
-   "total_citations": 1,
-   "match": 1,
-   "partial": 0,
-   "mismatch": 0,
-   "not_found": 0
-  }
- },
- "to_review": [
+ "backlog": [
   {
    "file": "medication_depletions.json",
    "entry_id": "DEP_OCP_MAGNESIUM",
@@ -3197,8 +3199,8 @@
    "file": "standardized_botanicals.json",
    "entry_id": "lutemax_2020",
    "pmid": "29144655",
-   "status": "not_found",
-   "live_title": "NOT FOUND",
+   "status": "mismatch",
+   "live_title": "Dulaglutide (Addendum to Commission A15-07)",
    "identity_words": [
     "2020",
     "marigold",
