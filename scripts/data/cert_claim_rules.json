@@ -133,14 +133,24 @@
         "id": "CERT_USP_VERIFIED",
         "verified_capabilities": {
           "verified_program": "USP Verified",
-          "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
+          "capabilities": [
+            "purity_verified",
+            "heavy_metal_tested",
+            "label_accuracy_verified"
+          ],
           "basis": "USP verification checks that listed ingredients are present in the declared amounts and screens for harmful levels of specified contaminants. Applies only to a registry-verified product, never to a label claim.",
           "source": "https://www.usp.org/verification-services"
         },
         "implies_gmp": {
           "verified_program": "USP Verified",
-          "scopes": ["sku", "product_line"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
           "basis": "USP Dietary Supplement Verification Program audits the manufacturing facility for cGMP compliance as a program requirement.",
           "source": "https://www.usp.org/verification-services"
         },
@@ -177,14 +187,24 @@
         "id": "CERT_NSF_SPORT",
         "verified_capabilities": {
           "verified_program": "NSF Sport",
-          "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
+          "capabilities": [
+            "purity_verified",
+            "heavy_metal_tested",
+            "label_accuracy_verified"
+          ],
           "basis": "NSF Certified for Sport builds on NSF/ANSI 173 contents and contaminant testing and adds banned-substance screening. Applies only to a registry-verified product, never to a label claim.",
           "source": "https://www.nsfsport.com/"
         },
         "implies_gmp": {
           "verified_program": "NSF Sport",
-          "scopes": ["sku", "product_line"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
           "basis": "NSF Certified for Sport requires GMP registration/facility audit as the first step of certification.",
           "source": "https://www.nsfsport.com/"
         },
@@ -211,14 +231,24 @@
         "id": "CERT_NSF_CONTENTS",
         "verified_capabilities": {
           "verified_program": "NSF Certified",
-          "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
+          "capabilities": [
+            "purity_verified",
+            "heavy_metal_tested",
+            "label_accuracy_verified"
+          ],
           "basis": "The NSF Certified dietary supplement listing is NSF/ANSI 173 contents certification: label contents verification plus contaminant testing. Applies only to a registry-verified product, never to a label claim.",
           "source": "https://www.nsf.org/consumer-resources/articles/supplements-and-gmp"
         },
         "implies_gmp": {
           "verified_program": "NSF Certified",
-          "scopes": ["sku", "product_line"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
           "basis": "NSF/ANSI 173 contents certification includes a GMP facility audit of the manufacturer.",
           "source": "https://www.nsf.org/consumer-resources/articles/supplements-and-gmp"
         },
@@ -242,8 +272,15 @@
         "id": "CERT_CONSUMERLAB",
         "verified_capabilities": {
           "verified_program": "ConsumerLab",
-          "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified", "heavy_metal_tested", "label_accuracy_verified"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
+          "capabilities": [
+            "purity_verified",
+            "heavy_metal_tested",
+            "label_accuracy_verified"
+          ],
           "basis": "ConsumerLab's Quality Certification Program tests certified products for identity, strength and contamination. Applies only to a registry-verified product, never to a label claim.",
           "source": "https://www.consumerlab.com/quality-certification-program/certified-products/"
         },
@@ -270,14 +307,20 @@
         "id": "CERT_INFORMED_SPORT",
         "verified_capabilities": {
           "verified_program": "Informed Sport",
-          "scopes": ["sku", "product_line"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
           "capabilities": [],
           "basis": "Informed Sport verifies batch testing for prohibited substances. That is valuable named-program evidence, but it does not establish PharmaGuide's broader purity, heavy-metal, or label-accuracy flags.",
           "source": "https://sport.wetestyoutrust.com/about/certification-process"
         },
         "implies_gmp": {
           "verified_program": "Informed Sport",
-          "scopes": ["sku", "product_line"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
           "basis": "Informed Sport requires manufacturing in a GMP-registered facility plus an audit as part of certification.",
           "source": "https://sport.wetestyoutrust.com/"
         },
@@ -299,14 +342,20 @@
         "id": "CERT_INFORMED_CHOICE",
         "verified_capabilities": {
           "verified_program": "Informed Choice",
-          "scopes": ["sku", "product_line"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
           "capabilities": [],
           "basis": "Informed Choice verifies recurring testing for banned-substance contamination. That is valuable named-program evidence, but it does not establish PharmaGuide's broader purity, heavy-metal, or label-accuracy flags.",
           "source": "https://choice.wetestyoutrust.com/sites/default/files/2022-07/Informed%20Choice%20Dietary%20Supplement%20Certification%20Process.pdf"
         },
         "implies_gmp": {
           "verified_program": "Informed Choice",
-          "scopes": ["sku", "product_line"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
           "basis": "Informed Choice (consumer arm of the Informed program) requires manufacturing in a GMP-registered, audited facility.",
           "source": "https://choice.wetestyoutrust.com/"
         },
@@ -328,14 +377,23 @@
         "id": "CERT_BSCG",
         "verified_capabilities": {
           "verified_program": "BSCG",
-          "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified", "label_accuracy_verified"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
+          "capabilities": [
+            "purity_verified",
+            "label_accuracy_verified"
+          ],
           "basis": "BSCG Certified Drug Free tests every lot for banned substances and verifies label claims and the product's contaminant limits (annually, by BSCG or another qualified lab). BSCG's program pages do not name heavy-metal testing, so heavy_metal_tested is not established. Applies only to a current registry-verified product, never to a label claim.",
           "source": "https://www.bscg.org/certified-drug-free-supplement-certification-process"
         },
         "implies_gmp": {
           "verified_program": "BSCG",
-          "scopes": ["sku", "product_line"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
           "basis": "BSCG Certified Drug Free certification includes GMP audit/compliance of the manufacturer.",
           "source": "https://www.bscg.org/"
         },
@@ -358,8 +416,14 @@
         "id": "CERT_IFOS",
         "verified_capabilities": {
           "verified_program": "IFOS",
-          "scopes": ["sku", "product_line"],
-          "capabilities": ["purity_verified", "heavy_metal_tested"],
+          "scopes": [
+            "sku",
+            "product_line"
+          ],
+          "capabilities": [
+            "purity_verified",
+            "heavy_metal_tested"
+          ],
           "basis": "IFOS tests certified fish oils for contaminants including heavy metals; it is not treated as supplement-facts label accuracy verification. Applies only to a registry-verified product, never to a label claim.",
           "source": "https://certifications.nutrasource.ca/certified-products"
         },

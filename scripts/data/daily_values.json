@@ -20,7 +20,9 @@
   "nutrients": {
     "vitamin_c": {
       "standard_name": "Vitamin C",
-      "aliases": ["Ascorbic Acid"],
+      "aliases": [
+        "Ascorbic Acid"
+      ],
       "unit": "mg",
       "target_groups": {
         "adult_4_plus": 90,
@@ -31,7 +33,10 @@
     },
     "vitamin_b6": {
       "standard_name": "Vitamin B6",
-      "aliases": ["Pyridoxine", "Pyridoxal"],
+      "aliases": [
+        "Pyridoxine",
+        "Pyridoxal"
+      ],
       "unit": "mg",
       "target_groups": {
         "adult_4_plus": 1.7,
@@ -42,7 +47,12 @@
     },
     "vitamin_d": {
       "standard_name": "Vitamin D",
-      "aliases": ["Vitamin D2", "Vitamin D3", "Cholecalciferol", "Ergocalciferol"],
+      "aliases": [
+        "Vitamin D2",
+        "Vitamin D3",
+        "Cholecalciferol",
+        "Ergocalciferol"
+      ],
       "unit": "mcg",
       "target_groups": {
         "adult_4_plus": 20,
@@ -53,7 +63,12 @@
     },
     "folate": {
       "standard_name": "Folate",
-      "aliases": ["Folic Acid", "Vitamin B9", "Methylfolate", "5-MTHF"],
+      "aliases": [
+        "Folic Acid",
+        "Vitamin B9",
+        "Methylfolate",
+        "5-MTHF"
+      ],
       "unit": "mcg DFE",
       "target_groups": {
         "adult_4_plus": 400,
@@ -64,7 +79,11 @@
     },
     "iodine": {
       "standard_name": "Iodine",
-      "aliases": ["Potassium Iodide", "Sodium Iodide", "Kelp Iodine"],
+      "aliases": [
+        "Potassium Iodide",
+        "Sodium Iodide",
+        "Kelp Iodine"
+      ],
       "unit": "mcg",
       "target_groups": {
         "adult_4_plus": 150,
@@ -75,7 +94,11 @@
     },
     "vitamin_b12": {
       "standard_name": "Vitamin B12",
-      "aliases": ["Cobalamin", "Methyl B12", "Cyanocobalamin"],
+      "aliases": [
+        "Cobalamin",
+        "Methyl B12",
+        "Cyanocobalamin"
+      ],
       "unit": "mcg",
       "target_groups": {
         "adult_4_plus": 2.4,
@@ -86,7 +109,9 @@
     },
     "biotin": {
       "standard_name": "Biotin",
-      "aliases": ["Vitamin B7"],
+      "aliases": [
+        "Vitamin B7"
+      ],
       "unit": "mcg",
       "target_groups": {
         "adult_4_plus": 30,
@@ -97,7 +122,9 @@
     },
     "chromium": {
       "standard_name": "Chromium",
-      "aliases": ["Chromium Picolinate"],
+      "aliases": [
+        "Chromium Picolinate"
+      ],
       "unit": "mcg",
       "target_groups": {
         "adult_4_plus": 35,
@@ -108,7 +135,9 @@
     },
     "selenium": {
       "standard_name": "Selenium",
-      "aliases": ["Selenomethionine"],
+      "aliases": [
+        "Selenomethionine"
+      ],
       "unit": "mcg",
       "target_groups": {
         "adult_4_plus": 55,
@@ -119,7 +148,9 @@
     },
     "molybdenum": {
       "standard_name": "Molybdenum",
-      "aliases": ["Sodium Molybdate"],
+      "aliases": [
+        "Sodium Molybdate"
+      ],
       "unit": "mcg",
       "target_groups": {
         "adult_4_plus": 45,
@@ -130,7 +161,12 @@
     },
     "vitamin_k": {
       "standard_name": "Vitamin K",
-      "aliases": ["Vitamin K1", "Vitamin K2", "Phylloquinone", "Menaquinone"],
+      "aliases": [
+        "Vitamin K1",
+        "Vitamin K2",
+        "Phylloquinone",
+        "Menaquinone"
+      ],
       "unit": "mcg",
       "target_groups": {
         "adult_4_plus": 120,

@@ -20,7 +20,11 @@
     "vitamin_d3": {
       "id": "CONV_VITAMIN_D3",
       "standard_name": "Vitamin D3 (Cholecalciferol)",
-      "aliases": ["cholecalciferol", "D3", "vitamin D-3"],
+      "aliases": [
+        "cholecalciferol",
+        "D3",
+        "vitamin D-3"
+      ],
       "conversions": {
         "iu_to_mcg": 0.025,
         "mcg_to_iu": 40
@@ -33,7 +37,11 @@
     "vitamin_d2": {
       "id": "CONV_VITAMIN_D2",
       "standard_name": "Vitamin D2 (Ergocalciferol)",
-      "aliases": ["ergocalciferol", "D2", "vitamin D-2"],
+      "aliases": [
+        "ergocalciferol",
+        "D2",
+        "vitamin D-2"
+      ],
       "conversions": {
         "iu_to_mcg": 0.025,
         "mcg_to_iu": 40
@@ -145,7 +153,9 @@
     "vitamin_a_unknown": {
       "id": "CONV_VITAMIN_A_UNKNOWN",
       "standard_name": "Vitamin A (Form Unknown)",
-      "aliases": ["vitamin A"],
+      "aliases": [
+        "vitamin A"
+      ],
       "conversions": null,
       "canonical_unit": "mcg RAE",
       "handling": "flag_for_review",
@@ -205,7 +215,9 @@
     "vitamin_e_unknown": {
       "id": "CONV_VITAMIN_E_UNKNOWN",
       "standard_name": "Vitamin E (Form Unknown)",
-      "aliases": ["vitamin E"],
+      "aliases": [
+        "vitamin E"
+      ],
       "conversions": null,
       "canonical_unit": "mg",
       "handling": "flag_for_review",
@@ -228,7 +240,10 @@
     "folate_unknown": {
       "id": "CONV_FOLATE_UNKNOWN",
       "standard_name": "Folate (Form Unknown)",
-      "aliases": ["folate", "vitamin b9"],
+      "aliases": [
+        "folate",
+        "vitamin b9"
+      ],
       "conversions": {
         "mg_dfe_to_mcg_dfe": 1000,
         "mcg_dfe_to_mcg_dfe": 1
@@ -244,7 +259,10 @@
     "folate_folic_acid": {
       "id": "CONV_FOLATE_FOLIC_ACID",
       "standard_name": "Folate (as Folic Acid)",
-      "aliases": ["folic acid", "pteroylmonoglutamic acid"],
+      "aliases": [
+        "folic acid",
+        "pteroylmonoglutamic acid"
+      ],
       "conversions": {
         "mg_to_mcg_dfe": 1700,
         "mg_dfe_to_mcg_dfe": 1000,
@@ -279,7 +297,10 @@
     "folate_food": {
       "id": "CONV_FOLATE_FOOD",
       "standard_name": "Folate (from food)",
-      "aliases": ["food folate", "natural folate"],
+      "aliases": [
+        "food folate",
+        "natural folate"
+      ],
       "conversions": {
         "mg_to_mcg_dfe": 1000,
         "mg_dfe_to_mcg_dfe": 1000,
@@ -310,7 +331,11 @@
     "vitamin_k1": {
       "id": "CONV_VITAMIN_K1",
       "standard_name": "Vitamin K1 (Phylloquinone)",
-      "aliases": ["phylloquinone", "K1", "vitamin K-1"],
+      "aliases": [
+        "phylloquinone",
+        "K1",
+        "vitamin K-1"
+      ],
       "conversions": null,
       "canonical_unit": "mcg",
       "notes": "No IU conversion - always measured in mcg"
@@ -318,7 +343,13 @@
     "vitamin_k2": {
       "id": "CONV_VITAMIN_K2",
       "standard_name": "Vitamin K2 (Menaquinone)",
-      "aliases": ["menaquinone", "MK-4", "MK-7", "K2", "vitamin K-2"],
+      "aliases": [
+        "menaquinone",
+        "MK-4",
+        "MK-7",
+        "K2",
+        "vitamin K-2"
+      ],
       "conversions": null,
       "canonical_unit": "mcg",
       "notes": "No IU conversion - always measured in mcg; MK-7 has longer half-life than MK-4"
@@ -373,7 +404,12 @@
     "biotin": {
       "id": "CONV_BIOTIN",
       "standard_name": "Biotin (Vitamin B7)",
-      "aliases": ["vitamin B7", "vitamin H", "d-biotin", "B7"],
+      "aliases": [
+        "vitamin B7",
+        "vitamin H",
+        "d-biotin",
+        "B7"
+      ],
       "conversions": null,
       "canonical_unit": "mcg",
       "notes": "No IU conversion - measured in mcg; also known as vitamin H or vitamin B7",
@@ -415,12 +451,24 @@
       "g_to_mcg": 1000000,
       "mcg_to_mg": 0.001,
       "mg_to_g": 0.001,
-      "mcg_to_g": 1e-6
+      "mcg_to_g": 1e-06
     },
     "unit_aliases": {
-      "g": ["gram", "grams", "gm"],
-      "mg": ["milligram", "milligrams"],
-      "mcg": ["microgram", "micrograms", "ug", "µg"]
+      "g": [
+        "gram",
+        "grams",
+        "gm"
+      ],
+      "mg": [
+        "milligram",
+        "milligrams"
+      ],
+      "mcg": [
+        "microgram",
+        "micrograms",
+        "ug",
+        "µg"
+      ]
     }
   },
   "form_detection_patterns": {

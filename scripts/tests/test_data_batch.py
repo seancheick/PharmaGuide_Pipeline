@@ -17,6 +17,27 @@ from run_artifacts import json_text
 DATA = Path(__file__).parent.parent / "data"
 DATA_FILES = sorted(DATA.rglob("*.json"))
 
+# Formatted in their own commit once the lane editing them has landed. The test
+# below fails as soon as a listed file is canonical, so the list only shrinks.
+NOT_YET_CANONICAL = {
+    "ingredient_quality_map.json",
+    "ingredient_interaction_rules.json",
+    "standardized_botanicals.json",
+}
+
+
+@pytest.mark.parametrize("path", DATA_FILES, ids=lambda p: str(p.relative_to(DATA)))
+def test_data_file_is_canonical_json_without_duplicate_keys(path):
+    text = path.read_text(encoding="utf-8")
+    blob = db.loads(text)  # raises on a duplicate key, which json would drop silently
+    canonical = text == json_text(blob)
+    if path.name in NOT_YET_CANONICAL:
+        assert not canonical, f"{path.name} is canonical now: remove it from NOT_YET_CANONICAL"
+        assert json.loads(json_text(blob)) == blob
+    else:
+        assert canonical, f"{path.name} is not canonical JSON: run scripts/data_batch.py format {path}"
+
+
 @pytest.mark.parametrize("path", DATA_FILES, ids=lambda p: str(p.relative_to(DATA)))
 def test_recount_agrees_with_every_data_file(path):
     blob = db.load(path)
