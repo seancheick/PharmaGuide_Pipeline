@@ -303,7 +303,7 @@ def _validated_equivalence_redirects(
     if not isinstance(rows, list):
         raise ValueError("canonical_equivalences.equivalences must be a list")
 
-    collections = _canonical_registry_collections(databases)
+    collections = canonical_registry_collections(databases)
 
     redirects: dict[tuple[str, str], tuple[str, str]] = {}
     for row in rows:
@@ -349,7 +349,7 @@ def _validated_equivalence_redirects(
     return redirects
 
 
-def _canonical_registry_collections(
+def canonical_registry_collections(
     databases: Mapping[str, Any],
 ) -> dict[str, set[str]]:
     collections: dict[str, set[str]] = {}
@@ -387,7 +387,7 @@ def validated_canonical_parent_relationships(
     if not isinstance(rows, list):
         raise ValueError("canonical_equivalences.relationships must be a list")
 
-    collections = _canonical_registry_collections(databases)
+    collections = canonical_registry_collections(databases)
     relationships: set[tuple[str, str]] = set()
     for row in rows:
         if not isinstance(row, Mapping):

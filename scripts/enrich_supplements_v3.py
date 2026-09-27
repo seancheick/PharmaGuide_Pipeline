@@ -125,6 +125,7 @@ from identity_integrity import (
     has_nonlive_microbial_derivative_evidence,
     IdentityDecision,
     build_canonical_identity_registry,
+    canonical_registry_collections,
     is_identity_scoreable,
     resolve_identity,
     validated_canonical_parent_relationships,
@@ -4047,6 +4048,14 @@ class SupplementEnricherV3:
 
         return resolve
 
+    def _canonical_registry_ids(self) -> Dict[str, set]:
+        """Ids each canonical registry holds (identity_integrity owns the sets)."""
+        cached = getattr(self, "_canonical_registry_id_cache", None)
+        if cached is None or cached[0] is not self.databases:
+            cached = (self.databases, canonical_registry_collections(self.databases))
+            self._canonical_registry_id_cache = cached
+        return cached[1]
+
     def _current_canonical_identity_registry(self):
         if getattr(self, "_canonical_identity_databases", None) is not self.databases:
             self._canonical_identity_registry = build_canonical_identity_registry(
@@ -4377,6 +4386,17 @@ class SupplementEnricherV3:
                 ),
             }
         )
+        registry_ids = self._canonical_registry_ids()
+        source_db = entry.get("canonical_source_db")
+        if (
+            coherent_quality_match
+            and source_db in registry_ids
+            and final_canonical_id not in registry_ids[source_db]
+        ):
+            # The decision replaced the cleaner's identity with an IQM one
+            # ("Cherry powder" other_ingredients -> dark_sweet_cherry); the
+            # registry field follows it, since scoring reads it.
+            entry["canonical_source_db"] = "ingredient_quality_map"
         if not coherent_quality_match:
             # A recognized preparation or rejected identity has no IQM form
             # rating. Do not retain either a rejected candidate's rating or
@@ -17937,20 +17957,11 @@ class SupplementEnricherV3:
     def _interaction_registry_ids(self) -> Dict[str, set]:
         """Ids held by each registry a row can be an interaction subject of,
         IQM first so an IQM id always resolves to IQM."""
-        cached = getattr(self, "_interaction_registry_id_cache", None)
-        if cached is None:
-            quality_map = self.databases.get("ingredient_quality_map") or {}
-            cached = {
-                "ingredient_quality_map": {
-                    key for key, value in quality_map.items()
-                    if not str(key).startswith("_") and isinstance(value, dict)
-                },
-            }
-            for db in ("botanical_ingredients", "other_ingredients"):
-                rows = (self.databases.get(db) or {}).get(db) or []
-                cached[db] = {row.get("id") for row in rows if isinstance(row, dict) and row.get("id")}
-            self._interaction_registry_id_cache = cached
-        return cached
+        registry_ids = self._canonical_registry_ids()
+        return {
+            db: registry_ids.get(db, set())
+            for db in ("ingredient_quality_map", "botanical_ingredients", "other_ingredients")
+        }
 
     def _derive_interaction_subject_ref(self, ingredient: Dict) -> Optional[Dict[str, str]]:
         canonical_id = str(ingredient.get("canonical_id") or "").strip()
