@@ -127,9 +127,17 @@ def test_presence_rule_with_a_dose_tier_still_flags_when_the_amount_is_unknown(e
     assert decision["evaluation_status"] == "amount_unknown"
     assert decision["consumer_disposition"] == "block"
     assert decision["decision_rule"]["amount_missing_disposition"] == "block"
-    # The dose-dependent sub-rules of the same rule keep the missing-amount default.
+    # Licorice hypertension is presence too since D8 (2026-09-26): 100 mg/day
+    # glycyrrhizic acid is no floor for people with hypertension, so an
+    # unquantified child still flags it.
     hypertension = _hit(profile, "RULE_IQM_LICORICE_HYPERTENSION", "condition_id", "hypertension")
-    assert hypertension["dose_decision"]["consumer_disposition"] == "suppress"
+    assert hypertension["dose_decision"]["consumer_disposition"] != "suppress"
+    # A dose-dependent sub-rule keeps the missing-amount default (garlic's
+    # 600 mg hypertension floor).
+    garlic = _child("Garlic Extract", "garlic", "ingredientRows[2].nestedRows[4]")
+    garlic_bp = _hit(enricher._collect_interaction_profile(_product([], [garlic])),
+                     "RULE_INGREDIENT_GARLIC", "condition_id", "hypertension")
+    assert garlic_bp["dose_decision"]["consumer_disposition"] == "suppress"
 
 
 def test_authored_missing_amount_policy_still_wins_over_presence(enricher):
