@@ -214,3 +214,29 @@ def test_real_protein_source_in_ingredient_list_keeps_evidence(enricher):
     payload = score_evidence(product, owner_scoped=True)
     assert "INGR_WHEY_PROTEIN" in payload["metadata"]["recovered_matches"]
     assert payload["metadata"]["ingredient_points"]["protein"] > 0
+
+
+@pytest.mark.parametrize("product_id, qualifies", [("42306", True), ("42289", False)])
+def test_real_skipped_protein_blend_retains_source_evidence(enricher, product_id, qualifies):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.modules.generic_evidence import score_evidence
+    raw = json.loads((Path(__file__).parent / "fixtures" /
+                      f"protein_evidence_{product_id}_raw.json").read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    from scoring_input_contract import declared_protein_source_rows
+    sources = declared_protein_source_rows(product)
+    assert any(".forms[" in row.get("raw_source_path", "") for row in sources)
+    from scoring_input_contract import get_scoring_ingredients
+    protein_rows = [row for row in get_scoring_ingredients(product, strict=True).rows
+                    if row.get("canonical_id") == "protein"]
+    assert protein_rows
+    assert all(row.get("evidence_type") == "sports_primary_dose" for row in protein_rows)
+    payload = score_evidence(product, owner_scoped=True)
+    assert ("INGR_WHEY_PROTEIN" in payload["metadata"]["recovered_matches"]) is qualifies
+    # Typed macro dose is not proof of a qualifying clinical source.
+    product["inactiveIngredients"] = []
+    assert "INGR_WHEY_PROTEIN" not in score_evidence(
+        product, owner_scoped=True
+    )["metadata"]["recovered_matches"]

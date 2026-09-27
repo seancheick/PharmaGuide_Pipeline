@@ -288,7 +288,7 @@ def test_exact_protein_projection_can_recover_category_evidence() -> None:
     assert payload["metadata"]["ingredient_points"] == {"protein": 6.48}
 
 
-def test_exact_nested_creatine_identity_can_recover_ingredient_evidence() -> None:
+def test_nested_creatine_identity_alone_cannot_claim_blend_dose() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     creatine = _ingredient(
@@ -312,8 +312,8 @@ def test_exact_nested_creatine_identity_can_recover_ingredient_evidence() -> Non
     payload = score_evidence(product, owner_scoped=True)
 
     assert payload["metadata"]["evidence_owner_canonicals"] == ["creatine_monohydrate"]
-    assert payload["metadata"]["recovered_matches"] == ["INGR_CREATINE_MONOHYDRATE"]
-    assert payload["metadata"]["ingredient_points"]["creatine_monohydrate"] > 0
+    assert payload["metadata"]["recovered_matches"] == []
+    assert "creatine_monohydrate" not in payload["metadata"]["ingredient_points"]
 
 
 def test_disclosed_bcaa_aggregate_recovers_its_mixture_evidence() -> None:
@@ -1320,3 +1320,178 @@ def test_named_whey_source_is_not_replaced_by_its_constituent_proteins():
         "forms": [{"name": "Alpha-Lactalbumin", "category": "protein"},
                   {"name": "Lactoferrin", "category": "protein"}]}]
     assert score_evidence(product, owner_scoped=True)["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+
+
+def test_generic_module_uses_existing_purpose_owner_scope():
+    from scoring_v4.modules.generic import score_generic
+    product = _product(
+        product_name='Sleep Melatonin',
+        ingredients=[_ingredient(name='Melatonin', canonical_id='melatonin', quantity=5),
+                     _ingredient(name='L-Leucine', canonical_id='l_leucine', quantity=100)],
+        matches=[_match(id='MEL', ingredient='Melatonin', standard_name='Melatonin',
+                        study_type='rct_single', total_enrollment=30),
+                 _match(id='LEU', ingredient='L-Leucine', standard_name='L-Leucine')],
+    )
+    evidence = score_generic(product).dimensions['evidence']
+    assert evidence.metadata['ingredient_points'] == {'melatonin': 2.16}
+
+
+def test_fiber_module_cannot_borrow_evidence_from_adjunct_mineral():
+    from scoring_v4.modules.fiber_digestive import score_fiber_digestive
+    product = _product(
+        product_name='Daily Digestive', primary_type='fiber_digestive',
+        ingredients=[_ingredient(name='Psyllium', canonical_id='psyllium', quantity=3000),
+                     _ingredient(name='Magnesium', canonical_id='magnesium', quantity=50)],
+        matches=[_match()],
+    )
+    evidence = score_fiber_digestive(product).dimensions['evidence']
+    assert 'magnesium' not in evidence.metadata['ingredient_points']
+
+
+def test_digestive_activity_owner_wins_over_massive_adjunct():
+    from evidence_resolver import evidence_owner_canonicals
+    product = _product(product_name='Daily Digestive', primary_type='fiber_digestive',
+        ingredients=[_ingredient(name='Lactase', canonical_id='lactase', quantity=9000, unit='ALU'),
+                     _ingredient(name='Calcium', canonical_id='calcium', quantity=300)])
+    assert evidence_owner_canonicals(product, module='fiber_digestive') == {'lactase'}
+
+
+def test_digestive_evidence_authority_floor_cannot_escape_owner_scope():
+    from scoring_v4.modules.fiber_digestive import score_fiber_digestive
+    product = _product(product_name='Daily Digestive', primary_type='fiber_digestive',
+        ingredients=[_ingredient(name='Lactase', canonical_id='lactase', quantity=9000, unit='ALU'),
+                     _ingredient(name='Calcium', canonical_id='calcium', quantity=300)],
+        matches=[])
+    evidence = score_fiber_digestive(product).dimensions['evidence']
+    assert evidence.metadata.get('nutrition_authority_canonical') is None
+    assert 'nutrition_authority_floor' not in evidence.components
+
+
+def test_immune_profile_nutrients_are_owners_regardless_of_microgram_mass():
+    from evidence_resolver import evidence_owner_canonicals
+    product = _product(product_name='Daily Immune', primary_type='immune_support',
+        ingredients=[_ingredient(name='Vitamin C', canonical_id='vitamin_c', quantity=500),
+                     _ingredient(name='Vitamin D3', canonical_id='vitamin_d3', quantity=25, unit='mcg'),
+                     _ingredient(name='Zinc', canonical_id='zinc', quantity=15)])
+    assert evidence_owner_canonicals(product, module='generic') == {'vitamin_c', 'vitamin_d3', 'zinc'}
+
+
+def test_nested_fiber_anchor_cannot_transfer_blend_total_to_psyllium():
+    from scoring_v4.modules.generic_evidence import score_evidence
+    row = _ingredient(name='Psyllium', canonical_id='psyllium', quantity=3.1, unit='g')
+    row.update(scoring_input_kind='product_level_evidence', evidence_type='blend_anchor_mass',
+               evidence_scope='blend_level', raw_source_path='ingredientRows[2]',
+               linked_rows=['ingredientRows[2]', 'ingredientRows[2].nestedRows[0]'],
+               reason='identity_bearing_blend_header_mass_from_nested_child')
+    product = _product(product_name='Fiber Fusion', primary_type='fiber_digestive',
+                       ingredients=[row], matches=[])
+    assert score_evidence(product, owner_scoped=True)['metadata']['recovered_matches'] == []
+
+
+def test_title_nutrient_keeps_authority_floor_beside_heavier_adjunct():
+    from scoring_v4.modules.generic_evidence import score_evidence, NUTRITION_AUTHORITY_FLOOR
+    product = _product(product_name='Folic Acid 800 mcg',
+        ingredients=[_ingredient(name='Folic Acid', canonical_id='vitamin_b9_folate', quantity=800, unit='mcg'),
+                     _ingredient(name='Calcium', canonical_id='calcium', quantity=65)],
+        matches=[])
+    payload = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert payload['metadata']['nutrition_authority_canonical'] == 'vitamin_b9_folate'
+    assert payload['components']['primary_evidence_floor'] == NUTRITION_AUTHORITY_FLOOR
+
+
+def test_real_stress_gut_labels_assess_both_explicit_purposes():
+    import json
+    from evidence_resolver import evidence_owner_canonicals
+    from scoring_input_contract import classify_ingredient_roles
+    from scoring_v4.scored_artifact import build_scored_artifact
+    products = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())
+    assert {str(p['id']) for p in products} == {'315334', '315850'}
+    for product in products:
+        owners = evidence_owner_canonicals(product, module='fiber_digestive')
+        assert {'ashwagandha', 'l_theanine', 'digestive_enzymes', 'protease'} <= owners
+        roles = classify_ingredient_roles(product, module='fiber_digestive')
+        assert any(r['canonical_id'] == 'l_theanine' and r['role_source'].startswith('statements[') for r in roles)
+        artifact = build_scored_artifact(product)
+        assert artifact['quality_score_status'] == 'scored'
+        assert 0 < artifact['quality_pillars_v4']['evidence']['score'] <= 20
+        from copy import deepcopy
+        duplicate = deepcopy(product)
+        duplicate['statements'] += deepcopy(product['statements'])
+        duplicate['evidence_data']['clinical_matches'] *= 2
+        repeated = build_scored_artifact(duplicate)
+        assert repeated['quality_pillars_v4']['evidence']['score'] == artifact['quality_pillars_v4']['evidence']['score']
+        without_claims = deepcopy(product)
+        without_claims['statements'] = []
+        assert build_scored_artifact(without_claims)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_explicit_function_claim_requires_material_active_and_named_subject():
+    from evidence_resolver import evidence_owner_canonicals
+    from copy import deepcopy
+    product = _product(product_name='Stress & Gut Health', primary_type='fiber_digestive',
+        ingredients=[_ingredient(name='Lactase', canonical_id='lactase', quantity=9000, unit='ALU'),
+                     _ingredient(name='L-Theanine', canonical_id='l_theanine', quantity=200),
+                     _ingredient(name='Calcium', canonical_id='calcium', quantity=300),
+                     _ingredient(name='Black Pepper', canonical_id='black_pepper', quantity=5)],
+        statements=[{'type':'Formula re: Contains', 'notes':'L-theanine helps you relax. Calcium supports bones. Black pepper supports digestion.'}])
+    assert evidence_owner_canonicals(product, module='fiber_digestive') == {'lactase', 'l_theanine'}
+    for notes in ['Supports stress and gut health.', 'Contains L-theanine.',
+                  'L-theanine does not help relaxation.',
+                  'L-theanine and calcium are included. Lactase helps digestion.']:
+        control = deepcopy(product)
+        control['statements'][0]['notes'] = notes
+        assert evidence_owner_canonicals(control, module='fiber_digestive') == {'lactase'}
+    for kind in ['Precautions re: All Other', 'Brand IP Statement(s) re: (c), (TM), (SM)']:
+        control = deepcopy(product)
+        control['statements'][0]['type'] = kind
+        assert evidence_owner_canonicals(control, module='fiber_digestive') == {'lactase'}
+    control = deepcopy(product)
+    for row in control['ingredient_quality_data']['ingredients_scorable']:
+        if row['canonical_id'] == 'l_theanine':
+            row['source_section'] = 'nutrition_facts'
+    assert 'l_theanine' not in evidence_owner_canonicals(control, module='fiber_digestive')
+
+
+def test_function_claims_reject_manufacturing_and_governing_negation():
+    import json
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    for notes in [
+        'Ashwagandha helps capsule manufacturing. L-theanine supports tablet stability.',
+        'No evidence that ashwagandha helps stress and l-theanine supports relaxation.',
+        'Ashwagandha supports stress but not l-theanine which supports relaxation.',
+    ]:
+        control = deepcopy(product)
+        control['statements'] = [{'type': 'Formula re: Contains', 'notes': notes}]
+        assert build_scored_artifact(control)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_explicit_claim_cannot_borrow_evidence_for_another_purpose():
+    import json
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    product['statements'] = [{'type': 'Formula re: Contains',
+        'notes': 'Ashwagandha supports bone density. L-theanine supports bowel regularity.'}]
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
+    import json
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    scores = []
+    for notes in [
+        'Ashwagandha supports gut health. Ashwagandha supports stress management. L-theanine supports relaxation.',
+        'Ashwagandha supports stress management. Ashwagandha supports gut health. L-theanine supports relaxation.',
+        'Ashwagandha supports gut health and stress management. L-theanine supports relaxation.',
+    ]:
+        control = deepcopy(product)
+        control['statements'] = [{'type': 'Formula re: Contains', 'notes': notes}]
+        scores.append(build_scored_artifact(control)['quality_pillars_v4']['evidence']['score'])
+    assert scores[0] == scores[1] == scores[2] > 0
+    for entry in product['evidence_data']['clinical_matches']:
+        entry.update(primary_outcome='Reduced oxidative stress biomarkers',
+            health_goals_supported=[], endpoint_relevance_tags=[], key_endpoints=[])
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0

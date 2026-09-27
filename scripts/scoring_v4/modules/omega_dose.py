@@ -170,14 +170,12 @@ def score_dose(product: Any) -> Dict[str, Any]:
     per_day_max = total_per_serving * max_daily
     per_day_mid = (per_day_min + per_day_max) / 2.0
 
-    # Score the directed interval itself.  Applying a nonlinear band function
-    # to its midpoint can grant full credit even when the minimum permitted
-    # regimen is below the reviewed target.  Averaging the two endpoint scores
-    # preserves both instructions and gives partial credit when the interval
-    # crosses a band.
+    # Adequacy uses the minimum directed daily exposure (shared with
+    # Evidence and RDA adequacy). Keep the upper endpoint for interval
+    # explanation and safety; it cannot increase adequacy credit.
     minimum_score, minimum_label, minimum_flag = _band_score(per_day_min, bands)
     maximum_score, maximum_label, maximum_flag = _band_score(per_day_max, bands)
-    band_score = min((minimum_score + maximum_score) / 2.0, band_cap)
+    band_score = min(minimum_score, band_cap)
     band_label = minimum_label if minimum_label == maximum_label else f"{minimum_label}_to_{maximum_label}"
     band_flag = minimum_flag or maximum_flag
     interval_crosses_band = minimum_label != maximum_label
@@ -199,7 +197,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
 
         prenatal_min_score, prenatal_min_label = prenatal_score(dha_ps * min_daily)
         prenatal_max_score, prenatal_max_label = prenatal_score(dha_ps * max_daily)
-        ind_score = (prenatal_min_score + prenatal_max_score) / 2.0
+        ind_score = prenatal_min_score
         indication_label = (
             prenatal_min_label
             if prenatal_min_label == prenatal_max_label

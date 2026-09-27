@@ -414,3 +414,742 @@ Continue existing generic/fiber Evidence ownership, iron-oxide/non-delivering Do
 botanical exposure/basis and population-reference work, then validate integration
 with fresh representative inputs and export/Flutter consumers. No push, merge,
 release, new worktree, or new public contract was performed for this batch.
+
+## 2026-09-26 continuation: botanical daily exposure
+
+Owner: `serving_frequency.py::resolve_daily_serving_range` supplies daily exposure;
+`scoring_v4/modules/botanical_profile.py::score_botanical_dose` owns its comparison.
+Evidence: `rg "daily|Adequacy exposure" scripts/GLOSSARY.md scripts/serving_frequency.py`.
+Will NOT create: a serving resolver, field, registry or new dose policy.
+
+A failing regression demonstrated that 150 mg twice daily was compared as 150 mg
+against the existing daily reference. The adapter now uses minimum directed daily
+exposure. 50 botanical profile/role tests passed. Stored-input adapter probe of
+1,353 products found 11 payload changes (including metadata-only changes); receipt
+`~/pg_quality/candd/runs/botanical_daily_20260926.json`. Preparation/basis scope still
+requires review; this checkpoint alone does not establish route or release readiness.
+
+### Protein source loss in skipped inactive blend headers
+
+Owner: `enhanced_normalizer.py::_process_ingredients_sequential` preserves source
+forms through its existing header expansion; `scoring_input_contract.py::declared_protein_source_rows`
+projects the resulting rows. Evidence: `rg 'structural_form_container|should_skip_inactive|declared_protein_source_rows' scripts`.
+Will NOT create: a source parser, registry, public field or product exception.
+
+Both 42306 and 42289 disclose sources in raw Other Ingredients; the skip-list
+path discarded their proprietary headers with their forms. Two failing cleaner
+regressions preceded the expansion fix. A failing real-label Evidence regression
+then exposed that expanded rows use `category`, not `raw_category`; the projection
+now accepts that existing field. 80 focused cleaner/matcher/Evidence tests pass.
+42306 recovers whey evidence; 42289 preserves its casein/egg/soy/whey sources but
+still fails this record's current scope. Fresh real-label outputs are recorded in
+`~/pg_quality/candd/runs/protein_source_loss_20260926.json` (62.6 and 32.9 respectively).
+These totals are fresh outputs, not an isolated before/after score measurement.
+Combined fresh validation and broader preservation checks remain pending.
+
+### Generic/fiber Evidence purpose ownership
+
+Owner: `evidence_resolver.py::evidence_owner_canonicals` consumes
+`scoring_input_contract.py::classify_ingredient_roles`; generic Evidence remains
+`generic_evidence.py::score_evidence`. Existing route_features digestive sets and
+immune_support._active_id define their respective purpose ingredients.
+Evidence: `rg 'owner_scoped|role_driver_canonicals|_active_id|FIBER_CANONICALS' scripts`.
+Will NOT create: an owner resolver, identity set, module, registry or public field.
+
+Five failing regressions established adjunct Evidence, activity-unit ownership,
+a nutrition-authority floor bypass, and mass-only exclusion of immune nutrients.
+Generic/fiber callers now opt into the same scope as sports. Authority floors
+must belong to an owner. Digestive roles reuse existing identity sets; immune
+roles reuse the existing profile rather than privileging milligram mass over
+micrograms. 163 focused tests pass. The immune ideal fixture changes 93.0 -> 94.6
+because existing reviewed quercetin/elderberry records are recovered despite
+other pre-existing matches (raw Evidence 11.8881 -> 13.2651); no magnitudes changed.
+Frozen score/route/safety comparison follows at the combined checkpoint.
+
+### Non-delivering nutrient forms: absorption and Dose
+
+Owner: `scoring_reference_resolver.py::delivers_parent_nutrient` reads IQM
+parent_relationship; enrichment owns absorption pairing and adequacy projection.
+Physical source joins use `scoring_input_contract.py::source_linked_rows`.
+Evidence: `rg 'delivers_parent_nutrient|source_linked_rows|_collect_absorption_data' scripts`.
+Will NOT create: a form-quality table, a delivery policy, field or status.
+
+Two failing normalize->enrich regressions showed iron oxide + vitamin C earned
+an enhancer bonus and emitted unknown rather than zero adequacy. Absorption now
+excludes source-linked non-delivering IQM rows. Adequacy emits pct_rda=0 while
+keeping its noneligible flag and UL assessment. Generic Dose consequently counts
+zero instead of dropping that exposure from its average (vitamin C + oxide 20 ->
+10 public Dose in the regression). Evidence unchanged; glycine-chelated iron
+still qualifies for pairing. 163 focused form/absorption/generic/multi tests pass.
+Existing equal-Dose regression was corrected to pin zero contribution rather
+than denominator exclusion. Fresh regeneration is required for these fields.
+
+### Omega exposure and population reference check
+
+Owner: `serving_frequency.py::resolve_daily_serving_range`; the glossary defines
+adequacy as per_day_min and safety as per_day_max. Evidence already uses minimum.
+`omega_dose.py::score_dose` still averaged endpoint scores, yielding 15.0 versus
+12.4 for the same 700 mg minimum dose when the permitted maximum doubled.
+A failing regression preceded alignment to the existing minimum-adequacy contract,
+including prenatal DHA. Interval metadata and maximum-exposure flags are retained.
+Will NOT create: an exposure resolver, reference population or scoring magnitude.
+
+104 focused omega, prenatal, multi and serving-basis tests passed; 20 tests skipped
+because this checkout has no generated catalog yet. Existing prenatal tests verify
+Pregnancy RDA (including iron/iodine) and unchanged adult reference behavior.
+This is a contract alignment with measurable score impact, not a new dose target.
+
+### Frozen replay finding: blend quantity is not an individual dose
+
+Owner: `generic_evidence.py::_recover_verified_primary_ingredient_matches`.
+Evidence: `rg 'exact_nested_identity|identity_bearing_blend_header_mass_from_nested_child' scripts`.
+Will NOT create: an alternate mass owner or blend policy.
+
+The first continuation replay exposed 333746, Fiber Fusion: 3.1 g is the total
+of psyllium, oat bran, guar and further constituents, not a disclosed psyllium
+dose. The prior recovery exception trusted a nested identity as though it owned
+all blend mass. A failing regression preceded removing that exception. Existing
+protein-source and complete BCAA aggregate paths remain; branded formula recovery
+is separate. The old synthetic creatine test lacked dose ownership and now pins
+no recovery. 176 focused Evidence/source/contract/archetype tests pass.
+
+The initial broad run was interrupted for this correction: 7,118 passed, 112
+skipped, one stale omega endpoint-average expectation failed before interruption.
+It is NOT an acceptance run. The first 1,353-input continuation replay had 153
+changed pillar payloads, 155 readiness payload changes and no route/status/safety
+changes. Those intermediate results require a replacement after this finding.
+
+### Botanical preparation containment and interim test correction
+
+Owner: `botanical_profile.py::_dosing_entry_for` consumes the existing therapeutic
+reference; `_forms_text` retains the row's preparation. A failing whole-herb
+regression showed 500 mg root powder receiving extract-range credit. When a
+reference explicitly names extract and the disclosed row is whole herb/powder
+without extract evidence, it now returns disclosed/no-reference rather than
+inventing equivalence. Will NOT create: an extract conversion ratio or registry.
+
+Content re-verified through Europe PMC MED API on 2026-09-26: PMID 31517876 used
+240 mg/day standardized Shoden extract; PMID 23439798 used 300 mg extract twice
+daily. Neither establishes an equivalent dose of plain root powder.
+Sources: https://pubmed.ncbi.nlm.nih.gov/31517876/ and
+https://pubmed.ncbi.nlm.nih.gov/23439798/. Preparation-specific branded-carrier
+ranges (including phytosome mass versus constituent mass) remain a review gap;
+this narrow correction does not assert full botanical clinical closure.
+59 focused botanical/role/omega-standard checks passed. The stale omega test
+now expects 16.8 at the 1,200 mg minimum, rather than 18.4 endpoint averaging.
+
+### Protein mover dispositions — current registry coverage, not a quality judgment
+
+Owner: `backed_clinical_studies.json::INGR_WHEY_PROTEIN` and existing source
+projection/recovery. Will NOT create: broad aliases, a source-family registry,
+product exceptions, or implied equivalence between isolated and blended evidence.
+Raw labels were read from the existing frozen sample's source paths, alongside
+active/inactive rows and `declared_protein_source_rows`. Fourteen dispositions:
+
+| Product | Source finding | Disposition |
+|---|---|---|
+| 42306 | Raw inactive proprietary whey blend was dropped | Cleaner/projection fixed; Evidence recovers on fresh input |
+| 42289 | Raw casein/egg/soy/whey blend was dropped | Source loss fixed; mixed-egg applicability remains unrepresented |
+| 25694 | Casein/egg/milk/soy/whey declared | Mixed-egg applicability gap; no isolated-egg alias added |
+| 259796 | Casein/whey/egg declared | Mixed-egg applicability gap |
+| 317624 | Casein/whey/egg declared | Mixed-egg applicability gap |
+| 330181 | Hemp protein declared | Outside current record; hemp-specific trial reviewed below |
+| 330187 | Rice protein declared | Outside current record; rice-specific trials reviewed below |
+| 264831 | Fava isolate plus rice source declared | Outside current record; fava cannot borrow whey/pea scope |
+| 273676 | Fava/barley/rice blend | Outside current record |
+| 273685 | Fava/barley/rice blend | Outside current record |
+| 273696 | Fava/pea/salmon blend | Outside current record; raw salmon row has misleading pea ingredientGroup |
+| 277517 | Fava/pea/ProGo salmon blend | Outside current record; same misleading raw taxonomy; rejected by complete-source rule |
+| 29098 | Sprouted rice and additional plant/Chlorella sources | Mixed source scope unrepresented |
+| 180692 | Mixed pea/rice/flax/hemp/quinoa/other greens blend | Macro/title is not a complete reviewed protein-source declaration |
+
+Content verified 2026-09-26 via Europe PMC REST MED records and fullTextXML for
+PMC5867436. PMID 28698222 explicitly includes egg-containing **blends** among
+its sources; it does not establish isolated-egg applicability. The current flat
+alias join cannot express that conditional scope without also admitting isolated
+egg. Keep these four entries as a representation gap, not a claim of absent
+human evidence. PMID 39303495 is whey-specific in older adults; it does not
+broaden this scope to alternative plants or fish sources.
+
+PMID 33261645 compared 24 g rice versus whey in 24 trained males for eight weeks;
+PMID 23782948 studied 48 g rice versus whey. These active-comparator results do
+not inherit the 49-trial meta-analysis rating by adding a rice alias. PMID
+37847288 studied 60 g hemp supplement (40 g protein and 9 g oil) versus soy in
+34 adults, with sex-specific findings; this is not proof that 11 g hemp protein
+on product 330181 receives the same rating. No curated record was edited and
+no clinician approval is asserted.
+
+Sources: https://pubmed.ncbi.nlm.nih.gov/28698222/,
+https://pubmed.ncbi.nlm.nih.gov/39303495/,
+https://pubmed.ncbi.nlm.nih.gov/33261645/,
+https://pubmed.ncbi.nlm.nih.gov/23782948/,
+https://pubmed.ncbi.nlm.nih.gov/37847288/.
+These are completed source-coverage dispositions, with explicitly unresolved
+registry representation/curation; they are not fourteen restored scores.
+
+### Readiness shares recovered clinical matches
+
+Owner: `generic_evidence.py::resolved_clinical_matches` — evidence: `rg -n
+'resolved_clinical_matches|owner_scoped' scripts/assessment_readiness.py
+scripts/scoring_v4/modules/*.py`. Will NOT create: a second matcher or readiness
+state. A failing NAC regression reproduced score recovery alongside an existing
+incidental match while readiness omitted the recovered evidence. Readiness now
+uses the same recovery mode for the three owner-scoped scoring modules.
+115 focused readiness/Evidence checks passed. The preceding stable code checkpoint
+at a4cc5c6b passed 16,347 fast tests, 171 skipped (372.01 s); that checkpoint
+predates this final readiness alignment and is not its complete-suite proof.
+
+### Fresh 12-brand run and nutrient-total correction
+
+All 7,412 raw labels completed Clean/Enrich/Score at674a2ec9 across Culturelle,
+GNC, Garden_of_life, Life_Extension, Nature_Made, Natures_Way, Ora,
+Pure_Encapsulations, Solgar, Sports_Research, Thorne and nordic-naturals.
+Pipeline-only log: `~/pg_quality/candd/fresh_12brands_20260926.log`.
+First-pass records preserved: `runs/fresh12_firstpass_674a2ec9.jsonl`.
+
+Owner: `evidence_resolver.py::resolve_evidence_for_row` and
+`is_essential_dietary_nutrient` — evidence: `rg -n 'is_parent_total|is_essential'
+scripts/evidence_resolver.py`. Will NOT create: a nutrient identity list or a
+new evidence state. Fresh GNC224672 reproduced a false undisclosed-blend finding:
+Folate1333mcgDFE was a declared nutrient total with a Folic Acid800mcg child.
+The existing essential-nutrient classifier now distinguishes that total from an
+opaque blend; explicitly proprietary rows remain blocked. Regression failed
+before the fix; all46 resolver tests passed afterward. Scoring rescore follows.
+
+Owner: `generic_evidence.py::_mass_dominant_essential_canonical` consumes the
+existing `evidence_owner_canonicals` result — evidence: `rg -n
+'_mass_dominant_essential_canonical|owner_canonicals' scripts/scoring_v4/modules/generic_evidence.py`.
+Will NOT create: a floor magnitude or another owner selector. The same Folic Acid
+label had65mg calcium, so choosing the heaviest nutrient before scope silently
+removed the folate authority floor. Scope now filters the existing competitors
+before selection; non-nutrient purpose competitors still prevent a trace vitamin
+from earning a floor. Regression failed before the fix.203 focused checks passed.
+Real224672 now resolves by authority and earns the existing raw10-point nutrition
+floor (11.1 public), with an assessed explanation rather than false identity debt.
+Its old15.6 points came from calcium and are not restored.
+
+### Continuation measurements at6bdffe33 — provisional policy, not release approval
+
+Owner: the existing scorer, `evidence_resolver`, `scoring_input_contract`, IQM,
+`serving_frequency`, and their current export/Flutter consumers. Evidence: the
+11 local commits after69c08dbc and the recorded boundary regressions. Will NOT
+create: a second scorer, source registry, product exception, or public field.
+
+- Fresh Clean/Enrich/Score:7,412 labels across12brands; all stages succeeded.
+  After the two nutrient fixes, every brand was rescored successfully at6bdffe33.
+- Coverage:generic4,528; multi/prenatal1,063; sports598; omega528;
+  probiotic398; fiber/digestive215; B-complex82. Statuses:6,077scored,
+  1,294not_scored,41suppressed_safety.
+- Isolated frozen replay:1,353inputs,119score changes (111Evidence,8Dose).
+  Zero route/status/safety/dose-safety/completeness changes.258readiness payloads
+  differ (Evidence258,Dose details81,shadow dimensions52); eligibility unchanged.
+  Source unchanged during replay; SHA256
+  315df72aeafbf11a60de6fde92f4bb5b3123dcac98dff238a8baf61b6ccc17af.
+- Fresh/frozen join:798overlapping labels,149pillar movers,194readiness changes;
+  no compared route/status/safety/dose-safety/completeness differences.22IQD
+  projections changed, all disclosed omega form recovery. This projection covers
+  source path, identity and matched form; the inactive protein-source boundary is
+  covered separately by the two real-label regressions.
+- First-pass/final fresh nutrient correction:91score/conclusion changes; maximum
+  absolute11.1. Zero safety, route, eligibility, exposure, or quarantine changes.
+  GNC224672 ends57.6overall with11.1Evidence, rather than borrowing calcium credit.
+- Route leaders inspected:337856Curcumin Phytosome100 (preparation-basis gap,
+  not clinical approval);328090probiotic81.4;328830prenatal96.5;
+  218637psyllium93;59360omega91.5;175321creatine100;209616B-complex98.6.
+  Numerical leaders are diagnostic examples, not an endorsement or a90+target.
+- Flutter:59focused score/pillar/projection/detail-blob/tradeoff checks passed.
+  No Flutter source edited. Exported-candidate validation remains a separate gate.
+
+Artifacts under `~/pg_quality/candd/runs/`: `continuation_final_6bdffe33.jsonl`
+(and metadata), `continuation_final_diff_6bdffe33.json`,
+`fresh12_firstpass_674a2ec9.jsonl`, `fresh12_final_6bdffe33.jsonl`,
+`fresh12_nutrient_fix_diff.json`, `fresh12_vs_frozen.json`,
+`fresh12_identity_diff.json`, `fresh12_coverage.json`.
+
+**Unresolved acceptance decisions:** strict digestive ownership sends315334 and
+315850Stress & Gut Health Evidence20→0 by excluding substantial stress actives.
+Sean's mixed-purpose ownership decision is pending; this candidate is provisional.
+Conditional mixed-egg source applicability and alternative-source curation remain
+open. Preparation-specific carrier/extract references also remain a clinical
+review gap. Do not describe those gaps as fixed or all14protein scores restored.
+
+Main was fetched at a5bc92b7 and includes separate clinical/scoring changes in19
+production/data files relative to69c08dbc. The combined main+continuation result
+has not been tested. No merge, push, release or worktree deletion occurred.
+
+Testing workflow correction requested by Sean: batch related fixes; use focused
+regressions; one broad fast checkpoint; stop on an early failure, but after roughly60–70%
+let the run finish and collect failures. Repair related failures together before restarting. Do not run a broad suite per
+individual fix, or automatically add release/full-suite runs to a provisional
+candidate. No broad suite is running; finish the collected export findings before another checkpoint.
+
+### Test-cost defect found by the final checkpoint
+
+The broad fast run was interrupted at its first reported failure under Sean's
+then-current instruction:11,951passed,111skipped,1timeout in762.20seconds.
+`test_no_corpus_red_yeast_rice_label_is_unmatched` timed out decoding the full
+corpus at120seconds; it did not report an unmatched safety label. Sean then
+refined the workflow: after60–70% allow completion and batch the failures.
+
+Owner: `test_profiles.py::RELEASE_TEST_FILES/ARTIFACT_TEST_FILES` already owns
+`test_active_banned_recalled_parity.py`. Evidence: `rg -n
+'ARTIFACT_TEST_FILES|RELEASE_TEST_FILES|test_active_banned_recalled_parity'
+scripts/test_profiles.py`. Will NOT create: a second profile or bypass a safety
+assertion. The two whole-corpus tests were moved from fast unit-test files into
+that existing artifact/release file. The178791 lookup also reads the real enriched
+`id` key and avoids decoding batches that do not contain that ID.
+
+The35fast label/form tests passed together (0.77seconds). The full-corpus red
+yeast rice check passed under the existing600-second artifact/slow budget;
+178791 was absent and explicitly skipped (1passed,1skipped,32.42seconds).
+No scorer or clinical data changed; another pipeline rebuild is unnecessary.
+
+
+### Export checkpoint and batched follow-up (2026-09-26)
+
+The guarded candidate export stopped at the existing scoring snapshot gate:
+30 failures, 5 passes. Of the failures, 14 require brands outside this 12-brand
+sample; 16 differ from the saved score/status expectations. The source matrix,
+IQM, cleaner, enrichment, clinical drift, and RDA/UL stamp gates passed first.
+The snapshot manifest is dated 2026-09-08. No snapshots were refreshed, no gate
+was weakened, and no candidate was promoted.
+
+Diagnostics: `/Users/seancheick/pg_quality/candd/runs/export_snapshot_failures.json`.
+The two score-withheld cases were reproduced through the current input owner:
+
+- 182730 Athletic Pure Pack: `disclosed_form_unmapped`; vitamin E retains an
+  unresolved `Tocopherol` token beside its matched succinate form; vanadium's
+  `Bis-Glycinato OxoVanadium` form is unresolved. This needs form provenance/
+  curation review, not an automatic restoration of the old 79-point score.
+- 323080 Catalyte: IQD excludes sodium/chloride from its form-scoring rows;
+  `get_scoring_ingredients` adds label-active projections, and the sodium
+  projection carries its three disclosed salts as unmapped. The strict input
+  gate therefore withholds the score. Whether the projection should inherit
+  the exclusion needs owner-level review before changing this behavior.
+
+Owner: `scripts/scoring_input_contract.py::get_scoring_ingredients` and
+`derive_product_scoring_evidence`; form status is owned by
+`scripts/enrich_supplements_v3.py::_row_form_match_status`.
+Evidence: direct probes of enriched/scored 182730 and 323080, plus
+`rg -n 'DISCLOSED_FORM_UNMAPPED_FINDING|identity_bearing_active_anchor_mass'
+scripts/scoring_input_contract.py`.
+Will NOT create: a second form policy, product exceptions, or replacement
+snapshot expectations without reviewing the differences.
+
+A separate strict diagnostic build uses the canonical builder and an explicit
+output directory, `/Users/seancheick/pg_quality/candd/diagnostic_export_20260926`.
+It is not a validated release candidate. All 16 snapshot score/status drifts
+were already present in the first-pass fresh run at 674a2ec9; none was introduced
+by the later nutrient fixes.
+
+
+The diagnostic build exported 6,114 products, quarantined 1,298, and reported
+zero builder errors. Its field-completeness audit passed with no undeclared
+blob keys, and identity containment passed. The separate strict scoring source
+audit failed with 1,286 findings, so release acceptance remains blocked.
+Direct comparison of all 6,114 exported score/status/verdict triples to the
+scored inputs found zero differences after applying the existing
+`quality_score.py::shipped_whole_score` rounding rule.
+
+**Export defect found and fixed as a batch:** three BLOCKED GNC products
+(220094, 220098, 220101) were excluded solely by `disclosed_form_unmapped`,
+hiding their confirmed ban warning. The existing `validate_export_contract`
+owner now permits that finding only for a confirmed ban/recall with
+`suppressed_safety`, null numeric scores and `N/A` display. Other contract
+findings and identity/display defects remain blocked. This implements the
+existing AGENTS safety-visibility requirement; no new clinical policy or
+public field was introduced.
+
+Owner: `scripts/build_final_db.py::validate_export_contract`; confirmation is
+reused from `scripts/release_catalog_artifact.py::is_confirmed_ban_or_recall`.
+Evidence: `rg -n 'validate_export_contract|is_confirmed_ban_or_recall'
+scripts/build_final_db.py scripts/release_catalog_artifact.py` and the real
+three-product export probe. Will NOT create: a second safety decision or any
+numeric score for suppressed products.
+
+The new regression batch reproduced two expected failures before the fix.
+Afterward, the two export test files passed together: **340 passed in 11.87s**.
+A strict canonical build of the three real inputs exported all three with
+BLOCKED, suppressed_safety, null score, and banned flag true; zero errors or
+quarantines. Artifact: `~/pg_quality/candd/safety_export_regression_20260926`.
+The earlier full diagnostic output is preserved as pre-fix evidence; it was
+not silently patched or presented as the fixed candidate. Source scores and
+verdicts were unchanged by this export-only fix.
+
+One broad fast checkpoint completed for the batch: **16,390 passed, 137 skipped
+in 410.05 seconds (6m50s)**. Log: `~/pg_quality/candd/batched_fast_20260926.log`.
+No further broad run is needed for this unchanged code. The guarded candidate
+remains blocked by the snapshot/source findings and pending policy decision.
+No merge, push, release, or worktree deletion occurred.
+
+
+### Independent continuation audit — 2026-09-26; policy stop
+
+Fetched all remotes before inspection. Main and origin/main are 8dbd621b;
+candidate v41-recovery is 00a0c5f9 with a clean tree. `git rev-list
+--left-right --count main...HEAD` reports 145 main-only and 13 candidate-only
+commits. Claude pending-fixes is 786d318b, four commits beyond main; no merge
+performed. No pipeline or pytest process was running at inspection.
+
+Recounted the preserved diagnostic_scoring_contract.log: 1,267 findings contain
+only disclosed_form_unmapped; 19 contain that plus
+identity_disposition_not_scoreable:identity_conflict. Total 1,286. This classifies
+reported gate reasons, not root causes or accepted curation exceptions.
+The snapshot failure JSON contains 14 missing references and 16 drifts; its
+passed list contains only 3 entries (the prior summary says 5 passes). Do not
+use that partial JSON to assert the total number of passing gate checks.
+
+Reproduced both 315334 and 315850 from current GNC enriched batch 3 through
+build_scored_artifact: scored, overall 50.1, Evidence 0/20,
+applicability_unestablished. classify_ingredient_roles marks ashwagandha and
+l_theanine major; digestive_enzymes and protease primary. The current
+Evidence owner set contains only digestive_enzymes and protease. The existing
+explicit-owner precedence excludes the major stress ingredients.
+
+Owner: scripts/evidence_resolver.py::evidence_owner_canonicals and
+scripts/scoring_input_contract.py::classify_ingredient_roles — evidence:
+`rg -n 'evidence_owner_canonicals|classify_ingredient_roles' scripts/evidence_resolver.py
+scripts/scoring_input_contract.py`, matrix scoring_input_contract entry,
+GLOSSARY V4 module/archetype entries, and the real-product probe above.
+Will NOT create: a second scorer/resolver, new field, product whitelist, or
+unapproved mixed-purpose scoring policy.
+
+Stop for Sean's policy decision: should material actives serving another
+explicit product purpose participate in Evidence alongside route drivers,
+or should route-driver precedence remain exclusive? Including them must
+retain form/dose/population applicability and must not automatically restore
+historical 20/20 Evidence. Required by AGENTS autonomy boundary and
+pg-scoring-change step 1. No scoring/data changes, snapshot refresh, test rerun,
+new pipeline rebuild, export promotion, merge, push, release, or worktree
+removal. Existing fast checkpoint is historical evidence, not a new test run.
+Remaining acceptance sequence in the original handoff stays outstanding.
+
+
+### Approved multi-purpose policy implementation — 2026-09-26 (measurement pending)
+
+Sean approved assessing substantial explicitly purpose-driving actives alongside
+route drivers, retaining every clinical/identity/source gate and the 20-point cap.
+The existing role classifier now recognizes affirmative formulation statements
+that name a material non-nutrient active as the subject of a function claim.
+Statement locations are retained in role_source; role_reason is
+named_in_label_function_claim. Generic Evidence retains its shared owner selection
+and clinical-record-ID deduplication and emits explicit-label-owner flags.
+No clinical registry or scoring magnitudes changed.
+
+Owner: scoring_input_contract.py::classify_ingredient_roles and
+evidence_resolver.py::evidence_owner_canonicals — evidence: current symbol search,
+matrix scoring_input_contract entry, and two real-label regressions.
+Will NOT create: a purpose registry, alternate scorer, whitelist or public field.
+
+Two new regressions failed before implementation. Focused batch: 148 passed
+in 2.43s, log ~/pg_quality/candd/multipurpose_focused.log. Both real labels
+315334/315850 move 50.1 to 70.1, Evidence 0 to 20, via ashwagandha and
+L-theanine. Duplicating statements/clinical records does not add points;
+removing statements restores Evidence 0. These are measured provisional results,
+not release acceptance. New real enriched fixtures preserve original provenance.
+
+Additional reproduced pre-existing resolver inconsistency: projected scoring rows
+carry quantity, while resolve_evidence_for_row reads amount/dose_value, so disclosed
+L-theanine200mg reports dose_undisclosed. Ashwagandha240mg with a standardized
+marker child is_parent_total and reports structural_blend_header despite explicit
+non-proprietary/non-blend flags. Generic scoring still awards points; resolver
+reports identity_material_unresolved. Resolve this through existing owners before
+acceptance. Fresh-context review and frozen replay remain pending.
+
+
+Fresh-context review reproduced two parser defects: manufacturing-function text
+could earn Evidence and conjunction splitting lost governing negation. A real-label
+regression failed before the repair. The parser now rejects negated sentences
+before splitting and requires a recognized health indication. The existing
+probiotic indication categorizer moved to evidence_resolver for shared consumption;
+no duplicate map was created. Mood synonyms include relax/relaxation/cortisol.
+Role reasons retain the indication; generic Evidence and resolver match it against
+the clinical record's stated endpoints/goals, never broad notes. A stress record
+cannot substantiate a bone/digestive-only claim. Focused parser/role/probiotic
+batch:95passed2.56s; broader prior batch163passed2.31s. Final resolver alignment
+and full replay remain required.
+
+
+Resolver row-contract correction: four regressions failed before the fix.
+The resolver now uses generic_evidence's existing dose-map/conversion path,
+restricted to the exact row, for unit and directed daily exposure. A study with
+an unmet higher threshold no longer vetoes an independently applicable record.
+Explicit blend flags remain blocking; parenthood alone does not make a disclosed
+standardized extract an undisclosed blend. No registry or dose policy was added.
+Focused resolver/generic/readiness batch:170passed2.87s;
+~/pg_quality/candd/resolver_row_contract_{red,green}.log. Tests cover the real
+extract/theanine rows, equivalent mg/g/mcg, two daily servings, sibling dose
+non-borrowing, multiple study minima and true blends. Whole frozen replay pending.
+
+Owner: generic_evidence.py::_dose_map/_converted_product_dose and
+scoring_input_contract.py::_positive_quantity/_row_unit/_role_is_blend_member.
+Evidence: shared-provider calls and failing-then-passing regression batch above.
+Will NOT create: a second conversion, daily-dose policy, or applicability flag.
+
+
+Second adversarial review: union all explicit purposes across statements and
+coordinated objects so label order cannot change scores. Preserve a new subject's
+claim boundary; reject oxidative/physical stress as psychological stress.
+The positive literature-resolution branch now shares the backed-study purpose
+check. Both new regressions failed before fixes. Final focused batch205passed
+3.77s; log ~/pg_quality/candd/multipurpose_review_complete.log. No score pin was
+raised or bypassed; same clinical record still counted once. Final broad/replay
+measurements follow after this batch.
+
+
+Broad checkpoint at 220c4e5e: 16,399 passed, 137 skipped, one failed in
+420.40s. The sole failure was two stale raw quantity/unit read exceptions
+in the contract leak audit after shared accessor adoption. Removed only
+those obsolete entries. Owner: audit_scoring_contract_leaks.py::ALLOWLIST —
+evidence: test_scoring_contract_leak_audit live-tree failure.
+Will NOT create: new audit exceptions or bypasses.
+
+
+Source review: free nicotinamide extraction no longer matches the compound
+prefix in nicotinamide riboside/mononucleotide/adenine names. Four regressions
+failed first; form extraction suite then 97 passed. Real 182475 clean/enrich/score
+now retains nicotinamide_riboside identity with mapped form status, no invented
+niacinamide token, strict findings empty, score 75.5. No IQM form or alias added.
+Owner: form_vocab.py::extract_forms using data/form_keywords_vocab.json — evidence:
+rg form_vocab/form_keywords/normaliz in matrix/glossary and four red tests.
+Will NOT create: a new identity, registry, clinical mapping, or form fallback.
+Boundary artifact: ~/pg_quality/candd/runs/source_boundary_real_probe.json.
+
+
+Catalyte 323080: propagate the existing IQD Nutrition Facts exclusion into generic
+active projections and contain old native generic anchors by the same source path.
+Keep typed protein/omega recovery and original dose/safety inputs. Sodium 485 mg
+and chloride 80 mg remain in IQD/RDA records; neither becomes a generic anchor.
+Real fresh clean/enrich/score: 72.4, scored, strict findings empty. Two regressions
+failed before correction. Combined source/contract batch: 168 passed in 2.02s.
+Fresh independent reviewer found no actionable regression and verified RDA
+records and unchanged input. Owner: scoring_input_contract.py::
+derive_product_scoring_evidence / _product_scoring_evidence_rows using
+is_nutrition_fact_declaration — evidence: real 323080 boundary and red tests.
+Will NOT create: new Nutrition Facts policy, public fields, score exceptions.
+Full checkpoint and clean-HEAD measurement remain pending.
+
+
+Follow-up checkpoint stopped on one early protein regression: 8,417 passed,
+87 skipped, one failed at interruption (253.92s). Real 42306 previously relied
+on a generic anchor because its display ledger called Protein mapped_ingredient
+while IQD correctly marked the source Nutrition Facts. Extend the existing typed
+protein projection to accept that exact source-path match; keep title intent,
+gram-validated nutrition summary and exact Protein ledger requirements. Normalized
+product-level sports-primary protein evidence is distinct from its excluded source
+row. Clinical recovery still requires complete qualifying source identities.
+The paired real 42306/42289 regression now asserts typed protein evidence and
+removes ingredient-list sources to verify that macro/title alone earns no recovery.
+Fresh reviewer verified the containment; original NF rows and sodium/chloride
+anchors remain excluded. Owner: scoring_input_contract.py::
+_derive_declared_nutrition_protein_evidence / is_nutrition_fact_declaration.
+Will NOT create: a generic Nutrition Facts exception or protein evidence alias.
+Focused source/clinical/Evidence batch: 164 passed (see protein_typed_projection_green.log).
+Flutter consumer checks: 122 passed, app HEAD 4c5ff2b7, no app changes.
+
+
+2026-09-26 nutrition capture correction: source ingredient names containing
+"fiber" or "protein" could overwrite the panel total. Bind capture to the panel
+name; retain exact fiber source paths. Real Sunfiber 228873 now retains 5 g
+from ingredientRows[1].nestedRows[0], replacing the incorrect 0 NP child value.
+It remains not_scored; this change does not introduce a fiber scoring policy.
+Four capture regressions failed before correction; combined focused source batch
+passed 262 tests in 34.48s (~/pg_quality/candd/fiber_source_green.log).
+Owner: scripts/enhanced_normalizer.py::_extract_nutritional_info — evidence:
+matrix/glossary searches, real raw 228873 and source-versus-panel regressions.
+Will NOT create: a new normalizer, evidence type, clinical alias or public field.
+
+97b8a0ed checkpoint: 16,408 passed, 137 skipped, 458.47s. Frozen 1,353-input
+replay completed unchanged with no errors; 154 totals, 86 statuses and 5 routes
+changed versus continuation_final_6bdffe33. No safety_gate or dose_safety reason
+changes. The 12-brand diagnostic was intentionally stopped after 7 completed
+brands when source defects surfaced; preserve fresh12_release_97b8a0ed.
+Not final acceptance. Two named-konjac products currently expose a separate
+PGX alias/identity-projection defect; their numeric 63.0 results are NOT accepted.
+A single curated alias removal and NF-only fiber policy decision await Sean.
+
+
+Konjac projection containment: required repaired identities that explicitly
+exclude scoring under a different safety-recognition tuple now enter the existing
+identity conflict ledger. This blocks derived and persisted native generic
+anchors without globally rejecting recognized preparations or taxonomy flags.
+Real 252564/255063 regressions failed first (scored instead of not_scored);
+228 focused tests then passed. Persisted-anchor tests with and without a valid
+peer passed (2), retaining one unresolved exposure and blocking numeric scoring.
+Owner: scripts/scoring_input_contract.py::_identity_projection_rejection_reason
+and required_identity_conflicts — evidence: matrix scoring_input_contract and
+mapping_coverage_contract, real saved IQD tuple and red tests.
+Will NOT create: new status, safety registry, identity resolver or public field.
+The PGX alias and misleading Polydextrose recognition remain upstream findings;
+this containment does not claim they are clinically corrected.
+
+
+Named fiber source precedence: an approved, dose-bearing active whose own name
+is recognized cannot be excluded solely because standardName becomes generic
+Fiber. Exact source Nutrition Facts exclusions remain authoritative; downstream
+identity/form gates remain active. Fresh raw 259395 resolves scoreable fiber and
+scores 61.8; 252564/255063 retain contradictory PGX/Polydextrose identities and
+are held by the prior containment fix. No aliases or curated entries changed.
+Owner: scripts/enrich_supplements_v3.py::_should_skip_from_scoring — evidence:
+existing source-role ownership, real raw fixtures and named-fiber red regressions.
+Will NOT create: a whitelist, alternative identity resolver or NF evidence type.
+Independent fresh review found no actionable issue in the final combined diff.
+Final fast checkpoint and clean-HEAD replay follow this commit; full fresh
+12-brand acceptance remains incomplete while clinical decisions are pending.
+
+
+Final verification for source batch a0eee3e5: scripts/test.sh fast completed
+16,414 passed, 137 skipped, 1 expected Pillow decompression-bomb test warning,
+1,133.57 seconds. Log: ~/pg_quality/candd/final_fast_fiber_source.log.
+Fresh-context reviewer found no actionable issue. No unchanged suite rerun.
+Clean-HEAD replay captured all 1,353 frozen products, exit 0, source_unchanged=true:
+~/pg_quality/candd/runs/release_candidate_a0eee3e5.jsonl (+ .meta.json).
+Incremental comparison with 97b8a0ed: zero changes in total, status, route,
+all-six-pillar payloads, safety_gate reasons or dose_safety reasons.
+The frozen replay does not re-exercise cleaning/enrichment; fresh four-product
+raw probes are stored in runs/fiber_source_a0eee3e5.json. They confirm
+252564/255063 not_scored/null, 259395 scored/61.8, 228873 not_scored/null with
+5 g retained. The prior 63.0 Konjac projections are invalid diagnostic history.
+
+Pending approval is concrete: remove only the exact alias "Konjac root extract"
+from ingredient_quality_map.json pgx_fiber.forms["PGX fiber"].aliases; retain the
+entry and all evidence, add no replacement alias. Health Canada identifies PGX
+as a glucomannan/xanthan/sodium-alginate complex:
+https://www.canada.ca/content/dam/hc-sc/migration/hc-sc/fn-an/alt_formats/pdf/label-etiquet/claims-reclam/assess-evalu/glucose-complex-polysaccharides-complexe-glycemique-eng.pdf
+No curated deletion performed. Also pending: retain NF-only fiber holds versus
+authorize a typed verified-source fiber contract. Do not infer approval.
+Final fresh 12-brand rebuild, export audits, snapshot acceptance and clinical
+curation remain open. Prior 122 Flutter tests passed, but no fresh final bundle
+was produced. Candidate is NOT release-ready.
+
+Latest fetched observation: main 6767a383, origin/main 6c4a130e; before this
+receipt candidate a0eee3e5 has 160 main-only / 25 candidate-only commits.
+Other agents continue changing main. Combined state unverified; no integration,
+push or release. Preserve the active worktree and partial brand diagnostics.
+
+
+2026-09-26 approved fiber decisions, final implementation at 7cf610e1. Raw DSLD
+inspection established the section contract before code changed:
+`ingredientRows` is the active/Supplement Facts source;
+`otheringredients.ingredients` is the inactive source. Nutrition is a separate
+consumer of the same label ledger, not a second ingredient classifier. The
+typed `declared_active_fiber` projection exists only when `nutrition_summary`
+grams and source amount/unit join to the exact `raw_source_path` of a current
+active row whose cleaner-owned identity is scoreable canonical fiber and whose
+raw DSLD category is fiber. Title, unmatched totals, inactive/other rows and
+non-fiber rows cannot create the projection. Persisted projections are caches:
+the scoring boundary rejects them when the current exact join no longer exists.
+
+The exact `Konjac root extract` alias was removed from the proprietary PGX form;
+no replacement alias or clinical claim was added. PGX remains the documented
+glucomannan/xanthan-gum/sodium-alginate complex. Fresh raw results: DSLD
+178797, 270961, 277404, 305905, 67530 and fixture 228873 move from not_scored to
+scored at 52.0, 58.5, 47.7, 49.4, 61.9 and 60.5 through one mapped
+`declared_active_fiber` row. 252564 and 255063 move from held contradictory PGX
+identity to scoreable generic fiber at 63.0; 259395 remains 61.8 with identical
+pillars. Evidence credit remains zero where no applicable clinical record
+exists. Inactive ingredients supplied no scoring row in every probe.
+
+Nutrition export remains independent and complete: `build_final_db.py` emits
+`nutrition_detail` plus the canonical `display_ingredients` label ledger, and
+Flutter filters all nutrition label rows into its separate Nutrition Facts
+card. Real raw/export probes retained cholesterol, sugars, saturated/trans fat,
+sodium and nested rows as printed; the Flutter card regression passed 9 tests.
+
+Clean-HEAD replay against merge baseline dafdf860 captured the same 1,353 frozen
+inputs in both arms with zero score/status/route/distribution changes; those
+stored enriched inputs did not include the eight freshly re-enriched affected
+labels. Affected raw-label artifacts are
+`~/pg_quality/candd/runs/fiber_affected_{baseline_dafdf860,candidate_7cf610e1}.json`;
+replay artifacts are `fiber_{baseline_dafdf860,candidate_7cf610e1}.jsonl` and
+`fiber_report_7cf610e1.json` in the same directory.
+
+Fresh review found and then verified the fix for one P1 stale-native-evidence
+bypass. Owner removal, inactive ownership, source-path/amount/unit mismatch now
+reject persisted fiber evidence and yield not_scored; a valid updated dose
+replaces the stale row without duplication. Post-merge focused pipeline batch:
+92 passed; stale-evidence batch: 9 passed; IQM integrity batch: 22 passed.
+
+Owner: scripts/scoring_input_contract.py::_derive_declared_active_fiber_evidence
+and _product_scoring_evidence_rows — evidence: matrix concepts
+scoring_input_contract and mapping_coverage_contract plus fresh raw probes.
+Owner: scripts/scoring_v4/route_features.py::MATERIAL_FIBER_CANONICALS — evidence:
+matrix concept fiber_identity and imported canonical set.
+Owner: scripts/enrich_supplements_v3.py::_collect_nutrition_summary and
+scripts/build_final_db.py::build_detail_blob — evidence: exact source-path probe
+and Flutter canonical-ledger consumer.
+Will NOT create: another normalizer, fiber registry, title inference, inactive
+fallback, public/export field, status, verdict or app-side scoring rule.
+Commits: b42b5b39, a40880a9, 7cf610e1. Full fast and final fresh 12-brand
+acceptance remain pending; no push or release.
+
+Full fast checkpoint at tracked receipt head 7b055d5b: **16,527 passed,
+265 skipped, zero failures in 511.65 seconds**. Log:
+`~/pg_quality/candd/final_fast_7b055d5b.log`. The skip increase relative to the
+earlier checkpoint is explained by the current main test inventory and missing
+Node/local-review opt-ins listed in the report; it is not a failing gate.
+Final fresh 12-brand pipeline/export acceptance remains pending.
+
+## 2026-09-26: final raw-label and Nutrition Facts acceptance
+
+The fresh export first reproduced 35 `UNRESOLVED_SCORE_ACTIVE` failures. Raw
+inspection showed 34 nested `Insoluble Fiber` rows and one `Omega-9 Fatty Acid`
+row that the identity analysis had already classified as
+`excluded_nutrition_fact`, while the display ledger still called them scored
+ingredients. `SupplementEnricherV3._enrich_display_ingredients` now projects
+that exact path-owned decision as `display_type=nutrition_fact`,
+`score_included=false`, `display_disposition=label_context`. The strict export
+gate was not weakened. Commit: a54cca7b. Focused export/ledger batch: 491 passed.
+
+The same raw review found the cleaner summary allowed nested fiber and sugar
+children to overwrite their label totals. Product 241368 therefore reported
+3 g insoluble fiber instead of 8 g Dietary Fiber and 0 g Added Sugars instead
+of `<1 g` Total Sugars. `enhanced_normalizer._record_nutrition_fact` now applies
+label-semantic source precedence: Dietary/Total Fiber over generic fiber over
+soluble/insoluble, and Total Sugars over sugar over Added Sugars. Every raw row
+still remains in the canonical display ledger; only the aggregate summary owner
+changed. Commit: e8a0817e. Focused cleaner/scoring batch: 184 passed.
+
+Owner: `scripts/enrich_supplements_v3.py::_enrich_display_ingredients` —
+evidence: exact `raw_source_path` join to `ingredient_quality_analysis` and the
+35-product strict-export reproduction. Owner:
+`scripts/enhanced_normalizer.py::_record_nutrition_fact` /
+`_extract_nutritional_info` — evidence: raw 241368 parent/child hierarchy and
+red aggregate regressions. Owner:
+`scripts/build_final_db.py::_validate_active_count_reconciliation` — evidence:
+the unchanged strict gate now passes. Flutter consumer:
+`lib/features/product_detail/v2/sections/nutrition_section.dart` — evidence:
+canonical nutrition-ledger and `nutrition_detail` focused tests. Will NOT
+create: a second normalizer, nutrition registry, inactive/text inference,
+export field, app scoring rule or weaker reconciliation gate.
+
+Final fresh 12-brand raw -> clean -> enrich -> score replay at
+`~/pg_quality/candd/fresh12_final_e8a0817e` completed all 12 logs with zero error
+lines and 4,617 products at every stage. Status distribution is unchanged:
+4,021 scored, 562 not_scored, 34 suppressed_safety. Against the pre-summary-fix
+candidate, 163 nutrition summaries changed and 18 scores moved. Each movement
+was traced to raw JSON: six are corrected total Dietary Fiber doses; twelve are
+corrected Total Sugars values that nested Added Sugars had overwritten. Five
+fiber corrections cross POOR -> SAFE; one 5 g total-sugar correction crosses
+SAFE -> POOR. No scoring status distribution changed. Full delta artifact:
+`candidate_delta_report.json` in that run root.
+
+Strict export from the final enriched and scored artifacts completed with
+4,054 products, zero errors, zero contract failures and 563 expected review
+queue quarantines. `UNRESOLVED_SCORE_ACTIVE` is absent. Contract sync scanned
+all 4,054 detail blobs: zero required/optional RED fields, zero undeclared
+top-level/active/inactive keys. Products 270961 and 277404 export 4 g and 5 g
+Dietary Fiber as Nutrition Facts; 241368 exports 8 g Dietary Fiber and 1 g
+Total Sugars with its child rows retained; 282948 exports Omega-9 Fatty Acid as
+a Nutrition Fact. Core DB score/status rows agree with the scored artifacts.
+
+Final pipeline checkpoint at e8a0817e: `scripts/test.sh fast` passed **16,657**,
+skipped 137 and failed zero in 448.42 seconds. Flutter focused consumer sweep
+passed 70 tests across the Nutrition Facts card, canonical ledger and connected
+product detail. The app-wide `make test` completed 3,601 tests with seven
+unrelated screenshot/golden failures (nutrient progress, probiotic light/dark,
+unfinished-evidence hero and two reviewer screenshot cases); no nutrition
+contract test failed. Logs: `~/pg_quality/candd/final_fast_e8a0817e.log`,
+`flutter_nutrition_contract_e8a0817e.log`, and `flutter_make_test_e8a0817e.log`.
+This is a verified local candidate only: no merge, push, catalog promotion or
+release was performed.

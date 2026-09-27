@@ -744,3 +744,62 @@ def test_phase4_final_sweep_standardized_clinical_botanicals():
 
 
 
+
+
+def test_declared_nutrient_total_is_not_an_undisclosed_blend():
+    row = {'canonical_id': 'vitamin_b9_folate', 'name': 'Folate',
+           'quantity': 1333, 'unit': 'mcg DFE', 'is_parent_total': True,
+           'is_proprietary_blend': False}
+    result = er.resolve_evidence_for_row(row)
+    assert result.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+    row['is_proprietary_blend'] = True
+    assert er.resolve_evidence_for_row(row).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+
+
+def test_real_disclosed_extract_and_theanine_are_not_missing_or_blend():
+    import json
+    from scoring_input_contract import get_scoring_ingredients
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    rows = get_scoring_ingredients(product, strict=True).rows
+    for row in rows:
+        if row.get('raw_source_path') in {'ingredientRows[0]', 'ingredientRows[1]'}:
+            result = er.resolve_evidence_for_row(row, product)
+            assert result.applicability_status not in {'blend_header_undisclosed', 'dose_undisclosed'}
+            assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+
+
+@pytest.mark.parametrize('quantity,unit', [(200, 'mg'), (0.2, 'g'), (200000, 'mcg')])
+def test_resolver_uses_shared_daily_units_and_any_applicable_record(monkeypatch, quantity, unit):
+    studies = [
+        {'id': 'LOW', 'study_type': 'rct_multiple', 'min_clinical_dose': 400, 'dose_unit': 'mg'},
+        {'id': 'HIGH', 'study_type': 'rct_multiple', 'min_clinical_dose': 800, 'dose_unit': 'mg'},
+    ]
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'l_theanine': studies})
+    row = {'canonical_id': 'l_theanine', 'name': 'L-Theanine', 'quantity': quantity,
+           'unit': unit, 'raw_source_path': 'ingredientRows[0]'}
+    product = {'serving_basis': {'min_servings_per_day': 2, 'max_servings_per_day': 2},
+        'ingredient_quality_data': {'ingredients_scorable': [row,
+            dict(row, quantity=quantity * 10, raw_source_path='ingredientRows[1]')]}}
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    row['quantity'] = quantity / 10
+    assert er.resolve_evidence_for_row(row, product).applicability_status == 'sub_clinical_dose'
+    row['is_proprietary_blend'] = True
+    assert er.resolve_evidence_for_row(row, product).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+
+
+def test_literature_resolution_cannot_substitute_another_claimed_purpose(monkeypatch):
+    import json
+    from scoring_input_contract import get_scoring_ingredients
+    product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
+    row = next(r for r in get_scoring_ingredients(product, strict=True).rows if r.get('canonical_id') == 'l_theanine')
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {})
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'l_theanine': {
+        'verification_result': 'authoritative_pubmed_verified',
+        'verification_provenance': {'all_pmids_verified': True, 'retractions_found': False},
+        'effect_direction': 'positive_strong', 'primary_outcome': 'Improved bowel regularity',
+        'studied_dose_exposure': {'values': [100], 'unit': 'mg'},
+    }})
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.reason_code == 'label_purpose_evidence_mismatch'

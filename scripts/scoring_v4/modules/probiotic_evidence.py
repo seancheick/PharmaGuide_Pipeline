@@ -29,32 +29,8 @@ CAP_EVIDENCE = _EM["cap_evidence"]
 CAP_STRAIN_CLINICAL = _EM["cap_strain_clinical"]
 CAP_DOSE_APPLICABILITY = _EM["cap_dose_applicability"]
 
-INDICATION_KEYWORDS: Dict[str, Set[str]] = {
-    "digestive": {
-        "digestive", "digestion", "gut", "bowel", "regularity", "constipation",
-        "diarrhea", "ibs", "irritable", "bloating", "gastro", "colic", "gi",
-    },
-    "immune": {
-        "immune", "immunity", "respiratory", "cold", "allergy", "allergic",
-        "rhinitis", "eczema", "atopic",
-    },
-    "women": {
-        "women", "woman", "womens", "female", "vaginal", "urogenital",
-        "vaginosis", "bv", "urinary", "uti",
-    },
-    "prenatal": {
-        "prenatal", "pregnancy", "pregnant", "maternal", "postnatal",
-        "postpartum",
-    },
-    "infant": {
-        "infant", "infants", "baby", "babies", "pediatric", "children", "child", "kids",
-        "toddler", "toddlers", "preterm", "neonatal", "neonates",
-    },
-    "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
-    "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat"},
-    "mood": {"mood", "stress", "anxiety", "cognition", "psychobiotic", "sleep"},
-    "bone": {"bone", "density"},
-}
+from evidence_resolver import evidence_indication_categories as _categories_from_text
+
 
 POSITIONING_STATEMENT_TYPES = {
     "general statements all other content",
@@ -425,18 +401,6 @@ def _native_strain_key(strain: Dict[str, Any]) -> str:
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
     return _safe_dict(product.get("probiotic_data") or product.get("probiotic_detail"))
-
-
-def _categories_from_text(text: str) -> Set[str]:
-    normalized = _norm_text(text)
-    if not normalized:
-        return set()
-    categories: Set[str] = set()
-    words = set(normalized.split())
-    for category, keywords in INDICATION_KEYWORDS.items():
-        if words & keywords:
-            categories.add(category)
-    return categories
 
 
 def _norm_text(value: Any) -> str:

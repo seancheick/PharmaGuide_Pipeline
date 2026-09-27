@@ -3078,3 +3078,91 @@ class TestQualityMapPrecedence:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+@pytest.mark.parametrize("product_id", ["252564", "255063", "259395"])
+def test_named_fiber_source_is_not_reclassified_as_nutrition_rollup(enricher, product_id):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / "fixtures" /
+                      f"fiber_evidence_{product_id}_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = enricher.enrich_product(cleaned)
+    scored = build_scored_artifact(enriched)
+    rows = enriched["ingredient_quality_data"]["ingredients"]
+    named = next(row for row in rows if row["name"] in {"Konjac root extract", "Glucomannan"})
+    assert named.get("score_exclusion_reason") != "excluded_nutrition_fact"
+    assert named.get("canonical_id") == "fiber"
+    assert named.get("scoreable_identity") is True
+    assert named.get("recognized_entry_id") != "ADD_POLYDEXTROSE"
+    assert scored["quality_score_status"] == "scored"
+
+
+def test_plain_konjac_root_extract_is_not_the_pgx_proprietary_complex(enricher):
+    quality_map = enricher.databases["ingredient_quality_map"]
+    match = enricher._match_quality_map(
+        "Konjac root extract",
+        "Konjac root extract",
+        quality_map,
+        _form_extraction_attempt=True,
+    )
+    assert match is None or match.get("canonical_id") != "pgx_fiber"
+
+
+@pytest.mark.parametrize("name", ["Dietary Fiber", "Unidentified Source"])
+def test_generic_fiber_parent_cannot_rescue_unverified_or_panel_source(enricher, name):
+    row = {"name": name, "raw_source_text": name, "standardName": "Fiber",
+           "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
+           "quantity": 5, "unit": "g"}
+    assert enricher._should_skip_from_scoring(
+        row, enricher.databases["ingredient_quality_map"],
+        enricher.databases.get("botanical_ingredients", {}),
+    ) == SKIP_REASON_NUTRITION_FACT
+
+
+def test_excluded_nutrition_row_cannot_remain_scored_in_display_ledger(enricher):
+    source_path = "ingredientRows[3].nestedRows[0].nestedRows[1]"
+    enriched = {
+        "activeIngredients": [
+            {
+                "name": "Insoluble Fiber",
+                "raw_source_text": "Insoluble Fiber",
+                "raw_source_path": source_path,
+            }
+        ],
+        "inactiveIngredients": [],
+        "ingredient_quality_data": {
+            "ingredients": [
+                {
+                    "name": "Insoluble Fiber",
+                    "raw_source_text": "Insoluble Fiber",
+                    "raw_source_path": source_path,
+                    "role_classification": "inactive_non_scorable",
+                    "scoreable_identity": False,
+                    "score_exclusion_reason": "excluded_nutrition_fact",
+                }
+            ]
+        },
+        "display_ingredients": [
+            {
+                "raw_source_text": "Insoluble Fiber",
+                "raw_source_path": source_path,
+                "source_section": "activeIngredients",
+                "display_type": "mapped_ingredient",
+                "resolution_type": "direct_mapped",
+                "score_included": True,
+                "display_disposition": "scored",
+                "is_label_context": False,
+                "form_display_state": "not_disclosed",
+            }
+        ],
+    }
+
+    [row] = enricher._enrich_display_ingredients(enriched)
+
+    assert row["display_type"] == "nutrition_fact"
+    assert row["resolution_type"] == "display_only"
+    assert row["score_included"] is False
+    assert row["display_disposition"] == "label_context"
+    assert row["is_label_context"] is True
+    assert row["form_display_state"] == "not_applicable"

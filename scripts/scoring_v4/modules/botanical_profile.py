@@ -689,7 +689,18 @@ def _dosing_entry_for(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     index = _dosing_index()
     for key in _ingredient_identity_keys(row):
         if key in index:
-            return index[key]
+            entry = index[key]
+            forms = _forms_text(row)
+            if (
+                "extract" in _norm(entry.get("standard_name"))
+                and any(token in forms for token in _WHOLE_HERB_TOKENS)
+                and not any(token in forms for token in _EXTRACT_TOKENS)
+            ):
+                # Whole-herb mass is not the extract mass studied by this
+                # reference. Retain disclosure credit without inventing a
+                # concentration ratio or treating it as an ineffective dose.
+                continue
+            return entry
     return None
 
 
@@ -787,6 +798,12 @@ def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if rng is None:
         return {"score": BOTANICAL_DOSE_DISCLOSED_NO_REF, "band": "disclosed_no_reference", "metadata": {}}
 
+    from serving_frequency import resolve_daily_serving_range
+
+    # Adequacy uses the minimum directed daily exposure, as in the shared
+    # nutrient and omega contracts. The row amount is per serving.
+    servings_min, _, _ = resolve_daily_serving_range(product)
+    mass *= servings_min
     lo, hi = rng
     meta = {"dose_mg": mass, "range_mg": [lo, hi]}
     if lo <= mass <= hi:

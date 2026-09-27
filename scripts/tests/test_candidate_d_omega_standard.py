@@ -108,7 +108,7 @@ def test_unknown_frequency_records_default_without_inventing_a_range() -> None:
     assert payload["metadata"]["applicability_qualified"] is True
 
 
-def test_dose_scores_directed_interval_not_midpoint_dose() -> None:
+def test_dose_scores_minimum_and_retains_directed_interval() -> None:
     from scoring_v4.modules.omega_dose import score_dose
 
     payload = score_dose(_product(epa=900, dha=300, minimum=1, maximum=2))
@@ -116,7 +116,7 @@ def test_dose_scores_directed_interval_not_midpoint_dose() -> None:
     assert payload["metadata"]["per_day_min_mg"] == 1200.0
     assert payload["metadata"]["per_day_max_mg"] == 2400.0
     assert payload["metadata"]["interval_crosses_band"] is True
-    assert payload["score"] == pytest.approx(18.4)
+    assert payload["score"] == pytest.approx(16.8)
 
 
 def test_omega_registry_keeps_clinical_facts_not_scoring_magnitudes():

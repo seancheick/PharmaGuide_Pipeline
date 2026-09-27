@@ -256,7 +256,6 @@ _ENZYME_CANONICAL_IDS = frozenset({
     "digestive_enzymes", "pepsin",
     "protease", "amylase", "lipase", "bromelain", "papain",
     "lactase", "alpha_galactosidase", "pancreatin", "cellulase",
-    "lactase", "alpha_galactosidase", "pancreatin", "cellulase",
 })
 _SYSTEMIC_ENZYME_CANONICAL_IDS = frozenset({
     "nattokinase", "serrapeptase", "lumbrokinase",

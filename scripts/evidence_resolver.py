@@ -61,6 +61,51 @@ _HARMFUL_ADDITIVES_PATH = _DATA_DIR / "harmful_additives.json"
 _LITERATURE_EVIDENCE_PATH = _DATA_DIR / "literature_evidence_records.json"
 
 
+INDICATION_KEYWORDS: Dict[str, Set[str]] = {
+    "digestive": {
+        "digestive", "digestion", "gut", "bowel", "regularity", "constipation",
+        "diarrhea", "ibs", "irritable", "bloating", "gastro", "colic", "gi",
+    },
+    "immune": {
+        "immune", "immunity", "respiratory", "cold", "allergy", "allergic",
+        "rhinitis", "eczema", "atopic",
+    },
+    "women": {
+        "women", "woman", "womens", "female", "vaginal", "urogenital",
+        "vaginosis", "bv", "urinary", "uti",
+    },
+    "prenatal": {
+        "prenatal", "pregnancy", "pregnant", "maternal", "postnatal",
+        "postpartum",
+    },
+    "infant": {
+        "infant", "infants", "baby", "babies", "pediatric", "children", "child", "kids",
+        "toddler", "toddlers", "preterm", "neonatal", "neonates",
+    },
+    "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
+    "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat"},
+    "mood": {"mood", "stress", "anxiety", "cognition", "psychobiotic", "sleep",
+             "relax", "relaxation", "cortisol"},
+    "bone": {"bone", "density"},
+}
+
+def evidence_indication_categories(text: str) -> Set[str]:
+    """Shared label/clinical indication categories; never proof of efficacy."""
+    normalized = re.sub(r"[^a-z0-9]+", " ", str(text or "").lower())
+    # Physiological/physical stress is not psychological stress. This shared
+    # categorizer must not transfer antioxidant or manufacturing evidence to
+    # a mood claim merely because both contain the word "stress".
+    normalized = re.sub(r"\b(?:oxidative|cellular|mechanical|thermal|osmotic|endoplasmic reticulum) stress\b", " ", normalized)
+    words = set(normalized.split())
+    categories = {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
+    if "bone" in categories and "bone" not in words:
+        categories.discard("bone")  # density alone may describe a capsule
+    if "metabolic" in categories and not (words & (INDICATION_KEYWORDS["metabolic"] - {"fat"})):
+        if not re.search(r"\b(?:body|visceral) fat\b", normalized):
+            categories.discard("metabolic")
+    return categories
+
+
 class EvidenceDisposition(str, Enum):
     """Canonical Evidence disposition contract."""
     RESOLVED_BY_AUTHORITY = "resolved_by_authority"
@@ -462,6 +507,18 @@ def resolve_evidence_for_canonical(
     return resolve_evidence_for_row(row, product=None)
 
 
+def _reviewed_row_dose(row: Mapping[str, Any], product: Optional[Mapping[str, Any]], record: Mapping[str, Any]) -> Optional[float]:
+    """Use the scorer's unit/daily exposure owner, bounded to this exact row."""
+    from scoring_v4.modules.generic_evidence import _dose_map, _converted_product_dose
+    entry = dict(record)
+    entry["matched_canonical_id"] = row.get("canonical_id")
+    entry["ingredient"] = row.get("name") or row.get("canonical_id")
+    ref = row.get("raw_source_path") or row.get("source_row_ref")
+    entry["matched_source_row_refs"] = [ref] if ref else []
+    dose, _ = _converted_product_dose(entry, _dose_map(dict(product or {}), rows=[dict(row)]))
+    return dose
+
+
 def resolve_evidence_for_row(
     row: Mapping[str, Any],
     product: Optional[Mapping[str, Any]] = None,
@@ -555,7 +612,8 @@ def resolve_evidence_for_row(
             blocking_reasons=["silica_provenance_ambiguous"],
         )
 
-    if row_dict.get("is_proprietary_blend") or row_dict.get("is_parent_total"):
+    from scoring_input_contract import _role_is_blend_member
+    if _role_is_blend_member(row_dict):
         return EvidenceResolution(
             canonical_id=canonical,
             ingredient_name=name,
@@ -749,6 +807,18 @@ def resolve_evidence_for_row(
         matched_owners.append("backed_clinical_studies")
         # Check study types, effect directions, and applicability
         valid_studies = [s for s in deduped_studies if _norm(s.get("study_type")) != "reference"]
+        claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
+        if claimed_purposes:
+            valid_studies = [study for study in valid_studies if claimed_purposes & _evidence_entry_purposes(study)]
+            if not valid_studies:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
+                    blocking_reasons=["label_purpose_evidence_mismatch"],
+                )
         owner_facts["backed_clinical_studies"] = {
             "study_count": len(valid_studies),
             "study_types": list({s.get("study_type") for s in valid_studies}),
@@ -757,20 +827,27 @@ def resolve_evidence_for_row(
         }
 
         # Check applicability: dose and form exclusions
-        dose_val = _as_float(row_dict.get("amount") or row_dict.get("dose_value"))
         form_val = _canonical_text(matched_form)
-
-        is_form_excluded = False
-        is_sub_clinical = False
-
-        for s in valid_studies:
-            excluded_forms = [_canonical_text(f) for f in s.get("exclude_aliases", [])]
-            if form_val and any(ef in form_val for ef in excluded_forms):
-                is_form_excluded = True
-
-            min_dose = _as_float(s.get("min_clinical_dose"))
-            if min_dose is not None and dose_val is not None and dose_val < min_dose:
-                is_sub_clinical = True
+        record_states = []
+        for study in valid_studies:
+            excluded_forms = [_canonical_text(f) for f in study.get("exclude_aliases", [])]
+            if form_val and any(ef and ef in form_val for ef in excluded_forms):
+                record_states.append("form_mismatch")
+                continue
+            dose = _reviewed_row_dose(row_dict, product, study)
+            minimum = _as_float(study.get("min_clinical_dose"))
+            if dose is None and product is not None:
+                record_states.append("dose_undisclosed")
+            elif minimum is not None and dose is not None and dose < minimum:
+                record_states.append("sub_clinical_dose")
+            else:
+                record_states.append("applicable")
+        # A second record's higher dose or different form cannot veto an
+        # applicable record. The scorer assesses each clinical record too.
+        has_applicable = "applicable" in record_states
+        is_form_excluded = bool(record_states) and all(state == "form_mismatch" for state in record_states)
+        is_sub_clinical = not has_applicable and "sub_clinical_dose" in record_states
+        dose_missing = not has_applicable and not is_sub_clinical
 
         if is_form_excluded:
             blocking_reasons.append("form_mismatch_with_clinical_trials")
@@ -786,7 +863,7 @@ def resolve_evidence_for_row(
                 blocking_reasons=blocking_reasons,
             )
 
-        if dose_val is None and product is not None:
+        if dose_missing and product is not None:
             return EvidenceResolution(
                 canonical_id=canonical,
                 ingredient_name=name,
@@ -1003,9 +1080,22 @@ def resolve_evidence_for_row(
                     blocking_reasons=blocking_reasons,
                 )
 
+        claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
+        if claimed_purposes and not (claimed_purposes & _evidence_entry_purposes(lit_entry)):
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
+                blocking_reasons=["label_purpose_evidence_mismatch"],
+            )
+
         # Check dose applicability against studied exposure
-        dose_val = _as_float(row_dict.get("amount") or row_dict.get("dose_value"))
         studied_dose = lit_entry.get("studied_dose_exposure")
+        dose_record = dict(lit_entry)
+        if isinstance(studied_dose, dict):
+            dose_record["dose_unit"] = studied_dose.get("unit") or lit_entry.get("dose_unit") or "mg"
+        dose_val = _reviewed_row_dose(row_dict, product, dose_record)
         if isinstance(studied_dose, dict):
             min_dose = min(studied_dose.get("values", [])) if studied_dose.get("values") else None
         elif isinstance(studied_dose, list) and studied_dose:
@@ -1135,6 +1225,27 @@ def evidence_owner_canonicals(
         for row in rows
         if str(row.get("canonical_id") or "").strip()
     }
+
+
+def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] = None) -> Dict[str, Set[str]]:
+    """Read explicit-purpose provenance from the existing role result."""
+    from scoring_input_contract import classify_ingredient_roles
+    purposes: Dict[str, Set[str]] = {}
+    for role in classify_ingredient_roles(dict(product), module=module):
+        reason = str(role.get("role_reason") or "")
+        if reason.startswith("named_in_label_function_claim:"):
+            purposes.setdefault(str(role["canonical_id"]), set()).update(reason.split(":", 1)[1].split(","))
+    return purposes
+
+
+def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
+    """Only stated endpoints/goals describe the record's supported purpose."""
+    parts = [str(entry.get("primary_outcome") or "")]
+    for key in ("health_goals_supported", "endpoint_relevance_tags", "key_endpoints"):
+        values = entry.get(key)
+        if isinstance(values, list):
+            parts.extend(str(value) for value in values)
+    return evidence_indication_categories(" ".join(parts))
 
 
 def resolve_product_evidence(
