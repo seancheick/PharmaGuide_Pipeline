@@ -123,7 +123,11 @@ def test_every_shipped_override_is_documented_and_every_unspecified_form_is_at_o
     assert sorted(overrides) == sorted([
         'magnesium', 'zinc', 'iron', 'vitamin_a', 'beta_carotene', 'bacillus_subtilis',
         'phosphatidylcholine', 'rhodiola', 'ginkgo', 'msm', 'phosphatidylserine',
-        'acetyl_l_carnitine', 'creatine_monohydrate', 'vanadyl_sulfate', 'capsaicin'])
+        'acetyl_l_carnitine', 'creatine_monohydrate', 'vanadyl_sulfate', 'capsaicin',
+        # These label-identity forms have no reviewed absorption premium over
+        # their parent baseline. The override prevents disclosure alone from
+        # manufacturing a quality advantage.
+        'nickel', 'tin', 'yohimbe'])
 
 
 def test_the_integrity_gate_rejects_an_undocumented_value_above_the_floor():
@@ -209,6 +213,47 @@ def test_a_compound_filed_under_another_parent_reads_as_this_parents_counter_ion
                                         cleaned_forms=[{'name': token}], cleaner_canonical_id=parent)
     assert (match['canonical_id'], match['form_id']) == (parent, form)
     assert not match.get('unmapped_forms')
+
+
+@pytest.mark.parametrize('parent, label, token, form', [
+    ('l_arginine', 'Arginine AKG', 'L-Arginine-Alpha-Ketoglutarate', 'l-arginine akG'),
+    ('nickel', 'Nickel', 'Nickel Sulfate', 'nickel sulfate'),
+    ('tin', 'Tin', 'Stannous Chloride', 'stannous chloride'),
+    ('silicon', 'Silicon', 'Silicon Dioxide', 'silicon dioxide (as silicon source)'),
+    ('vanadium', 'Vanadium', 'Bis-Glycinato OxoVanadium', 'bis-glycinato oxovanadium'),
+    ('yohimbe', 'Yohimbe Bark Extract', 'Yohimbine Alkaloids',
+     'yohimbe extract standardized to yohimbine alkaloids'),
+])
+def test_real_dsld_disclosures_reach_their_reviewed_parent_scoped_form(
+        enricher, parent, label, token, form):
+    """Frozen scoring labels stay held until each disclosed form is curated."""
+    match = enricher._match_quality_map(
+        label,
+        label,
+        enricher.databases['ingredient_quality_map'],
+        cleaned_forms=[{'name': token}],
+        cleaner_canonical_id=parent,
+    )
+    assert (match['canonical_id'], match['form_id']) == (parent, form)
+    assert match.get('form_match_status') != 'unmapped'
+    assert not match.get('unmapped_forms')
+
+
+def test_generic_tocopherol_is_curated_without_claiming_a_specific_isomer(enricher):
+    match = enricher._match_quality_map(
+        'Vitamin E',
+        'Vitamin E',
+        enricher.databases['ingredient_quality_map'],
+        cleaned_forms=[
+            {'name': 'D-Alpha-Tocopherol Succinate'},
+            {'name': 'Tocopherol'},
+        ],
+        cleaner_canonical_id='vitamin_e',
+    )
+    assert match['canonical_id'] == 'vitamin_e'
+    assert match['form_id'] == 'd-alpha-tocopheryl succinate'
+    assert match.get('unmapped_forms') == []
+    assert match['final_form_bio_score'] < 10
 
 
 def test_a_disclosed_form_the_iqm_lacks_is_unmapped_and_held(enricher):

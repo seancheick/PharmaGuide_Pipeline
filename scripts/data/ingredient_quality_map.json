@@ -32,8 +32,8 @@
     },
     "statistics": {
       "total_parents": 655,
-      "total_forms": 1449,
-      "total_form_aliases": 12124,
+      "total_forms": 1454,
+      "total_form_aliases": 12132,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -6955,7 +6955,8 @@
           "natural vitamin e supplement",
           "vitamin e natural supplement",
           "vitamin e acetate",
-          "Tocopheryl Acetate"
+          "Tocopheryl Acetate",
+          "Tocopherol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14060,12 +14061,10 @@
         },
         "notes": "Generic vanadium listing without specifying the salt form. Most supplements use vanadyl sulfate, but the form matters significantly for bioavailability. Conservative score applied. B25 audit 2026-04-25: V class baseline (PMID:23982218).",
         "aliases": [
-          "bis-glycinato oxovanadium",
           "vanadium amino acid chelate",
           "vanadium glycinate",
           "Vanadium Nicotinate Glycinate Chelate",
           "Vanadium Krebs Cycle Chelates",
-          "Bis-Glycinato Oxo Vanadium",
           "vanadyl",
           "vanadyl supplement"
         ],
@@ -19983,7 +19982,8 @@
           "arginine alpha-keto-glutarate",
           "immediate release l-arginine alpha-keto-glutarate",
           "sustained release l-arginine alpha-keto-glutarate",
-          "sustained release from l-arginine alpha-keto-glutarate"
+          "sustained release from l-arginine alpha-keto-glutarate",
+          "L-Arginine-Alpha-Ketoglutarate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -44502,6 +44502,24 @@
           "range_high": 0.75,
           "quality": "good"
         }
+      },
+      "silicon dioxide (as silicon source)": {
+        "bio_score": 8,
+        "absorption": "unknown",
+        "absorption_structured": {
+          "value": 0.35,
+          "range_low": 0.27,
+          "range_high": 0.44,
+          "quality": "moderate"
+        },
+        "consumer_note": "Silicon dioxide is the silicon source named on this label. It is the same chemical identity owned by the silica record and is represented here only as a Silicon source form.",
+        "consumer_note_review": {
+          "by": "DSLD form closure audit 2026-09-27",
+          "date": "2026-09-27"
+        },
+        "notes": "DSLD label 12012 declares Silicon as Silicon Dioxide (UNII ETJ7Z6XBU4). The silica owner supplies the chemistry and quality value; this parent-scoped source form lets the Silicon nutrient row preserve that disclosure.",
+        "dosage_importance": 1.0,
+        "aliases": []
       }
     },
     "match_rules": {
@@ -63927,7 +63945,29 @@
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
+        },
+        "unknown_floor": {
+          "override": true,
+          "rationale": "Yohimbine standardization identifies assay content, not a proven absorption advantage; the standardized and undisclosed extracts retain the same conservative class value.",
+          "reviewed_by": "DSLD form closure audit 2026-09-27",
+          "reviewed_on": "2026-09-27"
         }
+      },
+      "yohimbe extract standardized to yohimbine alkaloids": {
+        "bio_score": 5,
+        "absorption": "unknown (standardization identifies alkaloid content, not a proven delivery advantage)",
+        "consumer_note": "This yohimbe extract declares its yohimbine alkaloid standardization. Standardization identifies content and does not by itself establish better absorption or clinical benefit.",
+        "consumer_note_review": {
+          "by": "DSLD form closure audit 2026-09-27",
+          "date": "2026-09-27"
+        },
+        "notes": "DSLD label 270831 declares Yohimbe Bark Extract standardized to 2% Yohimbine Alkaloids. Curated as a parent-scoped standardized extract form; existing yohimbe safety rules remain authoritative and no plain-yohimbine efficacy evidence is transferred.",
+        "aliases": [
+          "Yohimbine Alkaloids",
+          "yohimbe extract 2% yohimbine alkaloids",
+          "yohimbe standardized to yohimbine"
+        ],
+        "dosage_importance": 1.5
       }
     },
     "standard_name": "Yohimbe",
@@ -68090,6 +68130,28 @@
           "range_high": 0.105,
           "quality": "poor"
         }
+      },
+      "bis-glycinato oxovanadium": {
+        "bio_score": 7,
+        "absorption": "very low (vanadium class baseline; glycinato carrier advantage unsupported)",
+        "absorption_structured": {
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.03,
+          "quality": "low"
+        },
+        "consumer_note": "Bis-glycinato oxovanadium is a chelated oxovanadium compound. The label identifies the compound, but current evidence does not establish a supplement absorption advantage over the reviewed vanadium class baseline.",
+        "consumer_note_review": {
+          "by": "DSLD form closure audit 2026-09-27",
+          "date": "2026-09-27"
+        },
+        "notes": "DSLD label 182730 declares Vanadium as Bis-Glycinato OxoVanadium. This compound was previously misplaced as an alias of vanadyl sulfate despite containing no sulfate. It retains the reviewed vanadium class-equivalence score without an invented chelate premium.",
+        "aliases": [
+          "Bis-Glycinato OxoVanadium",
+          "Bis-Glycinato Oxo Vanadium",
+          "bis glycinato oxovanadium"
+        ],
+        "dosage_importance": 1.5
       }
     },
     "cui": "C0042306",
@@ -71576,6 +71638,32 @@
         "aliases": [
           "Nickel",
           "Ni"
+        ],
+        "unknown_floor": {
+          "override": true,
+          "rationale": "Nickel sulfate has no reviewed form-specific supplement absorption advantage; disclosed and undisclosed nickel retain the same conservative ultratrace baseline.",
+          "reviewed_by": "DSLD form closure audit 2026-09-27",
+          "reviewed_on": "2026-09-27"
+        }
+      },
+      "nickel sulfate": {
+        "bio_score": 7.0,
+        "absorption": "moderate (parent baseline; no form-specific supplement advantage established)",
+        "absorption_structured": {
+          "quality": "moderate",
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6
+        },
+        "consumer_note": "Nickel sulfate is the nickel salt named on this label. The form is identified for label accuracy; no nickel daily requirement or form-specific supplement benefit is established.",
+        "consumer_note_review": {
+          "by": "DSLD form closure audit 2026-09-27",
+          "date": "2026-09-27"
+        },
+        "notes": "DSLD label 12012 explicitly declares Nickel as Nickel Sulfate. Curated as an exact parent-scoped form without a bioavailability premium over the existing nickel baseline.",
+        "dosage_importance": 0.5,
+        "aliases": [
+          "Nickel Sulfate"
         ]
       }
     },
@@ -71634,6 +71722,32 @@
         "aliases": [
           "Tin",
           "Sn"
+        ],
+        "unknown_floor": {
+          "override": true,
+          "rationale": "Stannous chloride has no reviewed form-specific supplement absorption advantage; disclosed and undisclosed tin retain the same conservative ultratrace baseline.",
+          "reviewed_by": "DSLD form closure audit 2026-09-27",
+          "reviewed_on": "2026-09-27"
+        }
+      },
+      "stannous chloride": {
+        "bio_score": 7.0,
+        "absorption": "moderate (parent baseline; no form-specific supplement advantage established)",
+        "absorption_structured": {
+          "quality": "moderate",
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6
+        },
+        "consumer_note": "Stannous chloride is the tin salt named on this label. The form is identified for label accuracy; no tin daily requirement or form-specific supplement benefit is established.",
+        "consumer_note_review": {
+          "by": "DSLD form closure audit 2026-09-27",
+          "date": "2026-09-27"
+        },
+        "notes": "DSLD label 12012 explicitly declares Tin as Stannous Chloride. Curated as an exact parent-scoped form without a bioavailability premium over the existing tin baseline.",
+        "dosage_importance": 0.5,
+        "aliases": [
+          "Stannous Chloride"
         ]
       }
     },
