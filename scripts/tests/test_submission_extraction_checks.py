@@ -149,3 +149,73 @@ def test_a_catalog_hit_is_offered_as_a_candidate_not_a_disposition() -> None:
     assert "compare" in detail and "not proof" in detail
     # Nothing here may resolve the submission or name an identity for it.
     assert "duplicate" not in detail
+
+
+# --------------------------------------------------- transcription conventions
+#
+# Each case is a failure a reviewer actually sent back (S16, 2026-09-21). These
+# are findings about how a reading was written down, not about the label, so a
+# reader fixes them before submitting rather than recording them as evidence.
+
+from submission_review.extraction.checks import (  # noqa: E402
+    CONVENTION_CODES, convention_findings,
+)
+
+
+def _row(name, **overrides):
+    row = {
+        "display_name": _f(name), "amount": None, "percent_dv": None,
+        "form_text": None, "parent_index": None, "is_blend_header": False,
+        "status": "read",
+    }
+    row.update(overrides)
+    return row
+
+
+def test_a_printed_as_form_must_be_split_out() -> None:
+    draft = _draft(ingredient_rows=[
+        _row("Vitamin C (as ascorbic acid)",
+             amount=_f({"value": 1000, "unit_text": "mg"})),
+    ])
+
+    findings = convention_findings(draft)
+    assert _codes(findings) == ["form_not_split"]
+    assert "ingredient_rows[0]" in findings[0]["detail"]
+
+
+def test_a_split_form_and_a_botanical_latin_name_are_clean() -> None:
+    draft = _draft(ingredient_rows=[
+        _row("Vitamin C (as ascorbic acid)", form_text=_f("ascorbic acid")),
+        # A Latin binomial in parentheses is identity, not a form.
+        _row("Dried Rose Hips (Rosa canina)"),
+    ])
+
+    assert convention_findings(draft) == []
+
+
+def test_a_form_is_never_a_child_row_of_an_ordinary_row() -> None:
+    draft = _draft(ingredient_rows=[
+        _row("Vitamin D3"),
+        _row("Cholecalciferol", parent_index=0),
+        _row("Herbal Blend", is_blend_header=True),
+        _row("Ginger", parent_index=2),
+    ])
+
+    findings = convention_findings(draft)
+    assert _codes(findings) == ["form_as_child_row"]
+    assert "ingredient_rows[1]" in findings[0]["detail"]
+
+
+def test_a_percent_daily_value_is_not_an_amount() -> None:
+    draft = _draft(ingredient_rows=[
+        _row("Vitamin C", amount=_f({"value": 1111, "unit_text": "%"})),
+    ])
+
+    assert _codes(convention_findings(draft)) == ["percent_as_amount"]
+
+
+def test_convention_codes_are_their_own_vocabulary() -> None:
+    # Recording one as a draft discrepancy needs the edge function's mirror
+    # (schema.ts DRAFT_DISCREPANCY_CODES) changed and deployed first.
+    assert not CONVENTION_CODES & DISCREPANCY_CODES
+    assert convention_findings(_draft()) == []
