@@ -1284,3 +1284,30 @@ def test_iqm_licorice_bp_floors_cite_the_100_mg_glycyrrhizic_acid_trial():
         assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
         assert floor["source"] == LICORICE_FLOOR_SOURCE, target
         assert floor["confidence_basis"] == "documented_effective_dose", target
+
+
+def test_green_tea_liver_warning_treats_800_mg_as_an_observed_risk_dose_not_a_safe_limit():
+    """Sean, 2026-09-26 (Q24). EFSA 2018 (PMID 32625874, PMC7009618): >= 800 mg
+    EGCG/day as a supplement raised serum transaminases in trials, and "it was not
+    possible to identify an EGCG dose from green tea extracts that could be
+    considered safe". USP 2020 (PMID 32140423): case reports span 140 to ~1000 mg
+    EGCG/day with large individual variability; its monograph label says not to use
+    with a liver problem. So below 800 mg is not safe and an unknown amount is not
+    assumed >= 800 mg: the liver warning is avoid at any amount, and 800 mg only
+    adds dose-specific copy."""
+    rule = _rule("RULE_IQM_GREEN_TEA_HYPERTENSION")
+    liver = _sub_rule(rule, "condition_id", "liver_disease")
+    [tier] = [t for t in rule["dose_thresholds"] if t.get("target_id") == "liver_disease"]
+
+    assert liver["severity"] == "avoid" and liver["materiality"] == "presence"
+    assert tier["severity_if_met"] == tier["severity_if_not_met"] == "avoid"
+    assert tier["profile_gate"]["dose"]["severity_if_not_met"] == "avoid"
+    assert tier["consumer_disposition_if_not_met"] == "block"
+    assert tier["amount_missing_disposition"] == "block"
+    assert "not a safe" in tier["note"] and "800" in tier["alert_body_if_met"]
+    assert _pmid("32625874") in liver["sources"] and _pmid("32140423") in liver["sources"]
+    copy = json.dumps(liver)
+    for stale in ("saturates first-pass elimination", "lowers the threshold for injury",
+                  "400 mg/dose", "hepatotoxicity threshold"):
+        assert stale not in copy + tier["note"], stale
+    assert "800" not in liver["alert_body"]  # the unknown/lower-amount copy claims no dose

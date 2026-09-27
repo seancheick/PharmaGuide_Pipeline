@@ -189,7 +189,8 @@
       "2026-09-26: RULE_INGREDIENT_GINSENG. The anticoagulants threshold note cited PMID 22137021, a gastric-cancer radiotherapy study (ghost); it now cites Yuan 2004 (PMID 15238367, American ginseng lowered INR and warfarin exposure) and calls >1000 mg/day the authored threshold (commit 7a6ce5b4). Six 200 mg/day floors cited PMID 35509826, a metabolic meta-analysis with no dose-response, under a copied blood-pressure rationale. Glucose floors (diabetes, three hypoglycemic classes) now cite Sotaniemi 1995 (PMID 8721940): 100 mg/day lowered fasting glucose, so the floor is 100 mg. Surgery and anticoagulants floors are removed (Sean, D8): no human source gives a dose for a ginseng bleeding or warfarin effect, and Korean red ginseng 1 g and 1.5 g were null (PMIDs 19913311, 23596810). Those two now fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES glucose floors (diabetes and three hypoglycemic classes) were 1000 mg/day, labelled weak_signal_conservative and cited to a general review (PMID 35800714) that gives no dose. They now cite the documented dose, Kianbakht 2013 (PMID 24273930): leaf extract 500 mg every 8 hours (1500 mg/day) lowered fasting glucose, 2-hour glucose and HbA1c on top of oral antidiabetics. Floor 1000 -> 1500 mg/day (the trial dose; Sean 2026-09-26: use the dose a study documents, never an invented one). Severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_BOTANICAL_LICORICE_ROOT antihypertensives 100 mg/day floor cited PMID 393503, two women on 273-546 mg glycyrrhizin daily, which never mentions 100 mg (confidence_basis inferred_from_dose_range). It now cites af Geijerstam 2024 (PMID 38246526): licorice with 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg in a randomized crossover trial. Value unchanged; confidence_basis documented_effective_dose; the rationale states the floor is compared with the label licorice amount. Receipt: scripts/audits/pending_items_20260926/research.md.",
-      "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md."
+      "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_IQM_GREEN_TEA_HYPERTENSION liver_disease (Sean, Q24): 800 mg EGCG/day is an observed risk dose, not a safe limit. The tier no longer lowers the warning to monitor (and hidden) below 800 mg; it stays avoid at any amount, including an unstated one, and >= 800 mg adds dose-specific copy. Sources now EFSA 2018 (PMID 32625874: >= 800 mg raised transaminases; no safe dose identified), USP 2020 (PMID 32140423) and LiverTox NBK547925. Removed unsourced copy: first-pass 'saturation' at 800 mg, liver disease 'lowers the threshold for injury', and a '>= 400 mg/dose' cut-off. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interaction_rules": [
@@ -5016,14 +5017,16 @@
           "condition_id": "liver_disease",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "EGCG (epigallocatechin gallate), the principal catechin in green tea extract, undergoes hepatic first-pass metabolism. At supplemental doses (\u2265800 mg EGCG/day), EGCG saturates first-pass elimination and reaches hepatotoxic concentrations, inducing mitochondrial oxidative stress, hepatocellular pattern of liver injury, and transaminase elevations. The United States Pharmacopeia 2020 comprehensive review confirmed dose-dependent hepatocellular toxicity with adverse events reported from 140 mg to ~1,000 mg EGCG/day. Pre-existing liver disease impairs EGCG clearance and lowers the threshold for injury.",
-          "action": "Avoid concentrated green tea extract supplements (standardized EGCG \u2265400 mg/dose) in patients with liver disease. Brewed green tea is not implicated. Recommend liver function monitoring if use cannot be avoided.",
+          "mechanism": "Green tea extract has been implicated in clinically apparent acute liver injury, including acute liver failure (LiverTox). Case reports associate liver injury with EGCG intakes from about 140 to 1,000 mg/day, with substantial variation in individual susceptibility (USP 2020 review). In trials, supplemental EGCG at or above 800 mg/day raised serum transaminases, and EFSA could not identify an EGCG dose from green tea extracts that could be considered safe (EFSA 2018). Traditionally brewed green tea is generally considered safe.",
+          "action": "Avoid concentrated green tea extract supplements if you have liver disease; USP's green tea extract monograph label says not to use them with a liver problem. No safe EGCG amount has been established, so a lower or unstated amount does not remove the concern. If a clinician recommends use, take it with food and monitor liver function.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/32625874/",
             "https://pubmed.ncbi.nlm.nih.gov/32140423/",
+            "https://www.ncbi.nlm.nih.gov/books/NBK547925/",
             "https://pubmed.ncbi.nlm.nih.gov/36178169/"
           ],
           "alert_headline": "Green tea extract may injure the liver",
-          "alert_body": "Concentrated green tea extract has been linked to rare but serious liver injury. If you have liver disease, avoid concentrated extract supplements unless your clinician recommends them.",
+          "alert_body": "Concentrated green tea extract has caused rare but serious liver injury, and no safe EGCG amount is known. If you have liver disease, avoid these supplements unless your clinician recommends them.",
           "informational_note": "Concentrated green tea extract has liver safety signals relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5148,8 +5151,8 @@
           "value": 800,
           "unit": "mg EGCG",
           "severity_if_met": "avoid",
-          "severity_if_not_met": "monitor",
-          "note": "EGCG hepatotoxicity threshold; at \u2265800 mg EGCG/day first-pass saturation produces hepatocellular injury per USP 2020 review. Brewed green tea not implicated.",
+          "severity_if_not_met": "avoid",
+          "note": "800 mg EGCG/day is an observed risk dose, not a safe limit: it is the supplemental intake at or above which EFSA 2018 found a statistically significant rise in serum transaminases in trials, and EFSA could not identify a safe EGCG dose from green tea extracts. At or above it the warning adds dose-specific copy; below it or with no stated EGCG the warning stays at avoid. https://pubmed.ncbi.nlm.nih.gov/32625874/",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -5172,9 +5175,13 @@
               "value": 800,
               "unit": "mg EGCG",
               "severity_if_met": "avoid",
-              "severity_if_not_met": "monitor"
+              "severity_if_not_met": "avoid"
             }
-          }
+          },
+          "consumer_disposition_if_met": "block",
+          "consumer_disposition_if_not_met": "block",
+          "amount_missing_disposition": "block",
+          "alert_body_if_met": "This product provides 800 mg or more of EGCG a day, the supplemental intake EFSA linked to raised liver enzymes in trials. If you have liver disease, do not use it unless your clinician recommends it."
         }
       ]
     },
