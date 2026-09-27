@@ -19101,6 +19101,20 @@ class SupplementEnricherV3:
         highest_weight = -1.0
         highest_severity: Optional[str] = None
 
+        # A label row's banned/recalled safety matches are subjects too: a row
+        # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
+        # still meets the rules authored on its safety record.
+        safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
+        for section_key in ("activeIngredients", "inactiveIngredients"):
+            for label_row in enriched.get(section_key) or []:
+                if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
+                    continue
+                for flag in label_row.get("safety_flags") or []:
+                    if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
+                        safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
+                            (self._normalize_interaction_db_key(flag["source_db"]), str(flag["entry_id"]))
+                        )
+
         all_ingredient_rows: List[Tuple[str, Dict]] = []
         for row in ingredients:
             if isinstance(row, dict):
@@ -19132,7 +19146,11 @@ class SupplementEnricherV3:
             # -> garlic); each rule's own form_scope still decides.
             matched_rules = []
             seen_rule_ids: set = set()
-            for subject_ref in interaction_subject_refs(subject["db"], subject["canonical_id"]):
+            safety_refs = (
+                safety_subjects_by_path.get(ingredient.get("raw_source_path"), [])
+                if source_bucket != "derived_marker" else []
+            )
+            for subject_ref in [*interaction_subject_refs(subject["db"], subject["canonical_id"]), *safety_refs]:
                 for candidate in rule_index.get(subject_ref, []):
                     if id(candidate) not in seen_rule_ids:
                         seen_rule_ids.add(id(candidate))

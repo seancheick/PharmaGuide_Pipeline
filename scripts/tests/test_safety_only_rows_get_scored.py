@@ -77,3 +77,21 @@ def test_an_inactive_excipient_keeps_its_additive_record(pipeline):
     enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
     hits = enriched["contaminant_data"]["harmful_additives"]["additives"]
     assert "ADD_CALCIUM_SILICATE" in {hit["additive_id"] for hit in hits}
+
+
+@pytest.mark.parametrize(
+    "pid,rule_id",
+    [
+        (241706, "RULE_BANNED_7KETO_DHEA_PREGNANCY"),
+        (307546, "RULE_BANNED_7KETO_DHEA_PREGNANCY"),
+        (182627, "RULE_BANNED_BITTER_ORANGE_HYPERTENSION"),
+    ],
+)
+def test_a_row_answers_to_the_rules_of_its_safety_match(pipeline, pid, rule_id):
+    """A row with an IQM identity and a safety match meets the interaction
+    rules authored on the safety record, not only those on its IQM identity."""
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / f"safety_only_row_{pid}_raw.json").read_text())
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    fired = {alert["rule_id"] for alert in enriched["interaction_profile"]["ingredient_alerts"]}
+    assert rule_id in fired
