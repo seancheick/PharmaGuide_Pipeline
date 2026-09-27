@@ -231,3 +231,48 @@ def test_report_names_an_aggregation_change_over_unchanged_inputs(tmp_path):
     report = replay.build_report(base, [('a', cand)])['arms']['a']
     assert report['largest_increases'][0]['reasons'][0]['causes'] == ['formula']
     assert report['unexplained_material_changes'] == 0
+
+
+def raw_corpus(tmp_path, labels):
+    root = tmp_path / 'raw'
+    for brand, label in labels:
+        (root / brand).mkdir(parents=True, exist_ok=True)
+        (root / brand / f"{label['id']}.json").write_text(json.dumps(label))
+    return root
+
+
+def test_freeze_raw_finds_labels_by_id_and_rejects_ambiguity(tmp_path):
+    root = raw_corpus(tmp_path, [('A', {'id': 1}), ('B', {'id': 2}), ('B', {'id': 3})])
+    spec = replay.freeze_raw(root, [2, 1], tmp_path / 'frozen', tmp_path / 'manifest.json')
+    assert spec['product_count'] == 2
+    assert [f['path'] for f in spec['files']] == ['A/1.json', 'B/2.json']
+    assert {f['kind'] for f in spec['files']} == {'raw'}
+    assert [p['id'] for _, _, p in replay.inputs(tmp_path / 'frozen', tmp_path / 'manifest.json')] == [1, 2]
+    with pytest.raises(ValueError, match='missing'):
+        replay.freeze_raw(root, [9], tmp_path / 'f2', tmp_path / 'm2.json')
+    (root / 'C').mkdir()
+    (root / 'C' / '1.json').write_text(json.dumps({'id': 1}))
+    with pytest.raises(ValueError, match='found twice'):
+        replay.freeze_raw(root, [1], tmp_path / 'f3', tmp_path / 'm3.json')
+
+
+@pytest.mark.parametrize('workers', [1, 2])
+def test_raw_snapshot_runs_clean_enrich_score_from_the_checkout(tmp_path, workers):
+    root = raw_corpus(tmp_path, [('A', {'id': 1, 'fullName': 'One'}), ('A', {'id': 2, 'fullName': 'Two'})])
+    frozen, manifest = tmp_path / 'frozen', tmp_path / 'manifest.json'
+    replay.freeze_raw(root, [1, 2], frozen, manifest)
+    scripts = tmp_path / 'checkout' / 'scripts'
+    scripts.mkdir(parents=True)
+    (scripts / 'enhanced_normalizer.py').write_text(
+        'class EnhancedDSLDNormalizer:\n    def normalize_product(self, label):\n        return {**label, "cleaned": True}\n')
+    (scripts / 'enrich_supplements_v3.py').write_text(
+        'class SupplementEnricherV3:\n    def enrich_product(self, product):\n        return {**product, "enriched": True}, {}\n')
+    (scripts / 'score_supplements_v4.py').write_text(
+        'def score_product_v4(product):\n    assert product["cleaned"] and product["enriched"]\n'
+        '    return {"quality_score_status": "scored", "quality_score_v4_100": 50.0, "v4_module": "fixture"}\n')
+    import subprocess, sys
+    out = tmp_path / 'out.jsonl'
+    proc = subprocess.run([sys.executable, replay.__file__, '_worker', '--checkout', str(scripts.parent), '--products-root', str(frozen), '--manifest', str(manifest), '--out', str(out), '--workers', str(workers)], capture_output=True, text=True)
+    assert proc.returncode == 0, proc.stderr
+    rows = [json.loads(line) for line in out.read_text().splitlines()]
+    assert [(r['id'], r['name'], r['total'], r['route']) for r in rows] == [('1', 'One', 50.0, 'fixture'), ('2', 'Two', 50.0, 'fixture')]
