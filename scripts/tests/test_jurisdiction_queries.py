@@ -189,12 +189,13 @@ class TestStateQueries:
 class TestFederalQueries:
     """Test queries for federal-level jurisdictions."""
 
-    def test_us_federal_sibutramine_ban(self, ingredients):
-        """US federal should show sibutramine as banned."""
+    def test_us_federal_sibutramine_not_lawful(self, ingredients):
+        """Sibutramine is not lawful federally: FDA had it withdrawn in 2010 and DEA
+        lists it in Schedule IV; no ban rule exists (register Q15)."""
         results = get_jurisdictions_for_country(ingredients, 'US')
         sibutramine = [r for r in results if 'SIBUTRAMINE' in r['id']]
-        assert len(sibutramine) > 0, "Sibutramine should be federally banned"
-        assert sibutramine[0]['status'] in ['banned', 'restricted']
+        assert len(sibutramine) > 0, "Sibutramine should have a US federal row"
+        assert sibutramine[0]['status'] == 'not_lawful'
 
     def test_us_federal_ephedra_ban(self, ingredients):
         """US federal should show ephedra as banned."""
@@ -307,7 +308,7 @@ class TestQueryUtilities:
             # Sort by effective_date descending
             sorted_j = sorted(
                 relevant,
-                key=lambda x: x.get('effective_date', ''),
+                key=lambda x: x.get('effective_date') or '',
                 reverse=True
             )
             return sorted_j[0] if sorted_j else None

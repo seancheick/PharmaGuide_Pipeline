@@ -351,3 +351,49 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   safe; the concern is concentrated extracts).
 - Measured: 13 matcha products lose the extract liver warning and keep the beta-blocker warning; scores 330026-330029
   53.1 -> 51.2, 335679 62.4 -> 64.4, 326246 54.5 -> 58.8, others unchanged; statuses unchanged.
+
+## Q15 "FDA ban effective" labels on 36 banned_recalled records (Sean's D10 standard, 2026-09-26)
+Two research agents read the primary document for each record (fda.gov live or via Wayback, federalregister.gov
+API, ecfr.gov, govinfo, accessdata import alerts, DOJ releases on fda.gov, opss.org); per-record JSON receipts with
+verbatim quotes were checked by script against the saved sources. Spot-checked here: Federal Register API for 64 FR
+4050, 63 FR 6862, 91 FR 42150, 91 FR 40917, 75 FR 80061; Hydroxie 709661 (2025-06-25); the DMHA/phenibut update
+(12 letters 2019-04-10; phenibut misbranded, DMHA NDI-or-unsafe-food-additive); Peak Nootropics 557887 (2019-02-04,
+footnote: the letter "does not address ... whether products containing piracetam can be lawfully marketed as
+dietary supplements"); Melanotan II consumer update (Wayback 2008-12-19 capture).
+- Genuine bans (label kept): ephedra (69 FR 6788, effective 2004-04-12, 21 CFR 119.1; the rule cites "more than
+  18,000 AERs", not 155 deaths/17,000); FD&C Red No. 2 (41 FR 5823 delisting, effective 1976-02-12 per 41 FR 6774;
+  "41 FR 41858" is not FDA's citation); titanium dioxide EU (Regulation (EU) 2022/63, in force 2022-02-07;
+  2022-08-07 ended sell-through).
+- Warning letters / advisories / import alerts (verified; legal status per FDA's own theory):
+  1,4-butanediol T99-21 1999-05-11 (Class I Health Hazard; unapproved new drugs; not scheduled, not List I);
+  7-OH Hydroxie 2025-06-25 ("not lawful in dietary supplements"; DEA notice of intent only, no 2024 scheduling);
+  aristolochic acid Import Alert 54-10 2000-07-06 (not 54-12) + 2001-04-09 letter (adulterated; "over 100 cases of
+  nephropathy", not transplants); BMPEA 2015-04-23 (not a dietary ingredient -> misbranded; "4-amino-2-methylpentane"
+  is a DMBA synonym; 9 of 21 is Pawar 2013); comfrey 2001-07-06 letter (adulterated; FTC preliminary injunction vs one
+  firm); DMAA letters from 2012-04-24 (not a dietary ingredient; 11th Cir. 2019 upheld seizure); DMBA 2015-04-28 (NDI
+  without notification -> adulterated, FDA directory category 7); DMHA 2019-04-10 (now: not a dietary ingredient,
+  unsafe food additive); higenamine IronMag 622504 2022-05-04 (a dietary ingredient marketed as an NDI without
+  notification -> adulterated; not drug exclusion; Advisory List by 2019-06-24); phenibut 2019-04-10 (misbranded;
+  2023 Chill6 injunction; 2023 Nootropics Depot plea); picamilon 2015-11-30 (misbranded, niacin-GABA entity);
+  sibutramine FDA withdrawal request 2010-10-08, NDA withdrawn 2010-12-21, DEA Schedule IV 1998-02-11; tianeptine
+  MA Labs 566831 2018-11-07 (DEA proposed Schedule I 2026-07-08, not III, not final); yellow oleander tejocote
+  warning 2024-01-26 (Nuez de la India Sept 2023; no 2021 alert, no import alert, no deaths in FDA text);
+  dymethazine Hardcore Formulations 522783 2017-06-05 + recall 2017-06-28 (the cited 2012 "Ultra Research" recall
+  URL 404s and was never archived; not in 21 U.S.C. 802(41)(A)); adrafinil, aniracetam, Noopept, phenylpiracetam
+  Peak 557887 2019-02-04 ("not dietary supplements", unapproved new drugs by claims); modafinil DEA Schedule IV
+  1999-01-27 (1998-12-24 is the Provigil approval); Melanotan II warning letter on or about 2007-08-30 (FDA 2016
+  NOOH) + 2007 consumer update; kratom Import Alert 54-15 firms from 2014-02-28 (FDA: 44 reported deaths); DMAA
+  analogs: per-compound DMBA/DMHA actions, no class statement.
+- No US determination (policy unverified, legal status under_review, gate routes a match to review): fasoracetam,
+  IGF-1, IGF-1 LR3, sunifiram (only the DoD list names it), 9-Me-BC, flmodafinil (analogue law covers Schedule I/II
+  only), piracetam (FDA's letters say they do not decide supplement lawfulness). The 2019-11-25 date on four
+  nootropics is the publication date of a non-FDA study.
+- Non-bans outside "banned": potassium bromate (21 CFR 172.730/137.155 permit it; California bans it in food from
+  2027-01-01; EU/Canada/Brazil claims unverified, EUR-Lex unreadable); synthetic estrogens (no supplement document;
+  21 CFR 310.530 covers OTC topical hormone drugs); lobelia (21 CFR 310.544: OTC smoking-deterrent drugs only, "After
+  December 1, 1993"; the Poisonous Plant Database page is gone).
+- DoD rows: all named on the DoD Prohibited Dietary Supplement Ingredients list (opss.org, DoDI 6130.06, updated
+  2026-05-26): enobosarm/Ostarine, LGD-4033, vosilasarm/RAD140, DMAA, adrafinil, modafinil, fonturacetam
+  (phenylpiracetam), DMBA, DMHA, sunifiram. Retyped from state_statute to the list (type regulatory, agency scope).
+- Corpus: none of the 36 records matches a product in the 2026-09-22 enriched corpus, so no verdict moves today.
+  Gate probe: a DMAA product went from quarantine (policy unverified) to BLOCKED; piracetam stays in review.

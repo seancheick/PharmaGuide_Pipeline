@@ -337,3 +337,128 @@ def test_verified_sarm_policy_blocks_instead_of_quarantining():
     }
     result = evaluate_safety_gate(product)
     assert result.verdict == "BLOCKED" and result.quarantine_required is False
+
+
+# Register Q15 (2026-09-26, D10 standard): 36 more records carried "FDA ban
+# effective". Each now dates and cites the government document that names the
+# compound, labelled as what it is. Only ephedra (21 CFR 119.1), FD&C Red No. 2
+# (1976 delisting) and titanium dioxide (EU 2022/63) are bans. Receipts:
+# scripts/audits/pending_items_20260926/research.md Q15.
+_ISDI = "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/"
+_PEAK = _WL + "peak-nootropics-llc-aka-advanced-nootropics-557887-02052019"
+_FR = "https://www.federalregister.gov/documents/"
+Q15_PRIMARY_SOURCES = {
+    "BANNED_14_BUTANEDIOL": ("1999-05-11", "FDA advisory publication date",
+                             _FR + "2000/03/13/00-5925/schedules-of-controlled-substances-addition-of-gamma-hydroxybutyric-acid-to-schedule-i"),
+    "BANNED_7_HYDROXYMITRAGYNINE": ("2025-06-25", "FDA warning letter", _WL + "hydroxie-llc-709661-06252025"),
+    "BANNED_ARISTOLOCHIC_ACID": ("2000-07-06", "First FDA enforcement action",
+                                 "https://www.accessdata.fda.gov/cms_ia/importalert_141.html"),
+    "BANNED_BMPEA": ("2015-04-23", "FDA warning letter", _ISDI + "bmpea-dietary-supplements"),
+    "BANNED_COMFREY_INTERNAL": ("2001-07-06", "FDA advisory publication date",
+                                "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory"),
+    "BANNED_DMAA": ("2012-04-24", "FDA warning letter", _ISDI + "dmaa-products-marketed-dietary-supplements"),
+    "BANNED_DMBA": ("2015-04-28", "FDA warning letter",
+                    "https://www.fda.gov/food/hfp-constituent-updates/recent-fda-action-dietary-supplements-labeled-containing-dmba"),
+    "BANNED_DMHA": ("2019-04-10", "FDA warning letter", _ISDI + "dmha-dietary-supplements"),
+    "BANNED_EPHEDRA": ("2004-04-12", "FDA ban effective", "https://www.govinfo.gov/content/pkg/FR-2004-02-11/pdf/04-2912.pdf"),
+    "BANNED_FDC_RED_2_AMARANTH": ("1976-02-12", "FDA ban effective",
+                                  "https://www.govinfo.gov/content/pkg/FR-1976-02-10/pdf/FR-1976-02-10.pdf"),
+    "BANNED_HIGENAMINE": ("2022-05-04", "FDA warning letter", _WL + "ironmag-labs-622504-05042022"),
+    "BANNED_PHENIBUT": ("2019-04-10", "FDA warning letter", _ISDI + "phenibut-dietary-supplements"),
+    "BANNED_PICAMILON": ("2015-11-30", "FDA warning letter",
+                         "https://www.fda.gov/food/hfp-constituent-updates/recent-fda-action-dietary-supplements-labeled-containing-picamilon"),
+    "BANNED_SIBUTRAMINE": ("2010-10-08", "FDA safety advisory published",
+                           _FR + "2010/12/21/2010-31986/abbott-laboratories-inc-withdrawal-of-approval-of-a-new-drug-application-for-meridia"),
+    "BANNED_TIANEPTINE": ("2018-11-07", "FDA warning letter", _WL + "ma-labs-llc-566831-11072018"),
+    "BANNED_YELLOW_OLEANDER_RECENT": ("2024-01-26", "FDA advisory publication date",
+                                      "https://www.fda.gov/food/alerts-advisories-safety-information/fda-issues-warning-about-certain-products-containing-toxic-yellow-oleander"),
+    "BANNED_DYMETHAZINE": ("2017-06-05", "FDA warning letter", _WL + "hardcore-formulations-522783-06052017"),
+    "NOOTROPIC_ADRAFINIL": ("2019-02-04", "FDA warning letter", _PEAK),
+    "NOOTROPIC_ANIRACETAM": ("2019-02-04", "FDA warning letter", _PEAK),
+    "NOOTROPIC_MODAFINIL": ("1999-01-27", "DEA scheduling effective",
+                            _FR + "1999/01/27/99-1791/schedules-of-controlled-substances-placement-of-modafinil-into-schedule-iv"),
+    "NOOTROPIC_OMBERACETAM": ("2019-02-04", "FDA warning letter", _PEAK),
+    "NOOTROPIC_PHENYLPIRACETAM": ("2019-02-04", "FDA warning letter", _PEAK),
+    "PEPTIDE_MELANOTAN_II": ("2007-08-30", "FDA warning letter",
+                             "https://www.fda.gov/regulatory-information/electronic-reading-room/notice-opportunity-hearing-nooh-manookian-edward-8516"),
+    "RISK_KRATOM_NATURAL": ("2014-02-28", "First FDA enforcement action",
+                            "https://www.accessdata.fda.gov/cms_ia/importalert_1137.html"),
+    "STIM_METHYLHEXANAMINE_ANALOGS": ("2015-04-28", "FDA warning letter",
+                                      "https://www.fda.gov/food/hfp-constituent-updates/recent-fda-action-dietary-supplements-labeled-containing-dmba"),
+}
+# No government document names the compound with a US status (or, for
+# piracetam, FDA said its letters do not decide supplement lawfulness): the
+# safety gate routes a match to review, as for SR9009.
+Q15_NO_US_DETERMINATION = ["BANNED_FASORACETAM", "BANNED_IGF1", "BANNED_IGF1_LR3", "BANNED_SUNIFIRAM",
+                           "NOOTROPIC_9MEBC", "NOOTROPIC_FLMODAFINIL", "NOOTROPIC_PIRACETAM"]
+_GENUINE_BANS = {"BANNED_EPHEDRA", "BANNED_FDC_RED_2_AMARANTH"}
+
+
+@pytest.mark.parametrize("entry_id", sorted(Q15_PRIMARY_SOURCES))
+def test_q15_records_cite_the_document_that_names_the_compound(banned_recalled, entry_id):
+    entry = _find(banned_recalled, entry_id)
+    date, label, url = Q15_PRIMARY_SOURCES[entry_id]
+    assert (entry["regulatory_date"], entry["regulatory_date_label"]) == (date, label)
+    assert url in [r.get("url") for r in entry["references_structured"]] + [
+        (j.get("source") or {}).get("url") for j in entry["jurisdictions"]]
+    assert entry["policy_verification_status"] == "verified"
+    [us] = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "US"]
+    if entry_id in _GENUINE_BANS:
+        assert us["status"] == "banned" and us["effective_date"] == date
+        assert entry["legal_status_enum"] == "banned_federal"
+    else:
+        assert us["status"] == "not_lawful" and us["effective_date"] is None
+        assert entry["legal_status_enum"] != "banned_federal"
+        live = json.dumps({k: entry[k] for k in ("reason", "safety_warning", "safety_warning_one_liner")}).lower()
+        for stale in ("fda banned", "banned by fda", "banned in supplements", "ban effective"):
+            assert stale not in live, (entry_id, stale)
+
+
+@pytest.mark.parametrize("entry_id", Q15_NO_US_DETERMINATION)
+def test_q15_records_without_a_us_determination_stay_under_review(banned_recalled, entry_id):
+    entry = _find(banned_recalled, entry_id)
+    [us] = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "US"]
+    assert us["status"] in {"under_review", "not_approved"}
+    assert entry["legal_status_enum"] == "under_review"
+    assert entry.get("policy_verification_status") != "verified"
+    assert "ban" not in (entry["regulatory_date_label"] or "").lower()
+
+
+def test_ban_labels_are_left_only_on_real_bans(banned_recalled):
+    labelled = {e["id"] for e in banned_recalled if "ban" in (e.get("regulatory_date_label") or "").lower()}
+    assert labelled == _GENUINE_BANS | {"BANNED_ADD_TITANIUM_DIOXIDE"}
+
+
+def test_dod_rows_cite_the_dod_list_not_a_state_statute(banned_recalled):
+    for entry_id in ("SARM_OSTARINE", "SARM_LIGANDROL", "SARM_RAD140", "BANNED_DMAA", "NOOTROPIC_ADRAFINIL",
+                     "NOOTROPIC_MODAFINIL", "NOOTROPIC_PHENYLPIRACETAM", "STIM_METHYLHEXANAMINE_ANALOGS",
+                     "BANNED_SUNIFIRAM"):
+        [dod] = [j for j in _find(banned_recalled, entry_id)["jurisdictions"] if j.get("jurisdiction_code") == "US-DOD"]
+        assert dod["source"]["type"] == "regulatory", entry_id
+        assert dod["source"]["url"] == "https://www.opss.org/dod-prohibited-dietary-supplement-ingredients", entry_id
+        assert dod["jurisdiction_type"] == "agency_scope", entry_id
+
+
+@pytest.mark.parametrize("name,canonical,verdict,quarantined", [
+    ("DMAA", "dmaa", "BLOCKED", False),        # verified: FDA names DMAA
+    ("Piracetam", "piracetam", None, True),     # FDA left supplement lawfulness open: review
+])
+def test_q15_verified_policy_blocks_and_open_policy_routes_to_review(name, canonical, verdict, quarantined):
+    import sys
+    scripts = REPO_ROOT / "scripts"
+    if str(scripts) not in sys.path:
+        sys.path.insert(0, str(scripts))
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": f"TEST_{name}", "fullName": name, "status": "active",
+        "form_factor": "capsule", "supplement_type": {"type": "single_nutrient"},
+        "contaminant_data": {"banned_substances": {"found": False, "substances": [], "safety_flags": []}},
+        "activeIngredients": [{"name": name, "standardName": name, "raw_source_text": name,
+                               "forms": [], "mapped": True}],
+        "inactiveIngredients": [],
+        "ingredient_quality_data": {"total_active": 1, "ingredients_scorable": [
+            {"name": name, "canonical_id": canonical, "mapped": True, "quantity": 20.0, "unit": "mg"}]},
+    }
+    result = evaluate_safety_gate(product)
+    assert (result.verdict, result.quarantine_required) == (verdict, quarantined)
