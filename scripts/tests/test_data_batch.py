@@ -37,13 +37,6 @@ BYTE_PINNED = {
     "pin its sha256",
 }
 
-# Formatted in their own commit once the lane editing them has landed. The test
-# below fails as soon as a listed file is canonical, so the list only shrinks.
-NOT_YET_CANONICAL = {
-    "ingredient_quality_map.json",
-    "ingredient_interaction_rules.json",
-    "standardized_botanicals.json",
-}
 
 
 @pytest.mark.parametrize("path", DATA_FILES, ids=lambda p: str(p.relative_to(DATA)))
@@ -53,11 +46,7 @@ def test_data_file_is_canonical_json_without_duplicate_keys(path):
     canonical = text == json_text(blob)
     if path.name in BYTE_PINNED:
         return
-    if path.name in NOT_YET_CANONICAL:
-        assert not canonical, f"{path.name} is canonical now: remove it from NOT_YET_CANONICAL"
-        assert json.loads(json_text(blob)) == blob
-    else:
-        assert canonical, f"{path.name} is not canonical JSON: run scripts/data_batch.py format {path}"
+    assert canonical, f"{path.name} is not canonical JSON: run scripts/data_batch.py format {path}"
 
 
 @pytest.mark.parametrize("path", DATA_FILES, ids=lambda p: str(p.relative_to(DATA)))
