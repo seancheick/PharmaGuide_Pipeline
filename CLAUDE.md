@@ -27,7 +27,7 @@ In `.claude/skills/` (cloud sessions get them too), except `/handoff` and `/pg-r
 | `/pg-scoring-change` | any change that can move a score, pillar, route or verdict |
 | `/verify-data` | live-API identifier verification |
 | `/fda-weekly-sync` | FDA recall/ban sync |
-| `/prepare-product-submissions` | submission extraction queue |
+| `/product-submissions-prep` | transcribe new submissions for the reviewer; run the extraction queue |
 | `/handoff`, `/pg-resume` | save and recover worktree state |
 
 Path rules in `.claude/rules/` load on their own when you touch `scripts/data/`,
