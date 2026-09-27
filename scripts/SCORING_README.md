@@ -14,9 +14,8 @@ Enriched product
   → final SQLite + detail blob
 ```
 
-`score_supplements.py` is no longer an operational entrypoint. It may remain in
-the tree temporarily for post-rebuild test disposition, but production,
-preflight, release, export, and audit-preview paths do not invoke it.
+The v3 scorer `score_supplements.py` was deleted on 2026-07-17 (21148621); v4 is
+the only scorer.
 
 ## Public export contract
 
@@ -180,9 +179,10 @@ contribution.
 Every live key must have a behavioral test. Remove obsolete knobs instead of
 wiring them merely because they exist.
 
-`config/scoring_config.json` is retained only for non-production historical
-tests until the retired scorer is deleted. It is not read by the Stage-3
-producer, final export, or release path.
+`config/scoring_config.json` is the retired v3 config. The Stage-3 producer,
+final export and release path never read it; the local dashboard's CAERS page
+(`dashboard/data_loader.py`, `views/audit_caers.py`) and a few parity tests
+still do.
 
 ## Making a scoring change
 

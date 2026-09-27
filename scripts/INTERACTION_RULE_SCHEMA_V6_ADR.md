@@ -1,6 +1,6 @@
 # ADR — Interaction Rule Schema v6.0 (`profile_gate`)
 
-**Status:** APPROVED with revisions (2026-05-05) — ready for implementation
+**Status:** IMPLEMENTED (v6.0.0 shipped; the rules file has moved on since, see its `_metadata.schema_version`). Historical design record.
 **Date:** 2026-05-05
 **Authors:** PharmaGuide pipeline + clinical team, ADR draft by Claude, revisions per clinical reviewer feedback
 **Affects:** `scripts/data/ingredient_interaction_rules.json`, `clinical_risk_taxonomy.json`, `enrich_supplements_v3.py`, `build_final_db.py`, Flutter app `assets/db/` consumer
@@ -165,7 +165,7 @@ Flutter evaluation:
 
 This keeps the schema flat, makes precedence testable, and avoids a special escalation engine.
 
-> **Phase 3 TODO**: split the broad `hypoglycemics` drug class into specific subclasses — `insulin`, `sulfonylureas`, `meglitinides` (high-hypoglycemia-risk) vs `metformin`, `glp_1_receptor_agonists`, `sglt2_inhibitors`, `dpp_4_inhibitors` (lower-risk). For Phase 2, keep `hypoglycemics` for backward compatibility but mark for splitting.
+> **Phase 3 (done: `hypoglycemics_high_risk` / `hypoglycemics_lower_risk` / `hypoglycemics_unknown` in clinical_risk_taxonomy.json)**: split the broad `hypoglycemics` drug class into specific subclasses — `insulin`, `sulfonylureas`, `meglitinides` (high-hypoglycemia-risk) vs `metformin`, `glp_1_receptor_agonists`, `sglt2_inhibitors`, `dpp_4_inhibitors` (lower-risk). For Phase 2, keep `hypoglycemics` for backward compatibility but mark for splitting.
 
 ---
 
@@ -289,7 +289,7 @@ Each step is its own atomic commit. No commit modifies more than one stage.
 ✅ **v1.5.0 Flutter migration first**, then Phase 2
 ✅ **Cross-product dose summation deferred to Phase 3** (schema permits `total_daily_exposure` basis but Flutter MUST NOT claim full support until Phase 3)
 ✅ **Shared evaluator fixture** required (Python+Dart) to prevent drift
-✅ **`hypoglycemics` split** TODO Phase 3 — keep current broad class for v6.0; split into high-risk (insulin, sulfonylureas, meglitinides) vs lower-risk (metformin, GLP-1 RAs, SGLT2i, DPP-4i) post-launch
+✅ **`hypoglycemics` split** done in Phase 3 (was TODO) — keep current broad class for v6.0; split into high-risk (insulin, sulfonylureas, meglitinides) vs lower-risk (metformin, GLP-1 RAs, SGLT2i, DPP-4i) post-launch
 
 ---
 
