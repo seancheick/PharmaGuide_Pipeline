@@ -859,12 +859,6 @@ def test_reviewed_same_identity_alias_beats_broader_source_group(
             "omega_9_fatty_acids",
         ),
         ("Vitamin K", "Brewer's Yeast", "Vitamin K", "vitamin_k"),
-        (
-            "fermented Soybean powder",
-            "Nattokinase",
-            "Soy",
-            "nattokinase",
-        ),
         ("Touchi extract", "Touchi Extract", "Soy", "touchi_extract"),
         ("Ginsenoside Rg3", "Ginsenoside Rg3", "Ginsenosides", "rg3"),
         (

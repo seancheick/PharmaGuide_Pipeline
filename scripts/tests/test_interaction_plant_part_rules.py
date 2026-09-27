@@ -1,16 +1,15 @@
 """Dandelion and nettle interaction claims follow the plant part their evidence covers.
 
-Sean, 2026-09-26: split the rules by plant part. The dandelion diuretic claims
-(kidney disease, antihypertensives, lithium) rest on leaf evidence: PMID
-19678785 is a Taraxacum officinale folium trial, and the EU monographs give the
-diuretic indication for the leaf and for root with herb, none for root alone.
-The nettle glucose claims rest on a nettle leaf trial (PMID 24273930) and the
-EU nettle-leaf monograph is the diuretic one; the root monograph covers only
-benign prostatic hyperplasia. The nettle blood-pressure claim covers every part
-(PMID 35800714; root extract in rats, PMID 12020933), so it has its own
-unscoped rule. Before the split every dandelion or nettle root
-label carried the leaf claims, while a label resolved to the botanical root
-record carried nothing.
+Sean, 2026-09-26: split the rules by plant part. The nettle glucose claims rest
+on a nettle leaf trial (PMID 24273930) and the EU nettle-leaf monograph is the
+diuretic one; the root monograph covers only benign prostatic hyperplasia. The
+nettle blood-pressure claim covers every part (PMID 35800714; root extract in
+rats, PMID 12020933), so it has its own unscoped rule. The dandelion diuretic
+claims (kidney disease, antihypertensives, lithium) cover every part: the EU
+leaf monograph and the EU root monograph (EMA/HMPC/475726/2020) both give a
+traditional diuretic indication (register Q18). Before the split a nettle root
+label carried the leaf claims, while a label resolved to a botanical root record
+carried nothing.
 
 A part-scoped rule (form_scope_match "fail_open") stays silent only for a
 label-confirmed form outside its scope; an unknown or inferred form still warns
@@ -64,11 +63,11 @@ def _fired(enricher, normalizer, pid: int) -> set:
     "pid,expected",
     [
         # Nutricost Dandelion Root 1575 mg: "Dandelion root 4:1 extract" (IQM)
-        (223501, {DANDELION_GLUCOSE}),
+        (223501, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # Milk Thistle X: "Dandelion root extract", the common root spelling
-        (229831, {DANDELION_GLUCOSE}),
+        (229831, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # GNC Liver Cleanser: "Dandelion root powder" (botanical dandelion_root)
-        (228932, {DANDELION_GLUCOSE}),
+        (228932, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # OLLY Beat The Bloat: "Dandelion Leaf Extract"
         (315977, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # BulkSupplements Stinging Nettle Root Extract 1000 mg: the blood-pressure
@@ -95,18 +94,18 @@ def _profile(enricher, row: dict) -> set:
 @pytest.mark.parametrize(
     "form_id,form_match_status,expected",
     [
-        ("dandelion root", "mapped", {DANDELION_GLUCOSE}),
-        ("dandelion leaf", "mapped", {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
-        ("dandelion extract", "mapped", {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
+        ("stinging nettle root extract", "mapped", {NETTLE_BP}),
+        ("stinging nettle leaf extract", "mapped", {NETTLE, NETTLE_BP}),
+        ("stinging nettle (unspecified)", "mapped", {NETTLE, NETTLE_BP}),
         # No confirmed part: the leaf claims still fire.
-        ("dandelion root", "n/a", {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
-        (None, "n/a", {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
+        ("stinging nettle root extract", "n/a", {NETTLE, NETTLE_BP}),
+        (None, "n/a", {NETTLE, NETTLE_BP}),
     ],
 )
 def test_an_unconfirmed_part_fails_open(enricher, form_id, form_match_status, expected):
     row = {
-        "name": "Dandelion", "raw_source_text": "Dandelion", "standard_name": "Dandelion",
-        "canonical_id": "dandelion", "canonical_source_db": "ingredient_quality_map",
+        "name": "Nettle", "raw_source_text": "Nettle", "standard_name": "Nettle",
+        "canonical_id": "stinging_nettle", "canonical_source_db": "ingredient_quality_map",
         "form_id": form_id, "form_match_status": form_match_status,
         "quantity": 500.0, "unit": "mg", "unit_normalized": "mg",
     }

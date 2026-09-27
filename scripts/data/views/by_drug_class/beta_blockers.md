@@ -2,8 +2,9 @@
 
 # Beta Blockers (beta_blockers)
 
-**1 rules.** Category: cardiovascular
+**2 rules.** Category: cardiovascular
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
 | `green_tea_extract` | ingredient_quality_map | avoid | established | May reduce nadolol effect | Green tea catechins, especially EGCG, can inhibit intestinal uptake transporters and substantially reduce nadolol exposure; human studies show reduced blood-pressure response. |
+| `matcha_tea_powder` | botanical_ingredients | avoid | established | May reduce nadolol effect | Matcha is powdered whole green-tea leaf. Green tea inhibits OATP1A2, the intestinal uptake transporter that carries nadolol into the body: in volunteers, 700 mL of green tea daily… |

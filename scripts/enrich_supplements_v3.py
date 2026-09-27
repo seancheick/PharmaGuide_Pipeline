@@ -18100,7 +18100,7 @@ class SupplementEnricherV3:
         scope = {str(item).strip() for item in form_scope if str(item).strip()}
         row_forms = self._row_form_ids(ingredient)
         if rule.get("form_scope_match") == "fail_open":
-            # A plant-part rule (dandelion leaf diuresis) is silent only for a
+            # A plant-part rule (nettle leaf glucose) is silent only for a
             # label-confirmed form outside its scope; an unknown or inferred
             # part still warns (G1 fail-open).
             if ingredient.get("form_match_status") != "mapped" or not row_forms:
@@ -19193,7 +19193,7 @@ class SupplementEnricherV3:
                 continue
 
             ingredient_name = ingredient.get("raw_source_text") or ingredient.get("name") or ingredient.get("standard_name") or "unknown"
-            # A botanical twin is its declared IQM part (dandelion root) for
+            # A botanical twin is its declared IQM part (nettle root) for
             # rules scoped by plant part.
             twin_form = interaction_twin_form(
                 ingredient.get("canonical_source_db"), subject["canonical_id"]

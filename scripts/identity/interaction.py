@@ -100,6 +100,8 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "cranberry_fruit": "cranberry",
     "cranrx": "cranberry",
     "dandelion": "dandelion",
+    # EU root monograph EMA/HMPC/475726/2020: traditional diuretic use and a
+    # fluid-restriction warning, the premise of the dandelion kidney rule (Q18).
     "dandelion_root": "dandelion",
     "devil_s_claw": "devils_claw",
     "devils_claw_tuber": "devils_claw",
@@ -169,11 +171,9 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
 
 
 # The IQM form a twin is, for parents whose rules are scoped by plant part
-# (dandelion leaf diuresis, nettle leaf glucose; Sean, 2026-09-26). Every twin
+# (nettle leaf glucose; Sean, 2026-09-26). Every twin
 # of a parent with a form-scoped rule declares one.
 BOTANICAL_INTERACTION_TWIN_FORM: dict[str, str] = {
-    "dandelion": "dandelion extract",
-    "dandelion_root": "dandelion root",
     "nettle": "stinging nettle (unspecified)",
     "nettle_leaf": "stinging nettle leaf extract",
     "nettle_root": "stinging nettle root extract",

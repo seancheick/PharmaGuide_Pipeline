@@ -205,6 +205,7 @@ _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
     'vanadium':             4,  # minerals/B25: hazardous trace mineral — unknown-form floor (UMLS poison flag, GI tox >1.8 mg/day, ~5% F) kept below the disclosed sodium-vanadate class floor (7); conservative-by-design, and the safety-correct direction
     'vitamin_k2':           6,  # subtype undisclosed: cannot inherit MK-4, MK-7, cis-isomer, or source-specific properties
     'branched_chain_amino_acids': 10,  # ratio-unspecified generic BCAA; see _PREMIUM_ONLY_PEER_EXEMPTIONS
+    'green_tea_extract':    7,  # register Q25 2026-09-26: whole-leaf matcha (8) left this extract parent; unspecified keeps 7, which unknown_form_quality already uses (floor 9 - 1 = 8)
 }
 
 

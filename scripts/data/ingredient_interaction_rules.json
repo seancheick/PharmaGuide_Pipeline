@@ -4,9 +4,9 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
     "last_updated": "2026-09-26",
-    "total_entries": 150,
+    "total_entries": 151,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 150,
+    "total_rules": 151,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -191,11 +191,13 @@
       "2026-09-26: RULE_BOTANICAL_LICORICE_ROOT antihypertensives 100 mg/day floor cited PMID 393503, two women on 273-546 mg glycyrrhizin daily, which never mentions 100 mg (confidence_basis inferred_from_dose_range). It now cites af Geijerstam 2024 (PMID 38246526): licorice with 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg in a randomized crossover trial. Value unchanged; confidence_basis documented_effective_dose; the rationale states the floor is compared with the label licorice amount. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_GINKGO_HYPERTENSION pregnancy block raised from caution (no source) to avoid with NCCIH ginkgo (may be unsafe in pregnancy; might cause early labor or extra bleeding during delivery), matching RULE_BOTAN_GINKGO_PREGNANCY (Sean, 2026-09-26: one ginkgo pregnancy verdict). Lactation stays caution (NCCIH: little is known).",
-      "2026-09-26: Plant-part split (Sean, 2026-09-26). RULE_IQM_DANDELION_KIDNEY keeps the diuretic claims (kidney disease, antihypertensives, lithium), now form_scope dandelion leaf + dandelion extract (whole or unstated part): PMID 19678785 is a dandelion leaf trial and the EU monographs give the diuretic indication for the leaf and for root with herb, none for the root alone; the kidney claim now also cites the EU leaf monograph (avoid in renal failure, possible hyperkalemia). Its three hypoglycemic claims moved unchanged to the new RULE_IQM_DANDELION_GLUCOSE, which applies to every dandelion form. RULE_IQM_STINGING_NETTLE_DIABETES is form_scope nettle leaf + unspecified: its glucose evidence is a leaf-extract trial (PMID 24273930) and the EU nettle-root monograph covers only benign prostatic hyperplasia. form_scope_match 'fail_open': a part-scoped rule is silent only for a label-confirmed form outside its scope; unknown or inferred parts still warn.",
+      "2026-09-26: Plant-part split (Sean, 2026-09-26). RULE_IQM_DANDELION_KIDNEY keeps the diuretic claims (kidney disease, antihypertensives, lithium) for every dandelion part: the EU leaf monograph and the EU root monograph (EMA/HMPC/475726/2020, final 2021-11-24) both give a traditional diuretic indication, and the kidney claim cites both (leaf: avoid in renal failure, possible hyperkalemia; root: not recommended where reduced fluid intake is advised). Its three hypoglycemic claims moved unchanged to the new RULE_IQM_DANDELION_GLUCOSE, which also applies to every dandelion form. RULE_IQM_STINGING_NETTLE_DIABETES is form_scope nettle leaf + unspecified: its glucose evidence is a leaf-extract trial (PMID 24273930) and the EU nettle-root monograph covers only benign prostatic hyperplasia. form_scope_match 'fail_open': a part-scoped rule is silent only for a label-confirmed form outside its scope; unknown or inferred parts still warn.",
       "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES keeps only its glucose claims (diabetes, hypoglycemics) under the nettle leaf + unspecified form_scope. Its antihypertensives claim moves unchanged in severity, with the same no-data pregnancy block, to the new unscoped RULE_IQM_STINGING_NETTLE_BLOOD_PRESSURE: the hypotensive evidence covers every part (PMID 35800714) and a root-extract study lowered blood pressure in rats (PMID 12020933), so a root label keeps them. Found by the fresh-context review of the plant-part split.",
       "2026-09-26: RULE_IQM_GREEN_TEA_HYPERTENSION liver_disease (Sean, Q24): 800 mg EGCG/day is an observed risk dose, not a safe limit. The tier no longer lowers the warning to monitor (and hidden) below 800 mg; it stays avoid at any amount, including an unstated one, and >= 800 mg adds dose-specific copy. Sources now EFSA 2018 (PMID 32625874: >= 800 mg raised transaminases; no safe dose identified), USP 2020 (PMID 32140423) and LiverTox NBK547925. Removed unsourced copy: first-pass 'saturation' at 800 mg, liver disease 'lowers the threshold for injury', and a '>= 400 mg/dose' cut-off. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_INGREDIENT_GINSENG and RULE_IQM_STINGING_NETTLE_DIABETES glucose floors removed (Sean, D8 follow-up: a studied dose is not a warning threshold; a numeric floor needs threshold evidence such as a dose-response study, multiple doses separating no effect from effect, or a monograph/regulatory threshold). Ginseng's 100 mg/day (Sotaniemi 1995, PMID 8721940) and nettle's 1500 mg/day (Kianbakht 2013, PMID 24273930) are observed-effect doses from single studies that tested nothing lower. Both doses are now stated in the eight glucose mechanisms and cited in their sources (nettle's regimen was previously stated only in its diabetes mechanism). All eight sub-rules fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
-      "2026-09-26: Licorice blood-pressure floors removed (Sean, D8): RULE_BOTANICAL_LICORICE_ROOT antihypertensives and RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives. 100 mg/day glycyrrhizic acid is a level WHO has suggested is unlikely to harm most adults and the dose that raised home systolic BP in healthy adults (PMID 38246526); it is not a floor for people with hypertension, who respond more strongly (PMID 12574791, 15.3 vs 3.5 mmHg at 150 mg glycyrrhetinic acid/day). The floors were also compared with licorice mass, not glycyrrhizic acid. The three sub-rules fire on presence; the 100 mg figure stays as dose context in their mechanisms and sources, and the IQM hypertension threshold note (>= 2000 mg extract escalates to avoid) no longer calls it the point where BP elevation becomes clinically significant. Severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
+      "2026-09-26: Licorice blood-pressure floors removed (Sean, D8): RULE_BOTANICAL_LICORICE_ROOT antihypertensives and RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives. 100 mg/day glycyrrhizic acid is a level WHO has suggested is unlikely to harm most adults and the dose that raised home systolic BP in healthy adults (PMID 38246526); it is not a floor for people with hypertension, who respond more strongly (PMID 12574791, 15.3 vs 3.5 mmHg at 150 mg glycyrrhetinic acid/day). The floors were also compared with licorice mass, not glycyrrhizic acid. The three sub-rules fire on presence; the 100 mg figure stays as dose context in their mechanisms and sources, and the IQM hypertension threshold note (>= 2000 mg extract escalates to avoid) no longer calls it the point where BP elevation becomes clinically significant. Severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_BOTAN_MATCHA_BETA_BLOCKERS added (register Q25, matcha split from green tea extract). Matcha rows used to resolve to IQM green_tea_extract and met the extract-only liver warning and extract adverse-event signals; they now resolve to botanical matcha_tea_powder (whole leaf), which is not twinned to the extract. This rule carries over the beta-blocker sub-rule unchanged in severity (avoid, presence) because its evidence is brewed green tea (Misaka 2014, PMID 24419562) and EGCG (Abe 2018, PMID 29480324), both present in whole leaf. The extract rule's hypertension and antihypertensive sub-rules were not copied: they are gated on a 400 mg extract floor derived from extract caffeine content. Whole-leaf green tea generally (botanical green_tea, green_tea_leaf, standardized green_tea) still carries no nadolol rule: register Q27.",
+      "2026-09-26: RULE_IQM_DANDELION_KIDNEY kidney_disease cites the EU herbal monograph on dandelion root (EMA/HMPC/475726/2020, final 2021-11-24): traditional use 'to increase the amount of urine', and root 'is not recommended for patients with conditions where reduced fluid intake is advised by a medical doctor'. IQM dandelion's form covers root, and the rule's diuretic premise was cited only to leaf evidence (register Q18)."
     ]
   },
   "interaction_rules": [
@@ -5160,6 +5162,64 @@
           "alert_body_if_met": "This product provides 800 mg or more of EGCG a day, the supplemental intake EFSA linked to raised liver enzymes in trials. If you have liver disease, do not use it unless your clinician recommends it."
         }
       ]
+    },
+    {
+      "id": "RULE_BOTAN_MATCHA_BETA_BLOCKERS",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "matcha_tea_powder"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "beta_blockers",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Matcha is powdered whole green-tea leaf. Green tea inhibits OATP1A2, the intestinal uptake transporter that carries nadolol into the body: in volunteers, 700 mL of green tea daily for 14 days cut nadolol exposure by about 85% and reduced its effect on systolic blood pressure. A single dose of EGCG-rich green tea extract lowered nadolol exposure by 28-40%, so EGCG is a key contributor.",
+          "action": "If you take nadolol or another beta blocker, ask your prescriber before using matcha supplements, and do not take them at the same time.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/24419562/",
+            "https://pubmed.ncbi.nlm.nih.gov/29480324/"
+          ],
+          "alert_headline": "May reduce nadolol effect",
+          "alert_body": "Green tea, including matcha, can sharply lower nadolol levels and weaken blood-pressure control. If you take a beta blocker, ask your prescriber before using it.",
+          "informational_note": "Matcha is whole green-tea leaf; green tea blocks a gut transporter that absorbs nadolol.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "beta_blockers"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
+        "alert_headline": "Limited safety data",
+        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-09-26",
+      "review_owner": "pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_GYMNEMA_DIABETES",
@@ -20994,11 +21054,6 @@
         "db": "ingredient_quality_map",
         "canonical_id": "dandelion"
       },
-      "form_scope": [
-        "dandelion leaf",
-        "dandelion extract"
-      ],
-      "form_scope_match": "fail_open",
       "condition_rules": [
         {
           "condition_id": "kidney_disease",
@@ -21008,7 +21063,8 @@
           "action": "Avoid unsupervised dandelion supplementation in kidney disease. Any diuretic effect should be managed in consultation with a nephrologist.",
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion",
-            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-taraxacum-officinale-weber-ex-wigg-folium_en.pdf"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-taraxacum-officinale-weber-ex-wigg-folium_en.pdf",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-taraxacum-officinale-fh-wigg-radix_en.pdf"
           ],
           "alert_headline": "Diuretic herb \u2014 use caution in CKD",
           "alert_body": "Dandelion may have diuretic effects. If you have kidney disease or take diuretics, ask your clinician before using concentrated dandelion supplements.",
