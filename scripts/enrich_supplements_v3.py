@@ -4660,6 +4660,9 @@ class SupplementEnricherV3:
                     "quantity": quantity,
                     "unit": unit,
                     "unit_normalized": unit_normalized,
+                    # Printed %DV (0.0 for a printed 0%, None for none): tells a
+                    # panel zero from a listing without an amount (Q23).
+                    "dailyValue": ingredient.get("dailyValue"),
                     "has_dose": has_dose,
                     "is_blend_header": blend_flags["is_blend_header"],
                     "is_proprietary_blend": blend_flags["is_proprietary_blend"],
@@ -7244,6 +7247,7 @@ class SupplementEnricherV3:
                 "quantity": quantity,
                 "unit": unit,
                 "unit_normalized": unit_normalized,
+                "dailyValue": ingredient.get("dailyValue"),
                 "has_dose": has_dose,
                 "is_blend_header": blend_flags["is_blend_header"],
                 "is_proprietary_blend": blend_flags["is_proprietary_blend"],
@@ -7329,6 +7333,7 @@ class SupplementEnricherV3:
                 "quantity": quantity,
                 "unit": unit,
                 "unit_normalized": unit_normalized,
+                "dailyValue": ingredient.get("dailyValue"),
                 "has_dose": has_dose,
                 "is_blend_header": blend_flags["is_blend_header"],
                 "is_proprietary_blend": blend_flags["is_proprietary_blend"],
@@ -7392,6 +7397,7 @@ class SupplementEnricherV3:
                 "quantity": quantity,
                 "unit": unit,
                 "unit_normalized": unit_normalized,
+                "dailyValue": ingredient.get("dailyValue"),
                 "has_dose": has_dose,
                 "is_blend_header": blend_flags["is_blend_header"],
                 "is_proprietary_blend": blend_flags["is_proprietary_blend"],

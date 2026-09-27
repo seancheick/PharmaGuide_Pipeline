@@ -227,6 +227,46 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   glycyrrhizic acid content; a licorice row is at least its GA content, so the 100 mg floor never suppresses a
   product supplying 100 mg GA. Value unchanged in both rules; source and rationale replaced.
 
+## Q24 green tea extract and liver disease (Sean's decision 2026-09-26: 800 mg EGCG is an observed risk dose)
+- EFSA 2018, Scientific opinion on the safety of green tea catechins (EFSA J 16(4):e05239, PMID 32625874, PMC7009618;
+  efetch, abstract + full text): "intake of doses equal or above 800 mg EGCG/day taken as a food supplement has been shown
+  to induce a statistically significant increase of serum transaminases"; full text: "The Panel concluded that it was not
+  possible to identify an EGCG dose from green tea extracts that could be considered safe." Traditional infusions "are in
+  general considered to be safe"; rare idiosyncratic cases after infusions.
+- USP 2020 review (PMID 32140423): case reports associate hepatotoxicity with "EGCG intake amounts from 140 mg to ~1000
+  mg/day and substantial inter-individual variability"; USP monograph label: "Do not use if you have a liver problem".
+  It does not tie first-pass saturation to 800 mg.
+- LiverTox Green Tea (NBK547925, PMID 31643260): green tea extract "implicated in cases of clinically apparent acute
+  liver injury, including instances of acute liver failure". Full chapter (dose dependence) not read: bot check.
+- Removed as unsourced: "saturates first-pass elimination" at 800 mg, liver disease "lowers the threshold for injury",
+  and a ">= 400 mg/dose" cut-off.
+- Corpus (2026-09-22 enriched): 149 products stated EGCG < 800 mg (monitor, hidden), 83 stated none (hidden), 0 stated
+  >= 800 mg. All 232 now show avoid to users with liver disease.
+- Matcha: IQM files "matcha powder" and matcha aliases under green_tea_extract (5 products on the matcha form; more under
+  "green tea extract (unspecified)"). Whole-leaf tea is not a concentrated extract (EFSA). Queued as Q25.
+
+## D18 egg inside protein blends (Sean's decision 2026-09-26: evidence follows the intervention studied)
+- Morton 2018 (PMID 28698222, PMC5867436, full text via efetch): 49 included RCTs are references 16-64 ("extracted from the
+  final 49 studies.16-64"); sources: whey 23, casein 3, soy 6, pea 1, milk 10, whole food 7, 13 "non-specific protein
+  blends or blends containing multiple protein sources (eg, whey, casein, soy and egg)". The only egg intervention is
+  reference 45, Iglay 2009 (PMID 19299575): a whole-food diet with extra protein "predominately from egg sources", whose
+  title reports it "does not influence" body composition responses. No included trial tested a whey/casein/soy blend with
+  added egg; INGR_WHEY_PROTEIN has no egg alias and no egg evidence family exists.
+- 25694 cleaned 2026-09-22 (read directly): active "Protein 22 g" plus whey/milk/soy source rows with no amounts; inactive
+  "Protein Blend" forms: calcium caseinate, egg albumen, micellar casein, milk protein isolate, soy protein isolate, whey
+  protein concentrate and isolate.
+
+## Q23 printed 0% Daily Value (Sean's decision 2026-09-26: preserve it upstream, no category heuristic)
+- enhanced_normalizer.py `_process_quantity`: `if dv:` dropped a printed 0.0; `.get("percent", 0)` turned a missing percent
+  into 0.0 on the single-quantity path. Now a printed percent (0 included) is kept and none stays None.
+- Raw corpus (~/Downloads/PharmaGuide_Datasets/staging/brands, 2026-09-26): top-level "0 NP" vitamin/mineral rows: 141 print
+  0% (Vitamin A 59, Vitamin C 58: panel zeros), 18 print no percent (Vitamin B12 8, sodium 4: listed without an amount),
+  328 print a positive %DV. The removed category heuristic misread the 18. All depths: 2,329 printed-0% rows in 1,059
+  products now clean to dailyValue 0.0 instead of null.
+- dailyValue readers checked: cleaner DV-unit repair and folate DFE (require > 0), scoring_input_contract and completeness
+  gate (require > 0), enricher UL eligibility (>= 0: a 0% row becomes DV-confirmed; its amount is 0), nested DV owner
+  (`is not None`: a parent printing 0% is no longer linked; not seen in tests), export (0.0 now ships where null did).
+
 ## D8 follow-up (Sean, 2026-09-26): a studied dose is not a warning threshold
 - Ruling: a numeric floor needs threshold evidence (a dose-response study, multiple doses separating no effect
   from effect, or a monograph/regulatory threshold). A dose at which one study saw an effect is an observed-effect
