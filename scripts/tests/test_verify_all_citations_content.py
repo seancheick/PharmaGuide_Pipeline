@@ -109,6 +109,7 @@ OTHER_OWNERS = {
 # Review ledgers and rejected records: they name PMIDs that were checked or refused.
 NOT_CLAIMS = {
     "interaction_rules_ghost_review.json", "backed_studies_ghost_review.json", "timing_rules_rejected.json",
+    "citation_content_backlog.json",
 }
 _CITATION = re.compile(
     r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID[:\s#]*(\d{4,9})"
@@ -160,3 +161,54 @@ def test_every_citation_in_the_data_folder_is_read_by_a_content_verifier() -> No
         if cited - collected:
             gaps[rel] = sorted(cited - collected)[:8]
     assert not gaps, gaps
+
+
+def test_book_records_are_parsed_not_reported_missing(monkeypatch) -> None:
+    """PMID 29144655 is a PubmedBookArticle (an IQWiG dulaglutide dossier) cited
+    for Lutemax; efetch returns no PubmedArticle for it, so it read as "not
+    found" instead of being content-checked."""
+    xml = (b'<?xml version="1.0" ?><PubmedArticleSet><PubmedBookArticle><BookDocument>'
+           b'<PMID Version="1">29144655</PMID><Book><BookTitle book="x">Dulaglutide (Addendum to '
+           b'Commission A15-07)</BookTitle></Book><Abstract><AbstractText>Benefit assessment.'
+           b'</AbstractText></Abstract></BookDocument></PubmedBookArticle></PubmedArticleSet>')
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def read(self):
+            return xml
+
+    monkeypatch.setattr(vac.urllib.request, "urlopen", lambda *a, **k: Response())
+    monkeypatch.setattr(vac.time, "sleep", lambda *_: None)
+    article = vac.fetch_articles(["29144655"])["29144655"]
+    assert article["title"] == "Dulaglutide (Addendum to Commission A15-07)"
+    assert article["abstract"] == "Benefit assessment."
+
+
+def test_baseline_gate_fails_only_on_unresolved_or_new_mismatches() -> None:
+    """Release gate (Sean, D6): the triaged backlog reports but does not block;
+    a mismatch not in the backlog blocks, and an unresolved PMID always blocks."""
+    results = [{"file": "a.json", "entries": [
+        {"entry_id": "x", "pmid": "1", "status": "mismatch"},
+        {"entry_id": "y", "pmid": "2", "status": "mismatch"},
+        {"entry_id": "z", "pmid": "3", "status": "not_found"},
+        {"entry_id": "w", "pmid": "4", "status": "partial"}]}]
+    baseline = {"backlog": [{"file": "a.json", "entry_id": "x", "pmid": "1", "status": "mismatch"},
+                            {"file": "a.json", "entry_id": "z", "pmid": "3", "status": "not_found"}]}
+    new, unresolved = vac.baseline_failures(results, baseline)
+    assert [(f, e["pmid"]) for f, e in new] == [("a.json", "2")]
+    assert [(f, e["pmid"]) for f, e in unresolved] == [("a.json", "3")]
+
+
+def test_committed_backlog_is_well_formed() -> None:
+    backlog = json.loads((ROOT / "data" / "citation_content_backlog.json").read_text())
+    items = backlog["backlog"]
+    assert backlog["_metadata"]["total_entries"] == len(items)
+    assert {i["status"] for i in items} <= {"mismatch", "not_found"}
+    assert len({(i["file"], i["entry_id"], i["pmid"]) for i in items}) == len(items)
+    configured = {c["file"] for c in vac.FILE_CONFIGS}
+    assert {i["file"] for i in items} <= configured

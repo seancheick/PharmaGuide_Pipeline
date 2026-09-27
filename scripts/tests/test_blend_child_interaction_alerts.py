@@ -98,10 +98,10 @@ def test_blend_child_does_not_repeat_a_rule_its_scorable_twin_fired(enricher):
 
 
 def test_top_level_np_vitamin_row_reads_as_a_panel_zero(enricher):
-    # "0 NP" on a vitamin or mineral outside a blend is a nutrition-panel zero
-    # until the cleaner keeps a printed 0% DV (Q23).
+    # "Vitamin A 0 NP" printed as 0% DV outside a blend is a nutrition-panel
+    # zero (Q23: the cleaner keeps dailyValue 0.0).
     row = _top("Vitamin A", "vitamin_a", 0.0, "NP")
-    row["category"] = "vitamins"
+    row["dailyValue"] = 0.0
     profile = enricher._collect_interaction_profile(_product([], [row]))
     assert not [a for a in profile["ingredient_alerts"]
                 if (a.get("subject_ref") or {}).get("canonical_id") == "vitamin_a"]
@@ -127,9 +127,17 @@ def test_presence_rule_with_a_dose_tier_still_flags_when_the_amount_is_unknown(e
     assert decision["evaluation_status"] == "amount_unknown"
     assert decision["consumer_disposition"] == "block"
     assert decision["decision_rule"]["amount_missing_disposition"] == "block"
-    # The dose-dependent sub-rules of the same rule keep the missing-amount default.
+    # Licorice hypertension is presence too since D8 (2026-09-26): 100 mg/day
+    # glycyrrhizic acid is no floor for people with hypertension, so an
+    # unquantified child still flags it.
     hypertension = _hit(profile, "RULE_IQM_LICORICE_HYPERTENSION", "condition_id", "hypertension")
-    assert hypertension["dose_decision"]["consumer_disposition"] == "suppress"
+    assert hypertension["dose_decision"]["consumer_disposition"] != "suppress"
+    # A dose-dependent sub-rule keeps the missing-amount default (garlic's
+    # 600 mg hypertension floor).
+    garlic = _child("Garlic Extract", "garlic", "ingredientRows[2].nestedRows[4]")
+    garlic_bp = _hit(enricher._collect_interaction_profile(_product([], [garlic])),
+                     "RULE_INGREDIENT_GARLIC", "condition_id", "hypertension")
+    assert garlic_bp["dose_decision"]["consumer_disposition"] == "suppress"
 
 
 def test_authored_missing_amount_policy_still_wins_over_presence(enricher):

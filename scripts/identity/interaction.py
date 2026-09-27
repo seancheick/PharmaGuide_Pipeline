@@ -228,12 +228,11 @@ def interaction_subject_ids(canonical_id: Any) -> list[str]:
 
 # Units that record "no amount given" rather than a measured amount.
 _NO_AMOUNT_UNITS = frozenset({"", "unspecified", "not provided", "unknown", "n/a", "na"})
-# Outside a blend DSLD writes "0 NP" both for a nutrition-panel "0%" line and
-# for an ingredient listed without an amount, and the cleaner drops a printed
-# 0% DV (register Q23). Until it keeps it, a "0 NP" vitamin or mineral is read
-# as a panel zero and any other "0 NP" row as listed (2026-09-22 corpus: 151
-# vitamin/mineral rows such as "Vitamin A 0 NP" vs 25 others such as fish oil).
-_PANEL_NUTRIENT_CATEGORIES = frozenset({"vitamin", "vitamins", "mineral", "minerals"})
+# Outside a blend DSLD writes "0 NP" both for a nutrition-panel "0%" line and for
+# an ingredient listed without an amount; the printed %DV tells them apart, and
+# the cleaner keeps it as dailyValue: 0.0 for a printed 0%, None for no percent
+# (register Q23). Raw corpus 2026-09-26: 141 "0 NP" vitamin/mineral rows print
+# 0%, 18 print no percent (Vitamin B12 8, sodium 4).
 
 
 def label_row_is_blend_child(row: dict) -> bool:
@@ -252,7 +251,7 @@ def label_row_establishes_presence(row: dict) -> bool:
     A positive amount, a printed %DV above 0 (the cleaner's
     daily_value_no_amount role), a listing inside a blend, or a listing with no
     amount establish it. A measured zero ("Iron 0 mg", "Vitamin D 0 mcg", "0%",
-    "Not Present", a "0 NP" vitamin or mineral) does not. Presence says nothing
+    "Not Present", "0 NP" printed as 0% DV) does not. Presence says nothing
     about the amount: dose rules still read the row's own quantity (Sean,
     D1/D1c, 2026-09-26).
     """
@@ -266,7 +265,7 @@ def label_row_establishes_presence(row: dict) -> bool:
     if row.get("cleaner_row_role") == "daily_value_no_amount" or label_row_is_blend_child(row):
         return True
     if unit == "np":
-        return str(row.get("category") or "").strip().lower() not in _PANEL_NUTRIENT_CATEGORIES
+        return row.get("dailyValue") is None
     return unit in _NO_AMOUNT_UNITS
 
 

@@ -192,7 +192,10 @@
       "2026-09-26: RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives 100 mg/day floors cited PMID 393503 (273-546 mg glycyrrhizin case pair, no mention of 100 mg); they now cite af Geijerstam 2024 (PMID 38246526, 100 mg/day glycyrrhizic acid raised home systolic BP by 3.1 mmHg). Values unchanged; confidence_basis documented_effective_dose. Receipt: scripts/audits/pending_items_20260926/research.md.",
       "2026-09-26: RULE_IQM_GINKGO_HYPERTENSION pregnancy block raised from caution (no source) to avoid with NCCIH ginkgo (may be unsafe in pregnancy; might cause early labor or extra bleeding during delivery), matching RULE_BOTAN_GINKGO_PREGNANCY (Sean, 2026-09-26: one ginkgo pregnancy verdict). Lactation stays caution (NCCIH: little is known).",
       "2026-09-26: Plant-part split (Sean, 2026-09-26). RULE_IQM_DANDELION_KIDNEY keeps the diuretic claims (kidney disease, antihypertensives, lithium), now form_scope dandelion leaf + dandelion extract (whole or unstated part): PMID 19678785 is a dandelion leaf trial and the EU monographs give the diuretic indication for the leaf and for root with herb, none for the root alone; the kidney claim now also cites the EU leaf monograph (avoid in renal failure, possible hyperkalemia). Its three hypoglycemic claims moved unchanged to the new RULE_IQM_DANDELION_GLUCOSE, which applies to every dandelion form. RULE_IQM_STINGING_NETTLE_DIABETES is form_scope nettle leaf + unspecified: its glucose evidence is a leaf-extract trial (PMID 24273930) and the EU nettle-root monograph covers only benign prostatic hyperplasia. form_scope_match 'fail_open': a part-scoped rule is silent only for a label-confirmed form outside its scope; unknown or inferred parts still warn.",
-      "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES keeps only its glucose claims (diabetes, hypoglycemics) under the nettle leaf + unspecified form_scope. Its antihypertensives claim moves unchanged in severity, with the same no-data pregnancy block, to the new unscoped RULE_IQM_STINGING_NETTLE_BLOOD_PRESSURE: the hypotensive evidence covers every part (PMID 35800714) and a root-extract study lowered blood pressure in rats (PMID 12020933), so a root label keeps them. Found by the fresh-context review of the plant-part split."
+      "2026-09-26: RULE_IQM_STINGING_NETTLE_DIABETES keeps only its glucose claims (diabetes, hypoglycemics) under the nettle leaf + unspecified form_scope. Its antihypertensives claim moves unchanged in severity, with the same no-data pregnancy block, to the new unscoped RULE_IQM_STINGING_NETTLE_BLOOD_PRESSURE: the hypotensive evidence covers every part (PMID 35800714) and a root-extract study lowered blood pressure in rats (PMID 12020933), so a root label keeps them. Found by the fresh-context review of the plant-part split.",
+      "2026-09-26: RULE_IQM_GREEN_TEA_HYPERTENSION liver_disease (Sean, Q24): 800 mg EGCG/day is an observed risk dose, not a safe limit. The tier no longer lowers the warning to monitor (and hidden) below 800 mg; it stays avoid at any amount, including an unstated one, and >= 800 mg adds dose-specific copy. Sources now EFSA 2018 (PMID 32625874: >= 800 mg raised transaminases; no safe dose identified), USP 2020 (PMID 32140423) and LiverTox NBK547925. Removed unsourced copy: first-pass 'saturation' at 800 mg, liver disease 'lowers the threshold for injury', and a '>= 400 mg/dose' cut-off. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: RULE_INGREDIENT_GINSENG and RULE_IQM_STINGING_NETTLE_DIABETES glucose floors removed (Sean, D8 follow-up: a studied dose is not a warning threshold; a numeric floor needs threshold evidence such as a dose-response study, multiple doses separating no effect from effect, or a monograph/regulatory threshold). Ginseng's 100 mg/day (Sotaniemi 1995, PMID 8721940) and nettle's 1500 mg/day (Kianbakht 2013, PMID 24273930) are observed-effect doses from single studies that tested nothing lower. Both doses are now stated in the eight glucose mechanisms and cited in their sources (nettle's regimen was previously stated only in its diabetes mechanism). All eight sub-rules fire on presence; severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-09-26: Licorice blood-pressure floors removed (Sean, D8): RULE_BOTANICAL_LICORICE_ROOT antihypertensives and RULE_IQM_LICORICE_HYPERTENSION hypertension and antihypertensives. 100 mg/day glycyrrhizic acid is a level WHO has suggested is unlikely to harm most adults and the dose that raised home systolic BP in healthy adults (PMID 38246526); it is not a floor for people with hypertension, who respond more strongly (PMID 12574791, 15.3 vs 3.5 mmHg at 150 mg glycyrrhetinic acid/day). The floors were also compared with licorice mass, not glycyrrhizic acid. The three sub-rules fire on presence; the 100 mg figure stays as dose context in their mechanisms and sources, and the IQM hypertension threshold note (>= 2000 mg extract escalates to avoid) no longer calls it the point where BP elevation becomes clinically significant. Severities unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interaction_rules": [
@@ -4480,10 +4483,11 @@
           "condition_id": "diabetes",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Ginsenosides improve insulin sensitivity and increase pancreatic beta-cell insulin secretion. RCTs show significant postprandial glucose reduction.",
+          "mechanism": "Ginsenosides improve insulin sensitivity and increase pancreatic beta-cell insulin secretion. RCTs show significant postprandial glucose reduction. In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting glucose versus placebo; lower doses were not studied.",
           "action": "Monitor glucose levels when combining with diabetes medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know",
+            "https://pubmed.ncbi.nlm.nih.gov/8721940/"
           ],
           "alert_headline": "May modestly lower blood sugar",
           "alert_body": "Ginseng can lower blood sugar. If you have diabetes, talk to your clinician before adding ginseng and monitor your glucose, especially in the first weeks.",
@@ -4507,16 +4511,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/8721940/",
-            "rationale": "In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting blood glucose versus placebo and 200 mg/day also lowered HbA1c (PMID 8721940; dose split from the full text as reported in PMID 35912631). 100 mg/day is the lowest dose with a documented glucose effect."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "surgery_scheduled",
@@ -4557,10 +4552,11 @@
           "drug_class_id": "hypoglycemics_high_risk",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Mild additive glucose-lowering effect.",
+          "mechanism": "Mild additive glucose-lowering effect. In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting glucose versus placebo; lower doses were not studied.",
           "action": "Monitor for hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/asian-ginseng"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://pubmed.ncbi.nlm.nih.gov/8721940/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
@@ -4584,25 +4580,17 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/8721940/",
-            "rationale": "In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting blood glucose versus placebo and 200 mg/day also lowered HbA1c (PMID 8721940; dose split from the full text as reported in PMID 35912631). 100 mg/day is the lowest dose with a documented glucose effect."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_lower_risk",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Mild additive glucose-lowering effect.",
+          "mechanism": "Mild additive glucose-lowering effect. In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting glucose versus placebo; lower doses were not studied.",
           "action": "Monitor for hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/asian-ginseng"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://pubmed.ncbi.nlm.nih.gov/8721940/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
@@ -4626,16 +4614,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/8721940/",
-            "rationale": "In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting blood glucose versus placebo and 200 mg/day also lowered HbA1c (PMID 8721940; dose split from the full text as reported in PMID 35912631). 100 mg/day is the lowest dose with a documented glucose effect."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "anticoagulants",
@@ -4707,10 +4686,11 @@
           "drug_class_id": "hypoglycemics_unknown",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Mild additive glucose-lowering effect.",
+          "mechanism": "Mild additive glucose-lowering effect. In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting glucose versus placebo; lower doses were not studied.",
           "action": "Monitor for hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/asian-ginseng"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://pubmed.ncbi.nlm.nih.gov/8721940/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
@@ -4734,16 +4714,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/8721940/",
-            "rationale": "In newly diagnosed type 2 diabetes, ginseng 100 mg/day for 8 weeks lowered fasting blood glucose versus placebo and 200 mg/day also lowered HbA1c (PMID 8721940; dose split from the full text as reported in PMID 35912631). 100 mg/day is the lowest dose with a documented glucose effect."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -5022,14 +4993,16 @@
           "condition_id": "liver_disease",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "EGCG (epigallocatechin gallate), the principal catechin in green tea extract, undergoes hepatic first-pass metabolism. At supplemental doses (\u2265800 mg EGCG/day), EGCG saturates first-pass elimination and reaches hepatotoxic concentrations, inducing mitochondrial oxidative stress, hepatocellular pattern of liver injury, and transaminase elevations. The United States Pharmacopeia 2020 comprehensive review confirmed dose-dependent hepatocellular toxicity with adverse events reported from 140 mg to ~1,000 mg EGCG/day. Pre-existing liver disease impairs EGCG clearance and lowers the threshold for injury.",
-          "action": "Avoid concentrated green tea extract supplements (standardized EGCG \u2265400 mg/dose) in patients with liver disease. Brewed green tea is not implicated. Recommend liver function monitoring if use cannot be avoided.",
+          "mechanism": "Green tea extract has been implicated in clinically apparent acute liver injury, including acute liver failure (LiverTox). Case reports associate liver injury with EGCG intakes from about 140 to 1,000 mg/day, with substantial variation in individual susceptibility (USP 2020 review). In trials, supplemental EGCG at or above 800 mg/day raised serum transaminases, and EFSA could not identify an EGCG dose from green tea extracts that could be considered safe (EFSA 2018). Traditionally brewed green tea is generally considered safe.",
+          "action": "Avoid concentrated green tea extract supplements if you have liver disease; USP's green tea extract monograph label says not to use them with a liver problem. No safe EGCG amount has been established, so a lower or unstated amount does not remove the concern. If a clinician recommends use, take it with food and monitor liver function.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/32625874/",
             "https://pubmed.ncbi.nlm.nih.gov/32140423/",
+            "https://www.ncbi.nlm.nih.gov/books/NBK547925/",
             "https://pubmed.ncbi.nlm.nih.gov/36178169/"
           ],
           "alert_headline": "Green tea extract may injure the liver",
-          "alert_body": "Concentrated green tea extract has been linked to rare but serious liver injury. If you have liver disease, avoid concentrated extract supplements unless your clinician recommends them.",
+          "alert_body": "Concentrated green tea extract has caused rare but serious liver injury, and no safe EGCG amount is known. If you have liver disease, avoid these supplements unless your clinician recommends them.",
           "informational_note": "Concentrated green tea extract has liver safety signals relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5154,8 +5127,8 @@
           "value": 800,
           "unit": "mg EGCG",
           "severity_if_met": "avoid",
-          "severity_if_not_met": "monitor",
-          "note": "EGCG hepatotoxicity threshold; at \u2265800 mg EGCG/day first-pass saturation produces hepatocellular injury per USP 2020 review. Brewed green tea not implicated.",
+          "severity_if_not_met": "avoid",
+          "note": "800 mg EGCG/day is an observed risk dose, not a safe limit: it is the supplemental intake at or above which EFSA 2018 found a statistically significant rise in serum transaminases in trials, and EFSA could not identify a safe EGCG dose from green tea extracts. At or above it the warning adds dose-specific copy; below it or with no stated EGCG the warning stays at avoid. https://pubmed.ncbi.nlm.nih.gov/32625874/",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -5178,9 +5151,13 @@
               "value": 800,
               "unit": "mg EGCG",
               "severity_if_met": "avoid",
-              "severity_if_not_met": "monitor"
+              "severity_if_not_met": "avoid"
             }
-          }
+          },
+          "consumer_disposition_if_met": "block",
+          "consumer_disposition_if_not_met": "block",
+          "amount_missing_disposition": "block",
+          "alert_body_if_met": "This product provides 800 mg or more of EGCG a day, the supplemental intake EFSA linked to raised liver enzymes in trials. If you have liver disease, do not use it unless your clinician recommends it."
         }
       ]
     },
@@ -6097,10 +6074,12 @@
           "condition_id": "hypertension",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Glycyrrhizin can increase sodium retention and blood pressure. NOTE: DGL (deglycyrrhizinated licorice) has glycyrrhizin removed and does NOT have this interaction. This rule applies only to whole/standard licorice extract containing glycyrrhizin.",
+          "mechanism": "Glycyrrhizin can increase sodium retention and blood pressure. NOTE: DGL (deglycyrrhizinated licorice) has glycyrrhizin removed and does NOT have this interaction. This rule applies only to whole/standard licorice extract containing glycyrrhizin. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
           "action": "Avoid in uncontrolled blood pressure unless deglycyrrhizinated form is confirmed.",
           "sources": [
-            "https://www.nccih.nih.gov/health/licorice-root"
+            "https://www.nccih.nih.gov/health/licorice-root",
+            "https://pubmed.ncbi.nlm.nih.gov/38246526/",
+            "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
           "form_exclusion": "DGL (deglycyrrhizinated licorice)",
           "alert_headline": "Licorice may raise blood pressure",
@@ -6125,16 +6104,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/38246526/",
-            "rationale": "Licorice supplying 100 mg/day glycyrrhizic acid for 2 weeks raised home systolic blood pressure by 3.1 mmHg and suppressed renin and aldosterone in healthy volunteers (randomized crossover trial, PMID 38246526). The floor is compared with the licorice amount on the label, which is at least its glycyrrhizic acid content, so it never suppresses a product supplying 100 mg glycyrrhizic acid. DGL has the glycyrrhizin removed."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -6176,10 +6146,12 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "May blunt blood pressure control from antihypertensive therapy. Does not apply to DGL (deglycyrrhizinated) licorice.",
+          "mechanism": "May blunt blood pressure control from antihypertensive therapy. Does not apply to DGL (deglycyrrhizinated) licorice. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
           "action": "Monitor blood pressure and review supplement use with clinician.",
           "sources": [
-            "https://www.nccih.nih.gov/health/licorice-root"
+            "https://www.nccih.nih.gov/health/licorice-root",
+            "https://pubmed.ncbi.nlm.nih.gov/38246526/",
+            "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Licorice can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding licorice.",
@@ -6203,16 +6175,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/38246526/",
-            "rationale": "Licorice supplying 100 mg/day glycyrrhizic acid for 2 weeks raised home systolic blood pressure by 3.1 mmHg and suppressed renin and aldosterone in healthy volunteers (randomized crossover trial, PMID 38246526). The floor is compared with the licorice amount on the label, which is at least its glycyrrhizic acid content, so it never suppresses a product supplying 100 mg glycyrrhizic acid. DGL has the glycyrrhizin removed."
-          }
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -6296,7 +6259,7 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "monitor",
-          "note": "2000 mg of typical commercial licorice extract (4-5% glycyrrhizin) \u2248 100 mg glycyrrhizic acid, the threshold above which BP elevation becomes clinically significant. DGL is exempt. https://www.nccih.nih.gov/health/licorice-root",
+          "note": "2000 mg of typical commercial licorice extract (4-5% glycyrrhizin) \u2248 100 mg glycyrrhizic acid/day, the dose that raised blood pressure in healthy adults (https://pubmed.ncbi.nlm.nih.gov/38246526/); at or above it the warning escalates to avoid. It is not a safe floor: people with hypertension respond more strongly (https://pubmed.ncbi.nlm.nih.gov/12574791/). DGL is exempt. https://www.nccih.nih.gov/health/licorice-root",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -17343,10 +17306,12 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Glycyrrhizin causes sodium retention and blood pressure elevation via pseudoaldosteronism, directly opposing the pharmacodynamic effect of all antihypertensive drug classes (ACE inhibitors, ARBs, calcium channel blockers, diuretics, beta-blockers). Clinical case series have documented failed BP control in patients consuming licorice while on antihypertensive therapy.",
+          "mechanism": "Glycyrrhizin causes sodium retention and blood pressure elevation via pseudoaldosteronism, directly opposing the pharmacodynamic effect of all antihypertensive drug classes (ACE inhibitors, ARBs, calcium channel blockers, diuretics, beta-blockers). Clinical case series have documented failed BP control in patients consuming licorice while on antihypertensive therapy. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
           "action": "Discontinue licorice root supplements in patients on antihypertensive therapy. DGL (deglycyrrhizinated licorice) does not carry this interaction. Inform prescriber of any licorice supplement use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/31605160/"
+            "https://pubmed.ncbi.nlm.nih.gov/31605160/",
+            "https://pubmed.ncbi.nlm.nih.gov/38246526/",
+            "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
           "alert_headline": "May reduce blood-pressure medication effect",
           "alert_body": "Licorice's sodium-retaining effect works against antihypertensive therapy. If you take a blood-pressure medication, talk to your prescriber; DGL licorice is unaffected.",
@@ -17370,16 +17335,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 100,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/38246526/",
-            "rationale": "Licorice supplying 100 mg/day glycyrrhizic acid for 2 weeks raised home systolic blood pressure by 3.1 mmHg and suppressed renin and aldosterone in healthy volunteers (randomized crossover trial, PMID 38246526). The floor is compared with the licorice amount on the label, which is at least its glycyrrhizic acid content, so it never suppresses a product supplying 100 mg glycyrrhizic acid. DGL has the glycyrrhizin removed."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -22212,16 +22168,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1500,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/24273930/",
-            "rationale": "Nettle leaf extract 500 mg every 8 hours (1500 mg/day) for 3 months, added to oral antidiabetics in advanced type 2 diabetes, lowered fasting glucose, 2-hour glucose and HbA1c versus placebo (RCT, PMID 24273930). No lower mg dose with a glucose effect is documented."
-          }
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -22229,7 +22176,7 @@
           "drug_class_id": "hypoglycemics_high_risk",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Nettle leaf extract added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
+          "mechanism": "Nettle leaf extract (500 mg every 8 hours) added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24273930/",
@@ -22257,22 +22204,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1500,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/24273930/",
-            "rationale": "Nettle leaf extract 500 mg every 8 hours (1500 mg/day) for 3 months, added to oral antidiabetics in advanced type 2 diabetes, lowered fasting glucose, 2-hour glucose and HbA1c versus placebo (RCT, PMID 24273930). No lower mg dose with a glucose effect is documented."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_lower_risk",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Nettle leaf extract added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
+          "mechanism": "Nettle leaf extract (500 mg every 8 hours) added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24273930/",
@@ -22300,22 +22238,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1500,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/24273930/",
-            "rationale": "Nettle leaf extract 500 mg every 8 hours (1500 mg/day) for 3 months, added to oral antidiabetics in advanced type 2 diabetes, lowered fasting glucose, 2-hour glucose and HbA1c versus placebo (RCT, PMID 24273930). No lower mg dose with a glucose effect is documented."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Nettle leaf extract added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
+          "mechanism": "Nettle leaf extract (500 mg every 8 hours) added to oral antidiabetic drugs lowered fasting glucose, post-meal glucose and HbA1c in a 3-month randomised trial, and a meta-analysis of 8 trials found fasting glucose fell by about 18 mg/dL. Its reported insulin-secretagogue and alpha-glucosidase-inhibiting effects could add to antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24273930/",
@@ -22343,16 +22272,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 1500,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "documented_effective_dose",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/24273930/",
-            "rationale": "Nettle leaf extract 500 mg every 8 hours (1500 mg/day) for 3 months, added to oral antidiabetics in advanced type 2 diabetes, lowered fasting glucose, 2-hour glucose and HbA1c versus placebo (RCT, PMID 24273930). No lower mg dose with a glucose effect is documented."
-          }
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],

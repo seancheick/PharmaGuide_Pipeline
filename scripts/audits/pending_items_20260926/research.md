@@ -226,3 +226,93 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
 - The enricher compares a floor with the ingredient row's label amount (`_evaluate_min_effective_dose`), not with
   glycyrrhizic acid content; a licorice row is at least its GA content, so the 100 mg floor never suppresses a
   product supplying 100 mg GA. Value unchanged in both rules; source and rationale replaced.
+
+## Q24 green tea extract and liver disease (Sean's decision 2026-09-26: 800 mg EGCG is an observed risk dose)
+- EFSA 2018, Scientific opinion on the safety of green tea catechins (EFSA J 16(4):e05239, PMID 32625874, PMC7009618;
+  efetch, abstract + full text): "intake of doses equal or above 800 mg EGCG/day taken as a food supplement has been shown
+  to induce a statistically significant increase of serum transaminases"; full text: "The Panel concluded that it was not
+  possible to identify an EGCG dose from green tea extracts that could be considered safe." Traditional infusions "are in
+  general considered to be safe"; rare idiosyncratic cases after infusions.
+- USP 2020 review (PMID 32140423): case reports associate hepatotoxicity with "EGCG intake amounts from 140 mg to ~1000
+  mg/day and substantial inter-individual variability"; USP monograph label: "Do not use if you have a liver problem".
+  It does not tie first-pass saturation to 800 mg.
+- LiverTox Green Tea (NBK547925, PMID 31643260): green tea extract "implicated in cases of clinically apparent acute
+  liver injury, including instances of acute liver failure". Full chapter (dose dependence) not read: bot check.
+- Removed as unsourced: "saturates first-pass elimination" at 800 mg, liver disease "lowers the threshold for injury",
+  and a ">= 400 mg/dose" cut-off.
+- Corpus (2026-09-22 enriched): 149 products stated EGCG < 800 mg (monitor, hidden), 83 stated none (hidden), 0 stated
+  >= 800 mg. All 232 now show avoid to users with liver disease.
+- Matcha: IQM files "matcha powder" and matcha aliases under green_tea_extract (5 products on the matcha form; more under
+  "green tea extract (unspecified)"). Whole-leaf tea is not a concentrated extract (EFSA). Queued as Q25.
+
+## D18 egg inside protein blends (Sean's decision 2026-09-26: evidence follows the intervention studied)
+- Morton 2018 (PMID 28698222, PMC5867436, full text via efetch): 49 included RCTs are references 16-64 ("extracted from the
+  final 49 studies.16-64"); sources: whey 23, casein 3, soy 6, pea 1, milk 10, whole food 7, 13 "non-specific protein
+  blends or blends containing multiple protein sources (eg, whey, casein, soy and egg)". The only egg intervention is
+  reference 45, Iglay 2009 (PMID 19299575): a whole-food diet with extra protein "predominately from egg sources", whose
+  title reports it "does not influence" body composition responses. No included trial tested a whey/casein/soy blend with
+  added egg; INGR_WHEY_PROTEIN has no egg alias and no egg evidence family exists.
+- 25694 cleaned 2026-09-22 (read directly): active "Protein 22 g" plus whey/milk/soy source rows with no amounts; inactive
+  "Protein Blend" forms: calcium caseinate, egg albumen, micellar casein, milk protein isolate, soy protein isolate, whey
+  protein concentrate and isolate.
+
+## Q23 printed 0% Daily Value (Sean's decision 2026-09-26: preserve it upstream, no category heuristic)
+- enhanced_normalizer.py `_process_quantity`: `if dv:` dropped a printed 0.0; `.get("percent", 0)` turned a missing percent
+  into 0.0 on the single-quantity path. Now a printed percent (0 included) is kept and none stays None.
+- Raw corpus (~/Downloads/PharmaGuide_Datasets/staging/brands, 2026-09-26): top-level "0 NP" vitamin/mineral rows: 141 print
+  0% (Vitamin A 59, Vitamin C 58: panel zeros), 18 print no percent (Vitamin B12 8, sodium 4: listed without an amount),
+  328 print a positive %DV. The removed category heuristic misread the 18. All depths: 2,329 printed-0% rows in 1,059
+  products now clean to dailyValue 0.0 instead of null.
+- dailyValue readers checked: cleaner DV-unit repair and folate DFE (require > 0), scoring_input_contract and completeness
+  gate (require > 0), enricher UL eligibility (>= 0: a 0% row becomes DV-confirmed; its amount is 0), nested DV owner
+  (`is not None`: a parent printing 0% is no longer linked; not seen in tests), export (0.0 now ships where null did).
+
+## D8 follow-up (Sean, 2026-09-26): a studied dose is not a warning threshold
+- Ruling: a numeric floor needs threshold evidence (a dose-response study, multiple doses separating no effect
+  from effect, or a monograph/regulatory threshold). A dose at which one study saw an effect is an observed-effect
+  dose; it does not show that lower doses are inert.
+- RULE_INGREDIENT_GINSENG glucose sub-rules: Sotaniemi 1995 (PMID 8721940) tested 100 and 200 mg/day only; the
+  100 mg arm lowered fasting glucose (Derosa 2022, PMID 35912631). Floors removed; the 100 mg/day result is now
+  stated in the four glucose mechanisms and 8721940 is in their sources. The four ghost-review entries for
+  35912631 (which only the removed floor rationale cited) are deleted.
+- RULE_IQM_STINGING_NETTLE_DIABETES: Kianbakht 2013 (PMID 24273930) is one regimen (500 mg every 8 hours); the
+  diabetes mechanism stated it, the three hypoglycemic mechanisms now do too; all four cite it. Floors removed.
+- Both rules now fire on presence at unchanged severities.
+
+## standardized_botanicals ginger_extract: nonexistent PMID (Q22)
+- PMID 28200047: esummary "cannot get document summary" (2026-09-26); it does not exist.
+- The source line named "Marx et al. 2017 systematic review on ginger for chemotherapy-induced nausea". PubMed
+  (esummary/efetch 2026-09-26): PMID 25848702, Marx W, Ried K, McCarthy AL, Crit Rev Food Sci Nutr 2017 Jan 2,
+  "Ginger-Mechanism of action in chemotherapy-induced nausea and vomiting: A review" (publication type Review,
+  not systematic); abstract: "Bioactive compounds within the rhizome of ginger, particularly the gingerol and
+  shogaol class of compounds". The 2013 systematic review by the same group is PMID 23550785 (Nutr Rev).
+- Source line now names 25848702 as a review. Citation only: the +1 standardized-botanical bonus depends on the
+  label's gingerol claim, not on this source.
+
+## standardized_botanicals slendesta: nonexistent PMID (Q22)
+- PMID 22647284: esummary "cannot get document summary" (2026-09-26); it does not exist.
+- PMID 28485429 (Zhu Y, Lasrado JA, Hu J et al. Food Funct 2017, doi 10.1039/c6fo01803c, efetch 2026-09-26):
+  randomized double-blind placebo-controlled crossover, 44 healthy women, "potato extract standardized to 15 or
+  30 mg PI2"; lower postprandial hunger and higher fullness; "Consumption of 15 mg PI2 also resulted in
+  significantly higher postprandial plasma levels of cholecystokinin". Supports the entry's satiety/CCK note for a
+  PI2-standardized potato extract; the abstract does not name the Slendesta brand.
+- Other human PI2 trials seen: PMID 20644555 (Peters 2011, 30 mg PI2 minidrink), PMID 32161479 (Flechtner-Mors
+  2020, 150 mg PI2 twice daily during weight reduction). Citation only; the bonus depends on the brand on the label.
+
+## Licorice blood-pressure floors removed (D8, Sean 2026-09-26)
+- PMID 38246526 (af Geijerstam 2024, efetch): "The World Health Organization has suggested that 100 mg GA/d would
+  be unlikely to cause adverse effects"; in 28 healthy adults (median age 24) licorice with 100 mg GA/day raised home
+  systolic BP by 3.1 mmHg (95% CI 0.8-5.4) over 2 weeks. A tolerable-intake level for most adults and one studied
+  dose, not a floor.
+- PMID 12574791 (Sigurjonsdottir 2003, efetch 2026-09-26): 100 g liquorice/day (150 mg glycyrrhetinic acid) for 4
+  weeks raised office systolic BP 15.3 mmHg in essential hypertension vs 3.5 mmHg in normotensives (p=0.004).
+- The floors compared a 100 mg value with the licorice ingredient's label mass (`_evaluate_min_effective_dose`),
+  not glycyrrhizic acid content.
+- Removed on RULE_BOTANICAL_LICORICE_ROOT antihypertensives and RULE_IQM_LICORICE_HYPERTENSION hypertension and
+  antihypertensives; both sources added and the 100 mg figure stated as context in each mechanism. The IQM
+  hypertension threshold (>= 2000 mg extract -> avoid, below -> monitor) stays; its note no longer calls 100 mg GA the
+  point where BP elevation "becomes clinically significant".
+- Impact, catalog 2026.09.22: 10 products newly show the IQM licorice hypertension warning (label licorice 1.5-80 mg);
+  drug-class sub-rules are not in detail blobs. None hidden.
+- Not verified here and not cited: the JECFA/WHO wording on susceptible subgroups and the WHO monograph
+  contraindications quoted in Sean's pasted review.

@@ -159,6 +159,23 @@ Required fields:
 
 If dose conversion is not possible at runtime, the base severity is retained.
 
+### Dose floors (`min_effective_dose`)
+
+A floor suppresses a warning below its value, so it needs threshold evidence (Sean, D8, 2026-09-26):
+
+- A studied dose is not a warning threshold. A trial that saw an effect at 100 mg shows an
+  observed-effect dose; it says nothing about 50 mg unless lower doses were tested.
+- Valid floor provenance: a dose-response study that locates the boundary, multiple doses that
+  separate no effect from effect, or an authoritative monograph or regulatory threshold.
+- Case reports never set a floor: an event at a dose shows harm can occur there, not safety below it.
+- A floor's source must study the sub-rule's own effect (bleeding for a bleeding rule, glucose for a
+  glucose rule), never an efficacy endpoint such as BPH or arthritis.
+- Without threshold evidence the sub-rule is `materiality: presence`. Keep the studied dose as
+  evidence in the mechanism text and cite it in `sources`.
+
+`verify_interaction_rules_citations.py --strict` content-checks floor sources and rationales and
+dose-threshold notes as well as `sources[]`, and gates the release.
+
 ---
 
 ## Current Coverage Status

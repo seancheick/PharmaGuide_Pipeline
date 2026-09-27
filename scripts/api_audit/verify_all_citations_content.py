@@ -277,13 +277,15 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
                     raise
             root = ET.fromstring(raw)
 
-            for article in root.findall(".//PubmedArticle"):
+            # A book record (PubmedBookArticle: NBK chapters, HTA dossiers) has a
+            # BookTitle instead of an ArticleTitle; without it, it read as "not found".
+            for article in root.findall(".//PubmedArticle") + root.findall(".//PubmedBookArticle"):
                 pmid_el = article.find(".//PMID")
                 if pmid_el is None:
                     continue
                 pmid = pmid_el.text.strip()
 
-                title = element_text(article.find(".//ArticleTitle"))
+                title = element_text(article.find(".//ArticleTitle")) or element_text(article.find(".//BookTitle"))
 
                 # Collect all abstract sections
                 abstract_parts = []
@@ -628,10 +630,31 @@ def verify_file(config: dict) -> dict:
     }
 
 
+def baseline_failures(results: list[dict], baseline: dict) -> tuple[list, list]:
+    """(new mismatches, unresolved citations) against a known-backlog baseline.
+
+    A mismatch listed in the baseline is backlog: reported, not a failure. A
+    mismatch not listed, or a citation that does not resolve, is a failure.
+    """
+    known = {(item["file"], item["entry_id"], item["pmid"])
+             for item in baseline.get("backlog", []) if item.get("status") == "mismatch"}
+    new, unresolved = [], []
+    for result in results:
+        for entry in result.get("entries", []):
+            if entry["status"] == "not_found":
+                unresolved.append((result["file"], entry))
+            elif entry["status"] == "mismatch" and (result["file"], entry["entry_id"], entry["pmid"]) not in known:
+                new.append((result["file"], entry))
+    return new, unresolved
+
+
 def main():
     parser = argparse.ArgumentParser(description="Content-verify all PubMed citations")
     parser.add_argument("--file", help="Verify only this file (e.g., timing_rules.json)")
     parser.add_argument("--report", type=Path, help="Write JSON report to this path")
+    parser.add_argument("--baseline", type=Path,
+                        help="known backlog (scripts/data/citation_content_backlog.json): fail only on "
+                             "an unresolved citation or a mismatch not listed there")
     args = parser.parse_args()
 
     # Load env
@@ -682,6 +705,16 @@ def main():
         with open(args.report, "w") as f:
             json.dump(all_results, f, indent=2, ensure_ascii=False)
         print(f"Report: {args.report}")
+
+    if args.baseline:
+        new, unresolved = baseline_failures(all_results, json.loads(args.baseline.read_text()))
+        print(f"BASELINE: {len(new)} new mismatch(es), {len(unresolved)} unresolved citation(s); "
+              f"{total_mismatch - len(new)} backlog mismatch(es) reported, not blocking")
+        for file, entry in unresolved:
+            print(f"  UNRESOLVED {file} {entry['entry_id']} PMID {entry['pmid']}")
+        for file, entry in new:
+            print(f"  NEW MISMATCH {file} {entry['entry_id']} PMID {entry['pmid']}: {entry['article_title']}")
+        return 1 if new or unresolved else 0
 
     return 1 if total_mismatch > 0 else 0
 

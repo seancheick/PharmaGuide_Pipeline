@@ -1230,60 +1230,97 @@ def test_feverfew_anticoagulant_rule_carries_no_floor_from_a_general_review():
     assert sub["materiality"] == "presence"
 
 
-def test_ginseng_floors_match_the_effect_their_source_measured():
+def test_ginseng_carries_no_floor_and_keeps_its_studied_glucose_dose_as_evidence():
     """PMID 35509826 (a metabolic meta-analysis, no dose-response) floored every
-    sub-rule at 200 mg with a blood-pressure rationale. Glucose: Sotaniemi 1995
-    (PMID 8721940) found 100 mg/day lowered fasting glucose and 200 mg/day HbA1c,
-    so the glucose floors are 100 mg. Bleeding/warfarin: no human source gives a
-    dose (Korean red ginseng 1 g and 1.5 g were null), so those fire on presence."""
+    sub-rule at 200 mg. Sean, D8 (2026-09-26): a studied dose is not a warning
+    threshold. Sotaniemi 1995 (PMID 8721940) found 100 mg/day lowered fasting
+    glucose, an observed-effect dose, but tested nothing lower, so the glucose
+    sub-rules fire on presence and keep that dose as cited evidence. No human
+    source gives a bleeding or warfarin dose either."""
     rule = _rule("RULE_INGREDIENT_GINSENG")
     assert "35509826" not in json.dumps(rule)
-    for key, target in (("condition_id", "surgery_scheduled"), ("drug_class_id", "anticoagulants")):
+    for key, target in (("condition_id", "surgery_scheduled"), ("drug_class_id", "anticoagulants"),
+                        ("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
+                        ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
         sub = _sub_rule(rule, key, target)
         assert "min_effective_dose" not in sub and sub["materiality"] == "presence", target
     for key, target in (("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
                         ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
-        floor = _sub_rule(rule, key, target)["min_effective_dose"]
-        assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
-        assert floor["source"] == _pmid("8721940"), target
-        assert "hypertensive" not in floor["rationale"], target
+        sub = _sub_rule(rule, key, target)
+        assert _pmid("8721940") in sub["sources"], target
+        assert "100 mg/day" in sub["mechanism"], target
 
 
-def test_stinging_nettle_glucose_floor_is_the_trial_dose_not_a_conservative_guess():
-    """The 1000 mg floor was labelled weak_signal_conservative and cited a
-    general review (PMID 35800714). The documented dose is Kianbakht 2013 (PMID
-    24273930): leaf extract 500 mg every 8 hours (1500 mg/day) lowered glucose
-    and HbA1c on top of oral antidiabetics."""
+def test_stinging_nettle_glucose_rules_carry_no_floor():
+    """The 1000 mg floor was weak_signal_conservative on a general review. The
+    only documented dose, Kianbakht 2013 (PMID 24273930, 500 mg every 8 hours),
+    is one studied regimen, not a threshold (Sean, D8 2026-09-26), so the
+    glucose sub-rules fire on presence; the regimen stays in the mechanism and
+    sources."""
     rule = _rule("RULE_IQM_STINGING_NETTLE_DIABETES")
     for key, target in (("condition_id", "diabetes"), ("drug_class_id", "hypoglycemics_high_risk"),
                         ("drug_class_id", "hypoglycemics_lower_risk"), ("drug_class_id", "hypoglycemics_unknown")):
-        floor = _sub_rule(rule, key, target)["min_effective_dose"]
-        assert (floor["value"], floor["unit"], floor["basis"]) == (1500, "mg", "per_day"), target
-        assert floor["source"] == _pmid("24273930"), target
-        assert floor["confidence_basis"] == "documented_effective_dose", target
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub and sub["materiality"] == "presence", target
+        assert _pmid("24273930") in sub["sources"], target
+        assert "500 mg" in sub["mechanism"], target
 
 
 LICORICE_FLOOR_SOURCE = _pmid("38246526")
 
 
-def test_licorice_root_bp_floor_cites_the_100_mg_glycyrrhizic_acid_trial():
-    """PMID 393503 is two women on 273-546 mg glycyrrhizin; it never mentions
-    100 mg. af Geijerstam 2024 (PMID 38246526) randomized healthy volunteers to
-    licorice with 100 mg glycyrrhizic acid/day: home systolic BP rose 3.1 mmHg."""
-    floor = _sub_rule(_rule("RULE_BOTANICAL_LICORICE_ROOT"), "drug_class_id", "antihypertensives")["min_effective_dose"]
-    assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day")
-    assert floor["source"] == LICORICE_FLOOR_SOURCE
-    assert floor["confidence_basis"] == "documented_effective_dose"
+def _assert_licorice_bp_presence(rule_id: str, targets: tuple) -> None:
+    rule = _rule(rule_id)
+    for key, target in targets:
+        sub = _sub_rule(rule, key, target)
+        assert "min_effective_dose" not in sub and sub["materiality"] == "presence", (rule_id, target)
+        assert LICORICE_FLOOR_SOURCE in sub["sources"] and _pmid("12574791") in sub["sources"], (rule_id, target)
+        assert "100 mg/day glycyrrhizic acid" in sub["mechanism"], (rule_id, target)
 
 
-def test_iqm_licorice_bp_floors_cite_the_100_mg_glycyrrhizic_acid_trial():
-    """Same defect as the licorice root rule: PMID 393503 never mentions 100 mg."""
-    rule = _rule("RULE_IQM_LICORICE_HYPERTENSION")
-    for key, target in (("condition_id", "hypertension"), ("drug_class_id", "antihypertensives")):
-        floor = _sub_rule(rule, key, target)["min_effective_dose"]
-        assert (floor["value"], floor["unit"], floor["basis"]) == (100, "mg", "per_day"), target
-        assert floor["source"] == LICORICE_FLOOR_SOURCE, target
-        assert floor["confidence_basis"] == "documented_effective_dose", target
+def test_licorice_root_bp_rule_fires_on_presence():
+    """Sean, D8 (2026-09-26): 100 mg/day glycyrrhizic acid is a level WHO calls
+    unlikely to harm most adults and the dose that raised BP in healthy adults
+    (PMID 38246526), not a floor for people with hypertension, who respond more
+    strongly (PMID 12574791). The floor was also compared with licorice mass,
+    not glycyrrhizic acid. Presence, with 100 mg kept as dose context."""
+    _assert_licorice_bp_presence("RULE_BOTANICAL_LICORICE_ROOT", (("drug_class_id", "antihypertensives"),))
+
+
+def test_iqm_licorice_bp_rules_fire_on_presence_and_the_threshold_note_claims_no_safe_floor():
+    _assert_licorice_bp_presence("RULE_IQM_LICORICE_HYPERTENSION",
+                                 (("condition_id", "hypertension"), ("drug_class_id", "antihypertensives")))
+    note = next(t for t in _rule("RULE_IQM_LICORICE_HYPERTENSION")["dose_thresholds"]
+                if t.get("target_id") == "hypertension")["note"]
+    assert "the threshold above which BP elevation becomes clinically significant" not in note
+    assert _pmid("12574791") in note
+
+
+def test_green_tea_liver_warning_treats_800_mg_as_an_observed_risk_dose_not_a_safe_limit():
+    """Sean, 2026-09-26 (Q24). EFSA 2018 (PMID 32625874, PMC7009618): >= 800 mg
+    EGCG/day as a supplement raised serum transaminases in trials, and "it was not
+    possible to identify an EGCG dose from green tea extracts that could be
+    considered safe". USP 2020 (PMID 32140423): case reports span 140 to ~1000 mg
+    EGCG/day with large individual variability; its monograph label says not to use
+    with a liver problem. So below 800 mg is not safe and an unknown amount is not
+    assumed >= 800 mg: the liver warning is avoid at any amount, and 800 mg only
+    adds dose-specific copy."""
+    rule = _rule("RULE_IQM_GREEN_TEA_HYPERTENSION")
+    liver = _sub_rule(rule, "condition_id", "liver_disease")
+    [tier] = [t for t in rule["dose_thresholds"] if t.get("target_id") == "liver_disease"]
+
+    assert liver["severity"] == "avoid" and liver["materiality"] == "presence"
+    assert tier["severity_if_met"] == tier["severity_if_not_met"] == "avoid"
+    assert tier["profile_gate"]["dose"]["severity_if_not_met"] == "avoid"
+    assert tier["consumer_disposition_if_not_met"] == "block"
+    assert tier["amount_missing_disposition"] == "block"
+    assert "not a safe" in tier["note"] and "800" in tier["alert_body_if_met"]
+    assert _pmid("32625874") in liver["sources"] and _pmid("32140423") in liver["sources"]
+    copy = json.dumps(liver)
+    for stale in ("saturates first-pass elimination", "lowers the threshold for injury",
+                  "400 mg/dose", "hepatotoxicity threshold"):
+        assert stale not in copy + tier["note"], stale
+    assert "800" not in liver["alert_body"]  # the unknown/lower-amount copy claims no dose
 
 
 NCCIH_GINKGO = "https://www.nccih.nih.gov/health/ginkgo"

@@ -4,8 +4,8 @@ One rule, used by interaction selection (enricher) and by the fingerprint the
 app joins curated pairs on. A positive amount, a printed %DV above 0, a listing
 inside a blend or a listing with no amount establish presence; a measured zero
 ("Iron 0 mg", "Vitamin D 0 mcg", "0%", "Not Present") does not. "0 NP" outside a
-blend is read by category (a vitamin or mineral is a panel zero) until the
-cleaner keeps a printed 0% DV apart from a missing one (register Q23).
+blend is a panel zero when the label prints 0% DV (dailyValue 0.0) and a listing
+without an amount when it prints no percent (dailyValue None; register Q23).
 """
 
 from __future__ import annotations
@@ -32,8 +32,8 @@ from identity.interaction import label_row_establishes_presence  # noqa: E402
     ({"quantity": 0.0, "unit": "mcg"}, False),
     ({"quantity": 0.0, "unit": "%"}, False),
     ({"quantity": 0.0, "unit": "Not Present"}, False),
-    ({"quantity": 0.0, "unit": "NP", "category": "vitamins"}, False),
-    ({"quantity": 0.0, "unit": "NP", "category": "fatty_acids"}, True),
+    ({"quantity": 0.0, "unit": "NP", "dailyValue": 0.0}, False),
+    ({"quantity": 0.0, "unit": "NP", "dailyValue": None, "category": "vitamins"}, True),
 ])
 def test_presence_rule(row, present):
     assert label_row_establishes_presence(row) is present
