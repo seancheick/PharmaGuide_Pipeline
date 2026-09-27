@@ -5,7 +5,7 @@
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "last_updated": "2026-09-25",
-    "total_entries": 53,
+    "total_entries": 60,
     "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches \u2014 the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
     "reviewed_at": "2026-09-25"
   },
@@ -382,6 +382,55 @@
         "banned:harmful"
       ],
       "reason": "2026-09-21: short form of 'calcium disodium edta'. Same deliberate role-scoped dual-recognition with harmful_additives ADD_CALCIUM_DISODIUM_EDTA. The bare token 'EDTA' is intentionally NOT an alias of either policy identity, so no generic EDTA term appears here."
+    },
+    {
+      "term_normalized": "mannitol",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: BulkSupplements Mannitol products carry mannitol as their only active; IQM mannitol gives it a primary identity so the product is scored (Sean: non-banned safety matches are scored and ship). ADD_SUGAR_ALCOHOLS additive recognition is deliberately retained. Deliberate dual-recognition, reviewed."
+    },
+    {
+      "term_normalized": "d mannitol",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: Stereo-specific spelling of mannitol, mirrored with ADD_SUGAR_ALCOHOLS (same rationale as \"mannitol\")."
+    },
+    {
+      "term_normalized": "polydextrose",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: Litesse polydextrose is the dosed active of GNC fiber products; IQM fiber (unspecified) gives it a primary identity so the product is scored. ADD_POLYDEXTROSE additive recognition is deliberately retained. Deliberate dual-recognition, reviewed."
+    },
+    {
+      "term_normalized": "litesse",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: Litesse is the polydextrose brand; same rationale as \"polydextrose\"."
+    },
+    {
+      "term_normalized": "litesse polydextrose",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: Branded polydextrose spelling; same rationale as \"polydextrose\"."
+    },
+    {
+      "term_normalized": "litesse polydextrose fiber",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: Branded polydextrose spelling; same rationale as \"polydextrose\"."
+    },
+    {
+      "term_normalized": "calcium silicate",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: Transparent Labs Bulk declares 400 mg calcium silicate as an active; IQM calcium (unspecified) gives it a primary identity so the product is scored. ADD_CALCIUM_SILICATE excipient recognition is deliberately retained. Deliberate dual-recognition, reviewed."
     }
   ]
 }
