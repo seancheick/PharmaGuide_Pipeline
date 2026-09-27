@@ -26,7 +26,8 @@ Run the PharmaGuide API verification suite against data files. Use this BEFORE c
 
 | Argument | Script | What it checks |
 |----------|--------|---------------|
-| `pmid` | `scripts/api_audit/verify_all_citations_content.py` | PMID exists AND article title matches claimed topic |
+| `pmid` | `scripts/api_audit/verify_all_citations_content.py --baseline scripts/data/citation_content_backlog.json` | PMID exists AND article title matches claimed topic; fails only on a new mismatch or an unresolved PMID (the backlog is listed, not blocking) |
+| `rules` | `scripts/api_audit/verify_interaction_rules_citations.py --strict` | Interaction-rule citations name the rule's subject and topic (release gate) |
 | `cui` | `scripts/api_audit/verify_cui.py` | UMLS CUI resolves to correct concept |
 | `interactions` | `scripts/api_audit/verify_interactions.py` | RXCUIs + CUIs + drug class refs valid |
 | `unii` | `scripts/api_audit/verify_unii.py` | FDA UNII + CFR references valid |
@@ -34,7 +35,10 @@ Run the PharmaGuide API verification suite against data files. Use this BEFORE c
 | `nct` | `scripts/api_audit/verify_clinical_trials.py` | ClinicalTrials.gov NCT IDs valid |
 | `rda` | `scripts/api_audit/verify_rda_uls.py` | RDA/AI/UL values match National Academies DRI |
 | `depletions` | `scripts/api_audit/verify_depletion_timing_pmids.py` | Depletion/timing PMIDs content-verified |
-| (all) | Runs pmid + cui + unii + interactions | Full suite |
+| (all) | Runs pmid + rules + cui + unii + interactions | Full suite |
+
+For a curated-data batch, add `--changed-since origin/main` (or the batch's base ref) to the `pmid`
+and `rules` verifiers: they check only the entries the batch changed and print one line each.
 
 ## Steps
 
@@ -47,14 +51,15 @@ If missing, tell the user: "API keys not found in .env — cannot verify. Do NOT
 </step>
 
 <step>
-Parse the argument to determine which scripts to run. If no argument, run the full suite (pmid, cui, unii, interactions).
+Parse the argument to determine which scripts to run. If no argument, run the full suite (pmid, rules, cui, unii, interactions).
 </step>
 
 <step>
-Run each verification script and capture output. Pipe through `| tail -30` to keep context lean.
-Example:
+Run each verification script with the project interpreter and capture output. Pipe through
+`| tail -30` to keep context lean. Example:
 ```bash
-python3 scripts/api_audit/verify_all_citations_content.py 2>&1 | tail -30
+source scripts/python_env.sh
+"$PG_PYTHON" scripts/api_audit/verify_all_citations_content.py --baseline scripts/data/citation_content_backlog.json 2>&1 | tail -30
 ```
 </step>
 

@@ -20,7 +20,7 @@ in `docs/adr/`, ownership in `scripts/contracts/source_of_truth_matrix.json`.
 Raw `python3 -m pytest` picks macOS Python 3.9 and runs every heavy test (~1 h).
 
 ```bash
-scripts/test.sh fast -k <kw>   # iterating: only the topic you touched
+scripts/test.sh fast -k <kw>   # iterating, or once per applied data batch: the topic you touched
 scripts/test.sh fast           # checkpoint: completed batch or shared-code change
 scripts/test.sh release        # release gates before a ship
 scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
@@ -139,8 +139,11 @@ bug-fix notes are history, not specifications.
 - **No unverified clinical claim or identifier.** Every mechanism, severity or interaction needs a
   citable source; PMID/CUI/RXCUI/UNII/NCT/CAS/CID are content-verified against the live API. A real
   PMID about the wrong topic is a ghost reference — a defect. Details: `.claude/rules/clinical-data.md`.
-- **One entry at a time.** Never bulk-apply API results or batch-edit curated data; batch
-  operations skip entries silently.
+- **Batch by topic, verify per entry.** Related entries go in one reviewable batch. Each entry gets
+  its own identity and source check by content and its own result; `scripts/data_batch.py check`
+  proves the applied diff matches that list exactly (batches that skip entries silently are the
+  failure this guards). Then verify, test and fix the batch together. Verifier output never goes into
+  data unreviewed (`--apply` included).
 - **Identity by chemistry, not name.** Confirm via PubChem CID / CAS / InChI and search existing
   entries before adding one.
 - **Two similar data files?** Check `_metadata.schema_version`, migration history and what the
@@ -168,8 +171,10 @@ bug-fix notes are history, not specifications.
   inputs outside `/tmp` — a reboot wipes it.
 - One worktree + branch per agent; one integrator mutates and pushes `main`. Stage explicit paths
   only. Re-check the branch tip before claiming a lane. Record your lane (goal + files you will
-  touch) early in your worktree's `.claude/state/CURRENT_HANDOFF.md`. Every agent reads the other
-  lanes there before editing a shared owner (scoring config, matrix, rule files, export contract).
+  touch) early in your worktree's `.claude/state/CURRENT_HANDOFF.md`, and rewrite that file on each
+  update instead of appending (git keeps history; a stacked handoff costs every resume). Every agent
+  reads the other lanes there before editing a shared owner (scoring config, matrix, rule files,
+  export contract).
 
 ## Engineering principles
 
