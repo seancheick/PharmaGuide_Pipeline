@@ -38,7 +38,7 @@ from product_submission_import import (  # noqa: E402
 from submission_review.extraction import bounded_http  # noqa: E402
 from submission_review.extraction.checks import convention_findings  # noqa: E402
 from submission_review.extraction.envelope import (  # noqa: E402
-    LABEL_CONTENT_KEYS, SCHEMA_VERSION,
+    LABEL_CONTENT_KEYS, SCHEMA_VERSION, LabelDraftError, validate_label_draft_v1,
 )
 from submission_review.extraction.extractor import (  # noqa: E402
     EvidenceBundle, EvidencePhoto, ExtractionConfig, ExtractionResult,
@@ -319,6 +319,13 @@ def cmd_record(api: Reviewer, alias: str, model: str) -> int:
     content = json.loads((directory / "reading.json").read_text())
     draft = build_draft(content, prepared, model)
 
+    # The extractor would refuse a malformed reading as "invalid provider
+    # draft"; ask the envelope owner first so the reader sees where and why.
+    try:
+        validate_label_draft_v1(draft)
+    except LabelDraftError as error:
+        print(f"{alias}: not recorded; reading.json is not a valid draft: {error}")
+        return 1
     problems = convention_findings(draft)
     if problems:
         print(f"{alias}: not recorded; fix reading.json first:")

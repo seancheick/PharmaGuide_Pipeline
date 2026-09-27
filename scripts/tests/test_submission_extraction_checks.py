@@ -193,19 +193,6 @@ def test_a_split_form_and_a_botanical_latin_name_are_clean() -> None:
     assert convention_findings(draft) == []
 
 
-def test_a_form_is_never_a_child_row_of_an_ordinary_row() -> None:
-    draft = _draft(ingredient_rows=[
-        _row("Vitamin D3"),
-        _row("Cholecalciferol", parent_index=0),
-        _row("Herbal Blend", is_blend_header=True),
-        _row("Ginger", parent_index=2),
-    ])
-
-    findings = convention_findings(draft)
-    assert _codes(findings) == ["form_as_child_row"]
-    assert "ingredient_rows[1]" in findings[0]["detail"]
-
-
 def test_a_percent_daily_value_is_not_an_amount() -> None:
     draft = _draft(ingredient_rows=[
         _row("Vitamin C", amount=_f({"value": 1111, "unit_text": "%"})),

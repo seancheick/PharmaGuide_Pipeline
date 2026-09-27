@@ -185,7 +185,9 @@ def _duplicate_photo_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
 #: fixes these before submitting, so they are a gate, not draft discrepancies:
 #: recording one would need the edge function's DRAFT_DISCREPANCY_CODES mirror
 #: (schema.ts) changed and deployed first.
-CONVENTION_CODES = frozenset({"form_not_split", "form_as_child_row", "percent_as_amount"})
+#: (A child row under a non-blend row is already refused by the envelope
+#: validator, which owns row parentage.)
+CONVENTION_CODES = frozenset({"form_not_split", "percent_as_amount"})
 
 _AS_FORM = re.compile(r"\(\s*as\s+[^)]+\)", re.IGNORECASE)
 
@@ -201,9 +203,10 @@ def convention_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
     Each rule is exact on purpose: a gate that fires on a correct reading
     teaches readers to ignore it.
     """
-    rows = [row for row in draft.get("ingredient_rows") or [] if isinstance(row, Mapping)]
     findings: list[dict[str, Any]] = []
-    for index, row in enumerate(rows):
+    for index, row in enumerate(draft.get("ingredient_rows") or []):
+        if not isinstance(row, Mapping):
+            continue
         name = (row.get("display_name") or {}).get("value")
         form = (row.get("form_text") or {}).get("value")
         if isinstance(name, str) and _AS_FORM.search(name) and not (
@@ -211,13 +214,6 @@ def convention_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
             findings.append(_convention(
                 "form_not_split", index,
                 f"{name!r} prints a form; copy it into form_text as printed."))
-        parent = row.get("parent_index")
-        if (isinstance(parent, int) and not isinstance(parent, bool)
-                and 0 <= parent < len(rows) and rows[parent].get("is_blend_header") is not True):
-            findings.append(_convention(
-                "form_as_child_row", index,
-                "a child row under a row that is not a blend header; a form "
-                "belongs in form_text, and only blend headers have children."))
         amount = (row.get("amount") or {}).get("value")
         if isinstance(amount, Mapping) and str(amount.get("unit_text") or "").strip() == "%":
             findings.append(_convention(
