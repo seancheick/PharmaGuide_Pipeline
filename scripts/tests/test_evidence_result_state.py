@@ -26,6 +26,80 @@ def test_essential_nutrient_without_clinical_rct_is_authority_supported():
     assert _state(_product(matches=[])) == "evaluated_authority"
 
 
+def test_authority_owner_remains_headline_when_secondary_research_does_not_apply():
+    """A secondary applicability limit stays in details without owning the pillar headline."""
+    zinc = {
+        "name": "Zinc",
+        "standard_name": "Zinc",
+        "canonical_id": "zinc",
+        "mapped": True,
+        "quantity": 22.5,
+        "unit": "mg",
+        "cleaner_row_role": "active_scorable",
+    }
+    secondary = {
+        "name": "Bacillus subtilis",
+        "standard_name": "Bacillus subtilis",
+        "canonical_id": "bacillus_subtilis",
+        "mapped": True,
+        "quantity": 0,
+        "unit": "NP",
+        "category": "probiotic",
+        "cleaner_row_role": "nested_display_only",
+    }
+    product = _product(
+        product_name="Zinc",
+        ingredients=[zinc, secondary],
+        matches=[],
+        probiotic_data={
+            "is_probiotic_product": True,
+            "probiotic_blends": [{
+                "name": "Bacillus subtilis",
+                "strains": ["Bacillus subtilis"],
+                "strain_identity_resolution": [{
+                    "strain": "Bacillus subtilis",
+                    "resolution": "species_only",
+                }],
+            }],
+        },
+    )
+
+    evidence = score_evidence(
+        product,
+        apply_primary_floor=False,
+    )
+    authority_only = score_evidence(
+        _product(product_name="Zinc", ingredients=[zinc], matches=[]),
+        apply_primary_floor=False,
+    )
+
+    # This test isolates result ownership, so it deliberately disables the
+    # nutrition floor: changing the headline must not manufacture score.
+    assert evidence["score"] == authority_only["score"] == 0.0
+    assert evidence["metadata"]["evidence_result_state"] == "evaluated_authority"
+
+    component = evidence["metadata"]["probiotic_component_evidence"]
+    assert component["disposition_state"] == "research_present_applicability_unestablished"
+
+    from evidence_resolver import resolve_product_evidence
+    headline_owner = resolve_product_evidence(product, owner_scoped=True)
+    assert [resolution.canonical_id for resolution in headline_owner.resolutions] == ["zinc"]
+    ingredient_details = {
+        resolution.canonical_id: resolution.disposition
+        for resolution in resolve_product_evidence(product).resolutions
+    }
+    assert ingredient_details["bacillus_subtilis"] == (
+        "research_present_applicability_unestablished"
+    )
+
+    pillar = _pillar_evidence(evidence, 20, "generic_single_molecule", _config())
+    assert pillar["score"] == 0.0
+    assert pillar["reason"] == (
+        "Established nutritional authority recognizes the physiological necessity of these "
+        "essential nutrients."
+    )
+
+
 def test_records_rejected_by_applicability_are_not_called_uncovered():
     match = _match(id="TEST_FORMULA_ONLY", applicability={"scope": "formula_context_only"})
     assert _state(_product(matches=[match])) == "applicability_unestablished"

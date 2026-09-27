@@ -534,6 +534,27 @@ def _evidence_result_state(
 
     # Probiotic disposition takes precedence for probiotic products
     if probiotic_disposition and probiotic_disposition.get("has_probiotic_component"):
+        # Result-state ownership is narrower than the ingredient-detail view.
+        # A secondary probiotic component retains its disposition in component
+        # metadata and ingredient resolutions, but it cannot replace a
+        # completed authority disposition earned by the product's headline
+        # owner. Resolve that owner through the existing structured identity
+        # seam without changing the score or filtering the detail payload.
+        headline_res = (
+            prod_res
+            if owner_scoped
+            else resolve_product_evidence(product, owner_scoped=True)
+        )
+        probiotic_owns_headline = any(
+            "probiotic_strain_registry" in resolution.matched_owners
+            for resolution in headline_res.resolutions
+        )
+        if (
+            not probiotic_owns_headline
+            and headline_res.overall_disposition
+            == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+        ):
+            return "evaluated_authority"
         prob_state = probiotic_disposition.get("disposition_state")
         if prob_state:
             return str(prob_state)
