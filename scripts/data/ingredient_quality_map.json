@@ -34050,7 +34050,7 @@
     "forms": {
       "resistant dextrin": {
         "bio_score": 9,
-        "absorption": "not absorbed (soluble fiber; fermented in the colon)",
+        "absorption": "category_error (soluble fiber; fermented in the colon, not systemically absorbed)",
         "absorption_structured": {
           "value": null,
           "range_low": null,
