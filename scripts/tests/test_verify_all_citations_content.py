@@ -160,3 +160,29 @@ def test_every_citation_in_the_data_folder_is_read_by_a_content_verifier() -> No
         if cited - collected:
             gaps[rel] = sorted(cited - collected)[:8]
     assert not gaps, gaps
+
+
+def test_book_records_are_parsed_not_reported_missing(monkeypatch) -> None:
+    """PMID 29144655 is a PubmedBookArticle (an IQWiG dulaglutide dossier) cited
+    for Lutemax; efetch returns no PubmedArticle for it, so it read as "not
+    found" instead of being content-checked."""
+    xml = (b'<?xml version="1.0" ?><PubmedArticleSet><PubmedBookArticle><BookDocument>'
+           b'<PMID Version="1">29144655</PMID><Book><BookTitle book="x">Dulaglutide (Addendum to '
+           b'Commission A15-07)</BookTitle></Book><Abstract><AbstractText>Benefit assessment.'
+           b'</AbstractText></Abstract></BookDocument></PubmedBookArticle></PubmedArticleSet>')
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def read(self):
+            return xml
+
+    monkeypatch.setattr(vac.urllib.request, "urlopen", lambda *a, **k: Response())
+    monkeypatch.setattr(vac.time, "sleep", lambda *_: None)
+    article = vac.fetch_articles(["29144655"])["29144655"]
+    assert article["title"] == "Dulaglutide (Addendum to Commission A15-07)"
+    assert article["abstract"] == "Benefit assessment."

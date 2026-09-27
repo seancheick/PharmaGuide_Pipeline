@@ -277,13 +277,15 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
                     raise
             root = ET.fromstring(raw)
 
-            for article in root.findall(".//PubmedArticle"):
+            # A book record (PubmedBookArticle: NBK chapters, HTA dossiers) has a
+            # BookTitle instead of an ArticleTitle; without it, it read as "not found".
+            for article in root.findall(".//PubmedArticle") + root.findall(".//PubmedBookArticle"):
                 pmid_el = article.find(".//PMID")
                 if pmid_el is None:
                     continue
                 pmid = pmid_el.text.strip()
 
-                title = element_text(article.find(".//ArticleTitle"))
+                title = element_text(article.find(".//ArticleTitle")) or element_text(article.find(".//BookTitle"))
 
                 # Collect all abstract sections
                 abstract_parts = []
