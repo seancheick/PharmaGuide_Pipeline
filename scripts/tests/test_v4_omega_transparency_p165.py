@@ -408,9 +408,9 @@ def _load_canaries(ids):
 # break this lock — what we want to guarantee is that Transparency is in
 # the right ballpark and the positive components fire correctly.
 @pytest.mark.parametrize("dsld_id,min_score,max_score", [
-    ("327776", 11.5, 12.5),   # Sports Research: EPA/DHA + TG form disclosed
-    ("326270", 11.5, 12.5),   # Sports Research alt
-    ("288740", 10.5, 11.5),   # Nordic: undefined form; honest allergen presence no longer penalizes
+    ("327776", 10.5, 11.5),   # Sports Research: native 11-point cap; EPA/DHA + TG disclosed
+    ("326270", 10.5, 11.5),   # Sports Research alt: same native cap
+    ("288740", 7.5, 8.5),     # Nordic: undefined form; no retired optional-claim credit
     ("273630", 8.5, 9.5),     # Garden of Life Advanced Omega
     ("239592", 8.0, 12.0),    # CVS Krill
     ("184654", 8.0, 12.0),    # Pure Encap Krill-Plex
