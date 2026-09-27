@@ -29,14 +29,14 @@ I will give you a file path to a JSON database. Before auditing:
 
 This allows the prompt to work on ANY of the project's databases:
 
-- `ingredient_quality_map.json` (parent → forms → aliases) — 621 parents, schema 5.4.0
+- `ingredient_quality_map.json` (parent → forms → aliases)
 - `harmful_additives.json` (entries with aliases and categories) — 116 entries, schema 5.4.0
-- `banned_recalled_ingredients.json` (entries with aliases and status) — 146 entries, schema 5.3.0
+- `banned_recalled_ingredients.json` (entries with aliases and status)
 - `botanical_ingredients.json` (entries with aliases) — 482 entries, schema 5.2.0
 - `botanical_marker_contributions.json` (source botanical → bioactive marker contributions) — added 2026-05-11
 - `other_ingredients.json` (entries with aliases) — 679 entries, schema 5.4.0
 - `standardized_botanicals.json` (botanical standardization markers) — 239 entries
-- `clinically_relevant_strains.json` (probiotic strain bonuses) — 42 entries, schema 5.1.0
+- `clinically_relevant_strains.json` (probiotic strain bonuses)
 - Or any similar structured reference file
 
 ### Step 1 — Audit each entry

@@ -265,12 +265,12 @@ Before adding an alias to an existing entry, verify the alias actually refers to
 
 If you change cleaner, normalizer, enricher, batch processor, scorer contract, matching logic, **or any canonical vocab**, you must run a small shadow verification on an affected dataset slice and compare before/after.
 
-Use `scripts/shadow_score_comparison.py` for the exploratory before/after diff, then run the authoritative `scripts/tests/test_scoring_snapshot_v1.py` release gate.
+Use `scripts/audits/quality_redesign/replay.py` (`freeze-raw`, `snapshot` on both trees, `compare`) for the before/after diff, then run the authoritative `scripts/tests/test_scoring_snapshot_v1.py` release gate.
 
 **Vocab-change shadow check:** if you touch any canonical vocab JSON, also run:
 
 ```bash
-python3 -m pytest scripts/tests/ -k "vocab or taxonomy or canonical or sp1 or sp2 or sp3 or sp4 or sp5 or sp6" -q
+scripts/test.sh fast -k "vocab or taxonomy or canonical or sp1 or sp2 or sp3 or sp4 or sp5 or sp6"
 ```
 
 This catches drift across Flutter parity, canonical-ID enforcement, and v4 routing tests.
@@ -283,7 +283,7 @@ For every approved batch, follow this exact order:
 2. Implement the narrowest correct fix
 3. Run targeted tests
 4. Run `python3 scripts/db_integrity_sanity_check.py --strict`
-5. Run `python3 -m pytest scripts/tests/ -k "overlap or integrity or schema or vocab" -q`
+5. Run `scripts/test.sh fast -k "overlap or integrity or schema or vocab"`
 6. Run a real shadow clean on the exact raw DSLD source files for the affected labels
 7. Confirm the target labels are cleared from the intended unmapped surface
 8. Confirm prior fixes did not regress (`primary_type`, `form_factor_canonical`, `category_canonical` stable for unrelated products)
@@ -348,7 +348,7 @@ Never promote Lane B or Lane C items into production data just to clear backlog 
 After approval, for each approved item:
 
 1. Pin a failing test for the expected state
-2. Make the approved JSON or code change (one entry at a time)
+2. Make the approved JSON or code change (batch by topic, each entry verified on its own; `scripts/data_batch.py`)
 3. Verify the test passes
 4. Run integrity checks (`db_integrity_sanity_check.py --strict`)
 5. If any canonical vocab touched, run vocab parity tests
@@ -950,7 +950,7 @@ Action: Do not add to DB. Fix cleaner/header logic if needed.
 ### Bucket 2: Parser / normalizer bug
 
 Examples: Punctuation drift, bracket bleed, dosage text in name, apostrophe variants
-Action: Patch code, add regression test, shadow-run via `shadow_score_comparison.py`.
+Action: Patch code, add regression test, measure with `scripts/audits/quality_redesign/replay.py`.
 
 ### Bucket 3: Routing / precedence bug
 
@@ -1207,7 +1207,7 @@ Prefer the exact current run folder first, because that is the operator's workin
 | `run_pipeline.py`                  | Orchestrates Clean → Enrich → Score           | Shadow-run verification          |
 | `clean_dsld_data.py`               | Stage 1: normalize raw DSLD JSON              | Investigate cleaning bugs        |
 | `enrich_supplements_v3.py`         | Stage 2: match, classify, enrich              | Investigate enrichment bugs      |
-| `score_supplements.py`             | Stage 3: arithmetic scoring                   | Investigate scoring bugs         |
+| `score_supplements_v4.py`          | Stage 3: arithmetic scoring                   | Investigate scoring bugs         |
 | `enhanced_normalizer.py`           | Core text normalization engine                | Investigate normalization bugs   |
 | `supplement_taxonomy.py`           | SP-1 classifier → primary_type                | Investigate taxonomy mis-routes  |
 | `form_factor_normalizer.py`        | SP-3 → form_factor_canonical                  | Investigate form_factor drift    |
@@ -1222,7 +1222,7 @@ Prefer the exact current run folder first, because that is the operator's workin
 | `rda_ul_calculator.py`             | RDA/UL dose calculations                      | Investigate dose scoring         |
 | `dosage_normalizer.py`             | Dose normalization                            | Investigate dose parsing         |
 | `match_ledger.py`                  | Match tracking/auditing                       | Trace match decisions            |
-| `shadow_score_comparison.py`       | Before/after scoring diff                     | Verify shadow-run deltas         |
+| `audits/quality_redesign/replay.py` | Before/after scoring diff | Verify before/after deltas |
 | `tests/test_scoring_snapshot_v1.py`| Reviewed frozen-product baseline gate          | Guard against regressions        |
 | `db_integrity_sanity_check.py`     | Schema and data validation                    | Mandatory after every edit       |
 | `coverage_gate.py`                 | Quality/coverage threshold enforcement        | Quality gate checking            |
@@ -1421,7 +1421,7 @@ Taxonomy mis-routes:      XX (Lane C — code fix required)
 
 1. Files changed (exact list)
 2. Tests run (integrity + targeted + vocab parity)
-3. Shadow-run verification (before/after unmapped deltas via `shadow_score_comparison.py`)
+3. Before/after verification (unmapped deltas via `scripts/audits/quality_redesign/replay.py`)
 4. Canonical-field stability check: `primary_type`, `form_factor_canonical`, `category_canonical` unchanged on unrelated products
 5. Residual risk (anything still deferred)
 

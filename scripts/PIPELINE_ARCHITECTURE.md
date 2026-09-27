@@ -1,9 +1,9 @@
 # PharmaGuide Pipeline Architecture
 
 > Last verified: 2026-09-18
-> Export schema: 2.5.0 | Core columns: 117 | Pipeline manifest: 3.4.0
-> Version truth lives in code, not this header: `EXPORT_SCHEMA_VERSION` (build_final_db.py),
-> `PRODUCTS_CORE_COLUMNS` (core_export_model.py), `SCHEMA_VERSION` (stage_manifest.py).
+> Version truth lives in code, not this header: `EXPORT_SCHEMA_VERSION` and `PIPELINE_VERSION`
+> (build_final_db.py), `PRODUCTS_CORE_COLUMNS` (core_export_model.py); `SCHEMA_VERSION`
+> (stage_manifest.py) versions the stage manifests.
 
 ## 1. System boundary
 

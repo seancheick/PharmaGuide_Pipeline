@@ -31,7 +31,7 @@ Before any new work, it helps to be honest about what exists.
 ### What already works
 
 - **DSLD intake scripts** (`scripts/dsld_api_client.py`, `scripts/dsld_api_sync.py`) — you can fetch from NIH DSLD by brand, query, filter, or supplement form code (gummies=`e0176`, capsules=`e0159`, softgels=`e0161`, etc.). A state file tracks what's been seen so delta pulls work.
-- **3-stage pipeline** (`run_pipeline.py` → clean → enrich → score). Deterministic, testable, 3,957 tests passing.
+- **3-stage pipeline** (`run_pipeline.py` → clean → enrich → score). Deterministic and tested (`scripts/test.sh`).
 - **Final DB build** (`build_final_db.py`) merges all brands into a single SQLite + detail blobs + manifest.
 - **Supabase sync** (`sync_to_supabase.py`) pushes the built DB to your hosted database.
 - **Validation gate** (`validate_safety_copy.py` `--strict`) — catches authoring mistakes before shipping.

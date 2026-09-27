@@ -21,9 +21,10 @@ Components:
                            metadata (sustainability_cert_program), not a
                            formulation-quality signal.
 
-Maximum reachable score with current sub-components: 8 + 4 = 12/25.
-The 2-point headroom is intentional and reserved for future lot-level purity
-signals. Per Sean's 'do not invent fields' rule, concentration credit requires
+Maximum reachable score with current sub-components: 8 + 4 = 12 of the
+rubric's 25. The public Formulation pillar normalizes against
+quality_score.json formulation_subscale.archetype_reference.omega, which is
+set to that reachable 12. Per Sean's 'do not invent fields' rule, concentration credit requires
 label-disclosed parent omega oil mass and EPA/DHA mass.
 
 Per §13 architecture lock, this module does not import from

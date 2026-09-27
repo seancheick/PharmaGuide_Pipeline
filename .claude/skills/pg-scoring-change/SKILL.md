@@ -43,8 +43,10 @@ skill covers the steps.
    directly invents regressions.
 6. **Measure before claiming.** Score stored inputs from a clean HEAD worktree (never with
    uncommitted scoring edits in the tree) into an old and a new directory. Compare with
-   `python3 scripts/audit_source_of_truth_contract.py shadow-diff --old-dir <old> --new-dir <new>`
-   and a score diff. Explain the top movers. Any unexplained identity or status change: revert.
+   `"$PG_PYTHON" scripts/audit_source_of_truth_contract.py shadow-diff --old-dir <old> --new-dir <new>`
+   and a score diff. For curated-data or cleaner changes, freeze the affected raw labels once with
+   `scripts/audits/quality_redesign/replay.py freeze-raw`, `snapshot` both trees (clean → enrich →
+   score, up to 4 workers) and `compare`. Explain the top movers. Any unexplained identity or status change: revert.
    Run one corpus job at a time.
 7. **Fresh-context review.** Give a reviewer only the requirement, the matrix owner, the diff and
    the measured deltas. It must answer: does the diff add a new name? Does a near-name already exist

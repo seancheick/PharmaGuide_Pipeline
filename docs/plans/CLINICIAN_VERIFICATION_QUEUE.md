@@ -1,6 +1,7 @@
 # Clinician Verification Queue
 
-**Status:** ACTIVE — async, never blocks production
+**Status:** HISTORICAL (2026-09-27): not maintained since 2026-05-18. Open review items live in the one
+register, `scripts/audits/pending_items_20260926/LEDGER.md`.
 **Started:** 2026-05-18
 **Last triaged:** 2026-05-18
 **Companion spec:** [SCORING_V4_PROPOSAL.md](SCORING_V4_PROPOSAL.md) §11 Anchor methodology

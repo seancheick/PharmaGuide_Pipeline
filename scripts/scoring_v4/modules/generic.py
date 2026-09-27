@@ -19,9 +19,10 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
                                * evidence_level * effect_direction * enrollment
                                * dose_guard * top_N + depth_bonus); cap per
                                ingredient = 7
-    Transparency        10     P1.3.5 — clear-single base + B3 claim_compliance
-                               up to +4; minus B2 allergen + B5 opacity
-                               (class-aware) + B6 marketing
+    Transparency        10     P1.3.5 — clear-single base + complete-active
+                               disclosure bonus; B3 claim_compliance is checked
+                               but scores 0 (b3_cap); minus B2 allergen + B5
+                               opacity (class-aware) + B6 marketing
     Core subtotal       85
 
 Plus separate adjustments before the raw-score clamp:
@@ -29,8 +30,11 @@ Plus separate adjustments before the raw-score clamp:
     Verification Bonus         0 to +8    (former 0-15 Testing & Trust signals,
                                           rescaled by verification_bonus)
     Manufacturer Trust         0 to +5    (D1+D2+rollup; P1.3.6)
-    Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
-                                          + severity/recency; P1.3.6)
+    Manufacturer Violations    0 to cap   (manufacturer_violations.json rules
+                                          + severity/recency; graduated cap by
+                                          Class I count, quality_score.json
+                                          verification_magnitudes.manufacturer
+                                          mfg_cap_*; P1.3.6)
     Safety Hygiene Base        0 to +4    (catalog safety-signal absence)
 
 Phase 9 state: Formulation, Dose, Evidence, Transparency, Manufacturer
@@ -145,7 +149,7 @@ class ManufacturerTrustResult:
 
 @dataclass
 class ManufacturerViolationsResult:
-    """Separate 0 to -25 adjustment (§6 line 401).
+    """Separate adjustment down to the graduated mfg_cap_* floor (§6 line 401).
 
     It is independent of the additive verification bonus and is populated by
     P1.3.6 from `manufacturer_violations.json` rules.

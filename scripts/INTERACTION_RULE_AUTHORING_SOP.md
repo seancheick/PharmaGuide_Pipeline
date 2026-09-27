@@ -1,6 +1,6 @@
 # PharmaGuide Interaction Rule Authoring SOP
 
-> Last updated: 2026-03-18 | Schema 5.1.0 | 45 rules, 14 conditions, 9 drug classes
+> Schema version and rule count: `_metadata` of `scripts/data/ingredient_interaction_rules.json`.
 
 ## Scope
 
@@ -210,11 +210,11 @@ dose-threshold notes as well as `sources[]`, and gates the release.
 3. Add/update rule with authoritative sources.
 4. Run tests:
    ```bash
-   cd scripts && python3 -m pytest tests/test_interaction_tracker.py tests/test_db_integrity.py tests/test_clinical_schema_compat.py -q
+   scripts/test.sh fast -k interaction
    ```
 5. Run full suite:
    ```bash
-   cd scripts && python3 -m pytest tests/ -q
+   scripts/test.sh fast
    ```
 6. Update `_metadata.total_entries` and `_metadata.last_updated` in the JSON.
 
@@ -246,4 +246,4 @@ dose-threshold notes as well as `sources[]`, and gates the release.
 
 ## Reusable Agent Prompt
 
-For batch-adding new rules with AI assistance, see `scripts/PROMPT_ADD_INTERACTION_RULES.md`. That prompt includes the full JSON schema, all valid enum values, research protocol, and quality checklist.
+For batch-adding new rules with AI assistance, see `scripts/audits/prompts/PROMPT_ADD_INTERACTION_RULES.md`. That prompt includes the full JSON schema, all valid enum values, research protocol, and quality checklist.

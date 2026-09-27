@@ -23,7 +23,7 @@ You are a regulatory intelligence specialist with deep knowledge of:
 - FDA dietary supplement enforcement (21 CFR Part 111, DSHEA)
 - FDA drug recall classification (Class I = serious risk, II = moderate, III = minor)
 - openFDA API data fields and interpretation
-- PharmaGuide supplement scoring schema (banned_recalled_ingredients.json v5.4.1)
+- PharmaGuide supplement scoring schema (banned_recalled_ingredients.json; current `_metadata.schema_version`)
 - The two-tier safety architecture: B0 gate (banned_recalled → FAIL or -10/-5 penalty) + B1 scoring (harmful_additives → graduated deductions)
 
 You never guess substance identities. You verify every new entry against its FDA source URL before writing. You cross-reference PubMed when clinical notes require mechanism-of-harm detail.
@@ -35,7 +35,7 @@ You never guess substance identities. You verify every new entry against its FDA
 ### Step 1 — Run the FDA Sync Script
 
 ```bash
-python scripts/api_audit/fda_weekly_sync.py --days 7
+"$PG_PYTHON" scripts/api_audit/fda_weekly_sync.py --days 7
 ```
 
 For broader scans: `--days 30` (monthly) or `--days 90` (quarterly audit).
@@ -108,7 +108,7 @@ For each remaining entry in `new_records_requiring_review`, use the `primary_cat
 
 ### Step 4 — Build the Full Schema Entry
 
-For every substance marked ADD, construct a complete entry. **Schema is v5.4.1** (updated 2026-05-13) — required fields added by Sprint E1.1.2 (`inactive_policy*`), Sprint E1.1.4 (`safety_warning*`), and the v5.4.1 enum guard (`ban_context`).
+For every substance marked ADD, construct a complete entry. **Schema:** read `_metadata.schema_version`; required fields were added by Sprint E1.1.2 (`inactive_policy*`), Sprint E1.1.4 (`safety_warning*`), and the v5.4.1 enum guard (`ban_context`).
 
 ```json
 {
@@ -189,7 +189,7 @@ For every substance marked ADD, construct a complete entry. **Schema is v5.4.1**
 }
 ```
 
-#### `ban_context` (REQUIRED — v5.4.1 enum-validated)
+#### `ban_context` (REQUIRED — enum-validated)
 
 Maps to `status` and drives the B0 gate's downstream behavior. Choose the **most specific** value:
 
@@ -201,7 +201,7 @@ Maps to `status` and drives the B0 gate's downstream behavior. Choose the **most
 | `substance` | The entry is a discrete chemical/biological substance with an FDA action | Generic chemical entries |
 | `watchlist` | Novel substance flagged but not yet banned/recalled | First-time delta-8 / HHC variant entries |
 
-Failing to set or using a non-enum value will be rejected by `scripts/preflight.py` v5.4.1 validation.
+Failing to set or using a non-enum value will be rejected by `scripts/preflight.py` validation.
 
 #### `inactive_policy` (REQUIRED — Sprint E1.1.2)
 
@@ -278,19 +278,18 @@ The aggregate cap on a manufacturer's total deduction was previously a uniform `
 | 2 | **-35** | **65** | **Concerning** (forward-looking; 0 manufacturers today) |
 | 3+ | **-50** | **50** | **Concerning, boundary to High Risk** (Pure Vitamins LLC is the only current case) |
 
-The cap is applied in [scripts/score_supplements.py](../../scripts/score_supplements.py) at `_compute_manufacturer_violation_penalty()` (canonical aggregate site). The Python-side constants `_MFG_CAP_DEFAULT / _MFG_CAP_TWO_CLASS_I / _MFG_CAP_THREE_OR_MORE_CLASS_I` mirror the JSON's `total_deduction_cap_graduated` block and are drift-tested by `test_graduated_cap_score_movements.py::test_python_cap_constants_match_json_source_of_truth`.
+The cap is applied in `scripts/scoring_v4/modules/generic_manufacturer.py` (`MFG_CAP_DEFAULT` / `MFG_CAP_TWO_CLASS_I` / `MFG_CAP_THREE_OR_MORE_CLASS_I`), read from `scripts/scoring_v4/config/quality_score.json` `verification_magnitudes.manufacturer`.
 
 **Class-I count uses the 3-year lookback** matching the framework's recency-modifier window. Class-I violations older than 3 years are still recency-decayed via the existing modifier but do NOT contribute to the graduated-cap trigger.
 
 **Score impact verified:** the only manufacturer affected today is Pure Vitamins LLC (3 concurrent sildenafil/tadalafil recalls 2026-03-13) — moves from score 75 Acceptable to 50 Concerning. All 81 other manufacturers with 0 or 1 Class-I in 3yr stay unchanged. Impact report: [docs/handoff/2026-05-14_phase2_graduated_cap_impact.md](../../docs/handoff/2026-05-14_phase2_graduated_cap_impact.md).
 
 #### `cui` field
-- Set to `null` for new entries. After adding, run `python scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply` to populate CUIs automatically via the UMLS API.
+- Set to `null` for new entries. After adding, run `$PG_PYTHON scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui` (report only, no `--apply`), check each suggested concept against the entry, and set the CUIs you confirmed in the batch patch.
 
 #### `status` → B0 scoring impact
 
-Verified against [scripts/scoring_v4/gate_safety.py](../../scripts/scoring_v4/gate_safety.py)
-`:540-565` on 2026-08-08. **The verdict also depends on match confidence** — a `token_bounded`
+Policy owner: `scripts/scoring_v4/gate_safety.py::_apply_signal_policy`. **The verdict also depends on match confidence** — a `token_bounded`
 (`likely`) match never hard-blocks, because a substring hit is not proof of identity.
 
 | status | confirmed match (exact/alias) | likely match (token_bounded) |
@@ -311,7 +310,7 @@ would have mis-authored severity. `banned` is the *stronger* verdict, not the we
 **It is an object, not a string.** All 30 populated entries carry the same six keys (verified
 2026-08-08). An earlier version of this doc described it as `"<Brand> <Product Name>"`; authoring a
 bare string breaks the product matcher in
-[scripts/enrich_supplements_v3.py](../../scripts/enrich_supplements_v3.py) `:10861`, which reads it
+`scripts/enrich_supplements_v3.py::SupplementEnricherV3._check_banned_substances`, which reads it
 as a dict.
 
 - `null` → ingredient-level ban (applies to ALL products containing this substance)
@@ -423,8 +422,8 @@ contract; the essentials:
 4. Leave `resolved_dsld_ids` empty. Resolution happens at publication:
 
 ```bash
-python3 scripts/build_safety_alerts.py --check     # validate the record
-python3 scripts/build_safety_alerts.py --resolve   # resolve scope against the catalog
+"$PG_PYTHON" scripts/build_safety_alerts.py --check     # validate the record
+"$PG_PYTHON" scripts/build_safety_alerts.py --resolve   # resolve scope against the catalog
 ```
 
 **Class I raises priority and review urgency — it does not bypass review.** FDA
@@ -449,7 +448,7 @@ Use `scripts/test.sh` — **never raw `pytest`.** It picks the wrong interpreter
 bash scripts/test.sh fast -k "banned or overlap or safety_alerts"
 
 # 2. Populate CUIs for new entries
-python3 scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply
+"$PG_PYTHON" scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui   # report only; set reviewed CUIs by hand
 
 # 3. Full fast tier before handing off
 bash scripts/test.sh fast
@@ -480,7 +479,7 @@ force it, rather than assuming the edit propagated.
 - Use `regulatory_date` = recall initiation date (format YYYY-MM-DD), never today's date
 - Set `match_mode: historical` for product-specific terminated recalls
 - Increment `_metadata.governance.change_log` version on every run
-- Set `cui: null` for new entries (verify_cui.py populates them after)
+- Set `cui: null` for new entries (filled in after reviewing verify_cui.py's report)
 - Count and update `total_entries` after all changes
 - Run the targeted schema guards after all changes; run the full suite when the environment is provisioned
 - Filter food product and device false positives before processing
@@ -492,7 +491,7 @@ force it, rather than assuming the edit propagated.
 - Use today's date as `regulatory_date` — use the FDA recall initiation date
 - Add an entry without at least 1 `references_structured` item with a real URL
 - Permanently remove entries — only set `match_mode: historical` or `status: watchlist`
-- Guess CUI values — leave as null, let verify_cui.py populate them
+- Guess CUI values — leave them null until verify_cui.py's suggestion is reviewed
 - **Publish a safety alert.** Draft only (`status: "draft"`). Publication requires a
   human to verify identity, scope, wording and source. Class I is no exception —
   it raises urgency, not authority

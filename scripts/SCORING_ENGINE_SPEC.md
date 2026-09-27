@@ -156,11 +156,12 @@ jurisdiction, and role; it does not branch on matcher implementation names.
 Primary verdict applicability is US federal/state. Regional evidence remains in
 `jurisdictions` and `regional_advisories`.
 
-The final export also enforces banned-substance parity. If export evidence is
-broader than the native v4 gate,
-`suppress_scored_artifact_for_hard_block()` collapses the
-public contract to BLOCKED + null score; a banned product can never retain a
-finite ranking value.
+The final export also enforces banned-substance parity without deciding the
+verdict itself: `build_final_db.py::project_export_scored_artifact` raises if
+the export's own critical banned warning is not matched by a Stage 3 `BLOCKED`
+decision (verdict, safety verdict, product safety status and blocking reason),
+or a recalled warning by `UNSAFE`. The verdict is decided once, in Stage 3; a
+disagreement stops the build instead of shipping.
 
 ## 7. Completeness gate
 

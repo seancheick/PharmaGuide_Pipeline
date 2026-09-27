@@ -232,11 +232,11 @@ Coverage by drug class:
 
 ## After Writing Rules
 
-1. Run tests: `cd scripts && python3 -m pytest tests/ -q`
-2. All ~7,000 tests (across 169 files) must pass
-3. Verify the JSON is valid: `python3 -c "import json; json.load(open('data/ingredient_interaction_rules.json'))"`
-4. Run the interaction-rules schema and content tests specifically: `python3 -m pytest tests/test_ingredient_interaction_rules*.py -v`
-5. Run the FINAL_EXPORT_SCHEMA round-trip test (v1.6.0) if you touched `dose_thresholds` or `pregnancy_lactation` — they flow into the Flutter export's interaction_summary block
+1. Run tests: `scripts/test.sh fast`
+2. All tests must pass
+3. Prove the batch landed: `$PG_PYTHON scripts/data_batch.py check scripts/data/ingredient_interaction_rules.json --since origin/main --expect <rule keys>`
+4. Run the interaction-rule tests specifically: `scripts/test.sh fast -k interaction`, and the citation gate `$PG_PYTHON scripts/api_audit/verify_interaction_rules_citations.py --strict --changed-since origin/main`
+5. Run the FINAL_EXPORT_SCHEMA round-trip tests if you touched `dose_thresholds` or `pregnancy_lactation` — they flow into the Flutter export's interaction_summary block
 
 ---
 

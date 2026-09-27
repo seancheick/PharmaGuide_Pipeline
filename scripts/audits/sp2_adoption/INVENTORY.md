@@ -5,7 +5,7 @@
 `category_breakdown`, or product-name heuristics for class/module decisions
 in v4 routing, scoring, gates, confidence, and final export.
 
-**Source-of-truth contract (per `docs/plans/2026-05-20-pipeline-stability-vocab-expansion-design.md`):**
+**Source-of-truth contract (per `docs/archive/2026-09/2026-05-20-pipeline-stability-vocab-expansion-design.md`):**
 1. `enrich` computes `supplement_taxonomy` once.
 2. `score`, v4 shadow scoring, `build_final_db` consume taxonomy.
 3. Legacy fields only as fallback when taxonomy is absent (old batches).

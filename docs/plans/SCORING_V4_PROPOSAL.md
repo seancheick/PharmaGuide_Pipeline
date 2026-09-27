@@ -1,6 +1,8 @@
 # Scoring v4 Proposal — Class-Aware Quality + Hard Safety Gates
 
-**Status:** DRAFT — working document
+**Status:** HISTORICAL (2026-09-27). v4 became the one production scorer at the cutover (f3bed2f2,
+2026-07-16; `docs/adr/0002-one-public-quality-scorer.md`). This document records how it was designed;
+the current contract is `scripts/SCORING_ENGINE_SPEC.md` and `scripts/scoring_v4/config/quality_score.json`.
 **Owners:** Sean (product), Claude + Codex (engineering)
 **Started:** 2026-05-18
 **Last updated:** 2026-05-18

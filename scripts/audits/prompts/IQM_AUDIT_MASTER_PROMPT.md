@@ -13,13 +13,13 @@ You are auditing a supplement scoring pipeline that powers a consumer health app
 
 - **IQM file:** `scripts/data/ingredient_quality_map.json` — the master ingredient database (621 parents, schema 5.4.0, each with scored forms)
 - **Scoring range:** bio_score is 0-15. If natural=True, score = bio_score + 3 (max score = 18). If natural=False, score = bio_score (max score = 15). bio_score MUST NOT exceed 15.
-- **Scoring engine:** `scripts/score_supplements.py` — reads IQM scores to produce final product grades
+- **Scoring engine:** `scripts/score_supplements_v4.py::score_product_v4` — reads IQM scores to produce final product scores
 - **Enrichment pipeline:** `scripts/enrich_supplements_v3.py` — resolves raw labels → IQM parents/forms
-- **Scoring spec:** `scripts/SCORING_ENGINE_SPEC.md` (v3.4.0) — authoritative scoring rules
+- **Scoring spec:** `scripts/SCORING_ENGINE_SPEC.md` — authoritative scoring rules
 - **Scoring config:** `scripts/config/scoring_config.json` — caps, gates, coefficients
-- **Tests:** `python -m pytest scripts/tests/` (~7,000 tests across 169 files) — ALL tests must pass after every change
+- **Tests:** `scripts/test.sh fast -k <topic>` once per applied batch, `scripts/test.sh fast` before the commit (never raw pytest)
 - **Supporting data files (in `scripts/data/`):** counts current as of 2026-05-12; check `_metadata.total_entries` for live values
-  - `banned_recalled_ingredients.json` — hard-fail blocked substances (~146 entries, schema 5.3.0)
+  - `banned_recalled_ingredients.json` — hard-fail blocked substances (counts and schema in its `_metadata`)
   - `harmful_additives.json` — penalty substances (~116 entries, schema 5.4.0, severity: critical/high/moderate/low)
   - `top_manufacturers_data.json` — trusted brands (~77 entries, fuzzy threshold 0.90)
   - `allergens.json` — allergen detection (~17 entries)
@@ -81,7 +81,7 @@ After applying changes to each batch, run ALL 8 checks before reporting done:
 5. **dosage_importance:** Present on every form (Primary=1.5 for essential vitamins/minerals, Secondary=1.0 for botanicals/antioxidants, Trace=0.5 for minor minerals)
 6. **Schema fields:** cui_note when CUI is null, rxcui_note when RxCUI is null, match_rules complete (priority, match_mode, exclusions, parent_id, confidence)
 7. **Alias integrity:** No cross-parent conflicts (check ALLOWED_CROSS_ALIASES whitelist in test_ingredient_quality_map_schema.py), no intra-parent duplicates, no typos
-8. **Run test suite:** `python -m pytest scripts/tests/ -x -q` — ALL tests must pass
+8. **Run test suite:** `scripts/test.sh fast` — ALL tests must pass
 9. **Internal consistency (Vit E pattern check):** For every form, verify the triple (`notes`, `absorption` string, `absorption_structured.value`) tells the same story within ±5%. Verify `absorption_structured.quality` enum matches its `value` band per the mapping table (value < 0.3 → poor/low; 0.3-0.6 → moderate; 0.6-0.8 → good; 0.8-0.95 → very_good; > 0.95 → excellent). Verify branded/natural-indicator aliases (Ester-E, RRR-, d-alpha-, naturally-derived tokens) sit under the NATURAL form entry, not the synthetic one. Verify notes reflect current scientific framing (post-2015 standards, e.g., Vit E 2R-isomer bioactivity per IOM 2000, not pre-2000 12.5% convention).
 
 ### Step 5: Batch Summary
@@ -182,10 +182,10 @@ Run ONCE at the start of the audit before batch work begins:
 - Schema-version bumps require a corresponding test update under `scripts/tests/`.
 
 ### 4B: Test Suite Health
-- Run full test suite: `python -m pytest scripts/tests/ -v`
+- Run the suite: `scripts/test.sh fast`
 - Any skipped tests should be investigated — are they stale or blocked?
 - Any xfailed tests should be reviewed — can they be fixed?
-- Check test count hasn't decreased (currently ~7,000 across 169 files; verify with `python3 -m pytest scripts/tests/ --collect-only -q | tail -3`)
+- Check the passed count has not dropped (compare the `scripts/test.sh fast` summary line with the previous run)
 
 ### 4C: Constants Freshness
 - Review `scripts/constants.py` EXCLUDED_NUTRITION_FACTS list
@@ -206,7 +206,7 @@ Run ONCE at the start of the audit before batch work begins:
 2. **Always launch PubMed research BEFORE making changes.** Never correct a bio_score based on memory — get the citation first.
 3. **Never hand-edit JSON.** Always use Python scripts: `json.load() → modify → json.dump(indent=2, ensure_ascii=False)`.
 4. **Run the 8-point self-audit after every batch.** This is not optional.
-5. **Run `python -m pytest scripts/tests/ -x -q` after every batch.** All tests must pass.
+5. **Run `scripts/test.sh fast` after every batch.** All tests must pass.
 6. **Delete phantom forms** ("X from food", "X from collagen") that cannot appear on supplement labels. Exception: real supplement forms like "vitamin D from lichen" or "omega-3 from algae."
 7. **Remove suffix aliases** ending in " supplement" — the normalizer doesn't use them.
 8. **New branded forms** (Nitrosigine, Sustamine, MagTein, Quatrefolic, etc.) with distinct PK mechanisms deserve their own form entry, not just an alias on the base form.

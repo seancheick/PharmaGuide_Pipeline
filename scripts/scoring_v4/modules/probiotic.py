@@ -15,7 +15,7 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
                                relevance 8
     Transparency        15     P2.5 — strain identities 8 + per-strain CFU 7;
                                minus B2 allergen + B5 opacity (class-aware
-                               probiotic 0.4x) + B6 marketing; B3 claims +4
+                               probiotic 0.4x) + B6 marketing; B3 claims checked, 0 points
     Core subtotal       75
 
 Plus separate adjustments before the raw-score clamp:
