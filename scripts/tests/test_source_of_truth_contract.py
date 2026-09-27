@@ -691,6 +691,57 @@ def test_clinical_gate_rejects_contradictory_dose_decisions(tmp_path):
     assert "below-threshold result cannot use review" in invalid[0].message
 
 
+def test_clinical_gate_allows_explicit_presence_risk_below_context_threshold(tmp_path):
+    """A dose threshold may strengthen copy without defining a safe floor.
+
+    Green-tea extract and liver disease is the production example: the risk is
+    presence-based, while 800 mg EGCG/day selects stronger dose-specific copy.
+    The below-threshold branch must remain an explicit block rather than being
+    mistaken for a contradictory dose-floor result.
+    """
+    product_file = tmp_path / "products.json"
+    write_json(
+        product_file,
+        [{
+            "id": "presence-risk-canary",
+            "ingredient_quality_data": {"ingredients_scorable": []},
+            "interaction_profile": {
+                "ingredient_alerts": [{
+                    "rule_id": "RULE_PRESENCE_RISK_CANARY",
+                    "ingredient_name": "Green Tea Extract",
+                    "subject_ref": {"canonical_id": "green_tea_extract"},
+                    "condition_hits": [{
+                        "condition_id": "liver_disease",
+                        "materiality": "presence",
+                        "dose_decision": {
+                            "clinical_severity": "avoid",
+                            "evaluation_status": "below_threshold",
+                            "consumer_disposition": "block",
+                            "release_blocking": False,
+                            "decision_rule": {
+                                "consumer_disposition_if_met": "block",
+                                "consumer_disposition_if_not_met": "block",
+                                "amount_missing_disposition": "block",
+                            },
+                        },
+                    }],
+                    "drug_class_hits": [],
+                }],
+            },
+        }],
+    )
+    args = argparse.Namespace(
+        enriched_file=[], enriched_dir=[], product_file=[str(product_file)],
+        products_dir=None, dist_dir=None, strict_release=True,
+    )
+
+    invalid = [
+        finding for finding in audit.audit_clinical(args)
+        if finding.code == "CLINICAL_DOSE_DECISION_CONTRACT_INVALID"
+    ]
+    assert invalid == []
+
+
 def test_clinical_gate_requires_explicit_unknown_state_policy(tmp_path):
     product_file = tmp_path / "products.json"
     write_json(

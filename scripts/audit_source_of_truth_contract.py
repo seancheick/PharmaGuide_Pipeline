@@ -1170,7 +1170,25 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
                                 )
                             elif disposition not in {"suppress", "good_to_know", "review", "block"}:
                                 contract_error = f"invalid consumer disposition {disposition or '<missing>'}"
-                            elif status == "below_threshold" and disposition in {"review", "block"}:
+                            elif (
+                                status == "below_threshold"
+                                and disposition in {"review", "block"}
+                                and not (
+                                    disposition == "block"
+                                    and str(hit.get("materiality") or "").strip().lower()
+                                    == "presence"
+                                    and str(decision.get("clinical_severity") or "").strip().lower()
+                                    == "avoid"
+                                    and all(
+                                        str(rule.get(field) or "").strip().lower() == "block"
+                                        for field in (
+                                            "consumer_disposition_if_met",
+                                            "consumer_disposition_if_not_met",
+                                            "amount_missing_disposition",
+                                        )
+                                    )
+                                )
+                            ):
                                 contract_error = (
                                     f"below-threshold result cannot use {disposition} disposition"
                                 )
