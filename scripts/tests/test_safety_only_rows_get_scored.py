@@ -12,7 +12,9 @@ They ship instead of being withheld.
 Excipient substances (mannitol, polydextrose, calcium silicate) get no IQM
 identity: the IQM has no section-scoped matching, so an IQM alias also claims
 the inactive filler row and drops its additive record (13 Nutricost
-electrolyte labels lost ADD_CALCIUM_SILICATE when tried).
+electrolyte labels lost ADD_CALCIUM_SILICATE when tried). A low-severity
+additive sold as the product's only active (BulkSupplements Mannitol) keeps its
+additive record as an unscored identity instead.
 """
 
 from __future__ import annotations
@@ -48,6 +50,8 @@ def pipeline():
         (328274, "OI_ACETYL_L_CARNITINE_ARGINATE", None, "scored"),
         (200891, "germanium", "RISK_GERMANIUM", "scored"),  # Jarrow Ge-132
         (241744, "silver", "ADD_COLLOIDAL_SILVER", "scored"),  # Double Wood colloidal silver
+        # Sole-active excipient: BulkSupplements Mannitol keeps its additive identity
+        (252699, "ADD_SUGAR_ALCOHOLS", None, "scored"),
     ],
 )
 def test_the_product_ships_scored_and_keeps_its_safety_warning(pipeline, pid, canonical_id, safety_id, status):

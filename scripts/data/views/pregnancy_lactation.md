@@ -2,7 +2,7 @@
 
 # Pregnancy & Lactation block
 
-**150 rules** with an authored `pregnancy_lactation` block.
+**151 rules** with an authored `pregnancy_lactation` block.
 
 | canonical_id | preg_category | lact_category | evidence | mechanism |
 |---|---|---|---|---|
@@ -104,6 +104,7 @@
 | `maca` | informational | no_data | theoretical |  |
 | `magnesium` | monitor | monitor | limited |  |
 | `manganese` | monitor | monitor | limited |  |
+| `matcha_tea_powder` | no_data | no_data | no_data |  |
 | `melatonin` | no_data | no_data | no_data |  |
 | `milk_thistle` | no_data | no_data | no_data |  |
 | `milk_thistle` | no_data | no_data | no_data |  |

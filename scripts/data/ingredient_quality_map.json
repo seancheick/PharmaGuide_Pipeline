@@ -4813,7 +4813,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -4862,7 +4862,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -4922,7 +4922,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -4933,7 +4933,7 @@
           ]
         },
         "absorption": "mitochondrial coenzyme form; ~1-2% passive absorption at 1000 mcg dose",
-        "consumer_note": "Adenosylcobalamin is a coenzyme form of vitamin B12 in which cobalamin carries a 5\u2032-deoxyadenosyl group.",
+        "consumer_note": "Adenosylcobalamin is a coenzyme form of vitamin B12 in which cobalamin carries a 5′-deoxyadenosyl group.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -4971,7 +4971,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -5022,7 +5022,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -5070,7 +5070,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -5120,7 +5120,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
+              "title": "Vitamin B12 — Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -34050,7 +34050,7 @@
     "forms": {
       "resistant dextrin": {
         "bio_score": 9,
-        "absorption": "not absorbed (soluble fiber; fermented in the colon)",
+        "absorption": "category_error (soluble fiber; fermented in the colon, not systemically absorbed)",
         "absorption_structured": {
           "value": null,
           "range_low": null,
