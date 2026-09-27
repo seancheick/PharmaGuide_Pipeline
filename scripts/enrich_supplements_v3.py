@@ -22187,6 +22187,9 @@ class SupplementEnricherV3:
                         "data_by_group": list(_nutrient_record.get("data") or []),
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
+                        "raw_source_text": (
+                            ingredient.get("raw_source_text") or ing_name
+                        ),
                         "raw_source_path": ingredient.get("raw_source_path"),
                         "is_servings_estimated": servings_estimated,
                     })

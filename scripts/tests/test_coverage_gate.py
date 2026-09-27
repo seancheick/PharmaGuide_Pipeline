@@ -554,6 +554,39 @@ class TestReportGeneration:
             assert summary["products_can_score"] == 1
             assert summary["products_blocked"] == 0
 
+    def test_json_report_preserves_missing_conversion_label_provenance(self, gate):
+        """A conversion warning remains traceable to the exact label row."""
+        products = [
+            {
+                "dsld_id": 204571,
+                "match_ledger": {"domains": {}, "summary": {}},
+                "rda_ul_data": {
+                    "analyzed_ingredients": [
+                        {
+                            "ingredient": "Folate",
+                            "quantity": 35.0,
+                            "unit": "mcg",
+                            "raw_source_text": "Folate",
+                            "raw_source_path": "ingredientRows[4]",
+                            "conversion_evidence": {
+                                "success": False,
+                                "error": "No conversion factor for mcg -> mcg DFE",
+                            },
+                        }
+                    ]
+                },
+            }
+        ]
+
+        result = gate.check_batch(products)
+        report = gate._build_json_report(result)
+        issue = report["products"][0]["correctness_issues"][0]
+
+        assert issue["details"]["nutrient"] == "Folate"
+        assert issue["details"]["original_amount"] == 35.0
+        assert issue["raw_source_text"] == "Folate"
+        assert issue["raw_source_path"] == "ingredientRows[4]"
+
     def test_markdown_report_generated(self, gate):
         """Test Markdown report is generated."""
         products = [

@@ -607,12 +607,24 @@ class CoverageGate:
                         severity="WARN",
                         description=f"Unit conversion failed: {error}",
                         details={
-                            "nutrient": ing.get("name", "unknown"),
-                            "original_amount": ing.get("amount"),
+                            "nutrient": (
+                                ing.get("ingredient")
+                                or ing.get("name")
+                                or "unknown"
+                            ),
+                            "original_amount": (
+                                ing.get("quantity")
+                                if ing.get("quantity") is not None
+                                else ing.get("amount")
+                            ),
                             "original_unit": ing.get("unit"),
                             "error": error
                         },
-                        raw_source_text=ing.get("raw_source_text"),
+                        raw_source_text=(
+                            ing.get("raw_source_text")
+                            or ing.get("ingredient")
+                            or ing.get("name")
+                        ),
                         raw_source_path=ing.get("raw_source_path")
                     ))
 
@@ -916,7 +928,9 @@ class CoverageGate:
                             "type": ci.issue_type,
                             "severity": ci.severity,
                             "description": ci.description,
-                            "details": ci.details
+                            "details": ci.details,
+                            "raw_source_text": ci.raw_source_text,
+                            "raw_source_path": ci.raw_source_path,
                         }
                         for ci in pr.correctness_issues
                     ]
