@@ -29,6 +29,14 @@ def _tracked_data_files() -> list[Path]:
 
 DATA_FILES = _tracked_data_files()
 
+# Byte-pinned elsewhere, so their bytes are the contract and they keep their
+# format: reformatting one is a cross-repo change.
+BYTE_PINNED = {
+    "profile_gate_test_cases.json": "vendored byte-identical by the Flutter app; "
+    "test_profile_gate_fixture_sync.py and the app's profile_gate_fixture_sync_test.dart "
+    "pin its sha256",
+}
+
 # Formatted in their own commit once the lane editing them has landed. The test
 # below fails as soon as a listed file is canonical, so the list only shrinks.
 NOT_YET_CANONICAL = {
@@ -43,6 +51,8 @@ def test_data_file_is_canonical_json_without_duplicate_keys(path):
     text = path.read_text(encoding="utf-8")
     blob = db.loads(text)  # raises on a duplicate key, which json would drop silently
     canonical = text == json_text(blob)
+    if path.name in BYTE_PINNED:
+        return
     if path.name in NOT_YET_CANONICAL:
         assert not canonical, f"{path.name} is canonical now: remove it from NOT_YET_CANONICAL"
         assert json.loads(json_text(blob)) == blob
