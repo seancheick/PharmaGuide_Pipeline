@@ -10,10 +10,11 @@ Real DSLD labels (tests/fixtures/form_association_*_raw.json):
   form; its share was scored as an unknown 5.0.
 - 12012: Thiamine lists "Vitamin B1", the nutrient's own name, as a form.
 - 176044: Leucine lists the whey proteins it comes from as forms.
-- Controls: 47815 Magnesium and 17118 Calcium name real salts the IQM does not
-  carry (arginate, D-pantothenate). Those are disclosed unmapped forms: the
-  row is held for curation (form_match_status 'unmapped') and the share keeps
-  the parent's unknown-form value (calcium 3), never an invented form.
+- Controls: 47815 Magnesium and 17118 Calcium name salts the IQM curated on
+  2026-09-27 as parent-scoped source aliases: magnesium arginate is an amino
+  acid chelate (the zinc arginate precedent) and calcium D-pantothenate, with
+  no calcium absorption data, is calcium (unspecified) at the unknown value 3.
+  A salt the IQM lacks is still held as unmapped, never an invented form.
 - 214477 "Vitamin A (as Fish Liver Oil)" and 317111 "Black Cumin Seed Oil (as
   Nigella sativa Seed Oil)" resolve through IQM aliases, not a fallback guess.
 """
@@ -67,11 +68,11 @@ def test_source_proteins_are_not_forms_of_an_amino_acid(enricher):
     assert row['bio_score'] == 14.0
 
 
-@pytest.mark.parametrize('pid, name, salt, expected', [('47815', 'Magnesium', 'Magnesium Arginate', 9.0),
-                                                      ('17118', 'Calcium', 'Calcium D-Pantothenate', 5.7)])
-def test_named_salts_the_iqm_lacks_are_unmapped(enricher, pid, name, salt, expected):
+@pytest.mark.parametrize('pid, name, expected', [('47815', 'Magnesium', 10.0),
+                                                ('17118', 'Calcium', 5.7)])
+def test_curated_salts_map_without_an_invented_form(enricher, pid, name, expected):
     row = _row(enricher, pid, name)
-    assert row['unmapped_forms'] == [salt] and row['form_match_status'] == 'unmapped'
+    assert row['unmapped_forms'] == [] and row['form_match_status'] == 'mapped'
     assert row['bio_score'] == expected
 
 
@@ -101,8 +102,8 @@ def test_alias_phrases(enricher, phrase, parent, form):
 
 
 def test_an_unmatched_share_takes_the_parents_own_unknown_form_value(enricher):
-    # Calcium carbonate 8, dicalcium phosphate 6, D-pantothenate unmapped at
-    # the calcium unknown value 3 (calcium oxide 4 - 1): (8 + 6 + 3) / 3.
+    # Calcium carbonate 8, dicalcium phosphate 6, D-pantothenate at calcium
+    # (unspecified), the same unknown value 3 (calcium oxide 4 - 1): (8 + 6 + 3) / 3.
     from scoring_reference_resolver import unknown_form_quality
     iqm = enricher.databases['ingredient_quality_map']
     assert unknown_form_quality(iqm['calcium'])['bio_score'] == 3

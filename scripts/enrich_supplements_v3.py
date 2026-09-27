@@ -6070,6 +6070,24 @@ class SupplementEnricherV3:
                 # _stamp_iqd_identity already retained the validated primary
                 # decision. The safety match has no authority to replace it.
                 row["identity_decision_reason"] = "safety_identity_excluded_from_scoring"
+            elif (
+                recognition_source == "harmful_additives"
+                and not row.get("is_excipient")
+                and self._is_low_severity_additive(matched_entry_id)
+            ):
+                # A low-severity additive declared as the active (BulkSupplements
+                # Mannitol, Litesse polydextrose) is a known substance, not a
+                # safety finding: its additive record is its unscored identity,
+                # so the product ships instead of failing on an unresolved row
+                # (Sean, 2026-09-27).
+                row.update({
+                    "canonical_id": matched_entry_id,
+                    "canonical_id_after": matched_entry_id,
+                    "canonical_source_db": recognition_source,
+                    "identity_decision_reason": "low_severity_additive_identity",
+                })
+                if matched_entry_name:
+                    row["standard_name"] = matched_entry_name
             else:
                 row.update({
                     "canonical_id": None,
@@ -6094,6 +6112,12 @@ class SupplementEnricherV3:
             })
             if matched_entry_name:
                 row["standard_name"] = matched_entry_name
+
+    def _is_low_severity_additive(self, additive_id: Any) -> bool:
+        for additive in (self.databases.get("harmful_additives") or {}).get("harmful_additives") or []:
+            if isinstance(additive, dict) and additive.get("id") == additive_id:
+                return str(additive.get("severity_level") or "").strip().lower() == "low"
+        return False
 
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
         """Determine excipient status for ingredient-level signals.

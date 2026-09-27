@@ -5,9 +5,8 @@ high-risk, watchlist or additive safety record, which cannot supply a primary
 identity, so the row stayed an unresolved score-active and the export refused
 the product (a scan found nothing). Sean, 2026-09-27: anything that is not
 banned or recalled must be scored to ship, keeping its safety warning. Each
-row now reaches a verified identity. Life Extension Mix stays
-NOT_SCORED only because other rows declare forms the IQM does not map yet.
-ALCAR arginate keeps its identity-only owner (no ALCAR form or dose credit).
+row now reaches a verified identity; Life Extension Mix's salts were curated on
+2026-09-27 so it scores. ALCAR arginate keeps its identity-only owner (no ALCAR form or dose credit).
 They ship instead of being withheld.
 
 Excipient substances (mannitol, polydextrose, calcium silicate) get no IQM
@@ -44,7 +43,7 @@ def pipeline():
     [
         (241706, "7_keto_dhea", "BANNED_7_KETO_DHEA", "scored"),  # HUM Ripped Rooster "7-Keto"
         (307546, "7_keto_dhea", "BANNED_7_KETO_DHEA", "scored"),  # Jarrow 7-oxo-DHEA 3-acetate
-        (182627, "citrus_bioflavonoids", "RISK_BITTER_ORANGE", "not_scored"),  # Life Extension Mix
+        (182627, "citrus_bioflavonoids", "RISK_BITTER_ORANGE", "scored"),  # Life Extension Mix
         # ALCAR arginate keeps its identity-only owner: no ALCAR form or dose credit
         (328274, "OI_ACETYL_L_CARNITINE_ARGINATE", None, "scored"),
         (200891, "germanium", "RISK_GERMANIUM", "scored"),  # Jarrow Ge-132
