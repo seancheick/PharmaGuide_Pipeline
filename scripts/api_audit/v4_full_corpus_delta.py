@@ -103,7 +103,14 @@ def build_rows(
     """
     rows: List[Dict[str, Any]] = []
     for dsld_id, scored in scored_index.items():
-        v3_score = canary._num(scored.get("score_100_equivalent"))
+        # Production v4 owns the score. Historical v3 artifacts predate the
+        # canonical field, so the mirror remains a read fallback only.
+        baseline_score = (
+            scored.get("quality_score_v4_100")
+            if "quality_score_v4_100" in scored
+            else scored.get("score_100_equivalent")
+        )
+        v3_score = canary._num(baseline_score)
         v3_verdict = scored.get("verdict")
         v3_safety_verdict = scored.get("safety_verdict")
         completeness = _v3_completeness_status(scored)

@@ -7624,7 +7624,7 @@ def build_detail_blob(
             "basis_reason": serving.get("basis_reason"),
         },
         "manufacturer_detail": {
-            "brand_name": safe_str(enriched.get("brand_name") or enriched.get("brandName")),
+            "brand_name": brand_identity.display_brand,
             "is_trusted": json_bool(enriched.get("is_trusted_manufacturer")),
             "manufacturing_region": safe_str(enriched.get("manufacturing_region")),
             "violations": safe_dict(safe_dict(enriched.get("manufacturer_data")).get("violations")),
@@ -8079,7 +8079,6 @@ def build_detail_blob(
         blob["certification_detail"]["gmp"] = _certification_gmp_detail(
             blob["certification_detail"].get("gmp"), pillars, enriched
         )
-        blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")
         blob["v4_safety_gate"] = scored.get("_v4_safety_gate")
         blob["v4_dose_safety"] = scored.get("dose_safety_evaluation")
         blob["v4_completeness_gate"] = scored.get("_v4_completeness_gate")
@@ -8290,7 +8289,7 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     Returns dict with keys: share_title, share_description, share_highlights, share_og_image_url
     """
     product_name = safe_str(enriched.get("product_name"))
-    brand_name = safe_str(enriched.get("brand_name") or enriched.get("brandName"))
+    brand_name = resolve_catalog_brand(enriched).display_brand
     score_100 = safe_float(scored.get("score_100_equivalent"))
     # Share copy shows the same whole number the app shows (round half up), so a
     # 74.6 reads 75/100 everywhere instead of a truncated 74/100 here.
@@ -9726,9 +9725,8 @@ def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str
 def generate_dosing_summary(enriched: Dict) -> Dict:
     """Generate user-friendly dosing summary and servings per container.
 
-    Prefers enriched["serving_basis"] (enricher-computed, same source the
-    scorer uses for dose adequacy) over raw enriched["servingSizes"].
-    Falls back to servingSizes for backward compat with pre-serving_basis data.
+    Reads enriched["serving_basis"], the canonical serving owner shared with
+    scoring. Missing canonical data produces the honest label fallback.
 
     Returns dict with keys: dosing_summary, servings_per_container
     """
@@ -9747,20 +9745,16 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
     # adult serving row.
     max_daily = resolve_daily_serving_multiplier(enriched)
 
-    # Serving *size* still prefers serving_basis (enricher-computed,
-    # scorer-aligned) over the raw cleaner rows.
+    # Serving size comes from the same canonical owner as scoring.
     sb = safe_dict(enriched.get("serving_basis"))
     if sb.get("basis_count") is not None:
         min_qty_raw = sb.get("basis_count")
         max_qty_raw = sb.get("basis_count")
         unit = safe_str(sb.get("basis_unit"))
     else:
-        # Fallback: raw servingSizes from cleaner
-        serving_sizes = safe_list(enriched.get("servingSizes"))
-        serving = safe_dict(serving_sizes[0]) if serving_sizes else {}
-        min_qty_raw = serving.get("minQuantity")
-        max_qty_raw = serving.get("maxQuantity")
-        unit = safe_str(serving.get("unit"))
+        min_qty_raw = None
+        max_qty_raw = None
+        unit = ""
 
     min_qty = safe_float(min_qty_raw)
     max_qty = safe_float(max_qty_raw)
@@ -10419,7 +10413,7 @@ def update_audit_state(
             products_with_warnings_sample.append({
                 "dsld_id": pid,
                 "product_name": safe_str(enriched.get("product_name")),
-                "brand": safe_str(enriched.get("brand_name") or enriched.get("brandName")),
+                "brand": resolve_catalog_brand(enriched).display_brand,
                 "verdict": verdict,
                 "warnings": top,
             })

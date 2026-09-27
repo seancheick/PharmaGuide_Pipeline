@@ -226,7 +226,6 @@ BLOB_TOP_LEVEL: dict[str, dict[str, Any]] = {
     "product_status_detail": {"required": False, "presence": "nullable", "note": "null for active products; set for discontinued/off-market"},
     "product_status": {"required": False, "presence": "nullable", "note": "2.4 alias of product_status_detail for older app builds (schema 3 removes it)"},
     "quality_pillars_v4": {"required": False, "presence": "nullable", "note": "null when the score is safety-suppressed"},
-    "clean_label_flags_v4": {"required": False, "presence": "nullable", "note": "null when no clean-label flag applies"},
     "v4_confidence_detail": {"required": False, "presence": "nullable", "note": "null when the score is safety-suppressed"},
     "v4_score_explanation": {"required": False, "presence": "nullable", "note": "null when the score is safety-suppressed"},
     "interaction_summary": {"required": False, "presence": "conditional", "note": "only when an interaction rule matches"},

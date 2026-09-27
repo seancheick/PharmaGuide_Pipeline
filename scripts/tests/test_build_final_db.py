@@ -602,6 +602,22 @@ def test_unknown_catalog_brand_passes_through_without_affecting_score():
     assert row["quality_score_v4_100"] == scored["quality_score_v4_100"]
 
 
+def test_every_export_surface_uses_the_canonical_brand_owner():
+    enriched = make_enriched()
+    enriched["brandName"] = "Canonical Brand"
+    enriched["brand_name"] = "Stale Compatibility Brand"
+    scored = make_scored()
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-09-27T00:00:00Z"))
+    blob = build_detail_blob(enriched, scored)
+    share = generate_share_metadata(enriched, scored)
+
+    assert row["brand_name"] == "Canonical Brand"
+    assert blob["manufacturer_detail"]["brand_name"] == "Canonical Brand"
+    assert "Canonical Brand" in share["share_title"]
+    assert "Stale Compatibility Brand" not in json.dumps({"blob": blob, "share": share})
+
+
 def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
     enriched = {
         "product_name": "Clinical Probe",
@@ -1037,6 +1053,14 @@ def test_detail_blob_preserves_serving_frequency_provenance():
 
     assert serving_info["servings_per_day_source"] == "directions"
     assert serving_info["basis_reason"] == "directions_frequency"
+
+
+def test_dosing_summary_does_not_rederive_missing_canonical_serving_basis():
+    enriched = make_enriched()
+    enriched.pop("serving_basis")
+    enriched["servingSizes"] = [{"minQuantity": 9, "maxQuantity": 9, "unit": "capsules"}]
+
+    assert generate_dosing_summary(enriched)["dosing_summary"] == "See product label"
 
 
 def make_scored(verdict="SAFE"):
@@ -3244,6 +3268,12 @@ def test_generate_dosing_summary_reads_real_fields():
                 "dailyServingsSource": "label",
             }
         ],
+        "serving_basis": {
+            "basis_count": 2,
+            "basis_unit": "Capsule(s)",
+            "min_servings_per_day": 1,
+            "max_servings_per_day": 1,
+        },
         "form_factor": "capsule",
     }
 
@@ -3270,6 +3300,12 @@ def test_generate_dosing_summary_range_quantity_reads_min_and_max():
                 "maxDailyServings": 2,
             }
         ],
+        "serving_basis": {
+            "basis_count": 2,
+            "basis_unit": "Softgel(s)",
+            "min_servings_per_day": 1,
+            "max_servings_per_day": 2,
+        },
         "form_factor": "softgel",
     }
 
@@ -3278,8 +3314,9 @@ def test_generate_dosing_summary_range_quantity_reads_min_and_max():
     assert dosing["servings_per_container"] == 60
     summary = dosing["dosing_summary"].lower()
     assert "softgel" in summary
-    # Range 1-2 should appear verbatim.
-    assert "1" in summary and "2" in summary
+    # The enricher-selected canonical serving is 2 softgels; export does not
+    # re-interpret the raw alternate serving row.
+    assert "2" in summary
 
 
 def test_generate_dosing_summary_twice_daily_from_max_daily_servings():
@@ -3294,6 +3331,12 @@ def test_generate_dosing_summary_twice_daily_from_max_daily_servings():
                 "maxDailyServings": 2,
             }
         ],
+        "serving_basis": {
+            "basis_count": 3,
+            "basis_unit": "Capsule(s)",
+            "min_servings_per_day": 2,
+            "max_servings_per_day": 2,
+        },
         "form_factor": "capsule",
     }
 
@@ -3316,6 +3359,12 @@ def test_generate_dosing_summary_gummy_form():
                 "maxDailyServings": 1,
             }
         ],
+        "serving_basis": {
+            "basis_count": 2,
+            "basis_unit": "Gummie(s)",
+            "min_servings_per_day": 1,
+            "max_servings_per_day": 1,
+        },
         "form_factor": "gummy",
     }
 
