@@ -12,9 +12,6 @@ omega_rubric.json:
       - source_disclosed       3  (fish / krill / algae / cod liver /
                                    species named; reuses
                                    omega_formulation._source_disclosed)
-      - oxidation_disclosed    2  (TOTOX / peroxide / anisidine values
-                                   labeled — usually 0 today; future-ready
-                                   for when lot-test scrapers populate)
       - b3 optional claim validation       0 (claims remain checked)
 
     Penalties (reused from generic_transparency):
@@ -26,7 +23,7 @@ omega_rubric.json:
 
   Hard-clamped at dimension_cap = 15.
 
-The native omega cap is 13: EPA/DHA, molecular form, and source disclosure.
+The native omega cap is 11: EPA/DHA, molecular form, and source disclosure.
 The public pillar assembler maps that full native contract to 15/15. Optional
 claims do not fill missing disclosure points.
 
@@ -60,19 +57,6 @@ _TM = _cfg_block("transparency_magnitudes", "omega")["omega"]
 
 
 CAP_TRANSPARENCY = _TM["cap_transparency"]
-
-
-# Oxidation-signal keys checked on the product blob. Future-ready: when
-# lot-test scrapers add these, the credit fires automatically.
-_OXIDATION_TOP_LEVEL_KEYS = (
-    "oxidation_data",
-    "totox",
-    "totox_value",
-    "peroxide_value",
-    "anisidine_value",
-    "lot_oxidation",
-    "lot_test_data",
-)
 
 
 def _load_rubric() -> Dict[str, Any]:
@@ -121,44 +105,6 @@ def _epa_or_dha_disclosed(product: Dict[str, Any]) -> bool:
     return False
 
 
-def _oxidation_disclosed(product: Dict[str, Any]) -> bool:
-    """True when the enriched blob contains lot-level oxidation/TOTOX/
-    peroxide/anisidine values. Today this is almost always False
-    (DSLD labels rarely surface lot test values). Future-ready for
-    when IFOS lot reports or other scrapers populate these fields."""
-    # 1. Top-level oxidation keys (any non-empty value counts)
-    for key in _OXIDATION_TOP_LEVEL_KEYS:
-        value = product.get(key)
-        if value:
-            if isinstance(value, dict) and not value:
-                continue
-            if isinstance(value, (list, str)) and not value:
-                continue
-            return True
-
-    # 2. certification_data.oxidation_data / .lot_test_data
-    cert_data = _safe_dict(product.get("certification_data"))
-    for key in ("oxidation_data", "lot_test_data", "totox", "peroxide_value"):
-        value = cert_data.get(key)
-        if value:
-            return True
-
-    # 3. evidence_based programs with oxidation/TOTOX in the rule_id or
-    #    display_name (future scrapers may emit TOTOX as a rules_db program)
-    evidence = _safe_dict(cert_data.get("evidence_based"))
-    for program in _safe_list(evidence.get("third_party_programs")):
-        if not isinstance(program, dict):
-            continue
-        rid = _norm(program.get("rule_id"))
-        name = _norm(program.get("display_name"))
-        if "totox" in rid or "peroxide" in rid or "oxidation" in rid:
-            return True
-        if "totox" in name or "peroxide" in name or "oxidation" in name:
-            return True
-
-    return False
-
-
 def score_transparency(product: Any) -> Dict[str, Any]:
     """Score omega-class Transparency dimension."""
     if not isinstance(product, dict):
@@ -169,7 +115,6 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     epa_dha_pts = float(t_cfg.get("epa_or_dha_disclosed", 5) or 5)
     form_pts = float(t_cfg.get("form_disclosed", 3) or 3)
     source_pts = float(t_cfg.get("source_disclosed", 3) or 3)
-    oxidation_pts = float(_safe_dict(t_cfg.get("oxidation_disclosed")).get("score", 2) or 2)
     b3_cap = float(_safe_dict(t_cfg.get("b3_claim_compliance")).get("cap", 0) or 0)
 
     flags: List[str] = []
@@ -182,8 +127,6 @@ def score_transparency(product: Any) -> Dict[str, Any]:
         components["form_disclosed"] = form_pts
     if _source_disclosed(product):
         components["source_disclosed"] = source_pts
-    if _oxidation_disclosed(product):
-        components["oxidation_disclosed"] = oxidation_pts
 
     # B3 reuses generic validation. Optional free-from and dietary-preference
     # claims are audited for contradictions but carry zero positive points.

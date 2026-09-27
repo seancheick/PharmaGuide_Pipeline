@@ -13,7 +13,8 @@
    "1.3.0-omega-semantics-2026-09": "c44235dc3aa7db5c",
    "2.0.0-purpose-evidence-2026-09": "d13d1387560baa5d",
    "2.0.1-disclosure-owned-transparency": "72ede2446f4eec12",
-   "2.1.0-iqm-form-quality": "615b33edc61b2036"
+   "2.1.0-iqm-form-quality": "615b33edc61b2036",
+   "2.2.0-verification-owned-oxidation": "bc61a6a15bf1d9bb"
   },
   "quality_score": {
    "1.0.4-sports-subtypes": "4e040a97fe26f559",
@@ -57,7 +58,8 @@
    "1.20.1-omega-evidence-ownership": "d330b9894fb507fa",
    "1.21.0-no-dose-form-count": "dd72402f1eca73b5",
    "1.21.1-immune-magnitudes-config": "e6bdbd587bfc4f32",
-   "1.21.2-omega-evidence-ownership": "03151b2c5c601faf"
+   "1.21.2-omega-evidence-ownership": "03151b2c5c601faf",
+   "1.21.3-omega-transparency-owner": "f39af73fc7e43f48"
   }
  }
 }

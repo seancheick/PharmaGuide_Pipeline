@@ -47,7 +47,7 @@ EXPECTED_DIMENSION_CAPS = {
     "formulation": 25,
     "dose": 25,
     "evidence": 20,
-    "transparency": 13,
+    "transparency": 11,
 }
 
 
@@ -1069,9 +1069,9 @@ def test_omega_rubric_config_present_and_well_formed() -> None:
     assert rubric["_metadata"]["purpose"] == "scoring_v4_omega_module_rubric"
 
     # Phase 4: trust moved out of the core denominator to verification_bonus,
-    # so the core dimension caps now sum to 85 (the trust SCORING section
+    # so the core dimension caps now sum to 81 (the trust SCORING section
     # remains in the rubric and is consumed by the verification bonus).
-    assert sum(rubric["dimension_caps"].values()) == 83  # transparency 15 -> 13, oxidation retired
+    assert sum(rubric["dimension_caps"].values()) == 81
 
 
 def test_omega_rubric_delegates_form_values_to_iqm() -> None:

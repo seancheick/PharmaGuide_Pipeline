@@ -17,10 +17,9 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §9
     Evidence            20     P1.6.3 — generic evidence pipeline with
                                omega-specific canonicals (EPA/DHA/EPA+DHA)
                                + indication_relevance (+5 at AHA CVD dose)
-    Transparency        15     P1.6.5 — EPA/DHA disclosed 5 + form disclosed 3
-                               + source disclosed 3 + oxidation disclosed 2
-                               + B3 claim_compliance (cap 4) minus B2/B5/B6
-    Core subtotal       85
+    Transparency        11     P1.6.5 — EPA/DHA disclosed 5 + form disclosed 3
+                               + source disclosed 3, minus B2/B5/B6
+    Core subtotal       81
 
 Plus separate adjustments before the raw-score clamp:
 

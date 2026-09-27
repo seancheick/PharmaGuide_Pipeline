@@ -269,7 +269,7 @@ def _probiotic_transparency_reason(dim: Dict[str, Any], fallback: str) -> str:
 
 # Omega Transparency items in rubric order; a missing component was not disclosed.
 # Only what the pillar still SCORES belongs here. Oxidation testing was retired
-# from Transparency on 2026-09-18 (omega_rubric oxidation_disclosed.score = 0):
+# from Transparency on 2026-09-18 (lot-level testing belongs to Verification):
 # naming it kept telling every omega label that oxidation testing was missing
 # from a pillar that no longer charges for it, and made the "all disclosed"
 # sentence unreachable, since a retired component can never be credited.
