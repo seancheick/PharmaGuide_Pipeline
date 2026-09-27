@@ -32,8 +32,8 @@
     },
     "statistics": {
       "total_parents": 655,
-      "total_forms": 1450,
-      "total_form_aliases": 12148,
+      "total_forms": 1449,
+      "total_form_aliases": 12136,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -4813,7 +4813,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -4862,7 +4862,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -4922,7 +4922,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -4933,7 +4933,7 @@
           ]
         },
         "absorption": "mitochondrial coenzyme form; ~1-2% passive absorption at 1000 mcg dose",
-        "consumer_note": "Adenosylcobalamin is a coenzyme form of vitamin B12 in which cobalamin carries a 5′-deoxyadenosyl group.",
+        "consumer_note": "Adenosylcobalamin is a coenzyme form of vitamin B12 in which cobalamin carries a 5\u2032-deoxyadenosyl group.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -4971,7 +4971,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -5022,7 +5022,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -5070,7 +5070,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -5120,7 +5120,7 @@
             {
               "type": "authoritative_guidance",
               "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin B12 — Health Professional Fact Sheet",
+              "title": "Vitamin B12 \u2014 Health Professional Fact Sheet",
               "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
               "supports_claims": [
                 "class_equivalence"
@@ -25601,31 +25601,6 @@
           "quality": "poor"
         }
       },
-      "matcha powder": {
-        "bio_score": 8,
-        "absorption": "very_low (EGCG class-poor F 0.1-1%)",
-        "consumer_note": "Matcha is powdered whole green-tea leaf rather than an isolated tea extract. It contains catechins along with other natural leaf components.",
-        "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
-        },
-        "notes": "Whole-leaf green tea powder. Contains ~137x more EGCG per gram vs brewed tea (PMID:14518774, Weiss 2003), but whole-leaf matrix (fiber, protein) may alter absorption kinetics vs isolated extracts. No direct human PK comparison vs standardized extract exists. Variable catechin content depending on grade and preparation. B24 audit 2026-04-25: matcha = EGCG class-poor (PMID:15585768).",
-        "aliases": [
-          "stone-ground green tea",
-          "whole leaf green tea",
-          "ground matcha",
-          "pure matcha powder",
-          "traditional matcha",
-          "Camellia sinensis, Powder"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.01,
-          "range_low": 0.005,
-          "range_high": 0.02,
-          "quality": "low"
-        }
-      },
       "green tea catechins": {
         "bio_score": 9,
         "absorption": "very low (<1% F for EGCG; extensive first-pass conjugation)",
@@ -25675,11 +25650,6 @@
           "catechin",
           "tea catechins",
           "Total Monomeric Phenols",
-          "organic matcha green tea leaf powder",
-          "organic matcha green tea",
-          "matcha",
-          "matcha green tea",
-          "organic matcha",
           "organic green & white tea extract",
           "green & white tea extract",
           "green and white tea extract"
@@ -27917,8 +27887,7 @@
     "forms": {
       "nattokinase standard": {
         "same_identity_aliases": [
-          "natto extract",
-          "fermented soybean powder"
+          "natto extract"
         ],
         "bio_score": 9,
         "absorption": "low but functionally significant (enzyme detectable in serum 2-24h post-dose)",
@@ -27937,9 +27906,7 @@
           "subtilisin nat",
           "natto extract",
           "natto nsp-2",
-          "Cardiokinase",
-          "fermented soybean powder",
-          "fermented soy powder"
+          "Cardiokinase"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -41891,8 +41858,6 @@
           "cordyceps mushroom",
           "cordyceps extract",
           "Cordyceps Mushroom Fruiting Body Extract",
-          "Bionectria ochroleuca",
-          "cordyceps militaris bionectria",
           "cordyceps cs-4",
           "Cordyceps militaris Mycelium Extract",
           "cordyceps militaris mycelium",
@@ -68242,6 +68207,9 @@
           "glycine max",
           "soy protein",
           "soy extract",
+          "fermented soy extract",
+          "fermented soybean powder",
+          "fermented soy powder",
           "soya"
         ],
         "dosage_importance": 1.0,

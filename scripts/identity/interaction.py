@@ -64,10 +64,11 @@ INTERACTION_SUBJECT_FAMILY: dict[str, str] = {
 # parent (RULE_INGREDIENT_GARLIC is authored on IQM `garlic`, so 320 mg of
 # `garlic_bulb` warned about nothing). Interaction lookup only: scoring keeps
 # the botanical identity. Each pair shares a GSRS UNII or is a species the IQM
-# parent names. Same-species records left out (a marker or nutrient source,
-# another part or preparation) are listed with their reasons in
-# test_botanical_interaction_subjects.py, which requires a decision for every
-# candidate.
+# parent names, and its part is one the rule's evidence covers. Same-species
+# records left out (a marker or nutrient source, another part or preparation,
+# e.g. nettle root under a leaf-evidence rule) are listed with
+# their reasons in test_botanical_interaction_subjects.py, which requires a
+# decision for every candidate.
 BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "aloe_vera": "aloe_vera",
     "aloe_vera_concentrated_gel": "aloe_vera",
@@ -100,6 +101,8 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "cranberry_fruit": "cranberry",
     "cranrx": "cranberry",
     "dandelion": "dandelion",
+    # EU root monograph EMA/HMPC/475726/2020: traditional diuretic use and a
+    # fluid-restriction warning, the premise of the dandelion kidney rule (Q18).
     "dandelion_root": "dandelion",
     "devil_s_claw": "devils_claw",
     "devils_claw_tuber": "devils_claw",
@@ -141,7 +144,6 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "milk_thistle_seed": "milk_thistle",
     "nettle": "stinging_nettle",
     "nettle_leaf": "stinging_nettle",
-    "nettle_root": "stinging_nettle",
     "nigella": "black_seed_oil",
     "olive_leaf_extract": "olive_leaf",
     "olive_leaf_powder": "olive_leaf",

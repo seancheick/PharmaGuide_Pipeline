@@ -67,7 +67,8 @@ B24_BANDS_VALUED = [
     # gaba — PK-strict
     ('gaba', 'gaba (gamma-aminobutyric acid) (unspecified)',       0.02, 0.10, 'Boonstra 2015 BBB'),
     # green_tea_extract
-    ('green_tea_extract', 'matcha powder',                         0.005, 0.02, 'Henning 2004'),
+    # 'matcha powder' left green_tea_extract 2026-09-26 (register Q25): matcha is whole leaf,
+    # botanical matcha_tea_powder.
     ('green_tea_extract', 'green tea extract (unspecified)',       0.005, 0.02, 'Chow 2001'),
     # milk_thistle
     ('milk_thistle', 'milk thistle (unspecified)',                 0.001, 0.01, 'Calani 2012'),

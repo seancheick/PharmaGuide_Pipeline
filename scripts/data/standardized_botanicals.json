@@ -91,7 +91,7 @@
       "vegetable_greens": 6
     },
     "statistics": {
-      "total_aliases": 862,
+      "total_aliases": 861,
       "entries_with_threshold": 108,
       "high_priority": 68,
       "medium_priority": 170
@@ -3098,8 +3098,7 @@
         "green tea extract",
         "green tea leaf",
         "green tea polyphenols",
-        "tea extract",
-        "matcha"
+        "tea extract"
       ],
       "markers": [
         "EGCG",

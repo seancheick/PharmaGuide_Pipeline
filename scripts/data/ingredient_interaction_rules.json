@@ -4,9 +4,9 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
     "last_updated": "2026-09-26",
-    "total_entries": 150,
+    "total_entries": 151,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 150,
+    "total_rules": 151,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -20996,7 +20996,8 @@
       },
       "form_scope": [
         "dandelion leaf",
-        "dandelion extract"
+        "dandelion extract",
+        "dandelion root"
       ],
       "form_scope_match": "fail_open",
       "condition_rules": [
@@ -21004,15 +21005,16 @@
           "condition_id": "kidney_disease",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "Dandelion leaf (Taraxacum officinale) is a traditional diuretic: the EU herbal monograph gives it to increase the amount of urine and advises avoiding it in renal failure because of possible hyperkalemia. In CKD, fluid management is critical; uncontrolled diuresis can precipitate dehydration, acute kidney injury, and electrolyte derangements.",
+          "mechanism": "Dandelion leaf and root preparations (Taraxacum officinale) have traditional diuretic use. The EU herbal monographs advise against use when reduced fluid intake is recommended, including severe renal disease. In CKD, unsupervised diuresis can complicate fluid and electrolyte management.",
           "action": "Avoid unsupervised dandelion supplementation in kidney disease. Any diuretic effect should be managed in consultation with a nephrologist.",
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion",
-            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-taraxacum-officinale-weber-ex-wigg-folium_en.pdf"
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-taraxacum-officinale-weber-ex-wigg-folium_en.pdf",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-taraxacum-officinale-fh-wigg-radix_en.pdf"
           ],
           "alert_headline": "Diuretic herb \u2014 use caution in CKD",
           "alert_body": "Dandelion may have diuretic effects. If you have kidney disease or take diuretics, ask your clinician before using concentrated dandelion supplements.",
-          "informational_note": "Dandelion leaf is a traditional diuretic \u2014 relevant to people with kidney conditions.",
+          "informational_note": "Dandelion leaf and root are traditional diuretics \u2014 relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -25850,6 +25852,64 @@
         }
       ],
       "last_reviewed": "2026-09-24",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_BOTAN_MATCHA_BETA_BLOCKERS",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "matcha_tea_powder"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "beta_blockers",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Matcha is powdered whole green-tea leaf. Green tea inhibits OATP1A2, the intestinal uptake transporter that carries nadolol into the body: in volunteers, 700 mL of green tea daily for 14 days cut nadolol exposure by about 85% and reduced its effect on systolic blood pressure. A single dose of EGCG-rich green tea extract lowered nadolol exposure by 28-40%, so EGCG is a key contributor.",
+          "action": "If you take nadolol or another beta blocker, ask your prescriber before using matcha supplements, and do not take them at the same time.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/24419562/",
+            "https://pubmed.ncbi.nlm.nih.gov/29480324/"
+          ],
+          "alert_headline": "May reduce nadolol effect",
+          "alert_body": "Green tea, including matcha, can sharply lower nadolol levels and weaken blood-pressure control. If you take a beta blocker, ask your prescriber before using it.",
+          "informational_note": "Matcha is whole green-tea leaf; green tea blocks a gut transporter that absorbs nadolol.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "beta_blockers"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
+        "alert_headline": "Limited safety data",
+        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-09-26",
       "review_owner": "pharmaguide_clinical_team"
     }
   ]

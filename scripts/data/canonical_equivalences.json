@@ -4,10 +4,10 @@
     "schema_version": "1.0.0",
     "version": "2026-07-13",
     "total_entries": 7,
-    "total_relationships": 4,
+    "total_relationships": 7,
     "purpose": "Prevent cleaner/enricher identity drift using reviewed exact-identity and broad-to-specific contracts.",
     "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
-    "last_updated": "2026-09-24"
+    "last_updated": "2026-09-26"
   },
   "equivalences": [
     {
@@ -109,6 +109,33 @@
       "child_id": "oat_bran",
       "relation": "broader_than",
       "basis": "Oat (Avena sativa) is the broad plant identity. Oat bran is a specific milled fraction of the oat groat (21 CFR 101.81(c)(2)(ii)(A)(1)), so a literal 'Oat Bran' label that independently resolves to oat_bran keeps that identity when DSLD's structured group reads 'Oat Fiber' (DSLD 293280, 293400).",
+      "scope": "specificity_resolution_only"
+    },
+    {
+      "parent_db": "botanical_ingredients",
+      "parent_id": "citrus_bergamot",
+      "child_db": "botanical_ingredients",
+      "child_id": "bergamot_essential_oil",
+      "relation": "broader_than",
+      "basis": "Citrus bergamia is the broad plant identity; DSLD groups bergamot oil rows under it (ingredientGroup 'Bergamot Orange'). A literal bergamot-oil label that resolves to bergamot_essential_oil (GSRS 39W1PKE3JI BERGAMOT OIL) must keep that preparation identity instead of being repaired to the fruit, whose interaction rule rests on fruit-extract evidence (register Q18, 2026-09-26).",
+      "scope": "specificity_resolution_only"
+    },
+    {
+      "parent_db": "botanical_ingredients",
+      "parent_id": "chamomile",
+      "child_db": "botanical_ingredients",
+      "child_id": "chamomile_essential_oil",
+      "relation": "broader_than",
+      "basis": "Matricaria chamomilla is the broad plant identity; DSLD groups chamomile oil rows under 'Chamomile (unspecified)'. A literal chamomile-oil label that resolves to chamomile_essential_oil (GSRS SA8AR2W4ER MATRICARIA CHAMOMILLA FLOWERING TOP OIL) must keep that preparation identity instead of being repaired to the flower (register Q18, 2026-09-26).",
+      "scope": "specificity_resolution_only"
+    },
+    {
+      "parent_db": "botanical_ingredients",
+      "parent_id": "green_tea",
+      "child_db": "botanical_ingredients",
+      "child_id": "matcha_tea_powder",
+      "relation": "broader_than",
+      "basis": "Green Tea is the broad plant identity; DSLD groups matcha rows under 'Green Tea'. A literal matcha label that resolves to matcha_tea_powder (stone-ground whole leaf) must keep that preparation identity. Matcha is not a concentrated extract, so it is not green_tea_extract either (register Q25, 2026-09-26).",
       "scope": "specificity_resolution_only"
     }
   ]
