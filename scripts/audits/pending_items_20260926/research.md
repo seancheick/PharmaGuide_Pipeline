@@ -288,3 +288,13 @@ Agent-verified, not clinician-reviewed. Thresholds, severities and categories we
   shogaol class of compounds". The 2013 systematic review by the same group is PMID 23550785 (Nutr Rev).
 - Source line now names 25848702 as a review. Citation only: the +1 standardized-botanical bonus depends on the
   label's gingerol claim, not on this source.
+
+## standardized_botanicals slendesta: nonexistent PMID (Q22)
+- PMID 22647284: esummary "cannot get document summary" (2026-09-26); it does not exist.
+- PMID 28485429 (Zhu Y, Lasrado JA, Hu J et al. Food Funct 2017, doi 10.1039/c6fo01803c, efetch 2026-09-26):
+  randomized double-blind placebo-controlled crossover, 44 healthy women, "potato extract standardized to 15 or
+  30 mg PI2"; lower postprandial hunger and higher fullness; "Consumption of 15 mg PI2 also resulted in
+  significantly higher postprandial plasma levels of cholecystokinin". Supports the entry's satiety/CCK note for a
+  PI2-standardized potato extract; the abstract does not name the Slendesta brand.
+- Other human PI2 trials seen: PMID 20644555 (Peters 2011, 30 mg PI2 minidrink), PMID 32161479 (Flechtner-Mors
+  2020, 150 mg PI2 twice daily during weight reduction). Citation only; the bonus depends on the brand on the label.

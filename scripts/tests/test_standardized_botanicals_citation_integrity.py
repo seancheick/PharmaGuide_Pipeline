@@ -24,3 +24,12 @@ def test_ginger_cites_the_marx_2017_review_not_a_nonexistent_pmid():
     assert "28200047" not in sources
     assert "PMID 25848702" in sources
     assert "systematic review" not in sources
+
+
+def test_slendesta_cites_a_potato_pi2_satiety_trial_not_a_nonexistent_pmid():
+    """PMID 22647284 does not exist in PubMed. PMID 28485429 (Zhu 2017, Food
+    Funct) is a randomized trial of potato extract standardized to 15 or 30 mg
+    proteinase inhibitor II: lower hunger, higher fullness, higher CCK."""
+    sources = ENTRIES["slendesta"]["sources"]
+    assert not any("22647284" in s for s in sources)
+    assert "https://pubmed.ncbi.nlm.nih.gov/28485429/" in sources

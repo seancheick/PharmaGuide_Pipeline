@@ -5487,7 +5487,7 @@
       "category": "tuber",
       "priority": "medium",
       "notes": "Patented potato protein extract that promotes satiety by triggering CCK release. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
-      "last_updated": "2026-05-22",
+      "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "2A8I57T4MX"
       },
@@ -5501,7 +5501,7 @@
       ],
       "bonus_rationale": "Slendesta\u00ae (Kemin Industries) is a potato protein extract (Solanum tuberosum) standardized to the PI2 (proteinase inhibitor II) bioactive fraction. Clinical literature on satiety / cholecystokinin elevation / appetite endpoints. branded_extract basis: bonus is granted when the label names the Slendesta\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/22647284/",
+        "https://pubmed.ncbi.nlm.nih.gov/28485429/",
         "https://www.kemin.com/na/en-us/markets/human/products/slendesta"
       ]
     },

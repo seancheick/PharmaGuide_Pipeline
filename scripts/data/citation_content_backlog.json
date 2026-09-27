@@ -4,7 +4,7 @@
   "description": "Citations the first full-coverage run (2026-09-26) flagged: 'mismatch' means the live PubMed record shares no identity word with its entry (a heuristic; many are wrong papers, some are naming misses), 'not_found' means the PMID does not resolve. The release gate fails on any not_found and on any mismatch NOT listed here, so a new bad citation cannot hide in this backlog. Fix entries one at a time via /data-fix and delete each from this list in the same commit (register Q22). The 10 medication_depletions items are needs_revision records the app suppresses.",
   "schema_version": "5.0.0",
   "last_updated": "2026-09-26",
-  "total_entries": 233,
+  "total_entries": 232,
   "source_run": "verify_all_citations_content.py --report (after e349a2b7: every citation in scripts/data read)",
   "summary_by_file": {
    "timing_rules.json": {
@@ -148,7 +148,7 @@
     "not_found": 0
    }
   },
-  "not_found_recheck": "esummary 2026-09-26: 28200047 (ginger_extract) and 22647284 (slendesta) do not exist in PubMed. 29144655 (lutemax_2020) is a PubmedBookArticle, an IQWiG dulaglutide dossier, read as not found until 05c3e5ad; listed as mismatch. Fixed: ginger_extract now cites PMID 25848702 (2026-09-26)."
+  "not_found_recheck": "esummary 2026-09-26: 28200047 (ginger_extract) and 22647284 (slendesta) do not exist in PubMed. 29144655 (lutemax_2020) is a PubmedBookArticle, an IQWiG dulaglutide dossier, read as not found until 05c3e5ad; listed as mismatch. Fixed: ginger_extract now cites PMID 25848702 (2026-09-26). Fixed: slendesta now cites PMID 28485429 (2026-09-26)."
  },
  "backlog": [
   {
@@ -3324,21 +3324,6 @@
    "identity_words": [
     "green",
     "sharp"
-   ]
-  },
-  {
-   "file": "standardized_botanicals.json",
-   "entry_id": "slendesta",
-   "pmid": "22647284",
-   "status": "not_found",
-   "live_title": "NOT FOUND",
-   "identity_words": [
-    "potato",
-    "protein",
-    "slendesta",
-    "proteinase",
-    "extract",
-    "inhibitor"
    ]
   },
   {
