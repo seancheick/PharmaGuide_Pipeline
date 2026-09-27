@@ -1,0 +1,423 @@
+"""An agent as a reader: it reads the photographs and files a label_draft_v1.
+
+The agent (Claude or any other) is one more producer behind the same extractor
+the queue worker uses, so its reading gets the same envelope validation,
+deterministic checks and independent grounding (RapidOCR over the same
+prepared bytes). What it writes is a draft and a reviewer draft; the five
+field confirmations and the approval stay the reviewer's clicks in the console.
+
+    fetch  S01 [S02 ...]   photos + an OCR lead reading for each submission
+    record S01 --model M   file the agent's reading.json as a draft
+    save   S01             save label.json as the review, after checks
+
+Work lives in ``$PG_SUBMISSION_WORKDIR`` (default /tmp/pg_submissions/<alias>).
+Output names aliases only; submission ids, user ids and URLs are never printed.
+
+Account: until a machine reviewer exists, requests run as the reviewer named
+by ``PG_REVIEWER_EMAIL`` through an admin-minted session (Sean, 2026-09-27:
+"use my account for now"). Photos may go to hosted models (same decision).
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import stat
+import sys
+from pathlib import Path
+from typing import Any, Mapping
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+import env_loader  # noqa: E402,F401
+from product_submission_import import (  # noqa: E402
+    SubmissionImportError, _validate_label_payload,
+)
+from submission_review.extraction import bounded_http  # noqa: E402
+from submission_review.extraction.checks import convention_findings  # noqa: E402
+from submission_review.extraction.envelope import (  # noqa: E402
+    LABEL_CONTENT_KEYS, SCHEMA_VERSION,
+)
+from submission_review.extraction.extractor import (  # noqa: E402
+    EvidenceBundle, EvidencePhoto, ExtractionConfig, ExtractionResult,
+    LabelDraftExtractor, PreparedBundle, Usage,
+)
+from submission_review.extraction.photo_prep import prepare_bundle  # noqa: E402
+from submission_review.extraction.to_manual_label import (  # noqa: E402
+    STATEMENT_TYPE, to_manual_label,
+)
+
+PROVIDER = "agent"
+#: Bump when the product-submissions-prep skill's reading rules change.
+PROMPT_VERSION = "product-submissions-prep/1"
+RETENTION = "hosted-ok-sean-2026-09-27"
+WORK = Path(os.environ.get("PG_SUBMISSION_WORKDIR", "/tmp/pg_submissions"))
+EDGE_PATH = "/functions/v1/review-product-submissions"
+MAX_JSON = 16 * 1024 * 1024
+MAX_PHOTO = 15 * 1024 * 1024
+
+
+class AgentError(RuntimeError):
+    pass
+
+
+# ------------------------------------------------------------ pure pieces
+
+def build_draft(content: Mapping[str, Any], bundle: PreparedBundle, model: str) -> dict[str, Any]:
+    """The agent's label content plus the provenance only the runtime knows.
+
+    A source may name just its photo_id; the prepared input for that photo is
+    filled in, since the agent reads photos, not prepared inputs.
+    """
+    extra = set(content) - LABEL_CONTENT_KEYS
+    if extra:
+        raise AgentError(f"reading.json has non-label keys: {sorted(extra)}")
+    inputs = {photo.photo_id: photo.input_id for photo in bundle.photos}
+
+    def bind(value: Any) -> Any:
+        if isinstance(value, dict):
+            bound = {key: bind(item) for key, item in value.items()}
+            if "photo_id" in bound and "input_id" not in bound and "declared" not in bound:
+                if bound["photo_id"] not in inputs:
+                    raise AgentError("a source names a photo this submission does not have")
+                bound["input_id"] = inputs[bound["photo_id"]]
+            return bound
+        if isinstance(value, list):
+            return [bind(item) for item in value]
+        return value
+
+    return {
+        **bind(dict(content)),
+        "schema_version": SCHEMA_VERSION,
+        "draft_origin": "model",
+        "provider": PROVIDER,
+        "model": model,
+        "prompt_version": PROMPT_VERSION,
+        "evidence_revision": bundle.evidence_revision,
+        "evidence_snapshot": bundle.snapshot,
+        "sent_inputs": [photo.as_sent_input() for photo in bundle.photos],
+    }
+
+
+def reading_changes(skeleton: Any, label: Any, path: str = "$") -> list[str]:
+    """Where label.json departs from what the recorded reading says.
+
+    label.json may only add what a draft cannot carry (ingredientGroup,
+    physicalState, statement types, daily servings, ...). Changing a value the
+    reading supplied means the reading was wrong: fix reading.json and record
+    again, so the draft the reviewer sees and the label agree.
+    """
+    if isinstance(skeleton, Mapping):
+        if not isinstance(label, Mapping):
+            return [path]
+        changes = []
+        for key, value in skeleton.items():
+            if key not in label:
+                changes.append(f"{path}.{key}")
+            elif key == "type" and value == STATEMENT_TYPE:
+                continue  # the neutral default is there to be replaced
+            else:
+                changes.extend(reading_changes(value, label[key], f"{path}.{key}"))
+        return changes
+    if isinstance(skeleton, list):
+        if not isinstance(label, list) or len(label) != len(skeleton):
+            return [path]
+        changes = []
+        for index, value in enumerate(skeleton):
+            changes.extend(reading_changes(value, label[index], f"{path}[{index}]"))
+        return changes
+    return [] if skeleton == label else [path]
+
+
+class _FiledReading:
+    """Adapter that returns the agent's already-written draft."""
+
+    def __init__(self, draft: dict[str, Any]) -> None:
+        self._draft = draft
+
+    def extract(self, bundle: PreparedBundle, config: ExtractionConfig) -> ExtractionResult:
+        return ExtractionResult(draft=self._draft, usage=Usage())
+
+
+# ------------------------------------------------------------ the service
+
+def _env(name: str, *alternates: str) -> str:
+    for key in (name, *alternates):
+        value = (os.environ.get(key) or "").strip()
+        if value:
+            return value
+    raise AgentError(f"missing {name} in the environment (.env)")
+
+
+class Reviewer:
+    """The review function, called with the configured reviewer's session."""
+
+    def __init__(self) -> None:
+        self.url = _env("SUPABASE_URL").rstrip("/")
+        self.anon = _env("SUPABASE_ANON_KEY", "SUPABASE_PUBLISHABLE_KEY")
+        self.token_path = WORK / ".session"
+
+    def _post(self, path: str, body: dict, headers: dict) -> tuple[int, Any]:
+        response = bounded_http.request(
+            "POST", self.url + path, timeout=90, max_bytes=MAX_JSON,
+            headers=headers, body=body)
+        try:
+            return response.status_code, json.loads(response.content or b"{}")
+        except ValueError:
+            return response.status_code, {}
+
+    def _mint(self) -> str:
+        service = _env("SUPABASE_SERVICE_ROLE_KEY")
+        email = _env("PG_REVIEWER_EMAIL")
+        status, link = self._post(
+            "/auth/v1/admin/generate_link", {"type": "magiclink", "email": email},
+            {"apikey": service, "authorization": f"Bearer {service}"})
+        if status != 200 or not link.get("email_otp"):
+            raise AgentError(f"could not mint a reviewer session ({status})")
+        status, verified = self._post(
+            "/auth/v1/verify",
+            {"email": email, "token": link["email_otp"], "type": "magiclink"},
+            {"apikey": self.anon})
+        if status != 200 or not verified.get("access_token"):
+            raise AgentError(f"could not verify the reviewer session ({status})")
+        WORK.mkdir(parents=True, exist_ok=True)
+        self.token_path.write_text(verified["access_token"])
+        self.token_path.chmod(stat.S_IRUSR | stat.S_IWUSR)
+        return verified["access_token"]
+
+    def token(self, *, fresh: bool = False) -> str:
+        if not fresh and self.token_path.exists():
+            cached = self.token_path.read_text().strip()
+            if cached:
+                return cached
+        return self._mint()
+
+    def call(self, action: str, **payload: Any) -> dict:
+        for fresh in (False, True):
+            status, body = self._post(
+                EDGE_PATH, {"action": action, **payload},
+                {"apikey": self.anon, "authorization": f"Bearer {self.token(fresh=fresh)}"})
+            if status != 401:
+                break
+        if status != 200:
+            detail = body.get("error") if isinstance(body, dict) else None
+            raise AgentError(f"{action} refused ({status}): {str(detail)[:200]}")
+        return body
+
+    def open_submissions(self) -> list[dict]:
+        rows, after = [], None
+        while True:
+            body = self.call("list", limit=100, status="open", **({"after": after} if after else {}))
+            rows.extend(body.get("submissions") or [])
+            after = body.get("next_after")
+            if not after:
+                return rows
+
+    def submission(self, submission_id: str) -> dict:
+        rows = self.call("list", submission_id=submission_id).get("submissions") or []
+        if len(rows) != 1:
+            raise AgentError("that submission is no longer open")
+        return rows[0]
+
+
+def _aliases(rows: list[dict] | None = None) -> dict[str, str]:
+    """alias -> submission id, stable across runs on this machine."""
+    path = WORK / "aliases.json"
+    mapping = json.loads(path.read_text()) if path.exists() else {}
+    if rows is not None:
+        known = set(mapping.values())
+        for row in rows:
+            if row["id"] not in known:
+                number = len(mapping) + 1
+                while f"S{number:02d}" in mapping:
+                    number += 1
+                mapping[f"S{number:02d}"] = row["id"]
+        WORK.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(mapping, indent=1))
+    return mapping
+
+
+def _resolve(alias: str) -> str:
+    mapping = _aliases()
+    if alias.upper() not in mapping:
+        raise AgentError(f"unknown alias {alias}; run `list` first")
+    return mapping[alias.upper()]
+
+
+def _bundle(submission: dict, directory: Path) -> EvidenceBundle:
+    manifest = json.loads((directory / "photos.json").read_text())
+    files = {entry["photo_id"]: entry["file"] for entry in manifest}
+    return EvidenceBundle(
+        submission_id=submission["id"],
+        evidence_revision=submission["evidence_revision"],
+        photos=tuple(
+            EvidencePhoto(photo_id=photo["photo_id"], sha256=photo["content_sha256"],
+                          path=files[photo["photo_id"]],
+                          categories=tuple(photo.get("categories") or ()))
+            for photo in submission.get("photos") or ()
+        ),
+    )
+
+
+# ------------------------------------------------------------ commands
+
+def cmd_list(api: Reviewer) -> None:
+    rows = api.open_submissions()
+    mapping = {value: key for key, value in _aliases(rows).items()}
+    print(f"open submissions: {len(rows)}")
+    for row in rows:
+        print(f"  {mapping[row['id']]}  {row.get('kind') or '-':<16} "
+              f"{row.get('review_status') or '-':<13} photos={len(row.get('photos') or [])} "
+              f"submitted={(row.get('submitted_at') or row.get('created_at') or '')[:10]}")
+
+
+def cmd_fetch(api: Reviewer, alias: str) -> None:
+    from submission_review.extraction.adapters.ocr_adapter import (
+        PROVIDER as OCR, RULES_VERSION, OcrLabelAdapter,
+    )
+    from submission_review.extraction.adapters.rapidocr_reader import RapidOcrReader
+
+    alias = alias.upper()
+    submission = api.submission(_resolve(alias))
+    directory = WORK / alias
+    (directory / "photos").mkdir(parents=True, exist_ok=True)
+    manifest = []
+    for index, photo in enumerate(submission.get("photos") or [], start=1):
+        response = bounded_http.request("GET", photo["signed_url"], timeout=90, max_bytes=MAX_PHOTO)
+        if response.status_code != 200:
+            raise AgentError(f"{alias} photo {index:02d} download failed ({response.status_code})")
+        if hashlib.sha256(response.content).hexdigest() != photo["content_sha256"]:
+            raise AgentError(f"{alias} photo {index:02d} does not match its evidence hash")
+        category = "-".join(photo.get("categories") or ["uncategorised"])
+        target = directory / "photos" / f"{index:02d}_{category}.jpg"
+        target.write_bytes(response.content)
+        manifest.append({"photo": f"{index:02d}", "photo_id": photo["photo_id"],
+                         "categories": photo.get("categories") or [], "file": str(target)})
+    (directory / "photos.json").write_text(json.dumps(manifest, indent=1))
+
+    # The OCR reading is a lead to correct against the photographs, never the answer.
+    prepared = prepare_bundle(_bundle(submission, directory))
+    config = ExtractionConfig(provider=OCR, model="rapidocr", model_digest="0" * 64,
+                              prompt_version=RULES_VERSION, retention_policy_version="local-only-v1")
+    lead = OcrLabelAdapter(RapidOcrReader()).extract(prepared, config).draft
+    reading = {key: lead[key] for key in LABEL_CONTENT_KEYS if key in lead}
+    (directory / "reading.json").write_text(json.dumps(reading, indent=1, ensure_ascii=False))
+    print(f"{alias}: {len(manifest)} photo(s) and an OCR lead reading in {directory}")
+    for entry in manifest:
+        print(f"    {entry['photo']}  {', '.join(entry['categories']) or 'uncategorised'}")
+
+
+def cmd_record(api: Reviewer, alias: str, model: str) -> int:
+    from submission_review.extraction.adapters.rapidocr_reader import RapidOcrReader
+
+    alias = alias.upper()
+    directory = WORK / alias
+    submission = api.submission(_resolve(alias))
+    prepared = prepare_bundle(_bundle(submission, directory))
+    content = json.loads((directory / "reading.json").read_text())
+    draft = build_draft(content, prepared, model)
+
+    problems = convention_findings(draft)
+    if problems:
+        print(f"{alias}: not recorded; fix reading.json first:")
+        for finding in problems:
+            print(f"    {finding['code']}: {finding['detail']}")
+        return 1
+
+    config = ExtractionConfig(
+        provider=PROVIDER, model=model,
+        model_digest=hashlib.sha256(model.encode()).hexdigest(),
+        prompt_version=PROMPT_VERSION, retention_policy_version=RETENTION)
+    result = LabelDraftExtractor(_FiledReading(draft), grounding_reader=RapidOcrReader()).extract(
+        prepared, config, submission_gtin=submission.get("normalized_upc"))
+    usage = result.usage.as_payload()
+    api.call("record_extraction", submission_id=submission["id"], extraction={
+        "schema_version": SCHEMA_VERSION, "provider": PROVIDER, "model": model,
+        "prompt_version": PROMPT_VERSION, "input_image_hashes": prepared.snapshot,
+        "draft_payload": result.draft, "field_provenance": {}, "confidence": None,
+        "usage": usage, "evidence_revision": prepared.evidence_revision,
+    })
+    (directory / "draft.json").write_text(json.dumps(result.draft, indent=1, ensure_ascii=False))
+    skeleton = to_manual_label(result.draft)
+    (directory / "label.json").write_text(json.dumps(skeleton.payload, indent=1, ensure_ascii=False))
+    (directory / "unresolved.json").write_text(json.dumps(skeleton.unresolved, indent=1, ensure_ascii=False))
+
+    print(f"{alias}: draft recorded; label.json and unresolved.json written")
+    for finding in result.draft.get("discrepancies") or []:
+        print(f"    finding {finding['severity']}: {finding['code']} — {finding.get('detail') or ''}")
+    grounding = usage.get("grounding") or {}
+    print(f"    grounding: {grounding.get('grounded')}/{grounding.get('checked')} fields found "
+          f"by independent OCR ({grounding.get('status')})")
+    for entry in grounding.get("fields") or []:
+        if not entry.get("grounded"):
+            # Not an error: OCR misses fine print. Each one is a field to re-read.
+            print(f"      re-read {entry['path']}: {entry.get('reason')}")
+    print(f"    fill {len(skeleton.unresolved)} unresolved item(s) in label.json, then `save {alias}`")
+    return 0
+
+
+def cmd_save(api: Reviewer, alias: str) -> int:
+    alias = alias.upper()
+    directory = WORK / alias
+    draft = json.loads((directory / "draft.json").read_text())
+    label = json.loads((directory / "label.json").read_text())
+    changes = reading_changes(to_manual_label(draft).payload, label)
+    if changes:
+        print(f"{alias}: not saved; label.json changes values the recorded reading supplied:")
+        for path in changes[:20]:
+            print(f"    {path}")
+        print("    fix reading.json and run `record` again")
+        return 1
+    try:
+        _validate_label_payload(label)
+    except SubmissionImportError as error:
+        print(f"{alias}: not saved; the catalog importer refuses it: {error}")
+        return 1
+    diagnostics = api.call("validate_label", payload=label).get("diagnostics") or []
+    if diagnostics:
+        print(f"{alias}: not saved; {len(diagnostics)} server diagnostic(s):")
+        for item in diagnostics[:20]:
+            print("    " + json.dumps(item)[:200])
+        return 1
+    submission = api.submission(_resolve(alias))
+    api.call("save_review", submission_id=submission["id"], payload=label,
+             expected_evidence_revision=submission["evidence_revision"],
+             evidence_manifest_sha256=submission["evidence_manifest_sha256"])
+    print(f"{alias}: saved. In the console: open it, compare each field with its crop, "
+          f"tick the five fields, approve.")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("list")
+    fetch = sub.add_parser("fetch")
+    fetch.add_argument("aliases", nargs="+")
+    record = sub.add_parser("record")
+    record.add_argument("alias")
+    record.add_argument("--model", required=True, help="the reading model, e.g. claude-opus-5-5")
+    save = sub.add_parser("save")
+    save.add_argument("alias")
+    args = parser.parse_args(argv)
+    try:
+        api = Reviewer()
+        if args.command == "list":
+            cmd_list(api)
+            return 0
+        if args.command == "fetch":
+            for alias in args.aliases:
+                cmd_fetch(api, alias)
+            return 0
+        if args.command == "record":
+            return cmd_record(api, args.alias, args.model)
+        return cmd_save(api, args.alias)
+    except (AgentError, bounded_http.TransportError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
