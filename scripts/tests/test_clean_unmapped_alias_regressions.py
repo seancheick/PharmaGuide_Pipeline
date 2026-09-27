@@ -1797,7 +1797,7 @@ def test_raw_validated_punctuation_and_form_variants_map(normalizer, name, expec
         ("BaCognize Ultra Bacopa extract", "Bacopa"),
         ("BroccoVital Myrosinase Broccoli extract", "Broccoli"),
         ("Deer Antler horn powder", "Deer Antler"),
-        ("Deglycyrrhized Licorice", "Licorice"),
+        ("Deglycyrrhized Licorice", "DGL (Deglycyrrhizinated Licorice)"),
         ("Bilberry standardized extract", "Bilberry"),
         ("Ginkgo [leaf] 50:1 Extract", "Ginkgo"),
         ("Ginkgo Biloba 4:1 Extract", "Ginkgo"),

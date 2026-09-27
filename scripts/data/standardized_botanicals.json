@@ -56,7 +56,7 @@
     },
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.1",
-    "last_updated": "2026-09-26",
+    "last_updated": "2026-09-27",
     "total_entries": 180,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
@@ -91,7 +91,7 @@
       "vegetable_greens": 6
     },
     "statistics": {
-      "total_aliases": 861,
+      "total_aliases": 857,
       "entries_with_threshold": 108,
       "high_priority": 68,
       "medium_priority": 170
@@ -3677,11 +3677,7 @@
         "licorice root extract",
         "liquorice",
         "liquorice root",
-        "liquorice root extract",
-        "DGL licorice",
-        "deglycyrrhizinated licorice",
-        "deglycyrrhizinated licorice root extract",
-        "dgl"
+        "liquorice root extract"
       ],
       "markers": [
         "glycyrrhizin",

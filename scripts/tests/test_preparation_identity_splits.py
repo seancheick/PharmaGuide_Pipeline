@@ -153,3 +153,43 @@ def test_dandelion_root_answers_to_the_dandelion_rule():
     kidney = next(c for r in rules if r["id"] == "RULE_IQM_DANDELION_KIDNEY"
                   for c in r["condition_rules"] if c["condition_id"] == "kidney_disease")
     assert any("taraxacum-officinale-fh-wigg-radix" in s for s in kidney["sources"])
+
+
+def test_dgl_aliases_are_owned_by_the_distinct_preparation():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    for raw_name in (
+        "Deglycyrrhized Licorice",
+        "Gutgard DGL",
+        "deglycyrrhizinated licorice root extract",
+    ):
+        standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(raw_name, [])
+        assert mapped is True
+        assert standard_name == "DGL (Deglycyrrhizinated Licorice)"
+
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping("licorice root extract", [])
+    assert mapped is True
+    assert standard_name == "Licorice"
+
+
+def test_clinical_followups_use_routable_fields_and_one_policy_owner():
+    rules = json.loads((DATA / "ingredient_interaction_rules.json").read_text())["interaction_rules"]
+    by_id = {rule["id"]: rule for rule in rules}
+
+    serialized = json.dumps(rules)
+    assert "form_exclusion" not in serialized
+
+    eleuthero = by_id["RULE_IQM_SIBERIAN_GINSENG_PREGNANCY"]
+    assert eleuthero["condition_rules"] == []
+    assert eleuthero["drug_class_rules"] == []
+    assert eleuthero["pregnancy_lactation"]["pregnancy_category"] == "avoid"
+    assert eleuthero["pregnancy_lactation"]["lactation_category"] == "avoid"
+
+    dandelion = by_id["RULE_IQM_DANDELION_KIDNEY"]
+    assert {row["condition_id"] for row in dandelion["condition_rules"]} >= {
+        "kidney_disease",
+        "liver_disease",
+    }
+    assert dandelion["pregnancy_lactation"]["pregnancy_category"] == "avoid"
+    assert "pregnancy_lactation" not in by_id["RULE_IQM_DANDELION_GLUCOSE"]
