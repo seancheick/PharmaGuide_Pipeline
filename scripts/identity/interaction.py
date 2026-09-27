@@ -178,7 +178,6 @@ BOTANICAL_INTERACTION_TWIN_FORM: dict[str, str] = {
     "dandelion_root": "dandelion root",
     "nettle": "stinging nettle (unspecified)",
     "nettle_leaf": "stinging nettle leaf extract",
-    "nettle_root": "stinging nettle root extract",
 }
 
 

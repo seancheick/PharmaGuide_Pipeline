@@ -1,10 +1,8 @@
 """Dandelion and nettle interaction claims follow the plant part their evidence covers.
 
-Sean, 2026-09-26: split the rules by plant part. The dandelion diuretic claims
-(kidney disease, antihypertensives, lithium) rest on leaf evidence: PMID
-19678785 is a Taraxacum officinale folium trial, and the EU monographs give the
-diuretic indication for the leaf and for root with herb, none for root alone.
-The nettle glucose claims rest on a nettle leaf trial (PMID 24273930) and the
+Sean, 2026-09-26: split the rules by plant part. The dandelion kidney rule
+covers the labelled leaf and root preparations supported by their respective
+EU monographs. The nettle glucose claims rest on a nettle leaf trial (PMID 24273930) and the
 EU nettle-leaf monograph is the diuretic one; the root monograph covers only
 benign prostatic hyperplasia. The nettle blood-pressure claim covers every part
 (PMID 35800714; root extract in rats, PMID 12020933), so it has its own
@@ -64,11 +62,11 @@ def _fired(enricher, normalizer, pid: int) -> set:
     "pid,expected",
     [
         # Nutricost Dandelion Root 1575 mg: "Dandelion root 4:1 extract" (IQM)
-        (223501, {DANDELION_GLUCOSE}),
+        (223501, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # Milk Thistle X: "Dandelion root extract", the common root spelling
-        (229831, {DANDELION_GLUCOSE}),
+        (229831, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # GNC Liver Cleanser: "Dandelion root powder" (botanical dandelion_root)
-        (228932, {DANDELION_GLUCOSE}),
+        (228932, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # OLLY Beat The Bloat: "Dandelion Leaf Extract"
         (315977, {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # BulkSupplements Stinging Nettle Root Extract 1000 mg: the blood-pressure
@@ -95,7 +93,7 @@ def _profile(enricher, row: dict) -> set:
 @pytest.mark.parametrize(
     "form_id,form_match_status,expected",
     [
-        ("dandelion root", "mapped", {DANDELION_GLUCOSE}),
+        ("dandelion root", "mapped", {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         ("dandelion leaf", "mapped", {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         ("dandelion extract", "mapped", {DANDELION_DIURETIC, DANDELION_GLUCOSE}),
         # No confirmed part: the leaf claims still fire.
