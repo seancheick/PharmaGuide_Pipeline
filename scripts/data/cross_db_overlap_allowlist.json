@@ -4,10 +4,10 @@
     "schema_version": "5.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-09-25",
-    "total_entries": 53,
+    "last_updated": "2026-09-27",
+    "total_entries": 55,
     "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches — the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
-    "reviewed_at": "2026-09-25"
+    "reviewed_at": "2026-09-27"
   },
   "allowed_overlaps": [
     {
@@ -382,6 +382,20 @@
         "banned:harmful"
       ],
       "reason": "2026-09-21: short form of 'calcium disodium edta'. Same deliberate role-scoped dual-recognition with harmful_additives ADD_CALCIUM_DISODIUM_EDTA. The bare token 'EDTA' is intentionally NOT an alias of either policy identity, so no generic EDTA term appears here."
+    },
+    {
+      "term_normalized": "nickel sulfate",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: Exact DSLD Supplement Facts form under the canonical Nickel parent (label 12012) and an ADD_NICKEL contaminant alias. Active-source routing preserves mineral identity without applying the low-severity contaminant penalty; inactive or contaminant context retains the safety signal."
+    },
+    {
+      "term_normalized": "stannous chloride",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "2026-09-27: Exact DSLD Supplement Facts form under the canonical Tin parent (label 12012) and an ADD_TIN contaminant alias. Active-source routing preserves mineral identity without applying the low-severity contaminant penalty; inactive or contaminant context retains the safety signal."
     }
   ]
 }

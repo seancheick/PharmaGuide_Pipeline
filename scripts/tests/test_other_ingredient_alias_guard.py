@@ -43,10 +43,12 @@ def test_silica_overlap_records_the_current_identity_review():
     # by the Phase-3 clinical-policy review, which added the five role-scoped
     # EDTA `banned:harmful` entries. Advanced 2026-09-21 -> 2026-09-25 when the
     # anthraquinone curation deleted ADD_SENNA (Sean-approved) and with it the
-    # six senna/cassia `harmful:iqm` overlaps. The silica identity review itself
-    # is unchanged, and is still asserted byte-for-byte below.
-    assert metadata["last_updated"] == "2026-09-25"
-    assert metadata["reviewed_at"] == "2026-09-25"
+    # six senna/cassia `harmful:iqm` overlaps. Advanced 2026-09-25 ->
+    # 2026-09-27 when the exact DSLD Nickel Sulfate and Stannous Chloride forms
+    # were reviewed as active-mineral / contaminant-context overlaps. The
+    # silica identity review itself is unchanged and remains asserted below.
+    assert metadata["last_updated"] == "2026-09-27"
+    assert metadata["reviewed_at"] == "2026-09-27"
     assert "PubChem CID 24261" in silica["reason"]
     assert "VYPSYNLAJGMNEJ-UHFFFAOYSA-N" in silica["reason"]
 
