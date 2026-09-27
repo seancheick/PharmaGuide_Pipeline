@@ -31,9 +31,9 @@
       }
     },
     "statistics": {
-      "total_parents": 653,
-      "total_forms": 1443,
-      "total_form_aliases": 12106,
+      "total_parents": 655,
+      "total_forms": 1449,
+      "total_form_aliases": 12135,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -1818,7 +1818,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 653,
+    "total_entries": 655,
     "total_ingredients": 13882,
     "data_quality": {
       "review_status": "stub"
@@ -4500,6 +4500,7 @@
         },
         "notes": "A patented calcium salt of L-5-MTHF developed by Merck. One of the first branded active folate supplements. Identical active molecule to generic 5-MTHF, with the calcium salt providing good stability. Evidence update 2026-04-25 (Batch 12): B-vitamin audit \u2014 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks \u2014 bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent \u2192 Keenan 2013; \"Wittwer 1989\" \u2192 1985; \"Loew 5x F\" \u2192 Cmax 5x/AUC 3.6x.",
         "aliases": [
+          "l-5-methyltetrahydrofolate calcium salt",
           "calcium l-5-methyltetrahydrofolate",
           "5-MTHF calcium salt",
           "L-Methylfolate Calcium",
@@ -6464,6 +6465,13 @@
     "cui": "C0042874",
     "forms": {
       "mixed tocopherols": {
+        "source_form_aliases": [
+          "beta-tocopherol",
+          "gamma-tocopherol",
+          "delta-tocopherol",
+          "delta tocopherol",
+          "delta tocopherols"
+        ],
         "bio_score": 12,
         "absorption": "full-spectrum natural; \u03b1-form retained via \u03b1-TTP, \u03b2/\u03b3/\u03b4 absorbed but rapidly metabolized",
         "consumer_note": "Mixed tocopherols include alpha, beta, gamma, and delta forms of vitamin E. Alpha-tocopherol is the form recognized to meet human vitamin E requirements.",
@@ -6921,6 +6929,9 @@
         "parent_relationship": "degradation_product"
       },
       "vitamin e (unspecified)": {
+        "source_form_aliases": [
+          "alpha-tocopherol"
+        ],
         "bio_score": 5,
         "absorption": "moderate (alpha-tocopherol class baseline)",
         "consumer_note": "This listing identifies vitamin E without naming a tocopherol, tocotrienol, stereoisomer, or ester. The label does not provide enough form detail to distinguish among vitamin E forms.",
@@ -7100,6 +7111,24 @@
     "rxcui": "1895",
     "rda_ul_ref": "Calcium",
     "forms": {
+      "calcium ascorbate (as calcium source)": {
+        "bio_score": 10,
+        "absorption": "30%",
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4,
+          "quality": "moderate"
+        },
+        "notes": "Calcium ascorbate (UNII 183E4W213W) declared as a calcium source. Scored like the magnesium and zinc ascorbate source forms; no comparative calcium absorption study places it above other soluble salts. The bare name stays a source alias because vitamin C owns calcium ascorbate as a vitamin C form. 2026-09-27",
+        "aliases": [
+          "calcium from calcium ascorbate"
+        ],
+        "source_form_aliases": [
+          "calcium ascorbate"
+        ],
+        "dosage_importance": 1.5
+      },
       "calcium citrate": {
         "bio_score": 14,
         "absorption": "42%",
@@ -7645,6 +7674,13 @@
         "parent_relationship": "non_functional_analog"
       },
       "calcium (unspecified)": {
+        "source_form_aliases": [
+          "calcium d-glucarate",
+          "calcium d-pantothenate",
+          "d-calcium pantothenate",
+          "d calcium pantothenate",
+          "r-3-hydroxybutyric acid calcium"
+        ],
         "bio_score": 3,
         "absorption": "moderate (Ca class baseline; form-dependent 25-42%)",
         "consumer_note": "The label names calcium without identifying the calcium salt. That limits comparison with named forms such as carbonate, citrate, or phosphate.",
@@ -8458,6 +8494,9 @@
         }
       },
       "magnesium (unspecified)": {
+        "source_form_aliases": [
+          "r-3-hydroxybutyric acid magnesium"
+        ],
         "bio_score": 5,
         "absorption": "form unknown; assume oxide-tier worst-case for scoring",
         "consumer_note": "The label names magnesium without identifying the magnesium salt. That limits comparison with named forms such as oxide, citrate, or glycinate.",
@@ -8524,6 +8563,9 @@
         }
       },
       "magnesium amino acid chelate": {
+        "source_form_aliases": [
+          "magnesium arginate"
+        ],
         "bio_score": 11,
         "absorption": "AAC superior to oxide in humans (Walker 2003); inferior to citrate",
         "consumer_note": "The label identifies magnesium bound to amino acids but does not name the exact carrier. That leaves form-specific comparisons less certain than for a named magnesium salt.",
@@ -9885,6 +9927,7 @@
         },
         "notes": "Zinc chelated with the amino acid L-methionine (patented as OptiZinc). Good absorption and cellular retention. Methionine is a sulfur-containing amino acid that may provide additional antioxidant benefits. A well-studied branded form. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit \u2014 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants \u2014 the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemil\u00e4 2015 (PMID:25888289) Zn lozenge \u2014 LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic\u2192organic gradient). Clinician recalibration 2026-06-02: bio_score is absorption/bioavailability only; natural/source and tolerability claims are not counted in bio_score. API evidence trail: scripts/audits/mineral_forms_20260602/api_verification.json.",
         "aliases": [
+          "l-optizinc zinc mono-l-methionine sulfate",
           "optizinc",
           "zinc methionine",
           "l-optizinc",
@@ -10671,6 +10714,7 @@
         },
         "notes": "Selenium grown into yeast cells during fermentation, creating a matrix of multiple organic selenium species (primarily selenomethionine, plus selenocysteine and methylselenocysteine). Mimics the selenium profile found in selenium-rich foods. The SelenoExcell brand is the most clinically studied. ~85% absorbed.",
         "aliases": [
+          "high selenium yeast",
           "yeast selenium",
           "selenium yeast",
           "food selenium",
@@ -11330,6 +11374,8 @@
         },
         "notes": "A natural blend of flavonoid compounds from citrus fruits \u2014 typically including hesperidin, naringin, rutin, and quercetin. These compounds work synergistically with vitamin C, enhancing its absorption and extending its antioxidant activity. Traditionally known as 'Vitamin P.' Supports capillary strength, circulation, and anti-inflammatory pathways. B28 audit 2026-04-25: bioflavonoid class-poor (B19 framework).",
         "aliases": [
+          "bitter orange citrus bioflavonoids",
+          "bitter orange citrus bioflavonoid",
           "citrus bioflavonoids",
           "bioflavonoid complex",
           "hesperidin rutin",
@@ -14754,6 +14800,9 @@
         }
       },
       "crominex 3+ chromium complex": {
+        "source_form_aliases": [
+          "primavie"
+        ],
         "bio_score": 7,
         "absorption": "Natreon proprietary; clinical RCTs only, no PK data, class F 0.5-4%",
         "consumer_note": "Crominex 3+ is a branded chromium complex with a defined multi-component formulation.",
@@ -14763,6 +14812,7 @@
         },
         "notes": "Patented complex (Natreon Inc.) combining trivalent chromium with Phyllanthus emblica (amla) extract and PrimaVie shilajit. RCT evidence shows comparable glucose and lipid effects to chromium picolinate with a potentially improved safety profile (reduced Cr(VI) conversion risk per Natreon in vitro data, 2010). Absorption estimated 2\u20134%, consistent with other organic chromium complexes. Used in branded products like Crominex 3+. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit \u2014 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) \u2014 no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged. Dr Pham C3 sign-off: bio_score 13 \u2192 7. Crominex pattern (branded RCT \u2260 PK premium). F~2.5% per Anderson 1996.",
         "aliases": [
+          "crominex 3+ chromium",
           "Crominex 3+",
           "crominex",
           "crominex 3 plus",
@@ -17370,6 +17420,9 @@
     "rxcui": "9060",
     "forms": {
       "quercetin phytosome": {
+        "source_form_aliases": [
+          "phosphatidylcholine complex"
+        ],
         "bio_score": 10,
         "absorption": "phytosome lipid carrier; modest 2-4\u00d7 over rutin baseline; still class-poor",
         "consumer_note": "Quercetin phytosome combines quercetin with phospholipids. It is a delivery complex distinct from standard quercetin powder.",
@@ -17456,6 +17509,10 @@
         "form_evidence_axis": "systemic_bioavailability"
       },
       "quercetin dihydrate": {
+        "source_form_aliases": [
+          "japanese sophora concentrate",
+          "japanese sophora flower bud concentrate"
+        ],
         "bio_score": 6,
         "absorption": "~2%",
         "consumer_note": "Quercetin dihydrate is a crystalline form of quercetin that contains water molecules. It is the standard unenhanced quercetin material rather than a delivery complex.",
@@ -26246,6 +26303,10 @@
         }
       },
       "ginseng (unspecified)": {
+        "source_form_aliases": [
+          "panax notoginseng",
+          "rosa roxburghii"
+        ],
         "bio_score": 8,
         "absorption": "low (ginsenoside biotransformation-dependent)",
         "consumer_note": "This label names ginseng without identifying species, plant part, processing, or ginsenoside standardization.",
@@ -31867,6 +31928,10 @@
     "dosage_importance": 0.8,
     "forms": {
       "cyanidin-3-glucoside (unspecified)": {
+        "source_form_aliases": [
+          "black currant fruit extract",
+          "black current fruit extract"
+        ],
         "bio_score": 10,
         "absorption": "low-moderate (~1-5%)",
         "consumer_note": "Cyanidin-3-glucoside is cyanidin joined to glucose at the 3-position, a specific anthocyanin structure.",
@@ -33373,6 +33438,9 @@
     "dosage_importance": 1.0,
     "forms": {
       "delphinidin (unspecified)": {
+        "source_form_aliases": [
+          "delphinol"
+        ],
         "bio_score": 7,
         "absorption": "~2-5% intact anthocyanidin; gut metabolites may contribute",
         "consumer_note": "Delphinidin is a specific anthocyanidin pigment; this label does not name a sugar-bound derivative.",
@@ -33980,6 +34048,26 @@
     "description": "Dietary fiber including konjac glucomannan; viscous soluble fiber with strong lipid-lowering evidence",
     "dosage_importance": 1.0,
     "forms": {
+      "resistant dextrin": {
+        "bio_score": 9,
+        "absorption": "category_error (soluble fiber; fermented in the colon, not systemically absorbed)",
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
+        },
+        "notes": "Resistant dextrin from tapioca (FiberSMART, Anderson Global Group; FDA GRAS Notice 1045, no-questions letter 2022-08-26). Printed as \"FiberSmart Resistant Starch\" but it is a dextrin, not resistant starch. bio_score equals the parent's lowest named form: no comparative evidence ranks it. 2026-09-27",
+        "aliases": [
+          "resistant dextrin",
+          "resistant tapioca dextrin",
+          "tapioca resistant dextrin",
+          "fibersmart",
+          "fibersmart resistant starch",
+          "fibersmart soluble tapioca fiber"
+        ],
+        "dosage_importance": 1.5
+      },
       "fiber (unspecified)": {
         "bio_score": 8,
         "absorption": "category_error (fiber; luminal mechanism)",
@@ -36115,6 +36203,9 @@
     "dosage_importance": 1.5,
     "forms": {
       "luteolin (unspecified)": {
+        "source_form_aliases": [
+          "japanese sophora"
+        ],
         "bio_score": 7,
         "absorption": "1-5%",
         "consumer_note": "Luteolin is a specific flavone found in many botanical materials.",
@@ -44530,6 +44621,7 @@
         },
         "notes": "Alpha-glycerophosphocholine \u2014 a highly bioavailable choline source that crosses the blood-brain barrier. Precursor to acetylcholine and phosphatidylcholine. Clinical evidence for cognitive support in Alzheimer's (1200 mg/day) and growth hormone secretion in athletes (600 mg). ~40% choline by weight. B34 audit 2026-04-25: bulk class-application (good class) \u2014 mechanical mapping from absorption + bio_score.",
         "aliases": [
+          "alpha-glycerylphosphorylcholine",
           "Alpha GPC",
           "alpha-glyceryl phosphoryl choline",
           "l-alpha-glycerophosphorylcholine",
@@ -45009,6 +45101,10 @@
     "cui": "C0106006",
     "forms": {
       "d beta hydroxybutyrate bhb (standard)": {
+        "source_form_aliases": [
+          "r-3-hydroxybutyric acid calcium",
+          "r-3-hydroxybutyric acid magnesium"
+        ],
         "bio_score": 10,
         "absorption": "BHB salt; ~50% inactive L-isomer; KS Cmax 1.0mM vs KE 2.8mM (Stubbs 2017)",
         "consumer_note": "BHB is beta-hydroxybutyrate, a ketone-body ingredient. In supplements it is commonly paired with minerals as a salt, so the label's total weight can include both BHB and the mineral component.",
@@ -50132,14 +50228,11 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Taraxacum officinale root/leaf extract. Traditional European bitter herb for liver/digestive support and as a mild diuretic. Contains taraxasterol, inulin (prebiotic), and flavonoids. Limited clinical trial data but strong ethnobotanical use history for hepatoprotection and bile flow stimulation.",
+        "notes": "Taraxacum officinale extract of the whole plant, root with leaf, or an unstated part. Traditional European bitter herb for liver/digestive support and as a mild diuretic. Contains taraxasterol, inulin (prebiotic), and flavonoids. Limited clinical trial data but strong ethnobotanical use history for hepatoprotection and bile flow stimulation.",
         "aliases": [
           "dandelion",
-          "dandelion root",
           "taraxacum officinale",
-          "dandelion leaf",
           "dandelion whole plant extract",
-          "dandelion root 4:1 extract",
           "dandelion whole plant/root extract",
           "dandelion 4:1 extract",
           "Dandelion PE",
@@ -50147,6 +50240,50 @@
           "taraxasterol",
           "taraxacum triterpene",
           "dandelion triterpene"
+        ],
+        "absorption_structured": {
+          "value": 0.55,
+          "range_low": 0.5,
+          "range_high": 0.6,
+          "quality": "moderate"
+        },
+        "dosage_importance": 1.0
+      },
+      "dandelion root": {
+        "bio_score": 6,
+        "absorption": "good (~50-60%)",
+        "consumer_note": "Dandelion extract is prepared from Taraxacum species. Its plant-compound profile varies with the plant part and extraction method.",
+        "consumer_note_review": {
+          "by": "Product owner approval",
+          "date": "2026-08-08"
+        },
+        "notes": "Taraxacum officinale root. Traditional European bitter for digestion and bile flow; rich in inulin and sesquiterpene lactones. The EU herbal monographs give a diuretic indication for the leaf and for root with herb, none for the root alone. Split from dandelion extract on 2026-09-26 so interaction rules follow the plant part; scoring fields unchanged.",
+        "aliases": [
+          "dandelion root",
+          "dandelion root extract",
+          "dandelion root 4:1 extract"
+        ],
+        "absorption_structured": {
+          "value": 0.55,
+          "range_low": 0.5,
+          "range_high": 0.6,
+          "quality": "moderate"
+        },
+        "dosage_importance": 1.0
+      },
+      "dandelion leaf": {
+        "bio_score": 6,
+        "absorption": "good (~50-60%)",
+        "consumer_note": "Dandelion extract is prepared from Taraxacum species. Its plant-compound profile varies with the plant part and extraction method.",
+        "consumer_note_review": {
+          "by": "Product owner approval",
+          "date": "2026-08-08"
+        },
+        "notes": "Taraxacum officinale leaf. EU traditional-use monograph (EMA/HMPC/579636/2008): increases the amount of urine to flush the urinary tract; avoid in renal failure, diabetes or heart failure because of possible hyperkalemia. Split from dandelion extract on 2026-09-26 so interaction rules follow the plant part; scoring fields unchanged.",
+        "aliases": [
+          "dandelion leaf",
+          "dandelion leaf extract",
+          "taraxacum officinale leaf"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -50419,6 +50556,10 @@
     "rxcui": "1549329",
     "forms": {
       "blueberry extract": {
+        "source_form_aliases": [
+          "anthocyanin",
+          "anthocyanins"
+        ],
         "bio_score": 8,
         "absorption": "good (~50-60%)",
         "consumer_note": "Blueberry extract is a plant extract containing varying amounts of anthocyanins and other polyphenols. Without a stated standardization, those constituents can vary between products.",
@@ -63022,6 +63163,7 @@
         },
         "notes": "Standard Montmorency tart cherry extract. Good clinical evidence for muscle recovery and sleep. Lower anthocyanin concentration than standardized forms. Dose: 60-90mL concentrate or 300-500mg extract/day. B31 audit 2026-04-25: anthocyanin class-poor <0.1% intact (PMID:20218618). Ghost: Borges is 2nd author not 1st.",
         "aliases": [
+          "sour cherry, powder",
           "montmorency tart cherry extract",
           "montmorency cherry extract",
           "sour cherry extract",
@@ -65157,6 +65299,12 @@
     ],
     "forms": {
       "olive fruit extract standardized": {
+        "source_form_aliases": [
+          "tyrosol",
+          "oleuropein",
+          "polyphenols",
+          "polyphenols, hydroxytyrosol, tyrosol and oleuropein"
+        ],
         "bio_score": 10,
         "absorption": "moderate (HT/TYR delivery; whole-fruit Caco-2 1.86%)",
         "consumer_note": "This is a standardized extract from olive fruit. A stated hydroxytyrosol or polyphenol content is a marker used to characterize the composition of the extract.",
@@ -67243,6 +67391,8 @@
         },
         "notes": "7-Keto-DHEA (7-oxodehydroepiandrosterone) is a non-hormonal metabolite of DHEA that does NOT convert to testosterone or estrogen. Distinct from DHEA (CUI C0011185, UNII 459AG36T1B). Supports thermogenesis via increased thyroid hormone activity. DB-RCT (PMID:17227968, Zenk 2007, n=30, 7 wk): 7-Keto 200mg/day + exercise lost 2.88 kg vs 0.97 kg placebo. Also PMID:10435590 (Lardy 1998) on thermogenic mechanism. UNII 2334LJD2E9, CAS 566-19-8. B34 audit 2026-04-25: bulk class-application (default fallback) \u2014 mechanical mapping from absorption + bio_score.",
         "aliases": [
+          "7-keto",
+          "7-oxo-dehydroepiandrosterone-3beta-acetate",
           "7-keto dhea",
           "7-keto-dhea",
           "7 keto dhea",
@@ -68769,6 +68919,11 @@
     "rda_ul_ref": "Sodium",
     "forms": {
       "sodium (unspecified)": {
+        "source_form_aliases": [
+          "himalayan rock salt",
+          "himalayan salt",
+          "himalayan pink salt"
+        ],
         "bio_score": 8,
         "absorption": "~95-100%",
         "consumer_note": "This label names sodium without identifying its accompanying salt, compound, or elemental amount.",
@@ -72431,5 +72586,98 @@
       "beta-glucanase"
     ],
     "external_ids": {}
+  },
+  "germanium": {
+    "standard_name": "Germanium",
+    "category": "minerals",
+    "forms": {
+      "germanium sesquioxide (ge-132)": {
+        "bio_score": 7.0,
+        "absorption": "moderate",
+        "absorption_structured": {
+          "quality": "moderate",
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6
+        },
+        "notes": "Organic germanium Ge-132 (propagermanium, bis(2-carboxyethylgermanium) sesquioxide). RISK_GERMANIUM keeps its high-risk safety record (renal toxicity). Canonical identity added so a label row matched only by a safety record resolves and the product is scored (Sean, 2026-09-27: anything not banned or recalled is scored and ships with its warning). No RDA/UL, so dose adequacy is not assessed; bio_score follows the identity-only precedent (nickel/tin, quarantine remediation 2026-09-19) and asserts no absorption advantage.",
+        "dosage_importance": 0.5,
+        "aliases": [
+          "bis-beta carboxyethyl germanium sesquioxide",
+          "carboxyethylgermanium sesquioxide",
+          "bis(2-carboxyethylgermanium) sesquioxide",
+          "germanium sesquioxide",
+          "ge-132",
+          "propagermanium",
+          "repagermanium"
+        ]
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "exact",
+      "exclusions": []
+    },
+    "category_enum": "minerals",
+    "data_quality": {
+      "review_status": "validated",
+      "completeness": 0.7,
+      "last_reviewed_at": "2026-09-27",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "unii": "1Q2P9TO9Q7",
+      "cas": "12758-40-6",
+      "pubchem_cid": 83030
+    },
+    "cui": null,
+    "cui_status": "no_confirmed_umls_match",
+    "cui_note": "UMLS was not reachable when this identity was added (2026-09-27); identity rests on the UNII and PubChem CID.",
+    "rxcui": "4784",
+    "aliases": []
+  },
+  "silver": {
+    "standard_name": "Silver",
+    "category": "minerals",
+    "forms": {
+      "silver (unspecified)": {
+        "bio_score": 7.0,
+        "absorption": "moderate",
+        "absorption_structured": {
+          "quality": "moderate",
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6
+        },
+        "notes": "Elemental or colloidal silver. ADD_COLLOIDAL_SILVER keeps its high-risk safety record (argyria). Canonical identity added so a label row matched only by a safety record resolves and the product is scored (Sean, 2026-09-27: anything not banned or recalled is scored and ships with its warning). No RDA/UL, so dose adequacy is not assessed; bio_score follows the identity-only precedent (nickel/tin, quarantine remediation 2026-09-19) and asserts no absorption advantage.",
+        "dosage_importance": 0.5,
+        "aliases": [
+          "Silver",
+          "colloidal silver"
+        ]
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "exact",
+      "exclusions": []
+    },
+    "category_enum": "minerals",
+    "data_quality": {
+      "review_status": "validated",
+      "completeness": 0.7,
+      "last_reviewed_at": "2026-09-27",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "unii": "3M4G523W1G",
+      "cas": "7440-22-4",
+      "pubchem_cid": 23954
+    },
+    "cui": null,
+    "cui_status": "no_confirmed_umls_match",
+    "cui_note": "UMLS was not reachable when this identity was added (2026-09-27); identity rests on the UNII and PubChem CID.",
+    "rxcui": "2606543",
+    "aliases": []
   }
 }

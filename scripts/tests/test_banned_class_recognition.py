@@ -37,7 +37,13 @@ LEGION_STEROID_LABELS = [
     "17a-Ethyl-Estr-5(6)-Ene-3B-Diol",
 ]
 
-EXPECTED_BANNED_ID = "SPIKE_ANABOLIC_STEROIDS"
+# Each compound left the SPIKE_ANABOLIC_STEROIDS class record for its own
+# verified entry on 2026-09-27.
+EXPECTED_BANNED_IDS = {
+    "3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol": "BANNED_METHYLDIAZINOL",
+    "2, 17a-Dimethyl-17b-Hydroxy-5a-Androst-2-Ene": "BANNED_DIMETHANDROSTENOL",
+    "17a-Ethyl-Estr-5(6)-Ene-3B-Diol": "BANNED_NORETHANDRIOL",
+}
 
 
 @pytest.fixture(scope="module")
@@ -54,13 +60,14 @@ def test_legion_steroid_hits_banned_substances_check(enricher, label):
     assert result["found"] is True, (
         f"Expected {label!r} to be flagged as banned; got {result}"
     )
+    expected = EXPECTED_BANNED_IDS[label]
     banned_ids = {s.get("banned_id") for s in result["substances"]}
-    assert EXPECTED_BANNED_ID in banned_ids, (
-        f"Expected {EXPECTED_BANNED_ID} in banned_ids for {label!r}, got {banned_ids}"
+    assert expected in banned_ids, (
+        f"Expected {expected} in banned_ids for {label!r}, got {banned_ids}"
     )
-    # All class matches must be exact or alias, never token_bounded
+    # Matches must be exact or alias, never token_bounded
     for sub in result["substances"]:
-        if sub.get("banned_id") == EXPECTED_BANNED_ID:
+        if sub.get("banned_id") == expected:
             assert sub["match_type"] in ("exact", "alias"), (
                 f"Class match must be exact/alias only, got {sub['match_type']} "
                 f"for {label!r}"
@@ -113,7 +120,8 @@ def test_class_entity_does_not_over_match_generic_chemistry(enricher):
         [{"name": "Methyl Alcohol", "standardName": "Methyl Alcohol"}]
     )
     banned_ids = {s.get("banned_id") for s in result.get("substances", [])}
-    assert EXPECTED_BANNED_ID not in banned_ids, (
-        f"Generic 'Methyl Alcohol' must not match SPIKE_ANABOLIC_STEROIDS "
+    steroid_ids = {"SPIKE_ANABOLIC_STEROIDS", *EXPECTED_BANNED_IDS.values()}
+    assert not banned_ids & steroid_ids, (
+        f"Generic 'Methyl Alcohol' must not match a steroid entry "
         f"via token-bounded fuzzy match; got {banned_ids}"
     )

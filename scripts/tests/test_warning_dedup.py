@@ -250,3 +250,57 @@ def test_dedup_preserves_relative_order_of_distinct_warnings() -> None:
     # First survivor must still be the "critical" entry (index 0 originally)
     assert out[0]["canonical_id"] == "a"
     assert out[1]["canonical_id"] == "b"
+
+
+# ---------------------------------------------------------------------------
+# One plant, one interaction card. Two label rows of one plant (raw powder and
+# standardized extract; a botanical record and its IQM twin) surfaced the same
+# rule and target twice because the key used the label spelling.
+# ---------------------------------------------------------------------------
+
+def _interaction_card(name: str, canonical_id: str, severity: str = "avoid") -> dict:
+    return {
+        "type": "drug_interaction", "severity": severity, "drug_class_id": "doacs",
+        "source": "interaction_rules", "source_rule_id": "RULE_INGREDIENT_ST_JOHNS_WORT",
+        "ingredient_name": name, "ingredient_canonical_id": canonical_id,
+    }
+
+
+@pytest.mark.parametrize("severity", ["avoid", "caution"])
+def test_one_plant_on_two_rows_shows_one_interaction_card(severity) -> None:
+    raw = _interaction_card("raw St. John's Wort powder", "st_john_s_wort", severity)
+    extract = _interaction_card("standardized St. John's Wort extract", "st_johns_wort", severity)
+    assert len(_dedup_warnings([raw, extract])) == 1
+
+
+def test_two_plants_keep_their_own_interaction_cards() -> None:
+    garlic = _interaction_card("Garlic extract", "garlic")
+    ginkgo = _interaction_card("Ginkgo leaf", "ginkgo_biloba_leaf")
+    assert len(_dedup_warnings([garlic, ginkgo])) == 2
+
+
+def test_one_plant_different_severities_stay_separate() -> None:
+    caution = _interaction_card("raw St. John's Wort powder", "st_john_s_wort", "caution")
+    monitor = _interaction_card("standardized St. John's Wort extract", "st_johns_wort", "monitor")
+    assert len(_dedup_warnings([caution, monitor])) == 2
+
+
+def _dosed_card(name: str, floor_status: str, disposition: str) -> dict:
+    card = _interaction_card(name, "stinging_nettle", "caution")
+    card.update({
+        "source_rule_id": "RULE_IQM_STINGING_NETTLE_DIABETES", "drug_class_id": "hypoglycemics",
+        "dose_floor_status": floor_status, "dose_decision": {"consumer_disposition": disposition},
+    })
+    return card
+
+
+def test_a_below_floor_row_never_displaces_the_row_that_fires() -> None:
+    """The app hides a below-floor card of a non-hard severity. Merging it with
+    the same plant's at-or-above card could keep the hidden one."""
+    below = _dosed_card("Nettle leaf powder", "below", "suppress")
+    above = _dosed_card("Stinging Nettle Leaf Extract", "at_or_above", "review")
+    kept = _dedup_warnings([below, above])
+    assert [(c["dose_floor_status"], c["dose_decision"]["consumer_disposition"]) for c in kept] == [
+        ("below", "suppress"), ("at_or_above", "review"),
+    ]
+    assert len(_dedup_warnings([above, dict(above, ingredient_name="Nettle leaf")])) == 1

@@ -2,10 +2,11 @@
 
 # Upcoming Surgery (surgery_scheduled)
 
-**9 rules.** Category: perioperative
+**11 rules.** Category: perioperative
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
+| `NHA_GINGER_EXTRACT` | other_ingredients | caution | probable | Pause before scheduled surgery | Concentrated ginger extracts may affect platelet function. |
 | `chondroitin` | ingredient_quality_map | monitor | probable | Review if using blood thinners | Chondroitin sulfate's structural heparin-like properties and documented case reports of INR elevation with warfarin raise concern for perioperative bleeding risk. Standard pre-sur… |
 | `fish_oil` | ingredient_quality_map | monitor | probable | Review high-dose omega-3 before surgery | Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. A large RCT (OPERA, n=1516) found no significant increase in surgical bleeding at… |
 | `garlic` | ingredient_quality_map | avoid | probable | Garlic supplements may increase bleeding | Garlic can reduce platelet aggregation and increase bleeding tendency around procedures. |
@@ -13,5 +14,6 @@
 | `ginkgo` | ingredient_quality_map | avoid | established | Ginkgo may increase surgical bleeding risk | PAF inhibition by ginkgolides increases perioperative bleeding risk. Discontinue at least 2 weeks before scheduled surgery. |
 | `ginseng` | ingredient_quality_map | caution | probable | Ginseng may affect bleeding or glucose | Ginseng may affect platelet aggregation and coagulation parameters. Case reports of reduced warfarin INR documented. |
 | `saw_palmetto` | ingredient_quality_map | caution | probable | Review saw palmetto before surgery | A case report of severe intraoperative hemorrhage associated with saw palmetto use prompted awareness of potential perioperative bleeding risk. Bleeding time was prolonged and nor… |
+| `vitamin_e` | ingredient_quality_map | caution | probable | Stop high-dose vitamin E before surgery | Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors, raising perioperative bleeding risk at high supplemental doses (~400 IU/day and above… |
 | `vitamin_k` | ingredient_quality_map | monitor | established | Vitamin K plan depends on warfarin care | Vitamin K intake changes coagulation balance around perioperative anticoagulation management. |
-| `white_willow_bark` | ingredient_quality_map | avoid | established | Salicylate-like — stop before surgery | Salicylates from white willow bark irreversibly inhibit platelet cyclooxygenase-1 (COX-1). Because platelet COX-1 inhibition lasts the platelet lifespan (~10 days), stopping willo… |
+| `white_willow_bark` | ingredient_quality_map | avoid | limited | Salicylate-like — stop before surgery | Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised placebo-controlled trial, willo… |

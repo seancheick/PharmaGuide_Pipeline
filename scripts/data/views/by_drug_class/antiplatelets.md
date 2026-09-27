@@ -2,7 +2,7 @@
 
 # Antiplatelet Agents (antiplatelets)
 
-**23 rules.** Category: hematology
+**22 rules.** Category: hematology
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
@@ -17,15 +17,14 @@
 | `epa` | ingredient_quality_map | caution | probable | May add to antiplatelet effects | Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk… |
 | `evening_primrose_oil` | ingredient_quality_map | monitor | probable | May add to antiplatelet effects | GLA-derived eicosanoids (PGE1) inhibit platelet aggregation. Combined with antiplatelet drugs, additive platelet inhibition may occur. The clinical magnitude at standard EPO doses… |
 | `fish_oil` | ingredient_quality_map | caution | established | May add to antiplatelet effects | Additive inhibition of platelet aggregation through independent TXA2 suppression. Combined use of high-dose fish oil with aspirin and warfarin has been associated with subdural he… |
-| `fish_oil` | ingredient_quality_map | caution | probable | May add to antiplatelet effects | Additive antiplatelet effects. Omega-3 fatty acids inhibit platelet aggregation via thromboxane A2 suppression, which may compound the effects of antiplatelet agents like aspirin … |
 | `flaxseed` | ingredient_quality_map | monitor | probable | May add to antiplatelet effects | High-dose flaxseed oil supplementation reduces collagen-induced platelet aggregation in humans by increasing platelet EPA:AA ratio and reducing TXA2 synthesis potential. Additive … |
 | `garlic` | ingredient_quality_map | caution | probable | May add to antiplatelet effects | Potential additive platelet inhibition. |
 | `ginger` | ingredient_quality_map | caution | probable | May add to antiplatelet effects | Additive antiplatelet effect: ginger TXA2 inhibition combined with aspirin COX-1 or clopidogrel ADP pathway inhibition. |
 | `ginkgo` | ingredient_quality_map | caution | probable | May add to antiplatelet effects | Additive antiplatelet effect via PAF inhibition combined with COX/ADP pathway inhibition from aspirin/clopidogrel. |
 | `glucosamine` | ingredient_quality_map | monitor | theoretical | May add to antiplatelet effects | No documented direct interaction between glucosamine and antiplatelet drugs. Theoretical concern given unknown mechanism of warfarin potentiation. |
+| `nattokinase` | ingredient_quality_map | avoid | probable | Avoid with antiplatelet medication | Nattokinase may reduce clot formation through fibrinolytic and antithrombotic mechanisms. Combining it with antiplatelet medications can add bleeding risk. |
 | `omega_3` | ingredient_quality_map | caution | established | May add to antiplatelet effects | Additive inhibition of platelet aggregation. Both omega-3s and antiplatelet drugs (aspirin, clopidogrel) independently suppress TXA2-mediated platelet activation. A case report of… |
 | `resveratrol` | ingredient_quality_map | caution | probable | May add to antiplatelet effects | Additive antiplatelet effect via complementary mechanisms: resveratrol inhibits COX-1/COX-2 and GPVI signalling while aspirin/clopidogrel block COX-1 or P2Y12 pathways, producing … |
 | `saw_palmetto` | ingredient_quality_map | monitor | theoretical | May add to antiplatelet effects | Theoretical additive antiplatelet effect through COX pathway inhibition. The case report of prolonged bleeding time supports caution, though in vivo platelet function studies at s… |
 | `turmeric` | ingredient_quality_map | caution | established | May add to antiplatelet effects | Curcumin independently inhibits platelet aggregation via TXA2 suppression, COX-1 inhibition, and Ca2+ signaling interference. Combined with antiplatelet drugs (aspirin, clopidogre… |
-| `vitamin_d` | ingredient_quality_map | monitor | theoretical | May add to antiplatelet effects | No established direct interaction between vitamin D supplementation and antiplatelet drug activity. Monitoring recommended at high doses due to broader hemostatic pathway involvem… |
-| `white_willow_bark` | ingredient_quality_map | avoid | established | Do not combine with antiplatelet medications | Additive irreversible COX-1 inhibition. White willow bark combined with aspirin or clopidogrel produces dual antiplatelet inhibition beyond standard cardioprotective dosing. |
+| `white_willow_bark` | ingredient_quality_map | caution | established | Do not combine with antiplatelet medications | Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised placebo-controlled trial, willo… |

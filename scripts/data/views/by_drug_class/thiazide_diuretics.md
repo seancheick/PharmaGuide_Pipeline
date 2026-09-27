@@ -2,8 +2,9 @@
 
 # Thiazide Diuretics (thiazide_diuretics)
 
-**1 rules.** Category: cardiology
+**2 rules.** Category: cardiology
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
+| `aloe_ferox` | ingredient_quality_map | caution | probable | Extra potassium loss with diuretics | Diuretics and stimulant laxatives both promote potassium loss, so using them together may enhance hypokalaemia. |
 | `vitamin_d` | ingredient_quality_map | monitor | probable | Vitamin D plus thiazides may raise calcium | Thiazide diuretics reduce urinary calcium excretion; high vitamin D doses enhance calcium absorption, increasing the risk of hypercalcemia. |

@@ -6,5 +6,5 @@
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
-| `citrus_bergamot` | ingredient_quality_map | monitor | established | Mildly raises hormone levels | CYP3A4 inhibition may modestly increase ethinyl estradiol exposure. Effect is documented but small. |
+| `citrus_bergamot` | ingredient_quality_map | monitor | limited | May raise contraceptive hormone levels | Bergamot juice contains the furanocoumarins bergamottin (about 18 mg/L) and bergapten. In volunteers, 12 mg of bergamottin raised felodipine exposure (AUC) by 37%, a smaller effec… |
 | `st_johns_wort` | ingredient_quality_map | contraindicated | established | May cause contraception failure | CYP3A4 induction reduces ethinyl estradiol exposure → contraception failure and breakthrough bleeding documented in clinical literature. |

@@ -126,6 +126,7 @@ from identity_integrity import (
     has_nonlive_microbial_derivative_evidence,
     IdentityDecision,
     build_canonical_identity_registry,
+    canonical_registry_collections,
     is_identity_scoreable,
     resolve_identity,
     validated_canonical_parent_relationships,
@@ -169,6 +170,7 @@ from match_ledger import (
 )
 from identity.interaction import (
     interaction_subject_refs,
+    interaction_twin_form,
     label_row_establishes_presence,
     label_row_is_blend_child,
 )
@@ -4047,6 +4049,14 @@ class SupplementEnricherV3:
 
         return resolve
 
+    def _canonical_registry_ids(self) -> Dict[str, set]:
+        """Ids each canonical registry holds (identity_integrity owns the sets)."""
+        cached = getattr(self, "_canonical_registry_id_cache", None)
+        if cached is None or cached[0] is not self.databases:
+            cached = (self.databases, canonical_registry_collections(self.databases))
+            self._canonical_registry_id_cache = cached
+        return cached[1]
+
     def _current_canonical_identity_registry(self):
         if getattr(self, "_canonical_identity_databases", None) is not self.databases:
             self._canonical_identity_registry = build_canonical_identity_registry(
@@ -4377,6 +4387,17 @@ class SupplementEnricherV3:
                 ),
             }
         )
+        registry_ids = self._canonical_registry_ids()
+        source_db = entry.get("canonical_source_db")
+        if (
+            coherent_quality_match
+            and source_db in registry_ids
+            and final_canonical_id not in registry_ids[source_db]
+        ):
+            # The decision replaced the cleaner's identity with an IQM one
+            # ("Cherry powder" other_ingredients -> dark_sweet_cherry); the
+            # registry field follows it, since scoring reads it.
+            entry["canonical_source_db"] = "ingredient_quality_map"
         if not coherent_quality_match:
             # A recognized preparation or rejected identity has no IQM form
             # rating. Do not retain either a rejected candidate's rating or
@@ -4564,12 +4585,15 @@ class SupplementEnricherV3:
             is_structural_parent_total = (
                 id(source_ingredient) in structural_parent_total_row_ids
             )
-            if product_activity_text or is_structural_parent_total:
+            sole_active_row = len(active_ingredients) == 1
+            if product_activity_text or is_structural_parent_total or sole_active_row:
                 ingredient = dict(ingredient)
             if product_activity_text:
                 ingredient.setdefault("_product_activity_text", product_activity_text)
             if is_structural_parent_total:
                 ingredient["_structural_parent_total"] = True
+            if sole_active_row:
+                ingredient["_sole_active_row"] = True
             # Use branded_token_extracted for matching if present AND it differs from name.
             # When branded_token_extracted == name the clean stage collapsed the full label
             # to just the brand prefix (e.g. "Albion" from "Albion Magnesium Bisglycinate Chelate").
@@ -6050,6 +6074,25 @@ class SupplementEnricherV3:
                 # _stamp_iqd_identity already retained the validated primary
                 # decision. The safety match has no authority to replace it.
                 row["identity_decision_reason"] = "safety_identity_excluded_from_scoring"
+            elif (
+                recognition_source == "harmful_additives"
+                and self._is_low_severity_additive(matched_entry_id)
+                and (not row.get("is_excipient") or ingredient.get("_sole_active_row"))
+            ):
+                # A low-severity additive declared as the active (BulkSupplements
+                # Mannitol, Litesse polydextrose) is a known substance, not a
+                # safety finding: its additive record is its unscored identity,
+                # so the product ships instead of failing on an unresolved row
+                # (Sean, 2026-09-27). A flagged excipient qualifies only as the
+                # product's sole active; beside a real active it stays filler.
+                row.update({
+                    "canonical_id": matched_entry_id,
+                    "canonical_id_after": matched_entry_id,
+                    "canonical_source_db": recognition_source,
+                    "identity_decision_reason": "low_severity_additive_identity",
+                })
+                if matched_entry_name:
+                    row["standard_name"] = matched_entry_name
             else:
                 row.update({
                     "canonical_id": None,
@@ -6074,6 +6117,12 @@ class SupplementEnricherV3:
             })
             if matched_entry_name:
                 row["standard_name"] = matched_entry_name
+
+    def _is_low_severity_additive(self, additive_id: Any) -> bool:
+        for additive in (self.databases.get("harmful_additives") or {}).get("harmful_additives") or []:
+            if isinstance(additive, dict) and additive.get("id") == additive_id:
+                return str(additive.get("severity_level") or "").strip().lower() == "low"
+        return False
 
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
         """Determine excipient status for ingredient-level signals.
@@ -18010,16 +18059,30 @@ class SupplementEnricherV3:
             SKIP_REASON_NUTRITION_FACT,
         ) and label_row_establishes_presence(row)
 
+    def _interaction_registry_ids(self) -> Dict[str, set]:
+        """Ids held by each registry a row can be an interaction subject of,
+        IQM first so an IQM id always resolves to IQM."""
+        registry_ids = self._canonical_registry_ids()
+        return {
+            db: registry_ids.get(db, set())
+            for db in ("ingredient_quality_map", "botanical_ingredients", "other_ingredients")
+        }
+
     def _derive_interaction_subject_ref(self, ingredient: Dict) -> Optional[Dict[str, str]]:
         canonical_id = str(ingredient.get("canonical_id") or "").strip()
         if canonical_id:
             # A recognized botanical or other ingredient keeps its registry, so
             # it meets the rules authored there; rows without a routable
             # registry (probiotic, standardized botanical) stay IQM subjects.
+            db = self._normalize_interaction_db_key(ingredient.get("canonical_source_db"))
+            registry_ids = self._interaction_registry_ids()
+            if db in registry_ids and canonical_id not in registry_ids[db]:
+                # The identity decision can rewrite canonical_id and leave
+                # canonical_source_db behind (reishi under botanical): the
+                # subject is the registry that holds the id.
+                db = next((name for name, ids in registry_ids.items() if canonical_id in ids), None)
             return {
-                "db": self._normalize_interaction_db_key(
-                    ingredient.get("canonical_source_db")
-                ) or "ingredient_quality_map",
+                "db": db or "ingredient_quality_map",
                 "canonical_id": canonical_id,
             }
 
@@ -18107,6 +18170,13 @@ class SupplementEnricherV3:
         # hid the retinyl acetate from the preformed vitamin A pregnancy rule.
         scope = {str(item).strip() for item in form_scope if str(item).strip()}
         row_forms = self._row_form_ids(ingredient)
+        if rule.get("form_scope_match") == "fail_open":
+            # A plant-part rule (nettle leaf glucose) is silent only for a
+            # label-confirmed form outside its scope; an unknown or inferred
+            # part still warns (G1 fail-open).
+            if ingredient.get("form_match_status") != "mapped" or not row_forms:
+                return True
+            return bool(row_forms & scope)
         if rule.get("form_scope_match") == "all":
             # The row amount is this form's amount only when every declared
             # form is in scope; a mixed retinyl + beta-carotene row with no
@@ -19136,6 +19206,20 @@ class SupplementEnricherV3:
         highest_weight = -1.0
         highest_severity: Optional[str] = None
 
+        # A label row's banned/recalled safety matches are subjects too: a row
+        # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
+        # still meets the rules authored on its safety record.
+        safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
+        for section_key in ("activeIngredients", "inactiveIngredients"):
+            for label_row in enriched.get(section_key) or []:
+                if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
+                    continue
+                for flag in label_row.get("safety_flags") or []:
+                    if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
+                        safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
+                            (self._normalize_interaction_db_key(flag["source_db"]), str(flag["entry_id"]))
+                        )
+
         all_ingredient_rows: List[Tuple[str, Dict]] = []
         for row in ingredients:
             if isinstance(row, dict):
@@ -19167,7 +19251,11 @@ class SupplementEnricherV3:
             # -> garlic); each rule's own form_scope still decides.
             matched_rules = []
             seen_rule_ids: set = set()
-            for subject_ref in interaction_subject_refs(subject["db"], subject["canonical_id"]):
+            safety_refs = (
+                safety_subjects_by_path.get(ingredient.get("raw_source_path"), [])
+                if source_bucket != "derived_marker" else []
+            )
+            for subject_ref in [*interaction_subject_refs(subject["db"], subject["canonical_id"]), *safety_refs]:
                 for candidate in rule_index.get(subject_ref, []):
                     if id(candidate) not in seen_rule_ids:
                         seen_rule_ids.add(id(candidate))
@@ -19176,9 +19264,18 @@ class SupplementEnricherV3:
                 continue
 
             ingredient_name = ingredient.get("raw_source_text") or ingredient.get("name") or ingredient.get("standard_name") or "unknown"
+            # A botanical twin is its declared IQM part (nettle root) for
+            # rules scoped by plant part.
+            twin_form = interaction_twin_form(
+                ingredient.get("canonical_source_db"), subject["canonical_id"]
+            )
+            scope_row = (
+                {**ingredient, "form_id": twin_form, "matched_forms": [], "form_match_status": "mapped"}
+                if twin_form else ingredient
+            )
 
             for rule in matched_rules:
-                if not self._interaction_rule_applies(rule, ingredient):
+                if not self._interaction_rule_applies(rule, scope_row):
                     continue
 
                 condition_hits: List[Dict[str, Any]] = []

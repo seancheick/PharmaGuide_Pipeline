@@ -330,6 +330,11 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
         ("synephrine", "BANNED_BITTER_ORANGE"),
         ("yohimbe", "RISK_YOHIMBE"),
         ("7_keto_dhea", "BANNED_7_KETO_DHEA"),
+        # Sean, 2026-09-27: a non-banned safety match is scored and ships with
+        # its warning, so these rows carry an IQM identity beside the record.
+        ("citrus_bioflavonoids", "RISK_BITTER_ORANGE"),
+        ("germanium", "RISK_GERMANIUM"),
+        ("silver", "ADD_COLLOIDAL_SILVER"),
         ("cascara_sagrada", "ADD_CASCARA_SAGRADA"),
         # Cape aloe: owner rule 2026-09-25 that high-risk ingredients carry their
         # status in banned_recalled; IQM keeps identity/form quality. Same FDA
@@ -354,7 +359,6 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
         ("withaferin_a", "WATCH_WITHAFERIN_A"),
         ("miroestrol", "RISK_MIROESTROL"),
     }
-    assert ("citrus_bioflavonoids", "RISK_BITTER_ORANGE") not in observed_parent_ids
     assert all(status in {"high_risk", "watchlist"} for _, _, status, _ in overlaps)
 
 

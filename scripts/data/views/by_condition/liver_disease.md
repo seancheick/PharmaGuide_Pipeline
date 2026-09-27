@@ -2,19 +2,20 @@
 
 # Liver Disease (liver_disease)
 
-**20 rules.** Category: hepatic
+**21 rules.** Category: hepatic
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
 | `BANNED_CBD_US` | banned_recalled_ingredients | avoid | established | CBD may raise liver enzymes | CBD is extensively metabolized by CYP3A4 and CYP2C19 in the liver. FDA drug labels for multiple medications warn that concomitant CBD causes ALT/AST elevation. In patients with pr… |
+| `aloe_ferox` | ingredient_quality_map | caution | probable | Rare liver injury reported | Oral aloe is a likely but rare cause of clinically apparent hepatocellular liver injury (LiverTox likelihood B), and chronic overdose of anthranoid laxatives may lead to toxic hep… |
 | `andrographis` | ingredient_quality_map | monitor | probable | Rare liver injury reports | Despite hepatoprotective activity documented in some animal models, clinical case reports and DILI network databases document rare but real cases of drug-induced liver injury (DIL… |
 | `black_cohosh` | ingredient_quality_map | avoid | probable | Linked to rare liver injury | Cimicifuga racemosa (black cohosh) causes idiosyncratic hepatitis via two overlapping mechanisms: (1) oxidative stress generating 4-hydroxynonenal (4HNE) protein adducts in hepato… |
 | `butterbur` | ingredient_quality_map | contraindicated | established | PA-containing butterbur can injure liver | Pyrrolizidine alkaloids in non-PA-free butterbur are direct hepatotoxins that cause sinusoidal obstruction syndrome (veno-occlusive disease). Even PA-certified-free products carry… |
-| `cascara_sagrada` | ingredient_quality_map | caution | probable | Chronic use may affect the liver | Chronic use of anthraquinone laxatives including cascara sagrada has been associated with hepatotoxicity; the FDA withdrew OTC cascara sagrada products in 2002 partly on safety gr… |
+| `cascara_sagrada` | ingredient_quality_map | caution | probable | Chronic use may affect the liver | Cascara is generally well tolerated at recommended short-term doses, but longer-term use of high doses has been linked to rare cases of clinically apparent liver injury, some seve… |
 | `chinese_skullcap` | ingredient_quality_map | caution | probable | Linked to herb-induced liver injury | Scutellaria species have been linked to herb-induced liver injury (HILI) in published case series. Proposed mechanisms include flavone-mediated mitochondrial dysfunction and idios… |
 | `copper` | ingredient_quality_map | caution | established | Copper handling depends on the liver | Copper homeostasis depends on hepatic biliary excretion as the primary elimination route. In Wilson's disease, ATP7B mutations block copper export into bile, causing pathological … |
 | `gotu_kola` | ingredient_quality_map | monitor | probable | Rare liver injury reports | Centella asiatica triterpenoids (asiaticoside, madecassoside) have been associated with idiosyncratic hepatotoxicity in case reports. Three cases of jaundice with markedly elevate… |
-| `green_tea_extract` | ingredient_quality_map | avoid | established | Green tea extract may injure the liver | EGCG (epigallocatechin gallate), the principal catechin in green tea extract, undergoes hepatic first-pass metabolism. At supplemental doses (≥800 mg EGCG/day), EGCG saturates fir… |
+| `green_tea_extract` | ingredient_quality_map | avoid | established | Green tea extract may injure the liver | Green tea extract has been implicated in clinically apparent acute liver injury, including acute liver failure (LiverTox). Case reports associate liver injury with EGCG intakes fr… |
 | `iron` | ingredient_quality_map | caution | established | Extra iron may worsen liver overload | The liver is the principal organ of iron storage and regulation. In liver disease, hepatic hepcidin production is impaired, disrupting iron homeostasis and increasing intestinal i… |
 | `kavalactones` | ingredient_quality_map | avoid | established | Kava is not recommended with liver disease | Kavalactones (from Piper methysticum) inhibit CYP1A2, CYP2C9, CYP2C19, CYP2D6, and CYP3A4, disrupting hepatic drug metabolism. Mechanistically, kavalactones activate the pregnane … |
 | `manganese` | ingredient_quality_map | caution | established | Manganese clearance depends on the liver | Manganese is excreted almost exclusively via bile. Liver disease impairs biliary excretion, leading to systemic accumulation. Excess manganese deposits in the basal ganglia (globu… |

@@ -244,6 +244,9 @@ def validate_iqm_br_collision(data_dir: Path = DATA_DIR) -> Dict:
         "vinpocetine",       # NOOTROPIC_VINPOCETINE high_risk — FDA legal conclusion tentative; reproductive-risk CAUTION
         "withaferin_a",      # WATCH_WITHAFERIN_A watchlist — standardization marker; dose-dependent caution layer
         "miroestrol",        # RISK_MIROESTROL high_risk — standardization marker; estrogenic/endocrine caution layer
+        "citrus_bioflavonoids",  # RISK_BITTER_ORANGE high_risk — "bitter orange citrus bioflavonoids" (Life Extension Mix)
+        "germanium",         # RISK_GERMANIUM high_risk — Ge-132 sold as a supplement; renal toxicity warning layer
+        "silver",            # ADD_COLLOIDAL_SILVER high_risk — colloidal silver; argyria warning layer
     }
 
     # Walk IQM entries and check every standard_name + alias

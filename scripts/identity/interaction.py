@@ -58,25 +58,28 @@ INTERACTION_SUBJECT_FAMILY: dict[str, str] = {
 }
 
 
-# Botanical twin: a botanical_ingredients identity that is the same species
-# and plant part as an IQM parent answers to the interactions authored on that
+# Botanical twin: a botanical_ingredients or standardized_botanicals identity
+# that is the same species and plant part as an IQM parent answers to the
+# interactions authored on that
 # parent (RULE_INGREDIENT_GARLIC is authored on IQM `garlic`, so 320 mg of
 # `garlic_bulb` warned about nothing). Interaction lookup only: scoring keeps
 # the botanical identity. Each pair shares a GSRS UNII or is a species the IQM
-# parent names, and its part is one the rule's evidence covers. Same-species
-# records left out (a marker or nutrient source, another part or preparation,
-# e.g. nettle root under a leaf-evidence rule) are listed with
-# their reasons in test_botanical_interaction_subjects.py, which requires a
-# decision for every candidate.
+# parent names. Same-species records left out (a marker or nutrient source,
+# another part or preparation) are listed with their reasons in
+# test_botanical_interaction_subjects.py, which requires a decision for every
+# candidate.
 BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "aloe_vera": "aloe_vera",
     "aloe_vera_concentrated_gel": "aloe_vera",
     "american_ginseng": "ginseng",
+    "american_ginseng_std": "ginseng",
     "andrographis": "andrographis",
     "ashwagandha": "ashwagandha",
     "ashwagandha_root": "ashwagandha",
+    "astragalus_extract": "astragalus",
     "astragalus_root": "astragalus",
     "bacopa": "bacopa",
+    "berberine": "berberine_supplement",
     "bitter_melon_fruit": "bitter_melon",
     "black_cohosh": "black_cohosh",
     "black_garlic": "garlic",
@@ -88,28 +91,39 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "cinnamon": "cinnamon",
     "cinnamon_bark": "cinnamon",
     "citrus_bergamot": "citrus_bergamot",
+    "citrus_bergamot_extract": "citrus_bergamot",
     "cordyceps": "cordyceps",
+    "cordyceps_militaris": "cordyceps",
     "cordyceps_mushroom_powder": "cordyceps",
+    "cran_max": "cranberry",
     "cranberry": "cranberry",
     "cranberry_fruit": "cranberry",
+    "cranrx": "cranberry",
     "dandelion": "dandelion",
     # EU root monograph EMA/HMPC/475726/2020: traditional diuretic use and a
     # fluid-restriction warning, the premise of the dandelion kidney rule (Q18).
     "dandelion_root": "dandelion",
+    "devil_s_claw": "devils_claw",
     "devils_claw_tuber": "devils_claw",
     "dong_quai": "dong_quai",
     "echinacea_angustifolia": "echinacea",
+    "echinacea_extract": "echinacea",
+    "echinacea_purpurea": "echinacea",
     "echinacea_purpurea_aerial": "echinacea",
     "echinacea_purpurea_herb": "echinacea",
     "echinacea_purpurea_root_extract": "echinacea",
     "elderberries": "elderberry",
+    "evening_primrose": "evening_primrose_oil",
     "evening_primrose_seed_oil": "evening_primrose_oil",
     "fenugreek_seed": "fenugreek",
     "feverfew": "feverfew",
     "flaxseed": "flaxseed",
+    "flowens": "cranberry",
     "garlic_bulb": "garlic",
+    "garlic_std": "garlic",
     "ginger_extract": "ginger",
     "ginger_root": "ginger",
+    "ginkgo_biloba": "ginkgo",
     "ginkgo_biloba_leaf": "ginkgo",
     "ginseng_root_panax": "ginseng",
     "goldenseal": "goldenseal",
@@ -118,16 +132,23 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "hawthorn_flowering_tops": "hawthorn",
     "holy_basil_leaf": "holy_basil",
     "huperzine_a": "huperzine_a",
+    "ksm_66_ashwagandha": "ashwagandha",
     "l_theanine": "l_theanine",
     "licorice_root": "licorice",
     "lion_s_mane": "lions_mane",
     "lions_mane_mushroom_powder": "lions_mane",
     "maca_root": "maca",
+    "microactive_melatonin": "melatonin",
     "milk_thistle": "milk_thistle",
     "milk_thistle_seed": "milk_thistle",
+    "nettle": "stinging_nettle",
     "nettle_leaf": "stinging_nettle",
+    "nettle_root": "stinging_nettle",
     "nigella": "black_seed_oil",
+    "olive_leaf_extract": "olive_leaf",
     "olive_leaf_powder": "olive_leaf",
+    "pacran": "cranberry",
+    "panax_ginseng": "ginseng",
     "passion_flower": "passionflower",
     "passionflower_herb": "passionflower",
     "psyllium_husk": "psyllium",
@@ -137,6 +158,7 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "rhodiola_rosea_root": "rhodiola",
     "sage_leaf_extract": "sage",
     "saw_palmetto_berry": "saw_palmetto",
+    "slimbione": "bitter_melon",
     "st_john_s_wort": "st_johns_wort",
     "tribulus_terrestris": "tribulus",
     "turmeric": "turmeric",
@@ -147,6 +169,22 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "yerba_mate_leaf": "yerba_mate",
 }
 
+
+# The IQM form a twin is, for parents whose rules are scoped by plant part
+# (nettle leaf glucose; Sean, 2026-09-26). Every twin
+# of a parent with a form-scoped rule declares one.
+BOTANICAL_INTERACTION_TWIN_FORM: dict[str, str] = {
+    "nettle": "stinging nettle (unspecified)",
+    "nettle_leaf": "stinging nettle leaf extract",
+    "nettle_root": "stinging nettle root extract",
+}
+
+
+def interaction_twin_form(source_db: Any, canonical_id: Any) -> str | None:
+    """The IQM form a botanical row (by its canonical_source_db) stands for."""
+    if str(source_db or "").strip() not in ("botanical_ingredients", "standardized_botanicals"):
+        return None
+    return BOTANICAL_INTERACTION_TWIN_FORM.get(str(canonical_id or "").strip())
 
 def _family_ids(canonical: str) -> list[str]:
     family = INTERACTION_SUBJECT_FAMILY.get(canonical)
@@ -160,12 +198,19 @@ def interaction_subject_refs(db: Any, canonical_id: Any) -> list[tuple[str, str]
     if not source_db or not canonical:
         return []
     if source_db == "ingredient_quality_map":
-        return [(source_db, subject_id) for subject_id in _family_ids(canonical)]
-    refs = [(source_db, canonical)]
-    twin = BOTANICAL_INTERACTION_TWIN.get(canonical) if source_db == "botanical_ingredients" else None
+        refs = [(source_db, subject_id) for subject_id in _family_ids(canonical)]
+    else:
+        refs = [(source_db, canonical)]
+    # A standardized botanical has no interaction registry of its own and keeps
+    # an IQM subject, so its twin is looked up from there too.
+    twin = (
+        BOTANICAL_INTERACTION_TWIN.get(canonical)
+        if source_db in ("ingredient_quality_map", "botanical_ingredients")
+        else None
+    )
     if twin:
         refs += [("ingredient_quality_map", subject_id) for subject_id in _family_ids(twin)]
-    return refs
+    return list(dict.fromkeys(refs))
 
 
 def interaction_subject_ids(canonical_id: Any) -> list[str]:
@@ -223,6 +268,12 @@ def label_row_establishes_presence(row: dict) -> bool:
         return row.get("dailyValue") is None
     return unit in _NO_AMOUNT_UNITS
 
+
+def interaction_identity(canonical_id: Any) -> str | None:
+    """The broadest subject an identity answers to (garlic_bulb -> garlic,
+    vitamin_k2 -> vitamin_k): one plant or nutrient, one interaction card."""
+    ids = interaction_subject_ids(canonical_id)
+    return ids[-1] if ids else None
 
 def normalize_interaction_canonical_id(value: Any) -> str | None:
     """Return the catalog-facing canonical used for interaction lookup."""

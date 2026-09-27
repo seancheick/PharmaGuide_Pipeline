@@ -1698,6 +1698,10 @@ def _identity_projection_rejection_reason(
         and (canonical_id, source_db) != (
             source_row.get("canonical_id"), source_row.get("canonical_source_db")
         )
+        # A low-severity excipient's additive record is its reviewed,
+        # unscored identity (enricher low_severity_additive_identity), not a
+        # safety record standing in for a real one.
+        and identity_row.get("identity_decision_reason") != "low_severity_additive_identity"
     ):
         return "identity_projection_rejected:safety_record_substitution"
     if repaired:

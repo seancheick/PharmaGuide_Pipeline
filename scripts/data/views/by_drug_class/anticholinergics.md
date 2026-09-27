@@ -7,4 +7,4 @@
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
 | `alpha_gpc` | ingredient_quality_map | caution | probable | May affect anticholinergic medications | Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that directly increases brain acetylcholine synthesis and release by providing substrate for choline acetyltransfe… |
-| `huperzine_a` | ingredient_quality_map | avoid | established | Works against anticholinergic medications | Huperzine A inhibits acetylcholinesterase, dramatically increasing synaptic acetylcholine. Anticholinergic drugs (oxybutynin, benztropine, scopolamine, tricyclic antidepressants) … |
+| `huperzine_a` | ingredient_quality_map | avoid | probable | Works against anticholinergic medications | Huperzine A is a natural acetylcholinesterase inhibitor, licensed as an Alzheimer's drug in China and sold as a supplement in the US. The prescribing information for donepezil, an… |

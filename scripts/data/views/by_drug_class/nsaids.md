@@ -2,7 +2,7 @@
 
 # NSAIDs (nsaids)
 
-**16 rules.** Category: pain
+**14 rules.** Category: pain
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
@@ -16,9 +16,7 @@
 | `fish_oil` | ingredient_quality_map | monitor | probable | May add to NSAID bleeding risk | Both fish oil and NSAIDs affect prostaglandin synthesis via COX pathway modulation. Combined use may modestly increase GI bleeding risk through additive reduction in mucosal prote… |
 | `flaxseed` | ingredient_quality_map | monitor | theoretical | May add to NSAID bleeding risk | Flaxseed's omega-3 fatty acids and NSAIDs both modulate prostaglandin synthesis through different mechanisms (ALA→EPA competing with AA; NSAIDs inhibiting COX). Combined use may a… |
 | `glucosamine` | ingredient_quality_map | monitor | theoretical | May add to NSAID bleeding risk | Glucosamine is frequently co-administered with chondroitin for osteoarthritis, often as an alternative to NSAIDs. No known direct pharmacokinetic or pharmacodynamic interaction wi… |
-| `omega_3` | ingredient_quality_map | monitor | probable | May add to NSAID bleeding risk | Both omega-3 fatty acids and NSAIDs affect prostaglandin synthesis through COX pathway modulation. The additive reduction in thromboxane production and potential combined effect o… |
-| `pygeum` | ingredient_quality_map | caution | theoretical | May add to NSAID bleeding risk | Pygeum africanum bark extract contains phytosterols (beta-sitosterol), pentacyclic triterpenes, and ferulic acid esters that inhibit prostaglandin biosynthesis by reducing arachid… |
+| `omega_3` | ingredient_quality_map | monitor | theoretical | Mild platelet effect with NSAIDs | Omega-3 fatty acids have mild antiplatelet effects: in healthy volunteers a prescription omega-3 product did not inhibit platelet aggregation on its own but enhanced aspirin's eff… |
 | `saw_palmetto` | ingredient_quality_map | monitor | theoretical | May add to NSAID bleeding risk | Theoretical additive COX inhibition. Both saw palmetto lipidosterolic extract and NSAIDs affect prostaglandin synthesis. Clinical significance is uncertain at standard saw palmett… |
 | `turmeric` | ingredient_quality_map | monitor | probable | May add to NSAID bleeding risk | Curcumin inhibits both COX-1 and 5-lipoxygenase, pathways shared with NSAIDs. Combined use may produce additive GI mucosal effects and platelet inhibition, modestly increasing GI … |
-| `vitamin_d` | ingredient_quality_map | monitor | theoretical | May add to NSAID bleeding risk | No established pharmacokinetic or pharmacodynamic interaction between vitamin D and NSAIDs on platelet or coagulation pathways. Theoretical concern at high doses given shared anti… |
-| `white_willow_bark` | ingredient_quality_map | avoid | established | Can add to NSAID side-effect risk | Concurrent salicylate from white willow bark and NSAID use creates additive COX-1/COX-2 inhibition, increasing gastrointestinal bleeding risk and nephrotoxicity. Comparable to asp… |
+| `white_willow_bark` | ingredient_quality_map | avoid | established | Can add to NSAID side-effect risk | The EU herbal monograph advises against combining willow bark with salicylates and other NSAIDs without medical advice, and contraindicates it in active peptic ulcer disease and s… |

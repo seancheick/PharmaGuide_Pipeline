@@ -2,15 +2,14 @@
 
 # Epilepsy/Seizures (seizure_disorder)
 
-**8 rules.** Category: neurologic
+**7 rules.** Category: neurologic
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
 | `BANNED_CBD_US` | banned_recalled_ingredients | caution | established | CBD — seizure clinician guidance | CBD has anticonvulsant properties (FDA-approved for Lennox-Gastaut and Dravet syndromes). However, CBD supplements are not pharmaceutical-grade and have variable potency, contamin… |
-| `borage_seed_oil` | ingredient_quality_map | monitor | theoretical | Seizure-threshold evidence is limited | Borage seed oil contains high concentrations of gamma-linolenic acid (GLA, ~24%), similar to evening primrose oil. Borage also contains trace pyrrolizidine alkaloids in some prepa… |
+| `borage_seed_oil` | ingredient_quality_map | monitor | limited | Seizure-threshold evidence is limited | Borage seed oil is an abundant source of gamma-linolenic acid (GLA). Status epilepticus was reported in a previously healthy 41-year-old woman after one week of borage oil. For ev… |
 | `evening_primrose_oil` | ingredient_quality_map | monitor | theoretical | Seizure evidence is mixed | Evening primrose oil (EPO) contains gamma-linolenic acid (GLA). Concern regarding seizure threshold lowering originated from early case reports in the 1980s. A 2007 review conclud… |
 | `ginkgo` | ingredient_quality_map | caution | probable | Ginkgo may lower seizure threshold | Ginkgo biloba seeds and insufficiently processed leaf products contain ginkgotoxin (4-O-methylpyridoxine), which inhibits GABA synthesis by depleting pyridoxal-5-phosphate cofacto… |
-| `guarana` | ingredient_quality_map | caution | probable | High caffeine may affect seizures | High-dose caffeine (the primary active compound in guarana) lowers the seizure threshold by antagonizing adenosine receptors, which normally exert inhibitory control over neuronal… |
-| `huperzine_a` | ingredient_quality_map | caution | theoretical | Cholinergic effect — seizure caution | Huperzine A inhibits acetylcholinesterase (AChE), increasing synaptic acetylcholine. Elevated cholinergic tone in the CNS can lower seizure threshold and has been associated with … |
-| `kavalactones` | ingredient_quality_map | caution | probable | May interact with seizure medications | Kavalactones have demonstrated anticonvulsant properties in animal models via GABA-A receptor modulation. However, abrupt discontinuation after regular use may produce withdrawal … |
+| `kavalactones` | ingredient_quality_map | caution | limited | May interact with seizure medications | Kavalactones enhance GABA-A receptor binding, block voltage-gated sodium channels and have shown anticonvulsant and sedative effects. Yet herbs used for epilepsy, kava among them,… |
 | `melatonin` | ingredient_quality_map | monitor | probable | Seizure effects can vary | Melatonin's effects on seizure threshold are debated. While some data suggests anticonvulsant properties via melatonin receptor MT1/MT2 modulation, case reports of seizure exacerb… |
+| `vitamin_b6_pyridoxine` | ingredient_quality_map | caution | probable | High-dose B6 may affect seizure medications | High-dose pyridoxine can reduce serum concentrations of phenytoin and phenobarbital by increasing their metabolism (documented at 200 mg/day), potentially lowering seizure control… |

@@ -3278,11 +3278,13 @@
         "organic chaste tree",
         "chasteberry",
         "monk's pepper",
-        "Chasteberry Fruit Extract"
+        "Chasteberry Fruit Extract",
+        "Chaste Berry Tree (Vitex) extract",
+        "vitex berry extract"
       ],
       "category": "berry",
       "notes": "Vitex agnus-castus (Lamiaceae) berry. Contains diterpenes and iridoids acting on dopamine D2 receptors. European HMPC-approved for PMS symptoms. RCT evidence for menstrual regularity (PMID 23136064).",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "433OSF3U8A"
       },
@@ -4597,12 +4599,11 @@
       "latin_name": "Taraxacum officinale",
       "aliases": [
         "taraxacum officinale root",
-        "dandelion root powder",
-        "Taraxacum officinale"
+        "dandelion root powder"
       ],
       "category": "root",
       "notes": "Taraxacum officinale (Asteraceae) root. Root-specific preparation rich in inulin (up to 40% in autumn harvest) and sesquiterpene lactones. Traditional choleretic and prebiotic. Botanical root powder.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "9DE5YCO0RU"
       },
@@ -9394,8 +9395,8 @@
         "Silybum marianum"
       ],
       "category": "herb",
-      "notes": "Silybum marianum (Asteraceae) whole herb. Contains silymarin flavonolignan complex in seeds. Most-studied hepatoprotective botanical. This entry covers generic milk thistle herb, not seed-specific.",
-      "last_updated": "2026-03-01",
+      "notes": "Silybum marianum (Asteraceae) for milk thistle labels that name no plant part. Its UNII U946SH95EE is registered as Silybum marianum seed (the achene fruit), the source of the silymarin flavonolignan complex; milk_thistle_seed holds labels that name the seed. Most-studied hepatoprotective botanical.",
+      "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "U946SH95EE"
       },
@@ -9849,12 +9850,11 @@
       "latin_name": "Urtica dioica",
       "aliases": [
         "urtica dioica leaf",
-        "stinging nettle leaf powder",
-        "Urtica dioica"
+        "stinging nettle leaf powder"
       ],
       "category": "leaf",
       "notes": "Urtica dioica (Urticaceae) leaf. Contains chlorophyll, histamine, formic acid, and flavonoids. European HMPC-approved for urinary complaints and joint pain. Nutritive mineral-rich herb.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "232L6DS3Y4"
       },
@@ -9882,12 +9882,11 @@
       "aliases": [
         "nettle (urtica dioica) (root) aqueous extract",
         "urtica dioica root extract",
-        "stinging nettle root extract",
-        "Urtica dioica"
+        "stinging nettle root extract"
       ],
       "category": "root",
       "notes": "Urtica dioica (Urticaceae) root. Distinct from leaf in bioactive profile — contains lectins, sterols, and lignans. European HMPC-approved for BPH symptoms. Botanical root form.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "J8HE8A6E5T"
       },
@@ -9944,11 +9943,12 @@
         "five-leaf chastetree",
         "Vitex negundo",
         "chinese vitex",
-        "chinese chaste tree"
+        "chinese chaste tree",
+        "organic vitex negundo"
       ],
       "category": "leaf",
       "notes": "Vitex negundo, commonly called Nirgundi/Nirgundee or five-leaf chaste tree. Ayurvedic botanical used in classical joint and women's health formulas.",
-      "last_updated": "2026-03-13",
+      "last_updated": "2026-09-26",
       "external_ids": {},
       "cui": "C1643782",
       "functional_roles": [],
@@ -14091,22 +14091,17 @@
     {
       "id": "vitex",
       "standard_name": "Vitex",
-      "latin_name": "Vitex agnus-castus",
+      "latin_name": "Vitex trifolia",
       "aliases": [
         "vitex trifolia",
-        "vitex negundo",
-        "organic vitex negundo",
         "three-leaf chastetree",
-        "man jing zi",
-        "Chaste Berry Tree (Vitex) extract",
-        "vitex berry extract",
-        "Vitex agnus-castus"
+        "man jing zi"
       ],
       "category": "herb",
-      "notes": "Vitex agnus-castus (Lamiaceae) berry. Same species as chaste_tree; covers generic vitex labels. Contains diterpenes acting on dopamine D2 receptors. Traditional female reproductive herb.",
-      "last_updated": "2026-03-01",
+      "notes": "Vitex trifolia (Lamiaceae), three-leaf or simpleleaf chastetree. Its dried ripe fruit is Man Jing Zi (Viticis Fructus), from V. trifolia and V. trifolia var. simplicifolia (PMID 37810114, 37282876). Not Vitex agnus-castus (chaste_tree) or Vitex negundo (nirgundi).",
+      "last_updated": "2026-09-26",
       "external_ids": {},
-      "cui": "C0752339",
+      "cui": null,
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

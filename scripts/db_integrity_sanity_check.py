@@ -1504,6 +1504,11 @@ def check_ingredient_interaction_rules(findings: List[Finding], data: Dict[str, 
                 for j, item in enumerate(form_scope):
                     if not isinstance(item, str) or not item.strip():
                         findings.append(Finding("error", file, f"[{i}].form_scope[{j}]", "invalid_form_scope_value", "non-empty str", _type_name(item)))
+        form_scope_match = rule.get("form_scope_match")
+        if form_scope_match is not None and form_scope_match not in ("all", "fail_open"):
+            # The enricher reads any other value as the default match, which
+            # silences an unknown form instead of failing open.
+            findings.append(Finding("error", file, f"[{i}].form_scope_match", "enum_value_not_supported", "all|fail_open", str(form_scope_match)))
 
         dose_thresholds = rule.get("dose_thresholds")
         if dose_thresholds is not None:
