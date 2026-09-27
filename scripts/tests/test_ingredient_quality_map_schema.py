@@ -867,9 +867,8 @@ class TestStatisticsReconciliation:
         declared = metadata.get('statistics', {}).get(field)
         assert declared == actual, (
             f"_metadata.statistics.{field}={declared} but actual counted="
-            f"{actual} (drift {actual - declared:+d}). Reconcile via:\n"
-            f"  - update _metadata.statistics.{field} to {actual}\n"
-            f"  - bump _metadata.last_updated to today\n"
+            f"{actual} (drift {actual - declared:+d}). Fix: $PG_PYTHON "
+            f"scripts/data_batch.py recount scripts/data/ingredient_quality_map.json\n"
             f"This invariant exists because pre-2026-05-15, drift on "
             f"total_form_aliases reached 131 entries before anyone noticed."
         )

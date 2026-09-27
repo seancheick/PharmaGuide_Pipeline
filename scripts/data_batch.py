@@ -144,6 +144,94 @@ def iqm_statistics(parents: dict) -> dict[str, int]:
     return stats
 
 
+def _records(blob: dict, key: str) -> list:
+    value = blob.get(key)
+    values = value.values() if isinstance(value, dict) else value or []
+    return [v for v in values if isinstance(v, dict)]
+
+
+def _size(key: str):
+    return lambda blob: len(blob.get(key) or ())
+
+
+def _tally(key: str, field: str):
+    """{value: count} of ``field`` over the records under ``key``."""
+    def count(blob: dict) -> dict[str, int]:
+        c = Counter(str(r[field]) for r in _records(blob, key) if r.get(field) is not None)
+        return dict(sorted(c.items()))
+    return count
+
+
+def _where(key: str, predicate):
+    return lambda blob: sum(1 for r in _records(blob, key) if predicate(r))
+
+
+def _iqm_categories(blob: dict) -> dict[str, int]:
+    c = Counter(str(p["category"]) for k, p in blob.items()
+                if k != "_metadata" and isinstance(p, dict) and p.get("category"))
+    return dict(sorted(c.items()))
+
+
+def _cert_claim_statistics(blob: dict) -> dict[str, int]:
+    """Rules per category (non-underscore keys) and their total."""
+    rules = blob.get("rules") or {}
+    per = {name: sum(1 for k in body if not k.startswith("_"))
+           for name, body in rules.items() if isinstance(body, dict)}
+    return {**per, "total_rules": sum(per.values())}
+
+
+# Every other count a data file stores in _metadata, with the one definition the
+# data proves (each matched the stored value, or the stored value had drifted).
+# recount writes only fields a file already has; a field whose meaning cannot
+# be derived from its own file (color_indicators totals, cross-file timing
+# counts, literature evidence counts) is not listed and stays hand-maintained.
+# cert_claim_rules statistics (one count per rule category) are handled in recount.
+DERIVED_COUNTS: dict[str, dict[tuple, Any]] = {
+    "banned_recalled_ingredients.json": {("risk_breakdown",): _tally("ingredients", "clinical_risk_enum")},
+    "harmful_additives.json": {
+        ("risk_breakdown",): _tally("harmful_additives", "severity_level"),
+        ("categories_count",): lambda b: len(b["_metadata"].get("category_enum") or ()),
+    },
+    IQM_FILE: {("categories",): _iqm_categories},
+    "standardized_botanicals.json": {
+        ("categories",): _tally("standardized_botanicals", "category"),
+        ("statistics", "total_aliases"): lambda b: sum(len(r.get("aliases") or ()) for r in _records(b, "standardized_botanicals")),
+    },
+    "ingredient_interaction_rules.json": {
+        ("total_rules",): _size("interaction_rules"),
+        ("rules_with_dose_thresholds",): _where("interaction_rules", lambda r: bool(r.get("dose_thresholds"))),
+    },
+    "canonical_equivalences.json": {("total_relationships",): _size("relationships")},
+    "clinical_risk_taxonomy.json": {("drug_classes_count",): _size("drug_classes")},
+    "cert_verification_overrides.json": {("total_overrides",): _size("overrides")},
+    "upc_overrides.json": {("total_overrides",): _size("overrides")},
+    "drug_class_vocab.json": {
+        ("user_selectable_count",): _where("drug_classes", lambda r: r.get("user_selectable") is True),
+        ("rule_only_count",): _where("drug_classes", lambda r: r.get("user_selectable") is False),
+    },
+    "drug_classes.json": {
+        ("total_classes",): _size("classes"),
+        ("total_members",): lambda b: sum(len(r.get("member_rxcuis") or ()) for r in _records(b, "classes")),
+    },
+    "form_keywords_vocab.json": {("total_categories",): _size("categories")},
+    "synergy_cluster.json": {
+        ("total_clusters",): _size("synergy_clusters"),
+        ("citation_coverage", "total_clusters"): _size("synergy_clusters"),
+        ("citation_coverage", "clusters_with_sources"): _where("synergy_clusters", lambda r: bool(r.get("sources"))),
+    },
+    "manufacturer_violations.json": {
+        **{("statistics", f"{level}_violations"): _where("manufacturer_violations", lambda r, lv=level: r.get("severity_level") == lv)
+           for level in ("critical", "high", "moderate", "low")},
+        ("statistics", "resolved_count"): _where("manufacturer_violations", lambda r: r.get("is_resolved") is True),
+        ("statistics", "unresolved_count"): _where("manufacturer_violations", lambda r: not r.get("is_resolved")),
+    },
+    "cert_registry.json": {("total_verified_records",): _size("verified_records")},
+    "caers_adverse_event_signals.json": {("total_ingredients_with_signals",): _size("signals")},
+    "profile_gate_test_cases.json": {("case_count",): _size("test_cases")},
+    "unit_conversions.json": {("statistics", "vitamin_conversions"): _size("vitamin_conversions")},
+}
+
+
 def recount(name: str, blob: dict) -> dict[str, tuple[Any, Any]]:
     """Recompute the counts owned here, in place. Only fields that already exist
     are written. Returns {field: (old, new)} for each field that changed."""
@@ -152,8 +240,8 @@ def recount(name: str, blob: dict) -> dict[str, tuple[Any, Any]]:
         return {}
     changes: dict[str, tuple[Any, Any]] = {}
 
-    def put(container: dict, key: str, value: Any, label: str) -> None:
-        if key in container and container[key] != value:
+    def put(container: Any, key: str, value: Any, label: str) -> None:
+        if isinstance(container, dict) and key in container and container[key] != value:
             changes[label] = (container[key], value)
             container[key] = value
 
@@ -165,6 +253,14 @@ def recount(name: str, blob: dict) -> dict[str, tuple[Any, Any]]:
         parents = {k: v for k, v in blob.items() if k != "_metadata"}
         for key, value in iqm_statistics(parents).items():
             put(meta["statistics"], key, value, f"statistics.{key}")
+    if name == "cert_claim_rules.json" and isinstance(meta.get("statistics"), dict):
+        for key, value in _cert_claim_statistics(blob).items():
+            put(meta["statistics"], key, value, f"statistics.{key}")
+    for path, derive in DERIVED_COUNTS.get(name, {}).items():
+        container = meta
+        for step in path[:-1]:
+            container = container.get(step) if isinstance(container, dict) else None
+        put(container, path[-1], derive(blob), ".".join(path))
     return changes
 
 

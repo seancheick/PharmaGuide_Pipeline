@@ -61,7 +61,7 @@ def test_metadata_total_entries_matches_entry_count(path: Path) -> None:
         downstream consumers reading total_entries get a lie.
 
     If a file legitimately tracks something else under total_entries (e.g.
-    a section of a multi-section payload), add it to INTENTIONAL_EXCEPTIONS
+    a section of a multi-section payload), add it to data_batch.INTENTIONAL_EXCEPTIONS
     with a rationale AND write a bespoke per-file test pinning the semantic.
     """
     blob = json.loads(path.read_text(encoding="utf-8"))
@@ -93,7 +93,7 @@ def test_metadata_total_entries_matches_entry_count(path: Path) -> None:
     assert actual == meta_total, (
         f"{path.name}: _metadata.total_entries={meta_total} but "
         f"{shape_name} payload has {actual} entries. "
-        f"Bump _metadata.total_entries to {actual} "
-        f"(or, if the semantic intentionally differs, add to "
-        f"INTENTIONAL_EXCEPTIONS with rationale + bespoke test)."
+        f"Fix: $PG_PYTHON scripts/data_batch.py recount scripts/data/{path.name} "
+        f"(or, if the semantic intentionally differs, add it to "
+        f"data_batch.INTENTIONAL_EXCEPTIONS with rationale + bespoke test)."
     )

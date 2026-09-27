@@ -146,3 +146,26 @@ def test_at_ref_distinguishes_a_missing_file_from_a_bad_ref():
     assert db.at_ref("HEAD", DATA / "daily_values.json")["_metadata"]
     with pytest.raises(ValueError, match="failed"):
         db.at_ref("no-such-ref-7f3a", DATA / "daily_values.json")
+
+
+def test_every_derived_count_names_a_field_that_exists():
+    """A renamed or removed _metadata field must not leave a derivation that
+    silently maintains nothing."""
+    tracked = {path.name: path for path in DATA_FILES}
+    for name, derivations in db.DERIVED_COUNTS.items():
+        assert name in tracked, f"DERIVED_COUNTS names {name}, which is not a tracked data file"
+        meta = db.load(tracked[name])["_metadata"]
+        for path in derivations:
+            node = meta
+            for step in path:
+                assert isinstance(node, dict) and step in node, f"{name}: _metadata.{'.'.join(path)} does not exist"
+                node = node[step]
+
+
+def test_recount_fixes_a_drifted_derived_count():
+    blob = {"_metadata": {"total_entries": 2, "risk_breakdown": {"high": 9}},
+            "ingredients": [{"id": "A", "clinical_risk_enum": "high"},
+                            {"id": "B", "clinical_risk_enum": "critical"}]}
+    changes = db.recount("banned_recalled_ingredients.json", blob)
+    assert changes == {"risk_breakdown": ({"high": 9}, {"critical": 1, "high": 1})}
+    assert db.recount("banned_recalled_ingredients.json", blob) == {}

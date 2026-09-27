@@ -437,10 +437,11 @@
       "2026-05-30: Safety-copy tone close-out (Option B). After 6bfe7c43 voice normalization, applied the final bounded rubric to the ACTION_MISMATCH set: fixed the one true action defect (7-OH mitragynine had no action verb), aligned HM_CADMIUM to the heavy-metal contaminant voice ('Avoid untested products'), restored dropped specificity on EPHEDRA (stroke/heart) and DMAA (stroke/cardiac), and strengthened two genuinely-soft controlled/cancer-linked drug rows (modafinil, cardarine). Regulatory-only revocations (Red 3, BVO, PHO, Amaranth), legal-status (CBD, delta-8), lawful-but-cautioned (red yeast rice), OTC (docusate, simethicone), and general heavy-metal/contaminant rows are INTENTIONALLY kept soft ('Avoid'/'Avoid untested products'/'Talk to your doctor') — encoded in audit_safety_oneliner_tone.py so they no longer flag as under-warning. An earlier uncommitted batch that escalated all 19 to 'Stop using this product' was rejected: it busted the 80-char cap on 13 rows and over-corrected regulatory/contaminant cases. Closes safety-copy tone."
     ],
     "risk_breakdown": {
-      "critical": 87,
-      "high": 20,
-      "moderate": 14,
-      "low": 8
+      "critical": 112,
+      "dose_dependent": 3,
+      "high": 46,
+      "low": 1,
+      "moderate": 23
     },
     "flutter_top_level_key": "recalled_ingredients",
     "flutter_schema_version": "5.2.0",
