@@ -27,7 +27,8 @@ from constants import (
     VALID_INPUT_EXTENSIONS,
     VALIDATION_THRESHOLDS
 )
-from stage_manifest import write_stage_manifest
+from pipeline_freshness import stage_input_fingerprints
+from stage_manifest import StageManifestError, write_stage_manifest
 import traceback
 import os
 import hashlib
@@ -35,6 +36,8 @@ import signal
 import stat
 
 logger = logging.getLogger(__name__)
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class PerformanceTracker:
@@ -244,11 +247,19 @@ class BatchProcessor:
         cleaned_dir = self.output_dir / "cleaned"
         owned_paths = sorted(cleaned_dir.glob("cleaned_batch_*.json"))
         owned_paths.extend(sorted(cleaned_dir.glob("cleaned_batch_*.jsonl")))
+        current = stage_input_fingerprints(REPO_ROOT, "clean")
+        started = getattr(self, "_stage_inputs", None)
+        if started is not None and current != started:
+            raise StageManifestError(
+                "Cleaning code or reference data changed during the run; "
+                "refusing to publish a mixed manifest"
+            )
         return write_stage_manifest(
             cleaned_dir,
             "clean",
             owned_paths,
             processing_complete=bool(summary.get("processing_complete", False)),
+            input_fingerprints=current,
         )
 
     def _write_quarantine_file(self, file_path: str, error: StructuredError):
@@ -569,9 +580,18 @@ class BatchProcessor:
             processed_file_paths=[]
         )
     
+    def _clean_stage_inputs(self) -> Dict[str, str]:
+        """Reference data and cleaning code this run started with."""
+        if getattr(self, "_stage_inputs", None) is None:
+            self._stage_inputs = stage_input_fingerprints(REPO_ROOT, "clean")
+        return self._stage_inputs
+
     def _get_config_checksum(self) -> str:
-        """Get checksum of config for validation"""
-        config_str = json.dumps(self.config, sort_keys=True)
+        """Checksum of config and stage inputs, so a resume never mixes revisions"""
+        config_str = json.dumps(
+            {"config": self.config, "inputs": self._clean_stage_inputs()},
+            sort_keys=True,
+        )
         return hashlib.md5(config_str.encode()).hexdigest()
 
     def _get_file_manifest_checksum(self, files: List[Path]) -> str:
@@ -676,6 +696,10 @@ class BatchProcessor:
         """Process all files in batches"""
         start_time = time.time()
         logger.info("Preparing processing state for %d files", len(files))
+        # Pin the code and reference data this run starts with; the manifest
+        # re-checks them at the end.
+        self._stage_inputs = None
+        self._clean_stage_inputs()
 
         # Load or create state
         state = None
@@ -694,7 +718,10 @@ class BatchProcessor:
 
                 # A7: Validate config hasn't changed
                 if state.config_checksum != self._get_config_checksum():
-                    logger.warning("Config changed since last run, starting fresh")
+                    logger.warning(
+                        "Config, cleaning code or reference data changed since "
+                        "last run, starting fresh"
+                    )
                     state = None
                 # A7: Validate file manifest hasn't changed (now includes size+mtime)
                 elif state.file_manifest_checksum:

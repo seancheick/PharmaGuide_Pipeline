@@ -159,6 +159,7 @@ SUBMISSION_RECEIPTS="$SUBMISSION_OUTPUT_DIR/.product_submission_import_receipts"
 SUBMISSION_PIPELINE_PREFIX="$PRODUCTS_DIR/output_Product_Submissions"
 SUBMISSION_SCORE_MANIFEST="$SUBMISSION_PIPELINE_PREFIX"_scored/scored/.stage_manifest.json
 SUBMISSION_ENRICH_MANIFEST="$SUBMISSION_PIPELINE_PREFIX"_enriched/enriched/.stage_manifest.json
+SUBMISSION_CLEAN_MANIFEST="$SUBMISSION_PIPELINE_PREFIX"/cleaned/.stage_manifest.json
 
 # Code that changes emitted catalog identity, scoring, or explanation fields is
 # a catalog-build input, just like the source product outputs. Without this,
@@ -315,9 +316,11 @@ submission_pipeline_needs_run() {
   (( FORCE == 1 )) && return 0
   [[ ! -f "$SUBMISSION_SCORE_MANIFEST" ]] && return 0
   if ! "$PG_PYTHON" "$REPO_ROOT/scripts/pipeline_freshness.py" \
-      check-enrichment-manifest \
+      check-stage-manifests \
       --repo-root "$REPO_ROOT" \
-      --manifest "$SUBMISSION_ENRICH_MANIFEST" >/dev/null 2>&1; then
+      --clean "$SUBMISSION_CLEAN_MANIFEST" \
+      --enrich "$SUBMISSION_ENRICH_MANIFEST" \
+      --score "$SUBMISSION_SCORE_MANIFEST" >/dev/null 2>&1; then
     return 0
   fi
   find "$SUBMISSION_OUTPUT_DIR" -maxdepth 1 -type f -name '*.json' \

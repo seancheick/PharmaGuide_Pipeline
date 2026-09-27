@@ -82,7 +82,9 @@ RELEASE_SUPABASE_DRY_RUN=0
 RELEASE_FLUTTER_REPO=""      # empty = use release_full.sh default
 SUBMISSION_OUTPUT_DIR="$REPO_ROOT/manual_labels/product_submissions"
 SUBMISSION_PIPELINE_PREFIX="products/output_Product_Submissions"
+SUBMISSION_CLEAN_MANIFEST="$SCRIPTS_DIR/${SUBMISSION_PIPELINE_PREFIX}/cleaned/.stage_manifest.json"
 SUBMISSION_ENRICH_MANIFEST="$SCRIPTS_DIR/${SUBMISSION_PIPELINE_PREFIX}_enriched/enriched/.stage_manifest.json"
+SUBMISSION_SCORE_MANIFEST="$SCRIPTS_DIR/${SUBMISSION_PIPELINE_PREFIX}_scored/scored/.stage_manifest.json"
 PIPELINE_ONLY=0
 RELEASE_EXPLICIT=0
 
@@ -342,23 +344,25 @@ if [ ${#FAILED[@]} -ne 0 ]; then
 fi
 
 # Product Submissions is an auxiliary, human-approved label source outside the
-# 37-brand dataset root, but the catalog snapshot includes it. Refresh only its
-# enrichment and score whenever reference-data content changed so a successful
+# 37-brand dataset root, but the catalog snapshot includes it. Rebuild it (clean,
+# enrich, score) whenever reference data or stage code changed, so a successful
 # brand run cannot reach snapshot assembly with one stale auxiliary manifest.
 if [ "$SKIP_SNAPSHOT" != "1" ] \
     && [ -d "$SUBMISSION_OUTPUT_DIR" ] \
     && find "$SUBMISSION_OUTPUT_DIR" -maxdepth 1 -type f -name '*.json' \
         -print -quit 2>/dev/null | grep -q .; then
-    if ! "$PYTHON" pipeline_freshness.py check-enrichment-manifest \
+    if ! "$PYTHON" pipeline_freshness.py check-stage-manifests \
         --repo-root "$REPO_ROOT" \
-        --manifest "$SUBMISSION_ENRICH_MANIFEST" >/dev/null 2>&1; then
-        echo -e "${BLUE}Refreshing Product Submissions against current reference data...${NC}"
+        --clean "$SUBMISSION_CLEAN_MANIFEST" \
+        --enrich "$SUBMISSION_ENRICH_MANIFEST" \
+        --score "$SUBMISSION_SCORE_MANIFEST" >/dev/null 2>&1; then
+        echo -e "${BLUE}Refreshing Product Submissions against current reference data and pipeline code...${NC}"
         if "$PYTHON" run_pipeline.py \
             --raw-dir "$SUBMISSION_OUTPUT_DIR" \
             --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
-            --stages enrich,score \
+            --stages clean,enrich,score \
             --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
-            echo -e "${GREEN}✓ Product Submissions enrichment and scoring refreshed${NC}"
+            echo -e "${GREEN}✓ Product Submissions cleaning, enrichment and scoring refreshed${NC}"
         else
             echo -e "${RED}✗ Product Submissions refresh failed; snapshot and release were not started${NC}"
             exit 1

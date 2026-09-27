@@ -22,10 +22,7 @@ sys.modules[spec.name] = audit
 spec.loader.exec_module(audit)
 
 from stage_manifest import write_stage_manifest  # noqa: E402
-from pipeline_freshness import (  # noqa: E402
-    REFERENCE_FINGERPRINT_KEY,
-    enrichment_reference_fingerprint,
-)
+from pipeline_freshness import STAGES, stage_input_fingerprints  # noqa: E402
 from scripts.release_artifact_paths import catalog_dist_dir  # noqa: E402
 
 
@@ -64,7 +61,8 @@ def test_candidate_freshness_rejects_reference_data_drift(
     repo = tmp_path / "repo"
     data_file = repo / "scripts" / "data" / "reference.json"
     write_json(data_file, {"value": 1})
-    fingerprint = enrichment_reference_fingerprint(repo)
+    for spec in STAGES.values():
+        (repo / "scripts" / spec["entry"]).write_text("VALUE = 1\n")
 
     stage_dir = (
         repo / "scripts" / "products" / "output_Test_enriched" / "enriched"
@@ -75,7 +73,7 @@ def test_candidate_freshness_rejects_reference_data_drift(
         stage_dir,
         "enrich",
         [output],
-        input_fingerprints={REFERENCE_FINGERPRINT_KEY: fingerprint},
+        input_fingerprints=stage_input_fingerprints(repo, "enrich"),
     )
 
     dist = repo / "candidate" / "dist"
@@ -97,7 +95,7 @@ def test_candidate_freshness_rejects_reference_data_drift(
         )
     )
 
-    assert "FRESHNESS_ENRICHMENT_REFERENCE_MISMATCH" in {
+    assert "FRESHNESS_STAGE_INPUT_MISMATCH" in {
         finding.code for finding in findings
     }
 

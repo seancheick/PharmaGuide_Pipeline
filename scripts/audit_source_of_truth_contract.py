@@ -27,7 +27,7 @@ from assessment_readiness import (
 
 
 from stage_manifest import select_stage_files
-from pipeline_freshness import enrichment_reference_freshness_issues
+from pipeline_freshness import stage_freshness_issues
 from release_catalog_artifact import (
     ReleaseValidationError,
     SUPPRESSED_SAFETY_DOSE_QUARANTINE,
@@ -1692,18 +1692,19 @@ def audit_freshness(args: argparse.Namespace) -> list[Finding]:
     if newest_product and newest_product > catalog_db.stat().st_mtime:
         findings.append(Finding("FRESHNESS_PRODUCTS_NEWER_THAN_DIST", "enriched/scored outputs are newer than scripts/dist catalog DB", str(products_dir)))
 
-    reference_issues = enrichment_reference_freshness_issues(REPO_ROOT)
-    if reference_issues:
-        sample = "; ".join(reference_issues[:3])
+    stage_issues = stage_freshness_issues(REPO_ROOT)
+    if stage_issues:
+        sample = "; ".join(stage_issues[:3])
         suffix = (
-            f"; and {len(reference_issues) - 3} more"
-            if len(reference_issues) > 3
+            f"; and {len(stage_issues) - 3} more"
+            if len(stage_issues) > 3
             else ""
         )
         findings.append(Finding(
-            "FRESHNESS_ENRICHMENT_REFERENCE_MISMATCH",
-            "current scripts/data content was not used by every enriched "
-            f"artifact ({sample}{suffix}); rerun full enrichment and scoring",
+            "FRESHNESS_STAGE_INPUT_MISMATCH",
+            "current scripts/data content or pipeline code was not used by "
+            f"every stage output ({sample}{suffix}); rerun the stale stages "
+            "for every brand",
             str(products_dir),
         ))
 

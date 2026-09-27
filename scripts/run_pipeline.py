@@ -45,10 +45,7 @@ from stage_manifest import (
     select_stage_input_files,
     write_stage_manifest_from_directory,
 )
-from pipeline_freshness import (
-    REFERENCE_FINGERPRINT_KEY,
-    enrichment_reference_fingerprint,
-)
+from pipeline_freshness import CODE_FINGERPRINT_KEY, STAGES, stage_input_fingerprints
 from run_artifacts import ensure_run_id
 
 # Setup logging
@@ -62,6 +59,14 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 logger = logging.getLogger(__name__)
+
+
+def _stage_scripts_and_configs() -> Dict[str, Dict[str, str]]:
+    """Default stage scripts and --config files; pipeline_freshness owns them."""
+    return {
+        "scripts": {stage: spec["entry"] for stage, spec in STAGES.items()},
+        "configs": {stage: STAGES[stage]["configs"][0] for stage in ("clean", "enrich")},
+    }
 
 
 class PipelineRunner:
@@ -170,16 +175,57 @@ class PipelineRunner:
                 "enriched_suffix": "enriched",
                 "scored_suffix": "scored"
             },
-            "scripts": {
-                "clean": "clean_dsld_data.py",
-                "enrich": "enrich_supplements_v3.py",
-                "score": "score_products_v4.py"
-            },
-            "configs": {
-                "clean": "config/cleaning_config.json",
-                "enrich": "config/enrichment_config.json",
-            }
+            **_stage_scripts_and_configs(),
         }
+
+    def _stage_inputs(self, stage: str) -> Optional[Dict[str, str]]:
+        """Fingerprint a stage's reference data and code, or log why not."""
+        try:
+            inputs = stage_input_fingerprints(self.script_dir.parent, stage)
+        except (OSError, ValueError, SyntaxError) as exc:
+            logger.error("Could not fingerprint %s inputs: %s", stage, exc)
+            return None
+        defaults = _stage_scripts_and_configs()
+        if any(self.config.get(key) != defaults[key] for key in defaults):
+            # The code fingerprint describes the default stage scripts and
+            # configs; a custom set leaves the output unproven, not current.
+            inputs.pop(CODE_FINGERPRINT_KEY)
+        return inputs
+
+    def _publish_stage_manifest(
+        self,
+        stage: str,
+        directory: Path,
+        inputs: Dict[str, str],
+        run_id: str,
+    ) -> bool:
+        """Record a stage's outputs, but only if its inputs held still.
+
+        Reference data or code edited while the stage ran would make the
+        manifest describe a mix of revisions, so the stage fails instead.
+        """
+        current = self._stage_inputs(stage)
+        if current is None:
+            return False
+        if current != inputs:
+            logger.error(
+                "%s inputs (reference data or stage code) changed during the "
+                "stage; refusing to publish a mixed manifest",
+                stage,
+            )
+            return False
+        try:
+            write_stage_manifest_from_directory(
+                directory,
+                stage,
+                patterns=("*.json",),
+                run_id=run_id,
+                input_fingerprints=inputs,
+            )
+        except StageManifestError as exc:
+            logger.error("%s ownership manifest failed: %s", stage, exc)
+            return False
+        return True
 
     def _run_script(self, script_name: str, args: List[str], dry_run: bool = False) -> bool:
         """Run a Python script with arguments"""
@@ -676,7 +722,6 @@ class PipelineRunner:
         if "enrich" in stages:
             # Use cleaned output from stage 1 as input
             enrich_input = cleaned_dir
-            enrich_reference_fingerprint = None
             # Validate input directory exists (skip if clean just ran or dry_run)
             if not dry_run and "clean" not in results["stages_completed"]:
                 if not self._validate_input_dir(enrich_input, "ENRICH"):
@@ -696,19 +741,10 @@ class PipelineRunner:
                     logger.error("Cleaning ownership manifest failed: %s", exc)
                     return results
             if not dry_run:
-                try:
-                    enrich_reference_fingerprint = (
-                        enrichment_reference_fingerprint(
-                            self.script_dir.parent
-                        )
-                    )
-                except (OSError, ValueError) as exc:
+                enrich_inputs = self._stage_inputs("enrich")
+                if enrich_inputs is None:
                     results["stages_failed"].append("enrich")
-                    logger.error(
-                        "Pipeline stopped: could not fingerprint enrichment "
-                        "reference inputs: %s",
-                        exc,
-                    )
+                    logger.error("Pipeline stopped: could not fingerprint enrichment inputs")
                     return results
                 quarantine_stage_outputs(Path(enriched_dir))
             success = self.run_enrich(
@@ -718,49 +754,9 @@ class PipelineRunner:
                 run_id=effective_run_id,
             )
             if success and not dry_run:
-                try:
-                    current_reference_fingerprint = (
-                        enrichment_reference_fingerprint(
-                            self.script_dir.parent
-                        )
-                    )
-                except (OSError, ValueError) as exc:
-                    logger.error(
-                        "Could not re-check enrichment reference inputs after "
-                        "the stage: %s",
-                        exc,
-                    )
-                    success = False
-                else:
-                    if (
-                        current_reference_fingerprint
-                        != enrich_reference_fingerprint
-                    ):
-                        logger.error(
-                            "Enrichment reference inputs changed during the "
-                            "stage; refusing to publish a mixed-reference "
-                            "manifest"
-                        )
-                        success = False
-                    else:
-                        try:
-                            write_stage_manifest_from_directory(
-                                Path(enriched_dir),
-                                "enrich",
-                                patterns=("*.json",),
-                                run_id=effective_run_id,
-                                input_fingerprints={
-                                    REFERENCE_FINGERPRINT_KEY: (
-                                        enrich_reference_fingerprint
-                                    ),
-                                },
-                            )
-                        except StageManifestError as exc:
-                            logger.error(
-                                "Enrichment ownership manifest failed: %s",
-                                exc,
-                            )
-                            success = False
+                success = self._publish_stage_manifest(
+                    "enrich", Path(enriched_dir), enrich_inputs, effective_run_id
+                )
             if success:
                 results["stages_completed"].append("enrich")
             else:
@@ -826,6 +822,11 @@ class PipelineRunner:
                     return results
             scored_output_dir = Path(scored_dir) / "scored"
             if not dry_run:
+                score_inputs = self._stage_inputs("score")
+                if score_inputs is None:
+                    results["stages_failed"].append("score")
+                    logger.error("Pipeline stopped: could not fingerprint scoring inputs")
+                    return results
                 quarantine_stage_outputs(scored_output_dir)
             success = self.run_score(
                 score_input,
@@ -834,16 +835,9 @@ class PipelineRunner:
                 run_id=effective_run_id,
             )
             if success and not dry_run:
-                try:
-                    write_stage_manifest_from_directory(
-                        scored_output_dir,
-                        "score",
-                        patterns=("*.json",),
-                        run_id=effective_run_id,
-                    )
-                except StageManifestError as exc:
-                    logger.error("Scoring ownership manifest failed: %s", exc)
-                    success = False
+                success = self._publish_stage_manifest(
+                    "score", scored_output_dir, score_inputs, effective_run_id
+                )
             if success:
                 results["stages_completed"].append("score")
             else:
