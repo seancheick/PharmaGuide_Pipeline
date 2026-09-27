@@ -127,6 +127,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 import env_loader  # noqa: F401
 from api_audit.pubmed_client import PubMedClient
+from run_artifacts import atomic_write_json
 
 # ---------------------------------------------------------------------------
 # Config
@@ -1466,8 +1467,7 @@ def main():
 
         if args.apply and enrichments:
             clinical_db["_metadata"]["last_updated"] = datetime.now(UTC).strftime("%Y-%m-%d")
-            with open(Path(args.clinical_db), "w") as f:
-                json.dump(clinical_db, f, indent=2, ensure_ascii=False)
+            atomic_write_json(Path(args.clinical_db), clinical_db)
             print(f"\nApplied {len(enrichments)} enrollment updates.", file=sys.stderr)
 
         print(f"\nEnrichment: {len(enrichments)} entries {'applied' if args.apply else 'found (dry-run)'}.", file=sys.stderr)
@@ -1499,8 +1499,7 @@ def main():
                 f"backfill-auditability updated {len(updates)} high-impact entries "
                 f"with registry counts, endpoint tags, and effect_direction auditability fields.",
             )
-            with open(Path(args.clinical_db), "w") as f:
-                json.dump(clinical_db, f, indent=2, ensure_ascii=False)
+            atomic_write_json(Path(args.clinical_db), clinical_db)
             print(f"\nApplied {len(updates)} auditability updates.", file=sys.stderr)
 
         print(

@@ -6,6 +6,7 @@ changed, nothing else did, the counts match, and the file stays canonical JSON.
 """
 
 import json
+import subprocess
 from datetime import date
 from pathlib import Path
 
@@ -15,7 +16,18 @@ import data_batch as db
 from run_artifacts import json_text
 
 DATA = Path(__file__).parent.parent / "data"
-DATA_FILES = sorted(DATA.rglob("*.json"))
+
+
+def _tracked_data_files() -> list[Path]:
+    """Tracked JSON only: a checkout also holds ignored downloads and caches
+    (fda_drug_labels/, fda_unii_cache.json) that no one curates."""
+    proc = subprocess.run(["git", "ls-files", "-z", "--", "*.json"], cwd=DATA,
+                          capture_output=True, text=True)
+    assert proc.returncode == 0, proc.stderr
+    return sorted(DATA / name for name in proc.stdout.split("\0") if name)
+
+
+DATA_FILES = _tracked_data_files()
 
 # Formatted in their own commit once the lane editing them has landed. The test
 # below fails as soon as a listed file is canonical, so the list only shrinks.

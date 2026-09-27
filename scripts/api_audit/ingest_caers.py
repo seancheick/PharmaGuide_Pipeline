@@ -30,6 +30,8 @@ from datetime import datetime, timezone
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(os.path.dirname(SCRIPT_DIR), "data")
+sys.path.insert(0, os.path.dirname(SCRIPT_DIR))
+from run_artifacts import atomic_write_json  # noqa: E402
 CAERS_DIR = os.path.join(DATA_DIR, "fda_caers")
 CAERS_FILE = os.path.join(CAERS_DIR, "food-event-0001-of-0001.json")
 IQM_FILE = os.path.join(DATA_DIR, "ingredient_quality_map.json")
@@ -481,8 +483,7 @@ def main():
     output = build_output(signals, total_supp)
 
     # Write
-    with open(OUTPUT_FILE, "w") as f:
-        json.dump(output, f, indent=2)
+    atomic_write_json(OUTPUT_FILE, output)
     print(f"\nWrote {OUTPUT_FILE}")
     print(f"Ingredients with signals: {len(output['signals'])}")
 
