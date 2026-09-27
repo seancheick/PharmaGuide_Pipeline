@@ -18,6 +18,8 @@ from pathlib import Path
 
 import pytest
 
+from data_batch import iqm_statistics
+
 # Path to the ingredient quality map file
 IQM_PATH = Path(__file__).parent.parent / 'data' / 'ingredient_quality_map.json'
 
@@ -845,38 +847,8 @@ class TestSummaryStatistics:
 class TestStatisticsReconciliation:
     """_metadata.statistics fields must equal the actual counts."""
 
-    @staticmethod
-    def _compute(entries):
-        total_parents = 0
-        total_forms = 0
-        total_form_aliases = 0
-        parents_with_parent_aliases = 0
-        parents_with_contains_aliases = 0
-        parents_with_pattern_aliases = 0
-        for entry in entries.values():
-            if not isinstance(entry, dict):
-                continue
-            total_parents += 1
-            if entry.get('aliases'):
-                parents_with_parent_aliases += 1
-            if entry.get('contains_aliases'):
-                parents_with_contains_aliases += 1
-            if entry.get('pattern_aliases'):
-                parents_with_pattern_aliases += 1
-            forms = entry.get('forms', {})
-            if isinstance(forms, dict):
-                for fdata in forms.values():
-                    total_forms += 1
-                    if isinstance(fdata, dict):
-                        total_form_aliases += len(fdata.get('aliases', []))
-        return {
-            'total_parents': total_parents,
-            'total_forms': total_forms,
-            'total_form_aliases': total_form_aliases,
-            'parents_with_parent_aliases': parents_with_parent_aliases,
-            'parents_with_contains_aliases': parents_with_contains_aliases,
-            'parents_with_pattern_aliases': parents_with_pattern_aliases,
-        }
+    # One counter: data_batch.iqm_statistics also writes these fields (recount).
+    _compute = staticmethod(iqm_statistics)
 
     @pytest.mark.parametrize(
         "field",

@@ -30,115 +30,16 @@ are not permitted.
 
 import json
 from pathlib import Path
-from typing import Any, Optional
 
 import pytest
 
+from data_batch import INTENTIONAL_EXCEPTIONS, classify_shape
+
 DATA = Path(__file__).parent.parent / "data"
 
-# Files whose shape doesn't match the universal classifier OR whose
-# total_entries means something file-specific. Each entry MUST cite the
-# bespoke per-file test that pins the semantic (no silent skips).
-INTENTIONAL_EXCEPTIONS: dict[str, str] = {
-    "catalog_brand_registry.json":
-        "total_entries tracks canonical brand-family records; wave_1 is an "
-        "execution manifest, not another brand catalog. Pinned by "
-        "test_brand_identity.py.",
-    "ingredient_weights.json":
-        "total_entries tracks dosage_weights tier count (4 — therapeutic / "
-        "optimal / maintenance / trace), not the sum across multi-section "
-        "payload. Pinned by test_ingredient_weights_contract.py.",
-    "unit_conversions.json":
-        "total_entries tracks vitamin_conversions only; mass_conversions "
-        "and form_detection_patterns are static rule config, not vitamin "
-        "entries. Pinned by "
-        "test_unit_conversions_contract.py.",
-    "cert_claim_rules.json":
-        "total_entries = Σ(non-_-prefixed rule keys across rules.*), "
-        "excluding each category's _metadata config sub-key. Pinned by "
-        "test_cert_claim_rules_contract.py.",
-    "manufacture_deduction_expl.json":
-        "Structural config file (1 scalar total_deduction_cap + 4 nested "
-        "dicts for violation_categories / modifiers / calculation_rules / "
-        "score_thresholds). total_entries=5 tracks count of top-level "
-        "non-_metadata sub-sections — meaningful but not entry-shaped. "
-        "Pinned by test_manufacture_deduction_expl_contract.py.",
-    "banned_match_allowlist.json":
-        "total_entries tracks allowlist only; denylist is auxiliary and "
-        "tracked separately. Pinned by "
-        "test_banned_match_allowlist_contract.py.",
-    "clinical_risk_taxonomy.json":
-        "UNIQUE convention — total_entries = SUM of all 7 taxonomy arrays "
-        "(conditions + drug_classes + severity_levels + evidence_levels + "
-        "profile_flags + product_forms + sources). Pinned by "
-        "test_clinical_risk_taxonomy_contract.py.",
-    "color_indicators.json":
-        "total_entries tracks natural_indicators only; artificial_indicators "
-        "+ explicit_natural_dyes + explicit_artificial_dyes are auxiliary. "
-        "Pinned by test_color_indicators_contract.py.",
-    "functional_ingredient_groupings.json":
-        "total_entries tracks functional_groupings only; vague_terms_to_flag "
-        "+ transparency_bonuses are auxiliary. Pinned by "
-        "test_functional_ingredient_groupings_contract.py.",
-    "migration_report.json":
-        "total_entries tracks alias_collisions_resolved (the headline number "
-        "of this migration); other arrays/dicts are scaffolding. Pinned by "
-        "test_migration_report_contract.py.",
-    "fda_unii_cache.json":
-        "Runtime cache file (name_to_unii + unii_to_name lookups, 170K+ "
-        "entries each) populated by scripts/api_audit/fda_weekly_sync.py. "
-        "Size fluctuates with each FDA UNII sync — a static total_entries "
-        "would be meaningless and forced bumps per sync. Intentionally "
-        "carries no total_entries; the cache file's freshness is tracked "
-        "by _metadata.last_updated instead.",
-}
-
-
-def _classify_shape(blob: dict) -> Optional[tuple[str, int]]:
-    """Return ``(shape_name, entry_count)`` if the file matches one of three
-    universal shapes; ``None`` if it needs a bespoke per-file test.
-
-    Shapes recognized:
-
-    1. ``single_array``: exactly one top-level array besides ``_metadata``,
-       no top-level dicts. Entry count = ``len(array)``.
-
-    2. ``single_payload_dict``: exactly one top-level dict besides
-       ``_metadata``, no top-level arrays. Entry count = number of keys in
-       that wrapping dict. Inner values may be dicts (entry records) or
-       lists (alias arrays) — count is what matters.
-
-    3. ``top_level_dict_of_dicts``: 2+ top-level dicts besides ``_metadata``,
-       no top-level arrays, no top-level scalars. Every non-``_metadata``
-       value must be a dict (an entry record). Entry count = number of
-       non-``_metadata`` keys.
-
-    A file with mixed scalars+dicts at top level (e.g. config files like
-    ``manufacture_deduction_expl.json``) falls through to ``None``.
-    """
-    non_meta = {k: v for k, v in blob.items() if k != "_metadata"}
-    arrays = [(k, v) for k, v in non_meta.items() if isinstance(v, list)]
-    dicts = [(k, v) for k, v in non_meta.items() if isinstance(v, dict)]
-
-    # Shape 1: exactly one top-level array. Auxiliary top-level dicts
-    # (e.g. side-lookups, classification settings) are permitted — the
-    # array is the primary entry catalog and meta tracks its length.
-    # Examples: clinically_relevant_strains.json (strains array + prebiotics
-    # lookup), id_redirects.json (redirects array + lookup index),
-    # ingredient_classification.json (skip_exact array + settings + classifications).
-    if len(arrays) == 1:
-        return ("single_array", len(arrays[0][1]))
-
-    # Shape 2: single top-level dict (wrapper), no arrays, no other keys.
-    if len(dicts) == 1 and not arrays and len(non_meta) == 1:
-        return ("single_payload_dict", len(dicts[0][1]))
-
-    # Shape 3: top-level IS the entry map — every non-meta value is a dict.
-    # Excludes files with any scalar at top level (e.g. config files).
-    if not arrays and dicts and len(non_meta) == len(dicts):
-        return ("top_level_dict_of_dicts", len(non_meta))
-
-    return None
+# The shape classifier and the exception list live in data_batch.py, the one
+# owner of _metadata counts (its recount writes what this test checks).
+_classify_shape = classify_shape
 
 
 def _candidate_files() -> list[Path]:
