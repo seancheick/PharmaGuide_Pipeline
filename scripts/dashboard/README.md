@@ -66,18 +66,7 @@ Those timelines may not match. The UI now labels that explicitly per page.
 Primary dashboard verification:
 
 ```bash
-python3 -m pytest -q \
-  scripts/tests/test_dashboard_navigation.py \
-  scripts/tests/test_dashboard_app_shell.py \
-  scripts/tests/test_dashboard_page_meta.py \
-  scripts/tests/test_dashboard_time_format.py \
-  scripts/tests/test_dashboard_command_center.py \
-  scripts/tests/test_dashboard_architecture.py \
-  scripts/tests/test_dashboard_smoke.py \
-  scripts/tests/test_dashboard_loader.py \
-  scripts/tests/test_graceful_degradation.py \
-  scripts/tests/test_dashboard_empty_db.py \
-  scripts/tests/test_batch_run_all_datasets.py
+scripts/test.sh fast -k "dashboard or graceful_degradation or batch_run_all_datasets"
 ```
 
 ## Notes

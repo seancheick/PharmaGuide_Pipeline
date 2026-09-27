@@ -114,3 +114,6 @@ scripts/clinical_evidence_strength_report.json
 
 # Empty canary fixture with no readers; rebuild locally if a canary DB is needed.
 scripts/products_canaries.db
+
+# discover_clinical_evidence.py 30-day API cache (regenerated; never tracked)
+scripts/api_audit/.cache/

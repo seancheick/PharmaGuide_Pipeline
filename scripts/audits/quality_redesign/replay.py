@@ -1,4 +1,17 @@
-"""Frozen-input replay of the real scorer; no scoring policy lives here."""
+"""Frozen-input replay of the real scorer; no scoring policy lives here.
+
+Two input kinds, one capture/compare format:
+  freeze      enriched stage outputs; snapshot re-runs only the scorer
+  freeze-raw  raw DSLD labels by id; snapshot runs clean -> enrich -> score
+              with the checkout's own modules, so curated-data and cleaner
+              edits show up (the measurement for a data batch)
+
+  $PG_PYTHON scripts/audits/quality_redesign/replay.py freeze-raw --raw-root RAW --ids ids.json \
+      --frozen-root F --manifest F/manifest.json
+  replay.py snapshot --checkout <main worktree> --products-root F --manifest F/manifest.json --out base.jsonl --workers 4
+  replay.py snapshot --checkout <batch worktree> ... --out cand.jsonl --workers 4
+  replay.py compare --baseline base.jsonl --candidate cand.jsonl --out delta.json
+"""
 from __future__ import annotations
 
 import argparse
@@ -28,8 +41,12 @@ def write_json(path, value):
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
 
 
-def payloads(path):
+def payloads(path, raw=False):
     value = json.loads(path.read_text())
+    if raw:
+        if not isinstance(value, dict) or value.get('id') is None:
+            raise ValueError(f'Invalid raw label: {path}')
+        return [value]
     if not isinstance(value, list) or not value:
         raise ValueError(f'Empty or invalid product payload: {path}')
     return value
@@ -75,6 +92,40 @@ def freeze(products_root, frozen_root, manifest):
     return result
 
 
+def freeze_raw(raw_root, ids, frozen_root, manifest):
+    """Freeze the raw DSLD label <id>.json of each id found under raw_root."""
+    raw_root, frozen_root = Path(raw_root).resolve(), Path(frozen_root).resolve()
+    if frozen_root.exists():
+        raise ValueError('Frozen destination already exists; use a new directory')
+    wanted = [str(i) for i in ids]
+    if not wanted or len(set(wanted)) != len(wanted):
+        raise ValueError('Empty or duplicate product IDs')
+    found, wanted_set = {}, set(wanted)
+    for path in raw_root.rglob('*.json'):
+        if path.stem in wanted_set:
+            found.setdefault(path.stem, []).append(path)
+    missing = [i for i in wanted if i not in found]
+    ambiguous = sorted(i for i, paths in found.items() if len(paths) > 1)
+    if missing or ambiguous:
+        raise ValueError(f'Raw labels missing {missing[:10]} or found twice {ambiguous[:10]}')
+    records = []
+    for pid in sorted(wanted):
+        source = found[pid][0]
+        rel = source.relative_to(raw_root)
+        target = frozen_root / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+        digest = sha(source)
+        if sha(target) != digest:
+            raise ValueError(f'Input mutated during freeze: {source}')
+        if str(payloads(target, raw=True)[0]['id']) != pid:
+            raise ValueError(f'{rel}: file name and label id differ')
+        records.append({'path': str(rel), 'sha256': digest, 'kind': 'raw'})
+    result = {'schema_version': 1, 'source_root': str(raw_root), 'created_at': datetime.now(timezone.utc).isoformat(), 'product_count': len(records), 'files': records}
+    write_json(manifest, result)
+    return result
+
+
 def verified_files(root, manifest):
     root = Path(root).resolve()
     spec = json.loads(Path(manifest).read_text())
@@ -88,10 +139,10 @@ def verified_files(root, manifest):
         path = (root / item['path']).resolve()
         if not path.is_relative_to(root) or sha(path) != item['sha256']:
             raise ValueError(f'Input hash mismatch: {path}')
-    product_files = [item for item in files if item['kind'] == 'products']
-    for stage in sorted({(root / item['path']).parent for item in product_files}):
+    product_files = [item for item in files if item['kind'] in ('products', 'raw')]
+    for stage in sorted({(root / item['path']).parent for item in product_files if item['kind'] == 'products'}):
         selected = select_stage_input_files(stage, 'enrich', require_manifest=True)
-        if {str(p.relative_to(root)) for p in selected} != {item['path'] for item in product_files if (root / item['path']).parent == stage}:
+        if {str(p.relative_to(root)) for p in selected} != {item['path'] for item in product_files if item['kind'] == 'products' and (root / item['path']).parent == stage}:
             raise ValueError('Input manifest does not match stage ownership')
         if str((stage / MANIFEST_NAME).relative_to(root)) not in names:
             raise ValueError('Missing enrichment stage manifest ownership')
@@ -102,7 +153,7 @@ def inputs(root, manifest):
     root = Path(root).resolve()
     product_files, spec = verified_files(root, manifest)
     count = 0
-    for record in unique((item['path'], item['sha256'], p) for item in product_files for p in payloads(root / item['path'])):
+    for record in unique((item['path'], item['sha256'], p) for item in product_files for p in payloads(root / item['path'], raw=item['kind'] == 'raw')):
         count += 1
         yield record
     if not count or count != spec['product_count']:
@@ -391,8 +442,34 @@ def snapshot(checkout, products_root, manifest, out, workers=1):
     read_rows(out)
 
 
+_RAW_SCORERS = {}
+
+
+def raw_scorer(checkout):
+    """clean -> enrich -> score with the checkout's own modules, built once per process."""
+    if checkout not in _RAW_SCORERS:
+        import copy
+        import logging
+        sys.path.insert(0, str(Path(checkout).resolve() / 'scripts'))
+        logging.disable(logging.CRITICAL)
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+        from enrich_supplements_v3 import SupplementEnricherV3
+        from score_supplements_v4 import score_product_v4
+        logging.disable(logging.CRITICAL)
+        normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+
+        def score(label):
+            enriched, _ = enricher.enrich_product(normalizer.normalize_product(label))
+            return score_product_v4(copy.deepcopy(enriched))
+
+        _RAW_SCORERS[checkout] = score
+    return _RAW_SCORERS[checkout]
+
+
 def score_batch(task):
     checkout, root, item = task
+    if item['kind'] == 'raw':
+        return score_records(((item['path'], item['sha256'], p) for p in payloads(Path(root) / item['path'], raw=True)), raw_scorer(checkout))
     sys.path.insert(0, str(Path(checkout).resolve() / 'scripts'))
     from score_supplements_v4 import score_product_v4
     return score_records(((item['path'], item['sha256'], p) for p in payloads(Path(root) / item['path'])), score_product_v4)
@@ -431,6 +508,9 @@ def main():
     freeze_p = subs.add_parser('freeze')
     for flag in ('products-root', 'frozen-root', 'manifest'):
         freeze_p.add_argument('--' + flag, required=True)
+    raw_p = subs.add_parser('freeze-raw')
+    for flag in ('raw-root', 'ids', 'frozen-root', 'manifest'):
+        raw_p.add_argument('--' + flag, required=True, help='JSON list of DSLD ids' if flag == 'ids' else None)
     for name in ('snapshot', '_worker'):
         p = subs.add_parser(name)
         p.add_argument('--workers', type=int, choices=range(1, 5), default=1)
@@ -450,6 +530,8 @@ def main():
     args = parser.parse_args()
     if args.command == 'freeze':
         freeze(args.products_root, args.frozen_root, args.manifest)
+    elif args.command == 'freeze-raw':
+        freeze_raw(args.raw_root, json.loads(Path(args.ids).read_text()), args.frozen_root, args.manifest)
     elif args.command == 'snapshot':
         snapshot(args.checkout, args.products_root, args.manifest, args.out, args.workers)
     elif args.command == '_worker':

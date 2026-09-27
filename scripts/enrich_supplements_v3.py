@@ -8541,7 +8541,6 @@ class SupplementEnricherV3:
             'folate':     'yeast folate',
             'vitamin b9': 'yeast folate',
             'folic acid': 'yeast folate',
-            'vitamin k':  'yeast vitamin k2',
             'vitamin k2': 'yeast vitamin k2',
         }
 

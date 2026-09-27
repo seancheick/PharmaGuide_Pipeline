@@ -1,12 +1,12 @@
 {
   "_metadata": {
-    "description": "Bonus-eligible standardized-extract registry. NOT a botanical identity file \u2014 identity lives in botanical_ingredients.json.",
-    "purpose": "Bonus-awarding layer (A5b_standardized_botanical = +1pt) per scripts/config/scoring_config.json:105 and score_supplements.py:1133-1186. An entry triggers the bonus ONLY when the label/entry proves a measurable marker, branded standardized extract, or quantified constituent standardization. Plain botanical aliases (e.g., 'garlic', 'turmeric root', 'green coffee bean') must NOT live here for bonus purposes \u2014 they belong in botanical_ingredients.json for identity-only mapping with no bonus. The runtime enforcement is the enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148), which require percentage detection in label text before granting the bonus; this file's contract describes the editorial discipline for which entries earn that pathway.",
+    "description": "Bonus-eligible standardized-extract registry. NOT a botanical identity file — identity lives in botanical_ingredients.json.",
+    "purpose": "Bonus-awarding layer (A5b_standardized_botanical = +1pt) per scripts/config/scoring_config.json:105 and score_supplements.py:1133-1186. An entry triggers the bonus ONLY when the label/entry proves a measurable marker, branded standardized extract, or quantified constituent standardization. Plain botanical aliases (e.g., 'garlic', 'turmeric root', 'green coffee bean') must NOT live here for bonus purposes — they belong in botanical_ingredients.json for identity-only mapping with no bonus. The runtime enforcement is the enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148), which require percentage detection in label text before granting the bonus; this file's contract describes the editorial discipline for which entries earn that pathway.",
     "bonus_eligibility_contract": {
       "rule": "An entry may stay in standardized_botanicals.json only if it has at least one of the four standardization bases below. If none applies, move the entry (or migrate plain aliases) to botanical_ingredients.json (basic identity, no A5b bonus).",
       "acceptable_standardization_bases": {
         "marker_percent": {
-          "description": "Explicit marker standardization on the label or in entry notes \u2014 'standardized to X%', 'minimum X%', quantified active constituent.",
+          "description": "Explicit marker standardization on the label or in entry notes — 'standardized to X%', 'minimum X%', quantified active constituent.",
           "examples": [
             "95% curcuminoids",
             "minimum 24% flavone glycosides",
@@ -44,15 +44,15 @@
       },
       "do_not_use_unii_alone": "UNII proves IDENTITY, not standardization. A clean UNII match is necessary for an entry to ship safely, but it does NOT by itself make an entry bonus-eligible.",
       "do_not_bulk_move": "Cleanup of legacy entries must proceed in controlled 8-12 entry batches with per-entry shadow-score comparison. See scripts/audits/standardized_botanicals_eligibility_20260522/REPORT.md for prioritized cleanup batches (bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric).",
-      "preserve_plain_aliases_during_migration": "Until the per-entry \u00a78.5/marker-evidence audit lands, plain alias removal is too aggressive \u2014 the enricher's meets_threshold gate already filters non-standardized labels at scoring time. Premature alias removal would strip the bonus from products whose labels DO carry marker evidence but whose ingredient-row string is plain (e.g. 'Green Coffee bean extract' with a separate '50% chlorogenic acids' notes line). Plain identity in botanical_ingredients.json is a fallback home for products that should never match here, not a replacement for runtime gating.",
-      "added_by": "2026-05-22 Codex review + user directive \u2014 established after audit found that <=4% of legacy entries were clearly marker-qualified and >=66% contained \u00a78.5 multi-UNII contamination."
+      "preserve_plain_aliases_during_migration": "Until the per-entry §8.5/marker-evidence audit lands, plain alias removal is too aggressive — the enricher's meets_threshold gate already filters non-standardized labels at scoring time. Premature alias removal would strip the bonus from products whose labels DO carry marker evidence but whose ingredient-row string is plain (e.g. 'Green Coffee bean extract' with a separate '50% chlorogenic acids' notes line). Plain identity in botanical_ingredients.json is a fallback home for products that should never match here, not a replacement for runtime gating.",
+      "added_by": "2026-05-22 Codex review + user directive — established after audit found that <=4% of legacy entries were clearly marker-qualified and >=66% contained §8.5 multi-UNII contamination."
     },
     "per_entry_v6_schema_fields": {
-      "bonus_eligible": "boolean \u2014 true when one of the four standardization bases is satisfied by the entry's documented evidence",
-      "standardization_basis": "enum \u2014 marker_percent | branded_extract | pharmacopeial_marker | extract_ratio_plus_marker | mushroom_fraction | none",
-      "marker_compounds": "string[] \u2014 named bioactive markers (e.g. ['chlorogenic acid', 'caffeine'])",
-      "bonus_rationale": "string \u2014 1-2 sentence explanation citing the standardization evidence",
-      "sources": "string[] \u2014 required when bonus_eligible=true (PMID/DOI/USP monograph/NIH ODS/ABC URL)"
+      "bonus_eligible": "boolean — true when one of the four standardization bases is satisfied by the entry's documented evidence",
+      "standardization_basis": "enum — marker_percent | branded_extract | pharmacopeial_marker | extract_ratio_plus_marker | mushroom_fraction | none",
+      "marker_compounds": "string[] — named bioactive markers (e.g. ['chlorogenic acid', 'caffeine'])",
+      "bonus_rationale": "string — 1-2 sentence explanation citing the standardization evidence",
+      "sources": "string[] — required when bonus_eligible=true (PMID/DOI/USP monograph/NIH ODS/ABC URL)"
     },
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.1",
@@ -73,22 +73,34 @@
       "markers"
     ],
     "categories": {
-      "active_compound": 6,
-      "adaptogen": 9,
-      "algae": 4,
+      "active_compound": 1,
+      "adaptogen": 6,
+      "algae": 2,
+      "algal_oil": 1,
+      "amino_acid": 1,
       "bark": 1,
+      "berry": 1,
       "essential_oil": 2,
-      "fruit": 2,
-      "herb": 132,
-      "herb_root_bark": 8,
-      "leaf": 2,
-      "mushroom": 10,
-      "polyphenol": 1,
-      "root": 2,
-      "seed_fruit": 20,
-      "standardized": 30,
-      "standardized_extract": 3,
-      "vegetable_greens": 6
+      "fatty_acid_amide": 1,
+      "fermentate": 1,
+      "fruit": 8,
+      "herb": 89,
+      "herb_root_bark": 9,
+      "hormone_analog": 1,
+      "leaf": 3,
+      "mineral": 2,
+      "mineral_chelate": 1,
+      "mineral_complex": 1,
+      "mushroom": 9,
+      "nootropic": 1,
+      "polysaccharide": 1,
+      "root": 6,
+      "seed_fruit": 22,
+      "standardized": 4,
+      "structural_protein": 2,
+      "tripeptide": 1,
+      "tuber": 1,
+      "vegetable_greens": 2
     },
     "statistics": {
       "total_aliases": 857,
@@ -176,7 +188,7 @@
       },
       "cui": "C1086056",
       "min_threshold": 10,
-      "threshold_source": "10% beta-glucans \u2014 functional mushroom standard"
+      "threshold_source": "10% beta-glucans — functional mushroom standard"
     },
     {
       "standard_name": "AlphaWave L-Theanine",
@@ -190,7 +202,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "alphawave_l_theanine",
-      "notes": "AlphaWave \u2014 pure L-theanine from fermentation. Standardized to \u226599% L-theanine (HPLC).",
+      "notes": "AlphaWave — pure L-theanine from fermentation. Standardized to ≥99% L-theanine (HPLC).",
       "category": "amino_acid",
       "external_ids": {},
       "data_quality": "complete",
@@ -199,7 +211,7 @@
         "iqm_parent_id": "l_theanine"
       },
       "bonus_class": "isolated_compound",
-      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound — NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Amla",
@@ -331,7 +343,7 @@
       "external_ids": {},
       "cui": "C1215581",
       "min_threshold": 15,
-      "threshold_source": "15% anthocyanins \u2014 standard chokeberry extract"
+      "threshold_source": "15% anthocyanins — standard chokeberry extract"
     },
     {
       "standard_name": "Artichoke",
@@ -425,14 +437,14 @@
         "microalgal astaxanthin"
       ],
       "markers": [
-        "astaxanthin \u2265 3%",
+        "astaxanthin ≥ 3%",
         "total carotenoids"
       ],
       "min_threshold": 3,
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "astaxanthin_haematococcus_pluvialis",
-      "notes": "Botanical ingredient standardized for astaxanthin \u2265 3%, total carotenoids. Commonly used in dietary supplements. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "Botanical ingredient standardized for astaxanthin ≥ 3%, total carotenoids. Commonly used in dietary supplements. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
       "external_ids": {
         "unii": "31T0FF0472",
@@ -459,14 +471,14 @@
         "carotenoid esters",
         "haematococcus-derived astaxanthin"
       ],
-      "bonus_rationale": "Astaxanthin sourced from Haematococcus pluvialis is the commercial natural astaxanthin pathway, with branded preparations from Cyanotech (BioAstin\u00ae), AstaReal AB (AstaReal\u00ae), and Algatech (AstaPure / Zanthin variants). Standardized to defined astaxanthin percentage (typically 1-5% in commercial extracts; 10%+ in concentrates). Clinical literature on oxidative-stress, skin, and exercise endpoints. branded_extract basis: bonus is granted when the label names BioAstin / AstaReal / AstaPure / Zanthin brand variants. Companion plain identity in botanical_ingredients.astaxanthin (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Astaxanthin sourced from Haematococcus pluvialis is the commercial natural astaxanthin pathway, with branded preparations from Cyanotech (BioAstin®), AstaReal AB (AstaReal®), and Algatech (AstaPure / Zanthin variants). Standardized to defined astaxanthin percentage (typically 1-5% in commercial extracts; 10%+ in concentrates). Clinical literature on oxidative-stress, skin, and exercise endpoints. branded_extract basis: bonus is granted when the label names BioAstin / AstaReal / AstaPure / Zanthin brand variants. Companion plain identity in botanical_ingredients.astaxanthin (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/21962237/",
         "https://www.nccih.nih.gov/health/astaxanthin",
         "https://www.cyanotech.com/bioastin/"
       ],
       "bonus_class": "isolated_compound",
-      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound — NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "AstaZine",
@@ -492,7 +504,7 @@
         "astaxanthin",
         "carotenoid esters"
       ],
-      "bonus_rationale": "AstaZine\u00ae (BGG / Algatech) is a clinically-studied Haematococcus pluvialis-derived natural astaxanthin extract standardized to 5%+ astaxanthin. Companion to standardized_botanicals.astaxanthin_haematococcus_pluvialis which owns the broader algal astaxanthin pathway. branded_extract basis: bonus is granted when the label names the AstaZine\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "AstaZine® (BGG / Algatech) is a clinically-studied Haematococcus pluvialis-derived natural astaxanthin extract standardized to 5%+ astaxanthin. Companion to standardized_botanicals.astaxanthin_haematococcus_pluvialis which owns the broader algal astaxanthin pathway. branded_extract basis: bonus is granted when the label names the AstaZine® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/21962237/",
         "https://www.bggworld.com/astazine/"
@@ -539,7 +551,7 @@
       "external_ids": {},
       "cui": "C1095897",
       "min_threshold": 0.3,
-      "threshold_source": "0.3% astragalosides \u2014 Chinese Pharmacopoeia"
+      "threshold_source": "0.3% astragalosides — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Bacopa",
@@ -743,7 +755,7 @@
       },
       "cui": "C0005117",
       "bonus_class": "isolated_compound",
-      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound — NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Beta-Glucans",
@@ -773,9 +785,9 @@
       },
       "cui": "C1134651",
       "min_threshold": 20,
-      "threshold_source": "20% beta-glucans \u2014 minimum for functional claim",
+      "threshold_source": "20% beta-glucans — minimum for functional claim",
       "bonus_class": "isolated_compound",
-      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound — NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Bil-Max",
@@ -801,7 +813,7 @@
         "anthocyanidins",
         "polyphenols"
       ],
-      "bonus_rationale": "Bil-Max\u00ae (Sabinsa) is a clinically-studied bilberry (Vaccinium myrtillus) extract standardized to 25%+ anthocyanins (high-grade anthocyanidins). Companion to standardized_botanicals.bilberry (v6-annotated in SB-5) which already owns the bilberry pathway. branded_extract basis: bonus is granted when the label names the Bil-Max\u00ae brand specifically. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Bil-Max® (Sabinsa) is a clinically-studied bilberry (Vaccinium myrtillus) extract standardized to 25%+ anthocyanins (high-grade anthocyanidins). Companion to standardized_botanicals.bilberry (v6-annotated in SB-5) which already owns the bilberry pathway. branded_extract basis: bonus is granted when the label names the Bil-Max® brand specifically. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/15642341/",
         "https://www.sabinsa.com/"
@@ -834,9 +846,9 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
-      "bonus_rationale": "Bilberry (Vaccinium myrtillus, UNII 9P2U39H18W) is bonus-eligible when the product label declares a measurable anthocyanin or anthocyanoside % (typically 25-36% \u2014 'Mirtoselect' from Indena is the original 36%-anthocyanin standardized extract used in most European clinical trials). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Bilberry' identity matches but defers to meets_threshold. Preparation variants (UNIIs R911H793SU 'bilberry extract', V9S692O326 'bilberry fruit extract', KK0KHX972K 'european bilberry') are FDA-registered preparation variants of the SAME species (V. myrtillus, UNII 9P2U39H18W) \u2014 not cross-species \u00a78.5 misplacement; retained for runtime identity matching.",
+      "bonus_rationale": "Bilberry (Vaccinium myrtillus, UNII 9P2U39H18W) is bonus-eligible when the product label declares a measurable anthocyanin or anthocyanoside % (typically 25-36% — 'Mirtoselect' from Indena is the original 36%-anthocyanin standardized extract used in most European clinical trials). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Bilberry' identity matches but defers to meets_threshold. Preparation variants (UNIIs R911H793SU 'bilberry extract', V9S692O326 'bilberry fruit extract', KK0KHX972K 'european bilberry') are FDA-registered preparation variants of the SAME species (V. myrtillus, UNII 9P2U39H18W) — not cross-species §8.5 misplacement; retained for runtime identity matching.",
       "sources": [
-        "NIH ODS \u2014 Bilberry: https://ods.od.nih.gov/factsheets/list-all/",
+        "NIH ODS — Bilberry: https://ods.od.nih.gov/factsheets/list-all/",
         "NCCIH Bilberry overview: https://www.nccih.nih.gov/health/bilberry",
         "Indena Mirtoselect monograph (Vaccinium myrtillus standardized to 36% anthocyanins per Indena HPLC method)",
         "Chu et al. 2011 systematic review on Mirtoselect / anthocyanin-standardized bilberry (PMID 21660670)"
@@ -845,7 +857,7 @@
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "bilberry",
-      "notes": "Bilberry (Vaccinium myrtillus, Ericaceae) fruit. UNII 9P2U39H18W. Eye-health and microcirculatory botanical standardized for anthocyanins/anthocyanosides (typical 25%; Mirtoselect 36%). SB-5 \u00a78.5 / v6 annotation 2026-05-22: refined standard_name to include species; added v6 contract fields (bonus_eligible, standardization_basis, marker_compounds, bonus_rationale, sources); added marker-explicit alias phrasings (Mirtoselect branded + 25%/36% standardized) for direct matching of labels carrying the standardization claim. The audit's reported '4 distinct UNIIs in aliases' resolved to preparation variants of V. myrtillus (not cross-species misplacement) per the SB-4 same-species-different-UNII pattern; preparation-variant aliases retained.",
+      "notes": "Bilberry (Vaccinium myrtillus, Ericaceae) fruit. UNII 9P2U39H18W. Eye-health and microcirculatory botanical standardized for anthocyanins/anthocyanosides (typical 25%; Mirtoselect 36%). SB-5 §8.5 / v6 annotation 2026-05-22: refined standard_name to include species; added v6 contract fields (bonus_eligible, standardization_basis, marker_compounds, bonus_rationale, sources); added marker-explicit alias phrasings (Mirtoselect branded + 25%/36% standardized) for direct matching of labels carrying the standardization claim. The audit's reported '4 distinct UNIIs in aliases' resolved to preparation variants of V. myrtillus (not cross-species misplacement) per the SB-4 same-species-different-UNII pattern; preparation-variant aliases retained.",
       "category": "seed_fruit",
       "external_ids": {
         "unii": "9P2U39H18W"
@@ -918,7 +930,7 @@
       },
       "cui": "C0771400",
       "min_threshold": 25,
-      "threshold_source": "25% anthocyanins \u2014 concentrated seed/fruit extract"
+      "threshold_source": "25% anthocyanins — concentrated seed/fruit extract"
     },
     {
       "standard_name": "Black Pepper Extract",
@@ -936,7 +948,7 @@
       "priority": "high",
       "last_updated": "2025-11-17",
       "id": "black_pepper_extract",
-      "notes": "Bioavailability enhancer standardized for 95% piperine (BioPerine\u00ae). Added to turmeric and other supplements to enhance absorption.",
+      "notes": "Bioavailability enhancer standardized for 95% piperine (BioPerine®). Added to turmeric and other supplements to enhance absorption.",
       "category": "seed_fruit",
       "external_ids": {
         "unii": "KM66971LVF"
@@ -1031,7 +1043,7 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "bladderwrack",
-      "notes": "Bladderwrack (Fucus vesiculosus). UNII 535G2ABX9M. Standardization markers: fucoidan (sulfated polysaccharide) and iodine (natural source, varies 100-1000 mcg/g dry weight). SB-3a \u00a77.5/\u00a78.5 cleanup 2026-05-22: alias family migrated here from IQM brown_kelp ('Bladder Wrack', 'Bladderwrack', 'Fucus vesiculosus', 'Fucus vesiculosus extract', 'bladder wrack extract', 'bladderwrack extract'). 'Bladderwrack Whole Plant Extract' added to cover Ora pid=259887 (Phase 1 Item 3 \u2014 that label was previously misrouting to brown_kelp generic-kelp pathway). Bonus pathway: marker_percent only when the label declares the standardization; plain 'Bladderwrack' identity matches but defers to meets_threshold gate.",
+      "notes": "Bladderwrack (Fucus vesiculosus). UNII 535G2ABX9M. Standardization markers: fucoidan (sulfated polysaccharide) and iodine (natural source, varies 100-1000 mcg/g dry weight). SB-3a §7.5/§8.5 cleanup 2026-05-22: alias family migrated here from IQM brown_kelp ('Bladder Wrack', 'Bladderwrack', 'Fucus vesiculosus', 'Fucus vesiculosus extract', 'bladder wrack extract', 'bladderwrack extract'). 'Bladderwrack Whole Plant Extract' added to cover Ora pid=259887 (Phase 1 Item 3 — that label was previously misrouting to brown_kelp generic-kelp pathway). Bonus pathway: marker_percent only when the label declares the standardization; plain 'Bladderwrack' identity matches but defers to meets_threshold gate.",
       "category": "herb",
       "external_ids": {
         "unii": "535G2ABX9M"
@@ -1050,7 +1062,7 @@
       },
       "cui": "C1083174",
       "min_threshold": 0.03,
-      "threshold_source": "0.03% iodine content \u2014 typical standardization"
+      "threshold_source": "0.03% iodine content — typical standardization"
     },
     {
       "standard_name": "Blue-Max",
@@ -1076,7 +1088,7 @@
         "polyphenols",
         "blueberry-specific anthocyanidins"
       ],
-      "bonus_rationale": "Blue-Max\u00ae (Sabinsa) is a clinically-studied blueberry (Vaccinium corymbosum) extract standardized to 10%+ anthocyanin content. branded_extract basis: bonus is granted when the label names the Blue-Max\u00ae brand specifically. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Blue-Max® (Sabinsa) is a clinically-studied blueberry (Vaccinium corymbosum) extract standardized to 10%+ anthocyanin content. branded_extract basis: bonus is granted when the label names the Blue-Max® brand specifically. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/22376060/",
         "https://www.sabinsa.com/"
@@ -1137,7 +1149,7 @@
         "boswellia serrata extract standardized to 70% boswellic acids",
         "boswellia extract standardized to boswellic acids",
         "AKBA standardized boswellia extract",
-        "Apr\u00e8sFlex"
+        "AprèsFlex"
       ],
       "markers": [
         "boswellic acids",
@@ -1151,18 +1163,18 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
-      "bonus_rationale": "Boswellia serrata (UNII 4PW41QCO2M) is bonus-eligible when the product label declares a measurable boswellic-acid % (typically 65-70% total boswellic acids) OR a named branded standardized extract with documented marker profile: 5-Loxin / 5-Loxin Advanced (Sabinsa, \u226530% AKBA), Boswellin (Sabinsa, 65% boswellic acids), Bosclear, Apr\u00e8sFlex (Laila Nutraceuticals, \u226520% AKBA). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Boswellia' identity without marker evidence still matches this entry but does NOT trigger A5b unless meets_threshold passes. Distinct species from Boswellia carterii (Somali frankincense, UNII R9XLF1R1WM) \u2014 that identity lives in botanical_ingredients.boswellia_carterii.",
+      "bonus_rationale": "Boswellia serrata (UNII 4PW41QCO2M) is bonus-eligible when the product label declares a measurable boswellic-acid % (typically 65-70% total boswellic acids) OR a named branded standardized extract with documented marker profile: 5-Loxin / 5-Loxin Advanced (Sabinsa, ≥30% AKBA), Boswellin (Sabinsa, 65% boswellic acids), Bosclear, AprèsFlex (Laila Nutraceuticals, ≥20% AKBA). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Boswellia' identity without marker evidence still matches this entry but does NOT trigger A5b unless meets_threshold passes. Distinct species from Boswellia carterii (Somali frankincense, UNII R9XLF1R1WM) — that identity lives in botanical_ingredients.boswellia_carterii.",
       "sources": [
         "NCCIH Boswellia overview: https://www.nccih.nih.gov/health/boswellia",
         "Abdel-Tawab et al. 2011 systematic review on boswellic acid pharmacology (PMID 21679876)",
         "Sabinsa 5-Loxin / Boswellin product monographs (branded standardized extracts)",
-        "Sengupta et al. 2008 osteoarthritis RCT on 5-Loxin (PMID 18667066) \u2014 AKBA-standardized B. serrata"
+        "Sengupta et al. 2008 osteoarthritis RCT on 5-Loxin (PMID 18667066) — AKBA-standardized B. serrata"
       ],
       "min_threshold": 65,
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "boswellia",
-      "notes": "Boswellia serrata (Burseraceae) gum resin. UNII 4PW41QCO2M. Anti-inflammatory herb. Standardization markers: total boswellic acids (typically 65-70%) plus AKBA (3-acetyl-11-keto-beta-boswellic acid) as the most active sub-marker (5-30% in branded extracts). SB-4 \u00a78.5 cleanup 2026-05-22: refined standard_name from 'Boswellia' to species-precise 'Boswellia serrata'. Removed 'frankincense extract' alias (UNII R9XLF1R1WM = B. carterii, a different species) \u2014 that identity now lives in botanical_ingredients.boswellia_carterii. Added v6 contract fields per the bonus-eligibility governance landed in eff29b3d on main; added marker-explicit alias phrasings for direct matching of labels carrying the standardization claim. Branded extracts (5-Loxin, Joint Shield, Boswellin, Bosclear, Apr\u00e8sFlex) retained \u2014 their formulation UNIIs differ from the species UNII but the species identity is B. serrata with documented marker profiles.",
+      "notes": "Boswellia serrata (Burseraceae) gum resin. UNII 4PW41QCO2M. Anti-inflammatory herb. Standardization markers: total boswellic acids (typically 65-70%) plus AKBA (3-acetyl-11-keto-beta-boswellic acid) as the most active sub-marker (5-30% in branded extracts). SB-4 §8.5 cleanup 2026-05-22: refined standard_name from 'Boswellia' to species-precise 'Boswellia serrata'. Removed 'frankincense extract' alias (UNII R9XLF1R1WM = B. carterii, a different species) — that identity now lives in botanical_ingredients.boswellia_carterii. Added v6 contract fields per the bonus-eligibility governance landed in eff29b3d on main; added marker-explicit alias phrasings for direct matching of labels carrying the standardization claim. Branded extracts (5-Loxin, Joint Shield, Boswellin, Bosclear, AprèsFlex) retained — their formulation UNIIs differ from the species UNII but the species identity is B. serrata with documented marker profiles.",
       "category": "herb",
       "external_ids": {
         "unii": "4PW41QCO2M"
@@ -1227,12 +1239,12 @@
       },
       "cui": "C0006217",
       "min_threshold": 2400,
-      "threshold_source": "2400 GDU/g \u2014 activity unit threshold",
+      "threshold_source": "2400 GDU/g — activity unit threshold",
       "attributes": {
         "iqm_parent_id": "bromelain"
       },
       "bonus_class": "enzyme_activity",
-      "_bonus_class_note": "v3.7.0: explicitly classed enzyme_activity \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
+      "_bonus_class_note": "v3.7.0: explicitly classed enzyme_activity — NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Burdock Root",
@@ -1266,7 +1278,7 @@
       },
       "cui": "C0873127",
       "min_threshold": 1,
-      "threshold_source": "1% arctiin \u2014 standard root extract"
+      "threshold_source": "1% arctiin — standard root extract"
     },
     {
       "standard_name": "Butcher's Broom",
@@ -1287,7 +1299,7 @@
       "external_ids": {},
       "cui": "C1021282",
       "min_threshold": 10,
-      "threshold_source": "10% ruscogenin \u2014 European Pharmacopoeia standard"
+      "threshold_source": "10% ruscogenin — European Pharmacopoeia standard"
     },
     {
       "standard_name": "Butterbur",
@@ -1349,7 +1361,7 @@
       },
       "rxcui": "285223",
       "gsrs": {
-        "substance_name": "CAT\u2019S CLAW",
+        "substance_name": "CAT’S CLAW",
         "substance_class": "structurallyDiverse",
         "cfr_sections": [],
         "dsld_count": 258,
@@ -1397,7 +1409,7 @@
       },
       "cui": "C1365522",
       "min_threshold": 1,
-      "threshold_source": "1% 3-n-butylphthalide \u2014 celery seed extract standard"
+      "threshold_source": "1% 3-n-butylphthalide — celery seed extract standard"
     },
     {
       "standard_name": "Chaga",
@@ -1509,7 +1521,7 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "chromax",
-      "notes": "Chromax \u2014 chromium picolinate by Nutrition21. Dosed by elemental chromium (typically 200 mcg/dose). [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "Chromax — chromium picolinate by Nutrition21. Dosed by elemental chromium (typically 200 mcg/dose). [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "mineral_chelate",
       "external_ids": {
         "cas": "14639-25-9",
@@ -1527,13 +1539,13 @@
         "chromium picolinate (12.43% elemental Cr)",
         "chromium"
       ],
-      "bonus_rationale": "Chromax\u00ae (Nutrition 21) is the original clinically-studied chromium picolinate preparation (12.43% elemental chromium by weight). Extensive clinical literature on glycemic control, insulin sensitivity, and lean-body-mass support. branded_extract basis: bonus is granted when the label names the Chromax\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Chromax® (Nutrition 21) is the original clinically-studied chromium picolinate preparation (12.43% elemental chromium by weight). Extensive clinical literature on glycemic control, insulin sensitivity, and lean-body-mass support. branded_extract basis: bonus is granted when the label names the Chromax® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/16823477/",
         "https://www.nccih.nih.gov/health/chromium"
       ],
       "bonus_class": "branded_form",
-      "_bonus_class_note": "v3.7.0: explicitly classed branded_form \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
+      "_bonus_class_note": "v3.7.0: explicitly classed branded_form — NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Cinnamon Bark Essential Oil",
@@ -1571,7 +1583,7 @@
       },
       "cui": "C0301249",
       "min_threshold": 55,
-      "threshold_source": "55% cinnamaldehyde \u2014 USP/Ph.Eur standard"
+      "threshold_source": "55% cinnamaldehyde — USP/Ph.Eur standard"
     },
     {
       "standard_name": "Cissus Quadrangularis",
@@ -1604,7 +1616,7 @@
       },
       "cui": "C1078516",
       "min_threshold": 2.5,
-      "threshold_source": "2.5% ketosteroids \u2014 3-Keto-beta-sitosterol standard"
+      "threshold_source": "2.5% ketosteroids — 3-Keto-beta-sitosterol standard"
     },
     {
       "standard_name": "Citrus Bergamot Extract",
@@ -1657,7 +1669,7 @@
       "external_ids": {},
       "cui": "C3651730",
       "min_threshold": 10,
-      "threshold_source": "10% flavanols \u2014 standardized cocoa extract"
+      "threshold_source": "10% flavanols — standardized cocoa extract"
     },
     {
       "standard_name": "CoffeeBerry (whole coffee fruit extract)",
@@ -1680,21 +1692,21 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "coffeeberry",
-      "notes": "CoffeeBerry\u00ae is the Futureceuticals-branded standardized extract of whole coffee fruit (Coffea arabica). Clinical literature (NeuroFactor\u00ae, CognatiQ\u00ae) reports BDNF elevation and cognitive endpoints from the whole-fruit chlorogenic-acid pathway. UNII HOX6BEK27Q = COFFEA ARABICA FRUIT (the source identity; verified via scripts/data/fda_unii_cache.json). RC-1 2026-05-22: external_ids.unii set + v6 contract annotation. Identity (plain coffee fruit) lives in botanical_ingredients.coffee_fruit; this bonus entry fires only when the label evidences branded CoffeeBerry\u00ae/NeuroFactor\u00ae/CognatiQ\u00ae or quantified chlorogenic-acid %.",
+      "notes": "CoffeeBerry® is the Futureceuticals-branded standardized extract of whole coffee fruit (Coffea arabica). Clinical literature (NeuroFactor®, CognatiQ®) reports BDNF elevation and cognitive endpoints from the whole-fruit chlorogenic-acid pathway. UNII HOX6BEK27Q = COFFEA ARABICA FRUIT (the source identity; verified via scripts/data/fda_unii_cache.json). RC-1 2026-05-22: external_ids.unii set + v6 contract annotation. Identity (plain coffee fruit) lives in botanical_ingredients.coffee_fruit; this bonus entry fires only when the label evidences branded CoffeeBerry®/NeuroFactor®/CognatiQ® or quantified chlorogenic-acid %.",
       "category": "seed_fruit",
       "external_ids": {
         "unii": "HOX6BEK27Q"
       },
       "cui": "C1138610",
       "min_threshold": 45,
-      "threshold_source": "45% chlorogenic acids \u2014 standard coffee fruit extract",
+      "threshold_source": "45% chlorogenic acids — standard coffee fruit extract",
       "bonus_eligible": true,
       "standardization_basis": "branded_extract",
       "marker_compounds": [
         "chlorogenic acids",
         "polyphenols (catechins, procyanidins)"
       ],
-      "bonus_rationale": "CoffeeBerry\u00ae (Futureceuticals) is a clinically-studied branded standardized whole-coffee-fruit extract; NeuroFactor\u00ae and CognatiQ\u00ae are the cognitive-endpoint product names within the CoffeeBerry\u00ae family. Clinical literature reports BDNF elevation and cognitive endpoints tied to standardized chlorogenic-acid + polyphenol content of the whole fruit (NOT the bean). The branded_extract basis applies: bonus is granted when the label names the verified brand (CoffeeBerry/NeuroFactor/CognatiQ) OR proves measurable chlorogenic-acid percentage (typically 45%+). The enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148) enforce label-text brand/percentage detection at runtime. Plain coffee-fruit identity (unstandardized) lives in botanical_ingredients.coffee_fruit (no bonus).",
+      "bonus_rationale": "CoffeeBerry® (Futureceuticals) is a clinically-studied branded standardized whole-coffee-fruit extract; NeuroFactor® and CognatiQ® are the cognitive-endpoint product names within the CoffeeBerry® family. Clinical literature reports BDNF elevation and cognitive endpoints tied to standardized chlorogenic-acid + polyphenol content of the whole fruit (NOT the bean). The branded_extract basis applies: bonus is granted when the label names the verified brand (CoffeeBerry/NeuroFactor/CognatiQ) OR proves measurable chlorogenic-acid percentage (typically 45%+). The enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148) enforce label-text brand/percentage detection at runtime. Plain coffee-fruit identity (unstandardized) lives in botanical_ingredients.coffee_fruit (no bonus).",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/24013626/",
         "https://pubmed.ncbi.nlm.nih.gov/23695488/",
@@ -1718,7 +1730,7 @@
       ],
       "category": "seed_fruit",
       "priority": "medium",
-      "notes": "Cognigrape (Bionap branded red-grape, Vitis vinifera) anthocyanin-rich standardized extract clinically studied for cognitive support in older adults (Calapai 2017 PMID 28552883). UNII RDS2V6DVY5 (grape seed extract preparation registry \u2014 matches Cognigrape's grape-seed-pomace chemistry). SB-9 cleanup 2026-05-22: fixed copy-paste typo ('gognigrape' removed; canonical 'cognigrape' + case variants preserved); populated external_ids.unii. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "Cognigrape (Bionap branded red-grape, Vitis vinifera) anthocyanin-rich standardized extract clinically studied for cognitive support in older adults (Calapai 2017 PMID 28552883). UNII RDS2V6DVY5 (grape seed extract preparation registry — matches Cognigrape's grape-seed-pomace chemistry). SB-9 cleanup 2026-05-22: fixed copy-paste typo ('gognigrape' removed; canonical 'cognigrape' + case variants preserved); populated external_ids.unii. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "RDS2V6DVY5"
@@ -1731,7 +1743,7 @@
         "polyphenols",
         "flavonoids"
       ],
-      "bonus_rationale": "Cognigrape\u00ae (Bionap) is an anthocyanin-rich red-grape extract (Vitis vinifera fruit/seed/skin) standardized to a defined polyphenol profile. Clinical literature on cognitive performance endpoints in healthy adults. branded_extract basis: bonus is granted when the label names the Cognigrape\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Cognigrape® (Bionap) is an anthocyanin-rich red-grape extract (Vitis vinifera fruit/seed/skin) standardized to a defined polyphenol profile. Clinical literature on cognitive performance endpoints in healthy adults. branded_extract basis: bonus is granted when the label names the Cognigrape® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/28391595/",
         "https://www.bionap.com/portfolio/cognigrape/"
@@ -1749,7 +1761,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "cognizin_citicoline",
-      "notes": "Cognizin \u2014 fermentation-derived citicoline by Kyowa Hakko. \u226599% purity by HPLC.",
+      "notes": "Cognizin — fermentation-derived citicoline by Kyowa Hakko. ≥99% purity by HPLC.",
       "category": "nootropic",
       "external_ids": {},
       "data_quality": "complete",
@@ -1758,7 +1770,7 @@
         "iqm_parent_id": "choline"
       },
       "bonus_class": "isolated_compound",
-      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound — NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Coleus Forskohlii",
@@ -1831,7 +1843,7 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "mushroom_fraction",
-      "bonus_rationale": "Cordyceps sinensis (Ophiocordyceps sinensis, UNII 8Q1GYP08KU) is bonus-eligible when the product label declares polysaccharides % (typical 40%+ \u2014 the historical Chinese pharmacopeial standard), beta-glucans %, adenosine %, or names the CS-4 fermented-mycelium variant (Paecilomyces hepiali Cs-4, UNII 821RF3P03C \u2014 used in most clinical trials due to wild C. sinensis being unsustainable). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Cordyceps' identity matches but defers to meets_threshold. Bonus pathway is species-specific to C. sinensis \u2014 Cordyceps militaris (UNII J617U5X7NN) is a different species with a cordycepin-focused marker profile and lives in standardized_botanicals.cordyceps_militaris.",
+      "bonus_rationale": "Cordyceps sinensis (Ophiocordyceps sinensis, UNII 8Q1GYP08KU) is bonus-eligible when the product label declares polysaccharides % (typical 40%+ — the historical Chinese pharmacopeial standard), beta-glucans %, adenosine %, or names the CS-4 fermented-mycelium variant (Paecilomyces hepiali Cs-4, UNII 821RF3P03C — used in most clinical trials due to wild C. sinensis being unsustainable). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Cordyceps' identity matches but defers to meets_threshold. Bonus pathway is species-specific to C. sinensis — Cordyceps militaris (UNII J617U5X7NN) is a different species with a cordycepin-focused marker profile and lives in standardized_botanicals.cordyceps_militaris.",
       "sources": [
         "NCCIH Cordyceps overview: https://www.nccih.nih.gov/health/cordyceps",
         "Holliday & Cleaver 2008 review on Cordyceps sinensis / CS-4 pharmacology (PMID 18197785)",
@@ -1841,7 +1853,7 @@
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "cordyceps",
-      "notes": "Cordyceps sinensis / Ophiocordyceps sinensis (Ophiocordycipitaceae). UNII 8Q1GYP08KU. Performance / adaptogenic mushroom. Standardization markers: polysaccharides (40%+ Chinese-pharmacopeial standard) plus adenosine. Note that cordycepin (3'-deoxyadenosine, UNII GZ8VF4M2J8) is LOW in C. sinensis \u2014 high-cordycepin products are typically C. militaris. SB-10 \u00a78.5 species split 2026-05-22: closed the missing-UNII gap (set external_ids.unii=8Q1GYP08KU); refined standard_name to 'Cordyceps sinensis'; removed 'cordyceps militaris' alias (different species, UNII J617U5X7NN, now lives in companion standardized_botanicals.cordyceps_militaris entry); added v6 contract fields + marker-explicit alias phrasings + CS-4 fermented-mycelium alias variants.",
+      "notes": "Cordyceps sinensis / Ophiocordyceps sinensis (Ophiocordycipitaceae). UNII 8Q1GYP08KU. Performance / adaptogenic mushroom. Standardization markers: polysaccharides (40%+ Chinese-pharmacopeial standard) plus adenosine. Note that cordycepin (3'-deoxyadenosine, UNII GZ8VF4M2J8) is LOW in C. sinensis — high-cordycepin products are typically C. militaris. SB-10 §8.5 species split 2026-05-22: closed the missing-UNII gap (set external_ids.unii=8Q1GYP08KU); refined standard_name to 'Cordyceps sinensis'; removed 'cordyceps militaris' alias (different species, UNII J617U5X7NN, now lives in companion standardized_botanicals.cordyceps_militaris entry); added v6 contract fields + marker-explicit alias phrasings + CS-4 fermented-mycelium alias variants.",
       "category": "mushroom",
       "min_threshold": 40,
       "external_ids": {
@@ -1876,7 +1888,7 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
-      "bonus_rationale": "Cordyceps militaris (UNII J617U5X7NN) is bonus-eligible when the product label declares a measurable cordycepin % (typical 0.1-0.3%) \u2014 cordycepin is C. militaris's signature bioactive and the source of most ergogenic-supplement clinical interest. Beta-glucans % is the secondary marker pathway. Distinct species from Cordyceps sinensis (UNII 8Q1GYP08KU), which is polysaccharide-focused; C. militaris is commercially cultivable and contains higher cordycepin than wild C. sinensis. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate. Plain 'Cordyceps militaris' identity matches but defers to meets_threshold.",
+      "bonus_rationale": "Cordyceps militaris (UNII J617U5X7NN) is bonus-eligible when the product label declares a measurable cordycepin % (typical 0.1-0.3%) — cordycepin is C. militaris's signature bioactive and the source of most ergogenic-supplement clinical interest. Beta-glucans % is the secondary marker pathway. Distinct species from Cordyceps sinensis (UNII 8Q1GYP08KU), which is polysaccharide-focused; C. militaris is commercially cultivable and contains higher cordycepin than wild C. sinensis. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate. Plain 'Cordyceps militaris' identity matches but defers to meets_threshold.",
       "sources": [
         "Hirsch et al. 2017 RCT on Cordyceps militaris fruiting body for high-intensity exercise (PMID 28012484)",
         "Tuli et al. 2014 review on cordycepin pharmacology and bioavailability (PMID 23538328)",
@@ -1885,7 +1897,7 @@
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "cordyceps_militaris",
-      "notes": "Cordyceps militaris (Cordycipitaceae). UNII J617U5X7NN. Commercially cultivable performance mushroom with high cordycepin content compared to wild C. sinensis. Created 2026-05-22 via SB-10 \u00a78.5 cleanup to host the 'cordyceps militaris' alias that previously co-existed with C. sinensis under one entry. Distinct standardization basis (cordycepin %) vs companion standardized_botanicals.cordyceps entry (polysaccharides %, beta-glucans).",
+      "notes": "Cordyceps militaris (Cordycipitaceae). UNII J617U5X7NN. Commercially cultivable performance mushroom with high cordycepin content compared to wild C. sinensis. Created 2026-05-22 via SB-10 §8.5 cleanup to host the 'cordyceps militaris' alias that previously co-existed with C. sinensis under one entry. Distinct standardization basis (cordycepin %) vs companion standardized_botanicals.cordyceps entry (polysaccharides %, beta-glucans).",
       "category": "mushroom",
       "min_threshold": 0.1,
       "external_ids": {
@@ -1916,7 +1928,7 @@
         "proanthocyanidins (PACs)",
         "anthocyanins"
       ],
-      "bonus_rationale": "Cran-Max\u00ae (PharmaChem Innovations) is a clinically-studied whole-cranberry fruit extract with the entire phytochemical complement (PACs, anthocyanins, phenolics). Used in UTI-prevention RCTs (Bio-Shield\u2122 delivery). branded_extract basis: bonus is granted when the label names the Cran-Max\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Cran-Max® (PharmaChem Innovations) is a clinically-studied whole-cranberry fruit extract with the entire phytochemical complement (PACs, anthocyanins, phenolics). Used in UTI-prevention RCTs (Bio-Shield™ delivery). branded_extract basis: bonus is granted when the label names the Cran-Max® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://www.nccih.nih.gov/health/cranberry",
         "https://pubmed.ncbi.nlm.nih.gov/12010289/"
@@ -1937,7 +1949,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "cranrx",
-      "notes": "CranRx \u2014 cranberry (Vaccinium macrocarpon) extract. Standardized to 36 mg PAC/dose by BL-DMAC method.",
+      "notes": "CranRx — cranberry (Vaccinium macrocarpon) extract. Standardized to 36 mg PAC/dose by BL-DMAC method.",
       "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -1976,7 +1988,7 @@
       "standardization": "95% curcuminoids",
       "category": "root",
       "last_updated": "2026-05-22",
-      "notes": "Curcumin marker compound (UNII IT942ZTH98, verified). Anti-inflammatory standardized to 95% curcuminoids. C3 Complex (Sabinsa), BCM-95 Bio-Curcumin (Arjuna Natural), Meriva (Indena phytosome), Longvida, Theracurmin are bonus-eligible branded standardized extracts. Plain curcuminoid powder aliases (curcumin powder, curcumin extract) safe under runtime meets_threshold gate (score_supplements.py:1148) \u2014 bonus fires only when label proves measurable curcuminoid percentage.",
+      "notes": "Curcumin marker compound (UNII IT942ZTH98, verified). Anti-inflammatory standardized to 95% curcuminoids. C3 Complex (Sabinsa), BCM-95 Bio-Curcumin (Arjuna Natural), Meriva (Indena phytosome), Longvida, Theracurmin are bonus-eligible branded standardized extracts. Plain curcuminoid powder aliases (curcumin powder, curcumin extract) safe under runtime meets_threshold gate (score_supplements.py:1148) — bonus fires only when label proves measurable curcuminoid percentage.",
       "external_ids": {
         "unii": "IT942ZTH98",
         "cas": "458-37-7",
@@ -2056,7 +2068,7 @@
       },
       "cui": "C0010467",
       "bonus_class": "botanical_standardization",
-      "_bonus_class_note": "v3.7.0: 95% curcuminoids = the standardized Curcuma longa (turmeric) extract standard (Meriva/BCM-95/Longvida class) \u2014 kept botanical. A synthetic isolated curcumin would be isolated_compound, but this entry represents the extract."
+      "_bonus_class_note": "v3.7.0: 95% curcuminoids = the standardized Curcuma longa (turmeric) extract standard (Meriva/BCM-95/Longvida class) — kept botanical. A synthetic isolated curcumin would be isolated_compound, but this entry represents the extract."
     },
     {
       "standard_name": "Dandelion",
@@ -2090,7 +2102,7 @@
       },
       "cui": "C0440015",
       "min_threshold": 2,
-      "threshold_source": "2% sesquiterpene lactones \u2014 standard root extract",
+      "threshold_source": "2% sesquiterpene lactones — standard root extract",
       "_category_fix": "v3.7.0: corrected from mushroom (data error); Taraxacum officinale is an herb/root."
     },
     {
@@ -2195,7 +2207,7 @@
       "external_ids": {},
       "cui": "C0752270",
       "min_threshold": 4,
-      "threshold_source": "4% phenolic compounds \u2014 aligns with species-level entries",
+      "threshold_source": "4% phenolic compounds — aligns with species-level entries",
       "attributes": {
         "iqm_parent_id": "echinacea"
       }
@@ -2303,7 +2315,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "enovita",
-      "notes": "Enovita \u2014 grape seed extract (Vitis vinifera). Standardized to \u226595% OPCs.",
+      "notes": "Enovita — grape seed extract (Vitis vinifera). Standardized to ≥95% OPCs.",
       "category": "seed_fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -2321,7 +2333,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "enxtra",
-      "notes": "EnXtra \u2014 Alpinia galanga rhizome extract by Laila Nutraceuticals. Standardized to ACA profile (exact threshold proprietary).",
+      "notes": "EnXtra — Alpinia galanga rhizome extract by Laila Nutraceuticals. Standardized to ACA profile (exact threshold proprietary).",
       "category": "root",
       "external_ids": {},
       "data_quality": "complete",
@@ -2341,7 +2353,7 @@
       "priority": "medium",
       "last_updated": "2026-09-04",
       "id": "epicor",
-      "notes": "EpiCor \u2014 dried yeast fermentate (S. cerevisiae). Whole-food matrix, not standardized to single marker. Identity-tested as complete fermentate.",
+      "notes": "EpiCor — dried yeast fermentate (S. cerevisiae). Whole-food matrix, not standardized to single marker. Identity-tested as complete fermentate.",
       "sources": [
         "https://www.cargill.com/doc/1432208360027/state-of-the-art-prototypes.pdf",
         "https://www.cargill.com/supplements/epicor-faqs"
@@ -2379,7 +2391,7 @@
         "coumarins",
         "gallotannins (root-specific)"
       ],
-      "bonus_rationale": "EPs\u00ae 7630 (Dr. Willmar Schwabe Pharmaceuticals) is a clinically-studied Pelargonium sidoides root extract standardized to a defined fingerprint of coumarins (incl. umckalin) and gallotannins. Approved as an OTC herbal medicinal product in Germany for acute bronchitis (Umckaloabo\u00ae). Extensive RCT literature on upper respiratory infections. branded_extract basis: bonus is granted when the label names EPs\u00ae 7630 / Umckaloabo\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "EPs® 7630 (Dr. Willmar Schwabe Pharmaceuticals) is a clinically-studied Pelargonium sidoides root extract standardized to a defined fingerprint of coumarins (incl. umckalin) and gallotannins. Approved as an OTC herbal medicinal product in Germany for acute bronchitis (Umckaloabo®). Extensive RCT literature on upper respiratory infections. branded_extract basis: bonus is granted when the label names EPs® 7630 / Umckaloabo® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/24199972/",
         "https://www.nccih.nih.gov/health/pelargonium"
@@ -2407,7 +2419,7 @@
       },
       "cui": "C0015148",
       "min_threshold": 70,
-      "threshold_source": "70% eucalyptol/1,8-cineole \u2014 Ph.Eur monograph"
+      "threshold_source": "70% eucalyptol/1,8-cineole — Ph.Eur monograph"
     },
     {
       "standard_name": "Evening Primrose",
@@ -2463,7 +2475,7 @@
       "external_ids": {},
       "cui": "C3728253",
       "min_threshold": 1,
-      "threshold_source": "1% saponins \u2014 stem extract standard"
+      "threshold_source": "1% saponins — stem extract standard"
     },
     {
       "standard_name": "Fenugreek",
@@ -2579,7 +2591,7 @@
         "zeaxanthin",
         "carotenoids"
       ],
-      "bonus_rationale": "FloraGLO\u00ae (Kemin Industries) is the original commercial lutein extract from Tagetes erecta marigold, standardized to >5% lutein (free form). Used in AREDS2 macular-degeneration trial as the lutein source. branded_extract basis: bonus is granted when the label names the FloraGLO\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "FloraGLO® (Kemin Industries) is the original commercial lutein extract from Tagetes erecta marigold, standardized to >5% lutein (free form). Used in AREDS2 macular-degeneration trial as the lutein source. branded_extract basis: bonus is granted when the label names the FloraGLO® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/23644932/",
         "https://www.nei.nih.gov/research/clinical-trials/age-related-eye-disease-study-2-areds2"
@@ -2610,7 +2622,7 @@
         "phenolic acids",
         "anthocyanins"
       ],
-      "bonus_rationale": "Flowens\u00ae (Frutarom / IFF) is a clinically-studied whole cranberry fruit powder standardized to 1.5%+ proanthocyanidins (PACs). Clinical literature on lower urinary-tract symptom (LUTS) improvement in men. branded_extract basis: bonus is granted when the label names the Flowens\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Flowens® (Frutarom / IFF) is a clinically-studied whole cranberry fruit powder standardized to 1.5%+ proanthocyanidins (PACs). Clinical literature on lower urinary-tract symptom (LUTS) improvement in men. branded_extract basis: bonus is granted when the label names the Flowens® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/27530809/",
         "https://www.nccih.nih.gov/health/cranberry"
@@ -2628,7 +2640,7 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "fruitex_b_calcium_fructoborate",
-      "notes": "FruiteX-B \u2014 calcium fructoborate. Provides 3 mg elemental boron per clinical dose. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "FruiteX-B — calcium fructoborate. Provides 3 mg elemental boron per clinical dose. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "mineral_complex",
       "external_ids": {
         "unii": "7EW2EZ38LS"
@@ -2644,7 +2656,7 @@
         "calcium fructoborate (CFB)",
         "boron"
       ],
-      "bonus_rationale": "FruiteX-B\u00ae (FutureCeuticals / VDF) is a calcium fructoborate (CFB) compound naturally occurring in fruits, with bioavailable boron + fructose + calcium in a defined molecular form. Clinical literature on joint comfort, cardiovascular endpoints, and bone-mineral support. branded_extract basis: bonus is granted when the label names the FruiteX-B\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "FruiteX-B® (FutureCeuticals / VDF) is a calcium fructoborate (CFB) compound naturally occurring in fruits, with bioavailable boron + fructose + calcium in a defined molecular form. Clinical literature on joint comfort, cardiovascular endpoints, and bone-mineral support. branded_extract basis: bonus is granted when the label names the FruiteX-B® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/21669589/",
         "https://www.futureceuticals.com/"
@@ -2670,7 +2682,7 @@
       "external_ids": {},
       "cui": "C0017439",
       "min_threshold": 2,
-      "threshold_source": "2% gentiopicroside \u2014 European Pharmacopoeia"
+      "threshold_source": "2% gentiopicroside — European Pharmacopoeia"
     },
     {
       "standard_name": "Ginger (Zingiber officinale)",
@@ -2708,7 +2720,7 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
-      "bonus_rationale": "Ginger (Zingiber officinale, UNII C5529G5JPQ) is bonus-eligible when the product label declares a measurable gingerols / shogaols / total-pungent-compounds % (typical 5-20% gingerols, with shogaols as the secondary marker formed during drying / heating). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Ginger' identity matches but defers to meets_threshold. Marker-compound UNIIs in alias list (V2ZD052TS1 'total gingerols and shogaols', SAS9Z1SVUK 'standardized ginger gingerols', 925QK2Z900 '6-gingerol') describe what the entry is standardized TO \u2014 they are NOT cross-species \u00a78.5 misplacement. Same-species preparation pattern documented in SB-4 / SB-5.",
+      "bonus_rationale": "Ginger (Zingiber officinale, UNII C5529G5JPQ) is bonus-eligible when the product label declares a measurable gingerols / shogaols / total-pungent-compounds % (typical 5-20% gingerols, with shogaols as the secondary marker formed during drying / heating). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Ginger' identity matches but defers to meets_threshold. Marker-compound UNIIs in alias list (V2ZD052TS1 'total gingerols and shogaols', SAS9Z1SVUK 'standardized ginger gingerols', 925QK2Z900 '6-gingerol') describe what the entry is standardized TO — they are NOT cross-species §8.5 misplacement. Same-species preparation pattern documented in SB-4 / SB-5.",
       "sources": [
         "NCCIH Ginger overview: https://www.nccih.nih.gov/health/ginger",
         "NIH ODS Ginger fact sheet: https://ods.od.nih.gov/factsheets/list-all/",
@@ -2721,7 +2733,7 @@
       "min_threshold": 5,
       "last_updated": "2026-09-26",
       "id": "ginger_extract",
-      "notes": "Ginger (Zingiber officinale, Zingiberaceae) rhizome. UNII C5529G5JPQ. Digestive, antiemetic and anti-inflammatory botanical standardized for gingerols (typically 5%, ranging 5-20% in concentrated extracts) plus shogaols (formed during drying/heating). SB-6 \u00a78.5 / v6 annotation 2026-05-22: refined standard_name to include species; added v6 contract fields (bonus_eligible, standardization_basis, marker_compounds, bonus_rationale, sources); added marker-explicit alias phrasings for direct matching. The audit's reported '5 distinct UNIIs in aliases' resolved to marker-compound UNIIs (V2ZD052TS1, SAS9Z1SVUK, 925QK2Z900) and generic registry term (UL302SFN7L), all describing the same species (Z. officinale, UNII C5529G5JPQ) \u2014 not cross-species misplacement.",
+      "notes": "Ginger (Zingiber officinale, Zingiberaceae) rhizome. UNII C5529G5JPQ. Digestive, antiemetic and anti-inflammatory botanical standardized for gingerols (typically 5%, ranging 5-20% in concentrated extracts) plus shogaols (formed during drying/heating). SB-6 §8.5 / v6 annotation 2026-05-22: refined standard_name to include species; added v6 contract fields (bonus_eligible, standardization_basis, marker_compounds, bonus_rationale, sources); added marker-explicit alias phrasings for direct matching. The audit's reported '5 distinct UNIIs in aliases' resolved to marker-compound UNIIs (V2ZD052TS1, SAS9Z1SVUK, 925QK2Z900) and generic registry term (UL302SFN7L), all describing the same species (Z. officinale, UNII C5529G5JPQ) — not cross-species misplacement.",
       "external_ids": {
         "unii": "C5529G5JPQ"
       },
@@ -2764,7 +2776,7 @@
       "external_ids": {},
       "cui": "C0061267",
       "min_threshold": 5,
-      "threshold_source": "5% gingerols \u2014 standard ginger extract"
+      "threshold_source": "5% gingerols — standard ginger extract"
     },
     {
       "standard_name": "Ginkgo Biloba",
@@ -2832,7 +2844,7 @@
       "external_ids": {},
       "cui": "C0599524",
       "min_threshold": 6,
-      "threshold_source": "6% terpene lactones \u2014 EGb 761 terpene fraction"
+      "threshold_source": "6% terpene lactones — EGb 761 terpene fraction"
     },
     {
       "standard_name": "Goji Berry",
@@ -2853,7 +2865,7 @@
       "external_ids": {},
       "cui": "C4255019",
       "min_threshold": 20,
-      "threshold_source": "20% polysaccharides \u2014 Lycium barbarum standard"
+      "threshold_source": "20% polysaccharides — Lycium barbarum standard"
     },
     {
       "standard_name": "Goldenseal",
@@ -2955,7 +2967,7 @@
       },
       "cui": "C2776583",
       "min_threshold": 12.5,
-      "threshold_source": "12.5% 6-paradol \u2014 Paradoxine standard"
+      "threshold_source": "12.5% 6-paradol — Paradoxine standard"
     },
     {
       "standard_name": "Grape Seed (Vitis vinifera seed)",
@@ -2988,9 +3000,9 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
-      "bonus_rationale": "Grape seed (Vitis vinifera, UNII RDS2V6DVY5 for the standardized extract preparation; C34U15ICXA for plain seed identity in botanical_ingredients.grape_seed) is bonus-eligible when the product label declares OPC % (typically 90-95% \u2014 the high-OPC threshold) OR a branded standardized extract (Masquelier's OPC, MegaNatural-BP). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'grape seed' identity matches but defers to meets_threshold. The audit's reported '5 distinct UNIIs in aliases' reflect marker-compound UNIIs (ZZE3L9H7KH proanthocyanidins, 7G50Y5P93W Masquelier's OPC) and preparation variants \u2014 not cross-species \u00a78.5 misplacement.",
+      "bonus_rationale": "Grape seed (Vitis vinifera, UNII RDS2V6DVY5 for the standardized extract preparation; C34U15ICXA for plain seed identity in botanical_ingredients.grape_seed) is bonus-eligible when the product label declares OPC % (typically 90-95% — the high-OPC threshold) OR a branded standardized extract (Masquelier's OPC, MegaNatural-BP). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'grape seed' identity matches but defers to meets_threshold. The audit's reported '5 distinct UNIIs in aliases' reflect marker-compound UNIIs (ZZE3L9H7KH proanthocyanidins, 7G50Y5P93W Masquelier's OPC) and preparation variants — not cross-species §8.5 misplacement.",
       "sources": [
-        "NIH ODS \u2014 Grape Seed Extract: https://ods.od.nih.gov/factsheets/list-all/",
+        "NIH ODS — Grape Seed Extract: https://ods.od.nih.gov/factsheets/list-all/",
         "NCCIH Grape Seed overview: https://www.nccih.nih.gov/health/grape-seed-extract",
         "Sano et al. 2007 RCT on MegaNatural-BP for blood pressure (PMID 17190620)",
         "Bagchi et al. 2003 systematic review on OPC pharmacology and cardiovascular outcomes (PMID 12867234)"
@@ -3000,7 +3012,7 @@
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "grape_seed",
-      "notes": "Vitis vinifera seed extract (Vitaceae). UNII RDS2V6DVY5 for the standardized extract preparation (botanical_ingredients.grape_seed holds plain seed identity, UNII C34U15ICXA). Cardiovascular antioxidant standardized for 90-95% OPCs (oligomeric proanthocyanidins). SB-9 \u00a78.5 / v6 annotation 2026-05-22: added v6 contract fields + marker-explicit alias phrasings + Masquelier's OPC and MegaNatural-BP branded variants. Sibling 'grape_seed_extract' entry overlaps with this one (same UNII); flagged for future merger.",
+      "notes": "Vitis vinifera seed extract (Vitaceae). UNII RDS2V6DVY5 for the standardized extract preparation (botanical_ingredients.grape_seed holds plain seed identity, UNII C34U15ICXA). Cardiovascular antioxidant standardized for 90-95% OPCs (oligomeric proanthocyanidins). SB-9 §8.5 / v6 annotation 2026-05-22: added v6 contract fields + marker-explicit alias phrasings + Masquelier's OPC and MegaNatural-BP branded variants. Sibling 'grape_seed_extract' entry overlaps with this one (same UNII); flagged for future merger.",
       "category": "seed_fruit",
       "external_ids": {
         "unii": "RDS2V6DVY5"
@@ -3074,16 +3086,16 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
-      "bonus_rationale": "Bonus is granted when the product label declares chlorogenic acid % (typically 45-50%) or names a verified branded standardized extract (Svetol). Both Coffea arabica AND Coffea canephora robusta are valid source species \u2014 the marker (chlorogenic acid) is what makes the extract bonus-worthy, not species. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate. Plain 'Coffee Bean Extract' identity (no marker) lives in botanical_ingredients.coffee_bean_plain (no A5b bonus).",
+      "bonus_rationale": "Bonus is granted when the product label declares chlorogenic acid % (typically 45-50%) or names a verified branded standardized extract (Svetol). Both Coffea arabica AND Coffea canephora robusta are valid source species — the marker (chlorogenic acid) is what makes the extract bonus-worthy, not species. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate. Plain 'Coffee Bean Extract' identity (no marker) lives in botanical_ingredients.coffee_bean_plain (no A5b bonus).",
       "sources": [
         "NIH ODS Botanical Dietary Supplement Standardization concept (definition of marker-based standardization): https://ods.od.nih.gov/factsheets/list-all/",
         "Naturex Svetol monograph (Coffea canephora robusta, 45-50% chlorogenic acids; original European weight-loss RCTs)",
-        "Onakpoya et al. 2011 meta-analysis on green coffee bean extract and weight loss (PMID 21861914) \u2014 used Svetol/GCA-standardized preparations"
+        "Onakpoya et al. 2011 meta-analysis on green coffee bean extract and weight loss (PMID 21861914) — used Svetol/GCA-standardized preparations"
       ],
       "priority": "medium",
       "last_updated": "2026-07-17",
       "id": "green_coffee_bean",
-      "notes": "Weight management extract standardized for 45-50% chlorogenic acids (GCA). v6 annotation 2026-05-22 (SB-2): this entry was the first to carry the new schema fields (bonus_eligible / standardization_basis / marker_compounds / bonus_rationale / sources) under the bonus-eligibility contract. Plain aliases ('green coffee bean extract', 'coffea robusta', etc.) preserved for runtime matching \u2014 the enricher's meets_threshold gate (score_supplements.py:1148) is the authoritative bonus-eligibility check at scoring time. RC-1 2026-05-22: external_ids.unii set to V5032728L7 (FDA ROBUSTA COFFEE BEAN / COFFEA ROBUSTA SEED POWDER \u2014 closest single canonical substance UNII for the chlorogenic-acid extract pathway, which is predominantly robusta-sourced; verified via scripts/data/fda_unii_cache.json). Absorbed \u00a78.5-misplaced branded aliases from coffee_fruit (Svetol\u00ae variants, Slimpure\u00ae variants \u2014 both Naturex-branded green coffee BEAN extracts, not fruit). Shadow-score audit pre-commit confirmed 53/53 products that match this entry today have has_standardized_botanical=True via the percentage detection block; ~50% of spot-checked cases have explicit chlorogenic-acid % evidence in the broader product text (the gate works). Marker (chlorogenic acid) is what makes the extract bonus-worthy, not species \u2014 both Coffea arabica and Coffea canephora robusta source variants are valid.",
+      "notes": "Weight management extract standardized for 45-50% chlorogenic acids (GCA). v6 annotation 2026-05-22 (SB-2): this entry was the first to carry the new schema fields (bonus_eligible / standardization_basis / marker_compounds / bonus_rationale / sources) under the bonus-eligibility contract. Plain aliases ('green coffee bean extract', 'coffea robusta', etc.) preserved for runtime matching — the enricher's meets_threshold gate (score_supplements.py:1148) is the authoritative bonus-eligibility check at scoring time. RC-1 2026-05-22: external_ids.unii set to V5032728L7 (FDA ROBUSTA COFFEE BEAN / COFFEA ROBUSTA SEED POWDER — closest single canonical substance UNII for the chlorogenic-acid extract pathway, which is predominantly robusta-sourced; verified via scripts/data/fda_unii_cache.json). Absorbed §8.5-misplaced branded aliases from coffee_fruit (Svetol® variants, Slimpure® variants — both Naturex-branded green coffee BEAN extracts, not fruit). Shadow-score audit pre-commit confirmed 53/53 products that match this entry today have has_standardized_botanical=True via the percentage detection block; ~50% of spot-checked cases have explicit chlorogenic-acid % evidence in the broader product text (the gate works). Marker (chlorogenic acid) is what makes the extract bonus-worthy, not species — both Coffea arabica and Coffea canephora robusta source variants are valid.",
       "category": "herb",
       "min_threshold": 45,
       "external_ids": {
@@ -3273,7 +3285,7 @@
       },
       "cui": "C0950016",
       "min_threshold": 20,
-      "threshold_source": "20% gypenosides \u2014 standard jiaogulan extract"
+      "threshold_source": "20% gypenosides — standard jiaogulan extract"
     },
     {
       "standard_name": "Hawthorn",
@@ -3324,7 +3336,7 @@
       "external_ids": {},
       "cui": "C1031603",
       "min_threshold": 1,
-      "threshold_source": "1% TSG (2,3,5,4'-tetrahydroxystilbene-2-O-\u03b2-D-glucoside) \u2014 Chinese Pharmacopoeia"
+      "threshold_source": "1% TSG (2,3,5,4'-tetrahydroxystilbene-2-O-β-D-glucoside) — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Hibiscus Extract",
@@ -3362,7 +3374,7 @@
       },
       "cui": "C1207898",
       "min_threshold": 1.5,
-      "threshold_source": "1.5% anthocyanins \u2014 common standardization"
+      "threshold_source": "1.5% anthocyanins — common standardization"
     },
     {
       "standard_name": "Holy Basil",
@@ -3493,7 +3505,7 @@
       },
       "cui": "C1004696",
       "min_threshold": 0.5,
-      "threshold_source": "0.5% mesembrine \u2014 standard Sceletium tortuosum extract"
+      "threshold_source": "0.5% mesembrine — standard Sceletium tortuosum extract"
     },
     {
       "standard_name": "KeraGLO",
@@ -3507,7 +3519,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "keraglo",
-      "notes": "KeraGLO \u2014 solubilized keratin from wool (Keraplast technology). Identity-tested, not standardized to % marker.",
+      "notes": "KeraGLO — solubilized keratin from wool (Keraplast technology). Identity-tested, not standardized to % marker.",
       "category": "structural_protein",
       "external_ids": {},
       "data_quality": "complete",
@@ -3550,7 +3562,7 @@
       },
       "cui": "C1572690",
       "min_threshold": 6,
-      "threshold_source": "6% caffeine \u2014 standard kola extract"
+      "threshold_source": "6% caffeine — standard kola extract"
     },
     {
       "standard_name": "KSM-66 Ashwagandha",
@@ -3577,7 +3589,7 @@
         "withanolides",
         "withaferin A"
       ],
-      "bonus_rationale": "KSM-66\u00ae Ashwagandha (Ixoreal Biomed) is the most clinically-studied branded Withania somnifera root extract, standardized to 5%+ withanolides via a green-chemistry root-only extraction process. Extensive clinical literature on stress / cortisol / sleep / athletic endurance / testosterone endpoints. branded_extract basis: bonus is granted when the label names the KSM-66\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "KSM-66® Ashwagandha (Ixoreal Biomed) is the most clinically-studied branded Withania somnifera root extract, standardized to 5%+ withanolides via a green-chemistry root-only extraction process. Extensive clinical literature on stress / cortisol / sleep / athletic endurance / testosterone endpoints. branded_extract basis: bonus is granted when the label names the KSM-66® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/23439798/",
         "https://pubmed.ncbi.nlm.nih.gov/26609282/",
@@ -3607,7 +3619,7 @@
       "external_ids": {},
       "cui": "C5779733",
       "min_threshold": 40,
-      "threshold_source": "40% puerarin \u2014 standard root extract"
+      "threshold_source": "40% puerarin — standard root extract"
     },
     {
       "standard_name": "Lemon Balm",
@@ -3645,7 +3657,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "levagen",
-      "notes": "Levagen+ \u2014 palmitoylethanolamide (PEA) with LipiSperse dispersion. \u226598% PEA by HPLC.",
+      "notes": "Levagen+ — palmitoylethanolamide (PEA) with LipiSperse dispersion. ≥98% PEA by HPLC.",
       "category": "fatty_acid_amide",
       "external_ids": {
         "cas": "544-31-0",
@@ -3709,7 +3721,7 @@
       },
       "cui": "C0086555",
       "min_threshold": 4,
-      "threshold_source": "4% glycyrrhizin \u2014 European Pharmacopoeia"
+      "threshold_source": "4% glycyrrhizin — European Pharmacopoeia"
     },
     {
       "standard_name": "Life's DHA",
@@ -3724,7 +3736,7 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "life_s_dha",
-      "notes": "Life's DHA \u2014 algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "Life's DHA — algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "algal_oil",
       "external_ids": {
         "unii": "QGK4EZ8JB9"
@@ -3740,7 +3752,7 @@
         "docosahexaenoic acid (DHA)",
         "algal omega-3"
       ],
-      "bonus_rationale": "life'sDHA\u00ae (DSM Nutritional Products, formerly Martek Biosciences) is the original commercial vegetarian docosahexaenoic acid (DHA) extract from the algae Crypthecodinium cohnii. Used in infant formula and clinical-grade vegetarian omega-3 supplements. branded_extract basis: bonus is granted when the label names the life'sDHA\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "life'sDHA® (DSM Nutritional Products, formerly Martek Biosciences) is the original commercial vegetarian docosahexaenoic acid (DHA) extract from the algae Crypthecodinium cohnii. Used in infant formula and clinical-grade vegetarian omega-3 supplements. branded_extract basis: bonus is granted when the label names the life'sDHA® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/18689548/",
         "https://www.dsm.com/human-nutrition/en/products/life-s-dha.html"
@@ -3774,7 +3786,7 @@
         "meso-zeaxanthin",
         "carotenoids"
       ],
-      "bonus_rationale": "Lutemax\u00ae 2020 (OmniActive Health Technologies) is a clinically-studied Tagetes erecta (marigold) extract standardized to the three macular carotenoids (lutein + zeaxanthin + meso-zeaxanthin in a 5:1:1 ratio). Clinical literature (B.L.U.E. study, LAMA, etc.) on macular pigment optical density and visual performance. branded_extract basis: bonus is granted when the label names the Lutemax\u00ae 2020 brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Lutemax® 2020 (OmniActive Health Technologies) is a clinically-studied Tagetes erecta (marigold) extract standardized to the three macular carotenoids (lutein + zeaxanthin + meso-zeaxanthin in a 5:1:1 ratio). Clinical literature (B.L.U.E. study, LAMA, etc.) on macular pigment optical density and visual performance. branded_extract basis: bonus is granted when the label names the Lutemax® 2020 brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/28494836/",
         "https://pubmed.ncbi.nlm.nih.gov/29144655/"
@@ -3926,7 +3938,7 @@
       },
       "cui": "C1067051",
       "min_threshold": 10,
-      "threshold_source": "10% anthocyanins \u2014 Delphinol standard"
+      "threshold_source": "10% anthocyanins — Delphinol standard"
     },
     {
       "standard_name": "Marigold",
@@ -3974,7 +3986,7 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "microactive_melatonin",
-      "notes": "MicroActive Melatonin \u2014 microencapsulated sustained-release melatonin. Dosed by mg/serving. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "MicroActive Melatonin — microencapsulated sustained-release melatonin. Dosed by mg/serving. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "hormone_analog",
       "external_ids": {
         "unii": "JL5DK93RCL"
@@ -3989,7 +4001,7 @@
       "marker_compounds": [
         "melatonin (sustained-release matrix)"
       ],
-      "bonus_rationale": "MicroActive\u00ae Melatonin (BioActives LLC) is a sustained-release melatonin preparation using the proprietary MicroActive\u00ae delivery matrix for prolonged plasma exposure (7+ hours vs ~3 hours for standard immediate-release). Clinical literature on sleep onset and maintenance endpoints. branded_extract basis: bonus is granted when the label names the MicroActive\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "MicroActive® Melatonin (BioActives LLC) is a sustained-release melatonin preparation using the proprietary MicroActive® delivery matrix for prolonged plasma exposure (7+ hours vs ~3 hours for standard immediate-release). Clinical literature on sleep onset and maintenance endpoints. branded_extract basis: bonus is granted when the label names the MicroActive® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/27535533/",
         "https://www.bioactives.com/"
@@ -4057,7 +4069,7 @@
       "external_ids": {},
       "cui": "C0042785",
       "min_threshold": 0.1,
-      "threshold_source": "0.1% viscotoxins \u2014 European mistletoe standard"
+      "threshold_source": "0.1% viscotoxins — European mistletoe standard"
     },
     {
       "standard_name": "Moringa",
@@ -4078,7 +4090,7 @@
       "external_ids": {},
       "cui": "C5981468",
       "min_threshold": 1,
-      "threshold_source": "1% isothiocyanates \u2014 leaf extract standard"
+      "threshold_source": "1% isothiocyanates — leaf extract standard"
     },
     {
       "standard_name": "Morosil",
@@ -4092,7 +4104,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "morosil",
-      "notes": "Morosil \u2014 Moro blood orange extract (Citrus sinensis cv. Moro). Standardized to \u22655% anthocyanins.",
+      "notes": "Morosil — Moro blood orange extract (Citrus sinensis cv. Moro). Standardized to ≥5% anthocyanins.",
       "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -4168,7 +4180,7 @@
       },
       "cui": "C0330540",
       "min_threshold": 1,
-      "threshold_source": "1% DNJ \u2014 standard white mulberry extract"
+      "threshold_source": "1% DNJ — standard white mulberry extract"
     },
     {
       "standard_name": "Nettle (Urtica dioica)",
@@ -4196,17 +4208,17 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
-      "bonus_rationale": "Nettle (Urtica dioica, UNII 710FLW4U46) bonus-eligibility splits by plant part: nettle ROOT is bonus-eligible when the label declares beta-sitosterol % (typical ~1%), scopoletin %, or a lignans claim \u2014 used for BPH / prostate. Nettle LEAF is bonus-eligible when the label declares silica % or a formic-acid claim \u2014 used for allergy / joint support. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Nettle' / 'Urtica dioica' identity matches but defers to meets_threshold. Part-specific identity (without marker claim) routes to botanical_ingredients.nettle_root (UNII J8HE8A6E5T) or botanical_ingredients.nettle_leaf (UNII 232L6DS3Y4) for plain identity matching \u2014 those entries do NOT trigger the bonus.",
+      "bonus_rationale": "Nettle (Urtica dioica, UNII 710FLW4U46) bonus-eligibility splits by plant part: nettle ROOT is bonus-eligible when the label declares beta-sitosterol % (typical ~1%), scopoletin %, or a lignans claim — used for BPH / prostate. Nettle LEAF is bonus-eligible when the label declares silica % or a formic-acid claim — used for allergy / joint support. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Nettle' / 'Urtica dioica' identity matches but defers to meets_threshold. Part-specific identity (without marker claim) routes to botanical_ingredients.nettle_root (UNII J8HE8A6E5T) or botanical_ingredients.nettle_leaf (UNII 232L6DS3Y4) for plain identity matching — those entries do NOT trigger the bonus.",
       "sources": [
         "NCCIH Nettle overview: https://www.nccih.nih.gov/health/stinging-nettle",
-        "Schneider & Rubben 2004 long-term nettle root for BPH (PMID 15211420) \u2014 beta-sitosterol pathway",
-        "Roschek et al. 2009 randomized double-blind trial of nettle leaf for allergic rhinitis (PMID 19140159) \u2014 leaf pathway",
+        "Schneider & Rubben 2004 long-term nettle root for BPH (PMID 15211420) — beta-sitosterol pathway",
+        "Roschek et al. 2009 randomized double-blind trial of nettle leaf for allergic rhinitis (PMID 19140159) — leaf pathway",
         "ESCOP Nettle Root / Nettle Leaf monographs (separate plant-part standardization criteria)"
       ],
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "nettle",
-      "notes": "Nettle (Urtica dioica, Urticaceae). Species-level UNII 710FLW4U46. Two clinically distinct plant parts with different markers and uses: ROOT for BPH/prostate (beta-sitosterol, scopoletin, lignans); LEAF for allergy/joint (silica, formic acid, chlorophyll). SB-7 root-vs-leaf split 2026-05-22: removed part-specific aliases ('nettle root extract', 'nettle leaf extract' \u2014 those identify the plant part, not a standardization claim \u2014 moved to existing botanical_ingredients.nettle_root and botanical_ingredients.nettle_leaf canonicals which do NOT trigger A5b). Added v6 contract fields acknowledging dual-marker pathway (root markers + leaf markers); added marker-explicit alias phrasings for BOTH pathways so labels with explicit standardization claims (beta-sitosterol %, silica %) match directly. Species-level aliases ('Urtica dioica', 'stinging nettle') retained for runtime matching gated by meets_threshold.",
+      "notes": "Nettle (Urtica dioica, Urticaceae). Species-level UNII 710FLW4U46. Two clinically distinct plant parts with different markers and uses: ROOT for BPH/prostate (beta-sitosterol, scopoletin, lignans); LEAF for allergy/joint (silica, formic acid, chlorophyll). SB-7 root-vs-leaf split 2026-05-22: removed part-specific aliases ('nettle root extract', 'nettle leaf extract' — those identify the plant part, not a standardization claim — moved to existing botanical_ingredients.nettle_root and botanical_ingredients.nettle_leaf canonicals which do NOT trigger A5b). Added v6 contract fields acknowledging dual-marker pathway (root markers + leaf markers); added marker-explicit alias phrasings for BOTH pathways so labels with explicit standardization claims (beta-sitosterol %, silica %) match directly. Species-level aliases ('Urtica dioica', 'stinging nettle') retained for runtime matching gated by meets_threshold.",
       "category": "herb",
       "min_threshold": 1,
       "external_ids": {
@@ -4255,7 +4267,7 @@
         "polyphenols (whole coffee fruit)",
         "BDNF-stimulating fraction"
       ],
-      "bonus_rationale": "NeuroFactor\u00ae (Futureceuticals) is a clinically-studied whole coffee-fruit extract (Coffea arabica fruit, NOT bean) standardized to a defined polyphenol/chlorogenic-acid profile. Clinical literature reports rapid (1-hour) brain-derived neurotrophic factor (BDNF) elevation in healthy adults. branded_extract basis: bonus is granted when the label names the NeuroFactor\u00ae brand. Companion identity in botanical_ingredients.coffee_fruit and the CoffeeBerry\u00ae bonus entry standardized_botanicals.coffeeberry. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "NeuroFactor® (Futureceuticals) is a clinically-studied whole coffee-fruit extract (Coffea arabica fruit, NOT bean) standardized to a defined polyphenol/chlorogenic-acid profile. Clinical literature reports rapid (1-hour) brain-derived neurotrophic factor (BDNF) elevation in healthy adults. branded_extract basis: bonus is granted when the label names the NeuroFactor® brand. Companion identity in botanical_ingredients.coffee_fruit and the CoffeeBerry® bonus entry standardized_botanicals.coffeeberry. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/24013626/",
         "https://www.futureceuticals.com/neurofactor"
@@ -4280,7 +4292,7 @@
       "external_ids": {},
       "cui": "C1365464",
       "min_threshold": 6,
-      "threshold_source": "6% hydroxytyrosol \u2014 clinical dosing standard"
+      "threshold_source": "6% hydroxytyrosol — clinical dosing standard"
     },
     {
       "standard_name": "Olive Leaf",
@@ -4349,7 +4361,7 @@
         "anthocyanins",
         "OptiBerry polyphenol blend"
       ],
-      "bonus_rationale": "OptiBerry\u00ae (InterHealth Nutraceuticals, now Lonza) is a clinically-studied blend of six berry extracts (wild blueberry, wild bilberry, cranberry, elderberry, raspberry seed, strawberry) standardized to high anthocyanin / polyphenol content. Used in antioxidant / anti-angiogenic research. Multi-source blend has no single-substance UNII; the brand name is the bonus trigger. branded_extract basis: bonus is granted when the label names the OptiBerry\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "OptiBerry® (InterHealth Nutraceuticals, now Lonza) is a clinically-studied blend of six berry extracts (wild blueberry, wild bilberry, cranberry, elderberry, raspberry seed, strawberry) standardized to high anthocyanin / polyphenol content. Used in antioxidant / anti-angiogenic research. Multi-source blend has no single-substance UNII; the brand name is the bonus trigger. branded_extract basis: bonus is granted when the label names the OptiBerry® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/15050362/",
         "https://pubmed.ncbi.nlm.nih.gov/16219800/"
@@ -4380,7 +4392,7 @@
         "type-A proanthocyanidins (PACs)",
         "phenolic acids"
       ],
-      "bonus_rationale": "Pacran\u00ae (Naturex / Givaudan) is a clinically-studied whole-cranberry powder standardized to soluble proanthocyanidin content (typically 1.5%+ sPACs). Clinical literature on recurrent UTI prevention and urinary-tract anti-adhesion activity uses Pacran\u00ae standardization. branded_extract basis: bonus is granted when the label names the Pacran\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical (score_supplements.py:1148).",
+      "bonus_rationale": "Pacran® (Naturex / Givaudan) is a clinically-studied whole-cranberry powder standardized to soluble proanthocyanidin content (typically 1.5%+ sPACs). Clinical literature on recurrent UTI prevention and urinary-tract anti-adhesion activity uses Pacran® standardization. branded_extract basis: bonus is granted when the label names the Pacran® brand. Runtime gate: meets_threshold + has_standardized_botanical (score_supplements.py:1148).",
       "sources": [
         "https://www.nccih.nih.gov/health/cranberry",
         "https://pubmed.ncbi.nlm.nih.gov/27013539/"
@@ -4476,7 +4488,7 @@
       "external_ids": {},
       "cui": "C3779996",
       "min_threshold": 0.1,
-      "threshold_source": "EPs 7630 standard \u2014 coumarins marker"
+      "threshold_source": "EPs 7630 standard — coumarins marker"
     },
     {
       "standard_name": "Peppermint",
@@ -4514,7 +4526,7 @@
       },
       "cui": "C0697157",
       "min_threshold": 1,
-      "threshold_source": "1% menthol \u2014 leaf extract minimum"
+      "threshold_source": "1% menthol — leaf extract minimum"
     },
     {
       "standard_name": "Peppermint Essential Oil",
@@ -4540,7 +4552,7 @@
       },
       "cui": "C0070325",
       "min_threshold": 38,
-      "threshold_source": "38% menthol \u2014 USP monograph"
+      "threshold_source": "38% menthol — USP monograph"
     },
     {
       "standard_name": "Pomegranate",
@@ -4598,7 +4610,7 @@
       "external_ids": {},
       "cui": "C0949996",
       "min_threshold": 5,
-      "threshold_source": "5% betalains \u2014 Opuntia ficus-indica standard"
+      "threshold_source": "5% betalains — Opuntia ficus-indica standard"
     },
     {
       "standard_name": "Proanthoplex",
@@ -4612,7 +4624,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "proanthoplex",
-      "notes": "Proanthoplex \u2014 grape seed OPC extract. Standardized to \u226595% OPCs.",
+      "notes": "Proanthoplex — grape seed OPC extract. Standardized to ≥95% OPCs.",
       "category": "seed_fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -4657,7 +4669,7 @@
       },
       "cui": "C0033488",
       "min_threshold": 5,
-      "threshold_source": "5% total polyphenols \u2014 commercial standard"
+      "threshold_source": "5% total polyphenols — commercial standard"
     },
     {
       "standard_name": "Pumpkin Seed",
@@ -4736,7 +4748,7 @@
         "bioflavonoids",
         "phenolic acids"
       ],
-      "bonus_rationale": "Pycnogenol\u00ae (Horphag Research) is a clinically-studied French maritime pine bark extract (Pinus pinaster) standardized to 65-75% procyanidins (OPCs). Hundreds of clinical trials covering circulation / endothelial function / inflammation / skin / cognition. branded_extract basis: bonus is granted when the label names the Pycnogenol\u00ae brand. Plain pine bark identity (unstandardized) lives in botanical_ingredients.pine_bark_extract (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Pycnogenol® (Horphag Research) is a clinically-studied French maritime pine bark extract (Pinus pinaster) standardized to 65-75% procyanidins (OPCs). Hundreds of clinical trials covering circulation / endothelial function / inflammation / skin / cognition. branded_extract basis: bonus is granted when the label names the Pycnogenol® brand. Plain pine bark identity (unstandardized) lives in botanical_ingredients.pine_bark_extract (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/22260513/",
         "https://www.nccih.nih.gov/health/pycnogenol",
@@ -4873,7 +4885,7 @@
       "external_ids": {},
       "cui": "C1382907",
       "min_threshold": 0.1,
-      "threshold_source": "0.1% catalpol \u2014 Chinese Pharmacopoeia reference"
+      "threshold_source": "0.1% catalpol — Chinese Pharmacopoeia reference"
     },
     {
       "standard_name": "Reishi",
@@ -5024,7 +5036,7 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
-      "bonus_rationale": "Rhodiola rosea (UNII 3S5ITS5ULN) is bonus-eligible when the product label declares the standard 3% rosavins + 1% salidroside specification (or a named branded standardized extract such as SHR-5 from Swedish Herbal Institute, which is the spec used in most adaptogen RCTs). The 3:1 rosavins-to-salidroside ratio is the historical Russian / Scandinavian pharmacopeial standard. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Rhodiola' identity matches but defers to meets_threshold. The bonus pathway is species-specific to R. rosea \u2014 other Rhodiola species (R. crenulata UNII E1596V65V0, R. quadrifida / R. sacra UNII 11R149C3CY) have different marker profiles and are NOT covered by this entry's pathway. Editorial note: 'rhodiola root' is generic phrasing \u2014 UNII registry assigns it to R. quadrifida / R. sacra, but supplement-context labels typically mean R. rosea. Alias retained for runtime matching given that convention; products using non-R. rosea species should call them out explicitly (e.g., 'Rhodiola crenulata').",
+      "bonus_rationale": "Rhodiola rosea (UNII 3S5ITS5ULN) is bonus-eligible when the product label declares the standard 3% rosavins + 1% salidroside specification (or a named branded standardized extract such as SHR-5 from Swedish Herbal Institute, which is the spec used in most adaptogen RCTs). The 3:1 rosavins-to-salidroside ratio is the historical Russian / Scandinavian pharmacopeial standard. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Rhodiola' identity matches but defers to meets_threshold. The bonus pathway is species-specific to R. rosea — other Rhodiola species (R. crenulata UNII E1596V65V0, R. quadrifida / R. sacra UNII 11R149C3CY) have different marker profiles and are NOT covered by this entry's pathway. Editorial note: 'rhodiola root' is generic phrasing — UNII registry assigns it to R. quadrifida / R. sacra, but supplement-context labels typically mean R. rosea. Alias retained for runtime matching given that convention; products using non-R. rosea species should call them out explicitly (e.g., 'Rhodiola crenulata').",
       "sources": [
         "NCCIH Rhodiola rosea overview: https://www.nccih.nih.gov/health/rhodiola",
         "Panossian et al. 2010 systematic review on Rhodiola rosea pharmacology (PMID 20378318)",
@@ -5035,7 +5047,7 @@
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "rhodiola",
-      "notes": "Rhodiola rosea (Crassulaceae) root. UNII 3S5ITS5ULN. Adaptogenic herb standardized for rosavins (rosavin, rosin, rosarin \u2014 collectively 'rosavins') at min 3% plus salidroside at min 1%, in the traditional 3:1 ratio. SHR-5 (Swedish Herbal Institute) is the original standardized extract used in adaptogen RCTs. SB-8 \u00a78.5 fix + v6 annotation 2026-05-22: closed the missing-target-UNII gap (entry had empty external_ids; now populated with 3S5ITS5ULN); refined standard_name to species precision; added v6 contract fields + marker-explicit aliases for direct matching of labels carrying the standardization claim. Other Rhodiola species (R. crenulata UNII E1596V65V0, R. quadrifida / R. sacra UNII 11R149C3CY) are different species with different marker profiles \u2014 they are NOT covered by this entry's bonus pathway and should route to their own canonicals when products surface using them.",
+      "notes": "Rhodiola rosea (Crassulaceae) root. UNII 3S5ITS5ULN. Adaptogenic herb standardized for rosavins (rosavin, rosin, rosarin — collectively 'rosavins') at min 3% plus salidroside at min 1%, in the traditional 3:1 ratio. SHR-5 (Swedish Herbal Institute) is the original standardized extract used in adaptogen RCTs. SB-8 §8.5 fix + v6 annotation 2026-05-22: closed the missing-target-UNII gap (entry had empty external_ids; now populated with 3S5ITS5ULN); refined standard_name to species precision; added v6 contract fields + marker-explicit aliases for direct matching of labels carrying the standardization claim. Other Rhodiola species (R. crenulata UNII E1596V65V0, R. quadrifida / R. sacra UNII 11R149C3CY) are different species with different marker profiles — they are NOT covered by this entry's bonus pathway and should route to their own canonicals when products surface using them.",
       "category": "adaptogen",
       "external_ids": {
         "unii": "3S5ITS5ULN"
@@ -5075,7 +5087,7 @@
       },
       "cui": "C1074162",
       "min_threshold": 3,
-      "threshold_source": "3% aspalathin \u2014 concentrated rooibos extract"
+      "threshold_source": "3% aspalathin — concentrated rooibos extract"
     },
     {
       "standard_name": "Rosemary",
@@ -5147,7 +5159,7 @@
       },
       "cui": "C0696940",
       "min_threshold": 5,
-      "threshold_source": "5% salvianolic acid B \u2014 Chinese Pharmacopoeia"
+      "threshold_source": "5% salvianolic acid B — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Saw Palmetto",
@@ -5235,14 +5247,14 @@
       "priority": "medium",
       "category": "seed_fruit",
       "id": "sea_buckthorn",
-      "notes": "Mesocarp/pulp oil of Hippophae rhamnoides fruit \u2014 fatty-acid profile dominated by palmitoleic acid (omega-7) and oleic acid (omega-9), plus carotenoids and tocopherols. UNII TA4JCF9S1J = HIPPOPHAE RHAMNOIDES FRUIT OIL (verified via scripts/data/fda_unii_cache.json). Part-ambiguous mentions ('sea buckthorn oil', 'seabuckthorn oil', 'sea buckthorn extract', 'seaberry') were removed from this entry per \u00a78.5 \u2014 they may refer to seed oil, which has materially different chemistry and lives under sea_buckthorn_seed_oil (UNII T53SBG6741). Plain juice/powder identity continues to live in botanical_ingredients.sea_buckthorn.",
+      "notes": "Mesocarp/pulp oil of Hippophae rhamnoides fruit — fatty-acid profile dominated by palmitoleic acid (omega-7) and oleic acid (omega-9), plus carotenoids and tocopherols. UNII TA4JCF9S1J = HIPPOPHAE RHAMNOIDES FRUIT OIL (verified via scripts/data/fda_unii_cache.json). Part-ambiguous mentions ('sea buckthorn oil', 'seabuckthorn oil', 'sea buckthorn extract', 'seaberry') were removed from this entry per §8.5 — they may refer to seed oil, which has materially different chemistry and lives under sea_buckthorn_seed_oil (UNII T53SBG6741). Plain juice/powder identity continues to live in botanical_ingredients.sea_buckthorn.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "TA4JCF9S1J"
       },
       "cui": "C1013835",
       "min_threshold": 3,
-      "threshold_source": "3% omega-7 palmitoleic acid \u2014 fruit oil standard",
+      "threshold_source": "3% omega-7 palmitoleic acid — fruit oil standard",
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
       "marker_compounds": [
@@ -5277,14 +5289,14 @@
       "priority": "medium",
       "category": "seed_fruit",
       "id": "sea_buckthorn_seed_oil",
-      "notes": "Seed/kernel oil of Hippophae rhamnoides \u2014 fatty-acid profile dominated by alpha-linolenic acid (omega-3) and linoleic acid (omega-6); NOT the palmitoleic-rich fruit oil. UNII T53SBG6741 = HIPPOPHAE RHAMNOIDES SEED OIL (verified via scripts/data/fda_unii_cache.json). Companion to sea_buckthorn (fruit oil, UNII TA4JCF9S1J). Part-ambiguous label text ('sea buckthorn oil') without seed-vs-fruit disambiguation maps to plain identity in botanical_ingredients.sea_buckthorn (no bonus).",
+      "notes": "Seed/kernel oil of Hippophae rhamnoides — fatty-acid profile dominated by alpha-linolenic acid (omega-3) and linoleic acid (omega-6); NOT the palmitoleic-rich fruit oil. UNII T53SBG6741 = HIPPOPHAE RHAMNOIDES SEED OIL (verified via scripts/data/fda_unii_cache.json). Companion to sea_buckthorn (fruit oil, UNII TA4JCF9S1J). Part-ambiguous label text ('sea buckthorn oil') without seed-vs-fruit disambiguation maps to plain identity in botanical_ingredients.sea_buckthorn (no bonus).",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "T53SBG6741"
       },
       "cui": "C1013835",
       "min_threshold": 30,
-      "threshold_source": "30%+ combined alpha-linolenic + linoleic acid \u2014 seed oil standard",
+      "threshold_source": "30%+ combined alpha-linolenic + linoleic acid — seed oil standard",
       "bonus_eligible": true,
       "standardization_basis": "marker_percent",
       "marker_compounds": [
@@ -5312,7 +5324,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "setria",
-      "notes": "Setria \u2014 fermentation-derived L-glutathione by Kyowa Hakko. \u226598% L-glutathione by HPLC.",
+      "notes": "Setria — fermentation-derived L-glutathione by Kyowa Hakko. ≥98% L-glutathione by HPLC.",
       "category": "tripeptide",
       "external_ids": {},
       "data_quality": "complete",
@@ -5344,7 +5356,7 @@
         "phosphatidylserine (PS)",
         "soy-derived phospholipid"
       ],
-      "bonus_rationale": "Sharp-PS\u00ae Green (Lipogen) is a soy-derived phosphatidylserine preparation manufactured without hexane (Green process), standardized to 20%+ PS content. Clinical literature on cognitive performance, memory, and exercise stress endpoints. branded_extract basis: bonus is granted when the label names the Sharp-PS\u00ae Green brand. Companion plain identity in botanical_ingredients.phosphatidylserine (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Sharp-PS® Green (Lipogen) is a soy-derived phosphatidylserine preparation manufactured without hexane (Green process), standardized to 20%+ PS content. Clinical literature on cognitive performance, memory, and exercise stress endpoints. branded_extract basis: bonus is granted when the label names the Sharp-PS® Green brand. Companion plain identity in botanical_ingredients.phosphatidylserine (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/24345046/",
         "https://www.lipogen.com/"
@@ -5441,7 +5453,7 @@
       "external_ids": {},
       "cui": "C0074460",
       "min_threshold": 5,
-      "threshold_source": "5% shogaols \u2014 dried/processed ginger standard"
+      "threshold_source": "5% shogaols — dried/processed ginger standard"
     },
     {
       "standard_name": "Siberian Ginseng",
@@ -5465,7 +5477,7 @@
       },
       "cui": "C1035215",
       "min_threshold": 0.8,
-      "threshold_source": "0.8% eleutherosides \u2014 European Pharmacopoeia"
+      "threshold_source": "0.8% eleutherosides — European Pharmacopoeia"
     },
     {
       "standard_name": "Slendesta",
@@ -5494,7 +5506,7 @@
         "PI2 (proteinase inhibitor II)",
         "potato protein fraction"
       ],
-      "bonus_rationale": "Slendesta\u00ae (Kemin Industries) is a potato protein extract (Solanum tuberosum) standardized to the PI2 (proteinase inhibitor II) bioactive fraction. Clinical literature on satiety / cholecystokinin elevation / appetite endpoints. branded_extract basis: bonus is granted when the label names the Slendesta\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Slendesta® (Kemin Industries) is a potato protein extract (Solanum tuberosum) standardized to the PI2 (proteinase inhibitor II) bioactive fraction. Clinical literature on satiety / cholecystokinin elevation / appetite endpoints. branded_extract basis: bonus is granted when the label names the Slendesta® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/28485429/",
         "https://www.kemin.com/na/en-us/markets/human/products/slendesta"
@@ -5512,7 +5524,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "slimbione",
-      "notes": "Slimbione \u2014 bitter melon (Momordica charantia) extract. Standardized to charantin + polypeptide-p (proprietary ratio).",
+      "notes": "Slimbione — bitter melon (Momordica charantia) extract. Standardized to charantin + polypeptide-p (proprietary ratio).",
       "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -5616,7 +5628,7 @@
       },
       "cui": "C4025984",
       "min_threshold": 0.5,
-      "threshold_source": "0.5% ecdysterones \u2014 Pfaffia paniculata standard"
+      "threshold_source": "0.5% ecdysterones — Pfaffia paniculata standard"
     },
     {
       "standard_name": "SunActive Iron",
@@ -5630,7 +5642,7 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "sunactive_iron",
-      "notes": "SunActive Iron \u2014 micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "SunActive Iron — micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "mineral",
       "external_ids": {
         "unii": "FZ7NYF5N8L"
@@ -5646,7 +5658,7 @@
         "iron (ferric pyrophosphate, micronized)",
         "elemental iron"
       ],
-      "bonus_rationale": "SunActive\u00ae Fe (Taiyo Kagaku) is a micronized, microencapsulated ferric pyrophosphate preparation with improved tolerability and absorption vs traditional iron salts. Clinical literature on iron-deficiency anemia and tolerability endpoints. branded_extract basis: bonus is granted when the label names the SunActive\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "SunActive® Fe (Taiyo Kagaku) is a micronized, microencapsulated ferric pyrophosphate preparation with improved tolerability and absorption vs traditional iron salts. Clinical literature on iron-deficiency anemia and tolerability endpoints. branded_extract basis: bonus is granted when the label names the SunActive® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/19674817/",
         "https://www.taiyokagaku.com/en/"
@@ -5673,7 +5685,7 @@
       },
       "cui": "C0330657",
       "min_threshold": 1,
-      "threshold_source": "1% anthocyanins \u2014 Montmorency cherry standard"
+      "threshold_source": "1% anthocyanins — Montmorency cherry standard"
     },
     {
       "standard_name": "Thermosil",
@@ -5687,7 +5699,7 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "thermosil",
-      "notes": "Thermosil \u2014 silicon/silica complex. Limited public standardization data. Requires verification. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "Thermosil — silicon/silica complex. Limited public standardization data. Requires verification. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "mineral",
       "external_ids": {
         "unii": "623B93YABH"
@@ -5703,7 +5715,7 @@
         "silicon",
         "orthosilicic acid (bioavailable silica)"
       ],
-      "bonus_rationale": "Thermosil is a branded silicon/silica complex marketed for bone and connective-tissue support. Standardized to bioavailable orthosilicic acid content. branded_extract basis: bonus is granted when the label names the Thermosil brand. Runtime gate: meets_threshold + has_standardized_botanical. [Note: limited public clinical literature \u2014 verification advisory; may downgrade to plain identity in future review.]",
+      "bonus_rationale": "Thermosil is a branded silicon/silica complex marketed for bone and connective-tissue support. Standardized to bioavailable orthosilicic acid content. branded_extract basis: bonus is granted when the label names the Thermosil brand. Runtime gate: meets_threshold + has_standardized_botanical. [Note: limited public clinical literature — verification advisory; may downgrade to plain identity in future review.]",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/18046594/"
       ]
@@ -5741,7 +5753,7 @@
       },
       "cui": "C0697238",
       "min_threshold": 20,
-      "threshold_source": "20% thymol \u2014 Ph.Eur thyme oil standard"
+      "threshold_source": "20% thymol — Ph.Eur thyme oil standard"
     },
     {
       "standard_name": "Tongkat Ali",
@@ -5799,7 +5811,7 @@
       "external_ids": {},
       "cui": "C3832720",
       "min_threshold": 10,
-      "threshold_source": "10% polysaccharides \u2014 functional mushroom standard"
+      "threshold_source": "10% polysaccharides — functional mushroom standard"
     },
     {
       "standard_name": "Tribulus",
@@ -5862,7 +5874,7 @@
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "turkey_tail",
-      "notes": "Immune support mushroom standardized for 30%+ polysaccharides (PSK, PSP). UNII 2YD82VN5CM = TRAMETES VERSICOLOR WHOLE (verified via scripts/data/fda_unii_cache.json). Strain-specific UNII 26BE3YVD39 (CM-101) and fruiting-body UNII 4C900477MT are preparation variants. The 'PSK' and 'PSP' abbreviations collide with unrelated protein UNIIs (XY526V7HUL, LQ0G3D3X8F) in the FDA registry \u2014 those are NOT polysaccharide fractions; PSK/PSP here refer to the Trametes versicolor polysaccharide fractions (krestin, polysaccharide peptide / Yun zhi).",
+      "notes": "Immune support mushroom standardized for 30%+ polysaccharides (PSK, PSP). UNII 2YD82VN5CM = TRAMETES VERSICOLOR WHOLE (verified via scripts/data/fda_unii_cache.json). Strain-specific UNII 26BE3YVD39 (CM-101) and fruiting-body UNII 4C900477MT are preparation variants. The 'PSK' and 'PSP' abbreviations collide with unrelated protein UNIIs (XY526V7HUL, LQ0G3D3X8F) in the FDA registry — those are NOT polysaccharide fractions; PSK/PSP here refer to the Trametes versicolor polysaccharide fractions (krestin, polysaccharide peptide / Yun zhi).",
       "category": "mushroom",
       "min_threshold": 30,
       "external_ids": {
@@ -5910,7 +5922,7 @@
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "turmeric",
-      "notes": "Curcuma longa whole rhizome (UNII 856YO1Z64F = CURCUMA LONGA (TURMERIC) ROOT, verified). Anti-inflammatory spice standardized for 95% curcuminoids when in extract form. Raw turmeric powder contains only 2-5% curcuminoids and will NOT satisfy the runtime meets_threshold gate (score_supplements.py:1148) \u2014 plain rhizome aliases (turmeric powder, turmeric root, haldi) stay here so identity routing works, but the bonus fires only when the label proves a measurable curcuminoid percentage. Plain identity also lives in botanical_ingredients.turmeric and botanical_ingredients.turmeric_root_powder. Branded standardized extracts (C3 Complex, BCM-95, Meriva, Longvida, Theracurmin) are catalogued under standardized_botanicals.curcumin.",
+      "notes": "Curcuma longa whole rhizome (UNII 856YO1Z64F = CURCUMA LONGA (TURMERIC) ROOT, verified). Anti-inflammatory spice standardized for 95% curcuminoids when in extract form. Raw turmeric powder contains only 2-5% curcuminoids and will NOT satisfy the runtime meets_threshold gate (score_supplements.py:1148) — plain rhizome aliases (turmeric powder, turmeric root, haldi) stay here so identity routing works, but the bonus fires only when the label proves a measurable curcuminoid percentage. Plain identity also lives in botanical_ingredients.turmeric and botanical_ingredients.turmeric_root_powder. Branded standardized extracts (C3 Complex, BCM-95, Meriva, Longvida, Theracurmin) are catalogued under standardized_botanicals.curcumin.",
       "category": "herb",
       "external_ids": {
         "unii": "856YO1Z64F"
@@ -5968,7 +5980,7 @@
         "bisdemethoxycurcumin",
         "curcuminoids (total)"
       ],
-      "bonus_rationale": "TurmiPure\u00ae Gold (Naturex / Givaudan) is a water-dispersible curcumin extract delivering enhanced bioavailability vs unformulated turmeric powder (~85x by AUC). Standardized to curcuminoid content with proprietary delivery system. branded_extract basis: bonus is granted when the label names the TurmiPure\u00ae Gold brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "TurmiPure® Gold (Naturex / Givaudan) is a water-dispersible curcumin extract delivering enhanced bioavailability vs unformulated turmeric powder (~85x by AUC). Standardized to curcuminoid content with proprietary delivery system. branded_extract basis: bonus is granted when the label names the TurmiPure® Gold brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/31935893/",
         "https://www.givaudan.com/taste-wellbeing"
@@ -5986,7 +5998,7 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "uniflex",
-      "notes": "Uniflex (UC-II) \u2014 undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "Uniflex (UC-II) — undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "structural_protein",
       "external_ids": {},
       "data_quality": "complete",
@@ -6000,7 +6012,7 @@
         "undenatured type II collagen (UC-II)",
         "native-structure type II collagen"
       ],
-      "bonus_rationale": "UC-II\u00ae / Uniflex (InterHealth Nutraceuticals, now Lonza) is a clinically-studied undenatured type II collagen from chicken sternum cartilage. Identity is by native molecular structure (undenatured collagen helix), not by % standardization \u2014 clinical dose is fixed at 40 mg. Clinical literature on joint comfort vs glucosamine+chondroitin comparator. branded_extract basis: bonus is granted when the label names UC-II\u00ae or Uniflex brand. No single substance UNII (collagen is structurally-diverse class). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "UC-II® / Uniflex (InterHealth Nutraceuticals, now Lonza) is a clinically-studied undenatured type II collagen from chicken sternum cartilage. Identity is by native molecular structure (undenatured collagen helix), not by % standardization — clinical dose is fixed at 40 mg. Clinical literature on joint comfort vs glucosamine+chondroitin comparator. branded_extract basis: bonus is granted when the label names UC-II® or Uniflex brand. No single substance UNII (collagen is structurally-diverse class). Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/19185917/",
         "https://www.lonza.com/products/uc-ii"
@@ -6024,7 +6036,7 @@
       "external_ids": {},
       "cui": "C0770993",
       "min_threshold": 10,
-      "threshold_source": "10% arbutin \u2014 European Pharmacopoeia"
+      "threshold_source": "10% arbutin — European Pharmacopoeia"
     },
     {
       "standard_name": "Valerian",
@@ -6081,7 +6093,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "wellmune",
-      "notes": "Wellmune \u2014 beta-1,3/1,6-glucan from S. cerevisiae (Kerry). Standardized to \u226575% beta-glucan by weight.",
+      "notes": "Wellmune — beta-1,3/1,6-glucan from S. cerevisiae (Kerry). Standardized to ≥75% beta-glucan by weight.",
       "category": "polysaccharide",
       "external_ids": {},
       "data_quality": "complete",
@@ -6157,7 +6169,7 @@
       },
       "cui": "C0697076",
       "min_threshold": 6,
-      "threshold_source": "6% diosgenin \u2014 commercial standardization"
+      "threshold_source": "6% diosgenin — commercial standardization"
     },
     {
       "standard_name": "Wormwood",
@@ -6194,7 +6206,7 @@
       },
       "cui": "C0331308",
       "min_threshold": 0.03,
-      "threshold_source": "0.03% artemisinin \u2014 Artemisia annua leaf standard"
+      "threshold_source": "0.03% artemisinin — Artemisia annua leaf standard"
     },
     {
       "standard_name": "Yerba Mate",
@@ -6249,7 +6261,7 @@
       "bonus_rationale": "Bonus-eligible when the label declares aescin/escin standardization (16-20% triterpene glycosides) or a named branded standardized horse-chestnut extract. Identity lives in botanical_ingredients.horse_chestnut_seed.",
       "sources": [
         "Commission E / ESCOP Hippocastani semen monograph (16-20% aescin)",
-        "Pittler & Ernst, horse chestnut seed extract for CVI (Cochrane) \u2014 PMC7144685"
+        "Pittler & Ernst, horse chestnut seed extract for CVI (Cochrane) — PMC7144685"
       ],
       "category": "seed_fruit",
       "priority": "medium",

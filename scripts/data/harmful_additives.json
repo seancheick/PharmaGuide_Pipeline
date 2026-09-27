@@ -41,9 +41,9 @@
       "entity_relationships": "Links to related entries or null"
     },
     "risk_breakdown": {
-      "moderate": 45,
-      "high": 22,
-      "low": 46
+      "high": 21,
+      "low": 62,
+      "moderate": 33
     },
     "categories_count": 20,
     "pipeline_integration": "Used by enrichment script to apply penalty points for harmful ingredients during scoring. Matches against ingredient names and other_ingredient forms.",

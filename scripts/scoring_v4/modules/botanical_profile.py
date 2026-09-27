@@ -13,13 +13,14 @@ both for botanical products:
     branded clinically-studied extract   +3
     weak / unidentified botanical        -4   (replaces the +6 identity credit)
 
-  Dose adapter (replaces RDA/UL proxy), via rda_therapeutic_dosing.json:
-    within studied range   -> 21
-    near studied range     -> 16
-    below studied range    -> 10
-    disclosed, no reference-> 10
-    blend total only       -> 7
-    primary, no dose       -> 0  (NOT denominator exclusion)
+  Dose adapter (replaces RDA/UL proxy), via rda_therapeutic_dosing.json; points
+  are quality_score.json formulation_variant_magnitudes.botanical:
+    within studied range    -> botanical_dose_within
+    near studied range      -> botanical_dose_near
+    above / below range     -> botanical_dose_above / botanical_dose_below
+    disclosed, no reference -> botanical_dose_disclosed_no_ref
+    blend total only        -> botanical_dose_blend_total
+    primary, no dose        -> botanical_dose_primary_no_dose (NOT denominator exclusion)
 
 The A5b standardized-botanical bonus is DISABLED inside the profile (marker
 standardization is now core formulation, not a duplicate +1 bonus). Botanical

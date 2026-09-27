@@ -1,6 +1,7 @@
 # Scoring v3 → v4 — Engineering Bridge
 
-**Status:** REFERENCE — engineering companion to [SCORING_V4_PROPOSAL.md](SCORING_V4_PROPOSAL.md)
+**Status:** HISTORICAL (2026-09-27). Maps v3 code that was deleted at the v4 cutover (f3bed2f2); the
+file:line references no longer resolve. Companion to [SCORING_V4_PROPOSAL.md](SCORING_V4_PROPOSAL.md).
 **Audience:** engineers implementing the v4 shadow scorer
 **Started:** 2026-05-18
 

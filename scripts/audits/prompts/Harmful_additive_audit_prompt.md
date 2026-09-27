@@ -381,5 +381,5 @@ Aliases removed:       XX
 6. **All identifiers must be API-verified.** CUI via UMLS, UNII via GSRS, CAS via PubChem. Never trust inherited data without verification.
 7. **No alias should match a different compound** — verify via CUI/UNII/CAS. If an alias belongs to a different substance, decouple it (remove from wrong entry, optionally add to correct entry). Metal salts ≠ free acids, nucleotides ≠ MSG, glycerol ≠ sugar alcohols.
 8. **Identifier decoupling over forced matches.** If GSRS returns the wrong substance, clear the GSRS/UNII and add a policy override — never leave wrong data hoping it's "close enough."
-9. **No batch fixes on data files.** Fix entries one at a time, verify each change, run targeted tests after each edit.
+9. **Batch by topic, verify per entry** (AGENTS.md): verify each entry on its own, apply the batch with `scripts/data_batch.py`, prove it with `data_batch.py check`, then run the targeted tests once per batch.
 10. When in doubt → ⚠️ flag, don't guess.

@@ -18,10 +18,12 @@ AGENTS.md; this file holds only Claude-specific material. Don't grow it into a s
 
 ## Skills for this repo
 
+In `.claude/skills/` (cloud sessions get them too), except `/handoff` and `/pg-resume`, which are global.
+
 | Skill | Use |
 |---|---|
 | `/catalog-release` | the release train; wraps `scripts/release_full.sh` |
-| `/data-fix` | curated-data corrections, one entry at a time |
+| `/data-fix` | curated-data corrections and additions: batch by topic, verify every entry |
 | `/pg-scoring-change` | any change that can move a score, pillar, route or verdict |
 | `/verify-data` | live-API identifier verification |
 | `/fda-weekly-sync` | FDA recall/ban sync |

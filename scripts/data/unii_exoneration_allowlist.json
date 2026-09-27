@@ -19,8 +19,14 @@
       "unii": "3OWL53L36A",
       "fda_canonical_name": "MANNITOL",
       "entries": [
-        {"file": "other_ingredients.json", "entry_id": "PII_PARTECK"},
-        {"file": "other_ingredients.json", "entry_id": "PII_PEARLITOL"}
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_PARTECK"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_PEARLITOL"
+        }
       ],
       "rationale": "Both are branded mannitol excipients (Parteck = Merck, Pearlitol = Roquette). Same FDA-cataloged compound, different brand names. Single tier (other_ingredients), so runtime collision logging will warn but the resolved payload is correct either way.",
       "added_by": "unii_triage_2026_05_14"
@@ -29,8 +35,14 @@
       "unii": "3VMW64U790",
       "fda_canonical_name": "CISSUS QUADRANGULARIS WHOLE",
       "entries": [
-        {"file": "botanical_ingredients.json", "entry_id": "winged_treebine"},
-        {"file": "standardized_botanicals.json", "entry_id": "cissus_quadrangularis"}
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "winged_treebine"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "cissus_quadrangularis"
+        }
       ],
       "rationale": "Common name (Winged Treebine) vs Latin binomial (Cissus quadrangularis) for the same plant. Standardized entry wins for active-side scoring.",
       "added_by": "unii_triage_2026_05_14"
@@ -39,9 +51,18 @@
       "unii": "50JZ5Z98QY",
       "fda_canonical_name": "MARITIME PINE",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "pine_bark_extract"},
-        {"file": "botanical_ingredients.json", "entry_id": "pine_bark_extract"},
-        {"file": "standardized_botanicals.json", "entry_id": "pycnogenol"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "pine_bark_extract"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "pine_bark_extract"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "pycnogenol"
+        }
       ],
       "rationale": "All maritime pine (Pinus pinaster) bark extract. Pycnogenol is the Horphag-branded standardized form. IQM wins for active scoring. 2026-05-22: pine_bark_extract relocated from standardized_botanicals to botanical_ingredients (plain identity, no bonus) per MO-3; std-side pycnogenol retains the branded bonus pathway.",
       "added_by": "unii_triage_2026_05_14"
@@ -50,9 +71,18 @@
       "unii": "5EVU04N5QU",
       "fda_canonical_name": "CITRUS AURANTIUM DULCIS (ORANGE) FRUIT POWDER",
       "entries": [
-        {"file": "botanical_ingredients.json", "entry_id": "orange"},
-        {"file": "other_ingredients.json", "entry_id": "NHA_ORANGE_CRYSTALS"},
-        {"file": "other_ingredients.json", "entry_id": "NHA_ORANGE_FLAVOR"}
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "orange"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_ORANGE_CRYSTALS"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_ORANGE_FLAVOR"
+        }
       ],
       "rationale": "All derived from FDA-cataloged Citrus aurantium dulcis fruit powder. Crystals and flavor are downstream products of the same orange fruit. Botanical wins for scoring; other entries route to inactive recognition.",
       "added_by": "unii_triage_2026_05_14"
@@ -61,8 +91,14 @@
       "unii": "714783Y9Z0",
       "fda_canonical_name": "SALVIA MILTIORRHIZA WHOLE",
       "entries": [
-        {"file": "botanical_ingredients.json", "entry_id": "danshen"},
-        {"file": "standardized_botanicals.json", "entry_id": "salvia_miltiorrhiza"}
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "danshen"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "salvia_miltiorrhiza"
+        }
       ],
       "rationale": "Common Chinese name (Danshen) vs Latin binomial (Salvia miltiorrhiza) for the same plant. Standardized entry wins for active scoring.",
       "added_by": "unii_triage_2026_05_14"
@@ -71,8 +107,14 @@
       "unii": "7797M4CPPA",
       "fda_canonical_name": "N,N-DIMETHYLGLYCINE",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "dimethyl_glycine"},
-        {"file": "other_ingredients.json", "entry_id": "OI_DIMETHYLGLYCINE"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "dimethyl_glycine"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "OI_DIMETHYLGLYCINE"
+        }
       ],
       "rationale": "Same compound (DMG, N,N-dimethylglycine), IQM is active-scoring entry, other_ingredients is inactive-recognition entry. Different roles, identical chemistry. IQM wins at runtime.",
       "added_by": "unii_triage_2026_05_14"
@@ -81,8 +123,14 @@
       "unii": "A1ST9M22TO",
       "fda_canonical_name": "KAEMPFERIA PARVIFLORA WHOLE",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "kaempferia_parviflora"},
-        {"file": "botanical_ingredients.json", "entry_id": "black_ginger"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "kaempferia_parviflora"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "black_ginger"
+        }
       ],
       "rationale": "Latin binomial (Kaempferia parviflora) vs common name (Black Ginger) for the same plant. IQM wins.",
       "added_by": "unii_triage_2026_05_14"
@@ -91,12 +139,30 @@
       "unii": "C5529G5JPQ",
       "fda_canonical_name": "GINGER",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "ginger"},
-        {"file": "botanical_ingredients.json", "entry_id": "ginger_extract"},
-        {"file": "botanical_ingredients.json", "entry_id": "ginger_root"},
-        {"file": "other_ingredients.json", "entry_id": "NHA_GINGER_EXTRACT"},
-        {"file": "other_ingredients.json", "entry_id": "NHA_GINGER_FLAVOR"},
-        {"file": "standardized_botanicals.json", "entry_id": "ginger_extract"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "ginger"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "ginger_extract"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "ginger_root"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_GINGER_EXTRACT"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_GINGER_FLAVOR"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "ginger_extract"
+        }
       ],
       "rationale": "All Zingiber officinale (ginger) entries. Intentional separate modeling for scoring context: raw root vs standardized extract vs flavor preparation. Priority order resolves to IQM for active scoring; other tiers route inactive disclosures.",
       "added_by": "unii_triage_2026_05_14"
@@ -105,8 +171,14 @@
       "unii": "G199I91G4B",
       "fda_canonical_name": "CONJUGATED LINOLEIC ACID",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "cla"},
-        {"file": "other_ingredients.json", "entry_id": "OI_CLA_OIL_INACTIVE"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "cla"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "OI_CLA_OIL_INACTIVE"
+        }
       ],
       "rationale": "Same compound (CLA), two roles. IQM is the active-scoring entry; other_ingredients is the inactive-recognition entry for CLA oil used as a carrier. IQM wins.",
       "added_by": "unii_triage_2026_05_14"
@@ -115,8 +187,14 @@
       "unii": "K48IKT5321",
       "fda_canonical_name": "CLOVE",
       "entries": [
-        {"file": "botanical_ingredients.json", "entry_id": "cloves"},
-        {"file": "other_ingredients.json", "entry_id": "PII_CLOVE_POWDER"}
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "cloves"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_CLOVE_POWDER"
+        }
       ],
       "rationale": "Same spice (Syzygium aromaticum / Eugenia caryophyllus), two contexts (whole/herb vs powdered formulation aid). Botanical wins for scoring.",
       "added_by": "unii_triage_2026_05_14"
@@ -125,8 +203,14 @@
       "unii": "T538276W1L",
       "fda_canonical_name": "ISATIS TINCTORIA WHOLE",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "isatis"},
-        {"file": "botanical_ingredients.json", "entry_id": "woad"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "isatis"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "woad"
+        }
       ],
       "rationale": "Latin binomial (Isatis tinctoria) vs common name (Woad) for the same plant. IQM wins.",
       "added_by": "unii_triage_2026_05_14"
@@ -135,8 +219,14 @@
       "unii": "11MSQ4JG7G",
       "fda_canonical_name": "AGARICUS BLAZEI WHOLE",
       "entries": [
-        {"file": "botanical_ingredients.json", "entry_id": "himematsutake"},
-        {"file": "standardized_botanicals.json", "entry_id": "agaricus_blazei"}
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "himematsutake"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "agaricus_blazei"
+        }
       ],
       "rationale": "Himematsutake is a common Japanese name for Agaricus blazei. Both entries point to the same FDA-cataloged whole botanical; standardized botanical wins when active-scoring context needs it.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -145,8 +235,14 @@
       "unii": "31T0FF0472",
       "fda_canonical_name": "HAEMATOCOCCUS PLUVIALIS",
       "entries": [
-        {"file": "standardized_botanicals.json", "entry_id": "astaxanthin_haematococcus_pluvialis"},
-        {"file": "standardized_botanicals.json", "entry_id": "astazine"}
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "astaxanthin_haematococcus_pluvialis"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "astazine"
+        }
       ],
       "rationale": "AstaZine is a branded Haematococcus pluvialis astaxanthin source. Both standardized-botanical entries intentionally share the same FDA substance; first-write routing remains within the same identity family.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -155,9 +251,18 @@
       "unii": "394XK0IH40",
       "fda_canonical_name": "PHOSPHATIDYLSERINE",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "phosphatidylserine"},
-        {"file": "botanical_ingredients.json", "entry_id": "phosphatidylserine"},
-        {"file": "standardized_botanicals.json", "entry_id": "sharp_ps_green"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "phosphatidylserine"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "phosphatidylserine"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "sharp_ps_green"
+        }
       ],
       "rationale": "Sharp-PS Green is a branded phosphatidylserine ingredient, while IQM and botanical entries model the same FDA-cataloged phosphatidylserine identity in different scoring contexts. IQM wins for active scoring.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -166,8 +271,14 @@
       "unii": "6PQP1V1B6O",
       "fda_canonical_name": "ANNATTO",
       "entries": [
-        {"file": "other_ingredients.json", "entry_id": "NHA_ANNATTO_VARIANTS"},
-        {"file": "other_ingredients.json", "entry_id": "OI_ANNATTO_EXTRACT"}
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_ANNATTO_VARIANTS"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "OI_ANNATTO_EXTRACT"
+        }
       ],
       "rationale": "Both rows model annatto colorant/extract preparations under the same FDA annatto substance. The broad variant row and extract row are inactive-recognition aliases, not separate chemical identities.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -176,8 +287,14 @@
       "unii": "6R8T1UDM3V",
       "fda_canonical_name": "PALMITAMIDE MEA",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "palmitoylethanolamide"},
-        {"file": "standardized_botanicals.json", "entry_id": "levagen"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "palmitoylethanolamide"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "levagen"
+        }
       ],
       "rationale": "Levagen is a branded palmitoylethanolamide ingredient. The IQM parent and branded standardized entry share the same FDA palmitamide MEA identity; IQM remains the active-scoring winner.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -186,8 +303,14 @@
       "unii": "BD70459I50",
       "fda_canonical_name": "CITRUS BIOFLAVONOIDS",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "citrus_bioflavonoids"},
-        {"file": "botanical_ingredients.json", "entry_id": "lemon_bioflavonoids"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "citrus_bioflavonoids"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "lemon_bioflavonoids"
+        }
       ],
       "rationale": "Lemon bioflavonoids are a citrus-bioflavonoid source row, while IQM models the active scoring parent. Both carry the FDA citrus bioflavonoids substance and route to the IQM parent for active scoring.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -196,8 +319,14 @@
       "unii": "BIA2SO6F5B",
       "fda_canonical_name": "GALEGA OFFICINALIS WHOLE",
       "entries": [
-        {"file": "botanical_ingredients.json", "entry_id": "galega_officinalis"},
-        {"file": "botanical_ingredients.json", "entry_id": "goats_rue"}
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "galega_officinalis"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "goats_rue"
+        }
       ],
       "rationale": "Goat's rue is the common name for Galega officinalis. These botanical rows are aliases for the same FDA-cataloged whole plant, not competing identities.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -206,9 +335,18 @@
       "unii": "BQY1UBX046",
       "fda_canonical_name": "EUROPEAN ELDERBERRY",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "elderberry"},
-        {"file": "botanical_ingredients.json", "entry_id": "elderberries"},
-        {"file": "standardized_botanicals.json", "entry_id": "elderberry"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "elderberry"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "elderberries"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "elderberry"
+        }
       ],
       "rationale": "The IQM parent, plural botanical row, and standardized elderberry row all represent European elderberry. IQM wins for active scoring; botanical and standardized rows keep source/form context.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -217,8 +355,14 @@
       "unii": "C4YAD5F5G6",
       "fda_canonical_name": "GLYCERYL MONOOLEATE",
       "entries": [
-        {"file": "other_ingredients.json", "entry_id": "PII_GLYCEROL_MONOOLEATE"},
-        {"file": "other_ingredients.json", "entry_id": "PII_GLYCERYL_MONOOLEATE"}
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_GLYCEROL_MONOOLEATE"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_GLYCERYL_MONOOLEATE"
+        }
       ],
       "rationale": "Glycerol monooleate and glyceryl monooleate are naming variants for the same FDA-cataloged excipient. Both rows are inactive-recognition aliases in the same other-ingredient tier.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -227,8 +371,14 @@
       "unii": "D65QWF3541",
       "fda_canonical_name": "HANDROANTHUS IMPETIGINOSUS WHOLE",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "pau_darco"},
-        {"file": "botanical_ingredients.json", "entry_id": "pau_darco_bark"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "pau_darco"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "pau_darco_bark"
+        }
       ],
       "rationale": "Pau d'Arco and Pau d'Arco bark both point to the FDA-cataloged Handroanthus impetiginosus whole botanical. IQM wins for active scoring; the bark row preserves botanical label context.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -237,8 +387,14 @@
       "unii": "D9108TZ9KG",
       "fda_canonical_name": "COCOA",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "cocoa"},
-        {"file": "botanical_ingredients.json", "entry_id": "cacao_powder"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "cocoa"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "cacao_powder"
+        }
       ],
       "rationale": "Cacao powder is a cocoa-source botanical label row. Both records share the FDA cocoa identity, and the IQM parent remains the active-scoring payload.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -247,8 +403,14 @@
       "unii": "E750O06Y6O",
       "fda_canonical_name": "HESPERIDIN",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "citrus_bioflavonoids.forms[hesperidin]"},
-        {"file": "botanical_ingredients.json", "entry_id": "hesperidin"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "citrus_bioflavonoids.forms[hesperidin]"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "hesperidin"
+        }
       ],
       "rationale": "The IQM form-level row and botanical row both represent hesperidin. Form-level UNII lookup still routes to the citrus bioflavonoids parent payload while retaining form identity downstream.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -257,9 +419,18 @@
       "unii": "FZ989GH94E",
       "fda_canonical_name": "PVP",
       "entries": [
-        {"file": "other_ingredients.json", "entry_id": "NHA_PVP"},
-        {"file": "other_ingredients.json", "entry_id": "PII_KOLLIDON"},
-        {"file": "other_ingredients.json", "entry_id": "PII_POVIDONE"}
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_PVP"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_KOLLIDON"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_POVIDONE"
+        }
       ],
       "rationale": "PVP, povidone, and Kollidon are the same FDA-cataloged polyvinylpyrrolidone excipient identity represented with generic and branded labels. All rows live in the inactive other-ingredient tier.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -268,9 +439,18 @@
       "unii": "HOX6BEK27Q",
       "fda_canonical_name": "COFFEA ARABICA FRUIT",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "coffee_fruit"},
-        {"file": "botanical_ingredients.json", "entry_id": "coffee_fruit"},
-        {"file": "standardized_botanicals.json", "entry_id": "coffeeberry"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "coffee_fruit"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "coffee_fruit"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "coffeeberry"
+        }
       ],
       "rationale": "CoffeeBerry is a branded whole coffee fruit extract, while IQM and botanical rows model the same Coffea arabica fruit identity. IQM wins for active scoring and the branded row preserves standardized-source context.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -279,8 +459,14 @@
       "unii": "K679OBS311",
       "fda_canonical_name": "CARBOXYMETHYLCELLULOSE SODIUM, UNSPECIFIED FORM",
       "entries": [
-        {"file": "other_ingredients.json", "entry_id": "OI_CELLULOSE_GUM"},
-        {"file": "other_ingredients.json", "entry_id": "PII_SODIUM_CARBOXYMETHYLCELLULOSE"}
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "OI_CELLULOSE_GUM"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_SODIUM_CARBOXYMETHYLCELLULOSE"
+        }
       ],
       "rationale": "Cellulose gum is the common excipient label for sodium carboxymethylcellulose. Both rows represent the same FDA-cataloged inactive ingredient identity.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -289,8 +475,14 @@
       "unii": "S71T8B8Z6P",
       "fda_canonical_name": "CHROMIUM PICOLINATE",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "chromium.forms[chromium picolinate]"},
-        {"file": "standardized_botanicals.json", "entry_id": "chromax"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "chromium.forms[chromium picolinate]"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "chromax"
+        }
       ],
       "rationale": "Chromax is a branded chromium picolinate ingredient. The IQM form-level row and standardized branded row share the same FDA chromium picolinate identity, while the IQM parent remains the scoring payload.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -299,8 +491,14 @@
       "unii": "TJ6XA84OQF",
       "fda_canonical_name": "SENEGALIA CATECHU WHOLE",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "acacia_catechu"},
-        {"file": "botanical_ingredients.json", "entry_id": "cutch_tree"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "acacia_catechu"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "cutch_tree"
+        }
       ],
       "rationale": "Cutch tree is the common name for Senegalia/Acacia catechu. Both records represent the same FDA-cataloged whole botanical; IQM wins for active scoring.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -309,9 +507,18 @@
       "unii": "X72A60C9MT",
       "fda_canonical_name": "LUTEIN",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "lutein"},
-        {"file": "standardized_botanicals.json", "entry_id": "floraglo"},
-        {"file": "standardized_botanicals.json", "entry_id": "lutemax_2020"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "lutein"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "floraglo"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "lutemax_2020"
+        }
       ],
       "rationale": "FloraGLO and Lutemax 2020 are branded lutein ingredients. All rows share the FDA lutein identity, with IQM providing the active-scoring parent and branded rows preserving formulation/source context.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -320,8 +527,14 @@
       "unii": "E89I1637KE",
       "fda_canonical_name": "CYAMOPSIS TETRAGONOLOBA (GUAR) GUM",
       "entries": [
-        {"file": "other_ingredients.json", "entry_id": "OI_GUAR_GUM"},
-        {"file": "other_ingredients.json", "entry_id": "NHA_PARTIALLY_HYDROLYZED_GUAR_GUM"}
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "OI_GUAR_GUM"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_PARTIALLY_HYDROLYZED_GUAR_GUM"
+        }
       ],
       "rationale": "Live GSRS search for partially hydrolyzed guar gum resolves to the FDA guar gum substance. The plain guar gum and PHGG rows are inactive/fiber recognition variants of the same registry identity.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -330,8 +543,14 @@
       "unii": "H8AV0SQX4D",
       "fda_canonical_name": "SODIUM STARCH GLYCOLATE TYPE A",
       "entries": [
-        {"file": "other_ingredients.json", "entry_id": "PII_SODIUM_STARCH_GLYCOLATE"},
-        {"file": "other_ingredients.json", "entry_id": "NHA_SODIUM_STARCH_GLYCOLATE"}
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_SODIUM_STARCH_GLYCOLATE"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_SODIUM_STARCH_GLYCOLATE"
+        }
       ],
       "rationale": "Both rows model sodium starch glycolate type A disintegrant/excipient labels. Live GSRS search resolves the ingredient name to the same FDA mixture UNII, so this is duplicate inactive modeling rather than a competing identity.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -340,8 +559,14 @@
       "unii": "M4I0D6VV5M",
       "fda_canonical_name": "CALCIUM CHLORIDE",
       "entries": [
-        {"file": "other_ingredients.json", "entry_id": "NHA_CALCIUM_CHLORIDE"},
-        {"file": "other_ingredients.json", "entry_id": "PII_CALCIUM_CHLORIDE_EXCIPIENT"}
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "NHA_CALCIUM_CHLORIDE"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "PII_CALCIUM_CHLORIDE_EXCIPIENT"
+        }
       ],
       "rationale": "The calcium chloride processing-aid row and excipient row intentionally represent the same FDA calcium chloride chemical. The duplicate rows preserve different inactive-use contexts.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -350,9 +575,18 @@
       "unii": "UFH8805FKA",
       "fda_canonical_name": "ST. JOHN'S WORT",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "st_johns_wort"},
-        {"file": "botanical_ingredients.json", "entry_id": "st_john_s_wort"},
-        {"file": "standardized_botanicals.json", "entry_id": "st_john_s_wort"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "st_johns_wort"
+        },
+        {
+          "file": "botanical_ingredients.json",
+          "entry_id": "st_john_s_wort"
+        },
+        {
+          "file": "standardized_botanicals.json",
+          "entry_id": "st_john_s_wort"
+        }
       ],
       "rationale": "The IQM parent, botanical row, and standardized botanical row all represent Hypericum perforatum / St. John's Wort. IQM wins active scoring while botanical and standardized rows preserve source and marker context.",
       "added_by": "unii_runtime_cleanup_2026_06_15"
@@ -361,8 +595,14 @@
       "unii": "PQ6CK8PD0R",
       "fda_canonical_name": "ASCORBIC ACID",
       "entries": [
-        {"file": "ingredient_quality_map.json", "entry_id": "vitamin_c"},
-        {"file": "other_ingredients.json", "entry_id": "OI_ASCORBIC_ACID_PRESERVATIVE"}
+        {
+          "file": "ingredient_quality_map.json",
+          "entry_id": "vitamin_c"
+        },
+        {
+          "file": "other_ingredients.json",
+          "entry_id": "OI_ASCORBIC_ACID_PRESERVATIVE"
+        }
       ],
       "rationale": "Vitamin C IS ascorbic acid (same compound). Two roles: IQM models it as an active vitamin; other_ingredients models it as a preservative additive. IQM wins for active scoring; other tier handles inactive disclosure as a preservative.",
       "added_by": "unii_triage_2026_05_14"

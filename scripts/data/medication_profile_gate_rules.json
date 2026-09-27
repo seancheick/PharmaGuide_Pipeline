@@ -37,8 +37,12 @@
         "gate_type": "combination",
         "requires": {
           "conditions_any": [],
-          "drug_classes_any": ["nsaids"],
-          "profile_flags_any": ["pregnant"]
+          "drug_classes_any": [
+            "nsaids"
+          ],
+          "profile_flags_any": [
+            "pregnant"
+          ]
         },
         "excludes": {
           "conditions_any": [],
@@ -63,8 +67,12 @@
       "profile_gate": {
         "gate_type": "combination",
         "requires": {
-          "conditions_any": ["kidney_disease"],
-          "drug_classes_any": ["nsaids"],
+          "conditions_any": [
+            "kidney_disease"
+          ],
+          "drug_classes_any": [
+            "nsaids"
+          ],
           "profile_flags_any": []
         },
         "excludes": {

@@ -5,7 +5,7 @@
 **Authors:** Sean Cheick (decisions), Claude (drafting)
 **Affects:**
   - `scripts/release_full.sh`
-  - `scripts/cleanup_orphan_blobs.py` (or its current home)
+  - `scripts/cleanup_old_versions.py` (`quarantine_orphan_blob_batch`) and `scripts/release_safety/orphan_reconcile.py`
   - `batch_run_all_datasets.sh` (consumer)
   - Supabase storage bucket `pharmaguide` (detail-blob layout)
   - Pipeline manifest schema (new table `catalog_releases`)
@@ -162,7 +162,7 @@ Adopt a phased redesign of the release pipeline that enforces all ten invariants
 
 - **Recovery procedure** (documented in operations runbook):
   ```
-  python scripts/recover_quarantined_blob.py <sha256_hash>
+  $PG_PYTHON scripts/recover_quarantined_blob.py <sha256_hash>
   # → finds the blob in shared/quarantine/*/
   # → copies it back to shared/details/sha256/{shard}/{hash}.json
   # → emits an audit log entry
@@ -237,7 +237,7 @@ Adopt a phased redesign of the release pipeline that enforces all ten invariants
   );
   ```
 
-  A version is **live iff `state = 'ACTIVE'`**. Retirement is an explicit operator action (e.g., `python scripts/retire_release.py 2026.05.10.132843 --reason "deprecated TestFlight build"`), recorded in the audit trail. See "Release state machine" below for full state semantics.
+  A version is **live iff `state = 'ACTIVE'`**. Retirement is an explicit operator action (e.g., `$PG_PYTHON scripts/release_safety/retire_release.py 2026.05.10.132843 --reason "deprecated TestFlight build"`), recorded in the audit trail. See "Release state machine" below for full state semantics.
 
 - **Duplicate registration handling (HR-9):** `INSERT` on existing `db_version` is a no-op (`INSERT ... ON CONFLICT DO NOTHING`), not an error. Re-running release registration after a partial failure converges; never errors on "already registered." State *transitions* (e.g., re-activating an already-ACTIVE version) are also no-ops.
 
@@ -341,7 +341,7 @@ When a published release proves bad (corrupted data, regression, contract violat
 
 ```
 1. Mark the bad release retired.
-   python scripts/retire_release.py <bad_db_version> --reason "<one-line cause>"
+   $PG_PYTHON scripts/release_safety/retire_release.py <bad_db_version> --reason "<one-line cause>"
    → sets catalog_releases.state = 'RETIRED', retired_at = now() for this version
    → bad version is no longer in the protected blob set
    → bad version no longer eligible for OTA delivery
@@ -350,20 +350,21 @@ When a published release proves bad (corrupted data, regression, contract violat
    git revert <bundle commit on Flutter main>      # OR cherry-pick the prior bundle commit
    → assets/db/ on Flutter main now points at the previous version
    → next OTA / app reinstall picks up the prior catalog
-   → if the prior version was already RETIRED in step 1's neighborhood, transition it back via:
-     python scripts/reactivate_release.py <prior_db_version> --reason "rollback target"
-     (re-activation is the ONE retirement-reverse case the system allows; operator must justify)
+   → a RETIRED version cannot be re-activated: `scripts/release_safety/registry.py` makes RETIRED
+     terminal (ACTIVE → RETIRED only), and no reactivate script exists (checked 2026-09-27). If the
+     rollback target was retired, republish it as a new release (step 3's last resort).
 
 3. Restore quarantined blobs if the previous version's blobs were swept.
    for hash in $(diff_protected_blobs <prior_db_version> <bad_db_version>):
-       python scripts/recover_quarantined_blob.py "$hash"
+       $PG_PYTHON scripts/recover_quarantined_blob.py "$hash"
    → quarantined blobs return to shared/details/sha256/{shard}/
    → only works within the 30-day quarantine TTL
    → blobs already hard-deleted by the tombstone sweeper cannot be recovered;
      in that case, the only path is to republish the prior version (re-run pipeline from prior dataset state)
 
 4. Invalidate OTA pointers (if OTA delivery is active).
-   python scripts/invalidate_ota_manifest.py <bad_db_version>
+   NOT IMPLEMENTED (2026-09-27): no invalidate_ota_manifest script exists. If OTA delivery is
+   active, this step has no tool yet (pending-items register).
    → ensures running apps don't pick up the bad version on next OTA check
    → forces them to the most recent ACTIVE prior version
 
@@ -456,7 +457,7 @@ Considered: serve the bundle directly from Supabase, skip the bundled-in-app DB.
 - **Tombstone sweeper cadence** — operator-invoked initially. Cron-able later if operational load justifies.
 - **`recover_quarantined_blob.py`** access control — currently any operator with pipeline access can recover. Tighten if/when needed.
 - **Lock file vs Postgres advisory lock** — start with lock file; revisit if pipeline goes distributed.
-- **`reactivate_release.py`** — does the rollback re-activation path need a stronger gate (e.g., second operator approval)? Decided at P3 implementation.
+- **`reactivate_release.py`** (moot as of 2026-09-27: never built, and registry.py makes RETIRED terminal) — does the rollback re-activation path need a stronger gate (e.g., second operator approval)? Decided at P3 implementation.
 
 ---
 

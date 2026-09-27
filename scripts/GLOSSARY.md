@@ -149,7 +149,7 @@ committed outcome after a lost response without borrowing another attempt's resu
 | **Response lock** | A content-hashed declaration that the reviewer registry and append-only response file are complete before the development baseline key may be opened. |
 | **Candidate lock** | The statistician- and clinical-owner-approved, content-hashed list of calibration candidates, mechanistic rationale, and expected direction frozen before the sealed holdout may be opened. |
 | **Aggregate clinical evidence identity** | One clinical-evidence record scoped to a required set of disclosed canonical ingredients rather than any one component. Enrichment emits it once only when the complete identity set is present; scoring sums convertible daily component doses and fails closed when a required component or unit is missing. |
-| **Router** | `scoring_v4/router.py`, the sole authority for v4 module dispatch. |
+| **Router** | `scoring_input_contract.py::build_scoring_classification` decides the v4 module route; `scoring_v4/router.py` is a thin adapter over it (`class_for_product`). |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
 | **Completeness exclusion** | Products without usable identity/payload become `NOT_SCORED` and are quarantined from the live catalog. Missing disclosure can instead remain scoreable as explicit soft debt. |
 | **Verdict precedence** | BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE. |

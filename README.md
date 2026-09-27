@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tests-5100+-4CAF50?style=for-the-badge&logo=pytest&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tests-scripts%2Ftest.sh-4CAF50?style=for-the-badge&logo=pytest&logoColor=white" />
   <img src="https://img.shields.io/badge/Scoring-v4-FF6B35?style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" />
 </p>
@@ -198,7 +198,6 @@ scripts/
   extract_product_images.py    # Product image extraction and upload
   build_interaction_db.py      # Interaction rules DB assembly
   unii_cache.py                # FDA UNII offline cache management
-  shadow_score_comparison.py   # Historical comparison tool; v4 is now production
   tests/test_scoring_snapshot_v1.py # Authoritative frozen-product regression gate
   preflight.py                 # Pre-pipeline validation checks
   unmapped_ingredient_tracker.py # Unmapped ingredient diagnostics
@@ -215,7 +214,7 @@ scripts/
     verify_rda_uls.py          # RDA/UL verification against DRI tables
     verify_clinical_trials.py  # ClinicalTrials.gov NCT verification
     fda_weekly_sync.py         # FDA recall tracking (openFDA, RSS, DEA)
-  tests/                       # 580 test files, 5100+ tests
+  tests/                       # run with scripts/test.sh (fast / release / full)
   logs/                        # Runtime logs
   reports/                     # Generated audit reports
 docs/                          # Technical documentation

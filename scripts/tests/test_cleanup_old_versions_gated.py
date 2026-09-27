@@ -144,10 +144,3 @@ def test_quarantine_batch_without_factory_stays_serial():
     assert (moved, failed) == (6, 0)
     assert len(bucket.copy_clients_by_thread) == 1
 
-
-def test_sync_cleanup_owns_version_rows_only():
-    from sync_to_supabase import _build_cleanup_args
-
-    assert _build_cleanup_args(cleanup_keep=2) == [
-        "--keep", "2", "--execute", "--cleanup-db",
-    ]

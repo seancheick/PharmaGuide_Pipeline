@@ -29,35 +29,54 @@
       "forms": [
         {
           "canonical": "re-esterified triglyceride",
-          "patterns": ["\\brtg\\b", "re-?esterified\\s+triglycerides?\\b"]
+          "patterns": [
+            "\\brtg\\b",
+            "re-?esterified\\s+triglycerides?\\b"
+          ]
         },
         {
           "canonical": "natural triglyceride",
-          "patterns": ["\\bnatural\\s+triglycerides?\\b"]
+          "patterns": [
+            "\\bnatural\\s+triglycerides?\\b"
+          ]
         },
         {
           "canonical": "triglyceride",
-          "patterns": ["\\btriglycerides?\\b"]
+          "patterns": [
+            "\\btriglycerides?\\b"
+          ]
         },
         {
           "canonical": "krill phospholipid",
-          "patterns": ["\\bkrill\\s+phospholipid\\b"]
+          "patterns": [
+            "\\bkrill\\s+phospholipid\\b"
+          ]
         },
         {
           "canonical": "phospholipid",
-          "patterns": ["\\bphospholipid\\b"]
+          "patterns": [
+            "\\bphospholipid\\b"
+          ]
         },
         {
           "canonical": "monoglyceride",
-          "patterns": ["\\bmonoglycerides?\\b"]
+          "patterns": [
+            "\\bmonoglycerides?\\b"
+          ]
         },
         {
           "canonical": "free fatty acid",
-          "patterns": ["\\bfree\\s+fatty\\s+acid\\b", "\\bffa\\b"]
+          "patterns": [
+            "\\bfree\\s+fatty\\s+acid\\b",
+            "\\bffa\\b"
+          ]
         },
         {
           "canonical": "ethyl ester",
-          "patterns": ["\\bethyl\\s+esters?\\b", "\\bee\\b"]
+          "patterns": [
+            "\\bethyl\\s+esters?\\b",
+            "\\bee\\b"
+          ]
         }
       ]
     },
@@ -67,19 +86,35 @@
       "forms": [
         {
           "canonical": "EPA",
-          "patterns": ["\\beicosapentaenoic\\s+acid\\b", "\\bepa\\b", "\\bc20:5n-3\\b"]
+          "patterns": [
+            "\\beicosapentaenoic\\s+acid\\b",
+            "\\bepa\\b",
+            "\\bc20:5n-3\\b"
+          ]
         },
         {
           "canonical": "DHA",
-          "patterns": ["\\bdocosahexaenoic\\s+acid\\b", "\\bdha\\b", "\\bc22:6n-3\\b"]
+          "patterns": [
+            "\\bdocosahexaenoic\\s+acid\\b",
+            "\\bdha\\b",
+            "\\bc22:6n-3\\b"
+          ]
         },
         {
           "canonical": "DPA",
-          "patterns": ["\\bdocosapentaenoic\\s+acid\\b", "\\bdpa\\b", "\\bc22:5n-3\\b"]
+          "patterns": [
+            "\\bdocosapentaenoic\\s+acid\\b",
+            "\\bdpa\\b",
+            "\\bc22:5n-3\\b"
+          ]
         },
         {
           "canonical": "ALA",
-          "patterns": ["\\balpha-linolenic\\s+acid\\b", "\\bala\\b", "\\bc18:3n-3\\b"]
+          "patterns": [
+            "\\balpha-linolenic\\s+acid\\b",
+            "\\bala\\b",
+            "\\bc18:3n-3\\b"
+          ]
         }
       ]
     },
@@ -89,19 +124,29 @@
       "forms": [
         {
           "canonical": "algae oil",
-          "patterns": ["\\balg(?:ae|al)\\s+oil\\b", "\\bfrom\\s+algae\\b"]
+          "patterns": [
+            "\\balg(?:ae|al)\\s+oil\\b",
+            "\\bfrom\\s+algae\\b"
+          ]
         },
         {
           "canonical": "krill oil",
-          "patterns": ["\\bkrill\\s+oil\\b"]
+          "patterns": [
+            "\\bkrill\\s+oil\\b"
+          ]
         },
         {
           "canonical": "calamari oil",
-          "patterns": ["\\bcalamari\\s+oil\\b", "\\bsquid\\s+oil\\b"]
+          "patterns": [
+            "\\bcalamari\\s+oil\\b",
+            "\\bsquid\\s+oil\\b"
+          ]
         },
         {
           "canonical": "fish oil",
-          "patterns": ["\\bfish\\s+oil\\b"]
+          "patterns": [
+            "\\bfish\\s+oil\\b"
+          ]
         }
       ]
     },
@@ -111,23 +156,34 @@
       "forms": [
         {
           "canonical": "spore-based",
-          "patterns": ["\\bspore[-\\s]?(?:based|forming)\\b"]
+          "patterns": [
+            "\\bspore[-\\s]?(?:based|forming)\\b"
+          ]
         },
         {
           "canonical": "microencapsulated",
-          "patterns": ["\\bmicroencapsulated\\b"]
+          "patterns": [
+            "\\bmicroencapsulated\\b"
+          ]
         },
         {
           "canonical": "acid-resistant",
-          "patterns": ["\\bacid[-\\s]?(?:resistant|stable|protected)\\b"]
+          "patterns": [
+            "\\bacid[-\\s]?(?:resistant|stable|protected)\\b"
+          ]
         },
         {
           "canonical": "delayed-release",
-          "patterns": ["\\bdelayed[-\\s]?release\\b", "\\bdr\\s*caps?\\b"]
+          "patterns": [
+            "\\bdelayed[-\\s]?release\\b",
+            "\\bdr\\s*caps?\\b"
+          ]
         },
         {
           "canonical": "enteric-coated",
-          "patterns": ["\\benteric[-\\s]?coated\\b"]
+          "patterns": [
+            "\\benteric[-\\s]?coated\\b"
+          ]
         }
       ]
     },
@@ -137,19 +193,33 @@
       "forms": [
         {
           "canonical": "heat-killed",
-          "patterns": ["\\bheat[-\\s]?killed\\b", "\\btyndalli[sz]ed\\b", "\\bheat[-\\s]?inactivated\\b"]
+          "patterns": [
+            "\\bheat[-\\s]?killed\\b",
+            "\\btyndalli[sz]ed\\b",
+            "\\bheat[-\\s]?inactivated\\b"
+          ]
         },
         {
           "canonical": "inactivated",
-          "patterns": ["\\binactivated\\b", "\\bnon[-\\s]?viable\\b"]
+          "patterns": [
+            "\\binactivated\\b",
+            "\\bnon[-\\s]?viable\\b"
+          ]
         },
         {
           "canonical": "lysate",
-          "patterns": ["\\b(?:cell|bacterial)\\s+lysate\\b", "\\blysate\\b"]
+          "patterns": [
+            "\\b(?:cell|bacterial)\\s+lysate\\b",
+            "\\blysate\\b"
+          ]
         },
         {
           "canonical": "postbiotic",
-          "patterns": ["\\bpostbiotic\\b", "\\bparaprobiotic\\b", "\\bghost\\s+probiotic\\b"]
+          "patterns": [
+            "\\bpostbiotic\\b",
+            "\\bparaprobiotic\\b",
+            "\\bghost\\s+probiotic\\b"
+          ]
         }
       ]
     },
@@ -159,23 +229,36 @@
       "forms": [
         {
           "canonical": "fructooligosaccharide",
-          "patterns": ["\\bfructooligosaccharide", "\\bfos\\b"]
+          "patterns": [
+            "\\bfructooligosaccharide",
+            "\\bfos\\b"
+          ]
         },
         {
           "canonical": "galactooligosaccharide",
-          "patterns": ["\\bgalactooligosaccharide", "\\bgos\\b"]
+          "patterns": [
+            "\\bgalactooligosaccharide",
+            "\\bgos\\b"
+          ]
         },
         {
           "canonical": "xylooligosaccharide",
-          "patterns": ["\\bxylooligosaccharide", "\\bxos\\b"]
+          "patterns": [
+            "\\bxylooligosaccharide",
+            "\\bxos\\b"
+          ]
         },
         {
           "canonical": "resistant starch",
-          "patterns": ["\\bresistant\\s+starch\\b"]
+          "patterns": [
+            "\\bresistant\\s+starch\\b"
+          ]
         },
         {
           "canonical": "inulin",
-          "patterns": ["\\binulin\\b"]
+          "patterns": [
+            "\\binulin\\b"
+          ]
         }
       ]
     },
@@ -185,15 +268,23 @@
       "forms": [
         {
           "canonical": "retinyl palmitate",
-          "patterns": ["\\bretinyl\\s*palmitate\\b", "\\bvitamin\\s*a\\s+palmitate\\b"]
+          "patterns": [
+            "\\bretinyl\\s*palmitate\\b",
+            "\\bvitamin\\s*a\\s+palmitate\\b"
+          ]
         },
         {
           "canonical": "retinyl acetate",
-          "patterns": ["\\bretinyl\\s*acetate\\b", "\\bvitamin\\s*a\\s+acetate\\b"]
+          "patterns": [
+            "\\bretinyl\\s*acetate\\b",
+            "\\bvitamin\\s*a\\s+acetate\\b"
+          ]
         },
         {
           "canonical": "beta-carotene",
-          "patterns": ["\\bbeta[\\s-]*carotene\\b"]
+          "patterns": [
+            "\\bbeta[\\s-]*carotene\\b"
+          ]
         }
       ]
     },
@@ -203,19 +294,29 @@
       "forms": [
         {
           "canonical": "D3",
-          "patterns": ["\\b(?:vitamin\\s*)?d3\\b"]
+          "patterns": [
+            "\\b(?:vitamin\\s*)?d3\\b"
+          ]
         },
         {
           "canonical": "D2",
-          "patterns": ["\\b(?:vitamin\\s*)?d2\\b"]
+          "patterns": [
+            "\\b(?:vitamin\\s*)?d2\\b"
+          ]
         },
         {
           "canonical": "cholecalciferol",
-          "patterns": ["\\b(?:vitamin\\s*)?d3\\b", "\\bcholecalciferol\\b"]
+          "patterns": [
+            "\\b(?:vitamin\\s*)?d3\\b",
+            "\\bcholecalciferol\\b"
+          ]
         },
         {
           "canonical": "ergocalciferol",
-          "patterns": ["\\b(?:vitamin\\s*)?d2\\b", "\\bergocalciferol\\b"]
+          "patterns": [
+            "\\b(?:vitamin\\s*)?d2\\b",
+            "\\bergocalciferol\\b"
+          ]
         }
       ]
     },
@@ -225,15 +326,21 @@
       "forms": [
         {
           "canonical": "d-alpha tocopheryl acetate",
-          "patterns": ["\\bd[\\s-]*alpha[\\s-]*tocopheryl[\\s-]*acetate\\b"]
+          "patterns": [
+            "\\bd[\\s-]*alpha[\\s-]*tocopheryl[\\s-]*acetate\\b"
+          ]
         },
         {
           "canonical": "dl-alpha tocopheryl acetate",
-          "patterns": ["\\bdl[\\s-]*alpha[\\s-]*tocopheryl[\\s-]*acetate\\b"]
+          "patterns": [
+            "\\bdl[\\s-]*alpha[\\s-]*tocopheryl[\\s-]*acetate\\b"
+          ]
         },
         {
           "canonical": "d-alpha tocopherol",
-          "patterns": ["\\bd[\\s-]*alpha[\\s-]*tocopherol\\b"]
+          "patterns": [
+            "\\bd[\\s-]*alpha[\\s-]*tocopherol\\b"
+          ]
         }
       ]
     },
@@ -243,15 +350,24 @@
       "forms": [
         {
           "canonical": "menaquinone-7",
-          "patterns": ["\\bmk[-\\s]?7\\b", "\\bmenaquinone[-\\s]?7\\b"]
+          "patterns": [
+            "\\bmk[-\\s]?7\\b",
+            "\\bmenaquinone[-\\s]?7\\b"
+          ]
         },
         {
           "canonical": "menaquinone-4",
-          "patterns": ["\\bmk[-\\s]?4\\b", "\\bmenaquinone[-\\s]?4\\b"]
+          "patterns": [
+            "\\bmk[-\\s]?4\\b",
+            "\\bmenaquinone[-\\s]?4\\b"
+          ]
         },
         {
           "canonical": "phylloquinone",
-          "patterns": ["\\bphylloquinone\\b", "\\bphytonadione\\b"]
+          "patterns": [
+            "\\bphylloquinone\\b",
+            "\\bphytonadione\\b"
+          ]
         }
       ]
     },
@@ -261,15 +377,21 @@
       "forms": [
         {
           "canonical": "calcium ascorbate",
-          "patterns": ["\\bcalcium\\s*ascorbate\\b"]
+          "patterns": [
+            "\\bcalcium\\s*ascorbate\\b"
+          ]
         },
         {
           "canonical": "magnesium ascorbate",
-          "patterns": ["\\bmagnesium\\s*ascorbate\\b"]
+          "patterns": [
+            "\\bmagnesium\\s*ascorbate\\b"
+          ]
         },
         {
           "canonical": "ascorbic acid",
-          "patterns": ["\\bascorbic\\s*acid\\b"]
+          "patterns": [
+            "\\bascorbic\\s*acid\\b"
+          ]
         }
       ]
     },
@@ -279,15 +401,22 @@
       "forms": [
         {
           "canonical": "methylcobalamin",
-          "patterns": ["\\bmethylcobalamin\\b"]
+          "patterns": [
+            "\\bmethylcobalamin\\b"
+          ]
         },
         {
           "canonical": "cyanocobalamin",
-          "patterns": ["\\bcyanocobalamin\\b"]
+          "patterns": [
+            "\\bcyanocobalamin\\b"
+          ]
         },
         {
           "canonical": "dibencozide",
-          "patterns": ["\\bdibencozide\\b", "\\bcoenzyme\\s*b12\\b"]
+          "patterns": [
+            "\\bdibencozide\\b",
+            "\\bcoenzyme\\s*b12\\b"
+          ]
         }
       ]
     },
@@ -297,55 +426,89 @@
       "forms": [
         {
           "canonical": "pyridoxal-5-phosphate",
-          "patterns": ["\\bp[-\\s]?5[-\\s]?p\\b", "\\bpyridoxal[-\\s]?5[-\\s]?phosphate\\b", "\\bplp\\b"]
+          "patterns": [
+            "\\bp[-\\s]?5[-\\s]?p\\b",
+            "\\bpyridoxal[-\\s]?5[-\\s]?phosphate\\b",
+            "\\bplp\\b"
+          ]
         },
         {
           "canonical": "pyridoxine",
-          "patterns": ["\\bpyridoxine\\b"]
+          "patterns": [
+            "\\bpyridoxine\\b"
+          ]
         },
         {
           "canonical": "riboflavin-5-phosphate",
-          "patterns": ["\\br[-\\s]?5[-\\s]?p\\b", "\\briboflavin[-\\s]?5[-\\s]?phosphate\\b", "\\bfmn\\b"]
+          "patterns": [
+            "\\br[-\\s]?5[-\\s]?p\\b",
+            "\\briboflavin[-\\s]?5[-\\s]?phosphate\\b",
+            "\\bfmn\\b"
+          ]
         },
         {
           "canonical": "riboflavin",
-          "patterns": ["\\briboflavin\\b"]
+          "patterns": [
+            "\\briboflavin\\b"
+          ]
         },
         {
           "canonical": "inositol hexanicotinate",
-          "patterns": ["\\binositol\\s*hexanicotinate\\b", "\\bihn\\b"]
+          "patterns": [
+            "\\binositol\\s*hexanicotinate\\b",
+            "\\bihn\\b"
+          ]
         },
         {
           "canonical": "niacinamide",
-          "patterns": ["\\bniacinamide\\b", "\\bnicotinamide\\b(?![-\\s]+(?:riboside|mononucleotide|adenine)\\b)"]
+          "patterns": [
+            "\\bniacinamide\\b",
+            "\\bnicotinamide\\b(?![-\\s]+(?:riboside|mononucleotide|adenine)\\b)"
+          ]
         },
         {
           "canonical": "nicotinic acid",
-          "patterns": ["\\bnicotinic\\s*acid\\b"]
+          "patterns": [
+            "\\bnicotinic\\s*acid\\b"
+          ]
         },
         {
           "canonical": "thiamine mononitrate",
-          "patterns": ["\\bthiamin[e]?\\s*mononitrate\\b"]
+          "patterns": [
+            "\\bthiamin[e]?\\s*mononitrate\\b"
+          ]
         },
         {
           "canonical": "thiamine hydrochloride",
-          "patterns": ["\\bthiamine\\s*hcl\\b", "\\bthiamine\\s*hydrochloride\\b"]
+          "patterns": [
+            "\\bthiamine\\s*hcl\\b",
+            "\\bthiamine\\s*hydrochloride\\b"
+          ]
         },
         {
           "canonical": "benfotiamine",
-          "patterns": ["\\bbenfotiamine\\b"]
+          "patterns": [
+            "\\bbenfotiamine\\b"
+          ]
         },
         {
           "canonical": "pantethine",
-          "patterns": ["\\bpantethine\\b"]
+          "patterns": [
+            "\\bpantethine\\b"
+          ]
         },
         {
           "canonical": "calcium pantothenate",
-          "patterns": ["\\bcalcium\\s*pantothenate\\b", "\\bd[-\\s]?pantothenate\\b"]
+          "patterns": [
+            "\\bcalcium\\s*pantothenate\\b",
+            "\\bd[-\\s]?pantothenate\\b"
+          ]
         },
         {
           "canonical": "pantothenic acid",
-          "patterns": ["\\bpantothenic\\s*acid\\b"]
+          "patterns": [
+            "\\bpantothenic\\s*acid\\b"
+          ]
         }
       ]
     },
@@ -365,7 +528,9 @@
         },
         {
           "canonical": "folic acid",
-          "patterns": ["\\bfolic\\s*acid\\b"]
+          "patterns": [
+            "\\bfolic\\s*acid\\b"
+          ]
         }
       ]
     },
@@ -375,75 +540,113 @@
       "forms": [
         {
           "canonical": "bisglycinate",
-          "patterns": ["\\bbisglycinate\\b"]
+          "patterns": [
+            "\\bbisglycinate\\b"
+          ]
         },
         {
           "canonical": "glycinate",
-          "patterns": ["\\bglycinate\\b"]
+          "patterns": [
+            "\\bglycinate\\b"
+          ]
         },
         {
           "canonical": "picolinate",
-          "patterns": ["\\bpicolinate\\b"]
+          "patterns": [
+            "\\bpicolinate\\b"
+          ]
         },
         {
           "canonical": "citrate",
-          "patterns": ["\\bcitrate\\b"]
+          "patterns": [
+            "\\bcitrate\\b"
+          ]
         },
         {
           "canonical": "malate",
-          "patterns": ["\\bmalate\\b"]
+          "patterns": [
+            "\\bmalate\\b"
+          ]
         },
         {
           "canonical": "taurate",
-          "patterns": ["\\btaurate\\b"]
+          "patterns": [
+            "\\btaurate\\b"
+          ]
         },
         {
           "canonical": "carbonate",
-          "patterns": ["\\bcarbonate\\b"]
+          "patterns": [
+            "\\bcarbonate\\b"
+          ]
         },
         {
           "canonical": "oxide",
-          "patterns": ["\\boxide\\b"]
+          "patterns": [
+            "\\boxide\\b"
+          ]
         },
         {
           "canonical": "gluconate",
-          "patterns": ["\\bgluconate\\b"]
+          "patterns": [
+            "\\bgluconate\\b"
+          ]
         },
         {
           "canonical": "lactate",
-          "patterns": ["\\blactate\\b"]
+          "patterns": [
+            "\\blactate\\b"
+          ]
         },
         {
           "canonical": "fumarate",
-          "patterns": ["\\bfumarate\\b"]
+          "patterns": [
+            "\\bfumarate\\b"
+          ]
         },
         {
           "canonical": "aspartate",
-          "patterns": ["\\baspartate\\b"]
+          "patterns": [
+            "\\baspartate\\b"
+          ]
         },
         {
           "canonical": "orotate",
-          "patterns": ["\\borotate\\b"]
+          "patterns": [
+            "\\borotate\\b"
+          ]
         },
         {
           "canonical": "threonate",
-          "patterns": ["\\bthreonate\\b"]
+          "patterns": [
+            "\\bthreonate\\b"
+          ]
         },
         {
           "canonical": "succinate",
-          "patterns": ["\\bsuccinate\\b"]
+          "patterns": [
+            "\\bsuccinate\\b"
+          ]
         },
         {
           "canonical": "pidolate",
-          "patterns": ["\\bpidolate\\b"]
+          "patterns": [
+            "\\bpidolate\\b"
+          ]
         },
         {
           "canonical": "sulfate",
-          "patterns": ["\\bsulf?ate\\b", "\\bsulphate\\b"]
+          "patterns": [
+            "\\bsulf?ate\\b",
+            "\\bsulphate\\b"
+          ]
         },
         {
           "canonical": "hydrochloride",
-          "patterns": ["\\bhcl\\b", "\\bhydrochloride\\b"]
+          "patterns": [
+            "\\bhcl\\b",
+            "\\bhydrochloride\\b"
+          ]
         }
       ]
     },
@@ -453,15 +656,21 @@
       "forms": [
         {
           "canonical": "selenomethionine",
-          "patterns": ["\\b(?:l[-\\s]?)?selenomethionine\\b"]
+          "patterns": [
+            "\\b(?:l[-\\s]?)?selenomethionine\\b"
+          ]
         },
         {
           "canonical": "sodium selenate",
-          "patterns": ["\\bsodium\\s*selenate\\b"]
+          "patterns": [
+            "\\bsodium\\s*selenate\\b"
+          ]
         },
         {
           "canonical": "sodium selenite",
-          "patterns": ["\\bsodium\\s*selenite\\b"]
+          "patterns": [
+            "\\bsodium\\s*selenite\\b"
+          ]
         }
       ]
     },
@@ -471,11 +680,15 @@
       "forms": [
         {
           "canonical": "ubiquinol",
-          "patterns": ["\\bubiquinol\\b"]
+          "patterns": [
+            "\\bubiquinol\\b"
+          ]
         },
         {
           "canonical": "ubiquinone",
-          "patterns": ["\\bubiquinone\\b"]
+          "patterns": [
+            "\\bubiquinone\\b"
+          ]
         }
       ]
     },
@@ -485,15 +698,23 @@
       "forms": [
         {
           "canonical": "alpha-gpc",
-          "patterns": ["\\balpha[-\\s]?gpc\\b", "\\bglycerophosphocholine\\b"]
+          "patterns": [
+            "\\balpha[-\\s]?gpc\\b",
+            "\\bglycerophosphocholine\\b"
+          ]
         },
         {
           "canonical": "citicoline",
-          "patterns": ["\\bciticoline\\b", "\\bcdp[-\\s]?choline\\b"]
+          "patterns": [
+            "\\bciticoline\\b",
+            "\\bcdp[-\\s]?choline\\b"
+          ]
         },
         {
           "canonical": "choline bitartrate",
-          "patterns": ["\\bcholine\\s*bitartrate\\b"]
+          "patterns": [
+            "\\bcholine\\s*bitartrate\\b"
+          ]
         }
       ]
     }

@@ -1,5 +1,8 @@
 # RC review checklist — 2026-05-19
 
+**HISTORICAL (2026-09-27):** the review of the 2026-05-19 release candidate; its snapshot directory no
+longer exists. The current release procedure is the `catalog-release` skill.
+
 Sequenced review for the non-production release candidate built by
 `PYTHON=python3.13 bash batch_run_all_datasets.sh --skip-release`.
 Snapshot for score-delta comparison: `scripts/final_db_output.preRC_20260519T013812Z/`.

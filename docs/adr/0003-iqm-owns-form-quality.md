@@ -20,9 +20,9 @@ B-complex modules were moved onto the single owner, guarded by
 ## Consequences
 
 - No pillar adds points for premium-form counts, preferred-form names or bio_score multipliers.
-- Known violation when this was written: `generic_dose.py::_score_multi_form_bonus` gives up to +3
-  Dose points for 2+ premium forms of one nutrient. Removing it moves shipped scores, so it is a
-  separate, measured change and not part of this record.
+- The known violation when this was written, `generic_dose.py::_score_multi_form_bonus` (up to +3
+  Dose points for 2+ premium forms of one nutrient), was removed as a separate, measured change:
+  quality_score 1.21.0 (8fbfd601).
 
 ## Rejected
 

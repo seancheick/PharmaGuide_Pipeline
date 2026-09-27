@@ -1008,5 +1008,4 @@ def test_shipped_iqm_carries_no_nested_axis_and_full_canonical_coverage():
     # 2026-09-25: 18 legacy unspecified forms fell below Excellent under the
     # unknown-form floor and left the backlog (250 -> 232, 195 -> 177).
     assert coverage.total == 239
-    assert len(coverage.missing) == 177
     assert sorted(coverage.missing) == sorted(load_backlog_file(BACKLOG_PATH))

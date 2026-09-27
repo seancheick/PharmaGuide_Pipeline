@@ -10,14 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 class TestEnrichmentIdentityMatchingPolicy:
     """Ingredient identity must not expose a fuzzy fallback."""
 
-    @pytest.fixture
-    def enricher(self):
-        from enrich_supplements_v3 import SupplementEnricherV3
-        return SupplementEnricherV3()
-
-    def test_fuzzy_ingredient_identity_fallback_is_absent(self, enricher):
-        assert not hasattr(enricher, '_fuzzy_ingredient_match')
-
+    # The enricher-attribute check lives in test_iqm_match_precedence.py.
     def test_standalone_fuzzy_identity_module_is_retired(self):
         assert not (Path(__file__).parent.parent / "fuzzy_matcher.py").exists()
 

@@ -70,6 +70,7 @@ _THIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(_THIS_DIR))
 sys.path.insert(0, str(_THIS_DIR.parent))
 from dataset_paths import brand_dataset_root  # noqa: E402
+from run_artifacts import atomic_write_json  # noqa: E402
 
 from audit_unii_data_quality import (
     REFERENCE_FILES,
@@ -544,22 +545,8 @@ def apply_one_entry(
 
     today_str = today_str or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     file_path = repo_root / "scripts/data" / proposal.file
-    # Read the raw file text once so we can detect its existing convention
-    # for non-ASCII characters. The 4 reference files differ:
-    #   - other_ingredients.json: raw UTF-8 (no \u escapes)
-    #   - ingredient_quality_map.json + standardized_botanicals.json: ASCII-
-    #     escaped (\uXXXX)
-    #   - botanical_ingredients.json: mixed (older entries escaped, newer raw)
-    # We default to ASCII-escaping when ≥10 \u escapes appear in the file
-    # OR when zero non-ASCII chars appear (pure ASCII files). Otherwise we
-    # preserve raw UTF-8. This keeps the apply diff minimal in every case.
     with open(file_path, encoding="utf-8") as f:
-        raw_text = f.read()
-    blob = json.loads(raw_text)
-    escape_count = raw_text.count("\\u")
-    has_raw_utf8 = any(ord(c) > 127 for c in raw_text[:50000])
-    # ascii-escape the output if the file is conventionally escape-style
-    file_uses_ascii_escapes = escape_count >= 10 or not has_raw_utf8
+        blob = json.load(f)
 
     # Find the list_key for this file. REFERENCE_FILES is keyed by full
     # repo-relative path ("scripts/data/<file>.json") but proposals carry
@@ -600,11 +587,8 @@ def apply_one_entry(
     if isinstance(md, dict):
         md["last_updated"] = today_str
 
-    # Write back with stable formatting, preserving the file's existing
-    # non-ASCII convention (ASCII-escaped vs raw UTF-8).
-    with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(blob, f, indent=2, ensure_ascii=file_uses_ascii_escapes)
-        f.write("\n")
+    # Every data file is canonical JSON (test_data_batch pins it).
+    atomic_write_json(file_path, blob)
 
     return file_path
 

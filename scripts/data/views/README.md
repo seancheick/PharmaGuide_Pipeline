@@ -19,12 +19,12 @@ scripts/data/views/
 │   ├── pregnancy.md             ← every rule that mentions condition_id=pregnancy
 │   ├── hypertension.md
 │   ├── diabetes.md
-│   └── … (14 total — one per condition_id in clinical_risk_taxonomy.json)
+│   └── … (one per condition_id in clinical_risk_taxonomy.json)
 └── by_drug_class/
     ├── anticoagulants.md
     ├── antihypertensives.md
     ├── nsaids.md
-    └── … (21 total — one per drug_class_id in clinical_risk_taxonomy.json)
+    └── … (one per drug_class_id in clinical_risk_taxonomy.json)
 ```
 
 Each view is a Markdown table:
@@ -240,7 +240,7 @@ python3 -m pytest scripts/tests/ -k interaction
 
 ## What these tools do **not** do
 
-- Do **not** modify the pipeline scripts (`enrich_supplements_v3.py`, `score_supplements.py`, `build_final_db.py`).
+- Do **not** modify the pipeline scripts (`enrich_supplements_v3.py`, `score_supplements_v4.py`, `build_final_db.py`).
 - Do **not** change the JSON schema, key names, or rule ID format used by Flutter.
 - Do **not** author `dose_thresholds[]` — those need numeric clinical guidance and should be added by hand following SOP §"Dose Threshold Policy".
 - Do **not** author the `pregnancy_lactation` aggregate block — same reason.
@@ -259,5 +259,5 @@ The view layer gives a clinician a per-condition reading experience with zero ch
 ## Related docs
 
 - `scripts/INTERACTION_RULE_AUTHORING_SOP.md` — clinical authoring SOP (sources, severity ladder, change-control checklist).
-- `scripts/PROMPT_ADD_INTERACTION_RULES.md` — reusable AI agent prompt for batch rule drafting.
+- `scripts/audits/prompts/PROMPT_ADD_INTERACTION_RULES.md` — reusable AI agent prompt for batch rule drafting.
 - `scripts/data/clinical_risk_taxonomy.json` — controlled enums (conditions, drug classes, severity, evidence).

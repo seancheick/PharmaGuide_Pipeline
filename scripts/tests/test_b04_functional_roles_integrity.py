@@ -78,8 +78,9 @@ def test_aggregate_disposition_counts(by_id):
     # 481 after unmapped triage added PII_CORN_BRAN_POWDER and
     # PII_FAVA_BEAN_PROTEIN_ISOLATE as non-IQM source/filler identities.
     # 488 after Wave 1 added six exact inactive identities with known roles.
-    # Keep this exact so accidental role loss remains release-blocking.
-    assert populated == 488, f"expected 488 populated entries; got {populated}"
+    # A floor, not an exact pin: losing a role stays release-blocking, adding
+    # one needs no test edit (raise the floor when you want to lock gains in).
+    assert populated >= 488, f"expected at least 488 populated entries; got {populated}"
     assert deferred == len(by_id) - populated, (
         f"expected deferred count to track total-populated; got {deferred}"
     )

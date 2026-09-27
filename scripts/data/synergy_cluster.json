@@ -7,8 +7,8 @@
     "total_entries": 58,
     "citation_fields": "note + sources (phase_3 curated_no_query_placeholders)",
     "citation_coverage": {
-      "clusters_with_sources": 54,
-      "total_clusters": 54,
+      "clusters_with_sources": 58,
+      "total_clusters": 58,
       "clusters_with_query_placeholders": 0
     },
     "total_clusters": 58,

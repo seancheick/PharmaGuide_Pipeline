@@ -35,13 +35,18 @@ def report_run_directory(report_root: Path, run_id: str) -> Path:
     return directory
 
 
+def json_text(payload: Any) -> str:
+    """The repository's canonical JSON text: indent 2, UTF-8, trailing newline."""
+    return json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+
+
 def atomic_write_json(path: Path, payload: Any) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = path.with_name(f".{path.name}.{uuid.uuid4().hex}.tmp")
     try:
         with open(temp_path, "w", encoding="utf-8") as handle:
-            json.dump(payload, handle, indent=2, ensure_ascii=False)
+            handle.write(json_text(payload))
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(temp_path, path)

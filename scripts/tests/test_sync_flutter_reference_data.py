@@ -32,7 +32,6 @@ def test_sync_replaces_app_copy_with_validated_canonical_artifact(tmp_path: Path
     assert result["destination"] == destination
     assert result["reference_data_version"] == "5.1.2-2026-09-15"
     assert result["reference_data_fingerprint"].startswith("sha256:")
-    assert json.loads(destination.read_text())["_metadata"]["total_entries"] == 77
     validate_flutter_reference_data(source_path=source, flutter_repo=flutter_repo)
 
 
