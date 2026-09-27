@@ -37,13 +37,15 @@ def iqm():
 
 
 def test_b34_coverage_milestone(iqm):
-    """Coverage must be ≥95% after B34 bulk finalization."""
-    total = sum(len(p.get('forms', {})) for p in iqm.values())
-    pop = sum(
-        1 for p in iqm.values()
-        for f in p.get('forms', {}).values()
-        if (f.get('absorption_structured') or {}).get('value') is not None
-    )
+    """Coverage must be ≥95% after B34 bulk finalization. A declared
+    category-error form (a fiber acting in the gut lumen) is null by design,
+    so it is not a coverage gap and stays out of the denominator."""
+    forms = [
+        f for p in iqm.values() for f in p.get('forms', {}).values()
+        if not str(f.get('absorption', '')).lower().startswith('category_error')
+    ]
+    total = len(forms)
+    pop = sum(1 for f in forms if (f.get('absorption_structured') or {}).get('value') is not None)
     pct = pop / total * 100
     assert pct >= 95.0, (
         f'Coverage {pct:.1f}% below 95% target. Pop: {pop}/{total}'
@@ -61,6 +63,7 @@ def test_b34_all_category_errors_preserved(iqm):
         ('psyllium', 'psyllium seed'),
         ('superoxide_dismutase', 'sod supplement'),
         ('fiber', 'konjac glucomannan'),
+        ('fiber', 'resistant dextrin'),
         ('collagen', 'undenatured collagen'),
         ('prebiotics', 'pectin'),
         ('prebiotics', 'alpha-glucooligosaccharides (alpha-GOS)'),
