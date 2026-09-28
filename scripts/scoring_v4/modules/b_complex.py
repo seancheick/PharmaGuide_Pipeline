@@ -19,6 +19,7 @@ from typing import Any, Dict, Optional
 from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
 from evidence_resolver import resolve_authority_panel_evidence
+from scoring_v4.modules.generic_evidence import authority_panel_result_state
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import (
     _as_float,
@@ -317,6 +318,7 @@ def _score_evidence(product: Dict[str, Any]) -> Dict[str, Any]:
             "authority_expected_keys": authority["expected_keys"],
             "authority_unresolved_keys": authority["unresolved_keys"],
             "authority_resolution_reasons": authority["resolution_reasons"],
+            "evidence_result_state": authority_panel_result_state(product, authority),
         },
     }
 

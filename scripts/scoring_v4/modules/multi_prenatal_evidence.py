@@ -11,6 +11,7 @@ from __future__ import annotations
 from typing import Any, Dict
 
 from evidence_resolver import resolve_authority_panel_evidence
+from scoring_v4.modules.generic_evidence import authority_panel_result_state
 from scoring_v4.modules.multi_prenatal_dose import (
     CORE_MULTI_ANCHORS,
     PRENATAL_CORE_ANCHORS,
@@ -77,5 +78,6 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             "authority_expected_keys": authority["expected_keys"],
             "authority_unresolved_keys": authority["unresolved_keys"],
             "authority_resolution_reasons": authority["resolution_reasons"],
+            "evidence_result_state": authority_panel_result_state(product, authority),
         },
     }

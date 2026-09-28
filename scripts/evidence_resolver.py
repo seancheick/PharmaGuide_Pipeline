@@ -1313,6 +1313,27 @@ def resolve_product_evidence(
     dispositions = [r.disposition for r in resolutions]
     all_blockers = [b for r in resolutions for b in r.blocking_reasons]
 
+    overall, complete = compose_product_resolution_state(dispositions)
+
+    return ProductEvidenceResolution(
+        dsld_id=dsld_id,
+        product_name=prod_name,
+        assessable_ingredients_count=len(assessable_rows),
+        resolutions=resolutions,
+        overall_disposition=overall,
+        is_assessment_complete=complete,
+        unresolved_blockers=list(set(all_blockers)),
+        owner_contributions=owner_counts,
+    )
+
+
+def compose_product_resolution_state(dispositions: Sequence[str]) -> Tuple[str, bool]:
+    """Compose row dispositions into (overall disposition, assessment complete).
+
+    The one precedence for every product-level Evidence composition: the whole
+    label (resolve_product_evidence) and an essential-nutrient panel
+    (resolve_authority_panel_evidence).
+    """
     # Phase 5 Strict Completeness Contract:
     # A product is marked complete ONLY if ALL assessable evidence-bearing actives
     # have reached terminal evaluated dispositions. Having "some" or "most" ingredients
@@ -1350,17 +1371,7 @@ def resolve_product_evidence(
     else:
         overall = EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
         complete = True
-
-    return ProductEvidenceResolution(
-        dsld_id=dsld_id,
-        product_name=prod_name,
-        assessable_ingredients_count=len(assessable_rows),
-        resolutions=resolutions,
-        overall_disposition=overall,
-        is_assessment_complete=complete,
-        unresolved_blockers=list(set(all_blockers)),
-        owner_contributions=owner_counts,
-    )
+    return overall, complete
 
 
 def resolve_authority_panel_evidence(
@@ -1387,6 +1398,7 @@ def resolve_authority_panel_evidence(
             "expected_keys": list(expected),
             "unresolved_keys": [],
             "resolution_reasons": {},
+            "panel_resolution": _compose_panel_resolution(product, []),
         }
 
     from scoring_input_contract import get_assessable_evidence_ingredients
@@ -1395,6 +1407,7 @@ def resolve_authority_panel_evidence(
     covered: Set[str] = set()
     seen: Set[str] = set()
     reasons: Dict[str, str] = {}
+    resolutions: List[EvidenceResolution] = []
     for row in get_assessable_evidence_ingredients(dict(product)):
         if not isinstance(row, Mapping):
             continue
@@ -1403,6 +1416,7 @@ def resolve_authority_panel_evidence(
             continue
         seen.add(key)
         resolution = resolve_evidence_for_row(row, product)
+        resolutions.append(resolution)
         reasons[key] = resolution.reason_code
         if resolution.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
             covered.add(key)
@@ -1418,7 +1432,27 @@ def resolve_authority_panel_evidence(
         "expected_keys": list(expected),
         "unresolved_keys": sorted(unresolved),
         "resolution_reasons": dict(sorted(reasons.items())),
+        "panel_resolution": _compose_panel_resolution(product, resolutions),
     }
+
+
+def _compose_panel_resolution(
+    product: Any, resolutions: List[EvidenceResolution],
+) -> ProductEvidenceResolution:
+    """The panel's rows composed exactly like a whole product's."""
+    product = product if isinstance(product, Mapping) else {}
+    overall, complete = compose_product_resolution_state(
+        [resolution.disposition for resolution in resolutions])
+    return ProductEvidenceResolution(
+        dsld_id=str(product.get("dsld_id") or ""),
+        product_name=str(product.get("product_name") or product.get("name") or ""),
+        assessable_ingredients_count=len(resolutions),
+        resolutions=resolutions,
+        overall_disposition=overall,
+        is_assessment_complete=complete,
+        unresolved_blockers=sorted({b for r in resolutions for b in r.blocking_reasons}),
+        owner_contributions={},
+    )
 
 
 def _as_float(val: Any) -> Optional[float]:

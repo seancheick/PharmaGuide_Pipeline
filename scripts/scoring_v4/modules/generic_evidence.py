@@ -600,7 +600,12 @@ def _evidence_result_state(
         return "applicability_unestablished"
 
     # No listed clinical matches on record: the (complete) resolver decides.
-    disp = prod_res.overall_disposition
+    return result_state_for_disposition(prod_res.overall_disposition)
+
+
+def result_state_for_disposition(disp: Optional[str]) -> str:
+    """The Evidence result state a composed, complete disposition establishes."""
+    from evidence_resolver import EvidenceDisposition
     if disp == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
         return "evaluated_authority"
     if disp == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value:
@@ -616,6 +621,27 @@ def _evidence_result_state(
         return "no_assessable_actives"
 
     return "clinical_review_not_covered"
+
+
+def authority_panel_result_state(product: Dict[str, Any], authority: Dict[str, Any]) -> str:
+    """Result state of an essential-nutrient panel (multi/prenatal, B-complex).
+
+    An open panel row keeps its coverage-gap state even when other nutrients
+    earned points. Authority coverage is ``evaluated_authority``. Zero coverage
+    is read from what the panel rows did establish, never as a reviewed null:
+    no panel nutrient on the label is an uncovered review, not a conclusion.
+    """
+    panel = authority.get("panel_resolution")
+    gap = evidence_completeness_gap(product, panel) if panel is not None else None
+    if gap:
+        return gap
+    if authority.get("covered_keys"):
+        return "evaluated_authority"
+    if panel is None or not panel.resolutions:
+        if not _assessable_active_ingredients(product):
+            return "no_assessable_actives"
+        return "clinical_review_not_covered"
+    return result_state_for_disposition(panel.overall_disposition)
 
 
 def resolved_clinical_matches(
