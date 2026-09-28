@@ -206,6 +206,16 @@ def test_the_parents_generic_form_is_not_a_reading_of_a_named_token(enricher):
     ('magnesium', 'Magnesium', 'Magnesium Ascorbate', 'magnesium ascorbate (as magnesium source)'),
     ('zinc', 'Zinc', 'Zinc Ascorbate', 'zinc ascorbate (as zinc source)'),
     ('taurine', 'Taurine', 'Magnesium Taurate', 'magnesium taurate (as taurine source)'),
+    # 2026-09-28 form curation, batch 3: a nutrient row naming another nutrient's salt.
+    ('calcium', 'Calcium', 'Calcium Pantothenate', 'calcium pantothenate (as calcium source)'),
+    ('vitamin_c', 'Vitamin C', 'Chromium Ascorbate', 'vitamin c from chromium ascorbate'),
+    ('potassium', 'Potassium', 'Potassium Ascorbate', 'potassium ascorbate (as potassium source)'),
+    ('calcium', 'Calcium', 'Ester-C Calcium Ascorbate', 'calcium ascorbate (as calcium source)'),
+    ('calcium', 'Calcium', 'Ester-C', 'calcium ascorbate (as calcium source)'),
+    ('phosphorus', 'Phosphorus', 'Magnesium Phosphate', 'phosphate salts'),
+    ('phosphorus', 'Phosphorus', 'Dimagnesium Phosphate', 'phosphate salts'),
+    ('potassium', 'Potassium', 'Potassium Iodide', 'potassium (unspecified)'),
+    ('calcium', 'Calcium', 'Calcium Phosphate Dibasic', 'dicalcium phosphate'),
 ])
 def test_a_compound_filed_under_another_parent_reads_as_this_parents_counter_ion_form(
         enricher, parent, label, token, form):
@@ -314,6 +324,13 @@ def normalizer():
     ('Sodium Phosphate', ('PII_SODIUM_PHOSPHATE_GENERIC', 'other_ingredients')),
     ('Monosodium Phosphate', ('phosphorus', 'ingredient_quality_map')),
     ('Calcium Phosphate', ('calcium', 'ingredient_quality_map')),
+    ('Calcium Pantothenate', ('vitamin_b5_pantothenic', 'ingredient_quality_map')),
+    ('Chromium Ascorbate', ('chromium', 'ingredient_quality_map')),
+    ('Potassium Ascorbate', ('vitamin_c', 'ingredient_quality_map')),
+    ('Potassium Iodide', ('iodine', 'ingredient_quality_map')),
+    ('Ester-C', ('vitamin_c', 'ingredient_quality_map')),
+    ('Magnesium Phosphate', ('magnesium', 'ingredient_quality_map')),
+    ('Calcium Phosphate Dibasic', ('dicalcium_phosphate', 'ingredient_quality_map')),
 ])
 def test_curated_source_forms_leave_standalone_identities_alone(normalizer, name, identity):
     """Salt names curated as forms of another parent go in source_form_aliases,

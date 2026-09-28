@@ -32,8 +32,8 @@
     },
     "statistics": {
       "total_parents": 655,
-      "total_forms": 1455,
-      "total_form_aliases": 12189,
+      "total_forms": 1458,
+      "total_form_aliases": 12192,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -5741,6 +5741,24 @@
         "external_ids": {
           "unii": "JTL8B7TVW7"
         }
+      },
+      "vitamin c from chromium ascorbate": {
+        "bio_score": 10,
+        "absorption": "80%",
+        "absorption_structured": {
+          "value": 0.8,
+          "range_low": 0.64,
+          "range_high": 0.96,
+          "quality": "very_good"
+        },
+        "notes": "Chromium(III) ascorbate (PubChem CID 129729345) declared under the Vitamin C row on Emergen-C labels (e.g. DSLD 1178). The ascorbate delivers vitamin C like the other mineral ascorbates, but those sit at 13 as grandfathered legacy forms; a new form enters the Excellent band (12+) only with form evidence (test_form_score_reconciliation), and none specific to chromium ascorbate was reviewed, so it scores 10 like the other '(as X source)' forms. Named 'vitamin c from ...' like inositol from inositol hexanicotinate so no identity index reads the bare salt name; chromium owns chromium ascorbate as a chromium identity. 2026-09-28",
+        "aliases": [
+          "vitamin c from chromium ascorbate"
+        ],
+        "source_form_aliases": [
+          "chromium ascorbate"
+        ],
+        "dosage_importance": 1.5
       }
     },
     "match_rules": {
@@ -7126,7 +7144,9 @@
           "calcium from calcium ascorbate"
         ],
         "source_form_aliases": [
-          "calcium ascorbate"
+          "calcium ascorbate",
+          "ester-c calcium ascorbate",
+          "ester-c"
         ],
         "dosage_importance": 1.5
       },
@@ -7505,7 +7525,10 @@
         },
         "external_ids": {
           "unii": "L11K75P92J"
-        }
+        },
+        "source_form_aliases": [
+          "calcium phosphate dibasic"
+        ]
       },
       "coral calcium": {
         "bio_score": 6,
@@ -7759,6 +7782,29 @@
           "cas": "7758-23-8",
           "pubchem_cid": 24454
         }
+      },
+      "calcium pantothenate (as calcium source)": {
+        "bio_score": 10,
+        "absorption": "30%",
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4,
+          "quality": "moderate"
+        },
+        "notes": "Calcium D-pantothenate (PubChem CID 443753) declared under the Calcium row on Emergen-C labels (e.g. DSLD 1178). Scored like the calcium ascorbate source form: a soluble calcium salt with no comparative calcium absorption study placing it above others. The bare name stays a source alias because vitamin B5 owns calcium pantothenate as a B5 form. 2026-09-28",
+        "aliases": [
+          "calcium from calcium pantothenate"
+        ],
+        "source_form_aliases": [
+          "calcium pantothenate"
+        ],
+        "dosage_importance": 1.5,
+        "cross_ref": {
+          "primary_parent": "vitamin_b5_pantothenic",
+          "primary_form": "calcium pantothenate",
+          "note": "Same chemical substance as vitamin_b5_pantothenic/calcium pantothenate. Scored here for calcium bioavailability."
+        }
       }
     },
     "match_rules": {
@@ -7841,7 +7887,9 @@
           "potassium phosphate",
           "dipotassium phosphate",
           "monobasic calcium phosphate",
-          "monocalcium phosphate"
+          "monocalcium phosphate",
+          "magnesium phosphate",
+          "dimagnesium phosphate"
         ]
       },
       "phosphorus (unspecified)": {
@@ -16286,7 +16334,10 @@
           "range_low": 0.78,
           "range_high": 0.92,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "potassium iodide"
+        ]
       },
       "potassium glycinate": {
         "bio_score": 11,
@@ -16343,6 +16394,29 @@
           "range_low": 0.8,
           "range_high": 0.95,
           "quality": "very_good"
+        }
+      },
+      "potassium ascorbate (as potassium source)": {
+        "bio_score": 10,
+        "absorption": "unknown (no reviewed form-specific potassium absorption value; scored with the lowest soluble potassium salt, potassium phosphate 10)",
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
+        },
+        "notes": "Potassium ascorbate (PubChem CID 23687519) declared under the Potassium row on Pure Encapsulations labels (e.g. DSLD 183533). A soluble potassium salt scored at the lowest soluble potassium salt value (potassium phosphate, 10): no premium without a form-specific absorption study. The bare name stays a source alias because vitamin C owns potassium ascorbate as a vitamin C form. 2026-09-28",
+        "aliases": [
+          "potassium from potassium ascorbate"
+        ],
+        "source_form_aliases": [
+          "potassium ascorbate"
+        ],
+        "dosage_importance": 1.5,
+        "cross_ref": {
+          "primary_parent": "vitamin_c",
+          "primary_form": "potassium ascorbate",
+          "note": "Same chemical substance as vitamin_c/potassium ascorbate. Scored here for potassium bioavailability."
         }
       }
     },
