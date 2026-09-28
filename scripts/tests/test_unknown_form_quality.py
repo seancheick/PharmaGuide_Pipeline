@@ -698,6 +698,7 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     # the token reads the unspecified form, the row label decides (psyllium husk powder,
     # tart cherry extract, the BCAA label's existing 2:1:1 alias).
     ('caffeine', 'Caffeine', {'name': 'extended-release Caffeine', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Caffeine'}, 'caffeine anhydrous'),
+    ('caffeine', 'Caffeine', {'name': 'extended release Caffeine', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Caffeine'}, 'caffeine anhydrous'),
     ('inulin', 'Inulin', {'name': 'Fructooligosaccharides', 'category': 'fiber', 'ingredientGroup': 'Fructo-Oligosaccharides (FOS)'}, 'inulin (unspecified)'),
     ('vitamin_b2_riboflavin', 'Riboflavin', {'name': 'Vitamin B2, Activated', 'category': 'vitamin', 'ingredientGroup': 'Riboflavin'}, 'riboflavin-5-phosphate'),
     ('alpha_lipoic_acid', 'R-Lipoic Acid', {'name': 'Na-RALA Sodium R-Lipoate', 'category': _M, 'prefix': 'as microencapsulated Bio-Enhanced stabilized', 'ingredientGroup': 'Alpha-Lipoic Acid'}, 'sodium r-lipoate'),
