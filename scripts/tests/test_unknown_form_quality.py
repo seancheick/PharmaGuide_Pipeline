@@ -416,6 +416,38 @@ def test_a_held_label_spelling_reaches_the_form_it_names(enricher, parent, label
     assert not match.get('unmapped_forms')
 
 
+@pytest.mark.parametrize('label, std_name, form, parent', [
+    # Real held rows whose cleaner canonical came from standardized_botanicals or
+    # botanical_ingredients, so the matcher got no IQM parent from the cleaner.
+    ('Maca Root Extract', 'Maca', {'name': 'Lepidium meyenii Root Extract', 'category': _B, 'ingredientGroup': 'Maca'}, 'maca'),
+    ('Sea Buckthorn, Powder', 'Sea Buckthorn', {'name': 'Hippophae rhamnoides, Powder', 'category': _B, 'ingredientGroup': 'Sea Buckthorn'}, 'sea_buckthorn'),
+    ('Gotu Kola Whole Herb Extract', 'Gotu Kola', {'name': 'Centella asiatica Whole Herb Extract', 'category': _B, 'ingredientGroup': 'Gotu Kola'}, 'gotu_kola'),
+])
+def test_form_tokens_are_judged_under_the_parent_the_row_is_scored_as(enricher, label, std_name, form, parent):
+    """The row is scored under the IQM parent its name resolves to; its form
+    tokens are judged under that parent too, even when the cleaner's canonical
+    came from a botanical database (the plant's binomial restates it)."""
+    match = enricher._match_quality_map(label, std_name, enricher.databases['ingredient_quality_map'],
+                                        cleaned_forms=[form])
+    assert match['canonical_id'] == parent
+    assert match.get('match_status') != 'FORM_DISCLOSED_UNMAPPED'
+    assert not match.get('unmapped_forms')
+
+
+@pytest.mark.parametrize('label, std_name, form, cleaner_canonical_id', [
+    # D21: a different species under the row's parent waits for Sean's call.
+    ('Acai Berry Fruit Extract', 'Acai Berry', {'name': 'Euterpe badiocarpa Fruit Extract', 'category': _B, 'ingredientGroup': 'Acai'}, None),
+    ('Acai Berry Extract', 'Acai Berry', {'name': 'Euterpe badiocarpa Berry Extract', 'category': _B, 'ingredientGroup': 'Acai'}, 'acai_berry'),
+    ('Sarsaparilla Root Extract', 'Sarsaparilla', {'name': 'Smilax china Root Extract', 'category': _B, 'ingredientGroup': 'Chinese Smilax'}, 'sarsaparilla'),
+    ('Pine Bark Extract', 'Pine Bark Extract', {'name': 'Pinus massoniana Bark Extract', 'category': _B, 'ingredientGroup': 'Masson Pine'}, 'pine_bark_extract'),
+])
+def test_a_different_species_under_the_row_parent_stays_held_for_review(enricher, label, std_name, form,
+                                                                       cleaner_canonical_id):
+    match = enricher._match_quality_map(label, std_name, enricher.databases['ingredient_quality_map'],
+                                        cleaned_forms=[form], cleaner_canonical_id=cleaner_canonical_id)
+    assert match.get('unmapped_forms') == [form['name']]
+
+
 def test_bitter_orange_under_citrus_bioflavonoids_stays_held_for_review(enricher):
     """Bitter orange carries its own safety owner (synephrine); it is not
     folded into the generic citrus-source list without a review."""

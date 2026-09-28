@@ -9192,6 +9192,24 @@ class SupplementEnricherV3:
             resolved["original_label"] = ing_name
             return resolved
 
+        def _reread_under_row_parent(parent_match: Dict) -> Optional[Dict]:
+            """The row is scored under the IQM parent its name resolves to.
+            When the cleaner named no IQM parent (a botanical-database
+            canonical), the form tokens were judged without one; judge them
+            under that parent before calling a form unmapped ("Lepidium
+            meyenii Root Extract" under Maca)."""
+            row_parent = parent_match.get('canonical_id')
+            if cleaner_iqm_canonical or row_parent not in quality_map:
+                return None
+            reread = self._match_quality_map(
+                ing_name, std_name, quality_map, cleaned_forms=cleaned_forms,
+                preferred_parent=preferred_parent, branded_token=branded_token,
+                cleaner_canonical_id=row_parent,
+            )
+            if reread and reread.get('match_status') not in ('FORM_DISCLOSED_UNMAPPED', 'FORM_UNMAPPED'):
+                return reread
+            return None
+
         generic_form_only_descriptors = {
             "molecular distilled",
             "triglyceride form",
@@ -9323,6 +9341,9 @@ class SupplementEnricherV3:
                             branded_match = _try_branded_token_fallback()
                             if (branded_match and self._is_specific_form_match(branded_match, quality_map)):
                                 return branded_match
+                            reread = _reread_under_row_parent(fallback_match)
+                            if reread:
+                                return reread
                             fallback = self._disclosed_unmapped_match(fallback_match)
                             fallback['match_status'] = 'FORM_DISCLOSED_UNMAPPED'
                             fallback['cleaner_canonical_enforced'] = bool(
@@ -9390,6 +9411,9 @@ class SupplementEnricherV3:
                         branded_match = _try_branded_token_fallback()
                         if (branded_match and self._is_specific_form_match(branded_match, quality_map)):
                             return branded_match
+                        reread = _reread_under_row_parent(fallback_match)
+                        if reread:
+                            return reread
                         fallback = self._disclosed_unmapped_match(fallback_match)
                         fallback['match_status'] = 'FORM_DISCLOSED_UNMAPPED'
                         fallback['cleaner_canonical_enforced'] = bool(
