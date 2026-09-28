@@ -7764,7 +7764,7 @@
       },
       "monocalcium phosphate": {
         "bio_score": 6,
-        "absorption": "unknown (no reviewed form-specific calcium absorption value; scored with the calcium phosphate class)",
+        "absorption": "25% (calcium phosphate class value, as tricalcium and dicalcium phosphate; no monocalcium-specific study reviewed)",
         "consumer_note": "Monocalcium phosphate is a calcium and phosphate salt. It is used as a mineral source and in effervescent tablets.",
         "consumer_note_review": {
           "by": "Claude form curation batch 1 (agent review)",
@@ -7777,10 +7777,10 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown"
+          "value": 0.25,
+          "range_low": 0.15,
+          "range_high": 0.35,
+          "quality": "poor"
         },
         "external_ids": {
           "cas": "7758-23-8",
