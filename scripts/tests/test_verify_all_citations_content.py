@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -144,8 +145,14 @@ def test_every_citation_in_the_data_folder_is_read_by_a_content_verifier() -> No
     data_dir = ROOT / "data"
     configs = {c["file"]: c for c in vac.FILE_CONFIGS}
     gaps = {}
-    for path in sorted(data_dir.rglob("*.json")):
-        rel = path.relative_to(data_dir).as_posix()
+    # Tracked files only: a local download (fda_drug_labels/, 2 GB, ignored)
+    # is not curated data and must not decide this test.
+    tracked = subprocess.run(
+        ["git", "ls-files", "-z", "--", "*.json"],
+        cwd=data_dir, capture_output=True, check=True,
+    ).stdout.decode("utf-8").split("\0")
+    for rel in sorted(filter(None, tracked)):
+        path = data_dir / rel
         if rel in OTHER_OWNERS or rel in NOT_CLAIMS:
             continue
         data = json.loads(path.read_text())

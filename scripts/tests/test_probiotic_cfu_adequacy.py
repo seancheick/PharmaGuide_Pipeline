@@ -177,10 +177,16 @@ def test_canary_19067_probiotic_ingredient_carries_adequacy_tier() -> None:
             plantarum = ing
             break
     assert plantarum is not None, "L. plantarum 299v not found in 19067 blob"
-    assert plantarum.get("adequacy_tier") == "good", (
-        f"19067 L. plantarum 299v at 10B CFU should map to 'good' tier; got "
-        f"{plantarum.get('adequacy_tier')!r}"
+    # The tier ships on the strain record; the row copy was retired (ae38d859).
+    strain = next(
+        s for s in (blob.get("probiotic_detail") or {}).get("clinical_strains") or []
+        if "299v" in (s.get("strain") or "")
     )
+    assert strain.get("adequacy_tier") == "good", (
+        f"19067 L. plantarum 299v at 10B CFU should map to 'good' tier; got "
+        f"{strain.get('adequacy_tier')!r}"
+    )
+    assert "adequacy_tier" not in plantarum
     # Dr Pham 2026-09-22: 299v is medium (n = 40) and positive -> moderate support.
     assert plantarum.get("clinical_support_level") == "moderate", (
         f"19067 strain should derive moderate support from medium positive evidence; got "
