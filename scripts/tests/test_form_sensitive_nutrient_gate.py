@@ -70,7 +70,9 @@ def test_form_contract_emits_label_when_iqm_resolved_form(nutrient, raw, matched
     enricher's matched_form is a real chemical form, the contract must
     populate display_form_label and emit form_status='known'."""
     ing = {"forms": [], "name": raw, "raw_source_text": raw}
-    m = {"matched_form": matched_form}
+    # The enricher's row reading owns form_match_status (83f75fe9: the export
+    # never re-matches IQM aliases); a named IQM form reads "mapped".
+    m = {"matched_form": matched_form, "form_match_status": "mapped"}
     contract = _compute_form_contract(ing, m)
     assert contract["display_form_label"], (
         f"{nutrient}: display_form_label empty for matched_form={matched_form!r}. "
