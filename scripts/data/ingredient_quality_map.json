@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12305,
+      "total_form_aliases": 12309,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -5304,7 +5304,8 @@
         },
         "notes": "A buffered, non-acidic form of vitamin C combined with calcium. Gentle on the stomach — a good choice for people who experience GI upset from regular ascorbic acid. Provides a small amount of supplemental calcium.",
         "aliases": [
-          "calcium ascorbate supplement"
+          "calcium ascorbate supplement",
+          "calcium l-ascorbate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -15202,7 +15203,16 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown"
-        }
+        },
+        "source_form_aliases": [
+          "kelp",
+          "organic sea kelp",
+          "bladderwrack",
+          "kelp (whole thallus) powder",
+          "kelp powder",
+          "ascophyllum nodosum",
+          "fucus vesiculosus"
+        ]
       },
       "sodium iodide": {
         "bio_score": 11,
@@ -18633,7 +18643,10 @@
         },
         "external_ids": {
           "unii": "89NA02M4RX"
-        }
+        },
+        "source_form_aliases": [
+          "apple"
+        ]
       },
       "mixed prebiotic blend": {
         "bio_score": 10,
@@ -23177,7 +23190,10 @@
           "range_low": 0.1,
           "range_high": 0.5,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "green micro-algae"
+        ]
       }
     },
     "match_rules": {
@@ -27960,7 +27976,10 @@
           "range_low": 0.01,
           "range_high": 0.05,
           "quality": "poor"
-        }
+        },
+        "source_form_aliases": [
+          "european black elderberry extract"
+        ]
       }
     },
     "match_rules": {
@@ -34483,7 +34502,10 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown"
-        }
+        },
+        "source_form_aliases": [
+          "fenugreek seed extract"
+        ]
       },
       "konjac glucomannan": {
         "bio_score": 9,
@@ -34512,7 +34534,13 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown"
-        }
+        },
+        "source_form_aliases": [
+          "konjac root extract",
+          "konjac extract",
+          "umbrella arum",
+          "amorphophallus konjac root extract"
+        ]
       }
     },
     "cui": "C0225326",
@@ -36598,7 +36626,8 @@
     "forms": {
       "luteolin (unspecified)": {
         "source_form_aliases": [
-          "japanese sophora"
+          "japanese sophora",
+          "phospholipid complex"
         ],
         "bio_score": 7,
         "absorption": "1-5%",
@@ -36978,7 +37007,8 @@
           "Sitosterol",
           "beta sitosterol supplement",
           "free beta-sitosterol",
-          "Soy Phytosterol Complex"
+          "Soy Phytosterol Complex",
+          "beta-sisterol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37057,7 +37087,8 @@
         "notes": "Plant sterol with slightly higher absorption than beta-sitosterol (~1.9% vs 0.41%). Absorbed campesterol is efficiently excreted via ABCG5/G8 transporters. Contributes to cholesterol absorption inhibition in mixed phytosterol preparations.",
         "aliases": [
           "campesterols",
-          "campsterols"
+          "campsterols",
+          "campestrol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46059,7 +46090,10 @@
           "range_low": 0.05,
           "range_high": 0.15,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "black cumin seed oil"
+        ]
       },
       "black seed powder": {
         "bio_score": 8,
@@ -47523,7 +47557,10 @@
           "quality": "good",
           "range_low": 0.65,
           "range_high": 0.9
-        }
+        },
+        "source_form_aliases": [
+          "omega-3"
+        ]
       },
       "DHA fish oil rTG": {
         "bio_score": 14,
@@ -47747,7 +47784,10 @@
           "quality": "good",
           "range_low": 0.65,
           "range_high": 0.9
-        }
+        },
+        "source_form_aliases": [
+          "omega-3"
+        ]
       },
       "EPA fish oil rTG": {
         "bio_score": 14,
@@ -49851,7 +49891,10 @@
           "range_high": 0.6,
           "quality": "moderate"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "source_form_aliases": [
+          "linum usitatissimum oil"
+        ]
       },
       "flaxseed meal/powder": {
         "bio_score": 7,
@@ -50613,7 +50656,10 @@
           "range_high": 0.5,
           "quality": "moderate"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "source_form_aliases": [
+          "magnolia officinalis bark extract, powder"
+        ]
       },
       "magnolia bark honokiol-enriched": {
         "bio_score": 11,
@@ -52985,7 +53031,10 @@
         },
         "external_ids": {
           "unii": "4V59G5UW9X"
-        }
+        },
+        "source_form_aliases": [
+          "argania spinosa"
+        ]
       }
     },
     "match_rules": {
@@ -53101,7 +53150,10 @@
           "range_low": 0.35,
           "range_high": 0.55,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "calcium magnesium phytate"
+        ]
       }
     },
     "match_rules": {
@@ -53479,7 +53531,11 @@
           "range_low": 0.35,
           "range_high": 0.55,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "phaseolus vulgaris",
+          "phaseolus vulgaris seed extract"
+        ]
       }
     },
     "match_rules": {
@@ -53752,7 +53808,10 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "oenothera biennis"
+        ]
       }
     },
     "match_rules": {
@@ -55788,6 +55847,9 @@
         "aliases": [
           "microalgae supplement",
           "algae oil"
+        ],
+        "source_form_aliases": [
+          "triglyceride algal oil"
         ]
       }
     },
@@ -58894,7 +58956,10 @@
           "quality": "very_good",
           "range_low": 0.75,
           "range_high": 0.95
-        }
+        },
+        "source_form_aliases": [
+          "hydrochloride"
+        ]
       }
     },
     "match_rules": {
@@ -61358,7 +61423,10 @@
           "quality": "unknown",
           "range_low": 0.4,
           "range_high": 0.6
-        }
+        },
+        "source_form_aliases": [
+          "lycium barbarum fruit juice, powder"
+        ]
       }
     },
     "aliases": [
@@ -62178,7 +62246,10 @@
           "range_low": 0.25,
           "range_high": 0.5,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "decapeptide"
+        ]
       }
     },
     "cui": "C0054845",
@@ -62243,7 +62314,10 @@
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "coffea arabica whole fruit extract"
+        ]
       }
     },
     "cui": "C2937579",
@@ -63353,7 +63427,10 @@
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "avena sativa"
+        ]
       }
     },
     "cui": "C4317675",
@@ -66862,7 +66939,12 @@
           "range_low": 0.01,
           "range_high": 0.05,
           "quality": "poor"
-        }
+        },
+        "source_form_aliases": [
+          "citrus sinensis var. moro fruit extract",
+          "citrus sinensis var. moro peel extract",
+          "blood orange fruit extract"
+        ]
       }
     },
     "match_rules": {
@@ -72543,7 +72625,8 @@
           "dpp4",
           "dpp iv protease",
           "dpp-iv protease",
-          "protease, fungal"
+          "protease, fungal",
+          "alkaline protease, bacterial"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
