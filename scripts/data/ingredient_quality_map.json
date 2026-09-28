@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12260,
+      "total_form_aliases": 12305,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -2796,7 +2796,8 @@
           "Riboflavin 5’ Phosphate",
           "Vitamin B2, Riboflavin 5 Phosphate",
           "Riboflavin 5’-Phosphate",
-          "riboflavin-5 phosphate"
+          "riboflavin-5 phosphate",
+          "vitamin b2, activated"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3749,7 +3750,8 @@
           "activated vitamin b6",
           "vitamin b6, activated",
           "vitamin b6 activated",
-          "pyridoxal-5-phosphate"
+          "pyridoxal-5-phosphate",
+          "pyridoxyl 5-phosphate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3811,7 +3813,8 @@
           "vit b6 hcl",
           "b6 hcl supplement",
           "pyridoxine supplement",
-          "Pyridoxine Hydrchloride"
+          "Pyridoxine Hydrchloride",
+          "pyridoxide hcl"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4024,7 +4027,8 @@
           "biotin supplement",
           "commercial biotin supplement",
           "free biotin",
-          "free biotin supplement"
+          "free biotin supplement",
+          "biotin triturate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4352,7 +4356,9 @@
           "patented methylfolate",
           "patented methylfolate supplement",
           "patented calcium methylfolate",
-          "patented calcium methylfolate supplement"
+          "patented calcium methylfolate supplement",
+          "(6s)-5-methyltetrahydrofolic acid",
+          "(6s)-5-methyltetrahydrofolate acid"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4499,7 +4505,10 @@
           "range_low": 0.8,
           "range_high": 0.95,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "glucosamine salt"
+        ]
       },
       "metafolin": {
         "bio_score": 13,
@@ -5003,7 +5012,8 @@
           "hydroxy b12",
           "hydroxo b12",
           "vitamin b12a",
-          "hydroxycobalamin"
+          "hydroxycobalamin",
+          "hydroxocobalamin hydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5403,7 +5413,8 @@
           "pure ascorbic acid",
           "ascorbic acid supplement",
           "l-ascorbic acid supplement",
-          "pure ascorbic acid supplement"
+          "pure ascorbic acid supplement",
+          "q-c"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -5953,7 +5964,8 @@
           "vitamin d 3 supplement",
           "vit d 3",
           "Vitamin D3, Natural",
-          "vitamin d-3"
+          "vitamin d-3",
+          "cholecalciferol, fermented"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6501,7 +6513,8 @@
           "delta tocopherol",
           "delta tocopherols",
           "d-beta-tocopherol",
-          "d-delta-tocopherol"
+          "d-delta-tocopherol",
+          "d-beta tocopherol"
         ],
         "bio_score": 12,
         "absorption": "full-spectrum natural; α-form retained via α-TTP, β/γ/δ absorbed but rapidly metabolized",
@@ -6989,7 +7002,8 @@
           "vitamin e natural supplement",
           "vitamin e acetate",
           "Tocopheryl Acetate",
-          "Tocopherol"
+          "Tocopherol",
+          "alpha-tocopherol acetate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7115,7 +7129,10 @@
           "range_low": 0.1,
           "range_high": 0.8,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "k2"
+        ]
       }
     },
     "match_rules": {
@@ -11675,7 +11692,8 @@
           "rutin sophora japonica flower bud extract",
           "Rutin NF",
           "omniflavone sophora japonica fruit extract",
-          "omniflavone(tm) sophora japonica fruit extract"
+          "omniflavone(tm) sophora japonica fruit extract",
+          "quercetin rutinoside"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12213,7 +12231,9 @@
           "Calcium Beta-Hydroxy Beta-Methylbutyrate Monohydrate",
           "Calcium B-hydroxy-B-methylbutyrate",
           "calcium beta-hydroxy-beta-methylbutyrate",
-          "Beta-Hydroxy Beta-Methylbutyrate Monohydrate"
+          "Beta-Hydroxy Beta-Methylbutyrate Monohydrate",
+          "calcium beta-hydroxy beta-methylbutyric acid",
+          "calcium beta-hydroxybeta-methylbutyrate monohydrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16906,7 +16926,9 @@
           "microactive q10 cyclodextrin complex",
           "MicroActive CoQ10-cyclodextrin Complex",
           "microactive ubiquinone",
-          "cyclodextrin coq10 complex"
+          "cyclodextrin coq10 complex",
+          "microactive q10-cyclodextrin",
+          "sustained-release microactive q10-cyclodextrin complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17048,7 +17070,8 @@
           "Co-Enzyme Q-10",
           "co-q10",
           "Co Q-10",
-          "ubiquinone 10"
+          "ubiquinone 10",
+          "ubiquinone-10"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17429,6 +17452,11 @@
         },
         "audit_trail": [
           "D3.4 (2026-04-20): Phytosome Curcuminoids + related variants added to meriva form."
+        ],
+        "source_form_aliases": [
+          "phospholipid complex",
+          "phosphatidylcholine",
+          "phosphatidylcholine complex"
         ]
       },
       "theracurmin": {
@@ -17711,7 +17739,10 @@
     "forms": {
       "quercetin phytosome": {
         "source_form_aliases": [
-          "phosphatidylcholine complex"
+          "phosphatidylcholine complex",
+          "phospholipid complex",
+          "phospholipid",
+          "phospholipids"
         ],
         "bio_score": 10,
         "absorption": "phytosome lipid carrier; modest 2-4× over rutin baseline; still class-poor",
@@ -18782,7 +18813,10 @@
             }
           ]
         },
-        "form_evidence_axis": "systemic_bioavailability"
+        "form_evidence_axis": "systemic_bioavailability",
+        "source_form_aliases": [
+          "alpha-glycerylphosphorylcholine"
+        ]
       },
       "CDP-choline (citicoline)": {
         "bio_score": 12,
@@ -18805,7 +18839,8 @@
           "citicoline cognizin",
           "cognizin brand",
           "Cognizin CDP Choline",
-          "CDP Choline"
+          "CDP Choline",
+          "citicoline monosodium salt"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19750,7 +19785,8 @@
         "notes": "L-carnitine bound to fumaric acid for stability. Less clinical data than tartrate or ALCAR. Moderate absorption presumed from carnitine class data.",
         "aliases": [
           "carnitine fumarate",
-          "fumaric acid carnitine"
+          "fumaric acid carnitine",
+          "l-canitine fumarate"
         ],
         "dosage_importance": 0.5,
         "bio_score": 8,
@@ -20303,7 +20339,8 @@
           "hcl arginine",
           "arginine hcl powder",
           "l-arginine hydrochloride",
-          "L-Arginine Hydrochloride, Powder"
+          "L-Arginine Hydrochloride, Powder",
+          "l-arginine monohydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20334,7 +20371,8 @@
           "l-arginine, micronized",
           "Arginine, Micronized",
           "arginine micronized",
-          "micronized arginine"
+          "micronized arginine",
+          "l-arginine monohydrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21641,7 +21679,9 @@
           "l-ornithine hcl",
           "ornithine hydrochloride",
           "l-ornithine hydrochloride, micronized",
-          "micronized l-ornithine hydrochloride"
+          "micronized l-ornithine hydrochloride",
+          "l-ornithine monohydrochloride",
+          "l-ornithine hydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -23320,7 +23360,8 @@
           "HyaMax",
           "Injuv Hyaluronic Acid",
           "Hyal-Joint(TM)Hyaluronic Acid",
-          "hyamax hyaluronic acid"
+          "hyamax hyaluronic acid",
+          "sodium hyaluronic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -23328,7 +23369,10 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown"
-        }
+        },
+        "source_form_aliases": [
+          "sodium"
+        ]
       }
     },
     "match_rules": {
@@ -23500,7 +23544,9 @@
           "BioEnhanced Stabilized Na-RALA Sodium R-Lipoate",
           "sodium r-lipoic acid",
           "na-rala",
-          "stabilized r-lipoic acid"
+          "stabilized r-lipoic acid",
+          "na-rala sodium r-lipoate",
+          "bio-enhanced na-rala"
         ],
         "context_include": [
           "lipoic",
@@ -25122,7 +25168,9 @@
           "biocell collagen proprietary sternal cartilage extract",
           "hydrolyzed collagen types 1 and 3",
           "collagen types 1 and 3",
-          "biocell hydrolyzed chicken sternal cartilage extract"
+          "biocell hydrolyzed chicken sternal cartilage extract",
+          "porcine collagen peptides",
+          "chicken collagen, hydrolyzed"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25569,7 +25617,9 @@
           "truflex glucosamine sulfate",
           "truflex",
           "potassium glucosamine sulfate",
-          "glucosamine sulfate kcl"
+          "glucosamine sulfate kcl",
+          "d-glucosamine sulfate 2kcl",
+          "greengrown glucosamine sulfate 2kcl"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25860,7 +25910,10 @@
           "range_low": 0.01,
           "range_high": 0.05,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "green tea phytosome decaffeinated extract"
+        ]
       },
       "green tea extract (50% EGCG)": {
         "bio_score": 9,
@@ -26041,7 +26094,10 @@
           "range_low": 0.05,
           "range_high": 0.2,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "phosphatidylcholine complex"
+        ]
       },
       "grape seed extract (95% proanthocyanidins)": {
         "bio_score": 9,
@@ -26607,12 +26663,18 @@
           "range_low": 0.01,
           "range_high": 0.18,
           "quality": "poor"
-        }
+        },
+        "source_form_aliases": [
+          "panax quinquefolium l. rhizome extract"
+        ]
       },
       "ginseng (unspecified)": {
         "source_form_aliases": [
           "panax notoginseng",
-          "rosa roxburghii"
+          "rosa roxburghii",
+          "panax ginseng aerial part extract",
+          "panax ginseng aerial parts extract",
+          "panax ginseng, powder"
         ],
         "bio_score": 8,
         "absorption": "low (ginsenoside biotransformation-dependent)",
@@ -28049,7 +28111,14 @@
           "D3.7 (2026-09-20): added transglucosidase as label-normalization alias under specific enzymes form. Added to satisfy test contract (test_transglucosidase_routes_to_specific_digestive_enzyme). Transglucosidase (fungal glucosyltransferase, EC 2.4.1.-) is classified as a digestive enzyme supplement; no new CUI/UNII claimed."
         ],
         "source_form_aliases": [
-          "lactase"
+          "lactase",
+          "protease",
+          "peptidase",
+          "amylase",
+          "acid protease",
+          "alkaline proteases",
+          "cellulase",
+          "lipase"
         ]
       },
       "enteric-coated enzymes": {
@@ -28216,7 +28285,8 @@
           "subtilisin nat",
           "natto extract",
           "natto nsp-2",
-          "Cardiokinase"
+          "Cardiokinase",
+          "fibrinase"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29434,7 +29504,9 @@
           "dmae bitartrate supplement",
           "deanol supplement",
           "dimethylaminoethanol bitartrate",
-          "DMAE bitartrate salt"
+          "DMAE bitartrate salt",
+          "dimethylethanolamine bitartrate",
+          "2-dimethylaminoethanol bitartrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29905,7 +29977,8 @@
           "s-adenosyl methionine disulfate tosylate",
           "same tosylate disulfate",
           "sam-e tosylate disulfate",
-          "s-adenosylmethionine tosylate disulfate"
+          "s-adenosylmethionine tosylate disulfate",
+          "s-adenosyl-l-methionine disulfate p-toluenesulfonate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32942,7 +33015,8 @@
           "infinergy",
           "caffeine anhydrous 50% extract",
           "PURENERGY",
-          "Caffeine Pterostilbene Complex"
+          "Caffeine Pterostilbene Complex",
+          "extended-release caffeine"
         ],
         "form_evidence": {
           "schema_version": "1.0.0",
@@ -35575,7 +35649,10 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown"
-        }
+        },
+        "source_form_aliases": [
+          "fructooligosaccharides"
+        ]
       }
     },
     "cui": "C0021936",
@@ -39295,7 +39372,10 @@
           "range_low": 0.8,
           "range_high": 0.95,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "dimethylresveratrol"
+        ]
       }
     },
     "match_rules": {
@@ -42740,7 +42820,10 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown"
-        }
+        },
+        "source_form_aliases": [
+          "plantago ovata, powder"
+        ]
       }
     },
     "match_rules": {
@@ -42812,7 +42895,11 @@
           "mushroom beta glucans",
           "wellmune baker's yeast beta glucans",
           "BetaVia",
-          "beta 1-3 glucan"
+          "beta 1-3 glucan",
+          "yeast beta 1,3/1,6 glucan",
+          "beta 1-6 glucans",
+          "1,3 beta glucan",
+          "glucagel"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -42820,7 +42907,11 @@
           "range_high": 0.5,
           "quality": "moderate"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "source_form_aliases": [
+          "saccharomyces cerevisiae",
+          "reishi mycelia extract"
+        ]
       }
     },
     "match_rules": {
@@ -45151,7 +45242,15 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "l-leucine",
+          "l-isoleucine",
+          "l-valine",
+          "l-leucine, micronized",
+          "l-isoleucine, micronized",
+          "l-valine, micronized"
+        ]
       }
     },
     "match_rules": {
@@ -45442,7 +45541,8 @@
       "d beta hydroxybutyrate bhb (standard)": {
         "source_form_aliases": [
           "r-3-hydroxybutyric acid calcium",
-          "r-3-hydroxybutyric acid magnesium"
+          "r-3-hydroxybutyric acid magnesium",
+          "4-in-1 ketone salt blend"
         ],
         "bio_score": 10,
         "absorption": "BHB salt; ~50% inactive L-isomer; KS Cmax 1.0mM vs KE 2.8mM (Stubbs 2017)",
@@ -46211,7 +46311,10 @@
           "range_low": 0.1,
           "range_high": 0.5,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "shilajit fulvic acid complex"
+        ]
       },
       "purified shilajit extract": {
         "bio_score": 12,
@@ -46266,7 +46369,9 @@
         },
         "source_form_aliases": [
           "ancient peat extract",
-          "apple extract"
+          "apple extract",
+          "peat",
+          "apple fruit extract"
         ]
       },
       "shilajit resin": {
@@ -49054,7 +49159,8 @@
           "menhaden oil",
           "herring oil",
           "mackerel oil",
-          "fish oil triglycerides"
+          "fish oil triglycerides",
+          "omega-3 fatty acid triglycerides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -49873,7 +49979,9 @@
         },
         "dosage_importance": 1.0,
         "source_form_aliases": [
-          "matricaria chamomilla flower extract"
+          "matricaria chamomilla flower extract",
+          "matricaria recutita flower extract",
+          "matricaria recutita flowering top extract"
         ]
       }
     },
@@ -50303,7 +50411,11 @@
           "range_high": 0.6,
           "quality": "moderate"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "source_form_aliases": [
+          "rosae canina fruit extract",
+          "rosa canina fruit extract"
+        ]
       }
     },
     "match_rules": {
@@ -50866,7 +50978,13 @@
           "range_high": 0.6,
           "quality": "moderate"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "source_form_aliases": [
+          "cinnamomum aromaticum bark extract",
+          "cinnamomum spp.",
+          "cinnamomum burmannii",
+          "cinnamomum bark extract"
+        ]
       }
     },
     "match_rules": {
@@ -52132,7 +52250,8 @@
           "celadrin",
           "cetylated fatty acids",
           "cetyl myristoleate",
-          "cfa blend"
+          "cfa blend",
+          "esterified fatty acid carbons"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -52330,7 +52449,8 @@
           "bovine lactoferrin",
           "activ-ferrin lactoferrin",
           "bioferrin",
-          "milk peptides"
+          "milk peptides",
+          "apolactoferrin"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -52809,7 +52929,10 @@
           "range_low": 0.7,
           "range_high": 0.85,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "perilla frutescens seed extract"
+        ]
       }
     },
     "match_rules": {
@@ -53410,7 +53533,10 @@
           "range_low": 0.25,
           "range_high": 0.5,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "zea mays, powder"
+        ]
       }
     },
     "match_rules": {
@@ -59917,7 +60043,11 @@
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "aloe barbadensis, dehydrate, powder",
+          "aloe barbadensis leaf extract"
+        ]
       }
     },
     "standard_name": "Aloe Vera",
@@ -63568,7 +63698,11 @@
           "range_low": 0.003,
           "range_high": 0.012,
           "quality": "poor"
-        }
+        },
+        "source_form_aliases": [
+          "montmorency tart cherry variety",
+          "cerasus vulgaris mill fruit extract"
+        ]
       }
     },
     "match_rules": {
@@ -67778,7 +67912,9 @@
           "7-keto dehydroepiandrosterone",
           "7-keto dhea metabolite",
           "7-oxodehydroepiandrosterone 3-acetate",
-          "3-acetyl-7-oxo-dehydroepiandrosterone"
+          "3-acetyl-7-oxo-dehydroepiandrosterone",
+          "7-oxo-dehydroepiandrosterone-3 beta-acetate",
+          "7-oxo-dehydroepiandrosterone acetate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -70835,7 +70971,13 @@
           "range_low": 0.02,
           "range_high": 0.1,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "capsicum annuum fruit extract",
+          "capsicum annuum seed extract",
+          "capsicum extract",
+          "capsicum fruit extract"
+        ]
       }
     },
     "match_rules": {
@@ -71044,7 +71186,10 @@
           "range_low": 0.1,
           "range_high": 0.4,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "aesculus hippocastanum seed extract"
+        ]
       },
       "horse chestnut standardized (aescin marker)": {
         "bio_score": 10,
@@ -71350,7 +71495,8 @@
           "vitamin k2-7",
           "menaq7 vitamin k2",
           "mena q7",
-          "menaq7 vitamin k-2"
+          "menaq7 vitamin k-2",
+          "menaquinone-7, natural"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -71480,7 +71626,8 @@
           "all trans menaquinone-7 supplement",
           "bioactive mk7 supplement",
           "K2 Vital Delta",
-          "K2VITAL Delta"
+          "K2VITAL Delta",
+          "trans-menaquinone-7"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -72296,7 +72443,12 @@
           "range_high": null,
           "quality": "unknown"
         },
-        "unii": "040L83973U"
+        "unii": "040L83973U",
+        "source_form_aliases": [
+          "amylase",
+          "lipase",
+          "protease"
+        ]
       }
     },
     "category_enum": "enzymes",
