@@ -881,6 +881,19 @@ def test_a_different_species_under_the_row_parent_stays_held_for_review(enricher
     assert match.get('unmapped_forms') == [form['name']]
 
 
+@pytest.mark.parametrize('label, form', [
+    ('Galactomannan', {'name': 'Fenugreek', 'category': _B, 'ingredientGroup': 'Fenugreek'}),
+    ('Galactomannans', {'name': 'Fenugreek', 'category': _B, 'prefix': 'from', 'ingredientGroup': 'Fenugreek'}),
+])
+def test_fenugreek_galactomannan_is_not_konjac_glucomannan(enricher, label, form):
+    """Galactomannan (fenugreek, guar) and glucomannan (konjac) are different
+    polysaccharides; Life Extension's fenugreek galactomannan rows (232925,
+    325831) read the fiber parent's unspecified form, not the konjac form."""
+    match = enricher._match_quality_map(label, 'Galactomannan', enricher.databases['ingredient_quality_map'],
+                                        cleaned_forms=[form], cleaner_canonical_id='fiber')
+    assert (match['canonical_id'], match['form_id']) == ('fiber', 'fiber (unspecified)')
+
+
 def test_bitter_orange_under_citrus_bioflavonoids_stays_held_for_review(enricher):
     """Bitter orange carries its own safety owner (synephrine); it is not
     folded into the generic citrus-source list without a review."""

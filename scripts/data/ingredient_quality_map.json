@@ -34494,7 +34494,8 @@
           "soluble vegetable fiber",
           "fiber blend",
           "total dietary fiber",
-          "Soluable Fiber"
+          "Soluable Fiber",
+          "galactomannan"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -34522,7 +34523,6 @@
           "konjac",
           "konjac root",
           "amorphophallus konjac",
-          "galactomannan",
           "konjac flour",
           "konjac mannan",
           "luralean propolmannan",
