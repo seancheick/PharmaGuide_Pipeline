@@ -23,7 +23,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from scoring_input_contract import dose_disclosure_status
+from scoring_input_contract import dose_disclosure_status, is_nutrition_fact_declaration
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -435,7 +435,17 @@ def _declared_active_count(product: Dict[str, Any], rows: List[Dict[str, Any]]) 
     ):
         parsed = int(_as_float(value, 0) or 0)
         if parsed > 0:
-            return parsed
+            # Both counts are every cleaned active row. A printed Nutrition
+            # Facts line on that panel (Sodium, Chloride) is disclosed but is
+            # not an active, so it is never a missing active row.
+            nutrition_fact_rows = sum(
+                1
+                for row in quality.get("ingredients") or []
+                if isinstance(row, dict)
+                and _norm_text(row.get("source_section")) == "active"
+                and is_nutrition_fact_declaration(row)
+            )
+            return max(parsed - nutrition_fact_rows, 0)
     return len(rows)
 
 

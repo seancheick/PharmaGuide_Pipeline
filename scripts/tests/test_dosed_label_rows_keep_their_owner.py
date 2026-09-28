@@ -68,3 +68,20 @@ def test_the_chloride_row_is_accounted_like_a_sourced_one(normalizer):
     rows = [r for r in enriched["ingredient_quality_data"]["ingredients"] if r.get("name") == "Chloride"]
     assert [(r.get("canonical_id"), r.get("skip_reason")) for r in rows] == [
         ("chloride", "excluded_nutrition_fact")]
+
+
+def test_a_printed_nutrition_fact_row_is_not_a_missing_active(normalizer):
+    """311733 prints every active with its amount, plus Chloride 335 mg. The
+    Chloride line is disclosed but not an active (excluded_nutrition_fact), so
+    it must not count against complete active disclosure: before, the declared
+    count (14 cleaned rows) exceeded the 13 active rows and the product lost
+    the 6-point disclosure credit it had earned."""
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched, _ = SupplementEnricherV3().enrich_product(_clean(normalizer, "bcaa_311733_raw.json"))
+    scored = build_scored_artifact(enriched)
+    disclosure = (scored["_v4_module_breakdown"]["dimensions"]["transparency"]["metadata"]
+                  ["complete_active_disclosure"])
+    assert disclosure["qualifies"] is True
+    assert disclosure["declared_active_count"] == disclosure["active_row_count"] == 13
